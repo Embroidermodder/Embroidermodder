@@ -1,7 +1,0 @@
-embroidermodder2
-	name=EmbroiderModder2
-	command=embroidermodder2
-	requires_terminal=false
-	expects_uris=false
-	can_open_multiple_files=true
-	mime_types=application/x-embroidermodder

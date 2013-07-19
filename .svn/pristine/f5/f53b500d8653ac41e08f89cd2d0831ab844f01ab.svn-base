@@ -1,6 +1,0 @@
-//csv.h
-
-void csv_read(class pattern *pattern, const char *filename);
-void csv_write(class pattern *pattern, const char *filename);
-void csv_read(class pattern *pattern, CFile *csvin);
-void csv_write(class pattern *pattern, CFile *csvout);

@@ -1,6 +1,0 @@
-//dst.h
-
-void dst_read(class pattern *pattern, const char *filename);
-void dst_write(class pattern *pattern, const char *filename);
-void dst_read(class pattern *pattern, CFile *dstin);
-void dst_write(class pattern *pattern, CFile *dstout);
