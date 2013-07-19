@@ -1,0 +1,1216 @@
+// EmbroideryView.cpp : implementation of the CEmbroideryView class
+//
+// This file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#include "stdafx.h"
+#include "embroidermodder.h"
+
+#include "pattern.h"
+#include "EmbroideryDoc.h"
+#include "EmbroideryView.h"
+#include "paint.h"
+#include "messaging.h"
+#include "LetterDialog.h"
+#include "AboutDialog.h"
+//#include "analyze.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+extern CEmbroidermodderApp theApp;
+
+/////////////////////////////////////////////////////////////////////////////
+// CEmbroideryView
+
+IMPLEMENT_DYNCREATE(CEmbroideryView, CScrollView)
+
+BEGIN_MESSAGE_MAP(CEmbroideryView, CScrollView)
+	//{{AFX_MSG_MAP(CEmbroideryView)
+	ON_WM_PAINT()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
+	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONUP()
+	ON_COMMAND(ID_ZOOM_IN, OnZoomIn)
+	ON_COMMAND(ID_ZOOM_OUT, OnZoomOut)
+	ON_COMMAND(ID_ZOOM_FIT, OnZoomFit)
+	ON_COMMAND(ID_ZOOM_SELECTION, OnZoomSelection)
+	ON_COMMAND(ID_ZOOM_1TO1, OnZoom1to1)
+	ON_WM_SIZE()
+	ON_WM_KEYDOWN()
+	ON_WM_CANCELMODE()
+	ON_WM_LBUTTONDBLCLK()
+	ON_COMMAND(ID_DELETEPOINT, OnDeletepoint)
+	ON_COMMAND(ID_CONVERTTOJUMP, OnConverttojump)
+	ON_COMMAND(ID_CONVERTTONORMAL, OnConverttonormal)
+	ON_COMMAND(ID_DISPLAY_JUMPS, OnDisplayJumps)
+	ON_UPDATE_COMMAND_UI(ID_DISPLAY_JUMPS, OnUpdateDisplayJumps)
+	ON_COMMAND(ID_EDIT_ADDLETTERING, OnEditAddlettering)
+	//}}AFX_MSG_MAP
+	// Standard printing commands
+	ON_COMMAND(ID_FILE_PRINT, CScrollView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_DIRECT, CScrollView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CScrollView::OnFilePrintPreview)
+	ON_COMMAND(ID_FILE_PRINT, &CView::OnFilePrint)
+	ON_COMMAND(ID_FILE_PRINT_DIRECT, &CView::OnFilePrint)
+	ON_WM_CONTEXTMENU()
+	ON_WM_RBUTTONUP()
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CEmbroideryView construction/destruction
+
+CEmbroideryView::CEmbroideryView()
+{
+	initialupdatecomplete=FALSE;
+}
+
+CEmbroideryView::~CEmbroideryView()
+{
+	theApp.flush_my_idletasks(this);
+}
+
+BOOL CEmbroideryView::PreCreateWindow(CREATESTRUCT& cs)
+{
+	// TODO: Modify the Window class or styles here by modifying
+	//  the CREATESTRUCT cs
+
+	// Need to assign this menu, no matter which doc template was used.
+	// How to create an HMENU from a resource ID?
+//	cs.hMenu=(UINT)IDR_EMBROIDERYTYPE;
+
+	return CScrollView::PreCreateWindow(cs);
+}
+
+void CEmbroideryView::OnInitialUpdate()
+{
+	CScrollView::OnInitialUpdate();
+
+	printing = FALSE;
+	bitmapping = FALSE;
+	usebitmap = TRUE;	// change this to FALSE if you want direct draw to screen
+	bitmapcomplete = FALSE;
+	bitmapstitched = 0;
+	bitmap_dc = NULL;
+	rdrag = ldrag = FALSE;
+	rdownpoint = ldownpoint = CPoint(0,0);
+	// calculate the total size of this view
+	viewzoom = 1.0;
+	display_jumps = FALSE;
+	
+	//ppi = 96;		// laptop's screen=96, desktop monitor=60, printer = ?
+	CPaintDC dc(this);
+	ppi = dc.GetDeviceCaps(LOGPIXELSX);	// get screen pixels per inch, assume x==y
+
+	set_viewdimensions();
+	mousemode = MOUSEMODE_IDLE;
+	mdc_temp_bitmap = NULL;
+	initialupdatecomplete = TRUE;	// don't handle some messages until this happens.
+	OnZoomFit();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CEmbroideryView drawing message handler, actual drawing is in file paint.cpp
+
+void CEmbroideryView::OnPaint() 
+{
+	CPaintDC dc(this); // device context for painting
+	CEmbroideryDoc *doc;
+
+	doc=GetDocument();
+
+	if ((usebitmap) &&  ((!bitmapcomplete) || (bitmap_dc==NULL))) {
+		if (bitmap_dc==NULL) {	// try creating the bitmap, may fail if not enough memory
+			bitmap_dc=create_bitmap(viewdimensions);
+			bitmapcomplete=FALSE;
+			bitmapstitched=0;
+		};
+		if (bitmap_dc!=NULL) {	// try rendering the bitmap, may not complete now
+			paint_bitmap(bitmap_dc,400);	// work for 400ms
+		};
+	};
+	if ((usebitmap) && (!bitmapcomplete)) {	// bitmap not complete, render it when idle
+		theApp.queue_idletask(IDLETASK_CREATE_BITMAP, this);
+	};
+	paint_pattern(&dc,&doc->pattern);
+	paint_messages(&dc, &doc->pattern.messages);
+}
+
+// OnDraw was used by default for printing, but OnPaint is for screen drawing.  Weird.
+// We don't use this function at all.  It is required to be here ("pure virtual" crap).
+void CEmbroideryView::OnDraw(CDC* pDC)
+{
+	ASSERT(FALSE);	// Let us know if this is ever called.
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CEmbroideryView printing
+
+BOOL CEmbroideryView::OnPreparePrinting(CPrintInfo* pInfo)
+{
+	// default preparation
+	return DoPreparePrinting(pInfo);
+}
+
+void CEmbroideryView::OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo)
+{
+	// TODO: add extra initialization before printing
+	printing=TRUE;
+	// pagearea = pInfo->m_rectDraw; <-- Don't do here, m_rectDraw is not yet valid!!!
+}
+
+void CEmbroideryView::OnPrint(CDC* pDC, CPrintInfo* pInfo) 
+{
+	// TODO: Add your specialized code here and/or call the base class
+	CEmbroideryDoc *doc;
+	doc=GetDocument();
+
+	ppi = pDC->GetDeviceCaps(LOGPIXELSX);	// get printer pixels per inch, assume x==y
+	set_viewdimensions();
+	pagearea = pInfo->m_rectDraw;
+
+	paint_pattern(pDC,&doc->pattern);
+	paint_messages(pDC, &doc->pattern.messages);
+	
+	//CScrollView::OnPrint(pDC, pInfo);
+}
+
+void CEmbroideryView::OnEndPrinting(CDC* pDC, CPrintInfo* pInfo)
+{
+	CPaintDC dc(this);
+	printing=FALSE;
+	ppi = dc.GetDeviceCaps(LOGPIXELSX);	// get screen pixels per inch, assume x==y
+
+	set_viewdimensions();
+	// TODO: add cleanup after printing
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CEmbroideryView diagnostics
+
+#ifdef _DEBUG
+void CEmbroideryView::AssertValid() const
+{
+	CScrollView::AssertValid();
+}
+
+void CEmbroideryView::Dump(CDumpContext& dc) const
+{
+	CScrollView::Dump(dc);
+}
+
+CEmbroideryDoc* CEmbroideryView::GetDocument() // non-debug version is inline
+{
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CEmbroideryDoc)));
+	return (CEmbroideryDoc*)m_pDocument;
+}
+#endif //_DEBUG
+
+/////////////////////////////////////////////////////////////////////////////
+// CEmbroideryView message handlers
+
+void CEmbroideryView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView) 
+{
+	CScrollView::OnActivateView(bActivate, pActivateView, pDeactiveView);
+
+	// make sure status bar shows reflects current active view window
+	if(bActivate) {
+		theApp.status.updateall(&GetDocument()->pattern);
+	} else {
+		//status_clearall();
+		// note that the deactivate doesn't always come before activate
+	};
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// Mouse selction, button clicking, etc. event handlers
+
+// these all just call MouseMessageHandler, and identify what type of event happened.
+void CEmbroideryView::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	MouseMessageHandler(MOUSEMESSAGE_LDOWN, nFlags, point);
+	CScrollView::OnLButtonDown(nFlags, point);
+}
+
+void CEmbroideryView::OnRButtonDown(UINT nFlags, CPoint point) 
+{
+	MouseMessageHandler(MOUSEMESSAGE_RDOWN, nFlags, point);
+	CScrollView::OnRButtonDown(nFlags, point);
+}
+
+void CEmbroideryView::OnMouseMove(UINT nFlags, CPoint point) 
+{
+	MouseMessageHandler(MOUSEMESSAGE_MOVE, nFlags, point);
+	CScrollView::OnMouseMove(nFlags, point);
+}
+
+void CEmbroideryView::OnLButtonUp(UINT nFlags, CPoint point) 
+{
+	MouseMessageHandler(MOUSEMESSAGE_LUP, nFlags, point);
+	CScrollView::OnLButtonUp(nFlags, point);
+}
+
+void CEmbroideryView::OnRButtonUp(UINT nFlags, CPoint point) 
+{
+	MouseMessageHandler(MOUSEMESSAGE_RUP, nFlags, point);
+	CScrollView::OnRButtonUp(nFlags, point);
+}
+
+void CEmbroideryView::OnLButtonDblClk(UINT nFlags, CPoint point) 
+{
+	MouseMessageHandler(MOUSEMESSAGE_LDBLCLK, nFlags, point);
+	CScrollView::OnLButtonDblClk(nFlags, point);
+}
+
+void CEmbroideryView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+{
+	CScrollView::OnKeyDown(nChar, nRepCnt, nFlags);
+	// see #include "winuser.h" for definitions of virtual key codes
+	switch(nChar) {
+	case VK_ESCAPE:
+		// escape key, cancel current mode
+		MouseMessageHandler(MOUSEMESSAGE_CANCELMODE, 0, CPoint(0,0));
+		break;
+	case VK_LEFT:
+	case VK_RIGHT:
+	case VK_DELETE:
+	case VK_BACK:
+	case VK_INSERT:
+		MouseMessageHandler(MOUSEMESSAGE_KEYDOWN, 0, CPoint(0,0), nChar);
+		break;
+//	case VK_TAB:
+//		class pattern *pattern;
+//		CPaintDC dc(this);
+//		pattern = &GetDocument()->pattern;
+//		if (pattern->edit_stitch_num>=0) {
+//			DrawFont(&dc, "embroidermodder",pattern->stitchlist[pattern->edit_stitch_num].point());
+//			GetDocument()->UpdateAllViews(NULL,HINT_PATTERN_CHANGED);
+//		};
+//		break;
+	};
+}
+
+void CEmbroideryView::OnCancelMode() 
+{	// This is called when we need to give up mouse Capture (system dialog box pops up, etc.)
+	CScrollView::OnCancelMode();
+	MouseMessageHandler(MOUSEMESSAGE_CANCELMODE, 0, CPoint(0,0));
+}
+
+
+
+void CEmbroideryView::MouseMessageHandler(int action, UINT nFlags, CPoint point, UINT nChar)
+{
+	// handle all mouse click and move commands.
+	// This way, all commands relating to one function can be together,
+	// which makes debugging and understanding code easier.
+
+	static CPoint lastmouse;	// we need to know where the mouse last was if the event is a keyboard event.
+
+	//nFlags...
+	//MK_CONTROL   Set if the CTRL key is down. 
+	//MK_LBUTTON   Set if the left mouse button is down. 
+	//MK_MBUTTON   Set if the middle mouse button is down. 
+	//MK_RBUTTON   Set if the right mouse button is down. 
+	//MK_SHIFT	   Set if the SHIFT key is down. 	
+
+	CEmbroideryDoc *doc;	// the doc and pattern
+	pattern *pattern;
+	lfRect prect_select;	// existing selection rectangle in pattern coordinates
+	CRect srect_editpt;		// current edit point in screen coordinates
+	CPoint s_editpt;
+
+	HCURSOR hCursor;		// cursor object for changing the shape
+	lfVector patternpt;		// pattern point of stitch
+	int stitch;				// stitch number nearest mouse
+	CRect srect;			// rectangle in screen coordinates
+	lfRect prect;			// rectangle in pattern coordinates
+	CPoint s_relative_position;	// amount of move since button down
+//	lfVector ppa,ppb;		//pattern points for start and end of selection
+	int i;
+//	int count;				// number of stitches in new selection
+	bool over_selection_region; // is mouse over a previous selction region?
+	BOOL over_edit_point;	// is mouse over (within radius) the current edit point?
+	doc=GetDocument();
+	pattern=&doc->pattern;
+	patternpt=screen_point_to_pattern_point(point);
+	prect_select=pattern->get_select_bounds(doc->doc_selectmode);
+	over_selection_region = prect_select.isin(patternpt);
+
+	if (pattern->edit_stitch_num>=0 && pattern->edit_stitch_num<pattern->stitches && doc->doc_selectmode==DOC_SELECTMODE_POINTS) {
+		s_editpt=pattern_point_to_screen_point(pattern->stitchlist[pattern->edit_stitch_num].point());
+		srect_editpt.left = s_editpt.x-SELECT_STITCH_CIRCLE_RADIUS;
+		srect_editpt.right = s_editpt.x+SELECT_STITCH_CIRCLE_RADIUS;
+		srect_editpt.top = s_editpt.y-SELECT_STITCH_CIRCLE_RADIUS;
+		srect_editpt.bottom = s_editpt.y+SELECT_STITCH_CIRCLE_RADIUS;
+		over_edit_point = srect_editpt.PtInRect(point);
+	} else {
+		over_edit_point = false;
+	};
+
+	// Four types of constants are used in this routine...
+	//  DOC_MOUSEMODE refers to the document edit mode (controlled by toolbar button)
+	//    _SELECT, _MOVE, _INSERT, _DELETE
+	//  DOC_SELECTMODE refers to the document selection type mode (controlled by toolbar buttons)
+	//    _POINTS, _LINES, _SHAPES
+	//  MOUSEMODE refers to the current action (in the middle of which command)
+	//    _IDLE, _SELECT, _MOVE, _DELETE
+	//  MOUSEMESSAGE refers to the mouse event we are responding to (button down, etc)
+	//    _LDOWN, _LUP, _RDOWN, _RUP, _MOVE
+
+	// Mouse function summary by mode:
+	// DOC_MOUSEMODE_SELECTPOINT:
+	//   Left button click to select a point
+	//   Left button drag to select a region (of points)
+	//   Left button drag (from selection region) to move the points
+	//   -- need to add drag of single selcted point
+	//   Right button has no function
+	// DOC_MOUSEMODE_SELECTLINE:
+	//   Left button click to select a line (nearest midpoint)
+	//   Left button drag to select a region (of lines entirely in region)
+	//   Left button drag (from selection region) to move the lines
+	//     --Jump stitches are inserted before and after each run of selected lines
+	//   Right button has no function
+	// DOC_MOUSEMODE_INSERT
+	//   Left button inserts a point (on down even instead of on up...)
+	//   Right button deletes a point
+	//   Right button drag to continue deleting one point at a time
+
+	// since keyboard events don't have a mouse position, use the last position we had.
+	if ((action==MOUSEMESSAGE_KEYDOWN) || (action==MOUSEMESSAGE_CANCELMODE)) {
+		point = lastmouse;	// remember from last time.
+	} else {
+		lastmouse = point;	// remember for next time.
+	};
+
+	// ============================ CANCEL MODE =======================
+	if ((action==MOUSEMESSAGE_CANCELMODE) && (mousemode!=MOUSEMODE_IDLE)) {
+		ReleaseCapture();
+		mousemode=MOUSEMODE_IDLE;
+		return;
+	};
+
+	// ============================ KEY HANDLING ======================
+	if (action==MOUSEMESSAGE_KEYDOWN) {
+		switch (nChar) {
+		case VK_LEFT:
+		case VK_RIGHT:
+			if (mousemode==MOUSEMODE_IDLE) {
+				// redraw old stitch selection
+				if(pattern->edit_stitch_num>=0) {
+					doc->UpdateAllViews(NULL,HINT_INVALIDATE_SELECT_STITCH,(CObject *)pattern->edit_stitch_num);
+				};
+				
+				// change current edit stitch number
+				if (nChar==VK_LEFT) pattern->edit_stitch_num--;
+				if (nChar==VK_RIGHT) pattern->edit_stitch_num++;
+
+				// wrap around ends if necessary
+				if (pattern->edit_stitch_num<0) pattern->edit_stitch_num=pattern->stitches-1;
+				if (pattern->edit_stitch_num>=pattern->stitches) pattern->edit_stitch_num=0;
+				
+				// draw new stitch selection
+				if(pattern->edit_stitch_num>=0) {
+					doc->UpdateAllViews(NULL,HINT_INVALIDATE_SELECT_STITCH,(CObject *)pattern->edit_stitch_num);
+				};
+			};
+			break;
+		case VK_DELETE:
+		case VK_BACK:
+			if (doc->doc_mousemode==DOC_MOUSEMODE_SELECT || doc->doc_mousemode==DOC_MOUSEMODE_MOVE) {
+				// delete the selection
+				if (pattern->CountSelected() > 0) {
+					pattern->delete_selected();
+					doc->UpdateAllViews(NULL,HINT_PATTERN_CHANGED);
+				};
+			};
+			if (doc->doc_mousemode==DOC_MOUSEMODE_DELETE || doc->doc_mousemode==DOC_MOUSEMODE_INSERT) {
+				// delete the stitch
+				if(pattern->edit_stitch_num>=0) {
+					// delete the stitch and select the new edit stitch
+					pattern->delete_stitch(pattern->edit_stitch_num);
+					if (nChar==VK_BACK) pattern->edit_stitch_num--;
+			
+
+					// redraw pattern
+					//double scaleamt = 1.0;
+					doc->UpdateAllViews(NULL,HINT_PATTERN_CHANGED);
+				};
+			};
+			break;
+		case VK_INSERT:
+			if (doc->doc_mousemode==DOC_MOUSEMODE_INSERT || doc->doc_mousemode==DOC_MOUSEMODE_DELETE) {
+				if(pattern->edit_stitch_num==0) pattern->edit_stitch_num++;
+				if(pattern->edit_stitch_num>=1) {
+					// insert a new stitch at midpoint of current stitch
+					int i;
+					lfVector midpoint;
+					i = pattern->edit_stitch_num;
+					midpoint.dx = (pattern->stitchlist[i-1].xx+pattern->stitchlist[i].xx)/2;
+					midpoint.dy = (pattern->stitchlist[i-1].yy+pattern->stitchlist[i].yy)/2;
+					pattern->AddStitchAbs(midpoint.dx,midpoint.dy,pattern->stitchlist[i].selected);
+					pattern->move_last_stitch(i);
+
+					// redraw pattern
+					doc->UpdateAllViews(NULL,HINT_PATTERN_CHANGED);
+				};
+			};
+			break;
+		default:
+			break;
+		};
+	};
+
+	// ============================ INSERT POINT ======================
+	// LEFT BUTTON DOWN (INSERT)
+	if ((action==MOUSEMESSAGE_LDOWN) && (doc->doc_mousemode==DOC_MOUSEMODE_INSERT)) {
+		pattern->AddStitchAbs(patternpt.dx,patternpt.dy,NORMAL);
+		pattern->move_last_stitch(pattern->edit_stitch_num+1);
+		pattern->edit_stitch_num++;
+		doc->UpdateAllViews(NULL, HINT_PATTERN_CHANGED);
+		mousemode=MOUSEMODE_IDLE;
+	};
+
+	// ============================ DELETE POINT ======================
+	// LEFT BUTTON DOWN (DELETE)
+	if ((action==MOUSEMESSAGE_LDOWN) && doc->doc_mousemode==DOC_MOUSEMODE_DELETE) {
+		stitch = pattern->find_nearest_stitch(patternpt.dx,patternpt.dy, doc->doc_selectmode);
+
+		if (stitch!=-1) {
+			// now delete the stitch
+			theApp.status.set("Delete stitch ",stitch);
+			pattern->delete_stitch(stitch);
+			pattern->edit_stitch_num=stitch-1;
+			if (pattern->edit_stitch_num<0) pattern->edit_stitch_num=0;	// don't wrap;
+			theApp.status.updateall(pattern);
+			doc->UpdateAllViews(NULL, HINT_PATTERN_CHANGED);
+		} else {
+			// no stitch found near mouse position
+		};
+		//rdrag = FALSE;
+		//rdownpoint = point;
+		SetCapture();
+		mousemode=MOUSEMODE_DELETE;
+	};
+
+	// LEFT BUTTON DRAG(DELETE) = continue to delete points, one every move event
+	if (action==MOUSEMESSAGE_MOVE && mousemode == MOUSEMODE_DELETE) {
+		stitch = pattern->find_nearest_stitch(patternpt.dx,patternpt.dy, doc->doc_selectmode);
+
+		if (stitch!=-1) {
+			// now delete the stitch so we can see that we had selected the right one :)
+			theApp.status.set("Delete stitch ",stitch);
+			pattern->delete_stitch(stitch);
+			theApp.status.updateall(pattern);
+			doc->UpdateAllViews(NULL);
+		} else {
+			// no stitch found near mouse position
+		};
+	};
+	
+	// RIGHT BUTTON UP(DELETE)
+	if (action==MOUSEMESSAGE_LUP && mousemode == MOUSEMODE_DELETE) {
+		ReleaseCapture();
+		mousemode = MOUSEMODE_IDLE;
+	};
+
+	// ========================= SELECT (REGION, LINE OR POINT) ========================
+	// LEFT BUTTON DOWN (SELECT)
+	if ((action==MOUSEMESSAGE_LDOWN) /*&& !(over_selection_region)*/
+				&& (doc->doc_mousemode==DOC_MOUSEMODE_SELECT)) {
+		mousemode=MOUSEMODE_SELECT;
+		ldrag=FALSE;
+		ldownpoint=point;
+		SetCapture();
+	};
+	// LEFT BUTTON DRAG (SELECT)
+	if (action==MOUSEMESSAGE_MOVE && mousemode==MOUSEMODE_SELECT) {
+		ldrag = TRUE;
+		srect.left=ldownpoint.x;
+		srect.top =ldownpoint.y;
+		srect.right=point.x;
+		srect.bottom=point.y;
+		srect.NormalizeRect();
+		DrawSelectRectangle(srect);
+	};
+	// LEFT BUTTON UP (SELECT)	
+	if (action==MOUSEMESSAGE_LUP && mousemode==MOUSEMODE_SELECT) {	
+//		count=0;
+		ReleaseCapture();
+		// unselect previous selection unless control key held down...
+		if (!CONTROL_HELD(nFlags)) {
+			if(pattern->CountSelected() > 0) {
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&prect_select);
+				pattern->clear_selection();
+			};
+		};
+
+		if (ldrag==TRUE) {
+			// select area (points or lines depending on doc_mousemode)
+			DrawSelectRectangle(CRect(0,0,0,0),FALSE);	// clear our temporary selection box
+
+			srect = CRect(ldownpoint.x,ldownpoint.y,point.x,point.y);
+			srect.NormalizeRect();
+			prect = screen_rect_to_pattern_rect(srect);
+
+			lfVector prev_patternpt = lfVector(0,0);
+			for (i=0;i<pattern->stitches;i++) {
+				patternpt=pattern->stitchlist[i].point();
+				if (doc->doc_selectmode==DOC_SELECTMODE_POINTS) {
+					if (prect.isin(patternpt)) {
+						pattern->select_stitch(i);
+//						count++;
+					};
+				} else if (doc->doc_selectmode==DOC_SELECTMODE_LINES) {
+					if ((prect.isin(patternpt)) && (prect.isin(prev_patternpt))) {
+						pattern->select_stitch(i);
+						//count++;
+					};
+					prev_patternpt=patternpt;
+				};
+			};
+			doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&pattern->get_select_bounds(doc->doc_selectmode));
+//			doc->UpdateAllViews(NULL);
+			//pattern->messages.add("Selected area: ",count);
+		} else {
+			patternpt=screen_point_to_pattern_point(point);
+			if(pattern->edit_stitch_num>=0) {
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_SELECT_STITCH,(CObject *)pattern->edit_stitch_num);
+			};
+			// select nearest point or line
+			stitch=pattern->find_nearest_stitch(patternpt.dx,patternpt.dy,doc->doc_selectmode);
+			pattern->select_stitch(stitch);
+			if (CONTROL_HELD(nFlags)) {
+				// adding one stitch to selection region, must redraw selection region
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&pattern->get_select_bounds(doc->doc_selectmode));
+			};
+			//pattern->messages.add("Selected stitch: ",stitch);
+			if (stitch>=0) {
+				pattern->edit_stitch_num=stitch;
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_SELECT_STITCH,(CObject *)pattern->edit_stitch_num);
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&pattern->get_select_bounds(doc->doc_selectmode));
+			};
+		};
+		mousemode = MOUSEMODE_IDLE;
+	};
+
+	// LEFT BUTTON DOUBLE CLICK (SELECT CONTINUOUS SECTION)
+	if (action==MOUSEMESSAGE_LDBLCLK && doc->doc_mousemode==DOC_MOUSEMODE_SELECT) {	
+//		count=0;
+		ReleaseCapture();
+		// unselect previous selection unless control key held down...
+		if (!CONTROL_HELD(nFlags)) {
+			if(pattern->CountSelected() > 0) {
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&prect_select);
+				pattern->clear_selection();
+			};
+		};
+
+		{
+			patternpt=screen_point_to_pattern_point(point);
+			if(pattern->edit_stitch_num>=0) {
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_SELECT_STITCH,(CObject *)pattern->edit_stitch_num);
+			};
+			// select nearest point or line
+			stitch=pattern->find_nearest_stitch(patternpt.dx,patternpt.dy,doc->doc_selectmode);
+			// grow both directions until non-normal stitch is found.
+			if (stitch>=0) {
+				for (i=stitch; i>=0; i--) {
+					pattern->select_stitch(i);
+					if (pattern->stitchlist[i].flags != NORMAL) break;
+				};
+				for (i=stitch+1; i<pattern->stitches; i++) {
+					if (pattern->stitchlist[i].flags != NORMAL) break;
+					pattern->select_stitch(i);
+				};
+			};
+			if (CONTROL_HELD(nFlags)) {
+				// adding one stitch to selection region, must redraw selection region
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&pattern->get_select_bounds(doc->doc_selectmode));
+			};
+			//pattern->messages.add("Selected stitch: ",stitch);
+			if (stitch>=0) {
+				pattern->edit_stitch_num=stitch;
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_SELECT_STITCH,(CObject *)pattern->edit_stitch_num);
+				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&pattern->get_select_bounds(doc->doc_selectmode));
+			};
+		};
+		mousemode = MOUSEMODE_IDLE;
+	};
+
+	//=================================== MOVE POINT =========================
+	// LEFT BUTTON DOWN (MOVE POINT)
+	if ((action==MOUSEMESSAGE_LDOWN) && (doc->doc_mousemode==DOC_MOUSEMODE_MOVE) && (over_edit_point)) {
+			// LEFT BUTTON DOWN (MOVE)
+				mousemode=MOUSEMODE_MOVE_POINT;
+				// change cursor to move arrows
+				HCURSOR oldCursor;
+				hCursor = AfxGetApp()->LoadStandardCursor(IDC_SIZEALL);
+				oldCursor = SetCursor(hCursor);
+				// free the old cursor?
+
+				srect = srect_editpt;
+				//srect.NormalizeRect();
+				mdc_temp_bitmap = create_bitmap(srect.Size());
+				copy_screen_to_bitmap(mdc_temp_bitmap, srect);
+				
+				ldrag=FALSE;
+				ldownpoint=point;
+				SetCapture();
+	};
+	// LEFT BUTTON DRAG (MOVE POINT)
+	if (action==MOUSEMESSAGE_MOVE && mousemode==MOUSEMODE_MOVE_POINT) {
+		ldrag = TRUE;
+		// Load a predefined Windows cursor
+		hCursor = AfxGetApp()->LoadStandardCursor(IDC_SIZEALL);
+		SetCursor(hCursor);
+
+		s_relative_position.x=point.x-ldownpoint.x;
+		s_relative_position.y=point.y-ldownpoint.y;
+		// to show the drag, move a bitmap copy of the selection region
+		draw_ghost_selection(s_relative_position);
+	};
+	// LEFT BUTTON UP (MOVE POINT, but mouse didn't move)
+	if (action==MOUSEMESSAGE_LUP && mousemode==MOUSEMODE_MOVE_POINT && ldrag==FALSE) {
+		// Move where no drag occurred.  Do nothing.
+		mousemode=MOUSEMODE_IDLE;
+		ReleaseCapture();
+	};
+
+	// LEFT BUTTON UP (MOVE POINT, and mouse had moveed)
+	if (action==MOUSEMESSAGE_LUP && mousemode==MOUSEMODE_MOVE_POINT && ldrag==TRUE) {
+//		count=0;
+		ReleaseCapture();
+
+		s_relative_position.x=point.x-ldownpoint.x;
+		s_relative_position.y=point.y-ldownpoint.y;
+		draw_ghost_selection(s_relative_position,FALSE);	// restore backing and free it's bitmap
+
+		srect = pattern_rect_to_screen_rect(prect_select);
+		srect.left += point.x - ldownpoint.x;
+		srect.right += point.x - ldownpoint.x;
+		srect.top += point.y - ldownpoint.y;
+		srect.bottom += point.y - ldownpoint.y;
+
+		prect = screen_rect_to_pattern_rect(srect);
+
+		lfVector p_point = screen_point_to_pattern_point(point);
+		lfVector p_ldownpoint = screen_point_to_pattern_point(ldownpoint);
+		lfVector p_relative_position;
+		p_relative_position.dx = p_point.dx - p_ldownpoint.dx;
+		p_relative_position.dy = p_point.dy - p_ldownpoint.dy;
+
+		pattern->stitchlist[pattern->edit_stitch_num].xx+=p_relative_position.dx;
+		pattern->stitchlist[pattern->edit_stitch_num].yy+=p_relative_position.dy;
+
+		doc->UpdateAllViews(NULL,HINT_PATTERN_CHANGED);
+		mousemode = MOUSEMODE_IDLE;
+	};
+
+	//=================================== MOVE (move selection region) =============
+
+	// LEFT BUTTON DOWN (MOVE)
+	if ((action==MOUSEMESSAGE_LDOWN) && (doc->doc_mousemode==DOC_MOUSEMODE_MOVE) && (over_selection_region) && (!over_edit_point)) {
+			// LEFT BUTTON DOWN (MOVE)
+				mousemode=MOUSEMODE_MOVE;
+				// change cursor to move arrows
+				HCURSOR oldCursor;
+				hCursor = AfxGetApp()->LoadStandardCursor(IDC_SIZEALL);
+				oldCursor = SetCursor(hCursor);
+				// free the old cursor?
+
+				srect = pattern_rect_to_screen_rect(prect_select);
+				//srect.NormalizeRect();
+				mdc_temp_bitmap = create_bitmap(srect.Size());
+				copy_screen_to_bitmap(mdc_temp_bitmap, srect);
+				
+				ldrag=FALSE;
+				ldownpoint=point;
+				SetCapture();
+	};
+	// LEFT BUTTON DRAG (MOVE)
+	if (action==MOUSEMESSAGE_MOVE && mousemode==MOUSEMODE_MOVE) {
+		ldrag = TRUE;
+		// Load a predefined Windows cursor
+		hCursor = AfxGetApp()->LoadStandardCursor(IDC_SIZEALL);
+		SetCursor(hCursor);
+
+		s_relative_position.x=point.x-ldownpoint.x;
+		s_relative_position.y=point.y-ldownpoint.y;
+		// to show the drag, move a bitmap copy of the selection region
+		draw_ghost_selection(s_relative_position);
+	};
+
+	// LEFT BUTTON UP (MOVE, but mouse didn't move)
+	if (action==MOUSEMESSAGE_LUP && mousemode==MOUSEMODE_MOVE && ldrag==FALSE) {
+		// Move where no drag occurred.  Do nothing.
+		mousemode=MOUSEMODE_IDLE;
+		ReleaseCapture();
+	};
+
+	// LEFT BUTTON UP (MOVE, and mouse had moveed)
+	if (action==MOUSEMESSAGE_LUP && mousemode==MOUSEMODE_MOVE && ldrag==TRUE) {
+//		count=0;
+		ReleaseCapture();
+
+		s_relative_position.x=point.x-ldownpoint.x;
+		s_relative_position.y=point.y-ldownpoint.y;
+		draw_ghost_selection(s_relative_position,FALSE);	// restore backing and free it's bitmap
+
+//		// unselect previous selection unless control key held down...
+//		if (!CONTROL_HELD(nFlags)) {
+//			if(pattern->count_selected() > 0) {
+//				doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&prect_select);
+//				pattern->clear_selection();
+//			};
+//		};
+
+		srect = pattern_rect_to_screen_rect(prect_select);
+		srect.left += point.x - ldownpoint.x;
+		srect.right += point.x - ldownpoint.x;
+		srect.top += point.y - ldownpoint.y;
+		srect.bottom += point.y - ldownpoint.y;
+
+		prect = screen_rect_to_pattern_rect(srect);
+
+		lfVector p_point = screen_point_to_pattern_point(point);
+		lfVector p_ldownpoint = screen_point_to_pattern_point(ldownpoint);
+		lfVector p_relative_position;
+		p_relative_position.dx = p_point.dx - p_ldownpoint.dx;
+		p_relative_position.dy = p_point.dy - p_ldownpoint.dy;
+
+		for (i=0;i<pattern->stitches;i++) {
+			patternpt=pattern->stitchlist[i].point();
+			if (doc->doc_selectmode==DOC_SELECTMODE_POINTS) {
+				if (pattern->stitchlist[i].selected) {
+					pattern->stitchlist[i].xx+=p_relative_position.dx;
+					pattern->stitchlist[i].yy+=p_relative_position.dy;
+//					count++;
+				};
+			} else if (doc->doc_selectmode==DOC_SELECTMODE_LINES) {
+				if (pattern->stitchlist[i].selected) {
+					if ((pattern->stitchlist[i].flags==NORMAL) && 
+							(i>0) && (!pattern->stitchlist[i-1].selected)) {
+						// insert a jumppoint to beginning of line
+						pattern->AddStitchAbs(pattern->stitchlist[i-1].xx+p_relative_position.dx,pattern->stitchlist[i-1].yy+p_relative_position.dy,JUMP);
+						pattern->move_last_stitch(i);
+						i++;
+					};
+					if ((i<pattern->stitches-1) && (pattern->stitchlist[i+1].flags==NORMAL) 
+							 && (!pattern->stitchlist[i+1].selected)) {
+						// insert a jumppoint after this point of line
+						pattern->AddStitchAbs(pattern->stitchlist[i].xx,pattern->stitchlist[i].yy,JUMP);
+						pattern->move_last_stitch(i+1);
+					};
+					// move this point
+					pattern->stitchlist[i].xx+=p_relative_position.dx;
+					pattern->stitchlist[i].yy+=p_relative_position.dy;
+					//count++;
+				};
+			};
+		};
+		//double scale = 1.0;
+		//doc->UpdateAllViews(NULL,HINT_REMEMBER_THIS_SCROLL_POINT);
+		doc->UpdateAllViews(NULL,HINT_PATTERN_CHANGED);
+		//doc->UpdateAllViews(NULL,HINT_INVALIDATE_PRECT,(CObject *)&pattern->get_select_bounds(doc->doc_selectmode));
+		mousemode = MOUSEMODE_IDLE;
+	};
+
+	//===================================== MENU POPUP ================================
+	// Right button click
+
+	if (action==MOUSEMESSAGE_RDOWN) {
+		rdownpoint = point;
+		PopupMenu(point);
+	};
+
+	//===================================== IDLE ================================
+	// ----- Any buttons down, mouse moving... -----
+	// IDLE, change cursor if in select region.
+	if (action==MOUSEMESSAGE_MOVE && mousemode==MOUSEMODE_IDLE && doc->doc_mousemode==DOC_MOUSEMODE_MOVE) {
+		if (!(nFlags&(MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))) {	// no buttons pressed
+			if (over_selection_region  || over_edit_point) {
+				// change cursor to move arrows
+  				// Load a predefined Windows cursor
+				hCursor = AfxGetApp()->LoadStandardCursor(IDC_SIZEALL);
+				SetCursor(hCursor);
+			};
+		};
+	};
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// Panning and Zooming message handlers
+
+BOOL CEmbroideryView::OnScroll(UINT nScrollCode, UINT nPos, BOOL bDoScroll) 
+{
+	BOOL result;
+	// TODO: Add your specialized code here and/or call the base class
+
+	result = CScrollView::OnScroll(nScrollCode, nPos, bDoScroll);
+		// this will invalidate only the newly scrolled in region
+		// to invalidate the whole window...
+	//if (result) {	// if result is false, then no scrolling was actually done.
+		//Invalidate(FALSE);
+	//};
+	return(result);
+}
+
+void CEmbroideryView::OnZoomIn() 
+{
+	lfVector oldcenter = GetPatternPointAtScreenCenter();
+
+	viewzoom*=5.0/4.0;
+
+	set_viewdimensions();
+	ScrollToPatternPoint(oldcenter);
+	Invalidate(TRUE);
+	bitmap_dc=free_bitmap(bitmap_dc);
+}
+
+void CEmbroideryView::OnZoomOut() 
+{
+	lfVector oldcenter = GetPatternPointAtScreenCenter();
+
+	viewzoom*=4.0/5.0;
+
+	set_viewdimensions();
+	ScrollToPatternPoint(oldcenter);
+	Invalidate(TRUE);
+	bitmap_dc=free_bitmap(bitmap_dc);
+}
+
+void CEmbroideryView::OnZoomFit() 
+{
+	lfRect patrect;
+	RECT winrect;
+	double vz;
+
+	patrect = GetDocument()->pattern.get_dimensions();
+	GetClientRect(&winrect);
+
+	viewzoom = (winrect.right / patrect.width()) * 25.4 / ppi;
+	vz = (winrect.bottom / patrect.height()) * 25.4 / ppi;
+
+	if (vz<viewzoom) viewzoom=vz;
+
+	set_viewdimensions();
+	// don't need to set scrollbars because whole image visible
+	Invalidate(TRUE);
+	bitmap_dc=free_bitmap(bitmap_dc);
+}
+
+void CEmbroideryView::OnZoomSelection() 
+{
+	lfRect patrect;
+	RECT winrect;
+	double vz;
+
+	patrect = GetDocument()->pattern.get_select_bounds(GetDocument()->doc_selectmode);
+	if (patrect.width()==0 && patrect.height()==0) {
+		// no selection, so pretend select all...
+		patrect = GetDocument()->pattern.get_dimensions();
+	};
+	GetClientRect(&winrect);
+
+	viewzoom = (winrect.right / patrect.width()) * 25.4 / ppi;
+	vz = (winrect.bottom / patrect.height()) * 25.4 / ppi;
+
+	if (vz<viewzoom) viewzoom=vz;
+
+	set_viewdimensions();
+	ScrollToPatternPoint(lfVector((patrect.left+patrect.right)/2,(patrect.top+patrect.bottom)/2));
+	Invalidate(TRUE);
+	bitmap_dc=free_bitmap(bitmap_dc);
+}
+
+void CEmbroideryView::OnZoom1to1() 
+{
+	lfVector oldcenter = GetPatternPointAtScreenCenter();
+
+	viewzoom = 1.0;
+
+	set_viewdimensions();
+	ScrollToPatternPoint(oldcenter);
+	Invalidate(TRUE);
+	bitmap_dc=free_bitmap(bitmap_dc);
+}
+
+void CEmbroideryView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
+{
+	if (!initialupdatecomplete) return;	// don't update anything if the window hasn't been initialized.
+
+	// pattern changed, but not scaled.  Recalculate and redraw everything.
+	if (lHint==HINT_PATTERN_CHANGED) {
+		set_viewdimensions();
+		Invalidate();
+		bitmap_dc=free_bitmap(bitmap_dc);
+		return;
+	};
+	// lHint==1 means document pattern size changed by scaling factor in hint
+	if (lHint==HINT_PATTERN_CHANGED_SIZE) {
+		double scalefactor;
+		set_viewdimensions();
+		// hint is a pointer to a double, scaling factor.
+		scalefactor = *(double *)pHint;
+		oldcenter.dx *= scalefactor;	// scale the old point and set the scrollto point
+		oldcenter.dy *= scalefactor;
+		ScrollToPatternPoint(oldcenter);
+		Invalidate();
+		bitmap_dc=free_bitmap(bitmap_dc);
+		return;
+	};
+	// lHint==2 means a pattern region to update is in pHint (*lfRect)
+	if (lHint==HINT_INVALIDATE_PRECT) {
+		CRect sregion;
+		lfRect *pregion;
+		
+		pregion = (lfRect *)pHint;
+		sregion = pattern_rect_to_screen_rect(*pregion);
+		sregion.right++;
+		sregion.bottom++;
+
+		InvalidateRect(sregion,FALSE);
+		return;
+	};
+
+	// invalidate the small area around the selected stitch (phint is stitch number)
+	if (lHint==HINT_INVALIDATE_SELECT_STITCH) {
+		int stitch;
+		lfVector ppoint;
+		CPoint spoint;
+		CRect sregion;
+		int radius;
+
+		radius = SELECT_STITCH_CIRCLE_RADIUS;		//Match this value to radius in paint_pattern()
+		stitch = (int)pHint;
+		ppoint = lfVector(GetDocument()->pattern.stitchlist[stitch].xx,GetDocument()->pattern.stitchlist[stitch].yy);
+		spoint = pattern_point_to_screen_point(ppoint);
+		sregion.left  =spoint.x-radius;
+		sregion.top   =spoint.y-radius;
+		sregion.right =spoint.x+radius+1;
+		sregion.bottom=spoint.y+radius+1;
+		InvalidateRect(sregion,FALSE);
+		return;
+	};
+
+	// each view remembers its scroll position in pattern coordinates.
+	// will do this before scaling design, so matching point can be selected afterwards
+	if (lHint==HINT_REMEMBER_THIS_SCROLL_POINT) {
+		oldcenter = GetPatternPointAtScreenCenter();
+		return;
+	};
+
+	// this would follow above, but the scale design hint takes care of this also, so not used.
+	if (lHint==HINT_RESET_TO_STORED_SCROLL_POINT) {
+		ScrollToPatternPoint(oldcenter);
+		return;
+	};
+
+	// no hint provided, do default, which invalidates entire view.
+	// AND DELETES THE BITMAP!!!
+	bitmap_dc=free_bitmap(bitmap_dc);
+	
+	CScrollView::OnUpdate(pSender, lHint, pHint);
+}
+
+void CEmbroideryView::OnSize(UINT nType, int cx, int cy) 
+{
+	CScrollView::OnSize(nType, cx, cy);
+	if (!initialupdatecomplete) return;
+	set_viewdimensions();
+//	Invalidate();
+	// TODO: Add your message handler code here
+	
+}
+
+
+
+void CEmbroideryView::PopupMenu(CPoint point) {
+
+	CPoint screenpoint;
+	CMenu *popup;
+
+	screenpoint = point;
+	ClientToScreen(&screenpoint);
+	popup = new(CMenu);
+
+//	popup->LoadMenu(ID_POPUPMENU);
+	popup->CreatePopupMenu();	// LoadMenu isn't working, build the menu manually
+	popup->AppendMenu(MF_STRING,ID_DELETEPOINT,"Delete Point");
+	popup->AppendMenu(MF_STRING,ID_CONVERTTOJUMP,"Convert to Jump Stitch");
+	popup->AppendMenu(MF_STRING,ID_CONVERTTONORMAL,"Convert to Normal Stitch");
+	popup->AppendMenu(MF_STRING,ID_CHANGECOLOR,"Change Color");
+	
+	popup->EnableMenuItem(ID_CHANGECOLOR,MF_GRAYED);	// Not yet implemented
+
+	// TrackPopupMenu is a modal command.  Will return when selection is made.
+	popup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,screenpoint.x,screenpoint.y,this);
+
+	delete(popup);
+};
+
+void CEmbroideryView::OnDeletepoint() 
+{
+	int stitch;
+	lfVector patternpt;
+	class pattern *pattern;
+	CEmbroideryDoc *doc;
+
+	doc = GetDocument();
+	pattern = &doc->pattern;
+	patternpt=screen_point_to_pattern_point(rdownpoint);
+
+		stitch = pattern->find_nearest_stitch(patternpt.dx,patternpt.dy, doc->doc_selectmode);
+
+		if (stitch!=-1) {
+			// now delete the stitch
+			theApp.status.set("Delete stitch ",stitch);
+			pattern->delete_stitch(stitch);
+			pattern->edit_stitch_num=stitch-1;
+			if (pattern->edit_stitch_num<0) pattern->edit_stitch_num=0;	// don't wrap;
+			theApp.status.updateall(pattern);
+			doc->UpdateAllViews(NULL, HINT_PATTERN_CHANGED);
+		} else {
+			// no stitch found near mouse position
+		};
+	
+}
+
+void CEmbroideryView::OnConverttojump() 
+{
+	int stitch;
+	lfVector patternpt;
+	class pattern *pattern;
+	CEmbroideryDoc *doc;
+
+	doc = GetDocument();
+	pattern = &doc->pattern;
+	patternpt=screen_point_to_pattern_point(rdownpoint);
+
+		stitch = pattern->find_nearest_stitch(patternpt.dx,patternpt.dy, doc->doc_selectmode);
+
+		if (stitch!=-1) {
+			// now delete the stitch
+			pattern->stitchlist[stitch].flags=JUMP;
+			theApp.status.updateall(pattern);
+			doc->UpdateAllViews(NULL, HINT_PATTERN_CHANGED);
+		} else {
+			// no stitch found near mouse position
+		};
+	
+	
+}
+
+void CEmbroideryView::OnConverttonormal() 
+{
+	int stitch;
+	lfVector patternpt;
+	class pattern *pattern;
+	CEmbroideryDoc *doc;
+
+	doc = GetDocument();
+	pattern = &doc->pattern;
+	patternpt=screen_point_to_pattern_point(rdownpoint);
+
+		stitch = pattern->find_nearest_stitch(patternpt.dx,patternpt.dy, doc->doc_selectmode);
+
+		if (stitch!=-1) {
+			// now delete the stitch
+			pattern->stitchlist[stitch].flags=NORMAL;
+			theApp.status.updateall(pattern);
+			doc->UpdateAllViews(NULL, HINT_PATTERN_CHANGED);
+		} else {
+			// no stitch found near mouse position
+		};
+	
+	
+}
+
+void CEmbroideryView::OnDisplayJumps() 
+{
+	// TODO: Add your command handler code here
+	display_jumps = !display_jumps;
+	Invalidate(FALSE);
+	//OnUpdate(NULL, HINT_PATTERN_CHANGED, NULL);	// force redraw
+}
+
+void CEmbroideryView::OnUpdateDisplayJumps(CCmdUI* pCmdUI) 
+{
+	// TODO: Add your command update UI handler code here
+	pCmdUI->SetCheck(display_jumps);
+}
+
+void CEmbroideryView::OnEditAddlettering() 
+{
+	CFont *font;
+	// TODO: Add your command handler code here
+	CPaintDC dc(this);
+	CLetterDialog letterDlg;
+
+
+	// initialize member variables
+	letterDlg.letterDC = &dc;
+	memset(&letterDlg.lf, 0, sizeof(LOGFONT));
+	letterDlg.lf.lfHeight = -MulDiv(48, letterDlg.letterDC->GetDeviceCaps(LOGPIXELSY), 72);	// Default size = 48pt
+	strcpy_s(letterDlg.lf.lfFaceName, "Times New Roman");	// Default font
+	letterDlg.lf.lfWeight = FW_NORMAL;					// Default style
+	letterDlg.lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;		// Select only TrueType fonts
+
+	font = new(CFont);
+	if (font->CreateFontIndirect(&letterDlg.lf)) {
+		font = letterDlg.letterDC->SelectObject(font);	// replace existing font in DC
+	};
+
+	// set initial location to be current edit stitch location
+	pattern *pattern;
+	pattern = &GetDocument()->pattern;
+	if (pattern->edit_stitch_num >=0 && pattern->edit_stitch_num < pattern->stitches) {
+		letterDlg.m_location_x = pattern->stitchlist[pattern->edit_stitch_num].xx;
+		letterDlg.m_location_y = pattern->stitchlist[pattern->edit_stitch_num].yy;
+	} else {
+		letterDlg.m_location_x = letterDlg.m_location_y = 0.0;
+	};
+
+	// Run the Dialog
+	if (letterDlg.DoModal()==IDOK) {
+		//DrawFont(letterDlg.letterDC,letterDlg.lf,letterDlg.m_text,lfVector(letterDlg.m_location_x,letterDlg.m_location_y));
+				// create and draw the pattern
+
+		struct PathStruct path;
+		class pattern *text_pattern;
+		int i;
+
+		path = letterDlg.ConvertTextToPath(letterDlg.letterDC,letterDlg.m_text,CPoint(0,0));
+		letterDlg.ScalePath(path);
+		text_pattern = letterDlg.ConvertPathToPattern(path);
+		for (i=0;i<text_pattern->stitches;i++) {
+			pattern->AddStitchAbs(text_pattern->stitchlist[i].xx+letterDlg.m_location_x,-text_pattern->stitchlist[i].yy+letterDlg.m_location_y,text_pattern->stitchlist[i].flags,TRUE);
+		};
+		for (i=0;i<text_pattern->colors;i++) {
+			pattern->AddColor(text_pattern->colorlist[i].rgb,text_pattern->colorlist[i].description,text_pattern->colorlist[i].catalog_number);
+		};
+		//letterDlg.PaintPatternPreview(&dc,pattern);
+
+		letterDlg.DeletePath(path);
+		delete (text_pattern);
+
+		theApp.status.updateall(pattern);
+		GetDocument()->UpdateAllViews(NULL, HINT_PATTERN_CHANGED, NULL);
+	} else {
+		// canceled
+	};
+
+	// restore the windows font, and delete ours
+	font = letterDlg.letterDC->SelectObject(font);	// replace existing font in DC
+	delete font;
+
+}

@@ -1,0 +1,736 @@
+// LetterDialog.cpp : implementation of the CLetterDialog class
+//
+// This file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#include "stdafx.h"
+#include <math.h>
+#include "embroidermodder.h"
+#include "LetterDialog.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CLetterDialog dialog
+
+CLetterDialog::CLetterDialog(CWnd* pParent /*=NULL*/)
+	: CDialog(CLetterDialog::IDD, pParent)
+{
+	// initialize variables
+	scalex = scaley = 1.0;
+	letterDC = NULL;
+	windows_font = NULL;
+	color = RGB(0,0,0);
+	textsize = CSize(0,0);
+
+	//{{AFX_DATA_INIT(CLetterDialog)
+	m_text = _T("");
+	m_selected_font_text = _T("Times New Roman");
+	m_running_outline_check = TRUE;
+	m_num_running_threads = 2;
+	m_running_length = 1.0;
+	m_proportional_check = TRUE;
+	m_scale_height = 0.0;
+	m_scale_width = 0.0;
+	m_location_x = 0.0;
+	m_location_y = 0.0;
+	m_show_stitches = FALSE;
+	m_show_jumps = FALSE;
+	m_preserve_details_check = TRUE;
+	//}}AFX_DATA_INIT
+
+}
+
+BOOL CLetterDialog::OnInitDialog() 
+{
+	CFont *font;
+	CDialog::OnInitDialog(); // Run standard initialization first.
+
+	// Try to set focus on text edit.  This isn't working, default still ID_OK.
+	CEdit* initialFocus;
+	initialFocus = (CEdit*) GetDlgItem(IDC_TEXT_EDIT);
+	GotoDlgCtrl(initialFocus);
+
+	// This isn't working quite right, so currently the DC and font are already created in parent CEmbroideryView::OnEditLettering()
+	if (letterDC == NULL) {
+		// Create the DC
+		letterDC = new CPaintDC(this);
+
+		// prepare font structure;
+		memset(&lf, 0, sizeof(LOGFONT));
+		lf.lfHeight = -MulDiv(48, letterDC->GetDeviceCaps(LOGPIXELSY), 72);	// Default size = 48pt
+		strcpy_s(lf.lfFaceName, "Times New Roman");	// Default font
+		lf.lfWeight = FW_NORMAL;					// Default style
+		lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;		// Select only TrueType fonts
+
+		font = new(CFont);
+		if (font->CreateFontIndirect(&lf)) {
+			windows_font = letterDC->SelectObject(font);	// replace existing font in DC
+		};
+		//delete windows_font;	// don't delete the old one, windows wants to do this
+	};
+
+
+	return TRUE;  // return TRUE unless you set the focus to a control
+	// EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CLetterDialog::DoDataExchange(CDataExchange* pDX)
+{
+
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CLetterDialog)
+	DDX_Text(pDX, IDC_TEXT_EDIT, m_text);
+	DDX_Text(pDX, IDC_SELECTED_FONT, m_selected_font_text);
+	DDX_Check(pDX, IDC_RUNNING_OUTLINE_CHECK, m_running_outline_check);
+	DDX_Text(pDX, IDC_RUNNING_THREADS_EDIT, m_num_running_threads);
+	DDX_Text(pDX, IDC_RUNNING_LENGTH_EDIT, m_running_length);
+	DDX_Check(pDX, IDC_PROPORTIONAL_CHECK, m_proportional_check);
+	DDX_Text(pDX, IDC_SCALE_HEIGHT_EDIT, m_scale_height);
+	DDX_Text(pDX, IDC_SCALE_WIDTH_EDIT, m_scale_width);
+	DDX_Text(pDX, IDC_LOCATION_X_EDIT, m_location_x);
+	DDX_Text(pDX, IDC_LOCATION_Y_EDIT, m_location_y);
+	DDX_Check(pDX, IDC_SHOW_STITCHES_CHECK, m_show_stitches);
+	DDX_Check(pDX, IDC_SHOW_JUMPS_CHECK, m_show_jumps);
+	DDX_Check(pDX, IDC_PRESERVE_DETAILS_CHECK, m_preserve_details_check);
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(CLetterDialog, CDialog)
+	//{{AFX_MSG_MAP(CLetterDialog)
+	ON_BN_CLICKED(IDC_CHANGE_FONT_BUTTON, OnChangeFontButton)
+	ON_EN_CHANGE(IDC_TEXT_EDIT, OnChangeTextEdit)
+	ON_EN_CHANGE(IDC_SCALE_HEIGHT_EDIT, OnChangeScaleHeightEdit)
+	ON_EN_CHANGE(IDC_SCALE_WIDTH_EDIT, OnChangeScaleWidthEdit)
+	ON_BN_CLICKED(IDC_PROPORTIONAL_CHECK, OnProportionalCheck)
+	ON_WM_DRAWITEM()
+	ON_BN_CLICKED(IDC_SHOW_STITCHES_CHECK, OnShowStitchesCheck)
+	ON_BN_CLICKED(IDC_SHOW_JUMPS_CHECK, OnShowJumpsCheck)
+	ON_BN_CLICKED(IDC_RUNNING_OUTLINE_CHECK, OnRunningOutlineCheck)
+	ON_EN_CHANGE(IDC_RUNNING_LENGTH_EDIT, OnChangeRunningLengthEdit)
+	ON_EN_CHANGE(IDC_RUNNING_THREADS_EDIT, OnChangeRunningThreadsEdit)
+	ON_BN_CLICKED(IDC_PRESERVE_DETAILS_CHECK, OnPreserveDetailsCheck)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CLetterDialog message handlers
+
+void CLetterDialog::OnOK() 
+{
+	// TODO: Add extra validation here
+
+	CDialog::OnOK();
+}
+
+void CLetterDialog::OnCancel() 
+{
+	// TODO: Add extra cleanup here
+
+	CDialog::OnCancel();
+}
+
+void CLetterDialog::OnChangeFontButton() 
+{
+	CFont *font;
+
+	UpdateData(TRUE);	// update variables from controls
+
+	CFontDialog dlg(&lf);
+	dlg.DoModal();
+
+	color = dlg.GetColor();
+	m_selected_font_text = dlg.GetFaceName();
+	if (dlg.IsBold()) m_selected_font_text += ", Bold";
+	if (dlg.IsItalic()) m_selected_font_text += ", Italic";
+	if (dlg.IsUnderline()) m_selected_font_text += ", Underline";
+	if (dlg.IsStrikeOut()) m_selected_font_text += ", Strikeout";
+
+	font = new(CFont);
+	if (font->CreateFontIndirect(&lf)) {
+		font = letterDC->SelectObject(font);	// replace existing font
+	};
+	delete font;	// delete the old one
+
+	//textsize = letterDC->GetOutputTextExtent(m_text);
+	m_scale_width = textsize.cx * scalex;
+	m_scale_height = textsize.cy * scaley;
+
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnChangeTextEdit() 
+{
+	// TODO: If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO: Add your control notification handler code here
+	//	CSize textsize;
+
+	UpdateData(TRUE);	// update variables from controls
+
+	//	textsize = letterDC->GetOutputTextExtent(m_text);
+
+	m_scale_height = textsize.cy*scaley;
+	m_scale_width = textsize.cx*scalex;
+
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+
+}
+
+void CLetterDialog::OnChangeScaleHeightEdit() 
+{
+	// TODO: If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO: Add your control notification handler code here
+	//	CSize textsize;
+
+	UpdateData(TRUE);	// update variables from controls
+
+	//	textsize = letterDC->GetOutputTextExtent(m_text);
+
+	if (textsize.cy==0) return;	// no text, so cannot scale it.
+	scaley = m_scale_height/textsize.cy;
+
+	if (m_proportional_check) {
+		scalex=scaley;
+		m_scale_width = textsize.cx * scalex;
+	};
+
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnChangeScaleWidthEdit() 
+{
+	// TODO: If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CDialog::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO: Add your control notification handler code here
+	//	CSize textsize;
+
+	UpdateData(TRUE);	// update variables from controls
+
+	//	textsize = letterDC->GetOutputTextExtent(m_text);
+	//	textsize = GetPathExtents(path);
+
+	if (textsize.cx==0) return;	// no text, so cannot scale it.
+	scalex = m_scale_width/textsize.cx;
+
+	if (m_proportional_check) {
+		scaley=scalex;
+		m_scale_height = textsize.cy * scaley;
+	};
+
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnProportionalCheck() 
+{
+	// TODO: Add your control notification handler code here
+	//	CSize textsize;
+
+	UpdateData(TRUE);	// update variables from controls
+
+	if (m_proportional_check) {
+		if (scalex!=scaley) {
+			if (scalex>scaley) {
+				scalex = scaley;
+			} else {
+				scaley = scalex;
+			};
+			//			textsize = letterDC->GetOutputTextExtent(m_text);
+			m_scale_width = textsize.cx * scalex;
+			m_scale_height = textsize.cy * scaley;
+		};
+	};
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+// ------------------------------------------------------------------------------
+// Draw preview window
+//
+void CLetterDialog::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct) 
+{
+	UpdateData(TRUE);	// update variables from controls
+
+	if (nIDCtl == IDC_LETTERING_PREVIEW && lpDrawItemStruct->itemAction==ODA_DRAWENTIRE ) {
+		//draw the lettering preview
+		CPaintDC dc(this);
+		HDC orig_hdc;
+		CRect area;
+
+		// connect the hDC to our CPaintDC;
+		orig_hdc = dc.Detach();
+		dc.Attach(lpDrawItemStruct->hDC);
+
+		// fill background
+		area = lpDrawItemStruct->rcItem;
+		dc.FillSolidRect(area, RGB(155,155,155));
+
+		// Select the correct font
+		CFont newFont;
+		if (newFont.CreateFontIndirect(&lf)) {
+			CFont* pOldFont = dc.SelectObject(&newFont);
+		};
+
+		// draw the text string
+
+		//textsize = letterDC->GetOutputTextExtent(m_text);
+		CRect pathextents;
+
+		//		// draw the text directly (without converting to stitches)
+		//		dc.TextOut(area.left, area.top, _T(m_text));
+		//		
+
+		// create and draw the pattern
+		struct PathStruct path;
+		class pattern *pattern;
+
+		path = ConvertTextToPath(&dc,m_text,CPoint(area.TopLeft()));
+
+		pathextents = GetPathExtents(path);
+		textsize = pathextents.Size();
+		m_scale_width = textsize.cx * scalex;		// calculate these before scaling.
+		m_scale_height = textsize.cy * scaley;
+
+		ScalePath(path);
+
+		pattern = ConvertPathToPattern(path);
+		PaintPatternPreview(&dc,pattern);
+
+		DeletePath(path);
+		delete (pattern);
+
+
+		UpdateData(FALSE);	// update controls from variables
+	};
+
+
+	CDialog::OnDrawItem(nIDCtl, lpDrawItemStruct);
+}
+
+// -----------------------------------------------------------------------------------
+// Routines to Convert the text into pattern stitches
+//
+
+CRect CLetterDialog::GetPathExtents(struct PathStruct path) {
+	CRect rect;
+	int i;
+
+	if (path.nNumPts <4) {
+		rect.left=rect.right=rect.top=rect.bottom=0;
+	} else {
+		rect.left=rect.right=path.lpPoints[4].x;
+		rect.top=rect.bottom=path.lpPoints[4].y;
+		for (i=5;i<path.nNumPts;i++) {
+			if (path.lpPoints[i].x < rect.left  ) rect.left  =path.lpPoints[i].x;
+			if (path.lpPoints[i].x > rect.right ) rect.right =path.lpPoints[i].x;
+			if (path.lpPoints[i].y < rect.top   ) rect.top   =path.lpPoints[i].y;
+			if (path.lpPoints[i].y > rect.bottom) rect.bottom=path.lpPoints[i].y;
+		};
+	};
+	return (rect);
+};
+
+
+PathStruct CLetterDialog::ConvertTextToPath(CDC* pDC, const char *text, CPoint spoint) {
+	struct PathStruct path;
+	path.nNumPts = 0;
+	path.lpPoints = NULL;
+	path.lpTypes = NULL;
+
+	// use a path to record how the text was drawn
+	pDC->BeginPath();
+	pDC->TextOut(spoint.x, spoint.y, _T(text));
+	pDC->EndPath();
+
+	pDC->FlattenPath();	// this command converts all Curves to a series of line segments.
+
+	// Find out how many points are in the path.
+	path.nNumPts = pDC->GetPath(NULL, NULL, 0);
+	if (path.nNumPts <= 0)
+		// zero means no points
+		// -1 means error
+		return(path);
+
+	// Allocate memory to hold points and stroke types from
+	// the path.
+	path.lpPoints = new POINT[path.nNumPts];
+	if (path.lpPoints == NULL) 
+		return(path);
+	path.lpTypes = new BYTE[path.nNumPts];
+	if (path.lpTypes == NULL)
+	{
+		delete [] path.lpPoints;
+		return(path);
+	}
+
+	// Now that we have the memory, really get the path data.
+	path.nNumPts = pDC->GetPath(path.lpPoints, path.lpTypes, path.nNumPts);
+
+	return path;
+}
+
+void CLetterDialog::DeletePath(PathStruct path) {
+	if (path.lpPoints != NULL)
+		delete [] path.lpPoints;
+	if (path.lpTypes != NULL)
+		delete [] path.lpTypes;
+	path.nNumPts = -1;
+};
+
+void CLetterDialog::ScalePath(PathStruct path) {
+	int i;
+	for (i=0;i<path.nNumPts;i++) {
+		path.lpPoints[i].x = (long) (path.lpPoints[i].x * scalex);
+		path.lpPoints[i].y = (long) (path.lpPoints[i].y * scaley);
+	};
+};
+
+// a better algorithm could be used for preserve details that doesn't put a short stitch at end.
+double CLetterDialog::RunningStitchesToPoint(class pattern *pattern, lfVector ppoint, BOOL finish) {
+	static double dist_remaining = 0.0;	// preserve from last call.
+	static lfVector lastpt;
+	double length;
+	double dx,dy;
+	double unitdx,unitdy;
+
+	if (dist_remaining==0.0) {
+		if(pattern->stitches>0) {
+			lastpt = lfVector(pattern->stitchlist[pattern->stitches-1].xx,pattern->stitchlist[pattern->stitches-1].yy);
+		} else {
+			lastpt = lfVector(0.0,0.0);
+		};
+	};
+	while (TRUE) {
+		dx=ppoint.dx-lastpt.dx;
+		dy=ppoint.dy-lastpt.dy;
+		length=sqrt(dx*dx + dy*dy);
+		if (dist_remaining<length) {
+			unitdx = dx/length;
+			unitdy = dy/length;
+			pattern->AddStitchAbs(lastpt.dx+unitdx*dist_remaining,lastpt.dy+unitdy*dist_remaining,NORMAL,TRUE);
+			lastpt = lfVector(pattern->stitchlist[pattern->stitches-1].xx,pattern->stitchlist[pattern->stitches-1].yy);
+			dist_remaining = m_running_length;
+		} else {
+			break;
+		};
+	};
+	if (finish && dist_remaining>0) {
+		pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+		dist_remaining = 0;
+	} else {
+		dist_remaining -= length;
+	};
+	lastpt = ppoint;
+	return (dist_remaining);
+};
+
+
+pattern *CLetterDialog::ConvertPathToPattern(PathStruct path) {
+	int nIndex;
+	LPPOINT pptLastMoveTo = NULL;
+	int numLastMoveTo = 0;
+	int repeat_count;
+
+	class pattern *pattern;
+	lfVector ppoint;
+
+	pattern = new (class pattern);
+
+	pattern->AddColor(color,"Text Color","");	// Set the color;
+	pattern->AddStitchAbs(0.0,0.0,STOP,TRUE);	// Create a color change stitch;
+
+	repeat_count = m_num_running_threads;
+	// for each of the points we have...
+	// NOTE: skip the first 4 points (outline of background rectangle
+	for (nIndex = 4; nIndex < path.nNumPts; nIndex++)
+	{
+		switch(path.lpTypes[nIndex])
+		{
+			// React to information from the path by drawing the data
+			// we received. For each of the points, record our own
+			// "last active point" so we can close figures, lines, and
+			// Beziers.
+
+		case PT_MOVETO:			// start of a new disjointed area
+			if (pptLastMoveTo != NULL && nIndex > 0) {
+				ppoint=screen_point_to_pattern_point(CPoint(pptLastMoveTo->x, pptLastMoveTo->y));
+				RunningStitchesToPoint(pattern,ppoint,TRUE /******/);
+				//pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+			};
+			pptLastMoveTo = &path.lpPoints[nIndex];
+			numLastMoveTo = nIndex;
+
+			ppoint=screen_point_to_pattern_point(CPoint(path.lpPoints[nIndex].x,path.lpPoints[nIndex].y));
+			pattern->AddStitchAbs(ppoint.dx,ppoint.dy,JUMP,TRUE);
+			break;
+
+		case PT_LINETO | PT_CLOSEFIGURE:		// last line
+			ppoint=screen_point_to_pattern_point(CPoint(path.lpPoints[nIndex].x,path.lpPoints[nIndex].y));
+			RunningStitchesToPoint(pattern,ppoint,m_preserve_details_check);
+			//pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+			if (pptLastMoveTo != NULL) {
+				ppoint=screen_point_to_pattern_point(CPoint(pptLastMoveTo->x, pptLastMoveTo->y));
+				RunningStitchesToPoint(pattern,ppoint,(repeat_count<=1 || m_preserve_details_check) /*****/);
+				//pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+				if (repeat_count>1) {
+					repeat_count--;
+					nIndex = numLastMoveTo-1;
+				} else {
+					repeat_count = m_num_running_threads;
+				};
+			};
+			pptLastMoveTo = NULL;
+			break;
+
+		case PT_LINETO:						// line
+			ppoint=screen_point_to_pattern_point(CPoint(path.lpPoints[nIndex].x,path.lpPoints[nIndex].y));
+			RunningStitchesToPoint(pattern,ppoint,m_preserve_details_check);
+			//pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+			break;
+
+			// We don't convert Beziers yet....
+		case PT_BEZIERTO | PT_CLOSEFIGURE:	// last curve
+			ASSERT(FALSE);
+			ASSERT(nIndex + 2 <= path.nNumPts);
+			//         pDC->PolyBezierTo(&lppt[nIndex], 3);
+			nIndex += 2;
+			if (pptLastMoveTo != NULL)
+				//            pDC->LineTo(pptLastMoveTo->x, pptLastMoveTo->y);
+				pptLastMoveTo = NULL;
+			break;
+
+		case PT_BEZIERTO:						// curve
+			ASSERT(FALSE);
+			ASSERT(nIndex + 2 <= path.nNumPts);
+			//         pDC->PolyBezierTo(&lppt[nIndex], 3);
+			nIndex += 2;
+			break;
+		}
+	}
+
+	// If the figure was never closed and should be,
+	// close it now.
+	if (pptLastMoveTo != NULL && nIndex > 1) {
+		ppoint=screen_point_to_pattern_point(CPoint(pptLastMoveTo->x, pptLastMoveTo->y));
+		RunningStitchesToPoint(pattern,ppoint,TRUE /******/);
+		//pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+	};
+	return(pattern);
+};
+
+//
+void CLetterDialog::PaintPatternPreview(CDC *dc, pattern *pattern) 
+{
+	int i;	
+	int col;
+	CPen *oldpen;
+	CPen *winpen;
+	int threadwidth;
+	lfVector ppoint;
+	lfVector prevppoint;
+	BOOL skipped;
+
+	threadwidth=1;
+	col = 0;
+
+	oldpen = new(CPen);
+	oldpen->CreatePen(PS_SOLID,threadwidth,pattern->colorlist[col].rgb);
+	winpen = dc->SelectObject(oldpen);
+
+	for(i=0;i<pattern->stitches;i++) {
+		if (pattern->stitchlist[i].flags==STOP) {
+
+			if (col<pattern->colors) {
+				oldpen = new(CPen);
+				oldpen->CreatePen(PS_SOLID,threadwidth,pattern->colorlist[col].rgb);
+				oldpen = dc->SelectObject(oldpen);
+				oldpen->DeleteObject();
+				delete(oldpen);
+				col++;
+			} else {
+				// Don't have enough colors so pick a random one. (Not normally used.)
+				// Produces an interesting shimmer pattern during a resize if it is used.
+				oldpen = new(CPen);
+				oldpen->CreatePen(PS_SOLID,threadwidth,RGB(rand()%256,rand()%256,rand()%256));
+				oldpen = dc->SelectObject(oldpen);
+				oldpen->DeleteObject();
+				delete(oldpen);
+				col++;
+			};
+		} else {
+			ppoint =pattern->stitchlist[i].point();
+			if ((pattern->stitchlist[i].flags==NORMAL) 
+				/*&& (pclipbox.doeslineintersect(ppoint,prevppoint))*/) {
+					if (skipped) {  // don't need MoveTo if we're already there
+						dc->MoveTo(pattern_point_to_screen_point(prevppoint));
+					};
+					// draw the visible NORMAL stitch
+					dc->LineTo(pattern_point_to_screen_point(ppoint));
+					skipped=FALSE;
+			} else {
+				// either the line isn't visible, or it isn't a normal stitch, so skip it
+				skipped=TRUE;
+			};
+			prevppoint=ppoint;
+		};
+	};
+	if (m_show_stitches) {
+		CPoint spoint;
+		// draw in selected points as small black circles
+		// Draw pattern
+		skipped=TRUE;	// forces a MoveTo before the first line we draw.
+		prevppoint=lfVector(0,0);	// a nice default starting point.
+		// select a narrow black pen
+		oldpen = new(CPen);
+		oldpen->CreatePen(PS_SOLID,1,RGB(0,0,0));
+		oldpen = dc->SelectObject(oldpen);
+		oldpen->DeleteObject();
+		delete(oldpen);
+
+		for(i=0;i<pattern->stitches;i++) 
+		{
+			if (pattern->stitchlist[i].flags==STOP) 
+			{
+			} 
+			else 
+			{
+				ppoint =pattern->stitchlist[i].point();
+				// we should grow the pclipbox
+				if ((pattern->stitchlist[i].selected) /*&& (pclipbox.isin(ppoint))*/) 
+				{
+					// mark the selected point
+					spoint = pattern_point_to_screen_point(ppoint);
+					DrawCircle(dc,spoint,SELECTED_POINTS_CIRCLE_RADIUS,8);
+				};
+			};
+		};
+	};
+	if (m_show_jumps) {
+		//sclipbox.NormalizeRect();
+		// Draw pattern
+		skipped=TRUE;	// forces a MoveTo before the first line we draw.
+		prevppoint=lfVector(0,0);	// a nice default starting point.
+		// select a dash-dot black pen
+		oldpen = new(CPen);
+		oldpen->CreatePen(PS_DASHDOT,1,RGB(0,0,0));
+		oldpen = dc->SelectObject(oldpen);
+		oldpen->DeleteObject();
+		delete(oldpen);
+
+		for(i=0;i<pattern->stitches;i++) {
+			if (pattern->stitchlist[i].flags==END) {
+			} else {
+				ppoint =pattern->stitchlist[i].point();
+				if ((pattern->stitchlist[i].flags==JUMP)) {
+					if (skipped) {  // don't need MoveTo if we're already there
+						dc->MoveTo(pattern_point_to_screen_point(prevppoint));
+					};
+					// draw the JUMP stitch
+					dc->LineTo(pattern_point_to_screen_point(ppoint));
+					skipped=FALSE;
+				} else {
+					skipped=TRUE;
+				};
+				prevppoint=ppoint;
+			};
+		};
+	};
+	winpen->DeleteObject();
+
+};
+
+// simple translations...
+CPoint CLetterDialog::pattern_point_to_screen_point(lfVector ppoint) {
+	CPoint spoint;
+	spoint.x=(int)ppoint.dx;
+	spoint.y=(int)ppoint.dy;
+	return(spoint);
+};
+
+lfVector CLetterDialog::screen_point_to_pattern_point(CPoint spoint) {
+	lfVector ppoint;
+	ppoint.dx=(double)spoint.x;
+	ppoint.dy=(double)spoint.y;
+	return(ppoint);
+};
+
+
+void CLetterDialog::DrawCircle(CDC *dc, CPoint center, int radius, int steps) {
+	// draws an unfilled circle
+	// steps can be small for smaller circles, but higher for large ones
+	double anglestep;
+	int i,dx,dy;
+
+	anglestep = (2*pi/steps);
+	dc->MoveTo(center.x+radius,center.y);	// start at right side (angle 0);
+	for (i=1;i<=steps;i++) {
+		dx = round(cos(anglestep*i)*radius);
+		dy = round(sin(anglestep*i)*radius);
+		dc->LineTo(center.x+dx,center.y+dy);
+	};
+};
+
+void CLetterDialog::OnShowStitchesCheck() 
+{
+	UpdateData(TRUE);	// update variables from controls
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnShowJumpsCheck() 
+{
+	UpdateData(TRUE);	// update variables from controls
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnRunningOutlineCheck() 
+{
+	UpdateData(TRUE);	// update variables from controls
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnChangeRunningLengthEdit() 
+{
+	UpdateData(TRUE);	// update variables from controls
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnChangeRunningThreadsEdit() 
+{
+	UpdateData(TRUE);	// update variables from controls
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}
+
+void CLetterDialog::OnPreserveDetailsCheck() 
+{
+	UpdateData(TRUE);	// update variables from controls
+	UpdateData(FALSE);	// update controls from variables
+	Invalidate(FALSE);
+}

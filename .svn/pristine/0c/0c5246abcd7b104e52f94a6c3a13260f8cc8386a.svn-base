@@ -1,0 +1,73 @@
+// SettingDialog.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "embroidermodder.h"
+#include "SettingDialog.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// SettingDialog dialog
+
+
+SettingDialog::SettingDialog(CWnd* pParent /*=NULL*/)
+	: CDialog(SettingDialog::IDD, pParent)
+{
+	EnableAutomation();
+
+	//{{AFX_DATA_INIT(SettingDialog)
+		// NOTE: the ClassWizard will add member initialization here
+	//}}AFX_DATA_INIT
+}
+
+
+void SettingDialog::OnFinalRelease()
+{
+	// When the last reference for an automation object is released
+	// OnFinalRelease is called.  The base class will automatically
+	// deletes the object.  Add additional cleanup required for your
+	// object before calling the base class.
+
+	CDialog::OnFinalRelease();
+}
+
+void SettingDialog::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(SettingDialog)
+		// NOTE: the ClassWizard will add DDX and DDV calls here
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(SettingDialog, CDialog)
+	//{{AFX_MSG_MAP(SettingDialog)
+		// NOTE: the ClassWizard will add message map macros here
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+BEGIN_DISPATCH_MAP(SettingDialog, CDialog)
+	//{{AFX_DISPATCH_MAP(SettingDialog)
+		// NOTE - the ClassWizard will add and remove mapping macros here.
+	//}}AFX_DISPATCH_MAP
+END_DISPATCH_MAP()
+
+// Note: we add support for IID_ISettingDialog to support typesafe binding
+//  from VBA.  This IID must match the GUID that is attached to the 
+//  dispinterface in the .ODL file.
+
+// {B3917D52-6C87-4CC7-8F50-B887545A2731}
+static const IID IID_ISettingDialog =
+{ 0xb3917d52, 0x6c87, 0x4cc7, { 0x8f, 0x50, 0xb8, 0x87, 0x54, 0x5a, 0x27, 0x31 } };
+
+BEGIN_INTERFACE_MAP(SettingDialog, CDialog)
+	INTERFACE_PART(SettingDialog, IID_ISettingDialog, Dispatch)
+END_INTERFACE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// SettingDialog message handlers

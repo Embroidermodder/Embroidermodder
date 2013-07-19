@@ -1,0 +1,305 @@
+//csv.cpp
+// .CSV (Excel) embroidery file spreadsheet read/write routines
+
+// File format is unique to this software, allows editing of embroidery
+// data in Excel spreadsheets, text editors, or as a easy-to-parse text
+// interface to other programs.
+
+#include "stdafx.h"
+#include <stdio.h>
+#include <fcntl.h>
+#include <io.h>
+#include "csv.h"
+#include "pattern.h"
+#include "helpers.h"
+//#include "paint.h"
+//#include "analyze.h"
+#include "Messaging.h"
+
+#define QUOTE '"'
+
+// Procedures
+
+char *type_to_text (int flags) {
+	switch (flags) {
+	case NORMAL:
+		return ("STITCH");
+		break;
+	case JUMP:
+		return ("JUMP");
+		break;
+	case STOP:
+		return ("COLOR");
+		break;
+	case END:
+		return ("END");
+		break;
+	default:
+		return ("UNKNOWN");
+		break;
+	}
+};
+
+
+void csv_read(class pattern *pattern, const char *filename) {
+	CFile csvin;
+
+	if (!csvin.Open(filename,CFile::modeRead)) {
+		fprintf(stderr, "Error opening %s for read\n",filename);
+		exit(-1);
+	};
+
+	csv_read(pattern,&csvin);
+
+	csvin.Close();
+};
+
+void csv_read(class pattern *pattern, CFile *csvin) {
+	char line[2048];// One line of text read at a time
+
+//	FILE *csvin;
+	int i;
+	int co=0;
+	char *var_name;
+
+	// for converting stitches from file encoding
+	double xx,yy,dx,dy;
+
+	//pattern->initialize_pattern(filename,filename);
+	pattern->clear();
+	pattern->set_variable("design_name",csvin->GetFileTitle());
+	pattern->set_variable("file_name",csvin->GetFileName());
+
+//	csvin = fopen(filename,"r");
+//	if (csvin==0) {
+//		fprintf(stderr,"Error opening %s for read\n",filename);
+//		buffer_add("Error open for read: ",filename);
+//		exit(-1);
+//	};
+
+	xx=yy=0.0;
+	// READ AND PARSE FILE
+//	len=csvin->GetLength();
+	for (int jj=0;;jj++) {
+		if (csvin->GetLength()==csvin->GetPosition()) break;
+		for (i=0;i<1023;i++) {
+			csvin->Read(&line[i],1);
+			//line[i]=fgetc(csvin);
+			if (line[i]=='\n') break;
+			if (csvin->GetLength()==csvin->GetPosition()) break;
+		};
+		line[i]='\0';
+
+		switch (line[0]) {
+		case '#':
+			// comment, ignore line
+			break;
+		case '>':
+			// variable
+			//if (strcmp(split_cell_str(line,1),">Design_Name")==0) {
+				//pattern->design_name=stralloccopy(split_cell_str(line,2));
+			//	pattern->set_variable("design_name",split_cell_str(line,2));
+			//};
+			var_name=split_cell_str(line,1);
+			pattern->set_variable(&var_name[1],split_cell_str(line,2));
+			break;
+		case '$':
+			// color
+			pattern->add_color(RGB(split_cell_int(line,2),split_cell_int(line,3),
+				split_cell_int(line,4)),split_cell_str(line,5),split_cell_str(line,6));
+			//ignore color number specified in file?
+			break;
+		case '*':
+			// stitch
+			if (split_cell_str(line,2)[0]!=0) {
+				xx=split_cell_double(line,2);
+				yy=split_cell_double(line,3);
+			} else { 
+				dx=split_cell_double(line,4);
+				dy=split_cell_double(line,5);
+				xx+=dx;
+				yy+=dy;
+			};
+			if (strcmp(split_cell_str(line,1),"*STITCH")==0) {
+				pattern->add_stitch_abs(xx,yy,NORMAL);
+			} else if (strcmp(split_cell_str(line,1),"*COLOR")==0) {
+				pattern->add_stitch_abs(xx,yy,STOP);
+				co++;
+			} else if (strcmp(split_cell_str(line,1),"*END")==0) {
+				pattern->add_stitch_abs(xx,yy,END);
+			} else if (strcmp(split_cell_str(line,1),"*JUMP")==0) {
+				pattern->add_stitch_abs(xx,yy,JUMP);
+			} else {
+				pattern->add_stitch_abs(xx,yy,UNKNOWN);
+			};
+		};
+
+	};
+//	fclose(csvin);
+
+	pattern->calculate_angles();
+
+#ifdef DEBUG_FILEOUT
+	FILE *fout;
+	fout = fopen("stdout.txt","w");
+	if (fout==0) {
+		fprintf(stderr, "Error opening %s for write\n","stdout.txt");
+		exit(-1);
+	};
+	//Display header for debugging purposes
+	fprintf(fout,"HEADER: (file %s)\n",filename);
+	fprintf(fout,"Done reading: %d stitches\n",pattern->stitches);
+	fclose(fout);
+#endif
+
+	srand((unsigned)time(NULL));
+	for(;pattern->colors<co;) {
+		pattern->add_color(RGB(rand()%256,rand()%256,rand()%256),"Random","");
+	};
+
+	buffer_add("Done read stitches:",pattern->stitches);
+
+};
+
+
+void csv_write(class pattern *pattern, const char *filename) {
+	CFile csvout;
+
+	if(!csvout.Open(filename,CFile::modeWrite)) {
+		fprintf(stderr, "Error opening %s for write\n",filename);
+		exit(-1);
+	};
+
+	csv_write(pattern,&csvout);
+
+	csvout.Close();
+};
+
+// Shortcuts to output various stuff to a CFile
+void write_quotedstring(CFile *cfp, char *str, char *separator) {
+	cfp->Write("\"",1);
+	cfp->Write(str,strlen(str));
+	cfp->Write("\"",1);
+	cfp->Write(separator,strlen(separator));
+};
+void write_integer(CFile *cfp, int num, char *separator) {
+	char buf[32];
+	sprintf(buf,"%d%s",num,separator);
+	cfp->Write(buf,strlen(buf));
+};
+void write_double(CFile *cfp, double num, char *separator) {
+	char buf[32];
+	sprintf(buf,"%lf%s",num,separator);
+	cfp->Write(buf,strlen(buf));
+};
+
+/*
+void write_printf(CFile *cfp, char *format, ...) {	// va_list argptr
+	static char buf[256];
+	vsprintf(buf,format,argptr);
+	cfp->Write(buf,strlen(buf));
+};
+*/
+
+void csv_write(class pattern *pattern, CFile *csvout) {
+//	FILE *csvout;
+	char buf[256];	// max line length
+	double xx,yy,dx,dy;
+	int flags;
+	double negx,posx,negy,posy;
+	int st,co;
+	int i;
+
+	if (pattern->stitches==0) {
+		fprintf(stderr,"No file to save\n");
+		return;
+	};
+
+	pattern->calculate_angles();
+
+//	csvout = fopen(filename,"w");
+//	if (csvout==0) {
+//		fprintf(stderr, "Error opening %s for write\n",filename);
+//		exit(-1);
+//	};
+
+	//first pass through pattern calculating extents
+	xx=yy=0; co=0; st=0; posx=negx=posy=negy=0;
+	flags=NORMAL;
+	for (i=0;flags!=END;i++) {
+		if (i>pattern->stitches) break;
+		xx=round(pattern->stitchlist[i].xx); // convert from mm to 0.1mm for file format
+		yy=round(pattern->stitchlist[i].yy);
+		flags=pattern->stitchlist[i].flags;
+		if (xx<negx) negx=xx;
+		if (xx>posx) posx=xx;
+		if (yy<negy) negy=yy;
+		if (yy>posy) posy=yy;
+		st++;
+		if (flags==STOP) co++;
+	};
+
+	//write header
+	write_quotedstring(csvout,"#CSV Embroidery File","\x0d\x0a");
+	write_quotedstring(csvout,"#Notes: Can be read by Excel as CSV (Comma Separated Value) or text editor.","\n");
+	write_quotedstring(csvout,"#Lines beginning with # are comments.","\n");
+	write_quotedstring(csvout,"#Lines beginning with > are variables: >VARIABLE, VALUE","\n");
+	write_quotedstring(csvout,"#Lines beginning with $ are colors: $Number, RED, GREEN, BLUE, Description, Catalog number","\n");
+	write_quotedstring(csvout,"#Lines beginning with * are stitchlist entries: *STITCH, x, y, rel x, rel y, l, a, da","\n");
+	write_quotedstring(csvout,"#  *STITCH means needle goes in, *JUMP means needle move only, *COLOR means stop for color change","\n");
+	write_quotedstring(csvout,"#  x and y are absolute locations in mm; rel x, rel y are relative locations;","\n");
+	write_quotedstring(csvout,"#  If absolute values are blank, relative values are used, otherwise relatives are ignored on read.","\n");
+	write_quotedstring(csvout,"#  (This is useful if editing by hand, move a piece of pattern by move first stitch and delete absolute values for the rest.)","\n");
+	write_quotedstring(csvout,"#  l is stitch length, a is angle into node, da is angle out - angle in;","\n");
+	write_quotedstring(csvout,"#  -999 means not-applicable.  These three parameters are ignored during read.","\n");
+	write_quotedstring(csvout,"#","\n");
+
+	//write variables
+	sprintf(buf,"#>VAR_NAME,VAR_VALUE\"\n");
+	csvout->Write(buf,strlen(buf));
+	for(i=0;i<pattern->num_variables;i++) {
+		sprintf(buf,"\">%s\",\"%s\"\n",pattern->variable_name[i],pattern->variable_value[i]);
+		csvout->Write(buf,strlen(buf));
+	};
+	//fprintf(csvout,">Design_Name,%c%s%c\n",QUOTE,pattern->get_variable("design_name"),QUOTE);
+	//dynamic_variables
+	sprintf(buf,">Stitch_Count,%d\n",pattern->stitches);
+	csvout->Write(buf,strlen(buf));
+	sprintf(buf,">Color_Count,%d\n",co);
+	csvout->Write(buf,strlen(buf));
+	sprintf(buf,">Extents,%lf,%lf,%lf,%lf\n",negx,posx,negy,posy);
+	csvout->Write(buf,strlen(buf));
+	sprintf(buf,"#\n");
+	csvout->Write(buf,strlen(buf));
+
+	//write colors
+	sprintf(buf,"#$COLOR,RED,GREEN,BLUE,DESCRIPTION,CATALOG_NUMBER\n");
+	csvout->Write(buf,strlen(buf));
+	for (i=0;i<pattern->colors;i++) {
+		sprintf(buf,"$%d,%d,%d,%d,\"%s\",\"%s\"\n",i,GetRValue(pattern->colorlist[i].rgb),
+			GetGValue(pattern->colorlist[i].rgb),GetBValue(pattern->colorlist[i].rgb),
+			pattern->colorlist[i].description,
+			pattern->colorlist[i].catalog_number);
+		csvout->Write(buf,strlen(buf));
+	};
+	sprintf(buf,"#\n");
+	csvout->Write(buf,strlen(buf));
+	//write stitches
+	sprintf(buf,"#*STITCH,XX,YY,DX,DY,LENGTH,ANGLE,dANGLE\n",QUOTE,QUOTE);
+	csvout->Write(buf,strlen(buf));
+	xx=yy=0;
+	for (i=0;i<pattern->stitches;i++) {
+		//convert from mm to 0.1mm for file format
+		dx=pattern->stitchlist[i].xx - xx;
+		dy=pattern->stitchlist[i].yy - yy;
+		xx=pattern->stitchlist[i].xx;
+		yy=pattern->stitchlist[i].yy;
+		flags=pattern->stitchlist[i].flags;
+		//fprintf(csvout,"*%s,%lf,%lf,%lf,%lf\n",type_to_text(flags),xx,yy,dx,dy);
+		sprintf(buf,"*%s,%lf,%lf,%lf,%lf,%lf,%lf,%lf\n",type_to_text(flags),xx,yy,dx,dy,
+			pattern->stitchlist[i].l,pattern->stitchlist[i].a,pattern->stitchlist[i].da);
+		csvout->Write(buf,strlen(buf));
+	};
+
+//	fclose(csvout);
+};

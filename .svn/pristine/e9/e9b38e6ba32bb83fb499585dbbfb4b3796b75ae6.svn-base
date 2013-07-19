@@ -1,0 +1,14 @@
+[Menu]
+Name=Draw
+Position=6
+
+[ToolBar]
+Name=Draw
+Position=6
+
+[Tips]
+ToolTip=&Rectangle
+StatusTip=Creates a rectangular polyline: RECTANGLE
+
+[Prompt]
+Alias=REC, RECT, RECTANG, RECTANGLE

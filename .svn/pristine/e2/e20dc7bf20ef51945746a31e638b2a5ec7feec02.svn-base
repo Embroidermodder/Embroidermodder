@@ -1,0 +1,182 @@
+//fonts.cpp
+// these are the text/font routines separated out from EmbroideryView.cpp
+//
+// This sourcecode file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#include "stdafx.h"
+#include <math.h>
+#include "pattern.h"
+#include "helpers.h"
+#include "embroidermodder.h"
+#include "paint.h"
+#include "EmbroideryDoc.h"
+#include "EmbroideryView.h"
+
+//////////////////////////////////////////////////////////////////////////////////
+// Routines to convert text to stitches
+
+
+// example code from BeginPath documentation on MSDN
+
+// This OnDraw() implementation uses GDI paths to draw the outline of
+// some text in a TrueType font. The path is used to record the way
+// the TrueType font would be drawn. Then, the function uses the data
+// returned from CDC::GetPath() to draw the font--without filling it.
+
+void CEmbroideryView::DrawFont(CDC* pDC, LOGFONT lf, const char *text, lfVector ppoint) {
+
+	// Font Selection Dialog Box
+//	LOGFONT lf;
+//	memset(&lf, 0, sizeof(LOGFONT));
+
+//	lf.lfHeight = -MulDiv(48, pDC->GetDeviceCaps(LOGPIXELSY), 72);	// Default size = 48pt
+//	strcpy(lf.lfFaceName, "Times New Roman");	// Default font
+//	lf.lfWeight = FW_NORMAL;					// Default style
+//	lf.lfOutPrecision = OUT_TT_ONLY_PRECIS;		// Select only TrueType fonts
+
+//	CFontDialog dlg(&lf);
+//	dlg.DoModal();
+
+
+   // create and select it
+//   CFont newFont;
+//   if (!newFont.CreateFontIndirect(&lf))
+//      return;
+//   CFont* pOldFont = pDC->SelectObject(&newFont);
+
+   CPoint spoint;
+   spoint = pattern_point_to_screen_point(ppoint);
+
+   // use a path to record how the text was drawn
+   pDC->BeginPath();
+   pDC->TextOut(spoint.x, spoint.y, _T(text));
+   pDC->EndPath();
+
+   pDC->FlattenPath();	// this command converts all Curves to a series of line segments.
+
+   // Find out how many points are in the path. Note that
+   // for long strings or complex fonts, this number might be
+   // gigantic!
+   int nNumPts = pDC->GetPath(NULL, NULL, 0);
+   if (nNumPts <= 0)
+	   // zero means no points
+	   // -1 means error
+      return;
+
+   // Allocate memory to hold points and stroke types from
+   // the path.
+   LPPOINT lpPoints = new POINT[nNumPts];
+   if (lpPoints == NULL)
+      return;
+   LPBYTE lpTypes = new BYTE[nNumPts];
+   if (lpTypes == NULL)
+   {
+      delete [] lpPoints;
+      return;
+   }
+
+   // Now that we have the memory, really get the path data.
+   nNumPts = pDC->GetPath(lpPoints, lpTypes, nNumPts);
+
+   // If it worked, draw the lines. Win95 and Win98 don't support
+   // the PolyDraw API, so we use our own member function to do
+   // similar work. If you're targeting only Windows NT, you can
+   // use the PolyDraw() API and avoid the COutlineView::PolyDraw()
+   // member function.
+
+   if (nNumPts != -1)
+      PolyDraw(pDC, lpPoints, lpTypes, nNumPts);
+
+   // Release the memory we used
+   delete [] lpPoints;
+   delete [] lpTypes;
+
+   // Put back the old font
+//   pDC->SelectObject(pOldFont);
+
+   return;
+}
+
+void CEmbroideryView::PolyDraw(CDC* pDC, CONST LPPOINT lppt, CONST LPBYTE lpbTypes, int cCount)
+{
+   int nIndex;
+   LPPOINT pptLastMoveTo = NULL;
+
+   class pattern *pattern;
+   lfVector ppoint;
+
+   pattern=&GetDocument()->pattern;
+
+   // for each of the points we have...
+   for (nIndex = 0; nIndex < cCount; nIndex++)
+   {
+      switch(lpbTypes[nIndex])
+      {
+      // React to information from the path by drawing the data
+      // we received. For each of the points, record our own
+      // "last active point" so we can close figures, lines, and
+      // Beziers.
+
+      case PT_MOVETO:			// start of a new disjointed area
+		 if (pptLastMoveTo != NULL && nIndex > 0) {
+//            pDC->LineTo(pptLastMoveTo->x, pptLastMoveTo->y);
+			ppoint=screen_point_to_pattern_point(CPoint(pptLastMoveTo->x, pptLastMoveTo->y));
+			pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+		 };
+//         pDC->MoveTo(lppt[nIndex].x, lppt[nIndex].y);
+         pptLastMoveTo = &lppt[nIndex];
+		 ppoint=screen_point_to_pattern_point(CPoint(lppt[nIndex].x,lppt[nIndex].y));
+		 pattern->AddStitchAbs(ppoint.dx,ppoint.dy,JUMP,TRUE);
+         break;
+
+      case PT_LINETO | PT_CLOSEFIGURE:		// last line
+//         pDC->LineTo(lppt[nIndex].x, lppt[nIndex].y);
+		 ppoint=screen_point_to_pattern_point(CPoint(lppt[nIndex].x,lppt[nIndex].y));
+		 pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+         if (pptLastMoveTo != NULL) {
+//            pDC->LineTo(pptLastMoveTo->x, pptLastMoveTo->y);
+			ppoint=screen_point_to_pattern_point(CPoint(pptLastMoveTo->x, pptLastMoveTo->y));
+			pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+		 };
+         pptLastMoveTo = NULL;
+         break;
+
+      case PT_LINETO:						// line
+//         pDC->LineTo(lppt[nIndex].x, lppt[nIndex].y);
+		 ppoint=screen_point_to_pattern_point(CPoint(lppt[nIndex].x,lppt[nIndex].y));
+		 pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+         break;
+
+      case PT_BEZIERTO | PT_CLOSEFIGURE:	// last curve
+		 ASSERT(FALSE);
+         ASSERT(nIndex + 2 <= cCount);
+         pDC->PolyBezierTo(&lppt[nIndex], 3);
+         nIndex += 2;
+         if (pptLastMoveTo != NULL)
+            pDC->LineTo(pptLastMoveTo->x, pptLastMoveTo->y);
+         pptLastMoveTo = NULL;
+         break;
+
+      case PT_BEZIERTO:						// curve
+         ASSERT(FALSE);
+		 ASSERT(nIndex + 2 <= cCount);
+         pDC->PolyBezierTo(&lppt[nIndex], 3);
+         nIndex += 2;
+         break;
+      }
+   }
+
+   // If the figure was never closed and should be,
+   // close it now.
+   if (pptLastMoveTo != NULL && nIndex > 1) {
+//      pDC->LineTo(pptLastMoveTo->x, pptLastMoveTo->y);
+	  ppoint=screen_point_to_pattern_point(CPoint(pptLastMoveTo->x, pptLastMoveTo->y));
+	  pattern->AddStitchAbs(ppoint.dx,ppoint.dy,NORMAL,TRUE);
+   };
+
+}

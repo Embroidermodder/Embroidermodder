@@ -1,0 +1,40 @@
+#ifndef POINT_H
+#define POINT_H
+class Point {
+    public:
+		Point(void) 
+		{
+			x = 0;
+			y = 0;
+		}
+
+		Point(int new_x, int new_y) 
+		{
+			x = new_x;
+			y = new_y;
+		}
+		Point::Point(const Point &point)
+		{
+			this->x = point.x;
+			this->y = point.y;
+		}
+        int getX()
+		{
+			return x;
+		}
+        int getY()
+		{
+			return y;
+		}
+
+		Point& Point::operator=(const Point &point)
+		{
+			this->x = point.x;
+			this->y = point.y;
+			return *this;
+		}
+    private:
+        int x;
+        int y;
+};
+#endif

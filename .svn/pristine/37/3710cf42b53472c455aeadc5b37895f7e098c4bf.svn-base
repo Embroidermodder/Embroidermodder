@@ -1,0 +1,100 @@
+Embroidermodder additional features and notes
+---------------------------------------------
+Additional file format .FEX (Free Embroidery Exchange)
+--Same as .csv, but without comments, and less precision
+--smaller file for publishing on internet
+
+Add arbitrary list of variables in pattern.
+Insert in list of stitches:
+Line Begin/End
+Region Begin/End, region name
+
+Instead of stitches:
+Line xx1,yy1, xx2,yy2, stitchlength
+Region perimiter points list (clockwise)
+holes points lists (counter clockwise)
+fill style
+
+Pattern attributes:
+  scale (amount, sx,sy, proportional lock)
+  Linear Density Policy
+    Pure scaling
+    Preserve stitchlength (last stitch short)
+    Preserve approx stitchlength (equal length runs)
+    Preserve pattern (??)
+  Parallel Density Policy
+    same options as above
+  Auto center design on save
+  Color palette selection
+  Thread weight (40wt, 30wt, 60wd) -> translate to mm
+  Needle size (12/10, etc) -> translate to mm
+  Background material color
+
+Program attributes:
+  each of the following can have None, Light, Normal, or Dark
+    Show needle holes
+    Show JUMP stitches
+    Show thread
+    Show COLOR change
+    Show cuts
+    Show center mark
+    Selected needle holes
+    Selected threads
+  View Zoom: To Fit, 100%, amount
+
+Menu commands:
+  Add Basting: hoop perimeter, design extents square, design perimeter
+    stitch length
+    distance from design
+    insert color change after
+  Center design
+  Screensaver
+  Cut for PLUS Hoop
+
+Accurate drawing:
+  Oversampling: 4x, 9x, 16x, 25x
+  Anti-alias (average color of subpixels)
+  Wide lines by multiple parallel lines < 1 apart
+
+
+Embroidery Dreams screensaver
+-----------------------------
+Draw modes:
+  speed: fast, slow
+  rip stitiches
+  cut jump threads, animate fall away
+  animated needle
+
+Multiples:
+  one at a time, fit to screen or actual size
+  multiples simultaneously
+  allow overlap/not
+
+Applique:
+  stitch each piece separately
+  then fly pieces in to correct place
+  disassemble completed design, pieces fall away
+
+Kaliedoscope
+  mirrors 2x, 4x
+  rotated 2x,3x,4x,5x,6x...
+  copies: grid/hex pattern/circle/row
+  patchwork quilt
+    with borders
+  color cycling
+  continuously rotating
+  randomly change single color
+
+pan/zoom:
+  zoom in/out
+  stretch
+  super closeup
+    follow needle
+
+time:
+  run until finished
+  fixed time
+
+Slideshow:
+  save BMP of completed designs
+  slideshow of favorite completed designs

@@ -1,0 +1,14 @@
+[Menu]
+Name=Draw
+Position=0
+
+[ToolBar]
+Name=Draw
+Position=0
+
+[Tips]
+ToolTip=&Line
+StatusTip=Creates straight line segments:  LINE
+
+[Prompt]
+Alias=L, LINE

@@ -1,0 +1,33 @@
+// stdafx.h : include file for standard system include files,
+//  or project specific include files that are used frequently, but
+//      are changed infrequently
+//
+// This sourcecode file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#if !defined(AFX_STDAFX_H__9BF00C23_0640_4268_B18F_51878122DD54__INCLUDED_)
+#define AFX_STDAFX_H__9BF00C23_0640_4268_B18F_51878122DD54__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+
+#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
+
+#include <afxwin.h>         // MFC core and standard components
+#include <afxext.h>         // MFC extensions
+#include <afxdisp.h>        // MFC Automation classes
+#include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
+#ifndef _AFX_NO_AFXCMN_SUPPORT
+#include <afxcmn.h>			// MFC support for Windows Common Controls
+#endif // _AFX_NO_AFXCMN_SUPPORT
+
+
+//{{AFX_INSERT_LOCATION}}
+// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+
+#endif // !defined(AFX_STDAFX_H__9BF00C23_0640_4268_B18F_51878122DD54__INCLUDED_)

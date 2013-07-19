@@ -1,0 +1,309 @@
+#######################################
+# Syntax Coloring Map for libEmbroidery
+#######################################
+
+####################
+# emb-arc.h
+####################
+
+# Datatypes
+EmbArc	    KEYWORD1
+EmbArcList  KEYWORD1
+
+# Functions #TODO: review arc header
+embArc_create	KEYWORD2
+embArc_add	KEYWORD2
+
+####################
+# emb-circle.h
+####################
+
+# Datatypes
+EmbCircle	KEYWORD1
+EmbCircleList	KEYWORD1
+
+####################
+# emb-color.h
+####################
+
+# Datatypes
+EmbColor	KEYWORD1
+
+# Functions
+embColor_fromHexStr	KEYWORD2
+
+####################
+# emb-ellipse.h
+####################
+
+# Datatypes
+EmbEllipse	KEYWORD1
+EmbEllipseList	KEYWORD1
+
+####################
+# emb-pattern.h
+####################
+
+# Datatypes
+EmbPattern	    KEYWORD1
+
+# Functions #TODO: review pattern header
+embPattern_create	KEYWORD2
+embPattern_hideStitchesOverLength	KEYWORD2
+embPattern_fixColorCount	KEYWORD2
+embPattern_addThread	KEYWORD2
+embPattern_addStitchAbs	KEYWORD2
+embPattern_addStitchRel	KEYWORD2
+embPattern_addArcAbs	KEYWORD2
+embPattern_changeColor	KEYWORD2
+embPattern_free	KEYWORD2
+embPattern_read	KEYWORD2
+embPattern_write	KEYWORD2
+embPattern_scale	KEYWORD2
+embPattern_calcBoundingBox	KEYWORD2
+embPattern_flipVertical	KEYWORD2
+embPattern_correctForMaxStitchLength	KEYWORD2
+embPattern_center	KEYWORD2
+embPattern_loadExternalColorFile	KEYWORD2
+
+####################
+# emb-polyline.h
+####################
+
+# Constants #TODO: review polyline header
+LINETO	LITERAL1
+MOVETO	LITERAL1
+CUBICTOCONTROL1	LITERAL1
+CUBICTOCONTROL2	LITERAL1
+CUBICTOEND	LITERAL1
+QUADTOCONTROL	LITERAL1
+QUADTOEND	LITERAL1
+
+# Datatypes
+EmbPolyline	KEYWORD1
+EmbPolylineList	KEYWORD1
+
+####################
+# emb-reader-writer.h
+####################
+
+# Datatypes
+EmbReaderWriter	    KEYWORD1
+
+# Functions
+embReaderWriter_getByFileName	KEYWORD2
+
+####################
+# emb-rect.h
+####################
+
+# Datatypes
+EmbRect	KEYWORD1
+EmbRectList	KEYWORD1
+
+# Functions #TODO: review rect header
+embRect_width	KEYWORD2
+embRect_height	KEYWORD2
+
+####################
+# emb-spline.h
+####################
+
+# Datatypes
+EmbBezier	KEYWORD1
+EmbSplineList	KEYWORD1
+
+####################
+# emb-stitch.h
+####################
+
+# Constants
+NORMAL	LITERAL1
+JUMP	LITERAL1
+TRIM	LITERAL1
+STOP	LITERAL1
+END	LITERAL1
+
+# Datatypes
+EmbStitch	KEYWORD1
+EmbStitchList	KEYWORD1
+
+# Functions
+embStitch_add	KEYWORD2
+embStitch_getAt	KEYWORD2
+embStitch_count	KEYWORD2
+embStitch_empty	KEYWORD2
+
+####################
+# emb-thread.h
+####################
+
+# Datatypes
+EmbThread	KEYWORD1
+EmbThreadList	KEYWORD1
+
+# Functions
+embThread_findNearestColor	KEYWORD2
+embThread_findNearestColorInArray	KEYWORD2
+embThread_add	KEYWORD2
+embThread_getRandom	KEYWORD2
+embThread_getAt	KEYWORD2
+embThread_count	KEYWORD2
+embThread_empty	KEYWORD2
+
+####################
+# emb-time.h
+####################
+
+# Datatypes
+EmbTime	KEYWORD1
+
+# Functions
+embTime_initNow	KEYWORD2
+
+####################
+# formats
+####################
+
+ read10o	KEYWORD2
+write10o	KEYWORD2
+ read100	KEYWORD2
+write100	KEYWORD2
+ readArt	KEYWORD2
+writeArt	KEYWORD2
+ readBmc	KEYWORD2
+writeBmc	KEYWORD2
+ readBro	KEYWORD2
+writeBro	KEYWORD2
+ readCnd	KEYWORD2
+writeCnd	KEYWORD2
+ readCol	KEYWORD2
+writeCol	KEYWORD2
+ readCsd	KEYWORD2
+writeCsd	KEYWORD2
+ readCsv	KEYWORD2
+writeCsv	KEYWORD2
+ readDat	KEYWORD2
+writeDat	KEYWORD2
+ readDem	KEYWORD2
+writeDem	KEYWORD2
+ readDsb	KEYWORD2
+writeDsb	KEYWORD2
+ readDst	KEYWORD2
+writeDst	KEYWORD2
+ readDsz	KEYWORD2
+writeDsz	KEYWORD2
+ readDxf	KEYWORD2
+writeDxf	KEYWORD2
+ readEdr	KEYWORD2
+writeEdr	KEYWORD2
+ readEmd	KEYWORD2
+writeEmd	KEYWORD2
+ readExp	KEYWORD2
+writeExp	KEYWORD2
+ readExy	KEYWORD2
+writeExy	KEYWORD2
+ readEys	KEYWORD2
+writeEys	KEYWORD2
+ readFxy	KEYWORD2
+writeFxy	KEYWORD2
+ readGnc	KEYWORD2
+writeGnc	KEYWORD2
+  readGt	KEYWORD2
+ writeGt	KEYWORD2
+ readHus	KEYWORD2
+writeHus	KEYWORD2
+ readInb	KEYWORD2
+writeInb	KEYWORD2
+ readJef	KEYWORD2
+writeJef	KEYWORD2
+ readKsm	KEYWORD2
+writeKsm	KEYWORD2
+ readPcd	KEYWORD2
+writePcd	KEYWORD2
+ readPcm	KEYWORD2
+writePcm	KEYWORD2
+ readPcq	KEYWORD2
+writePcq	KEYWORD2
+ readPcs	KEYWORD2
+writePcs	KEYWORD2
+ readPec	KEYWORD2
+writePec	KEYWORD2
+ readPel	KEYWORD2
+writePel	KEYWORD2
+ readPem	KEYWORD2
+writePem	KEYWORD2
+ readPes	KEYWORD2
+writePes	KEYWORD2
+ readPhb	KEYWORD2
+writePhb	KEYWORD2
+ readPhc	KEYWORD2
+writePhc	KEYWORD2
+ readRgb	KEYWORD2
+writeRgb	KEYWORD2
+ readSew	KEYWORD2
+writeSew	KEYWORD2
+ readShv	KEYWORD2
+writeShv	KEYWORD2
+ readSst	KEYWORD2
+writeSst	KEYWORD2
+ readStx	KEYWORD2
+writeStx	KEYWORD2
+ readSvg	KEYWORD2
+writeSvg	KEYWORD2
+ readT09	KEYWORD2
+writeT09	KEYWORD2
+ readTap	KEYWORD2
+writeTap	KEYWORD2
+ readThr	KEYWORD2
+writeThr	KEYWORD2
+ readTxt	KEYWORD2
+writeTxt	KEYWORD2
+ readU00	KEYWORD2
+writeU00	KEYWORD2
+ readU01	KEYWORD2
+writeU01	KEYWORD2
+ readVip	KEYWORD2
+writeVip	KEYWORD2
+ readVp3	KEYWORD2
+writeVp3	KEYWORD2
+ readXxx	KEYWORD2
+writeXxx	KEYWORD2
+ readZsk	KEYWORD2
+writeZsk	KEYWORD2
+
+####################
+# helpers-binary.h
+####################
+
+# Functions
+binaryReadByte	KEYWORD2
+binaryReadBytes	KEYWORD2
+binaryReadInt16	KEYWORD2
+binaryReadInt32	KEYWORD2
+binaryReadUInt8	KEYWORD2
+binaryReadUInt16	KEYWORD2
+binaryReadUInt32	KEYWORD2
+binaryReadInt16BE	KEYWORD2
+binaryReadInt32BE	KEYWORD2
+binaryReadFloat	KEYWORD2
+binaryWriteByte	KEYWORD2
+binaryWriteBytes	KEYWORD2
+binaryWriteShort	KEYWORD2
+binaryWriteUShort	KEYWORD2
+binaryWriteInt	KEYWORD2
+binaryWriteUInt	KEYWORD2
+binaryWriteFloat	KEYWORD2
+
+####################
+# helpers-misc.h
+####################
+
+# Constants
+PI	LITERAL1
+
+# Functions
+roundDouble	KEYWORD2
+rTrim	KEYWORD2
+lTrim	KEYWORD2
+

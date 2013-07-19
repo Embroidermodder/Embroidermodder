@@ -1,0 +1,14 @@
+[Menu]
+Name=Draw
+Position=8
+
+[ToolBar]
+Name=Draw
+Position=8
+
+[Tips]
+ToolTip=Circle
+StatusTip=Creates a circle:  CIRCLE
+
+[Prompt]
+Alias=C, CIRCLE

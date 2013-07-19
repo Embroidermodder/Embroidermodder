@@ -1,0 +1,67 @@
+//embroidery_pattern.h
+
+
+
+
+
+struct stitch {
+	int flags;	// uses codes defined below
+	double xx;		// absolute position (not relative)
+	double yy;		
+
+	double a;		// angle into this node
+	double da;		// angle out - angle in
+	double l;		// length into this node
+
+//	double a(void);		// calculate angle into this node
+//	double da(void);	// calculate angle out - angle in
+//	double l(void);		// calculate length into this node
+};
+
+struct color {
+	COLORREF rgb;
+	char *description;
+	char *catalog_number;	int colorNumber;
+};
+
+class embroidery_pattern {
+public:
+	int stitches;
+	int colors;
+	struct stitch *stitchlist;
+	struct color *colorlist;
+	char *design_name;
+private:
+	int allocated_stitches;
+	int allocated_colors;
+
+public:
+	void initialize_pattern(const char *design_name);
+    int add_color (COLORREF rgb, const char *description, const char *catalog_number, int colNum);
+	int add_stitch_abs(double x, double y, int flags);
+	int add_stitch_rel(double dx, double dy, int flags);
+	int add_stitch_copy (struct stitch src);
+	int delete_stitch (int number);
+	int move_last_stitch (int number);
+	void print_stitchlist(char *filename);
+	void read_dst(const char *filename);
+	void write_dst(const char *filename);
+	void read_csv(const char *filename);
+	void write_csv(const char *filename);	void read_pes(const char *filename);
+	void read_exp(const char *filename);		void write_exp(const char *filename);		void read_pcs(const char *filename);		void read_ksm(const char *filename);		void scale_pattern (double scale);
+	void statistics (void);
+	void create_test(void);
+	struct lfRECT get_dimensions(void); 
+	void calculate_angles(void);
+};
+
+// Codes for stitch types (in struct stitch.flags)
+
+#define NORMAL 0
+#define UNKNOWN 1
+#define JUMP 2
+#define STOP 3
+#define END 4
+#define LINE 10
+#define SATINLINE 11
+#define REGION 12

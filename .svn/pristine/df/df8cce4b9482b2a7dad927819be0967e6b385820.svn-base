@@ -1,0 +1,59 @@
+#if !defined(AFX_SETTINGS_H__01C3A432_8CEC_4DFF_8C21_446743A57193__INCLUDED_)
+#define AFX_SETTINGS_H__01C3A432_8CEC_4DFF_8C21_446743A57193__INCLUDED_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif // _MSC_VER > 1000
+// Settings.h : header file
+//
+
+/////////////////////////////////////////////////////////////////////////////
+// Settings dialog
+
+class Settings : public CDialog
+{
+// Construction
+public:
+	Settings(CWnd* pParent = NULL);   // standard constructor
+
+// Dialog Data
+	//{{AFX_DATA(Settings)
+	enum { IDD = IDD_SETTINGS };
+		// NOTE: the ClassWizard will add data members here
+	//}}AFX_DATA
+
+
+// Overrides
+	// ClassWizard generated virtual function overrides
+	//{{AFX_VIRTUAL(Settings)
+	protected:
+	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	//}}AFX_VIRTUAL
+
+// Implementation
+protected:
+
+	// Generated message map functions
+	//{{AFX_MSG(Settings)
+	afx_msg void OnSelchangeSettingsTab(NMHDR* pNMHDR, LRESULT* pResult);
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+};
+
+//{{AFX_INSERT_LOCATION}}
+// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+
+#endif // !defined(AFX_SETTINGS_H__01C3A432_8CEC_4DFF_8C21_446743A57193__INCLUDED_)
+
+
+
+//============================Configuration Class===========================
+class Configuration {
+public:
+	double scale;
+	int stitchlength_mode;
+	int display_stats;
+	int format;
+
+	void reset_to_defaults(void);
+};

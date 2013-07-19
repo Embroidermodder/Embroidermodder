@@ -1,0 +1,24 @@
+#include "stdafx.h"
+#include <stdio.h>
+#include "Point.h"
+#include <list>
+using namespace std;
+
+class stitchBlock
+{
+public:
+	COLORREF Color;
+    int ColorIndex;
+    int StitchesTotal;
+	list<Point> stitches;
+	stitchBlock(void)
+	{
+	}
+	stitchBlock(const stitchBlock &block)
+	{
+		this->Color = block.Color;
+		this->ColorIndex = block.ColorIndex;
+		this->StitchesTotal = block.StitchesTotal;
+		this->stitches = list<Point>(block.stitches);
+	}
+};

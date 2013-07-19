@@ -1,0 +1,791 @@
+//paint.cpp
+// these are the painting routines separated out from EmbroideryView.cpp
+//
+// This sourcecode file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#include "stdafx.h"
+#include <math.h>
+#include "pattern.h"
+#include "helpers.h"
+#include "embroidermodder.h"
+#include "paint.h"
+#include "EmbroideryDoc.h"
+#include "EmbroideryView.h"
+
+#include <sys/types.h>
+#include <sys/timeb.h>
+#include <time.h>
+
+//////////////////////////////////////////////////////////////////////////////////
+// Routines to setup and recalculate conversions between screen and pattern space
+
+void CEmbroideryView::set_viewdimensions(void) {
+	lfRect patrect;
+	patrect = GetDocument()->pattern.get_dimensions();
+	double vz;
+	if (printing) {
+		vz=1;	// don't zoom printout
+	} else {
+		vz=viewzoom;
+	};
+	viewdimensions.cx = round(patrect.width() * vz * ppi / 25.4 /*mm/inch*/);
+	viewdimensions.cy = round(patrect.height() * vz * ppi / 25.4 /*mm/inch*/);
+
+	viewdimensions.cx = max(viewdimensions.cx, 0);
+	viewdimensions.cy = max(viewdimensions.cy, 0);
+	if (!printing) SetScrollSizes(MM_TEXT, viewdimensions);
+
+	calculate_scale_and_offset();
+};
+
+void CEmbroideryView::calculate_scale_and_offset (void) {
+	double scalex;
+	class lfRect pat_rect;
+	RECT winrect;
+
+	offset.x=offset.y=0;
+
+	// Get the window area we have to draw in (either screen or printed page)
+	if (printing) {
+		winrect = pagearea;
+	} else if (bitmapping) {
+		winrect.left=winrect.top=0;		// use pattern area, this will be bitmap size
+		winrect.right=viewdimensions.cx;
+		winrect.bottom=viewdimensions.cy;
+	} else {
+		GetClientRect(&winrect);
+	};
+
+	// if window is larger than drawing, then center the drawing,
+	// otherwise, leave aligned to top/left and scrollbars can be used.
+	if ((winrect.right-winrect.left) > viewdimensions.cx) {
+		offset.x = ((winrect.right-winrect.left) - viewdimensions.cx)/2 + winrect.left;
+	};
+	if ((winrect.bottom-winrect.top) > viewdimensions.cy) {
+		if (printing) {
+			offset.y = winrect.top;	// don't cener vertically on printout, leave at top printable edge of page
+		} else {
+			offset.y = ((winrect.bottom-winrect.top) - viewdimensions.cy)/2 + winrect.top;
+		};
+	};
+	bitblt_offset = offset;
+
+	// Now change winrect to be the viewdimensions (size of the actual pattern area only)
+	// for the rest of these calculations.
+	winrect.left=winrect.top=0;
+	winrect.right=viewdimensions.cx;
+	winrect.bottom=viewdimensions.cy;
+
+	pat_rect = GetDocument()->pattern.get_dimensions();
+
+	// Calculate the scaling factor
+	scalex=double(winrect.right-winrect.left)/(pat_rect.right-pat_rect.left);
+	scale=double(winrect.bottom-winrect.top)/(pat_rect.top-pat_rect.bottom);
+	if (scalex<scale) {
+		scale=scalex;
+	};
+	// a null pattern can end up with NAN for scale.  Replace this with 1.
+	if (pat_rect.width() == 0 && pat_rect.height() == 0) scale = 1;
+
+	// Calculate the offset (add this to offsets calculated above).
+	offset.x+=-(round(scale*((pat_rect.right+pat_rect.left)/2-pat_rect.left))-round((winrect.right+winrect.left)/2.0));
+	offset.y+=-(round(scale*((pat_rect.bottom+pat_rect.top)/2-pat_rect.bottom))-round((winrect.bottom+winrect.top)/2.0));
+
+	// Store the offsets in pattern space for the topleft corner of the pattern
+	poffset.dx = pat_rect.left;
+	poffset.dy = pat_rect.top;
+};
+
+// conversion routines...
+
+CPoint CEmbroideryView::pattern_point_to_screen_point (lfVector patternpt) {
+	CPoint point;
+	CPoint scrollpoint;
+
+	scrollpoint=GetScrollPosition();
+	if (printing || bitmapping) {
+		scrollpoint.x=scrollpoint.y=0;	// don't scroll a printout or bitmap
+	} else {
+		scrollpoint=GetScrollPosition();
+	};
+
+	point.x=offset.x+round(scale*(patternpt.dx-poffset.dx))-scrollpoint.x;
+	point.y=offset.y+round(scale*(-(patternpt.dy-poffset.dy)))-scrollpoint.y;
+
+	return (point);
+};
+
+lfVector CEmbroideryView::screen_point_to_pattern_point (CPoint screenpt) {
+	lfVector patternpt;
+	CPoint scrollpoint;
+
+	if (printing || bitmapping) {
+		scrollpoint.x=scrollpoint.y=0;	// don't scroll a printout
+	} else {
+		scrollpoint=GetScrollPosition();
+	};
+
+	patternpt.dx=(screenpt.x+scrollpoint.x-offset.x)/scale + poffset.dx;
+	patternpt.dy=-(screenpt.y+scrollpoint.y-offset.y)/scale + poffset.dy;
+
+	return(patternpt);
+};
+
+CRect CEmbroideryView::pattern_rect_to_screen_rect (lfRect patternrect) {
+	lfVector ppoint;
+	CPoint spoint;
+	CRect srect;
+	ppoint.dx=patternrect.left;
+	ppoint.dy=patternrect.top;
+	spoint=pattern_point_to_screen_point(ppoint);
+	srect.left=spoint.x;
+	srect.top=spoint.y;
+
+	ppoint.dx=patternrect.right;
+	ppoint.dy=patternrect.bottom;
+	spoint=pattern_point_to_screen_point(ppoint);
+	srect.right=spoint.x;
+	srect.bottom=spoint.y;
+	return(srect);
+};
+
+lfRect CEmbroideryView::screen_rect_to_pattern_rect (CRect srect) {
+	lfVector ppoint;
+	CPoint spoint;
+	lfRect prect;
+	spoint.x=srect.left;
+	spoint.y=srect.top;
+	ppoint=screen_point_to_pattern_point(spoint);
+	prect.left=ppoint.dx;
+	prect.top=ppoint.dy;
+
+	spoint.x=srect.right;
+	spoint.y=srect.bottom;
+	ppoint=screen_point_to_pattern_point(spoint);
+	prect.right=ppoint.dx;
+	prect.bottom=ppoint.dy;
+	return(prect);
+};
+
+// Routines for finding and setting a pattern point at the center of the screen.
+// Used during scaling and zooming to preserve piece being viewed.
+
+class lfVector CEmbroideryView::GetPatternPointAtScreenCenter (void) {
+	// use before changing zoom so that we can recenter on same point after zoom.
+	RECT winrect;
+	GetClientRect(&winrect);
+	return(screen_point_to_pattern_point(CPoint(winrect.right/2,winrect.bottom/2)));
+};
+
+void CEmbroideryView::ScrollToPatternPoint(lfVector ppoint) {
+	// scroll so that ppoint is in center of view
+	CPoint spoint;
+	RECT winrect;
+	spoint.x=spoint.y=0;
+	ScrollToPosition(spoint);	// set scrollbars to zero before calculating new positions
+
+	spoint = pattern_point_to_screen_point(ppoint);
+	GetClientRect(&winrect);
+	spoint.x -= winrect.right/2;
+	spoint.y -= winrect.bottom/2;
+
+	// check limits before scrolling...
+	if (spoint.x>viewdimensions.cx-winrect.right) {
+		spoint.x=viewdimensions.cx-winrect.right;
+	};
+	if (spoint.y>viewdimensions.cy-winrect.top) {
+		spoint.y=viewdimensions.cy-winrect.top;
+	};
+	if (spoint.x<0) spoint.x=0;
+	if (spoint.y<0) spoint.y=0;
+
+	ScrollToPosition(spoint);
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Routines to draw the screen
+
+void CEmbroideryView::paint_pattern (CDC *dc, class pattern *pattern) {
+	lfVector ppoint;
+	lfVector skippedpoint;
+	lfVector prevppoint;
+	CPoint spoint;
+	bool skipped;
+	int i;
+	int col;
+	int threadwidth;
+	class lfRect bounds;
+	CRect sclipbox;
+	lfRect pclipbox;
+	col =0;
+
+	// make sure this is done... Shouldn't do it every time, though
+	//calculate_scale_and_offset();
+
+	threadwidth=round(0.3*scale);  if (threadwidth<1) threadwidth=1;
+
+	dc->GetClipBox(&sclipbox);
+	sclipbox.left  -=threadwidth;	//	expand clipbox by pixel width of thread
+	sclipbox.top   -=threadwidth;
+	sclipbox.right +=threadwidth;
+	sclipbox.bottom+=threadwidth;
+	pclipbox = screen_rect_to_pattern_rect(sclipbox);
+
+	CPen *winpen; // save the pen windows originally created for us and put it back at end.
+	CPen *oldpen; // this is our temporary pen.
+	// Process for changing pens:
+	// Each time except this first, create new pen,
+	// swap it in, and delete the one that came out.)
+	oldpen = new(CPen);
+	oldpen->CreatePen(PS_SOLID,1,RGB(rand()%256,rand()%256,rand()%256));
+	winpen = dc->SelectObject(oldpen);
+
+	prevppoint=lfVector(0,0);	// a nice default starting point.
+
+	if ((usebitmap) && (bitmapstitched>0) && (bitmap_dc!=NULL)) {
+		// -------------------------------------
+		// copy the bitmap onto the screen
+		CPoint scrollpoint=GetScrollPosition();
+		dc->FillSolidRect(sclipbox,RGB(255,255,255));	// necessary if bitmap doesn't fill clip region.
+		dc->BitBlt(sclipbox.left,sclipbox.top,sclipbox.Width(),sclipbox.Height(),bitmap_dc,sclipbox.left-bitblt_offset.x+scrollpoint.x,sclipbox.top-bitblt_offset.y+scrollpoint.y,SRCCOPY);
+		// skip ahead past already rendered lines, counting color changes
+		for (i=0;i<bitmapstitched;i++) {
+			if (pattern->stitchlist[i].flags==STOP) col++;
+		};
+		prevppoint=pattern->stitchlist[i].point();
+	} else {
+		dc->FillSolidRect(sclipbox,RGB(255,255,255));
+		i=0;
+	};
+	if ((!usebitmap) || (!bitmapcomplete) || (bitmap_dc==NULL)) {
+		// ---------------------------------------
+		// draw the pattern directly to the screen
+
+		//sclipbox.NormalizeRect();
+		//		dc->FillSolidRect(sclipbox,RGB(255,255,255));
+		// create a pen for the first color
+		if (col<pattern->colors) {
+			oldpen = new(CPen);
+			oldpen->CreatePen(PS_SOLID,threadwidth,pattern->colorlist[col].rgb);
+			oldpen = dc->SelectObject(oldpen);
+			oldpen->DeleteObject();
+			delete(oldpen);
+			col++;
+		};
+		// Draw pattern
+		skipped=TRUE;	// forces a MoveTo before the first line we draw.
+		for(/*i=0 <-- skipped ahead above*/;i<pattern->stitches;i++) {
+			if (pattern->stitchlist[i].flags==STOP) {
+
+				if (col<pattern->colors) {
+					oldpen = new(CPen);
+					oldpen->CreatePen(PS_SOLID,threadwidth,pattern->colorlist[col].rgb);
+					oldpen = dc->SelectObject(oldpen);
+					oldpen->DeleteObject();
+					delete(oldpen);
+					col++;
+				} else {
+					// Don't have enough colors so pick a random one. (Not normally used.)
+					// Produces an interesting shimmer pattern during a resize if it is used.
+					oldpen = new(CPen);
+					oldpen->CreatePen(PS_SOLID,threadwidth,RGB(rand()%256,rand()%256,rand()%256));
+					oldpen = dc->SelectObject(oldpen);
+					oldpen->DeleteObject();
+					delete(oldpen);
+					col++;
+				};
+			} else {
+				ppoint =pattern->stitchlist[i].point();
+				if ((pattern->stitchlist[i].flags==NORMAL) 
+					&& (pclipbox.doeslineintersect(ppoint,prevppoint))) {
+						if (skipped) {  // don't need MoveTo if we're already there
+							dc->MoveTo(pattern_point_to_screen_point(prevppoint));
+						};
+						// draw the visible NORMAL stitch
+						dc->LineTo(pattern_point_to_screen_point(ppoint));
+						skipped=FALSE;
+				} else {
+					// either the line isn't visible, or it isn't a normal stitch, so skip it
+					skipped=TRUE;
+				};
+				prevppoint=ppoint;
+			};
+		};
+	};
+	// draw selction bounding box
+	if (!printing) {			// but don't draw it on printout
+		// ---------------------------------------------
+		// draw in selected region as a dashed rectangle
+		bounds = pattern->get_select_bounds(GetDocument()->doc_selectmode);
+		if (bounds.width()!=0 && bounds.height()!=0) {
+			oldpen = new(CPen);
+			oldpen->CreatePen(PS_DASH,1,RGB(0,0,0));
+			oldpen = dc->SelectObject(oldpen);
+			oldpen->DeleteObject();
+			delete(oldpen);
+
+			CRect srect;
+			srect = pattern_rect_to_screen_rect(bounds);
+			dc->MoveTo(srect.left,srect.top);
+			dc->LineTo(srect.right,srect.top);
+			dc->LineTo(srect.right,srect.bottom);
+			dc->LineTo(srect.left,srect.bottom);
+			dc->LineTo(srect.left,srect.top);
+		};
+		// --------------------------------------------
+		// draw in selected lines as narrow black lines
+		if (GetDocument()->doc_selectmode==DOC_SELECTMODE_LINES) {
+			//sclipbox.NormalizeRect();
+			// Draw pattern
+			skipped=TRUE;	// forces a MoveTo before the first line we draw.
+			prevppoint=lfVector(0,0);	// a nice default starting point.
+			// select a narrow black pen
+			oldpen = new(CPen);
+			oldpen->CreatePen(PS_SOLID,1,RGB(0,0,0));
+			oldpen = dc->SelectObject(oldpen);
+			oldpen->DeleteObject();
+			delete(oldpen);
+
+			for(i=0;i<pattern->stitches;i++) {
+				if (pattern->stitchlist[i].flags==STOP) {
+				} else {
+					ppoint =pattern->stitchlist[i].point();
+					if ((pattern->stitchlist[i].selected)/*&&(pattern->stitchlist[i].flags==NORMAL)*/ 
+						&& (pclipbox.doeslineintersect(ppoint,prevppoint))) {
+							if (skipped) {  // don't need MoveTo if we're already there
+								dc->MoveTo(pattern_point_to_screen_point(prevppoint));
+							};
+							// draw the visible NORMAL stitch
+							dc->LineTo(pattern_point_to_screen_point(ppoint));
+							skipped=FALSE;
+					} else {
+						// either the line isn't visible, or it isn't a normal stitch, so skip it
+						skipped=TRUE;
+					};
+					prevppoint=ppoint;
+				};
+			};
+		};
+		// ----------------------------------------------
+		// draw in selected points as small black circles
+		if (GetDocument()->doc_selectmode==DOC_SELECTMODE_POINTS) {
+			// Draw pattern
+			skipped=TRUE;	// forces a MoveTo before the first line we draw.
+			prevppoint=lfVector(0,0);	// a nice default starting point.
+			// select a narrow black pen
+			oldpen = new(CPen);
+			oldpen->CreatePen(PS_SOLID,1,RGB(0,0,0));
+			oldpen = dc->SelectObject(oldpen);
+			oldpen->DeleteObject();
+			delete(oldpen);
+
+			for(i=0;i<pattern->stitches;i++) {
+				if (pattern->stitchlist[i].flags==STOP) {
+				} else {
+					ppoint =pattern->stitchlist[i].point();
+					// we should grow the pclipbox
+					if ((pattern->stitchlist[i].selected) /*&& (pclipbox.isin(ppoint))*/) {
+						// mark the selected point
+						spoint = pattern_point_to_screen_point(ppoint);
+						DrawCircle(dc,spoint,SELECTED_POINTS_CIRCLE_RADIUS,8);
+					};
+				};
+			};
+		};
+		if (display_jumps) {
+			//sclipbox.NormalizeRect();
+			// Draw pattern
+			skipped=TRUE;	// forces a MoveTo before the first line we draw.
+			prevppoint=lfVector(0,0);	// a nice default starting point.
+			// select a dash-dot black pen
+			oldpen = new(CPen);
+			oldpen->CreatePen(PS_DASHDOT,1,RGB(0,0,0));
+			oldpen = dc->SelectObject(oldpen);
+			oldpen->DeleteObject();
+			delete(oldpen);
+
+			for(i=0;i<pattern->stitches;i++) {
+				if (pattern->stitchlist[i].flags==END) {
+				} else {
+					ppoint =pattern->stitchlist[i].point();
+					if ((pattern->stitchlist[i].flags==JUMP) 
+						&& (pclipbox.doeslineintersect(ppoint,prevppoint))) {
+							if (skipped) {  // don't need MoveTo if we're already there
+								dc->MoveTo(pattern_point_to_screen_point(prevppoint));
+							};
+							// draw the JUMP stitch
+							dc->LineTo(pattern_point_to_screen_point(ppoint));
+							skipped=FALSE;
+					} else {
+						skipped=TRUE;
+					};
+					prevppoint=ppoint;
+				};
+			};
+		};
+
+	};
+
+	// ----------------------------------
+	// draw circle around edit_stitch_num
+	if (!printing) {			// but don't draw it on printout
+		if (pattern->edit_stitch_num >=0 && pattern->edit_stitch_num < pattern->stitches) {
+			ppoint.dx = pattern->stitchlist[pattern->edit_stitch_num].xx;
+			ppoint.dy = pattern->stitchlist[pattern->edit_stitch_num].yy;
+
+			oldpen = new(CPen);
+			oldpen->CreatePen(PS_DOT,1,RGB(0,0,0));
+			oldpen = dc->SelectObject(oldpen);
+			oldpen->DeleteObject();
+			delete(oldpen);
+
+			spoint = pattern_point_to_screen_point(ppoint);
+			DrawCircle(dc,spoint,SELECT_STITCH_CIRCLE_RADIUS,8);
+		};
+	};
+
+	oldpen = dc->SelectObject(winpen);	// restore windows' pen and delete ours
+	oldpen->DeleteObject();
+	delete(oldpen);
+
+};
+
+void CEmbroideryView::paint_bitmap (CDC *dc, int worktime_ms) {
+	lfVector ppoint;
+	lfVector skippedpoint;
+	lfVector prevppoint;
+	CPoint spoint;
+	bool skipped;
+	int i;
+	int col;
+	int threadwidth;
+	class lfRect bounds;
+	CRect sclipbox;
+	lfRect pclipbox;
+	col =0;
+	class pattern *pattern;
+	struct _timeb  starttime;
+	struct _timeb currenttime;
+	int elapsed_ms;
+
+	_ftime( &starttime );
+
+	pattern=&GetDocument()->pattern;
+
+	// recalculate scale and offset (basically get rid of window centering if present)
+	bitmapping = TRUE;
+	calculate_scale_and_offset();
+
+	threadwidth=round(0.3*scale);  if (threadwidth<1) threadwidth=1;
+
+	dc->GetClipBox(&sclipbox);
+	sclipbox.left  -=threadwidth;	//	expand clipbox by pixel width of thread
+	sclipbox.top   -=threadwidth;
+	sclipbox.right +=threadwidth;
+	sclipbox.bottom+=threadwidth;
+	pclipbox = screen_rect_to_pattern_rect(sclipbox);
+
+	CPen *winpen; // save the pen windows originally created for us.
+	CPen *oldpen;
+	oldpen = new(CPen);
+	oldpen->CreatePen(PS_SOLID,1,RGB(rand()%256,rand()%256,rand()%256));
+	winpen = dc->SelectObject(oldpen);
+	//oldpen->DeleteObject();
+
+	// skip ahead past already rendered lines, counting color changes
+	for (i=0;i<bitmapstitched;i++) {
+		if (pattern->stitchlist[i].flags==STOP) col++;
+	};
+
+	if (col<pattern->colors) {
+		oldpen = new(CPen);
+		oldpen->CreatePen(PS_SOLID,threadwidth,pattern->colorlist[col].rgb);
+		oldpen = dc->SelectObject(oldpen);
+		oldpen->DeleteObject();
+		delete(oldpen);
+		col++;
+	};
+
+	//sclipbox.NormalizeRect();
+	// Draw pattern
+	skipped=TRUE;	// forces a MoveTo before the first line we draw.
+	if (bitmapstitched>0) {
+		prevppoint=pattern->stitchlist[bitmapstitched-1].point();
+	} else {
+		prevppoint=lfVector(0,0);	// a nice default starting point.
+		dc->FillSolidRect(sclipbox,RGB(255,255,255));
+	};		;
+	for(i=bitmapstitched;i<pattern->stitches;i++) {
+		if (pattern->stitchlist[i].flags==STOP) {
+
+			if (col<pattern->colors) {
+				oldpen = new(CPen);
+				oldpen->CreatePen(PS_SOLID,threadwidth,pattern->colorlist[col].rgb);
+				oldpen = dc->SelectObject(oldpen);
+				oldpen->DeleteObject();
+				delete(oldpen);
+				col++;
+			} else {
+				// Don't have enough colors so pick a random one. (Not normally used.)
+				// Produces an interesting shimmer pattern during a resize if it is used.
+				oldpen = new(CPen);
+				oldpen->CreatePen(PS_SOLID,threadwidth,RGB(rand()%256,rand()%256,rand()%256));
+				oldpen = dc->SelectObject(oldpen);
+				oldpen->DeleteObject();
+				delete(oldpen);
+				col++;
+			};
+		} else {
+			ppoint =pattern->stitchlist[i].point();
+			if ((pattern->stitchlist[i].flags==NORMAL) 
+				/*&& (pclipbox.doeslineintersect(ppoint,prevppoint))*/) {
+					if (skipped) {  // don't need MoveTo if we're already there
+						dc->MoveTo(pattern_point_to_screen_point(prevppoint));
+					};
+					// draw the visible NORMAL stitch
+					dc->LineTo(pattern_point_to_screen_point(ppoint));
+					skipped=FALSE;
+			} else {
+				// either the line isn't visible, or it isn't a normal stitch, so skip it
+				skipped=TRUE;
+			};
+			prevppoint=ppoint;
+		};
+		_ftime( &currenttime );
+		elapsed_ms = (currenttime.time - starttime.time)*1000 + currenttime.millitm - starttime.millitm;
+		if (elapsed_ms > worktime_ms) {
+			//char buf[100];
+			//sprintf(buf,"Bitmapping for %dms, stitches %d to %d\n",elapsed_ms,bitmapstitched,i);
+			//pattern->messages.add(buf);
+			i++;
+			break;
+		};
+	};
+
+	oldpen = dc->SelectObject(winpen);	// restore windows' pen and delete ours
+	oldpen->DeleteObject();
+	delete(oldpen);
+
+	// restore the scale and offset parameters
+	bitmapping = FALSE;
+	calculate_scale_and_offset();
+	bitmapstitched = i;
+	if (bitmapstitched==pattern->stitches) {
+		bitmapcomplete=TRUE;
+	} else {
+		bitmapcomplete=FALSE;
+	};
+};
+
+void CEmbroideryView::DrawCircle(CDC *dc, CPoint center, int radius, int steps) {
+	// draws an unfilled circle
+	// steps can be small for smaller circles, but higher for large ones
+	double anglestep;
+	int i,dx,dy;
+
+	anglestep = (2*pi/steps);
+	dc->MoveTo(center.x+radius,center.y);	// start at right side (angle 0);
+	for (i=1;i<=steps;i++) {
+		dx = round(cos(anglestep*i)*radius);
+		dy = round(sin(anglestep*i)*radius);
+		dc->LineTo(center.x+dx,center.y+dy);
+	};
+};
+
+void CEmbroideryView::paint_messages (CDC *dc, class messages *messages) {
+	int xx,yy;
+	int bottomy;
+	unsigned int i,start;
+	CPoint scrollpoint;
+	RECT winrect;
+	CSize fontsize;
+
+	class lfRect bounds;
+	CPoint spoint;
+
+	if (printing) {
+		// print text just below pattern, along left printable edge
+		xx=pagearea.left;
+
+		bounds = GetDocument()->pattern.get_dimensions();
+		spoint = pattern_point_to_screen_point(lfVector(bounds.right,bounds.bottom));
+		//yy=pagearea.top;
+		yy=spoint.y+2;
+		bottomy=pagearea.bottom;	// note that even if text runs off page, we don't do a page 2.
+	} else {
+		// print text along left edge of window on screen
+		GetClientRect(&winrect);
+		scrollpoint=GetScrollPosition();
+		xx=-scrollpoint.x;
+		yy=-scrollpoint.y;
+		bottomy=winrect.bottom+scrollpoint.y;
+	};
+
+	fontsize = dc->GetTextExtent("X");
+	//output string one line at a time
+
+	if (messages->text_buffer_allocated>0) {
+		for(i=0,start=0;i<messages->text_buffer_allocated;i++) {
+			if (messages->text_buffer[i]=='\0') break;
+			if (messages->text_buffer[i]=='\n') {
+				if (yy>=-fontsize.cy) {	// don't draw if off the top of the view
+					dc->TextOut(xx,yy,&messages->text_buffer[start], i-start);
+				};
+				start=i+1;
+				yy+=fontsize.cy+2;
+				if (yy>bottomy) break;	// stop if off the bottom of the view
+			};
+		};
+	};
+};
+
+// rectangle passed in is in screen coordinates so no translation necessary
+void CEmbroideryView::DrawSelectRectangle (CRect rect, bool on) {
+	static CRect lastdrawn;		// remember last drawn rectangle, and if it is valid.
+	static bool lastdrawn_valid=FALSE;
+
+	CDC *dc;
+	CSize thickness;
+
+	rect.NormalizeRect();	// if we don't normalize, backwards boxes are grey filled
+
+	dc = GetDC();
+	thickness.cx=thickness.cy=1;
+	if (lastdrawn_valid) {
+		dc->DrawDragRect(rect,thickness,lastdrawn,thickness);
+	} else {
+		// invalid lastdrawn, so pass in NULL pointer.
+		dc->DrawDragRect(rect,thickness,NULL,thickness);
+	};
+
+	if (on) {
+		lastdrawn=rect;
+		lastdrawn_valid=TRUE;
+	} else {
+		lastdrawn_valid=FALSE;
+	};
+	ReleaseDC(dc);
+};
+
+void CEmbroideryView::draw_ghost_selection(CPoint offset_amt, bool on) {
+	static CDC *mdc_backing_store = NULL;
+	static CPoint previous_offset_amt;
+	CRect oldrect;
+	CDC *dc;
+	dc = GetDC();
+	// draw selction bounding box
+
+	lfRect bounds;
+	//	CPen *oldpen;
+	CRect srect;
+
+	bounds = GetDocument()->pattern.get_select_bounds(GetDocument()->doc_selectmode);
+	srect = pattern_rect_to_screen_rect(bounds);
+
+	// create grey pen
+	//	oldpen = new(CPen);
+	//	oldpen->CreatePen(PS_DASH,1,RGB(128,128,128));
+	//	oldpen = dc->SelectObject(oldpen);
+
+	// do drawing commands here
+
+	// restore previous backing
+	if (mdc_backing_store==NULL) {
+		mdc_backing_store = create_bitmap(srect.Size());
+	} else {
+		oldrect = srect;
+		oldrect.OffsetRect(previous_offset_amt);
+		copy_bitmap_to_screen(mdc_backing_store,oldrect);
+	};
+	if (!on) {
+		//get rid of backing
+		mdc_backing_store = free_bitmap(mdc_backing_store);
+		ReleaseDC(dc);
+		return;	// don't draw another backing
+	};
+	// create new backing
+	srect.OffsetRect(offset_amt);
+	copy_screen_to_bitmap(mdc_backing_store,srect);
+	previous_offset_amt = offset_amt;
+
+	// mdc_temp_bitmap must already have been filled.
+	copy_bitmap_to_screen(mdc_temp_bitmap,srect);
+
+	// delete grey pen
+	//	oldpen = dc->SelectObject(oldpen);
+	//	oldpen->DeleteObject();
+	//	delete(oldpen);
+
+	// draw outline rectangle
+	//	srect.OffsetRect(offset_amt);
+	//	DrawSelectRectangle(srect);
+	ReleaseDC(dc);
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// Routines to copy screen to and from a bitmap
+// safely tolerates creation failure by assigning NULL to mdc, then do nothing if mdc is NULL.
+
+void CEmbroideryView::copy_screen_to_bitmap (CDC *mdc, CRect sregion) {
+	CDC *dc;	// DC for screen
+	if (mdc !=NULL) {
+		dc = GetDC();
+		mdc->BitBlt(0,0,sregion.Width(),sregion.Height(),dc,sregion.left,sregion.top,SRCCOPY);
+		ReleaseDC(dc);
+	};
+};
+
+void CEmbroideryView::copy_bitmap_to_screen (CDC *mdc, CRect sregion) {
+	CDC *dc;
+	if (mdc!=NULL) {
+		dc = GetDC();
+		dc->BitBlt(sregion.left,sregion.top,sregion.Width(),sregion.Height(),mdc,0,0,SRCCOPY);
+		ReleaseDC(dc);
+	};
+};
+
+CDC *CEmbroideryView::create_bitmap (CSize size) {
+	CBitmap *bitmap;
+	CDC *dc;	// DC for screen
+	CDC *mdc;	// DC for memory bitmap
+
+	dc = GetDC();
+	bitmap = new(CBitmap);
+	// create a bitmap and DC for it.
+	if (!(bitmap->CreateCompatibleBitmap(dc,size.cx,size.cy))) {
+		//char buf[100];
+		//sprintf(buf,"Failed to create CBitmap of size %d,%d in CEmbroideryView::create_bitmap.\n",size.cx,size.cy);
+		//GetDocument()->pattern.messages.add(buf);
+		delete(bitmap);
+		ReleaseDC(dc);
+		return(NULL);
+	};
+	mdc = new (CDC);
+	mdc->CreateCompatibleDC(dc);
+#ifdef DEBUG
+	mdc->AssertValid();
+#endif
+	mdc->SelectObject(bitmap);
+
+	ReleaseDC(dc);
+	return(mdc);
+};
+
+CDC *CEmbroideryView::free_bitmap (CDC *mdc) {
+	CBitmap *bitmap = NULL;
+
+	// should remove bitmap from DC before destroying DC.  Replace it with a NULL pointer bitmap?
+	//bitmap = mdc->SelectObject(bitmap);	// this returns a null pointer, not the bitmap.
+	if (mdc==NULL) return(mdc); // already void, do nothing.
+	bitmap = mdc->GetCurrentBitmap();
+	mdc->DeleteDC();
+	bitmap->DeleteObject();
+	delete(mdc);
+	delete(bitmap);
+	return(NULL); // assign returned value to your dc pointer variable to make it NULL;
+};

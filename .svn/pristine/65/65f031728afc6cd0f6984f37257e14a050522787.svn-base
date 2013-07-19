@@ -1,0 +1,198 @@
+// messaging.cpp
+//
+// This sourcecode file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#include "stdafx.h"
+#include "pattern.h"
+#include "Messaging.h"
+#include "embroidermodder.h"
+#include "helpers.h"
+
+extern CEmbroidermodderApp theApp;
+
+void status_io::statusbar_settext(const char *src,int field /*=0*/) {
+	StatusBar->SetText(src,field,0);
+};
+
+// status shortcuts: display various combunatins of strings and numbers
+
+void status_io::set(char *src) {
+	statusbar_settext(src);
+};
+
+void status_io::set(int src) {
+	char buf[100];
+	sprintf_s(buf,"%d",src);
+	statusbar_settext(buf);
+};
+
+void status_io::set(double src) {
+	char buf[100];
+	sprintf_s(buf,"%lf",src);
+	statusbar_settext(buf);
+};
+
+void status_io::set(const char *src1, const char *src2) {
+	char buf[100];
+	sprintf_s(buf,"%s %s",src1,src2);
+	statusbar_settext(buf);
+};
+
+void status_io::set(const char *src1, int src2) {
+	char buf[100];
+	sprintf_s(buf,"%s %d",src1,src2);
+	statusbar_settext(buf);
+};
+
+void status_io::set(const char *src1, double src2) {
+	char buf[100];
+	sprintf_s(buf,"%s %s",src1,src2);
+	statusbar_settext(buf);
+};
+
+void status_io::clear(void) {
+	statusbar_settext("Ready");
+};
+
+
+// update each of the status fields
+
+void status_io::set_size(class pattern *pattern) {
+	char buf[100];
+	lfRect patsize;
+
+	patsize = pattern->get_dimensions();
+	sprintf_s(buf,"Size: %.1lf x %.1lf mm",patsize.width(),patsize.height());
+	statusbar_settext(buf,1 /*ID_INDICATOR_SIZE*/);
+};
+
+void status_io::set_scale(class pattern *pattern) {
+
+	char buf[100];
+	sprintf_s(buf,"Scale: %.2lf x",pattern->config.scale);
+	statusbar_settext(buf,2 /*ID_INDICATOR_SCALE*/);
+}
+
+void status_io::set_colors(class pattern *pattern) {
+	char buf[100];
+	sprintf_s(buf,"Colors: %d",pattern->colors);
+	statusbar_settext(buf,3 /*ID_INDICATOR_COLORS*/);
+}
+
+void status_io::set_format(class pattern *pattern) {
+	char buf[100];
+	if(pattern->stitches==0) {
+		sprintf_s(buf,"Empty");
+	} else if (pattern->config.format == 0) {
+		sprintf_s(buf,"Stitches: %d",pattern->stitches);
+	} else if (pattern->config.format == 1) {
+		sprintf_s(buf,"Lines: %d",pattern->stitches);
+	} else if (pattern->config.format == 2) {
+		sprintf_s(buf,"Shapes: %d",pattern->stitches);
+	} else {
+		sprintf_s(buf,"%d",pattern->stitches);
+	};
+	statusbar_settext(buf,4);
+};
+
+void status_io::updateall(class pattern *pattern) {
+
+	set_size(pattern);
+	set_scale(pattern);
+	set_colors(pattern);
+	set_format(pattern);
+};
+
+void status_io::clearall(void) {
+	for (int i=1;i<=4;i++) {
+		statusbar_settext("",i);
+	};
+};
+
+////////////////////////////////////////////////////////////////////////
+// messages class
+//   maintains a buffer (text string).  Actual display is not done by this class.
+//   see paint.cpp for display function 
+messages::~messages(void) {	//destructor
+	if (text_buffer_allocated>0) {
+		clear();
+		free(text_buffer);
+		text_buffer_allocated=0;
+	};
+};
+
+messages::messages(void) {	//constructor
+	text_buffer_allocated=0;
+	// don't allocate any space until it is actually used the first time.
+};
+
+void messages::add(const char *src) {
+	int newlen;
+
+	if (src==NULL) return;
+
+	if (text_buffer_allocated==0) {
+		text_buffer_allocated=1000;
+		text_buffer=(char *)malloc(sizeof(char *)*text_buffer_allocated);
+		if (text_buffer==0) {
+			fprintf(stderr,"Error: failure to allocate text_buffer in add()\n");
+			exit(-1);
+		};
+		text_buffer[0]='\0';
+	};
+	newlen=strlen(text_buffer)+strlen(src);
+	while (strlen(text_buffer)+strlen(src) >= text_buffer_allocated) {
+		text_buffer_allocated += 1000;
+		text_buffer=(char *)realloc(text_buffer,sizeof(char *)*text_buffer_allocated);
+		if (text_buffer==0) {
+			fprintf(stderr,"Error: failure to allocate text_buffer in add()\n");
+			exit(-1);
+		};
+	};
+	strcpy(&text_buffer[strlen(text_buffer)],src);
+	text_buffer[newlen]='\0';
+};
+
+// Several helpful alternate formats for int, double, multiple strings, and strings with numbers.
+// The multiples all have an automatic newline added.
+
+void messages::add(int src) {
+	char buf[100];
+	sprintf(buf,"%d",src);
+	add(buf);
+};
+
+void messages::add(double src) {
+	char buf[100];
+	sprintf(buf,"%lf",src);
+	add(buf);
+};
+
+void messages::add(const char *src1, const char *src2) {
+	add(src1);
+	add(src2);
+	add("\n");
+};
+
+void messages::add(const char *src1, int src2) {
+	add(src1);
+	add(src2);
+	add("\n");
+};
+
+void messages::add(const char *src1, double src2) {
+	add(src1);
+	add(src2);
+	add("\n");
+};
+
+void messages::clear(void) {
+	if (text_buffer_allocated>0) {
+		text_buffer[0]='\0';
+	};
+};

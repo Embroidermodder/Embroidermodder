@@ -1,0 +1,14 @@
+[Menu]
+Name=None
+Position=0
+
+[ToolBar]
+Name=None
+Position=0
+
+[Tips]
+ToolTip=&Pan Down
+StatusTip=Moves the view down:  PANDOWN
+
+[Prompt]
+Alias=PANDOWN

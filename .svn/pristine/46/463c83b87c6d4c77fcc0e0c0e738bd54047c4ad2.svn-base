@@ -1,0 +1,8 @@
+#include "Point.h"
+#include "StdAfx.h"
+
+class stitchBlock
+{
+	
+
+};

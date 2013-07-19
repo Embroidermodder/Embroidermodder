@@ -1,0 +1,26 @@
+// headercheck.cpp
+
+// This sourcecode file is a part of embroidermodder.
+// This program is free software; you can use, redistribute, and/or modify it
+// under the terms of the GNU General Puplic License (GPL) as published by
+// the Free Software Foundation.  See the file license.txt for details.
+// http://embroidermodder.sourceforge.net/
+//
+
+#include "stdafx.h"
+
+// to verify that the headers all properly include prerequisite headers, enable each of
+// these one at a time and compile...
+
+//#include "analyze.h"
+//#include "ChildFrm.h"
+//#include "csv.h"
+//#include "dst.h"
+//#include "embroidermodder.h"
+//#include "EmbroideryDoc.h"
+//#include "EmbroideryView.h"
+//#include "helpers.h"
+//#include "MainFrm.h"
+//#include "Messaging.h"
+//#include "paint.h"
+//#include "pattern.h"
