@@ -1195,7 +1195,7 @@ void View::mousePressEvent(QMouseEvent* event)
 
         if(pastingActive)
         {
-            QList<QGraphicsItem*> itemList = pasteObjectItemGroup->children();
+            QList<QGraphicsItem*> itemList = pasteObjectItemGroup->childItems();
             gscene->destroyItemGroup(pasteObjectItemGroup);
             foreach(QGraphicsItem* item, itemList)
             {

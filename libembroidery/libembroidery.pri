@@ -15,6 +15,7 @@ SOURCES += \
 ../libembroidery/emb-polyline.c \
 ../libembroidery/emb-reader-writer.c \
 ../libembroidery/emb-rect.c \
+../libembroidery/emb-settings.c \
 ../libembroidery/emb-spline.c \
 ../libembroidery/emb-stitch.c \
 ../libembroidery/emb-thread.c \
@@ -92,6 +93,7 @@ HEADERS += \
 ../libembroidery/emb-polyline.h \
 ../libembroidery/emb-reader-writer.h \
 ../libembroidery/emb-rect.h \
+../libembroidery/emb-settings.h \
 ../libembroidery/emb-spline.h \
 ../libembroidery/emb-stitch.h \
 ../libembroidery/emb-thread.h \
