@@ -1,0 +1,37 @@
+######################
+# Embroidermodder 2  #
+######################
+embroidermodder2/.moc
+embroidermodder2/.obj
+embroidermodder2/Makefile
+embroidermodder2/settings.ini
+embroidermodder2/prompt.log
+embroidermodder2/embroidermodder2
+embroidermodder2/embroidermodder2.exe
+
+######################
+# libembroidery      #
+######################
+libembroidery/.moc
+libembroidery/.obj
+libembroidery/Makefile
+libembroidery/libembroidery-convert
+libembroidery/libembroidery-convert.exe
+
+######################
+# KDE4 Thumbnailer   #
+######################
+thumbnailer-kde4/.moc
+thumbnailer-kde4/.obj
+thumbnailer-kde4/Makefile
+thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
+
+######################
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
