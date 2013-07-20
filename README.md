@@ -16,8 +16,8 @@ Dependencies
 ------------
 
 To build Embroidermodder 2 from source you will need at least:
-[Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
-[Qt](http://www.qt-project.org) (version >= 4.8).
+- [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
+- [Qt](http://www.qt-project.org) (version >= 4.8).
 
 Optionally, you may want to add:
 
