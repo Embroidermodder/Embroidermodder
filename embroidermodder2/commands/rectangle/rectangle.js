@@ -11,12 +11,14 @@ global.y2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.newRect = true;
     global.x1 = NaN;
     global.y1 = NaN;
     global.x2 = NaN;
     global.y2 = NaN;
-    setPromptPrefix("Specify first corner point or [Chamfer/Fillet]: ");
+    setPromptPrefix(qsTr("Specify first corner point or [Chamfer/Fillet]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -32,7 +34,7 @@ function click(x, y)
         addRubber("RECTANGLE");
         setRubberMode("RECTANGLE");
         setRubberPoint("RECTANGLE_START", x, y);
-        setPromptPrefix("Specify other corner point or [Dimensions]: ");
+        setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
     }
     else
     {
@@ -57,15 +59,15 @@ function context(str)
 //      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(str == "C" || str == "CHAMFER")
+    if(str == "C" || str == "CHAMFER") //TODO: Probably should add additional qsTr calls here.
     {
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
-    else if(str == "D" || str == "DIMENSIONS")
+    else if(str == "D" || str == "DIMENSIONS") //TODO: Probably should add additional qsTr calls here.
     {
         todo("RECTANGLE", "prompt() for DIMENSIONS");
     }
-    else if(str == "F" || str == "FILLET")
+    else if(str == "F" || str == "FILLET") //TODO: Probably should add additional qsTr calls here.
     {
         todo("RECTANGLE", "prompt() for FILLET");
     }
@@ -74,9 +76,8 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
-            appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            alert(qsTr("Invalid point."));
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
@@ -90,7 +91,7 @@ function prompt(str)
                 addRubber("RECTANGLE");
                 setRubberMode("RECTANGLE");
                 setRubberPoint("RECTANGLE_START", x, y);
-                setPromptPrefix("Specify other corner point or [Dimensions]: ");
+                setPromptPrefix(qsTr("Specify other corner point or [Dimensions]: "));
             }
             else
             {

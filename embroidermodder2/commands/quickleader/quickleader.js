@@ -12,11 +12,13 @@ global.y2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.x1 = NaN;
     global.y1 = NaN;
     global.x2 = NaN;
     global.y2 = NaN;
-    setPromptPrefix("Specify first point: ");
+    setPromptPrefix(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -32,7 +34,7 @@ function click(x, y)
         setRubberMode("DIMLEADER_LINE");
         setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
         appendPromptHistory();
-        setPromptPrefix("Specify second point: ");
+        setPromptPrefix(qsTr("Specify second point: "));
     }
     else
     {
@@ -62,9 +64,8 @@ function prompt(str)
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Requires two points.");
-            appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            alert(qsTr("Requires two points."));
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
@@ -73,16 +74,15 @@ function prompt(str)
             addRubber("DIMLEADER");
             setRubberMode("DIMLEADER_LINE");
             setRubberPoint("DIMLEADER_LINE_START", global.x1, global.y1);
-            setPromptPrefix("Specify second point: ");
+            setPromptPrefix(qsTr("Specify second point: "));
         }
     }
     else
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Requires two points.");
-            appendPromptHistory();
-            setPromptPrefix("Specify second point: ");
+            alert(qsTr("Requires two points."));
+            setPromptPrefix(qsTr("Specify second point: "));
         }
         else
         {

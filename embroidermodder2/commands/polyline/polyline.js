@@ -6,17 +6,21 @@ global.firstX;
 global.firstY;
 global.prevX;
 global.prevY;
+global.num;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.firstRun = true;
     global.firstX = NaN;
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    setPromptPrefix("Specify first point: ");
+    global.num = 0;
+    setPromptPrefix(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -33,17 +37,16 @@ function click(x, y)
         global.prevY = y;
         addRubber("POLYLINE");
         setRubberMode("POLYLINE");
-        setRubberPoint("POLYLINE_START", global.firstX, global.firstY);
+        setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
         appendPromptHistory();
-        setPromptPrefix("Specify next point or [Undo]: ");
+        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
     }
     else
     {
-        setRubberPoint("POLYLINE_END", x, y);
-        vulcanize();
-        addRubber("POLYLINE");
-        setRubberMode("POLYLINE");
-        setRubberPoint("POLYLINE_START", x, y);
+        global.num++;
+        setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
+        setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
+        spareRubber("POLYLINE");
         appendPromptHistory();
         global.prevX = x;
         global.prevY = y;
@@ -67,9 +70,8 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
-            appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            alert(qsTr("Invalid point."));
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
@@ -80,13 +82,13 @@ function prompt(str)
             global.prevY = global.firstY;
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
-            setRubberPoint("POLYLINE_START", global.firstX, global.firstY);
-            setPromptPrefix("Specify next point or [Undo]: ");
+            setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
+            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
         }
     }
     else
     {
-        if(str == "U" || str == "UNDO")
+        if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
         {
             todo("POLYLINE", "prompt() for UNDO");
         }
@@ -95,22 +97,20 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Point or option keyword required.");
-                appendPromptHistory();
-                setPromptPrefix("Specify next point or [Undo]: ");
+                alert(qsTr("Point or option keyword required."));
+                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
             else
             {
                 var x = Number(strList[0]);
                 var y = Number(strList[1]);
-                setRubberPoint("POLYLINE_END", x, y);
-                vulcanize();
-                addRubber("POLYLINE");
-                setRubberMode("POLYLINE");
-                setRubberPoint("POLYLINE_START", x, y);
+                global.num++;
+                setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
+                setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
+                spareRubber("POLYLINE");
                 global.prevX = x;
                 global.prevY = y;
-                setPromptPrefix("Specify next point or [Undo]: ");
+                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
         }
     }

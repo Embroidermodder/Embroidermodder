@@ -3,19 +3,26 @@ CONFIG  += plugin shared warn_on
 CONFIG  -= debug_and_release
 CONFIG  += release
 CONFIG  -= debug
+CONFIG += silent #Comment this out for verbose output
 
 TARGET = embroidery-thumbnailer-kde4
+
+#Qt5
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += printsupport widgets
+}
 
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
 INCLUDEPATH += $$PWD
 
+unix:INCLUDEPATH += "/usr/include/kde4" #Fedora
+
 HEADERS   = libembroidery-thumbnailer-kde4.h
 SOURCES   = libembroidery-thumbnailer-kde4.cpp
 
 include( ../libembroidery/libembroidery.pri )
-include( ../libcgeometry/libcgeometry.pri )
 
 unix {
 QMAKE_STRIP    = echo                       #Suppress strip errors "File format not recognized"

@@ -1,19 +1,4 @@
-#include "mainwindow.h"
-#include "mainwindow-actions.h"
-
-#include "statusbar.h"
-#include "statusbar-button.h"
-
-#include "view.h"
-#include "cmdprompt.h"
-
-#include "property-editor.h"
-#include "undo-editor.h"
-
-#include "native-scripting.h"
-#include "native-javascript.h"
-
-#include "preview-dialog.h"
+#include "embroidermodder.h"
 
 #include <stdlib.h>
 
@@ -36,9 +21,53 @@
 #include <QComboBox>
 #include <QCloseEvent>
 #include <QMetaObject>
+#include <QLocale>
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    readSettings();
+
+    QString appDir = qApp->applicationDirPath();
+    //Verify that files/directories needed are actually present.
+    QFileInfo check(appDir + "/commands");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/help");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/icons");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/images");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/samples");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/translations");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+
+    QString lang = getSettingsGeneralLanguage();
+    qDebug("language: %s", qPrintable(lang));
+    if(lang == "system")
+        lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
+
+    //Load translations for the Embroidermodder 2 GUI
+    QTranslator translatorEmb;
+    translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
+    qApp->installTranslator(&translatorEmb);
+
+    //Load translations for the commands
+    QTranslator translatorCmd;
+    translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
+    qApp->installTranslator(&translatorCmd);
+
+    //Load translations provided by Qt - this covers dialog buttons and other common things.
+    QTranslator translatorQt;
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); //TODO: ensure this always loads, ship a copy of this with the app
+    qApp->installTranslator(&translatorQt);
+
     //Init
     mainWin = this;
     //Menus
@@ -55,25 +84,32 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Toolbars
     toolbarFile       = addToolBar(tr("File"));
     toolbarEdit       = addToolBar(tr("Edit"));
+    toolbarView       = addToolBar(tr("View"));
     toolbarZoom       = addToolBar(tr("Zoom"));
     toolbarPan        = addToolBar(tr("Pan"));
     toolbarIcon       = addToolBar(tr("Icon"));
     toolbarHelp       = addToolBar(tr("Help"));
     toolbarLayer      = addToolBar(tr("Layer"));
     toolbarProperties = addToolBar(tr("Properties"));
+    toolbarText       = addToolBar(tr("Text"));
     toolbarPrompt     = addToolBar(tr("Command Prompt"));
     //Selectors
     layerSelector      = new QComboBox(this);
     colorSelector      = new QComboBox(this);
     linetypeSelector   = new QComboBox(this);
     lineweightSelector = new QComboBox(this);
+    textFontSelector   = new QFontComboBox(this);
+    textSizeSelector   = new QComboBox(this);
 
     numOfDocs = 0;
     docIndex = 0;
 
-    readSettings();
+    shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setMinimumSize(800, 480); //Require Minimum WVGA
+
+    loadFormats();
 
     //create the mdiArea
     QFrame* vbox = new QFrame(this);
@@ -103,16 +139,20 @@ MainWindow::MainWindow() : QMainWindow(0)
     prompt->setPromptTextColor(QColor(getSettingsPromptTextColor()));
     prompt->setPromptBackgroundColor(QColor(getSettingsPromptBGColor()));
 
+    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
+
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
     connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
 
             connect(prompt, SIGNAL(deletePressed()),    this, SLOT(deletePressed()));
     //TODO: connect(prompt, SIGNAL(tabPressed()),       this, SLOT(someUnknownSlot()));
             connect(prompt, SIGNAL(escapePressed()),    this, SLOT(escapePressed()));
+            connect(prompt, SIGNAL(upPressed()),        this, SLOT(promptInputPrevious()));
+            connect(prompt, SIGNAL(downPressed()),      this, SLOT(promptInputNext()));
             connect(prompt, SIGNAL(F1Pressed()),        this, SLOT(help()));
     //TODO: connect(prompt, SIGNAL(F2Pressed()),        this, SLOT(floatHistory()));
     //TODO: connect(prompt, SIGNAL(F3Pressed()),        this, SLOT(toggleQSNAP()));
-    //TODO: connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleTablet()));
+            connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleLwt())); //TODO: typically this is toggleTablet(), make F-Keys customizable thru settings
     //TODO: connect(prompt, SIGNAL(F5Pressed()),        this, SLOT(toggleISO()));
     //TODO: connect(prompt, SIGNAL(F6Pressed()),        this, SLOT(toggleCoords()));
             connect(prompt, SIGNAL(F7Pressed()),        this, SLOT(toggleGrid()));
@@ -128,12 +168,20 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
             connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
 
+            connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
+            connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+
+            connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
+
+            connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
+
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor("icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
+    connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor("icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -143,12 +191,13 @@ MainWindow::MainWindow() : QMainWindow(0)
     initMainWinPointer(this);
 
     engine = new QScriptEngine(this);
+    engine->installTranslatorFunctions();
     debugger = new QScriptEngineDebugger(this);
     debugger->attachTo(engine);
     javaInitNatives(engine);
 
     //Load all commands in a loop
-    QDir commandDir("commands");
+    QDir commandDir(appDir + "/commands");
     QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     foreach(QString cmdName, cmdList)
     {
@@ -173,7 +222,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     showNormal();
 
     //Load tips from external file
-    QFile tipFile("tips.txt");
+    QFile tipFile(appDir + "/tips.txt");
     if(tipFile.open(QFile::ReadOnly))
     {
         QTextStream stream(&tipFile);
@@ -201,7 +250,7 @@ MainWindow::~MainWindow()
 
 QAction* MainWindow::getAction(int actionEnum)
 {
-    return actionDict.value(actionEnum);
+    return actionHash.value(actionEnum);
 }
 
 void MainWindow::recentMenuAboutToShow()
@@ -242,14 +291,14 @@ void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionDict.value(ACTION_windowclose));
-    windowMenu->addAction(actionDict.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash.value(ACTION_windowclose));
+    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionDict.value(ACTION_windowcascade));
-    windowMenu->addAction(actionDict.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
+    windowMenu->addAction(actionHash.value(ACTION_windowtile));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionDict.value(ACTION_windownext));
-    windowMenu->addAction(actionDict.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash.value(ACTION_windownext));
+    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -287,13 +336,13 @@ MainWindow* MainWindow::getApplication()
     return mainWin;
 }
 
-void MainWindow::newfile()
+void MainWindow::newFile()
 {
-    qDebug("MainWindow::newfile()");
+    qDebug("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
-    MDIWindow* mdiWin = new MDIWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
-    connect(mdiWin, SIGNAL(sendCloseMdiWin(MDIWindow*)), this, SLOT(onCloseMdiWin(MDIWindow*)));
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
     updateMenuToolbarStatusbar();
@@ -307,9 +356,9 @@ void MainWindow::newfile()
     }
 }
 
-void MainWindow::openfile(bool recent, const QString& recentFile)
+void MainWindow::openFile(bool recent, const QString& recentFile)
 {
-    qDebug("MainWindow::openfile()");
+    qDebug("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
@@ -326,12 +375,12 @@ void MainWindow::openfile(bool recent, const QString& recentFile)
     else if(!preview)
     {
         //TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
-        files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, fileFormatFilterString());
+        files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
     else if(preview)
     {
-        PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, fileFormatFilterString());
+        PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
         //TODO: set openDialog->selectNameFilter(const QString& filter) from settings_opensave_open_format
         connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
@@ -348,8 +397,7 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
     {
         for(int i = 0; i < filesToOpen.count(); i++)
         {
-            int fileFormat = validFileFormat(filesToOpen[i]);
-            if(fileFormat == FILEFORMAT_NULL)
+            if(!validFileFormat(filesToOpen[i]))
                 continue;
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
@@ -361,8 +409,8 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             //The docIndex doesn't need increased as it is only used for unnamed files
             numOfDocs++;
-            MDIWindow* mdiWin = new MDIWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
-            connect(mdiWin, SIGNAL(sendCloseMdiWin(MDIWindow*)), this, SLOT(onCloseMdiWin(MDIWindow*)));
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             //Make sure the toolbars/etc... are shown before doing their zoomExtents
@@ -411,7 +459,7 @@ void MainWindow::openrecentfile()
     QAction* recentSender = qobject_cast<QAction*>(sender());
     if(recentSender)
     {
-        openfile(true, recentSender->data().toString());
+        openFile(true, recentSender->data().toString());
     }
 }
 
@@ -424,18 +472,15 @@ void MainWindow::saveasfile()
 {
     qDebug("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
-    MDIWindow* win;
-    if(!qobject_cast<MDIWindow*>(mdiArea->activeSubWindow()))
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(!mdiWin)
         return;
-
-    win = qobject_cast<MDIWindow*>(mdiArea->activeSubWindow());
 
     QString file;
     openFilesPath = settings_opensave_recent_directory;
-    file = QFileDialog::getSaveFileName(this, tr("Save"), openFilesPath, fileFormatFilterString()); //TODO: set selectedFilter from settings_opensave_save_format
+    file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
-    win->saveFile(file);
-
+    mdiWin->saveFile(file);
 }
 
 QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
@@ -443,14 +488,14 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
-    foreach(QMdiSubWindow* window, mdiArea->subWindowList())
+    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList())
     {
-        MDIWindow* mdiWin = qobject_cast<MDIWindow*>(window);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if(mdiWin)
         {
             if(mdiWin->getCurrentFile() == canonicalFilePath)
             {
-                return window;
+                return subWindow;
             }
         }
     }
@@ -467,14 +512,14 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
-    MDIWindow* win = qobject_cast<MDIWindow*>(mdiArea->activeSubWindow());
-    if(win)
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin)
     {
-        onCloseMdiWin(win);
+        onCloseMdiWin(mdiWin);
     }
 }
 
-void MainWindow::onCloseMdiWin(MDIWindow* theMdiWin)
+void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
     qDebug("MainWindow::onCloseMdiWin()");
     numOfDocs--;
@@ -490,17 +535,16 @@ void MainWindow::onCloseMdiWin(MDIWindow* theMdiWin)
 
     if(keepMaximized)
     {
-        MDIWindow* win = qobject_cast<MDIWindow*>(mdiArea->activeSubWindow());
-        if(win) { win->showMaximized(); }
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+        if(mdiWin) { mdiWin->showMaximized(); }
     }
 }
 
 void MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
     qDebug("MainWindow::onWindowActivated()");
-    MDIWindow* win = qobject_cast<MDIWindow*>(w);
-    if(win)
-        win->onWindowActivated();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
+    if(mdiWin) { mdiWin->onWindowActivated(); }
 }
 
 void MainWindow::resizeEvent(QResizeEvent* e)
@@ -520,18 +564,20 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionDict.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionDict.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionDict.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
 
     if(numOfDocs)
     {
         //Toolbars
+        toolbarView->show();
         toolbarZoom->show();
         toolbarPan->show();
         toolbarIcon->show();
         toolbarHelp->show();
         toolbarLayer->show();
+        toolbarText->show();
         toolbarProperties->show();
         toolbarPrompt->show();
 
@@ -576,11 +622,13 @@ void MainWindow::updateMenuToolbarStatusbar()
     else
     {
         //Toolbars
+        toolbarView->hide();
         toolbarZoom->hide();
         toolbarPan->hide();
         toolbarIcon->hide();
         toolbarHelp->hide();
         toolbarLayer->hide();
+        toolbarText->hide();
         toolbarProperties->hide();
         toolbarPrompt->hide();
         foreach(QToolBar* tb, toolbarHash)
@@ -622,123 +670,70 @@ void MainWindow::hideUnimplemented()
     qDebug("MainWindow::hideUnimplemented()");
 }
 
-int MainWindow::validFileFormat(const QString& fileName)
+bool MainWindow::validFileFormat(const QString& fileName)
 {
-    int type = FILEFORMAT_NULL;
-    if     (fileName.toUpper().endsWith(".100")) type = FILEFORMAT_100;
-    else if(fileName.toUpper().endsWith(".10O")) type = FILEFORMAT_10O;
-    else if(fileName.toUpper().endsWith(".ART")) type = FILEFORMAT_ART;
-    else if(fileName.toUpper().endsWith(".BMC")) type = FILEFORMAT_BMC;
-    else if(fileName.toUpper().endsWith(".BRO")) type = FILEFORMAT_BRO;
-    else if(fileName.toUpper().endsWith(".CND")) type = FILEFORMAT_CND;
-    else if(fileName.toUpper().endsWith(".COL")) type = FILEFORMAT_COL;
-    else if(fileName.toUpper().endsWith(".CSD")) type = FILEFORMAT_CSD;
-    else if(fileName.toUpper().endsWith(".CSV")) type = FILEFORMAT_CSV;
-    else if(fileName.toUpper().endsWith(".DAT")) type = FILEFORMAT_DAT;
-    else if(fileName.toUpper().endsWith(".DEM")) type = FILEFORMAT_DEM;
-    else if(fileName.toUpper().endsWith(".DSB")) type = FILEFORMAT_DSB;
-    else if(fileName.toUpper().endsWith(".DST")) type = FILEFORMAT_DST;
-    else if(fileName.toUpper().endsWith(".DSZ")) type = FILEFORMAT_DSZ;
-    else if(fileName.toUpper().endsWith(".DXF")) type = FILEFORMAT_DXF;
-    else if(fileName.toUpper().endsWith(".EDR")) type = FILEFORMAT_EDR;
-    else if(fileName.toUpper().endsWith(".EMD")) type = FILEFORMAT_EMD;
-    else if(fileName.toUpper().endsWith(".EXP")) type = FILEFORMAT_EXP;
-    else if(fileName.toUpper().endsWith(".EXY")) type = FILEFORMAT_EXY;
-    else if(fileName.toUpper().endsWith(".EYS")) type = FILEFORMAT_EYS;
-    else if(fileName.toUpper().endsWith(".FXY")) type = FILEFORMAT_FXY;
-    else if(fileName.toUpper().endsWith(".GNC")) type = FILEFORMAT_GNC;
-    else if(fileName.toUpper().endsWith(".GT"))  type = FILEFORMAT_GT;
-    else if(fileName.toUpper().endsWith(".HUS")) type = FILEFORMAT_HUS;
-    else if(fileName.toUpper().endsWith(".INB")) type = FILEFORMAT_INB;
-    else if(fileName.toUpper().endsWith(".JEF")) type = FILEFORMAT_JEF;
-    else if(fileName.toUpper().endsWith(".KSM")) type = FILEFORMAT_KSM;
-    else if(fileName.toUpper().endsWith(".PCD")) type = FILEFORMAT_PCD;
-    else if(fileName.toUpper().endsWith(".PCM")) type = FILEFORMAT_PCM;
-    else if(fileName.toUpper().endsWith(".PCQ")) type = FILEFORMAT_PCQ;
-    else if(fileName.toUpper().endsWith(".PCS")) type = FILEFORMAT_PCS;
-    else if(fileName.toUpper().endsWith(".PEC")) type = FILEFORMAT_PEC;
-    else if(fileName.toUpper().endsWith(".PEL")) type = FILEFORMAT_PEL;
-    else if(fileName.toUpper().endsWith(".PEM")) type = FILEFORMAT_PEM;
-    else if(fileName.toUpper().endsWith(".PES")) type = FILEFORMAT_PES;
-    else if(fileName.toUpper().endsWith(".PHB")) type = FILEFORMAT_PHB;
-    else if(fileName.toUpper().endsWith(".PHC")) type = FILEFORMAT_PHC;
-    else if(fileName.toUpper().endsWith(".RGB")) type = FILEFORMAT_RGB;
-    else if(fileName.toUpper().endsWith(".SEW")) type = FILEFORMAT_SEW;
-    else if(fileName.toUpper().endsWith(".SHV")) type = FILEFORMAT_SHV;
-    else if(fileName.toUpper().endsWith(".STX")) type = FILEFORMAT_STX;
-    else if(fileName.toUpper().endsWith(".SST")) type = FILEFORMAT_SST;
-    else if(fileName.toUpper().endsWith(".SVG")) type = FILEFORMAT_SVG;
-    else if(fileName.toUpper().endsWith(".T09")) type = FILEFORMAT_T09;
-    else if(fileName.toUpper().endsWith(".TAP")) type = FILEFORMAT_TAP;
-    else if(fileName.toUpper().endsWith(".THR")) type = FILEFORMAT_THR;
-    else if(fileName.toUpper().endsWith(".TXT")) type = FILEFORMAT_TXT;
-    else if(fileName.toUpper().endsWith(".U00")) type = FILEFORMAT_U00;
-    else if(fileName.toUpper().endsWith(".U01")) type = FILEFORMAT_U01;
-    else if(fileName.toUpper().endsWith(".VIP")) type = FILEFORMAT_VIP;
-    else if(fileName.toUpper().endsWith(".VP3")) type = FILEFORMAT_VP3;
-    else if(fileName.toUpper().endsWith(".XXX")) type = FILEFORMAT_XXX;
-    else if(fileName.toUpper().endsWith(".ZSK")) type = FILEFORMAT_ZSK;
-    return type;
+    if(embFormat_typeFromName(qPrintable(fileName)))
+        return true;
+    return false;
 }
 
-QString MainWindow::fileFormatFilterString()
+void MainWindow::loadFormats()
 {
-    QString supported = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.jef *.ksm *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
-    QString all = "All Files (*);;"   \
-    "100 (*.100);;"     \
-    "10o (*.10o);;"     \
-    "ART (*.art);;"     \
-    "BMC (*.bmc);;"     \
-    "BRO (*.bro);;"     \
-    "CND (*.cnd);;"     \
-    "COL (*.col);;"     \
-    "CSD (*.csd);;"     \
-    "CSV (*.csv);;"     \
-    "DAT (*.dat);;"     \
-    "DEM (*.dem);;"     \
-    "DSB (*.dsb);;"     \
-    "DST (*.dst);;"     \
-    "DSZ (*.dsz);;"     \
-    "DXF (*.dxf);;"     \
-    "EDR (*.edr);;"     \
-    "EMD (*.emd);;"     \
-    "EXP (*.exp);;"     \
-    "EXY (*.exy);;"     \
-    "EYS (*.eys);;"     \
-    "FXY (*.fxy);;"     \
-    "GNC (*.gnc);;"     \
-    "GT (*.gt);;"       \
-    "HUS (*.hus);;"     \
-    "INB (*.inb);;"     \
-    "JEF (*.jef);;"     \
-    "KSM (*.ksm);;"     \
-    "PCD (*.pcd);;"     \
-    "PCM (*.pcm);;"     \
-    "PCQ (*.pcq);;"     \
-    "PCS (*.pcs);;"     \
-    "PEC (*.pec);;"     \
-    "PEL (*.pel);;"     \
-    "PEM (*.pem);;"     \
-    "PES (*.pes);;"     \
-    "PHB (*.phb);;"     \
-    "PHC (*.phc);;"     \
-    "RGB (*.rgb);;"     \
-    "SEW (*.sew);;"     \
-    "SHV (*.shv);;"     \
-    "SST (*.sst);;"     \
-    "STX (*.stx);;"     \
-    "SVG (*.svg);;"     \
-    "T09 (*.t09);;"     \
-    "TAP (*.tap);;"     \
-    "THR (*.thr);;"     \
-    "TXT (*.txt);;"     \
-    "U00 (*.u00);;"     \
-    "U01 (*.u01);;"     \
-    "VIP (*.vip);;"     \
-    "VP3 (*.vp3);;"     \
-    "XXX (*.xxx);;"     \
-    "ZSK (*.zsk);;";
+    char stable, unstable;
+    QString supportedReaders  = "All Supported Files (";
+    QString individualReaders = "All Files (*);;";
+    QString supportedWriters  = "All Supported Files (";
+    QString individualWriters = "All Files (*);;";
+    QString supportedStr;
+    QString individualStr;
 
+    //TODO: Stable Only (Settings Option)
+    //stable = 'S'; unstable = 'S';
+
+    //Stable + Unstable
+    stable = 'S'; unstable = 'U';
+
+    const char* extension = 0;
+    const char* description = 0;
+    char readerState;
+    char writerState;
+
+    EmbFormatList* curFormat = 0;
+    for(int i=0; i < numberOfFormats; i++)
+    {
+        extension = formatTable[i].extension;
+        description = formatTable[i].description;
+        readerState = formatTable[i].reader;
+        writerState = formatTable[i].writer;
+
+        QString upperExt = QString(extension).toUpper();
+        supportedStr = "*" + upperExt + " ";
+        individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
+        if(readerState == stable || readerState == unstable)
+        {
+            //Exclude color file formats from open dialogs
+            if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
+            {
+                supportedReaders.append(supportedStr);
+                individualReaders.append(individualStr);
+            }
+        }
+        if(writerState == stable || writerState == unstable)
+        {
+            supportedWriters.append(supportedStr);
+            individualWriters.append(individualStr);
+        }
+
+    }
+
+    supportedReaders.append(");;");
+    supportedWriters.append(");;");
+
+    formatFilterOpen = supportedReaders + individualReaders;
+    formatFilterSave = supportedWriters + individualWriters;
+
+    //TODO: Fixup custom filter
+    /*
     QString custom = getSettingsCustomFilter();
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
@@ -748,6 +743,7 @@ QString MainWindow::fileFormatFilterString()
         custom = "Custom Filter(" + custom + ");;";
 
     return tr(qPrintable(custom + supported + all));
+    */
 }
 
 void MainWindow::closeToolBar(QAction* action)
@@ -799,4 +795,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

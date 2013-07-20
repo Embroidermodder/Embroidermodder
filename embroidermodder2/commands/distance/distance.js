@@ -10,11 +10,13 @@ global.y2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.x1 = NaN;
     global.y1 = NaN;
     global.x2 = NaN;
     global.y2 = NaN;
-    setPromptPrefix("Specify first point: ");
+    setPromptPrefix(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -26,8 +28,11 @@ function click(x, y)
     {
         global.x1 = x;
         global.y1 = y;
+        addRubber("LINE");
+        setRubberMode("LINE");
+        setRubberPoint("LINE_START", global.x1, global.y1);
         appendPromptHistory();
-        setPromptPrefix("Specify second point: ");
+        setPromptPrefix(qsTr("Specify second point: "));
     }
     else
     {
@@ -56,24 +61,25 @@ function prompt(str)
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Requires numeric distance or two points.");
-            appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            alert(qsTr("Requires numeric distance or two points."));
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
             global.x1 = Number(strList[0]);
             global.y1 = Number(strList[1]);
-            setPromptPrefix("Specify second point: ");
+            addRubber("LINE");
+            setRubberMode("LINE");
+            setRubberPoint("LINE_START", global.x1, global.y1);
+            setPromptPrefix(qsTr("Specify second point: "));
         }
     }
     else
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Requires numeric distance or two points.");
-            appendPromptHistory();
-            setPromptPrefix("Specify second point: ");
+            alert(qsTr("Requires numeric distance or two points."));
+            setPromptPrefix(qsTr("Specify second point: "));
         }
         else
         {
@@ -103,8 +109,8 @@ function reportDistance()
     var dist = calculateDistance(global.x1,global.y1,global.x2, global.y2);
     var angle = calculateAngle(global.x1,global.y1,global.x2, global.y2);
 
-    setPromptPrefix("Distance = " + dist.toString() + ", Angle = " + angle.toString());
+    setPromptPrefix(qsTr("Distance") + " = " + dist.toString() + ", " + qsTr("Angle") + " = " + angle.toString());
     appendPromptHistory();
-    setPromptPrefix("Delta X = " + dx.toString() + ", Delta Y = " + dy.toString());
+    setPromptPrefix(qsTr("Delta X") + " = " + dx.toString() + ", " + qsTr("Delta Y") + " = " + dy.toString());
     appendPromptHistory();
 }

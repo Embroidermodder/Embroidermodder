@@ -11,12 +11,14 @@ global.prevY;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.firstRun = true;
     global.firstX = NaN;
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    setPromptPrefix("Specify first point: ");
+    setPromptPrefix(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -35,7 +37,7 @@ function click(x, y)
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.firstX, global.firstY);
         appendPromptHistory();
-        setPromptPrefix("Specify next point or [Undo]: ");
+        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
     }
     else
     {
@@ -67,9 +69,8 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
-            appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            alert(qsTr("Invalid point."));
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
@@ -81,12 +82,12 @@ function prompt(str)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.firstX, global.firstY);
-            setPromptPrefix("Specify next point or [Undo]: ");
+            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
         }
     }
     else
     {
-        if(str == "U" || str == "UNDO")
+        if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
         {
             todo("LINE", "prompt() for UNDO");
         }
@@ -95,9 +96,8 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Point or option keyword required.");
-                appendPromptHistory();
-                setPromptPrefix("Specify next point or [Undo]: ");
+                alert(qsTr("Point or option keyword required."));
+                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
             else
             {
@@ -110,7 +110,7 @@ function prompt(str)
                 setRubberPoint("LINE_START", x, y);
                 global.prevX = x;
                 global.prevY = y;
-                setPromptPrefix("Specify next point or [Undo]: ");
+                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
         }
     }

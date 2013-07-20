@@ -1,7 +1,5 @@
-#include "object-point.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
-#include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
@@ -17,6 +15,7 @@ PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(p
     if(obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 
@@ -49,18 +48,30 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawPoint(0,0);
 }
 
 void PointObject::updateRubber(QPainter* painter)
 {
-    //TODO: Point Rubber Modes
+    int rubberMode = objectRubberMode();
+    if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if(gripPoint == scenePos())
+            {
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            }
+        }
+    }
 }
 
 void PointObject::vulcanize()
@@ -82,6 +93,18 @@ QList<QPointF> PointObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
+}
+
+void PointObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+}
+
+QPainterPath PointObject::objectSavePath() const
+{
+    QPainterPath path;
+    path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    return path;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,6 +1,4 @@
-#include "object-circle.h"
-#include "object-data.h"
-#include "geom-arc.h" //TODO: make a geom-circle.h that simply includes arc.h so it's more intuitive
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -18,6 +16,7 @@ CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObjec
     if(obj)
     {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 
@@ -77,6 +76,7 @@ void CircleObject::setObjectDiameter(qreal diameter)
     circRect.setHeight(diameter);
     circRect.moveCenter(QPointF(0,0));
     setRect(circRect);
+    updatePath();
 }
 
 void CircleObject::setObjectArea(qreal area)
@@ -95,6 +95,9 @@ void CircleObject::updatePath()
 {
     QPainterPath path;
     QRectF r = rect();
+    //Add the center point
+    path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    //Add the circle
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
     //NOTE: Reverse the path so that the inside area isn't considered part of the circle
@@ -108,11 +111,11 @@ void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawEllipse(rect());
 }
@@ -131,7 +134,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         qreal radius = sceneLine.length();
         setObjectRadius(radius);
-        if(painter) painter->drawLine(itemLine);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA)
@@ -145,7 +148,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         qreal diameter = sceneLine.length();
         setObjectDiameter(diameter);
-        if(painter) painter->drawLine(itemLine);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_CIRCLE_2P)
@@ -176,6 +179,25 @@ void CircleObject::updateRubber(QPainter* painter)
         qreal radius = sceneLine.length();
         setObjectRadius(radius);
         updatePath();
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if(gripPoint == objectCenter())
+            {
+                painter->drawEllipse(rect().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            }
+            else
+            {
+                qreal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
+                painter->drawEllipse(QPointF(), gripRadius, gripRadius);
+            }
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
     }
 }
 
@@ -218,6 +240,26 @@ QList<QPointF> CircleObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
+}
+
+void CircleObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if(before == objectCenter()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+    else                         { setObjectRadius(QLineF(objectCenter(), after).length()); }
+}
+
+QPainterPath CircleObject::objectSavePath() const
+{
+    QPainterPath path;
+    QRectF r = rect();
+    path.arcMoveTo(r, 0);
+    path.arcTo(r, 0, 360);
+
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(path);
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

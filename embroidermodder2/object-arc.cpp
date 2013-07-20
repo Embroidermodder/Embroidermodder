@@ -1,6 +1,4 @@
-#include "object-arc.h"
-#include "object-data.h"
-#include "geom-arc.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -18,6 +16,7 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
     if(obj)
     {
         init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 
@@ -306,11 +305,11 @@ void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     qreal startAngle = (objectStartAngle() + rotation())*16;
     qreal spanAngle = objectIncludedAngle()*16;
@@ -326,6 +325,9 @@ void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 void ArcObject::updateRubber(QPainter* painter)
 {
     //TODO: Arc Rubber Modes
+
+    //TODO: updateRubber() gripping for ArcObject
+
 }
 
 void ArcObject::vulcanize()
@@ -364,6 +366,11 @@ QList<QPointF> ArcObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectCenter() << objectStartPoint() << objectMidPoint() << objectEndPoint();
     return gripPoints;
+}
+
+void ArcObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    //TODO: gripEdit() for ArcObject
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

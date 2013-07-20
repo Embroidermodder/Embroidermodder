@@ -1,7 +1,5 @@
-#include "object-rect.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
-#include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
@@ -18,6 +16,7 @@ RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(pare
     {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 
@@ -133,11 +132,11 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawRect(rect());
 }
@@ -155,6 +154,32 @@ void RectObject::updateRubber(QPainter* painter)
         qreal h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            //TODO: Make this work with rotation & scaling
+            /*
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            QPointF after = objectRubberPoint(QString());
+            QPointF delta = after-gripPoint;
+            if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
+            else if(gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
+            else if(gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+            else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            */
+
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            QPointF after = objectRubberPoint(QString());
+            QPointF delta = after-gripPoint;
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
     }
 }
 
@@ -194,6 +219,32 @@ QList<QPointF> RectObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
+}
+
+void RectObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    QPointF delta = after-before;
+    if     (before == objectTopLeft())     { setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()); }
+    else if(before == objectTopRight())    { setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()); }
+    else if(before == objectBottomLeft())  { setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()); }
+    else if(before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
+}
+
+QPainterPath RectObject::objectSavePath() const
+{
+    QPainterPath path;
+    QRectF r = rect();
+    path.moveTo(r.bottomLeft());
+    path.lineTo(r.bottomRight());
+    path.lineTo(r.topRight());
+    path.lineTo(r.topLeft());
+    path.lineTo(r.bottomLeft());
+
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(path);
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

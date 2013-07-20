@@ -66,7 +66,7 @@ const QImage loadThumb(const QString& fileName)
                 {
                     if(!path.isEmpty())
                     {
-                        EmbColor thisColor = embThread_getAt(p->threadList, previousColor).color;
+                        EmbColor thisColor = embThreadList_getAt(p->threadList, previousColor).color;
                         QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
                         loadPen.setWidthF(0.35);
                         loadPen.setCapStyle(Qt::RoundCap);

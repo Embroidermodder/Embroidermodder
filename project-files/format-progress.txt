@@ -1,3 +1,8 @@
+/* TODO: Josh, Review this file and move any info still valid or needing work into TODO comments in the actual
+ *       libembroidery code. Many items in this list are out of date and do not reflect the current status of
+ *       libembroidery. When finished, delete this file.
+ */
+
 - Test that all formats read data in correct scale (format details should match other programs)
 - Add which formats to work with to preferences.
 - Check for memory leaks

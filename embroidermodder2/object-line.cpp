@@ -1,7 +1,5 @@
-#include "object-line.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
-#include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
@@ -122,13 +120,15 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    updateRubber(painter);
+    if(objectRubberMode() != OBJ_RUBBER_LINE) painter->drawLine(line());
 
-    painter->drawLine(line());
+    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, path()); }
 }
 
 void LineObject::updateRubber(QPainter* painter)
@@ -141,6 +141,21 @@ void LineObject::updateRubber(QPainter* painter)
 
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
+
+        drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+            else if(gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+        }
     }
 }
 
@@ -177,6 +192,20 @@ QList<QPointF> LineObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
     return gripPoints;
+}
+
+void LineObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
+    else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
+    else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
+}
+
+QPainterPath LineObject::objectSavePath() const
+{
+    QPainterPath path;
+    path.lineTo(objectDeltaX(), objectDeltaY());
+    return path;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

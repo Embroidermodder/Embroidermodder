@@ -4,7 +4,9 @@
 //      Use it to reset variables so they are ready to go.
 function main()
 {
-    setPromptPrefix("Specify point: ");
+    initCommand();
+    clearSelection();
+    setPromptPrefix(qsTr("Specify point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -33,9 +35,8 @@ function prompt(str)
     var strList = str.split(",");
     if(isNaN(strList[0]) || isNaN(strList[1]))
     {
-        setPromptPrefix("Invalid point.");
-        appendPromptHistory();
-        setPromptPrefix("Specify point: ");
+        alert(qsTr("Invalid point."));
+        setPromptPrefix(qsTr("Specify point: "));
     }
     else
     {

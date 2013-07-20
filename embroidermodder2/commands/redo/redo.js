@@ -4,6 +4,8 @@
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     redo();
     endCommand();
 }

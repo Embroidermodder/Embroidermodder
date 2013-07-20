@@ -23,6 +23,8 @@ global.mode_ELLIPSE_ROTATION          = 2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.mode = global.mode_MAJORDIAMETER_MINORRADIUS;
     global.x1      = NaN;
     global.y1      = NaN;
@@ -30,7 +32,7 @@ function main()
     global.y2      = NaN;
     global.x3      = NaN;
     global.y3      = NaN;
-    setPromptPrefix("Specify first axis start point or [Center]: ");
+    setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -48,7 +50,7 @@ function click(x, y)
             setRubberMode("ELLIPSE_LINE");
             setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
             appendPromptHistory();
-            setPromptPrefix("Specify first axis end point: ");
+            setPromptPrefix(qsTr("Specify first axis end point: "));
         }
         else if(isNaN(global.x2))
         {
@@ -65,7 +67,7 @@ function click(x, y)
             setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
             setRubberPoint("ELLIPSE_ROT", global.rot, 0);
             appendPromptHistory();
-            setPromptPrefix("Specify second axis end point or [Rotation]: ");
+            setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
         }
         else if(isNaN(global.x3))
         {
@@ -79,7 +81,7 @@ function click(x, y)
         }
         else
         {
-            error("ELLIPSE", "This should never happen.");
+            error("ELLIPSE", qsTr("This should never happen."));
         }
     }
     else if(global.mode == global.mode_MAJORRADIUS_MINORRADIUS)
@@ -95,7 +97,7 @@ function click(x, y)
             setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
             setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
             appendPromptHistory();
-            setPromptPrefix("Specify first axis end point: ");
+            setPromptPrefix(qsTr("Specify first axis end point: "));
         }
         else if(isNaN(global.x2))
         {
@@ -108,7 +110,7 @@ function click(x, y)
             setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
             setRubberPoint("ELLIPSE_ROT", global.rot, 0);
             appendPromptHistory();
-            setPromptPrefix("Specify second axis end point or [Rotation]: ");
+            setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
         }
         else if(isNaN(global.x3))
         {
@@ -122,18 +124,18 @@ function click(x, y)
         }
         else
         {
-            error("ELLIPSE", "This should never happen.");
+            error("ELLIPSE", qsTr("This should never happen."));
         }
     }
     else if(global.mode == global.mode_ELLIPSE_ROTATION)
     {
         if(isNaN(global.x1))
         {
-            error("ELLIPSE", "This should never happen.");
+            error("ELLIPSE", qsTr("This should never happen."));
         }
         else if(isNaN(global.x2))
         {
-            error("ELLIPSE", "This should never happen.");
+            error("ELLIPSE", qsTr("This should never happen."));
         }
         else if(isNaN(global.x3))
         {
@@ -162,19 +164,18 @@ function prompt(str)
     {
         if(isNaN(global.x1))
         {
-            if(str == "C" || str == "CENTER")
+            if(str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_MAJORRADIUS_MINORRADIUS;
-                setPromptPrefix("Specify center point: ");
+                setPromptPrefix(qsTr("Specify center point: "));
             }
             else
             {
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Point or option keyword required.");
-                    appendPromptHistory();
-                    setPromptPrefix("Specify first axis start point or [Center]: ");
+                    alert(qsTr("Point or option keyword required."));
+                    setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
                 }
                 else
                 {
@@ -183,7 +184,7 @@ function prompt(str)
                     addRubber("ELLIPSE");
                     setRubberMode("ELLIPSE_LINE");
                     setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
-                    setPromptPrefix("Specify first axis end point: ");
+                    setPromptPrefix(qsTr("Specify first axis end point: "));
                 }
             }
         }
@@ -192,9 +193,8 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
-                appendPromptHistory();
-                setPromptPrefix("Specify first axis end point: ");
+                alert(qsTr("Invalid point."));
+                setPromptPrefix(qsTr("Specify first axis end point: "));
             }
             else
             {
@@ -210,24 +210,23 @@ function prompt(str)
                 setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
                 setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
                 setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-                setPromptPrefix("Specify second axis end point or [Rotation]: ");
+                setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
             }
         }
         else if(isNaN(global.x3))
         {
-            if(str == "R" || str == "ROTATION")
+            if(str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
-                setPromptPrefix("Specify rotation: ");
+                setPromptPrefix(qsTr("Specify rotation: "));
             }
             else
             {
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Point or option keyword required.");
-                    appendPromptHistory();
-                    setPromptPrefix("Specify second axis end point or [Rotation]: ");
+                    alert(qsTr("Point or option keyword required."));
+                    setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
                 }
                 else
                 {
@@ -248,9 +247,8 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
-                appendPromptHistory();
-                setPromptPrefix("Specify center point: ");
+                alert(qsTr("Invalid point."));
+                setPromptPrefix(qsTr("Specify center point: "));
             }
             else
             {
@@ -262,7 +260,7 @@ function prompt(str)
                 setRubberMode("ELLIPSE_LINE");
                 setRubberPoint("ELLIPSE_LINE_POINT1", global.x1, global.y1);
                 setRubberPoint("ELLIPSE_CENTER", global.cx, global.cy);
-                setPromptPrefix("Specify first axis end point: ");
+                setPromptPrefix(qsTr("Specify first axis end point: "));
             }
         }
         else if(isNaN(global.x2))
@@ -270,9 +268,8 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
-                appendPromptHistory();
-                setPromptPrefix("Specify first axis end point: ");
+                alert(qsTr("Invalid point."));
+                setPromptPrefix(qsTr("Specify first axis end point: "));
             }
             else
             {
@@ -284,24 +281,23 @@ function prompt(str)
                 setRubberPoint("ELLIPSE_AXIS1_POINT2", global.x2, global.y2);
                 setRubberPoint("ELLIPSE_WIDTH", global.width, 0);
                 setRubberPoint("ELLIPSE_ROT", global.rot, 0);
-                setPromptPrefix("Specify second axis end point or [Rotation]: ");
+                setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
             }
         }
         else if(isNaN(global.x3))
         {
-            if(str == "R" || str == "ROTATION")
+            if(str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_ELLIPSE_ROTATION;
-                setPromptPrefix("Specify ellipse rotation: ");
+                setPromptPrefix(qsTr("Specify ellipse rotation: "));
             }
             else
             {
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Point or option keyword required.");
-                    appendPromptHistory();
-                    setPromptPrefix("Specify second axis end point or [Rotation]: ");
+                    alert(qsTr("Point or option keyword required."));
+                    setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
                 }
                 else
                 {
@@ -319,19 +315,18 @@ function prompt(str)
     {
         if(isNaN(global.x1))
         {
-            error("ELLIPSE", "This should never happen.");
+            error("ELLIPSE", qsTr("This should never happen."));
         }
         else if(isNaN(global.x2))
         {
-            error("ELLIPSE", "This should never happen.");
+            error("ELLIPSE", qsTr("This should never happen."));
         }
         else if(isNaN(global.x3))
         {
             if(isNaN(str))
             {
-                setPromptPrefix("Invalid angle. Input a numeric angle or pick a point.");
-                appendPromptHistory();
-                setPromptPrefix("Specify rotation: ");
+                alert(qsTr("Invalid angle. Input a numeric angle or pick a point."));
+                setPromptPrefix(qsTr("Specify rotation: "));
             }
             else
             {

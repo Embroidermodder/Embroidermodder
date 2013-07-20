@@ -1,10 +1,4 @@
-#include "mainwindow.h"
-
-#include <QApplication>
-#include <QPixmap>
-#include <QLocale>
-
-#include <QMessageBox>
+#include "embroidermodder.h"
 
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
@@ -19,7 +13,7 @@ static void usage(void)
     "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
     " _____________________________________________________________________________ "           "\n"
     "|                                                                             | "          "\n"
-    "|                   http://embroidermodder.sourceforge.net                    | "          "\n"
+    "|                   http://embroidermodder.github.io                          | "          "\n"
     "|_____________________________________________________________________________| "          "\n"
     "                                                                               "           "\n"
     "Usage: embroidermodder [options] files ..."                                      "\n"
@@ -41,7 +35,11 @@ static void version()
 
 int main(int argc, char* argv[])
 {
+#if defined(Q_OS_MAC)
+    Application app(argc, argv);
+#else
     QApplication app(argc, argv);
+#endif
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
 
@@ -66,6 +64,9 @@ int main(int argc, char* argv[])
         return 1;
 
     MainWindow* mainWin = new MainWindow();
+#if defined(Q_OS_MAC)
+    app.setMainWin(mainWin);
+#endif
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
 
@@ -78,5 +79,3 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

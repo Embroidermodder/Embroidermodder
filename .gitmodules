@@ -1,0 +1,7 @@
+[submodule "embroidermodder2/help"]
+	path = embroidermodder2/help
+	url = https://github.com/Embroidermodder/Embroidermodder.github.io.git
+	ignore = dirty
+[submodule "libembroidery"]
+	path = libembroidery
+	url = https://github.com/Embroidermodder/libembroidery

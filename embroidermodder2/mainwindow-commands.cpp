@@ -1,20 +1,4 @@
-#include "mainwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "imagewidget.h"
-#include "layer-manager.h"
-#include "object-data.h"
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-ellipse.h"
-#include "object-line.h"
-#include "object-point.h"
-#include "object-rect.h"
-#include "object-dimleader.h"
-#include "emb-rect.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
+#include "embroidermodder.h"
 
 #include <QLabel>
 #include <QDesktopServices>
@@ -27,8 +11,7 @@
 #include <QMdiArea>
 #include <QGraphicsScene>
 #include <QComboBox>
-#include "emb-pattern.h"
-#include <vector>
+#include <QWhatsThis>
 
 void MainWindow::stub_implement(QString txt)
 {
@@ -91,172 +74,83 @@ void MainWindow::selectAll()
     if(gview) { gview->selectAll(); }
 }
 
+QString MainWindow::platformString()
+{
+    //TODO: Append QSysInfo to string where applicable.
+    QString os;
+    #if   defined(Q_OS_AIX)
+    os = "AIX";
+    #elif defined(Q_OS_BSD4)
+    os = "BSD 4.4";
+    #elif defined(Q_OS_BSDI)
+    os = "BSD/OS";
+    #elif defined(Q_OS_CYGWIN)
+    os = "Cygwin";
+    #elif defined(Q_OS_DARWIN)
+    os = "Mac OS";
+    #elif defined(Q_OS_DGUX)
+    os = "DG/UX";
+    #elif defined(Q_OS_DYNIX)
+    os = "DYNIX/ptx";
+    #elif defined(Q_OS_FREEBSD)
+    os = "FreeBSD";
+    #elif defined(Q_OS_HPUX)
+    os = "HP-UX";
+    #elif defined(Q_OS_HURD)
+    os = "GNU Hurd";
+    #elif defined(Q_OS_IRIX)
+    os = "SGI Irix";
+    #elif defined(Q_OS_LINUX)
+    os = "Linux";
+    #elif defined(Q_OS_LYNX)
+    os = "LynxOS";
+    #elif defined(Q_OS_MAC)
+    os = "Mac OS";
+    #elif defined(Q_OS_MSDOS)
+    os = "MS-DOS";
+    #elif defined(Q_OS_NETBSD)
+    os = "NetBSD";
+    #elif defined(Q_OS_OS2)
+    os = "OS/2";
+    #elif defined(Q_OS_OPENBSD)
+    os = "OpenBSD";
+    #elif defined(Q_OS_OS2EMX)
+    os = "XFree86 on OS/2";
+    #elif defined(Q_OS_OSF)
+    os = "HP Tru64 UNIX";
+    #elif defined(Q_OS_QNX)
+    os = "QNX Neutrino";
+    #elif defined(Q_OS_RELIANT)
+    os = "Reliant UNIX";
+    #elif defined(Q_OS_SCO)
+    os = "SCO OpenServer 5";
+    #elif defined(Q_OS_SOLARIS)
+    os = "Sun Solaris";
+    #elif defined(Q_OS_SYMBIAN)
+    os = "Symbian";
+    #elif defined(Q_OS_ULTRIX)
+    os = "DEC Ultrix";
+    #elif defined(Q_OS_UNIX)
+    os = "UNIX BSD/SYSV";
+    #elif defined(Q_OS_UNIXWARE)
+    os = "UnixWare";
+    #elif defined(Q_OS_WIN32)
+    os = "Windows";
+    #elif defined(Q_OS_WINCE)
+    os = "Windows CE";
+    #endif
+    qDebug("Platform: %s", qPrintable(os));
+    return os;
+}
+
 void MainWindow::designDetails()
 {
-//TODO: Reimplement designDetails() using the libembroidery C API
-/*
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("designDetails()");
-    QString appName = QApplication::applicationName();
-    QString title = "Design Details";
-
-    pattern p;
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        p = ((MDIWindow*)mdiArea->activeSubWindow())->pattern;
-    p.CalculateBoundingBox();
-    embRect bounds = p.BoundingRect;
-
-    int colors=1;
-    int real_stitches=0;
-    int jump_stitches=0;
-    int trim_stitches=0;
-    int unknown_stitches=0;
-    double minx=0,maxx=0,miny=0,maxy=0;
-    double min_stitchlength=999.0;
-    double max_stitchlength=0.0;
-    double total_stitchlength=0.0;
-    int number_of_minlength_stitches=0;
-    int number_of_maxlength_stitches=0;
-
-    double xx=0,yy=0;
-    double dx=0,dy=0;
-    double length=0.0;
-
-    if (p.stitchlist.size() ==0) {
-        //messages.add("No design loaded\n");
-        return;
-    }
-    std::vector<double> stitchLengths;
-
-    int stitches = p.stitchlist.size();
-    double totalColorLength = 0.0;
-    for (int i=0;i<stitches;i++) {
-        dx=p.stitchlist[i].xx-xx;
-        dy=p.stitchlist[i].yy-yy;
-        xx=p.stitchlist[i].xx;
-        yy=p.stitchlist[i].yy;
-        length=sqrt(dx * dx + dy * dy);
-        totalColorLength += length;
-        if (i>0 && p.stitchlist[i-1].flags!=NORMAL) length=0.0;	//can't count first normal stitch;
-        if(!(p.stitchlist[i].flags & (JUMP | TRIM))) {
-            real_stitches++;
-            if(length>max_stitchlength) {max_stitchlength=length; number_of_maxlength_stitches=0;};
-            if(length==max_stitchlength) number_of_maxlength_stitches++;
-            if(length>0 && length<min_stitchlength)
-            {
-                min_stitchlength=length;
-                number_of_minlength_stitches=0;
-            };
-            if(length==min_stitchlength) number_of_minlength_stitches++;
-            total_stitchlength+=length;
-            if(xx<minx) minx=xx;
-            if(xx>maxx) maxx=xx;
-            if(yy<miny) miny=yy;
-            if(yy>maxy) maxy=yy;
-        }
-        if(p.stitchlist[i].flags & JUMP)
-        {
-            jump_stitches++;
-        }
-        if(p.stitchlist[i].flags & TRIM)
-        {
-            trim_stitches++;
-        }
-        if(p.stitchlist[i].flags & STOP)
-        {
-            stitchLengths.push_back(totalColorLength);
-            totalColorLength = 0;
-            colors++;
-        }
-        if(p.stitchlist[i].flags & END)
-        {
-            stitchLengths.push_back(totalColorLength);
-        }
-    }
-
-    //second pass to fill bins now that we know max stitch length
-#define NUMBINS 10
-    int bin[NUMBINS+1];
-    for (int i=0;i<=NUMBINS;i++)
+    QGraphicsScene* scene = activeScene();
+    if(scene)
     {
-        bin[i]=0;
+        EmbDetailsDialog dialog(scene, this);
+        dialog.exec();
     }
-
-    for (int i=0;i<stitches;i++) {
-        dx=p.stitchlist[i].xx-xx;
-        dy=p.stitchlist[i].yy-yy;
-        xx=p.stitchlist[i].xx;
-        yy=p.stitchlist[i].yy;
-        if (i>0 && p.stitchlist[i-1].flags==NORMAL && p.stitchlist[i].flags == NORMAL) {
-            length=sqrt(dx * dx + dy * dy);
-            bin[int(floor(NUMBINS*length/max_stitchlength))]++;
-        }
-    }
-
-    double binSize = max_stitchlength / NUMBINS;
-
-    QString str;
-    for(int i = 0; i < NUMBINS; i++)
-    {
-        str += QString::number(binSize * (i), 'f', 1) + " - " + QString::number(binSize * (i+1), 'f', 1) + " mm: " +  QString::number(bin[i]) + "\n\n";
-    }
-
-    QDialog dialog(this);
-
-    QGridLayout *grid = new QGridLayout(this);
-    grid->setSpacing(2);
-
-    grid->addWidget(new QLabel(tr("Stitches:")),0,0,1,1);
-    grid->addWidget(new QLabel(QString::number(p.stitchlist.size())), 0, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Colors:")),1,0,1,1);
-    grid->addWidget(new QLabel(QString::number(p.colorlist.size())), 1, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Jumps:")),2,0,1,1);
-    grid->addWidget(new QLabel(QString::number(jump_stitches)), 2, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Top:")),3,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.top) + " mm"), 3, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Left:")),4,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.left) + " mm"), 4, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Bottom:")),5,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.bottom) + " mm"), 5, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Right:")),6,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.right) + " mm"), 6, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Width:")),7,0,1,1);
-    grid->addWidget(new QLabel(QString::number((bounds.right - bounds.left)) + " mm"), 7, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Height:")),8,0,1,1);
-    grid->addWidget(new QLabel(QString::number((bounds.bottom - bounds.top)) + " mm"), 8, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("\nStitch Distribution: \n")),9,0,1,2);
-    grid->addWidget(new QLabel(str), 10, 0, 1, 1);
-    grid->addWidget(new QLabel(tr("\nThread Length By Color: \n")),11,0,1,2);
-    int currentRow = 12;
-    for(int i = 0; i < p.colorlist.size(); i++)
-    {
-        QFrame *frame = new QFrame();
-        frame->setGeometry(0,0,30,30);
-        QPalette palette = frame->palette();
-        color t = p.colorlist[i].Color;
-        palette.setColor(backgroundRole(), QColor( t.r, t.g, t.b ) );
-        frame->setPalette( palette );
-        frame->setAutoFillBackground(true);
-        grid->addWidget(frame, currentRow,0,1,1);
-        grid->addWidget(new QLabel(QString::number(stitchLengths[i]) + " mm"), currentRow,1,1,1);
-        currentRow++;
-    }
-    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
-    QPushButton button(&dialog);
-    button.setText("Ok");
-    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-
-    grid->addWidget(&buttonbox, currentRow, 0, 1, 2);
-
-    dialog.setWindowTitle(title);
-    dialog.setMinimumWidth(100);
-    dialog.setMinimumHeight(50);
-    dialog.setLayout(grid);
-    dialog.exec();
-    QApplication::restoreOverrideCursor();
-*/
 }
 
 void MainWindow::about()
@@ -264,13 +158,14 @@ void MainWindow::about()
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     qDebug("about()");
+    QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
     QString title = "About " + appName;
 
     QDialog dialog(this);
-    ImageWidget img("images/logo-small");
+    ImageWidget img(appDir + "/images/logo-small");
     QLabel text(appName + tr("\n\n") +
-                          tr("http://embroidermodder.sourceforge.net") +
+                          tr("http://embroidermodder.github.io") +
                           tr("\n\n") +
                           tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
                           tr("\n\n") +
@@ -278,7 +173,12 @@ void MainWindow::about()
                           tr("\n") +
                           tr("User Interface by Jonathan Greig.") +
                           tr("\n\n") +
-                          tr("Free under the zlib/libpng license."));
+                          tr("Free under the zlib/libpng license.")
+                          #if defined(BUILD_GIT_HASH)
+                          + tr("\n\n") +
+                          tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
+                          #endif
+                          );
     text.setWordWrap(true);
 
     QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
@@ -302,26 +202,37 @@ void MainWindow::about()
     QApplication::restoreOverrideCursor();
 }
 
+void MainWindow::whatsThisContextHelp()
+{
+    qDebug("whatsThisContextHelp()");
+    QWhatsThis::enterWhatsThisMode();
+}
+
 void MainWindow::print()
 {
     qDebug("print()");
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->print();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { mdiWin->print(); }
 }
 
 void MainWindow::tipOfTheDay()
 {
     qDebug("tipOfTheDay()");
 
+    QString appDir = qApp->applicationDirPath();
+
     wizardTipOfTheDay = new QWizard(this);
     wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
+    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
+    wizardTipOfTheDay->setMinimumSize(550, 400);
 
     QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
-    page->setTitle("Did you know...");
+
+    ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
     if(settings_general_current_tip >= listTipOfTheDay.size())
         settings_general_current_tip = 0;
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.at(settings_general_current_tip), wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings_general_current_tip), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
@@ -330,6 +241,8 @@ void MainWindow::tipOfTheDay()
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
+    layout->addWidget(imgBanner);
+    layout->addStrut(1);
     layout->addWidget(labelTipOfTheDay);
     layout->addStretch(1);
     layout->addWidget(checkBoxTipOfTheDay);
@@ -370,14 +283,14 @@ void MainWindow::buttonTipOfTheDayClicked(int button)
             settings_general_current_tip--;
         else
             settings_general_current_tip = listTipOfTheDay.size()-1;
-        labelTipOfTheDay->setText(listTipOfTheDay.at(settings_general_current_tip));
+        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
     }
     else if(button == QWizard::CustomButton2)
     {
         settings_general_current_tip++;
         if(settings_general_current_tip >= listTipOfTheDay.size())
             settings_general_current_tip = 0;
-        labelTipOfTheDay->setText(listTipOfTheDay.at(settings_general_current_tip));
+        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
     }
     else if(button == QWizard::CustomButton3)
     {
@@ -390,7 +303,7 @@ void MainWindow::help()
     qDebug("help()");
 
     // Open the HTML Help in the default browser
-    QUrl helpURL("help/index.html");
+    QUrl helpURL("file:///" + qApp->applicationDirPath() + "/help/doc-index.html");
     QDesktopServices::openUrl(helpURL);
 
     //TODO: This is how to start an external program. Use this elsewhere...
@@ -413,26 +326,54 @@ void MainWindow::changelog()
 void MainWindow::undo()
 {
     qDebug("undo()");
+    QString prefix = prompt->getPrefix();
     if(dockUndoEdit->canUndo())
     {
-        prompt->appendHistory("Undo " + dockUndoEdit->undoText());
+        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+        prompt->appendHistory(QString());
         dockUndoEdit->undo();
+        prompt->setPrefix(prefix);
     }
     else
-        prompt->appendHistory("Nothing to undo");
+    {
+        prompt->alert("Nothing to undo");
+        prompt->setPrefix(prefix);
+    }
 }
 
 void MainWindow::redo()
 {
     qDebug("redo()");
+    QString prefix = prompt->getPrefix();
     if(dockUndoEdit->canRedo())
     {
-        prompt->appendHistory("Redo " + dockUndoEdit->redoText());
+        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+        prompt->appendHistory(QString());
         dockUndoEdit->redo();
+        prompt->setPrefix(prefix);
     }
     else
-        prompt->appendHistory("Nothing to redo");
+    {
+        prompt->alert("Nothing to redo");
+        prompt->setPrefix(prefix);
+    }
 }
+
+bool MainWindow::isShiftPressed()
+{
+    return shiftKeyPressedState;
+}
+
+void MainWindow::setShiftPressed()
+{
+    shiftKeyPressedState = true;
+}
+
+void MainWindow::setShiftReleased()
+{
+    shiftKeyPressedState = false;
+}
+
 // Icons
 void MainWindow::iconResize(int iconSize)
 {
@@ -440,12 +381,12 @@ void MainWindow::iconResize(int iconSize)
     layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
     colorSelector->     setIconSize(QSize(iconSize,   iconSize));
     linetypeSelector->  setIconSize(QSize(iconSize*4, iconSize));
-    lineweightSelector->setIconSize(QSize(iconSize,   iconSize));
+    lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
     //set the minimum combobox width so the text is always readable
     layerSelector->     setMinimumWidth(iconSize*4);
     colorSelector->     setMinimumWidth(iconSize*2);
     linetypeSelector->  setMinimumWidth(iconSize*4);
-    lineweightSelector->setMinimumWidth(iconSize*2);
+    lineweightSelector->setMinimumWidth(iconSize*4);
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
@@ -488,13 +429,20 @@ void MainWindow::icon128()
     iconResize(128);
 }
 
+MdiWindow* MainWindow::activeMdiWindow()
+{
+    qDebug("activeMdiWindow()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    return mdiWin;
+}
+
 View* MainWindow::activeView()
 {
     qDebug("activeView()");
-    MDIWindow* win = (MDIWindow*)mdiArea->activeSubWindow();
-    if(win)
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin)
     {
-        View* v = win->getView();
+        View* v = mdiWin->getView();
         return v;
     }
     return 0;
@@ -503,10 +451,10 @@ View* MainWindow::activeView()
 QGraphicsScene* MainWindow::activeScene()
 {
     qDebug("activeScene()");
-    MDIWindow* win = (MDIWindow*)mdiArea->activeSubWindow();
-    if(win)
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin)
     {
-        QGraphicsScene* s = win->getScene();
+        QGraphicsScene* s = mdiWin->getScene();
         return s;
     }
     return 0;
@@ -524,13 +472,18 @@ QUndoStack* MainWindow::activeUndoStack()
     return 0;
 }
 
+void MainWindow::setUndoCleanIcon(bool opened)
+{
+    dockUndoEdit->updateCleanIcon(opened);
+}
+
 void MainWindow::updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->showViewScrollBars(val);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if(mdiWin) { mdiWin->showViewScrollBars(val); }
     }
 }
 
@@ -539,8 +492,8 @@ void MainWindow::updateAllViewCrossHairColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewCrossHairColor(color);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if(mdiWin) { mdiWin->setViewCrossHairColor(color); }
     }
 }
 
@@ -549,8 +502,18 @@ void MainWindow::updateAllViewBackgroundColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewBackgroundColor(color);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if(mdiWin) { mdiWin->setViewBackgroundColor(color); }
+    }
+}
+
+void MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if(mdiWin) { mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha); }
     }
 }
 
@@ -559,8 +522,8 @@ void MainWindow::updateAllViewGridColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewGridColor(color);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if(mdiWin) { mdiWin->setViewGridColor(color); }
     }
 }
 
@@ -569,9 +532,21 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewRulerColor(color);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if(mdiWin) { mdiWin->setViewRulerColor(color); }
     }
+}
+
+void MainWindow::updatePickAddMode(bool val)
+{
+    setSettingsSelectionModePickAdd(val);
+    dockPropEdit->updatePickAddModeButton(val);
+}
+
+void MainWindow::pickAddModeToggled()
+{
+    bool val = !getSettingsSelectionModePickAdd();
+    updatePickAddMode(val);
 }
 
 // Layer ToolBar
@@ -596,68 +571,85 @@ void MainWindow::layerPrevious()
 }
 
 // Zoom ToolBar
-void MainWindow::zoomrealtime()
+void MainWindow::zoomRealtime()
 {
-    qDebug("zoomrealtime()");
-    stub_implement("Implement zoomrealtime.");
+    qDebug("zoomRealtime()");
+    stub_implement("Implement zoomRealtime.");
 }
 
-void MainWindow::zoomprevious()
+void MainWindow::zoomPrevious()
 {
-    qDebug("zoomprevious()");
-    stub_implement("Implement zoomprevious.");
+    qDebug("zoomPrevious()");
+    stub_implement("Implement zoomPrevious.");
 }
 
-void MainWindow::zoomwindow()
+void MainWindow::zoomWindow()
 {
-    qDebug("zoomwindow()");
+    qDebug("zoomWindow()");
     View* gview = activeView();
     if(gview) { gview->zoomWindow(); }
 }
 
-void MainWindow::zoomdynamic()
+void MainWindow::zoomDynamic()
 {
-    qDebug("zoomdynamic()");
-    stub_implement("Implement zoomdynamic.");
+    qDebug("zoomDynamic()");
+    stub_implement("Implement zoomDynamic.");
 }
 
-void MainWindow::zoomscale()
+void MainWindow::zoomScale()
 {
-    qDebug("zoomscale()");
-    stub_implement("Implement zoomscale.");
+    qDebug("zoomScale()");
+    stub_implement("Implement zoomScale.");
 }
 
-void MainWindow::zoomcenter()
+void MainWindow::zoomCenter()
 {
-    qDebug("zoomcenter()");
-    stub_implement("Implement zoomcenter.");
+    qDebug("zoomCenter()");
+    stub_implement("Implement zoomCenter.");
 }
 
-void MainWindow::zoomin()
+void MainWindow::zoomIn()
 {
-    qDebug("zoomin()");
+    qDebug("zoomIn()");
     View* gview = activeView();
     if(gview) { gview->zoomIn(); }
 }
 
-void MainWindow::zoomout()
+void MainWindow::zoomOut()
 {
-    qDebug("zoomout()");
+    qDebug("zoomOut()");
     View* gview = activeView();
     if(gview) { gview->zoomOut(); }
 }
 
-void MainWindow::zoomall()
+void MainWindow::zoomSelected()
 {
-    qDebug("zoomall()");
-    stub_implement("Implement zoomall.");
+    qDebug("zoomSelected()");
+    View* gview = activeView();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && stack)
+    {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+        stack->push(cmd);
+    }
 }
 
-void MainWindow::zoomextents()
+void MainWindow::zoomAll()
 {
-    qDebug("zoomextents()");
+    qDebug("zoomAll()");
+    stub_implement("Implement zoomAll.");
+}
+
+void MainWindow::zoomExtents()
+{
+    qDebug("zoomExtents()");
     View* gview = activeView();
-    if(gview) { gview->zoomExtents(); }
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && stack)
+    {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+        stack->push(cmd);
+    }
 }
 // Pan SubMenu
 void MainWindow::panrealtime()
@@ -722,6 +714,28 @@ void MainWindow::panDown()
     }
 }
 
+void MainWindow::dayVision()
+{
+    View* gview = activeView();
+    if(gview)
+    {
+        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    }
+}
+
+void MainWindow::nightVision()
+{
+    View* gview = activeView();
+    if(gview)
+    {
+        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    }
+}
+
 void MainWindow::doNothing()
 {
     //This function intentionally does nothing.
@@ -750,8 +764,8 @@ void MainWindow::colorSelectorIndexChanged(int index)
     else
         QMessageBox::warning(this, tr("Color Selector Pointer Error"), tr("<b>An error has occured while changing colors.</b>"));
 
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->currentColorChanged(newColor);
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { mdiWin->currentColorChanged(newColor); }
 }
 
 void MainWindow::linetypeSelectorIndexChanged(int index)
@@ -764,31 +778,131 @@ void MainWindow::lineweightSelectorIndexChanged(int index)
     qDebug("lineweightSelectorIndexChanged(%d)", index);
 }
 
+void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
+{
+    qDebug("textFontSelectorCurrentFontChanged()");
+    setTextFont(font.family());
+}
+
+void MainWindow::textSizeSelectorIndexChanged(int index)
+{
+    qDebug("textSizeSelectorIndexChanged(%d)", index);
+    setSettingsTextSize(qFabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
+}
+
+QString MainWindow::textFont()
+{
+    return getSettingsTextFont();
+}
+
+qreal MainWindow::textSize()
+{
+    return getSettingsTextSize();
+}
+
+qreal MainWindow::textAngle()
+{
+    return getSettingsTextAngle();
+}
+
+bool MainWindow::textBold()
+{
+    return getSettingsTextStyleBold();
+}
+
+bool MainWindow::textItalic()
+{
+    return getSettingsTextStyleItalic();
+}
+
+bool MainWindow::textUnderline()
+{
+    return getSettingsTextStyleUnderline();
+}
+
+bool MainWindow::textStrikeOut()
+{
+    return getSettingsTextStyleStrikeOut();
+}
+
+bool MainWindow::textOverline()
+{
+    return getSettingsTextStyleOverline();
+}
+
+void MainWindow::setTextFont(const QString& str)
+{
+    textFontSelector->setCurrentFont(QFont(str));
+    setSettingsTextFont(str);
+}
+
+void MainWindow::setTextSize(qreal num)
+{
+    setSettingsTextSize(qFabs(num));
+    int index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if(index != -1)
+        textSizeSelector->removeItem(index);
+    textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
+    index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if(index != -1)
+        textSizeSelector->setCurrentIndex(index);
+}
+
+void MainWindow::setTextAngle(qreal num)
+{
+    setSettingsTextAngle(num);
+}
+
+void MainWindow::setTextBold(bool val)
+{
+    setSettingsTextStyleBold(val);
+}
+
+void MainWindow::setTextItalic(bool val)
+{
+    setSettingsTextStyleItalic(val);
+}
+
+void MainWindow::setTextUnderline(bool val)
+{
+    setSettingsTextStyleUnderline(val);
+}
+
+void MainWindow::setTextStrikeOut(bool val)
+{
+    setSettingsTextStyleStrikeOut(val);
+}
+
+void MainWindow::setTextOverline(bool val)
+{
+    setSettingsTextStyleOverline(val);
+}
+
 QString MainWindow::getCurrentLayer()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentLayer();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { return mdiWin->getCurrentLayer(); }
     return "0";
 }
 
 QRgb MainWindow::getCurrentColor()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentColor();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { return mdiWin->getCurrentColor(); }
     return 0; //TODO: return color ByLayer
 }
 
 QString MainWindow::getCurrentLineType()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentLineType();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { return mdiWin->getCurrentLineType(); }
     return "ByLayer";
 }
 
 QString MainWindow::getCurrentLineWeight()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentLineWeight();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { return mdiWin->getCurrentLineWeight(); }
     return "ByLayer";
 }
 
@@ -796,8 +910,8 @@ void MainWindow::deletePressed()
 {
     qDebug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->deletePressed();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { mdiWin->deletePressed(); }
     QApplication::restoreOverrideCursor();
 }
 
@@ -805,8 +919,8 @@ void MainWindow::escapePressed()
 {
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->escapePressed();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin) { mdiWin->escapePressed(); }
     QApplication::restoreOverrideCursor();
 
     nativeEndCommand();
@@ -824,6 +938,58 @@ void MainWindow::toggleRuler()
     statusbar->statusBarRulerButton->toggle();
 }
 
+void MainWindow::toggleLwt()
+{
+    qDebug("toggleLwt()");
+    statusbar->statusBarLwtButton->toggle();
+}
+
+void MainWindow::enablePromptRapidFire()
+{
+    prompt->enableRapidFire();
+}
+
+void MainWindow::disablePromptRapidFire()
+{
+    prompt->disableRapidFire();
+}
+
+void MainWindow::enableMoveRapidFire()
+{
+    View* gview = activeView();
+    if(gview) gview->enableMoveRapidFire();
+}
+
+void MainWindow::disableMoveRapidFire()
+{
+    View* gview = activeView();
+    if(gview) gview->disableMoveRapidFire();
+}
+
+void MainWindow::promptHistoryAppended(const QString& txt)
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->promptHistoryAppended(txt);
+}
+
+void MainWindow::logPromptInput(const QString& txt)
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->logPromptInput(txt);
+}
+
+void MainWindow::promptInputPrevious()
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->promptInputPrevious();
+}
+
+void MainWindow::promptInputNext()
+{
+    MdiWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->promptInputNext();
+}
+
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
@@ -839,26 +1005,53 @@ void MainWindow::runCommand()
 void MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
-    engine->evaluate(cmd + "_main()");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
+    engine->evaluate(cmd + "_main()", fileName);
 }
 
 void MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 {
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
+}
+
+void MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
+{
+    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
 }
 
 void MainWindow::runCommandContext(const QString& cmd, const QString& str)
 {
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
-    engine->evaluate(cmd + "_context('" + str.toUpper() + "')");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
 }
 
 void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 {
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
-    engine->evaluate(cmd + "_prompt('" + str.toUpper() + "')");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    //NOTE: Replace any special characters that will cause a syntax error
+    QString safeStr = str;
+    safeStr.replace("\\", "\\\\");
+    safeStr.replace("\'", "\\\'");
+    if(prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName); }
+    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
 
+}
+
+void MainWindow::nativeAlert(const QString& txt)
+{
+    prompt->alert(txt);
+}
+
+void MainWindow::nativeBlinkPrompt()
+{
+    prompt->startBlinking();
 }
 
 void MainWindow::nativeSetPromptPrefix(const QString& txt)
@@ -871,17 +1064,117 @@ void MainWindow::nativeAppendPromptHistory(const QString& txt)
     prompt->appendHistory(txt);
 }
 
-void MainWindow::nativeEndCommand()
+void MainWindow::nativeEnablePromptRapidFire()
+{
+    enablePromptRapidFire();
+}
+
+void MainWindow::nativeDisablePromptRapidFire()
+{
+    disablePromptRapidFire();
+}
+
+void MainWindow::nativeEnableMoveRapidFire()
+{
+    enableMoveRapidFire();
+}
+
+void MainWindow::nativeDisableMoveRapidFire()
+{
+    disableMoveRapidFire();
+}
+
+void MainWindow::nativeInitCommand()
 {
     View* gview = activeView();
     if(gview) gview->clearRubberRoom();
+}
 
+void MainWindow::nativeEndCommand()
+{
+    View* gview = activeView();
+    if(gview)
+    {
+        gview->clearRubberRoom();
+        gview->previewOff();
+        gview->disableMoveRapidFire();
+    }
     prompt->endCommand();
+}
+
+void MainWindow::nativeNewFile()
+{
+    newFile();
+}
+
+void MainWindow::nativeOpenFile()
+{
+    openFile();
+}
+
+void MainWindow::nativeExit()
+{
+    exit();
 }
 
 void MainWindow::nativeHelp()
 {
     help();
+}
+
+void MainWindow::nativeAbout()
+{
+    about();
+}
+
+void MainWindow::nativeTipOfTheDay()
+{
+    tipOfTheDay();
+}
+
+void MainWindow::nativeWindowCascade()
+{
+    mdiArea->cascade();
+}
+
+void MainWindow::nativeWindowTile()
+{
+    mdiArea->tile();
+}
+
+void MainWindow::nativeWindowClose()
+{
+    onCloseWindow();
+}
+
+void MainWindow::nativeWindowCloseAll()
+{
+    mdiArea->closeAllSubWindows();
+}
+
+void MainWindow::nativeWindowNext()
+{
+    mdiArea->activateNextSubWindow();
+}
+
+void MainWindow::nativeWindowPrevious()
+{
+    mdiArea->activatePreviousSubWindow();
+}
+
+QString MainWindow::nativePlatformString()
+{
+    return platformString();
+}
+
+void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
+{
+    QString msgType = type.toLower();
+    if     (msgType == "critical")    { QMessageBox::critical   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "information") { QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "question")    { QMessageBox::question   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "warning")     { QMessageBox::warning    (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
 }
 
 void MainWindow::nativeUndo()
@@ -892,6 +1185,36 @@ void MainWindow::nativeUndo()
 void MainWindow::nativeRedo()
 {
     redo();
+}
+
+void MainWindow::nativeIcon16()
+{
+    icon16();
+}
+
+void MainWindow::nativeIcon24()
+{
+    icon24();
+}
+
+void MainWindow::nativeIcon32()
+{
+    icon32();
+}
+
+void MainWindow::nativeIcon48()
+{
+    icon48();
+}
+
+void MainWindow::nativeIcon64()
+{
+    icon64();
+}
+
+void MainWindow::nativeIcon128()
+{
+    icon128();
 }
 
 void MainWindow::nativePanLeft()
@@ -914,6 +1237,21 @@ void MainWindow::nativePanDown()
     panDown();
 }
 
+void MainWindow::nativeZoomIn()
+{
+    zoomIn();
+}
+
+void MainWindow::nativeZoomOut()
+{
+    zoomOut();
+}
+
+void MainWindow::nativeZoomExtents()
+{
+    zoomExtents();
+}
+
 void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
@@ -921,38 +1259,136 @@ void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
     print();
 }
 
-void MainWindow::nativeSetTextFont(const QString& str)
+void MainWindow::nativeDayVision()
 {
+    dayVision();
 }
 
-void MainWindow::nativeSetTextSize(quint32 num)
+void MainWindow::nativeNightVision()
 {
+    nightVision();
+}
+
+void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
+{
+    setSettingsDisplayBGColor(qRgb(r,g,b));
+    updateAllViewBackgroundColors(qRgb(r,g,b));
+}
+
+void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
+{
+    setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    updateAllViewCrossHairColors(qRgb(r,g,b));
+}
+
+void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
+{
+    setSettingsGridColor(qRgb(r,g,b));
+    updateAllViewGridColors(qRgb(r,g,b));
+}
+
+QString MainWindow::nativeTextFont()
+{
+    return textFont();
+}
+
+qreal MainWindow::nativeTextSize()
+{
+    return textSize();
+}
+
+qreal MainWindow::nativeTextAngle()
+{
+    return textAngle();
+}
+
+bool MainWindow::nativeTextBold()
+{
+    return textBold();
+}
+
+bool MainWindow::nativeTextItalic()
+{
+    return textItalic();
+}
+
+bool MainWindow::nativeTextUnderline()
+{
+    return textUnderline();
+}
+
+bool MainWindow::nativeTextStrikeOut()
+{
+    return textStrikeOut();
+}
+
+bool MainWindow::nativeTextOverline()
+{
+    return textOverline();
+}
+
+void MainWindow::nativeSetTextFont(const QString& str)
+{
+    setTextFont(str);
+}
+
+void MainWindow::nativeSetTextSize(qreal num)
+{
+    setTextSize(num);
+}
+
+void MainWindow::nativeSetTextAngle(qreal num)
+{
+    setTextAngle(num);
 }
 
 void MainWindow::nativeSetTextBold(bool val)
 {
+    setTextBold(val);
 }
 
 void MainWindow::nativeSetTextItalic(bool val)
 {
+    setTextItalic(val);
 }
 
 void MainWindow::nativeSetTextUnderline(bool val)
 {
+    setTextUnderline(val);
 }
 
 void MainWindow::nativeSetTextStrikeOut(bool val)
 {
+    setTextStrikeOut(val);
 }
 
 void MainWindow::nativeSetTextOverline(bool val)
 {
+    setTextOverline(val);
+}
+
+void MainWindow::nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data)
+{
+    View* gview = activeView();
+    if(gview) gview->previewOn(clone, mode, x, -y, data);
+}
+
+void MainWindow::nativePreviewOff()
+{
+    View* gview = activeView();
+    if(gview) gview->previewOff();
 }
 
 void MainWindow::nativeVulcanize()
 {
     View* gview = activeView();
-    if(gview) return gview->vulcanizeRubberRoom();
+    if(gview) gview->vulcanizeRubberRoom();
+}
+
+void MainWindow::nativeClearRubber()
+{
+    View* gview = activeView();
+    if(gview) gview->clearRubberRoom();
 }
 
 bool MainWindow::nativeAllowRubber()
@@ -962,36 +1398,65 @@ bool MainWindow::nativeAllowRubber()
     return false;
 }
 
+void MainWindow::nativeSpareRubber(qint64 id)
+{
+    View* gview = activeView();
+    if(gview) gview->spareRubber(id);
+}
+
 void MainWindow::nativeSetRubberMode(int mode)
 {
     View* gview = activeView();
-    if(gview) return gview->setRubberMode(mode);
+    if(gview) gview->setRubberMode(mode);
 }
 
 void MainWindow::nativeSetRubberPoint(const QString& key, qreal x, qreal y)
 {
     View* gview = activeView();
-    if(gview) return gview->setRubberPoint(key, QPointF(x, -y));
+    if(gview) gview->setRubberPoint(key, QPointF(x, -y));
 }
 
-void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, bool fill)
+void MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
+{
+    View* gview = activeView();
+    if(gview) gview->setRubberText(key, txt);
+}
+
+void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, bool fill)
+void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
 {
-    QGraphicsScene* scene = activeScene();
-    if(scene)
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
     {
-        QPainterPath textPath;
-        textPath.addText(0, 0, QFont("Impact"), str);
-        QGraphicsPathItem* textItem = scene->addPath(textPath);
-        //QGraphicsSimpleTextItem* textItem = scene->addSimpleText(str, QFont("Impact"));
-        textItem->setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
-        textItem->setPos(x,-y);
-        textItem->setFlag(QGraphicsItem::ItemIsMovable, true);
-        textItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
-        scene->update();
+        TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
+        obj->setObjectTextFont(getSettingsTextFont());
+        obj->setObjectTextSize(getSettingsTextSize());
+        obj->setObjectTextStyle(getSettingsTextStyleBold(),
+                                getSettingsTextStyleItalic(),
+                                getSettingsTextStyleUnderline(),
+                                getSettingsTextStyleStrikeOut(),
+                                getSettingsTextStyleOverline());
+        obj->setObjectTextBackward(false);
+        obj->setObjectTextUpsideDown(false);
+        obj->setRotation(-rot);
+        //TODO: single line text fill
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
     }
 }
 
@@ -1153,15 +1618,56 @@ void MainWindow::nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 s
 {
 }
 
-void MainWindow::nativeAddPolygon(qreal startX, qreal startY)
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
+    {
+        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
 }
 
-void MainWindow::nativeAddPolyline(qreal startX, qreal startY)
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
+    {
+        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
 }
 
-void MainWindow::nativeAddPath(qreal startX, qreal startY)
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void MainWindow::nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
 }
 
@@ -1257,6 +1763,13 @@ qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qrea
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 
+int MainWindow::nativeNumSelected()
+{
+    View* gview = activeView();
+    if(gview) { return gview->numSelected(); }
+    return 0;
+}
+
 void MainWindow::nativeSelectAll()
 {
     View* gview = activeView();
@@ -1293,16 +1806,33 @@ void MainWindow::nativePasteSelected(qreal x, qreal y)
 
 void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
 {
+    View* gview = activeView();
+    if(gview) { gview->moveSelected(dx, -dy); }
 }
 
 void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
 {
+    if(factor <= 0.0)
+    {
+        QMessageBox::critical(this, tr("ScaleFactor Error"),
+                                tr("Hi there. If you are not a developer, report this as a bug. "
+                                "If you are a developer, your code needs examined, and possibly your head too."));
+    }
+
+    View* gview = activeView();
+    if(gview) { gview->scaleSelected(x, -y, factor); }
 }
 
 void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
 {
     View* gview = activeView();
-    if(gview) { gview->rotateSelected(x, y, -rot); }
+    if(gview) { gview->rotateSelected(x, -y, -rot); }
+}
+
+void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+{
+    View* gview = activeView();
+    if(gview) { gview->mirrorSelected(x1, -y1, x2, -y2); }
 }
 
 qreal MainWindow::nativeQSnapX()

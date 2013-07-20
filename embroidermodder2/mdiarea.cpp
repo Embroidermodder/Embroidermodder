@@ -1,6 +1,4 @@
-#include "mdiarea.h"
-#include "mainwindow.h"
-#include "view.h"
+#include "embroidermodder.h"
 
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
 {
@@ -61,7 +59,7 @@ void MdiArea::setBackgroundColor(const QColor& color)
 
 void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
-    mainWin->openfile();
+    mainWin->openFile();
 }
 
 void MdiArea::paintEvent(QPaintEvent* /*e*/)
@@ -109,7 +107,7 @@ void MdiArea::zoomExtentsAllSubWindows()
 {
     foreach(QMdiSubWindow* window, subWindowList())
     {
-        MDIWindow* mdiWin = qobject_cast<MDIWindow*>(window);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
         if(mdiWin)
         {
             View* v = mdiWin->getView();

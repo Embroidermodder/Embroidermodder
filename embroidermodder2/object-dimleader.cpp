@@ -1,7 +1,5 @@
-#include "object-dimleader.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
-#include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
@@ -217,11 +215,11 @@ void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawPath(lineStylePath);
     painter->drawPath(arrowStylePath);
@@ -240,6 +238,16 @@ void DimLeaderObject::updateRubber(QPainter* painter)
 
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+            else if(gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+        }
     }
 }
 
@@ -281,6 +289,13 @@ QList<QPointF> DimLeaderObject::allGripPoints()
     if(curved)
         gripPoints << objectMidPoint();
     return gripPoints;
+}
+
+void DimLeaderObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
+    else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
+    else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

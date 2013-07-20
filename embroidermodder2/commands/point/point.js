@@ -7,10 +7,12 @@ global.firstRun;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
+    clearSelection();
     global.firstRun = true;
-    setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?");
+    setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?"); //TODO: qsTr needed here when complete
     appendPromptHistory();
-    setPromptPrefix("Specify first point: ");
+    setPromptPrefix(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -22,7 +24,7 @@ function click(x, y)
     {
         global.firstRun = false;
         appendPromptHistory();
-        setPromptPrefix("Specify next point: ");
+        setPromptPrefix(qsTr("Specify next point: "));
         addPoint(x,y);
     }
     else
@@ -46,27 +48,26 @@ function prompt(str)
 {
     if(global.firstRun)
     {
-        if(str == "M" || str == "MODE")
+        if(str == "M" || str == "MODE") //TODO: Probably should add additional qsTr calls here.
         {
             todo("POINT", "prompt() for PDMODE");
         }
-        else if(str == "S" || str == "SIZE")
+        else if(str == "S" || str == "SIZE") //TODO: Probably should add additional qsTr calls here.
         {
             todo("POINT", "prompt() for PDSIZE");
         }
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
-            appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            alert(qsTr("Invalid point."));
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
             global.firstRun = false;
             var x = Number(strList[0]);
             var y = Number(strList[1]);
-            setPromptPrefix("Specify next point: ");
+            setPromptPrefix(qsTr("Specify next point: "));
             addPoint(x,y);
         }
     }
@@ -75,17 +76,15 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
-            appendPromptHistory();
-            setPromptPrefix("Specify next point: ");
+            alert(qsTr("Invalid point."));
+            setPromptPrefix(qsTr("Specify next point: "));
         }
         else
         {
             var x = Number(strList[0]);
             var y = Number(strList[1]);
-            setPromptPrefix("Specify next point: ");
+            setPromptPrefix(qsTr("Specify next point: "));
             addPoint(x,y);
         }
-     
     }
 }
