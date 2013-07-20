@@ -37,6 +37,7 @@ public slots:
     void zoomIn();
     void zoomOut();
     void zoomWindow();
+    void zoomSelected();
     void zoomExtents();
     void panRealTime();
     void panPoint();

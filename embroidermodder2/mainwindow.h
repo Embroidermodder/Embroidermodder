@@ -503,16 +503,17 @@ public slots:
     void layerManager();
     void layerPrevious();
     // Zoom Toolbar
-    void zoomrealtime();
-    void zoomprevious();
-    void zoomwindow();
-    void zoomdynamic();
-    void zoomscale();
-    void zoomcenter();
-    void zoomin();
-    void zoomout();
-    void zoomall();
-    void zoomextents();
+    void zoomRealtime();
+    void zoomPrevious();
+    void zoomWindow();
+    void zoomDynamic();
+    void zoomScale();
+    void zoomCenter();
+    void zoomIn();
+    void zoomOut();
+    void zoomSelected();
+    void zoomAll();
+    void zoomExtents();
     // Pan SubMenu
     void panrealtime();
     void panpoint();

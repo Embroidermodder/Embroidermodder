@@ -1055,6 +1055,25 @@ void View::zoomWindow()
     clearSelection();
 }
 
+void View::zoomSelected()
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    QPainterPath selectedRectPath;
+    foreach(QGraphicsItem* item, itemList)
+    {
+        selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
+    }
+    QRectF selectedRect = selectedRectPath.boundingRect();
+    if(selectedRect.isNull())
+    {
+        QMessageBox::information(this, tr("ZoomSelected Preselect"), tr("Preselect objects before invoking the zoomSelected command."));
+        //TODO: Support Post selection of objects
+    }
+    fitInView(selectedRect, Qt::KeepAspectRatio);
+    QApplication::restoreOverrideCursor();
+}
+
 void View::zoomExtents()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);

@@ -596,66 +596,73 @@ void MainWindow::layerPrevious()
 }
 
 // Zoom ToolBar
-void MainWindow::zoomrealtime()
+void MainWindow::zoomRealtime()
 {
-    qDebug("zoomrealtime()");
-    stub_implement("Implement zoomrealtime.");
+    qDebug("zoomRealtime()");
+    stub_implement("Implement zoomRealtime.");
 }
 
-void MainWindow::zoomprevious()
+void MainWindow::zoomPrevious()
 {
-    qDebug("zoomprevious()");
-    stub_implement("Implement zoomprevious.");
+    qDebug("zoomPrevious()");
+    stub_implement("Implement zoomPrevious.");
 }
 
-void MainWindow::zoomwindow()
+void MainWindow::zoomWindow()
 {
-    qDebug("zoomwindow()");
+    qDebug("zoomWindow()");
     View* gview = activeView();
     if(gview) { gview->zoomWindow(); }
 }
 
-void MainWindow::zoomdynamic()
+void MainWindow::zoomDynamic()
 {
-    qDebug("zoomdynamic()");
-    stub_implement("Implement zoomdynamic.");
+    qDebug("zoomDynamic()");
+    stub_implement("Implement zoomDynamic.");
 }
 
-void MainWindow::zoomscale()
+void MainWindow::zoomScale()
 {
-    qDebug("zoomscale()");
-    stub_implement("Implement zoomscale.");
+    qDebug("zoomScale()");
+    stub_implement("Implement zoomScale.");
 }
 
-void MainWindow::zoomcenter()
+void MainWindow::zoomCenter()
 {
-    qDebug("zoomcenter()");
-    stub_implement("Implement zoomcenter.");
+    qDebug("zoomCenter()");
+    stub_implement("Implement zoomCenter.");
 }
 
-void MainWindow::zoomin()
+void MainWindow::zoomIn()
 {
-    qDebug("zoomin()");
+    qDebug("zoomIn()");
     View* gview = activeView();
     if(gview) { gview->zoomIn(); }
 }
 
-void MainWindow::zoomout()
+void MainWindow::zoomOut()
 {
-    qDebug("zoomout()");
+    qDebug("zoomOut()");
     View* gview = activeView();
     if(gview) { gview->zoomOut(); }
 }
 
-void MainWindow::zoomall()
+void MainWindow::zoomSelected()
 {
-    qDebug("zoomall()");
-    stub_implement("Implement zoomall.");
+    qDebug("zoomSelected()");
+    View* gview = activeView();
+    if(gview) { gview->zoomSelected(); }
 }
 
-void MainWindow::zoomextents()
+void MainWindow::zoomAll()
 {
-    qDebug("zoomextents()");
+    qDebug("zoomAll()");
+    stub_implement("Implement zoomAll.");
+}
+
+void MainWindow::zoomExtents()
+{
+    qDebug("zoomExtents()");
     View* gview = activeView();
     if(gview) { gview->zoomExtents(); }
 }

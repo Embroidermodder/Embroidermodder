@@ -67,6 +67,7 @@ void MainWindow::createViewMenu()
     zoomMenu->addAction(actionDict.value(ACTION_zoomin));
     zoomMenu->addAction(actionDict.value(ACTION_zoomout));
     zoomMenu->addSeparator();
+    zoomMenu->addAction(actionDict.value(ACTION_zoomselected));
     zoomMenu->addAction(actionDict.value(ACTION_zoomall));
     zoomMenu->addAction(actionDict.value(ACTION_zoomextents));
     viewMenu->addMenu(panMenu);

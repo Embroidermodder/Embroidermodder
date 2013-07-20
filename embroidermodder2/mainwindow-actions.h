@@ -122,6 +122,7 @@ ACTION_zoomscale,
 ACTION_zoomcenter,
 ACTION_zoomin,
 ACTION_zoomout,
+ACTION_zoomselected,
 ACTION_zoomall,
 ACTION_zoomextents,
 // Pan SubMenu

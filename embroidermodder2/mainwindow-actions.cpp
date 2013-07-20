@@ -68,6 +68,7 @@ void MainWindow::createAllActions()
     actionDict.insert(ACTION_zoomcenter,   createAction(tr("zoomcenter"),   tr("Zoom &Center"),   tr("Zooms to display a view specified by a center point and magnification or height.")));
     actionDict.insert(ACTION_zoomin,       createAction(tr("zoomin"),       tr("Zoom &In"),       tr("Zooms to increase the apparent size of objects.")));
     actionDict.insert(ACTION_zoomout,      createAction(tr("zoomout"),      tr("Zoom &Out"),      tr("Zooms to decrease the apparent size of objects.")));
+    actionDict.insert(ACTION_zoomselected, createAction(tr("zoomselected"), tr("Zoom Selec&ted"), tr("Zooms to display the selected objects.")));
     actionDict.insert(ACTION_zoomall,      createAction(tr("zoomall"),      tr("Zoom &All"),      tr("Zooms to display the drawing extents or the grid limits.")));
     actionDict.insert(ACTION_zoomextents,  createAction(tr("zoomextents"),  tr("Zoom &Extents"),  tr("Zooms to display the drawing extents.")));
 
@@ -134,17 +135,17 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     else if(icon == "layers")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(layerManager()));
     else if(icon == "layerprevious")              connect(ACTION, SIGNAL(triggered()), this, SLOT(layerPrevious()));
 
-    else if(icon == "zoomrealtime")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomrealtime()));
-    else if(icon == "zoomprevious")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomprevious()));
-    else if(icon == "zoomwindow")                 connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomwindow()));
-    else if(icon == "zoomdynamic")                connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomdynamic()));
-    else if(icon == "zoomscale")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomscale()));
-    else if(icon == "zoomcenter")                 connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomcenter()));
-    else if(icon == "zoomin")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomin()));
-    else if(icon == "zoomout")                    connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomout()));
-    else if(icon == "zoomall")                    connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomall()));
-
-    else if(icon == "zoomextents")                connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomextents()));
+    else if(icon == "zoomrealtime")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomRealtime()));
+    else if(icon == "zoomprevious")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomPrevious()));
+    else if(icon == "zoomwindow")                 connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomWindow()));
+    else if(icon == "zoomdynamic")                connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomDynamic()));
+    else if(icon == "zoomscale")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomScale()));
+    else if(icon == "zoomcenter")                 connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomCenter()));
+    else if(icon == "zoomin")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomIn()));
+    else if(icon == "zoomout")                    connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomOut()));
+    else if(icon == "zoomselected")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomSelected()));
+    else if(icon == "zoomall")                    connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomAll()));
+    else if(icon == "zoomextents")                connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomExtents()));
 
     else if(icon == "panrealtime")                connect(ACTION, SIGNAL(triggered()), this, SLOT(panrealtime()));
     else if(icon == "panpoint")                   connect(ACTION, SIGNAL(triggered()), this, SLOT(panpoint()));

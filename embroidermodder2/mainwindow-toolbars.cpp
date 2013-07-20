@@ -48,6 +48,7 @@ void MainWindow::createZoomToolbar()
     toolbarZoom->addAction(actionDict.value(ACTION_zoomin));
     toolbarZoom->addAction(actionDict.value(ACTION_zoomout));
     toolbarZoom->addSeparator();
+    toolbarZoom->addAction(actionDict.value(ACTION_zoomselected));
     toolbarZoom->addAction(actionDict.value(ACTION_zoomall));
     toolbarZoom->addAction(actionDict.value(ACTION_zoomextents));
 
