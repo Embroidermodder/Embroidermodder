@@ -651,7 +651,12 @@ void MainWindow::zoomSelected()
 {
     qDebug("zoomSelected()");
     View* gview = activeView();
-    if(gview) { gview->zoomSelected(); }
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && stack)
+    {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", gview, 0);
+        stack->push(cmd);
+    }
 }
 
 void MainWindow::zoomAll()
@@ -664,7 +669,12 @@ void MainWindow::zoomExtents()
 {
     qDebug("zoomExtents()");
     View* gview = activeView();
-    if(gview) { gview->zoomExtents(); }
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && stack)
+    {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", gview, 0);
+        stack->push(cmd);
+    }
 }
 // Pan SubMenu
 void MainWindow::panrealtime()
