@@ -5,6 +5,7 @@
 #include <math.h>
 #include "emb-pattern.h"
 #include "emb-reader-writer.h"
+#include "emb-settings.h"
 #include "helpers-misc.h"
 
 EmbPattern* embPattern_create()
@@ -484,13 +485,12 @@ void embPattern_center(EmbPattern* p)
 
 void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 {
-    /*TODO: Fix the malloc memory corruption issues below */
-    /*
-    const char* dotPos = strrchr(filename, '.');
+    /*EmbReaderWriter* colorfile;
+    const char* dotPos = strrchr(fileName, '.');
 
     char* extractName = (char *)malloc(dotPos - fileName);
-    extractName = strncpy(extractName, filename, dotPos - filename);
-    EmbReaderWriter* colorfile;
+    extractName = memcpy(extractName, fileName, dotPos - fileName);
+
     colorfile = embReaderWriter_getByFileName(strcat(extractName,".edr"));
     if(!colorfile) return; //Ensure the pointer is valid
     if(!colorfile->reader(p, strcat(extractName,".edr")))
@@ -505,6 +505,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         }
     }
     free(colorfile);
+    free(extractName);
     */
 }
 

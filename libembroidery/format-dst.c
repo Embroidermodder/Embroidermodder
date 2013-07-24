@@ -39,12 +39,12 @@ unsigned char setbit(int pos)
         if((pointer->stitch.flags & JUMP) && !(pointer->stitch.flags & STOP))
         {
             if(jumpCount == 0)
-............{
-................jumpListStart = pointer;
-............}
-............jumpCount++;
-............if(needleDown && jumpCount >= jumpsPerTrim)
-............{
+            {
+                jumpListStart = pointer;
+            }
+            jumpCount++;
+            if(needleDown && jumpCount >= jumpsPerTrim)
+            {
                 EmbStitchList* removePointer = jumpListStart->next;
                 jumpListStart->stitch.xx = pointer->stitch.xx;
                 jumpListStart->stitch.yy = pointer->stitch.yy;

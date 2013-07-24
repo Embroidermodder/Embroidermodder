@@ -15,11 +15,13 @@ SOURCES += \
 ../libembroidery/emb-polyline.c \
 ../libembroidery/emb-reader-writer.c \
 ../libembroidery/emb-rect.c \
+../libembroidery/emb-satin-line.c \
 ../libembroidery/emb-settings.c \
 ../libembroidery/emb-spline.c \
 ../libembroidery/emb-stitch.c \
 ../libembroidery/emb-thread.c \
 ../libembroidery/emb-time.c \
+../libembroidery/emb-vector.c \
 ../libembroidery/helpers-binary.c \
 ../libembroidery/helpers-misc.c \
 ../libembroidery/thread-color.c \
@@ -93,11 +95,13 @@ HEADERS += \
 ../libembroidery/emb-polyline.h \
 ../libembroidery/emb-reader-writer.h \
 ../libembroidery/emb-rect.h \
+../libembroidery/emb-satin-line.h \
 ../libembroidery/emb-settings.h \
 ../libembroidery/emb-spline.h \
 ../libembroidery/emb-stitch.h \
 ../libembroidery/emb-thread.h \
 ../libembroidery/emb-time.h \
+../libembroidery/emb-vector.c \
 ../libembroidery/helpers-binary.h \
 ../libembroidery/helpers-misc.h \
 ../libembroidery/thread-color.h \

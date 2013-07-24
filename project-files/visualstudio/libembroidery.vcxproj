@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v100</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\libembroidery\emb-compress.c" />
     <ClCompile Include="..\..\libembroidery\emb-ellipse.c" />
     <ClCompile Include="..\..\libembroidery\emb-line.c" />
+    <ClCompile Include="..\..\libembroidery\emb-satin-line.c" />
     <ClCompile Include="..\..\libembroidery\emb-settings.c" />
     <ClCompile Include="..\..\libembroidery\emb-pattern.c" />
     <ClCompile Include="..\..\libembroidery\emb-point.c" />
@@ -97,6 +98,7 @@
     <ClCompile Include="..\..\libembroidery\emb-stitch.c" />
     <ClCompile Include="..\..\libembroidery\emb-thread.c" />
     <ClCompile Include="..\..\libembroidery\emb-time.c" />
+    <ClCompile Include="..\..\libembroidery\emb-vector.c" />
     <ClCompile Include="..\..\libembroidery\format-100.c" />
     <ClCompile Include="..\..\libembroidery\format-10o.c" />
     <ClCompile Include="..\..\libembroidery\format-art.c" />
@@ -162,6 +164,7 @@
     <ClInclude Include="..\..\libembroidery\emb-compress.h" />
     <ClInclude Include="..\..\libembroidery\emb-ellipse.h" />
     <ClInclude Include="..\..\libembroidery\emb-line.h" />
+    <ClInclude Include="..\..\libembroidery\emb-satin-line.h" />
     <ClInclude Include="..\..\libembroidery\emb-settings.h" />
     <ClInclude Include="..\..\libembroidery\emb-pattern.h" />
     <ClInclude Include="..\..\libembroidery\emb-point.h" />
@@ -173,6 +176,7 @@
     <ClInclude Include="..\..\libembroidery\emb-stitch.h" />
     <ClInclude Include="..\..\libembroidery\emb-thread.h" />
     <ClInclude Include="..\..\libembroidery\emb-time.h" />
+    <ClInclude Include="..\..\libembroidery\emb-vector.h" />
     <ClInclude Include="..\..\libembroidery\format-100.h" />
     <ClInclude Include="..\..\libembroidery\format-10o.h" />
     <ClInclude Include="..\..\libembroidery\format-art.h" />

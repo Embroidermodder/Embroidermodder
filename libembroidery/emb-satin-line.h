@@ -1,0 +1,26 @@
+#ifndef EMB_SATINLINE_H
+#define EMB_SATINLINE_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "emb-vector.h"
+
+typedef struct EmbSatinOutline_
+{
+    int length;
+    EmbVector* Side1;
+    EmbVector* Side2;
+} EmbSatinOutline;
+
+void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
+EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double density);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* EMB_SATINLINE_H */
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

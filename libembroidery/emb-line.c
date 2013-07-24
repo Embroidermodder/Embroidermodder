@@ -1,4 +1,5 @@
 #include "emb-line.h"
+#include "emb-vector.h" 
 #include <stdlib.h>
 
 double embLine_x1(EmbLine line)
@@ -66,6 +67,39 @@ int embLine_count(EmbLineObjectList* pointer)
 int embLine_empty(EmbLineObjectList* pointer)
 {
     return pointer == 0;
+}
+
+/*! Finds the normalized vector perpendicular (clockwise) to the line given by v1->v2 (normal to the line) */
+void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbVector* result)
+{
+    double temp;
+    result->X = vector2.X - vector1.X;
+    result->Y = vector2.Y - vector1.Y;
+    embVector_Normalize(*result, result);
+    temp = result->X;
+    result->X = result->Y;
+    result->Y = -temp;
+}
+
+/*! Finds the intersection of two lines given by v1->v2 and v3->v4 and sets the value in the result variable */
+void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result)
+{
+    double A2 = v2.Y - v1.Y;
+    double B2 = v1.X - v2.X;
+    double C2 = A2 * v1.X + B2 * v1.Y;
+
+    double A1 = v4.Y - v3.Y;
+    double B1 = v3.X - v4.X;
+    double C1 = A1 * v3.X + B1 * v3.Y;
+
+    double det = A1 * B2 - A2 * B1;
+    if (det < 1e-10 && det > -1e-10)
+    {
+        result->X = -10000;
+        result->Y = -10000;
+    }
+    result->X = (B2 * C1 - B1 * C2) / det;
+    result->Y = (A1 * C2 - A2 * C1) / det;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
