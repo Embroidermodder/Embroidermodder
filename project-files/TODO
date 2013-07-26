@@ -16,17 +16,20 @@ WIP - Saving CSV/SVG (rt)
 //====================
 Stuff for 2.0 beta1:
 //====================
+TODO - Load/Save Menu/Toolbars configurations into settings.ini
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
 TODO - Reading DXF
 TODO - Writing DXF
 TODO - Import Raster Image
-TODO - Layer Manager
+TODO - Layer Manager + LayerSwitcher DockWidget
 TODO - SNAP/ORTHO/POLAR
+TODO - Up and Down keys cycle thru commands in the command prompt
 TODO - Filling Algorithms (varga)
 
 //====================
 Stuff for 2.0 rc1:
 //====================
+TODO - QDoc Comments
 TODO - Review KDE4 Thumbnailer
 TODO - Documentation for libembroidery & formats
 TODO - HTML Help files
@@ -40,6 +43,7 @@ TODO - CAD Command review: ellipse
 TODO - CAD Command review: arc
 TODO - CAD Command review: distance
 TODO - CAD Command review: locatepoint
+TODO - CAD Command review: singlelinetext
 TODO - Clean up all compiler warning messages, right now theres plenty :P
 
 //====================
@@ -56,6 +60,8 @@ TODO - website revamp (varga)
 //====================
 //Stuff for 2.x
 //====================
+TODO - Keyboard Zooming/Panning
+TODO - Underline/Overline/Strikeout
 TODO - G-Code format?
 TODO - 3D Raised Embroidery
 TODO - Gradient Filling Algorithms
@@ -65,3 +71,11 @@ TODO - Reports?
 TODO - Record and Playback Commands
 TODO - EPS format?
 TODO - Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+TODO - Honeycomb Fill
+TODO - Hilburt Curve Fill
+TODO - Sierpinski Triangle fill
+TODO - Circle Grid Fill
+TODO - Spiral Fill
+TODO - Offset Fill
+TODO - Brick Fill
+

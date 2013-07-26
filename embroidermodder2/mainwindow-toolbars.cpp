@@ -203,6 +203,49 @@ void MainWindow::createPropertiesToolbar()
     connect(toolbarProperties, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+void MainWindow::createTextToolbar()
+{
+    qDebug("MainWindow createTextToolbar()");
+
+    toolbarText->setObjectName("toolbarText");
+
+    toolbarText->addWidget(textFontSelector);
+    textFontSelector->setCurrentFont(QFont(getSettingsTextFont()));
+    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+
+    toolbarText->addAction(actionDict.value(ACTION_textbold));
+    actionDict.value(ACTION_textbold)->setChecked(getSettingsTextStyleBold());
+    toolbarText->addAction(actionDict.value(ACTION_textitalic));
+    actionDict.value(ACTION_textitalic)->setChecked(getSettingsTextStyleItalic());
+    toolbarText->addAction(actionDict.value(ACTION_textunderline));
+    actionDict.value(ACTION_textunderline)->setChecked(getSettingsTextStyleUnderline());
+    toolbarText->addAction(actionDict.value(ACTION_textstrikeout));
+    actionDict.value(ACTION_textstrikeout)->setChecked(getSettingsTextStyleStrikeOut());
+    toolbarText->addAction(actionDict.value(ACTION_textoverline));
+    actionDict.value(ACTION_textoverline)->setChecked(getSettingsTextStyleOverline());
+
+    textSizeSelector->setFocusProxy(prompt);
+    textSizeSelector->addItem("6 pt",   6);
+    textSizeSelector->addItem("8 pt",   8);
+    textSizeSelector->addItem("9 pt",   9);
+    textSizeSelector->addItem("10 pt", 10);
+    textSizeSelector->addItem("11 pt", 11);
+    textSizeSelector->addItem("12 pt", 12);
+    textSizeSelector->addItem("14 pt", 14);
+    textSizeSelector->addItem("18 pt", 18);
+    textSizeSelector->addItem("24 pt", 24);
+    textSizeSelector->addItem("30 pt", 30);
+    textSizeSelector->addItem("36 pt", 36);
+    textSizeSelector->addItem("48 pt", 48);
+    textSizeSelector->addItem("60 pt", 60);
+    textSizeSelector->addItem("72 pt", 72);
+    setTextSize(getSettingsTextSize());
+    toolbarText->addWidget(textSizeSelector);
+    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
+
+    connect(toolbarText, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
 void MainWindow::createPromptToolbar()
 {
     qDebug("MainWindow createPromptToolbar()");
@@ -225,12 +268,14 @@ void MainWindow::createAllToolbars()
     createHelpToolbar();
     createLayerToolbar();
     createPropertiesToolbar();
+    createTextToolbar();
     createPromptToolbar();
 
     // Horizontal
     toolbarZoom->setOrientation(Qt::Horizontal);
     toolbarLayer->setOrientation(Qt::Horizontal);
     toolbarProperties->setOrientation(Qt::Horizontal);
+    toolbarText->setOrientation(Qt::Horizontal);
     toolbarPrompt->setOrientation(Qt::Horizontal);
     // Top
     addToolBarBreak(Qt::TopToolBarArea);
@@ -244,6 +289,8 @@ void MainWindow::createAllToolbars()
     addToolBarBreak(Qt::TopToolBarArea);
     addToolBar(Qt::TopToolBarArea, toolbarLayer);
     addToolBar(Qt::TopToolBarArea, toolbarProperties);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarText);
     // Bottom
     addToolBar(Qt::BottomToolBarArea, toolbarPrompt);
 

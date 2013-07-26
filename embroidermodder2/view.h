@@ -87,6 +87,7 @@ public slots:
     void clearRubberRoom();
     void setRubberMode(int mode);
     void setRubberPoint(const QString& key, const QPointF& point);
+    void setRubberText(const QString& key, const QString& txt);
 
 protected:
     void mouseDoubleClickEvent(QMouseEvent* event);

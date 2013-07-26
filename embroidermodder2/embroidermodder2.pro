@@ -47,12 +47,14 @@ object-arc.cpp \
 object-circle.cpp \
 object-dimleader.cpp \
 object-ellipse.cpp \
+object-image.cpp \
 object-line.cpp \
 object-path.cpp \
 object-point.cpp \
 object-polygon.cpp \
 object-polyline.cpp \
 object-rect.cpp \
+object-textsingle.cpp \
 
 HEADERS += \
 mainwindow.h \
@@ -77,12 +79,14 @@ object-arc.h \
 object-circle.h \
 object-dimleader.h \
 object-ellipse.h \
+object-image.h \
 object-line.h \
 object-path.h \
 object-point.h \
 object-polygon.h \
 object-polyline.h \
 object-rect.h \
+object-textsingle.h \
 
 #SCRIPTING
 SOURCES += \

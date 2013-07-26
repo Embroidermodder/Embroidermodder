@@ -60,6 +60,12 @@ void MainWindow::createAllActions()
     actionDict.insert(ACTION_lockalllayers,      createAction(tr("lockalllayers"),      tr("&Lock All Layers"),       tr("Locks all layers in the current drawing:  LOCKALL")));
     actionDict.insert(ACTION_unlockalllayers,    createAction(tr("unlockalllayers"),    tr("&Unlock All Layers"),     tr("Unlocks all layers in the current drawing:  UNLOCKALL")));
 
+    actionDict.insert(ACTION_textbold,      createAction(tr("textbold"),      tr("&Bold Text"),      tr("Sets text to be bold.")));
+    actionDict.insert(ACTION_textitalic,    createAction(tr("textitalic"),    tr("&Italic Text"),    tr("Sets text to be italic.")));
+    actionDict.insert(ACTION_textunderline, createAction(tr("textunderline"), tr("&Underline Text"), tr("Sets text to be underlined.")));
+    actionDict.insert(ACTION_textstrikeout, createAction(tr("textstrikeout"), tr("&StrikeOut Text"), tr("Sets text to be striked out.")));
+    actionDict.insert(ACTION_textoverline,  createAction(tr("textoverline"),  tr("&Overline Text"),  tr("Sets text to be overlined.")));
+
     actionDict.insert(ACTION_zoomrealtime, createAction(tr("zoomrealtime"), tr("Zoom &Realtime"), tr("Zooms to increase or decrease the apparent size of objects in the current viewport.")));
     actionDict.insert(ACTION_zoomprevious, createAction(tr("zoomprevious"), tr("Zoom &Previous"), tr("Zooms to display the previous view.")));
     actionDict.insert(ACTION_zoomwindow,   createAction(tr("zoomwindow"),   tr("Zoom &Window"),   tr("Zooms to display an area specified by a rectangular window.")));
@@ -134,6 +140,12 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     else if(icon == "makelayercurrent")           connect(ACTION, SIGNAL(triggered()), this, SLOT(makeLayerActive()));
     else if(icon == "layers")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(layerManager()));
     else if(icon == "layerprevious")              connect(ACTION, SIGNAL(triggered()), this, SLOT(layerPrevious()));
+
+    else if(icon == "textbold")                 { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));   }
+    else if(icon == "textitalic")               { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool))); }
+    else if(icon == "textunderline")            { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool))); }
+    else if(icon == "textstrikeout")            { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool))); }
+    else if(icon == "textoverline")             { ACTION->setCheckable(true); connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool))); }
 
     else if(icon == "zoomrealtime")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomRealtime()));
     else if(icon == "zoomprevious")               connect(ACTION, SIGNAL(triggered()), this, SLOT(zoomPrevious()));

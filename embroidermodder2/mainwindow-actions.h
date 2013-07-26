@@ -113,6 +113,12 @@ ACTION_freezealllayers,
 ACTION_thawalllayers,
 ACTION_lockalllayers,
 ACTION_unlockalllayers,
+//Text ToolBar
+ACTION_textbold,
+ACTION_textitalic,
+ACTION_textunderline,
+ACTION_textstrikeout,
+ACTION_textoverline,
 // Zoom ToolBar
 ACTION_zoomrealtime,
 ACTION_zoomprevious,

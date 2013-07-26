@@ -143,6 +143,14 @@ public:
     QRgb    getSettingsSelectionHotGripColor()        { return settings_selection_hotgrip_color;        }
     quint8  getSettingsSelectionGripSize()            { return settings_selection_grip_size;            }
     quint8  getSettingsSelectionPickBoxSize()         { return settings_selection_pickbox_size;         }
+    QString getSettingsTextFont()                     { return settings_text_font;                      }
+    qreal   getSettingsTextSize()                     { return settings_text_size;                      }
+    qreal   getSettingsTextAngle()                    { return settings_text_angle;                     }
+    bool    getSettingsTextStyleBold()                { return settings_text_style_bold;                }
+    bool    getSettingsTextStyleItalic()              { return settings_text_style_italic;              }
+    bool    getSettingsTextStyleUnderline()           { return settings_text_style_underline;           }
+    bool    getSettingsTextStyleStrikeOut()           { return settings_text_style_strikeout;           }
+    bool    getSettingsTextStyleOverline()            { return settings_text_style_overline;            }
 
     void setSettingsGeneralIconTheme(const QString& newValue)          { settings_general_icon_theme             = newValue; }
     void setSettingsGeneralIconSize(int newValue)                      { settings_general_icon_size              = newValue; }
@@ -228,6 +236,14 @@ public:
     void setSettingsSelectionHotGripColor(QRgb newValue)               { settings_selection_hotgrip_color        = newValue; }
     void setSettingsSelectionGripSize(quint8 newValue)                 { settings_selection_grip_size            = newValue; }
     void setSettingsSelectionPickBoxSize(quint8 newValue)              { settings_selection_pickbox_size         = newValue; }
+    void setSettingsTextFont(const QString& newValue)                  { settings_text_font                      = newValue; }
+    void setSettingsTextSize(qreal newValue)                           { settings_text_size                      = newValue; }
+    void setSettingsTextAngle(qreal newValue)                          { settings_text_angle                     = newValue; }
+    void setSettingsTextStyleBold(bool newValue)                       { settings_text_style_bold                = newValue; }
+    void setSettingsTextStyleItalic(bool newValue)                     { settings_text_style_italic              = newValue; }
+    void setSettingsTextStyleUnderline(bool newValue)                  { settings_text_style_underline           = newValue; }
+    void setSettingsTextStyleStrikeOut(bool newValue)                  { settings_text_style_strikeout           = newValue; }
+    void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
 
     QHash<int, QAction*>            actionDict;
     QHash<QString, QToolBar*>       toolbarHash;
@@ -237,6 +253,9 @@ public:
     QString                         activeCommand() { return prompt->activeCommand(); }
 
 public slots:
+
+    void                            enablePromptRapidFire();
+    void                            disablePromptRapidFire();
 
     void                            onCloseWindow();
     virtual void                    onCloseMdiWin(MDIWindow*);
@@ -354,6 +373,14 @@ private:
     QRgb                            settings_selection_hotgrip_color;
     quint8                          settings_selection_grip_size;
     quint8                          settings_selection_pickbox_size;
+    QString                         settings_text_font;
+    qreal                           settings_text_size;
+    qreal                           settings_text_angle;
+    bool                            settings_text_style_bold;
+    bool                            settings_text_style_italic;
+    bool                            settings_text_style_underline;
+    bool                            settings_text_style_overline;
+    bool                            settings_text_style_strikeout;
 
     QByteArray                      layoutState;
 
@@ -385,6 +412,7 @@ private:
     void createHelpToolbar();
     void createLayerToolbar();
     void createPropertiesToolbar();
+    void createTextToolbar();
     void createPromptToolbar();
 
     QToolBar* toolbarFile;
@@ -394,15 +422,18 @@ private:
     QToolBar* toolbarIcon;
     QToolBar* toolbarHelp;
     QToolBar* toolbarLayer;
+    QToolBar* toolbarText;
     QToolBar* toolbarProperties;
     QToolBar* toolbarPrompt;
     //====================================================
     //Selectors
     //====================================================
-    QComboBox* layerSelector;
-    QComboBox* colorSelector;
-    QComboBox* linetypeSelector;
-    QComboBox* lineweightSelector;
+    QComboBox*     layerSelector;
+    QComboBox*     colorSelector;
+    QComboBox*     linetypeSelector;
+    QComboBox*     lineweightSelector;
+    QFontComboBox* textFontSelector;
+    QComboBox*     textSizeSelector;
     //====================================================
     //Menus
     //====================================================
@@ -485,6 +516,26 @@ public slots:
     void colorSelectorIndexChanged(int index);
     void linetypeSelectorIndexChanged(int index);
     void lineweightSelectorIndexChanged(int index);
+    void textFontSelectorCurrentFontChanged(const QFont& font);
+    void textSizeSelectorIndexChanged(int index);
+
+    QString textFont();
+    qreal   textSize();
+    qreal   textAngle();
+    bool    textBold();
+    bool    textItalic();
+    bool    textUnderline();
+    bool    textStrikeOut();
+    bool    textOverline();
+
+    void setTextFont(const QString& str);
+    void setTextSize(qreal num);
+    void setTextAngle(qreal num);
+    void setTextBold(bool val);
+    void setTextItalic(bool val);
+    void setTextUnderline(bool val);
+    void setTextStrikeOut(bool val);
+    void setTextOverline(bool val);
 
     QString getCurrentLayer();
     QRgb    getCurrentColor();
@@ -534,6 +585,8 @@ public:
     //Natives
     void nativeSetPromptPrefix        (const QString& txt);
     void nativeAppendPromptHistory    (const QString& txt);
+    void nativeEnablePromptRapidFire  ();
+    void nativeDisablePromptRapidFire ();
     void nativeEndCommand             ();
 
     void nativeHelp                   ();
@@ -548,8 +601,18 @@ public:
 
     void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
 
+    QString nativeTextFont            ();
+    qreal   nativeTextSize            ();
+    qreal   nativeTextAngle           ();
+    bool    nativeTextBold            ();
+    bool    nativeTextItalic          ();
+    bool    nativeTextUnderline       ();
+    bool    nativeTextStrikeOut       ();
+    bool    nativeTextOverline        ();
+
     void nativeSetTextFont            (const QString& str);
-    void nativeSetTextSize            (quint32 num);
+    void nativeSetTextSize            (qreal num);
+    void nativeSetTextAngle           (qreal num);
     void nativeSetTextBold            (bool val);
     void nativeSetTextItalic          (bool val);
     void nativeSetTextUnderline       (bool val);
@@ -557,12 +620,14 @@ public:
     void nativeSetTextOverline        (bool val);
 
     void nativeVulcanize              ();
+    void nativeClearRubber            ();
     bool nativeAllowRubber            ();
     void nativeSetRubberMode          (int mode);
     void nativeSetRubberPoint         (const QString& key, qreal x, qreal y);
+    void nativeSetRubberText          (const QString& key, const QString& txt);
 
-    void nativeAddTextMulti           (const QString& str, qreal x, qreal y, bool fill);
-    void nativeAddTextSingle          (const QString& str, qreal x, qreal y, bool fill);
+    void nativeAddTextMulti           (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
+    void nativeAddTextSingle          (const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode);
 
     void nativeAddInfiniteLine        (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);
     void nativeAddRay                 (qreal x1, qreal y1, qreal x2, qreal y2, qreal rot);

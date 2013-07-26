@@ -7,6 +7,8 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValTodo = engine->newFunction(javaTodo); engine->globalObject().setProperty("todo", scriptValTodo);
     QScriptValue scriptValSetPromptPrefix = engine->newFunction(javaSetPromptPrefix); engine->globalObject().setProperty("setPromptPrefix", scriptValSetPromptPrefix);
     QScriptValue scriptValAppendPromptHistory = engine->newFunction(javaAppendPromptHistory); engine->globalObject().setProperty("appendPromptHistory", scriptValAppendPromptHistory);
+    QScriptValue scriptValEnablePromptRapidFire = engine->newFunction(javaEnablePromptRapidFire); engine->globalObject().setProperty("enablePromptRapidFire", scriptValEnablePromptRapidFire);
+    QScriptValue scriptValDisablePromptRapidFire = engine->newFunction(javaDisablePromptRapidFire); engine->globalObject().setProperty("disablePromptRapidFire", scriptValDisablePromptRapidFire);
     QScriptValue scriptValEndCommand = engine->newFunction(javaEndCommand); engine->globalObject().setProperty("endCommand", scriptValEndCommand);
     QScriptValue scriptValHelp = engine->newFunction(javaHelp); engine->globalObject().setProperty("help", scriptValHelp);
     QScriptValue scriptValUndo = engine->newFunction(javaUndo); engine->globalObject().setProperty("undo", scriptValUndo);
@@ -16,8 +18,17 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValPanUp = engine->newFunction(javaPanUp); engine->globalObject().setProperty("panUp", scriptValPanUp);
     QScriptValue scriptValPanDown = engine->newFunction(javaPanDown); engine->globalObject().setProperty("panDown", scriptValPanDown);
     QScriptValue scriptValPrintArea = engine->newFunction(javaPrintArea); engine->globalObject().setProperty("printArea", scriptValPrintArea);
+    QScriptValue scriptValTextFont = engine->newFunction(javaTextFont); engine->globalObject().setProperty("textFont", scriptValTextFont);
+    QScriptValue scriptValTextSize = engine->newFunction(javaTextSize); engine->globalObject().setProperty("textSize", scriptValTextSize);
+    QScriptValue scriptValTextAngle = engine->newFunction(javaTextAngle); engine->globalObject().setProperty("textAngle", scriptValTextAngle);
+    QScriptValue scriptValTextBold = engine->newFunction(javaTextBold); engine->globalObject().setProperty("textBold", scriptValTextBold);
+    QScriptValue scriptValTextItalic = engine->newFunction(javaTextItalic); engine->globalObject().setProperty("textItalic", scriptValTextItalic);
+    QScriptValue scriptValTextUnderline = engine->newFunction(javaTextUnderline); engine->globalObject().setProperty("textUnderline", scriptValTextUnderline);
+    QScriptValue scriptValTextStrikeOut = engine->newFunction(javaTextStrikeOut); engine->globalObject().setProperty("textStrikeOut", scriptValTextStrikeOut);
+    QScriptValue scriptValTextOverline = engine->newFunction(javaTextOverline); engine->globalObject().setProperty("textOverline", scriptValTextOverline);
     QScriptValue scriptValSetTextFont = engine->newFunction(javaSetTextFont); engine->globalObject().setProperty("setTextFont", scriptValSetTextFont);
     QScriptValue scriptValSetTextSize = engine->newFunction(javaSetTextSize); engine->globalObject().setProperty("setTextSize", scriptValSetTextSize);
+    QScriptValue scriptValSetTextAngle = engine->newFunction(javaSetTextAngle); engine->globalObject().setProperty("setTextAngle", scriptValSetTextAngle);
     QScriptValue scriptValSetTextBold = engine->newFunction(javaSetTextBold); engine->globalObject().setProperty("setTextBold", scriptValSetTextBold);
     QScriptValue scriptValSetTextItalic = engine->newFunction(javaSetTextItalic); engine->globalObject().setProperty("setTextItalic", scriptValSetTextItalic);
     QScriptValue scriptValSetTextUnderline = engine->newFunction(javaSetTextUnderline); engine->globalObject().setProperty("setTextUnderline", scriptValSetTextUnderline);
@@ -27,7 +38,9 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValAllowRubber = engine->newFunction(javaAllowRubber); engine->globalObject().setProperty("allowRubber", scriptValAllowRubber);
     QScriptValue scriptValSetRubberMode = engine->newFunction(javaSetRubberMode); engine->globalObject().setProperty("setRubberMode", scriptValSetRubberMode);
     QScriptValue scriptValSetRubberPoint = engine->newFunction(javaSetRubberPoint); engine->globalObject().setProperty("setRubberPoint", scriptValSetRubberPoint);
+    QScriptValue scriptValSetRubberText = engine->newFunction(javaSetRubberText); engine->globalObject().setProperty("setRubberText", scriptValSetRubberText);
     QScriptValue scriptValAddRubber = engine->newFunction(javaAddRubber); engine->globalObject().setProperty("addRubber", scriptValAddRubber);
+    QScriptValue scriptValClearRubber = engine->newFunction(javaClearRubber); engine->globalObject().setProperty("clearRubber", scriptValClearRubber);
     QScriptValue scriptValAddTextMulti = engine->newFunction(javaAddTextMulti); engine->globalObject().setProperty("addTextMulti", scriptValAddTextMulti);
     QScriptValue scriptValAddTextSingle = engine->newFunction(javaAddTextSingle); engine->globalObject().setProperty("addTextSingle", scriptValAddTextSingle);
     QScriptValue scriptValAddInfiniteLine = engine->newFunction(javaAddInfiniteLine); engine->globalObject().setProperty("addInfiniteLine", scriptValAddInfiniteLine);

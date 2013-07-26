@@ -301,6 +301,8 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     curCmd = "help";
     cmdActive = false;
 
+    rapidFireEnabled = false;
+
     this->setText(prefix);
     this->setFrame(false);
     this->setMaxLength(266);
@@ -308,8 +310,8 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     this->setDragEnabled(false);
 
     connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(checkCursorPosition(int, int)));
-    connect(this, SIGNAL(textEdited(const QString)), this, SLOT(checkEditedText(const QString)));
-    connect(this, SIGNAL(textChanged(const QString)), this, SLOT(checkChangedText(const QString)));
+    connect(this, SIGNAL(textEdited(const QString&)), this, SLOT(checkEditedText(const QString&)));
+    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(checkChangedText(const QString&)));
     connect(this, SIGNAL(selectionChanged()), this, SLOT(checkSelection()));
 
     aliasHash = new QHash<QString, QString>;
@@ -334,50 +336,77 @@ void CmdPromptInput::endCommand()
     qDebug("CmdPromptInput endCommand");
     lastCmd = curCmd;
     cmdActive = false;
+    rapidFireEnabled = false;
 
     prefix = "Command: ";
     clear();
 }
 
-void CmdPromptInput::processInput()
+void CmdPromptInput::processInput(const QChar& rapidChar)
 {
     qDebug("CmdPromptInput::processInput");
-    if(checkEditedText(curText))
-    {
-        QString cmdtxt(curText);
-        cmdtxt.replace(0, prefix.length(), "");
-        cmdtxt = cmdtxt.toLower();
 
-        if(cmdActive)
+    updateCurrentText(curText);
+
+    QString cmdtxt(curText);
+    cmdtxt.replace(0, prefix.length(), "");
+    if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
+
+    if(cmdActive)
+    {
+        if(rapidFireEnabled)
+        {
+            if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return)
+            {
+                emit appendHistory(curText);
+                emit runCommand(curCmd, "RAPID_ENTER");
+                curText.clear();
+                clear();
+                return;
+            }
+            else if(rapidChar == Qt::Key_Space)
+            {
+                updateCurrentText(curText + " ");
+                emit runCommand(curCmd, cmdtxt + " ");
+                return;
+            }
+            else
+            {
+                emit runCommand(curCmd, cmdtxt);
+                return;
+            }
+        }
+        else
         {
             emit appendHistory(curText);
             emit runCommand(curCmd, cmdtxt);
         }
+    }
+    else
+    {
+        if(aliasHash->contains(cmdtxt))
+        {
+            cmdActive = true;
+            lastCmd = curCmd;
+            curCmd = aliasHash->value(cmdtxt);
+            emit appendHistory(curText);
+            emit startCommand(curCmd);
+        }
+        else if(cmdtxt.isEmpty())
+        {
+            cmdActive = true;
+            emit appendHistory(curText);
+            //Rerun the last successful command
+            emit startCommand(lastCmd);
+        }
         else
         {
-            if(aliasHash->contains(cmdtxt))
-            {
-                cmdActive = true;
-                lastCmd = curCmd;
-                curCmd = aliasHash->value(cmdtxt);
-                emit appendHistory(curText);
-                emit startCommand(curCmd);
-            }
-            else if(cmdtxt.isEmpty())
-            {
-                cmdActive = true;
-                emit appendHistory(curText);
-                //Rerun the last successful command
-                emit startCommand(lastCmd);
-            }
-            else
-            {
-                emit appendHistory(curText + " Unknown command \"" + cmdtxt + "\". Press F1 for help.");
-            }
+            emit appendHistory(curText + " Unknown command \"" + cmdtxt + "\". Press F1 for help.");
         }
     }
 
-    clear();
+    if(!rapidFireEnabled)
+        clear();
 }
 
 void CmdPromptInput::checkSelection()
@@ -396,9 +425,8 @@ void CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
         this->setCursorPosition(prefix.length());
 }
 
-bool CmdPromptInput::checkEditedText(QString txt)
+void CmdPromptInput::updateCurrentText(const QString& txt)
 {
-    //qDebug("CmdPromptInput::checkEditedText - %s",qPrintable(txt));
     if(!txt.startsWith(prefix))
     {
         if(txt.length() < prefix.length())
@@ -407,19 +435,26 @@ bool CmdPromptInput::checkEditedText(QString txt)
             this->setText(prefix + txt);
         else
             this->setText(curText);
-        return false;
     }
-
-    // input is okay so update curText
-    curText = txt;
-    return true;
+    else
+    {
+        // input is okay so update curText
+        curText = txt;
+        this->setText(curText);
+    }
 }
 
-bool CmdPromptInput::checkChangedText(QString txt)
+void CmdPromptInput::checkEditedText(const QString& txt)
 {
-    //qDebug("CmdPromptInput::checkChangedText - %s",qPrintable(txt));
-    emit textEdited(txt);
-    return true;
+    updateCurrentText(txt);
+
+    if(rapidFireEnabled)
+        processInput();
+}
+
+void CmdPromptInput::checkChangedText(const QString& txt)
+{
+    updateCurrentText(txt);
 }
 
 void CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
@@ -481,7 +516,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
             case Qt::Key_Return:
             case Qt::Key_Space:
                 pressedKey->accept();
-                processInput();
+                processInput(QChar(key));
                 return true;
                 break;
             case Qt::Key_Delete:

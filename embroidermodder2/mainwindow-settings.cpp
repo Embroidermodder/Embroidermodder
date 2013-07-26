@@ -114,6 +114,15 @@ void MainWindow::readSettings()
     settings_selection_hotgrip_color        = settings.value("Selection/HotGripColor",     qRgb(255,  0,  0)).toInt();
     settings_selection_grip_size            = settings.value("Selection/GripSize",                         4).toInt();
     settings_selection_pickbox_size         = settings.value("Selection/PickBoxSize",                      4).toInt();
+    //Text
+    settings_text_font                      = settings.value("Text/Font",                            "Arial").toString();
+    settings_text_size                      = settings.value("Text/Size",                                 12).toReal();
+    settings_text_angle                     = settings.value("Text/Angle",                                 0).toReal();
+    settings_text_style_bold                = settings.value("Text/StyleBold",                         false).toBool();
+    settings_text_style_italic              = settings.value("Text/StyleItalic",                       false).toBool();
+    settings_text_style_underline           = settings.value("Text/StyleUnderline",                    false).toBool();
+    settings_text_style_strikeout           = settings.value("Text/StyleStrikeOut",                    false).toBool();
+    settings_text_style_overline            = settings.value("Text/StyleOverline",                     false).toBool();
 
     move(pos);
     resize(size);
@@ -224,6 +233,15 @@ void MainWindow::writeSettings()
     settings.setValue("Selection/HotGripColor",         tmp.setNum(settings_selection_hotgrip_color));
     settings.setValue("Selection/GripSize",             tmp.setNum(settings_selection_grip_size));
     settings.setValue("Selection/PickBoxSize",          tmp.setNum(settings_selection_pickbox_size));
+    //Text
+    settings.setValue("Text/Font",                                 settings_text_font);
+    settings.setValue("Text/Size",                      tmp.setNum(settings_text_size));
+    settings.setValue("Text/Angle",                     tmp.setNum(settings_text_angle));
+    settings.setValue("Text/StyleBold",                            settings_text_style_bold);
+    settings.setValue("Text/StyleItalic",                          settings_text_style_italic);
+    settings.setValue("Text/StyleUnderline",                       settings_text_style_underline);
+    settings.setValue("Text/StyleStrikeOut",                       settings_text_style_strikeout);
+    settings.setValue("Text/StyleOverline",                        settings_text_style_overline);
 }
 
 void MainWindow::settingsDialog(const QString& showTab)

@@ -76,4 +76,11 @@ QPointF BaseObject::objectRubberPoint(const QString& key) const
     return scene()->property(SCENE_QSNAP_POINT).toPointF();
 }
 
+QString BaseObject::objectRubberText(const QString& key) const
+{
+    if(objRubberTexts.contains(key))
+        return objRubberTexts.value(key);
+    return QString();
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

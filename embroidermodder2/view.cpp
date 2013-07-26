@@ -13,6 +13,7 @@
 #include "object-line.h"
 #include "object-point.h"
 #include "object-rect.h"
+#include "object-textsingle.h"
 
 #include <QtGui>
 #include <QGraphicsScene>
@@ -185,6 +186,16 @@ void View::setRubberPoint(const QString& key, const QPointF& point)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
         if(base) { base->setObjectRubberPoint(key, point); }
+    }
+    gscene->update();
+}
+
+void View::setRubberText(const QString& key, const QString& txt)
+{
+    foreach(QGraphicsItem* item, rubberRoomList)
+    {
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base) { base->setObjectRubberText(key, txt); }
     }
     gscene->update();
 }
@@ -1757,6 +1768,15 @@ QList<QGraphicsItem*> View::createCutCopyObjectList(QList<QGraphicsItem*> list)
             {
                 RectObject* copyRectObj = new RectObject(rectObj);
                 copyList.append(copyRectObj);
+            }
+        }
+        else if(objType == OBJ_TYPE_TEXTSINGLE)
+        {
+            TextSingleObject* textObj = static_cast<TextSingleObject*>(item);
+            if(textObj)
+            {
+                TextSingleObject* copyTextObj = new TextSingleObject(textObj);
+                copyList.append(copyTextObj);
             }
         }
     }

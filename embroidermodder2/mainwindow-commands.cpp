@@ -7,11 +7,12 @@
 #include "object-data.h"
 #include "object-arc.h"
 #include "object-circle.h"
+#include "object-dimleader.h"
 #include "object-ellipse.h"
 #include "object-line.h"
 #include "object-point.h"
 #include "object-rect.h"
-#include "object-dimleader.h"
+#include "object-textsingle.h"
 #include "emb-rect.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
@@ -781,6 +782,105 @@ void MainWindow::lineweightSelectorIndexChanged(int index)
     qDebug("lineweightSelectorIndexChanged(%d)", index);
 }
 
+void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
+{
+    qDebug("textFontSelectorCurrentFontChanged()");
+    setTextFont(font.family());
+}
+
+void MainWindow::textSizeSelectorIndexChanged(int index)
+{
+    qDebug("textSizeSelectorIndexChanged(%d)", index);
+    setSettingsTextSize(qFabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
+}
+
+QString MainWindow::textFont()
+{
+    return getSettingsTextFont();
+}
+
+qreal MainWindow::textSize()
+{
+    return getSettingsTextSize();
+}
+
+qreal MainWindow::textAngle()
+{
+    return getSettingsTextAngle();
+}
+
+bool MainWindow::textBold()
+{
+    return getSettingsTextStyleBold();
+}
+
+bool MainWindow::textItalic()
+{
+    return getSettingsTextStyleItalic();
+}
+
+bool MainWindow::textUnderline()
+{
+    return getSettingsTextStyleUnderline();
+}
+
+bool MainWindow::textStrikeOut()
+{
+    return getSettingsTextStyleStrikeOut();
+}
+
+bool MainWindow::textOverline()
+{
+    return getSettingsTextStyleOverline();
+}
+
+void MainWindow::setTextFont(const QString& str)
+{
+    setSettingsTextFont(str);
+}
+
+void MainWindow::setTextSize(qreal num)
+{
+    setSettingsTextSize(qFabs(num));
+    int index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if(index != -1)
+        textSizeSelector->removeItem(index);
+    textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
+    index = textSizeSelector->findText("Custom", Qt::MatchContains);
+    if(index != -1)
+        textSizeSelector->setCurrentIndex(index);
+}
+
+void MainWindow::setTextAngle(qreal num)
+{
+    setSettingsTextAngle(num);
+}
+
+void MainWindow::setTextBold(bool val)
+{
+    setSettingsTextStyleBold(val);
+}
+
+void MainWindow::setTextItalic(bool val)
+{
+    setSettingsTextStyleItalic(val);
+}
+
+void MainWindow::setTextUnderline(bool val)
+{
+    setSettingsTextStyleUnderline(val);
+}
+
+void MainWindow::setTextStrikeOut(bool val)
+{
+    setSettingsTextStyleStrikeOut(val);
+}
+
+void MainWindow::setTextOverline(bool val)
+{
+    setSettingsTextStyleOverline(val);
+}
+
 QString MainWindow::getCurrentLayer()
 {
     if((MDIWindow*)mdiArea->activeSubWindow())
@@ -841,6 +941,16 @@ void MainWindow::toggleRuler()
     statusbar->statusBarRulerButton->toggle();
 }
 
+void MainWindow::enablePromptRapidFire()
+{
+    prompt->enableRapidFire();
+}
+
+void MainWindow::disablePromptRapidFire()
+{
+    prompt->disableRapidFire();
+}
+
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
@@ -874,7 +984,12 @@ void MainWindow::runCommandContext(const QString& cmd, const QString& str)
 void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 {
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
-    engine->evaluate(cmd + "_prompt('" + str.toUpper() + "')");
+    //NOTE: Replace any special characters that will cause a syntax error
+    QString safeStr = str;
+    safeStr.replace("\\", "\\\\");
+    safeStr.replace("\'", "\\\'");
+    if(prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')"); }
+    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')"); }
 
 }
 
@@ -886,6 +1001,16 @@ void MainWindow::nativeSetPromptPrefix(const QString& txt)
 void MainWindow::nativeAppendPromptHistory(const QString& txt)
 {
     prompt->appendHistory(txt);
+}
+
+void MainWindow::nativeEnablePromptRapidFire()
+{
+    enablePromptRapidFire();
+}
+
+void MainWindow::nativeDisablePromptRapidFire()
+{
+    disablePromptRapidFire();
 }
 
 void MainWindow::nativeEndCommand()
@@ -938,38 +1063,96 @@ void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
     print();
 }
 
-void MainWindow::nativeSetTextFont(const QString& str)
+QString MainWindow::nativeTextFont()
 {
+    return textFont();
 }
 
-void MainWindow::nativeSetTextSize(quint32 num)
+qreal MainWindow::nativeTextSize()
 {
+    return textSize();
+}
+
+qreal MainWindow::nativeTextAngle()
+{
+    return textAngle();
+}
+
+bool MainWindow::nativeTextBold()
+{
+    return textBold();
+}
+
+bool MainWindow::nativeTextItalic()
+{
+    return textItalic();
+}
+
+bool MainWindow::nativeTextUnderline()
+{
+    return textUnderline();
+}
+
+bool MainWindow::nativeTextStrikeOut()
+{
+    return textStrikeOut();
+}
+
+bool MainWindow::nativeTextOverline()
+{
+    return textOverline();
+}
+
+void MainWindow::nativeSetTextFont(const QString& str)
+{
+    setTextFont(str);
+}
+
+void MainWindow::nativeSetTextSize(qreal num)
+{
+    setTextSize(num);
+}
+
+void MainWindow::nativeSetTextAngle(qreal num)
+{
+    setTextAngle(num);
 }
 
 void MainWindow::nativeSetTextBold(bool val)
 {
+    setTextBold(val);
 }
 
 void MainWindow::nativeSetTextItalic(bool val)
 {
+    setTextItalic(val);
 }
 
 void MainWindow::nativeSetTextUnderline(bool val)
 {
+    setTextUnderline(val);
 }
 
 void MainWindow::nativeSetTextStrikeOut(bool val)
 {
+    setTextStrikeOut(val);
 }
 
 void MainWindow::nativeSetTextOverline(bool val)
 {
+    setTextOverline(val);
 }
 
 void MainWindow::nativeVulcanize()
 {
     View* gview = activeView();
     if(gview) return gview->vulcanizeRubberRoom();
+}
+
+void MainWindow::nativeClearRubber()
+{
+    View* gview = activeView();
+    if(gview) gview->clearRubberRoom();
 }
 
 bool MainWindow::nativeAllowRubber()
@@ -991,24 +1174,45 @@ void MainWindow::nativeSetRubberPoint(const QString& key, qreal x, qreal y)
     if(gview) return gview->setRubberPoint(key, QPointF(x, -y));
 }
 
-void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, bool fill)
+void MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
+{
+    View* gview = activeView();
+    if(gview) return gview->setRubberText(key, txt);
+}
+
+void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, bool fill)
+void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
 {
-    QGraphicsScene* scene = activeScene();
-    if(scene)
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
     {
-        QPainterPath textPath;
-        textPath.addText(0, 0, QFont("Impact"), str);
-        QGraphicsPathItem* textItem = scene->addPath(textPath);
-        //QGraphicsSimpleTextItem* textItem = scene->addSimpleText(str, QFont("Impact"));
-        textItem->setData(OBJ_TYPE, OBJ_TYPE_TEXTSINGLE);
-        textItem->setPos(x,-y);
-        textItem->setFlag(QGraphicsItem::ItemIsMovable, true);
-        textItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
-        scene->update();
+        TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
+        obj->setObjectTextFont(getSettingsTextFont());
+        obj->setObjectTextSize(getSettingsTextSize());
+        obj->setObjectTextStyle(getSettingsTextStyleBold(),
+                                getSettingsTextStyleItalic(),
+                                getSettingsTextStyleUnderline(),
+                                getSettingsTextStyleStrikeOut(),
+                                getSettingsTextStyleOverline());
+        obj->setRotation(-rot);
+        //TODO: single line text fill
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
     }
 }
 

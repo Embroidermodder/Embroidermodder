@@ -61,12 +61,15 @@ MainWindow::MainWindow() : QMainWindow(0)
     toolbarHelp       = addToolBar(tr("Help"));
     toolbarLayer      = addToolBar(tr("Layer"));
     toolbarProperties = addToolBar(tr("Properties"));
+    toolbarText       = addToolBar(tr("Text"));
     toolbarPrompt     = addToolBar(tr("Command Prompt"));
     //Selectors
     layerSelector      = new QComboBox(this);
     colorSelector      = new QComboBox(this);
     linetypeSelector   = new QComboBox(this);
     lineweightSelector = new QComboBox(this);
+    textFontSelector   = new QFontComboBox(this);
+    textSizeSelector   = new QComboBox(this);
 
     numOfDocs = 0;
     docIndex = 0;
@@ -532,6 +535,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarIcon->show();
         toolbarHelp->show();
         toolbarLayer->show();
+        toolbarText->show();
         toolbarProperties->show();
         toolbarPrompt->show();
 
@@ -581,6 +585,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarIcon->hide();
         toolbarHelp->hide();
         toolbarLayer->hide();
+        toolbarText->hide();
         toolbarProperties->hide();
         toolbarPrompt->hide();
         foreach(QToolBar* tb, toolbarHash)

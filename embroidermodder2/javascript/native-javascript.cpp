@@ -67,6 +67,22 @@ QScriptValue javaAppendPromptHistory(QScriptContext* context, QScriptEngine* /*e
     return QScriptValue();
 }
 
+QScriptValue javaEnablePromptRapidFire(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("enablePromptRapidFire() requires zero arguments");
+
+    mainWin()->nativeEnablePromptRapidFire();
+    return QScriptValue();
+}
+
+QScriptValue javaDisablePromptRapidFire(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("disablePromptRapidFire() requires zero arguments");
+
+    mainWin()->nativeDisablePromptRapidFire();
+    return QScriptValue();
+}
+
 QScriptValue javaEndCommand(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("endCommand() requires zero arguments");
@@ -148,6 +164,54 @@ QScriptValue javaPrintArea(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaTextFont(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textFont() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextFont());
+}
+
+QScriptValue javaTextSize(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textSize() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextSize());
+}
+
+QScriptValue javaTextAngle(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textAngle() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextAngle());
+}
+
+QScriptValue javaTextBold(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textBold() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextBold());
+}
+
+QScriptValue javaTextItalic(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textItalic() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextItalic());
+}
+
+QScriptValue javaTextUnderline(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textUnderline() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextUnderline());
+}
+
+QScriptValue javaTextStrikeOut(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textStrikeOut() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextStrikeOut());
+}
+
+QScriptValue javaTextOverline(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("textOverline() requires zero arguments");
+    return QScriptValue(mainWin()->nativeTextOverline());
+}
+
 QScriptValue javaSetTextFont(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 1)    return context->throwError("setTextFont() requires one argument");
@@ -162,7 +226,16 @@ QScriptValue javaSetTextSize(QScriptContext* context, QScriptEngine* /*engine*/)
     if(context->argumentCount() != 1)    return context->throwError("setTextSize() requires one argument");
     if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument is not a number");
 
-    mainWin()->nativeSetTextSize(context->argument(0).toUInt32());
+    mainWin()->nativeSetTextSize(context->argument(0).toNumber());
+    return QScriptValue();
+}
+
+QScriptValue javaSetTextAngle(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 1)    return context->throwError("setTextAngle() requires one argument");
+    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument is not a number");
+
+    mainWin()->nativeSetTextAngle(context->argument(0).toNumber());
     return QScriptValue();
 }
 
@@ -251,6 +324,8 @@ QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*
 
     else if(mode == "RECTANGLE")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
 
+    else if(mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+
     else                                                 { return context->throwError(QScriptContext::UnknownError, "unknown rubberMode value"); }
 
     return QScriptValue();
@@ -268,6 +343,19 @@ QScriptValue javaSetRubberPoint(QScriptContext* context, QScriptEngine* /*engine
     qreal y     = context->argument(2).toNumber();
 
     mainWin()->nativeSetRubberPoint(key, x, y);
+    return QScriptValue();
+}
+
+QScriptValue javaSetRubberText(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 2)    return context->throwError("setRubberText() requires two arguments");
+    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): first argument is not a string");
+    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): second argument is not a string");
+
+    QString key = context->argument(0).toString().toUpper();
+    QString txt = context->argument(1).toString();
+
+    mainWin()->nativeSetRubberText(key, txt);
     return QScriptValue();
 }
 
@@ -308,42 +396,54 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     else if(objType == "RECTANGLE")    { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if(objType == "SPLINE")       {} //TODO: handle this type
     else if(objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if(objType == "TEXTSINGLE")   {} //TODO: handle this type
+    else if(objType == "TEXTSINGLE")   { mainWin()->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 
+    return QScriptValue();
+}
+
+QScriptValue javaClearRubber(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("clearRubber() requires zero arguments");
+
+    mainWin()->nativeClearRubber();
     return QScriptValue();
 }
 
 QScriptValue javaAddTextMulti(QScriptContext* context, QScriptEngine* /*engine*/)
 {
-    if(context->argumentCount() != 4)    return context->throwError("addTextMulti() requires four arguments");
+    if(context->argumentCount() != 5)    return context->throwError("addTextMulti() requires five arguments");
     if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): first argument is not a string");
     if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument is not a number");
     if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument is not a number");
-    if(!context->argument(3).isBool())   return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument is not a bool");
+    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument is not a number");
+    if(!context->argument(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextMulti(): fifth argument is not a bool");
 
     QString str   = context->argument(0).toString();
     qreal   x     = context->argument(1).toNumber();
     qreal   y     = context->argument(2).toNumber();
-    bool    fill  = context->argument(3).toBool();
+    qreal   rot   = context->argument(3).toNumber();
+    bool    fill  = context->argument(4).toBool();
 
-    mainWin()->nativeAddTextMulti(str, x, y, fill);
+    mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
 QScriptValue javaAddTextSingle(QScriptContext* context, QScriptEngine* /*engine*/)
 {
-    if(context->argumentCount() != 4)    return context->throwError("addTextSingle() requires four arguments");
+    if(context->argumentCount() != 5)    return context->throwError("addTextSingle() requires five arguments");
     if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): first argument is not a string");
     if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument is not a number");
     if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument is not a number");
-    if(!context->argument(3).isBool())   return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument is not a bool");
+    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument is not a number");
+    if(!context->argument(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextSingle(): fifth argument is not a bool");
 
     QString str   = context->argument(0).toString();
     qreal   x     = context->argument(1).toNumber();
     qreal   y     = context->argument(2).toNumber();
-    bool    fill  = context->argument(3).toBool();
+    qreal   rot   = context->argument(3).toNumber();
+    bool    fill  = context->argument(4).toBool();
 
-    mainWin()->nativeAddTextSingle(str, x, y, fill);
+    mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 

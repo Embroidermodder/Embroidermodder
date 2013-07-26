@@ -55,6 +55,8 @@ public:
     QString curCmd;
     bool cmdActive;
 
+    bool rapidFireEnabled;
+
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
@@ -90,10 +92,11 @@ signals:
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
     void endCommand();
-    void processInput();
+    void processInput(const QChar& rapidChar = QChar());
     void checkSelection();
-    bool checkChangedText(QString txt);
-    bool checkEditedText(QString txt);
+    void updateCurrentText(const QString& txt);
+    void checkEditedText(const QString& txt);
+    void checkChangedText(const QString& txt);
     void checkCursorPosition(int oldpos, int newpos);
 private:
     QHash<QString, QString>*  aliasHash;
@@ -170,6 +173,9 @@ public slots:
     bool isCommandActive() { return promptInput->cmdActive; }
     QString activeCommand() { return promptInput->curCmd; }
     void processInput() { promptInput->processInput(); }
+    void enableRapidFire() { promptInput->rapidFireEnabled = true; }
+    void disableRapidFire() { promptInput->rapidFireEnabled = false; }
+    bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
 
     void setPromptTextColor(const QColor&);
     void setPromptBackgroundColor(const QColor&);

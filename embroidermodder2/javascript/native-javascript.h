@@ -9,6 +9,8 @@ QScriptValue javaError                  (QScriptContext* context, QScriptEngine*
 QScriptValue javaTodo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetPromptPrefix        (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAppendPromptHistory    (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaEnablePromptRapidFire  (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaDisablePromptRapidFire (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaEndCommand             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaHelp                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaUndo                   (QScriptContext* context, QScriptEngine* engine);
@@ -18,8 +20,17 @@ QScriptValue javaPanRight               (QScriptContext* context, QScriptEngine*
 QScriptValue javaPanUp                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanDown                (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPrintArea              (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextFont               (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextSize               (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextAngle              (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextBold               (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextItalic             (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextUnderline          (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextStrikeOut          (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTextOverline           (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextFont            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextSize            (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaSetTextAngle           (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextBold            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextItalic          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextUnderline       (QScriptContext* context, QScriptEngine* engine);
@@ -29,7 +40,9 @@ QScriptValue javaVulcanize              (QScriptContext* context, QScriptEngine*
 QScriptValue javaAllowRubber            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetRubberMode          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetRubberPoint         (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaSetRubberText          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddRubber              (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaClearRubber            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddTextMulti           (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddTextSingle          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddInfiniteLine        (QScriptContext* context, QScriptEngine* engine);

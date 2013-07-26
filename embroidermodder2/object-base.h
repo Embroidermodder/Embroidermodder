@@ -26,6 +26,7 @@ public:
     QPainterPath objectPath()                          const { return path(); }
     int          objectRubberMode()                    const { return objRubberMode; }
     QPointF      objectRubberPoint(const QString& key) const;
+    QString      objectRubberText(const QString& key) const;
 
     QRectF rect() const { return path().boundingRect(); }
     void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
@@ -41,6 +42,7 @@ public:
     void setObjectPath(const QPainterPath& p) { setPath(p); }
     void setObjectRubberMode(int mode) { objRubberMode = mode; }
     void setObjectRubberPoint(const QString& key, const QPointF& point) { objRubberPoints.insert(key, point); }
+    void setObjectRubberText(const QString& key, const QString& txt) { objRubberTexts.insert(key, txt); }
 
     virtual QRectF boundingRect() const { return path().boundingRect(); }
     virtual QPainterPath shape() const { return path(); }
@@ -59,6 +61,7 @@ private:
     QLineF objLine;
     int objRubberMode;
     QHash<QString, QPointF> objRubberPoints;
+    QHash<QString, QString> objRubberTexts;
     qint64 objID;
 };
 
