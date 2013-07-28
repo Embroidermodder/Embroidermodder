@@ -1199,6 +1199,8 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
                                 getSettingsTextStyleUnderline(),
                                 getSettingsTextStyleStrikeOut(),
                                 getSettingsTextStyleOverline());
+        obj->setObjectTextBackward(false);
+        obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);
         //TODO: single line text fill
         obj->setObjectRubberMode(rubberMode);

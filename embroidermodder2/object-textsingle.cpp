@@ -19,6 +19,8 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
         setObjectTextFont(obj->objectTextFont());
         setObjectTextSize(obj->objectTextSize());
         setRotation(obj->rotation());
+        setObjectTextBackward(obj->objectTextBackward());
+        setObjectTextUpsideDown(obj->objectTextUpsideDown());
         setObjectTextStyle(obj->objectTextBold(), obj->objectTextItalic(), obj->objectTextUnderline(), obj->objectTextStrikeOut(), obj->objectTextOverline());
         init(obj->objectText(), obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
     }
@@ -39,13 +41,24 @@ void TextSingleObject::init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    objTextJustify = "Left"; //TODO: set the justification properly
+
     setObjectText(str);
     setObjectPos(x,y);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objectPen());
+}
+
+QStringList TextSingleObject::objectTextJustifyList() const
+{
+    QStringList justifyList;
+    justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
+    justifyList << "Top Left" << "Top Center" << "Top Right";
+    justifyList << "Middle Left" << "Middle Center" << "Middle Right";
+    justifyList << "Bottom Left" << "Bottom Center" << "Bottom Right";
+    return justifyList;
 }
 
 void TextSingleObject::setObjectText(const QString& str)
@@ -61,12 +74,93 @@ void TextSingleObject::setObjectText(const QString& str)
     font.setStrikeOut(objTextStrikeOut);
     font.setOverline(objTextOverline);
     textPath.addText(0, 0, font, str);
-    setObjectPath(textPath);
+
+    //Translate the path based on the justification
+    QRectF jRect = textPath.boundingRect();
+    if     (objTextJustify == "Left")          { textPath.translate(-jRect.left(), 0); }
+    else if(objTextJustify == "Center")        { textPath.translate(-jRect.center().x(), 0); }
+    else if(objTextJustify == "Right")         { textPath.translate(-jRect.right(), 0); }
+    else if(objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
+    else if(objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
+    else if(objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
+    else if(objTextJustify == "Top Left")      { textPath.translate(-jRect.topLeft()); }
+    else if(objTextJustify == "Top Center")    { textPath.translate(-jRect.center().x(), -jRect.top()); }
+    else if(objTextJustify == "Top Right")     { textPath.translate(-jRect.topRight()); }
+    else if(objTextJustify == "Middle Left")   { textPath.translate(-jRect.left(), -jRect.top()/2.0); }
+    else if(objTextJustify == "Middle Center") { textPath.translate(-jRect.center().x(), -jRect.top()/2.0); }
+    else if(objTextJustify == "Middle Right")  { textPath.translate(-jRect.right(), -jRect.top()/2.0); }
+    else if(objTextJustify == "Bottom Left")   { textPath.translate(-jRect.bottomLeft()); }
+    else if(objTextJustify == "Bottom Center") { textPath.translate(-jRect.center().x(), -jRect.bottom()); }
+    else if(objTextJustify == "Bottom Right")  { textPath.translate(-jRect.bottomRight()); }
+
+    //Backward or Upside Down
+    if(objTextBackward || objTextUpsideDown)
+    {
+        qreal horiz = 1.0;
+        qreal vert = 1.0;
+        if(objTextBackward) horiz = -1.0;
+        if(objTextUpsideDown) vert = -1.0;
+
+        QPainterPath flippedPath;
+
+        QPainterPath::Element element;
+        QPainterPath::Element P2;
+        QPainterPath::Element P3;
+        QPainterPath::Element P4;
+        for(int i = 0; i < textPath.elementCount(); ++i)
+        {
+            element = textPath.elementAt(i);
+            if(element.isMoveTo())
+            {
+                flippedPath.moveTo(horiz * element.x, vert * element.y);
+            }
+            else if(element.isLineTo())
+            {
+                flippedPath.lineTo(horiz * element.x, vert * element.y);
+            }
+            else if(element.isCurveTo())
+            {
+                                              // start point P1 is not needed
+                P2 = textPath.elementAt(i);   // control point
+                P3 = textPath.elementAt(i+1); // control point
+                P4 = textPath.elementAt(i+2); // end point
+
+                flippedPath.cubicTo(horiz * P2.x, vert * P2.y,
+                                    horiz * P3.x, vert * P3.y,
+                                    horiz * P4.x, vert * P4.y);
+            }
+        }
+        setObjectPath(flippedPath);
+    }
+    else
+        setObjectPath(textPath);
 }
 
 void TextSingleObject::setObjectTextFont(const QString& font)
 {
     objTextFont = font;
+    setObjectText(objText);
+}
+
+void TextSingleObject::setObjectTextJustify(const QString& justify)
+{
+    //Verify the string is a valid option
+    if     (justify == "Left")          { objTextJustify = justify; }
+    else if(justify == "Center")        { objTextJustify = justify; }
+    else if(justify == "Right")         { objTextJustify = justify; }
+    else if(justify == "Aligned")       { objTextJustify = justify; }
+    else if(justify == "Middle")        { objTextJustify = justify; }
+    else if(justify == "Fit")           { objTextJustify = justify; }
+    else if(justify == "Top Left")      { objTextJustify = justify; }
+    else if(justify == "Top Center")    { objTextJustify = justify; }
+    else if(justify == "Top Right")     { objTextJustify = justify; }
+    else if(justify == "Middle Left")   { objTextJustify = justify; }
+    else if(justify == "Middle Center") { objTextJustify = justify; }
+    else if(justify == "Middle Right")  { objTextJustify = justify; }
+    else if(justify == "Bottom Left")   { objTextJustify = justify; }
+    else if(justify == "Bottom Center") { objTextJustify = justify; }
+    else if(justify == "Bottom Right")  { objTextJustify = justify; }
+    else                                { objTextJustify = "Left";  } //Default
     setObjectText(objText);
 }
 
@@ -113,6 +207,18 @@ void TextSingleObject::setObjectTextStrikeOut(bool val)
 void TextSingleObject::setObjectTextOverline(bool val)
 {
     objTextOverline = val;
+    setObjectText(objText);
+}
+
+void TextSingleObject::setObjectTextBackward(bool val)
+{
+    objTextBackward = val;
+    setObjectText(objText);
+}
+
+void TextSingleObject::setObjectTextUpsideDown(bool val)
+{
+    objTextUpsideDown = val;
     setObjectText(objText);
 }
 
