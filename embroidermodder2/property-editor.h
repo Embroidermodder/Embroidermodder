@@ -32,6 +32,7 @@ class TextSingleObject;
 QT_BEGIN_NAMESPACE
 class QGroupBox;
 class QComboBox;
+class QFontComboBox;
 class QLineEdit;
 class QToolButton;
 class QGraphicsItem;
@@ -95,9 +96,10 @@ private:
     TextSingleObject*   tempTextSingleObj;
 
     //Helper functions
-    QToolButton* createToolButton(const QString& iconName, const QString& txt);
-    QLineEdit*   createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
-    QComboBox*   createComboBox(bool disable = false);
+    QToolButton*   createToolButton(const QString& iconName, const QString& txt);
+    QLineEdit*     createLineEdit(const QString& validatorType = QString(), bool readOnly = false);
+    QComboBox*     createComboBox(bool disable = false);
+    QFontComboBox* createFontComboBox(bool disable = false);
 
     int precisionAngle;
     int precisionLength;
@@ -111,7 +113,10 @@ private:
     QString fieldOnText;
     QString fieldOffText;
 
+    void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
     void updateLineEditNumIfVaries(QLineEdit* lineEdit, qreal num, bool useAnglePrecision);
+    void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
+    void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);
 
     QSignalMapper* signalMapper;
@@ -443,6 +448,21 @@ private:
     QLineEdit*   lineEditTextMultiY;
 
     //Text Single
+    QGroupBox*   createGroupBoxTextTextSingle();
+    QGroupBox*   groupBoxTextTextSingle;
+
+    QToolButton* toolButtonTextSingleContents;
+    QToolButton* toolButtonTextSingleFont;
+    QToolButton* toolButtonTextSingleJustify;
+    QToolButton* toolButtonTextSingleHeight;
+    QToolButton* toolButtonTextSingleRotation;
+
+    QLineEdit*     lineEditTextSingleContents;
+    QFontComboBox* comboBoxTextSingleFont;
+    QComboBox*     comboBoxTextSingleJustify;
+    QLineEdit*     lineEditTextSingleHeight;
+    QLineEdit*     lineEditTextSingleRotation;
+
     QGroupBox*   createGroupBoxGeometryTextSingle();
     QGroupBox*   groupBoxGeometryTextSingle;
 
@@ -451,6 +471,15 @@ private:
 
     QLineEdit*   lineEditTextSingleX;
     QLineEdit*   lineEditTextSingleY;
+
+    QGroupBox*   createGroupBoxMiscTextSingle();
+    QGroupBox*   groupBoxMiscTextSingle;
+
+    QToolButton* toolButtonTextSingleBackward;
+    QToolButton* toolButtonTextSingleUpsideDown;
+
+    QComboBox*   comboBoxTextSingleBackward;
+    QComboBox*   comboBoxTextSingleUpsideDown;
 };
 
 #endif

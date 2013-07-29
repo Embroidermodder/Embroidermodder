@@ -1363,6 +1363,18 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         undoStack->push(cmd);
         event->accept();
     }
+    if(event->button() == Qt::XButton1)
+    {
+        qDebug("XButton1");
+        mainWin->undo(); //TODO: Make this customizable
+        event->accept();
+    }
+    if(event->button() == Qt::XButton2)
+    {
+        qDebug("XButton2");
+        mainWin->redo(); //TODO: Make this customizable
+        event->accept();
+    }
     updateMouseCoords(event->x(), event->y());
     gscene->update();
 }

@@ -13,7 +13,7 @@ EmbPattern* embPattern_create()
     EmbPattern* p = 0;
     p = (EmbPattern*)malloc(sizeof(EmbPattern));
     if(!p) { /* TODO: error */ return 0; }
-    
+
     p->settings = embSettings_init();
     p->currentColorIndex = 0;
     p->stitchList = 0;
@@ -164,8 +164,9 @@ void embPattern_changeColor(EmbPattern* p, int index)
 
 EmbPattern* embPattern_read(const char* fileName)
 {
+    /* TODO: Review this function. Where is reader memory freed? */
     EmbPattern* p = (EmbPattern*)malloc(sizeof(EmbPattern));
-    EmbReaderWriter* reader;
+    EmbReaderWriter* reader = 0;
     reader = embReaderWriter_getByFileName(fileName);
     if(reader->reader(p, fileName))
     {
@@ -176,7 +177,8 @@ EmbPattern* embPattern_read(const char* fileName)
 
 int embPattern_write(EmbPattern* p, const char *fileName)
 {
-    EmbReaderWriter* writer;
+    /* TODO: Review this function. Where is writer memory freed? */
+    EmbReaderWriter* writer = 0;
     writer = embReaderWriter_getByFileName(fileName);
     if(writer->writer(p, fileName))
     {
@@ -384,7 +386,7 @@ void embPattern_combineJumpStitches(EmbPattern* p)
                 jumpListStart->stitch.xx = pointer->stitch.xx;
                 jumpListStart->stitch.yy = pointer->stitch.yy;
                 jumpListStart->next = pointer;
-                
+
                 for(; jumpCount > 0; jumpCount--)
                 {
                     EmbStitchList* tempPointer = removePointer->next;
@@ -424,7 +426,7 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
                 else maxLen = maxStitchLength;
 
                 splits = (int)ceil((double)maxXY / maxLen);
-                
+
                 if(splits > 1)
                 {
                     int flagsToUse = pointer->stitch.flags;
