@@ -27,7 +27,7 @@ EmbVectorList* embVectorList_create(EmbVector data);
 EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data);
 int embVectorList_count(EmbVectorList* pointer);
 int embVectorList_empty(EmbVectorList* pointer);
-int embVectorList_free(EmbVectorList* pointer);
+void embVectorList_free(EmbVectorList* pointer);
 
 #ifdef __cplusplus
 }

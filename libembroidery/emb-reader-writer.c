@@ -208,6 +208,13 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
         rw->writer = writeKsm;
         return rw;
     }
+	if(!strcmp(ending, ".max"))
+    {
+        EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
+        rw->reader = readMax;
+        rw->writer = writeMax;
+        return rw;
+    }
     if(!strcmp(ending, ".pcd"))
     {
         EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));

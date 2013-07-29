@@ -32,6 +32,7 @@ extern "C" {
 #include "format-inb.h"
 #include "format-jef.h"
 #include "format-ksm.h"
+#include "format-max.h"
 #include "format-pcd.h"
 #include "format-pcm.h"
 #include "format-pcq.h"

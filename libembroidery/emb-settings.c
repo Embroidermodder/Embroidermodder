@@ -4,6 +4,7 @@ EmbSettings embSettings_init()
 {
     EmbSettings result;
     result.dstJumpsPerTrim = 6;
+    return result;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

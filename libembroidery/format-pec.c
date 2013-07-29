@@ -70,7 +70,6 @@ void readPecStitches(EmbPattern* pattern, FILE* file)
 void pecEncodeJump(FILE* file, int x, int types)
 {
     int outputVal = abs(x) & 0x7FF;
-    unsigned char val;
     unsigned int orPart = 0x80;
     if(types & TRIM)
         orPart |= 0x20;
@@ -195,7 +194,7 @@ void PecEncode(FILE* file, EmbPattern* p)
 void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 {
     EmbRect bounds;
-    int i, flen, currentThreadCount, colorsToStitch, graphicsOffsetLocation, graphicsOffsetValue;
+    int i, flen, currentThreadCount, graphicsOffsetLocation, graphicsOffsetValue;
     const char* forwardSlashPos = strrchr(fileName, '/');
     const char* backSlashPos = strrchr(fileName, '\\');
     const char* dotPos = strrchr(fileName, '.');
@@ -214,7 +213,7 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
         start = fileName;
     }
     binaryWriteBytes(file, "LA:", 3);
-    flen = dotPos - start;
+    flen = (int)(dotPos - start);
 
     while(start < dotPos)
     {

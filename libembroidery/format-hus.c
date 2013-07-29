@@ -5,8 +5,9 @@
 #include <math.h>
 #include <fcntl.h>
 #include <limits.h>
-#include "helpers-binary.h"
 #include "emb-compress.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
 
 /*****************************************
  * EmbReaderWriter Functions

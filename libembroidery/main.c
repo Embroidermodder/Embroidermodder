@@ -32,6 +32,7 @@ static const char* const formats[] = {
 ".inb", "U", " ", " Inbro Embroidery Format                          ",
 ".jef", "U", "U", " Janome Embroidery Format                         ",
 ".ksm", "U", "U", " Pfaff Embroidery Format                          ",
+".max", "U", " ", " Pfaff Embroidery Format                          ",
 ".pcd", "U", "U", " Pfaff Embroidery Format                          ",
 ".pcm", "U", " ", " Pfaff Embroidery Format                          ",
 ".pcq", " ", " ", " Pfaff Embroidery Format                          ",

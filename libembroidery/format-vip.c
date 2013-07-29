@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "format-vip.h"
 #include "helpers-binary.h"
+#include "helpers-misc.h"
 #include "emb-compress.h"
 
 int DecodeByte(unsigned char b)

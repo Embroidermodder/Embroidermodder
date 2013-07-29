@@ -384,7 +384,6 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     int xx, yy, dx, dy, flags;
     int i;
     int co = 1, st = 0;
-    unsigned char b[3];
     int ax, ay, mx, my;
     char* pd;
     EmbStitchList* pointer;

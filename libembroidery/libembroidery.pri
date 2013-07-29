@@ -52,6 +52,7 @@ SOURCES += \
 ../libembroidery/format-inb.c \
 ../libembroidery/format-jef.c \
 ../libembroidery/format-ksm.c \
+../libembroidery/format-max.c \
 ../libembroidery/format-pcd.c \
 ../libembroidery/format-pcm.c \
 ../libembroidery/format-pcq.c \
@@ -101,7 +102,7 @@ HEADERS += \
 ../libembroidery/emb-stitch.h \
 ../libembroidery/emb-thread.h \
 ../libembroidery/emb-time.h \
-../libembroidery/emb-vector.c \
+../libembroidery/emb-vector.h \
 ../libembroidery/helpers-binary.h \
 ../libembroidery/helpers-misc.h \
 ../libembroidery/thread-color.h \
@@ -133,6 +134,7 @@ HEADERS += \
 ../libembroidery/format-inb.h \
 ../libembroidery/format-jef.h \
 ../libembroidery/format-ksm.h \
+../libembroidery/format-max.h \
 ../libembroidery/format-pcd.h \
 ../libembroidery/format-pcm.h \
 ../libembroidery/format-pcq.h \

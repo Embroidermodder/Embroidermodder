@@ -31,6 +31,7 @@ EmbVectorList* embVectorList_create(EmbVector data)
     EmbVectorList* pointer = (EmbVectorList*)malloc(sizeof(EmbVectorList));
     pointer->vector = data;
     pointer->next = 0;
+    return pointer;
 }
 
 EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data)
@@ -60,7 +61,7 @@ int embVectorList_empty(EmbVectorList* pointer)
     return pointer == 0;
 }
 
-int embVectorList_free(EmbVectorList* pointer)
+void embVectorList_free(EmbVectorList* pointer)
 {
     while(pointer)
     {
