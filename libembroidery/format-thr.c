@@ -148,7 +148,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     {
         header.length = header.length + sizeof(ThredHeader);
     }
-    header.numStiches = stitchLength; /* number of stitches in design */
+    header.numStiches = (unsigned short)stitchLength; /* number of stitches in design */
     header.hoopSize = 5;
 
     binaryWriteUInt(file, header.sigVersion);

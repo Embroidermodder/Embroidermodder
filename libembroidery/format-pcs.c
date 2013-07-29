@@ -59,9 +59,9 @@ int readPcs(EmbPattern* pattern, const char* fileName)
     for(i = 0; i < colorCount; i++)
     {
         EmbThread t;
-        t.color.r = fgetc(file);
-        t.color.g = fgetc(file);
-        t.color.b = fgetc(file);
+		t.color.r = binaryReadByte(file);
+        t.color.g = binaryReadByte(file);
+        t.color.b = binaryReadByte(file);
         t.catalogNumber = "";
         t.description = "";
         if(t.color.r || t.color.g || t.color.b)
@@ -69,7 +69,7 @@ int readPcs(EmbPattern* pattern, const char* fileName)
             allZeroColor = 0;
         }
         embPattern_addThread(pattern, t);
-        fgetc(file);
+        binaryReadByte(file);
     }
     if(allZeroColor)
         embPattern_loadExternalColorFile(pattern, fileName);
@@ -109,7 +109,7 @@ int writePcs(EmbPattern* pattern, const char* fileName)
     FILE* file;
     int flags = 0, i;
     unsigned char colorCount;
-    double xx = 0.0, yy = 0.0, dx = 0.0, dy = 0.0;
+    double xx = 0.0, yy = 0.0;
 
     file = fopen(fileName, "wb");
     if(file == 0)
@@ -138,7 +138,7 @@ int writePcs(EmbPattern* pattern, const char* fileName)
         binaryWriteUInt(file, 0); /* write remaining colors to reach 16 */
     }
 
-    binaryWriteUShort(file, (unsigned int)embStitch_count(pattern->stitchList));
+    binaryWriteUShort(file, (unsigned short)embStitch_count(pattern->stitchList));
     /* write stitches */
     xx = yy = 0;
     pointer = pattern->stitchList;

@@ -24,7 +24,7 @@ short shvDecodeShort(unsigned short inputByte)
 
 int readShv(EmbPattern* pattern, const char* fileName)
 {
-    int i, currentColor = 0;
+    int i;
     char inJump = 0;
     unsigned char fileNameLength, designWidth, designHeight;
     char halfDesignWidth, halfDesignHeight, halfDesignWidth2, halfDesignHeight2;

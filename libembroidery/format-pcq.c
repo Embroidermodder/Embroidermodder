@@ -107,9 +107,9 @@ int writePcq(EmbPattern* pattern, const char* fileName)
     EmbStitchList* pointer;
     EmbThreadList* threadPointer;
     FILE* file;
-    int flags = 0, i;
+    int i;
     unsigned char colorCount;
-    double xx = 0.0, yy = 0.0, dx = 0.0, dy = 0.0;
+    double xx = 0.0, yy = 0.0;
 
     file = fopen(fileName, "wb");
     if(file == 0)
@@ -144,7 +144,7 @@ int writePcq(EmbPattern* pattern, const char* fileName)
     pointer = pattern->stitchList;
     while(pointer)
     {
-        pcqEncode(file, pointer->stitch.xx * 10.0, pointer->stitch.yy * 10.0, pointer->stitch.flags);
+        pcqEncode(file, roundDouble(pointer->stitch.xx * 10.0), roundDouble(pointer->stitch.yy * 10.0), pointer->stitch.flags);
         pointer = pointer->next;
     }
     fclose(file);

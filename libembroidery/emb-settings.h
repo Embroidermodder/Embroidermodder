@@ -10,7 +10,7 @@ typedef struct EmbSettings_
     unsigned int dstJumpsPerTrim;
 } EmbSettings;
 
-EmbSettings embSettings_init();
+EmbSettings embSettings_init(void);
 
 #ifdef __cplusplus
 }

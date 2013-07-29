@@ -33,9 +33,7 @@ unsigned char binaryReadUInt8(FILE* file)
 
 unsigned short binaryReadUInt16(FILE* file)
 {
-    unsigned short x = fgetc(file);
-    x = x | fgetc(file) << 8;
-    return x;
+    return (unsigned short)(fgetc(file) | fgetc(file) << 8);
 }
 
 unsigned int binaryReadUInt32(FILE* file)
@@ -50,7 +48,7 @@ unsigned int binaryReadUInt32(FILE* file)
 /* Big endian version */
 short binaryReadInt16BE(FILE* file)
 {
-    short returnValue = fgetc(file) << 8;
+    short returnValue = (short)(fgetc(file) << 8);
     returnValue |= fgetc(file);
     return returnValue;
 }
@@ -58,7 +56,7 @@ short binaryReadInt16BE(FILE* file)
 /* Big endian version */
 unsigned short binaryReadUInt16BE(FILE* file)
 {
-    unsigned short returnValue = fgetc(file) << 8;
+    unsigned short returnValue = (unsigned short)(fgetc(file) << 8);
     returnValue |= fgetc(file);
     return returnValue;
 }

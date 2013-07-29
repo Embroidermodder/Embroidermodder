@@ -77,7 +77,6 @@ unsigned char setbit(int pos)
  
 void encode_record(FILE* file, int x, int y, int flags)
 {
-    int i;
     char b0, b1, b2;
     b0 = b1 = b2 = 0;
 

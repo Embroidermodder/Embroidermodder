@@ -2,7 +2,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3, unsigned char a4)
+double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
     if(res > 0x7FFFFF)
@@ -53,8 +53,8 @@ int readPcm(EmbPattern* pattern, const char* fileName)
         {
             /* TODO: ONLY INTERESTED IN THIS CASE TO LEARN MORE ABOUT THE FORMAT */
         }
-        dx = pcmDecode(b[2], b[1], b[0], b[8]);
-        dy = pcmDecode(b[6], b[5], b[4], b[8]);
+        dx = pcmDecode(b[2], b[1], b[0]);
+        dy = pcmDecode(b[6], b[5], b[4]);
         embPattern_addStitchAbs(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);

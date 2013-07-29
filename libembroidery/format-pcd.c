@@ -109,7 +109,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
     FILE* file;
     int flags = 0, i;
     unsigned char colorCount;
-    double xx = 0.0, yy = 0.0, dx = 0.0, dy = 0.0;
+    double xx = 0.0, yy = 0.0;
 
     file = fopen(fileName, "wb");
     if(file == 0)
@@ -144,7 +144,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
     pointer = pattern->stitchList;
     while(pointer)
     {
-        pcdEncode(file, pointer->stitch.xx * 10.0, pointer->stitch.yy * 10.0, pointer->stitch.flags);
+        pcdEncode(file, roundDouble(pointer->stitch.xx * 10.0), roundDouble(pointer->stitch.yy * 10.0), pointer->stitch.flags);
         pointer = pointer->next;
     }
     fclose(file);

@@ -367,7 +367,8 @@ void embPattern_combineJumpStitches(EmbPattern* p)
 {
     EmbStitchList* pointer;
     int jumpCount = 0;
-    EmbStitchList* jumpListStart;
+    EmbStitchList* jumpListStart = 0;
+	pointer = p->stitchList;
     while(pointer)
     {
         if(pointer->stitch.flags & JUMP)

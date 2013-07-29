@@ -16,7 +16,7 @@ double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-void maxEncode(FILE * file, int x, int y, int flags)
+void maxEncode(FILE * file, int x, int y)
 {
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(x & 0xFF));
@@ -89,7 +89,7 @@ int writeMax(EmbPattern* pattern, const char* fileName)
 	pointer = pattern->stitchList;
     while(pointer)
     {
-        maxEncode(file, roundDouble(pointer->stitch.xx * 10.0), roundDouble(pointer->stitch.yy * 10.0), pointer->stitch.flags);
+        maxEncode(file, roundDouble(pointer->stitch.xx * 10.0), roundDouble(pointer->stitch.yy * 10.0));
         pointer = pointer->next;
     }
 	fclose(file);

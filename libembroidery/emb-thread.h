@@ -24,7 +24,7 @@ typedef struct EmbThreadList_
 int embThread_findNearestColor(EmbColor color, EmbThreadList* colors);
 int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
 void embThread_add(EmbThreadList* pointer, EmbThread data);
-EmbThread embThread_getRandom();
+EmbThread embThread_getRandom(void);
 EmbThread embThread_getAt(EmbThreadList* pointer, int num);
 int embThread_count(EmbThreadList* pointer);
 int embThread_empty(EmbThreadList* pointer);

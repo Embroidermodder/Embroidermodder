@@ -59,7 +59,7 @@ typedef struct EmbPattern_
     double lastY;
 } EmbPattern;
 
-EmbPattern* embPattern_create();
+EmbPattern* embPattern_create(void);
 void embPattern_hideStitchesOverLength(EmbPattern* p, int length);
 void embPattern_fixColorCount(EmbPattern* p);
 void embPattern_addThread(EmbPattern* p, EmbThread thread);
