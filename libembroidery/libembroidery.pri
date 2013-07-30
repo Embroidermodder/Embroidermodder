@@ -53,6 +53,8 @@ SOURCES += \
 ../libembroidery/format-jef.c \
 ../libembroidery/format-ksm.c \
 ../libembroidery/format-max.c \
+../libembroidery/format-mit.c \
+../libembroidery/format-new.c \
 ../libembroidery/format-pcd.c \
 ../libembroidery/format-pcm.c \
 ../libembroidery/format-pcq.c \
@@ -135,6 +137,8 @@ HEADERS += \
 ../libembroidery/format-jef.h \
 ../libembroidery/format-ksm.h \
 ../libembroidery/format-max.h \
+../libembroidery/format-mit.h \
+../libembroidery/format-new.h \
 ../libembroidery/format-pcd.h \
 ../libembroidery/format-pcm.h \
 ../libembroidery/format-pcq.h \

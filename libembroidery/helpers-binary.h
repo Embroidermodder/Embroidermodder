@@ -8,7 +8,7 @@ extern "C" {
 #include <stdio.h>
 
 char binaryReadByte(FILE* file);
-void binaryReadBytes(FILE* file, unsigned char* destination, int count);
+int binaryReadBytes(FILE* file, unsigned char* destination, int count);
 int binaryReadInt16(FILE* file);
 int binaryReadInt32(FILE* file);
 unsigned char binaryReadUInt8(FILE* file);

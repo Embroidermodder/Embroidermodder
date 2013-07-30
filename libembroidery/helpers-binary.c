@@ -5,9 +5,9 @@ char binaryReadByte(FILE* file)
     return fgetc(file);
 }
 
-void binaryReadBytes(FILE* file, unsigned char* destination, int count)
+int binaryReadBytes(FILE* file, unsigned char* destination, int count)
 {
-    fread((char*) destination, count, 1, file);
+    return (int) fread((char*) destination, 1, count, file);
 }
 
 int binaryReadInt16(FILE* file)

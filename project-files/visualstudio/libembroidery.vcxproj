@@ -127,6 +127,8 @@
     <ClCompile Include="..\..\libembroidery\format-jef.c" />
     <ClCompile Include="..\..\libembroidery\format-ksm.c" />
     <ClCompile Include="..\..\libembroidery\format-max.c" />
+    <ClCompile Include="..\..\libembroidery\format-mit.c" />
+    <ClCompile Include="..\..\libembroidery\format-new.c" />
     <ClCompile Include="..\..\libembroidery\format-pcd.c" />
     <ClCompile Include="..\..\libembroidery\format-pcm.c" />
     <ClCompile Include="..\..\libembroidery\format-pcq.c" />
@@ -206,6 +208,8 @@
     <ClInclude Include="..\..\libembroidery\format-jef.h" />
     <ClInclude Include="..\..\libembroidery\format-ksm.h" />
     <ClInclude Include="..\..\libembroidery\format-max.h" />
+    <ClInclude Include="..\..\libembroidery\format-mit.h" />
+    <ClInclude Include="..\..\libembroidery\format-new.h" />
     <ClInclude Include="..\..\libembroidery\format-pcd.h" />
     <ClInclude Include="..\..\libembroidery\format-pcm.h" />
     <ClInclude Include="..\..\libembroidery\format-pcq.h" />

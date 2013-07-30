@@ -33,6 +33,8 @@ extern "C" {
 #include "format-jef.h"
 #include "format-ksm.h"
 #include "format-max.h"
+#include "format-mit.h"
+#include "format-new.h"
 #include "format-pcd.h"
 #include "format-pcm.h"
 #include "format-pcq.h"

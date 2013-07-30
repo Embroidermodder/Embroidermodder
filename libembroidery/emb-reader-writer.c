@@ -215,6 +215,20 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
         rw->writer = writeMax;
         return rw;
     }
+	if(!strcmp(ending, ".mit"))
+    {
+        EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
+        rw->reader = readMit;
+        rw->writer = writeMit;
+        return rw;
+    }
+	if(!strcmp(ending, ".new"))
+    {
+        EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
+        rw->reader = readNew;
+        rw->writer = writeNew;
+        return rw;
+    }
     if(!strcmp(ending, ".pcd"))
     {
         EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
