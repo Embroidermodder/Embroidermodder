@@ -5,34 +5,34 @@
 
 int readPhb(EmbPattern* pattern, const char* fileName)
 {
-	unsigned int fileOffset;
-	short colorCount;
-	FILE* file = fopen(fileName, "rb");
+    unsigned int fileOffset;
+    short colorCount;
+    FILE* file = fopen(fileName, "rb");
     int i;
-	
-	if(file == 0)
+
+    if(file == 0)
     {
         return 0;
     }
-	fseek(file, 0x71, SEEK_SET);
-	colorCount = binaryReadInt16(file);
+    fseek(file, 0x71, SEEK_SET);
+    colorCount = binaryReadInt16(file);
 
-	for(i = 0; i < colorCount; i++)
+    for(i = 0; i < colorCount; i++)
     {
-		EmbThread t = pecThreads[binaryReadByte(file)];
+        EmbThread t = pecThreads[binaryReadByte(file)];
         embPattern_addThread(pattern, t);
     }
 
-    // TODO: check that file begins with #PHB
-	fseek(file, 0x54, SEEK_SET);
-	fileOffset = 0x52;
-	fileOffset += binaryReadUInt32(file);
-	
-	fseek(file, fileOffset, SEEK_SET);
-	fileOffset += binaryReadUInt32(file) + 2;
-	
-	fseek(file, fileOffset, SEEK_SET);
-	fileOffset += binaryReadUInt32(file);
+    /* TODO: check that file begins with #PHB */
+    fseek(file, 0x54, SEEK_SET);
+    fileOffset = 0x52;
+    fileOffset += binaryReadUInt32(file);
+
+    fseek(file, fileOffset, SEEK_SET);
+    fileOffset += binaryReadUInt32(file) + 2;
+
+    fseek(file, fileOffset, SEEK_SET);
+    fileOffset += binaryReadUInt32(file);
 
     fseek(file, fileOffset + 14, SEEK_SET); /* 28 */
 
@@ -47,9 +47,9 @@ int readPhb(EmbPattern* pattern, const char* fileName)
     readPecStitches(pattern, file);
 
     embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
-	fclose(file);
+    fclose(file);
     embPattern_flipVertical(pattern);
-	return 1; /*TODO: finish ReadPhb */
+    return 1; /*TODO: finish ReadPhb */
 }
 
 int writePhb(EmbPattern* pattern, const char* fileName)

@@ -4,13 +4,13 @@
 
 int decodeMitStitch(unsigned char value)
 {
-	if(value & 0x80) return -(value & 0x1F);
-	return value;
+    if(value & 0x80) return -(value & 0x1F);
+    return value;
 }
 
 int readMit(EmbPattern* pattern, const char* fileName)
 {
-	unsigned char data[2];
+    unsigned char data[2];
     FILE* file = fopen(fileName, "rb");
     if(file == 0)
     {
@@ -20,9 +20,9 @@ int readMit(EmbPattern* pattern, const char* fileName)
 
     while(binaryReadBytes(file, data, 2) == 2)
     {
-		embPattern_addStitchRel(pattern, decodeMitStitch(data[0]) / 10.0, decodeMitStitch(data[1]) / 10.0, NORMAL, 1);
+        embPattern_addStitchRel(pattern, decodeMitStitch(data[0]) / 10.0, decodeMitStitch(data[1]) / 10.0, NORMAL, 1);
     }
-	embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
+    embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
     return 1;
 }
 

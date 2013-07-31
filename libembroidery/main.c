@@ -3,7 +3,7 @@
 #include <string.h>
 #include "emb-reader-writer.h"
 
-static const int formatCount = 53;
+static const int formatCount = 57;
 static const char* const formats[] = {
 ".10o", "U", " ", " Toyota Embroidery Format                         ",
 ".100", "U", " ", " Toyota Embroidery Format                         ",
@@ -30,6 +30,7 @@ static const char* const formats[] = {
 ".gt ", "U", " ", " Gold Thread Embroidery Format                    ",
 ".hus", "U", "U", " Husqvarna Viking Embroidery Format               ",
 ".inb", "U", " ", " Inbro Embroidery Format                          ",
+".inf", "U", "U", " Embroidery Color Format                          ",
 ".jef", "U", "U", " Janome Embroidery Format                         ",
 ".ksm", "U", "U", " Pfaff Embroidery Format                          ",
 ".max", "U", " ", " Pfaff Embroidery Format                          ",
@@ -104,6 +105,8 @@ void usage()
     printf("|_____________________________________________________________________________|\n");
     printf("\n");
 }
+
+/* TODO: Add capability for converting multiple files of various types to a single format. Currently, we only convert a single file to multiple formats. */
 
 int main(int argc, const char* argv[])
 {

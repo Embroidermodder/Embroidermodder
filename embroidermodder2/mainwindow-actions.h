@@ -3,7 +3,7 @@
 
 enum FILE_FORMATS {
 FILEFORMAT_NULL,
-FILEFORMAT_100, //Mitsubishi Embroidery Format
+FILEFORMAT_100, //Toyota Embroidery Format
 FILEFORMAT_10O, //Toyota Embroidery Format
 FILEFORMAT_ART, //Bernina Embroidery Format
 FILEFORMAT_BMC, //Bitmap Cache Embroidery Format
