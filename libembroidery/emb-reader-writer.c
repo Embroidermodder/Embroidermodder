@@ -194,6 +194,13 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
         rw->writer = writeInb;
         return rw;
     }
+	if(!strcmp(ending, ".inf"))
+    {
+        EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
+        rw->reader = readInf;
+        rw->writer = writeInf;
+        return rw;
+    }
     if(!strcmp(ending, ".jef"))
     {
         EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));

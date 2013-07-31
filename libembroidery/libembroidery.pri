@@ -50,6 +50,7 @@ SOURCES += \
 ../libembroidery/format-gt.c  \
 ../libembroidery/format-hus.c \
 ../libembroidery/format-inb.c \
+../libembroidery/format-inf.c \
 ../libembroidery/format-jef.c \
 ../libembroidery/format-ksm.c \
 ../libembroidery/format-max.c \
@@ -134,6 +135,7 @@ HEADERS += \
 ../libembroidery/format-gt.h  \
 ../libembroidery/format-hus.h \
 ../libembroidery/format-inb.h \
+../libembroidery/format-inf.h \
 ../libembroidery/format-jef.h \
 ../libembroidery/format-ksm.h \
 ../libembroidery/format-max.h \

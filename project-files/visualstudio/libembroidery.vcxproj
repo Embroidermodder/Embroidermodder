@@ -124,6 +124,7 @@
     <ClCompile Include="..\..\libembroidery\format-gt.c" />
     <ClCompile Include="..\..\libembroidery\format-hus.c" />
     <ClCompile Include="..\..\libembroidery\format-inb.c" />
+    <ClCompile Include="..\..\libembroidery\format-inf.c" />
     <ClCompile Include="..\..\libembroidery\format-jef.c" />
     <ClCompile Include="..\..\libembroidery\format-ksm.c" />
     <ClCompile Include="..\..\libembroidery\format-max.c" />
@@ -205,6 +206,7 @@
     <ClInclude Include="..\..\libembroidery\format-gt.h" />
     <ClInclude Include="..\..\libembroidery\format-hus.h" />
     <ClInclude Include="..\..\libembroidery\format-inb.h" />
+    <ClInclude Include="..\..\libembroidery\format-inf.h" />
     <ClInclude Include="..\..\libembroidery\format-jef.h" />
     <ClInclude Include="..\..\libembroidery\format-ksm.h" />
     <ClInclude Include="..\..\libembroidery\format-max.h" />

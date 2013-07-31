@@ -30,6 +30,7 @@ extern "C" {
 #include "format-gt.h"
 #include "format-hus.h"
 #include "format-inb.h"
+#include "format-inf.h"
 #include "format-jef.h"
 #include "format-ksm.h"
 #include "format-max.h"

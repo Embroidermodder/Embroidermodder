@@ -124,4 +124,16 @@ int embThread_empty(EmbThreadList* pointer)
     return pointer == NULL;
 }
 
+void embThread_free(EmbThreadList* pointer)
+{
+    EmbThreadList *colors = pointer;
+    while(colors)
+    {
+        EmbThreadList* next = colors->next;
+        free(colors);
+        colors = next;
+    }
+	pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

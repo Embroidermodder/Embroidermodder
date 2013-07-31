@@ -28,6 +28,7 @@ EmbThread embThread_getRandom(void);
 EmbThread embThread_getAt(EmbThreadList* pointer, int num);
 int embThread_count(EmbThreadList* pointer);
 int embThread_empty(EmbThreadList* pointer);
+void embThread_free(EmbThreadList* pointer);
 
 #ifdef __cplusplus
 }

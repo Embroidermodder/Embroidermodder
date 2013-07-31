@@ -71,6 +71,28 @@ int binaryReadInt32BE(FILE* file)
     return (returnValue);
 }
 
+/* Big endian version */
+unsigned int binaryReadUInt32BE(FILE* file)
+{
+    unsigned int returnValue = fgetc(file) << 24;
+    returnValue |= fgetc(file) << 16;
+    returnValue |= fgetc(file) << 8;
+    returnValue |= fgetc(file);
+    return returnValue;
+}
+
+void binaryReadString(FILE* file, char *buffer, int maxLength)
+{
+	int i = 0;
+	while(i < maxLength)
+	{
+		buffer[i] = fgetc(file);
+		if(buffer[i] == '\0') break;
+		i++;
+	}
+}
+
+
 float binaryReadFloat(FILE* file)
 {
     union
@@ -107,6 +129,12 @@ void binaryWriteUShort(FILE* file, unsigned short data)
     fputc((data >> 8) & 0xFF, file);
 }
 
+void binaryWriteUShortBE(FILE* file, unsigned short data)
+{
+    fputc((data >> 8) & 0xFF, file);
+    fputc(data & 0xFF, file);
+}
+
 void binaryWriteInt(FILE* file, int data)
 {
     fputc(data & 0xFF, file);
@@ -121,6 +149,14 @@ void binaryWriteUInt(FILE* file, unsigned int data)
     fputc((data >> 8) & 0xFF, file);
     fputc((data >> 16) & 0xFF, file);
     fputc((data >> 24) & 0xFF, file);
+}
+
+void binaryWriteUIntBE(FILE* file, unsigned int data)
+{
+	fputc((data >> 24) & 0xFF, file);
+	fputc((data >> 16) & 0xFF, file);
+	fputc((data >> 8) & 0xFF, file);
+    fputc(data & 0xFF, file);
 }
 
 void binaryWriteFloat(FILE* file, float data)
