@@ -655,8 +655,12 @@ int MainWindow::validFileFormat(const QString& fileName)
     else if(fileName.toUpper().endsWith(".GT"))  type = FILEFORMAT_GT;
     else if(fileName.toUpper().endsWith(".HUS")) type = FILEFORMAT_HUS;
     else if(fileName.toUpper().endsWith(".INB")) type = FILEFORMAT_INB;
+    else if(fileName.toUpper().endsWith(".INF")) type = FILEFORMAT_INF;
     else if(fileName.toUpper().endsWith(".JEF")) type = FILEFORMAT_JEF;
     else if(fileName.toUpper().endsWith(".KSM")) type = FILEFORMAT_KSM;
+    else if(fileName.toUpper().endsWith(".MAX")) type = FILEFORMAT_MAX;
+    else if(fileName.toUpper().endsWith(".MIT")) type = FILEFORMAT_MIT;
+    else if(fileName.toUpper().endsWith(".NEW")) type = FILEFORMAT_NEW;
     else if(fileName.toUpper().endsWith(".PCD")) type = FILEFORMAT_PCD;
     else if(fileName.toUpper().endsWith(".PCM")) type = FILEFORMAT_PCM;
     else if(fileName.toUpper().endsWith(".PCQ")) type = FILEFORMAT_PCQ;
@@ -688,7 +692,7 @@ int MainWindow::validFileFormat(const QString& fileName)
 
 QString MainWindow::fileFormatFilterString()
 {
-    QString supported = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.jef *.ksm *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
+    QString supported = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.inf *.jef *.ksm *.max *.mit *.new *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
     QString all = "All Files (*);;"   \
     "100 (*.100);;"     \
     "10o (*.10o);;"     \
@@ -715,8 +719,12 @@ QString MainWindow::fileFormatFilterString()
     "GT (*.gt);;"       \
     "HUS (*.hus);;"     \
     "INB (*.inb);;"     \
+    "INF (*.inf);;"     \
     "JEF (*.jef);;"     \
     "KSM (*.ksm);;"     \
+    "MAX (*.max);;"     \
+    "MIT (*.mit);;"     \
+    "NEW (*.new);;"     \
     "PCD (*.pcd);;"     \
     "PCM (*.pcm);;"     \
     "PCQ (*.pcq);;"     \

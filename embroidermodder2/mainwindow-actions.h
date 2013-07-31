@@ -28,8 +28,12 @@ FILEFORMAT_GNC, //Great Notions Embroidery Format
 FILEFORMAT_GT,  //Gold Thread Embroidery Format
 FILEFORMAT_HUS, //Husqvarna Viking Embroidery Format
 FILEFORMAT_INB, //Inbro Embroidery Format
+FILEFORMAT_INF, //Embroidery Color Format
 FILEFORMAT_JEF, //Janome Embroidery Format
 FILEFORMAT_KSM, //Pfaff Embroidery Format
+FILEFORMAT_MAX, //Pfaff Embroidery Format
+FILEFORMAT_MIT, //Mitsubishi Embroidery Format
+FILEFORMAT_NEW, //Ameco Embroidery Format
 FILEFORMAT_PCD, //Pfaff Embroidery Format
 FILEFORMAT_PCM, //Pfaff Embroidery Format
 FILEFORMAT_PCQ, //Pfaff Embroidery Format
