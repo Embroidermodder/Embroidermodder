@@ -9,6 +9,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValAppendPromptHistory = engine->newFunction(javaAppendPromptHistory); engine->globalObject().setProperty("appendPromptHistory", scriptValAppendPromptHistory);
     QScriptValue scriptValEnablePromptRapidFire = engine->newFunction(javaEnablePromptRapidFire); engine->globalObject().setProperty("enablePromptRapidFire", scriptValEnablePromptRapidFire);
     QScriptValue scriptValDisablePromptRapidFire = engine->newFunction(javaDisablePromptRapidFire); engine->globalObject().setProperty("disablePromptRapidFire", scriptValDisablePromptRapidFire);
+    QScriptValue scriptValInitCommand = engine->newFunction(javaInitCommand); engine->globalObject().setProperty("initCommand", scriptValInitCommand);
     QScriptValue scriptValEndCommand = engine->newFunction(javaEndCommand); engine->globalObject().setProperty("endCommand", scriptValEndCommand);
     QScriptValue scriptValHelp = engine->newFunction(javaHelp); engine->globalObject().setProperty("help", scriptValHelp);
     QScriptValue scriptValUndo = engine->newFunction(javaUndo); engine->globalObject().setProperty("undo", scriptValUndo);

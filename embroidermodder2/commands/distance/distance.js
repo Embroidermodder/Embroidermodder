@@ -10,6 +10,7 @@ global.y2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     global.x1 = NaN;
     global.y1 = NaN;
     global.x2 = NaN;

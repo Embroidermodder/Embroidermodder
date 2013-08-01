@@ -23,6 +23,7 @@ global.mode_ELLIPSE_ROTATION          = 2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     global.mode = global.mode_MAJORDIAMETER_MINORRADIUS;
     global.x1      = NaN;
     global.y1      = NaN;

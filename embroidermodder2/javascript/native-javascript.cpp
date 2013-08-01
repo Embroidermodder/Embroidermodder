@@ -83,6 +83,14 @@ QScriptValue javaDisablePromptRapidFire(QScriptContext* context, QScriptEngine* 
     return QScriptValue();
 }
 
+QScriptValue javaInitCommand(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("initCommand() requires zero arguments");
+
+    mainWin()->nativeInitCommand();
+    return QScriptValue();
+}
+
 QScriptValue javaEndCommand(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("endCommand() requires zero arguments");

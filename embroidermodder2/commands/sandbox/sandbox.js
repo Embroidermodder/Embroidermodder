@@ -8,6 +8,7 @@ global.test2;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     selectAll();
     rotateSelected(0,0,90);
     endCommand();

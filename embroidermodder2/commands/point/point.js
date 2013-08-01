@@ -7,6 +7,7 @@ global.firstRun;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     global.firstRun = true;
     setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?");
     appendPromptHistory();

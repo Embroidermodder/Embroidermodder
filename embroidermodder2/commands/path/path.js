@@ -13,6 +13,7 @@ global.prevY;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     global.firstRun = true;
     global.firstX = NaN;
     global.firstY = NaN;

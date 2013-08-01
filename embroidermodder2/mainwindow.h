@@ -587,6 +587,7 @@ public:
     void nativeAppendPromptHistory    (const QString& txt);
     void nativeEnablePromptRapidFire  ();
     void nativeDisablePromptRapidFire ();
+    void nativeInitCommand            ();
     void nativeEndCommand             ();
 
     void nativeHelp                   ();

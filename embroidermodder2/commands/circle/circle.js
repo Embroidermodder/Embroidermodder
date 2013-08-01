@@ -24,6 +24,7 @@ global.mode_TTR    = 4;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     global.mode = global.mode_1P_RAD;
     global.x1 = NaN;
     global.y1 = NaN;

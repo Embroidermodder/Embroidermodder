@@ -23,6 +23,7 @@ global.mode_RAPID   = 3;
 //      Use it to reset variables so they are ready to go.
 function main()
 {
+    initCommand();
     global.text = "";
     global.textX = NaN;
     global.textY = NaN;

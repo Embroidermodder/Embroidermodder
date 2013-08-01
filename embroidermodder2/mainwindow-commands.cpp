@@ -1013,6 +1013,12 @@ void MainWindow::nativeDisablePromptRapidFire()
     disablePromptRapidFire();
 }
 
+void MainWindow::nativeInitCommand()
+{
+    View* gview = activeView();
+    if(gview) gview->clearRubberRoom();
+}
+
 void MainWindow::nativeEndCommand()
 {
     View* gview = activeView();
