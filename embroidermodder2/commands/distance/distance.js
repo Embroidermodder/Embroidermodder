@@ -27,6 +27,9 @@ function click(x, y)
     {
         global.x1 = x;
         global.y1 = y;
+        addRubber("LINE");
+        setRubberMode("LINE");
+        setRubberPoint("LINE_START", global.x1, global.y1);
         appendPromptHistory();
         setPromptPrefix("Specify second point: ");
     }
@@ -65,6 +68,9 @@ function prompt(str)
         {
             global.x1 = Number(strList[0]);
             global.y1 = Number(strList[1]);
+            addRubber("LINE");
+            setRubberMode("LINE");
+            setRubberPoint("LINE_START", global.x1, global.y1);
             setPromptPrefix("Specify second point: ");
         }
     }
