@@ -44,6 +44,13 @@ int readPhb(EmbPattern* pattern, const char* fileName)
     binaryReadInt32(file); /* bytes to end of file */
     binaryReadInt32(file);
     binaryReadByte(file);
+
+    binaryReadInt16(file);
+    binaryReadInt16(file);
+    binaryReadInt16(file);
+    binaryReadInt16(file);
+    binaryReadInt16(file);
+    binaryReadInt16(file);
     readPecStitches(pattern, file);
 
     embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
