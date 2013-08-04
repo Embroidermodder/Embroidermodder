@@ -1,4 +1,3 @@
-#include "format-pec.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +7,8 @@
 
 void readPecStitches(EmbPattern* pattern, FILE* file)
 {
+    EmbStitchList *tempList;
+    EmbRect rect;
     int stitchNumber = 0;
     while(!feof(file))
     {
@@ -72,9 +73,13 @@ void pecEncodeJump(FILE* file, int x, int types)
     int outputVal = abs(x) & 0x7FF;
     unsigned int orPart = 0x80;
     if(types & TRIM)
+    {
         orPart |= 0x20;
+    }
     else if(types & JUMP)
+    {
         orPart |= 0x10;
+    }
 
     if(x < 0)
     {
@@ -105,7 +110,7 @@ int readPec(EmbPattern* pattern, const char* fileName)
     }
     fseek(file, 0x38, SEEK_SET);
     colorChanges = binaryReadByte(file);
-    for(i = 0; i < colorChanges; i++)
+    for(i = 0; i <= colorChanges; i++)
     {
         embPattern_addThread(pattern, pecThreads[binaryReadByte(file) % 65]);
     }
@@ -125,24 +130,16 @@ int readPec(EmbPattern* pattern, const char* fileName)
     binaryReadInt16(file); /* x size */
     binaryReadInt16(file); /* y size */
 
-    binaryReadInt16(file); /* unknown */
-    binaryReadInt16(file); /* unknown */
-    binaryReadInt16(file); /* hoop size? */
-    binaryReadInt16(file); /* hoop size? */
+    binaryReadInt16(file); /* 0x01E0 */
+    binaryReadInt16(file); /* 0x01B0 */
+    binaryReadInt16(file); /* distance left from start */
+    binaryReadInt16(file); /* distance up from start */
 
     /* Begin Stitch Data */
     /* 0x21C */
     /*unsigned int end = graphicsOffset + 0x208; */
     readPecStitches(pattern, file);
-    /* Reading Images */
-    fseek(file, graphicsOffset + 0x208, SEEK_SET);
-    /*
-    unsigned char* imageData = new unsigned char[(pattern->threadList.size() + 1) * 228];
-    binaryReadBytes(file, imageData, (pattern->threadList.size() + 1) * 228);
-    var colors = new List<Embroidery.Shared.Color> {Embroidery.Shared.Color.Black};
-    colors.AddRange(pattern.ColorList.Select(t => t.Color));
-    ReadImages(imageData, colors);
-    */
+
     embPattern_flipVertical(pattern);
     fclose(file);
     return 1;
@@ -163,19 +160,23 @@ void PecEncode(FILE* file, EmbPattern* p)
         deltaY = roundDouble(s.yy - thisY);
         thisX += (double)deltaX;
         thisY += (double)deltaY;
-		
-		if(s.flags & STOP)
+        
+        if(s.flags & STOP)
         {
             pecEncodeStop(file, stopCode);
             if(stopCode == 2)
+            {
                 stopCode = 1;
+            }
             else
+            {
                 stopCode = 2;
+            }
         }
         else if(s.flags & END)
         {
             binaryWriteByte(file, 0xFF);
-			break;
+            break;
         }
         else if(deltaX < 63 && deltaX > -64 && deltaY < 63 && deltaY > -64 && (!(s.flags & (JUMP | TRIM))))
         {
@@ -191,10 +192,40 @@ void PecEncode(FILE* file, EmbPattern* p)
     }
 }
 
+void clearImage(char image[38][48])
+{
+    memcpy(image, imageWithFrame, 48*38);
+}
+
+void writeImage(FILE *file, char image[][48])
+{
+    int i, j;
+    for(i = 0; i < 38; i++)
+    {
+        for(j = 0; j < 6; j++)
+        {
+            int offset = j * 8;
+            char output = 0;
+            output |= (image[i][offset] != 0);
+            output |= (image[i][offset + 1] != 0) << 1;
+            output |= (image[i][offset + 2] != 0) << 2;
+            output |= (image[i][offset + 3] != 0) << 3;
+            output |= (image[i][offset + 4] != 0) << 4;
+            output |= (image[i][offset + 5] != 0) << 5;
+            output |= (image[i][offset + 6] != 0) << 6;
+            output |= (image[i][offset + 7] != 0) << 7;
+            binaryWriteByte(file, output);
+        }
+    }
+}
+
 void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 {
+    EmbStitchList *tempStitches;
     EmbRect bounds;
-    int i, flen, currentThreadCount, graphicsOffsetLocation, graphicsOffsetValue;
+    char image[38][48];
+    int i, flen, currentThreadCount, graphicsOffsetLocation, graphicsOffsetValue, height, width;
+    double xFactor, yFactor;
     const char* forwardSlashPos = strrchr(fileName, '/');
     const char* backSlashPos = strrchr(fileName, '\\');
     const char* dotPos = strrchr(fileName, '.');
@@ -239,7 +270,7 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
         binaryWriteByte(file, 0x20);
     }
     currentThreadCount = embThread_count(pattern->threadList);
-    binaryWriteByte(file, currentThreadCount);
+    binaryWriteByte(file, currentThreadCount-1);
 
     for(i = 0; i < currentThreadCount; i++)
     {
@@ -262,18 +293,21 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     binaryWriteByte(file, 0xF0);
 
     bounds = embPattern_calcBoundingBox(pattern);
+
+    height = roundDouble(embRect_height(bounds));
+    width = roundDouble(embRect_width(bounds));
     /* write 2 byte x size */
-    binaryWriteShort(file, (short)embRect_width(bounds));
+    binaryWriteShort(file, (short)width);
     /* write 2 byte y size */
-    binaryWriteShort(file, (short)embRect_height(bounds));
+    binaryWriteShort(file, (short)height);
 
     /* Write 4 miscellaneous int16's */
     binaryWriteShort(file, 0x1E0);
     binaryWriteShort(file, 0x1B0);
 
-    /* hoop size */
-    binaryWriteShort(file, 0x9090); /* BUG: KNOWN ISSUE HOOP SIZE NOT SET PROPERLY */
-    binaryWriteShort(file, 0x9090); /* BUG: KNOWN ISSUE HOOP SIZE NOT SET PROPERLY */
+    binaryWriteUShortBE(file, (short)(0x9000 | -roundDouble(bounds.left)));
+    binaryWriteUShortBE(file, (short)(0x9000 | -roundDouble(bounds.top)));
+
     PecEncode(file, pattern);
     graphicsOffsetValue = ftell(file) - graphicsOffsetLocation + 2;
     fseek(file, graphicsOffsetLocation, SEEK_SET);
@@ -283,14 +317,41 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     binaryWriteByte(file, ((graphicsOffsetValue >> 16) & 0xFF));
 
     fseek(file, 0x00, SEEK_END);
+
     /*TODO: Write each colors image, not just 0's */
-    for(i = 0; i < currentThreadCount + 1; i++)
+    /* Writing all colors */
+    clearImage(image);
+    tempStitches = pattern->stitchList;
+
+    yFactor = 32.0 / height;
+    xFactor = 42.0 / width;
+    while(tempStitches->next)
     {
-        int j;
-        for(j = 0; j < 228; j++)
+        int x = roundDouble((tempStitches->stitch.xx - bounds.left) * xFactor) + 3;
+        int y = roundDouble((tempStitches->stitch.yy - bounds.top) * yFactor) + 3;
+        image[y][x] = 1;
+        tempStitches = tempStitches->next;
+    }
+    writeImage(file, image);
+    
+    /* Writing each individual color */
+    tempStitches = pattern->stitchList;
+    for(i = 0; i < currentThreadCount; i++)
+    {
+        clearImage(image);
+        while(tempStitches->next)
         {
-            binaryWriteByte(file, 0x00);
+            int x = roundDouble((tempStitches->stitch.xx - bounds.left) * xFactor) + 3;
+            int y = roundDouble((tempStitches->stitch.yy - bounds.top) * yFactor) + 3;
+            if(tempStitches->stitch.flags & STOP) 
+            {
+                tempStitches = tempStitches->next;
+                break;
+            }
+            image[y][x] = 1;
+            tempStitches = tempStitches->next;
         }
+        writeImage(file, image);
     }
 }
 
@@ -305,7 +366,7 @@ int writePec(EmbPattern* pattern, const char* fileName)
         return 0;
     }
     embPattern_fixColorCount(pattern);
-    embPattern_correctForMaxStitchLength(pattern,12.7, 12.7);
+    embPattern_correctForMaxStitchLength(pattern,12.7, 204.7);
     embPattern_scale(pattern, 10.0);
     
     
