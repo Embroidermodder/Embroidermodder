@@ -19,6 +19,8 @@ EmbPattern* embPattern_create()
     p->stitchList = 0;
     p->threadList = 0;
 
+    p->hoop.height = 0.0;
+    p->hoop.width = 0.0;
     p->arcObjList = 0;
     p->circleObjList = 0;
     p->ellipseObjList = 0;
@@ -164,26 +166,28 @@ void embPattern_changeColor(EmbPattern* p, int index)
 
 EmbPattern* embPattern_read(const char* fileName)
 {
-    /* TODO: Review this function. Where is reader memory freed? */
     EmbPattern* p = (EmbPattern*)malloc(sizeof(EmbPattern));
     EmbReaderWriter* reader = 0;
     reader = embReaderWriter_getByFileName(fileName);
     if(reader->reader(p, fileName))
     {
+        free(reader);
         return p;
     }
+    free(reader);
     return NULL;
 }
 
 int embPattern_write(EmbPattern* p, const char *fileName)
 {
-    /* TODO: Review this function. Where is writer memory freed? */
     EmbReaderWriter* writer = 0;
     writer = embReaderWriter_getByFileName(fileName);
     if(writer->writer(p, fileName))
     {
+        free(writer);
         return 1;
     }
+    free(writer);
     return 0;
 }
 
@@ -488,28 +492,46 @@ void embPattern_center(EmbPattern* p)
 
 void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 {
-    /*EmbReaderWriter* colorfile;
+    char hasRead = 0;
+    EmbReaderWriter* colorfile;
     const char* dotPos = strrchr(fileName, '.');
 
-    char* extractName = (char *)malloc(dotPos - fileName);
+    char* extractName = (char *)malloc(dotPos - fileName + 4);
     extractName = memcpy(extractName, fileName, dotPos - fileName);
-
-    colorfile = embReaderWriter_getByFileName(strcat(extractName,".edr"));
-    if(!colorfile) return; //Ensure the pointer is valid
-    if(!colorfile->reader(p, strcat(extractName,".edr")))
+    extractName[dotPos - fileName] = '\0';
+    strcat(extractName,".edr");
+    colorfile = embReaderWriter_getByFileName(extractName);
+    if(colorfile) hasRead = colorfile->reader(p, extractName);
+    if(!hasRead)
     {
         free(colorfile);
-        colorfile = embReaderWriter_getByFileName(strcat(extractName,".rgb"));
-        if(!colorfile->reader(p, strcat(extractName,".rgb")))
-        {
-            free(colorfile);
-            colorfile = embReaderWriter_getByFileName(strcat(extractName,".col"));
-            colorfile->reader(p, strcat(extractName,".col"));
-        }
+        extractName = memcpy(extractName, fileName, dotPos - fileName);
+        extractName[dotPos - fileName] = '\0';
+        strcat(extractName,".rgb");
+        colorfile = embReaderWriter_getByFileName(extractName);
+        if(colorfile) hasRead = colorfile->reader(p, extractName);
+    }
+    if(!hasRead)
+    {
+        free(colorfile);
+        extractName = memcpy(extractName, fileName, dotPos - fileName);
+        extractName[dotPos - fileName] = '\0';
+        strcat(extractName,".col");
+        colorfile = embReaderWriter_getByFileName(extractName);
+        colorfile->reader(p, extractName);
+        if(colorfile) hasRead = colorfile->reader(p, extractName);
+    }
+    if(!hasRead)
+    {
+        free(colorfile);
+        extractName = memcpy(extractName, fileName, dotPos - fileName);
+        extractName[dotPos - fileName] = '\0';
+        strcat(extractName,".inf");
+        colorfile = embReaderWriter_getByFileName(extractName);
+        if(colorfile) colorfile->reader(p, extractName);
     }
     free(colorfile);
     free(extractName);
-    */
 }
 
 void embPattern_free(EmbPattern* p)

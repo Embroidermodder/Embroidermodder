@@ -49,8 +49,6 @@ void husExpand(unsigned char* input, unsigned char* output, int compressedSize, 
     if(_180) memset(_180, 0, (_141)*sizeof(unsigned char));
     _181 = (unsigned char*)malloc(sizeof(unsigned char)*(_152));
     if(_181) memset(_181, 0, (_152)*sizeof(unsigned char));
-    inputBuffer = (unsigned char*)malloc(sizeof(unsigned char)*(bufferSize));
-    if(inputBuffer) memset(inputBuffer, 0,(bufferSize)*sizeof(unsigned char));
 
     if( _166 == NULL ||
         _189 == NULL ||
@@ -77,7 +75,6 @@ void husExpand_cleanup()
     free(_181);
     free(_240);
     free(_241);
-    /* free(inputBuffer); */
 }
 
 void husExpand_253(short _254,short _220,short _221)

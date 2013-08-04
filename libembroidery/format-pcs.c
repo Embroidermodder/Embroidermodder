@@ -54,6 +54,19 @@ int readPcs(EmbPattern* pattern, const char* fileName)
     version = binaryReadByte(file);
     hoopSize = binaryReadByte(file);  /* 0 for PCD, 1 for PCQ (MAXI), 2 for PCS with small hoop(80x80), */
                                       /* and 3 for PCS with large hoop (115x120) */
+
+    switch(hoopSize)
+    {
+        case 2:
+            pattern->hoop.width = 80.0;
+            pattern->hoop.height = 80.0;
+            break;
+        case 3:
+            pattern->hoop.width = 115;
+            pattern->hoop.height = 120.0;
+            break;
+    }
+
     colorCount = binaryReadUInt16(file);
 
     for(i = 0; i < colorCount; i++)

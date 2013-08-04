@@ -8,24 +8,25 @@
 extern "C" {
 #endif
 
-#include "emb-stitch.h"
-#include "emb-thread.h"
-
 #include "emb-arc.h"
 #include "emb-circle.h"
 #include "emb-ellipse.h"
+#include "emb-hoop.h"
 #include "emb-line.h"
-#include "emb-settings.h"
 #include "emb-path.h"
 #include "emb-point.h"
 #include "emb-polygon.h"
 #include "emb-polyline.h"
 #include "emb-rect.h"
+#include "emb-settings.h"
 #include "emb-spline.h"
+#include "emb-stitch.h"
+#include "emb-thread.h"
 
 typedef struct EmbPattern_
 {
     EmbSettings settings;
+    EmbHoop hoop;
     EmbStitchList* stitchList;
     EmbThreadList* threadList;
 

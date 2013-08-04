@@ -136,15 +136,15 @@ int readHus(EmbPattern* pattern, const char* fileName)
         embPattern_addThread(pattern, husThreads[pos]);
     }
 
-    attributeData = (unsigned char*)malloc(sizeof(unsigned char)*(xOffset - attributeOffset));
+    attributeData = (unsigned char*)malloc(sizeof(unsigned char)*(xOffset - attributeOffset + 1));
     binaryReadBytes(file, attributeData, xOffset - attributeOffset);
     attributeDataDecompressed = husDecompressData(attributeData, xOffset - attributeOffset, numberOfStitches);
 
-    xData = (unsigned char*)malloc(sizeof(unsigned char)*(yOffset - xOffset));
+    xData = (unsigned char*)malloc(sizeof(unsigned char)*(yOffset - xOffset + 1));
     binaryReadBytes(file, xData, yOffset - xOffset);
     xDecompressed = husDecompressData(xData, yOffset - xOffset, numberOfStitches);
 
-    yData = (unsigned char*)malloc(sizeof(unsigned char)*(fileLength - yOffset));
+    yData = (unsigned char*)malloc(sizeof(unsigned char)*(fileLength - yOffset + 1));
     binaryReadBytes(file, yData, fileLength - yOffset);
     yDecompressed = husDecompressData(yData, fileLength - yOffset, numberOfStitches);
 
@@ -155,7 +155,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
                                 husDecodeStitchType(attributeDataDecompressed[i]), 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
-
+    free(stringVal);
 	free(xData);
 	free(xDecompressed);
 	free(yData);

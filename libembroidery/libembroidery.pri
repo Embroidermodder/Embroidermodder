@@ -90,6 +90,7 @@ HEADERS += \
 ../libembroidery/emb-compress.h \
 ../libembroidery/emb-color.h \
 ../libembroidery/emb-ellipse.h \
+../libembroidery/emb-hoop.h \
 ../libembroidery/emb-layer.h \
 ../libembroidery/emb-line.h \
 ../libembroidery/emb-path.h \

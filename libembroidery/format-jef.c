@@ -7,6 +7,46 @@ char jefDecode(unsigned char inputByte)
 {
     return (inputByte >= 0x80) ? (char) ((-~inputByte) - 1) : (char) inputByte;
 }
+#define HOOP_126X110 0
+#define	HOOP_110X110 1
+#define	HOOP_50X50 2
+#define	HOOP_140X200 3
+#define HOOP_230X200 4
+
+int jefGetHoopSize(int width, int height)
+{
+    if(width <  50 && height <  50) { return HOOP_50X50; }
+    if(width < 110 && height < 110) { return HOOP_110X110; }
+    if(width < 140 && height < 200) { return HOOP_140X200; }
+    return ((int) HOOP_110X110);
+}
+
+void jefSetHoopFromId(EmbPattern *pattern, int hoopCode)
+{
+    switch(hoopCode)
+    {
+        case HOOP_126X110:
+            pattern->hoop.height = 126.0;
+            pattern->hoop.width = 110.0;
+            break;
+        case HOOP_50X50:
+            pattern->hoop.height = 50.0;
+            pattern->hoop.width = 50.0;
+            break;
+        case HOOP_110X110:
+           pattern->hoop.height = 110.0;
+            pattern->hoop.width = 110.0;
+            break;
+        case HOOP_140X200:
+            pattern->hoop.height = 140.0;
+            pattern->hoop.width = 200.0;
+            break;
+        case HOOP_230X200:
+            pattern->hoop.height = 230.0;
+            pattern->hoop.width = 200.0;
+            break;
+    }
+}
 
 int readJef(EmbPattern* pattern, const char* fileName)
 {
@@ -37,6 +77,7 @@ int readJef(EmbPattern* pattern, const char* fileName)
     numberOfColors = binaryReadInt32(file);
     numberOfStitchs = binaryReadInt32(file);
     hoopSize = binaryReadInt32(file);
+    jefSetHoopFromId(pattern, hoopSize);
     hoopOffsetLeft = binaryReadInt32(file);
     hoopOffsetTop = binaryReadInt32(file);
     hoopOffsetRight = binaryReadInt32(file);
@@ -144,18 +185,6 @@ void jefEncode(FILE* file, float x, float y, int stitchType)
         binaryWriteByte(file, dx);
         binaryWriteByte(file, dy);
     }
-}
-
-#define	HOOP_110X110 1
-#define	HOOP_50X50 2
-#define	HOOP_140X200 3
-
-int jefGetHoopSize(int width, int height)
-{
-    if(width <  50 && height <  50) { return HOOP_50X50; }
-    if(width < 110 && height < 110) { return HOOP_110X110; }
-    if(width < 140 && height < 200) { return HOOP_140X200; }
-    return ((int) HOOP_110X110);
 }
 
 int writeJef(EmbPattern* pattern, const char* fileName)

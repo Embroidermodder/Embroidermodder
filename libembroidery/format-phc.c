@@ -5,7 +5,7 @@
 
 int readPhc(EmbPattern* pattern, const char* fileName)
 {
-    int colorChanges, version, fileLength, bytesInSection2;
+    int colorChanges, version, bytesInSection2;
     unsigned short pecOffset, bytesInSection, bytesInSection3;
     char pecAdd;
     FILE* file = fopen(fileName, "rb");
@@ -22,12 +22,12 @@ int readPhc(EmbPattern* pattern, const char* fileName)
 
     for(i = 0; i < colorChanges; i++)
     {
-        EmbThread t = pecThreads[binaryReadByte(file)];
+        EmbThread t = pecThreads[(int)binaryReadByte(file)];
         embPattern_addThread(pattern, t);
     }
     fseek(file, 0x2B, SEEK_SET);
     pecAdd = binaryReadByte(file);
-    fileLength = binaryReadUInt32(file);
+    binaryReadUInt32(file); /* file length */
     pecOffset = binaryReadUInt16(file);
     fseek(file, pecOffset + pecAdd, SEEK_SET);
     bytesInSection = binaryReadUInt16(file);
