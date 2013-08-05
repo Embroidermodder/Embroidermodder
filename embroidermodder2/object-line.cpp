@@ -129,6 +129,27 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     updateRubber(painter);
 
     painter->drawLine(line());
+
+    /* TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
+    if(true)
+    {
+        painter->setPen(objectColor().darker(150));
+        QPainterPathStroker stroker;
+        stroker.setWidth(0.35);
+        stroker.setCapStyle(Qt::RoundCap);
+        stroker.setJoinStyle(Qt::RoundJoin);
+        QPainterPath realPath = stroker.createStroke(path());
+        painter->drawPath(realPath);
+
+        QLinearGradient grad(mapFromScene(objectMidPoint()), mapFromScene(objectEndPoint1()));
+        grad.setColorAt(0, objectColor());
+        grad.setColorAt(1, objectColor().darker(150));
+        grad.setSpread(QGradient::ReflectSpread);
+
+        if(objScene->property(ENABLE_LWT).toBool())
+            painter->fillPath(realPath, QBrush(grad));
+    }
+    */
 }
 
 void LineObject::updateRubber(QPainter* painter)
