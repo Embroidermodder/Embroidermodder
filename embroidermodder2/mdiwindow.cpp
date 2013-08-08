@@ -127,7 +127,7 @@ bool MDIWindow::loadFile(const QString &fileName)
     {
         QMessageBox::warning(this, tr("Error reading pattern"), tr(qPrintable(readError)));
     }
-
+    /* embPattern_addPointObjectAbs(); */
     if(readSuccessful)
     {
         int stitchCount = embStitch_count(p->stitchList);

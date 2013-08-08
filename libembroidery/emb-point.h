@@ -38,9 +38,13 @@ typedef struct EmbPointObjectList_
 } EmbPointObjectList;
 
 EmbPointObject embPointObj_make(double x, double y);
+EmbPoint embPoint_make(double x, double y);
 EmbPointObject* embPointObj_create(double x, double y);
+void embPointObjectList_free(EmbPointObjectList* list);
+void embPointList_free(EmbPointList* list);
 
-void embPoint_add(EmbPointObjectList* pointer, EmbPointObject data);
+EmbPointObjectList* embPointObject_add(EmbPointObjectList* pointer, EmbPointObject data);
+EmbPointList* embPoint_add(EmbPointList* pointer, EmbPoint data);
 int embPoint_count(EmbPointObjectList* pointer);
 int embPoint_empty(EmbPointObjectList* pointer);
 

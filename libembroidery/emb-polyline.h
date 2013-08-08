@@ -10,22 +10,21 @@ extern "C" {
 
 typedef struct EmbPolylineObject_
 {
-    EmbPoint polylinePoint;
-    EmbPointList* nextPolylinePoint;
-
-    /* Properties */
+    EmbPointList* pointList;
     int lineType;
     EmbColor color;
 } EmbPolylineObject;
 
 typedef struct EmbPolylineObjectList_
 {
-    EmbPolylineObject polylineObj;
+    EmbPolylineObject* polylineObj;
     struct EmbPolylineObjectList_* next;
 } EmbPolylineObjectList;
 
-int embPolyline_count(EmbPolylineObjectList* pointer);
-int embPolyline_empty(EmbPolylineObjectList* pointer);
+EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data);
+EmbPointObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
+int embPolylineObjectList_count(EmbPolylineObjectList* pointer);
+int embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
 
 #ifdef __cplusplus
 }
