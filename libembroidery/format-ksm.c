@@ -1,4 +1,5 @@
 #include "format-ksm.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 
 void ksmEncode(unsigned char *b, char dx, char dy, int flags) {
@@ -63,11 +64,16 @@ int writeKsm(EmbPattern* pattern, const char* fileName)
     EmbStitchList *pointer;
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;
+    int i;
     unsigned char b[4];
     file = fopen(fileName, "wb");
     if(file == 0)
     {
         return 0;
+    }
+    for(i = 0; i < 0x80; i++)
+    {
+        binaryWriteInt(file, 0);
     }
     /* write stitches */
     xx = yy = 0;

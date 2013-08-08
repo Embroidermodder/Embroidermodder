@@ -104,6 +104,42 @@ void embPattern_fixColorCount(EmbPattern* p)
     */
 }
 
+void moveStitchListToPolyline(EmbPattern* p)
+{
+    EmbStitchList* stitches = p->stitchList;
+    EmbPolylineObjectList* currentList;
+    while(stitches)
+    {
+        EmbPolylineObject* currentPolyline = (EmbPolylineObject *) malloc(sizeof(EmbPolylineObject));
+        currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
+        currentPolyline->color = embThread_getAt(p->threadList, stitches->stitch.color).color;
+        EmbPointList* currentPointList = (EmbPointList *) malloc(sizeof(EmbPointList));
+        currentPolyline->pointList = currentPointList;
+        while(stitches)
+        {
+            currentPointList = embPoint_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
+            if(stitches->stitch.flags & (STOP | TRIM))
+            {
+                break;
+            }
+            stitches = stitches->next;
+        }
+        if(!p->polylineObjList)
+        {
+            currentList = embPolylineObjectList_create(currentPolyline);
+            p->polylineObjList = currentList;
+        }
+        else
+        {
+            currentList = embPolylineObjectList_add(currentList, currentPolyline);
+        }
+        if(stitches && stitches->next)
+        {
+            stitches = stitches->next;
+        }
+    }
+}
+
 /* Three routines to add a stitch to the pattern depending on format... */
 void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex)
 {
@@ -111,8 +147,11 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 
     if(flags & END)
     {
+
         embPattern_fixColorCount(p);
+
         /* HideStitchesOverLength(127); */
+        moveStitchListToPolyline(p);
     }
 
     if((flags & STOP) && embStitch_empty(p->stitchList))
@@ -223,6 +262,7 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     EmbPolygonObjectList* pogObjList;
     EmbPoint pogPoint;
     EmbPolylineObjectList* polObjList;
+    EmbPointList* polyLinePointList;
     EmbPoint polPoint;
     EmbRectObjectList* rObjList;
     EmbRect rect;
@@ -238,7 +278,7 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     embLine_empty(p->lineObjList) &&
     embPoint_empty(p->pointObjList) &&
     embPolygon_empty(p->polygonObjList) &&
-    embPolyline_empty(p->polylineObjList) &&
+    embPolylineObjectList_empty(p->polylineObjList) &&
     embRect_empty(p->rectObjList) &&
     embSpline_empty(p->splineObjList))
     {
@@ -329,9 +369,14 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     polObjList = p->polylineObjList;
     while(polObjList)
     {
-        polPoint = polObjList->polylineObj.polylinePoint;
-        /* TODO: embPattern_calcBoundingBox for polylines */
+        polyLinePointList = polObjList->polylineObj->pointList;
+        while(polyLinePointList)
+        {
+            polPoint = polyLinePointList->point;
+            /* TODO: embPattern_calcBoundingBox for polylines */
 
+            polyLinePointList = polyLinePointList->next;
+        }
         polObjList = polObjList->next;
     }
 
@@ -650,6 +695,7 @@ void embPattern_free(EmbPattern* p)
     while(thisPolylineObjList)
     {
         nextPolylineObjList = thisPolylineObjList->next;
+        embPointList_free(thisPolylineObjList->polylineObj->pointList);
         free(thisPolylineObjList);
         thisPolylineObjList = nextPolylineObjList;
     }
@@ -741,7 +787,7 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
     }
     else
     {
-        embPoint_add(p->lastPointObj, pointObj);
+        embPointObj_add(p->lastPointObj, pointObj);
         p->lastPointObj = p->lastPointObj->next;
     }
 }

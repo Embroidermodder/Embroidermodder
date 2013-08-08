@@ -1,6 +1,24 @@
 #include "emb-polyline.h"
 
-int embPolyline_count(EmbPolylineObjectList* pointer)
+EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
+{
+    EmbPolylineObjectList* heapPointObj = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    heapPointObj->polylineObj = data;
+    heapPointObj->next = 0;
+    return heapPointObj;
+}
+
+EmbPointObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
+{
+    pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    pointer = pointer->next;
+    pointer->polylineObj = data;
+    pointer->next = 0;\
+
+    return pointer;
+}
+
+int embPolylineObjectList_count(EmbPolylineObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -12,7 +30,7 @@ int embPolyline_count(EmbPolylineObjectList* pointer)
     return i;
 }
 
-int embPolyline_empty(EmbPolylineObjectList* pointer)
+int embPolylineObjectList_empty(EmbPolylineObjectList* pointer)
 {
     return pointer == 0;
 }
