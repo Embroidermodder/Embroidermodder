@@ -316,9 +316,12 @@ void MainWindow::tipOfTheDay()
 
     wizardTipOfTheDay = new QWizard(this);
     wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
+    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
+    wizardTipOfTheDay->setMinimumSize(550, 400);
 
     QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
-    page->setTitle("Did you know...");
+
+    ImageWidget* imgBanner = new ImageWidget("images/did-you-know.png", wizardTipOfTheDay);
 
     if(settings_general_current_tip >= listTipOfTheDay.size())
         settings_general_current_tip = 0;
@@ -331,6 +334,8 @@ void MainWindow::tipOfTheDay()
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
     QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
+    layout->addWidget(imgBanner);
+    layout->addStrut(1);
     layout->addWidget(labelTipOfTheDay);
     layout->addStretch(1);
     layout->addWidget(checkBoxTipOfTheDay);

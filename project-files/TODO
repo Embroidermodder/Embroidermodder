@@ -11,7 +11,7 @@ DONE - Undo/Redo (rt)
 DONE - Cut/Copy/Paste
 TODO - Rotation (rt)
 WIP - Saving DST/PES/JEF (varga)
-TODO - Icons: theme, tipoftheday, qselect (rt)
+TODO - Icons: theme, qselect (rt)
 WIP - Saving CSV/SVG (rt)
 
 //====================
@@ -72,7 +72,6 @@ TODO - CAD Command: Chamfer
 TODO - CAD Command: Split
 TODO - CAD Command: Area
 TODO - Keyboard Zooming/Panning
-TODO - Underline/Overline/Strikeout
 TODO - G-Code format?
 TODO - 3D Raised Embroidery
 TODO - Gradient Filling Algorithms
@@ -91,4 +90,10 @@ TODO - Circle Grid Fill
 TODO - Spiral Fill
 TODO - Offset Fill
 TODO - Brick Fill
+TODO - Trim jumps over a certain length.
+TODO - FAQ about setting high number of jumps for more controlled trimming.
+TODO - 'New Selection, shift to add' vs 'Add to Selection, shift to deselect' option.
+TODO - Minimum stitch length option. (Many machines also have this option too)
+TODO - Add 'Design Details' functionality to libembroidery-convert
+TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
 
