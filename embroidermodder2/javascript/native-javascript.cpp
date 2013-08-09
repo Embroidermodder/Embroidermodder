@@ -147,6 +147,22 @@ QScriptValue javaWindowCloseAll(QScriptContext* context, QScriptEngine* /*engine
     return QScriptValue();
 }
 
+QScriptValue javaWindowNext(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("windowNext() requires zero arguments");
+
+    mainWin()->nativeWindowNext();
+    return QScriptValue();
+}
+
+QScriptValue javaWindowPrevious(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("windowPrevious() requires zero arguments");
+
+    mainWin()->nativeWindowPrevious();
+    return QScriptValue();
+}
+
 QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");

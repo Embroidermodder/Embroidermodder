@@ -1063,6 +1063,16 @@ void MainWindow::nativeWindowCloseAll()
     mdiArea->closeAllSubWindows();
 }
 
+void MainWindow::nativeWindowNext()
+{
+    mdiArea->activateNextSubWindow();
+}
+
+void MainWindow::nativeWindowPrevious()
+{
+    mdiArea->activatePreviousSubWindow();
+}
+
 void MainWindow::nativeUndo()
 {
     undo();

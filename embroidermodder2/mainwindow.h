@@ -596,6 +596,8 @@ public:
     void nativeWindowTile             ();
     void nativeWindowClose            ();
     void nativeWindowCloseAll         ();
+    void nativeWindowNext             ();
+    void nativeWindowPrevious         ();
 
     void nativeUndo                   ();
     void nativeRedo                   ();
