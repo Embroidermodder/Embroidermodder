@@ -836,6 +836,7 @@ bool MainWindow::textOverline()
 
 void MainWindow::setTextFont(const QString& str)
 {
+    textFontSelector->setCurrentFont(QFont(str));
     setSettingsTextFont(str);
 }
 

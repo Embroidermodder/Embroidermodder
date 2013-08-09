@@ -1,13 +1,14 @@
 //====================
 Stuff for 2.0 alpha1:
 //====================
-WIP - CAD Commands (rt)
-WIP - Font Generation (rt)
+WIP - CAD Command: Polygon (rt)
+WIP - CAD Command: Polyline (rt)
+DONE - Font Generation/Single Line Text (rt)
 TODO - Reduce/Enlarge. This will be the scale command. (rt)
 WIP - Statistics from 1.0, needs histogram
 WIP - Printing (rt)
-WIP - Undo/Redo (rt)
-WIP  - Cut/Copy/Paste
+DONE - Undo/Redo (rt)
+DONE - Cut/Copy/Paste
 TODO - Rotation (rt)
 WIP - Saving DST/PES/JEF (varga)
 TODO - Icons: theme, tipoftheday, qselect (rt)
@@ -16,6 +17,7 @@ WIP - Saving CSV/SVG (rt)
 //====================
 Stuff for 2.0 beta1:
 //====================
+WIP - CAD Command: Arc (rt)
 TODO - Load/Save Menu/Toolbars configurations into settings.ini
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
 TODO - Reading DXF
@@ -55,11 +57,20 @@ TODO - Debian Package (rt)
 TODO - NSIS Installer (rt)
 TODO - Mac Bundle?
 TODO - press release
-TODO - website revamp (varga)
+TODO - website revamp
 
 //====================
 //Stuff for 2.x
 //====================
+TODO - Cut/Copy - Allow Post-selection
+TODO - CAD Command: Array
+TODO - CAD Command: Offset
+TODO - CAD Command: Extend
+TODO - CAD Command: Trim
+TODO - CAD Command: Fillet
+TODO - CAD Command: Chamfer
+TODO - CAD Command: Split
+TODO - CAD Command: Area
 TODO - Keyboard Zooming/Panning
 TODO - Underline/Overline/Strikeout
 TODO - G-Code format?

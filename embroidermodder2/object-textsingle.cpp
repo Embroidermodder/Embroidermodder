@@ -243,6 +243,7 @@ void TextSingleObject::updateRubber(QPainter* painter)
     if(rubberMode == OBJ_RUBBER_TEXTSINGLE)
     {
         setObjectTextFont(objectRubberText("TEXT_FONT"));
+        setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
         setObjectPos(objectRubberPoint("TEXT_POINT"));
         QPointF hr = objectRubberPoint("TEXT_HEIGHT_ROTATION");
         setObjectTextSize(hr.x());

@@ -16,9 +16,6 @@ global.mode_SETFONT = 1;
 global.mode_SETGEOM = 2;
 global.mode_RAPID   = 3;
 
-//TODO: Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]:
-//TODO: Invalid option keyword.
-
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
 function main()
@@ -74,6 +71,7 @@ function click(x, y)
             setRubberPoint("TEXT_POINT", global.textX, global.textY);
             setRubberPoint("TEXT_HEIGHT_ROTATION", global.textHeight, global.textRotation);
             setRubberText("TEXT_FONT", global.textFont);
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
             setRubberText("TEXT_RAPID", global.text);
         }
         else
@@ -95,25 +93,153 @@ function context(str)
 //      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(global.mode == global.mode_SETGEOM)
+    if(global.mode == global.mode_JUSTIFY)
+    {
+        if(str == "C" || str == "CENTER")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Center";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify center point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "R" || str == "RIGHT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Right";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify right-end point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "A" || str == "ALIGN")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Aligned";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "M" || str == "MIDDLE")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Middle";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify middle point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "F" || str == "FIT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Fit";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "TL" || str == "TOPLEFT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Top Left";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify top-left point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "TC" || str == "TOPCENTER")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Top Center";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify top-center point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "TR" || str == "TOPRIGHT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Top Right";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify top-right point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "ML" || str == "MIDDLELEFT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Middle Left";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify middle-left point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "MC" || str == "MIDDLECENTER")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Middle Center";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify middle-center point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "MR" || str == "MIDDLERIGHT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Middle Right";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify middle-right point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "BL" || str == "BOTTOMLEFT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Bottom Left";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify bottom-left point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "BC" || str == "BOTTOMCENTER")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Bottom Center";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify bottom-center point of text or [Justify/Setfont]: ");
+        }
+        else if(str == "BR" || str == "BOTTOMRIGHT")
+        {
+            global.mode = global.mode_SETGEOM;
+            global.textJustify = "Bottom Right";
+            setRubberText("TEXT_JUSTIFY", global.textJustify);
+            setPromptPrefix("Specify bottom-right point of text or [Justify/Setfont]: ");
+        }
+        else
+        {
+            setPromptPrefix("Invalid option keyword.");
+            appendPromptHistory();
+            setPromptPrefix("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
+        }
+    }
+    else if(global.mode == global.mode_SETFONT)
+    {
+        global.mode = global.mode_SETGEOM;
+        global.textFont = str;
+        setRubberText("TEXT_FONT", global.textFont);
+        setTextFont(global.textFont);
+        setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+    }
+    else if(global.mode == global.mode_SETGEOM)
     {
         if(isNaN(global.textX))
         {
-            var strList = str.split(",");
-            if(isNaN(strList[0]) || isNaN(strList[1]))
+            if(str == "J" || str == "JUSTIFY")
             {
-                setPromptPrefix("Point or option keyword required.");
-                appendPromptHistory();
-                setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+                global.mode = global.mode_JUSTIFY;
+                setPromptPrefix("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
+            }
+            else if(str == "S" || str == "SETFONT")
+            {
+                global.mode = global.mode_SETFONT;
+                setPromptPrefix("Specify font name: ");
             }
             else
             {
-                global.textX = Number(strList[0]);
-                global.textY = Number(strList[1]);
-                addRubber("LINE");
-                setRubberMode("LINE");
-                setRubberPoint("LINE_START", global.textX, global.textY);
-                setPromptPrefix("Specify text height <" + textSize() + ">: ");
+                var strList = str.split(",");
+                if(isNaN(strList[0]) || isNaN(strList[1]))
+                {
+                    setPromptPrefix("Point or option keyword required.");
+                    appendPromptHistory();
+                    setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+                }
+                else
+                {
+                    global.textX = Number(strList[0]);
+                    global.textY = Number(strList[1]);
+                    addRubber("LINE");
+                    setRubberMode("LINE");
+                    setRubberPoint("LINE_START", global.textX, global.textY);
+                    setPromptPrefix("Specify text height <" + textSize() + ">: ");
+                }
             }
         }
         else if(isNaN(global.textHeight))
@@ -150,6 +276,7 @@ function prompt(str)
                 setRubberPoint("TEXT_POINT", global.textX, global.textY);
                 setRubberPoint("TEXT_HEIGHT_ROTATION", global.textHeight, global.textRotation);
                 setRubberText("TEXT_FONT", global.textFont);
+                setRubberText("TEXT_JUSTIFY", global.textJustify);
                 setRubberText("TEXT_RAPID", global.text);
             }
             else if(isNaN(str))
@@ -171,6 +298,7 @@ function prompt(str)
                 setRubberPoint("TEXT_POINT", global.textX, global.textY);
                 setRubberPoint("TEXT_HEIGHT_ROTATION", global.textHeight, global.textRotation);
                 setRubberText("TEXT_FONT", global.textFont);
+                setRubberText("TEXT_JUSTIFY", global.textJustify);
                 setRubberText("TEXT_RAPID", global.text);
             }
         }
