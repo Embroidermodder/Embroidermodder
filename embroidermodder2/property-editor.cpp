@@ -52,6 +52,7 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, QWidget* widgetToFo
     QHBoxLayout* hboxLayoutSelection = new QHBoxLayout(this);
     hboxLayoutSelection->addWidget(createComboBoxSelected());
     hboxLayoutSelection->addWidget(createToolButtonQSelect());
+    hboxLayoutSelection->addWidget(createToolButtonPickAdd());
     widgetSelection->setLayout(hboxLayoutSelection);
 
     QScrollArea* scrollProperties = new QScrollArea(this);
@@ -143,9 +144,21 @@ QToolButton* PropertyEditor::createToolButtonQSelect()
     toolButtonQSelect->setIcon(QIcon(iconDir + "/" + "quickselect" + ".png"));
     toolButtonQSelect->setIconSize(QSize(iconSize, iconSize));
     toolButtonQSelect->setText("QSelect");
-    toolButtonQSelect->setToolTip("QSelect");
+    toolButtonQSelect->setToolTip("QSelect"); //TODO: Better Description
     toolButtonQSelect->setToolButtonStyle(Qt::ToolButtonIconOnly);
     return toolButtonQSelect;
+}
+
+QToolButton* PropertyEditor::createToolButtonPickAdd()
+{
+    //TODO: Set as PickAdd or PickNew based on settings
+    toolButtonPickAdd = new QToolButton(this);
+    toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "pickadd" + ".png"));
+    toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
+    toolButtonPickAdd->setText("PickAdd");
+    toolButtonPickAdd->setToolTip("PickAdd"); //TODO: Better Description
+    toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    return toolButtonPickAdd;
 }
 
 void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)

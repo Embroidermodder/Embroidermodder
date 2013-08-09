@@ -127,9 +127,13 @@ private:
     //====================
     QComboBox*   createComboBoxSelected();
     QToolButton* createToolButtonQSelect();
+    QToolButton* createToolButtonPickAdd();
 
     QComboBox*   comboBoxSelected;
     QToolButton* toolButtonQSelect;
+    QToolButton* toolButtonPickAdd;
+
+    //TODO: Alphabetic/Categorized TabWidget
 
     //====================
     //General

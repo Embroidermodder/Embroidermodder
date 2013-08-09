@@ -11,7 +11,7 @@ DONE - Undo/Redo (rt)
 DONE - Cut/Copy/Paste
 TODO - Rotation (rt)
 WIP - Saving DST/PES/JEF (varga)
-TODO - Icons: theme, qselect (rt)
+DONE - Otto Theme Icons - alpha (rt)
 WIP - Saving CSV/SVG (rt)
 
 //====================
@@ -27,6 +27,7 @@ TODO - Layer Manager + LayerSwitcher DockWidget
 TODO - SNAP/ORTHO/POLAR
 TODO - Up and Down keys cycle thru commands in the command prompt
 TODO - Filling Algorithms (varga)
+TODO - Otto Theme Icons - beta (rt)
 
 //====================
 Stuff for 2.0 rc1:
