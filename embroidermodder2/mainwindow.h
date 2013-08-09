@@ -591,6 +591,7 @@ public:
     void nativeEndCommand             ();
 
     void nativeHelp                   ();
+    void nativeAbout                  ();
 
     void nativeUndo                   ();
     void nativeRedo                   ();

@@ -107,6 +107,14 @@ QScriptValue javaHelp(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaAbout(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("about() requires zero arguments");
+
+    mainWin()->nativeAbout();
+    return QScriptValue();
+}
+
 QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");

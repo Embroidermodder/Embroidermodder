@@ -14,6 +14,7 @@ QScriptValue javaDisablePromptRapidFire (QScriptContext* context, QScriptEngine*
 QScriptValue javaInitCommand            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaEndCommand             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaHelp                   (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaAbout                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaUndo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaRedo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanLeft                (QScriptContext* context, QScriptEngine* engine);

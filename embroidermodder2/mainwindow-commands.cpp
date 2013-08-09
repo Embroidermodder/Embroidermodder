@@ -1038,6 +1038,11 @@ void MainWindow::nativeHelp()
     help();
 }
 
+void MainWindow::nativeAbout()
+{
+    about();
+}
+
 void MainWindow::nativeUndo()
 {
     undo();
