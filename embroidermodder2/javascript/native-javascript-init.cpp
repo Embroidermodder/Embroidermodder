@@ -13,6 +13,8 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValEndCommand = engine->newFunction(javaEndCommand); engine->globalObject().setProperty("endCommand", scriptValEndCommand);
     QScriptValue scriptValHelp = engine->newFunction(javaHelp); engine->globalObject().setProperty("help", scriptValHelp);
     QScriptValue scriptValAbout = engine->newFunction(javaAbout); engine->globalObject().setProperty("about", scriptValAbout);
+    QScriptValue scriptValWindowClose = engine->newFunction(javaWindowClose); engine->globalObject().setProperty("windowClose", scriptValWindowClose);
+    QScriptValue scriptValWindowCloseAll = engine->newFunction(javaWindowCloseAll); engine->globalObject().setProperty("windowCloseAll", scriptValWindowCloseAll);
     QScriptValue scriptValUndo = engine->newFunction(javaUndo); engine->globalObject().setProperty("undo", scriptValUndo);
     QScriptValue scriptValRedo = engine->newFunction(javaRedo); engine->globalObject().setProperty("redo", scriptValRedo);
     QScriptValue scriptValPanLeft = engine->newFunction(javaPanLeft); engine->globalObject().setProperty("panLeft", scriptValPanLeft);

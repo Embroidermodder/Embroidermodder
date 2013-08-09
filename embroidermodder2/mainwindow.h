@@ -592,6 +592,8 @@ public:
 
     void nativeHelp                   ();
     void nativeAbout                  ();
+    void nativeWindowClose            ();
+    void nativeWindowCloseAll         ();
 
     void nativeUndo                   ();
     void nativeRedo                   ();

@@ -1043,6 +1043,16 @@ void MainWindow::nativeAbout()
     about();
 }
 
+void MainWindow::nativeWindowClose()
+{
+    onCloseWindow();
+}
+
+void MainWindow::nativeWindowCloseAll()
+{
+    mdiArea->closeAllSubWindows();
+}
+
 void MainWindow::nativeUndo()
 {
     undo();

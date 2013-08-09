@@ -12,6 +12,7 @@ void MainWindow::createAllActions()
 
     actionDict.insert(ACTION_windowcascade,  createAction(tr("windowcascade"),  tr("&Cascade"),   tr("Cascade the windows.")));
     actionDict.insert(ACTION_windowtile,     createAction(tr("windowtile"),     tr("&Tile"),      tr("Tile the windows.")));
+    actionDict.insert(ACTION_windowclose,    createAction(tr("windowclose"),    tr("Cl&ose"),     tr("Close the active window.")));
     actionDict.insert(ACTION_windowcloseall, createAction(tr("windowcloseall"), tr("Close &All"), tr("Close all the windows.")));
     actionDict.insert(ACTION_windownext,     createAction(tr("windownext"),     tr("Ne&xt"),      tr("Move the focus to the next window.")));
     actionDict.insert(ACTION_windowprevious, createAction(tr("windowprevious"), tr("Pre&vious"),  tr("Move the focus to the previous window.")));
@@ -21,7 +22,6 @@ void MainWindow::createAllActions()
     actionDict.insert(ACTION_save,          createAction(tr("save"),          tr("&Save"),    tr("Save the design to disk.")));
     actionDict.insert(ACTION_saveas,        createAction(tr("saveas"),        tr("Save &As"), tr("Save the design under a new name.")));
     actionDict.insert(ACTION_print,         createAction(tr("print"),         tr("&Print"),   tr("Print the design.")));
-    actionDict.insert(ACTION_windowclose,   createAction(tr("close"),         tr("Cl&ose"),   tr("Close the active window.")));
     actionDict.insert(ACTION_designdetails, createAction(tr("designdetails"), tr("&Details"), tr("Details of the current design.")));
     actionDict.insert(ACTION_exit,          createAction(tr("exit"),          tr("E&xit"),    tr("Exit the application.")));
 
@@ -105,7 +105,6 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     else if(icon == "save")                     { ACTION->setShortcut(QKeySequence::Save);     connect(ACTION, SIGNAL(triggered()), this, SLOT(savefile()));        }
     else if(icon == "saveas")                   { ACTION->setShortcut(QKeySequence::SaveAs);   connect(ACTION, SIGNAL(triggered()), this, SLOT(saveasfile()));      }
     else if(icon == "print")                    { ACTION->setShortcut(QKeySequence::Print);    connect(ACTION, SIGNAL(triggered()), this, SLOT(print()));           }
-    else if(icon == "close")                    { ACTION->setShortcut(QKeySequence::Close);    connect(ACTION, SIGNAL(triggered()), this, SLOT(onCloseWindow()));   }
     else if(icon == "designdetails")            { ACTION->setShortcut(QKeySequence("Ctrl+D")); connect(ACTION, SIGNAL(triggered()), this, SLOT(designDetails()));   }
     else if(icon == "exit")                     { ACTION->setShortcut(QKeySequence("Ctrl+Q")); connect(ACTION, SIGNAL(triggered()), this, SLOT(exit()));            }
 
@@ -115,6 +114,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
 
     else if(icon == "windowcascade")              connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(cascade()));
     else if(icon == "windowtile")                 connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(tile()));
+    else if(icon == "windowclose")              { ACTION->setShortcut(QKeySequence::Close);    connect(ACTION, SIGNAL(triggered()), this, SLOT(onCloseWindow()));   }
     else if(icon == "windowcloseall")             connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
     else if(icon == "windownext")               { ACTION->setShortcut(QKeySequence::NextChild);     connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));     }
     else if(icon == "windowprevious")           { ACTION->setShortcut(QKeySequence::PreviousChild); connect(ACTION, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow())); }
