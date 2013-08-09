@@ -22,7 +22,7 @@ typedef struct EmbPolylineObjectList_
 } EmbPolylineObjectList;
 
 EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data);
-EmbPointObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
+EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
 int embPolylineObjectList_count(EmbPolylineObjectList* pointer);
 int embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
 

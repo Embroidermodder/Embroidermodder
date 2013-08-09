@@ -84,6 +84,9 @@ void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj);
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
 
+
+void moveStitchListToPolyline(EmbPattern *pattern);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

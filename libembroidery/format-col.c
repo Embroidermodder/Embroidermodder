@@ -4,7 +4,6 @@
 
 int readCol(EmbPattern* pattern, const char* fileName)
 {
-    EmbThreadList* colors;
     char num;
     unsigned char blue, green, red;
     int numberOfColors, i;
@@ -16,15 +15,7 @@ int readCol(EmbPattern* pattern, const char* fileName)
         /*TODO: set messages here "Error opening COL file for read:" */
         return 0;
     }
-    colors = pattern->threadList;
-    while(colors)
-    {
-        EmbThreadList* next = colors->next;
-        free(colors);
-        colors = next;
-    }
-    pattern->threadList = NULL;
-
+    embThread_free(pattern->threadList);
     fscanf(file, "%d\r", &numberOfColors);
     for(i = 0; i < numberOfColors; i++)
     {

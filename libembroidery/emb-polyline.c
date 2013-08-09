@@ -8,9 +8,9 @@ EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
     return heapPointObj;
 }
 
-EmbPointObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
+EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
 {
-    pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    pointer->next = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
     pointer = pointer->next;
     pointer->polylineObj = data;
     pointer->next = 0;

@@ -73,6 +73,15 @@ int embPoint_empty(EmbPointObjectList* pointer)
     return pointer == 0;
 }
 
+EmbPointList* embPointList_create(double x, double y)
+{
+    EmbPointList* heapPointObj = (EmbPointList*)malloc(sizeof(EmbPointList));
+    heapPointObj->point.xx = x;
+    heapPointObj->point.yy = y;
+    heapPointObj->next = 0;
+    return heapPointObj;
+}
+
 void embPointObjectList_free(EmbPointObjectList* list)
 {
     EmbPointObjectList* current = list;

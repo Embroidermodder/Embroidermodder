@@ -107,25 +107,36 @@ void embPattern_fixColorCount(EmbPattern* p)
 void moveStitchListToPolyline(EmbPattern* p)
 {
     EmbStitchList* stitches = p->stitchList;
-    EmbPolylineObjectList* currentList;
+    EmbPolylineObjectList* currentList = 0;
     while(stitches)
     {
         EmbPolylineObject* currentPolyline = (EmbPolylineObject *) malloc(sizeof(EmbPolylineObject));
+        currentPolyline->pointList = 0;
         currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
         currentPolyline->color = embThread_getAt(p->threadList, stitches->stitch.color).color;
-        EmbPointList* currentPointList = (EmbPointList *) malloc(sizeof(EmbPointList));
-        currentPolyline->pointList = currentPointList;
+        EmbPointList* currentPointList = 0;
         while(stitches)
         {
-            printf("endless looping...\n");
-            currentPointList = embPoint_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
             if(stitches->stitch.flags & (STOP | TRIM))
             {
                 break;
             }
+            if(!(stitches->stitch.flags & JUMP))
+            {
+                if(!currentPointList)
+                {
+                    currentPointList = embPointList_create(stitches->stitch.xx, stitches->stitch.yy);
+                    currentPolyline->pointList = currentPointList;
+                }
+                else
+                {
+                    currentPointList = embPoint_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
+                }
+            }
             stitches = stitches->next;
         }
-        if(!p->polylineObjList)
+        currentPointList = 0;
+        if(!currentList)
         {
             currentList = embPolylineObjectList_create(currentPolyline);
             p->polylineObjList = currentList;
@@ -152,7 +163,6 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
         embPattern_fixColorCount(p);
 
         /* HideStitchesOverLength(127); */
-        moveStitchListToPolyline(p);
     }
 
     if((flags & STOP) && embStitch_empty(p->stitchList))
@@ -542,7 +552,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     EmbReaderWriter* colorfile;
     const char* dotPos = strrchr(fileName, '.');
 
-    char* extractName = (char *)malloc(dotPos - fileName + 4);
+    char* extractName = (char *)malloc(dotPos - fileName + 5);
     extractName = memcpy(extractName, fileName, dotPos - fileName);
     extractName[dotPos - fileName] = '\0';
     strcat(extractName,".edr");
@@ -564,7 +574,6 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".col");
         colorfile = embReaderWriter_getByFileName(extractName);
-        colorfile->reader(p, extractName);
         if(colorfile) hasRead = colorfile->reader(p, extractName);
     }
     if(!hasRead)
@@ -574,7 +583,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".inf");
         colorfile = embReaderWriter_getByFileName(extractName);
-        if(colorfile) colorfile->reader(p, extractName);
+        if(colorfile) hasRead = colorfile->reader(p, extractName);
     }
     free(colorfile);
     free(extractName);

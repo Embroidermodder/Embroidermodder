@@ -44,6 +44,7 @@ void embPointObjectList_free(EmbPointObjectList* list);
 void embPointList_free(EmbPointList* list);
 
 EmbPointObjectList* embPointObject_add(EmbPointObjectList* pointer, EmbPointObject data);
+EmbPointList* embPointList_create(double x, double y);
 EmbPointList* embPoint_add(EmbPointList* pointer, EmbPoint data);
 int embPoint_count(EmbPointObjectList* pointer);
 int embPoint_empty(EmbPointObjectList* pointer);

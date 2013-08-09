@@ -128,6 +128,7 @@ bool MDIWindow::loadFile(const QString &fileName)
 
     if(readSuccessful)
     {
+        moveStitchListToPolyline(p);
         int stitchCount = embStitch_count(p->stitchList);
         QPainterPath path;
         int arcIndex = 0;
