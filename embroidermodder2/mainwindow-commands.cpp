@@ -1043,6 +1043,16 @@ void MainWindow::nativeAbout()
     about();
 }
 
+void MainWindow::nativeWindowCascade()
+{
+    mdiArea->cascade();
+}
+
+void MainWindow::nativeWindowTile()
+{
+    mdiArea->tile();
+}
+
 void MainWindow::nativeWindowClose()
 {
     onCloseWindow();

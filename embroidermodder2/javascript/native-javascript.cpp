@@ -115,6 +115,22 @@ QScriptValue javaAbout(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaWindowCascade(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("windowCascade() requires zero arguments");
+
+    mainWin()->nativeWindowCascade();
+    return QScriptValue();
+}
+
+QScriptValue javaWindowTile(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("windowTile() requires zero arguments");
+
+    mainWin()->nativeWindowTile();
+    return QScriptValue();
+}
+
 QScriptValue javaWindowClose(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("windowClose() requires zero arguments");

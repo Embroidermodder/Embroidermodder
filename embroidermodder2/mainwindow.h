@@ -592,6 +592,8 @@ public:
 
     void nativeHelp                   ();
     void nativeAbout                  ();
+    void nativeWindowCascade          ();
+    void nativeWindowTile             ();
     void nativeWindowClose            ();
     void nativeWindowCloseAll         ();
 
