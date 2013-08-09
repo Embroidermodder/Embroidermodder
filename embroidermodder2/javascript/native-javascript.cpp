@@ -99,6 +99,14 @@ QScriptValue javaEndCommand(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaExit(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("exit() requires zero arguments");
+
+    mainWin()->nativeExit();
+    return QScriptValue();
+}
+
 QScriptValue javaHelp(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("help() requires zero arguments");

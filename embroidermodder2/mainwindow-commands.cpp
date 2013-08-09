@@ -1033,6 +1033,11 @@ void MainWindow::nativeEndCommand()
     prompt->endCommand();
 }
 
+void MainWindow::nativeExit()
+{
+    exit();
+}
+
 void MainWindow::nativeHelp()
 {
     help();

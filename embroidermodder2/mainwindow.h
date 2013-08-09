@@ -590,6 +590,7 @@ public:
     void nativeInitCommand            ();
     void nativeEndCommand             ();
 
+    void nativeExit                   ();
     void nativeHelp                   ();
     void nativeAbout                  ();
     void nativeWindowCascade          ();
