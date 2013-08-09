@@ -57,8 +57,6 @@ MDIWindow::MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curLineType = "ByLayer";
     curLineWeight = "ByLayer";
 
-    polylinePathItem = 0;
-
     // Due to strange Qt4.2.3 feature the child window icon is not drawn
     // in the main menu if showMaximized() is called for a non-visible child window
     // Therefore calling show() first...
@@ -127,7 +125,7 @@ bool MDIWindow::loadFile(const QString &fileName)
     {
         QMessageBox::warning(this, tr("Error reading pattern"), tr(qPrintable(readError)));
     }
-    /* embPattern_addPointObjectAbs(); */
+
     if(readSuccessful)
     {
         int stitchCount = embStitch_count(p->stitchList);
@@ -174,6 +172,41 @@ bool MDIWindow::loadFile(const QString &fileName)
                 curPointObj = curPointObj->next;
             }
         }
+        /* TODO: polyline testing. Appears to work somewhat but many files get stuck in endless loop in the stitch to conversion function.
+                 Also, polylines should be broken at TRIM and JUMP. Polylines should only contain NORMAL stitches. */
+        if(p->polylineObjList)
+        {
+            EmbPolylineObjectList* curPolylineObjList = p->polylineObjList;
+            while(curPolylineObjList)
+            {
+                QPainterPath polylinePath;
+                EmbPointList* curPointList = curPolylineObjList->polylineObj->pointList;
+                EmbColor thisColor = curPolylineObjList->polylineObj->color;
+                if(curPointList)
+                {
+                    EmbPoint pp = curPointList->point;
+                    polylinePath.moveTo(embPoint_x(pp), -embPoint_y(pp));
+                    curPointList = curPointList->next;
+                }
+                while(curPointList)
+                {
+                    EmbPoint pp = curPointList->point;
+                    polylinePath.lineTo(embPoint_x(pp), -embPoint_y(pp));
+                    curPointList = curPointList->next;
+                }
+
+                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                loadPen.setWidthF(0.35);
+                loadPen.setCapStyle(Qt::RoundCap);
+                loadPen.setJoinStyle(Qt::RoundJoin);
+                QGraphicsPathItem* pathItem = gscene->addPath(polylinePath, loadPen);
+                pathItem->setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
+                pathItem->setFlag(QGraphicsItem::ItemIsMovable, true);
+                pathItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+                curPolylineObjList = curPolylineObjList->next;
+            }
+        }
         if(p->rectObjList)
         {
             EmbRectObjectList* curRectObj = p->rectObjList;
@@ -184,6 +217,7 @@ bool MDIWindow::loadFile(const QString &fileName)
                 curRectObj = curRectObj->next;
             }
         }
+        /* TODO: Commented out while testing polyline to prevent duplicates. Uncomment later.
         if(p->stitchList)
         {
             int previousColor = p->stitchList->stitch.color;
@@ -240,6 +274,7 @@ bool MDIWindow::loadFile(const QString &fileName)
                 }
             }
         }
+        */
 
         setCurrentFile(fileName);
         mainWin->statusbar->showMessage("File loaded.");

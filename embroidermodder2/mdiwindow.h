@@ -89,9 +89,6 @@ private:
 
     int                        myIndex;
 
-    QVector<QPointF>           polygonPoints;
-    QGraphicsPathItem*         polylinePathItem;
-
     QString                    curLayer;
     QRgb                       curColor;
     QString                    curLineType;

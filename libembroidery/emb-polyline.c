@@ -13,7 +13,7 @@ EmbPointObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, Em
     pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPolylineObjectList));
     pointer = pointer->next;
     pointer->polylineObj = data;
-    pointer->next = 0;\
+    pointer->next = 0;
 
     return pointer;
 }

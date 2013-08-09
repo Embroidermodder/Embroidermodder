@@ -117,6 +117,7 @@ void moveStitchListToPolyline(EmbPattern* p)
         currentPolyline->pointList = currentPointList;
         while(stitches)
         {
+            printf("endless looping...\n");
             currentPointList = embPoint_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
             if(stitches->stitch.flags & (STOP | TRIM))
             {
