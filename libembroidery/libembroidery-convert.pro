@@ -1,6 +1,6 @@
 TEMPLATE = app
 CONFIG -= debug_and_release qt
-CONFIG += debug
+CONFIG += console debug
 #CONFIG += release
 
 TARGET = libembroidery-convert
@@ -21,7 +21,7 @@ QMAKE_CFLAGS += -std=c89
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-variable
 #QMAKE_CFLAGS_WARN_ON += -Wno-unknown-pragmas
 
-SOURCES += main.c
+SOURCES += libembroidery-main.c
 
 include( ../libembroidery/libembroidery.pri )
 include( ../libcgeometry/libcgeometry.pri )

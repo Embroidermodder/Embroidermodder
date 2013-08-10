@@ -110,11 +110,12 @@ void moveStitchListToPolyline(EmbPattern* p)
     EmbPolylineObjectList* currentList = 0;
     while(stitches)
     {
+        EmbPointList* currentPointList = 0;
         EmbPolylineObject* currentPolyline = (EmbPolylineObject *) malloc(sizeof(EmbPolylineObject));
         currentPolyline->pointList = 0;
         currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
         currentPolyline->color = embThread_getAt(p->threadList, stitches->stitch.color).color;
-        EmbPointList* currentPointList = 0;
+
         while(stitches)
         {
             if(stitches->stitch.flags & (STOP | TRIM))

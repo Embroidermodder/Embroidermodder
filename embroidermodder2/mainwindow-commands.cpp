@@ -325,7 +325,7 @@ void MainWindow::tipOfTheDay()
 
     if(settings_general_current_tip >= listTipOfTheDay.size())
         settings_general_current_tip = 0;
-    labelTipOfTheDay = new QLabel(listTipOfTheDay.at(settings_general_current_tip), wizardTipOfTheDay);
+    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings_general_current_tip), wizardTipOfTheDay);
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
