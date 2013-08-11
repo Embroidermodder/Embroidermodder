@@ -44,6 +44,7 @@ FILEFORMAT_PEM, //Brother Embroidery Format
 FILEFORMAT_PES, //Brother Embroidery Format
 FILEFORMAT_PHB, //Brother Embroidery Format
 FILEFORMAT_PHC, //Brother Embroidery Format
+FILEFORMAT_PLT, //AutoCAD Plot drawing
 FILEFORMAT_RGB, //RGB Embroidery Format
 FILEFORMAT_SEW, //Janome Embroidery Format
 FILEFORMAT_SHV, //Husqvarna Viking Embroidery Format

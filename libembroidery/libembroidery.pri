@@ -82,6 +82,7 @@ SOURCES += \
 ../libembroidery/format-vp3.c \
 ../libembroidery/format-xxx.c \
 ../libembroidery/format-zsk.c \
+    ../libembroidery/format-plt.c
 
 
 HEADERS += \
@@ -168,5 +169,6 @@ HEADERS += \
 ../libembroidery/format-vp3.h \
 ../libembroidery/format-xxx.h \
 ../libembroidery/format-zsk.h \
+    ../libembroidery/format-plt.h
 
 

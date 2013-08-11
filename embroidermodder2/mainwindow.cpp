@@ -671,6 +671,7 @@ int MainWindow::validFileFormat(const QString& fileName)
     else if(fileName.toUpper().endsWith(".PES")) type = FILEFORMAT_PES;
     else if(fileName.toUpper().endsWith(".PHB")) type = FILEFORMAT_PHB;
     else if(fileName.toUpper().endsWith(".PHC")) type = FILEFORMAT_PHC;
+    else if(fileName.toUpper().endsWith(".PLT")) type = FILEFORMAT_PLT;
     else if(fileName.toUpper().endsWith(".RGB")) type = FILEFORMAT_RGB;
     else if(fileName.toUpper().endsWith(".SEW")) type = FILEFORMAT_SEW;
     else if(fileName.toUpper().endsWith(".SHV")) type = FILEFORMAT_SHV;
@@ -692,7 +693,7 @@ int MainWindow::validFileFormat(const QString& fileName)
 
 QString MainWindow::fileFormatFilterString()
 {
-    QString supported = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.inf *.jef *.ksm *.max *.mit *.new *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
+    QString supported = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.inf *.jef *.ksm *.max *.mit *.new *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.plt *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
     QString all = "All Files (*);;"   \
     "100 (*.100);;"     \
     "10o (*.10o);;"     \
@@ -735,6 +736,7 @@ QString MainWindow::fileFormatFilterString()
     "PES (*.pes);;"     \
     "PHB (*.phb);;"     \
     "PHC (*.phc);;"     \
+    "PLT (*.plt);;"     \
     "RGB (*.rgb);;"     \
     "SEW (*.sew);;"     \
     "SHV (*.shv);;"     \

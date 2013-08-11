@@ -306,6 +306,13 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
         rw->writer = writePhc;
         return rw;
     }
+    if(!strcmp(ending, ".plt"))
+    {
+        EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
+        rw->reader = readPlt;
+        rw->writer = writePlt;
+        return rw;
+    }
     if(!strcmp(ending, ".rgb"))
     {
         EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));

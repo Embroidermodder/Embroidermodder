@@ -46,6 +46,7 @@ extern "C" {
 #include "format-pes.h"
 #include "format-phb.h"
 #include "format-phc.h"
+#include "format-plt.h"
 #include "format-rgb.h"
 #include "format-sew.h"
 #include "format-shv.h"
