@@ -376,14 +376,14 @@ void MainWindow::buttonTipOfTheDayClicked(int button)
             settings_general_current_tip--;
         else
             settings_general_current_tip = listTipOfTheDay.size()-1;
-        labelTipOfTheDay->setText(listTipOfTheDay.at(settings_general_current_tip));
+        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
     }
     else if(button == QWizard::CustomButton2)
     {
         settings_general_current_tip++;
         if(settings_general_current_tip >= listTipOfTheDay.size())
             settings_general_current_tip = 0;
-        labelTipOfTheDay->setText(listTipOfTheDay.at(settings_general_current_tip));
+        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
     }
     else if(button == QWizard::CustomButton3)
     {
