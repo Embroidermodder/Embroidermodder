@@ -14,6 +14,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValExit = engine->newFunction(javaExit); engine->globalObject().setProperty("exit", scriptValExit);
     QScriptValue scriptValHelp = engine->newFunction(javaHelp); engine->globalObject().setProperty("help", scriptValHelp);
     QScriptValue scriptValAbout = engine->newFunction(javaAbout); engine->globalObject().setProperty("about", scriptValAbout);
+    QScriptValue scriptValTipOfTheDay = engine->newFunction(javaTipOfTheDay); engine->globalObject().setProperty("tipOfTheDay", scriptValTipOfTheDay);
     QScriptValue scriptValWindowCascade = engine->newFunction(javaWindowCascade); engine->globalObject().setProperty("windowCascade", scriptValWindowCascade);
     QScriptValue scriptValWindowTile = engine->newFunction(javaWindowTile); engine->globalObject().setProperty("windowTile", scriptValWindowTile);
     QScriptValue scriptValWindowClose = engine->newFunction(javaWindowClose); engine->globalObject().setProperty("windowClose", scriptValWindowClose);

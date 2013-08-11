@@ -123,6 +123,14 @@ QScriptValue javaAbout(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaTipOfTheDay(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("tipOfTheDay() requires zero arguments");
+
+    mainWin()->nativeTipOfTheDay();
+    return QScriptValue();
+}
+
 QScriptValue javaWindowCascade(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("windowCascade() requires zero arguments");

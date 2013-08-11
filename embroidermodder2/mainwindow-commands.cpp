@@ -1117,6 +1117,11 @@ void MainWindow::nativeAbout()
     about();
 }
 
+void MainWindow::nativeTipOfTheDay()
+{
+    tipOfTheDay();
+}
+
 void MainWindow::nativeWindowCascade()
 {
     mdiArea->cascade();

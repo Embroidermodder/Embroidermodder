@@ -595,6 +595,7 @@ public:
     void nativeExit                   ();
     void nativeHelp                   ();
     void nativeAbout                  ();
+    void nativeTipOfTheDay            ();
     void nativeWindowCascade          ();
     void nativeWindowTile             ();
     void nativeWindowClose            ();

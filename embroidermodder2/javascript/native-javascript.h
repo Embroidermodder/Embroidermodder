@@ -16,6 +16,7 @@ QScriptValue javaEndCommand             (QScriptContext* context, QScriptEngine*
 QScriptValue javaExit                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaHelp                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAbout                  (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaTipOfTheDay            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaWindowCascade          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaWindowTile             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaWindowClose            (QScriptContext* context, QScriptEngine* engine);
