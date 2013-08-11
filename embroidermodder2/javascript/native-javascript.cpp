@@ -171,6 +171,12 @@ QScriptValue javaWindowPrevious(QScriptContext* context, QScriptEngine* /*engine
     return QScriptValue();
 }
 
+QScriptValue javaPlatformString(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("platformString() requires zero arguments");
+    return QScriptValue(mainWin()->nativePlatformString());
+}
+
 QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");

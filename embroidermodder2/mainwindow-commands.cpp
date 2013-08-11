@@ -92,6 +92,75 @@ void MainWindow::selectAll()
     if(gview) { gview->selectAll(); }
 }
 
+QString MainWindow::platformString()
+{
+    //TODO: Append QSysInfo to string where applicable.
+    QString os;
+    #if   defined(Q_OS_AIX)
+    os = "AIX";
+    #elif defined(Q_OS_BSD4)
+    os = "BSD 4.4";
+    #elif defined(Q_OS_BSDI)
+    os = "BSD/OS";
+    #elif defined(Q_OS_CYGWIN)
+    os = "Cygwin";
+    #elif defined(Q_OS_DARWIN)
+    os = "Mac OS";
+    #elif defined(Q_OS_DGUX)
+    os = "DG/UX";
+    #elif defined(Q_OS_DYNIX)
+    os = "DYNIX/ptx";
+    #elif defined(Q_OS_FREEBSD)
+    os = "FreeBSD";
+    #elif defined(Q_OS_HPUX)
+    os = "HP-UX";
+    #elif defined(Q_OS_HURD)
+    os = "GNU Hurd";
+    #elif defined(Q_OS_IRIX)
+    os = "SGI Irix";
+    #elif defined(Q_OS_LINUX)
+    os = "Linux";
+    #elif defined(Q_OS_LYNX)
+    os = "LynxOS";
+    #elif defined(Q_OS_MAC)
+    os = "Mac OS";
+    #elif defined(Q_OS_MSDOS)
+    os = "MS-DOS";
+    #elif defined(Q_OS_NETBSD)
+    os = "NetBSD";
+    #elif defined(Q_OS_OS2)
+    os = "OS/2";
+    #elif defined(Q_OS_OPENBSD)
+    os = "OpenBSD";
+    #elif defined(Q_OS_OS2EMX)
+    os = "XFree86 on OS/2";
+    #elif defined(Q_OS_OSF)
+    os = "HP Tru64 UNIX";
+    #elif defined(Q_OS_QNX)
+    os = "QNX Neutrino";
+    #elif defined(Q_OS_RELIANT)
+    os = "Reliant UNIX";
+    #elif defined(Q_OS_SCO)
+    os = "SCO OpenServer 5";
+    #elif defined(Q_OS_SOLARIS)
+    os = "Sun Solaris";
+    #elif defined(Q_OS_SYMBIAN)
+    os = "Symbian";
+    #elif defined(Q_OS_ULTRIX)
+    os = "DEC Ultrix";
+    #elif defined(Q_OS_UNIX)
+    os = "UNIX BSD/SYSV";
+    #elif defined(Q_OS_UNIXWARE)
+    os = "UnixWare";
+    #elif defined(Q_OS_WIN32)
+    os = "Windows";
+    #elif defined(Q_OS_WINCE)
+    os = "Windows CE";
+    #endif
+    qDebug("Platform: %s", qPrintable(os));
+    return os;
+}
+
 void MainWindow::designDetails()
 {
 //TODO: Reimplement designDetails() using the libembroidery C API
@@ -1076,6 +1145,11 @@ void MainWindow::nativeWindowNext()
 void MainWindow::nativeWindowPrevious()
 {
     mdiArea->activatePreviousSubWindow();
+}
+
+QString MainWindow::nativePlatformString()
+{
+    return platformString();
 }
 
 void MainWindow::nativeUndo()

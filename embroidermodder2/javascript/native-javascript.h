@@ -22,6 +22,7 @@ QScriptValue javaWindowClose            (QScriptContext* context, QScriptEngine*
 QScriptValue javaWindowCloseAll         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaWindowNext             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaWindowPrevious         (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaPlatformString         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaUndo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaRedo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanLeft                (QScriptContext* context, QScriptEngine* engine);

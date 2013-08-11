@@ -252,6 +252,8 @@ public:
     bool                            isCommandActive() { return prompt->isCommandActive(); }
     QString                         activeCommand() { return prompt->activeCommand(); }
 
+    QString platformString();
+
 public slots:
 
     void                            enablePromptRapidFire();
@@ -599,6 +601,8 @@ public:
     void nativeWindowCloseAll         ();
     void nativeWindowNext             ();
     void nativeWindowPrevious         ();
+
+    QString nativePlatformString      ();
 
     void nativeUndo                   ();
     void nativeRedo                   ();
