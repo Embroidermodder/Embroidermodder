@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /* Returns an EmbArcObject. It is created on the stack. */
-EmbArcObject embArcObj_make(double sx, double sy, double mx, double my, double ex, double ey)
+EmbArcObject embArcObject_make(double sx, double sy, double mx, double my, double ex, double ey)
 {
     EmbArcObject stackArcObj;
     stackArcObj.arc.startX = sx;
@@ -15,7 +15,7 @@ EmbArcObject embArcObj_make(double sx, double sy, double mx, double my, double e
 }
 
 /* Returns an EmbArcObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
-EmbArcObject* embArcObj_create(double sx, double sy, double mx, double my, double ex, double ey)
+EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey)
 {
     EmbArcObject* heapArcObj = (EmbArcObject*)malloc(sizeof(EmbArcObject));
     heapArcObj->arc.startX = sx;
@@ -27,7 +27,7 @@ EmbArcObject* embArcObj_create(double sx, double sy, double mx, double my, doubl
     return heapArcObj;
 }
 
-void embArc_add(EmbArcObjectList* pointer, EmbArcObject data)
+void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
 {
     while(pointer->next != 0)
     {
@@ -39,7 +39,7 @@ void embArc_add(EmbArcObjectList* pointer, EmbArcObject data)
     pointer->next = 0;
 }
 
-int embArc_count(EmbArcObjectList* pointer)
+int embArcObjectList_count(EmbArcObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -51,7 +51,7 @@ int embArc_count(EmbArcObjectList* pointer)
     return i;
 }
 
-int embArc_empty(EmbArcObjectList* pointer)
+int embArcObjectList_empty(EmbArcObjectList* pointer)
 {
     return pointer == 0;
 }

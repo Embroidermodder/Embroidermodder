@@ -1,6 +1,10 @@
 #include "emb-rect.h"
 #include <stdlib.h>
 
+/**************************************************/
+/* EmbRect                                        */
+/**************************************************/
+
 double embRect_x(EmbRect rect)
 {
     return rect.left;
@@ -61,8 +65,12 @@ void embRect_setRect(EmbRect* rect, double x, double y, double w, double h)
     rect->bottom = y + h;
 }
 
+/**************************************************/
+/* EmbRectObject                                  */
+/**************************************************/
+
 /* Returns an EmbRectObject. It is created on the stack. */
-EmbRectObject embRectObj_make(double x, double y, double w, double h)
+EmbRectObject embRectObject_make(double x, double y, double w, double h)
 {
     EmbRectObject stackRectObj;
     stackRectObj.rect.left = x;
@@ -73,7 +81,7 @@ EmbRectObject embRectObj_make(double x, double y, double w, double h)
 }
 
 /* Returns an EmbRectObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
-EmbRectObject* embRectObj_create(double x, double y, double w, double h)
+EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 {
     EmbRectObject* heapRectObj = (EmbRectObject*)malloc(sizeof(EmbRectObject));
     heapRectObj->rect.left = x;
@@ -83,15 +91,20 @@ EmbRectObject* embRectObj_create(double x, double y, double w, double h)
     return heapRectObj;
 }
 
-void embRect_add(EmbRectObjectList* pointer, EmbRectObject data)
+/**************************************************/
+/* EmbRectObjectList                              */
+/**************************************************/
+
+void embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data)
 {
+    /* TODO: pointer safety */
     pointer->next = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
     pointer = pointer->next;
     pointer->rectObj = data;
     pointer->next = 0;
 }
 
-int embRect_count(EmbRectObjectList* pointer)
+int embRectObjectList_count(EmbRectObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -103,7 +116,7 @@ int embRect_count(EmbRectObjectList* pointer)
     return i;
 }
 
-int embRect_empty(EmbRectObjectList* pointer)
+int embRectObjectList_empty(EmbRectObjectList* pointer)
 {
     return pointer == 0;
 }

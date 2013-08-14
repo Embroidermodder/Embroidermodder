@@ -81,6 +81,7 @@ EmbThread embThread_getRandom()
 
 void embThreadList_add(EmbThreadList* pointer, EmbThread data)
 {
+    /* TODO: pointer safety */
     EmbThreadList* tempPointer = pointer;
     while(tempPointer->next)
     {
@@ -94,6 +95,7 @@ void embThreadList_add(EmbThreadList* pointer, EmbThread data)
 
 EmbThread embThreadList_getAt(EmbThreadList* pointer, int num)
 {
+    /* TODO: pointer safety */
     int i = 0;
     for(i = 0; i < num; i++)
     {

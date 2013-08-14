@@ -7,12 +7,17 @@
 ####################
 
 # Datatypes
-EmbArc	    KEYWORD1
-EmbArcList  KEYWORD1
+EmbArc	KEYWORD1
+EmbArcObject 	KEYWORD1
+EmbArcObjectList	KEYWORD1
 
 # Functions #TODO: review arc header
-embArc_create	KEYWORD2
-embArc_add	KEYWORD2
+embArcObject_make	KEYWORD2
+embArcObject_create	KEYWORD2
+
+embArcObjectList_add	KEYWORD2
+embArcObjectList_count	KEYWORD2
+embArcObjectList_empty	KEYWORD2
 
 ####################
 # emb-circle.h
@@ -20,7 +25,19 @@ embArc_add	KEYWORD2
 
 # Datatypes
 EmbCircle	KEYWORD1
-EmbCircleList	KEYWORD1
+EmbCircleObject	KEYWORD1
+EmbCircleObjectList	KEYWORD1
+
+embCircle_centerX	KEYWORD2
+embCircle_centerY	KEYWORD2
+embCircle_radius	KEYWORD2
+
+embCircleObject_make	KEYWORD2
+embCircleObject_create	KEYWORD2
+
+embCircleObjectList_add	KEYWORD2
+embCircleObjectList_count	KEYWORD2
+embCircleObjectList_empty	KEYWORD2
 
 ####################
 # emb-color.h
@@ -38,7 +55,25 @@ embColor_fromHexStr	KEYWORD2
 
 # Datatypes
 EmbEllipse	KEYWORD1
-EmbEllipseList	KEYWORD1
+EmbEllipseObject	KEYWORD1
+EmbEllipseObjectList	KEYWORD1
+
+# Functions #TODO: review ellipse header
+embEllipse_centerX	KEYWORD2
+embEllipse_centerY	KEYWORD2
+embEllipse_radiusX	KEYWORD2
+embEllipse_radiusY	KEYWORD2
+embEllipse_diameterX	KEYWORD2
+embEllipse_diameterY	KEYWORD2
+embEllipse_width	KEYWORD2
+embEllipse_height	KEYWORD2
+
+embEllipseObject_make	KEYWORD2
+embEllipseObject_create	KEYWORD2
+
+embEllipseObjectList_add	KEYWORD2
+embEllipseObjectList_count	KEYWORD2
+embEllipseObjectList_empty	KEYWORD2
 
 ####################
 # emb-pattern.h
@@ -67,6 +102,45 @@ embPattern_center	KEYWORD2
 embPattern_loadExternalColorFile	KEYWORD2
 
 ####################
+# emb-point.h
+####################
+
+# Datatypes
+EmbPoint	KEYWORD1
+EmbPointList	KEYWORD1
+EmbPointObject	KEYWORD1
+EmbPointObjectList	KEYWORD1
+
+# Functions #TODO: review point header
+embPoint_x	KEYWORD2
+embPoint_y	KEYWORD2
+embPoint_make	KEYWORD2
+
+embPointList_create	KEYWORD2
+embPointList_add	KEYWORD2
+embPointList_free	KEYWORD2
+
+embPointObject_make	KEYWORD2
+embPointObject_create	KEYWORD2
+
+embPointObjectList_add	KEYWORD2
+embPointObjectList_count	KEYWORD2
+embPointObjectList_empty	KEYWORD2
+embPointObjectList_free	KEYWORD2
+
+####################
+# emb-polygon.h
+####################
+
+# Datatypes
+EmbPolygonObject	KEYWORD1
+EmbPolygonObjectList	KEYWORD1
+
+# Functions #TODO: review polygon header
+embPolygonObjectList_count	KEYWORD2
+embPolygonObjectList_empty	KEYWORD2
+
+####################
 # emb-polyline.h
 ####################
 
@@ -80,8 +154,14 @@ QUADTOCONTROL	LITERAL1
 QUADTOEND	LITERAL1
 
 # Datatypes
-EmbPolyline	KEYWORD1
-EmbPolylineList	KEYWORD1
+EmbPolylineObject	KEYWORD1
+EmbPolylineObjectList	KEYWORD1
+
+# Functions #TODO: review polyline header
+embPolylineObjectList_create	KEYWORD2
+embPolylineObjectList_add	KEYWORD2
+embPolylineObjectList_count	KEYWORD2
+embPolylineObjectList_empty	KEYWORD2
 
 ####################
 # emb-reader-writer.h
@@ -99,11 +179,29 @@ embReaderWriter_getByFileName	KEYWORD2
 
 # Datatypes
 EmbRect	KEYWORD1
-EmbRectList	KEYWORD1
+EmbRectObject	KEYWORD1
+EmbRectObjectList	KEYWORD1
 
 # Functions #TODO: review rect header
+embRect_x	KEYWORD2
+embRect_y	KEYWORD2
 embRect_width	KEYWORD2
 embRect_height	KEYWORD2
+
+embRect_setX	KEYWORD2
+embRect_setY	KEYWORD2
+embRect_setWidth	KEYWORD2
+embRect_setHeight	KEYWORD2
+
+embRect_setCoords	KEYWORD2
+embRect_setRect	KEYWORD2
+
+embRectObject_make	KEYWORD2
+embRectObject_create	KEYWORD2
+
+embRectObjectList_add	KEYWORD2
+embRectObjectList_count	KEYWORD2
+embRectObjectList_empty	KEYWORD2
 
 ####################
 # emb-spline.h
@@ -111,7 +209,12 @@ embRect_height	KEYWORD2
 
 # Datatypes
 EmbBezier	KEYWORD1
-EmbSplineList	KEYWORD1
+EmbSplineObject	KEYWORD1
+EmbSplineObjectList	KEYWORD1
+
+# Functions #TODO: review spline header
+embSplineObjectList_count	KEYWORD2
+embSplineObjectList_empty	KEYWORD2
 
 ####################
 # emb-stitch.h

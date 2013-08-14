@@ -34,18 +34,18 @@ typedef struct EmbEllipseObject_
     EmbColor color;
 } EmbEllipseObject;
 
+EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double ry);
+EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry);
+
 typedef struct EmbEllipseObjectList_
 {
     EmbEllipseObject ellipseObj;
     struct EmbEllipseObjectList_* next;
 } EmbEllipseObjectList;
 
-EmbEllipseObject embEllipseObj_make(double cx, double cy, double rx, double ry);
-EmbEllipseObject* embEllipseObj_create(double cx, double cy, double rx, double ry);
-
-void embEllipse_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
-int embEllipse_count(EmbEllipseObjectList* pointer);
-int embEllipse_empty(EmbEllipseObjectList* pointer);
+void embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
+int embEllipseObjectList_count(EmbEllipseObjectList* pointer);
+int embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
 
 #ifdef __cplusplus
 }

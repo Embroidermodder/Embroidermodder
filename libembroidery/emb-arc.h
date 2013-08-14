@@ -28,18 +28,18 @@ typedef struct EmbArcObject_
     EmbColor color;
 } EmbArcObject;
 
+EmbArcObject embArcObject_make(double sx, double sy, double mx, double my, double ex, double ey);
+EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey);
+
 typedef struct EmbArcObjectList_
 {
     EmbArcObject arcObj;
     struct EmbArcObjectList_* next;
 } EmbArcObjectList;
 
-EmbArcObject embArcObj_make(double sx, double sy, double mx, double my, double ex, double ey);
-EmbArcObject* embArcObj_create(double sx, double sy, double mx, double my, double ex, double ey);
-
-void embArc_add(EmbArcObjectList* pointer, EmbArcObject data);
-int embArc_count(EmbArcObjectList* pointer);
-int embArc_empty(EmbArcObjectList* pointer);
+void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
+int embArcObjectList_count(EmbArcObjectList* pointer);
+int embArcObjectList_empty(EmbArcObjectList* pointer);
 
 #ifdef __cplusplus
 }

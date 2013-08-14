@@ -1,6 +1,10 @@
 #include "emb-circle.h"
 #include <stdlib.h>
 
+/**************************************************/
+/* EmbCircle                                      */
+/**************************************************/
+
 double embCircle_centerX(EmbCircle circle)
 {
     return circle.centerX;
@@ -16,8 +20,12 @@ double embCircle_radius(EmbCircle circle)
     return circle.radius;
 }
 
+/**************************************************/
+/* EmbCircleObject                                */
+/**************************************************/
+
 /* Returns an EmbCircleObject. It is created on the stack. */
-EmbCircleObject embCircleObj_make(double cx, double cy, double r)
+EmbCircleObject embCircleObject_make(double cx, double cy, double r)
 {
     EmbCircleObject stackCircleObj;
     stackCircleObj.circle.centerX = cx;
@@ -27,7 +35,7 @@ EmbCircleObject embCircleObj_make(double cx, double cy, double r)
 }
 
 /* Returns an EmbCircleObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
-EmbCircleObject* embCircleObj_create(double cx, double cy, double r)
+EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 {
     EmbCircleObject* heapCircleObj = (EmbCircleObject*)malloc(sizeof(EmbCircleObject));
     heapCircleObj->circle.centerX = cx;
@@ -36,15 +44,20 @@ EmbCircleObject* embCircleObj_create(double cx, double cy, double r)
     return heapCircleObj;
 }
 
-void embCircle_add(EmbCircleObjectList* pointer, EmbCircleObject data)
+/**************************************************/
+/* EmbCircleObjectList                            */
+/**************************************************/
+
+void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 {
+    /* TODO: pointer safety */
     pointer->next = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
     pointer = pointer->next;
     pointer->circleObj = data;
     pointer->next = 0;
 }
 
-int embCircle_count(EmbCircleObjectList* pointer)
+int embCircleObjectList_count(EmbCircleObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -56,7 +69,7 @@ int embCircle_count(EmbCircleObjectList* pointer)
     return i;
 }
 
-int embCircle_empty(EmbCircleObjectList* pointer)
+int embCircleObjectList_empty(EmbCircleObjectList* pointer)
 {
     return pointer == 0;
 }

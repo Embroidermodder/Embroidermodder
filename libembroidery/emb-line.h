@@ -30,22 +30,21 @@ typedef struct EmbLineObject_
     EmbColor color;
 } EmbLineObject;
 
+EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2);
+EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2);
+
 typedef struct EmbLineObjectList_
 {
     EmbLineObject lineObj;
     struct EmbLineObjectList_* next;
 } EmbLineObjectList;
 
-EmbLineObject embLineObj_make(double x1, double y1, double x2, double y2);
-EmbLineObject* embLineObj_create(double x1, double y1, double x2, double y2);
+void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
+int embLineObjectList_count(EmbLineObjectList* pointer);
+int embLineObjectList_empty(EmbLineObjectList* pointer);
 
-void embLine_add(EmbLineObjectList* pointer, EmbLineObject data);
-int embLine_count(EmbLineObjectList* pointer);
-int embLine_empty(EmbLineObjectList* pointer);
-
-void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbVector* result);
-void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
-
+void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbVector* result); /* TODO: API cleanup: This belongs in emb-vector.h */
+void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result); /* TODO: API cleanup: This belongs in emb-vector.h */
 
 #ifdef __cplusplus
 }

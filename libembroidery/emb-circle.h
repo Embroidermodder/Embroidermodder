@@ -27,18 +27,18 @@ typedef struct EmbCircleObject_
     EmbColor color;
 } EmbCircleObject;
 
+EmbCircleObject embCircleObject_make(double cx, double cy, double r);
+EmbCircleObject* embCircleObject_create(double cx, double cy, double r);
+
 typedef struct EmbCircleObjectList_
 {
     EmbCircleObject circleObj;
     struct EmbCircleObjectList_* next;
 } EmbCircleObjectList;
 
-EmbCircleObject embCircleObj_make(double cx, double cy, double r);
-EmbCircleObject* embCircleObj_create(double cx, double cy, double r);
-
-void embCircle_add(EmbCircleObjectList* pointer, EmbCircleObject data);
-int embCircle_count(EmbCircleObjectList* pointer);
-int embCircle_empty(EmbCircleObjectList* pointer);
+void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data);
+int embCircleObjectList_count(EmbCircleObjectList* pointer);
+int embCircleObjectList_empty(EmbCircleObjectList* pointer);
 
 #ifdef __cplusplus
 }

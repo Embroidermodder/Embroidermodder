@@ -15,12 +15,17 @@ typedef struct EmbPoint_
 
 double embPoint_x(EmbPoint point);
 double embPoint_y(EmbPoint point);
+EmbPoint embPoint_make(double x, double y);
 
 typedef struct EmbPointList_
 {
     EmbPoint point;
     struct EmbPointList_* next;
 } EmbPointList;
+
+EmbPointList* embPointList_create(double x, double y);
+EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data);
+void embPointList_free(EmbPointList* list);
 
 typedef struct EmbPointObject_
 {
@@ -31,23 +36,19 @@ typedef struct EmbPointObject_
     EmbColor color;
 } EmbPointObject;
 
+EmbPointObject embPointObject_make(double x, double y);
+EmbPointObject* embPointObject_create(double x, double y);
+
 typedef struct EmbPointObjectList_
 {
     EmbPointObject pointObj;
     struct EmbPointObjectList_* next;
 } EmbPointObjectList;
 
-EmbPointObject embPointObj_make(double x, double y);
-EmbPoint embPoint_make(double x, double y);
-EmbPointObject* embPointObj_create(double x, double y);
+EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
+int embPointObjectList_count(EmbPointObjectList* pointer);
+int embPointObjectList_empty(EmbPointObjectList* pointer);
 void embPointObjectList_free(EmbPointObjectList* list);
-void embPointList_free(EmbPointList* list);
-
-EmbPointObjectList* embPointObject_add(EmbPointObjectList* pointer, EmbPointObject data);
-EmbPointList* embPointList_create(double x, double y);
-EmbPointList* embPoint_add(EmbPointList* pointer, EmbPoint data);
-int embPoint_count(EmbPointObjectList* pointer);
-int embPoint_empty(EmbPointObjectList* pointer);
 
 #ifdef __cplusplus
 }

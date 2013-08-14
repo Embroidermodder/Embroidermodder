@@ -39,18 +39,18 @@ typedef struct EmbRectObject_
     EmbColor color;
 } EmbRectObject;
 
+EmbRectObject embRectObject_make(double x, double y, double w, double h);
+EmbRectObject* embRectObject_create(double x, double y, double w, double h);
+
 typedef struct EmbRectObjectList_
 {
     EmbRectObject rectObj;
     struct EmbRectObjectList_* next;
 } EmbRectObjectList;
 
-EmbRectObject embRectObj_make(double x, double y, double w, double h);
-EmbRectObject* embRectObj_create(double x, double y, double w, double h);
-
-void embRect_add(EmbRectObjectList* pointer, EmbRectObject data);
-int embRect_count(EmbRectObjectList* pointer);
-int embRect_empty(EmbRectObjectList* pointer);
+void embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
+int embRectObjectList_count(EmbRectObjectList* pointer);
+int embRectObjectList_empty(EmbRectObjectList* pointer);
 
 #ifdef __cplusplus
 }

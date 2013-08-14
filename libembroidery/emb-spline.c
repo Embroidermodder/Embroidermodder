@@ -1,6 +1,6 @@
 #include "emb-spline.h"
 
-int embSpline_count(EmbSplineObjectList* pointer)
+int embSplineObjectList_count(EmbSplineObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -12,7 +12,7 @@ int embSpline_count(EmbSplineObjectList* pointer)
     return i;
 }
 
-int embSpline_empty(EmbSplineObjectList* pointer)
+int embSplineObjectList_empty(EmbSplineObjectList* pointer)
 {
     return pointer == 0;
 }

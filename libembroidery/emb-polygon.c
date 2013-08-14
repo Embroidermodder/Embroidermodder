@@ -1,6 +1,10 @@
 #include "emb-polygon.h"
 
-int embPolygon_count(EmbPolygonObjectList* pointer)
+/**************************************************/
+/* EmbPolygonObjectList                           */
+/**************************************************/
+
+int embPolygonObjectList_count(EmbPolygonObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -12,7 +16,7 @@ int embPolygon_count(EmbPolygonObjectList* pointer)
     return i;
 }
 
-int embPolygon_empty(EmbPolygonObjectList* pointer)
+int embPolygonObjectList_empty(EmbPolygonObjectList* pointer)
 {
     return pointer == 0;
 }

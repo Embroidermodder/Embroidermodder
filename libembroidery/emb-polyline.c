@@ -1,5 +1,9 @@
 #include "emb-polyline.h"
 
+/**************************************************/
+/* EmbPolylineObjectList                          */
+/**************************************************/
+
 EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 {
     EmbPolylineObjectList* heapPointObj = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));

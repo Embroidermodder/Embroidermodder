@@ -1,6 +1,10 @@
 #include "emb-ellipse.h"
 #include <stdlib.h>
 
+/**************************************************/
+/* EmbEllipse                                     */
+/**************************************************/
+
 double embEllipse_centerX(EmbEllipse ellipse)
 {
     return ellipse.centerX;
@@ -41,8 +45,12 @@ double embEllipse_height(EmbEllipse ellipse)
     return ellipse.radiusY * 2.0;
 }
 
+/**************************************************/
+/* EmbEllipseObject                               */
+/**************************************************/
+
 /* Returns an EmbEllipseObject. It is created on the stack. */
-EmbEllipseObject embEllipseObj_make(double cx, double cy, double rx, double ry)
+EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject stackEllipseObj;
     stackEllipseObj.ellipse.centerX = cx;
@@ -53,7 +61,7 @@ EmbEllipseObject embEllipseObj_make(double cx, double cy, double rx, double ry)
 }
 
 /* Returns an EmbEllipseObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
-EmbEllipseObject* embEllipseObj_create(double cx, double cy, double rx, double ry)
+EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject* heapEllipseObj = (EmbEllipseObject*)malloc(sizeof(EmbEllipseObject));
     heapEllipseObj->ellipse.centerX = cx;
@@ -63,15 +71,20 @@ EmbEllipseObject* embEllipseObj_create(double cx, double cy, double rx, double r
     return heapEllipseObj;
 }
 
-void embEllipse_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
+/**************************************************/
+/* EmbEllipseObjectList                           */
+/**************************************************/
+
+void embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
 {
+    /* TODO: pointer safety */
     pointer->next = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
     pointer = pointer->next;
     pointer->ellipseObj = data;
     pointer->next = 0;
 }
 
-int embEllipse_count(EmbEllipseObjectList* pointer)
+int embEllipseObjectList_count(EmbEllipseObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -83,7 +96,7 @@ int embEllipse_count(EmbEllipseObjectList* pointer)
     return i;
 }
 
-int embEllipse_empty(EmbEllipseObjectList* pointer)
+int embEllipseObjectList_empty(EmbEllipseObjectList* pointer)
 {
     return pointer == 0;
 }

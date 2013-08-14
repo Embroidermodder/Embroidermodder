@@ -1,6 +1,10 @@
 #include "emb-line.h"
-#include "emb-vector.h" 
+#include "emb-vector.h"
 #include <stdlib.h>
+
+/**************************************************/
+/* EmbLine                                        */
+/**************************************************/
 
 double embLine_x1(EmbLine line)
 {
@@ -22,8 +26,12 @@ double embLine_y2(EmbLine line)
     return line.y2;
 }
 
+/**************************************************/
+/* EmbLineObject                                  */
+/**************************************************/
+
 /* Returns an EmbLineObject. It is created on the stack. */
-EmbLineObject embLineObj_make(double x1, double y1, double x2, double y2)
+EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2)
 {
     EmbLineObject stackLineObj;
     stackLineObj.line.x1 = x1;
@@ -34,7 +42,7 @@ EmbLineObject embLineObj_make(double x1, double y1, double x2, double y2)
 }
 
 /* Returns an EmbLineObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
-EmbLineObject* embLineObj_create(double x1, double y1, double x2, double y2)
+EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 {
     EmbLineObject* heapLineObj = (EmbLineObject*)malloc(sizeof(EmbLineObject));
     heapLineObj->line.x1 = x1;
@@ -44,15 +52,20 @@ EmbLineObject* embLineObj_create(double x1, double y1, double x2, double y2)
     return heapLineObj;
 }
 
-void embLine_add(EmbLineObjectList* pointer, EmbLineObject data)
+/**************************************************/
+/* EmbLineObjectList                              */
+/**************************************************/
+
+void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
+    /* TODO: pointer safety */
     pointer->next = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
     pointer = pointer->next;
     pointer->lineObj = data;
     pointer->next = 0;
 }
 
-int embLine_count(EmbLineObjectList* pointer)
+int embLineObjectList_count(EmbLineObjectList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -64,7 +77,7 @@ int embLine_count(EmbLineObjectList* pointer)
     return i;
 }
 
-int embLine_empty(EmbLineObjectList* pointer)
+int embLineObjectList_empty(EmbLineObjectList* pointer)
 {
     return pointer == 0;
 }
@@ -72,6 +85,7 @@ int embLine_empty(EmbLineObjectList* pointer)
 /*! Finds the normalized vector perpendicular (clockwise) to the line given by v1->v2 (normal to the line) */
 void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbVector* result)
 {
+    /* TODO: pointer safety */
     double temp;
     result->X = vector2.X - vector1.X;
     result->Y = vector2.Y - vector1.Y;
@@ -84,6 +98,7 @@ void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbV
 /*! Finds the intersection of two lines given by v1->v2 and v3->v4 and sets the value in the result variable */
 void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result)
 {
+    /* TODO: pointer safety */
     double A2 = v2.Y - v1.Y;
     double B2 = v1.X - v2.X;
     double C2 = A2 * v1.X + B2 * v1.Y;

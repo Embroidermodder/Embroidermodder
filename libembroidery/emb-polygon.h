@@ -24,8 +24,8 @@ typedef struct EmbPolygonObjectList_
     struct EmbPolygonObjectList_* next;
 } EmbPolygonObjectList;
 
-int embPolygon_count(EmbPolygonObjectList* pointer);
-int embPolygon_empty(EmbPolygonObjectList* pointer);
+int embPolygonObjectList_count(EmbPolygonObjectList* pointer);
+int embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
 
 #ifdef __cplusplus
 }

@@ -4,6 +4,7 @@
 
 void embStitchList_add(EmbStitchList* pointer, EmbStitch data)
 {
+    /* TODO: pointer safety */
     pointer->next = (EmbStitchList*)malloc(sizeof(EmbStitchList));
     pointer = pointer->next;
     pointer->stitch = data;
@@ -12,6 +13,7 @@ void embStitchList_add(EmbStitchList* pointer, EmbStitch data)
 
 EmbStitch embStitchList_getAt(EmbStitchList* pointer, int num)
 {
+    /* TODO: pointer safety */
     int i;
     for(i = 0; i < num; i++)
     {

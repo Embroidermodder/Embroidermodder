@@ -131,7 +131,7 @@ void moveStitchListToPolyline(EmbPattern* p)
                 }
                 else
                 {
-                    currentPointList = embPoint_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
+                    currentPointList = embPointList_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
                 }
             }
             stitches = stitches->next;
@@ -218,7 +218,7 @@ void embPattern_changeColor(EmbPattern* p, int index)
 int embPattern_read(EmbPattern* p, const char* fileName)
 {
     embPattern_free(p);
-    p = (EmbPattern*)malloc(sizeof(EmbPattern));
+    p = embPattern_create();
     EmbReaderWriter* reader = 0;
     reader = embReaderWriter_getByFileName(fileName);
     if(reader->reader(p, fileName))
@@ -285,15 +285,15 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     /* TODO: Come back and optimize this mess so that after going thru all objects
             and stitches, if the rectangle isn't reasonable, then return a default rect */
     if(embStitchList_empty(p->stitchList) &&
-    embArc_empty(p->arcObjList) &&
-    embCircle_empty(p->circleObjList) &&
-    embEllipse_empty(p->ellipseObjList) &&
-    embLine_empty(p->lineObjList) &&
-    embPoint_empty(p->pointObjList) &&
-    embPolygon_empty(p->polygonObjList) &&
+    embArcObjectList_empty(p->arcObjList) &&
+    embCircleObjectList_empty(p->circleObjList) &&
+    embEllipseObjectList_empty(p->ellipseObjList) &&
+    embLineObjectList_empty(p->lineObjList) &&
+    embPointObjectList_empty(p->pointObjList) &&
+    embPolygonObjectList_empty(p->polygonObjList) &&
     embPolylineObjectList_empty(p->polylineObjList) &&
-    embRect_empty(p->rectObjList) &&
-    embSpline_empty(p->splineObjList))
+    embRectObjectList_empty(p->rectObjList) &&
+    embSplineObjectList_empty(p->splineObjList))
     {
         BoundingRect.top = 0.0;
         BoundingRect.left = 0.0;
@@ -593,6 +593,8 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 
 void embPattern_free(EmbPattern* p)
 {
+    if(!p) return;
+
     EmbThreadList* thisThreadList;
     EmbThreadList* nextThreadList;
     EmbStitchList* thisStitchList;
@@ -726,11 +728,12 @@ void embPattern_free(EmbPattern* p)
         thisSplineObjList = nextSplineObjList;
     }
     free(p);
+    p = 0;
 }
 
 void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r)
 {
-    EmbCircleObject circleObj = embCircleObj_make(cx, cy, r);
+    EmbCircleObject circleObj = embCircleObject_make(cx, cy, r);
 
     if(!(p->circleObjList))
     {
@@ -741,14 +744,14 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
     }
     else
     {
-        embCircle_add(p->lastCircleObj, circleObj);
+        embCircleObjectList_add(p->lastCircleObj, circleObj);
         p->lastCircleObj = p->lastCircleObj->next;
     }
 }
 
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry)
 {
-    EmbEllipseObject ellipseObj = embEllipseObj_make(cx, cy, rx, ry);
+    EmbEllipseObject ellipseObj = embEllipseObject_make(cx, cy, rx, ry);
 
     if(!(p->ellipseObjList))
     {
@@ -759,14 +762,14 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
     }
     else
     {
-        embEllipse_add(p->lastEllipseObj, ellipseObj);
+        embEllipseObjectList_add(p->lastEllipseObj, ellipseObj);
         p->lastEllipseObj = p->lastEllipseObj->next;
     }
 }
 
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2)
 {
-    EmbLineObject lineObj = embLineObj_make(x1, y1, x2, y2);
+    EmbLineObject lineObj = embLineObject_make(x1, y1, x2, y2);
 
     if(!(p->lineObjList))
     {
@@ -777,7 +780,7 @@ void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2,
     }
     else
     {
-        embLine_add(p->lastLineObj, lineObj);
+        embLineObjectList_add(p->lastLineObj, lineObj);
         p->lastLineObj = p->lastLineObj->next;
     }
 }
@@ -788,7 +791,7 @@ void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj)
 
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
 {
-    EmbPointObject pointObj = embPointObj_make(x, y);
+    EmbPointObject pointObj = embPointObject_make(x, y);
 
     if(!(p->pointObjList))
     {
@@ -799,14 +802,14 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
     }
     else
     {
-        embPointObj_add(p->lastPointObj, pointObj);
+        embPointObjectList_add(p->lastPointObj, pointObj);
         p->lastPointObj = p->lastPointObj->next;
     }
 }
 
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h)
 {
-    EmbRectObject rectObj = embRectObj_make(x, y, w, h);
+    EmbRectObject rectObj = embRectObject_make(x, y, w, h);
 
     if(!(p->rectObjList))
     {
@@ -817,7 +820,7 @@ void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, do
     }
     else
     {
-        embRect_add(p->lastRectObj, rectObj);
+        embRectObjectList_add(p->lastRectObj, rectObj);
         p->lastRectObj = p->lastRectObj->next;
     }
 }

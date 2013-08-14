@@ -36,8 +36,8 @@ typedef struct EmbSplineObjectList_
     struct EmbSplineObjectList_* next;
 } EmbSplineObjectList;
 
-int embSpline_count(EmbSplineObjectList* pointer);
-int embSpline_empty(EmbSplineObjectList* pointer);
+int embSplineObjectList_count(EmbSplineObjectList* pointer);
+int embSplineObjectList_empty(EmbSplineObjectList* pointer);
 
 #ifdef __cplusplus
 }
