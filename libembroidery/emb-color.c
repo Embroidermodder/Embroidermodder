@@ -2,6 +2,8 @@
 
 EmbColor embColor_fromHexStr(char* val)
 {
+    /* TODO: pointer safety */
+
     /* expect string beginning with 6 hex digits */
     EmbColor color1;
     int rgb = 0;

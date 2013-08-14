@@ -50,6 +50,7 @@ EmbPattern* embPattern_create()
 
 void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
 {
+    /* TODO: pointer safety */
     double prevX = 0;
     double prevY = 0;
     EmbStitchList* pointer;
@@ -69,6 +70,7 @@ void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
 
 void embPattern_addThread(EmbPattern* p, EmbThread thread)
 {
+    /* TODO: pointer safety */
     if(!(p->threadList))
     {
         EmbThreadList* t = (EmbThreadList *)malloc(sizeof(EmbThreadList));
@@ -84,6 +86,8 @@ void embPattern_addThread(EmbPattern* p, EmbThread thread)
 
 void embPattern_fixColorCount(EmbPattern* p)
 {
+    /* TODO: pointer safety */
+
     /* fix color count to be max of color index. */
     int maxColorIndex = 0;
     EmbStitchList* list = p->stitchList;
@@ -106,6 +110,7 @@ void embPattern_fixColorCount(EmbPattern* p)
 
 void moveStitchListToPolyline(EmbPattern* p)
 {
+    /* TODO: pointer safety */
     EmbStitchList* stitches = p->stitchList;
     EmbPolylineObjectList* currentList = 0;
     while(stitches)
@@ -156,6 +161,7 @@ void moveStitchListToPolyline(EmbPattern* p)
 /* Three routines to add a stitch to the pattern depending on format... */
 void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex)
 {
+    /* TODO: pointer safety */
     EmbStitch s;
 
     if(flags & END)
@@ -195,6 +201,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex)
 {
+    /* TODO: pointer safety */
     double x,y;
     if(!embStitchList_empty(p->stitchList))
     {
@@ -212,10 +219,11 @@ void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int
 
 void embPattern_changeColor(EmbPattern* p, int index)
 {
+    /* TODO: pointer safety */
     p->currentColorIndex = index;
 }
 
-int embPattern_read(EmbPattern* p, const char* fileName)
+int embPattern_read(EmbPattern* p, const char* fileName) /* TODO: This doesn't work. Write test case using this convenience function. */
 {
     embPattern_free(p);
     p = embPattern_create();
@@ -230,7 +238,7 @@ int embPattern_read(EmbPattern* p, const char* fileName)
     return 0;
 }
 
-int embPattern_write(EmbPattern* p, const char *fileName)
+int embPattern_write(EmbPattern* p, const char *fileName) /* TODO: Write test case using this convenience function. */
 {
     EmbReaderWriter* writer = 0;
     writer = embReaderWriter_getByFileName(fileName);
@@ -247,6 +255,7 @@ int embPattern_write(EmbPattern* p, const char *fileName)
 * Doesn't insert or delete stitches to preserve density. */
 void embPattern_scale(EmbPattern* p, double scale)
 {
+    /* TODO: pointer safety */
     EmbStitchList* pointer;
     pointer = p->stitchList;
     while(pointer)
@@ -259,6 +268,7 @@ void embPattern_scale(EmbPattern* p, double scale)
 
 EmbRect embPattern_calcBoundingBox(EmbPattern* p)
 {
+    /* TODO: pointer safety */
     EmbStitchList* pointer;
     EmbRect BoundingRect;
     EmbStitch pt;
@@ -416,6 +426,7 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
 
 void embPattern_flipVertical(EmbPattern* p)
 {
+    /* TODO: pointer safety */
     EmbStitchList* pointer;
     pointer= p->stitchList;
     while(pointer)
@@ -427,6 +438,7 @@ void embPattern_flipVertical(EmbPattern* p)
 
 void embPattern_combineJumpStitches(EmbPattern* p)
 {
+    /* TODO: pointer safety */
     EmbStitchList* pointer;
     int jumpCount = 0;
     EmbStitchList* jumpListStart = 0;
@@ -465,6 +477,7 @@ void embPattern_combineJumpStitches(EmbPattern* p)
 
 void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength)
 {
+    /* TODO: pointer safety */
     int j = 0, splits;
     double maxXY, maxLen, addX, addY;
 
@@ -528,6 +541,8 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
 
 void embPattern_center(EmbPattern* p)
 {
+    /* TODO: pointer safety */
+
     /* TODO: review this. currently not used in anywhere. Also needs to handle various design objects */
     int moveLeft, moveTop;
     EmbRect boundingRect;
@@ -550,6 +565,7 @@ void embPattern_center(EmbPattern* p)
 
 void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 {
+    /* TODO: pointer safety */
     char hasRead = 0;
     EmbReaderWriter* colorfile;
     const char* dotPos = strrchr(fileName, '.');
@@ -733,6 +749,7 @@ void embPattern_free(EmbPattern* p)
 
 void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r)
 {
+    /* TODO: pointer safety */
     EmbCircleObject circleObj = embCircleObject_make(cx, cy, r);
 
     if(!(p->circleObjList))
@@ -751,6 +768,7 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
 
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry)
 {
+    /* TODO: pointer safety */
     EmbEllipseObject ellipseObj = embEllipseObject_make(cx, cy, rx, ry);
 
     if(!(p->ellipseObjList))
@@ -769,6 +787,7 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
 
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2)
 {
+    /* TODO: pointer safety */
     EmbLineObject lineObj = embLineObject_make(x1, y1, x2, y2);
 
     if(!(p->lineObjList))
@@ -787,10 +806,12 @@ void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2,
 
 void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj)
 {
+    /* TODO: pointer safety */
 }
 
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
 {
+    /* TODO: pointer safety */
     EmbPointObject pointObj = embPointObject_make(x, y);
 
     if(!(p->pointObjList))
@@ -809,6 +830,7 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
 
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h)
 {
+    /* TODO: pointer safety */
     EmbRectObject rectObj = embRectObject_make(x, y, w, h);
 
     if(!(p->rectObjList))

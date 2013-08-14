@@ -22,6 +22,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
     if(!strcmp(ending, ".10o"))
     {
         EmbReaderWriter* rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
+        /* TODO: pointer safety */
         rw->reader = read10o;
         rw->writer = write10o;
         return rw;

@@ -4,6 +4,7 @@
 
 void embVector_Normalize(EmbVector vector, EmbVector* result)
 {
+    /* TODO: pointer safety */
     double length = embVector_GetLength(vector);
     result->X = vector.X / length;
     result->Y = vector.Y / length;
@@ -11,12 +12,14 @@ void embVector_Normalize(EmbVector vector, EmbVector* result)
 
 void embVector_Multiply(EmbVector vector, double magnitude, EmbVector* result)
 {
+    /* TODO: pointer safety */
     result->X = vector.X * magnitude;
     result->Y = vector.Y * magnitude;
 }
 
 void embVector_Add(EmbVector v1, EmbVector v2, EmbVector* result)
 {
+    /* TODO: pointer safety */
     result->X = v1.X + v2.X;
     result->Y = v1.Y + v2.Y;
 }
