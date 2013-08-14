@@ -3,7 +3,7 @@
 #include <string.h>
 #include "emb-reader-writer.h"
 
-static const int formatCount = 57;
+static const int formatCount = 58;
 static const char* const formats[] = {
 ".10o", "U", " ", " Toyota Embroidery Format                         ",
 ".100", "U", " ", " Toyota Embroidery Format                         ",
