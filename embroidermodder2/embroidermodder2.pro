@@ -32,6 +32,7 @@ mdiarea.cpp \
 mdiwindow.cpp \
 view.cpp \
 cmdprompt.cpp \
+embdetails-dialog.cpp \
 settings-dialog.cpp \
 preview-dialog.cpp \
 layer-manager.cpp \
@@ -63,6 +64,7 @@ mdiarea.h \
 mdiwindow.h \
 view.h \
 cmdprompt.h \
+embdetails-dialog.h \
 settings-dialog.h \
 preview-dialog.h \
 layer-manager.h \

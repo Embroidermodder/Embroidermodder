@@ -16,6 +16,7 @@
 #include "emb-rect.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
+#include "embdetails-dialog.h"
 
 #include <QLabel>
 #include <QDesktopServices>
@@ -28,8 +29,6 @@
 #include <QMdiArea>
 #include <QGraphicsScene>
 #include <QComboBox>
-#include "emb-pattern.h"
-#include <vector>
 
 void MainWindow::stub_implement(QString txt)
 {
@@ -163,170 +162,12 @@ QString MainWindow::platformString()
 
 void MainWindow::designDetails()
 {
-//TODO: Reimplement designDetails() using the libembroidery C API
-/*
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    qDebug("designDetails()");
-    QString appName = QApplication::applicationName();
-    QString title = "Design Details";
-
-    pattern p;
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        p = ((MDIWindow*)mdiArea->activeSubWindow())->pattern;
-    p.CalculateBoundingBox();
-    embRect bounds = p.BoundingRect;
-
-    int colors=1;
-    int real_stitches=0;
-    int jump_stitches=0;
-    int trim_stitches=0;
-    int unknown_stitches=0;
-    double minx=0,maxx=0,miny=0,maxy=0;
-    double min_stitchlength=999.0;
-    double max_stitchlength=0.0;
-    double total_stitchlength=0.0;
-    int number_of_minlength_stitches=0;
-    int number_of_maxlength_stitches=0;
-
-    double xx=0,yy=0;
-    double dx=0,dy=0;
-    double length=0.0;
-
-    if (p.stitchlist.size() ==0) {
-        //messages.add("No design loaded\n");
-        return;
-    }
-    std::vector<double> stitchLengths;
-
-    int stitches = p.stitchlist.size();
-    double totalColorLength = 0.0;
-    for (int i=0;i<stitches;i++) {
-        dx=p.stitchlist[i].xx-xx;
-        dy=p.stitchlist[i].yy-yy;
-        xx=p.stitchlist[i].xx;
-        yy=p.stitchlist[i].yy;
-        length=sqrt(dx * dx + dy * dy);
-        totalColorLength += length;
-        if (i>0 && p.stitchlist[i-1].flags!=NORMAL) length=0.0;	//can't count first normal stitch;
-        if(!(p.stitchlist[i].flags & (JUMP | TRIM))) {
-            real_stitches++;
-            if(length>max_stitchlength) {max_stitchlength=length; number_of_maxlength_stitches=0;};
-            if(length==max_stitchlength) number_of_maxlength_stitches++;
-            if(length>0 && length<min_stitchlength)
-            {
-                min_stitchlength=length;
-                number_of_minlength_stitches=0;
-            };
-            if(length==min_stitchlength) number_of_minlength_stitches++;
-            total_stitchlength+=length;
-            if(xx<minx) minx=xx;
-            if(xx>maxx) maxx=xx;
-            if(yy<miny) miny=yy;
-            if(yy>maxy) maxy=yy;
-        }
-        if(p.stitchlist[i].flags & JUMP)
-        {
-            jump_stitches++;
-        }
-        if(p.stitchlist[i].flags & TRIM)
-        {
-            trim_stitches++;
-        }
-        if(p.stitchlist[i].flags & STOP)
-        {
-            stitchLengths.push_back(totalColorLength);
-            totalColorLength = 0;
-            colors++;
-        }
-        if(p.stitchlist[i].flags & END)
-        {
-            stitchLengths.push_back(totalColorLength);
-        }
-    }
-
-    //second pass to fill bins now that we know max stitch length
-#define NUMBINS 10
-    int bin[NUMBINS+1];
-    for (int i=0;i<=NUMBINS;i++)
+    QGraphicsScene* scene = activeScene();
+    if(scene)
     {
-        bin[i]=0;
+        EmbDetailsDialog dialog(scene, this);
+        dialog.exec();
     }
-
-    for (int i=0;i<stitches;i++) {
-        dx=p.stitchlist[i].xx-xx;
-        dy=p.stitchlist[i].yy-yy;
-        xx=p.stitchlist[i].xx;
-        yy=p.stitchlist[i].yy;
-        if (i>0 && p.stitchlist[i-1].flags==NORMAL && p.stitchlist[i].flags == NORMAL) {
-            length=sqrt(dx * dx + dy * dy);
-            bin[int(floor(NUMBINS*length/max_stitchlength))]++;
-        }
-    }
-
-    double binSize = max_stitchlength / NUMBINS;
-
-    QString str;
-    for(int i = 0; i < NUMBINS; i++)
-    {
-        str += QString::number(binSize * (i), 'f', 1) + " - " + QString::number(binSize * (i+1), 'f', 1) + " mm: " +  QString::number(bin[i]) + "\n\n";
-    }
-
-    QDialog dialog(this);
-
-    QGridLayout *grid = new QGridLayout(this);
-    grid->setSpacing(2);
-
-    grid->addWidget(new QLabel(tr("Stitches:")),0,0,1,1);
-    grid->addWidget(new QLabel(QString::number(p.stitchlist.size())), 0, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Colors:")),1,0,1,1);
-    grid->addWidget(new QLabel(QString::number(p.colorlist.size())), 1, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Jumps:")),2,0,1,1);
-    grid->addWidget(new QLabel(QString::number(jump_stitches)), 2, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Top:")),3,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.top) + " mm"), 3, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Left:")),4,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.left) + " mm"), 4, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Bottom:")),5,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.bottom) + " mm"), 5, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Right:")),6,0,1,1);
-    grid->addWidget(new QLabel(QString::number(bounds.right) + " mm"), 6, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Width:")),7,0,1,1);
-    grid->addWidget(new QLabel(QString::number((bounds.right - bounds.left)) + " mm"), 7, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("Height:")),8,0,1,1);
-    grid->addWidget(new QLabel(QString::number((bounds.bottom - bounds.top)) + " mm"), 8, 1, 1, 1);
-    grid->addWidget(new QLabel(tr("\nStitch Distribution: \n")),9,0,1,2);
-    grid->addWidget(new QLabel(str), 10, 0, 1, 1);
-    grid->addWidget(new QLabel(tr("\nThread Length By Color: \n")),11,0,1,2);
-    int currentRow = 12;
-    for(int i = 0; i < p.colorlist.size(); i++)
-    {
-        QFrame *frame = new QFrame();
-        frame->setGeometry(0,0,30,30);
-        QPalette palette = frame->palette();
-        color t = p.colorlist[i].Color;
-        palette.setColor(backgroundRole(), QColor( t.r, t.g, t.b ) );
-        frame->setPalette( palette );
-        frame->setAutoFillBackground(true);
-        grid->addWidget(frame, currentRow,0,1,1);
-        grid->addWidget(new QLabel(QString::number(stitchLengths[i]) + " mm"), currentRow,1,1,1);
-        currentRow++;
-    }
-    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
-    QPushButton button(&dialog);
-    button.setText("Ok");
-    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-
-    grid->addWidget(&buttonbox, currentRow, 0, 1, 2);
-
-    dialog.setWindowTitle(title);
-    dialog.setMinimumWidth(100);
-    dialog.setMinimumHeight(50);
-    dialog.setLayout(grid);
-    dialog.exec();
-    QApplication::restoreOverrideCursor();
-*/
 }
 
 void MainWindow::about()

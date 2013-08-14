@@ -47,7 +47,7 @@ Settings_Dialog::Settings_Dialog(MainWindow* mw, const QString& showTab, QWidget
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(acceptChanges()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(rejectChanges()));
 
-    QVBoxLayout* vboxLayoutMain = new QVBoxLayout;
+    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(this);
     vboxLayoutMain->addWidget(tabWidget);
     vboxLayoutMain->addWidget(buttonBox);
     setLayout(vboxLayoutMain);
