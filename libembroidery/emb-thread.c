@@ -68,8 +68,18 @@ int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int
     return closestIndex;
 }
 
+EmbThread embThread_getRandom()
+{
+    EmbThread c;
+    c.color.r = rand()%256;
+    c.color.g = rand()%256;
+    c.color.b = rand()%256;
+    c.description = "random";
+    c.catalogNumber = "";
+    return c;
+}
 
-void embThread_add(EmbThreadList* pointer, EmbThread data)
+void embThreadList_add(EmbThreadList* pointer, EmbThread data)
 {
     EmbThreadList* tempPointer = pointer;
     while(tempPointer->next)
@@ -82,18 +92,7 @@ void embThread_add(EmbThreadList* pointer, EmbThread data)
     tempPointer->next = (EmbThreadList*)NULL;
 }
 
-EmbThread embThread_getRandom()
-{
-    EmbThread c;
-    c.color.r = rand()%256;
-    c.color.g = rand()%256;
-    c.color.b = rand()%256;
-    c.description = "random";
-    c.catalogNumber = "";
-    return c;
-}
-
-EmbThread embThread_getAt(EmbThreadList* pointer, int num)
+EmbThread embThreadList_getAt(EmbThreadList* pointer, int num)
 {
     int i = 0;
     for(i = 0; i < num; i++)
@@ -106,7 +105,7 @@ EmbThread embThread_getAt(EmbThreadList* pointer, int num)
     return pointer->thread;
 }
 
-int embThread_count(EmbThreadList* pointer)
+int embThreadList_count(EmbThreadList* pointer)
 {
     int i = 1;
     if(!pointer) return 0;
@@ -119,12 +118,12 @@ int embThread_count(EmbThreadList* pointer)
     return i;
 }
 
-int embThread_empty(EmbThreadList* pointer)
+int embThreadList_empty(EmbThreadList* pointer)
 {
     return pointer == NULL;
 }
 
-void embThread_free(EmbThreadList* pointer)
+void embThreadList_free(EmbThreadList* pointer)
 {
     EmbThreadList *colors = pointer;
     while(colors)

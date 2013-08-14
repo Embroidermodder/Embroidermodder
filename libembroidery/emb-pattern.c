@@ -78,7 +78,7 @@ void embPattern_addThread(EmbPattern* p, EmbThread thread)
     }
     else
     {
-        embThread_add(p->threadList, thread);
+        embThreadList_add(p->threadList, thread);
     }
 }
 
@@ -92,12 +92,12 @@ void embPattern_fixColorCount(EmbPattern* p)
         maxColorIndex = max(maxColorIndex, list->stitch.color);
         list = list->next;
     }
-    while((int)embThread_count(p->threadList) <= maxColorIndex)
+    while((int)embThreadList_count(p->threadList) <= maxColorIndex)
     {
         embPattern_addThread(p, embThread_getRandom());
     }
     /*
-    while(embThread_count(p->threadList) > (maxColorIndex + 1))
+    while(embThreadList_count(p->threadList) > (maxColorIndex + 1))
     {
         TODO: erase last color    p->threadList.pop_back();
     }
@@ -114,7 +114,7 @@ void moveStitchListToPolyline(EmbPattern* p)
         EmbPolylineObject* currentPolyline = (EmbPolylineObject *) malloc(sizeof(EmbPolylineObject));
         currentPolyline->pointList = 0;
         currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
-        currentPolyline->color = embThread_getAt(p->threadList, stitches->stitch.color).color;
+        currentPolyline->color = embThreadList_getAt(p->threadList, stitches->stitch.color).color;
 
         while(stitches)
         {
@@ -166,7 +166,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
         /* HideStitchesOverLength(127); */
     }
 
-    if((flags & STOP) && embStitch_empty(p->stitchList))
+    if((flags & STOP) && embStitchList_empty(p->stitchList))
         return;
     if((flags & STOP) && isAutoColorIndex)
     {
@@ -186,7 +186,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     }
     else
     {
-        embStitch_add(p->lastStitch, s);
+        embStitchList_add(p->lastStitch, s);
         p->lastStitch = p->lastStitch->next;
     }
     p->lastX = s.xx;
@@ -196,7 +196,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex)
 {
     double x,y;
-    if(!embStitch_empty(p->stitchList))
+    if(!embStitchList_empty(p->stitchList))
     {
         x = p->lastX + dx;
         y = p->lastY + dy;
@@ -215,18 +215,19 @@ void embPattern_changeColor(EmbPattern* p, int index)
     p->currentColorIndex = index;
 }
 
-EmbPattern* embPattern_read(const char* fileName)
+int embPattern_read(EmbPattern* p, const char* fileName)
 {
-    EmbPattern* p = (EmbPattern*)malloc(sizeof(EmbPattern));
+    embPattern_free(p);
+    p = (EmbPattern*)malloc(sizeof(EmbPattern));
     EmbReaderWriter* reader = 0;
     reader = embReaderWriter_getByFileName(fileName);
     if(reader->reader(p, fileName))
     {
         free(reader);
-        return p;
+        return 1;
     }
     free(reader);
-    return NULL;
+    return 0;
 }
 
 int embPattern_write(EmbPattern* p, const char *fileName)
@@ -283,7 +284,7 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     /* Calculate the bounding rectangle.  It's needed for smart repainting. */
     /* TODO: Come back and optimize this mess so that after going thru all objects
             and stitches, if the rectangle isn't reasonable, then return a default rect */
-    if(embStitch_empty(p->stitchList) &&
+    if(embStitchList_empty(p->stitchList) &&
     embArc_empty(p->arcObjList) &&
     embCircle_empty(p->circleObjList) &&
     embEllipse_empty(p->ellipseObjList) &&
@@ -467,7 +468,7 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
     int j = 0, splits;
     double maxXY, maxLen, addX, addY;
 
-    if(embStitch_count(p->stitchList) > 1)
+    if(embStitchList_count(p->stitchList) > 1)
     {
         EmbStitchList* pointer;
         EmbStitchList* prev;

@@ -162,7 +162,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
 	free(yDecompressed);
 	free(attributeData);
 	free(attributeDataDecompressed);
-	
+
 	fclose(file);
     return 1;
 }
@@ -191,9 +191,9 @@ int writeHus(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    stitchCount = embStitch_count(pattern->stitchList);
+    stitchCount = embStitchList_count(pattern->stitchList);
     /* embPattern_correctForMaxStitchLength(pattern, 0x7F, 0x7F); */
-    minColors = embThread_count(pattern->threadList);
+    minColors = embThreadList_count(pattern->threadList);
     patternColor = minColors;
     if(minColors > 24) minColors = 24;
     binaryWriteUInt(file, 0x00C8AF5B);
@@ -238,7 +238,7 @@ int writeHus(EmbPattern* pattern, const char* fileName)
 
     for(i = 0; i < patternColor; i++)
     {
-        binaryWriteShort(file, embThread_findNearestColorInArray(embThread_getAt(pattern->threadList, i).color, (EmbThread*)husThreads, husThreadCount));
+        binaryWriteShort(file, embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)husThreads, husThreadCount));
     }
 
     binaryWriteBytes(file, (char*) attributeCompressed, attributeSize);

@@ -112,7 +112,7 @@ void writeEmbOneSection(EmbPattern* pattern, FILE *file)
 
 void writePaletteSection(EmbPattern* pattern, FILE* file)
 {
-    binaryWriteInt(file, embThread_count(pattern->threadList));
+    binaryWriteInt(file, embThreadList_count(pattern->threadList));
 }
 
 int writePes(EmbPattern* pattern, const char* fileName)

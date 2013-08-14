@@ -15,7 +15,7 @@ int readCol(EmbPattern* pattern, const char* fileName)
         /*TODO: set messages here "Error opening COL file for read:" */
         return 0;
     }
-    embThread_free(pattern->threadList);
+    embThreadList_free(pattern->threadList);
     fscanf(file, "%d\r", &numberOfColors);
     for(i = 0; i < numberOfColors; i++)
     {
@@ -46,7 +46,7 @@ int writeCol(EmbPattern* pattern, const char* fileName)
         /*TODO: set messages here "Error creating/editing COL file for read:" */
         return 0;
     }
-    colorCount = embThread_count(pattern->threadList);
+    colorCount = embThreadList_count(pattern->threadList);
     fprintf(file, "%d\n\r", colorCount);
     colors = pattern->threadList;
     i = 0;

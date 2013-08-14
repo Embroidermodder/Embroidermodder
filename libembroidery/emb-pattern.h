@@ -68,7 +68,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
 void embPattern_changeColor(EmbPattern* p, int index);
 void embPattern_free(EmbPattern* p);
-EmbPattern* embPattern_read(const char* fileName);
+int embPattern_read(EmbPattern* p, const char* fileName);
 int embPattern_write(EmbPattern* p, const char *fileName);
 void embPattern_scale(EmbPattern* p, double scale);
 EmbRect embPattern_calcBoundingBox(EmbPattern* p);

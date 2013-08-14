@@ -17,7 +17,7 @@ int writeTxt(EmbPattern* pattern, const char* fileName)
         return 0;
     }
     pointer = pattern->stitchList;
-    fprintf(file, "%u\n", embStitch_count(pointer));
+    fprintf(file, "%u\n", embStitchList_count(pointer));
 
     while(pointer)
     {

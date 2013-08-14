@@ -140,7 +140,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         /*TODO: set status here "Error opening THR file for write:" */
         return 0;
     }
-    stitchLength = embStitch_count(pattern->stitchList);
+    stitchLength = embStitchList_count(pattern->stitchList);
     memset(&header, 0, sizeof(ThredHeader));
     header.sigVersion = 0x746872 | (version << 24);
     header.length = stitchLength * 12 + 16;

@@ -50,7 +50,7 @@ unsigned char setbit(int pos)
                 jumpListStart->stitch.yy = pointer->stitch.yy;
                 jumpListStart->stitch.flags |= TRIM;
                 jumpListStart->next = pointer;
-                
+
                 jumpCount-=2;
                 for(; jumpCount > 0; jumpCount--)
                 {
@@ -65,7 +65,7 @@ unsigned char setbit(int pos)
         }
         else
         {
-            if(pointer->stitch.flags == NORMAL) 
+            if(pointer->stitch.flags == NORMAL)
             {
                 needleDown = 1;
                 jumpCount = 0;
@@ -74,7 +74,7 @@ unsigned char setbit(int pos)
         pointer = pointer->next;
     }
 } */
- 
+
 void encode_record(FILE* file, int x, int y, int flags)
 {
     char b0, b1, b2;
@@ -112,8 +112,8 @@ void encode_record(FILE* file, int x, int y, int flags)
         b2 = (char) 0xF3;
         b0 = b1 = (char) 0;
     }
-    
-    /* if(flags & TRIM) 
+
+    /* if(flags & TRIM)
     {
         int v = 5;
         int dx = (int)(x/v), dy = (int)(y/v);
@@ -397,9 +397,9 @@ int writeDst(EmbPattern* pattern, const char* fileName)
 
     xx = yy = 0;
     co = 1;
-    co = embThread_count(pattern->threadList);
+    co = embThreadList_count(pattern->threadList);
     st = 0;
-    st = embStitch_count(pattern->stitchList);
+    st = embStitchList_count(pattern->stitchList);
     flags = NORMAL;
     boundingRect = embPattern_calcBoundingBox(pattern);
     /* TODO: review the code below

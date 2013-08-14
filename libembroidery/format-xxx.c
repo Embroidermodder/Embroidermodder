@@ -144,7 +144,7 @@ void xxxEncodeDesign(FILE* file, EmbPattern* p)
     double thisY = 0.0f;
     EmbStitchList* stitches;
 
-    if(!embStitch_empty(p->stitchList))
+    if(!embStitchList_empty(p->stitchList))
     {
         thisX = (float)p->stitchList->stitch.xx;
         thisY = (float)p->stitchList->stitch.yy;
@@ -195,12 +195,12 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     {
         binaryWriteByte(file, 0x00);
     }
-    binaryWriteUInt(file, (unsigned int) embStitch_count(pattern->stitchList));
+    binaryWriteUInt(file, (unsigned int) embStitchList_count(pattern->stitchList));
     for(i = 0; i < 0x0C; i++)
     {
         binaryWriteByte(file, 0x00);
     }
-    binaryWriteUShort(file, (unsigned short)embThread_count(pattern->threadList));
+    binaryWriteUShort(file, (unsigned short)embThreadList_count(pattern->threadList));
     binaryWriteShort(file, 0x0000);
 
     rect = embPattern_calcBoundingBox(pattern);

@@ -23,12 +23,13 @@ typedef struct EmbThreadList_
 
 int embThread_findNearestColor(EmbColor color, EmbThreadList* colors);
 int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
-void embThread_add(EmbThreadList* pointer, EmbThread data);
 EmbThread embThread_getRandom(void);
-EmbThread embThread_getAt(EmbThreadList* pointer, int num);
-int embThread_count(EmbThreadList* pointer);
-int embThread_empty(EmbThreadList* pointer);
-void embThread_free(EmbThreadList* pointer);
+
+void embThreadList_add(EmbThreadList* pointer, EmbThread data);
+int embThreadList_count(EmbThreadList* pointer);
+int embThreadList_empty(EmbThreadList* pointer);
+void embThreadList_free(EmbThreadList* pointer);
+EmbThread embThreadList_getAt(EmbThreadList* pointer, int num);
 
 #ifdef __cplusplus
 }

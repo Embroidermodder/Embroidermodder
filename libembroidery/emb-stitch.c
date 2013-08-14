@@ -2,7 +2,7 @@
 #include "emb-stitch.h"
 #include <stdio.h>
 
-void embStitch_add(EmbStitchList* pointer, EmbStitch data)
+void embStitchList_add(EmbStitchList* pointer, EmbStitch data)
 {
     pointer->next = (EmbStitchList*)malloc(sizeof(EmbStitchList));
     pointer = pointer->next;
@@ -10,7 +10,7 @@ void embStitch_add(EmbStitchList* pointer, EmbStitch data)
     pointer->next = 0;
 }
 
-EmbStitch embStitch_getAt(EmbStitchList* pointer, int num)
+EmbStitch embStitchList_getAt(EmbStitchList* pointer, int num)
 {
     int i;
     for(i = 0; i < num; i++)
@@ -21,7 +21,7 @@ EmbStitch embStitch_getAt(EmbStitchList* pointer, int num)
 }
 
 /* TODO: Add a default parameter to handle returning count based on stitch flags. Currently, it includes JUMP and TRIM stitches, maybe we just want NORMAL stitches only or vice versa */
-int embStitch_count(EmbStitchList* pointer)
+int embStitchList_count(EmbStitchList* pointer)
 {
     int i = 0;
     if(!pointer) return 0;
@@ -33,7 +33,7 @@ int embStitch_count(EmbStitchList* pointer)
     return i;
 }
 
-int embStitch_empty(EmbStitchList* pointer)
+int embStitchList_empty(EmbStitchList* pointer)
 {
     return pointer == 0;
 }

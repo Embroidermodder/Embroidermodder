@@ -18,7 +18,7 @@ int readInf(EmbPattern* pattern, const char* fileName)
     binaryReadUInt32BE(file);
     binaryReadUInt32BE(file);
     numberOfColors = binaryReadUInt32BE(file);
-    embThread_free(pattern->threadList);
+    embThreadList_free(pattern->threadList);
     for(i = 0; i < numberOfColors; i++)
     {
         char colorType[50];
@@ -52,7 +52,7 @@ int writeInf(EmbPattern* pattern, const char* fileName)
     binaryWriteUIntBE(file, 0x08);
     /* write place holder offset */
     binaryWriteUIntBE(file, 0x00);
-    binaryWriteUIntBE(file, embThread_count(pattern->threadList));
+    binaryWriteUIntBE(file, embThreadList_count(pattern->threadList));
 
     pointer = pattern->threadList;
     while(pointer)

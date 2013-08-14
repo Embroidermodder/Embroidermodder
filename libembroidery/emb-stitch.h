@@ -27,10 +27,11 @@ typedef struct EmbStitchList_
     struct EmbStitchList_* next;
 } EmbStitchList;
 
-void embStitch_add(EmbStitchList* pointer, EmbStitch data);
-EmbStitch embStitch_getAt(EmbStitchList* pointer, int num);
-int embStitch_count(EmbStitchList* pointer);
-int embStitch_empty(EmbStitchList* pointer);
+void embStitchList_add(EmbStitchList* pointer, EmbStitch data);
+int embStitchList_count(EmbStitchList* pointer);
+int embStitchList_empty(EmbStitchList* pointer);
+/* TODO: Shouldn't there be a embStitchList_free function? */
+EmbStitch embStitchList_getAt(EmbStitchList* pointer, int num);
 
 #ifdef __cplusplus
 }

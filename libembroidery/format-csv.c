@@ -214,7 +214,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
     }
 
     /* if not enough colors defined, fill in random colors */
-    while(embThread_count(pattern->threadList) < numColorChanges)
+    while(embThreadList_count(pattern->threadList) < numColorChanges)
     {
         embPattern_addThread(pattern, embThread_getRandom());
     }
@@ -235,10 +235,10 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
     int threadCount = 0;
 
     sList = pattern->stitchList;
-    stitchCount = embStitch_count(sList);
+    stitchCount = embStitchList_count(sList);
 
     tList = pattern->threadList;
-    threadCount = embThread_count(tList);
+    threadCount = embThreadList_count(tList);
 
     boundingRect = embPattern_calcBoundingBox(pattern);
 

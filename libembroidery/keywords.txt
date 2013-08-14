@@ -129,10 +129,10 @@ EmbStitch	KEYWORD1
 EmbStitchList	KEYWORD1
 
 # Functions
-embStitch_add	KEYWORD2
-embStitch_getAt	KEYWORD2
-embStitch_count	KEYWORD2
-embStitch_empty	KEYWORD2
+embStitchList_add	KEYWORD2
+embStitchList_getAt	KEYWORD2
+embStitchList_count	KEYWORD2
+embStitchList_empty	KEYWORD2
 
 ####################
 # emb-thread.h
@@ -145,11 +145,12 @@ EmbThreadList	KEYWORD1
 # Functions
 embThread_findNearestColor	KEYWORD2
 embThread_findNearestColorInArray	KEYWORD2
-embThread_add	KEYWORD2
 embThread_getRandom	KEYWORD2
-embThread_getAt	KEYWORD2
-embThread_count	KEYWORD2
-embThread_empty	KEYWORD2
+embThreadList_add	KEYWORD2
+embThreadList_count	KEYWORD2
+embThreadList_empty	KEYWORD2
+embThreadList_free	KEYWORD2
+embThreadList_getAt	KEYWORD2
 
 ####################
 # emb-time.h

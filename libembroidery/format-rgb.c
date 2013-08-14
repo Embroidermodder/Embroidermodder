@@ -15,7 +15,7 @@ int readRgb(EmbPattern* pattern, const char* fileName)
     fseek(file, 0x00, SEEK_END);
     numberOfColors = ftell(file) / 4;
 
-    embThread_free(pattern->threadList);
+    embThreadList_free(pattern->threadList);
 
     fseek(file, 0x00, SEEK_SET);
     for(i = 0; i < numberOfColors; i++)

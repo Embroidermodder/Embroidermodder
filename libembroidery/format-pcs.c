@@ -19,7 +19,7 @@ void pcsEncode(FILE * file, int dx, int dy, int flags)
     binaryWriteByte(file, (unsigned char)(dx & 0xFF));
     binaryWriteByte(file, (unsigned char)((dx >> 8) & 0xFF));
     binaryWriteByte(file, (unsigned char)((dx >> 16) & 0xFF));
-    
+
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(dy & 0xFF));
     binaryWriteByte(file, (unsigned char)((dy >> 8) & 0xFF));
@@ -131,7 +131,7 @@ int writePcs(EmbPattern* pattern, const char* fileName)
     }
     binaryWriteByte(file, (unsigned char)'2');
     binaryWriteByte(file, 3); /* TODO: select hoop size defaulting to Large PCS hoop */
-    colorCount = embThread_count(pattern->threadList);
+    colorCount = embThreadList_count(pattern->threadList);
     binaryWriteUShort(file, (unsigned short)colorCount);
     threadPointer = pattern->threadList;
     i = 0;
@@ -151,7 +151,7 @@ int writePcs(EmbPattern* pattern, const char* fileName)
         binaryWriteUInt(file, 0); /* write remaining colors to reach 16 */
     }
 
-    binaryWriteUShort(file, (unsigned short)embStitch_count(pattern->stitchList));
+    binaryWriteUShort(file, (unsigned short)embStitchList_count(pattern->stitchList));
     /* write stitches */
     xx = yy = 0;
     pointer = pattern->stitchList;

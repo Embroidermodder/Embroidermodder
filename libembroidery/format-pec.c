@@ -155,12 +155,12 @@ void PecEncode(FILE* file, EmbPattern* p)
     {
         int deltaX, deltaY;
         EmbStitch s = list->stitch;
-        
+
         deltaX = roundDouble(s.xx - thisX);
         deltaY = roundDouble(s.yy - thisY);
         thisX += (double)deltaX;
         thisY += (double)deltaY;
-        
+
         if(s.flags & STOP)
         {
             pecEncodeStop(file, stopCode);
@@ -269,12 +269,12 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     {
         binaryWriteByte(file, 0x20);
     }
-    currentThreadCount = embThread_count(pattern->threadList);
+    currentThreadCount = embThreadList_count(pattern->threadList);
     binaryWriteByte(file, currentThreadCount-1);
 
     for(i = 0; i < currentThreadCount; i++)
     {
-        binaryWriteByte(file, embThread_findNearestColorInArray(embThread_getAt(pattern->threadList, i).color, (EmbThread*)pecThreads, pecThreadCount));
+        binaryWriteByte(file, embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)pecThreads, pecThreadCount));
     }
     for(i = 0; i < (int)(0x1CF - currentThreadCount); i++)
     {
@@ -333,7 +333,7 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
         tempStitches = tempStitches->next;
     }
     writeImage(file, image);
-    
+
     /* Writing each individual color */
     tempStitches = pattern->stitchList;
     for(i = 0; i < currentThreadCount; i++)
@@ -343,7 +343,7 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
         {
             int x = roundDouble((tempStitches->stitch.xx - bounds.left) * xFactor) + 3;
             int y = roundDouble((tempStitches->stitch.yy - bounds.top) * yFactor) + 3;
-            if(tempStitches->stitch.flags & STOP) 
+            if(tempStitches->stitch.flags & STOP)
             {
                 tempStitches = tempStitches->next;
                 break;
@@ -368,8 +368,8 @@ int writePec(EmbPattern* pattern, const char* fileName)
     embPattern_fixColorCount(pattern);
     embPattern_correctForMaxStitchLength(pattern,12.7, 204.7);
     embPattern_scale(pattern, 10.0);
-    
-    
+
+
     binaryWriteBytes(file, "#PEC0001", 8);
 
     writePecStitches(pattern, file, fileName);

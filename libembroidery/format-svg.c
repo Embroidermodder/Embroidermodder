@@ -2880,7 +2880,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     }
 
     pointer = pattern->stitchList;
-    if(embStitch_count(pointer) > 0)
+    if(embStitchList_count(pointer) > 0)
     {
         while(pointer)
         {
@@ -2892,7 +2892,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
                     fprintf(file, "\"/>");
                 }
 
-                c = embThread_getAt(pattern->threadList, pointer->stitch.color).color;
+                c = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
                 /* TODO: use proper thread width for stoke-width rather than just 0.2 */
                 fprintf(file, "\n<path stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" d=\"M %d %d",
                             c.r,
