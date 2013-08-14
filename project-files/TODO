@@ -72,6 +72,19 @@ TODO - CAD Command: Fillet
 TODO - CAD Command: Chamfer
 TODO - CAD Command: Split
 TODO - CAD Command: Area
+TODO - CAD Command: Time
+TODO - CAD Command: PickAdd
+TODO - CAD Command: Product
+TODO - CAD Command: Program
+TODO - CAD Command: ZoomFactor
+TODO - CAD Command: GripHot
+TODO - CAD Command: GripColor & GripCool
+TODO - CAD Command: GripSize
+TODO - CAD Command: Highlight
+TODO - CAD Command: Units
+TODO - CAD Command: Grid
+TODO - CAD Command: Find
+TODO - CAD Command: Divide
 TODO - Keyboard Zooming/Panning
 TODO - G-Code format?
 TODO - 3D Raised Embroidery
@@ -93,8 +106,9 @@ TODO - Offset Fill
 TODO - Brick Fill
 TODO - Trim jumps over a certain length.
 TODO - FAQ about setting high number of jumps for more controlled trimming.
-TODO - 'New Selection, shift to add' vs 'Add to Selection, shift to deselect' option.
+TODO - 'New Selection, shift to add' vs 'Add to Selection, shift to deselect' option. (PICKADD)
 TODO - Minimum stitch length option. (Many machines also have this option too)
 TODO - Add 'Design Details' functionality to libembroidery-convert
 TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
+TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
 

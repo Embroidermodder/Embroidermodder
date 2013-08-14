@@ -35,49 +35,49 @@ void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
     QMenu menu(this);
     if(objectName() == "StatusBarButtonSNAP")
     {
-        QAction* settingsSnapAction = new QAction("&Settings...", &menu);
+        QAction* settingsSnapAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "gridsnapsettings" + ".png"), "&Settings...", &menu);
         connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
         menu.addAction(settingsSnapAction);
     }
     else if(objectName() == "StatusBarButtonGRID")
     {
-        QAction* settingsGridAction = new QAction("&Settings...", &menu);
+        QAction* settingsGridAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "gridsettings" + ".png"), "&Settings...", &menu);
         connect(settingsGridAction, SIGNAL(triggered()), this, SLOT(settingsGrid()));
         menu.addAction(settingsGridAction);
     }
     else if(objectName() == "StatusBarButtonRULER")
     {
-        QAction* settingsRulerAction = new QAction("&Settings...", &menu);
+        QAction* settingsRulerAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "rulersettings" + ".png"), "&Settings...", &menu);
         connect(settingsRulerAction, SIGNAL(triggered()), this, SLOT(settingsRuler()));
         menu.addAction(settingsRulerAction);
     }
     else if(objectName() == "StatusBarButtonORTHO")
     {
-        QAction* settingsOrthoAction = new QAction("&Settings...", &menu);
+        QAction* settingsOrthoAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "orthosettings" + ".png"), "&Settings...", &menu);
         connect(settingsOrthoAction, SIGNAL(triggered()), this, SLOT(settingsOrtho()));
         menu.addAction(settingsOrthoAction);
     }
     else if(objectName() == "StatusBarButtonPOLAR")
     {
-        QAction* settingsPolarAction = new QAction("&Settings...", &menu);
+        QAction* settingsPolarAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "polarsettings" + ".png"), "&Settings...", &menu);
         connect(settingsPolarAction, SIGNAL(triggered()), this, SLOT(settingsPolar()));
         menu.addAction(settingsPolarAction);
     }
     else if(objectName() == "StatusBarButtonQSNAP")
     {
-        QAction* settingsQSnapAction = new QAction("&Settings...", &menu);
+        QAction* settingsQSnapAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "qsnapsettings" + ".png"), "&Settings...", &menu);
         connect(settingsQSnapAction, SIGNAL(triggered()), this, SLOT(settingsQSnap()));
         menu.addAction(settingsQSnapAction);
     }
     else if(objectName() == "StatusBarButtonQTRACK")
     {
-        QAction* settingsQTrackAction = new QAction("&Settings...", &menu);
+        QAction* settingsQTrackAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "qtracksettings" + ".png"), "&Settings...", &menu);
         connect(settingsQTrackAction, SIGNAL(triggered()), this, SLOT(settingsQTrack()));
         menu.addAction(settingsQTrackAction);
     }
     else if(objectName() == "StatusBarButtonLWT")
     {
-        QAction* settingsLwtAction = new QAction("&Settings...", &menu);
+        QAction* settingsLwtAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "lineweightsettings" + ".png"), "&Settings...", &menu);
         connect(settingsLwtAction, SIGNAL(triggered()), this, SLOT(settingsLwt()));
         menu.addAction(settingsLwtAction);
     }
