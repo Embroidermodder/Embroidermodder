@@ -145,7 +145,7 @@ bool SaveObject::save(const QString &fileName)
         }
 
         writeSuccessful = writer->writer(pattern, qPrintable(fileName));
-        if(!writeSuccessful) { qDebug("Writing file %s was unsuccessful"); }
+        if(!writeSuccessful) { qDebug("Writing file %s was unsuccessful", qPrintable(fileName)); }
     }
 
     free(writer);

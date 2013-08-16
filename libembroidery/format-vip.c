@@ -34,53 +34,67 @@ unsigned char* DecompressData(unsigned char* input, int inputLength, int decompr
     husExpand((unsigned char*)input, decompressedData, inputLength, 10);
     return decompressedData;
 }
+typedef struct _VipHeader
+{
+    int magicCode;
+    int numberOfStitches;
+    int numberOfColors;
+    short postitiveXHoopSize;
+    short postitiveYHoopSize;
+    short negativeXHoopSize;
+    short negativeYHoopSize;
+    int attributeOffset;
+    int xOffset;
+    int yOffset;
+    unsigned char stringVal[8];
+    short unknown;
+    int colorLength;
+} VipHeader;
 
 int readVip(EmbPattern* pattern, const char* fileName)
 {
-    int fileLength, magicCode, numberOfStitches, numberOfColors;
-    int i, attributeOffset, xOffset, yOffset, unknown, colorLength;
-	unsigned char* stringVal;
+    int fileLength;
+    int i;
     unsigned char prevByte = 0;
-	int postitiveXHoopSize,postitiveYHoopSize,negativeXHoopSize,negativeYHoopSize;
     unsigned char *attributeData, *decodedColors, *attributeDataDecompressed;
     unsigned char *xData, *xDecompressed, *yData, *yDecompressed;
+    VipHeader header;
     FILE* file = fopen(fileName, "rb");
     if(file == 0)
     {
-        /* TODO: set messages here "Error opening VIP file for read:" */
         return 0;
     }
     fseek(file, 0x0, SEEK_END);
     fileLength = ftell(file);
     fseek(file, 0x00, SEEK_SET);
-    magicCode = binaryReadInt32(file);
-    numberOfStitches = binaryReadInt32(file);
-    numberOfColors = binaryReadInt32(file);
+    header.magicCode = binaryReadInt32(file);
+    header.numberOfStitches = binaryReadInt32(file);
+    header.numberOfColors = binaryReadInt32(file);
 
-    postitiveXHoopSize = binaryReadInt16(file);
-    postitiveYHoopSize = binaryReadInt16(file);
-    negativeXHoopSize = binaryReadInt16(file);
-    negativeYHoopSize = binaryReadInt16(file);
+    header.postitiveXHoopSize = binaryReadInt16(file);
+    header.postitiveYHoopSize = binaryReadInt16(file);
+    header.negativeXHoopSize = binaryReadInt16(file);
+    header.negativeYHoopSize = binaryReadInt16(file);
 
-    attributeOffset = binaryReadInt32(file);
-    xOffset = binaryReadInt32(file);
-    yOffset = binaryReadInt32(file);
+    header.attributeOffset = binaryReadInt32(file);
+    header.xOffset = binaryReadInt32(file);
+    header.yOffset = binaryReadInt32(file);
 
-    stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8);
-    binaryReadBytes(file, stringVal, 8);
+    //stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8);
+    binaryReadBytes(file, header.stringVal, 8);
 
-    unknown = binaryReadInt16(file);
+    header.unknown = binaryReadInt16(file);
 
-	colorLength = binaryReadInt32(file);
-	decodedColors = (unsigned char *)malloc(numberOfColors*4);
-    for(i = 0; i < numberOfColors*4; ++i)
+    header.colorLength = binaryReadInt32(file);
+    decodedColors = (unsigned char *)malloc(header.numberOfColors*4);
+    for(i = 0; i < header.numberOfColors*4; ++i)
     {
         unsigned char inputByte = binaryReadByte(file);
         unsigned char tmpByte = (unsigned char) (inputByte ^ vipDecodingTable[i]);
         decodedColors[i] = (unsigned char) (tmpByte ^ prevByte);
         prevByte = inputByte;
     }
-    for(i = 0; i < numberOfColors; i++)
+    for(i = 0; i < header.numberOfColors; i++)
     {
         EmbThread thread;
         int startIndex = i << 2;
@@ -90,29 +104,34 @@ int readVip(EmbPattern* pattern, const char* fileName)
 		/* printf("%d\n", decodedColors[startIndex + 3]); */
         embPattern_addThread(pattern, thread);
     }
-	fseek(file, attributeOffset, SEEK_SET);
-    attributeData = (unsigned char *)malloc(xOffset - attributeOffset);
-    binaryReadBytes(file, attributeData, xOffset - attributeOffset);
-    attributeDataDecompressed = DecompressData(attributeData, xOffset - attributeOffset, numberOfStitches);
+    fseek(file, header.attributeOffset, SEEK_SET);
+    attributeData = (unsigned char *)malloc(header.xOffset - header.attributeOffset);
+    binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset);
+    attributeDataDecompressed = DecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
 
-    fseek(file, xOffset, SEEK_SET);
-    xData = (unsigned char *)malloc(yOffset - xOffset);
-    binaryReadBytes(file, xData, yOffset - xOffset);
-    xDecompressed = DecompressData(xData, yOffset - xOffset, numberOfStitches);
+    fseek(file, header.xOffset, SEEK_SET);
+    xData = (unsigned char *)malloc(header.yOffset - header.xOffset);
+    binaryReadBytes(file, xData, header.yOffset - header.xOffset);
+    xDecompressed = DecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
 
-    fseek(file, yOffset, SEEK_SET);
-    yData = (unsigned char *)malloc(fileLength - yOffset);
-    binaryReadBytes(file, yData, fileLength - yOffset);
-    yDecompressed = DecompressData(yData, fileLength - yOffset, numberOfStitches);
+    fseek(file, header.yOffset, SEEK_SET);
+    yData = (unsigned char *)malloc(fileLength - header.yOffset);
+    binaryReadBytes(file, yData, fileLength - header.yOffset);
+    yDecompressed = DecompressData(yData, fileLength - header.yOffset, header.numberOfStitches);
 
-    for(i = 0; i < numberOfStitches; i++)
+    for(i = 0; i < header.numberOfStitches; i++)
     {
         embPattern_addStitchRel(pattern, DecodeByte(xDecompressed[i]) / 10.0,
             DecodeByte(yDecompressed[i]) / 10.0, DecodeStitchType(attributeDataDecompressed[i]), 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
     fclose(file);
-
+    free(attributeData);
+    free(xData);
+    free(yData);
+    free(attributeDataDecompressed);
+    free(xDecompressed);
+    free(yDecompressed);
     return 1; /*TODO: finish readVip */
 }
 

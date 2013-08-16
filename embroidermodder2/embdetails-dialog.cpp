@@ -1,4 +1,10 @@
+#include <QApplication>
 #include <QtGui>
+#include <QLabel>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QScrollArea>
+#include <QVBoxLayout>
 #include "embdetails-dialog.h"
 #include "emb-pattern.h"
 #include "emb-reader-writer.h"
