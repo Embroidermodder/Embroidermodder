@@ -41,10 +41,11 @@ EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2)
     return stackLineObj;
 }
 
-/* Returns an EmbLineObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/* Returns a pointer to an EmbLineObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 {
     EmbLineObject* heapLineObj = (EmbLineObject*)malloc(sizeof(EmbLineObject));
+    /* TODO: malloc fail error */
     heapLineObj->line.x1 = x1;
     heapLineObj->line.y1 = y1;
     heapLineObj->line.x2 = x2;
@@ -60,6 +61,7 @@ void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
     /* TODO: pointer safety */
     pointer->next = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->lineObj = data;
     pointer->next = 0;

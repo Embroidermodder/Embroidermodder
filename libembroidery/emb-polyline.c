@@ -7,6 +7,7 @@
 EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 {
     EmbPolylineObjectList* heapPointObj = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    /* TODO: malloc fail error */
     heapPointObj->polylineObj = data;
     heapPointObj->next = 0;
     return heapPointObj;
@@ -15,6 +16,7 @@ EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
 {
     pointer->next = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->polylineObj = data;
     pointer->next = 0;

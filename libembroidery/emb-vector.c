@@ -32,6 +32,7 @@ double embVector_GetLength(EmbVector vector)
 EmbVectorList* embVectorList_create(EmbVector data)
 {
     EmbVectorList* pointer = (EmbVectorList*)malloc(sizeof(EmbVectorList));
+    /* TODO: malloc fail error */
     pointer->vector = data;
     pointer->next = 0;
     return pointer;
@@ -41,6 +42,7 @@ EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data)
 {
     if(!pointer) return embVectorList_create(data);
     pointer->next = (EmbVectorList*)malloc(sizeof(EmbVectorList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->vector = data;
     pointer->next = 0;

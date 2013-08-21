@@ -34,10 +34,11 @@ EmbCircleObject embCircleObject_make(double cx, double cy, double r)
     return stackCircleObj;
 }
 
-/* Returns an EmbCircleObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/* Returns a pointer to an EmbCircleObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 {
     EmbCircleObject* heapCircleObj = (EmbCircleObject*)malloc(sizeof(EmbCircleObject));
+    /* TODO: malloc fail error */
     heapCircleObj->circle.centerX = cx;
     heapCircleObj->circle.centerY = cy;
     heapCircleObj->circle.radius  = r;
@@ -52,6 +53,7 @@ void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 {
     /* TODO: pointer safety */
     pointer->next = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->circleObj = data;
     pointer->next = 0;

@@ -7,6 +7,7 @@ unsigned char* ReadString(FILE* file)
 {
     int stringLength = binaryReadInt16BE(file);
     unsigned char* charString = (unsigned char*)malloc(stringLength);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, charString, stringLength);
     return charString;
 }

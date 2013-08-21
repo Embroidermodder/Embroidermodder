@@ -80,10 +80,11 @@ EmbRectObject embRectObject_make(double x, double y, double w, double h)
     return stackRectObj;
 }
 
-/* Returns an EmbRectObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/* Returns a pointer to an EmbRectObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 {
     EmbRectObject* heapRectObj = (EmbRectObject*)malloc(sizeof(EmbRectObject));
+    /* TODO: malloc fail error */
     heapRectObj->rect.left = x;
     heapRectObj->rect.top = y;
     heapRectObj->rect.right = x + w;

@@ -31,6 +31,7 @@ EmbPoint embPoint_make(double x, double y)
 EmbPointList* embPointList_create(double x, double y)
 {
     EmbPointList* heapPointObj = (EmbPointList*)malloc(sizeof(EmbPointList));
+    /* TODO: malloc fail error */
     heapPointObj->point.xx = x;
     heapPointObj->point.yy = y;
     heapPointObj->next = 0;
@@ -39,7 +40,9 @@ EmbPointList* embPointList_create(double x, double y)
 
 EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
 {
+    /* TODO: pointer safety */
     pointer->next = (EmbPointList*)malloc(sizeof(EmbPointList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->point = data;
     pointer->next = 0;
@@ -52,7 +55,7 @@ void embPointList_free(EmbPointList* list)
     EmbPointList* next;
     while(current)
     {
-        next= current->next;
+        next = current->next;
         free(current);
         current = next;
     }
@@ -71,10 +74,11 @@ EmbPointObject embPointObject_make(double x, double y)
     return stackPointObj;
 }
 
-/* Returns an EmbPointObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/* Returns a pointer to an EmbPointObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 EmbPointObject* embPointObject_create(double x, double y)
 {
     EmbPointObject* heapPointObj = (EmbPointObject*)malloc(sizeof(EmbPointObject));
+    /* TODO: malloc fail error */
     heapPointObj->point.xx = x;
     heapPointObj->point.yy = y;
     return heapPointObj;
@@ -88,6 +92,7 @@ EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPoint
 {
     /* TODO: pointer safety */
     pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->pointObj = data;
     pointer->next = 0;

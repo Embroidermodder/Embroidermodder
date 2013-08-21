@@ -35,10 +35,12 @@ void ReadStxThread(StxThread* thread, FILE* file)
 
     int codeLength = binaryReadUInt8(file);
     char* codeBuff = (char*)malloc(codeLength);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, (unsigned char*)codeBuff, codeLength);
     thread->ColorCode = codeBuff;
     colorNameLength = binaryReadUInt8(file);
     codeNameBuff = (char*)malloc(colorNameLength);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, (unsigned char*)codeNameBuff, colorNameLength);
     thread->ColorName = codeNameBuff;
 
@@ -50,6 +52,7 @@ void ReadStxThread(StxThread* thread, FILE* file)
 
     sectionNameLength = binaryReadUInt8(file);
     sectionNameBuff = (char*)malloc(sectionNameLength);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, (unsigned char*)sectionNameBuff, sectionNameLength);
     thread->SectionName = sectionNameBuff;
 
@@ -58,7 +61,8 @@ void ReadStxThread(StxThread* thread, FILE* file)
     somethingelse = binaryReadInt32(file);
     numberOfOtherDescriptors = binaryReadInt16(file);
 
-    thread->SubDescriptors = (SubDescriptor *) malloc(sizeof(SubDescriptor) * numberOfOtherDescriptors);
+    thread->SubDescriptors = (SubDescriptor*)malloc(sizeof(SubDescriptor) * numberOfOtherDescriptors);
+    /* TODO: malloc fail error */
     for(j = 0; j < numberOfOtherDescriptors; j++)
     {
         SubDescriptor sd;
@@ -70,10 +74,12 @@ void ReadStxThread(StxThread* thread, FILE* file)
         sd.SomeInt = binaryReadInt32(file);
         subcodeLength = binaryReadUInt8(file);
         subCodeBuff = (char*)malloc(subcodeLength);
+        /* TODO: malloc fail error */
         binaryReadBytes(file, (unsigned char*)subCodeBuff, subcodeLength);
         sd.ColorCode = subCodeBuff;
         subcolorNameLength = binaryReadUInt8(file);
         subColorNameBuff = (char*)malloc(subcolorNameLength);
+        /* TODO: malloc fail error */
         binaryReadBytes(file, (unsigned char*)subColorNameBuff, subcolorNameLength);
         sd.ColorName = subColorNameBuff;
         sd.SomeOtherInt = binaryReadInt32(file);
@@ -123,12 +129,14 @@ int readStx(EmbPattern* pattern, const char* fileName)
     top = binaryReadInt16(file);
 
     gif = (unsigned char*)malloc(imageLength);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, gif, imageLength);
     /*Stream s2 = new MemoryStream(gif); */
     /*Image = new Bitmap(s2); */
 
     threadCount = binaryReadInt16(file);
-    StxThreads = (StxThread *) malloc(sizeof(StxThread) * threadCount);
+    StxThreads = (StxThread*)malloc(sizeof(StxThread) * threadCount);
+    /* TODO: malloc fail error */
     for(i = 0; i < threadCount; i++)
     {
         EmbThread t;

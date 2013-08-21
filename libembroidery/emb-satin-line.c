@@ -11,17 +11,19 @@ void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints
     EmbSatinOutline outline;
     double halfThickness = thickness / 2.0;
     int intermediateOutlineCount = 2 * numberOfPoints - 2;
-    outline.Side1 = (EmbVector *) malloc(sizeof(EmbVector) * intermediateOutlineCount);
-    outline.Side2 = (EmbVector *) malloc(sizeof(EmbVector) * intermediateOutlineCount);
-    
-    for (i = 1; i < numberOfPoints; i++)
+    outline.Side1 = (EmbVector*)malloc(sizeof(EmbVector) * intermediateOutlineCount);
+    /* TODO: malloc fail error */
+    outline.Side2 = (EmbVector*)malloc(sizeof(EmbVector) * intermediateOutlineCount);
+    /* TODO: malloc fail error */
+
+    for(i = 1; i < numberOfPoints; i++)
     {
         int j = (i - 1) * 2;
         EmbVector v1;
         EmbVector temp;
-        
+
         embLine_GetPerpendicularCWVector(lines[i - 1], lines[i], &v1);
-        
+
         embVector_Multiply(v1, halfThickness, &temp);
         embVector_Add(temp, lines[i - 1], &outline.Side1[j]);
         embVector_Add(temp, lines[i], &outline.Side1[j + 1]);
@@ -31,19 +33,21 @@ void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints
         embVector_Add(temp, lines[i], &outline.Side2[j + 1]);
     }
 
-    result->Side1 = (EmbVector *) malloc(sizeof(EmbVector) * numberOfPoints);
-    result->Side2 = (EmbVector *) malloc(sizeof(EmbVector) * numberOfPoints);
+    /* TODO: pointer safety for result param */
+    result->Side1 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
+    /* TODO: malloc fail error */
+    result->Side2 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
+    /* TODO: malloc fail error */
 
     result->Side1[0] = outline.Side1[0];
     result->Side2[0] = outline.Side2[0];
 
-    
-    for (i = 3; i < intermediateOutlineCount; i += 2)
+    for(i = 3; i < intermediateOutlineCount; i += 2)
     {
         embLine_IntersectionWith(outline.Side1[i - 3], outline.Side1[i - 2], outline.Side1[i - 1], outline.Side1[i], &result->Side1[(i - 1) / 2]);
     }
 
-    for (i = 3; i < intermediateOutlineCount; i += 2)
+    for(i = 3; i < intermediateOutlineCount; i += 2)
     {
         embLine_IntersectionWith(outline.Side2[i - 3], outline.Side2[i - 2], outline.Side2[i - 1], outline.Side2[i], &result->Side2[(i - 1) / 2]);
     }
@@ -59,14 +63,16 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
     EmbVectorList* stitches = 0;
     EmbVectorList* currentStitch = 0;
     EmbVector temp;
-    if (result->length > 0)
+
+    /* TODO: pointer safety for result param */
+    if(result->length > 0)
     {
         double currTopX = 0;
         double currTopY = 0;
         double currBottomX = 0;
         double currBottomY = 0;
 
-        for (j = 0; j < result->length - 1; j++)
+        for(j = 0; j < result->length - 1; j++)
         {
             EmbVector p1 = result->Side1[j];
             EmbVector p2 = result->Side1[j + 1];
@@ -97,7 +103,7 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
             currBottomX = p3.X;
             currBottomY = p3.Y;
 
-            for (i = 0; i < numberOfSteps; i++)
+            for(i = 0; i < numberOfSteps; i++)
             {
                 EmbVector temp2;
                 temp.X= currTopX;
@@ -110,7 +116,7 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
                 {
                     stitches = currentStitch = embVectorList_create(temp);
                 }
-                temp2.X= currBottomX;
+                temp2.X = currBottomX;
                 temp2.Y = currBottomY;
                 currentStitch = embVectorList_add(currentStitch, temp2);
                 currTopX += topStepX;
@@ -119,12 +125,14 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
                 currBottomY += bottomStepY;
             }
         }
-        temp.X= currTopX;
+        temp.X = currTopX;
         temp.Y = currTopY;
         currentStitch = embVectorList_add(currentStitch, temp);
-        temp.X= currBottomX;
+        temp.X = currBottomX;
         temp.Y = currBottomY;
         currentStitch = embVectorList_add(currentStitch, temp);
     }
     return stitches;
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

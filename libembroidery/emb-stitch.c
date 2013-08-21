@@ -6,6 +6,7 @@ void embStitchList_add(EmbStitchList* pointer, EmbStitch data)
 {
     /* TODO: pointer safety */
     pointer->next = (EmbStitchList*)malloc(sizeof(EmbStitchList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->stitch = data;
     pointer->next = 0;

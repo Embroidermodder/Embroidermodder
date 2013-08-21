@@ -1,5 +1,15 @@
 #include "emb-color.h"
 
+/* Returns an EmbColor. It is created on the stack. */
+EmbColor embColor_make(unsigned char r, unsigned char g, unsigned char b)
+{
+    EmbColor stackColor;
+    stackColor.r = r;
+    stackColor.g = g;
+    stackColor.b = b;
+    return stackColor;
+}
+
 EmbColor embColor_fromHexStr(char* val)
 {
     /* TODO: pointer safety */

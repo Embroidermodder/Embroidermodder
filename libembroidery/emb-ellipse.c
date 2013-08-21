@@ -60,10 +60,11 @@ EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double r
     return stackEllipseObj;
 }
 
-/* Returns an EmbEllipseObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/* Returns a pointer to an EmbEllipseObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject* heapEllipseObj = (EmbEllipseObject*)malloc(sizeof(EmbEllipseObject));
+    /* TODO: malloc fail error */
     heapEllipseObj->ellipse.centerX = cx;
     heapEllipseObj->ellipse.centerY = cy;
     heapEllipseObj->ellipse.radiusX = rx;
@@ -79,6 +80,7 @@ void embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject da
 {
     /* TODO: pointer safety */
     pointer->next = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->ellipseObj = data;
     pointer->next = 0;

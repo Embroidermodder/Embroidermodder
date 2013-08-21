@@ -6,7 +6,7 @@
 
 int roundDouble(double src)
 {
-	if(src < 0.0) 
+	if(src < 0.0)
 		return (int) ceil(src - 0.5);
     return (int)floor(src+0.5);
 }
@@ -39,6 +39,7 @@ char* lTrim(char* const string, char junk)
 char* emb_strdup(const char* src)
 {
     char* dest = (char*)malloc(strlen(src) + 1);
+    /* TODO: malloc fail error */
     if(dest) strcpy(dest, src);
     return dest;
 }

@@ -46,6 +46,7 @@ int husDecodeStitchType(unsigned char b)
 unsigned char* husDecompressData(unsigned char* input, int inputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedContentLength);
+    /* TODO: malloc fail error */
     husExpand((unsigned char*) input, decompressedData, inputLength, 10);
     return decompressedData;
 }
@@ -53,6 +54,7 @@ unsigned char* husDecompressData(unsigned char* input, int inputLength, int deco
 unsigned char* husCompressData(unsigned char* input, int inputSize, int* compressedSize)
 {
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*inputSize*2);
+    /* TODO: malloc fail error */
     *compressedSize = husCompress(input, (unsigned long) inputSize, compressedData, 10, 0);
     return compressedData;
 }
@@ -127,6 +129,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
     yOffset = binaryReadInt32(file);
 
     stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, stringVal, 8);
 
     unknown = binaryReadInt16(file);
@@ -137,14 +140,17 @@ int readHus(EmbPattern* pattern, const char* fileName)
     }
 
     attributeData = (unsigned char*)malloc(sizeof(unsigned char)*(xOffset - attributeOffset + 1));
+    /* TODO: malloc fail error */
     binaryReadBytes(file, attributeData, xOffset - attributeOffset);
     attributeDataDecompressed = husDecompressData(attributeData, xOffset - attributeOffset, numberOfStitches);
 
     xData = (unsigned char*)malloc(sizeof(unsigned char)*(yOffset - xOffset + 1));
+    /* TODO: malloc fail error */
     binaryReadBytes(file, xData, yOffset - xOffset);
     xDecompressed = husDecompressData(xData, yOffset - xOffset, numberOfStitches);
 
     yData = (unsigned char*)malloc(sizeof(unsigned char)*(fileLength - yOffset + 1));
+    /* TODO: malloc fail error */
     binaryReadBytes(file, yData, fileLength - yOffset);
     yDecompressed = husDecompressData(yData, fileLength - yOffset, numberOfStitches);
 
@@ -209,8 +215,11 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     binaryWriteUInt(file, 0x2A + 2 * minColors);
 
     xValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
+    /* TODO: malloc fail error */
     yValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
+    /* TODO: malloc fail error */
     attributeValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
+    /* TODO: malloc fail error */
 
     pointer = pattern->stitchList;
     while(pointer)

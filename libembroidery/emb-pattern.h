@@ -82,6 +82,7 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
 void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj);
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
+void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
 
 

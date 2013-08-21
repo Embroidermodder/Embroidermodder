@@ -16,8 +16,10 @@ void BuildDecryptionTable(int seed)
     const int add1 = 0x3039;
 
     /* Set up mask array */
-    _subMask = (char *) malloc(SubMaskSize * sizeof(char));
-    _xorMask = (char *) malloc(XorMaskSize * sizeof(char));
+    _subMask = (char*)malloc(SubMaskSize * sizeof(char));
+    /* TODO: malloc fail error */
+    _xorMask = (char*)malloc(XorMaskSize * sizeof(char));
+    /* TODO: malloc fail error */
     for(i = 0; i < SubMaskSize; i++)
     {
         seed *= mul1;

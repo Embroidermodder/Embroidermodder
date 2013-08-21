@@ -14,10 +14,11 @@ EmbArcObject embArcObject_make(double sx, double sy, double mx, double my, doubl
     return stackArcObj;
 }
 
-/* Returns an EmbArcObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/* Returns a pointer to an EmbArcObject. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey)
 {
     EmbArcObject* heapArcObj = (EmbArcObject*)malloc(sizeof(EmbArcObject));
+    /* TODO: malloc fail error */
     heapArcObj->arc.startX = sx;
     heapArcObj->arc.startY = sy;
     heapArcObj->arc.midX   = mx;
@@ -34,6 +35,7 @@ void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
         pointer = pointer->next;
     }
     pointer->next = (EmbArcObjectList*)malloc(sizeof(EmbArcObjectList));
+    /* TODO: malloc fail error */
     pointer = pointer->next;
     pointer->arcObj = data;
     pointer->next = 0;

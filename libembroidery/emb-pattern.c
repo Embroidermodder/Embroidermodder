@@ -73,7 +73,8 @@ void embPattern_addThread(EmbPattern* p, EmbThread thread)
     /* TODO: pointer safety */
     if(!(p->threadList))
     {
-        EmbThreadList* t = (EmbThreadList *)malloc(sizeof(EmbThreadList));
+        EmbThreadList* t = (EmbThreadList*)malloc(sizeof(EmbThreadList));
+        /* TODO: malloc fail error */
         t->thread = thread;
         t->next = NULL;
         p->threadList = t;
@@ -116,7 +117,8 @@ void moveStitchListToPolyline(EmbPattern* p)
     while(stitches)
     {
         EmbPointList* currentPointList = 0;
-        EmbPolylineObject* currentPolyline = (EmbPolylineObject *) malloc(sizeof(EmbPolylineObject));
+        EmbPolylineObject* currentPolyline = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+        /* TODO: malloc fail error */
         currentPolyline->pointList = 0;
         currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
         currentPolyline->color = embThreadList_getAt(p->threadList, stitches->stitch.color).color;
@@ -186,6 +188,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     if(!(p->stitchList))
     {
         p->stitchList = (EmbStitchList*)malloc(sizeof(EmbStitchList));
+        /* TODO: malloc fail error */
         p->stitchList->stitch = s;
         p->stitchList->next = 0;
         p->lastStitch = p->stitchList;
@@ -225,9 +228,9 @@ void embPattern_changeColor(EmbPattern* p, int index)
 
 int embPattern_read(EmbPattern* p, const char* fileName) /* TODO: This doesn't work. Write test case using this convenience function. */
 {
+    EmbReaderWriter* reader = 0;
     embPattern_free(p);
     p = embPattern_create();
-    EmbReaderWriter* reader = 0;
     reader = embReaderWriter_getByFileName(fileName);
     if(reader->reader(p, fileName))
     {
@@ -519,6 +522,7 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
                         s.flags = flagsToUse;
                         s.color = colorToUse;
                         item = (EmbStitchList *)malloc(sizeof(EmbStitchList));
+                        /* TODO: malloc fail error */
                         item->stitch = s;
                         item->next = pointer;
                         prev->next = item;
@@ -570,7 +574,8 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     EmbReaderWriter* colorfile;
     const char* dotPos = strrchr(fileName, '.');
 
-    char* extractName = (char *)malloc(dotPos - fileName + 5);
+    char* extractName = (char*)malloc(dotPos - fileName + 5);
+    /* TODO: malloc fail error */
     extractName = memcpy(extractName, fileName, dotPos - fileName);
     extractName[dotPos - fileName] = '\0';
     strcat(extractName,".edr");
@@ -609,8 +614,6 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 
 void embPattern_free(EmbPattern* p)
 {
-    if(!p) return;
-
     EmbThreadList* thisThreadList;
     EmbThreadList* nextThreadList;
     EmbStitchList* thisStitchList;
@@ -639,6 +642,7 @@ void embPattern_free(EmbPattern* p)
     EmbSplineObjectList* thisSplineObjList;
     EmbSplineObjectList* nextSplineObjList;
 
+    if(!p) return;
     thisStitchList = p->stitchList;
     while(thisStitchList)
     {
@@ -755,6 +759,7 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
     if(!(p->circleObjList))
     {
         p->circleObjList = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
+        /* TODO: malloc fail error */
         p->circleObjList->circleObj = circleObj;
         p->circleObjList->next = 0;
         p->lastCircleObj = p->circleObjList;
@@ -774,6 +779,7 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
     if(!(p->ellipseObjList))
     {
         p->ellipseObjList = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
+        /* TODO: malloc fail error */
         p->ellipseObjList->ellipseObj = ellipseObj;
         p->ellipseObjList->next = 0;
         p->lastEllipseObj = p->ellipseObjList;
@@ -793,6 +799,7 @@ void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2,
     if(!(p->lineObjList))
     {
         p->lineObjList = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
+        /* TODO: malloc fail error */
         p->lineObjList->lineObj = lineObj;
         p->lineObjList->next = 0;
         p->lastLineObj = p->lineObjList;
@@ -817,6 +824,7 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
     if(!(p->pointObjList))
     {
         p->pointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
+        /* TODO: malloc fail error */
         p->pointObjList->pointObj = pointObj;
         p->pointObjList->next = 0;
         p->lastPointObj = p->pointObjList;
@@ -828,6 +836,23 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
     }
 }
 
+void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
+{
+    if(!(p->polylineObjList))
+    {
+        p->polylineObjList = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+        /* TODO: malloc fail error */
+        p->polylineObjList->polylineObj = obj;
+        p->polylineObjList->next = 0;
+        p->lastPolylineObj = p->polylineObjList;
+    }
+    else
+    {
+        embPolylineObjectList_add(p->lastPolylineObj, obj);
+        p->lastPolylineObj = p->lastPolylineObj->next;
+    }
+}
+
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h)
 {
     /* TODO: pointer safety */
@@ -836,6 +861,7 @@ void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, do
     if(!(p->rectObjList))
     {
         p->rectObjList = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
+        /* TODO: malloc fail error */
         p->rectObjList->rectObj = rectObj;
         p->rectObjList->next = 0;
         p->lastRectObj = p->rectObjList;

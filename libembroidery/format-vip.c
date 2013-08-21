@@ -31,6 +31,7 @@ int DecodeStitchType(unsigned char b)
 unsigned char* DecompressData(unsigned char* input, int inputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(decompressedContentLength);
+    /* TODO: malloc fail error */
     husExpand((unsigned char*)input, decompressedData, inputLength, 10);
     return decompressedData;
 }
@@ -80,13 +81,15 @@ int readVip(EmbPattern* pattern, const char* fileName)
     header.xOffset = binaryReadInt32(file);
     header.yOffset = binaryReadInt32(file);
 
-    //stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8);
+    /*stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8); TODO: review this line and uncomment or remove */
+    /* TODO: malloc fail error */
     binaryReadBytes(file, header.stringVal, 8);
 
     header.unknown = binaryReadInt16(file);
 
     header.colorLength = binaryReadInt32(file);
-    decodedColors = (unsigned char *)malloc(header.numberOfColors*4);
+    decodedColors = (unsigned char*)malloc(header.numberOfColors*4);
+    /* TODO: malloc fail error */
     for(i = 0; i < header.numberOfColors*4; ++i)
     {
         unsigned char inputByte = binaryReadByte(file);
@@ -105,17 +108,20 @@ int readVip(EmbPattern* pattern, const char* fileName)
         embPattern_addThread(pattern, thread);
     }
     fseek(file, header.attributeOffset, SEEK_SET);
-    attributeData = (unsigned char *)malloc(header.xOffset - header.attributeOffset);
+    attributeData = (unsigned char*)malloc(header.xOffset - header.attributeOffset);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset);
     attributeDataDecompressed = DecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
 
     fseek(file, header.xOffset, SEEK_SET);
-    xData = (unsigned char *)malloc(header.yOffset - header.xOffset);
+    xData = (unsigned char*)malloc(header.yOffset - header.xOffset);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, xData, header.yOffset - header.xOffset);
     xDecompressed = DecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
 
     fseek(file, header.yOffset, SEEK_SET);
-    yData = (unsigned char *)malloc(fileLength - header.yOffset);
+    yData = (unsigned char*)malloc(fileLength - header.yOffset);
+    /* TODO: malloc fail error */
     binaryReadBytes(file, yData, fileLength - header.yOffset);
     yDecompressed = DecompressData(yData, fileLength - header.yOffset, header.numberOfStitches);
 
@@ -138,6 +144,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
 unsigned char* vipCompressData(unsigned char* input, int inputSize, int* compressedSize)
 {
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*inputSize*2);
+    /* TODO: malloc fail error */
     *compressedSize = husCompress(input, (unsigned long) inputSize, compressedData, 10, 0);
     return compressedData;
 }
@@ -193,8 +200,10 @@ int writeVip(EmbPattern* pattern, const char* fileName)
 
     stitchCount = embStitchList_count(pattern->stitchList);
 	minColors = embThreadList_count(pattern->threadList);
-	decodedColors = (unsigned char *) malloc(minColors* 4 *sizeof(unsigned char));
-	encodedColors = (unsigned char *) malloc(minColors* 4 *sizeof(unsigned char));
+	decodedColors = (unsigned char*)malloc(minColors* 4 *sizeof(unsigned char));
+    /* TODO: malloc fail error */
+	encodedColors = (unsigned char*)malloc(minColors* 4 *sizeof(unsigned char));
+    /* TODO: malloc fail error */
     /* embPattern_correctForMaxStitchLength(pattern, 0x7F, 0x7F); */
 
     patternColor = minColors;
@@ -213,8 +222,11 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     binaryWriteUInt(file, 0x38 + (minColors << 3));
 
     xValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
+    /* TODO: malloc fail error */
     yValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
+    /* TODO: malloc fail error */
     attributeValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
+    /* TODO: malloc fail error */
 
     pointer = pattern->stitchList;
     while(pointer)

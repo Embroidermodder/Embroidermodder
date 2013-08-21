@@ -88,6 +88,7 @@ void embThreadList_add(EmbThreadList* pointer, EmbThread data)
         tempPointer = tempPointer->next;
     }
     tempPointer->next = (EmbThreadList*)malloc(sizeof(EmbThreadList));
+    /* TODO: malloc fail error */
     tempPointer = tempPointer->next;
     tempPointer->thread = data;
     tempPointer->next = (EmbThreadList*)NULL;
