@@ -3,7 +3,9 @@
 ######################
 embroidermodder2/.moc
 embroidermodder2/.obj
+embroidermodder2/TODO
 embroidermodder2/Makefile
+embroidermodder2/_memleak*
 embroidermodder2/settings.ini
 embroidermodder2/prompt.log
 embroidermodder2/embroidermodder2
@@ -14,7 +16,9 @@ embroidermodder2/embroidermodder2.exe
 ######################
 libembroidery/.moc
 libembroidery/.obj
+libembroidery/TODO
 libembroidery/Makefile
+libembroidery/_memleak*
 libembroidery/libembroidery-convert
 libembroidery/libembroidery-convert.exe
 
