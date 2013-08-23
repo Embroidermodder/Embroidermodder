@@ -5,7 +5,7 @@
 #include "helpers-binary.h"
 #include "format-jef.h"
 
-char sewDecode(unsigned char inputByte)
+static char sewDecode(unsigned char inputByte)
 {
     return (inputByte >= 0x80) ? (char) (-~(inputByte - 1)) : (char) inputByte;
 }

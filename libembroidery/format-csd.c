@@ -10,7 +10,7 @@
 static char _subMask[CsdSubMaskSize];
 static char _xorMask[CsdXorMaskSize];
 
-void BuildDecryptionTable(int seed)
+static void BuildDecryptionTable(int seed)
 {
     int i;
     const int mul1 = 0x41C64E6D;
@@ -30,7 +30,7 @@ void BuildDecryptionTable(int seed)
     }
 }
 
-unsigned char DecodeCsdByte(long fileOffset, unsigned char val, int type)
+static unsigned char DecodeCsdByte(long fileOffset, unsigned char val, int type)
 {
     static const unsigned char _decryptArray[] =
     {

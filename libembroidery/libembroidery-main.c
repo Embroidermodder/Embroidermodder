@@ -65,7 +65,7 @@ static const char* const formats[] = {
 ".zsk", "U", " ", " ZSK USA Embroidery Format                        "
 };
 
-void usage()
+void usage(void)
 {
     int i = 0;
 

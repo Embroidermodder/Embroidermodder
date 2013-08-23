@@ -9,7 +9,7 @@ extern "C" {
 
 char binaryReadByte(FILE* file);
 int binaryReadBytes(FILE* file, unsigned char* destination, int count);
-int binaryReadInt16(FILE* file);
+short binaryReadInt16(FILE* file);
 int binaryReadInt32(FILE* file);
 unsigned char binaryReadUInt8(FILE* file);
 unsigned short binaryReadUInt16(FILE* file);

@@ -2365,7 +2365,7 @@ void svgProcess(int c, const char* buff)
         char advance = 0;
         if(buff[0] == '/') { return; }
 
-        advance = svgIsElement(buff);
+        advance = (char)svgIsElement(buff);
 
         if(advance) { printf("ELEMENT:\n"); svgExpect = SVG_EXPECT_ATTRIBUTE; currentElement = svgElement_create(buff); }
         else        { return; }
@@ -2379,223 +2379,223 @@ void svgProcess(int c, const char* buff)
 
         if(!strcmp(name, "?xml"))
         {
-            if(!advance) { advance = svgIsXmlAttribute(buff); }
+            if(!advance) { advance = (char)svgIsXmlAttribute(buff); }
         }
         else if(!strcmp(name, "a"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsLinkAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsLinkAttribute(buff); }
         }
         else if(!strcmp(name, "animate"))
         {
-            if(!advance) { advance = svgIsAnimateAttribute(buff); }
+            if(!advance) { advance = (char)svgIsAnimateAttribute(buff); }
         }
         else if(!strcmp(name, "animateColor"))
         {
-            if(!advance) { advance = svgIsAnimateColorAttribute(buff); }
+            if(!advance) { advance = (char)svgIsAnimateColorAttribute(buff); }
         }
         else if(!strcmp(name, "animateMotion"))
         {
-            if(!advance) { advance = svgIsAnimateMotionAttribute(buff); }
+            if(!advance) { advance = (char)svgIsAnimateMotionAttribute(buff); }
         }
         else if(!strcmp(name, "animateTransform"))
         {
-            if(!advance) { advance = svgIsAnimateTransformAttribute(buff); }
+            if(!advance) { advance = (char)svgIsAnimateTransformAttribute(buff); }
         }
         else if(!strcmp(name, "animation"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsAnimationAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsAnimationAttribute(buff); }
         }
         else if(!strcmp(name, "audio"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsAudioAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsAudioAttribute(buff); }
         }
         else if(!strcmp(name, "circle"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsCircleAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsCircleAttribute(buff); }
         }
         else if(!strcmp(name, "defs"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsDefsAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsDefsAttribute(buff); }
         }
         else if(!strcmp(name, "desc"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsDescAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsDescAttribute(buff); }
         }
         else if(!strcmp(name, "discard"))
         {
-            if(!advance) { advance = svgIsDiscardAttribute(buff); }
+            if(!advance) { advance = (char)svgIsDiscardAttribute(buff); }
         }
         else if(!strcmp(name, "ellipse"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsEllipseAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsEllipseAttribute(buff); }
         }
         else if(!strcmp(name, "font"))
         {
-            if(!advance) { advance = svgIsFontAttribute(buff); }
+            if(!advance) { advance = (char)svgIsFontAttribute(buff); }
         }
         else if(!strcmp(name, "font-face"))
         {
-            if(!advance) { advance = svgIsFontFaceAttribute(buff); }
+            if(!advance) { advance = (char)svgIsFontFaceAttribute(buff); }
         }
         else if(!strcmp(name, "font-face-src"))
         {
-            if(!advance) { advance = svgIsFontFaceSrcAttribute(buff); }
+            if(!advance) { advance = (char)svgIsFontFaceSrcAttribute(buff); }
         }
         else if(!strcmp(name, "font-face-uri"))
         {
-            if(!advance) { advance = svgIsFontFaceUriAttribute(buff); }
+            if(!advance) { advance = (char)svgIsFontFaceUriAttribute(buff); }
         }
         else if(!strcmp(name, "foreignObject"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsForeignObjectAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsForeignObjectAttribute(buff); }
         }
         else if(!strcmp(name, "g"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsGroupAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsGroupAttribute(buff); }
         }
         else if(!strcmp(name, "glyph"))
         {
-            if(!advance) { advance = svgIsGlyphAttribute(buff); }
+            if(!advance) { advance = (char)svgIsGlyphAttribute(buff); }
         }
         else if(!strcmp(name, "handler"))
         {
-            if(!advance) { advance = svgIsHandlerAttribute(buff); }
+            if(!advance) { advance = (char)svgIsHandlerAttribute(buff); }
         }
         else if(!strcmp(name, "hkern"))
         {
-            if(!advance) { advance = svgIsHKernAttribute(buff); }
+            if(!advance) { advance = (char)svgIsHKernAttribute(buff); }
         }
         else if(!strcmp(name, "image"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsImageAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsImageAttribute(buff); }
         }
         else if(!strcmp(name, "line"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsLineAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsLineAttribute(buff); }
         }
         else if(!strcmp(name, "linearGradient"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsLinearGradientAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsLinearGradientAttribute(buff); }
         }
         else if(!strcmp(name, "listener"))
         {
-            if(!advance) { advance = svgIsListenerAttribute(buff); }
+            if(!advance) { advance = (char)svgIsListenerAttribute(buff); }
         }
         else if(!strcmp(name, "metadata"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsMetadataAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsMetadataAttribute(buff); }
         }
         else if(!strcmp(name, "missing-glyph"))
         {
-            if(!advance) { advance = svgIsMissingGlyphAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMissingGlyphAttribute(buff); }
         }
         else if(!strcmp(name, "mpath"))
         {
-            if(!advance) { advance = svgIsMPathAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMPathAttribute(buff); }
         }
         else if(!strcmp(name, "path"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsPathAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsPathAttribute(buff); }
         }
         else if(!strcmp(name, "polygon"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsPolygonAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsPolygonAttribute(buff); }
         }
         else if(!strcmp(name, "polyline"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsPolylineAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsPolylineAttribute(buff); }
         }
         else if(!strcmp(name, "prefetch"))
         {
-            if(!advance) { advance = svgIsPrefetchAttribute(buff); }
+            if(!advance) { advance = (char)svgIsPrefetchAttribute(buff); }
         }
         else if(!strcmp(name, "radialGradient"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsRadialGradientAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsRadialGradientAttribute(buff); }
         }
         else if(!strcmp(name, "rect"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsRectAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsRectAttribute(buff); }
         }
         else if(!strcmp(name, "script"))
         {
-            if(!advance) { advance = svgIsScriptAttribute(buff); }
+            if(!advance) { advance = (char)svgIsScriptAttribute(buff); }
         }
         else if(!strcmp(name, "set"))
         {
-            if(!advance) { advance = svgIsSetAttribute(buff); }
+            if(!advance) { advance = (char)svgIsSetAttribute(buff); }
         }
         else if(!strcmp(name, "solidColor"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsSolidColorAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsSolidColorAttribute(buff); }
         }
         else if(!strcmp(name, "stop"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsStopAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsStopAttribute(buff); }
         }
         else if(!strcmp(name, "svg"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsSvgAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsSvgAttribute(buff); }
         }
         else if(!strcmp(name, "switch"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsSwitchAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsSwitchAttribute(buff); }
         }
         else if(!strcmp(name, "tbreak"))
         {
-            if(!advance) { advance = svgIsTBreakAttribute(buff); }
+            if(!advance) { advance = (char)svgIsTBreakAttribute(buff); }
         }
         else if(!strcmp(name, "text"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsTextAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsTextAttribute(buff); }
         }
         else if(!strcmp(name, "textArea"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsTextAreaAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsTextAreaAttribute(buff); }
         }
         else if(!strcmp(name, "title"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsTitleAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsTitleAttribute(buff); }
         }
         else if(!strcmp(name, "tspan"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsTSpanAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsTSpanAttribute(buff); }
         }
         else if(!strcmp(name, "use"))
         {
-            if(!advance) { advance = svgIsProperty(buff); }
-            if(!advance) { advance = svgIsUseAttribute(buff); }
+            if(!advance) { advance = (char)svgIsProperty(buff); }
+            if(!advance) { advance = (char)svgIsUseAttribute(buff); }
         }
         else if(!strcmp(name, "video"))
         {
-            if(!advance) { advance = svgIsMediaProperty(buff); }
-            if(!advance) { advance = svgIsVideoAttribute(buff); }
+            if(!advance) { advance = (char)svgIsMediaProperty(buff); }
+            if(!advance) { advance = (char)svgIsVideoAttribute(buff); }
         }
 
         if(advance) { printf("ATTRIBUTE:\n"); svgExpect = SVG_EXPECT_VALUE; free(currentAttribute); currentAttribute = emb_strdup(buff); }

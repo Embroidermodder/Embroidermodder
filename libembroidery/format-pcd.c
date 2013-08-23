@@ -2,7 +2,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-double pcdDecode(unsigned char a1, unsigned char a2, unsigned char a3)
+static double pcdDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
     if(res > 0x7FFFFF)
@@ -12,7 +12,7 @@ double pcdDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-void pcdEncode(FILE * file, int dx, int dy, int flags)
+static void pcdEncode(FILE * file, int dx, int dy, int flags)
 {
     unsigned char flagsToWrite = 0;
     binaryWriteByte(file, (unsigned char)0);
@@ -59,9 +59,9 @@ int readPcd(EmbPattern* pattern, const char* fileName)
     for(i = 0; i < colorCount; i++)
     {
         EmbThread t;
-        t.color.r = fgetc(file);
-        t.color.g = fgetc(file);
-        t.color.b = fgetc(file);
+        t.color.r = (unsigned char)fgetc(file);
+        t.color.g = (unsigned char)fgetc(file);
+        t.color.b = (unsigned char)fgetc(file);
         t.catalogNumber = "";
         t.description = "";
         if(t.color.r || t.color.g || t.color.b)
@@ -107,7 +107,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
     EmbStitchList* pointer;
     EmbThreadList* threadPointer;
     FILE* file;
-    int flags = 0, i;
+    int i;
     unsigned char colorCount;
     double xx = 0.0, yy = 0.0;
 
@@ -118,7 +118,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
     }
     binaryWriteByte(file, (unsigned char)'2');
     binaryWriteByte(file, 3); /* TODO: select hoop size defaulting to Large PCS hoop */
-    colorCount = embThreadList_count(pattern->threadList);
+    colorCount = (unsigned char) embThreadList_count(pattern->threadList);
     binaryWriteUShort(file, (unsigned short)colorCount);
     threadPointer = pattern->threadList;
     i = 0;
@@ -138,7 +138,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
         binaryWriteUInt(file, 0); /* write remaining colors to reach 16 */
     }
 
-    binaryWriteUShort(file, (unsigned int)embStitchList_count(pattern->stitchList));
+    binaryWriteUShort(file, (unsigned short)embStitchList_count(pattern->stitchList));
     /* write stitches */
     xx = yy = 0;
     pointer = pattern->stitchList;

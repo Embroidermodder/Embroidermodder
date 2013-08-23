@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char* csvStitchFlagToStr(int flags)
+static char* csvStitchFlagToStr(int flags)
 {
     switch(flags)
     {
@@ -28,7 +28,7 @@ char* csvStitchFlagToStr(int flags)
     }
 }
 
-int csvStrToStitchFlag(const char* str)
+static int csvStrToStitchFlag(const char* str)
 {
     if(!strcmp(str, "STITCH"))
         return NORMAL;
@@ -145,11 +145,11 @@ int readCsv(EmbPattern* pattern, const char* fileName)
                         /* Do Nothing. Ignore Thread Number */
                     }
                     else if(cellNum == 3)
-                        r = atoi(buff);
+                        r = (unsigned char)atoi(buff);
                     else if(cellNum == 4)
-                        g = atoi(buff);
+                        g = (unsigned char)atoi(buff);
                     else if(cellNum == 5)
-                        b = atoi(buff);
+                        b = (unsigned char)atoi(buff);
                     else if(cellNum == 6)
                     {
                         /* TODO: Thread Description */

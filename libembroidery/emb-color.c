@@ -33,9 +33,9 @@ EmbColor embColor_fromHexStr(char* val)
             rgb = rgb * 16 + val[i] - 'a';
         }
     }
-    color1.r = (rgb >> 16) & 0xFF;
-    color1.g = (rgb >> 8) & 0xFF;
-    color1.b = rgb & 0xFF;
+    color1.r = (unsigned char)((rgb >> 16) & 0xFF);
+    color1.g = (unsigned char)((rgb >> 8) & 0xFF);
+    color1.b = (unsigned char)(rgb & 0xFF);
     return (color1);
 }
 

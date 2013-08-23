@@ -2,7 +2,7 @@
 #include "format-new.h"
 #include "helpers-binary.h"
 
-int decodeNewStitch(unsigned char value)
+static int decodeNewStitch(unsigned char value)
 {
     return (int)value;
 }

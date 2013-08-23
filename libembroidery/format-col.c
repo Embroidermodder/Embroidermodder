@@ -18,7 +18,7 @@ int readCol(EmbPattern* pattern, const char* fileName)
     }
     for(i = 0; i < numberOfColors; i++)
     {
-        int num, blue, green, red, itemsMatched;
+        int num, blue, green, red;
         EmbThread t;
         char line[30];
         if(fscanf(file, "%s\r", line) < 1)

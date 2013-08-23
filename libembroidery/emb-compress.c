@@ -1,4 +1,3 @@
-#include <fcntl.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
@@ -66,7 +65,7 @@ void husExpand(unsigned char* input, unsigned char* output, int compressedSize, 
     husExpand_cleanup();
 }
 
-void husExpand_cleanup()
+void husExpand_cleanup(void)
 {
     free(_166);
     free(_189);
@@ -116,7 +115,7 @@ void husExpand_253(short _254,short _220,short _221)
     }
 }
 
-int husExpand_expand()
+int husExpand_expand(void)
 {
     short _200 = 0;
     unsigned char* _278 = _166;
@@ -172,7 +171,7 @@ int husExpand_expand()
     return 0;
 }
 
-unsigned short husExpand_249()
+unsigned short husExpand_249(void)
 {
     unsigned short _276,_283;
     if(_244==0)
@@ -200,7 +199,7 @@ unsigned short husExpand_249()
     return _276;
 }
 
-unsigned short husExpand_250()
+unsigned short husExpand_250(void)
 {
     unsigned short _276,_283;
     _276=_241[_182>>8];
@@ -224,7 +223,7 @@ unsigned short husExpand_250()
     return _276;
 }
 
-void husExpand_251()
+void husExpand_251(void)
 {
     _244 = 0;
     husExpand_257();
@@ -237,7 +236,7 @@ unsigned short husExpand_252(int _219)
     return _284;
 }
 
-void husExpand_255()
+void husExpand_255(void)
 {
     short _226, _203;
     short _219 = (short) husExpand_252(_143);
@@ -342,7 +341,7 @@ void husExpand_256(int _219)
     _245 <<= _219;
 }
 
-void husExpand_257()
+void husExpand_257(void)
 {
     _182 = 0;
     _245 = 0;
@@ -490,7 +489,7 @@ int husCompress(unsigned char* _266, unsigned long _inputSize, unsigned char* _2
 	return returnVal;
 }
 
-void husCompress_cleanup()
+void husCompress_cleanup(void)
 {
     free(_166);
     free(_163);
@@ -513,7 +512,7 @@ void husCompress_223(short _203)
     husCompress_208(_180[_203], _192[_203]);
 }
 
-int husCompress_compress()
+int husCompress_compress(void)
 {
     short _209;
     short _201;
@@ -535,10 +534,13 @@ int husCompress_compress()
     
     inputPosition += _279;
     if(inputPosition > inputLength)
-        _209 = inputLength - inputPosition;
+    {
+        _209 = (short)(inputLength - inputPosition);
+    }
     else
+    {
         _209 = _279;
-
+    }
     s = (short)(_209&_280);
     _169 = 0;
     _168 = 0;
@@ -624,7 +626,7 @@ int husCompress_compress()
     return outputPosition;
 }
 
-void husCompress_196()
+void husCompress_196(void)
 {
     int i;
     for(i = 0; i < _141; i++)
@@ -642,7 +644,7 @@ void husCompress_196()
     _183 -= (unsigned short)((3*CHAR_BIT)+6);
 }
 
-void husCompress_197()
+void husCompress_197(void)
 {
     if(!_170)
         husCompress_207();
@@ -651,7 +653,7 @@ void husCompress_197()
     _184 = 0;
 }
 
-void husCompress_198()
+void husCompress_198(void)
 {
     int i;
     short* _450;
@@ -735,14 +737,14 @@ void husCompress_202(unsigned short _203, unsigned short _204)
     }
 }
 
-void husCompress_205()
+void husCompress_205(void)
 {
     _172 = 0;
     _182 = 0;
     _171 = 0;
 }
 
-void husCompress_206()
+void husCompress_206(void)
 {
     if(!_170)
     {
@@ -755,7 +757,7 @@ void husCompress_206()
     _171 = 0;
 }
 
-void husCompress_207()
+void husCompress_207(void)
 {
     unsigned int _226, _289, _229, _454, _455;
     unsigned int _456 = 0;
@@ -842,7 +844,7 @@ void husCompress_208(int _209, unsigned short _203)
     }
 }
 
-void husCompress_210()
+void husCompress_210(void)
 {
     if(_171 <= 0)
         return;
@@ -974,7 +976,7 @@ void husCompress_218(short _219, short _220, short _221)
     }
 }
 
-void husCompress_222()
+void husCompress_222(void)
 {
     short _226, _289, _219, _277;
     _219 = _141;

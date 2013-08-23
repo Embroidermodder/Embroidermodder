@@ -4,7 +4,7 @@
 #include "format-jef.h"
 #include "helpers-binary.h"
 
-char shvDecode(unsigned char inputByte)
+static char shvDecode(unsigned char inputByte)
 {
     if(inputByte >= 0x80)
     {
@@ -13,7 +13,7 @@ char shvDecode(unsigned char inputByte)
     return ((char)inputByte);
 }
 
-short shvDecodeShort(unsigned short inputByte)
+static short shvDecodeShort(unsigned short inputByte)
 {
     if(inputByte > 0x8000)
     {

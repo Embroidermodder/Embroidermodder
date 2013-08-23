@@ -16,13 +16,13 @@ void readPecStitches(EmbPattern* pattern, FILE* file)
         int stitchType = NORMAL;
         if(val1 == 0xFF && val2 == 0x00)
         {
-            embPattern_addStitchRel(pattern, 0, 0, END, 1);
+            embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
             break;
         }
         if(val1 == 0xFE && val2 == 0xB0)
         {
-            binaryReadByte(file);
-            embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
+            (void)binaryReadByte(file);
+            embPattern_addStitchRel(pattern, 0.0, 0.0, STOP, 1);
             stitchNumber++;
             continue;
         }
@@ -65,8 +65,7 @@ void readPecStitches(EmbPattern* pattern, FILE* file)
     }
 }
 
-
-void pecEncodeJump(FILE* file, int x, int types)
+static void pecEncodeJump(FILE* file, int x, int types)
 {
     int outputVal = abs(x) & 0x7FF;
     unsigned int orPart = 0x80;
@@ -88,7 +87,7 @@ void pecEncodeJump(FILE* file, int x, int types)
     binaryWriteByte(file, (unsigned char)(outputVal & 0xFF));
 }
 
-void pecEncodeStop(FILE* file, unsigned char val)
+static void pecEncodeStop(FILE* file, unsigned char val)
 {
     binaryWriteByte(file, 0xFE);
     binaryWriteByte(file, 0xB0);
@@ -106,7 +105,7 @@ int readPec(EmbPattern* pattern, const char* fileName)
         return 0;
     }
     fseek(file, 0x38, SEEK_SET);
-    colorChanges = binaryReadByte(file);
+    colorChanges = (unsigned char)binaryReadByte(file);
     for(i = 0; i <= colorChanges; i++)
     {
         embPattern_addThread(pattern, pecThreads[binaryReadByte(file) % 65]);
@@ -119,9 +118,9 @@ int readPec(EmbPattern* pattern, const char* fileName)
     graphicsOffset |= (binaryReadUInt8(file) << 8);
     graphicsOffset |= (binaryReadUInt8(file) << 16);
 
-    binaryReadByte(file); /* 0x31 */
-    binaryReadByte(file); /* 0xFF */
-    binaryReadByte(file); /* 0xF0 */
+    (void)binaryReadByte(file); /* 0x31 */
+    (void)binaryReadByte(file); /* 0xFF */
+    (void)binaryReadByte(file); /* 0xF0 */
     /* Get X and Y size in .1 mm */
     /* 0x210 */
     binaryReadInt16(file); /* x size */
@@ -142,7 +141,7 @@ int readPec(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-void PecEncode(FILE* file, EmbPattern* p)
+static void PecEncode(FILE* file, EmbPattern* p)
 {
     double thisX = 0.0;
     double thisY = 0.0;
@@ -161,13 +160,13 @@ void PecEncode(FILE* file, EmbPattern* p)
         if(s.flags & STOP)
         {
             pecEncodeStop(file, stopCode);
-            if(stopCode == 2)
+            if(stopCode == (unsigned char)2)
             {
-                stopCode = 1;
+                stopCode = (unsigned char)1;
             }
             else
             {
-                stopCode = 2;
+                stopCode = (unsigned char)2;
             }
         }
         else if(s.flags & END)
@@ -177,8 +176,8 @@ void PecEncode(FILE* file, EmbPattern* p)
         }
         else if(deltaX < 63 && deltaX > -64 && deltaY < 63 && deltaY > -64 && (!(s.flags & (JUMP | TRIM))))
         {
-            binaryWriteByte(file, (deltaX < 0.0f) ? (unsigned char)(deltaX + 0x80) : (unsigned char)deltaX);
-            binaryWriteByte(file, (deltaY < 0.0f) ? (unsigned char)(deltaY + 0x80) : (unsigned char)deltaY);
+            binaryWriteByte(file, (deltaX < 0) ? (unsigned char)(deltaX + 0x80) : (unsigned char)deltaX);
+            binaryWriteByte(file, (deltaY < 0) ? (unsigned char)(deltaY + 0x80) : (unsigned char)deltaY);
         }
         else
         {
@@ -189,12 +188,12 @@ void PecEncode(FILE* file, EmbPattern* p)
     }
 }
 
-void clearImage(char image[38][48])
+static void clearImage(unsigned char image[][48])
 {
     memcpy(image, imageWithFrame, 48*38);
 }
 
-void writeImage(FILE *file, char image[][48])
+static void writeImage(FILE *file, unsigned char image[][48])
 {
     int i, j;
     for(i = 0; i < 38; i++)
@@ -202,15 +201,15 @@ void writeImage(FILE *file, char image[][48])
         for(j = 0; j < 6; j++)
         {
             int offset = j * 8;
-            char output = 0;
-            output |= (image[i][offset] != 0);
-            output |= (image[i][offset + 1] != 0) << 1;
-            output |= (image[i][offset + 2] != 0) << 2;
-            output |= (image[i][offset + 3] != 0) << 3;
-            output |= (image[i][offset + 4] != 0) << 4;
-            output |= (image[i][offset + 5] != 0) << 5;
-            output |= (image[i][offset + 6] != 0) << 6;
-            output |= (image[i][offset + 7] != 0) << 7;
+            unsigned char output = 0;
+            output |= (unsigned char)(image[i][offset] != 0);
+            output |= (unsigned char)(image[i][offset + 1] != (unsigned char)0) << 1;
+            output |= (unsigned char)(image[i][offset + 2] != (unsigned char)0) << 2;
+            output |= (unsigned char)(image[i][offset + 3] != (unsigned char)0) << 3;
+            output |= (unsigned char)(image[i][offset + 4] != (unsigned char)0) << 4;
+            output |= (unsigned char)(image[i][offset + 5] != (unsigned char)0) << 5;
+            output |= (unsigned char)(image[i][offset + 6] != (unsigned char)0) << 6;
+            output |= (unsigned char)(image[i][offset + 7] != (unsigned char)0) << 7;
             binaryWriteByte(file, output);
         }
     }
@@ -220,7 +219,7 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 {
     EmbStitchList *tempStitches;
     EmbRect bounds;
-    char image[38][48];
+    unsigned char image[38][48];
     int i, flen, currentThreadCount, graphicsOffsetLocation, graphicsOffsetValue, height, width;
     double xFactor, yFactor;
     const char* forwardSlashPos = strrchr(fileName, '/');
@@ -245,49 +244,49 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 
     while(start < dotPos)
     {
-        binaryWriteByte(file, *start);
+        binaryWriteByte(file, (unsigned char)*start);
         start++;
     }
     for(i = 0; i < (int)(16-flen); i++)
     {
-        binaryWriteByte(file, 0x20);
+        binaryWriteByte(file, (unsigned char)0x20);
     }
     binaryWriteByte(file, 0x0D);
     for(i = 0; i < 12; i++)
     {
-        binaryWriteByte(file, 0x20);
+        binaryWriteByte(file, (unsigned char)0x20);
     }
-    binaryWriteByte(file, 0xFF);
-    binaryWriteByte(file, 0x00);
-    binaryWriteByte(file, 0x06);
-    binaryWriteByte(file, 0x26);
+    binaryWriteByte(file, (unsigned char)0xFF);
+    binaryWriteByte(file, (unsigned char)0x00);
+    binaryWriteByte(file, (unsigned char)0x06);
+    binaryWriteByte(file, (unsigned char)0x26);
 
     for(i = 0; i < 12; i++)
     {
-        binaryWriteByte(file, 0x20);
+        binaryWriteByte(file, (unsigned char)0x20);
     }
     currentThreadCount = embThreadList_count(pattern->threadList);
-    binaryWriteByte(file, currentThreadCount-1);
+    binaryWriteByte(file, (unsigned char)(currentThreadCount-1));
 
     for(i = 0; i < currentThreadCount; i++)
     {
-        binaryWriteByte(file, embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)pecThreads, pecThreadCount));
+        binaryWriteByte(file, (unsigned char)embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)pecThreads, pecThreadCount));
     }
     for(i = 0; i < (int)(0x1CF - currentThreadCount); i++)
     {
-        binaryWriteByte(file, 0x20);
+        binaryWriteByte(file, (unsigned char)0x20);
     }
-    binaryWriteShort(file, 0x0000);
+    binaryWriteShort(file, (short)0x0000);
 
     graphicsOffsetLocation = ftell(file);
     /* placeholder bytes to be overwritten */
-    binaryWriteByte(file, 0x00);
-    binaryWriteByte(file, 0x00);
-    binaryWriteByte(file, 0x00);
+    binaryWriteByte(file, (unsigned char)0x00);
+    binaryWriteByte(file, (unsigned char)0x00);
+    binaryWriteByte(file, (unsigned char)0x00);
 
-    binaryWriteByte(file, 0x31);
-    binaryWriteByte(file, 0xFF);
-    binaryWriteByte(file, 0xF0);
+    binaryWriteByte(file, (unsigned char)0x31);
+    binaryWriteByte(file, (unsigned char)0xFF);
+    binaryWriteByte(file, (unsigned char)0xF0);
 
     bounds = embPattern_calcBoundingBox(pattern);
 
@@ -299,23 +298,22 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     binaryWriteShort(file, (short)height);
 
     /* Write 4 miscellaneous int16's */
-    binaryWriteShort(file, 0x1E0);
-    binaryWriteShort(file, 0x1B0);
+    binaryWriteShort(file, (short)0x1E0);
+    binaryWriteShort(file, (short)0x1B0);
 
-    binaryWriteUShortBE(file, (short)(0x9000 | -roundDouble(bounds.left)));
-    binaryWriteUShortBE(file, (short)(0x9000 | -roundDouble(bounds.top)));
+    binaryWriteUShortBE(file, (unsigned short)(0x9000 | -roundDouble(bounds.left)));
+    binaryWriteUShortBE(file, (unsigned short)(0x9000 | -roundDouble(bounds.top)));
 
     PecEncode(file, pattern);
     graphicsOffsetValue = ftell(file) - graphicsOffsetLocation + 2;
     fseek(file, graphicsOffsetLocation, SEEK_SET);
 
-    binaryWriteByte(file, (graphicsOffsetValue & 0xFF));
-    binaryWriteByte(file, ((graphicsOffsetValue >> 8) & 0xFF));
-    binaryWriteByte(file, ((graphicsOffsetValue >> 16) & 0xFF));
+    binaryWriteByte(file, (unsigned char)(graphicsOffsetValue & 0xFF));
+    binaryWriteByte(file, (unsigned char)((graphicsOffsetValue >> 8) & 0xFF));
+    binaryWriteByte(file, (unsigned char)((graphicsOffsetValue >> 16) & 0xFF));
 
     fseek(file, 0x00, SEEK_END);
 
-    /*TODO: Write each colors image, not just 0's */
     /* Writing all colors */
     clearImage(image);
     tempStitches = pattern->stitchList;

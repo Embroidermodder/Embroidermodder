@@ -2,7 +2,7 @@
 #include "format-pec.h"
 #include "helpers-binary.h"
 
-short pecDecodeNormal(unsigned char inputByte)
+static short pecDecodeNormal(unsigned char inputByte)
 {
     if(inputByte < 0x40)
     {
@@ -11,7 +11,7 @@ short pecDecodeNormal(unsigned char inputByte)
     return (inputByte - 0x80);
 }
 
-int pecJumpDecode(unsigned char byte1, unsigned char byte2)
+static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
 {
     unsigned n1 = (unsigned char) (byte1 & 0x0F);
     if(n1 <= 7)
@@ -21,7 +21,7 @@ int pecJumpDecode(unsigned char byte1, unsigned char byte2)
     }
     else
     {
-        int returnValue = -((256 - byte2) + ((15 - n1) << 8));
+        int returnValue = -(int)((256 - byte2) + ((15 - n1) << 8));
         return returnValue;
     }
 }
@@ -48,7 +48,7 @@ int readPes(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-void writeSewSegSection(EmbPattern* pattern, FILE *file)
+static void writeSewSegSection(EmbPattern* pattern, FILE *file)
 {
     EmbStitchList* pointer;
     binaryWriteShort(file, 0x06); /* section count? */
@@ -70,7 +70,7 @@ void writeSewSegSection(EmbPattern* pattern, FILE *file)
         pointer = pointer->next;
     }
 }
-void writeEmbOneSection(EmbPattern* pattern, FILE *file)
+static void writeEmbOneSection(EmbPattern* pattern, FILE *file)
 {
     int i;
     EmbRect bounds;
@@ -110,7 +110,7 @@ void writeEmbOneSection(EmbPattern* pattern, FILE *file)
     /*WriteSubObjects(br, pes, SubBlocks); */
 }
 
-void writePaletteSection(EmbPattern* pattern, FILE* file)
+static void writePaletteSection(EmbPattern* pattern, FILE* file)
 {
     binaryWriteInt(file, embThreadList_count(pattern->threadList));
 }

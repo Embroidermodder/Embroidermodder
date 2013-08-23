@@ -6,7 +6,7 @@
 Pfaff MAX embroidery file format
 */
 
-double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
+static double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
     if(res > 0x7FFFFF)
@@ -16,7 +16,7 @@ double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-void maxEncode(FILE * file, int x, int y)
+static void maxEncode(FILE * file, int x, int y)
 {
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(x & 0xFF));

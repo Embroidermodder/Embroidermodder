@@ -2,7 +2,7 @@
 #include "format-mit.h"
 #include "helpers-binary.h"
 
-int decodeMitStitch(unsigned char value)
+static int decodeMitStitch(unsigned char value)
 {
     if(value & 0x80) return -(value & 0x1F);
     return value;

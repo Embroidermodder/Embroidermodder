@@ -17,7 +17,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
 
     while(ending[i] != '\0')
     {
-        ending[i] = tolower(ending[i]);
+        ending[i] = (char)tolower(ending[i]);
         ++i;
     }
     rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));

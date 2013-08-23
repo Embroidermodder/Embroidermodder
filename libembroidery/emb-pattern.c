@@ -8,7 +8,7 @@
 #include "emb-settings.h"
 #include "helpers-misc.h"
 
-EmbPattern* embPattern_create()
+EmbPattern* embPattern_create(void)
 {
     EmbPattern* p = 0;
     p = (EmbPattern*)malloc(sizeof(EmbPattern));
@@ -500,7 +500,6 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
             double dy = pointer->stitch.yy - yy;
             if((fabs(dx) > maxStitchLength) || (fabs(dy) > maxStitchLength))
             {
-                EmbStitchList *tempPointer = pointer;
                 maxXY = max(fabs(dx), fabs(dy));
                 if(pointer->stitch.flags & (JUMP | TRIM)) maxLen = maxJumpLength;
                 else maxLen = maxStitchLength;
@@ -577,37 +576,49 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 
     char* extractName = (char*)malloc(dotPos - fileName + 5);
     if(!extractName) return;
-    extractName = memcpy(extractName, fileName, dotPos - fileName);
+    extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
     extractName[dotPos - fileName] = '\0';
     strcat(extractName,".edr");
     colorfile = embReaderWriter_getByFileName(extractName);
-    if(colorfile) hasRead = colorfile->reader(p, extractName);
+    if(colorfile) 
+    {
+        hasRead = (char)colorfile->reader(p, extractName);
+    }
     if(!hasRead)
     {
         free(colorfile);
-        extractName = memcpy(extractName, fileName, dotPos - fileName);
+        extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".rgb");
         colorfile = embReaderWriter_getByFileName(extractName);
-        if(colorfile) hasRead = colorfile->reader(p, extractName);
+        if(colorfile) 
+        {
+            hasRead = (char)colorfile->reader(p, extractName);
+        }
     }
     if(!hasRead)
     {
         free(colorfile);
-        extractName = memcpy(extractName, fileName, dotPos - fileName);
+        extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".col");
         colorfile = embReaderWriter_getByFileName(extractName);
-        if(colorfile) hasRead = colorfile->reader(p, extractName);
+        if(colorfile) 
+        {
+            hasRead = (char)colorfile->reader(p, extractName);
+        }
     }
     if(!hasRead)
     {
         free(colorfile);
-        extractName = memcpy(extractName, fileName, dotPos - fileName);
+        extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".inf");
         colorfile = embReaderWriter_getByFileName(extractName);
-        if(colorfile) hasRead = colorfile->reader(p, extractName);
+        if(colorfile)
+        { 
+            hasRead = (char)colorfile->reader(p, extractName);
+        }
     }
     free(colorfile);
     free(extractName);
@@ -841,7 +852,7 @@ void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
 {
     if(!(p->polylineObjList))
     {
-        p->polylineObjList = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+        p->polylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
         /* TODO: malloc fail error */
         p->polylineObjList->polylineObj = obj;
         p->polylineObjList->next = 0;

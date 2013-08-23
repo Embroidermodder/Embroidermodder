@@ -243,7 +243,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     }
 
     fclose(file);
-    return 1; /*TODO: finish WriteThr */
+    return 1;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

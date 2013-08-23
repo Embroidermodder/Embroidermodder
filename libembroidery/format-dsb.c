@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <math.h>
 #include "helpers-misc.h"
 #include "format-dsb.h"
@@ -26,7 +25,7 @@ int readDsb(EmbPattern* pattern, const char* fileName)
     {
         int stitchType = NORMAL;
         int x, y;
-        unsigned char ctrl =fgetc(file);
+        unsigned char ctrl =(unsigned char)fgetc(file);
         if(feof(file)) break;
         y = fgetc(file);
         if(feof(file)) break;

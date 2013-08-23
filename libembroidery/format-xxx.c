@@ -5,7 +5,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-char xxxDecodeByte(unsigned char inputByte)
+static char xxxDecodeByte(unsigned char inputByte)
 {
     if(inputByte >= 0x80)
         return (char) ((-~inputByte) - 1);
@@ -114,18 +114,13 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-void xxxEncodeStop(FILE* file, EmbStitch s)
+static void xxxEncodeStop(FILE* file, EmbStitch s)
 {
-    binaryWriteByte(file, 0x7F);
-    binaryWriteByte(file, s.color + 8);
+    binaryWriteByte(file, (unsigned char)0x7F);
+    binaryWriteByte(file, (unsigned char)(s.color + 8));
 }
 
-double round(double d) /*TODO: this should probably be renamed to avoid compiling issues or find out if roundDouble() in helpers.h that returns an int will work. */
-{
-    return floor(d + 0.5);
-}
-
-void xxxEncodeStitch(FILE* file, double deltaX, double deltaY, int flags)
+static void xxxEncodeStitch(FILE* file, double deltaX, double deltaY, int flags)
 {
     if((flags & (JUMP | TRIM)) && (fabs(deltaX) > 124 || fabs(deltaY) > 124))
     {
@@ -135,12 +130,13 @@ void xxxEncodeStitch(FILE* file, double deltaX, double deltaY, int flags)
     }
     else
     {
-        binaryWriteByte(file, (char)round(deltaX));
-        binaryWriteByte(file, (char)round(deltaY));
+        // TODO: Verify this works after changing this to unsigned char
+        binaryWriteByte(file, (unsigned char)roundDouble(deltaX));
+        binaryWriteByte(file, (unsigned char)roundDouble(deltaY));
     }
 }
 
-void xxxEncodeDesign(FILE* file, EmbPattern* p)
+static void xxxEncodeDesign(FILE* file, EmbPattern* p)
 {
     double thisX = 0.0f;
     double thisY = 0.0f;

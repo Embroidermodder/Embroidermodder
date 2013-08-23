@@ -1,7 +1,7 @@
 #include "format-emd.h"
 #include "helpers-binary.h"
 
-char emdDecode(unsigned char inputByte)
+static char emdDecode(unsigned char inputByte)
 {
     return (inputByte >= 0x80) ? ((-~inputByte) - 1) : inputByte;
 }

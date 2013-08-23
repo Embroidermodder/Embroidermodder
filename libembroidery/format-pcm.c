@@ -2,7 +2,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
+static double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
     if(res > 0x7FFFFF)

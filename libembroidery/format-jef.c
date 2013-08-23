@@ -3,7 +3,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-char jefDecode(unsigned char inputByte)
+static char jefDecode(unsigned char inputByte)
 {
     return (inputByte >= 0x80) ? (char) ((-~inputByte) - 1) : (char) inputByte;
 }
@@ -13,7 +13,7 @@ char jefDecode(unsigned char inputByte)
 #define	HOOP_140X200 3
 #define HOOP_230X200 4
 
-int jefGetHoopSize(int width, int height)
+static int jefGetHoopSize(int width, int height)
 {
     if(width <  50 && height <  50) { return HOOP_50X50; }
     if(width < 110 && height < 110) { return HOOP_110X110; }
@@ -21,7 +21,7 @@ int jefGetHoopSize(int width, int height)
     return ((int) HOOP_110X110);
 }
 
-void jefSetHoopFromId(EmbPattern *pattern, int hoopCode)
+static void jefSetHoopFromId(EmbPattern *pattern, int hoopCode)
 {
     switch(hoopCode)
     {
@@ -148,7 +148,7 @@ int readJef(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-unsigned char jefEncodeByte(float inputByte)
+static unsigned char jefEncodeByte(float inputByte)
 {
     if(inputByte < 0)
     {
@@ -157,7 +157,7 @@ unsigned char jefEncodeByte(float inputByte)
     return ((unsigned char) inputByte);
 }
 
-void jefEncode(FILE* file, float x, float y, int stitchType)
+static void jefEncode(FILE* file, float x, float y, int stitchType)
 {
     unsigned char dx = jefEncodeByte(x * 10.0f);
     unsigned char dy = jefEncodeByte(y * 10.0f);

@@ -5,7 +5,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-int decode_record_flags(unsigned char b2)
+static int decode_record_flags(unsigned char b2)
 {
     int returnCode = 0;
     if(b2 == 0xF3)
@@ -23,7 +23,7 @@ int decode_record_flags(unsigned char b2)
     return returnCode;
 }
 
-unsigned char setbit(int pos)
+static unsigned char setbit(int pos)
 {
     return (1 << pos);
 }
@@ -75,7 +75,7 @@ unsigned char setbit(int pos)
     }
 } */
 
-void encode_record(FILE* file, int x, int y, int flags)
+static void encode_record(FILE* file, int x, int y, int flags)
 {
     char b0, b1, b2;
     b0 = b1 = b2 = 0;
@@ -126,11 +126,11 @@ void encode_record(FILE* file, int x, int y, int flags)
     } */
     if(flags & (JUMP | TRIM))
     {
-        b2 |= (char) 0x83;
+        b2 = (char) (b2 | 0x83);
     }
     if(flags & STOP)
     {
-        b2 |= (char) 0xC3;
+        b2 = (char) (b2 | 0xC3);
     }
 
     binaryWriteByte(file, b0);
@@ -142,7 +142,7 @@ void encode_record(FILE* file, int x, int y, int flags)
 /*#define cci(s) (s[0]*256+s[1]) */
 #define cci(c1,c2) (c1*256+c2)
 
-void set_dst_variable(EmbPattern* pattern, char* var, char* val)
+static void set_dst_variable(EmbPattern* pattern, char* var, char* val)
 {
     unsigned int i;
     EmbThread t;
@@ -280,7 +280,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     /* READ 512 BYTE HEADER INTO header[] */
     for(i = 0; i < 512; i++)
     {
-        header[i] = fgetc(file);
+        header[i] = (char)fgetc(file);
     }
 
     /*TODO:It would probably be a good idea to validate file before accepting it. */

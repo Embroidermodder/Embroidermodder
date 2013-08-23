@@ -14,7 +14,7 @@ int read10o(EmbPattern* pattern, const char* fileName)
     {
         int x, y;
         int stitchType = NORMAL;
-        unsigned char ctrl = fgetc(file);
+        unsigned char ctrl = (unsigned char)fgetc(file);
         if(feof(file))
             break;
         y = fgetc(file);

@@ -2,7 +2,7 @@
 
 char binaryReadByte(FILE* file)
 {
-    return fgetc(file);
+    return (char)fgetc(file);
 }
 
 int binaryReadBytes(FILE* file, unsigned char* destination, int count)
@@ -10,11 +10,11 @@ int binaryReadBytes(FILE* file, unsigned char* destination, int count)
     return (int) fread((char*) destination, 1, count, file);
 }
 
-int binaryReadInt16(FILE* file)
+short binaryReadInt16(FILE* file)
 {
-    short x = fgetc(file);
+    int x = fgetc(file);
     x = x | fgetc(file) << 8;
-    return x;
+    return (short)x;
 }
 
 int binaryReadInt32(FILE* file)
@@ -86,7 +86,7 @@ void binaryReadString(FILE* file, char *buffer, int maxLength)
 	int i = 0;
 	while(i < maxLength)
 	{
-		buffer[i] = fgetc(file);
+		buffer[i] = (char)fgetc(file);
 		if(buffer[i] == '\0') break;
 		i++;
 	}

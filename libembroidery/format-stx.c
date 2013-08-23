@@ -5,8 +5,6 @@
 #include "helpers-misc.h"
 #include "format-stx.h"
 
-/* TODO: Dispose all the allocated memory */
-
 typedef struct SubDescriptor_
 {
     int SomeNum;
@@ -25,7 +23,7 @@ typedef struct StxThread_
     EmbColor StxColor;
 } StxThread;
 
-int ReadStxThread(StxThread* thread, FILE* file)
+static int ReadStxThread(StxThread* thread, FILE* file)
 {
     int j, colorNameLength, sectionNameLength;
     int somethingsomething, somethingsomething2, somethingelse, numberOfOtherDescriptors;

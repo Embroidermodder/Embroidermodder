@@ -61,11 +61,11 @@ int writeInf(EmbPattern* pattern, const char* fileName)
         c = pointer->thread.color;
         sprintf(buffer, "RGB(%d,%d,%d)", (int)c.r, (int)c.g, (int)c.b);
         binaryWriteUShortBE(file, (unsigned short)(14 + strlen(buffer))); /* record length */
-        binaryWriteUShortBE(file, i); /* record number */
+        binaryWriteUShortBE(file, (unsigned short)i); /* record number */
         binaryWriteByte(file, c.r);
         binaryWriteByte(file, c.g);
         binaryWriteByte(file, c.b);
-        binaryWriteUShortBE(file, i); /* needle number */
+        binaryWriteUShortBE(file, (unsigned short)i); /* needle number */
         binaryWriteBytes(file, "RGB\0", 4);
         fprintf(file, buffer);
         binaryWriteByte(file, 0);

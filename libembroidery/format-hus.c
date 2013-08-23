@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <fcntl.h>
 #include <limits.h>
 #include "emb-compress.h"
 #include "helpers-binary.h"
@@ -13,7 +12,7 @@
  * EmbReaderWriter Functions
  ****************************************/
 
-short husDecode(unsigned char a1, unsigned char a2)
+static short husDecode(unsigned char a1, unsigned char a2)
 {
     unsigned short res = (a2 << 8) + a1;
     if(res >= 0x8000)
@@ -26,7 +25,7 @@ short husDecode(unsigned char a1, unsigned char a2)
 	}
 }
 
-int husDecodeStitchType(unsigned char b)
+static int husDecodeStitchType(unsigned char b)
 {
     switch(b)
     {
@@ -43,7 +42,7 @@ int husDecodeStitchType(unsigned char b)
     }
 }
 
-unsigned char* husDecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
+static unsigned char* husDecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedContentLength);
     if(!decompressedData) return 0;
@@ -51,7 +50,7 @@ unsigned char* husDecompressData(unsigned char* input, int compressedInputLength
     return decompressedData;
 }
 
-unsigned char* husCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
+static unsigned char* husCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
 {
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
      if(!compressedData) return 0;
@@ -59,17 +58,17 @@ unsigned char* husCompressData(unsigned char* input, int decompressedInputSize, 
     return compressedData;
 }
 
-int husDecodeByte(unsigned char b)
+static int husDecodeByte(unsigned char b)
 {
     return (char)b;
 }
 
-unsigned char husEncodeByte(double f)
+static unsigned char husEncodeByte(double f)
 {
     return (unsigned char)(int)roundDouble(f);
 }
 
-unsigned char husEncodeStitchType(int st)
+static unsigned char husEncodeStitchType(int st)
 {
     switch(st)
     {
@@ -107,7 +106,6 @@ int readHus(EmbPattern* pattern, const char* fileName)
     FILE* file = fopen(fileName, "rb");
     if(file == 0)
     {
-        /*TODO: set status here "Error opening HUS file for read:" */
         return 0;
     }
 

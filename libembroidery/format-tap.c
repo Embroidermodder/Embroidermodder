@@ -1,7 +1,7 @@
 #include "format-tap.h"
 #include <stdio.h>
 
-int decodeRecordFlags(unsigned char b2)
+static int decodeRecordFlags(unsigned char b2)
 {
     if(b2 == 0xF3)
         return END;

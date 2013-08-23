@@ -1,14 +1,15 @@
-#include "format-exp.h"
 #include <stdio.h>
-#include "helpers-misc.h"
 #include "emb-stitch.h"
+#include "format-exp.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
 
-char expDecode(unsigned char a1)
+static char expDecode(unsigned char a1)
 {
     return (a1 > 0x80) ? ((-~a1) - 1) : a1;
 }
 
-void expEncode(unsigned char *b, char dx, char dy, int flags)
+static void expEncode(unsigned char *b, char dx, char dy, int flags)
 {
     if(flags == TRIM)
     {
@@ -49,20 +50,20 @@ int readExp(EmbPattern* pattern, const char* fileName)
     for(i = 0; !feof(file); i++)
     {
         flags = NORMAL;
-        b0 = fgetc(file);
+        b0 = (unsigned char)fgetc(file);
         if(feof(file))
             break;
-        b1 = fgetc(file);
+        b1 = (unsigned char)fgetc(file);
         if(feof(file))
             break;
         if(b0 == 0x80)
         {
             if(b1 & 1)
             {
-                b0 = fgetc(file);
+                b0 = (unsigned char)fgetc(file);
                 if(feof(file))
                     break;
-                b1 = fgetc(file);
+                b1 = (unsigned char)fgetc(file);
                 if(feof(file))
                     break;
                 flags = STOP;
@@ -71,19 +72,19 @@ int readExp(EmbPattern* pattern, const char* fileName)
             {
                 flags = TRIM;
                 if(b1 == 2) flags = NORMAL;
-                b0 = fgetc(file);
+                b0 = (unsigned char)fgetc(file);
                 if(feof(file))
                     break;
-                b1 = fgetc(file);
+                b1 = (unsigned char)fgetc(file);
                 if(feof(file))
                     break;
             }
             else if(b1 == 0x80)
             {
-                b0 = fgetc(file);
+                b0 = (unsigned char)fgetc(file);
                 if(feof(file))
                     break;
-                b1 = fgetc(file);
+                b1 = (unsigned char)fgetc(file);
                 if(feof(file))
                     break;
                 /* Seems to be b0=0x07 and b1=0x00
@@ -109,7 +110,6 @@ int writeExp(EmbPattern* pattern, const char* fileName)
     double dx = 0.0, dy = 0.0;
     double xx = 0.0, yy = 0.0;
     int flags = 0;
-    int i = 0;
     unsigned char b[4];
 
     file = fopen(fileName, "wb");
@@ -128,7 +128,7 @@ int writeExp(EmbPattern* pattern, const char* fileName)
         xx = stitches->stitch.xx * 10.0;
         yy = stitches->stitch.yy * 10.0;
         flags = stitches->stitch.flags;
-        expEncode(b, roundDouble(dx), roundDouble(dy), flags);
+        expEncode(b, (char)roundDouble(dx), (char)roundDouble(dy), flags);
         if((b[0] == 128) && ((b[1] == 1) || (b[1] == 2) || (b[1] == 4)))
         {
             fprintf(file, "%c%c%c%c", b[0], b[1], b[2], b[3]);

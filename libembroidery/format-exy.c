@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "format-exy.h"
 
-int exyDecodeFlags(unsigned char b2)
+static int exyDecodeFlags(unsigned char b2)
 {
     int returnCode = 0;
     if(b2 == 0xF3)

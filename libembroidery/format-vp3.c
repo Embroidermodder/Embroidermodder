@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-unsigned char* ReadString(FILE* file)
+static unsigned char* ReadString(FILE* file)
 {
     int stringLength = binaryReadInt16BE(file);
     unsigned char* charString = (unsigned char*)malloc(stringLength);
@@ -12,12 +12,12 @@ unsigned char* ReadString(FILE* file)
     return charString;
 }
 
-int vp3Decode(unsigned char inputByte)
+static int vp3Decode(unsigned char inputByte)
 {
     return (inputByte > 0x80) ? -((unsigned char) (~inputByte) + 1) : inputByte;
 }
 
-short vp3DecodeInt16(short input)
+static short vp3DecodeInt16(short input)
 {
     if((unsigned short)input > 0x8000)
     {
@@ -26,7 +26,7 @@ short vp3DecodeInt16(short input)
     return (input);
 }
 
-void vp3ReadHoopSection(FILE* file)
+static void vp3ReadHoopSection(FILE* file)
 {
     int right = binaryReadInt32BE(file);
     int bottom = binaryReadInt32BE(file);

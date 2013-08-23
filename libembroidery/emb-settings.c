@@ -1,6 +1,6 @@
 #include "emb-settings.h"
 
-EmbSettings embSettings_init()
+EmbSettings embSettings_init(void)
 {
     EmbSettings result;
     result.dstJumpsPerTrim = 6;

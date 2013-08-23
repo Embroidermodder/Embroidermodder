@@ -68,7 +68,7 @@ int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int
     return closestIndex;
 }
 
-EmbThread embThread_getRandom()
+EmbThread embThread_getRandom(void)
 {
     EmbThread c;
     c.color.r = rand()%256;

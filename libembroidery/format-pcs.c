@@ -2,7 +2,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
+static double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
     int res = a1 + (a2 << 8) + (a3 << 16);
     if(res > 0x7FFFFF)
@@ -12,7 +12,7 @@ double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-void pcsEncode(FILE * file, int dx, int dy, int flags)
+static void pcsEncode(FILE * file, int dx, int dy, int flags)
 {
     unsigned char flagsToWrite = 0;
     binaryWriteByte(file, (unsigned char)0);
@@ -120,7 +120,7 @@ int writePcs(EmbPattern* pattern, const char* fileName)
     EmbStitchList* pointer;
     EmbThreadList* threadPointer;
     FILE* file;
-    int flags = 0, i;
+    int i;
     unsigned char colorCount;
     double xx = 0.0, yy = 0.0;
 
@@ -131,7 +131,7 @@ int writePcs(EmbPattern* pattern, const char* fileName)
     }
     binaryWriteByte(file, (unsigned char)'2');
     binaryWriteByte(file, 3); /* TODO: select hoop size defaulting to Large PCS hoop */
-    colorCount = embThreadList_count(pattern->threadList);
+    colorCount = (unsigned char)embThreadList_count(pattern->threadList);
     binaryWriteUShort(file, (unsigned short)colorCount);
     threadPointer = pattern->threadList;
     i = 0;

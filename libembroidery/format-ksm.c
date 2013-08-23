@@ -2,7 +2,7 @@
 #include "helpers-binary.h"
 #include <stdio.h>
 
-void ksmEncode(unsigned char *b, char dx, char dy, int flags) {
+static void ksmEncode(unsigned char *b, char dx, char dy, int flags) {
     if (flags == TRIM) {
         b[0] = 128;
         b[1] = 2;

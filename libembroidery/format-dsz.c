@@ -23,7 +23,7 @@ int readDsz(EmbPattern* pattern, const char* fileName)
         if(feof(file)) break;
         x = fgetc(file);
         if(feof(file)) break;
-        ctrl =fgetc(file);
+        ctrl = (unsigned char) fgetc(file);
         if(feof(file)) break;
         if(ctrl & 0x01) stitchType = TRIM;
         if(ctrl & 0x20) y = -y;

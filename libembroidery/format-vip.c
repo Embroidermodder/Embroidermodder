@@ -5,13 +5,13 @@
 #include "helpers-misc.h"
 #include "emb-compress.h"
 
-int DecodeByte(unsigned char b)
+static int DecodeByte(unsigned char b)
 {
     if (b >= 0x80) return (-(unsigned char) (~b + 1));
     return b;
 }
 
-int DecodeStitchType(unsigned char b)
+static int DecodeStitchType(unsigned char b)
 {
     switch (b)
     {
@@ -28,10 +28,10 @@ int DecodeStitchType(unsigned char b)
     }
 }
 
-unsigned char* DecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
+static unsigned char* DecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(decompressedContentLength);
-    if(!DecompressData)
+    if(!decompressedData)
     {
         return 0;
     }
@@ -148,7 +148,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-unsigned char* vipCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
+static unsigned char* vipCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
 {
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
     if(!compressedData)
@@ -159,12 +159,12 @@ unsigned char* vipCompressData(unsigned char* input, int decompressedInputSize, 
     return compressedData;
 }
 
-unsigned char vipEncodeByte(double f)
+static unsigned char vipEncodeByte(double f)
 {
     return (unsigned char)(int)roundDouble(f);
 }
 
-unsigned char vipEncodeStitchType(int st)
+static unsigned char vipEncodeStitchType(int st)
 {
     switch(st)
     {

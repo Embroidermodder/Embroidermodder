@@ -4,7 +4,7 @@
 #include "format-phc.h"
 #include "helpers-binary.h"
 
-char startsWith(const char *pre, const char *str)
+static char startsWith(const char *pre, const char *str)
 {
     size_t lenpre = strlen(pre),
            lenstr = strlen(str);
