@@ -24,7 +24,6 @@ int readInf(EmbPattern* pattern, const char* fileName)
         char colorType[50];
         char colorDescription[50];
         EmbThread t;
-        int pos;
         binaryReadUInt16(file);
         binaryReadUInt16(file);
         t.color.r = binaryReadByte(file);
@@ -60,8 +59,8 @@ int writeInf(EmbPattern* pattern, const char* fileName)
         char buffer[50];
         EmbColor c;
         c = pointer->thread.color;
-        sprintf(buffer, "RGB(%d,%d,%d)", c.r, c.g, c.b);
-        binaryWriteUShortBE(file, 14 + strlen(buffer)); /* record length */
+        sprintf(buffer, "RGB(%d,%d,%d)", (int)c.r, (int)c.g, (int)c.b);
+        binaryWriteUShortBE(file, (unsigned short)(14 + strlen(buffer))); /* record length */
         binaryWriteUShortBE(file, i); /* record number */
         binaryWriteByte(file, c.r);
         binaryWriteByte(file, c.g);

@@ -25,7 +25,7 @@ typedef struct StxThread_
     EmbColor StxColor;
 } StxThread;
 
-void ReadStxThread(StxThread* thread, FILE* file)
+int ReadStxThread(StxThread* thread, FILE* file)
 {
     int j, colorNameLength, sectionNameLength;
     int somethingsomething, somethingsomething2, somethingelse, numberOfOtherDescriptors;
@@ -62,7 +62,7 @@ void ReadStxThread(StxThread* thread, FILE* file)
     numberOfOtherDescriptors = binaryReadInt16(file);
 
     thread->SubDescriptors = (SubDescriptor*)malloc(sizeof(SubDescriptor) * numberOfOtherDescriptors);
-    /* TODO: malloc fail error */
+    if(!thread->SubDescriptors) return 0;
     for(j = 0; j < numberOfOtherDescriptors; j++)
     {
         SubDescriptor sd;
@@ -85,6 +85,7 @@ void ReadStxThread(StxThread* thread, FILE* file)
         sd.SomeOtherInt = binaryReadInt32(file);
         thread->SubDescriptors[j] = sd;
     }
+    return 1;
 }
 
 int readStx(EmbPattern* pattern, const char* fileName)

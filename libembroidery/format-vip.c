@@ -28,13 +28,17 @@ int DecodeStitchType(unsigned char b)
     }
 }
 
-unsigned char* DecompressData(unsigned char* input, int inputLength, int decompressedContentLength)
+unsigned char* DecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(decompressedContentLength);
-    /* TODO: malloc fail error */
-    husExpand((unsigned char*)input, decompressedData, inputLength, 10);
+    if(!DecompressData)
+    {
+        return 0;
+    }
+    husExpand((unsigned char*)input, decompressedData, compressedInputLength, 10);
     return decompressedData;
 }
+
 typedef struct _VipHeader
 {
     int magicCode;
@@ -131,21 +135,27 @@ int readVip(EmbPattern* pattern, const char* fileName)
             DecodeByte(yDecompressed[i]) / 10.0, DecodeStitchType(attributeDataDecompressed[i]), 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     fclose(file);
+
     free(attributeData);
     free(xData);
     free(yData);
     free(attributeDataDecompressed);
     free(xDecompressed);
     free(yDecompressed);
-    return 1; /*TODO: finish readVip */
+
+    return 1;
 }
 
-unsigned char* vipCompressData(unsigned char* input, int inputSize, int* compressedSize)
+unsigned char* vipCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
 {
-    unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*inputSize*2);
-    /* TODO: malloc fail error */
-    *compressedSize = husCompress(input, (unsigned long) inputSize, compressedData, 10, 0);
+    unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
+    if(!compressedData)
+    {
+        return 0;
+    }
+    *compressedSize = husCompress(input, (unsigned long) decompressedInputSize, compressedData, 10, 0);
     return compressedData;
 }
 
@@ -194,16 +204,19 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     FILE* file = fopen(fileName, "wb");
     if(file == 0)
     {
-        /*TODO: set status here "Error opening HUS file for write:" */
         return 0;
     }
 
     stitchCount = embStitchList_count(pattern->stitchList);
 	minColors = embThreadList_count(pattern->threadList);
-	decodedColors = (unsigned char*)malloc(minColors* 4 *sizeof(unsigned char));
-    /* TODO: malloc fail error */
-	encodedColors = (unsigned char*)malloc(minColors* 4 *sizeof(unsigned char));
-    /* TODO: malloc fail error */
+	decodedColors = (unsigned char*)malloc(minColors << 2);
+    if(!decodedColors) return 0;
+	encodedColors = (unsigned char*)malloc(minColors << 2);
+    if(encodedColors)
+    {
+        free(decodedColors);
+        return 0;
+    }
     /* embPattern_correctForMaxStitchLength(pattern, 0x7F, 0x7F); */
 
     patternColor = minColors;
@@ -222,66 +235,77 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     binaryWriteUInt(file, 0x38 + (minColors << 3));
 
     xValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
-    /* TODO: malloc fail error */
     yValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
-    /* TODO: malloc fail error */
     attributeValues = (unsigned char*)malloc(sizeof(unsigned char)*(stitchCount));
-    /* TODO: malloc fail error */
-
-    pointer = pattern->stitchList;
-    while(pointer)
+    if(xValues && yValues && attributeValues)
     {
-        xx = pointer->stitch.xx;
-        yy = pointer->stitch.yy;
-        flags = pointer->stitch.flags;
-        xValues[i] = vipEncodeByte((xx - previousX) * 10.0);
-        previousX = xx;
-        yValues[i] = vipEncodeByte((yy - previousY) * 10.0);
-        previousY = yy;
-        attributeValues[i] = vipEncodeStitchType(flags);
-        pointer = pointer->next;
-        i++;
+        pointer = pattern->stitchList;
+        while(pointer)
+        {
+            xx = pointer->stitch.xx;
+            yy = pointer->stitch.yy;
+            flags = pointer->stitch.flags;
+            xValues[i] = vipEncodeByte((xx - previousX) * 10.0);
+            previousX = xx;
+            yValues[i] = vipEncodeByte((yy - previousY) * 10.0);
+            previousY = yy;
+            attributeValues[i] = vipEncodeStitchType(flags);
+            pointer = pointer->next;
+            i++;
+        }
+        attributeCompressed = vipCompressData(attributeValues, stitchCount, &attributeSize);
+        xCompressed = vipCompressData(xValues, stitchCount, &xCompressedSize);
+        yCompressed = vipCompressData(yValues, stitchCount, &yCompressedSize);
+
+        binaryWriteUInt(file, (unsigned int) (0x38 + (minColors << 3) + attributeSize));
+        binaryWriteUInt(file, (unsigned int) (0x38 + (minColors << 3) + attributeSize + xCompressedSize));
+        binaryWriteUInt(file, 0x00000000);
+        binaryWriteUInt(file, 0x00000000);
+        binaryWriteUShort(file, 0x0000);
+
+	    binaryWriteInt(file, minColors << 2);
+
+	    colorPointer = pattern->threadList;
+
+        for (i = 0; i < minColors; i++)
+        {
+            int byteChunk = i << 2;
+		    EmbColor currentColor = colorPointer->thread.color;
+		    decodedColors[byteChunk] = currentColor.r;
+            decodedColors[byteChunk + 1] = currentColor.g;
+            decodedColors[byteChunk + 2] = currentColor.b;
+            decodedColors[byteChunk + 3] = 0x01;
+		    colorPointer = colorPointer->next;
+        }
+
+        for (i = 0; i < minColors << 2; ++i)
+        {
+            unsigned char tmpByte = (unsigned char) (decodedColors[i] ^ vipDecodingTable[i]);
+		    prevByte = (unsigned char) (tmpByte ^ prevByte);
+		    binaryWriteByte(file, prevByte);
+	    }
+	    for (i = 0; i <= minColors; i++)
+        {
+            binaryWriteInt(file, 1);
+        }
+        binaryWriteUInt(file, 0); /* string length */
+	    binaryWriteShort(file, 0);
+        binaryWriteBytes(file, (char*) attributeCompressed, attributeSize);
+	    binaryWriteBytes(file, (char*) xCompressed, xCompressedSize);
+	    binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
     }
-    attributeCompressed = vipCompressData(attributeValues, stitchCount, &attributeSize);
-    xCompressed = vipCompressData(xValues, stitchCount, &xCompressedSize);
-    yCompressed = vipCompressData(yValues, stitchCount, &yCompressedSize);
 
-    binaryWriteUInt(file, (unsigned int) (0x38 + (minColors << 3) + attributeSize));
-    binaryWriteUInt(file, (unsigned int) (0x38 + (minColors << 3) + attributeSize + xCompressedSize));
-    binaryWriteUInt(file, 0x00000000);
-    binaryWriteUInt(file, 0x00000000);
-    binaryWriteUShort(file, 0x0000);
+    if(attributeCompressed) free(attributeCompressed);
+    if(xCompressed) free(xCompressed);
+    if(yCompressed) free(yCompressed);
 
-	binaryWriteInt(file, minColors << 2);
+    if(attributeValues) free(attributeValues);
+    if(xValues) free(xValues);
+    if(yValues) free(yValues);
 
-	colorPointer = pattern->threadList;
+    if(decodedColors) free(decodedColors);
+    if(encodedColors) free(encodedColors);
 
-    for (i = 0; i < minColors; i++)
-    {
-        int byteChunk = i << 2;
-		EmbColor currentColor = colorPointer->thread.color;
-		decodedColors[byteChunk] = currentColor.r;
-        decodedColors[byteChunk + 1] = currentColor.g;
-        decodedColors[byteChunk + 2] = currentColor.b;
-        decodedColors[byteChunk + 3] = 0x01;
-		colorPointer = colorPointer->next;
-    }
-
-    for (i = 0; i < minColors << 2; ++i)
-    {
-        unsigned char tmpByte = (unsigned char) (decodedColors[i] ^ vipDecodingTable[i]);
-		prevByte = (unsigned char) (tmpByte ^ prevByte);
-		binaryWriteByte(file, prevByte);
-	}
-	for (i = 0; i <= minColors; i++)
-    {
-        binaryWriteInt(file, 1);
-    }
-    binaryWriteUInt(file, 0); /* string length */
-	binaryWriteShort(file, 0);
-    binaryWriteBytes(file, (char*) attributeCompressed, attributeSize);
-	binaryWriteBytes(file, (char*) xCompressed, xCompressedSize);
-	binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
     fclose(file);
     return 1;
 }

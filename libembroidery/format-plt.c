@@ -26,12 +26,18 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     {
         if(startsWith("PD", input))
         {
-            sscanf(input, "PD%lf,%lf;", &x, &y);
+            if(sscanf(input, "PD%lf,%lf;", &x, &y) < 2)
+            {
+                break;
+            }
             embPattern_addStitchAbs(pattern, x / scalingFactor, y / scalingFactor, NORMAL, 1);
         }
         else if(startsWith("PU", input))
         {
-            sscanf(input, "PU%lf,%lf;", &x, &y);
+            if(sscanf(input, "PU%lf,%lf;", &x, &y) < 2)
+            {
+                break;
+            }
             embPattern_addStitchAbs(pattern, x / scalingFactor, y / scalingFactor, STOP, 1);
         }
     }

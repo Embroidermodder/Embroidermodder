@@ -27,9 +27,8 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     EmbStitchList* secondLast = 0;
 
     file = fopen(fileName, "rb");
-    if(file == 0)
+    if(!file)
     {
-        /*TODO: set messages here "Error opening XXX file for read:" */
         return 0;
     }
 
@@ -96,16 +95,19 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     }
     lastStitch = pattern->stitchList;
     secondLast = 0;
-    while(lastStitch->next)
+    if(lastStitch)
     {
-        secondLast = lastStitch;
-        lastStitch=lastStitch->next;
-    }
-    if((!pattern->stitchList) && lastStitch->stitch.flags == STOP)
-    {
-        free(lastStitch);
-        secondLast->next = NULL;
-        embPattern_changeColor(pattern, pattern->currentColorIndex - 1);
+        while(lastStitch->next)
+        {
+            secondLast = lastStitch;
+            lastStitch=lastStitch->next;
+        }
+        if((!pattern->stitchList) && lastStitch->stitch.flags == STOP && secondLast)
+        {
+            free(lastStitch);
+            secondLast->next = NULL;
+            embPattern_changeColor(pattern, pattern->currentColorIndex - 1);
+        }
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
     fclose(file);

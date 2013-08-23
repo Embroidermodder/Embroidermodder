@@ -278,8 +278,8 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
 
     /* write variables */
     fprintf(file,"\"#\",\"[VAR_NAME]\",\"[VAR_VALUE]\"\n");
-    fprintf(file, "\">\",\"STITCH_COUNT:\",\"%u\"\n",   stitchCount);
-    fprintf(file, "\">\",\"THREAD_COUNT:\",\"%u\"\n",   threadCount);
+    fprintf(file, "\">\",\"STITCH_COUNT:\",\"%u\"\n",   (unsigned int)stitchCount);
+    fprintf(file, "\">\",\"THREAD_COUNT:\",\"%u\"\n",   (unsigned int)threadCount);
     fprintf(file, "\">\",\"EXTENTS_LEFT:\",\"%f\"\n",   boundingRect.left);
     fprintf(file, "\">\",\"EXTENTS_TOP:\",\"%f\"\n",    boundingRect.top);
     fprintf(file, "\">\",\"EXTENTS_RIGHT:\",\"%f\"\n",  boundingRect.right);
@@ -294,9 +294,9 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
     while(tList)
     {
         fprintf(file, "\"$\",\"%d\",\"%d\",\"%d\",\"%d\",\"%s\",\"%s\"\n", i,
-                tList->thread.color.r,
-                tList->thread.color.g,
-                tList->thread.color.b,
+                (int)tList->thread.color.r,
+                (int)tList->thread.color.g,
+                (int)tList->thread.color.b,
                 tList->thread.description,
                 tList->thread.catalogNumber);
         i++;

@@ -35,9 +35,9 @@ void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints
 
     /* TODO: pointer safety for result param */
     result->Side1 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
-    /* TODO: malloc fail error */
+    if(!result->Side1) return;
     result->Side2 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
-    /* TODO: malloc fail error */
+    if(!result->Side2) return;
 
     result->Side1[0] = outline.Side1[0];
     result->Side2[0] = outline.Side2[0];

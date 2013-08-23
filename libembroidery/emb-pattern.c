@@ -68,13 +68,13 @@ void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
     }
 }
 
-void embPattern_addThread(EmbPattern* p, EmbThread thread)
+int embPattern_addThread(EmbPattern* p, EmbThread thread)
 {
     /* TODO: pointer safety */
     if(!(p->threadList))
     {
         EmbThreadList* t = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-        /* TODO: malloc fail error */
+        if(!t) return 0;
         t->thread = thread;
         t->next = NULL;
         p->threadList = t;
@@ -83,6 +83,7 @@ void embPattern_addThread(EmbPattern* p, EmbThread thread)
     {
         embThreadList_add(p->threadList, thread);
     }
+    return 1;
 }
 
 void embPattern_fixColorCount(EmbPattern* p)
@@ -575,7 +576,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     const char* dotPos = strrchr(fileName, '.');
 
     char* extractName = (char*)malloc(dotPos - fileName + 5);
-    /* TODO: malloc fail error */
+    if(!extractName) return;
     extractName = memcpy(extractName, fileName, dotPos - fileName);
     extractName[dotPos - fileName] = '\0';
     strcat(extractName,".edr");

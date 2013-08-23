@@ -64,7 +64,7 @@ EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double r
 EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject* heapEllipseObj = (EmbEllipseObject*)malloc(sizeof(EmbEllipseObject));
-    /* TODO: malloc fail error */
+    if(!heapEllipseObj) return 0;
     heapEllipseObj->ellipse.centerX = cx;
     heapEllipseObj->ellipse.centerY = cy;
     heapEllipseObj->ellipse.radiusX = rx;

@@ -34,7 +34,6 @@ int readRgb(EmbPattern* pattern, const char* fileName)
 int writeRgb(EmbPattern* pattern, const char* fileName)
 {
     EmbThreadList* colors = pattern->threadList;
-    EmbColor c;
     FILE* file = fopen(fileName, "wb");
 
     if(file == 0)
@@ -44,7 +43,7 @@ int writeRgb(EmbPattern* pattern, const char* fileName)
 
     while(colors)
     {
-        c = colors->thread.color;
+        EmbColor c = colors->thread.color;
         binaryWriteByte(file, c.r);
         binaryWriteByte(file, c.g);
         binaryWriteByte(file, c.b);

@@ -63,7 +63,7 @@ typedef struct EmbPattern_
 EmbPattern* embPattern_create(void);
 void embPattern_hideStitchesOverLength(EmbPattern* p, int length);
 void embPattern_fixColorCount(EmbPattern* p);
-void embPattern_addThread(EmbPattern* p, EmbThread thread);
+int embPattern_addThread(EmbPattern* p, EmbThread thread);
 void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex);
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
 void embPattern_changeColor(EmbPattern* p, int index);

@@ -84,7 +84,7 @@ EmbRectObject embRectObject_make(double x, double y, double w, double h)
 EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 {
     EmbRectObject* heapRectObj = (EmbRectObject*)malloc(sizeof(EmbRectObject));
-    /* TODO: malloc fail error */
+    if(!heapRectObj) return 0;
     heapRectObj->rect.left = x;
     heapRectObj->rect.top = y;
     heapRectObj->rect.right = x + w;

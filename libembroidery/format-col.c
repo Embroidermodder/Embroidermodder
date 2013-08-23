@@ -4,31 +4,36 @@
 
 int readCol(EmbPattern* pattern, const char* fileName)
 {
-    char num;
-    unsigned char blue, green, red;
     int numberOfColors, i;
 
-    FILE* file;
-    file = fopen(fileName, "r");
+    FILE* file = fopen(fileName, "r");
     if(file==0)
     {
-        /*TODO: set messages here "Error opening COL file for read:" */
         return 0;
     }
     embThreadList_free(pattern->threadList);
-    fscanf(file, "%d\r", &numberOfColors);
+    if(fscanf(file, "%d\r", &numberOfColors) < 1) 
+    {
+        return 0;
+    }
     for(i = 0; i < numberOfColors; i++)
     {
+        int num, blue, green, red, itemsMatched;
         EmbThread t;
         char line[30];
-        fscanf(file, "%s\r", line);
-        sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red);
-
+        if(fscanf(file, "%s\r", line) < 1)
+        {
+            return 0;
+        }
+        if(sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red) != 4)
+        {
+            break;
+        }
         t.catalogNumber = "";
         t.description = "";
-        t.color.r = red;
-        t.color.g = green;
-        t.color.b = blue;
+        t.color.r = (unsigned char)red;
+        t.color.g = (unsigned char)green;
+        t.color.b = (unsigned char)blue;
         embPattern_addThread(pattern, t);
     }
     fclose(file);
@@ -42,8 +47,8 @@ int writeCol(EmbPattern* pattern, const char* fileName)
     EmbThreadList *colors;
 
     file = fopen(fileName, "w");
-    if(file==0) {
-        /*TODO: set messages here "Error creating/editing COL file for read:" */
+    if(file==0)
+    {
         return 0;
     }
     colorCount = embThreadList_count(pattern->threadList);
@@ -54,7 +59,7 @@ int writeCol(EmbPattern* pattern, const char* fileName)
     {
         EmbColor c;
         c = colors->thread.color;
-        fprintf(file, "%d,%d,%d,%d\n\r", i, c.r, c.g, c.b);
+        fprintf(file, "%d,%d,%d,%d\n\r", i, (int)c.r, (int)c.g, (int)c.b);
         i++;
         colors = colors->next;
     }

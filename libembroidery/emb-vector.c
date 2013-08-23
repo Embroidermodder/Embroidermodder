@@ -42,7 +42,7 @@ EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data)
 {
     if(!pointer) return embVectorList_create(data);
     pointer->next = (EmbVectorList*)malloc(sizeof(EmbVectorList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) return 0;
     pointer = pointer->next;
     pointer->vector = data;
     pointer->next = 0;

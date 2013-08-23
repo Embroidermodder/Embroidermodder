@@ -7,8 +7,6 @@
 
 void readPecStitches(EmbPattern* pattern, FILE* file)
 {
-    EmbStitchList *tempList;
-    EmbRect rect;
     int stitchNumber = 0;
     while(!feof(file))
     {
@@ -105,7 +103,6 @@ int readPec(EmbPattern* pattern, const char* fileName)
     FILE* file = fopen(fileName, "rb");
     if(file == 0)
     {
-        /*TODO: set status here "Error opening PEC file for read:" */
         return 0;
     }
     fseek(file, 0x38, SEEK_SET);
@@ -362,13 +359,11 @@ int writePec(EmbPattern* pattern, const char* fileName)
     file = fopen(fileName, "wb");
     if(file==0)
     {
-        /*TODO: set status here "Error opening PEC file for write:" */
         return 0;
     }
     embPattern_fixColorCount(pattern);
     embPattern_correctForMaxStitchLength(pattern,12.7, 204.7);
     embPattern_scale(pattern, 10.0);
-
 
     binaryWriteBytes(file, "#PEC0001", 8);
 

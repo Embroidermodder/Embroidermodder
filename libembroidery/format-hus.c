@@ -43,19 +43,19 @@ int husDecodeStitchType(unsigned char b)
     }
 }
 
-unsigned char* husDecompressData(unsigned char* input, int inputLength, int decompressedContentLength)
+unsigned char* husDecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedContentLength);
-    /* TODO: malloc fail error */
-    husExpand((unsigned char*) input, decompressedData, inputLength, 10);
+    if(!decompressedData) return 0;
+    husExpand((unsigned char*) input, decompressedData, compressedInputLength, 10);
     return decompressedData;
 }
 
-unsigned char* husCompressData(unsigned char* input, int inputSize, int* compressedSize)
+unsigned char* husCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
 {
-    unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*inputSize*2);
-    /* TODO: malloc fail error */
-    *compressedSize = husCompress(input, (unsigned long) inputSize, compressedData, 10, 0);
+    unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
+     if(!compressedData) return 0;
+    *compressedSize = husCompress(input, (unsigned long) decompressedInputSize, compressedData, 10, 0);
     return compressedData;
 }
 
@@ -95,7 +95,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
 
     int attributeOffset,xOffset,yOffset;
     unsigned char* attributeData;
-    unsigned char* attributeDataDecompressed;
+    unsigned char* attributeDataDecompressed = 0;
 
     unsigned char* xData;
     unsigned char* xDecompressed;
@@ -142,7 +142,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
     attributeData = (unsigned char*)malloc(sizeof(unsigned char)*(xOffset - attributeOffset + 1));
     /* TODO: malloc fail error */
     binaryReadBytes(file, attributeData, xOffset - attributeOffset);
-    attributeDataDecompressed = husDecompressData(attributeData, xOffset - attributeOffset, numberOfStitches);
+    attributeDataDecompressed = husDecompressData(attributeData, xOffset - attributeOffset, numberOfStitches + 1);
 
     xData = (unsigned char*)malloc(sizeof(unsigned char)*(yOffset - xOffset + 1));
     /* TODO: malloc fail error */
@@ -161,13 +161,14 @@ int readHus(EmbPattern* pattern, const char* fileName)
                                 husDecodeStitchType(attributeDataDecompressed[i]), 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
-    free(stringVal);
-	free(xData);
-	free(xDecompressed);
-	free(yData);
-	free(yDecompressed);
-	free(attributeData);
-	free(attributeDataDecompressed);
+
+    if(stringVal) free(stringVal);
+    if(xData) free(xData);
+    if(xDecompressed) free(xDecompressed);
+    if(yData) free(yData);
+    if(yDecompressed) free(yDecompressed);
+    if(attributeData) free(attributeData);
+    if(attributeDataDecompressed) free(attributeDataDecompressed);
 
 	fclose(file);
     return 1;

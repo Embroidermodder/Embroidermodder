@@ -4,10 +4,11 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-static const int SubMaskSize = 479;
-static const int XorMaskSize = 501;
-char* _subMask;
-char* _xorMask;
+#define CsdSubMaskSize  479
+#define CsdXorMaskSize  501
+
+static char _subMask[CsdSubMaskSize];
+static char _xorMask[CsdXorMaskSize];
 
 void BuildDecryptionTable(int seed)
 {
@@ -15,18 +16,13 @@ void BuildDecryptionTable(int seed)
     const int mul1 = 0x41C64E6D;
     const int add1 = 0x3039;
 
-    /* Set up mask array */
-    _subMask = (char*)malloc(SubMaskSize * sizeof(char));
-    /* TODO: malloc fail error */
-    _xorMask = (char*)malloc(XorMaskSize * sizeof(char));
-    /* TODO: malloc fail error */
-    for(i = 0; i < SubMaskSize; i++)
+    for(i = 0; i < CsdSubMaskSize; i++)
     {
         seed *= mul1;
         seed += add1;
         _subMask[i] = (char) ((seed >> 16) & 0xFF);
     }
-    for(i = 0; i < XorMaskSize; i++)
+    for(i = 0; i < CsdXorMaskSize; i++)
     {
         seed *= mul1;
         seed += add1;
@@ -93,7 +89,7 @@ unsigned char DecodeCsdByte(long fileOffset, unsigned char val, int type)
     {
         newOffset = (int) fileOffset;
     }
-    return ((unsigned char) ((unsigned char) (val ^ _xorMask[newOffset%XorMaskSize]) - _subMask[newOffset%SubMaskSize]));
+    return ((unsigned char) ((unsigned char) (val ^ _xorMask[newOffset%CsdXorMaskSize]) - _subMask[newOffset%CsdSubMaskSize]));
 }
 
 int readCsd(EmbPattern* pattern, const char* fileName)
@@ -164,7 +160,11 @@ int readCsd(EmbPattern* pattern, const char* fileName)
         else if((b0 & 0x0C) > 0)
         {
             flags = STOP;
-            embPattern_changeColor(pattern, colorOrder[colorChange]);
+            if(colorChange >= 14) 
+            {
+                printf("Invalid color change detected\n");
+            }
+            embPattern_changeColor(pattern, colorOrder[colorChange  % 14]);
             colorChange += 1;
         }
         else if((b0 & 0x1F) > 0) flags = TRIM;

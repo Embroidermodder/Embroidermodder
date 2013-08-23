@@ -41,6 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -140,6 +141,7 @@
     <ClCompile Include="..\..\libembroidery\format-pes.c" />
     <ClCompile Include="..\..\libembroidery\format-phb.c" />
     <ClCompile Include="..\..\libembroidery\format-phc.c" />
+    <ClCompile Include="..\..\libembroidery\format-plt.c" />
     <ClCompile Include="..\..\libembroidery\format-rgb.c" />
     <ClCompile Include="..\..\libembroidery\format-sew.c" />
     <ClCompile Include="..\..\libembroidery\format-shv.c" />
@@ -158,7 +160,7 @@
     <ClCompile Include="..\..\libembroidery\format-zsk.c" />
     <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
     <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
-    <ClCompile Include="..\..\libembroidery\main.c" />
+    <ClCompile Include="..\..\libembroidery\libembroidery-main.c" />
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +224,7 @@
     <ClInclude Include="..\..\libembroidery\format-pes.h" />
     <ClInclude Include="..\..\libembroidery\format-phb.h" />
     <ClInclude Include="..\..\libembroidery\format-phc.h" />
+    <ClInclude Include="..\..\libembroidery\format-plt.h" />
     <ClInclude Include="..\..\libembroidery\format-rgb.h" />
     <ClInclude Include="..\..\libembroidery\format-sew.h" />
     <ClInclude Include="..\..\libembroidery\format-shv.h" />

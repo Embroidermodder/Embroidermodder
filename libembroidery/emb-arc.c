@@ -18,7 +18,7 @@ EmbArcObject embArcObject_make(double sx, double sy, double mx, double my, doubl
 EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey)
 {
     EmbArcObject* heapArcObj = (EmbArcObject*)malloc(sizeof(EmbArcObject));
-    /* TODO: malloc fail error */
+    if(!heapArcObj) return 0;
     heapArcObj->arc.startX = sx;
     heapArcObj->arc.startY = sy;
     heapArcObj->arc.midX   = mx;
@@ -35,7 +35,11 @@ void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
         pointer = pointer->next;
     }
     pointer->next = (EmbArcObjectList*)malloc(sizeof(EmbArcObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next)
+    {
+        pointer->next = 0;
+        return;
+    }
     pointer = pointer->next;
     pointer->arcObj = data;
     pointer->next = 0;

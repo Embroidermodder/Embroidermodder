@@ -6,9 +6,10 @@ int readZsk(EmbPattern* pattern, const char* fileName)
     int b[3];
     FILE* file = fopen(fileName, "rb");
 
-    if(file == 0)
+    if(!file)
+    {
         return 0;
-
+    }
     fseek(file, 512, SEEK_SET);
 
     while(fread(b, 1, 3, file) == 3)
