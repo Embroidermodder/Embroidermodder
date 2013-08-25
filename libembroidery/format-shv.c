@@ -35,9 +35,11 @@ int readShv(EmbPattern* pattern, const char* fileName)
     int something;
     short left,top,right,bottom;
 
-    char something2,numberOfSections, something3 ;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    char something2, numberOfSections, something3;
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

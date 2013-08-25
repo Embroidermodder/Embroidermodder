@@ -4,21 +4,23 @@
 
 int readSst(EmbPattern* pattern, const char* fileName)
 {
-	int fileLength;
-	FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    int fileLength;
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
 
-	fseek(file, 0, SEEK_END);
-	fileLength = ftell(file);
+    fseek(file, 0, SEEK_END);
+    fileLength = ftell(file);
     fseek(file, 0xA0, SEEK_SET); /* skip the all zero header */
-	while(ftell(file) < fileLength)
+    while(ftell(file) < fileLength)
     {
         int stitchType = NORMAL;
-        
-		int b1 = (int) binaryReadByte(file);
+
+        int b1 = (int) binaryReadByte(file);
         int b2 = (int) binaryReadByte(file);
         unsigned char commandByte = binaryReadByte(file);
 

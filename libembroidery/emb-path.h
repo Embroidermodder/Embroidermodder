@@ -32,6 +32,9 @@ typedef struct EmbPathObjectList_
     struct EmbPathObjectList_* next;
 } EmbPathObjectList;
 
+int embPathObjectList_count(EmbPathObjectList* pointer);
+int embPathObjectList_empty(EmbPathObjectList* pointer);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

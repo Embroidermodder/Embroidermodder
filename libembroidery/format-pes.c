@@ -29,7 +29,13 @@ static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
 int readPes(EmbPattern* pattern, const char* fileName)
 {
     int pecstart, numColors, x;
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
+    {
+        return 0;
+    }
     fseek(file, 8, SEEK_SET);
     pecstart = binaryReadInt32(file);
 
@@ -48,9 +54,10 @@ int readPes(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-static void writeSewSegSection(EmbPattern* pattern, FILE *file)
+static void writeSewSegSection(EmbPattern* pattern, FILE* file)
 {
-    EmbStitchList* pointer;
+    /* TODO: pointer safety */
+    EmbStitchList* pointer = 0;
     binaryWriteShort(file, 0x06); /* section count? */
     binaryWriteUShort(file, 0xFFFF);
     binaryWriteShort(file, 0x00);
@@ -70,8 +77,9 @@ static void writeSewSegSection(EmbPattern* pattern, FILE *file)
         pointer = pointer->next;
     }
 }
-static void writeEmbOneSection(EmbPattern* pattern, FILE *file)
+static void writeEmbOneSection(EmbPattern* pattern, FILE* file)
 {
+    /* TODO: pointer safety */
     int i;
     EmbRect bounds;
     binaryWriteShort(file, 0x07); /* string length */
@@ -112,14 +120,17 @@ static void writeEmbOneSection(EmbPattern* pattern, FILE *file)
 
 static void writePaletteSection(EmbPattern* pattern, FILE* file)
 {
+    /* TODO: pointer safety */
     binaryWriteInt(file, embThreadList_count(pattern->threadList));
 }
 
 int writePes(EmbPattern* pattern, const char* fileName)
 {
     int pecLocation;
-    FILE* file = fopen(fileName, "wb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "wb");
+    if(!file)
     {
         return 0;
     }

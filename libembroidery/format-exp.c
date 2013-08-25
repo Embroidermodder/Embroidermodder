@@ -34,13 +34,14 @@ static void expEncode(unsigned char *b, char dx, char dy, int flags)
 
 int readExp(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     int i = 0;
     unsigned char b0 = 0, b1 = 0;
     char dx = 0, dy = 0;
     int flags = 0;
+
     file = fopen(fileName, "rb");
-    if(file == 0)
+    if(!file)
     {
         /*TODO: set status here "Error opening EXP file for read:" */
         return 0;
@@ -105,15 +106,15 @@ int readExp(EmbPattern* pattern, const char* fileName)
 
 int writeExp(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
-    EmbStitchList *stitches;
+    FILE* file = 0;
+    EmbStitchList* stitches = 0;
     double dx = 0.0, dy = 0.0;
     double xx = 0.0, yy = 0.0;
     int flags = 0;
     unsigned char b[4];
 
     file = fopen(fileName, "wb");
-    if(file == 0)
+    if(!file)
     {
         /*TODO: set status here "Error opening EXP file for write:" */
         return 0;

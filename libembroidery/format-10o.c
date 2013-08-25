@@ -3,8 +3,10 @@
 
 int read10o(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file= fopen(fileName,"rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName,"rb");
+    if(!file)
     {
         return 0;
     }

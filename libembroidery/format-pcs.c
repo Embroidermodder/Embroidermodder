@@ -12,8 +12,9 @@ static double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-static void pcsEncode(FILE * file, int dx, int dy, int flags)
+static void pcsEncode(FILE* file, int dx, int dy, int flags)
 {
+    /* TODO: pointer safety */
     unsigned char flagsToWrite = 0;
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(dx & 0xFF));
@@ -44,10 +45,10 @@ int readPcs(EmbPattern* pattern, const char* fileName)
     int flags = 0, st = 0;
     unsigned char version, hoopSize;
     unsigned short colorCount;
-    FILE* file;
+    FILE* file = 0;
 
     file = fopen(fileName, "rb");
-    if(file == 0)
+    if(!file)
     {
         return 0;
     }
@@ -117,15 +118,15 @@ int readPcs(EmbPattern* pattern, const char* fileName)
 
 int writePcs(EmbPattern* pattern, const char* fileName)
 {
-    EmbStitchList* pointer;
-    EmbThreadList* threadPointer;
-    FILE* file;
+    EmbStitchList* pointer = 0;
+    EmbThreadList* threadPointer = 0;
+    FILE* file = 0;
     int i;
     unsigned char colorCount;
     double xx = 0.0, yy = 0.0;
 
     file = fopen(fileName, "wb");
-    if(file == 0)
+    if(!file)
     {
         return 0;
     }

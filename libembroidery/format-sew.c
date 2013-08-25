@@ -7,7 +7,7 @@
 
 static char sewDecode(unsigned char inputByte)
 {
-    return (inputByte >= 0x80) ? (char) (-~(inputByte - 1)) : (char) inputByte;
+    return (inputByte >= 0x80) ? (char) (-~(inputByte - 1)) : (char) inputByte; /* TODO: fix return statement */
 }
 
 int readSew(EmbPattern* pattern, const char* fileName)
@@ -19,8 +19,10 @@ int readSew(EmbPattern* pattern, const char* fileName)
     int numberOfColors;
     char thisStitchIsJump = 0;
 
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

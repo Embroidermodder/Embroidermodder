@@ -9,10 +9,11 @@ int readTxt(EmbPattern* pattern, const char* fileName)
 
 int writeTxt(EmbPattern* pattern, const char* fileName)
 {
-    EmbStitchList* pointer;
-    FILE* file;
+    EmbStitchList* pointer = 0;
+    FILE* file = 0;
+
     file = fopen(fileName, "w");
-    if(file == 0)
+    if(!file)
     {
         return 0;
     }

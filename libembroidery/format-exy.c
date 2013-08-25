@@ -18,8 +18,10 @@ static int exyDecodeFlags(unsigned char b2)
 int readExy(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b[3];
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         /*TODO: set status here "Error opening EXY file for read:" */
         return 0;

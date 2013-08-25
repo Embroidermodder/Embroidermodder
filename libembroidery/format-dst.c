@@ -259,7 +259,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     *
     * char PD[9+1];   PD is also storing some information for multi-volume design.
     */
-    FILE* file;
+    FILE* file = 0;
     int i;
 
     /* for converting stitches from file encoding */
@@ -269,7 +269,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     pattern->set_variable("file_name",filename);
     */
     file = fopen(fileName, "rb");
-    if(file == 0)
+    if(!file)
     {
         /*TODO: set status here "Error opening DST file for read:" */
         /*TODO: set messages here "Error opening DST file for read:" */
@@ -379,16 +379,16 @@ int readDst(EmbPattern* pattern, const char* fileName)
 int writeDst(EmbPattern* pattern, const char* fileName)
 {
     EmbRect boundingRect;
-    FILE* file;
+    FILE* file = 0;
     int xx, yy, dx, dy, flags;
     int i;
     int co = 1, st = 0;
     int ax, ay, mx, my;
-    char* pd;
-    EmbStitchList* pointer;
+    char* pd = 0;
+    EmbStitchList* pointer = 0;
 
     file = fopen(fileName, "wb");
-    if(file == 0)
+    if(!file)
     {
         /*TODO: set status here "Error opening DST file for write:" */
         return 0;

@@ -7,10 +7,11 @@ int readPhb(EmbPattern* pattern, const char* fileName)
 {
     unsigned int fileOffset;
     short colorCount;
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
     int i;
 
-    if(file == 0)
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

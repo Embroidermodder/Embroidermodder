@@ -14,7 +14,7 @@ static char xxxDecodeByte(unsigned char inputByte)
 
 int readXxx(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     unsigned char b0, b1;
     int dx = 0, dy = 0;
     int flags;
@@ -130,7 +130,7 @@ static void xxxEncodeStitch(FILE* file, double deltaX, double deltaY, int flags)
     }
     else
     {
-        // TODO: Verify this works after changing this to unsigned char
+        /* TODO: Verify this works after changing this to unsigned char */
         binaryWriteByte(file, (unsigned char)roundDouble(deltaX));
         binaryWriteByte(file, (unsigned char)roundDouble(deltaY));
     }
@@ -175,7 +175,7 @@ static void xxxEncodeDesign(FILE* file, EmbPattern* p)
 
 int writeXxx(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     int i;
     EmbRect rect;
     int endOfStitches;
@@ -184,7 +184,7 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
 
     embPattern_correctForMaxStitchLength(pattern, 124, 127);
     file = fopen(fileName, "wb");
-    if(file==0)
+    if(!file)
     {
         /*TODO: set status here "Error opening XXX file for write:" */
         return 0;

@@ -2,18 +2,25 @@
 #include "helpers-binary.h"
 #include <stdio.h>
 
-static void ksmEncode(unsigned char *b, char dx, char dy, int flags) {
-    if (flags == TRIM) {
+static void ksmEncode(unsigned char *b, char dx, char dy, int flags)
+{
+    /* TODO: pointer safety */
+    if(flags == TRIM)
+    {
         b[0] = 128;
         b[1] = 2;
         b[2] = dx;
         b[3] = dy;
-    } else if (flags == STOP) {
+    }
+    else if(flags == STOP)
+    {
         b[0] = 128;
         b[1] = 1;
         b[2] = dx;
         b[3] = dy;
-    } else {
+    }
+    else
+    {
         b[0] = dx;
         b[1] = dy;
     }
@@ -23,16 +30,16 @@ int readKsm(EmbPattern* pattern, const char* fileName)
 {
     int prevStitchType = NORMAL;
     char b[3];
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
 
-    if(file == 0)
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         /*TODO: set status here "Error opening KSM file for read:" */
         return 0;
     }
 
     fseek(file, 0x200, SEEK_SET);
-
 
     while(fread(b, 1, 3, file) == 3)
     {
@@ -60,14 +67,15 @@ int readKsm(EmbPattern* pattern, const char* fileName)
 
 int writeKsm(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
-    EmbStitchList *pointer;
+    FILE* file = 0;
+    EmbStitchList* pointer = 0;
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;
     int i;
     unsigned char b[4];
+
     file = fopen(fileName, "wb");
-    if(file == 0)
+    if(!file)
     {
         return 0;
     }

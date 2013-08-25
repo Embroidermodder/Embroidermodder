@@ -81,7 +81,9 @@ int embLineObjectList_count(EmbLineObjectList* pointer)
 
 int embLineObjectList_empty(EmbLineObjectList* pointer)
 {
-    return pointer == 0;
+    if(pointer == 0)
+        return 1;
+    return 0;
 }
 
 /*! Finds the normalized vector perpendicular (clockwise) to the line given by v1->v2 (normal to the line) */

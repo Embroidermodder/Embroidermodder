@@ -63,7 +63,9 @@ int embVectorList_count(EmbVectorList* pointer)
 
 int embVectorList_empty(EmbVectorList* pointer)
 {
-    return pointer == 0;
+    if(pointer == 0)
+        return 1;
+    return 0;
 }
 
 void embVectorList_free(EmbVectorList* pointer)

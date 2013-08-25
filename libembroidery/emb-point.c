@@ -113,7 +113,9 @@ int embPointObjectList_count(EmbPointObjectList* pointer)
 
 int embPointObjectList_empty(EmbPointObjectList* pointer)
 {
-    return pointer == 0;
+    if(pointer == 0)
+        return 1;
+    return 0;
 }
 
 void embPointObjectList_free(EmbPointObjectList* list)

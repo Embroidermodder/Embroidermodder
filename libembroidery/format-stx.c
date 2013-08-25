@@ -25,9 +25,11 @@ typedef struct StxThread_
 
 static int ReadStxThread(StxThread* thread, FILE* file)
 {
+    /* TODO: pointer safety */
     int j, colorNameLength, sectionNameLength;
     int somethingsomething, somethingsomething2, somethingelse, numberOfOtherDescriptors;
-    char* codeNameBuff, *sectionNameBuff;
+    char* codeNameBuff = 0;
+    char* sectionNameBuff = 0;
     EmbColor col;
     unsigned char whatIsthis;
 
@@ -91,17 +93,19 @@ int readStx(EmbPattern* pattern, const char* fileName)
     int i, threadCount;
     unsigned char* gif;
     /* public Bitmap Image; */
-    StxThread* StxThreads;
+    StxThread* StxThreads = 0;
     unsigned char headerBytes[7];
-    char* header;
+    char* header = 0;
     char filetype[4], version[5];
-    int paletteLength, imageLength,something1, stitchDataOffset,something3,threadDescriptionOffset, stitchCount, left, right, colors;
-    int val1, val2,val3,val4,val5,val6;
+    int paletteLength, imageLength, something1, stitchDataOffset, something3, threadDescriptionOffset, stitchCount, left, right, colors;
+    int val1, val2, val3, val4, val5, val6;
 
-    int vala1,vala2,vala3,vala4,vala5,vala6;
+    int vala1, vala2, vala3, vala4, vala5, vala6;
     int bottom,top;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

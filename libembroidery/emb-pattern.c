@@ -53,7 +53,7 @@ void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
     /* TODO: pointer safety */
     double prevX = 0;
     double prevY = 0;
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     pointer = p->stitchList;
     while(pointer)
     {
@@ -260,7 +260,7 @@ int embPattern_write(EmbPattern* p, const char *fileName) /* TODO: Write test ca
 void embPattern_scale(EmbPattern* p, double scale)
 {
     /* TODO: pointer safety */
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     pointer = p->stitchList;
     while(pointer)
     {
@@ -273,27 +273,27 @@ void embPattern_scale(EmbPattern* p, double scale)
 EmbRect embPattern_calcBoundingBox(EmbPattern* p)
 {
     /* TODO: pointer safety */
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     EmbRect BoundingRect;
     EmbStitch pt;
-    EmbCircleObjectList* cObjList;
+    EmbCircleObjectList* cObjList = 0;
     EmbCircle circle;
-    EmbArcObjectList* aObjList;
+    EmbArcObjectList* aObjList = 0;
     EmbArc arc;
-    EmbEllipseObjectList* eObjList;
+    EmbEllipseObjectList* eObjList = 0;
     EmbEllipse ellipse;
-    EmbLineObjectList* liObjList;
+    EmbLineObjectList* liObjList = 0;
     EmbLine line;
-    EmbPointObjectList* pObjList;
+    EmbPointObjectList* pObjList = 0;
     EmbPoint point;
-    EmbPolygonObjectList* pogObjList;
+    EmbPolygonObjectList* pogObjList = 0;
     EmbPoint pogPoint;
-    EmbPolylineObjectList* polObjList;
-    EmbPointList* polyLinePointList;
+    EmbPolylineObjectList* polObjList = 0;
+    EmbPointList* polyLinePointList = 0;
     EmbPoint polPoint;
-    EmbRectObjectList* rObjList;
+    EmbRectObjectList* rObjList = 0;
     EmbRect rect;
-    EmbSplineObjectList* sObjList;
+    EmbSplineObjectList* sObjList = 0;
     EmbBezier bezier;
     /* Calculate the bounding rectangle.  It's needed for smart repainting. */
     /* TODO: Come back and optimize this mess so that after going thru all objects
@@ -431,7 +431,7 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
 void embPattern_flipVertical(EmbPattern* p)
 {
     /* TODO: pointer safety */
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     pointer= p->stitchList;
     while(pointer)
     {
@@ -443,7 +443,7 @@ void embPattern_flipVertical(EmbPattern* p)
 void embPattern_combineJumpStitches(EmbPattern* p)
 {
     /* TODO: pointer safety */
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     int jumpCount = 0;
     EmbStitchList* jumpListStart = 0;
 	pointer = p->stitchList;
@@ -487,8 +487,8 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
 
     if(embStitchList_count(p->stitchList) > 1)
     {
-        EmbStitchList* pointer;
-        EmbStitchList* prev;
+        EmbStitchList* pointer = 0;
+        EmbStitchList* prev = 0;
         prev = p->stitchList;
         pointer = prev->next;
 
@@ -550,7 +550,7 @@ void embPattern_center(EmbPattern* p)
     /* TODO: review this. currently not used in anywhere. Also needs to handle various design objects */
     int moveLeft, moveTop;
     EmbRect boundingRect;
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
 
     boundingRect = embPattern_calcBoundingBox(p);
 
@@ -571,7 +571,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 {
     /* TODO: pointer safety */
     char hasRead = 0;
-    EmbReaderWriter* colorfile;
+    EmbReaderWriter* colorfile = 0;
     const char* dotPos = strrchr(fileName, '.');
 
     char* extractName = (char*)malloc(dotPos - fileName + 5);
@@ -580,7 +580,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     extractName[dotPos - fileName] = '\0';
     strcat(extractName,".edr");
     colorfile = embReaderWriter_getByFileName(extractName);
-    if(colorfile) 
+    if(colorfile)
     {
         hasRead = (char)colorfile->reader(p, extractName);
     }
@@ -591,7 +591,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".rgb");
         colorfile = embReaderWriter_getByFileName(extractName);
-        if(colorfile) 
+        if(colorfile)
         {
             hasRead = (char)colorfile->reader(p, extractName);
         }
@@ -603,7 +603,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".col");
         colorfile = embReaderWriter_getByFileName(extractName);
-        if(colorfile) 
+        if(colorfile)
         {
             hasRead = (char)colorfile->reader(p, extractName);
         }
@@ -616,7 +616,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         strcat(extractName,".inf");
         colorfile = embReaderWriter_getByFileName(extractName);
         if(colorfile)
-        { 
+        {
             hasRead = (char)colorfile->reader(p, extractName);
         }
     }
@@ -626,33 +626,33 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 
 void embPattern_free(EmbPattern* p)
 {
-    EmbThreadList* thisThreadList;
-    EmbThreadList* nextThreadList;
-    EmbStitchList* thisStitchList;
-    EmbStitchList* nextStitchList;
+    EmbThreadList* thisThreadList = 0;
+    EmbThreadList* nextThreadList = 0;
+    EmbStitchList* thisStitchList = 0;
+    EmbStitchList* nextStitchList = 0;
 
-    EmbArcObjectList* thisArcObjList;
-    EmbArcObjectList* nextArcObjList;
-    EmbCircleObjectList* thisCircleObjList;
-    EmbCircleObjectList* nextCircleObjList;
-    EmbEllipseObjectList* thisEllipseObjList;
-    EmbEllipseObjectList* nextEllipseObjList;
-    EmbLineObjectList* thisLineObjList;
-    EmbLineObjectList* nextLineObjList;
-    EmbPathObjectList* thisPathObjList;
-    EmbPathObjectList* nextPathObjList;
-    EmbPathObject* thisPathObj;
-    EmbPathObject* nextPathObj;
-    EmbPointObjectList* thisPointObjList;
-    EmbPointObjectList* nextPointObjList;
-    EmbPolygonObjectList* thisPolygonObjList;
-    EmbPolygonObjectList* nextPolygonObjList;
-    EmbPolylineObjectList* thisPolylineObjList;
-    EmbPolylineObjectList* nextPolylineObjList;
-    EmbRectObjectList* thisRectObjList;
-    EmbRectObjectList* nextRectObjList;
-    EmbSplineObjectList* thisSplineObjList;
-    EmbSplineObjectList* nextSplineObjList;
+    EmbArcObjectList* thisArcObjList = 0;
+    EmbArcObjectList* nextArcObjList = 0;
+    EmbCircleObjectList* thisCircleObjList = 0;
+    EmbCircleObjectList* nextCircleObjList = 0;
+    EmbEllipseObjectList* thisEllipseObjList = 0;
+    EmbEllipseObjectList* nextEllipseObjList = 0;
+    EmbLineObjectList* thisLineObjList = 0;
+    EmbLineObjectList* nextLineObjList = 0;
+    EmbPathObjectList* thisPathObjList = 0;
+    EmbPathObjectList* nextPathObjList = 0;
+    EmbPathObject* thisPathObj = 0;
+    EmbPathObject* nextPathObj = 0;
+    EmbPointObjectList* thisPointObjList = 0;
+    EmbPointObjectList* nextPointObjList = 0;
+    EmbPolygonObjectList* thisPolygonObjList = 0;
+    EmbPolygonObjectList* nextPolygonObjList = 0;
+    EmbPolylineObjectList* thisPolylineObjList = 0;
+    EmbPolylineObjectList* nextPolylineObjList = 0;
+    EmbRectObjectList* thisRectObjList = 0;
+    EmbRectObjectList* nextRectObjList = 0;
+    EmbSplineObjectList* thisSplineObjList = 0;
+    EmbSplineObjectList* nextSplineObjList = 0;
 
     if(!p) return;
     thisStitchList = p->stitchList;

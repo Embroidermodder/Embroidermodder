@@ -4,8 +4,10 @@
 
 int readFxy(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         /*TODO: set messages here "Error opening FXY file for read:" */
         return 0;

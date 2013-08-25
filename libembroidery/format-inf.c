@@ -8,8 +8,10 @@ int readInf(EmbPattern* pattern, const char* fileName)
 {
     int numberOfColors;
     int i;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
@@ -40,10 +42,12 @@ int readInf(EmbPattern* pattern, const char* fileName)
 
 int writeInf(EmbPattern* pattern, const char* fileName)
 {
-    EmbThreadList* pointer;
+    EmbThreadList* pointer = 0;
     int i = 1, bytesRemaining;
-    FILE* file = fopen(fileName, "wb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "wb");
+    if(!file)
     {
         return 0;
     }

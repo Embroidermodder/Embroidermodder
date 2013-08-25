@@ -49,8 +49,10 @@ int readThr(EmbPattern* pattern, const char* fileName)
     int currentColor;
     int i;
 
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
@@ -131,11 +133,12 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     ThredHeader header;
     ThredExtension extension;
     char bitmapName[16];
-    EmbStitchList* pointer;
-    EmbThreadList* colorpointer;
-    FILE* file;
+    EmbStitchList* pointer = 0;
+    EmbThreadList* colorpointer = 0;
+    FILE* file = 0;
+
     file = fopen(fileName, "wb");
-    if(file == 0)
+    if(!file)
     {
         /*TODO: set status here "Error opening THR file for write:" */
         return 0;

@@ -7,8 +7,10 @@ int readEdr(EmbPattern* pattern, const char* fileName)
 {
     int numberOfColors;
     int i;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         /*TODO: set messages here "Error opening EDR file for read:" */
         return 0;
@@ -34,9 +36,11 @@ int readEdr(EmbPattern* pattern, const char* fileName)
 
 int writeEdr(EmbPattern* pattern, const char* fileName)
 {
-    EmbThreadList* pointer;
-    FILE* file = fopen(fileName, "wb");
-    if(file == 0)
+    EmbThreadList* pointer = 0;
+    FILE* file = 0;
+
+    file = fopen(fileName, "wb");
+    if(!file)
     {
         /*TODO: set messages here "Error creating/editing EDR file for read:" */
         return 0;

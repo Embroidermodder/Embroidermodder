@@ -7,8 +7,10 @@ int readRgb(EmbPattern* pattern, const char* fileName)
 {
     int i, numberOfColors;
 
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
@@ -34,9 +36,10 @@ int readRgb(EmbPattern* pattern, const char* fileName)
 int writeRgb(EmbPattern* pattern, const char* fileName)
 {
     EmbThreadList* colors = pattern->threadList;
-    FILE* file = fopen(fileName, "wb");
+    FILE* file = 0;
 
-    if(file == 0)
+    file = fopen(fileName, "wb");
+    if(!file)
     {
         return 0;
     }

@@ -47,7 +47,7 @@ static int csvStrToStitchFlag(const char* str)
 
 int readCsv(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     int numColorChanges = 0;
     int size = 1024;
     int pos = 0;
@@ -65,7 +65,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
     if(!buff) { /* TODO: error */ return 0; }
 
     file = fopen(fileName,"r");
-    if(file == 0)
+    if(!file)
     {
         /* TODO: error */
         return 0;
@@ -226,7 +226,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
 
 int writeCsv(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     EmbStitchList* sList;
     EmbThreadList* tList;
     EmbRect boundingRect;
@@ -249,7 +249,7 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
     }
 
     file = fopen(fileName, "w");
-    if(file == 0)
+    if(!file)
     {
         fprintf(stderr, "Error opening %s for write\n", fileName);
         return 0;

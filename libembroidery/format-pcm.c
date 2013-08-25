@@ -18,9 +18,10 @@ int readPcm(EmbPattern* pattern, const char* fileName)
     unsigned char b[9];
     double dx = 0, dy = 0;
     int flags = 0, st = 0;
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
 
-    if(file == 0)
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

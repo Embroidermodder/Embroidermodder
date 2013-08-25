@@ -4,11 +4,12 @@
 #include "format-phc.h"
 #include "helpers-binary.h"
 
-static char startsWith(const char *pre, const char *str)
+static char startsWith(const char* pre, const char* str)
 {
+    /* TODO: pointer safety */
     size_t lenpre = strlen(pre),
            lenstr = strlen(str);
-    return lenstr < lenpre ? 0 : strncmp(pre, str, lenpre) == 0;
+    return lenstr < lenpre ? 0 : strncmp(pre, str, lenpre) == 0; /* TODO: cleanup return statement */
 }
 
 int readPlt(EmbPattern* pattern, const char* fileName)
@@ -16,8 +17,10 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     double x, y;
     double scalingFactor = 40;
     char input[512];
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
@@ -48,12 +51,15 @@ int readPlt(EmbPattern* pattern, const char* fileName)
 
 int writePlt(EmbPattern* pattern, const char* fileName)
 {
+    /* TODO: pointer safety */
     double scalingFactor = 40;
     EmbStitch stitch;
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     char firstStitchOfBlock = 1;
-    FILE* file = fopen(fileName, "wb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "wb");
+    if(!file)
     {
         return 0;
     }

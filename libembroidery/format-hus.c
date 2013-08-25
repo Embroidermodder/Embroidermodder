@@ -93,18 +93,20 @@ int readHus(EmbPattern* pattern, const char* fileName)
     int postitiveXHoopSize,postitiveYHoopSize,negativeXHoopSize,negativeYHoopSize;
 
     int attributeOffset,xOffset,yOffset;
-    unsigned char* attributeData;
+    unsigned char* attributeData = 0;
     unsigned char* attributeDataDecompressed = 0;
 
-    unsigned char* xData;
-    unsigned char* xDecompressed;
+    unsigned char* xData = 0;
+    unsigned char* xDecompressed = 0;
 
-    unsigned char* yData;
-    unsigned char* yDecompressed;
-    unsigned char* stringVal;
+    unsigned char* yData = 0;
+    unsigned char* yDecompressed = 0;
+    unsigned char* stringVal = 0;
     int unknown, i = 0;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
@@ -182,15 +184,16 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     double previousX = 0;
     double previousY = 0;
     unsigned char* xValues, *yValues, *attributeValues;
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     double xx = 0.0;
     double yy = 0.0;
     int flags = 0;
     int i = 0;
     unsigned char* attributeCompressed, *xCompressed, *yCompressed;
+    FILE* file = 0;
 
-    FILE* file = fopen(fileName, "wb");
-    if(file == 0)
+    file = fopen(fileName, "wb");
+    if(!file)
     {
         /*TODO: set status here "Error opening HUS file for write:" */
         return 0;
@@ -237,6 +240,7 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     attributeCompressed = husCompressData(attributeValues, stitchCount, &attributeSize);
     xCompressed = husCompressData(xValues, stitchCount, &xCompressedSize);
     yCompressed = husCompressData(yValues, stitchCount, &yCompressedSize);
+    /* TODO: error if husCompressData returns zero? */
 
     binaryWriteUInt(file, (unsigned int) (0x2A + 2 * patternColor + attributeSize));
     binaryWriteUInt(file, (unsigned int) (0x2A + 2 * patternColor + attributeSize + xCompressedSize));

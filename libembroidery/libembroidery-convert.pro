@@ -1,7 +1,7 @@
 TEMPLATE = app
 CONFIG -= debug_and_release qt
 CONFIG += console debug
-#CONFIG += release
+#CONFIG += console release
 
 TARGET = libembroidery-convert
 

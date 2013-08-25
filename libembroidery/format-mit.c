@@ -11,8 +11,10 @@ static int decodeMitStitch(unsigned char value)
 int readMit(EmbPattern* pattern, const char* fileName)
 {
     unsigned char data[2];
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

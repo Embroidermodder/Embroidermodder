@@ -73,7 +73,9 @@ int embCircleObjectList_count(EmbCircleObjectList* pointer)
 
 int embCircleObjectList_empty(EmbCircleObjectList* pointer)
 {
-    return pointer == 0;
+    if(pointer == 0)
+        return 1;
+    return 0;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

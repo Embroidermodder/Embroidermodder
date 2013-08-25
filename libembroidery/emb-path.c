@@ -5,7 +5,7 @@
 
 
 
-int embPath_count(EmbPathObjectList* pointer)
+int embPathObjectList_count(EmbPathObjectList* pointer)
 {
     int i = 1; /* TODO: This should be set to 1. It's clearly wrong in multiple other places. Needs reviewed. */
     if(!pointer) return 0;
@@ -17,9 +17,11 @@ int embPath_count(EmbPathObjectList* pointer)
     return i;
 }
 
-int embPath_empty(EmbPathObjectList* pointer)
+int embPathObjectList_empty(EmbPathObjectList* pointer)
 {
-    return pointer == 0;
+    if(pointer == 0)
+        return 1;
+    return 0;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

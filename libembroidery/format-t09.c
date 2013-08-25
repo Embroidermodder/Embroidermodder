@@ -4,8 +4,10 @@
 int readT09(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b[3];
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

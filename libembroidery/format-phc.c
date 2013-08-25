@@ -8,10 +8,11 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     int colorChanges, version, bytesInSection2;
     unsigned short pecOffset, bytesInSection, bytesInSection3;
     char pecAdd;
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
     int i;
 
-    if(file == 0)
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }

@@ -58,21 +58,24 @@ static void vp3ReadHoopSection(FILE* file)
 int readVp3(EmbPattern* pattern, const char* fileName)
 {
     unsigned char magicString[5];
-    unsigned char some, *someString;
-    unsigned char v1, v2,v3,v4,v5,v6,v7,v8,v9,v10, v11, v12,v13,v14,v15,v16,v17,v18;
-    unsigned char* unknownString3;
+    unsigned char some;
+    unsigned char* someString = 0;
+    unsigned char v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18;
+    unsigned char* unknownString3 = 0;
     int numberOfColors;
     long colorSectionOffset;
     unsigned char magicCode[6];
     short someShort;
     unsigned char someByte;
     int bytesRemainingInFile;
-    unsigned char* unknownByteString;
+    unsigned char* unknownByteString = 0;
     int hoopConfigurationOffset;
-    unsigned char* unknownString2;
+    unsigned char* unknownString2 = 0;
     int i;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         /*TODO: set messages here "Error opening VP3 file for read:" */
         return 0;

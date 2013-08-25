@@ -51,18 +51,19 @@ static void jefSetHoopFromId(EmbPattern *pattern, int hoopCode)
 int readJef(EmbPattern* pattern, const char* fileName)
 {
     int stitchOffset, byte0xA, numberOfColors, numberOfStitchs;
-    int hoopSize,hoopOffsetLeft,hoopOffsetTop,hoopOffsetRight,hoopOffsetBottom;
-    int patternLeft,patternTop,patternRight,patternBottom;
-    int dunnoLeft,dunnoTop,dunnoRight,dunnoBottom;
-    int patternRelativeLeft,patternRelativeTop,patternRelativeRight,patternRelativeBottom;
-    int patternRelative2Left,patternRelative2Top,patternRelative2Right,patternRelative2Bottom,i;
+    int hoopSize, hoopOffsetLeft, hoopOffsetTop, hoopOffsetRight, hoopOffsetBottom;
+    int patternLeft, patternTop, patternRight, patternBottom;
+    int dunnoLeft, dunnoTop, dunnoRight, dunnoBottom;
+    int patternRelativeLeft, patternRelativeTop, patternRelativeRight, patternRelativeBottom;
+    int patternRelative2Left, patternRelative2Top, patternRelative2Right, patternRelative2Bottom, i;
     int stitchCount;
     char date[8], time[8];
     char dx, dy;
 
-    FILE* file;
+    FILE* file = 0;
+
     file = fopen(fileName, "rb");
-    if(file == 0)
+    if(!file)
     {
         /*TODO: set status here "Error opening JEF file for read:" */
         return 0;
@@ -159,6 +160,7 @@ static unsigned char jefEncodeByte(float inputByte)
 
 static void jefEncode(FILE* file, float x, float y, int stitchType)
 {
+    /* TODO: pointer safety */
     unsigned char dx = jefEncodeByte(x * 10.0f);
     unsigned char dy = jefEncodeByte(y * 10.0f);
     if(stitchType == TRIM)
@@ -191,15 +193,15 @@ int writeJef(EmbPattern* pattern, const char* fileName)
 {
     int colorlistSize, minColors, designWidth, designHeight, i;
     EmbRect boundingRect;
-    FILE* file;
+    FILE* file = 0;
     EmbTime time;
-    EmbThreadList* threadPointer;
+    EmbThreadList* threadPointer = 0;
     EmbStitch c;
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     double prevX, prevY;
 
     file = fopen(fileName, "wb");
-    if(file == 0)
+    if(!file)
     {
         return 0;
     }

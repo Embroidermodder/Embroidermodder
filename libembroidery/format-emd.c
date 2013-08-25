@@ -15,8 +15,10 @@ int readEmd(EmbPattern* pattern, const char* fileName)
     unsigned char jemd0[6];
     int width, height, colors;
     int i;
-    FILE* file = fopen(fileName, "rb");
-    if(file == 0)
+    FILE* file = 0;
+
+    file = fopen(fileName, "rb");
+    if(!file)
     {
         return 0;
     }
