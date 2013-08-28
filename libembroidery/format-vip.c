@@ -64,10 +64,8 @@ int readVip(EmbPattern* pattern, const char* fileName)
     unsigned char *attributeData, *decodedColors, *attributeDataDecompressed;
     unsigned char *xData, *xDecompressed, *yData, *yDecompressed;
     VipHeader header;
-    FILE* file = 0;
-
-    file = fopen(fileName, "rb");
-    if(!file)
+    FILE* file = fopen(fileName, "rb");
+    if(file == 0)
     {
         return 0;
     }
@@ -194,19 +192,17 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     double previousX = 0;
     double previousY = 0;
     unsigned char* xValues = 0, *yValues = 0, *attributeValues = 0;
-    EmbStitchList* pointer = 0;
+    EmbStitchList* pointer;
     double xx = 0.0;
     double yy = 0.0;
     int flags = 0;
     int i = 0;
     unsigned char* attributeCompressed = 0, *xCompressed = 0, *yCompressed = 0, *decodedColors = 0, *encodedColors = 0;
 	unsigned char prevByte = 0;
-	EmbThreadList *colorPointer = 0;
+	EmbThreadList *colorPointer;
 
-    FILE* file = 0;
-
-    file = fopen(fileName, "wb");
-    if(!file)
+    FILE* file = fopen(fileName, "wb");
+    if(file == 0)
     {
         return 0;
     }
@@ -271,7 +267,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
 
 	    colorPointer = pattern->threadList;
 
-        for(i = 0; i < minColors; i++)
+        for (i = 0; i < minColors; i++)
         {
             int byteChunk = i << 2;
 		    EmbColor currentColor = colorPointer->thread.color;
@@ -282,13 +278,13 @@ int writeVip(EmbPattern* pattern, const char* fileName)
 		    colorPointer = colorPointer->next;
         }
 
-        for(i = 0; i < minColors << 2; ++i)
+        for (i = 0; i < minColors << 2; ++i)
         {
             unsigned char tmpByte = (unsigned char) (decodedColors[i] ^ vipDecodingTable[i]);
 		    prevByte = (unsigned char) (tmpByte ^ prevByte);
 		    binaryWriteByte(file, prevByte);
 	    }
-	    for(i = 0; i <= minColors; i++)
+	    for (i = 0; i <= minColors; i++)
         {
             binaryWriteInt(file, 1);
         }

@@ -179,6 +179,11 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
         rw->reader = readNew;
         rw->writer = writeNew;
     }
+    else if(!strcmp(ending, ".ofm"))
+    {
+        rw->reader = readOfm;
+        rw->writer = writeOfm;
+    }
     else if(!strcmp(ending, ".pcd"))
     {
         rw->reader = readPcd;

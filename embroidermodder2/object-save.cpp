@@ -54,6 +54,10 @@ bool SaveObject::isStitchOnlyFormat(const QString& fileName)
     else if(fileName.toUpper().endsWith(".INB")) return true;
     else if(fileName.toUpper().endsWith(".JEF")) return true;
     else if(fileName.toUpper().endsWith(".KSM")) return true;
+    else if(fileName.toUpper().endsWith(".MAX")) return true;
+    else if(fileName.toUpper().endsWith(".MIT")) return true;
+    else if(fileName.toUpper().endsWith(".NEW")) return true;
+    else if(fileName.toUpper().endsWith(".OFM")) return true;
     else if(fileName.toUpper().endsWith(".PCD")) return true;
     else if(fileName.toUpper().endsWith(".PCM")) return true;
     else if(fileName.toUpper().endsWith(".PCQ")) return true;

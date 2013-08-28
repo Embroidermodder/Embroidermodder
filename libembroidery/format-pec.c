@@ -10,8 +10,8 @@ void readPecStitches(EmbPattern* pattern, FILE* file)
     int stitchNumber = 0;
     while(!feof(file))
     {
-        int val1 = binaryReadUInt8(file);
-        int val2 = binaryReadUInt8(file);
+        int val1 = (int)binaryReadUInt8(file);
+        int val2 = (int)binaryReadUInt8(file);
 
         int stitchType = NORMAL;
         if(val1 == 0xFF && val2 == 0x00)
@@ -58,8 +58,9 @@ void readPecStitches(EmbPattern* pattern, FILE* file)
             }
         }
         else if(val2 >= 0x40)
-                val2 -= 0x80;
-
+        {
+            val2 -= 0x80;
+        }
         embPattern_addStitchRel(pattern, val1 / 10.0, val2 / 10.0, stitchType, 1);
         stitchNumber++;
     }
@@ -67,7 +68,6 @@ void readPecStitches(EmbPattern* pattern, FILE* file)
 
 static void pecEncodeJump(FILE* file, int x, int types)
 {
-    /* TODO: pointer safety */
     int outputVal = abs(x) & 0x7FF;
     unsigned int orPart = 0x80;
     if(types & TRIM)
@@ -90,7 +90,6 @@ static void pecEncodeJump(FILE* file, int x, int types)
 
 static void pecEncodeStop(FILE* file, unsigned char val)
 {
-    /* TODO: pointer safety */
     binaryWriteByte(file, 0xFE);
     binaryWriteByte(file, 0xB0);
     binaryWriteByte(file, val);
@@ -101,9 +100,7 @@ int readPec(EmbPattern* pattern, const char* fileName)
     unsigned int graphicsOffset;
     unsigned char colorChanges;
     int i;
-    FILE* file = 0;
-
-    file = fopen(fileName, "rb");
+    FILE* file = fopen(fileName, "rb");
     if(!file)
     {
         return 0;
@@ -147,7 +144,6 @@ int readPec(EmbPattern* pattern, const char* fileName)
 
 static void PecEncode(FILE* file, EmbPattern* p)
 {
-    /* TODO: pointer safety */
     double thisX = 0.0;
     double thisY = 0.0;
     unsigned char stopCode = 2;
@@ -200,7 +196,6 @@ static void clearImage(unsigned char image[][48])
 
 static void writeImage(FILE *file, unsigned char image[][48])
 {
-    /* TODO: pointer safety */
     int i, j;
     for(i = 0; i < 38; i++)
     {
@@ -223,8 +218,7 @@ static void writeImage(FILE *file, unsigned char image[][48])
 
 void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 {
-    /* TODO: pointer safety */
-    EmbStitchList* tempStitches = 0;
+    EmbStitchList *tempStitches;
     EmbRect bounds;
     unsigned char image[38][48];
     int i, flen, currentThreadCount, graphicsOffsetLocation, graphicsOffsetValue, height, width;
@@ -232,8 +226,8 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     const char* forwardSlashPos = strrchr(fileName, '/');
     const char* backSlashPos = strrchr(fileName, '\\');
     const char* dotPos = strrchr(fileName, '.');
-    const char* start = 0;
-
+    const char* start;
+    start = 0;
     if(forwardSlashPos)
     {
         start = forwardSlashPos + 1;
@@ -359,14 +353,12 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 
 int writePec(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
-
-    embPattern_flipVertical(pattern);
-    file = fopen(fileName, "wb");
+    FILE* file = fopen(fileName, "wb");
     if(!file)
     {
         return 0;
     }
+    embPattern_flipVertical(pattern);
     embPattern_fixColorCount(pattern);
     embPattern_correctForMaxStitchLength(pattern,12.7, 204.7);
     embPattern_scale(pattern, 10.0);

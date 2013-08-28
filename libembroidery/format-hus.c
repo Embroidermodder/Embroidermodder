@@ -250,7 +250,7 @@ int writeHus(EmbPattern* pattern, const char* fileName)
 
     for(i = 0; i < patternColor; i++)
     {
-        binaryWriteShort(file, embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)husThreads, husThreadCount));
+        binaryWriteShort(file, (short)embThread_findNearestColorInArray(embThreadList_getAt(pattern->threadList, i).color, (EmbThread*)husThreads, husThreadCount));
     }
 
     binaryWriteBytes(file, (char*) attributeCompressed, attributeSize);

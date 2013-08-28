@@ -25,7 +25,7 @@ static int decode_record_flags(unsigned char b2)
 
 static unsigned char setbit(int pos)
 {
-    return (1 << pos);
+    return (unsigned char)(1 << pos);
 }
 
 /* void combineJumpStitches(EmbPattern* p, int jumpsPerTrim)
@@ -133,9 +133,9 @@ static void encode_record(FILE* file, int x, int y, int flags)
         b2 = (char) (b2 | 0xC3);
     }
 
-    binaryWriteByte(file, b0);
-    binaryWriteByte(file, b1);
-    binaryWriteByte(file, b2);
+    binaryWriteByte(file, (unsigned char)b0);
+    binaryWriteByte(file, (unsigned char)b1);
+    binaryWriteByte(file, (unsigned char)b2);
 }
 
 /*convert 2 characters into 1 int for case statement */
@@ -147,11 +147,13 @@ static void set_dst_variable(EmbPattern* pattern, char* var, char* val)
     unsigned int i;
     EmbThread t;
 
-    for(i = 0; i <= strlen(var); i++)
+    for(i = 0; i <= (unsigned int)strlen(var); i++)
     {
         /* upcase var */
         if(var[i] >= 'a' && var[i] <= 'z')
+        {
             var[i] += 'A' - 'a';
+        }
     }
 
     /* macro converts 2 characters to 1 int, allows case statement... */
@@ -303,7 +305,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
                     {
                         i -= 2;
                     }
-                    strncpy(val, &header[valpos], i - valpos);
+                    strncpy(val, &header[valpos], (size_t)(i - valpos));
                     val[i - valpos] = '\0';
                     set_dst_variable(pattern, var, val);
                     break;

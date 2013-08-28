@@ -20,6 +20,7 @@ int binaryReadInt32BE(FILE* file);   /* Big endian version */
 unsigned int binaryReadUInt32BE(FILE* file);
 float binaryReadFloat(FILE* file);
 void binaryReadString(FILE* file, char *buffer, int maxLength);
+void binaryReadUnicodeString(FILE* file, char *buffer, const int stringLength);
 
 void binaryWriteByte(FILE* file, unsigned char data);
 void binaryWriteBytes(FILE* file, const char* data, int size);

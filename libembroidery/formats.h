@@ -36,6 +36,7 @@ extern "C" {
 #include "format-max.h"
 #include "format-mit.h"
 #include "format-new.h"
+#include "format-ofm.h"
 #include "format-pcd.h"
 #include "format-pcm.h"
 #include "format-pcq.h"

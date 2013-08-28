@@ -2,12 +2,12 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
+/*! Reads ZSK file format (.DSZ) */
 int readDsz(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = fopen(fileName,"rb");
     if(file==0)
     {
-            /*TODO: set messages here "Error opening DSZ file for read:" */
         return 0;
     }
     embPattern_loadExternalColorFile(pattern, fileName);

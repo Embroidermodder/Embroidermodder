@@ -30,8 +30,9 @@ int readPcm(EmbPattern* pattern, const char* fileName)
 
     for(i = 0; i < 16; i++)
     {
-        char zero = fgetc(file);
-        int colorNumber = fgetc(file);
+        int colorNumber;
+        (void)fgetc(file); /* zero */
+        colorNumber = fgetc(file);
         embPattern_addThread(pattern, pcmThreads[colorNumber]);
     }
     st = binaryReadUInt16BE(file);

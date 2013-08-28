@@ -92,6 +92,18 @@ void binaryReadString(FILE* file, char *buffer, int maxLength)
 	}
 }
 
+void binaryReadUnicodeString(FILE* file, char *buffer, const int stringLength)
+{
+    int i = 0;
+    for(i = 0; i < stringLength * 2; i++)
+    {
+        char input = (char)fgetc(file);
+        if(input != 0)
+        {
+            buffer[i] = input;
+        }
+    }
+}
 
 float binaryReadFloat(FILE* file)
 {

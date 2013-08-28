@@ -56,6 +56,7 @@ SOURCES += \
 ../libembroidery/format-max.c \
 ../libembroidery/format-mit.c \
 ../libembroidery/format-new.c \
+../libembroidery/format-ofm.c \
 ../libembroidery/format-pcd.c \
 ../libembroidery/format-pcm.c \
 ../libembroidery/format-pcq.c \
@@ -66,6 +67,7 @@ SOURCES += \
 ../libembroidery/format-pes.c \
 ../libembroidery/format-phb.c \
 ../libembroidery/format-phc.c \
+../libembroidery/format-plt.c \
 ../libembroidery/format-rgb.c \
 ../libembroidery/format-sew.c \
 ../libembroidery/format-shv.c \
@@ -82,7 +84,7 @@ SOURCES += \
 ../libembroidery/format-vp3.c \
 ../libembroidery/format-xxx.c \
 ../libembroidery/format-zsk.c \
-    ../libembroidery/format-plt.c
+
 
 
 HEADERS += \
@@ -143,6 +145,7 @@ HEADERS += \
 ../libembroidery/format-max.h \
 ../libembroidery/format-mit.h \
 ../libembroidery/format-new.h \
+../libembroidery/format-ofm.h \
 ../libembroidery/format-pcd.h \
 ../libembroidery/format-pcm.h \
 ../libembroidery/format-pcq.h \
@@ -153,6 +156,7 @@ HEADERS += \
 ../libembroidery/format-pes.h \
 ../libembroidery/format-phb.h \
 ../libembroidery/format-phc.h \
+../libembroidery/format-plt.h \
 ../libembroidery/format-rgb.h \
 ../libembroidery/format-sew.h \
 ../libembroidery/format-shv.h \
@@ -169,6 +173,5 @@ HEADERS += \
 ../libembroidery/format-vp3.h \
 ../libembroidery/format-xxx.h \
 ../libembroidery/format-zsk.h \
-    ../libembroidery/format-plt.h
 
 

@@ -34,6 +34,7 @@ FILEFORMAT_KSM, //Pfaff Embroidery Format
 FILEFORMAT_MAX, //Pfaff Embroidery Format
 FILEFORMAT_MIT, //Mitsubishi Embroidery Format
 FILEFORMAT_NEW, //Ameco Embroidery Format
+FILEFORMAT_OFM, //Melco Embroidery Format
 FILEFORMAT_PCD, //Pfaff Embroidery Format
 FILEFORMAT_PCM, //Pfaff Embroidery Format
 FILEFORMAT_PCQ, //Pfaff Embroidery Format

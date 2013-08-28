@@ -26,33 +26,63 @@ static short vp3DecodeInt16(short input)
     return (input);
 }
 
-static void vp3ReadHoopSection(FILE* file)
+typedef struct _vp3Hoop
 {
-    int right = binaryReadInt32BE(file);
-    int bottom = binaryReadInt32BE(file);
-    int left = binaryReadInt32BE(file);
-    int top = binaryReadInt32BE(file);
+    int right;
+    int bottom;
+    int left;
+    int top;
+    int unknown1;
+    int unknown2;
+    int unknown3;
+    int numberOfBytesRemaining;
 
-    int unknown1 = binaryReadInt32BE(file);
-    int unknown2 = binaryReadInt32BE(file);
-    int unknown3 = binaryReadInt32BE(file);
-    int numberOfBytesRemaining = binaryReadInt32BE(file);
+    int xOffset;
+    int yOffset;
 
-    int xOffset = binaryReadInt32BE(file);
-    int yOffset = binaryReadInt32BE(file);
-
-    unsigned char byte1 = binaryReadByte(file);
-    unsigned char byte2 = binaryReadByte(file);
-    unsigned char byte3 = binaryReadByte(file);
+    unsigned char byte1;
+    unsigned char byte2;
+    unsigned char byte3;
 
     /* Centered hoop dimensions */
-    int right2 = binaryReadInt32BE(file);
-    int left2 = binaryReadInt32BE(file);
-    int bottom2 = binaryReadInt32BE(file);
-    int top2 = binaryReadInt32BE(file);
+    int right2;
+    int left2;
+    int bottom2;
+    int top2;
 
-    int width = binaryReadInt32BE(file);
-    int height = binaryReadInt32BE(file);
+    int width;
+    int height;
+} vp3Hoop;
+
+static vp3Hoop vp3ReadHoopSection(FILE* file)
+{
+    vp3Hoop hoop;
+    hoop.right = binaryReadInt32BE(file);
+    hoop.bottom = binaryReadInt32BE(file);
+    hoop.left = binaryReadInt32BE(file);
+    hoop.top = binaryReadInt32BE(file);
+
+    hoop.unknown1 = binaryReadInt32BE(file);
+    hoop.unknown2 = binaryReadInt32BE(file);
+    hoop.unknown3 = binaryReadInt32BE(file);
+    hoop.numberOfBytesRemaining = binaryReadInt32BE(file);
+
+    hoop.xOffset = binaryReadInt32BE(file);
+    hoop.yOffset = binaryReadInt32BE(file);
+
+    hoop.byte1 = binaryReadByte(file);
+    hoop.byte2 = binaryReadByte(file);
+    hoop.byte3 = binaryReadByte(file);
+
+    /* Centered hoop dimensions */
+    hoop.right2 = binaryReadInt32BE(file);
+    hoop.left2 = binaryReadInt32BE(file);
+    hoop.bottom2 = binaryReadInt32BE(file);
+    hoop.top2 = binaryReadInt32BE(file);
+
+    hoop.width = binaryReadInt32BE(file);
+    hoop.height = binaryReadInt32BE(file);
+    return hoop;
 }
 
 int readVp3(EmbPattern* pattern, const char* fileName)
