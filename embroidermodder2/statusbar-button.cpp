@@ -19,13 +19,13 @@ StatusBarButton::StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* 
     this->setAutoRaise(true);
     this->setCheckable(true);
 
-    if     (objectName() == "StatusBarButtonSNAP")   { /* No Settings */ }
+    if     (objectName() == "StatusBarButtonSNAP")   { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleSnap(bool))); }
     else if(objectName() == "StatusBarButtonGRID")   { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleGrid(bool))); }
     else if(objectName() == "StatusBarButtonRULER")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleRuler(bool))); }
-    else if(objectName() == "StatusBarButtonORTHO")  { /* No Settings */ }
-    else if(objectName() == "StatusBarButtonPOLAR")  { /* No Settings */ }
+    else if(objectName() == "StatusBarButtonORTHO")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleOrtho(bool))); }
+    else if(objectName() == "StatusBarButtonPOLAR")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(togglePolar(bool))); }
     else if(objectName() == "StatusBarButtonQSNAP")  { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQSnap(bool))); }
-    else if(objectName() == "StatusBarButtonQTRACK") { /* No Settings */ }
+    else if(objectName() == "StatusBarButtonQTRACK") { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleQTrack(bool))); }
     else if(objectName() == "StatusBarButtonLWT")    { connect(this, SIGNAL(toggled(bool)), this, SLOT(toggleLwt(bool))); }
 }
 
