@@ -11,6 +11,9 @@ typedef struct EmbHoop_
     double height;
 } EmbHoop;
 
+double embHoop_width(EmbHoop hoop);
+double embHoop_height(EmbHoop hoop);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

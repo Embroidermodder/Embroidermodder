@@ -8,7 +8,7 @@ static char *ReadLibrary(FILE *file)
 {
     int stringLength = 0;
     char *libraryName = 0;
-    //FF FE FF
+    /* FF FE FF */
     unsigned char leadin[3];
     binaryReadBytes(file, leadin, 3);
     stringLength = binaryReadByte(file);
@@ -43,23 +43,23 @@ static void ReadBlockHeader(FILE *file)
     short unknown1 = binaryReadInt16(file);
     short unknown2 = binaryReadInt32(file);
     int unknown3 = binaryReadInt32(file);
-    //int v = binaryReadBytes(3);
+    /* int v = binaryReadBytes(3); TODO: review */
     binaryReadInt16(file);
     binaryReadByte(file);
     len = binaryReadByte(file);
     s = (char *)malloc(2 * len);
     binaryReadBytes(file, s, 2 * len);
-    val1 = binaryReadInt32(file); // 0
-    val2 = binaryReadInt32(file); // 0
-    val3 = binaryReadInt32(file); // 0
-    val4 = binaryReadInt32(file); // 0
-    val5 = binaryReadInt32(file); // 1
-    val6 = binaryReadInt32(file); // 1
-    val7 = binaryReadInt32(file); // 1
-    val8 = binaryReadInt32(file); // 0
-    val9 = binaryReadInt32(file); // 64
-    val10 = binaryReadInt32(file); // 64
-    short1 = binaryReadInt16(file); // 0
+    val1 = binaryReadInt32(file);   /*  0 */
+    val2 = binaryReadInt32(file);   /*  0 */
+    val3 = binaryReadInt32(file);   /*  0 */
+    val4 = binaryReadInt32(file);   /*  0 */
+    val5 = binaryReadInt32(file);   /*  1 */
+    val6 = binaryReadInt32(file);   /*  1 */
+    val7 = binaryReadInt32(file);   /*  1 */
+    val8 = binaryReadInt32(file);   /*  0 */
+    val9 = binaryReadInt32(file);   /* 64 */
+    val10 = binaryReadInt32(file);  /* 64 */
+    short1 = binaryReadInt16(file); /*  0 */
 }
 
 static void ReadColorChange(FILE *file, EmbPattern *pattern)
@@ -72,7 +72,7 @@ static void ReadThreads(FILE *file, EmbPattern *p)
 {
     int i, numberOfColors, stringLen, numberOfLibraries;
     char *primaryLibraryName, *expandedString;
-    //FF FE FF 00
+    /* FF FE FF 00 */
     binaryReadInt32(file);
 
     numberOfColors = binaryReadInt16(file);
@@ -82,7 +82,7 @@ static void ReadThreads(FILE *file, EmbPattern *p)
     stringLen = binaryReadInt16(file);
     expandedString = (char *)malloc(stringLen);
     binaryReadBytes(file, expandedString, stringLen);
-    for (i = 0; i < numberOfColors; i++)
+    for(i = 0; i < numberOfColors; i++)
     {
         EmbThread thread;
         char colorNumberText[10];
@@ -101,7 +101,7 @@ static void ReadThreads(FILE *file, EmbPattern *p)
         colorName = (char *)malloc(colorNameLength * 2);
         binaryReadBytes(file, colorName, colorNameLength*2);
         binaryReadInt16(file);
-        itoa(colorNumber, colorNumberText, 10);
+     /* itoa(colorNumber, colorNumberText, 10); TODO: never use itoa, it's non-standard, use sprintf: http://stackoverflow.com/questions/5242524/converting-int-to-string-in-c */
         thread.catalogNumber = colorNumberText;
         thread.description = colorName;
         thread.color.r = r;
@@ -112,9 +112,9 @@ static void ReadThreads(FILE *file, EmbPattern *p)
     binaryReadInt16(file);
     primaryLibraryName = ReadLibrary(file);
     numberOfLibraries = binaryReadInt16(file);
-    for (i = 0; i < numberOfLibraries; i++)
+    for(i = 0; i < numberOfLibraries; i++)
     {
-        //libraries.Add(
+        /*libraries.Add( TODO: review */
         char *libName = ReadLibrary(file);
         free(libName);
     }
@@ -132,7 +132,7 @@ static void ReadExpanded(FILE *file, EmbPattern *p)
     ReadBlockHeader(file);
     numberOfStitches = binaryReadInt32(file);
 
-    for (i = 0; i < numberOfStitches; i++)
+    for(i = 0; i < numberOfStitches; i++)
     {
         unsigned char stitch[5];
         binaryReadBytes(file, stitch, 5);
@@ -160,17 +160,17 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     classNameLength = binaryReadInt16(file);
     s = (char *)malloc(sizeof(char) * classNameLength);
     binaryReadBytes(file, s, classNameLength);
-    unknownCount = binaryReadInt16(file); // unknown count
+    unknownCount = binaryReadInt16(file); /* unknown count */
 
     binaryReadInt16(file);
     key = ReadClass(file);
-    while (1 == 1)
+    while(1 == 1)
     {
-        if (key == 0xFEFF)
+        if(key == 0xFEFF)
         {
             break;
         }
-        if (key == 0x809C)
+        if(key == 0x809C)
         {
             ReadExpanded(file, pattern);
         }
@@ -179,7 +179,7 @@ int readOfm(EmbPattern* pattern, const char* fileName)
             ReadColorChange(file, pattern);
         }
         key = binaryReadUInt16(file);
-        if (key == 0xFFFF) ReadClass(file);
+        if(key == 0xFFFF) ReadClass(file);
     }
     embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
     return 1;

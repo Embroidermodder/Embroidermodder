@@ -6,6 +6,8 @@ SOURCES += \
 ../libembroidery/emb-compress.c \
 ../libembroidery/emb-color.c \
 ../libembroidery/emb-ellipse.c \
+../libembroidery/emb-file.c \
+../libembroidery/emb-hoop.c \
 ../libembroidery/emb-layer.c \
 ../libembroidery/emb-line.c \
 ../libembroidery/emb-path.c \
@@ -93,6 +95,7 @@ HEADERS += \
 ../libembroidery/emb-compress.h \
 ../libembroidery/emb-color.h \
 ../libembroidery/emb-ellipse.h \
+../libembroidery/emb-file.h \
 ../libembroidery/emb-hoop.h \
 ../libembroidery/emb-layer.h \
 ../libembroidery/emb-line.h \
