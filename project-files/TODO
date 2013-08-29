@@ -112,3 +112,9 @@ TODO - Add 'Design Details' functionality to libembroidery-convert
 TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
 TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
 
+//====================
+//Stuff for Arduino
+//====================
+TODO - Fix emb-outline files
+TODO - Fix thread-color files
+
