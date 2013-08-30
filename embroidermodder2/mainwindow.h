@@ -655,9 +655,9 @@ public:
     void nativeAddEllipse             (qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode);
     void nativeAddPoint               (qreal x, qreal y);
     void nativeAddRegularPolygon      (qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill);
-    void nativeAddPolygon             (qreal startX, qreal startY);
-    void nativeAddPolyline            (qreal startX, qreal startY);
-    void nativeAddPath                (qreal startX, qreal startY);
+    void nativeAddPolygon             (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPolyline            (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
+    void nativeAddPath                (qreal startX, qreal startY, const QPainterPath& p, int rubberMode);
     void nativeAddHorizontalDimension (qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
     void nativeAddVerticalDimension   (qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight);
     void nativeAddImage               (const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot);

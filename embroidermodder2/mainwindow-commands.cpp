@@ -9,8 +9,12 @@
 #include "object-circle.h"
 #include "object-dimleader.h"
 #include "object-ellipse.h"
+#include "object-image.h"
 #include "object-line.h"
+#include "object-path.h"
 #include "object-point.h"
+#include "object-polygon.h"
+#include "object-polyline.h"
 #include "object-rect.h"
 #include "object-textsingle.h"
 #include "emb-rect.h"
@@ -1348,15 +1352,53 @@ void MainWindow::nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 s
 {
 }
 
-void MainWindow::nativeAddPolygon(qreal startX, qreal startY)
+void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
+    {
+        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
 }
 
-void MainWindow::nativeAddPolyline(qreal startX, qreal startY)
+void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
+    View* gview = activeView();
+    QGraphicsScene* gscene = gview->scene();
+    QUndoStack* stack = gview->getUndoStack();
+    if(gview && gscene && stack)
+    {
+        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if(rubberMode)
+        {
+            gview->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, gview, 0);
+            stack->push(cmd);
+        }
+    }
 }
 
-void MainWindow::nativeAddPath(qreal startX, qreal startY)
+void MainWindow::nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
 }
 

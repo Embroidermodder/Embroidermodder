@@ -6,7 +6,7 @@
 class PolygonObject : public BaseObject
 {
 public:
-    PolygonObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
+    PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
     PolygonObject(PolygonObject* obj, QGraphicsItem* parent = 0);
     ~PolygonObject();
 
@@ -29,7 +29,9 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::PenStyle lineType);
+    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath(const QPainterPath& p);
+    QPainterPath normalPath;
 };
 
 #endif

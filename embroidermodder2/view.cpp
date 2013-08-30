@@ -10,8 +10,12 @@
 #include "object-circle.h"
 #include "object-dimleader.h"
 #include "object-ellipse.h"
+#include "object-image.h"
 #include "object-line.h"
+#include "object-path.h"
 #include "object-point.h"
+#include "object-polygon.h"
+#include "object-polyline.h"
 #include "object-rect.h"
 #include "object-textsingle.h"
 
@@ -1763,11 +1767,21 @@ QList<QGraphicsItem*> View::createCutCopyObjectList(QList<QGraphicsItem*> list)
         }
         else if(objType == OBJ_TYPE_POLYGON)
         {
-            //TODO: cut/copy polygons
+            PolygonObject* pgonObj = static_cast<PolygonObject*>(item);
+            if(pgonObj)
+            {
+                PolygonObject* copyPgonObj = new PolygonObject(pgonObj);
+                copyList.append(copyPgonObj);
+            }
         }
         else if(objType == OBJ_TYPE_POLYLINE)
         {
-            //TODO: cut/copy polylines
+            PolylineObject* plineObj = static_cast<PolylineObject*>(item);
+            if(plineObj)
+            {
+                PolylineObject* copyPlineObj = new PolylineObject(plineObj);
+                copyList.append(copyPlineObj);
+            }
         }
         else if(objType == OBJ_TYPE_RAY)
         {

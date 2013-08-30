@@ -9,8 +9,54 @@ global.test2;
 function main()
 {
     initCommand();
-    selectAll();
-    rotateSelected(0,0,90);
+    //selectAll();
+    //rotateSelected(0,0,90);
+    
+    //Polyline & Polygon Testing
+    var offsetX = 0.0;
+    var offsetY = 0.0;
+    
+    var polylineArray = [];
+    polylineArray.push(1.0 + offsetX);
+    polylineArray.push(1.0 + offsetY);
+    polylineArray.push(1.0 + offsetX);
+    polylineArray.push(2.0 + offsetY);
+    polylineArray.push(2.0 + offsetX);
+    polylineArray.push(2.0 + offsetY);
+    polylineArray.push(2.0 + offsetX);
+    polylineArray.push(3.0 + offsetY);
+    polylineArray.push(3.0 + offsetX);
+    polylineArray.push(3.0 + offsetY);
+    polylineArray.push(3.0 + offsetX);
+    polylineArray.push(2.0 + offsetY);
+    polylineArray.push(4.0 + offsetX);
+    polylineArray.push(2.0 + offsetY);
+    polylineArray.push(4.0 + offsetX);
+    polylineArray.push(1.0 + offsetY);
+    addPolyline(polylineArray);
+    
+    offsetX = 5.0;
+    offsetY = 0.0;
+    
+    var polygonArray = [];
+    polygonArray.push(1.0 + offsetX);
+    polygonArray.push(1.0 + offsetY);
+    polygonArray.push(1.0 + offsetX);
+    polygonArray.push(2.0 + offsetY);
+    polygonArray.push(2.0 + offsetX);
+    polygonArray.push(2.0 + offsetY);
+    polygonArray.push(2.0 + offsetX);
+    polygonArray.push(3.0 + offsetY);
+    polygonArray.push(3.0 + offsetX);
+    polygonArray.push(3.0 + offsetY);
+    polygonArray.push(3.0 + offsetX);
+    polygonArray.push(2.0 + offsetY);
+    polygonArray.push(4.0 + offsetX);
+    polygonArray.push(2.0 + offsetY);
+    polygonArray.push(4.0 + offsetX);
+    polygonArray.push(1.0 + offsetY);
+    addPolygon(polygonArray);
+
     endCommand();
 }
 

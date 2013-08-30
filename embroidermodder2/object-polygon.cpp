@@ -5,7 +5,7 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolygonObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -25,7 +25,7 @@ PolygonObject::~PolygonObject()
     qDebug("PolygonObject Destructor()");
 }
 
-void PolygonObject::init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
+void PolygonObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POLYGON);
@@ -35,12 +35,20 @@ void PolygonObject::init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::P
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setObjectPath(p);
+    updatePath(p);
     setObjectPos(x,y);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objectPen());
+}
+
+void PolygonObject::updatePath(const QPainterPath& p)
+{
+    normalPath = p;
+    QPainterPath reversePath = normalPath.toReversed();
+    reversePath.connectPath(normalPath);
+    setObjectPath(reversePath);
 }
 
 void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
@@ -74,13 +82,32 @@ void PolygonObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    return scenePos();
+    QPointF closestPoint = scenePos();
+    qreal closestDist = QLineF(mousePoint, closestPoint).length();
+    QPainterPath::Element element;
+    for(int i = 0; i < normalPath.elementCount(); ++i)
+    {
+        element = normalPath.elementAt(i);
+        QPointF elemPoint = mapToScene(element.x, element.y);
+        qreal elemDist = QLineF(mousePoint, elemPoint).length();
+        if(elemDist < closestDist)
+        {
+            closestPoint = elemPoint;
+            closestDist = elemDist;
+        }
+    }
+    return closestPoint;
 }
 
 QList<QPointF> PolygonObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
-    gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
+    QPainterPath::Element element;
+    for(int i = 0; i < normalPath.elementCount(); ++i)
+    {
+        element = normalPath.elementAt(i);
+        gripPoints << mapToScene(element.x, element.y);
+    }
     return gripPoints;
 }
 

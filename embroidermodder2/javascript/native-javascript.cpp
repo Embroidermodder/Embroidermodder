@@ -408,6 +408,10 @@ QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*
 
     else if(mode == "LINE")                              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
 
+    else if(mode == "POLYGON")                           { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
+
+    else if(mode == "POLYLINE")                          { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
+
     else if(mode == "RECTANGLE")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
 
     else if(mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
@@ -737,15 +741,94 @@ QScriptValue javaAddRegularPolygon(QScriptContext* context, QScriptEngine* /*eng
 
 QScriptValue javaAddPolygon(QScriptContext* context, QScriptEngine* /*engine*/)
 {
-    //TODO: parameter error checking
-    qDebug("TODO: finish addPolygon command");
+    if(context->argumentCount() != 1)   return context->throwError("addPolygon() requires one argument");
+    if(!context->argument(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolygon(): first argument is not an array");
+
+    QVariantList varList = context->argument(0).toVariant().toList();
+    int varSize = varList.size();
+    if(varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array must contain at least two elements");
+    if(varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array cannot contain an odd number of elements");
+
+    bool lineTo = false;
+    bool xCoord = true;
+    qreal x = 0;
+    qreal y = 0;
+    qreal startX = 0;
+    qreal startY = 0;
+    QPainterPath path;
+    foreach(QVariant var, varList)
+    {
+        if(var.canConvert(QVariant::Double))
+        {
+            if(xCoord)
+            {
+                xCoord = false;
+                x = var.toReal();
+            }
+            else
+            {
+                xCoord = true;
+                y = -var.toReal();
+
+                if(lineTo) { path.lineTo(x,y); }
+                else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
+            }
+        }
+        else
+            return context->throwError(QScriptContext::TypeError, "addPolygon(): array contains one or more invalid elements");
+    }
+
+    //Close the polygon
+    path.closeSubpath();
+
+    path.translate(-startX, -startY);
+
+    mainWin()->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 
 QScriptValue javaAddPolyline(QScriptContext* context, QScriptEngine* /*engine*/)
 {
-    //TODO: parameter error checking
-    qDebug("TODO: finish addPolyline command");
+    if(context->argumentCount() != 1)   return context->throwError("addPolyline() requires one argument");
+    if(!context->argument(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolyline(): first argument is not an array");
+
+    QVariantList varList = context->argument(0).toVariant().toList();
+    int varSize = varList.size();
+    if(varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array must contain at least two elements");
+    if(varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array cannot contain an odd number of elements");
+
+    bool lineTo = false;
+    bool xCoord = true;
+    qreal x = 0;
+    qreal y = 0;
+    qreal startX = 0;
+    qreal startY = 0;
+    QPainterPath path;
+    foreach(QVariant var, varList)
+    {
+        if(var.canConvert(QVariant::Double))
+        {
+            if(xCoord)
+            {
+                xCoord = false;
+                x = var.toReal();
+            }
+            else
+            {
+                xCoord = true;
+                y = -var.toReal();
+
+                if(lineTo) { path.lineTo(x,y); }
+                else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
+            }
+        }
+        else
+            return context->throwError(QScriptContext::TypeError, "addPolyline(): array contains one or more invalid elements");
+    }
+
+    path.translate(-startX, -startY);
+
+    mainWin()->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
 

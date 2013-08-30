@@ -6,7 +6,7 @@
 class PolylineObject : public BaseObject
 {
 public:
-    PolylineObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
+    PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent = 0);
     PolylineObject(PolylineObject* obj, QGraphicsItem* parent = 0);
     ~PolylineObject();
 
@@ -29,7 +29,9 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::PenStyle lineType);
+    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath(const QPainterPath& p);
+    QPainterPath normalPath;
 };
 
 #endif
