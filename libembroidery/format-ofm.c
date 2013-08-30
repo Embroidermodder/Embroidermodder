@@ -13,7 +13,7 @@ static char *ReadLibrary(FILE *file)
     binaryReadBytes(file, leadin, 3);
     stringLength = binaryReadByte(file);
     libraryName = (char *)malloc(sizeof(char) * stringLength * 2);
-    binaryReadBytes(file, libraryName, stringLength * 2);
+    binaryReadBytes(file, (unsigned char *)libraryName, stringLength * 2);
     return libraryName;
 }
 
@@ -25,7 +25,7 @@ static int ReadClass(FILE *file)
     len = binaryReadInt16(file);
 
     s = (char *)malloc(sizeof(char) * len + 1);
-    binaryReadBytes(file, s, len);
+    binaryReadBytes(file, (unsigned char *)s, len);
     s[len] = '\0';
     if(strcmp(s, "CExpStitch") == 0)
             return 0x809C;
@@ -41,14 +41,14 @@ static void ReadBlockHeader(FILE *file)
     char *s;
     unsigned short short1;
     short unknown1 = binaryReadInt16(file);
-    short unknown2 = binaryReadInt32(file);
+    short unknown2 = (short)binaryReadInt32(file);
     int unknown3 = binaryReadInt32(file);
     /* int v = binaryReadBytes(3); TODO: review */
     binaryReadInt16(file);
     binaryReadByte(file);
     len = binaryReadByte(file);
     s = (char *)malloc(2 * len);
-    binaryReadBytes(file, s, 2 * len);
+    binaryReadBytes(file, (unsigned char *)s, 2 * len);
     val1 = binaryReadInt32(file);   /*  0 */
     val2 = binaryReadInt32(file);   /*  0 */
     val3 = binaryReadInt32(file);   /*  0 */
@@ -81,7 +81,7 @@ static void ReadThreads(FILE *file, EmbPattern *p)
     binaryReadInt16(file);
     stringLen = binaryReadInt16(file);
     expandedString = (char *)malloc(stringLen);
-    binaryReadBytes(file, expandedString, stringLen);
+    binaryReadBytes(file, (unsigned char *)expandedString, stringLen);
     for(i = 0; i < numberOfColors; i++)
     {
         EmbThread thread;
@@ -99,14 +99,14 @@ static void ReadThreads(FILE *file, EmbPattern *p)
         binaryReadInt16(file);
         colorNameLength = binaryReadByte(file);
         colorName = (char *)malloc(colorNameLength * 2);
-        binaryReadBytes(file, colorName, colorNameLength*2);
+        binaryReadBytes(file, (unsigned char *)colorName, colorNameLength*2);
         binaryReadInt16(file);
      /* itoa(colorNumber, colorNumberText, 10); TODO: never use itoa, it's non-standard, use sprintf: http://stackoverflow.com/questions/5242524/converting-int-to-string-in-c */
         thread.catalogNumber = colorNumberText;
         thread.description = colorName;
-        thread.color.r = r;
-        thread.color.g = g;
-        thread.color.b = b;
+        thread.color.r = (unsigned char)r;
+        thread.color.g = (unsigned char)g;
+        thread.color.b = (unsigned char)b;
         embPattern_addThread(p, thread);
     }
     binaryReadInt16(file);
@@ -159,7 +159,7 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     binaryReadInt32(file);
     classNameLength = binaryReadInt16(file);
     s = (char *)malloc(sizeof(char) * classNameLength);
-    binaryReadBytes(file, s, classNameLength);
+    binaryReadBytes(file, (unsigned char *)s, classNameLength);
     unknownCount = binaryReadInt16(file); /* unknown count */
 
     binaryReadInt16(file);

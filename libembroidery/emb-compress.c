@@ -362,7 +362,7 @@ void husExpand_258(int _259, unsigned char* _260, int _261, unsigned short* _262
     for(_226=0;(int)_226<_259;_226++) _277[_260[_226]]++;
     _288[1]=0;
     for(_226=1;_226<=16;_226++) _288[_226+1]=(unsigned short)(_288[_226]+(_277[_226]<<(16-_226)));
-    if(_288[17]!=(unsigned short )(1U<<16))
+    if(_288[17] != (unsigned short)(1U<<16))
     {
         mStatus = -1;
         _243=10;
@@ -425,8 +425,8 @@ void husExpand_258(int _259, unsigned char* _260, int _261, unsigned short* _262
 }
 
 /*****************************************
- * HUS Compress Functions
- ****************************************/
+* HUS Compress Functions
+****************************************/
 
 int husCompress(unsigned char* _266, unsigned long _inputSize, unsigned char* _267, int _269, int _235)
 {
@@ -486,7 +486,7 @@ int husCompress(unsigned char* _266, unsigned long _inputSize, unsigned char* _2
 
     returnVal = husCompress_compress();
     husCompress_cleanup();
-	return returnVal;
+    return returnVal;
 }
 
 void husCompress_cleanup(void)
@@ -530,8 +530,8 @@ int husCompress_compress(void)
     husCompress_198();
     _200 = 0;
 
-	memcpy(_278, &inputArray[inputPosition], _279);
-    
+    memcpy(_278, &inputArray[inputPosition], _279);
+
     inputPosition += _279;
     if(inputPosition > inputLength)
     {
@@ -571,14 +571,14 @@ int husCompress_compress(void)
     }
     for(; _209 < _140; _209++)
     {
-		int _203;
+        int _203;
         if(inputPosition >= inputLength) 
-			break;
+            break;
         _203 = (int)(unsigned char)inputArray[inputPosition];
         inputPosition += 1;
         _278[s] = (unsigned char)_203;
         if(s < _140 - 1) 
-			_278[s + _279] = _278[s];
+            _278[s + _279] = _278[s];
         husCompress_448(s);
         s = (short)((s + 1)&(_280));
     }
@@ -596,9 +596,9 @@ int husCompress_compress(void)
             husCompress_202((unsigned short)(_168+(UCHAR_MAX + 1 - _135)), _169);
         while(--_168 >= 0)
         {
-			int _203;
+            int _203;
             if(inputPosition >= inputLength) 
-				break;
+                break;
             _203 = (int)(unsigned char) inputArray[inputPosition];
             inputPosition += 1;
             _278[s] = (unsigned char)_203;
@@ -751,8 +751,8 @@ void husCompress_206(void)
         husCompress_208(CHAR_BIT-1, 0);
         if(_171)
         {
-			husCompress_210();
-		}
+            husCompress_210();
+        }
     }
     _171 = 0;
 }
@@ -852,7 +852,7 @@ void husCompress_210(void)
         _170 = 1;
     else
     {
-		memcpy(outputArray + outputPosition, _179, _171);
+        memcpy(outputArray + outputPosition, _179, _171);
         outputPosition += _171;
     }
     _171 = 0;
@@ -874,7 +874,7 @@ int husCompress_211(int _212, unsigned short* _213, unsigned char* _214, unsigne
         if(_187[_226])
         {
             _177[++_227] = (short)_226;
-		}
+        }
     }
     if(_227 < 2)
     {
@@ -884,7 +884,7 @@ int husCompress_211(int _212, unsigned short* _213, unsigned char* _214, unsigne
     for(_226 = _227/2; _226 >= 1; _226--)
     {
         husCompress_225(_226, _187, _177, _227);
-	}
+    }
     _188 = _215;
     do
     {
@@ -892,7 +892,7 @@ int husCompress_211(int _212, unsigned short* _213, unsigned char* _214, unsigne
         if(_226 < _174)
         {
             *_188++=(unsigned short)_226;
-		}
+        }
         _177[1] = _177[_227--];
         husCompress_225(1, _187, _177, _227);
         _276 = _177[1];

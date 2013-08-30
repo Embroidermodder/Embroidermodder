@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\libembroidery\emb-color.c" />
     <ClCompile Include="..\..\libembroidery\emb-compress.c" />
     <ClCompile Include="..\..\libembroidery\emb-ellipse.c" />
+    <ClCompile Include="..\..\libembroidery\emb-file.c" />
     <ClCompile Include="..\..\libembroidery\emb-line.c" />
     <ClCompile Include="..\..\libembroidery\emb-satin-line.c" />
     <ClCompile Include="..\..\libembroidery\emb-settings.c" />
@@ -131,6 +132,7 @@
     <ClCompile Include="..\..\libembroidery\format-max.c" />
     <ClCompile Include="..\..\libembroidery\format-mit.c" />
     <ClCompile Include="..\..\libembroidery\format-new.c" />
+    <ClCompile Include="..\..\libembroidery\format-ofm.c" />
     <ClCompile Include="..\..\libembroidery\format-pcd.c" />
     <ClCompile Include="..\..\libembroidery\format-pcm.c" />
     <ClCompile Include="..\..\libembroidery\format-pcq.c" />
@@ -169,6 +171,7 @@
     <ClInclude Include="..\..\libembroidery\emb-color.h" />
     <ClInclude Include="..\..\libembroidery\emb-compress.h" />
     <ClInclude Include="..\..\libembroidery\emb-ellipse.h" />
+    <ClInclude Include="..\..\libembroidery\emb-file.h" />
     <ClInclude Include="..\..\libembroidery\emb-line.h" />
     <ClInclude Include="..\..\libembroidery\emb-satin-line.h" />
     <ClInclude Include="..\..\libembroidery\emb-settings.h" />
@@ -214,6 +217,7 @@
     <ClInclude Include="..\..\libembroidery\format-max.h" />
     <ClInclude Include="..\..\libembroidery\format-mit.h" />
     <ClInclude Include="..\..\libembroidery\format-new.h" />
+    <ClInclude Include="..\..\libembroidery\format-ofm.h" />
     <ClInclude Include="..\..\libembroidery\format-pcd.h" />
     <ClInclude Include="..\..\libembroidery\format-pcm.h" />
     <ClInclude Include="..\..\libembroidery\format-pcq.h" />

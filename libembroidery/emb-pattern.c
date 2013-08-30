@@ -823,45 +823,45 @@ void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2,
     }
 }
 
-void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj)
+void embPattern_addPathObjectAbs(EmbPattern* pattern, EmbPathObject* pathObj)
 {
     /* TODO: pointer safety */
 }
 
-void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
+void embPattern_addPointObjectAbs(EmbPattern* pattern, double x, double y)
 {
     /* TODO: pointer safety */
     EmbPointObject pointObj = embPointObject_make(x, y);
 
-    if(!(p->pointObjList))
+    if(!(pattern->pointObjList))
     {
-        p->pointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
+        pattern->pointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
         /* TODO: malloc fail error */
-        p->pointObjList->pointObj = pointObj;
-        p->pointObjList->next = 0;
-        p->lastPointObj = p->pointObjList;
+        pattern->pointObjList->pointObj = pointObj;
+        pattern->pointObjList->next = 0;
+        pattern->lastPointObj = pattern->pointObjList;
     }
     else
     {
-        embPointObjectList_add(p->lastPointObj, pointObj);
-        p->lastPointObj = p->lastPointObj->next;
+        embPointObjectList_add(pattern->lastPointObj, pointObj);
+        pattern->lastPointObj = pattern->lastPointObj->next;
     }
 }
 
-void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
+void embPattern_addPolylineObjectAbs(EmbPattern* pattern, EmbPolylineObject* obj)
 {
-    if(!(p->polylineObjList))
+    if(!(pattern->polylineObjList))
     {
-        p->polylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+        pattern->polylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
         /* TODO: malloc fail error */
-        p->polylineObjList->polylineObj = obj;
-        p->polylineObjList->next = 0;
-        p->lastPolylineObj = p->polylineObjList;
+        pattern->polylineObjList->polylineObj = obj;
+        pattern->polylineObjList->next = 0;
+        pattern->lastPolylineObj = pattern->polylineObjList;
     }
     else
     {
-        embPolylineObjectList_add(p->lastPolylineObj, obj);
-        p->lastPolylineObj = p->lastPolylineObj->next;
+        embPolylineObjectList_add(pattern->lastPolylineObj, obj);
+        pattern->lastPolylineObj = pattern->lastPolylineObj->next;
     }
 }
 

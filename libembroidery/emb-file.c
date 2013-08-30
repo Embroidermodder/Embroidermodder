@@ -6,11 +6,12 @@ EmbFile* embFile_open(const char* fileName, const char* mode)
 #ifdef ARDUINO
     /*TODO: embFile_open */
 #else
+    EmbFile* eFile;
     FILE* oFile = fopen(fileName, mode);
     if(!oFile)
         return 0;
 
-    EmbFile* eFile = (EmbFile*)malloc(sizeof(EmbFile));
+    eFile = (EmbFile*)malloc(sizeof(EmbFile));
     if(!eFile)
     {
         fclose(oFile);

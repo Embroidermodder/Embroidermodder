@@ -134,6 +134,7 @@ int writePes(EmbPattern* pattern, const char* fileName)
     {
         return 0;
     }
+    if(!pattern->stitchList || embStitchList_count(pattern->stitchList) == 0) return 0;
     embPattern_flipVertical(pattern);
     embPattern_scale(pattern, 10.0);
     binaryWriteBytes(file, "#PES0001", 8);
