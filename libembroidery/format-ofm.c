@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "compound-file.h"
 #include "format-ofm.h"
 #include "helpers-binary.h"
 
@@ -148,11 +149,17 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     int unknownCount = 0;
     int key = 0, classNameLength;
     char *s;
-    FILE* file = fopen(fileName, "rb");
-    if(!file)
+    FILE* fileCompound = fopen(fileName, "rb");
+    FILE* file = 0;
+    bcf_file *bcfFile;
+    if(!fileCompound)
     {
         return 0;
     }
+    bcfFile = (bcf_file *)malloc(sizeof(bcf_file));
+    bcfFile_read(fileCompound, bcfFile);
+    file = GetFile(bcfFile, fileCompound, "EdsIV Object");
+    bcf_file_free(bcfFile);
     fseek(file, 0x1C6, SEEK_SET);
     ReadThreads(file, pattern);
     fseek(file, 0x110, SEEK_CUR);

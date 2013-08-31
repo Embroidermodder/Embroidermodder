@@ -1,6 +1,11 @@
 INCLUDEPATH += ../libembroidery
 
 SOURCES += \
+../libembroidery/compound-file.c\
+../libembroidery/compound-file-difat.c\
+../libembroidery/compound-file-directory.c\
+../libembroidery/compound-file-fat.c\
+../libembroidery/compound-file-header.c\
 ../libembroidery/emb-arc.c \
 ../libembroidery/emb-circle.c \
 ../libembroidery/emb-compress.c \
@@ -90,6 +95,11 @@ SOURCES += \
 
 
 HEADERS += \
+../libembroidery/compound-file.h\
+../libembroidery/compound-file-difat.h\
+../libembroidery/compound-file-directory.h\
+../libembroidery/compound-file-fat.h\
+../libembroidery/compound-file-header.h\
 ../libembroidery/emb-arc.h \
 ../libembroidery/emb-circle.h \
 ../libembroidery/emb-compress.h \
@@ -176,5 +186,6 @@ HEADERS += \
 ../libembroidery/format-vp3.h \
 ../libembroidery/format-xxx.h \
 ../libembroidery/format-zsk.h \
+    ../libembroidery/compound-file-common.h
 
 

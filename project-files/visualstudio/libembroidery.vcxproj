@@ -81,6 +81,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libembroidery\compound-file-difat.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file-directory.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file-fat.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file-header.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file.c" />
     <ClCompile Include="..\..\libembroidery\emb-arc.c" />
     <ClCompile Include="..\..\libembroidery\emb-circle.c" />
     <ClCompile Include="..\..\libembroidery\emb-color.c" />
@@ -166,6 +171,12 @@
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\libembroidery\compound-file-common.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-difat.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-directory.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-fat.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-header.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file.h" />
     <ClInclude Include="..\..\libembroidery\emb-arc.h" />
     <ClInclude Include="..\..\libembroidery\emb-circle.h" />
     <ClInclude Include="..\..\libembroidery\emb-color.h" />
