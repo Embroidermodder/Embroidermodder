@@ -5,11 +5,11 @@
 extern "C" {
 #endif
 
-    
+
 typedef struct _bcf_file_fat
 {
     int             fatEntryCount;
-    unsigned int    fatEntries[255]; // maybe make this dynamic
+    unsigned int    fatEntries[255]; /* maybe make this dynamic */
     unsigned int    numberOfEntriesInFatSector;
 } bcf_file_fat;
 

@@ -44,7 +44,7 @@ time_t parseTime(FILE *file)
     time (&returnVal);
     ft_low = binaryReadInt32(file);
     ft_high = binaryReadInt32(file);
-    // TODO: translate to actual date time
+    /* TODO: translate to actual date time */
     return returnVal;
 }
 
@@ -72,7 +72,7 @@ bcf_directory_entry *CompoundFileDirectoryEntry(FILE *file)
     dir->creationTime = parseTime(file);
     dir->modifiedTime = parseTime(file);
     dir->startingSectorLocation = binaryReadUInt32(file);
-    dir->streamSize = binaryReadUInt32(file); // This should really be __int64 or long long, but for our uses we should never run into an issue
+    dir->streamSize = binaryReadUInt32(file); /* This should really be __int64 or long long, but for our uses we should never run into an issue */
     dir->streamSizeHigh = binaryReadUInt32(file); /* top portion of int64 */
     return dir;
 }

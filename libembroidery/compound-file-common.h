@@ -22,10 +22,10 @@ enum CompoundFileSectorTypes
 */
 enum DirectoryObjectType
 {
-    ObjectTypeUnknown   = 0x00, ///< Probably unallocated
-    ObjectTypeStorage   = 0x01, ///< a directory type object
-    ObjectTypeStream    = 0x02, ///< a file type object
-    ObjectTypeRootEntry = 0x05 ///< the root entry
+    ObjectTypeUnknown   = 0x00, /*!< Probably unallocated    */
+    ObjectTypeStorage   = 0x01, /*!< a directory type object */
+    ObjectTypeStream    = 0x02, /*!< a file type object      */
+    ObjectTypeRootEntry = 0x05  /*!< the root entry          */
 };
 
 /**
@@ -33,8 +33,8 @@ enum DirectoryObjectType
 */
 enum CompoundFileStreamIds
 {
-    CompoundFileStreamId_MaxRegularStreamId = 0xFFFFFFFA,//!< All real stream Ids are less than this
-    CompoundFileStreamId_NoStream           = 0xFFFFFFFF //!< There is no valid stream Id
+    CompoundFileStreamId_MaxRegularStreamId = 0xFFFFFFFA, /*!< All real stream Ids are less than this */
+    CompoundFileStreamId_NoStream           = 0xFFFFFFFF  /*!< There is no valid stream Id            */
 };
 
 #ifdef __cplusplus
