@@ -16,7 +16,7 @@ static unsigned int sectorSize(bcf_file *bcfFile)
     if(bcfFile->header.majorVersion == 3)
     {
         return 512;
-    } 
+    }
     else if(bcfFile->header.majorVersion == 4)
     {
         return 4096;
@@ -63,7 +63,7 @@ int bcfFile_read(FILE *file, bcf_file *bcfFile)
     }
 
     bcfFile->difat = bcf_difat_create(file, bcfFile->header.numberOfFATSectors, sectorSize(bcfFile));
-    if (haveExtraDIFATSectors(bcfFile)) 
+    if (haveExtraDIFATSectors(bcfFile))
     {
         parseDIFATSectors(file, bcfFile);
     }
@@ -78,7 +78,7 @@ int bcfFile_read(FILE *file, bcf_file *bcfFile)
     numberOfDirectoryEntriesPerSector = sectorSize(bcfFile) / sizeOfDirectoryEntry;
     bcfFile->directory = CompoundFileDirectory(numberOfDirectoryEntriesPerSector);
     directorySectorToReadFrom = bcfFile->header.firstDirectorySectorLocation;
-    while ( directorySectorToReadFrom != CompoundFileSector_EndOfChain ) 
+    while ( directorySectorToReadFrom != CompoundFileSector_EndOfChain )
    {
         seekToSector(bcfFile, file, directorySectorToReadFrom );
         readNextSector(file, bcfFile->directory);
@@ -130,3 +130,5 @@ void bcf_file_free(bcf_file *bcfFile)
     bcf_directory_free(bcfFile->directory);
     free(bcfFile);
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

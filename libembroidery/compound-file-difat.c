@@ -18,13 +18,13 @@ bcf_file_difat *bcf_difat_create(FILE *file, unsigned int fatSectors, const unsi
         fatSectors = NumberOfDifatEntriesInHeader;
     }
 
-    for (i = 0; i < fatSectors; ++i ) 
+    for (i = 0; i < fatSectors; ++i )
     {
         sectorRef = binaryReadUInt32(file);
         difat->fatSectorEntries[i] = sectorRef;
     }
     difat->fatSectorCount = fatSectors;
-    for (i = fatSectors; i < NumberOfDifatEntriesInHeader; ++i ) 
+    for (i = fatSectors; i < NumberOfDifatEntriesInHeader; ++i )
     {
         sectorRef = binaryReadUInt32(file);
         if (sectorRef != CompoundFileSector_FreeSector)
@@ -56,17 +56,17 @@ unsigned int readFullSector(FILE *file, bcf_file_difat *bcfFile, unsigned int *n
         entriesToReadInThisSector = *numberOfDifatEntriesStillToRead;
         *numberOfDifatEntriesStillToRead = 0;
     }
-    
-    for (i = 0; i < entriesToReadInThisSector; ++i ) 
+
+    for (i = 0; i < entriesToReadInThisSector; ++i )
     {
         sectorRef = binaryReadUInt32(file);
         bcfFile->fatSectorEntries[bcfFile->fatSectorCount]= sectorRef;
         bcfFile->fatSectorCount++;
-    } 
+    }
     for (i = entriesToReadInThisSector; i < numberOfEntriesInDifatSector(bcfFile); ++i)
     {
         sectorRef = binaryReadUInt32(file);
-        if ( sectorRef != CompoundFileSector_FreeSector) 
+        if ( sectorRef != CompoundFileSector_FreeSector)
         {
             printf("Unexpected sector value %x at DIFAT[%d]]\n", sectorRef, i);
         }
@@ -79,3 +79,5 @@ void bcf_file_difat_free(bcf_file_difat *difat)
 {
     free(difat);
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

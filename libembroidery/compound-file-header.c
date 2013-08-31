@@ -37,3 +37,5 @@ int bcfFileHeader_isValid(bcf_file_header header)
     }
     return 1;
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

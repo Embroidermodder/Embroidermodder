@@ -18,7 +18,7 @@ void loadFatFromSector(bcf_file_fat *fat, FILE *file)
     unsigned int i;
     unsigned int currentNumberOfFatEntries = fat->fatEntryCount;
     unsigned int newSize = currentNumberOfFatEntries + fat->numberOfEntriesInFatSector;
-    for (i = currentNumberOfFatEntries; i < newSize; ++i ) 
+    for (i = currentNumberOfFatEntries; i < newSize; ++i )
     {
         unsigned int fatEntry = binaryReadUInt32(file);
         fat->fatEntries[i] = fatEntry;
@@ -30,3 +30,5 @@ void bcf_file_fat_free(bcf_file_fat *fat)
 {
     free(fat);
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

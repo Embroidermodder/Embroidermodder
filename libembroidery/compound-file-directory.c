@@ -9,10 +9,10 @@ static void parseDirectoryEntryName(FILE *file, bcf_directory_entry *dir)
 {
     int i;
     unsigned short unicodechar;
-    for (i = 0; i < 32; ++i) 
+    for (i = 0; i < 32; ++i)
     {
         unicodechar = binaryReadUInt16(file);
-        if (unicodechar != 0x0000) 
+        if (unicodechar != 0x0000)
         {
             dir->directoryEntryName[i] = (char)unicodechar;
         }
@@ -30,7 +30,7 @@ static void readCLSID(FILE *file, bcf_directory_entry *dir)
     }
 }
 bcf_directory *CompoundFileDirectory( const unsigned int maxNumberOfDirectoryEntries)
-{       
+{
     bcf_directory *dir = (bcf_directory *)malloc(sizeof(bcf_directory));
     dir->maxNumberOfDirectoryEntries = maxNumberOfDirectoryEntries;
     dir->dirEntries = 0;
@@ -47,7 +47,6 @@ time_t parseTime(FILE *file)
     /* TODO: translate to actual date time */
     return returnVal;
 }
-
 
 bcf_directory_entry *CompoundFileDirectoryEntry(FILE *file)
 {
@@ -119,3 +118,4 @@ void bcf_directory_free(bcf_directory *dir)
     }
 }
 
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

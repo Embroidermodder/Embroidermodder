@@ -542,3 +542,5 @@ Vertices ReduceByNth(Vertices vertices, int nth)
 
     return result;
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
