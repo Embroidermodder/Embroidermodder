@@ -23,15 +23,16 @@ int readInb(EmbPattern* pattern, const char* fileName)
     int x = 0;
     int y = 0;
     int i;
+    int fileLength;
 
-    FILE* file = 0;
-
-    file = fopen(fileName, "rb");
+    FILE* file = fopen(fileName, "rb");
     if(!file)
     {
         return 0;
     }
     embPattern_loadExternalColorFile(pattern, fileName);
+    fseek(file, 0, SEEK_END);
+    fileLength = ftell(file);
     binaryReadBytes(file, fileDescription, 8);
     nullVal = binaryReadByte(file);
     binaryReadInt16(file);
@@ -50,7 +51,8 @@ int readInb(EmbPattern* pattern, const char* fileName)
     top = binaryReadInt16(file);
     bottom = binaryReadInt16(file);
     fseek(file, 0x2000, SEEK_SET);
-
+    /* Calculate stitch count since header has been seen to be blank */
+    stitchCount = (int)((fileLength - 0x2000) / 3);
     for(i = 0; i < stitchCount; i++)
     {
         unsigned char type;

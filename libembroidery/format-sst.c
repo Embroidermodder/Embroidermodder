@@ -12,7 +12,7 @@ int readSst(EmbPattern* pattern, const char* fileName)
     {
         return 0;
     }
-
+    embPattern_loadExternalColorFile(pattern, fileName);
     fseek(file, 0, SEEK_END);
     fileLength = ftell(file);
     fseek(file, 0xA0, SEEK_SET); /* skip the all zero header */
@@ -39,6 +39,10 @@ int readSst(EmbPattern* pattern, const char* fileName)
         if((commandByte & 0x40) == 0x40)
             b1 = -b1;
         embPattern_addStitchRel(pattern, b1 / 10.0, b2 / 10.0, stitchType, 1);
+    }
+    if(pattern->lastStitch->stitch.flags != END)
+    {
+        embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
     }
     return 1; /*TODO: finish readSst */
 }
