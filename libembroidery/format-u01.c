@@ -1,8 +1,49 @@
 #include "format-u01.h"
-
+#include <stdio.h>
 int readU01(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish readU01 */
+    int fileLength, negativeX = 0, negativeY = 0, flags = NORMAL;
+    char dx, dy;
+    unsigned char data[3];
+    FILE* file = fopen(fileName, "rb");
+    if(!file)
+    {
+        return 0;
+    }
+    fseek(file, 0, SEEK_END);
+    fileLength = ftell(file);
+    fseek(file, 0x100, SEEK_SET);
+    while(fread(data, 1, 3, file) == 3)
+    {
+        if(data[0] == 0xF8 || data[0] == 0x87 || data[0] == 0x91)
+        {
+            break;
+        }
+        if((data[0] & 0x0F) == 0)
+        {
+            flags = NORMAL;
+        }
+        else if((data[0] & 0x1f) == 1)
+        {
+            flags = JUMP;
+        }
+        else if((data[0] & 0x0F) > 0)
+        {
+            flags = STOP;
+        }
+        negativeX = ((data[0] & 0x20) > 0);
+        negativeY = ((data[0] & 0x40) > 0);
+
+        dx = (char) data[2];
+        dy = (char) data[1];
+        if(negativeX) dx = (char) -dx;
+        if(negativeY) dy = (char) -dy;
+        embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
+    }
+    embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
+
+    fclose(file);
+    return 1;
 }
 
 int writeU01(EmbPattern* pattern, const char* fileName)
