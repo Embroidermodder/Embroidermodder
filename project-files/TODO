@@ -17,6 +17,8 @@ WIP - Saving CSV/SVG (rt)
 //====================
 Stuff for 2.0 beta1:
 //====================
+TODO - Custom Filter Bug - doesn't save changes in some cases
+TODO - Cannot open file with # in name when opening multiple files (works fine when opening the single file)
 WIP - CAD Command: Arc (rt)
 TODO - Load/Save Menu/Toolbars configurations into settings.ini
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
