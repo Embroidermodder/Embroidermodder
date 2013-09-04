@@ -87,7 +87,7 @@ void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, do
 
 
 void moveStitchListToPolyline(EmbPattern *pattern);
-
+void movePolylinesToStitchList(EmbPattern* pattern);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

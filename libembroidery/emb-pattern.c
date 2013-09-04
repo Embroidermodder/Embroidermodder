@@ -41,10 +41,13 @@ EmbPattern* embPattern_create(void)
     p->lastEllipseObj = 0;
     p->lastPathObj = 0;
     p->lastPointObj = 0;
+    p->lastPolygonObj = 0;
     p->lastPolylineObj = 0;
     p->lastRectObj = 0;
     p->lastSplineObj = 0;
 
+    p->lastX = 0.0;
+    p->lastY = 0.0;
     return p;
 }
 
@@ -158,6 +161,41 @@ void moveStitchListToPolyline(EmbPattern* p)
         {
             stitches = stitches->next;
         }
+    }
+}
+
+void movePolylinesToStitchList(EmbPattern* p)
+{
+    if(p)
+    {
+        EmbPolylineObjectList* polyList = p->polylineObjList;
+        EmbStitchList* currentList = 0;
+        int firstObject = 1;
+        //int currentColor = polyList->polylineObj->color
+        while(polyList)
+        {
+            EmbPolylineObject* currentPoly = polyList->polylineObj;
+            EmbPointList* currentPointList = currentPoly->pointList;
+            EmbThread thread;
+            thread.catalogNumber = 0;
+            thread.color = currentPoly->color;
+            thread.description = 0;
+            embPattern_addThread(p, thread);
+            if(!firstObject)
+            {
+                embPattern_addStitchRel(p, currentPointList->point.xx, currentPointList->point.yy, TRIM, 1);
+                embPattern_addStitchRel(p, 0.0, 0.0, STOP, 1);
+                firstObject = 0;
+            }
+            while(currentPointList)
+            {
+                embPattern_addStitchAbs(p, currentPointList->point.xx, currentPointList->point.yy, NORMAL, 1);
+                currentPointList = currentPointList->next;
+            }
+
+            polyList = polyList->next;
+        }
+        embPattern_addStitchRel(p, 0.0, 0.0, END, 1);
     }
 }
 
