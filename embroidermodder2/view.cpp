@@ -445,6 +445,20 @@ void View::toggleLwt(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+void View::toggleReal(bool on)
+{
+    qDebug("View toggleReal()");
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    gscene->setProperty(ENABLE_REAL, on);
+    gscene->update();
+    QApplication::restoreOverrideCursor();
+}
+
+bool View::isRealEnabled()
+{
+    return gscene->property(ENABLE_REAL).toBool();
+}
+
 void View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());

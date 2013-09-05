@@ -77,6 +77,20 @@ void StatusBarButton::contextMenuEvent(QContextMenuEvent *event)
     }
     else if(objectName() == "StatusBarButtonLWT")
     {
+        View* gview = mainWin->activeView();
+        if(gview)
+        {
+            QAction* enableRealAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "realrender" + ".png"), "&RealRender On", &menu);
+            enableRealAction->setEnabled(!gview->isRealEnabled());
+            connect(enableRealAction, SIGNAL(triggered()), this, SLOT(enableReal()));
+            menu.addAction(enableRealAction);
+
+            QAction* disableRealAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "realrender" + ".png"), "&RealRender Off", &menu);
+            disableRealAction->setEnabled(gview->isRealEnabled());
+            connect(disableRealAction, SIGNAL(triggered()), this, SLOT(disableReal()));
+            menu.addAction(disableRealAction);
+        }
+
         QAction* settingsLwtAction = new QAction(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "lineweightsettings" + ".png"), "&Settings...", &menu);
         connect(settingsLwtAction, SIGNAL(triggered()), this, SLOT(settingsLwt()));
         menu.addAction(settingsLwtAction);
@@ -180,6 +194,20 @@ void StatusBarButton::toggleLwt(bool on)
     qDebug("StatusBarButton toggleLwt()");
     View* gview = mainWin->activeView();
     if(gview) { gview->toggleLwt(on); }
+}
+
+void StatusBarButton::enableReal()
+{
+    qDebug("StatusBarButton enableReal()");
+    View* gview = mainWin->activeView();
+    if(gview) { gview->toggleReal(true); }
+}
+
+void StatusBarButton::disableReal()
+{
+    qDebug("StatusBarButton disableReal()");
+    View* gview = mainWin->activeView();
+    if(gview) { gview->toggleReal(false); }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

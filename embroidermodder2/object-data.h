@@ -188,6 +188,7 @@ const char* const ENABLE_POLAR  = "ENABLE_POLAR";
 const char* const ENABLE_QSNAP  = "ENABLE_QSNAP";
 const char* const ENABLE_QTRACK = "ENABLE_QTRACK";
 const char* const ENABLE_LWT    = "ENABLE_LWT";
+const char* const ENABLE_REAL   = "ENABLE_REAL";
 
 const char* const SCENE_QSNAP_POINT = "SCENE_QSNAP_POINT";
 const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";

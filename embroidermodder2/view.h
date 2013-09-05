@@ -76,6 +76,8 @@ public slots:
     void toggleQSnap(bool on);
     void toggleQTrack(bool on);
     void toggleLwt(bool on);
+    void toggleReal(bool on);
+    bool isRealEnabled();
 
     void setGridColor(QRgb color);
     void createGrid(const QString& gridType);

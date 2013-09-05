@@ -33,6 +33,8 @@ private slots:
     void toggleQSnap(bool on);
     void toggleQTrack(bool on);
     void toggleLwt(bool on);
+    void enableReal();
+    void disableReal();
 
 private:
     MainWindow* mainWin;

@@ -130,10 +130,10 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 
     painter->drawLine(line());
 
-    /* TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
-    if(true)
+    //TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
+    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool())
     {
-        painter->setPen(objectColor().darker(150));
+        painter->setPen(objectColor().darker(150)); //TODO: Improve this for black and dark colors
         QPainterPathStroker stroker;
         stroker.setWidth(0.35);
         stroker.setCapStyle(Qt::RoundCap);
@@ -143,13 +143,11 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 
         QLinearGradient grad(mapFromScene(objectMidPoint()), mapFromScene(objectEndPoint1()));
         grad.setColorAt(0, objectColor());
-        grad.setColorAt(1, objectColor().darker(150));
+        grad.setColorAt(1, objectColor().darker(150)); //TODO: Improve this for black and dark colors
         grad.setSpread(QGradient::ReflectSpread);
 
-        if(objScene->property(ENABLE_LWT).toBool())
-            painter->fillPath(realPath, QBrush(grad));
+        painter->fillPath(realPath, QBrush(grad));
     }
-    */
 }
 
 void LineObject::updateRubber(QPainter* painter)

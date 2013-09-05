@@ -64,6 +64,36 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     updateRubber(painter);
 
     painter->drawPath(objectPath());
+
+    //TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
+    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool())
+    {
+        int count = normalPath.elementCount();
+        for(int i = 0; i < count-1; ++i)
+        {
+            QPainterPath::Element elem = normalPath.elementAt(i);
+            QPainterPath::Element next = normalPath.elementAt(i+1);
+
+            QPainterPath elemPath;
+            elemPath.moveTo(elem.x, elem.y);
+            elemPath.lineTo(next.x, next.y);
+
+            painter->setPen(objectColor().darker(150)); //TODO: Improve this for black and dark colors
+            QPainterPathStroker stroker;
+            stroker.setWidth(0.35);
+            stroker.setCapStyle(Qt::RoundCap);
+            stroker.setJoinStyle(Qt::RoundJoin);
+            QPainterPath realPath = stroker.createStroke(elemPath);
+            painter->drawPath(realPath);
+
+            QLinearGradient grad(elemPath.pointAtPercent(0.5), elemPath.pointAtPercent(0.0));
+            grad.setColorAt(0, objectColor());
+            grad.setColorAt(1, objectColor().darker(150)); //TODO: Improve this for black and dark colors
+            grad.setSpread(QGradient::ReflectSpread);
+
+            painter->fillPath(realPath, QBrush(grad));
+        }
+    }
 }
 
 void PolylineObject::updateRubber(QPainter* painter)

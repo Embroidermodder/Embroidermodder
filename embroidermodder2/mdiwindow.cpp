@@ -4,6 +4,7 @@
 #include "statusbar-button.h"
 #include "object-save.h"
 #include "object-data.h"
+#include "object-polyline.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -128,7 +129,7 @@ bool MDIWindow::loadFile(const QString &fileName)
 
     if(readSuccessful)
     {
-        moveStitchListToPolyline(p);
+        //moveStitchListToPolyline(p); //TODO: Test more
         int stitchCount = embStitchList_count(p->stitchList);
         QPainterPath path;
         int arcIndex = 0;
@@ -200,10 +201,10 @@ bool MDIWindow::loadFile(const QString &fileName)
                 loadPen.setWidthF(0.35);
                 loadPen.setCapStyle(Qt::RoundCap);
                 loadPen.setJoinStyle(Qt::RoundJoin);
-                QGraphicsPathItem* pathItem = gscene->addPath(polylinePath, loadPen);
-                pathItem->setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
-                pathItem->setFlag(QGraphicsItem::ItemIsMovable, true);
-                pathItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
+
+                PolylineObject* obj = new PolylineObject(0,0, polylinePath, loadPen.color().rgb());
+                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
+                gscene->addItem(obj);
 
                 curPolylineObjList = curPolylineObjList->next;
             }
@@ -218,7 +219,6 @@ bool MDIWindow::loadFile(const QString &fileName)
                 curRectObj = curRectObj->next;
             }
         }
-        /* TODO: Commented out while testing polyline to prevent duplicates. Uncomment later.
         if(p->stitchList)
         {
             int previousColor = p->stitchList->stitch.color;
@@ -232,38 +232,21 @@ bool MDIWindow::loadFile(const QString &fileName)
                 {
                     if(!path.isEmpty())
                     {
-                        EmbColor thisColor = embThread_getAt(p->threadList, previousColor).color;
+                        EmbColor thisColor = embThreadList_getAt(p->threadList, previousColor).color;
                         QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
                         loadPen.setWidthF(0.35);
                         loadPen.setCapStyle(Qt::RoundCap);
                         loadPen.setJoinStyle(Qt::RoundJoin);
-                        QGraphicsPathItem* pathItem = gscene->addPath(path, loadPen);
+
+                        PolylineObject* obj = new PolylineObject(0,0, path, loadPen.color().rgb());
+                        obj->setObjectRubberMode(OBJ_RUBBER_OFF);
+                        gscene->addItem(obj);
+
                         previousColor = tempStitch.color;
-                        pathItem->setData(OBJ_TYPE, OBJ_TYPE_POLYLINE);
-                        pathItem->setFlag(QGraphicsItem::ItemIsMovable, true);
-                        pathItem->setFlag(QGraphicsItem::ItemIsSelectable, true);
                         path = QPainterPath();
                     }
                     path.moveTo(tempStitch.xx, -tempStitch.yy);
                 }
-               // else if(tempStitch.flags==ARC)
-                //{
-                //    double sx        =  pattern.arclist[arcIndex].arcStartX;
-                //    double sy        = -pattern.arclist[arcIndex].arcStartY;
-                //    double cx        =  pattern.arclist[arcIndex].arcCenterX;
-                //    double cy        = -pattern.arclist[arcIndex].arcCenterY;
-                //    double rad       =  pattern.arclist[arcIndex].radius;
-                 //   double incAngle  =  pattern.arclist[arcIndex].incAngle;
-
-                    //TODO: death to rounding errors, if an arc is very close to being straight, then the arc is drawn backwards
-
-                    //TODO: the semi-circle situation
-
-                //    QRectF rect(QPointF(cx-rad, cy-rad), QPointF(cx+rad, cy+rad));
-                //    double startAngle = QLineF(cx, cy, sx, sy).angle();
-                //    path.arcTo(rect, startAngle, incAngle);
-                //    arcIndex++;
-                //}
                 else if((tempStitch.flags & JUMP) || (tempStitch.flags & TRIM))
                 {
                     //TODO: No objects should have moveTo in their path, so stop it here and add it to a BlockObject
@@ -275,7 +258,6 @@ bool MDIWindow::loadFile(const QString &fileName)
                 }
             }
         }
-        */
 
         setCurrentFile(fileName);
         mainWin->statusbar->showMessage("File loaded.");
