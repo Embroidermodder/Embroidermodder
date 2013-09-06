@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "format-pes.h"
 #include "format-pec.h"
 #include "helpers-binary.h"
@@ -59,10 +60,10 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
     /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
     EmbStitchList* mainPointer = 0;
-    short *colorInfo;
+    short *colorInfo = 0;
     int flag = 0;
     int count = 0;
-    int colorCode = 0;
+    int colorCode = -1;
     int stitchType = 0;
     int blockCount = 0;
     int colorCount = 0;
@@ -73,7 +74,6 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
     EmbColor color;
 
     mainPointer = pattern->stitchList;
-    colorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
     while(mainPointer)
     {
         pointer = mainPointer;
@@ -101,7 +101,7 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
     binaryWriteShort(file, 0x07); /* string length */
     binaryWriteBytes(file, "CSewSeg", 7);
 
-    colorInfo = (short *) calloc(sizeof(short) * 2 * colorCount);
+    colorInfo = (short *) calloc(colorCount * 2, sizeof(short));
     mainPointer = pattern->stitchList;
     colorCode = -1;
     blockCount = 0;
@@ -139,8 +139,8 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
         while(pointer && (flag == pointer->stitch.flags))
         {
             EmbStitch s = pointer->stitch;
-            binaryWriteShort(file, (short)s.xx - bounds.left);
-            binaryWriteShort(file, (short)s.yy + bounds.top);
+            binaryWriteShort(file, (short)(s.xx - bounds.left));
+            binaryWriteShort(file, (short)(s.yy + bounds.top));
             pointer = pointer->next;
         }
         if(pointer)
@@ -157,6 +157,10 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
         binaryWriteShort(file, colorInfo[i * 2 + 1]);
     }
     binaryWriteInt(file, 0);
+    if(colorInfo)
+    {
+        free(colorInfo);
+    }
 }
 static void writeEmbOneSection(EmbPattern* pattern, FILE* file)
 {
