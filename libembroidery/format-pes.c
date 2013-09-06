@@ -58,51 +58,133 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
 {
     /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
-    binaryWriteShort(file, 0x06); /* section count? */
+    EmbStitchList* mainPointer = 0;
+    short *colorInfo;
+    int flag = 0;
+    int count = 0;
+    int colorCode = 0;
+    int stitchType = 0;
+    int blockCount = 0;
+    int colorCount = 0;
+    int newColorCode = 0;
+    int colorInfoIndex = 0;
+    int i;
+    EmbRect bounds = embPattern_calcBoundingBox(pattern);
+    EmbColor color;
+
+    mainPointer = pattern->stitchList;
+    colorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
+    while(mainPointer)
+    {
+        pointer = mainPointer;
+        flag = pointer->stitch.flags;
+        color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
+        newColorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
+        if(newColorCode != colorCode)
+        {
+            colorCount++;
+            colorCode = newColorCode;
+        }
+        while(pointer && (flag == pointer->stitch.flags))
+        {
+            count++;
+            pointer = pointer->next;
+        }
+        blockCount++;
+        mainPointer = pointer;
+    }
+
+    binaryWriteShort(file, blockCount); /* block count */
     binaryWriteUShort(file, 0xFFFF);
     binaryWriteShort(file, 0x00);
 
     binaryWriteShort(file, 0x07); /* string length */
     binaryWriteBytes(file, "CSewSeg", 7);
-    binaryWriteShort(file, 0x01);
-    binaryWriteShort(file, 0x01);
-    binaryWriteShort(file, 0x02);
-    binaryWriteShort(file, 0x00);
-    pointer = pattern->stitchList;
-    while(pointer)
+
+    colorInfo = (short *) calloc(sizeof(short) * 2 * colorCount);
+    mainPointer = pattern->stitchList;
+    colorCode = -1;
+    blockCount = 0;
+    while(mainPointer)
     {
-        EmbStitch s = pointer->stitch;
-        binaryWriteShort(file, (short)s.xx);
-        binaryWriteShort(file, (short)s.yy);
-        pointer = pointer->next;
+        pointer = mainPointer;
+        flag = pointer->stitch.flags;
+        color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
+        newColorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
+        if(newColorCode != colorCode)
+        {
+            colorInfo[colorInfoIndex++] = blockCount;
+            colorInfo[colorInfoIndex++] = newColorCode;
+            colorCode = newColorCode;
+        }
+        count = 0;
+        while(pointer && (flag == pointer->stitch.flags))
+        {
+            count++;
+            pointer = pointer->next;
+        }
+        if(flag & JUMP)
+        {
+            stitchType = 1;
+        }
+        else
+        {
+            stitchType = 0;
+        }
+
+        binaryWriteShort(file, stitchType); /* 1 for jump, 0 for normal */
+        binaryWriteShort(file, (short)colorCode); /* color code */
+        binaryWriteShort(file, count); /* stitches in block */
+        pointer = mainPointer;
+        while(pointer && (flag == pointer->stitch.flags))
+        {
+            EmbStitch s = pointer->stitch;
+            binaryWriteShort(file, (short)s.xx - bounds.left);
+            binaryWriteShort(file, (short)s.yy + bounds.top);
+            pointer = pointer->next;
+        }
+        if(pointer)
+        {
+            binaryWriteShort(file, 0x8003);
+        }
+        blockCount++;
+        mainPointer = pointer;
     }
+    binaryWriteShort(file, colorCount);
+    for(i = 0; i < colorCount; i++)
+    {
+        binaryWriteShort(file, colorInfo[i * 2]);
+        binaryWriteShort(file, colorInfo[i * 2 + 1]);
+    }
+    binaryWriteInt(file, 0);
 }
 static void writeEmbOneSection(EmbPattern* pattern, FILE* file)
 {
     /* TODO: pointer safety */
     int i;
+    int hoopHeight = 1800, hoopWidth = 1300;
     EmbRect bounds;
     binaryWriteShort(file, 0x07); /* string length */
     binaryWriteBytes(file, "CEmbOne", 7);
     bounds = embPattern_calcBoundingBox(pattern);
 
-    binaryWriteShort(file, (short)bounds.left);
-    binaryWriteShort(file, (short)bounds.top);
-    binaryWriteShort(file, (short)bounds.right);
-    binaryWriteShort(file, (short)bounds.bottom);
+    binaryWriteShort(file, 0);
+    binaryWriteShort(file, 0);
+    binaryWriteShort(file, 0);
+    binaryWriteShort(file, 0);
 
-    binaryWriteShort(file, (short)bounds.left);
-    binaryWriteShort(file, (short)bounds.top);
-    binaryWriteShort(file, (short)bounds.right);
-    binaryWriteShort(file, (short)bounds.bottom);
+    binaryWriteShort(file, 0);
+    binaryWriteShort(file, 0);
+    binaryWriteShort(file, 0);
+    binaryWriteShort(file, 0);
 
     /* AffineTransform */
     binaryWriteFloat(file, 1.0f);
     binaryWriteFloat(file, 0.0f);
     binaryWriteFloat(file, 0.0f);
     binaryWriteFloat(file, 1.0f);
-    binaryWriteFloat(file, 0.0f);
-    binaryWriteFloat(file, 0.0f);
+    binaryWriteFloat(file, (float)((embRect_width(bounds) - hoopWidth) / 2));
+    binaryWriteFloat(file, (float)((embRect_height(bounds) + hoopHeight) / 2));
 
     binaryWriteShort(file, 1);
     binaryWriteShort(file, 0); /* Translate X */
@@ -116,12 +198,6 @@ static void writeEmbOneSection(EmbPattern* pattern, FILE* file)
     }
 
     /*WriteSubObjects(br, pes, SubBlocks); */
-}
-
-static void writePaletteSection(EmbPattern* pattern, FILE* file)
-{
-    /* TODO: pointer safety */
-    binaryWriteInt(file, embThreadList_count(pattern->threadList));
 }
 
 int writePes(EmbPattern* pattern, const char* fileName)
@@ -141,7 +217,7 @@ int writePes(EmbPattern* pattern, const char* fileName)
     /* WRITE PECPointer 32 bit int */
     binaryWriteInt(file, 0x00);
 
-    binaryWriteShort(file, 0x00);
+    binaryWriteShort(file, 0x01);
     binaryWriteShort(file, 0x01);
 
     /* Write object count */
@@ -151,7 +227,6 @@ int writePes(EmbPattern* pattern, const char* fileName)
 
     writeEmbOneSection(pattern, file);
     writeSewSegSection(pattern, file);
-    writePaletteSection(pattern, file);
 
     pecLocation = ftell(file);
     fseek(file, 0x08, SEEK_SET);
