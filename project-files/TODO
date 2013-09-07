@@ -12,7 +12,7 @@ DONE - Cut/Copy/Paste
 TODO - Rotation (rt)
 WIP - Saving DST/PES/JEF (varga)
 DONE - Otto Theme Icons - alpha (rt)
-WIP - Saving CSV/SVG (rt)
+WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
 
 //====================
 Stuff for 2.0 beta1:
@@ -70,6 +70,8 @@ TODO - CAD Command: Array
 TODO - CAD Command: Offset
 TODO - CAD Command: Extend
 TODO - CAD Command: Trim
+TODO - CAD Command: BreakAtPoint
+TODO - CAD Command: Break2Points
 TODO - CAD Command: Fillet
 TODO - CAD Command: Chamfer
 TODO - CAD Command: Split

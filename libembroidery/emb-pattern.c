@@ -171,7 +171,7 @@ void movePolylinesToStitchList(EmbPattern* p)
         EmbPolylineObjectList* polyList = p->polylineObjList;
         EmbStitchList* currentList = 0;
         int firstObject = 1;
-        //int currentColor = polyList->polylineObj->color
+        /*int currentColor = polyList->polylineObj->color TODO: polyline color */
         while(polyList)
         {
             EmbPolylineObject* currentPoly = polyList->polylineObj;
