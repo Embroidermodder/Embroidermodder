@@ -861,6 +861,12 @@ void MainWindow::toggleRuler()
     statusbar->statusBarRulerButton->toggle();
 }
 
+void MainWindow::toggleLwt()
+{
+    qDebug("toggleLwt()");
+    statusbar->statusBarLwtButton->toggle();
+}
+
 void MainWindow::enablePromptRapidFire()
 {
     prompt->enableRapidFire();

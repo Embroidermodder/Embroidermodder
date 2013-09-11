@@ -109,6 +109,10 @@ void MainWindow::readSettings()
     settings_qsnap_nearest                  = settings.value("QuickSnap/Nearest",                      false).toBool();
     settings_qsnap_apparent                 = settings.value("QuickSnap/Apparent",                     false).toBool();
     settings_qsnap_parallel                 = settings.value("QuickSnap/Parallel",                     false).toBool();
+    //LineWeight
+    settings_lwt_show_lwt                   = settings.value("LineWeight/ShowLineWeight",              false).toBool();
+    settings_lwt_real_render                = settings.value("LineWeight/RealRender",                   true).toBool();
+    settings_lwt_default_lwt                = settings.value("LineWeight/DefaultLineWeight",               0).toReal();
     //Selection
     settings_selection_coolgrip_color       = settings.value("Selection/CoolGripColor",    qRgb(  0,  0,255)).toInt();
     settings_selection_hotgrip_color        = settings.value("Selection/HotGripColor",     qRgb(255,  0,  0)).toInt();
@@ -228,6 +232,10 @@ void MainWindow::writeSettings()
     settings.setValue("QuickSnap/Nearest",                         settings_qsnap_nearest);
     settings.setValue("QuickSnap/Apparent",                        settings_qsnap_apparent);
     settings.setValue("QuickSnap/Parallel",                        settings_qsnap_parallel);
+    //LineWeight
+    settings.setValue("LineWeight/ShowLineWeight",                 settings_lwt_show_lwt);
+    settings.setValue("LineWeight/RealRender",                     settings_lwt_real_render);
+    settings.setValue("LineWeight/DefaultLineWeight",   tmp.setNum(settings_lwt_default_lwt));
     //Selection
     settings.setValue("Selection/CoolGripColor",        tmp.setNum(settings_selection_coolgrip_color));
     settings.setValue("Selection/HotGripColor",         tmp.setNum(settings_selection_hotgrip_color));

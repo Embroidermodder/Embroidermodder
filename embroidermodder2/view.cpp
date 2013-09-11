@@ -70,6 +70,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
         createGrid("");
 
     toggleRuler(mainWin->getSettingsRulerShowOnLoad());
+    toggleReal(true); //TODO: load this from file, else settings with default being true
 
     pasteObjectItemGroup = 0;
     pastingActive = false;
@@ -452,6 +453,11 @@ void View::toggleReal(bool on)
     gscene->setProperty(ENABLE_REAL, on);
     gscene->update();
     QApplication::restoreOverrideCursor();
+}
+
+bool View::isLwtEnabled()
+{
+    return gscene->property(ENABLE_LWT).toBool();
 }
 
 bool View::isRealEnabled()

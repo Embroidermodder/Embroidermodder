@@ -196,6 +196,28 @@ void StatusBarButton::toggleLwt(bool on)
     if(gview) { gview->toggleLwt(on); }
 }
 
+void StatusBarButton::enableLwt()
+{
+    qDebug("StatusBarButton enableLwt()");
+    View* gview = mainWin->activeView();
+    if(gview)
+    {
+        if(!gview->isLwtEnabled())
+            gview->toggleLwt(true);
+    }
+}
+
+void StatusBarButton::disableLwt()
+{
+    qDebug("StatusBarButton disableLwt()");
+    View* gview = mainWin->activeView();
+    if(gview)
+    {
+        if(gview->isLwtEnabled())
+            gview->toggleLwt(false);
+    }
+}
+
 void StatusBarButton::enableReal()
 {
     qDebug("StatusBarButton enableReal()");

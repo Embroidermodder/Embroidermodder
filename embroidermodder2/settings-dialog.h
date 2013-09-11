@@ -76,6 +76,9 @@ private:
     QRgb    preview_ruler_color;
     QRgb    accept_ruler_color;
 
+    bool    preview_lwt_show_lwt;
+    bool    preview_lwt_real_render;
+
     //Temporary until changes are accepted
     QString dialog_general_icon_theme;
     int     dialog_general_icon_size;
@@ -155,6 +158,9 @@ private:
     bool    dialog_qsnap_nearest;
     bool    dialog_qsnap_apparent;
     bool    dialog_qsnap_parallel;
+    bool    dialog_lwt_show_lwt;
+    bool    dialog_lwt_real_render;
+    qreal   dialog_lwt_default_lwt;
     QRgb    dialog_selection_coolgrip_color;
     QRgb    dialog_selection_hotgrip_color;
     quint8  dialog_selection_grip_size;
@@ -240,6 +246,8 @@ private slots:
     void comboBoxQSnapLocatorColorCurrentIndexChanged(int);
     void sliderQSnapLocatorSizeValueChanged(int);
     void sliderQSnapApertureSizeValueChanged(int);
+    void checkBoxLwtShowLwtStateChanged(int);
+    void checkBoxLwtRealRenderStateChanged(int);
     void comboBoxSelectionCoolGripColorCurrentIndexChanged(int);
     void comboBoxSelectionHotGripColorCurrentIndexChanged(int);
     void sliderSelectionGripSizeValueChanged(int);
