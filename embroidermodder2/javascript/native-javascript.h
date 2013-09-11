@@ -79,6 +79,7 @@ QScriptValue javaSetCursorShape         (QScriptContext* context, QScriptEngine*
 QScriptValue javaCalculateAngle         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaCalculateDistance      (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPerpendicularDistance  (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaNumSelected            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSelectAll              (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddToSelection         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaClearSelection         (QScriptContext* context, QScriptEngine* engine);

@@ -1500,6 +1500,13 @@ qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qrea
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 
+int MainWindow::nativeNumSelected()
+{
+    View* gview = activeView();
+    if(gview) { return gview->numSelected(); }
+    return 0;
+}
+
 void MainWindow::nativeSelectAll()
 {
     View* gview = activeView();

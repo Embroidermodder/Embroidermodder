@@ -9,6 +9,11 @@ global.test2;
 function main()
 {
     initCommand();
+    
+    //Report number of pre-selected objects
+    setPromptPrefix("Number of Objects Selected: " + numSelected().toString());
+    appendPromptHistory();
+    
     //selectAll();
     //rotateSelected(0,0,90);
     

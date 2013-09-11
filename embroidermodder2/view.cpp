@@ -1882,6 +1882,11 @@ void View::rotateSelected(qreal x, qreal y, qreal rot)
     gscene->clearSelection();
 }
 
+int View::numSelected()
+{
+    return gscene->selectedItems().size();
+}
+
 void View::showScrollBars(bool val)
 {
     if(val)

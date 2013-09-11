@@ -932,6 +932,12 @@ QScriptValue javaPerpendicularDistance(QScriptContext* context, QScriptEngine* /
                                                                context->argument(5).toNumber()));
 }
 
+QScriptValue javaNumSelected(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("numSelected() requires zero arguments");
+    return QScriptValue(mainWin()->nativeNumSelected());
+}
+
 QScriptValue javaSelectAll(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("selectAll() requires zero arguments");

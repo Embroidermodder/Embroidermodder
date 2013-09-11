@@ -679,6 +679,7 @@ public:
     qreal nativeCalculateDistance     (qreal x1, qreal y1, qreal x2, qreal y2);
     qreal nativePerpendicularDistance (qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
 
+    int  nativeNumSelected            ();
     void nativeSelectAll              ();
     void nativeAddToSelection         (const QPainterPath path, Qt::ItemSelectionMode mode);
     void nativeClearSelection         ();

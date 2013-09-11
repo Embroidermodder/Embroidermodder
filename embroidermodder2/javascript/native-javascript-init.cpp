@@ -76,6 +76,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValCalculateAngle = engine->newFunction(javaCalculateAngle); engine->globalObject().setProperty("calculateAngle", scriptValCalculateAngle);
     QScriptValue scriptValCalculateDistance = engine->newFunction(javaCalculateDistance); engine->globalObject().setProperty("calculateDistance", scriptValCalculateDistance);
     QScriptValue scriptValPerpendicularDistance = engine->newFunction(javaPerpendicularDistance); engine->globalObject().setProperty("perpendicularDistance", scriptValPerpendicularDistance);
+    QScriptValue scriptValNumSelected = engine->newFunction(javaNumSelected); engine->globalObject().setProperty("numSelected", scriptValNumSelected);
     QScriptValue scriptValSelectAll = engine->newFunction(javaSelectAll); engine->globalObject().setProperty("selectAll", scriptValSelectAll);
     QScriptValue scriptValAddToSelection = engine->newFunction(javaAddToSelection); engine->globalObject().setProperty("addToSelection", scriptValAddToSelection);
     QScriptValue scriptValClearSelection = engine->newFunction(javaClearSelection); engine->globalObject().setProperty("clearSelection", scriptValClearSelection);
