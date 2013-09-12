@@ -1553,6 +1553,8 @@ void MainWindow::nativePasteSelected(qreal x, qreal y)
 
 void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
 {
+    View* gview = activeView();
+    if(gview) { gview->moveSelected(dx, -dy); }
 }
 
 void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)

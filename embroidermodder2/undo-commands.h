@@ -34,6 +34,21 @@ private:
     View*       gview;
 };
 
+class UndoableMoveCommand : public QUndoCommand
+{
+public:
+    UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+
+private:
+    BaseObject* object;
+    View*       gview;
+    qreal       dx;
+    qreal       dy;
+};
+
 class UndoableNavCommand : public QUndoCommand
 {
 public:

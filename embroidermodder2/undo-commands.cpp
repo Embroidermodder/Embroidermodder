@@ -46,6 +46,29 @@ void UndoableDeleteCommand::redo()
 }
 
 //==================================================
+// Move
+//==================================================
+
+UndoableMoveCommand::UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    dx = deltaX;
+    dy = deltaY;
+}
+
+void UndoableMoveCommand::undo()
+{
+    object->moveBy(-dx, -dy);
+}
+
+void UndoableMoveCommand::redo()
+{
+    object->moveBy(dx, dy);
+}
+
+//==================================================
 // Navigation
 //==================================================
 

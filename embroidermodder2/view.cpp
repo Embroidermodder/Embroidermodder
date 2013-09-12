@@ -1609,11 +1609,21 @@ void View::deleteSelected()
 
 void View::moveSelected(qreal dx, qreal dy)
 {
+    undoStack->beginMacro("Move");
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
-    for(int i = 0; i < itemList.size(); i++)
+    foreach(QGraphicsItem* item, itemList)
     {
-        itemList.at(i)->moveBy(dx, dy);
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base)
+        {
+            UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, base->data(OBJ_NAME).toString(), base, this, 0);
+            if(cmd) undoStack->push(cmd);
+        }
     }
+    undoStack->endMacro();
+
+    //Always clear the selection after a move
+    gscene->clearSelection();
 }
 
 void View::cut()
