@@ -69,6 +69,48 @@ void UndoableMoveCommand::redo()
 }
 
 //==================================================
+// Rotate
+//==================================================
+
+UndoableRotateCommand::UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    pivotX = pivotPointX;
+    pivotY = pivotPointY;
+    angle = rotAngle;
+}
+
+void UndoableRotateCommand::undo()
+{
+    rotate(pivotX, pivotY, -angle);
+}
+
+void UndoableRotateCommand::redo()
+{
+    rotate(pivotX, pivotY, angle);
+}
+
+void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
+{
+    qreal rad = radians(rot);
+    qreal cosRot = qCos(rad);
+    qreal sinRot = qSin(rad);
+    qreal px = object->scenePos().x();
+    qreal py = object->scenePos().y();
+    px -= x;
+    py -= y;
+    qreal rotX = px*cosRot - py*sinRot;
+    qreal rotY = px*sinRot + py*cosRot;
+    rotX += x;
+    rotY += y;
+
+    object->setPos(rotX, rotY);
+    object->setRotation(object->rotation()+rot);
+}
+
+//==================================================
 // Navigation
 //==================================================
 

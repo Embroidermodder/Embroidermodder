@@ -4,6 +4,7 @@
 #include <QUndoCommand>
 #include <QPointF>
 #include <QTransform>
+#include <QtCore/qmath.h>
 
 class BaseObject;
 class View;
@@ -47,6 +48,27 @@ private:
     View*       gview;
     qreal       dx;
     qreal       dy;
+};
+
+class UndoableRotateCommand : public QUndoCommand
+{
+public:
+    UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+
+private:
+    void rotate(qreal x, qreal y, qreal rot);
+
+    inline qreal pi() { return (qAtan(1.0)*4.0); };
+    inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
+
+    BaseObject* object;
+    View*       gview;
+    qreal       pivotX;
+    qreal       pivotY;
+    qreal       angle;
 };
 
 class UndoableNavCommand : public QUndoCommand

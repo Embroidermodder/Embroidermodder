@@ -1564,7 +1564,7 @@ void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
 void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
 {
     View* gview = activeView();
-    if(gview) { gview->rotateSelected(x, y, -rot); }
+    if(gview) { gview->rotateSelected(x, -y, -rot); }
 }
 
 qreal MainWindow::nativeQSnapX()

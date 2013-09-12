@@ -1353,7 +1353,7 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
         QPointF delta = mapToScene(event->pos()) - mapToScene(movePoint);
         movePoint = event->pos();
-        moveSelected(delta.x(), delta.y());
+        //moveSelected(delta.x(), delta.y()); TODO: fix this to use another method.
         event->accept();
     }
     if(selectingActive)
@@ -1528,7 +1528,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
         menu.addAction(deleteAction);
 
         QAction *moveAction = new QAction("&Move", &menu);
-        connect(moveAction, SIGNAL(triggered()), this, SLOT(moveSelected())); //TODO: Fix: Object::connect: No such slot
+        connect(moveAction, SIGNAL(triggered()), this, SLOT(moveAction()));
         menu.addAction(moveAction);
 
         QAction *scaleAction = new QAction("Sca&le", &menu);
@@ -1536,7 +1536,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
         menu.addAction(scaleAction);
 
         QAction *rotateAction = new QAction("R&otate", &menu);
-        connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotate()));
+        connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotateAction()));
         menu.addAction(rotateAction);
 
         menu.addSeparator();
@@ -1607,10 +1607,19 @@ void View::deleteSelected()
         undoStack->endMacro();
 }
 
+void View::moveAction()
+{
+    mainWin->prompt->endCommand();
+    mainWin->prompt->setCurrentText("move");
+    mainWin->prompt->processInput();
+}
+
 void View::moveSelected(qreal dx, qreal dy)
 {
-    undoStack->beginMacro("Move");
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    int numSelected = itemList.size();
+    if(numSelected > 1)
+        undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
@@ -1620,7 +1629,8 @@ void View::moveSelected(qreal dx, qreal dy)
             if(cmd) undoStack->push(cmd);
         }
     }
-    undoStack->endMacro();
+    if(numSelected > 1)
+        undoStack->endMacro();
 
     //Always clear the selection after a move
     gscene->clearSelection();
@@ -1859,34 +1869,30 @@ void View::scaleSelected(qreal x, qreal y, qreal factor)
     gscene->clearSelection();
 }
 
-void View::rotate()
+void View::rotateAction()
 {
-    //TODO: initiate rotating and pick point and show rotation then on second click do the actual rotateSelected
-
-    rotateSelected(2.0, 0.0, -45.0); //TODO: temporary testing, remove when finished
-    //rotateSelected(sceneMousePoint.x(), sceneMousePoint.y(), -90.0);
+    mainWin->prompt->endCommand();
+    mainWin->prompt->setCurrentText("rotate");
+    mainWin->prompt->processInput();
 }
 
 void View::rotateSelected(qreal x, qreal y, qreal rot)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    int numSelected = itemList.size();
+    if(numSelected > 1)
+        undoStack->beginMacro("Rotate " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
-        qreal rad = radians(rot);
-        qreal cosRot = qCos(rad);
-        qreal sinRot = qSin(rad);
-        qreal px = item->scenePos().x();
-        qreal py = item->scenePos().y();
-        px -= x;
-        py -= y;
-        qreal rotX = px*cosRot - py*sinRot;
-        qreal rotY = px*sinRot + py*cosRot;
-        rotX += x;
-        rotY += y;
-
-        item->setPos(rotX, rotY);
-        item->setRotation(item->rotation()+rot);
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base)
+        {
+            UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, base->data(OBJ_NAME).toString(), base, this, 0);
+            if(cmd) undoStack->push(cmd);
+        }
     }
+    if(numSelected > 1)
+        undoStack->endMacro();
 
     //Always clear the selection after a rotate
     gscene->clearSelection();
