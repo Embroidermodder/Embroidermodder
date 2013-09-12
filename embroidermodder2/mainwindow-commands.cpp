@@ -1008,6 +1008,16 @@ QString MainWindow::nativePlatformString()
     return platformString();
 }
 
+void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
+{
+    QString msgType = type.toLower();
+    if     (msgType == "critical")    { QMessageBox::critical   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "information") { QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "question")    { QMessageBox::question   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "warning")     { QMessageBox::warning    (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
+}
+
 void MainWindow::nativeUndo()
 {
     undo();

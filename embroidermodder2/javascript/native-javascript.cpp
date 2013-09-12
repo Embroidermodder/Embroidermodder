@@ -185,6 +185,24 @@ QScriptValue javaPlatformString(QScriptContext* context, QScriptEngine* /*engine
     return QScriptValue(mainWin()->nativePlatformString());
 }
 
+QScriptValue javaMessageBox(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 3)    return context->throwError("messageBox() requires three arguments");
+    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): first argument is not a string");
+    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): second argument is not a string");
+    if(!context->argument(2).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): third argument is not a string");
+
+    QString type  = context->argument(0).toString().toLower();
+    QString title = context->argument(1).toString();
+    QString text  = context->argument(2).toString();
+
+    if(type != "critical" && type != "information" && type != "question" && type != "warning")
+        return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+
+    mainWin()->nativeMessageBox(type, title, text);
+    return QScriptValue();
+}
+
 QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");
@@ -416,7 +434,7 @@ QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*
 
     else if(mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
-    else                                                 { return context->throwError(QScriptContext::UnknownError, "unknown rubberMode value"); }
+    else                                                 { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
     return QScriptValue();
 }
@@ -457,7 +475,7 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     QString objType = context->argument(0).toString().toUpper();
 
     if(!mainWin()->nativeAllowRubber())
-        return context->throwError(QScriptContext::UnknownError, "You must use vulcanize() before you can add another rubber object.");
+        return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     qreal mx = mainWin()->nativeMouseX();
     qreal my = mainWin()->nativeMouseY();

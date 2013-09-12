@@ -615,6 +615,8 @@ public:
 
     QString nativePlatformString      ();
 
+    void nativeMessageBox             (const QString& type, const QString& title, const QString& text);
+
     void nativeUndo                   ();
     void nativeRedo                   ();
 
