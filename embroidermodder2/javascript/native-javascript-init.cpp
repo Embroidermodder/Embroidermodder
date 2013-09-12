@@ -236,6 +236,7 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
         if(!menuHash.value(menuName))
         {
             QMenu* menu = new QMenu(menuName, this);
+            menu->setTearOffEnabled(true);
             menuBar()->addMenu(menu);
             menuHash.insert(menuName, menu);
         }
