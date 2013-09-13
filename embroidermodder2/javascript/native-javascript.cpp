@@ -1198,6 +1198,8 @@ QScriptValue javaScaleSelected(QScriptContext* context, QScriptEngine* /*engine*
     if(qIsNaN(y))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument failed isNaN check. There is an error in your code.");
     if(qIsNaN(factor)) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument failed isNaN check. There is an error in your code.");
 
+    if(factor <= 0.0) return context->throwError(QScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
+
     mainWin()->nativeScaleSelected(x, y, factor);
     return QScriptValue();
 }

@@ -111,6 +111,54 @@ void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
 }
 
 //==================================================
+// Scale
+//==================================================
+
+UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+
+    //Prevent division by zero and other wacky behavior
+    if(scaleFactor <= 0.0)
+    {
+        dx = 0.0;
+        dy = 0.0;
+        factor = 1.0;
+        QMessageBox::critical(0, QObject::tr("ScaleFactor Error"),
+                              QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+                              "If you are a developer, your code needs examined, and possibly your head too."));
+    }
+    else
+    {
+        //Calculate the offset
+        qreal oldX = object->x();
+        qreal oldY = object->y();
+        QLineF scaleLine(x, y, oldX, oldY);
+        scaleLine.setLength(scaleLine.length()*scaleFactor);
+        qreal newX = scaleLine.x2();
+        qreal newY = scaleLine.y2();
+
+        dx = newX - oldX;
+        dy = newY - oldY;
+        factor = scaleFactor;
+    }
+}
+
+void UndoableScaleCommand::undo()
+{
+    object->setScale(object->scale()*(1/factor));
+    object->moveBy(-dx, -dy);
+}
+
+void UndoableScaleCommand::redo()
+{
+    object->setScale(object->scale()*factor);
+    object->moveBy(dx, dy);
+}
+
+//==================================================
 // Navigation
 //==================================================
 

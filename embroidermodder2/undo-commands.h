@@ -71,6 +71,22 @@ private:
     qreal       angle;
 };
 
+class UndoableScaleCommand : public QUndoCommand
+{
+public:
+    UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+
+private:
+    BaseObject* object;
+    View*       gview;
+    qreal       dx;
+    qreal       dy;
+    qreal       factor;
+};
+
 class UndoableNavCommand : public QUndoCommand
 {
 public:

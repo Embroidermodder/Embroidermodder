@@ -1559,6 +1559,15 @@ void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
 
 void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
 {
+    if(factor <= 0.0)
+    {
+        QMessageBox::critical(this, tr("ScaleFactor Error"),
+                                tr("Hi there. If you are not a developer, report this as a bug. "
+                                "If you are a developer, your code needs examined, and possibly your head too."));
+    }
+
+    View* gview = activeView();
+    if(gview) { gview->scaleSelected(x, -y, factor); }
 }
 
 void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)

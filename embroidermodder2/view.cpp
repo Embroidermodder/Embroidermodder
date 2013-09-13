@@ -1597,7 +1597,7 @@ void View::deleteSelected()
             BaseObject* base = static_cast<BaseObject*>(itemList.at(i));
             if(base)
             {
-                UndoableDeleteCommand* cmd = new UndoableDeleteCommand("Delete 1 " + base->data(OBJ_NAME).toString(), base, this, 0);
+                UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
                 if(cmd)
                 undoStack->push(cmd);
             }
@@ -1605,35 +1605,6 @@ void View::deleteSelected()
     }
     if(numSelected > 1)
         undoStack->endMacro();
-}
-
-void View::moveAction()
-{
-    mainWin->prompt->endCommand();
-    mainWin->prompt->setCurrentText("move");
-    mainWin->prompt->processInput();
-}
-
-void View::moveSelected(qreal dx, qreal dy)
-{
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
-    int numSelected = itemList.size();
-    if(numSelected > 1)
-        undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
-    foreach(QGraphicsItem* item, itemList)
-    {
-        BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
-        {
-            UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, base->data(OBJ_NAME).toString(), base, this, 0);
-            if(cmd) undoStack->push(cmd);
-        }
-    }
-    if(numSelected > 1)
-        undoStack->endMacro();
-
-    //Always clear the selection after a move
-    gscene->clearSelection();
 }
 
 void View::cut()
@@ -1850,22 +1821,32 @@ QList<QGraphicsItem*> View::createCutCopyObjectList(QList<QGraphicsItem*> list)
     return copyList;
 }
 
-void View::scaleAction()
+void View::moveAction()
 {
-    scaleSelected(0.0, 0.0, 2.0); //TODO: testing only, remove
+    mainWin->prompt->endCommand();
+    mainWin->prompt->setCurrentText("move");
+    mainWin->prompt->processInput();
 }
 
-void View::scaleSelected(qreal x, qreal y, qreal factor)
+void View::moveSelected(qreal dx, qreal dy)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    int numSelected = itemList.size();
+    if(numSelected > 1)
+        undoStack->beginMacro("Move " + QString().setNum(itemList.size()));
     foreach(QGraphicsItem* item, itemList)
     {
-        //TODO: scaleSelected
-        item->setScale(item->scale()*factor);
-        //TODO: shift the object afterwards to ensure they all scale consistently from the (x,y).
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base)
+        {
+            UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if(cmd) undoStack->push(cmd);
+        }
     }
+    if(numSelected > 1)
+        undoStack->endMacro();
 
-    //Always clear the selection after a scale
+    //Always clear the selection after a move
     gscene->clearSelection();
 }
 
@@ -1887,7 +1868,7 @@ void View::rotateSelected(qreal x, qreal y, qreal rot)
         BaseObject* base = static_cast<BaseObject*>(item);
         if(base)
         {
-            UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, base->data(OBJ_NAME).toString(), base, this, 0);
+            UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
             if(cmd) undoStack->push(cmd);
         }
     }
@@ -1895,6 +1876,35 @@ void View::rotateSelected(qreal x, qreal y, qreal rot)
         undoStack->endMacro();
 
     //Always clear the selection after a rotate
+    gscene->clearSelection();
+}
+
+void View::scaleAction()
+{
+    mainWin->prompt->endCommand();
+    mainWin->prompt->setCurrentText("scale");
+    mainWin->prompt->processInput();
+}
+
+void View::scaleSelected(qreal x, qreal y, qreal factor)
+{
+    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    int numSelected = itemList.size();
+    if(numSelected > 1)
+        undoStack->beginMacro("Scale " + QString().setNum(itemList.size()));
+    foreach(QGraphicsItem* item, itemList)
+    {
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base)
+        {
+            UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if(cmd) undoStack->push(cmd);
+        }
+    }
+    if(numSelected > 1)
+        undoStack->endMacro();
+
+    //Always clear the selection after a scale
     gscene->clearSelection();
 }
 

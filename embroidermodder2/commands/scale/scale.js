@@ -1,4 +1,4 @@
-//Command: Rotate
+//Command: Scale
 
 var global = {}; //Required
 global.firstRun;
@@ -6,14 +6,14 @@ global.baseX;
 global.baseY;
 global.destX;
 global.destY;
-global.angle;
+global.factor;
 
 global.baseRX;
 global.baseRY;
 global.destRX;
 global.destRY;
-global.angleRef;
-global.angleNew;
+global.factorRef;
+global.factorNew;
 
 global.mode;
 
@@ -29,26 +29,26 @@ function main()
     initCommand();
     global.mode = global.mode_NORMAL;
     global.firstRun = true;
-    global.baseX = NaN;
-    global.baseY = NaN;
-    global.destX = NaN;
-    global.destY = NaN;
-    global.angle = NaN;
+    global.baseX  = NaN;
+    global.baseY  = NaN;
+    global.destX  = NaN;
+    global.destY  = NaN;
+    global.factor = NaN;
 
-    global.baseRX   = NaN;
-    global.baseRY   = NaN;
-    global.destRX   = NaN;
-    global.destRY   = NaN;
-    global.angleRef = NaN;
-    global.angleNew = NaN;
+    global.baseRX    = NaN;
+    global.baseRY    = NaN;
+    global.destRX    = NaN;
+    global.destRY    = NaN;
+    global.factorRef = NaN;
+    global.factorNew = NaN;
 
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix("Preselect objects before invoking the rotate command.");
+        setPromptPrefix("Preselect objects before invoking the scale command.");
         appendPromptHistory();
         endCommand();
-        messageBox("information", "Rotate Preselect", "Preselect objects before invoking the rotate command.");
+        messageBox("information", "Scale Preselect", "Preselect objects before invoking the scale command.");
     }
     else
     {
@@ -72,15 +72,15 @@ function click(x, y)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             appendPromptHistory();
-            setPromptPrefix("Specify rotation angle or [Reference]: ");
+            setPromptPrefix("Specify scale factor or [Reference]: ");
         }
         else
         {
             global.destX = x;
             global.destY = y;
-            global.angle = calculateAngle(global.baseX, global.baseY, global.destX, global.destY);
+            global.factor = calculateDistance(global.baseX, global.baseY, global.destX, global.destY);
             appendPromptHistory();
-            rotateSelected(global.baseX, global.baseY, global.angle);
+            scaleSelected(global.baseX, global.baseY, global.factor);
             endCommand();
         }
     }
@@ -97,15 +97,38 @@ function click(x, y)
         {
             global.destRX = x;
             global.destRY = y;
-            global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
-            appendPromptHistory();
-            setPromptPrefix("Specify the new angle: ");
+            global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
+            if(global.factorRef <= 0.0)
+            {
+                global.destRX    = NaN;
+                global.destRY    = NaN;
+                global.factorRef = NaN;
+                setPromptPrefix("Value must be positive and nonzero.");
+                appendPromptHistory();
+                setPromptPrefix("Specify second point: ");
+            }
+            else
+            {
+                appendPromptHistory();
+                setPromptPrefix("Specify new length: ");
+            }
         }
-        else if(isNaN(global.angleNew))
+        else if(isNaN(global.factorNew))
         {
-            global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
-            rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
-            endCommand();
+            global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
+            if(global.factorNew <= 0.0)
+            {
+                global.factorNew = NaN;
+                setPromptPrefix("Value must be positive and nonzero.");
+                appendPromptHistory();
+                setPromptPrefix("Specify new length: ");
+            }
+            else
+            {
+                appendPromptHistory();
+                scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                endCommand();
+            }
         }
     }
 }
@@ -113,7 +136,7 @@ function click(x, y)
 //NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
-    todo("ROTATE", "context()");
+    todo("SCALE", "context()");
 }
 
 //NOTE: prompt() is run when Enter is pressed.
@@ -141,7 +164,7 @@ function prompt(str)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
-                setPromptPrefix("Specify rotation angle or [Reference]: ");
+                setPromptPrefix("Specify scale factor or [Reference]: ");
             }
         }
         else
@@ -149,21 +172,21 @@ function prompt(str)
             if(str == "R" || str == "REFERENCE")
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix("Specify the reference angle <0.00>: ");
+                setPromptPrefix("Specify reference length <1>: ");
                 clearRubber();
             }
             else
             {
                 if(isNaN(str))
                 {
-                    setPromptPrefix("Requires valid numeric angle, second point, or option keyword.");
+                    setPromptPrefix("Requires valid numeric distance, second point, or option keyword.");
                     appendPromptHistory();
-                    setPromptPrefix("Specify rotation angle or [Reference]: ");
+                    setPromptPrefix("Specify scale factor or [Reference]: ");
                 }
                 else
                 {
-                    global.angle = Number(str);
-                    rotateSelected(global.baseX, global.baseY, global.angle);
+                    global.factor = Number(str);
+                    scaleSelected(global.baseX, global.baseY, global.factor);
                     endCommand();
                 }
             }
@@ -171,6 +194,6 @@ function prompt(str)
     }
     else if(global.mode == global.mode_REFERENCE)
     {
-        todo("ROTATE", "Reference mode for prompt");
+        todo("SCALE", "Reference mode for prompt");
     }
 }
