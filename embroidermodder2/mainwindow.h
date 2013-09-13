@@ -139,6 +139,9 @@ public:
     bool    getSettingsQSnapNearest()                 { return settings_qsnap_nearest;                  }
     bool    getSettingsQSnapApparent()                { return settings_qsnap_apparent;                 }
     bool    getSettingsQSnapParallel()                { return settings_qsnap_parallel;                 }
+    bool    getSettingsLwtShowLwt()                   { return settings_lwt_show_lwt;                   }
+    bool    getSettingsLwtRealRender()                { return settings_lwt_real_render;                }
+    qreal   getSettingsLwtDefaultLwt()                { return settings_lwt_default_lwt;                }
     QRgb    getSettingsSelectionCoolGripColor()       { return settings_selection_coolgrip_color;       }
     QRgb    getSettingsSelectionHotGripColor()        { return settings_selection_hotgrip_color;        }
     quint8  getSettingsSelectionGripSize()            { return settings_selection_grip_size;            }
@@ -232,6 +235,9 @@ public:
     void setSettingsQSnapNearest(bool newValue)                        { settings_qsnap_nearest                  = newValue; }
     void setSettingsQSnapApparent(bool newValue)                       { settings_qsnap_apparent                 = newValue; }
     void setSettingsQSnapParallel(bool newValue)                       { settings_qsnap_parallel                 = newValue; }
+    void setSettingsLwtShowLwt(bool newValue)                          { settings_lwt_show_lwt                   = newValue; }
+    void setSettingsLwtRealRender(bool newValue)                       { settings_lwt_real_render                = newValue; }
+    void setSettingsLwtDefaultLwt(qreal newValue)                      { settings_lwt_default_lwt                = newValue; }
     void setSettingsSelectionCoolGripColor(QRgb newValue)              { settings_selection_coolgrip_color       = newValue; }
     void setSettingsSelectionHotGripColor(QRgb newValue)               { settings_selection_hotgrip_color        = newValue; }
     void setSettingsSelectionGripSize(quint8 newValue)                 { settings_selection_grip_size            = newValue; }
@@ -371,6 +377,9 @@ private:
     bool                            settings_qsnap_nearest;
     bool                            settings_qsnap_apparent;
     bool                            settings_qsnap_parallel;
+    bool                            settings_lwt_show_lwt;
+    bool                            settings_lwt_real_render;
+    qreal                           settings_lwt_default_lwt;
     QRgb                            settings_selection_coolgrip_color;
     QRgb                            settings_selection_hotgrip_color;
     quint8                          settings_selection_grip_size;
@@ -503,6 +512,7 @@ public slots:
 
     void toggleGrid();
     void toggleRuler();
+    void toggleLwt();
 
     // Icons
     void iconResize(int iconSize);
@@ -605,6 +615,8 @@ public:
 
     QString nativePlatformString      ();
 
+    void nativeMessageBox             (const QString& type, const QString& title, const QString& text);
+
     void nativeUndo                   ();
     void nativeRedo                   ();
 
@@ -669,6 +681,7 @@ public:
     qreal nativeCalculateDistance     (qreal x1, qreal y1, qreal x2, qreal y2);
     qreal nativePerpendicularDistance (qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2);
 
+    int  nativeNumSelected            ();
     void nativeSelectAll              ();
     void nativeAddToSelection         (const QPainterPath path, Qt::ItemSelectionMode mode);
     void nativeClearSelection         ();

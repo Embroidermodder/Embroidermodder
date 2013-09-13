@@ -185,6 +185,24 @@ QScriptValue javaPlatformString(QScriptContext* context, QScriptEngine* /*engine
     return QScriptValue(mainWin()->nativePlatformString());
 }
 
+QScriptValue javaMessageBox(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 3)    return context->throwError("messageBox() requires three arguments");
+    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): first argument is not a string");
+    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): second argument is not a string");
+    if(!context->argument(2).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): third argument is not a string");
+
+    QString type  = context->argument(0).toString().toLower();
+    QString title = context->argument(1).toString();
+    QString text  = context->argument(2).toString();
+
+    if(type != "critical" && type != "information" && type != "question" && type != "warning")
+        return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+
+    mainWin()->nativeMessageBox(type, title, text);
+    return QScriptValue();
+}
+
 QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");
@@ -245,6 +263,12 @@ QScriptValue javaPrintArea(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal y = context->argument(1).toNumber();
     qreal w = context->argument(2).toNumber();
     qreal h = context->argument(3).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(w)) return context->throwError(QScriptContext::TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(h)) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativePrintArea(x, y, w, h);
     return QScriptValue();
@@ -312,7 +336,12 @@ QScriptValue javaSetTextSize(QScriptContext* context, QScriptEngine* /*engine*/)
     if(context->argumentCount() != 1)    return context->throwError("setTextSize() requires one argument");
     if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument is not a number");
 
-    mainWin()->nativeSetTextSize(context->argument(0).toNumber());
+    qreal num = context->argument(0).toNumber();
+
+    //isNaN check
+    if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
+
+    mainWin()->nativeSetTextSize(num);
     return QScriptValue();
 }
 
@@ -321,7 +350,12 @@ QScriptValue javaSetTextAngle(QScriptContext* context, QScriptEngine* /*engine*/
     if(context->argumentCount() != 1)    return context->throwError("setTextAngle() requires one argument");
     if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument is not a number");
 
-    mainWin()->nativeSetTextAngle(context->argument(0).toNumber());
+    qreal num = context->argument(0).toNumber();
+
+    //isNaN check
+    if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
+
+    mainWin()->nativeSetTextAngle(num);
     return QScriptValue();
 }
 
@@ -416,7 +450,7 @@ QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*
 
     else if(mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
-    else                                                 { return context->throwError(QScriptContext::UnknownError, "unknown rubberMode value"); }
+    else                                                 { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
     return QScriptValue();
 }
@@ -431,6 +465,10 @@ QScriptValue javaSetRubberPoint(QScriptContext* context, QScriptEngine* /*engine
     QString key = context->argument(0).toString().toUpper();
     qreal x     = context->argument(1).toNumber();
     qreal y     = context->argument(2).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeSetRubberPoint(key, x, y);
     return QScriptValue();
@@ -457,7 +495,7 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     QString objType = context->argument(0).toString().toUpper();
 
     if(!mainWin()->nativeAllowRubber())
-        return context->throwError(QScriptContext::UnknownError, "You must use vulcanize() before you can add another rubber object.");
+        return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     qreal mx = mainWin()->nativeMouseX();
     qreal my = mainWin()->nativeMouseY();
@@ -514,6 +552,11 @@ QScriptValue javaAddTextMulti(QScriptContext* context, QScriptEngine* /*engine*/
     qreal   rot   = context->argument(3).toNumber();
     bool    fill  = context->argument(4).toBool();
 
+    //isNaN check
+    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
@@ -532,6 +575,11 @@ QScriptValue javaAddTextSingle(QScriptContext* context, QScriptEngine* /*engine*
     qreal   y     = context->argument(2).toNumber();
     qreal   rot   = context->argument(3).toNumber();
     bool    fill  = context->argument(4).toBool();
+
+    //isNaN check
+    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
@@ -566,6 +614,13 @@ QScriptValue javaAddLine(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal y2  = context->argument(3).toNumber();
     qreal rot = context->argument(4).toNumber();
 
+    //isNaN check
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "addLine(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "addLine(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "addLine(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
@@ -591,6 +646,15 @@ QScriptValue javaAddTriangle(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal rot    = context->argument(6).toNumber();
     bool  fill   = context->argument(7).toBool();
 
+    //isNaN check
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return QScriptValue();
 }
@@ -611,6 +675,13 @@ QScriptValue javaAddRectangle(QScriptContext* context, QScriptEngine* /*engine*/
     qreal h    = context->argument(3).toNumber();
     qreal rot  = context->argument(4).toNumber();
     bool  fill = context->argument(5).toBool();
+
+    //isNaN check
+    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(w))   return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(h))   return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
@@ -635,6 +706,14 @@ QScriptValue javaAddRoundedRectangle(QScriptContext* context, QScriptEngine* /*e
     qreal rot  = context->argument(5).toNumber();
     bool  fill = context->argument(6).toBool();
 
+    //isNaN check
+    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(w))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(h))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rad)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return QScriptValue();
 }
@@ -654,7 +733,15 @@ QScriptValue javaAddArc(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal midX   = context->argument(2).toNumber();
     qreal midY   = context->argument(3).toNumber();
     qreal endX   = context->argument(4).toNumber();
-    bool  endY   = context->argument(5).toNumber();
+    qreal endY   = context->argument(5).toNumber();
+
+    //isNaN check
+    if(qIsNaN(startX)) return context->throwError(QScriptContext::TypeError, "addArc(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(startY)) return context->throwError(QScriptContext::TypeError, "addArc(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(midX))   return context->throwError(QScriptContext::TypeError, "addArc(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(midY))   return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(endX))   return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(endY))   return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return QScriptValue();
@@ -672,6 +759,11 @@ QScriptValue javaAddCircle(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal centerY = context->argument(1).toNumber();
     qreal radius  = context->argument(2).toNumber();
     bool  fill    = context->argument(3).toBool();
+
+    //isNaN check
+    if(qIsNaN(centerX)) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(centerY)) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(radius))  return context->throwError(QScriptContext::TypeError, "addCircle(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
@@ -694,6 +786,13 @@ QScriptValue javaAddSlot(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal rot      = context->argument(4).toNumber();
     bool  fill     = context->argument(5).toBool();
 
+    //isNaN check
+    if(qIsNaN(centerX))  return context->throwError(QScriptContext::TypeError, "addSlot(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(centerY))  return context->throwError(QScriptContext::TypeError, "addSlot(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(diameter)) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(length))   return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot))      return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
@@ -715,6 +814,13 @@ QScriptValue javaAddEllipse(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal rot     = context->argument(4).toNumber();
     bool  fill    = context->argument(5).toBool();
 
+    //isNaN check
+    if(qIsNaN(centerX)) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(centerY)) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(radX))    return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(radY))    return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot))     return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
@@ -727,6 +833,10 @@ QScriptValue javaAddPoint(QScriptContext* context, QScriptEngine* /*engine*/)
 
     qreal x = context->argument(0).toNumber();
     qreal y = context->argument(1).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddPoint(x,y);
     return QScriptValue();
@@ -875,6 +985,13 @@ QScriptValue javaAddDimLeader(QScriptContext* context, QScriptEngine* /*engine*/
     qreal y2  = context->argument(3).toNumber();
     qreal rot = context->argument(4).toNumber();
 
+    //isNaN check
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return QScriptValue();
 }
@@ -896,10 +1013,19 @@ QScriptValue javaCalculateAngle(QScriptContext* context, QScriptEngine* /*engine
     if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument is not a number");
     if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument is not a number");
     if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument is not a number");
-    return QScriptValue(mainWin()->nativeCalculateAngle(context->argument(0).toNumber(),
-                                                        context->argument(1).toNumber(),
-                                                        context->argument(2).toNumber(),
-                                                        context->argument(3).toNumber()));
+
+    qreal x1 = context->argument(0).toNumber();
+    qreal y1 = context->argument(1).toNumber();
+    qreal x2 = context->argument(2).toNumber();
+    qreal y2 = context->argument(3).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
+
+    return QScriptValue(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
 }
 
 QScriptValue javaCalculateDistance(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -909,10 +1035,19 @@ QScriptValue javaCalculateDistance(QScriptContext* context, QScriptEngine* /*eng
     if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument is not a number");
     if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument is not a number");
     if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument is not a number");
-    return QScriptValue(mainWin()->nativeCalculateDistance(context->argument(0).toNumber(),
-                                                           context->argument(1).toNumber(),
-                                                           context->argument(2).toNumber(),
-                                                           context->argument(3).toNumber()));
+
+    qreal x1 = context->argument(0).toNumber();
+    qreal y1 = context->argument(1).toNumber();
+    qreal x2 = context->argument(2).toNumber();
+    qreal y2 = context->argument(3).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
+
+    return QScriptValue(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
 }
 
 QScriptValue javaPerpendicularDistance(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -924,12 +1059,29 @@ QScriptValue javaPerpendicularDistance(QScriptContext* context, QScriptEngine* /
     if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument is not a number");
     if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument is not a number");
     if(!context->argument(5).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument is not a number");
-    return QScriptValue(mainWin()->nativePerpendicularDistance(context->argument(0).toNumber(),
-                                                               context->argument(1).toNumber(),
-                                                               context->argument(2).toNumber(),
-                                                               context->argument(3).toNumber(),
-                                                               context->argument(4).toNumber(),
-                                                               context->argument(5).toNumber()));
+
+    qreal px = context->argument(0).toNumber();
+    qreal py = context->argument(1).toNumber();
+    qreal x1 = context->argument(2).toNumber();
+    qreal y1 = context->argument(3).toNumber();
+    qreal x2 = context->argument(4).toNumber();
+    qreal y2 = context->argument(5).toNumber();
+
+    //isNaN check
+    if(qIsNaN(px))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(py))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
+
+    return QScriptValue(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
+}
+
+QScriptValue javaNumSelected(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("numSelected() requires zero arguments");
+    return QScriptValue(mainWin()->nativeNumSelected());
 }
 
 QScriptValue javaSelectAll(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -971,6 +1123,10 @@ QScriptValue javaCutSelected(QScriptContext* context, QScriptEngine* /*engine*/)
     qreal x = context->argument(0).toNumber();
     qreal y = context->argument(1).toNumber();
 
+    //isNaN check
+    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeCutSelected(x, y);
     return QScriptValue();
 }
@@ -983,6 +1139,10 @@ QScriptValue javaCopySelected(QScriptContext* context, QScriptEngine* /*engine*/
 
     qreal x = context->argument(0).toNumber();
     qreal y = context->argument(1).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeCopySelected(x, y);
     return QScriptValue();
@@ -997,6 +1157,10 @@ QScriptValue javaPasteSelected(QScriptContext* context, QScriptEngine* /*engine*
     qreal x = context->argument(0).toNumber();
     qreal y = context->argument(1).toNumber();
 
+    //isNaN check
+    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativePasteSelected(x, y);
     return QScriptValue();
 }
@@ -1009,6 +1173,10 @@ QScriptValue javaMoveSelected(QScriptContext* context, QScriptEngine* /*engine*/
 
     qreal dx = context->argument(0).toNumber();
     qreal dy = context->argument(1).toNumber();
+
+    //isNaN check
+    if(qIsNaN(dx)) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(dy)) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeMoveSelected(dx, dy);
     return QScriptValue();
@@ -1025,6 +1193,11 @@ QScriptValue javaScaleSelected(QScriptContext* context, QScriptEngine* /*engine*
     qreal y      = context->argument(1).toNumber();
     qreal factor = context->argument(2).toNumber();
 
+    //isNaN check
+    if(qIsNaN(x))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(factor)) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument failed isNaN check. There is an error in your code.");
+
     mainWin()->nativeScaleSelected(x, y, factor);
     return QScriptValue();
 }
@@ -1039,6 +1212,11 @@ QScriptValue javaRotateSelected(QScriptContext* context, QScriptEngine* /*engine
     qreal x   = context->argument(0).toNumber();
     qreal y   = context->argument(1).toNumber();
     qreal rot = context->argument(2).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeRotateSelected(x, y, rot);
     return QScriptValue();

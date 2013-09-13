@@ -861,6 +861,12 @@ void MainWindow::toggleRuler()
     statusbar->statusBarRulerButton->toggle();
 }
 
+void MainWindow::toggleLwt()
+{
+    qDebug("toggleLwt()");
+    statusbar->statusBarLwtButton->toggle();
+}
+
 void MainWindow::enablePromptRapidFire()
 {
     prompt->enableRapidFire();
@@ -1000,6 +1006,16 @@ void MainWindow::nativeWindowPrevious()
 QString MainWindow::nativePlatformString()
 {
     return platformString();
+}
+
+void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
+{
+    QString msgType = type.toLower();
+    if     (msgType == "critical")    { QMessageBox::critical   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "information") { QMessageBox::information(this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "question")    { QMessageBox::question   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else if(msgType == "warning")     { QMessageBox::warning    (this, tr(qPrintable(title)), tr(qPrintable(text))); }
+    else                              { QMessageBox::critical   (this, tr("Native MessageBox Error"), tr("Incorrect use of the native messageBox function.")); }
 }
 
 void MainWindow::nativeUndo()
@@ -1494,6 +1510,13 @@ qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qrea
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 
+int MainWindow::nativeNumSelected()
+{
+    View* gview = activeView();
+    if(gview) { return gview->numSelected(); }
+    return 0;
+}
+
 void MainWindow::nativeSelectAll()
 {
     View* gview = activeView();
@@ -1530,6 +1553,8 @@ void MainWindow::nativePasteSelected(qreal x, qreal y)
 
 void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
 {
+    View* gview = activeView();
+    if(gview) { gview->moveSelected(dx, -dy); }
 }
 
 void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
@@ -1539,7 +1564,7 @@ void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
 void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
 {
     View* gview = activeView();
-    if(gview) { gview->rotateSelected(x, y, -rot); }
+    if(gview) { gview->rotateSelected(x, -y, -rot); }
 }
 
 qreal MainWindow::nativeQSnapX()

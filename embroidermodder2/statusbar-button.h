@@ -33,6 +33,9 @@ private slots:
     void toggleQSnap(bool on);
     void toggleQTrack(bool on);
     void toggleLwt(bool on);
+public slots:
+    void enableLwt();
+    void disableLwt();
     void enableReal();
     void disableReal();
 

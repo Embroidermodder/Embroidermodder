@@ -1,6 +1,9 @@
 #include <QtGui>
 
 #include "settings-dialog.h"
+#include "object-data.h"
+#include "statusbar.h"
+#include "statusbar-button.h"
 
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>
@@ -247,7 +250,7 @@ QWidget* Settings_Dialog::createTabDisplay()
     checkBoxShowScrollBars->setChecked(preview_display_show_scrollbars);
     connect(checkBoxShowScrollBars, SIGNAL(stateChanged(int)), this, SLOT(checkBoxShowScrollBarsStateChanged(int)));
 
-    QLabel* labelScrollBarWidget = new QLabel("Perform action when clicking corner widget",groupBoxScrollBars);
+    QLabel* labelScrollBarWidget = new QLabel("Perform action when clicking corner widget", groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
     dialog_display_scrollbar_widget_num = mainWin->getSettingsDisplayScrollBarWidgetNum();
     foreach(QAction* action, mainWin->actionDict)
@@ -1501,6 +1504,48 @@ QWidget* Settings_Dialog::createTabLineWeight()
 
     //TODO: finish this
 
+    //Misc
+    QGroupBox* groupBoxLwtMisc = new QGroupBox(tr("LineWeight Misc"), widget);
+
+    QGraphicsScene* s = mainWin->activeScene();
+
+    QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
+    if(s) { dialog_lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
+    else  { dialog_lwt_show_lwt = mainWin->getSettingsLwtShowLwt(); }
+    preview_lwt_show_lwt = dialog_lwt_show_lwt;
+    checkBoxShowLwt->setChecked(preview_lwt_show_lwt);
+    connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtShowLwtStateChanged(int)));
+
+    QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
+    checkBoxRealRender->setObjectName("checkBoxRealRender");
+    if(s) { dialog_lwt_real_render = s->property(ENABLE_REAL).toBool(); }
+    else  { dialog_lwt_real_render = mainWin->getSettingsLwtRealRender(); }
+    preview_lwt_real_render = dialog_lwt_real_render;
+    checkBoxRealRender->setChecked(preview_lwt_real_render);
+    connect(checkBoxRealRender, SIGNAL(stateChanged(int)), this, SLOT(checkBoxLwtRealRenderStateChanged(int)));
+    checkBoxRealRender->setEnabled(dialog_lwt_show_lwt);
+
+    QLabel* labelDefaultLwt = new QLabel("Default weight", groupBoxLwtMisc);
+    labelDefaultLwt->setEnabled(false); //TODO: remove later
+    QComboBox* comboBoxDefaultLwt = new QComboBox(groupBoxLwtMisc);
+    dialog_lwt_default_lwt = mainWin->getSettingsLwtDefaultLwt();
+    //TODO: populate the comboBox and set the initial value
+    comboBoxDefaultLwt->addItem(QString().setNum(dialog_lwt_default_lwt, 'F', 2).append(" mm"), dialog_lwt_default_lwt);
+    comboBoxDefaultLwt->setEnabled(false); //TODO: remove later
+
+    QVBoxLayout* vboxLayoutLwtMisc = new QVBoxLayout(groupBoxLwtMisc);
+    vboxLayoutLwtMisc->addWidget(checkBoxShowLwt);
+    vboxLayoutLwtMisc->addWidget(checkBoxRealRender);
+    vboxLayoutLwtMisc->addWidget(labelDefaultLwt);
+    vboxLayoutLwtMisc->addWidget(comboBoxDefaultLwt);
+    groupBoxLwtMisc->setLayout(vboxLayoutLwtMisc);
+
+    //Widget Layout
+    QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
+    vboxLayoutMain->addWidget(groupBoxLwtMisc);
+    vboxLayoutMain->addStretch(1);
+    widget->setLayout(vboxLayoutMain);
+
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
@@ -2332,6 +2377,31 @@ void Settings_Dialog::sliderQSnapApertureSizeValueChanged(int value)
     dialog_qsnap_aperture_size = value;
 }
 
+void Settings_Dialog::checkBoxLwtShowLwtStateChanged(int checked)
+{
+    preview_lwt_show_lwt = checked;
+    if(preview_lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
+    else                     { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
+
+    QObject* senderObj = sender();
+    if(senderObj)
+    {
+        QObject* parent = senderObj->parent();
+        if(parent)
+        {
+            QCheckBox* checkBoxRealRender = parent->findChild<QCheckBox*>("checkBoxRealRender");
+            if(checkBoxRealRender) checkBoxRealRender->setEnabled(preview_lwt_show_lwt);
+        }
+    }
+}
+
+void Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
+{
+    preview_lwt_real_render = checked;
+    if(preview_lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
+    else                        { mainWin->statusbar->statusBarLwtButton->disableReal(); }
+}
+
 void Settings_Dialog::sliderSelectionGripSizeValueChanged(int value)
 {
     dialog_selection_grip_size = value;
@@ -2393,6 +2463,8 @@ void Settings_Dialog::acceptChanges()
     if(dialog_grid_color_match_crosshair) dialog_grid_color = accept_display_crosshair_color;
     else                                  dialog_grid_color = accept_grid_color;
     dialog_ruler_color = accept_ruler_color;
+    dialog_lwt_show_lwt = preview_lwt_show_lwt;
+    dialog_lwt_real_render = preview_lwt_real_render;
 
     mainWin->setSettingsGeneralIconTheme(dialog_general_icon_theme);
     mainWin->setSettingsGeneralIconSize(dialog_general_icon_size);
@@ -2472,6 +2544,8 @@ void Settings_Dialog::acceptChanges()
     mainWin->setSettingsQSnapNearest(dialog_qsnap_nearest);
     mainWin->setSettingsQSnapApparent(dialog_qsnap_apparent);
     mainWin->setSettingsQSnapParallel(dialog_qsnap_parallel);
+    mainWin->setSettingsLwtShowLwt(dialog_lwt_show_lwt);
+    mainWin->setSettingsLwtRealRender(dialog_lwt_real_render);
     mainWin->setSettingsSelectionCoolGripColor(dialog_selection_coolgrip_color);
     mainWin->setSettingsSelectionHotGripColor(dialog_selection_hotgrip_color);
     mainWin->setSettingsSelectionGripSize(dialog_selection_grip_size);
@@ -2495,6 +2569,10 @@ void Settings_Dialog::acceptChanges()
     mainWin->prompt->setPromptFontSize(dialog_prompt_font_size);
     mainWin->updateAllViewGridColors(dialog_grid_color);
     mainWin->updateAllViewRulerColors(dialog_ruler_color);
+    if(dialog_lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
+    else                    { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
+    if(dialog_lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
+    else                       { mainWin->statusbar->statusBarLwtButton->disableReal(); }
 
     mainWin->writeSettings();
     accept();
@@ -2521,6 +2599,10 @@ void Settings_Dialog::rejectChanges()
     mainWin->prompt->setPromptFontSize(dialog_prompt_font_size);
     mainWin->updateAllViewGridColors(dialog_grid_color);
     mainWin->updateAllViewRulerColors(dialog_ruler_color);
+    if(dialog_lwt_show_lwt) { mainWin->statusbar->statusBarLwtButton->enableLwt(); }
+    else                    { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
+    if(dialog_lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
+    else                       { mainWin->statusbar->statusBarLwtButton->disableReal(); }
 
     reject();
 }

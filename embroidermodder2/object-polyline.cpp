@@ -74,6 +74,8 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
             QPainterPath::Element elem = normalPath.elementAt(i);
             QPainterPath::Element next = normalPath.elementAt(i+1);
 
+            if(next.isMoveTo()) continue;
+
             QPainterPath elemPath;
             elemPath.moveTo(elem.x, elem.y);
             elemPath.lineTo(next.x, next.y);

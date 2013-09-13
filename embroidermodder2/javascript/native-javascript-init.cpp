@@ -22,6 +22,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValWindowNext = engine->newFunction(javaWindowNext); engine->globalObject().setProperty("windowNext", scriptValWindowNext);
     QScriptValue scriptValWindowPrevious = engine->newFunction(javaWindowPrevious); engine->globalObject().setProperty("windowPrevious", scriptValWindowPrevious);
     QScriptValue scriptValPlatformString = engine->newFunction(javaPlatformString); engine->globalObject().setProperty("platformString", scriptValPlatformString);
+    QScriptValue scriptValMessageBox = engine->newFunction(javaMessageBox); engine->globalObject().setProperty("messageBox", scriptValMessageBox);
     QScriptValue scriptValUndo = engine->newFunction(javaUndo); engine->globalObject().setProperty("undo", scriptValUndo);
     QScriptValue scriptValRedo = engine->newFunction(javaRedo); engine->globalObject().setProperty("redo", scriptValRedo);
     QScriptValue scriptValPanLeft = engine->newFunction(javaPanLeft); engine->globalObject().setProperty("panLeft", scriptValPanLeft);
@@ -76,6 +77,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValCalculateAngle = engine->newFunction(javaCalculateAngle); engine->globalObject().setProperty("calculateAngle", scriptValCalculateAngle);
     QScriptValue scriptValCalculateDistance = engine->newFunction(javaCalculateDistance); engine->globalObject().setProperty("calculateDistance", scriptValCalculateDistance);
     QScriptValue scriptValPerpendicularDistance = engine->newFunction(javaPerpendicularDistance); engine->globalObject().setProperty("perpendicularDistance", scriptValPerpendicularDistance);
+    QScriptValue scriptValNumSelected = engine->newFunction(javaNumSelected); engine->globalObject().setProperty("numSelected", scriptValNumSelected);
     QScriptValue scriptValSelectAll = engine->newFunction(javaSelectAll); engine->globalObject().setProperty("selectAll", scriptValSelectAll);
     QScriptValue scriptValAddToSelection = engine->newFunction(javaAddToSelection); engine->globalObject().setProperty("addToSelection", scriptValAddToSelection);
     QScriptValue scriptValClearSelection = engine->newFunction(javaClearSelection); engine->globalObject().setProperty("clearSelection", scriptValClearSelection);
@@ -235,6 +237,7 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
         if(!menuHash.value(menuName))
         {
             QMenu* menu = new QMenu(menuName, this);
+            menu->setTearOffEnabled(true);
             menuBar()->addMenu(menu);
             menuHash.insert(menuName, menu);
         }

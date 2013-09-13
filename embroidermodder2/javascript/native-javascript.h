@@ -24,6 +24,7 @@ QScriptValue javaWindowCloseAll         (QScriptContext* context, QScriptEngine*
 QScriptValue javaWindowNext             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaWindowPrevious         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPlatformString         (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaMessageBox             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaUndo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaRedo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanLeft                (QScriptContext* context, QScriptEngine* engine);
@@ -79,6 +80,7 @@ QScriptValue javaSetCursorShape         (QScriptContext* context, QScriptEngine*
 QScriptValue javaCalculateAngle         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaCalculateDistance      (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPerpendicularDistance  (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaNumSelected            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSelectAll              (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddToSelection         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaClearSelection         (QScriptContext* context, QScriptEngine* engine);

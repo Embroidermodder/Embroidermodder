@@ -115,7 +115,7 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(F1Pressed()),        this, SLOT(help()));
     //TODO: connect(prompt, SIGNAL(F2Pressed()),        this, SLOT(floatHistory()));
     //TODO: connect(prompt, SIGNAL(F3Pressed()),        this, SLOT(toggleQSNAP()));
-    //TODO: connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleTablet()));
+            connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleLwt())); //TODO: typically this is toggleTablet(), make F-Keys customizable thru settings
     //TODO: connect(prompt, SIGNAL(F5Pressed()),        this, SLOT(toggleISO()));
     //TODO: connect(prompt, SIGNAL(F6Pressed()),        this, SLOT(toggleCoords()));
             connect(prompt, SIGNAL(F7Pressed()),        this, SLOT(toggleGrid()));

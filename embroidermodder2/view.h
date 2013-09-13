@@ -33,6 +33,7 @@ public:
     QUndoStack* getUndoStack() { return undoStack; }
     void addObject(BaseObject* obj);
     void deleteObject(BaseObject* obj);
+
 public slots:
     void zoomIn();
     void zoomOut();
@@ -53,10 +54,12 @@ public slots:
     void cut();
     void copy();
     void paste();
+    void moveAction();
     void scaleAction();
     void scaleSelected(qreal x, qreal y, qreal factor);
-    void rotate();
+    void rotateAction();
     void rotateSelected(qreal x, qreal y, qreal rot);
+    int  numSelected();
 
     void deletePressed();
     void escapePressed();
@@ -77,6 +80,7 @@ public slots:
     void toggleQTrack(bool on);
     void toggleLwt(bool on);
     void toggleReal(bool on);
+    bool isLwtEnabled();
     bool isRealEnabled();
 
     void setGridColor(QRgb color);
