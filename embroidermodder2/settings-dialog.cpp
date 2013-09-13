@@ -200,6 +200,8 @@ QWidget* Settings_Dialog::createTabDisplay()
     QWidget* widget = new QWidget(this);
 
     //Rendering
+    //TODO: Review OpenGL and Rendering settings for future inclusion
+    /*
     QGroupBox* groupBoxRender = new QGroupBox(tr("Rendering"), widget);
 
     QCheckBox* checkBoxUseOpenGL = new QCheckBox(tr("Use OpenGL"), groupBoxRender);
@@ -240,6 +242,7 @@ QWidget* Settings_Dialog::createTabDisplay()
     vboxLayoutRender->addWidget(checkBoxRenderHintHighAA);
     vboxLayoutRender->addWidget(checkBoxRenderHintNonCosmetic);
     groupBoxRender->setLayout(vboxLayoutRender);
+    */
 
     //ScrollBars
     QGroupBox* groupBoxScrollBars = new QGroupBox(tr("ScrollBars"), widget);
@@ -324,7 +327,7 @@ QWidget* Settings_Dialog::createTabDisplay()
 
     //Widget Layout
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
-    vboxLayoutMain->addWidget(groupBoxRender);
+    //vboxLayoutMain->addWidget(groupBoxRender); //TODO: Review OpenGL and Rendering settings for future inclusion
     vboxLayoutMain->addWidget(groupBoxScrollBars);
     vboxLayoutMain->addWidget(groupBoxColor);
     vboxLayoutMain->addWidget(groupBoxZoom);
