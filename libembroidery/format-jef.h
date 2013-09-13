@@ -10,7 +10,8 @@ extern "C" {
 int readJef(EmbPattern* pattern, const char* fileName);
 int writeJef(EmbPattern* pattern, const char* fileName);
 
-static const EmbThread jefThreads[] = {{ { 0,0,0}, "Black", ""},
+static const EmbThread jefThreads[] = {
+    {{0, 0 ,0}, "Black", ""},
     {{0, 0, 0}, "Black", ""},
     {{255, 255, 255}, "White", ""},
     {{255, 255, 23}, "Yellow", ""},
