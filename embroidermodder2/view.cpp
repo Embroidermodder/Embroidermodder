@@ -1491,6 +1491,8 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
 
 void View::contextMenuEvent(QContextMenuEvent* event)
 {
+    QString iconTheme = mainWin->getSettingsGeneralIconTheme();
+
     QMenu menu;
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();
@@ -1523,19 +1525,19 @@ void View::contextMenuEvent(QContextMenuEvent* event)
 
     if(!selectionEmpty)
     {
-        QAction *deleteAction = new QAction("D&elete", &menu);
+        QAction *deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", &menu);
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
         menu.addAction(deleteAction);
 
-        QAction *moveAction = new QAction("&Move", &menu);
+        QAction *moveAction = new QAction(QIcon("icons/" + iconTheme + "/" + "move" + ".png"), "&Move", &menu);
         connect(moveAction, SIGNAL(triggered()), this, SLOT(moveAction()));
         menu.addAction(moveAction);
 
-        QAction *scaleAction = new QAction("Sca&le", &menu);
+        QAction *scaleAction = new QAction(QIcon("icons/" + iconTheme + "/" + "scale" + ".png"), "Sca&le", &menu);
         connect(scaleAction, SIGNAL(triggered()), this, SLOT(scaleAction()));
         menu.addAction(scaleAction);
 
-        QAction *rotateAction = new QAction("R&otate", &menu);
+        QAction *rotateAction = new QAction(QIcon("icons/" + iconTheme + "/" + "rotate" + ".png"), "R&otate", &menu);
         connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotateAction()));
         menu.addAction(rotateAction);
 

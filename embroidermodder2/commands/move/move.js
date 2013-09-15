@@ -1,4 +1,4 @@
-//Command: MoveObject
+//Command: Move
 
 var global = {}; //Required
 global.firstRun;
@@ -66,7 +66,7 @@ function click(x, y)
 //NOTE: context() is run when a context menu entry is chosen.
 function context(str)
 {
-    todo("MOVEOBJECT", "context()");
+    todo("MOVE", "context()");
 }
 
 //NOTE: prompt() is run when Enter is pressed.
