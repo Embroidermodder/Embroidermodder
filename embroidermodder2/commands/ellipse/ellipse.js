@@ -24,6 +24,7 @@ global.mode_ELLIPSE_ROTATION          = 2;
 function main()
 {
     initCommand();
+    clearSelection();
     global.mode = global.mode_MAJORDIAMETER_MINORRADIUS;
     global.x1      = NaN;
     global.y1      = NaN;

@@ -14,6 +14,7 @@ global.prevY;
 function main()
 {
     initCommand();
+    clearSelection();
     global.firstRun = true;
     global.firstX = NaN;
     global.firstY = NaN;

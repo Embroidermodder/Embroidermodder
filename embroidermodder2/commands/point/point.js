@@ -8,6 +8,7 @@ global.firstRun;
 function main()
 {
     initCommand();
+    clearSelection();
     global.firstRun = true;
     setPromptPrefix("TODO: Current point settings: PDMODE=?  PDSIZE=?");
     appendPromptHistory();

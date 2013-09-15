@@ -5,6 +5,7 @@
 function main()
 {
     initCommand();
+    clearSelection();
     redo();
     endCommand();
 }

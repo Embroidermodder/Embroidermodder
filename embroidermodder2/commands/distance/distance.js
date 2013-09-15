@@ -11,6 +11,7 @@ global.y2;
 function main()
 {
     initCommand();
+    clearSelection();
     global.x1 = NaN;
     global.y1 = NaN;
     global.x2 = NaN;

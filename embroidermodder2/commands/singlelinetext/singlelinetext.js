@@ -21,6 +21,7 @@ global.mode_RAPID   = 3;
 function main()
 {
     initCommand();
+    clearSelection();
     global.text = "";
     global.textX = NaN;
     global.textY = NaN;

@@ -5,6 +5,7 @@
 function main()
 {
     initCommand();
+    clearSelection();
     setPromptPrefix("Enter an option [Cascade/Tile]: ");
 }
 

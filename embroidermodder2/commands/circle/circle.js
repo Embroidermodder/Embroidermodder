@@ -25,6 +25,7 @@ global.mode_TTR    = 4;
 function main()
 {
     initCommand();
+    clearSelection();
     global.mode = global.mode_1P_RAD;
     global.x1 = NaN;
     global.y1 = NaN;
