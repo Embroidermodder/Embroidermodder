@@ -1617,8 +1617,10 @@ void View::cut()
         return; //TODO: Prompt to select objects if nothing is preselected
     }
 
+    undoStack->beginMacro("Cut");
     copySelected();
     deleteSelected();
+    undoStack->endMacro();
 }
 
 void View::copy()
