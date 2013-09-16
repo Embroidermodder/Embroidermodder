@@ -31,6 +31,11 @@ thumbnailer-kde4/Makefile
 thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
 
 ######################
+# Project Files      #
+######################
+project-files/qmake/Makefile
+
+######################
 # OS generated files #
 ######################
 .DS_Store
