@@ -21,6 +21,7 @@ global.mode;
 global.mode_NORMAL    = 0;
 global.mode_REFERENCE = 1;
 
+//TODO: Add preview/ghost of rotation so the user can see where the objects will rotate to in real time.
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
@@ -91,6 +92,9 @@ function click(x, y)
             global.baseRX = x;
             global.baseRY = y;
             appendPromptHistory();
+            addRubber("LINE");
+            setRubberMode("LINE");
+            setRubberPoint("LINE_START", global.baseRX, global.baseRY);
             setPromptPrefix("Specify second point: ");
         }
         else if(isNaN(global.destRX))
@@ -98,6 +102,7 @@ function click(x, y)
             global.destRX = x;
             global.destRY = y;
             global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
+            setRubberPoint("LINE_START", global.baseX, global.baseY);
             appendPromptHistory();
             setPromptPrefix("Specify the new angle: ");
         }
@@ -171,6 +176,97 @@ function prompt(str)
     }
     else if(global.mode == global.mode_REFERENCE)
     {
-        todo("ROTATE", "Reference mode for prompt");
+        if(isNaN(global.baseRX))
+        {
+            if(isNaN(str))
+            {
+                var strList = str.split(",");
+                if(isNaN(strList[0]) || isNaN(strList[1]))
+                {
+                    setPromptPrefix("Requires valid numeric angle or two points.");
+                    appendPromptHistory();
+                    setPromptPrefix("Specify the reference angle <0.00>: ");
+                }
+                else
+                {
+                    global.baseRX = Number(strList[0]);
+                    global.baseRY = Number(strList[1]);
+                    addRubber("LINE");
+                    setRubberMode("LINE");
+                    setRubberPoint("LINE_START", global.baseRX, global.baseRY);
+                    setPromptPrefix("Specify second point: ");
+                }
+            }
+            else
+            {
+                //The base and dest values are only set here to advance the command.
+                global.baseRX = 0.0;
+                global.baseRY = 0.0;
+                global.destRX = 0.0;
+                global.destRY = 0.0;
+                //The reference angle is what we will use later.
+                global.angleRef = Number(str);
+                setPromptPrefix("Specify the new angle: ");
+            }
+        }
+        else if(isNaN(global.destRX))
+        {
+            if(isNaN(str))
+            {
+                var strList = str.split(",");
+                if(isNaN(strList[0]) || isNaN(strList[1]))
+                {
+                    setPromptPrefix("Requires valid numeric angle or two points.");
+                    appendPromptHistory();
+                    setPromptPrefix("Specify second point: ");
+                }
+                else
+                {
+                    global.destRX = Number(strList[0]);
+                    global.destRY = Number(strList[1]);
+                    global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
+                    setRubberPoint("LINE_START", global.baseX, global.baseY);
+                    setPromptPrefix("Specify the new angle: ");
+                }
+            }
+            else
+            {
+                //The base and dest values are only set here to advance the command.
+                global.baseRX = 0.0;
+                global.baseRY = 0.0;
+                global.destRX = 0.0;
+                global.destRY = 0.0;
+                //The reference angle is what we will use later.
+                global.angleRef = Number(str);
+                setPromptPrefix("Specify the new angle: ");
+            }
+        }
+        else if(isNaN(global.angleNew))
+        {
+            if(isNaN(str))
+            {
+                var strList = str.split(",");
+                if(isNaN(strList[0]) || isNaN(strList[1]))
+                {
+                    setPromptPrefix("Requires valid numeric angle or second point.");
+                    appendPromptHistory();
+                    setPromptPrefix("Specify the new angle: ");
+                }
+                else
+                {
+                    var x = Number(strList[0]);
+                    var y = Number(strList[1]);
+                    global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
+                    rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                    endCommand();
+                }
+            }
+            else
+            {
+                global.angleNew = Number(str);
+                rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                endCommand();
+            }
+        }
     }
 }
