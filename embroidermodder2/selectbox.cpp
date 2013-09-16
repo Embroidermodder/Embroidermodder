@@ -7,12 +7,12 @@ SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
     setColors(QColor(Qt::darkGreen), QColor(Qt::green), QColor(Qt::darkBlue), QColor(Qt::blue), 32);
 }
 
-//TODO: Add function to disable changing direction while the settings dialog is open so live previews will work correctly
 void SelectBox::setDirection(int dir)
 {
     qDebug("SelectBox setDirection()");
     if(!dir) { dirPen = leftPen;  dirBrush = leftBrush;  }
     else     { dirPen = rightPen; dirBrush = rightBrush; }
+    boxDir = dir;
 }
 
 void SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha)
@@ -35,8 +35,8 @@ void SelectBox::setColors(const QColor& colorL, const QColor& fillL, const QColo
     rightBrush.setStyle(Qt::SolidPattern);
     rightBrush.setColor(rightBrushColor);
 
-    dirPen = rightPen;
-    dirBrush = rightBrush;
+    if(!boxDir) { dirPen = leftPen;  dirBrush = leftBrush;  }
+    else        { dirPen = rightPen; dirBrush = rightBrush; }
 
     forceRepaint();
 }

@@ -32,6 +32,8 @@ private:
     QPen leftPen;
     QPen rightPen;
 
+    bool boxDir;
+
     void forceRepaint();
 };
 
