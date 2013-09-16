@@ -19,6 +19,8 @@ Stuff for 2.0 beta1:
 //====================
 TODO - Custom Filter Bug - doesn't save changes in some cases
 TODO - Cannot open file with # in name when opening multiple files (works fine when opening the single file)
+TODO - Move libembroidery-convert source and pro files into a separate directory or sub-directory so it will automatically build properly when building from project-files/qmake directory
+TODO - Closing Settings Dialog with the X in the window saves settings rather than discards them
 WIP - CAD Command: Arc (rt)
 TODO - Load/Save Menu/Toolbars configurations into settings.ini
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
@@ -89,6 +91,7 @@ TODO - CAD Command: Units
 TODO - CAD Command: Grid
 TODO - CAD Command: Find
 TODO - CAD Command: Divide
+TODO - Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. 
 TODO - Keyboard Zooming/Panning
 TODO - G-Code format?
 TODO - 3D Raised Embroidery

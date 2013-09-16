@@ -292,11 +292,69 @@ QWidget* Settings_Dialog::createTabDisplay()
     buttonBGColor->setIcon(QIcon(bgPix));
     connect(buttonBGColor, SIGNAL(clicked()), this, SLOT(chooseDisplayBackgroundColor()));
 
+    QLabel* labelSelectBoxLeftColor = new QLabel("Selection Box Color (Crossing)", groupBoxColor);
+    QPushButton* buttonSelectBoxLeftColor = new QPushButton("Choose", groupBoxColor);
+    dialog_display_selectbox_left_color  = mainWin->getSettingsDisplaySelectBoxLeftColor();
+    preview_display_selectbox_left_color = dialog_display_selectbox_left_color;
+    accept_display_selectbox_left_color  = dialog_display_selectbox_left_color;
+    QPixmap sBoxLCPix(16,16);
+    sBoxLCPix.fill(QColor(preview_display_selectbox_left_color));
+    buttonSelectBoxLeftColor->setIcon(QIcon(sBoxLCPix));
+    connect(buttonSelectBoxLeftColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftColor()));
+
+    QLabel* labelSelectBoxLeftFill = new QLabel("Selection Box Fill (Crossing)", groupBoxColor);
+    QPushButton* buttonSelectBoxLeftFill = new QPushButton("Choose", groupBoxColor);
+    dialog_display_selectbox_left_fill  = mainWin->getSettingsDisplaySelectBoxLeftFill();
+    preview_display_selectbox_left_fill = dialog_display_selectbox_left_fill;
+    accept_display_selectbox_left_fill  = dialog_display_selectbox_left_fill;
+    QPixmap sBoxLFPix(16,16);
+    sBoxLFPix.fill(QColor(preview_display_selectbox_left_fill));
+    buttonSelectBoxLeftFill->setIcon(QIcon(sBoxLFPix));
+    connect(buttonSelectBoxLeftFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftFill()));
+
+    QLabel* labelSelectBoxRightColor = new QLabel("Selection Box Color (Window)", groupBoxColor);
+    QPushButton* buttonSelectBoxRightColor = new QPushButton("Choose", groupBoxColor);
+    dialog_display_selectbox_right_color  = mainWin->getSettingsDisplaySelectBoxRightColor();
+    preview_display_selectbox_right_color = dialog_display_selectbox_right_color;
+    accept_display_selectbox_right_color  = dialog_display_selectbox_right_color;
+    QPixmap sBoxRCPix(16,16);
+    sBoxRCPix.fill(QColor(preview_display_selectbox_right_color));
+    buttonSelectBoxRightColor->setIcon(QIcon(sBoxRCPix));
+    connect(buttonSelectBoxRightColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightColor()));
+
+    QLabel* labelSelectBoxRightFill = new QLabel("Selection Box Fill (Window)", groupBoxColor);
+    QPushButton* buttonSelectBoxRightFill = new QPushButton("Choose", groupBoxColor);
+    dialog_display_selectbox_right_fill  = mainWin->getSettingsDisplaySelectBoxRightFill();
+    preview_display_selectbox_right_fill = dialog_display_selectbox_right_fill;
+    accept_display_selectbox_right_fill  = dialog_display_selectbox_right_fill;
+    QPixmap sBoxRFPix(16,16);
+    sBoxRFPix.fill(QColor(preview_display_selectbox_right_fill));
+    buttonSelectBoxRightFill->setIcon(QIcon(sBoxRFPix));
+    connect(buttonSelectBoxRightFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightFill()));
+
+    QLabel* labelSelectBoxAlpha = new QLabel("Selection Box Fill Alpha", groupBoxColor);
+    QSpinBox* spinBoxSelectBoxAlpha = new QSpinBox(groupBoxColor);
+    spinBoxSelectBoxAlpha->setRange(0, 255);
+    dialog_display_selectbox_alpha = mainWin->getSettingsDisplaySelectBoxAlpha();
+    preview_display_selectbox_alpha = dialog_display_selectbox_alpha;
+    spinBoxSelectBoxAlpha->setValue(preview_display_selectbox_alpha);
+    connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), this, SLOT(spinBoxDisplaySelectBoxAlphaValueChanged(int)));
+
     QGridLayout* gridLayoutColor = new QGridLayout(widget);
-    gridLayoutColor->addWidget(labelCrossHairColor,  0, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonCrossHairColor, 0, 1, Qt::AlignRight);
-    gridLayoutColor->addWidget(labelBGColor,         1, 0, Qt::AlignLeft);
-    gridLayoutColor->addWidget(buttonBGColor,        1, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelCrossHairColor,       0, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(buttonCrossHairColor,      0, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelBGColor,              1, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(buttonBGColor,             1, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelSelectBoxLeftColor,   2, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(buttonSelectBoxLeftColor,  2, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelSelectBoxLeftFill,    3, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(buttonSelectBoxLeftFill,   3, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelSelectBoxRightColor,  4, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(buttonSelectBoxRightColor, 4, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelSelectBoxRightFill,   5, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(buttonSelectBoxRightFill,  5, 1, Qt::AlignRight);
+    gridLayoutColor->addWidget(labelSelectBoxAlpha,       6, 0, Qt::AlignLeft);
+    gridLayoutColor->addWidget(spinBoxSelectBoxAlpha,     6, 1, Qt::AlignRight);
     groupBoxColor->setLayout(gridLayoutColor);
 
     //Zoom
@@ -1866,6 +1924,184 @@ void Settings_Dialog::currentDisplayBackgroundColorChanged(const QColor& color)
     mainWin->updateAllViewBackgroundColors(preview_display_bg_color);
 }
 
+void Settings_Dialog::chooseDisplaySelectBoxLeftColor()
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    if(button)
+    {
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_display_selectbox_left_color), this);
+        connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxLeftColorChanged(const QColor&)));
+        colorDialog->exec();
+
+        if(colorDialog->result() == QDialog::Accepted)
+        {
+            accept_display_selectbox_left_color = colorDialog->selectedColor().rgb();
+            QPixmap pix(16,16);
+            pix.fill(QColor(accept_display_selectbox_left_color));
+            button->setIcon(QIcon(pix));
+            mainWin->updateAllViewSelectBoxColors(accept_display_selectbox_left_color,
+                                                  accept_display_selectbox_left_fill,
+                                                  accept_display_selectbox_right_color,
+                                                  accept_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+        else
+        {
+            mainWin->updateAllViewSelectBoxColors(dialog_display_selectbox_left_color,
+                                                  dialog_display_selectbox_left_fill,
+                                                  dialog_display_selectbox_right_color,
+                                                  dialog_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+    }
+}
+
+void Settings_Dialog::currentDisplaySelectBoxLeftColorChanged(const QColor& color)
+{
+    preview_display_selectbox_left_color = color.rgb();
+    mainWin->updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
+                                          preview_display_selectbox_left_fill,
+                                          preview_display_selectbox_right_color,
+                                          preview_display_selectbox_right_fill,
+                                          preview_display_selectbox_alpha);
+}
+
+void Settings_Dialog::chooseDisplaySelectBoxLeftFill()
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    if(button)
+    {
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_display_selectbox_left_fill), this);
+        connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxLeftFillChanged(const QColor&)));
+        colorDialog->exec();
+
+        if(colorDialog->result() == QDialog::Accepted)
+        {
+            accept_display_selectbox_left_fill = colorDialog->selectedColor().rgb();
+            QPixmap pix(16,16);
+            pix.fill(QColor(accept_display_selectbox_left_fill));
+            button->setIcon(QIcon(pix));
+            mainWin->updateAllViewSelectBoxColors(accept_display_selectbox_left_color,
+                                                  accept_display_selectbox_left_fill,
+                                                  accept_display_selectbox_right_color,
+                                                  accept_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+        else
+        {
+            mainWin->updateAllViewSelectBoxColors(dialog_display_selectbox_left_color,
+                                                  dialog_display_selectbox_left_fill,
+                                                  dialog_display_selectbox_right_color,
+                                                  dialog_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+    }
+}
+
+void Settings_Dialog::currentDisplaySelectBoxLeftFillChanged(const QColor& color)
+{
+    preview_display_selectbox_left_fill = color.rgb();
+    mainWin->updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
+                                          preview_display_selectbox_left_fill,
+                                          preview_display_selectbox_right_color,
+                                          preview_display_selectbox_right_fill,
+                                          preview_display_selectbox_alpha);
+}
+
+void Settings_Dialog::chooseDisplaySelectBoxRightColor()
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    if(button)
+    {
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_display_selectbox_right_color), this);
+        connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxRightColorChanged(const QColor&)));
+        colorDialog->exec();
+
+        if(colorDialog->result() == QDialog::Accepted)
+        {
+            accept_display_selectbox_right_color = colorDialog->selectedColor().rgb();
+            QPixmap pix(16,16);
+            pix.fill(QColor(accept_display_selectbox_right_color));
+            button->setIcon(QIcon(pix));
+            mainWin->updateAllViewSelectBoxColors(accept_display_selectbox_left_color,
+                                                  accept_display_selectbox_left_fill,
+                                                  accept_display_selectbox_right_color,
+                                                  accept_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+        else
+        {
+            mainWin->updateAllViewSelectBoxColors(dialog_display_selectbox_left_color,
+                                                  dialog_display_selectbox_left_fill,
+                                                  dialog_display_selectbox_right_color,
+                                                  dialog_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+    }
+}
+
+void Settings_Dialog::currentDisplaySelectBoxRightColorChanged(const QColor& color)
+{
+    preview_display_selectbox_right_color = color.rgb();
+    mainWin->updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
+                                          preview_display_selectbox_left_fill,
+                                          preview_display_selectbox_right_color,
+                                          preview_display_selectbox_right_fill,
+                                          preview_display_selectbox_alpha);
+}
+
+void Settings_Dialog::chooseDisplaySelectBoxRightFill()
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    if(button)
+    {
+        QColorDialog* colorDialog = new QColorDialog(QColor(accept_display_selectbox_right_fill), this);
+        connect(colorDialog, SIGNAL(currentColorChanged(const QColor&)), this, SLOT(currentDisplaySelectBoxRightFillChanged(const QColor&)));
+        colorDialog->exec();
+
+        if(colorDialog->result() == QDialog::Accepted)
+        {
+            accept_display_selectbox_right_fill = colorDialog->selectedColor().rgb();
+            QPixmap pix(16,16);
+            pix.fill(QColor(accept_display_selectbox_right_fill));
+            button->setIcon(QIcon(pix));
+            mainWin->updateAllViewSelectBoxColors(accept_display_selectbox_left_color,
+                                                  accept_display_selectbox_left_fill,
+                                                  accept_display_selectbox_right_color,
+                                                  accept_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+        else
+        {
+            mainWin->updateAllViewSelectBoxColors(dialog_display_selectbox_left_color,
+                                                  dialog_display_selectbox_left_fill,
+                                                  dialog_display_selectbox_right_color,
+                                                  dialog_display_selectbox_right_fill,
+                                                  preview_display_selectbox_alpha);
+        }
+    }
+}
+
+void Settings_Dialog::currentDisplaySelectBoxRightFillChanged(const QColor& color)
+{
+    preview_display_selectbox_right_fill = color.rgb();
+    mainWin->updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
+                                          preview_display_selectbox_left_fill,
+                                          preview_display_selectbox_right_color,
+                                          preview_display_selectbox_right_fill,
+                                          preview_display_selectbox_alpha);
+}
+
+void Settings_Dialog::spinBoxDisplaySelectBoxAlphaValueChanged(int value)
+{
+    preview_display_selectbox_alpha = value;
+    mainWin->updateAllViewSelectBoxColors(accept_display_selectbox_left_color,
+                                          accept_display_selectbox_left_fill,
+                                          accept_display_selectbox_right_color,
+                                          accept_display_selectbox_right_fill,
+                                          preview_display_selectbox_alpha);
+}
+
 void Settings_Dialog::choosePromptTextColor()
 {
     QPushButton* button = qobject_cast<QPushButton*>(sender());
@@ -2458,6 +2694,11 @@ void Settings_Dialog::acceptChanges()
     dialog_display_show_scrollbars = preview_display_show_scrollbars;
     dialog_display_crosshair_color = accept_display_crosshair_color;
     dialog_display_bg_color = accept_display_bg_color;
+    dialog_display_selectbox_left_color = accept_display_selectbox_left_color;
+    dialog_display_selectbox_left_fill = accept_display_selectbox_left_fill;
+    dialog_display_selectbox_right_color = accept_display_selectbox_right_color;
+    dialog_display_selectbox_right_fill = accept_display_selectbox_right_fill;
+    dialog_display_selectbox_alpha = preview_display_selectbox_alpha;
     dialog_prompt_text_color = accept_prompt_text_color;
     dialog_prompt_bg_color = accept_prompt_bg_color;
     dialog_prompt_font_family = preview_prompt_font_family;
@@ -2488,6 +2729,11 @@ void Settings_Dialog::acceptChanges()
     mainWin->setSettingsDisplayScrollBarWidgetNum(dialog_display_scrollbar_widget_num);
     mainWin->setSettingsDisplayCrossHairColor(dialog_display_crosshair_color);
     mainWin->setSettingsDisplayBGColor(dialog_display_bg_color);
+    mainWin->setSettingsDisplaySelectBoxLeftColor(dialog_display_selectbox_left_color);
+    mainWin->setSettingsDisplaySelectBoxLeftFill(dialog_display_selectbox_left_fill);
+    mainWin->setSettingsDisplaySelectBoxRightColor(dialog_display_selectbox_right_color);
+    mainWin->setSettingsDisplaySelectBoxRightFill(dialog_display_selectbox_right_fill);
+    mainWin->setSettingsDisplaySelectBoxAlpha(dialog_display_selectbox_alpha);
     mainWin->setSettingsDisplayZoomScaleIn(dialog_display_zoomscale_in);
     mainWin->setSettingsDisplayZoomScaleOut(dialog_display_zoomscale_out);
     //TODO: mainWin->setSettingsDisplayCrossHairPercent(dialog_display_crosshair_percent);
@@ -2565,6 +2811,11 @@ void Settings_Dialog::acceptChanges()
     mainWin->updateAllViewScrollBars(dialog_display_show_scrollbars);
     mainWin->updateAllViewCrossHairColors(dialog_display_crosshair_color);
     mainWin->updateAllViewBackgroundColors(dialog_display_bg_color);
+    mainWin->updateAllViewSelectBoxColors(dialog_display_selectbox_left_color,
+                                          dialog_display_selectbox_left_fill,
+                                          dialog_display_selectbox_right_color,
+                                          dialog_display_selectbox_right_fill,
+                                          dialog_display_selectbox_alpha);
     mainWin->prompt->setPromptTextColor(QColor(dialog_prompt_text_color));
     mainWin->prompt->setPromptBackgroundColor(QColor(dialog_prompt_bg_color));
     mainWin->prompt->setPromptFontFamily(dialog_prompt_font_family);
@@ -2595,6 +2846,11 @@ void Settings_Dialog::rejectChanges()
     mainWin->updateAllViewScrollBars(dialog_display_show_scrollbars);
     mainWin->updateAllViewCrossHairColors(dialog_display_crosshair_color);
     mainWin->updateAllViewBackgroundColors(dialog_display_bg_color);
+    mainWin->updateAllViewSelectBoxColors(dialog_display_selectbox_left_color,
+                                          dialog_display_selectbox_left_fill,
+                                          dialog_display_selectbox_right_color,
+                                          dialog_display_selectbox_right_fill,
+                                          dialog_display_selectbox_alpha);
     mainWin->prompt->setPromptTextColor(QColor(dialog_prompt_text_color));
     mainWin->prompt->setPromptBackgroundColor(QColor(dialog_prompt_bg_color));
     mainWin->prompt->setPromptFontFamily(dialog_prompt_font_family);

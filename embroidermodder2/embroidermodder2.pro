@@ -36,6 +36,7 @@ embdetails-dialog.cpp \
 settings-dialog.cpp \
 preview-dialog.cpp \
 layer-manager.cpp \
+selectbox.cpp \
 statusbar.cpp \
 statusbar-button.cpp \
 imagewidget.cpp \
@@ -68,6 +69,7 @@ embdetails-dialog.h \
 settings-dialog.h \
 preview-dialog.h \
 layer-manager.h \
+selectbox.h \
 statusbar.h \
 statusbar-button.h \
 imagewidget.h \

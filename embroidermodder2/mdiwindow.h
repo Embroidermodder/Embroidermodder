@@ -67,6 +67,7 @@ public slots:
     void                       showViewScrollBars(bool val);
     void                       setViewCrossHairColor(QRgb color);
     void                       setViewBackgroundColor(QRgb color);
+    void                       setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void                       setViewGridColor(QRgb color);
     void                       setViewRulerColor(QRgb color);
 

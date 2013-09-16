@@ -474,6 +474,16 @@ void MainWindow::updateAllViewBackgroundColors(QRgb color)
     }
 }
 
+void MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        if((MDIWindow*)windowList.at(i))
+            ((MDIWindow*)windowList.at(i))->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+    }
+}
+
 void MainWindow::updateAllViewGridColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();

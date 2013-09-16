@@ -60,6 +60,16 @@ private:
     QRgb    preview_display_bg_color;
     QRgb    accept_display_bg_color;
 
+    QRgb    preview_display_selectbox_left_color;
+    QRgb    accept_display_selectbox_left_color;
+    QRgb    preview_display_selectbox_left_fill;
+    QRgb    accept_display_selectbox_left_fill;
+    QRgb    preview_display_selectbox_right_color;
+    QRgb    accept_display_selectbox_right_color;
+    QRgb    preview_display_selectbox_right_fill;
+    QRgb    accept_display_selectbox_right_fill;
+    quint8  preview_display_selectbox_alpha;
+
     QRgb    preview_prompt_text_color;
     QRgb    accept_prompt_text_color;
 
@@ -99,6 +109,11 @@ private:
     int     dialog_display_scrollbar_widget_num;
     QRgb    dialog_display_crosshair_color;
     QRgb    dialog_display_bg_color;
+    QRgb    dialog_display_selectbox_left_color;
+    QRgb    dialog_display_selectbox_left_fill;
+    QRgb    dialog_display_selectbox_right_color;
+    QRgb    dialog_display_selectbox_right_fill;
+    quint8  dialog_display_selectbox_alpha;
     qreal   dialog_display_zoomscale_in;
     qreal   dialog_display_zoomscale_out;
     quint8  dialog_display_crosshair_percent;
@@ -192,6 +207,15 @@ private slots:
     void currentDisplayCrossHairColorChanged(const QColor&);
     void chooseDisplayBackgroundColor();
     void currentDisplayBackgroundColorChanged(const QColor&);
+    void chooseDisplaySelectBoxLeftColor();
+    void currentDisplaySelectBoxLeftColorChanged(const QColor&);
+    void chooseDisplaySelectBoxLeftFill();
+    void currentDisplaySelectBoxLeftFillChanged(const QColor&);
+    void chooseDisplaySelectBoxRightColor();
+    void currentDisplaySelectBoxRightColorChanged(const QColor&);
+    void chooseDisplaySelectBoxRightFill();
+    void currentDisplaySelectBoxRightFillChanged(const QColor&);
+    void spinBoxDisplaySelectBoxAlphaValueChanged(int);
     void choosePromptTextColor();
     void currentPromptTextColorChanged(const QColor&);
     void choosePromptBackgroundColor();

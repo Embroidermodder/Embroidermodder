@@ -7,10 +7,10 @@
 
 class MainWindow;
 class BaseObject;
+class SelectBox;
 
 QT_BEGIN_NAMESPACE
 class QGraphicsScene;
-class QRubberBand;
 class QUndoStack;
 QT_END_NAMESPACE
 
@@ -71,6 +71,7 @@ public slots:
     void setCrossHairColor(QRgb color);
     void setCrossHairSize(quint8 percent);
     void setBackgroundColor(QRgb color);
+    void setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void toggleSnap(bool on);
     void toggleGrid(bool on);
     void toggleRuler(bool on);
@@ -152,10 +153,12 @@ private:
     QGraphicsScene* gscene;
     QUndoStack* undoStack;
 
-    QRubberBand* rubberBand;
+    SelectBox* selectBox;
     QPointF scenePressPoint;
     QPoint pressPoint;
+    QPointF sceneMovePoint;
     QPoint movePoint;
+    QPointF sceneReleasePoint;
     QPoint releasePoint;
 
     void updateMouseCoords(int x, int y);

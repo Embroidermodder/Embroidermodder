@@ -6,6 +6,8 @@
 #include "undo-editor.h"
 #include "undo-commands.h"
 
+#include "selectbox.h"
+
 #include "object-arc.h"
 #include "object-circle.h"
 #include "object-dimleader.h"
@@ -21,7 +23,6 @@
 
 #include <QtGui>
 #include <QGraphicsScene>
-#include <QRubberBand>
 #include <QGLWidget>
 
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
@@ -38,11 +39,12 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
         setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     }
 
-    setRenderHint(QPainter::Antialiasing,            mainWin->getSettingsDisplayRenderHintAA());
-    setRenderHint(QPainter::TextAntialiasing,        mainWin->getSettingsDisplayRenderHintTextAA());
-    setRenderHint(QPainter::SmoothPixmapTransform,   mainWin->getSettingsDisplayRenderHintSmoothPix());
-    setRenderHint(QPainter::HighQualityAntialiasing, mainWin->getSettingsDisplayRenderHintHighAA());
-    setRenderHint(QPainter::NonCosmeticDefaultPen,   mainWin->getSettingsDisplayRenderHintNonCosmetic());
+    //TODO: Review RenderHints later
+    //setRenderHint(QPainter::Antialiasing,            mainWin->getSettingsDisplayRenderHintAA());
+    //setRenderHint(QPainter::TextAntialiasing,        mainWin->getSettingsDisplayRenderHintTextAA());
+    //setRenderHint(QPainter::SmoothPixmapTransform,   mainWin->getSettingsDisplayRenderHintSmoothPix());
+    //setRenderHint(QPainter::HighQualityAntialiasing, mainWin->getSettingsDisplayRenderHintHighAA());
+    //setRenderHint(QPainter::NonCosmeticDefaultPen,   mainWin->getSettingsDisplayRenderHintNonCosmetic());
 
     //NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
     //NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -85,7 +87,12 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
 
     tempBaseObj = 0;
 
-    rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+    selectBox = new SelectBox(QRubberBand::Rectangle, this);
+    selectBox->setColors(QColor(mainWin->getSettingsDisplaySelectBoxLeftColor()),
+                         QColor(mainWin->getSettingsDisplaySelectBoxLeftFill()),
+                         QColor(mainWin->getSettingsDisplaySelectBoxRightColor()),
+                         QColor(mainWin->getSettingsDisplaySelectBoxRightFill()),
+                         mainWin->getSettingsDisplaySelectBoxAlpha());
 
     showScrollBars(mainWin->getSettingsDisplayShowScrollBars());
     setCornerButton();
@@ -1205,6 +1212,7 @@ void View::mousePressEvent(QMouseEvent* event)
             {
                 movingActive = true;
                 movePoint = event->pos();
+                sceneMovePoint = mapToScene(movePoint);
             }
         }
         QPainterPath path;
@@ -1217,19 +1225,20 @@ void View::mousePressEvent(QMouseEvent* event)
             pressPoint = event->pos();
             scenePressPoint = mapToScene(pressPoint);
 
-            if(!rubberBand)
-                rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
-            rubberBand->setGeometry(QRect(pressPoint, pressPoint));
-            rubberBand->show();
+            if(!selectBox)
+                selectBox = new SelectBox(QRubberBand::Rectangle, this);
+            selectBox->setGeometry(QRect(pressPoint, pressPoint));
+            selectBox->show();
         }
         else
         {
             selectingActive = false;
-            rubberBand->hide();
+            selectBox->hide();
             releasePoint = event->pos();
+            sceneReleasePoint = mapToScene(releasePoint);
 
-            path.addPolygon(mapToScene(rubberBand->geometry()));
-            if(releasePoint.x() > pressPoint.x())
+            path.addPolygon(mapToScene(selectBox->geometry()));
+            if(sceneReleasePoint.x() > scenePressPoint.x())
             {
                 QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                 foreach(QGraphicsItem* item, itemList)
@@ -1342,6 +1351,10 @@ void View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint&
 void View::mouseMoveEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->x(), event->y());
+    QPointF delta = mapToScene(event->pos()) - mapToScene(movePoint);
+    movePoint = event->pos();
+    sceneMovePoint = mapToScene(movePoint);
+
     if(pastingActive)
     {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
@@ -1349,16 +1362,16 @@ void View::mouseMoveEvent(QMouseEvent* event)
     if(movingActive)
     {
         selectingActive = false;
-        rubberBand->hide();
+        selectBox->hide();
 
-        QPointF delta = mapToScene(event->pos()) - mapToScene(movePoint);
-        movePoint = event->pos();
         //moveSelected(delta.x(), delta.y()); TODO: fix this to use another method.
         event->accept();
     }
     if(selectingActive)
     {
-        rubberBand->setGeometry(QRect(mapFromScene(scenePressPoint), event->pos()).normalized());
+        if(sceneMovePoint.x() >= scenePressPoint.x()) { selectBox->setDirection(1); }
+        else                                          { selectBox->setDirection(0); }
+        selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), event->pos()).normalized());
         event->accept();
     }
     if(panningActive)
@@ -1484,7 +1497,7 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     }
     if(selectingActive)
     {
-        rubberBand->setGeometry(QRect(mapFromScene(scenePressPoint), mousePoint).normalized());
+        selectBox->setGeometry(QRect(mapFromScene(scenePressPoint), mousePoint).normalized());
     }
     gscene->update();
 }
@@ -1562,7 +1575,7 @@ void View::deletePressed()
     pastingActive = false;
     zoomWindowActive = false;
     selectingActive = false;
-    rubberBand->hide();
+    selectBox->hide();
     deleteSelected();
 }
 
@@ -1577,7 +1590,7 @@ void View::escapePressed()
     pastingActive = false;
     zoomWindowActive = false;
     selectingActive = false;
-    rubberBand->hide();
+    selectBox->hide();
     clearSelection();
 }
 
@@ -1940,6 +1953,11 @@ void View::setCrossHairColor(QRgb color)
 void View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
+}
+
+void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+{
+    selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

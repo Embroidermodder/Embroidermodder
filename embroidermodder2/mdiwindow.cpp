@@ -429,6 +429,11 @@ void MDIWindow::setViewBackgroundColor(QRgb color)
     gview->setBackgroundColor(color);
 }
 
+void MDIWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+{
+    gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+}
+
 void MDIWindow::setViewGridColor(QRgb color)
 {
     gview->setGridColor(color);

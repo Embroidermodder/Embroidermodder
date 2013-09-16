@@ -80,6 +80,11 @@ public:
     int     getSettingsDisplayScrollBarWidgetNum()    { return settings_display_scrollbar_widget_num;   }
     QRgb    getSettingsDisplayCrossHairColor()        { return settings_display_crosshair_color;        }
     QRgb    getSettingsDisplayBGColor()               { return settings_display_bg_color;               }
+    QRgb    getSettingsDisplaySelectBoxLeftColor()    { return settings_display_selectbox_left_color;   }
+    QRgb    getSettingsDisplaySelectBoxLeftFill()     { return settings_display_selectbox_left_fill;    }
+    QRgb    getSettingsDisplaySelectBoxRightColor()   { return settings_display_selectbox_right_color;  }
+    QRgb    getSettingsDisplaySelectBoxRightFill()    { return settings_display_selectbox_right_fill;   }
+    quint8  getSettingsDisplaySelectBoxAlpha()        { return settings_display_selectbox_alpha;        }
     qreal   getSettingsDisplayZoomScaleIn()           { return settings_display_zoomscale_in;           }
     qreal   getSettingsDisplayZoomScaleOut()          { return settings_display_zoomscale_out;          }
     quint8  getSettingsDisplayCrossHairPercent()      { return settings_display_crosshair_percent;      }
@@ -176,6 +181,11 @@ public:
     void setSettingsDisplayScrollBarWidgetNum(int newValue)            { settings_display_scrollbar_widget_num   = newValue; }
     void setSettingsDisplayCrossHairColor(QRgb newValue)               { settings_display_crosshair_color        = newValue; }
     void setSettingsDisplayBGColor(QRgb newValue)                      { settings_display_bg_color               = newValue; }
+    void setSettingsDisplaySelectBoxLeftColor(QRgb newValue)           { settings_display_selectbox_left_color   = newValue; }
+    void setSettingsDisplaySelectBoxLeftFill(QRgb newValue)            { settings_display_selectbox_left_fill    = newValue; }
+    void setSettingsDisplaySelectBoxRightColor(QRgb newValue)          { settings_display_selectbox_right_color  = newValue; }
+    void setSettingsDisplaySelectBoxRightFill(QRgb newValue)           { settings_display_selectbox_right_fill   = newValue; }
+    void setSettingsDisplaySelectBoxAlpha(quint8 newValue)             { settings_display_selectbox_alpha        = newValue; }
     void setSettingsDisplayZoomScaleIn(qreal newValue)                 { settings_display_zoomscale_in           = newValue; }
     void setSettingsDisplayZoomScaleOut(qreal newValue)                { settings_display_zoomscale_out          = newValue; }
     void setSettingsDisplayCrossHairPercent(quint8 newValue)           { settings_display_crosshair_percent      = newValue; }
@@ -278,6 +288,7 @@ public slots:
     void                            updateAllViewScrollBars(bool val);
     void                            updateAllViewCrossHairColors(QRgb color);
     void                            updateAllViewBackgroundColors(QRgb color);
+    void                            updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void                            updateAllViewGridColors(QRgb color);
     void                            updateAllViewRulerColors(QRgb color);
 
@@ -316,6 +327,11 @@ private:
     int                             settings_display_scrollbar_widget_num;
     QRgb                            settings_display_crosshair_color;
     QRgb                            settings_display_bg_color;
+    QRgb                            settings_display_selectbox_left_color;
+    QRgb                            settings_display_selectbox_left_fill;
+    QRgb                            settings_display_selectbox_right_color;
+    QRgb                            settings_display_selectbox_right_fill;
+    quint8                          settings_display_selectbox_alpha;
     qreal                           settings_display_zoomscale_in;
     qreal                           settings_display_zoomscale_out;
     quint8                          settings_display_crosshair_percent;
