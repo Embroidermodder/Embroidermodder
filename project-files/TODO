@@ -17,6 +17,7 @@ WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
 //====================
 Stuff for 2.0 beta1:
 //====================
+TODO - automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="https://github.com/Embroidermodder/Embroidermodder/commit/%H">%s</a>'
 TODO - Custom Filter Bug - doesn't save changes in some cases
 TODO - Cannot open file with # in name when opening multiple files (works fine when opening the single file)
 TODO - Move libembroidery-convert source and pro files into a separate directory or sub-directory so it will automatically build properly when building from project-files/qmake directory

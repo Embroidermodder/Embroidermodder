@@ -310,7 +310,7 @@ void MainWindow::help()
     qDebug("help()");
 
     // Open the HTML Help in the default browser
-    QUrl helpURL("help/index.html");
+    QUrl helpURL("help/doc-index.html");
     QDesktopServices::openUrl(helpURL);
 
     //TODO: This is how to start an external program. Use this elsewhere...
