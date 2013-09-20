@@ -251,6 +251,30 @@ QScriptValue javaPanDown(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaZoomIn(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("zoomIn() requires zero arguments");
+
+    mainWin()->nativeZoomIn();
+    return QScriptValue();
+}
+
+QScriptValue javaZoomOut(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("zoomOut() requires zero arguments");
+
+    mainWin()->nativeZoomOut();
+    return QScriptValue();
+}
+
+QScriptValue javaZoomExtents(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("zoomExtents() requires zero arguments");
+
+    mainWin()->nativeZoomExtents();
+    return QScriptValue();
+}
+
 QScriptValue javaPrintArea(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 4)    return context->throwError("printArea() requires four arguments");

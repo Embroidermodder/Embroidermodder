@@ -641,6 +641,10 @@ public:
     void nativePanUp                  ();
     void nativePanDown                ();
 
+    void nativeZoomIn                 ();
+    void nativeZoomOut                ();
+    void nativeZoomExtents            ();
+
     void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
 
     QString nativeTextFont            ();

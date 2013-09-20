@@ -29,6 +29,9 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValPanRight = engine->newFunction(javaPanRight); engine->globalObject().setProperty("panRight", scriptValPanRight);
     QScriptValue scriptValPanUp = engine->newFunction(javaPanUp); engine->globalObject().setProperty("panUp", scriptValPanUp);
     QScriptValue scriptValPanDown = engine->newFunction(javaPanDown); engine->globalObject().setProperty("panDown", scriptValPanDown);
+    QScriptValue scriptValZoomIn = engine->newFunction(javaZoomIn); engine->globalObject().setProperty("zoomIn", scriptValZoomIn);
+    QScriptValue scriptValZoomOut = engine->newFunction(javaZoomOut); engine->globalObject().setProperty("zoomOut", scriptValZoomOut);
+    QScriptValue scriptValZoomExtents = engine->newFunction(javaZoomExtents); engine->globalObject().setProperty("zoomExtents", scriptValZoomExtents);
     QScriptValue scriptValPrintArea = engine->newFunction(javaPrintArea); engine->globalObject().setProperty("printArea", scriptValPrintArea);
     QScriptValue scriptValTextFont = engine->newFunction(javaTextFont); engine->globalObject().setProperty("textFont", scriptValTextFont);
     QScriptValue scriptValTextSize = engine->newFunction(javaTextSize); engine->globalObject().setProperty("textSize", scriptValTextSize);

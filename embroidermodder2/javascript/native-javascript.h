@@ -31,6 +31,9 @@ QScriptValue javaPanLeft                (QScriptContext* context, QScriptEngine*
 QScriptValue javaPanRight               (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanUp                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanDown                (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaZoomIn                 (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaZoomOut                (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaZoomExtents            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPrintArea              (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaTextFont               (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaTextSize               (QScriptContext* context, QScriptEngine* engine);

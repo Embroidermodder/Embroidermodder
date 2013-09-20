@@ -1058,6 +1058,21 @@ void MainWindow::nativePanDown()
     panDown();
 }
 
+void MainWindow::nativeZoomIn()
+{
+    zoomIn();
+}
+
+void MainWindow::nativeZoomOut()
+{
+    zoomOut();
+}
+
+void MainWindow::nativeZoomExtents()
+{
+    zoomExtents();
+}
+
 void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
