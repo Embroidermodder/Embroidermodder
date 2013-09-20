@@ -9,7 +9,6 @@ SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
 
 void SelectBox::setDirection(int dir)
 {
-    qDebug("SelectBox setDirection()");
     if(!dir) { dirPen = leftPen;  dirBrush = leftBrush;  }
     else     { dirPen = rightPen; dirBrush = rightBrush; }
     boxDir = dir;

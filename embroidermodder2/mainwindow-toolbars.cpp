@@ -35,6 +35,17 @@ void MainWindow::createEditToolbar()
     connect(toolbarEdit, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+void MainWindow::createViewToolbar()
+{
+    qDebug("MainWindow createViewToolbar()");
+
+    toolbarView->setObjectName("toolbarView");
+    toolbarView->addAction(actionDict.value(ACTION_day));
+    toolbarView->addAction(actionDict.value(ACTION_night));
+
+    connect(toolbarView, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
 void MainWindow::createZoomToolbar()
 {
     qDebug("MainWindow createZoomToolbar()");
@@ -262,6 +273,7 @@ void MainWindow::createAllToolbars()
 
     createFileToolbar();
     createEditToolbar();
+    createViewToolbar();
     createZoomToolbar();
     createPanToolbar();
     createIconToolbar();
@@ -272,6 +284,7 @@ void MainWindow::createAllToolbars()
     createPromptToolbar();
 
     // Horizontal
+    toolbarView->setOrientation(Qt::Horizontal);
     toolbarZoom->setOrientation(Qt::Horizontal);
     toolbarLayer->setOrientation(Qt::Horizontal);
     toolbarProperties->setOrientation(Qt::Horizontal);
@@ -286,6 +299,7 @@ void MainWindow::createAllToolbars()
     addToolBarBreak(Qt::TopToolBarArea);
     addToolBar(Qt::TopToolBarArea, toolbarZoom);
     addToolBar(Qt::TopToolBarArea, toolbarPan);
+    addToolBar(Qt::TopToolBarArea, toolbarView);
     addToolBarBreak(Qt::TopToolBarArea);
     addToolBar(Qt::TopToolBarArea, toolbarLayer);
     addToolBar(Qt::TopToolBarArea, toolbarProperties);

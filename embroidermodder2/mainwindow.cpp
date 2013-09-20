@@ -55,6 +55,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Toolbars
     toolbarFile       = addToolBar(tr("File"));
     toolbarEdit       = addToolBar(tr("Edit"));
+    toolbarView       = addToolBar(tr("View"));
     toolbarZoom       = addToolBar(tr("Zoom"));
     toolbarPan        = addToolBar(tr("Pan"));
     toolbarIcon       = addToolBar(tr("Icon"));
@@ -530,6 +531,7 @@ void MainWindow::updateMenuToolbarStatusbar()
     if(numOfDocs)
     {
         //Toolbars
+        toolbarView->show();
         toolbarZoom->show();
         toolbarPan->show();
         toolbarIcon->show();
@@ -580,6 +582,7 @@ void MainWindow::updateMenuToolbarStatusbar()
     else
     {
         //Toolbars
+        toolbarView->hide();
         toolbarZoom->hide();
         toolbarPan->hide();
         toolbarIcon->hide();

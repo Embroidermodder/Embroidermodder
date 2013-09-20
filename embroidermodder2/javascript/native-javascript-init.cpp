@@ -33,6 +33,11 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValZoomOut = engine->newFunction(javaZoomOut); engine->globalObject().setProperty("zoomOut", scriptValZoomOut);
     QScriptValue scriptValZoomExtents = engine->newFunction(javaZoomExtents); engine->globalObject().setProperty("zoomExtents", scriptValZoomExtents);
     QScriptValue scriptValPrintArea = engine->newFunction(javaPrintArea); engine->globalObject().setProperty("printArea", scriptValPrintArea);
+    QScriptValue scriptValDayVision = engine->newFunction(javaDayVision); engine->globalObject().setProperty("dayVision", scriptValDayVision);
+    QScriptValue scriptValNightVision = engine->newFunction(javaNightVision); engine->globalObject().setProperty("nightVision", scriptValNightVision);
+    QScriptValue scriptValSetBackgroundColor = engine->newFunction(javaSetBackgroundColor); engine->globalObject().setProperty("setBackgroundColor", scriptValSetBackgroundColor);
+    QScriptValue scriptValSetCrossHairColor = engine->newFunction(javaSetCrossHairColor); engine->globalObject().setProperty("setCrossHairColor", scriptValSetCrossHairColor);
+    QScriptValue scriptValSetGridColor = engine->newFunction(javaSetGridColor); engine->globalObject().setProperty("setGridColor", scriptValSetGridColor);
     QScriptValue scriptValTextFont = engine->newFunction(javaTextFont); engine->globalObject().setProperty("textFont", scriptValTextFont);
     QScriptValue scriptValTextSize = engine->newFunction(javaTextSize); engine->globalObject().setProperty("textSize", scriptValTextSize);
     QScriptValue scriptValTextAngle = engine->newFunction(javaTextAngle); engine->globalObject().setProperty("textAngle", scriptValTextAngle);

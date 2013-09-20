@@ -80,6 +80,9 @@ void MainWindow::createViewMenu()
     panMenu->addAction(actionDict.value(ACTION_panup));
     panMenu->addAction(actionDict.value(ACTION_pandown));
     viewMenu->addSeparator();
+    viewMenu->addAction(actionDict.value(ACTION_day));
+    viewMenu->addAction(actionDict.value(ACTION_night));
+    viewMenu->addSeparator();
 
     viewMenu->setTearOffEnabled(true);
     zoomMenu->setTearOffEnabled(true);

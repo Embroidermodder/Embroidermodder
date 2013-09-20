@@ -35,6 +35,11 @@ QScriptValue javaZoomIn                 (QScriptContext* context, QScriptEngine*
 QScriptValue javaZoomOut                (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaZoomExtents            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPrintArea              (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaDayVision              (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaNightVision            (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaSetBackgroundColor     (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaSetCrossHairColor      (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaSetGridColor           (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaTextFont               (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaTextSize               (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaTextAngle              (QScriptContext* context, QScriptEngine* engine);

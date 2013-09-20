@@ -669,6 +669,28 @@ void MainWindow::panDown()
     }
 }
 
+void MainWindow::dayVision()
+{
+    View* gview = activeView();
+    if(gview)
+    {
+        gview->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        gview->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        gview->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    }
+}
+
+void MainWindow::nightVision()
+{
+    View* gview = activeView();
+    if(gview)
+    {
+        gview->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        gview->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        gview->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    }
+}
+
 void MainWindow::doNothing()
 {
     //This function intentionally does nothing.
@@ -1078,6 +1100,34 @@ void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
     print();
+}
+
+void MainWindow::nativeDayVision()
+{
+    dayVision();
+}
+
+void MainWindow::nativeNightVision()
+{
+    nightVision();
+}
+
+void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
+{
+    setSettingsDisplayBGColor(qRgb(r,g,b));
+    updateAllViewBackgroundColors(qRgb(r,g,b));
+}
+
+void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
+{
+    setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    updateAllViewCrossHairColors(qRgb(r,g,b));
+}
+
+void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
+{
+    setSettingsGridColor(qRgb(r,g,b));
+    updateAllViewGridColors(qRgb(r,g,b));
 }
 
 QString MainWindow::nativeTextFont()

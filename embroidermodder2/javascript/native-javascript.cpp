@@ -298,6 +298,94 @@ QScriptValue javaPrintArea(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaDayVision(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("dayVision() requires zero arguments");
+
+    mainWin()->nativeDayVision();
+    return QScriptValue();
+}
+
+QScriptValue javaNightVision(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("nightVision() requires zero arguments");
+
+    mainWin()->nativeNightVision();
+    return QScriptValue();
+}
+
+QScriptValue javaSetBackgroundColor(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 3)    return context->throwError("setBackgroundColor() requires three arguments");
+    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument is not a number");
+    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument is not a number");
+    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument is not a number");
+
+    qreal r = context->argument(0).toNumber();
+    qreal g = context->argument(1).toNumber();
+    qreal b = context->argument(2).toNumber();
+
+    //isNaN check
+    if(qIsNaN(r)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(g)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(b)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
+
+    if(r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
+    if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
+    if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
+
+    mainWin()->nativeSetBackgroundColor(r, g, b);
+    return QScriptValue();
+}
+
+QScriptValue javaSetCrossHairColor(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 3)    return context->throwError("setCrossHairColor() requires three arguments");
+    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument is not a number");
+    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument is not a number");
+    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument is not a number");
+
+    qreal r = context->argument(0).toNumber();
+    qreal g = context->argument(1).toNumber();
+    qreal b = context->argument(2).toNumber();
+
+    //isNaN check
+    if(qIsNaN(r)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(g)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(b)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
+
+    if(r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
+    if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
+    if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+
+    mainWin()->nativeSetCrossHairColor(r, g, b);
+    return QScriptValue();
+}
+
+QScriptValue javaSetGridColor(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 3)    return context->throwError("setGridColor() requires three arguments");
+    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument is not a number");
+    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument is not a number");
+    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument is not a number");
+
+    qreal r = context->argument(0).toNumber();
+    qreal g = context->argument(1).toNumber();
+    qreal b = context->argument(2).toNumber();
+
+    //isNaN check
+    if(qIsNaN(r)) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(g)) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(b)) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
+
+    if(r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): r value must be in range 0-255"); }
+    if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
+    if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
+
+    mainWin()->nativeSetGridColor(r, g, b);
+    return QScriptValue();
+}
+
 QScriptValue javaTextFont(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("textFont() requires zero arguments");

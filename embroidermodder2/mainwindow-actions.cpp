@@ -85,8 +85,8 @@ void MainWindow::createAllActions()
     actionDict.insert(ACTION_panup,       createAction(tr("panup"),       tr("&Pan Up"),       tr("Moves the view up.")));
     actionDict.insert(ACTION_pandown,     createAction(tr("pandown"),     tr("&Pan Down"),     tr("Moves the view down.")));
 
-    actionDict.insert(ACTION_reduce,  createAction(tr("reduce"),  tr("&Reduce"),  tr("Reduces stuff")));
-    actionDict.insert(ACTION_enlarge, createAction(tr("enlarge"), tr("&Enlarge"), tr("Enlarges stuff")));
+    actionDict.insert(ACTION_day,   createAction(tr("day"),   tr("&Day"),   tr("Updates the current view using day vision settings.")));
+    actionDict.insert(ACTION_night, createAction(tr("night"), tr("&Night"), tr("Updates the current view using night vision settings.")));
 
     actionDict.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
     actionDict.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
@@ -165,6 +165,9 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     else if(icon == "panright")                   connect(ACTION, SIGNAL(triggered()), this, SLOT(panRight()));
     else if(icon == "panup")                      connect(ACTION, SIGNAL(triggered()), this, SLOT(panUp()));
     else if(icon == "pandown")                    connect(ACTION, SIGNAL(triggered()), this, SLOT(panDown()));
+
+    else if(icon == "day")                        connect(ACTION, SIGNAL(triggered()), this, SLOT(dayVision()));
+    else if(icon == "night")                      connect(ACTION, SIGNAL(triggered()), this, SLOT(nightVision()));
 
     else if(scripted)
     {

@@ -145,11 +145,11 @@ ACTION_panright,
 ACTION_panup,
 ACTION_pandown,
 
+ACTION_day,
+ACTION_night,
+
 ACTION_spellcheck,
 ACTION_quickselect,
-
-ACTION_reduce,
-ACTION_enlarge,
 
 ACTION_null
 };

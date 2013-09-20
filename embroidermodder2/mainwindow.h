@@ -433,6 +433,7 @@ private:
     void createAllToolbars();
     void createFileToolbar();
     void createEditToolbar();
+    void createViewToolbar();
     void createZoomToolbar();
     void createPanToolbar();
     void createIconToolbar();
@@ -444,6 +445,7 @@ private:
 
     QToolBar* toolbarFile;
     QToolBar* toolbarEdit;
+    QToolBar* toolbarView;
     QToolBar* toolbarZoom;
     QToolBar* toolbarPan;
     QToolBar* toolbarIcon;
@@ -601,6 +603,9 @@ public slots:
     void panUp();
     void panDown();
 
+    void dayVision();
+    void nightVision();
+
     void doNothing();
 
 private:
@@ -646,6 +651,13 @@ public:
     void nativeZoomExtents            ();
 
     void nativePrintArea              (qreal x, qreal y, qreal w, qreal h);
+
+    void nativeDayVision              ();
+    void nativeNightVision            ();
+
+    void nativeSetBackgroundColor     (quint8 r, quint8 g, quint8 b);
+    void nativeSetCrossHairColor      (quint8 r, quint8 g, quint8 b);
+    void nativeSetGridColor           (quint8 r, quint8 g, quint8 b);
 
     QString nativeTextFont            ();
     qreal   nativeTextSize            ();
