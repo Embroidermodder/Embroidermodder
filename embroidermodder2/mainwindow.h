@@ -147,6 +147,9 @@ public:
     bool    getSettingsLwtShowLwt()                   { return settings_lwt_show_lwt;                   }
     bool    getSettingsLwtRealRender()                { return settings_lwt_real_render;                }
     qreal   getSettingsLwtDefaultLwt()                { return settings_lwt_default_lwt;                }
+    bool    getSettingsSelectionModePickFirst()       { return settings_selection_mode_pickfirst;       }
+    bool    getSettingsSelectionModePickAdd()         { return settings_selection_mode_pickadd;         }
+    bool    getSettingsSelectionModePickDrag()        { return settings_selection_mode_pickdrag;        }
     QRgb    getSettingsSelectionCoolGripColor()       { return settings_selection_coolgrip_color;       }
     QRgb    getSettingsSelectionHotGripColor()        { return settings_selection_hotgrip_color;        }
     quint8  getSettingsSelectionGripSize()            { return settings_selection_grip_size;            }
@@ -248,6 +251,9 @@ public:
     void setSettingsLwtShowLwt(bool newValue)                          { settings_lwt_show_lwt                   = newValue; }
     void setSettingsLwtRealRender(bool newValue)                       { settings_lwt_real_render                = newValue; }
     void setSettingsLwtDefaultLwt(qreal newValue)                      { settings_lwt_default_lwt                = newValue; }
+    void setSettingsSelectionModePickFirst(bool newValue)              { settings_selection_mode_pickfirst       = newValue; }
+    void setSettingsSelectionModePickAdd(bool newValue)                { settings_selection_mode_pickadd         = newValue; }
+    void setSettingsSelectionModePickDrag(bool newValue)               { settings_selection_mode_pickdrag        = newValue; }
     void setSettingsSelectionCoolGripColor(QRgb newValue)              { settings_selection_coolgrip_color       = newValue; }
     void setSettingsSelectionHotGripColor(QRgb newValue)               { settings_selection_hotgrip_color        = newValue; }
     void setSettingsSelectionGripSize(quint8 newValue)                 { settings_selection_grip_size            = newValue; }
@@ -291,6 +297,9 @@ public slots:
     void                            updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
     void                            updateAllViewGridColors(QRgb color);
     void                            updateAllViewRulerColors(QRgb color);
+
+    void                            updatePickAddMode(bool val);
+    void                            pickAddModeToggled();
 
     void                            settingsDialog(const QString& showTab = QString());
     void                            readSettings();
@@ -396,6 +405,9 @@ private:
     bool                            settings_lwt_show_lwt;
     bool                            settings_lwt_real_render;
     qreal                           settings_lwt_default_lwt;
+    bool                            settings_selection_mode_pickfirst;
+    bool                            settings_selection_mode_pickadd;
+    bool                            settings_selection_mode_pickdrag;
     QRgb                            settings_selection_coolgrip_color;
     QRgb                            settings_selection_hotgrip_color;
     quint8                          settings_selection_grip_size;
@@ -408,6 +420,8 @@ private:
     bool                            settings_text_style_underline;
     bool                            settings_text_style_overline;
     bool                            settings_text_style_strikeout;
+
+    bool                            shiftKeyPressedState;
 
     QByteArray                      layoutState;
 
@@ -575,6 +589,10 @@ public slots:
     // Standard Slots
     void undo();
     void redo();
+
+    bool isShiftPressed();
+    void setShiftPressed();
+    void setShiftReleased();
 
     void deletePressed();
     void escapePressed();

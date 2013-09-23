@@ -75,6 +75,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     numOfDocs = 0;
     docIndex = 0;
 
+    shiftKeyPressedState = false;
+
     readSettings();
 
     setWindowIcon(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
@@ -132,9 +134,13 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
             connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
 
+            connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
+            connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor("icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockPropEdit = new PropertyEditor("icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
+    connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
     dockUndoEdit = new UndoEditor("icons/" + getSettingsGeneralIconTheme(), prompt, this);

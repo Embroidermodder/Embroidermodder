@@ -26,12 +26,14 @@
 #include "object-rect.h"
 #include "object-textsingle.h"
 
-PropertyEditor::PropertyEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent, Qt::WindowFlags flags) : QDockWidget(parent, flags)
+PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, QWidget* widgetToFocus, QWidget* parent, Qt::WindowFlags flags) : QDockWidget(parent, flags)
 {
     iconDir = iconDirectory;
     iconSize = 16;
     propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable
     setMinimumSize(100,100);
+
+    pickAdd = pickAddMode;
 
     precisionAngle  = 0; //TODO: Load this from settings and provide function for updating from settings
     precisionLength = 4; //TODO: Load this from settings and provide function for updating from settings
@@ -153,12 +155,35 @@ QToolButton* PropertyEditor::createToolButtonPickAdd()
 {
     //TODO: Set as PickAdd or PickNew based on settings
     toolButtonPickAdd = new QToolButton(this);
-    toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "pickadd" + ".png"));
-    toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
-    toolButtonPickAdd->setText("PickAdd");
-    toolButtonPickAdd->setToolTip("PickAdd"); //TODO: Better Description
-    toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    updatePickAddModeButton(pickAdd);
+    connect(toolButtonPickAdd, SIGNAL(clicked(bool)), this, SLOT(togglePickAddMode()));
     return toolButtonPickAdd;
+}
+
+void PropertyEditor::updatePickAddModeButton(bool pickAddMode)
+{
+    pickAdd = pickAddMode;
+    if(pickAdd)
+    {
+        toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "pickadd" + ".png"));
+        toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
+        toolButtonPickAdd->setText("PickAdd");
+        toolButtonPickAdd->setToolTip("PickAdd Mode - Add to current selection.\nClick to switch to PickNew Mode.");
+        toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
+    else
+    {
+        toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "picknew" + ".png"));
+        toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
+        toolButtonPickAdd->setText("PickNew");
+        toolButtonPickAdd->setToolTip("PickNew Mode - Replace current selection.\nClick to switch to PickAdd Mode.");
+        toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
+}
+
+void PropertyEditor::togglePickAddMode()
+{
+    emit pickAddModeToggled();
 }
 
 void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)

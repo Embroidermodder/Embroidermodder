@@ -33,11 +33,12 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     setFrameShape(QFrame::NoFrame);
 
     //NOTE: This has to be done before setting mouse tracking.
-    if(mainWin->getSettingsDisplayUseOpenGL())
-    {
-        qDebug("Using OpenGL...");
-        setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
-    }
+    //TODO: Review OpenGL for Qt5 later
+    //if(mainWin->getSettingsDisplayUseOpenGL())
+    //{
+    //    qDebug("Using OpenGL...");
+    //    setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
+    //}
 
     //TODO: Review RenderHints later
     //setRenderHint(QPainter::Antialiasing,            mainWin->getSettingsDisplayRenderHintAA());
@@ -1237,23 +1238,87 @@ void View::mousePressEvent(QMouseEvent* event)
             releasePoint = event->pos();
             sceneReleasePoint = mapToScene(releasePoint);
 
+            //Start SelectBox Code
             path.addPolygon(mapToScene(selectBox->geometry()));
             if(sceneReleasePoint.x() > scenePressPoint.x())
             {
-                QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
-                foreach(QGraphicsItem* item, itemList)
+                if(mainWin->getSettingsSelectionModePickAdd())
                 {
-                    item->setSelected(true);
+                    if(mainWin->isShiftPressed())
+                    {
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(false);
+                    }
+                    else
+                    {
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
+                }
+                else
+                {
+                    if(mainWin->isShiftPressed())
+                    {
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        if(!itemList.size())
+                            clearSelection();
+                        else
+                        {
+                            foreach(QGraphicsItem* item, itemList)
+                                item->setSelected(!item->isSelected()); //Toggle selected
+                        }
+                    }
+                    else
+                    {
+                        clearSelection();
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
                 }
             }
             else
             {
-                QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
-                foreach(QGraphicsItem* item, itemList)
+                if(mainWin->getSettingsSelectionModePickAdd())
                 {
-                    item->setSelected(true);
+                    if(mainWin->isShiftPressed())
+                    {
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(false);
+                    }
+                    else
+                    {
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
+                }
+                else
+                {
+                    if(mainWin->isShiftPressed())
+                    {
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        if(!itemList.size())
+                            clearSelection();
+                        else
+                        {
+                            foreach(QGraphicsItem* item, itemList)
+                                item->setSelected(!item->isSelected()); //Toggle selected
+                        }
+                    }
+                    else
+                    {
+                        clearSelection();
+                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        foreach(QGraphicsItem* item, itemList)
+                            item->setSelected(true);
+                    }
                 }
             }
+            //End SelectBox Code
         }
 
         if(pastingActive)

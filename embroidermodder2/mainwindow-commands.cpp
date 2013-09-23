@@ -18,6 +18,7 @@
 #include "object-rect.h"
 #include "object-textsingle.h"
 #include "emb-rect.h"
+#include "property-editor.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
 #include "embdetails-dialog.h"
@@ -353,6 +354,22 @@ void MainWindow::redo()
     else
         prompt->appendHistory("Nothing to redo");
 }
+
+bool MainWindow::isShiftPressed()
+{
+    return shiftKeyPressedState;
+}
+
+void MainWindow::setShiftPressed()
+{
+    shiftKeyPressedState = true;
+}
+
+void MainWindow::setShiftReleased()
+{
+    shiftKeyPressedState = false;
+}
+
 // Icons
 void MainWindow::iconResize(int iconSize)
 {
@@ -502,6 +519,18 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
         if((MDIWindow*)windowList.at(i))
             ((MDIWindow*)windowList.at(i))->setViewRulerColor(color);
     }
+}
+
+void MainWindow::updatePickAddMode(bool val)
+{
+    setSettingsSelectionModePickAdd(val);
+    dockPropEdit->updatePickAddModeButton(val);
+}
+
+void MainWindow::pickAddModeToggled()
+{
+    bool val = !getSettingsSelectionModePickAdd();
+    updatePickAddMode(val);
 }
 
 // Layer ToolBar
@@ -924,6 +953,7 @@ void MainWindow::runCommand()
 void MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
+    //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
     engine->evaluate(cmd + "_main()");
 }
 

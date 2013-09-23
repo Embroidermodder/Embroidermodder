@@ -1617,6 +1617,32 @@ QWidget* Settings_Dialog::createTabSelection()
 {
     QWidget* widget = new QWidget(this);
 
+    //Selection Modes
+    QGroupBox* groupBoxSelectionModes = new QGroupBox(tr("Modes"), widget);
+
+    QCheckBox* checkBoxSelectionModePickFirst = new QCheckBox(tr("Allow Preselection (PickFirst)"), groupBoxSelectionModes);
+    dialog_selection_mode_pickfirst = mainWin->getSettingsSelectionModePickFirst();
+    checkBoxSelectionModePickFirst->setChecked(dialog_selection_mode_pickfirst);
+    checkBoxSelectionModePickFirst->setChecked(true); checkBoxSelectionModePickFirst->setEnabled(false); //TODO: Remove this line when Post-selection is available
+    connect(checkBoxSelectionModePickFirst, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickFirstStateChanged(int)));
+
+    QCheckBox* checkBoxSelectionModePickAdd = new QCheckBox(tr("Add to Selection (PickAdd)"), groupBoxSelectionModes);
+    dialog_selection_mode_pickadd = mainWin->getSettingsSelectionModePickAdd();
+    checkBoxSelectionModePickAdd->setChecked(dialog_selection_mode_pickadd);
+    connect(checkBoxSelectionModePickAdd, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickAddStateChanged(int)));
+
+    QCheckBox* checkBoxSelectionModePickDrag = new QCheckBox(tr("Drag to Select (PickDrag)"), groupBoxSelectionModes);
+    dialog_selection_mode_pickdrag = mainWin->getSettingsSelectionModePickDrag();
+    checkBoxSelectionModePickDrag->setChecked(dialog_selection_mode_pickdrag);
+    checkBoxSelectionModePickDrag->setChecked(false); checkBoxSelectionModePickDrag->setEnabled(false); //TODO: Remove this line when this functionality is available
+    connect(checkBoxSelectionModePickDrag, SIGNAL(stateChanged(int)), this, SLOT(checkBoxSelectionModePickDragStateChanged(int)));
+
+    QVBoxLayout* vboxLayoutSelectionModes = new QVBoxLayout(groupBoxSelectionModes);
+    vboxLayoutSelectionModes->addWidget(checkBoxSelectionModePickFirst);
+    vboxLayoutSelectionModes->addWidget(checkBoxSelectionModePickAdd);
+    vboxLayoutSelectionModes->addWidget(checkBoxSelectionModePickDrag);
+    groupBoxSelectionModes->setLayout(vboxLayoutSelectionModes);
+
     //Selection Colors
     QGroupBox* groupBoxSelectionColors = new QGroupBox(tr("Colors"), widget);
 
@@ -1667,6 +1693,7 @@ QWidget* Settings_Dialog::createTabSelection()
 
     //Widget Layout
     QVBoxLayout *vboxLayoutMain = new QVBoxLayout(widget);
+    vboxLayoutMain->addWidget(groupBoxSelectionModes);
     vboxLayoutMain->addWidget(groupBoxSelectionColors);
     vboxLayoutMain->addWidget(groupBoxSelectionSizes);
     vboxLayoutMain->addStretch(1);
@@ -2641,6 +2668,21 @@ void Settings_Dialog::checkBoxLwtRealRenderStateChanged(int checked)
     else                        { mainWin->statusbar->statusBarLwtButton->disableReal(); }
 }
 
+void Settings_Dialog::checkBoxSelectionModePickFirstStateChanged(int checked)
+{
+    dialog_selection_mode_pickfirst = checked;
+}
+
+void Settings_Dialog::checkBoxSelectionModePickAddStateChanged(int checked)
+{
+    dialog_selection_mode_pickadd = checked;
+}
+
+void Settings_Dialog::checkBoxSelectionModePickDragStateChanged(int checked)
+{
+    dialog_selection_mode_pickdrag = checked;
+}
+
 void Settings_Dialog::sliderSelectionGripSizeValueChanged(int value)
 {
     dialog_selection_grip_size = value;
@@ -2795,6 +2837,9 @@ void Settings_Dialog::acceptChanges()
     mainWin->setSettingsQSnapParallel(dialog_qsnap_parallel);
     mainWin->setSettingsLwtShowLwt(dialog_lwt_show_lwt);
     mainWin->setSettingsLwtRealRender(dialog_lwt_real_render);
+    mainWin->setSettingsSelectionModePickFirst(dialog_selection_mode_pickfirst);
+    mainWin->setSettingsSelectionModePickAdd(dialog_selection_mode_pickadd);
+    mainWin->setSettingsSelectionModePickDrag(dialog_selection_mode_pickdrag);
     mainWin->setSettingsSelectionCoolGripColor(dialog_selection_coolgrip_color);
     mainWin->setSettingsSelectionHotGripColor(dialog_selection_hotgrip_color);
     mainWin->setSettingsSelectionGripSize(dialog_selection_grip_size);
@@ -2827,6 +2872,7 @@ void Settings_Dialog::acceptChanges()
     else                    { mainWin->statusbar->statusBarLwtButton->disableLwt(); }
     if(dialog_lwt_real_render) { mainWin->statusbar->statusBarLwtButton->enableReal(); }
     else                       { mainWin->statusbar->statusBarLwtButton->disableReal(); }
+    mainWin->updatePickAddMode(dialog_selection_mode_pickadd);
 
     mainWin->writeSettings();
     accept();

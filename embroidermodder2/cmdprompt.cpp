@@ -79,6 +79,9 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     connect(promptInput, SIGNAL(selectAllPressed()), this, SIGNAL(selectAllPressed()));
     connect(promptInput, SIGNAL(undoPressed()),      this, SIGNAL(undoPressed()));
     connect(promptInput, SIGNAL(redoPressed()),      this, SIGNAL(redoPressed()));
+
+    connect(promptInput, SIGNAL(shiftPressed()),     this, SIGNAL(shiftPressed()));
+    connect(promptInput, SIGNAL(shiftReleased()),    this, SIGNAL(shiftReleased()));
 }
 
 CmdPrompt::~CmdPrompt()
@@ -597,8 +600,27 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
                 emit F12Pressed();
                 return true;
                 break;
+            case Qt::Key_Shift:
+                pressedKey->ignore(); //we don't want to eat it, we just want to keep track of it
+                emit shiftPressed();
+                break;
             default:
                 pressedKey->ignore();
+        }
+    }
+
+    if(event->type() == QEvent::KeyRelease)
+    {
+        QKeyEvent* releasedKey = (QKeyEvent*)event;
+        int key = releasedKey->key();
+        switch(key)
+        {
+            case Qt::Key_Shift:
+                releasedKey->ignore(); //we don't want to eat it, we just want to keep track of it
+                emit shiftReleased();
+                break;
+            default:
+                releasedKey->ignore();
         }
     }
     return QObject::eventFilter(obj, event);

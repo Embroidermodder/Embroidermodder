@@ -119,6 +119,9 @@ void MainWindow::readSettings()
     settings_lwt_real_render                = settings.value("LineWeight/RealRender",                    true).toBool();
     settings_lwt_default_lwt                = settings.value("LineWeight/DefaultLineWeight",                0).toReal();
     //Selection
+    settings_selection_mode_pickfirst       = settings.value("Selection/PickFirst",                      true).toBool();
+    settings_selection_mode_pickadd         = settings.value("Selection/PickAdd",                        true).toBool();
+    settings_selection_mode_pickdrag        = settings.value("Selection/PickDrag",                      false).toBool();
     settings_selection_coolgrip_color       = settings.value("Selection/CoolGripColor",     qRgb(  0,  0,255)).toInt();
     settings_selection_hotgrip_color        = settings.value("Selection/HotGripColor",      qRgb(255,  0,  0)).toInt();
     settings_selection_grip_size            = settings.value("Selection/GripSize",                          4).toInt();
@@ -247,6 +250,9 @@ void MainWindow::writeSettings()
     settings.setValue("LineWeight/RealRender",                     settings_lwt_real_render);
     settings.setValue("LineWeight/DefaultLineWeight",   tmp.setNum(settings_lwt_default_lwt));
     //Selection
+    settings.setValue("Selection/PickFirst",                       settings_selection_mode_pickfirst);
+    settings.setValue("Selection/PickAdd",                         settings_selection_mode_pickadd);
+    settings.setValue("Selection/PickDrag",                        settings_selection_mode_pickdrag);
     settings.setValue("Selection/CoolGripColor",        tmp.setNum(settings_selection_coolgrip_color));
     settings.setValue("Selection/HotGripColor",         tmp.setNum(settings_selection_hotgrip_color));
     settings.setValue("Selection/GripSize",             tmp.setNum(settings_selection_grip_size));

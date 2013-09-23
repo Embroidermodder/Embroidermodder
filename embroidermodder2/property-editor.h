@@ -44,14 +44,18 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(const QString& iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0, Qt::WindowFlags flags = 0);
     ~PropertyEditor();
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
+signals:
+    void pickAddModeToggled();
+
 public slots:
     void setSelectedItems(QList<QGraphicsItem*> itemList);
+    void updatePickAddModeButton(bool pickAddMode);
 
 private slots:
     void fieldEdited(QObject* fieldObj);
@@ -59,6 +63,7 @@ private slots:
     void showOneType(int index);
     void hideAllGroups();
     void clearAllFields();
+    void togglePickAddMode();
 
 private:
     QWidget*     focusWidget;
@@ -66,6 +71,8 @@ private:
     QString      iconDir;
     int          iconSize;
     Qt::ToolButtonStyle propertyEditorButtonStyle;
+
+    bool pickAdd;
 
     QList<QGraphicsItem*> selectedItemList;
 

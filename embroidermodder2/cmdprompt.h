@@ -89,6 +89,9 @@ signals:
     void undoPressed();
     void redoPressed();
 
+    void shiftPressed();
+    void shiftReleased();
+
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
     void endCommand();
@@ -216,6 +219,9 @@ signals:
     void selectAllPressed();
     void undoPressed();
     void redoPressed();
+
+    void shiftPressed();
+    void shiftReleased();
 
 private:
     CmdPromptInput*    promptInput;

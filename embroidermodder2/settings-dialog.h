@@ -176,6 +176,9 @@ private:
     bool    dialog_lwt_show_lwt;
     bool    dialog_lwt_real_render;
     qreal   dialog_lwt_default_lwt;
+    bool    dialog_selection_mode_pickfirst;
+    bool    dialog_selection_mode_pickadd;
+    bool    dialog_selection_mode_pickdrag;
     QRgb    dialog_selection_coolgrip_color;
     QRgb    dialog_selection_hotgrip_color;
     quint8  dialog_selection_grip_size;
@@ -272,6 +275,9 @@ private slots:
     void sliderQSnapApertureSizeValueChanged(int);
     void checkBoxLwtShowLwtStateChanged(int);
     void checkBoxLwtRealRenderStateChanged(int);
+    void checkBoxSelectionModePickFirstStateChanged(int);
+    void checkBoxSelectionModePickAddStateChanged(int);
+    void checkBoxSelectionModePickDragStateChanged(int);
     void comboBoxSelectionCoolGripColorCurrentIndexChanged(int);
     void comboBoxSelectionHotGripColorCurrentIndexChanged(int);
     void sliderSelectionGripSizeValueChanged(int);
