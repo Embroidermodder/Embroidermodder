@@ -18,6 +18,7 @@ CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObjec
     if(obj)
     {
         init(obj->objectCenterX(), obj->objectCenterY(), obj->objectRadius(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 

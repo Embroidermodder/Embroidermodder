@@ -18,6 +18,7 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
     if(obj)
     {
         init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 

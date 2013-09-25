@@ -23,6 +23,7 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
         setObjectTextUpsideDown(obj->objectTextUpsideDown());
         setObjectTextStyle(obj->objectTextBold(), obj->objectTextItalic(), obj->objectTextUnderline(), obj->objectTextStrikeOut(), obj->objectTextOverline());
         init(obj->objectText(), obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setScale(obj->scale());
     }
 }
 

@@ -25,9 +25,9 @@ void MainWindow::createAllActions()
     actionDict.insert(ACTION_designdetails, createAction(tr("designdetails"), tr("&Details"), tr("Details of the current design.")));
     actionDict.insert(ACTION_exit,          createAction(tr("exit"),          tr("E&xit"),    tr("Exit the application.")));
 
-    actionDict.insert(ACTION_cut,   createAction(tr("cut"),   tr("Cu&t"),   tr("Cut the current selection's contents to the clipboard")));
-    actionDict.insert(ACTION_copy,  createAction(tr("copy"),  tr("&Copy"),  tr("Copy the current selection's contents to the clipboard")));
-    actionDict.insert(ACTION_paste, createAction(tr("paste"), tr("&Paste"), tr("Paste the clipboard's contents into the current selection")));
+    actionDict.insert(ACTION_cut,   createAction(tr("cut"),   tr("Cu&t"),   tr("Cut the current selection's contents to the clipboard.")));
+    actionDict.insert(ACTION_copy,  createAction(tr("copy"),  tr("&Copy"),  tr("Copy the current selection's contents to the clipboard.")));
+    actionDict.insert(ACTION_paste, createAction(tr("paste"), tr("&Paste"), tr("Paste the clipboard's contents into the current selection.")));
 
     actionDict.insert(ACTION_help,        createAction(tr("help"),        tr("&Help"),             tr("Displays help.")));
     actionDict.insert(ACTION_changelog,   createAction(tr("changelog"),   tr("&Changelog"),        tr("Describes new features in this product.")));

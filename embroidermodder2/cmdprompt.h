@@ -175,6 +175,7 @@ public slots:
     void endCommand() { promptInput->endCommand(); }
     bool isCommandActive() { return promptInput->cmdActive; }
     QString activeCommand() { return promptInput->curCmd; }
+    QString lastCommand() { return promptInput->lastCmd; }
     void processInput() { promptInput->processInput(); }
     void enableRapidFire() { promptInput->rapidFireEnabled = true; }
     void disableRapidFire() { promptInput->rapidFireEnabled = false; }

@@ -17,6 +17,8 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(pare
     if(obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
+        setScale(obj->scale());
     }
 }
 

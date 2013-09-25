@@ -695,6 +695,9 @@ public:
     void nativeSetTextStrikeOut       (bool val);
     void nativeSetTextOverline        (bool val);
 
+    void nativePreviewOn              (int clone, int mode, qreal x, qreal y, qreal data);
+    void nativePreviewOff             ();
+
     void nativeVulcanize              ();
     void nativeClearRubber            ();
     bool nativeAllowRubber            ();

@@ -21,8 +21,6 @@ global.mode;
 global.mode_NORMAL    = 0;
 global.mode_REFERENCE = 1;
 
-//TODO: Add preview/ghost of scaling so the user can see where the objects will scale to in real time.
-
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
 function main()
@@ -72,6 +70,7 @@ function click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
+            previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
             appendPromptHistory();
             setPromptPrefix("Specify scale factor or [Reference]: ");
         }
@@ -82,6 +81,7 @@ function click(x, y)
             global.factor = calculateDistance(global.baseX, global.baseY, global.destX, global.destY);
             appendPromptHistory();
             scaleSelected(global.baseX, global.baseY, global.factor);
+            previewOff();
             endCommand();
         }
     }
@@ -115,6 +115,7 @@ function click(x, y)
             {
                 appendPromptHistory();
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
+                previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
                 setPromptPrefix("Specify new length: ");
             }
         }
@@ -132,6 +133,7 @@ function click(x, y)
             {
                 appendPromptHistory();
                 scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                previewOff();
                 endCommand();
             }
         }
@@ -169,6 +171,7 @@ function prompt(str)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
+                previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
                 setPromptPrefix("Specify scale factor or [Reference]: ");
             }
         }
@@ -179,6 +182,7 @@ function prompt(str)
                 global.mode = global.mode_REFERENCE;
                 setPromptPrefix("Specify reference length <1>: ");
                 clearRubber();
+                previewOff();
             }
             else
             {
@@ -192,6 +196,7 @@ function prompt(str)
                 {
                     global.factor = Number(str);
                     scaleSelected(global.baseX, global.baseY, global.factor);
+                    previewOff();
                     endCommand();
                 }
             }
@@ -245,6 +250,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
+                    previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
                     setPromptPrefix("Specify new length: ");
                 }
             }
@@ -277,6 +283,7 @@ function prompt(str)
                     else
                     {
                         setRubberPoint("LINE_START", global.baseX, global.baseY);
+                        previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
                         setPromptPrefix("Specify new length: ");
                     }
                 }
@@ -302,6 +309,7 @@ function prompt(str)
                 else
                 {
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
+                    previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
                     setPromptPrefix("Specify new length: ");
                 }
             }
@@ -332,6 +340,7 @@ function prompt(str)
                     else
                     {
                         scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                        previewOff();
                         endCommand();
                     }
                 }
@@ -349,6 +358,7 @@ function prompt(str)
                 else
                 {
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
+                    previewOff();
                     endCommand();
                 }
             }

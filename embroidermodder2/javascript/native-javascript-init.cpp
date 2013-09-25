@@ -54,6 +54,8 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValSetTextUnderline = engine->newFunction(javaSetTextUnderline); engine->globalObject().setProperty("setTextUnderline", scriptValSetTextUnderline);
     QScriptValue scriptValSetTextStrikeOut = engine->newFunction(javaSetTextStrikeOut); engine->globalObject().setProperty("setTextStrikeOut", scriptValSetTextStrikeOut);
     QScriptValue scriptValSetTextOverline = engine->newFunction(javaSetTextOverline); engine->globalObject().setProperty("setTextOverline", scriptValSetTextOverline);
+    QScriptValue scriptValPreviewOn = engine->newFunction(javaPreviewOn); engine->globalObject().setProperty("previewOn", scriptValPreviewOn);
+    QScriptValue scriptValPreviewOff = engine->newFunction(javaPreviewOff); engine->globalObject().setProperty("previewOff", scriptValPreviewOff);
     QScriptValue scriptValVulcanize = engine->newFunction(javaVulcanize); engine->globalObject().setProperty("vulcanize", scriptValVulcanize);
     QScriptValue scriptValAllowRubber = engine->newFunction(javaAllowRubber); engine->globalObject().setProperty("allowRubber", scriptValAllowRubber);
     QScriptValue scriptValSetRubberMode = engine->newFunction(javaSetRubberMode); engine->globalObject().setProperty("setRubberMode", scriptValSetRubberMode);

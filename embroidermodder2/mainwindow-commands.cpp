@@ -1010,8 +1010,11 @@ void MainWindow::nativeInitCommand()
 void MainWindow::nativeEndCommand()
 {
     View* gview = activeView();
-    if(gview) gview->clearRubberRoom();
-
+    if(gview)
+    {
+        gview->clearRubberRoom();
+        gview->previewOff();
+    }
     prompt->endCommand();
 }
 
@@ -1240,10 +1243,22 @@ void MainWindow::nativeSetTextOverline(bool val)
     setTextOverline(val);
 }
 
+void MainWindow::nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data)
+{
+    View* gview = activeView();
+    if(gview) gview->previewOn(clone, mode, x, -y, data);
+}
+
+void MainWindow::nativePreviewOff()
+{
+    View* gview = activeView();
+    if(gview) gview->previewOff();
+}
+
 void MainWindow::nativeVulcanize()
 {
     View* gview = activeView();
-    if(gview) return gview->vulcanizeRubberRoom();
+    if(gview) gview->vulcanizeRubberRoom();
 }
 
 void MainWindow::nativeClearRubber()
@@ -1262,19 +1277,19 @@ bool MainWindow::nativeAllowRubber()
 void MainWindow::nativeSetRubberMode(int mode)
 {
     View* gview = activeView();
-    if(gview) return gview->setRubberMode(mode);
+    if(gview) gview->setRubberMode(mode);
 }
 
 void MainWindow::nativeSetRubberPoint(const QString& key, qreal x, qreal y)
 {
     View* gview = activeView();
-    if(gview) return gview->setRubberPoint(key, QPointF(x, -y));
+    if(gview) gview->setRubberPoint(key, QPointF(x, -y));
 }
 
 void MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
 {
     View* gview = activeView();
-    if(gview) return gview->setRubberText(key, txt);
+    if(gview) gview->setRubberText(key, txt);
 }
 
 void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)

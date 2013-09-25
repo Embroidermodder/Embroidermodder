@@ -54,6 +54,7 @@ public slots:
     void cut();
     void copy();
     void paste();
+    void repeatAction();
     void moveAction();
     void scaleAction();
     void scaleSelected(qreal x, qreal y, qreal factor);
@@ -87,6 +88,9 @@ public slots:
     void setGridColor(QRgb color);
     void createGrid(const QString& gridType);
     void setRulerColor(QRgb color);
+
+    void previewOn(int clone, int mode, qreal x, qreal y, qreal data);
+    void previewOff();
 
     bool allowRubber();
     void addToRubberRoom(QGraphicsItem* item);
@@ -128,7 +132,13 @@ private:
     int roundToMultiple(bool roundUp, int numToRound, int multiple);
     QPainterPath createRulerTextPath(float x, float y, QString str, float height);
 
-    QList<QGraphicsItem*> createCutCopyObjectList(QList<QGraphicsItem*> list);
+    QList<QGraphicsItem*> previewObjectList;
+    QGraphicsItemGroup* previewObjectItemGroup;
+    QPointF previewPoint;
+    qreal   previewData;
+    int     previewMode;
+
+    QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
     QPointF cutCopyMousePoint;
     QGraphicsItemGroup* pasteObjectItemGroup;
     QPointF pasteDelta;
@@ -137,6 +147,7 @@ private:
 
     void copySelected();
 
+    bool previewActive;
     bool pastingActive;
     bool movingActive;
     bool selectingActive;

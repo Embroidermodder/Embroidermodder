@@ -21,8 +21,6 @@ global.mode;
 global.mode_NORMAL    = 0;
 global.mode_REFERENCE = 1;
 
-//TODO: Add preview/ghost of rotation so the user can see where the objects will rotate to in real time.
-
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
 function main()
@@ -72,6 +70,7 @@ function click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
+            previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
             appendPromptHistory();
             setPromptPrefix("Specify rotation angle or [Reference]: ");
         }
@@ -82,6 +81,7 @@ function click(x, y)
             global.angle = calculateAngle(global.baseX, global.baseY, global.destX, global.destY);
             appendPromptHistory();
             rotateSelected(global.baseX, global.baseY, global.angle);
+            previewOff();
             endCommand();
         }
     }
@@ -103,6 +103,7 @@ function click(x, y)
             global.destRY = y;
             global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
             setRubberPoint("LINE_START", global.baseX, global.baseY);
+            previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
             appendPromptHistory();
             setPromptPrefix("Specify the new angle: ");
         }
@@ -110,6 +111,7 @@ function click(x, y)
         {
             global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
             rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+            previewOff();
             endCommand();
         }
     }
@@ -146,6 +148,7 @@ function prompt(str)
                 addRubber("LINE");
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
+                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
                 setPromptPrefix("Specify rotation angle or [Reference]: ");
             }
         }
@@ -156,6 +159,7 @@ function prompt(str)
                 global.mode = global.mode_REFERENCE;
                 setPromptPrefix("Specify the reference angle <0.00>: ");
                 clearRubber();
+                previewOff();
             }
             else
             {
@@ -169,6 +173,7 @@ function prompt(str)
                 {
                     global.angle = Number(str);
                     rotateSelected(global.baseX, global.baseY, global.angle);
+                    previewOff();
                     endCommand();
                 }
             }
@@ -206,6 +211,10 @@ function prompt(str)
                 global.destRY = 0.0;
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
+                addRubber("LINE");
+                setRubberMode("LINE");
+                setRubberPoint("LINE_START", global.baseX, global.baseY);
+                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                 setPromptPrefix("Specify the new angle: ");
             }
         }
@@ -225,6 +234,7 @@ function prompt(str)
                     global.destRX = Number(strList[0]);
                     global.destRY = Number(strList[1]);
                     global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
+                    previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     setPromptPrefix("Specify the new angle: ");
                 }
@@ -238,6 +248,7 @@ function prompt(str)
                 global.destRY = 0.0;
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
+                previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                 setPromptPrefix("Specify the new angle: ");
             }
         }
@@ -258,6 +269,7 @@ function prompt(str)
                     var y = Number(strList[1]);
                     global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
                     rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                    previewOff();
                     endCommand();
                 }
             }
@@ -265,6 +277,7 @@ function prompt(str)
             {
                 global.angleNew = Number(str);
                 rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
+                previewOff();
                 endCommand();
             }
         }

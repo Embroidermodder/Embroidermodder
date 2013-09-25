@@ -75,7 +75,11 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     toggleRuler(mainWin->getSettingsRulerShowOnLoad());
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
+    previewMode = PREVIEW_MODE_NULL;
+    previewData = 0;
+    previewObjectItemGroup = 0;
     pasteObjectItemGroup = 0;
+    previewActive = false;
     pastingActive = false;
     movingActive = false;
     selectingActive = false;
@@ -115,6 +119,10 @@ View::~View()
     //Prevent memory leaks by deleting any objects that were removed from the scene
     qDeleteAll(hashDeletedObjects.begin(), hashDeletedObjects.end());
     hashDeletedObjects.clear();
+
+    //Prevent memory leaks by deleting any unused instances
+    qDeleteAll(previewObjectList.begin(), previewObjectList.end());
+    previewObjectList.clear();
 }
 
 void View::enterEvent(QEvent* event)
@@ -137,6 +145,56 @@ void View::deleteObject(BaseObject* obj)
     gscene->removeItem(obj);
     gscene->update();
     hashDeletedObjects.insert(obj->objectID(), obj);
+}
+
+void View::previewOn(int clone, int mode, qreal x, qreal y, qreal data)
+{
+    qDebug("View previewOn()");
+    previewOff(); //Free the old objects before creating new ones
+
+    previewMode = mode;
+
+    //Create new objects and add them to the scene in an item group.
+    if     (clone == PREVIEW_CLONE_SELECTED) previewObjectList = createObjectList(gscene->selectedItems());
+    else if(clone == PREVIEW_CLONE_RUBBER)   previewObjectList = createObjectList(rubberRoomList);
+    else return;
+    previewObjectItemGroup = gscene->createItemGroup(previewObjectList);
+
+    if(previewMode == PREVIEW_MODE_MOVE   ||
+       previewMode == PREVIEW_MODE_ROTATE ||
+       previewMode == PREVIEW_MODE_SCALE)
+    {
+        previewPoint = QPointF(x, y); //NOTE: Move: basePt; Rotate: basePt;   Scale: basePt;
+        previewData = data;           //NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
+        previewActive = true;
+    }
+    else
+    {
+        previewMode == PREVIEW_MODE_NULL;
+        previewPoint = QPointF();
+        previewData = 0;
+        previewActive = false;
+    }
+
+    gscene->update();
+}
+
+void View::previewOff()
+{
+    //Prevent memory leaks by deleting any unused instances
+    qDeleteAll(previewObjectList.begin(), previewObjectList.end());
+    previewObjectList.clear();
+
+    if(previewObjectItemGroup)
+    {
+        gscene->removeItem(previewObjectItemGroup);
+        delete previewObjectItemGroup;
+        previewObjectItemGroup = 0;
+    }
+
+    previewActive = false;
+
+    gscene->update();
 }
 
 bool View::allowRubber()
@@ -1420,6 +1478,74 @@ void View::mouseMoveEvent(QMouseEvent* event)
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
+    if(previewActive)
+    {
+        if(previewMode == PREVIEW_MODE_MOVE)
+        {
+            previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);
+        }
+        else if(previewMode == PREVIEW_MODE_ROTATE)
+        {
+            qreal x = previewPoint.x();
+            qreal y = previewPoint.y();
+            qreal rot = previewData;
+
+            qreal mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle();
+
+            qreal rad = radians(rot-mouseAngle);
+            qreal cosRot = qCos(rad);
+            qreal sinRot = qSin(rad);
+            qreal px = 0;
+            qreal py = 0;
+            px -= x;
+            py -= y;
+            qreal rotX = px*cosRot - py*sinRot;
+            qreal rotY = px*sinRot + py*cosRot;
+            rotX += x;
+            rotY += y;
+
+            previewObjectItemGroup->setPos(rotX, rotY);
+            previewObjectItemGroup->setRotation(rot-mouseAngle);
+        }
+        else if(previewMode == PREVIEW_MODE_SCALE)
+        {
+            qreal x = previewPoint.x();
+            qreal y = previewPoint.y();
+            qreal scaleFactor = previewData;
+
+            qreal factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor;
+
+            previewObjectItemGroup->setScale(1);
+            previewObjectItemGroup->setPos(0,0);
+
+            if(scaleFactor <= 0.0)
+            {
+                QMessageBox::critical(this, QObject::tr("ScaleFactor Error"),
+                                    QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+                                    "If you are a developer, your code needs examined, and possibly your head too."));
+            }
+            else
+            {
+                //Calculate the offset
+                qreal oldX = 0;
+                qreal oldY = 0;
+                QLineF scaleLine(x, y, oldX, oldY);
+                scaleLine.setLength(scaleLine.length()*factor);
+                qreal newX = scaleLine.x2();
+                qreal newY = scaleLine.y2();
+
+                qreal dx = newX - oldX;
+                qreal dy = newY - oldY;
+
+                previewObjectItemGroup->setScale(previewObjectItemGroup->scale()*factor);
+                previewObjectItemGroup->moveBy(dx, dy);
+            }
+        }
+
+
+
+
+    }
     if(pastingActive)
     {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
@@ -1588,9 +1714,18 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     {
         return;
     }
+    if(!mainWin->prompt->isCommandActive())
+    {
+        QString lastCmd = mainWin->prompt->lastCommand();
+        QAction* repeatAction = new QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, this);
+        repeatAction->setStatusTip("Repeats the previously issued command.");
+        connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
+        menu.addAction(repeatAction);
+    }
     if(zoomWindowActive)
     {
-        QAction *cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", &menu);
+        QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
+        cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
         menu.addAction(cancelZoomWinAction);
     }
@@ -1603,25 +1738,30 @@ void View::contextMenuEvent(QContextMenuEvent* event)
 
     if(!selectionEmpty)
     {
-        QAction *deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", &menu);
+        QAction* deleteAction = new QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", this);
+        deleteAction->setStatusTip("Removes objects from a drawing.");
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
         menu.addAction(deleteAction);
 
-        QAction *moveAction = new QAction(QIcon("icons/" + iconTheme + "/" + "move" + ".png"), "&Move", &menu);
+        QAction* moveAction = new QAction(QIcon("icons/" + iconTheme + "/" + "move" + ".png"), "&Move", this);
+        moveAction->setStatusTip("Displaces objects a specified distance in a specified direction.");
         connect(moveAction, SIGNAL(triggered()), this, SLOT(moveAction()));
         menu.addAction(moveAction);
 
-        QAction *scaleAction = new QAction(QIcon("icons/" + iconTheme + "/" + "scale" + ".png"), "Sca&le", &menu);
+        QAction* scaleAction = new QAction(QIcon("icons/" + iconTheme + "/" + "scale" + ".png"), "Sca&le", this);
+        scaleAction->setStatusTip("Enlarges or reduces objects proportionally in the X, Y, and Z directions.");
         connect(scaleAction, SIGNAL(triggered()), this, SLOT(scaleAction()));
         menu.addAction(scaleAction);
 
-        QAction *rotateAction = new QAction(QIcon("icons/" + iconTheme + "/" + "rotate" + ".png"), "R&otate", &menu);
+        QAction* rotateAction = new QAction(QIcon("icons/" + iconTheme + "/" + "rotate" + ".png"), "R&otate", this);
+        rotateAction->setStatusTip("Rotates objects about a base point.");
         connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotateAction()));
         menu.addAction(rotateAction);
 
         menu.addSeparator();
 
-        QAction *clearAction = new QAction("Cle&ar Selection", &menu);
+        QAction* clearAction = new QAction("Cle&ar Selection", this);
+        clearAction->setStatusTip("Removes all objects from the selection set.");
         connect(clearAction, SIGNAL(triggered()), this, SLOT(clearSelection()));
         menu.addAction(clearAction);
     }
@@ -1724,7 +1864,7 @@ void View::copySelected()
     //Create new objects but do not add them to the scene just yet.
     //By creating them now, ensures that pasting will still work
     //if the original objects are deleted before the paste occurs.
-    mainWin->cutCopyObjectList = createCutCopyObjectList(selectedList);
+    mainWin->cutCopyObjectList = createObjectList(selectedList);
 }
 
 void View::paste()
@@ -1741,10 +1881,10 @@ void View::paste()
     pastingActive = true;
 
     //Re-create the list in case of multiple pastes
-    mainWin->cutCopyObjectList = createCutCopyObjectList(mainWin->cutCopyObjectList);
+    mainWin->cutCopyObjectList = createObjectList(mainWin->cutCopyObjectList);
 }
 
-QList<QGraphicsItem*> View::createCutCopyObjectList(QList<QGraphicsItem*> list)
+QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
 {
     QList<QGraphicsItem*> copyList;
 
@@ -1901,6 +2041,13 @@ QList<QGraphicsItem*> View::createCutCopyObjectList(QList<QGraphicsItem*> list)
     }
 
     return copyList;
+}
+
+void View::repeatAction()
+{
+    mainWin->prompt->endCommand();
+    mainWin->prompt->setCurrentText(mainWin->prompt->lastCommand());
+    mainWin->prompt->processInput();
 }
 
 void View::moveAction()

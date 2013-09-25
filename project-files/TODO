@@ -4,12 +4,12 @@ Stuff for 2.0 alpha1:
 WIP - CAD Command: Polygon (rt)
 WIP - CAD Command: Polyline (rt)
 DONE - Font Generation/Single Line Text (rt)
-WIP - Scaling (rt)
+DONE - Scaling (rt)
 WIP - Statistics from 1.0, needs histogram
 WIP - Printing (rt)
 DONE - Undo/Redo (rt)
 DONE - Cut/Copy/Paste
-WIP - Rotation (rt)
+DONE - Rotation (rt)
 WIP - Saving DST/PES/JEF (varga)
 DONE - Otto Theme Icons - alpha (rt)
 WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug

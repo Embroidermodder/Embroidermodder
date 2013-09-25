@@ -17,6 +17,7 @@ PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(p
     if(obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 

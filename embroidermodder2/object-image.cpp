@@ -18,6 +18,7 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(p
     {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
     }
 }
 

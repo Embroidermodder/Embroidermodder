@@ -17,6 +17,8 @@ PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseOb
     if(obj)
     {
         init(obj->objectX(), obj->objectY(), obj->objectPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setRotation(obj->rotation());
+        setScale(obj->scale());
     }
 }
 

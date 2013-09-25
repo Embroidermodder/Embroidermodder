@@ -56,6 +56,8 @@ QScriptValue javaSetTextItalic          (QScriptContext* context, QScriptEngine*
 QScriptValue javaSetTextUnderline       (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextStrikeOut       (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetTextOverline        (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaPreviewOn              (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaPreviewOff             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaVulcanize              (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAllowRubber            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetRubberMode          (QScriptContext* context, QScriptEngine* engine);

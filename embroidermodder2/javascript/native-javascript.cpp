@@ -516,6 +516,49 @@ QScriptValue javaSetTextOverline(QScriptContext* context, QScriptEngine* /*engin
     return QScriptValue();
 }
 
+QScriptValue javaPreviewOn(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 5)    return context->throwError("previewOn() requires five arguments");
+    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): first argument is not a string");
+    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): second argument is not a string");
+    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): third argument is not a number");
+    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument is not a number");
+    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument is not a number");
+
+    QString cloneStr = context->argument(0).toString().toUpper();
+    QString modeStr  = context->argument(1).toString().toUpper();
+    qreal x          = context->argument(2).toNumber();
+    qreal y          = context->argument(3).toNumber();
+    qreal data       = context->argument(4).toNumber();
+
+    int clone = PREVIEW_CLONE_NULL;
+    int mode = PREVIEW_MODE_NULL;
+    if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
+    else if(cloneStr == "RUBBER")   { clone = PREVIEW_CLONE_RUBBER;   }
+    else                            { return context->throwError(QScriptContext::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
+
+    if     (modeStr == "MOVE")   { mode = PREVIEW_MODE_MOVE;   }
+    else if(modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
+    else if(modeStr == "SCALE")  { mode = PREVIEW_MODE_SCALE;  }
+    else                         { return context->throwError(QScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
+
+    //isNaN check
+    if(qIsNaN(x))    return context->throwError(QScriptContext::TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y))    return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(data)) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
+
+    mainWin()->nativePreviewOn(clone, mode, x, y, data);
+    return QScriptValue();
+}
+
+QScriptValue javaPreviewOff(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("previewOff() requires zero arguments");
+
+    mainWin()->nativePreviewOff();
+    return QScriptValue();
+}
+
 QScriptValue javaVulcanize(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("vulcanize() requires zero arguments");

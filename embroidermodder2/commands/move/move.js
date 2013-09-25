@@ -49,6 +49,7 @@ function click(x, y)
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.baseX, global.baseY);
+        previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
         appendPromptHistory();
         setPromptPrefix("Specify destination point: ");
     }
@@ -59,6 +60,7 @@ function click(x, y)
         global.deltaX = global.destX - global.baseX;
         global.deltaY = global.destY - global.baseY;
         moveSelected(global.deltaX, global.deltaY);
+        previewOff();
         endCommand();
     }
 }
@@ -92,6 +94,7 @@ function prompt(str)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
+            previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
             setPromptPrefix("Specify destination point: ");
         }
     }
@@ -111,6 +114,7 @@ function prompt(str)
             global.deltaX = global.destX - global.baseX;
             global.deltaY = global.destY - global.baseY;
             moveSelected(global.deltaX, global.deltaY);
+            previewOff();
             endCommand();
         }
     }
