@@ -1274,6 +1274,12 @@ bool MainWindow::nativeAllowRubber()
     return false;
 }
 
+void MainWindow::nativeSpareRubber(qint64 id)
+{
+    View* gview = activeView();
+    if(gview) gview->spareRubber(id);
+}
+
 void MainWindow::nativeSetRubberMode(int mode)
 {
     View* gview = activeView();

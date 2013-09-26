@@ -65,6 +65,7 @@ QScriptValue javaSetRubberPoint         (QScriptContext* context, QScriptEngine*
 QScriptValue javaSetRubberText          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddRubber              (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaClearRubber            (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaSpareRubber            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddTextMulti           (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddTextSingle          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAddInfiniteLine        (QScriptContext* context, QScriptEngine* engine);

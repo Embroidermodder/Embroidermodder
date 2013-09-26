@@ -33,6 +33,7 @@ public:
     QUndoStack* getUndoStack() { return undoStack; }
     void addObject(BaseObject* obj);
     void deleteObject(BaseObject* obj);
+    void vulcanizeObject(BaseObject* obj);
 
 public slots:
     void zoomIn();
@@ -96,6 +97,7 @@ public slots:
     void addToRubberRoom(QGraphicsItem* item);
     void vulcanizeRubberRoom();
     void clearRubberRoom();
+    void spareRubber(qint64 id);
     void setRubberMode(int mode);
     void setRubberPoint(const QString& key, const QPointF& point);
     void setRubberText(const QString& key, const QString& txt);
@@ -113,6 +115,8 @@ protected:
 
 private:
     QHash<qint64, QGraphicsItem*> hashDeletedObjects;
+
+    QList<qint64> spareRubberList;
 
     QColor gridColor;
     QPainterPath gridPath;

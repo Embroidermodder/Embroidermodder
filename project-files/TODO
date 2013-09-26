@@ -2,7 +2,7 @@
 Stuff for 2.0 alpha1:
 //====================
 WIP - CAD Command: Polygon (rt)
-WIP - CAD Command: Polyline (rt)
+DONE - CAD Command: Polyline (rt)
 DONE - Font Generation/Single Line Text (rt)
 DONE - Scaling (rt)
 WIP - Statistics from 1.0, needs histogram
@@ -32,7 +32,7 @@ TODO - Layer Manager + LayerSwitcher DockWidget
 TODO - SNAP/ORTHO/POLAR
 TODO - Up and Down keys cycle thru commands in the command prompt
 TODO - Filling Algorithms (varga)
-TODO - Otto Theme Icons - beta (rt)
+TODO - Otto Theme Icons - beta (rt) - Units, Render, Selectors
 
 //====================
 Stuff for 2.0 rc1:

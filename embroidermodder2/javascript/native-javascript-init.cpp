@@ -63,6 +63,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValSetRubberText = engine->newFunction(javaSetRubberText); engine->globalObject().setProperty("setRubberText", scriptValSetRubberText);
     QScriptValue scriptValAddRubber = engine->newFunction(javaAddRubber); engine->globalObject().setProperty("addRubber", scriptValAddRubber);
     QScriptValue scriptValClearRubber = engine->newFunction(javaClearRubber); engine->globalObject().setProperty("clearRubber", scriptValClearRubber);
+    QScriptValue scriptValSpareRubber = engine->newFunction(javaSpareRubber); engine->globalObject().setProperty("spareRubber", scriptValSpareRubber);
     QScriptValue scriptValAddTextMulti = engine->newFunction(javaAddTextMulti); engine->globalObject().setProperty("addTextMulti", scriptValAddTextMulti);
     QScriptValue scriptValAddTextSingle = engine->newFunction(javaAddTextSingle); engine->globalObject().setProperty("addTextSingle", scriptValAddTextSingle);
     QScriptValue scriptValAddInfiniteLine = engine->newFunction(javaAddInfiniteLine); engine->globalObject().setProperty("addInfiniteLine", scriptValAddInfiniteLine);

@@ -674,7 +674,7 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     else if(objType == "LINE")         { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if(objType == "POINT")        {} //TODO: handle this type
     else if(objType == "POLYGON")      {} //TODO: handle this type
-    else if(objType == "POLYLINE")     {} //TODO: handle this type
+    else if(objType == "POLYLINE")     { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if(objType == "RAY")          {} //TODO: handle this type
     else if(objType == "RECTANGLE")    { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if(objType == "SPLINE")       {} //TODO: handle this type
@@ -689,6 +689,27 @@ QScriptValue javaClearRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     if(context->argumentCount() != 0) return context->throwError("clearRubber() requires zero arguments");
 
     mainWin()->nativeClearRubber();
+    return QScriptValue();
+}
+
+QScriptValue javaSpareRubber(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 1)    return context->throwError("spareRubber() requires one argument");
+    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "spareRubber(): first argument is not a string");
+
+    QString objID = context->argument(0).toString().toUpper();
+
+    if     (objID == "PATH")     { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
+    else if(objID == "POLYGON")  { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
+    else if(objID == "POLYLINE") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    else
+    {
+        bool ok = false;
+        qint64 id = objID.toLongLong(&ok);
+        if(!ok) return context->throwError(QScriptContext::TypeError, "spareRubber(): error converting object ID into an int64");
+        mainWin()->nativeSpareRubber(id);
+    }
+
     return QScriptValue();
 }
 

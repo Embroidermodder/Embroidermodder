@@ -73,7 +73,11 @@ QPointF BaseObject::objectRubberPoint(const QString& key) const
 {
     if(objRubberPoints.contains(key))
         return objRubberPoints.value(key);
-    return scene()->property(SCENE_QSNAP_POINT).toPointF();
+
+    QGraphicsScene* gscene = scene();
+    if(gscene)
+        return scene()->property(SCENE_QSNAP_POINT).toPointF();
+    return QPointF();
 }
 
 QString BaseObject::objectRubberText(const QString& key) const

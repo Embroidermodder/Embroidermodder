@@ -701,6 +701,8 @@ public:
     void nativeVulcanize              ();
     void nativeClearRubber            ();
     bool nativeAllowRubber            ();
+    void nativeSpareRubber            (qint64 id);
+    //TODO: void nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
     void nativeSetRubberMode          (int mode);
     void nativeSetRubberPoint         (const QString& key, qreal x, qreal y);
     void nativeSetRubberText          (const QString& key, const QString& txt);

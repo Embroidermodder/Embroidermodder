@@ -6,6 +6,7 @@ global.firstX;
 global.firstY;
 global.prevX;
 global.prevY;
+global.num;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
@@ -18,6 +19,7 @@ function main()
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
+    global.num = 0;
     setPromptPrefix("Specify first point: ");
 }
 
@@ -35,17 +37,16 @@ function click(x, y)
         global.prevY = y;
         addRubber("POLYLINE");
         setRubberMode("POLYLINE");
-        setRubberPoint("POLYLINE_START", global.firstX, global.firstY);
+        setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
         appendPromptHistory();
         setPromptPrefix("Specify next point or [Undo]: ");
     }
     else
     {
-        setRubberPoint("POLYLINE_END", x, y);
-        vulcanize();
-        addRubber("POLYLINE");
-        setRubberMode("POLYLINE");
-        setRubberPoint("POLYLINE_START", x, y);
+        global.num++;
+        setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
+        setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
+        spareRubber("POLYLINE");
         appendPromptHistory();
         global.prevX = x;
         global.prevY = y;
@@ -82,7 +83,7 @@ function prompt(str)
             global.prevY = global.firstY;
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
-            setRubberPoint("POLYLINE_START", global.firstX, global.firstY);
+            setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
             setPromptPrefix("Specify next point or [Undo]: ");
         }
     }
@@ -105,11 +106,10 @@ function prompt(str)
             {
                 var x = Number(strList[0]);
                 var y = Number(strList[1]);
-                setRubberPoint("POLYLINE_END", x, y);
-                vulcanize();
-                addRubber("POLYLINE");
-                setRubberMode("POLYLINE");
-                setRubberPoint("POLYLINE_START", x, y);
+                global.num++;
+                setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
+                setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
+                spareRubber("POLYLINE");
                 global.prevX = x;
                 global.prevY = y;
                 setPromptPrefix("Specify next point or [Undo]: ");

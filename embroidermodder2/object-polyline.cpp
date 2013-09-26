@@ -65,7 +65,7 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
     updateRubber(painter);
 
-    painter->drawPath(objectPath());
+    painter->drawPath(normalPath);
 
     //TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
     if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool())
@@ -102,7 +102,33 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
 
 void PolylineObject::updateRubber(QPainter* painter)
 {
-    //TODO: Polyline Rubber Modes
+    int rubberMode = objectRubberMode();
+    if(rubberMode == OBJ_RUBBER_POLYLINE)
+    {
+        setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
+
+        QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
+        if(painter) painter->drawLine(rubberLine);
+
+        bool ok = false;
+        QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
+        if(numStr.isNull()) return;
+        int num = numStr.toInt(&ok);
+        if(!ok) return;
+
+        QString appendStr;
+        QPainterPath rubberPath;
+        for(int i = 1; i <= num; i++)
+        {
+            appendStr = "POLYLINE_POINT_" + QString().setNum(i);
+            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
+            rubberPath.lineTo(appendPoint);
+        }
+        updatePath(rubberPath);
+
+        //Ensure the path isn't updated until the number of points is changed again
+        setObjectRubberText("POLYLINE_NUM_POINTS", QString());
+    }
 }
 
 void PolylineObject::vulcanize()

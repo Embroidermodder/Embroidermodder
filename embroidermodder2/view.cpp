@@ -216,29 +216,51 @@ void View::vulcanizeRubberRoom()
     foreach(QGraphicsItem* item, rubberRoomList)
     {
         BaseObject* base = static_cast<BaseObject*>(item);
-        if(base)
-        {
-            gscene->removeItem(base); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
-            base->vulcanize();
-
-            UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
-            if(cmd)
-            undoStack->push(cmd);
-        }
+        if(base) vulcanizeObject(base);
     }
     rubberRoomList.clear();
     gscene->update();
+}
+
+void View::vulcanizeObject(BaseObject* obj)
+{
+    gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
+    obj->vulcanize();
+
+    UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, this, 0);
+    if(cmd) undoStack->push(cmd);
 }
 
 void View::clearRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
-        gscene->removeItem(item);
-        delete item;
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base)
+        {
+            if((base->type() == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
+               (base->type() == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
+               (base->type() == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
+               (spareRubberList.contains(base->objectID())))
+            {
+                vulcanizeObject(base);
+            }
+            else
+            {
+                gscene->removeItem(item);
+                delete item;
+            }
+        }
     }
+
     rubberRoomList.clear();
+    spareRubberList.clear();
     gscene->update();
+}
+
+void View::spareRubber(qint64 id)
+{
+    spareRubberList.append(id);
 }
 
 void View::setRubberMode(int mode)
