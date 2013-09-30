@@ -1,12 +1,11 @@
 //====================
 Stuff for 2.0 alpha1:
 //====================
-WIP - CAD Command: Polygon (rt)
+DONE - CAD Command: Polygon (rt)
 DONE - CAD Command: Polyline (rt)
 DONE - Font Generation/Single Line Text (rt)
 DONE - Scaling (rt)
 WIP - Statistics from 1.0, needs histogram
-WIP - Printing (rt)
 DONE - Undo/Redo (rt)
 DONE - Cut/Copy/Paste
 DONE - Rotation (rt)
@@ -22,6 +21,7 @@ TODO - Custom Filter Bug - doesn't save changes in some cases
 TODO - Cannot open file with # in name when opening multiple files (works fine when opening the single file)
 TODO - Move libembroidery-convert source and pro files into a separate directory or sub-directory so it will automatically build properly when building from project-files/qmake directory
 TODO - Closing Settings Dialog with the X in the window saves settings rather than discards them
+WIP - Advanced Printing
 WIP - CAD Command: Arc (rt)
 TODO - Load/Save Menu/Toolbars configurations into settings.ini
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
@@ -51,7 +51,12 @@ TODO - CAD Command review: ellipse
 TODO - CAD Command review: arc
 TODO - CAD Command review: distance
 TODO - CAD Command review: locatepoint
+TODO - CAD Command review: move
+TODO - CAD Command review: rgb
+TODO - CAD Command review: rotate
+TODO - CAD Command review: scale
 TODO - CAD Command review: singlelinetext
+TODO - CAD Command review: star
 TODO - Clean up all compiler warning messages, right now theres plenty :P
 
 //====================
