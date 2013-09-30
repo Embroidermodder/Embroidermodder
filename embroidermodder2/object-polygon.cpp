@@ -65,12 +65,97 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
 
     updateRubber(painter);
 
-    painter->drawPath(objectPath());
+    painter->drawPath(normalPath);
 }
 
 void PolygonObject::updateRubber(QPainter* painter)
 {
-    //TODO: Polygon Rubber Modes
+    int rubberMode = objectRubberMode();
+    if(rubberMode == OBJ_RUBBER_POLYGON)
+    {
+        setObjectPos(objectRubberPoint("POLYGON_POINT_0"));
+
+        bool ok = false;
+        QString numStr = objectRubberText("POLYGON_NUM_POINTS");
+        if(numStr.isNull()) return;
+        int num = numStr.toInt(&ok);
+        if(!ok) return;
+
+        QString appendStr;
+        QPainterPath rubberPath;
+        for(int i = 1; i <= num; i++)
+        {
+            appendStr = "POLYGON_POINT_" + QString().setNum(i);
+            QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
+            rubberPath.lineTo(appendPoint);
+        }
+        rubberPath.lineTo(0,0);
+        updatePath(rubberPath);
+
+        //Ensure the path isn't updated until the number of points is changed again
+        setObjectRubberText("POLYGON_NUM_POINTS", QString());
+    }
+    else if(rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE)
+    {
+        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
+
+        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
+
+        QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
+        QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
+        qreal inscribeAngle = inscribeLine.angle();
+        qreal inscribeInc = 360.0/numSides;
+
+        if(painter) painter->drawLine(inscribeLine);
+
+        QPainterPath inscribePath;
+        //First Point
+        inscribePath.moveTo(inscribePoint);
+        //Remaining Points
+        for(int i = 1; i < numSides; i++)
+        {
+            inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
+            inscribePath.lineTo(inscribeLine.p2());
+        }
+        inscribePath.closeSubpath();
+        updatePath(inscribePath);
+    }
+    else if(rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
+    {
+        setObjectPos(objectRubberPoint("POLYGON_CENTER"));
+
+        quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
+
+        QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
+        QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
+        qreal circumscribeAngle = circumscribeLine.angle();
+        qreal circumscribeInc = 360.0/numSides;
+
+        if(painter) painter->drawLine(circumscribeLine);
+
+        QPainterPath circumscribePath;
+        //First Point
+        QLineF prev(circumscribeLine.p2(), QPointF(0,0));
+        prev = prev.normalVector();
+        circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
+        QLineF perp(circumscribeLine.p2(), QPointF(0,0));
+        perp = perp.normalVector();
+        QPointF iPoint;
+        perp.intersect(prev, &iPoint);
+        circumscribePath.moveTo(iPoint);
+        //Remaining Points
+        for(int i = 2; i <= numSides; i++)
+        {
+            prev = perp;
+            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
+            perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
+            perp = perp.normalVector();
+            perp.intersect(prev, &iPoint);
+            circumscribePath.lineTo(iPoint);
+        }
+        circumscribePath.closeSubpath();
+        updatePath(circumscribePath);
+    }
 }
 
 void PolygonObject::vulcanize()

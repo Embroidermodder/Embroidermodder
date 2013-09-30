@@ -938,6 +938,18 @@ void MainWindow::disablePromptRapidFire()
     prompt->disableRapidFire();
 }
 
+void MainWindow::enableMoveRapidFire()
+{
+    View* gview = activeView();
+    if(gview) gview->enableMoveRapidFire();
+}
+
+void MainWindow::disableMoveRapidFire()
+{
+    View* gview = activeView();
+    if(gview) gview->disableMoveRapidFire();
+}
+
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
@@ -961,6 +973,12 @@ void MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 {
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")");
+}
+
+void MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
+{
+    qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")");
 }
 
 void MainWindow::runCommandContext(const QString& cmd, const QString& str)
@@ -1001,6 +1019,16 @@ void MainWindow::nativeDisablePromptRapidFire()
     disablePromptRapidFire();
 }
 
+void MainWindow::nativeEnableMoveRapidFire()
+{
+    enableMoveRapidFire();
+}
+
+void MainWindow::nativeDisableMoveRapidFire()
+{
+    disableMoveRapidFire();
+}
+
 void MainWindow::nativeInitCommand()
 {
     View* gview = activeView();
@@ -1014,6 +1042,7 @@ void MainWindow::nativeEndCommand()
     {
         gview->clearRubberRoom();
         gview->previewOff();
+        gview->disableMoveRapidFire();
     }
     prompt->endCommand();
 }

@@ -83,6 +83,22 @@ QScriptValue javaDisablePromptRapidFire(QScriptContext* context, QScriptEngine* 
     return QScriptValue();
 }
 
+QScriptValue javaEnableMoveRapidFire(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("enableMoveRapidFire() requires zero arguments");
+
+    mainWin()->nativeEnableMoveRapidFire();
+    return QScriptValue();
+}
+
+QScriptValue javaDisableMoveRapidFire(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("disableMoveRapidFire() requires zero arguments");
+
+    mainWin()->nativeDisableMoveRapidFire();
+    return QScriptValue();
+}
+
 QScriptValue javaInitCommand(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("initCommand() requires zero arguments");
@@ -201,6 +217,21 @@ QScriptValue javaMessageBox(QScriptContext* context, QScriptEngine* /*engine*/)
 
     mainWin()->nativeMessageBox(type, title, text);
     return QScriptValue();
+}
+
+QScriptValue javaIsInt(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 1)    return context->throwError("isInt() requires one argument");
+    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "isInt(): first argument is not a number");
+
+    qreal num = context->argument(0).toNumber();
+
+    //isNaN check
+    if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "isInt(): first argument failed isNaN check. There is an error in your code.");
+
+    if(fmod(num, 1) == 0)
+        return QScriptValue(true);
+    return QScriptValue(false);
 }
 
 QScriptValue javaUndo(QScriptContext* context, QScriptEngine* /*engine*/)
@@ -598,6 +629,8 @@ QScriptValue javaSetRubberMode(QScriptContext* context, QScriptEngine* /*engine*
     else if(mode == "LINE")                              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
 
     else if(mode == "POLYGON")                           { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
+    else if(mode == "POLYGON_INSCRIBE")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if(mode == "POLYGON_CIRCUMSCRIBE")              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
     else if(mode == "POLYLINE")                          { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
 
@@ -673,7 +706,7 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     else if(objType == "INFINITELINE") {} //TODO: handle this type
     else if(objType == "LINE")         { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if(objType == "POINT")        {} //TODO: handle this type
-    else if(objType == "POLYGON")      {} //TODO: handle this type
+    else if(objType == "POLYGON")      { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if(objType == "POLYLINE")     { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if(objType == "RAY")          {} //TODO: handle this type
     else if(objType == "RECTANGLE")    { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }

@@ -11,6 +11,8 @@ QScriptValue javaSetPromptPrefix        (QScriptContext* context, QScriptEngine*
 QScriptValue javaAppendPromptHistory    (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaEnablePromptRapidFire  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaDisablePromptRapidFire (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaEnableMoveRapidFire    (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaDisableMoveRapidFire   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaInitCommand            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaEndCommand             (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaExit                   (QScriptContext* context, QScriptEngine* engine);
@@ -25,6 +27,7 @@ QScriptValue javaWindowNext             (QScriptContext* context, QScriptEngine*
 QScriptValue javaWindowPrevious         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPlatformString         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaMessageBox             (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIsInt                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaUndo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaRedo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanLeft                (QScriptContext* context, QScriptEngine* engine);

@@ -281,6 +281,9 @@ public slots:
     void                            enablePromptRapidFire();
     void                            disablePromptRapidFire();
 
+    void                            enableMoveRapidFire();
+    void                            disableMoveRapidFire();
+
     void                            onCloseWindow();
     virtual void                    onCloseMdiWin(MDIWindow*);
 
@@ -512,6 +515,7 @@ public slots:
     void runCommand();
     void runCommandMain(const QString& cmd);
     void runCommandClick(const QString& cmd,  qreal x, qreal y);
+    void runCommandMove(const QString& cmd,  qreal x, qreal y);
     void runCommandContext(const QString& cmd, const QString& str);
     void runCommandPrompt(const QString& cmd, const QString& str);
 
@@ -640,6 +644,9 @@ public:
     void nativeDisablePromptRapidFire ();
     void nativeInitCommand            ();
     void nativeEndCommand             ();
+
+    void nativeEnableMoveRapidFire    ();
+    void nativeDisableMoveRapidFire   ();
 
     void nativeExit                   ();
     void nativeHelp                   ();

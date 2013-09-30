@@ -75,6 +75,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     toggleRuler(mainWin->getSettingsRulerShowOnLoad());
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
+    rapidMoveActive = false;
     previewMode = PREVIEW_MODE_NULL;
     previewData = 0;
     previewObjectItemGroup = 0;
@@ -195,6 +196,16 @@ void View::previewOff()
     previewActive = false;
 
     gscene->update();
+}
+
+void View::enableMoveRapidFire()
+{
+    rapidMoveActive = true;
+}
+
+void View::disableMoveRapidFire()
+{
+    rapidMoveActive = false;
 }
 
 bool View::allowRubber()
@@ -1500,6 +1511,13 @@ void View::mouseMoveEvent(QMouseEvent* event)
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
+    if(mainWin->isCommandActive())
+    {
+        if(rapidMoveActive)
+        {
+            mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
+        }
+    }
     if(previewActive)
     {
         if(previewMode == PREVIEW_MODE_MOVE)
@@ -1563,10 +1581,6 @@ void View::mouseMoveEvent(QMouseEvent* event)
                 previewObjectItemGroup->moveBy(dx, dy);
             }
         }
-
-
-
-
     }
     if(pastingActive)
     {

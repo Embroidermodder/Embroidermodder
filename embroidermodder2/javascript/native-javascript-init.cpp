@@ -9,6 +9,8 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValAppendPromptHistory = engine->newFunction(javaAppendPromptHistory); engine->globalObject().setProperty("appendPromptHistory", scriptValAppendPromptHistory);
     QScriptValue scriptValEnablePromptRapidFire = engine->newFunction(javaEnablePromptRapidFire); engine->globalObject().setProperty("enablePromptRapidFire", scriptValEnablePromptRapidFire);
     QScriptValue scriptValDisablePromptRapidFire = engine->newFunction(javaDisablePromptRapidFire); engine->globalObject().setProperty("disablePromptRapidFire", scriptValDisablePromptRapidFire);
+    QScriptValue scriptValEnableMoveRapidFire = engine->newFunction(javaEnableMoveRapidFire); engine->globalObject().setProperty("enableMoveRapidFire", scriptValEnableMoveRapidFire);
+    QScriptValue scriptValDisableMoveRapidFire = engine->newFunction(javaDisableMoveRapidFire); engine->globalObject().setProperty("disableMoveRapidFire", scriptValDisableMoveRapidFire);
     QScriptValue scriptValInitCommand = engine->newFunction(javaInitCommand); engine->globalObject().setProperty("initCommand", scriptValInitCommand);
     QScriptValue scriptValEndCommand = engine->newFunction(javaEndCommand); engine->globalObject().setProperty("endCommand", scriptValEndCommand);
     QScriptValue scriptValExit = engine->newFunction(javaExit); engine->globalObject().setProperty("exit", scriptValExit);
@@ -23,6 +25,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValWindowPrevious = engine->newFunction(javaWindowPrevious); engine->globalObject().setProperty("windowPrevious", scriptValWindowPrevious);
     QScriptValue scriptValPlatformString = engine->newFunction(javaPlatformString); engine->globalObject().setProperty("platformString", scriptValPlatformString);
     QScriptValue scriptValMessageBox = engine->newFunction(javaMessageBox); engine->globalObject().setProperty("messageBox", scriptValMessageBox);
+    QScriptValue scriptValIsInt = engine->newFunction(javaIsInt); engine->globalObject().setProperty("isInt", scriptValIsInt);
     QScriptValue scriptValUndo = engine->newFunction(javaUndo); engine->globalObject().setProperty("undo", scriptValUndo);
     QScriptValue scriptValRedo = engine->newFunction(javaRedo); engine->globalObject().setProperty("redo", scriptValRedo);
     QScriptValue scriptValPanLeft = engine->newFunction(javaPanLeft); engine->globalObject().setProperty("panLeft", scriptValPanLeft);
@@ -99,6 +102,10 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValMoveSelected = engine->newFunction(javaMoveSelected); engine->globalObject().setProperty("moveSelected", scriptValMoveSelected);
     QScriptValue scriptValScaleSelected = engine->newFunction(javaScaleSelected); engine->globalObject().setProperty("scaleSelected", scriptValScaleSelected);
     QScriptValue scriptValRotateSelected = engine->newFunction(javaRotateSelected); engine->globalObject().setProperty("rotateSelected", scriptValRotateSelected);
+    QScriptValue scriptValQSnapX = engine->newFunction(javaQSnapX); engine->globalObject().setProperty("qsnapX", scriptValQSnapX);
+    QScriptValue scriptValQSnapY = engine->newFunction(javaQSnapY); engine->globalObject().setProperty("qsnapY", scriptValQSnapY);
+    QScriptValue scriptValMouseX = engine->newFunction(javaMouseX); engine->globalObject().setProperty("mouseX", scriptValMouseX);
+    QScriptValue scriptValMouseY = engine->newFunction(javaMouseY); engine->globalObject().setProperty("mouseY", scriptValMouseY);
 
     QScriptValue scriptValInclude = engine->newFunction(javaInclude); engine->globalObject().setProperty("include", scriptValInclude);
 }

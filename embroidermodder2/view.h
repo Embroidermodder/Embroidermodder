@@ -93,6 +93,9 @@ public slots:
     void previewOn(int clone, int mode, qreal x, qreal y, qreal data);
     void previewOff();
 
+    void enableMoveRapidFire();
+    void disableMoveRapidFire();
+
     bool allowRubber();
     void addToRubberRoom(QGraphicsItem* item);
     void vulcanizeRubberRoom();
@@ -151,6 +154,7 @@ private:
 
     void copySelected();
 
+    bool rapidMoveActive;
     bool previewActive;
     bool pastingActive;
     bool movingActive;
