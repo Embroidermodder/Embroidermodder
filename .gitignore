@@ -1,6 +1,6 @@
-######################
-# Embroidermodder 2  #
-######################
+#########################
+# Embroidermodder 2     #
+#########################
 embroidermodder2/.moc
 embroidermodder2/.obj
 embroidermodder2/TODO
@@ -10,34 +10,44 @@ embroidermodder2/settings.ini
 embroidermodder2/prompt.log
 embroidermodder2/embroidermodder2
 embroidermodder2/embroidermodder2.exe
+embroidermodder2/embroidermodder2.app
 
-######################
-# libembroidery      #
-######################
+#########################
+# libembroidery         #
+#########################
 libembroidery/.moc
 libembroidery/.obj
 libembroidery/TODO
 libembroidery/Makefile
 libembroidery/_memleak*
-libembroidery/libembroidery-convert
-libembroidery/libembroidery-convert.exe
 
-######################
-# KDE4 Thumbnailer   #
-######################
+#########################
+# libembroidery-convert #
+#########################
+libembroidery-convert/.moc
+libembroidery-convert/.obj
+libembroidery-convert/TODO
+libembroidery-convert/Makefile
+libembroidery-convert/_memleak*
+libembroidery-convert/libembroidery-convert
+libembroidery-convert/libembroidery-convert.exe
+
+#########################
+# KDE4 Thumbnailer      #
+#########################
 thumbnailer-kde4/.moc
 thumbnailer-kde4/.obj
 thumbnailer-kde4/Makefile
 thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
 
-######################
-# Project Files      #
-######################
+#########################
+# Project Files         #
+#########################
 project-files/qmake/Makefile
 
-######################
-# OS generated files #
-######################
+#########################
+# OS generated files    #
+#########################
 .DS_Store
 .DS_Store?
 .Spotlight-V100
