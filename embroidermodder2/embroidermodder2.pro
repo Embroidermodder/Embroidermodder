@@ -2,6 +2,8 @@ TEMPLATE = app
 CONFIG -= debug_and_release
 CONFIG += debug #This adds -g to CXXFLAGS so valgrind can locate the exact line.
 
+ICON = embroidermodder2.icns
+
 TARGET = embroidermodder2
 
 QT += opengl
