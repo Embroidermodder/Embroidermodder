@@ -7,12 +7,17 @@
 ######################
 
 TEMPLATE = subdirs
+
+######################
+# Linux/Unix         #
+######################
+
+unix {
 SUBDIRS  = \
 ../../thumbnailer-kde4 \
+../../libembroidery-convert \
 ../../embroidermodder2 \
 
-# install *nix
-unix {
 QMAKE_STRIP    = echo                       #Suppress strip errors "File format not recognized"
 QMAKE_DEL_DIR += --ignore-fail-on-non-empty #Suppress rmdir errors "Directory not empty"
 
@@ -60,12 +65,36 @@ INSTALLS += usrbin       \
 
 }
 
+######################
+# Windows            #
+######################
+
 win32 {
+SUBDIRS  = \
+../../libembroidery-convert \
+../../embroidermodder2 \
 
 nullsoft.path = "/tmp"
 nullsoft.files = ""
 nullsoft.extra = "makensis ../nsis/embroidermodder-installer.nsi;"
 
 INSTALLS += nullsoft
+
+}
+
+######################
+# Mac OSX            #
+######################
+
+macx {
+SUBDIRS  = \
+../../libembroidery-convert \
+../../embroidermodder2 \
+
+dmgcreator.path = "/tmp"
+dmgcreator.files = ""
+dmgcreator.extra = ""
+
+INSTALLS += dmgcreator
 
 }
