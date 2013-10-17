@@ -26,7 +26,7 @@ EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer,
 
 int embPolylineObjectList_count(EmbPolylineObjectList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

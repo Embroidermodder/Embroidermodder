@@ -69,7 +69,7 @@ void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 
 int embLineObjectList_count(EmbLineObjectList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

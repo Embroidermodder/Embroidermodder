@@ -107,7 +107,7 @@ void embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data)
 
 int embRectObjectList_count(EmbRectObjectList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

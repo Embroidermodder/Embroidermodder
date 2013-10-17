@@ -47,7 +47,7 @@ void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
 
 int embArcObjectList_count(EmbArcObjectList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

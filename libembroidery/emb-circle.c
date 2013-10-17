@@ -61,7 +61,7 @@ void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 
 int embCircleObjectList_count(EmbCircleObjectList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

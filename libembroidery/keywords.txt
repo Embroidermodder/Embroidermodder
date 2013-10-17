@@ -76,6 +76,28 @@ embEllipseObjectList_count	KEYWORD2
 embEllipseObjectList_empty	KEYWORD2
 
 ####################
+# emb-line.h
+####################
+
+# Datatypes
+EmbLine	KEYWORD1
+EmbLineObject	KEYWORD1
+EmbLineObjectList	KEYWORD1
+
+# Functions #TODO: review line header
+embLine_x1	KEYWORD2
+embLine_y1	KEYWORD2
+embLine_x2	KEYWORD2
+embLine_y2	KEYWORD2
+
+embLineObject_make	KEYWORD2
+embLineObject_create	KEYWORD2
+
+embLineObjectList_add	KEYWORD2
+embLineObjectList_count	KEYWORD2
+embLineObjectList_empty	KEYWORD2
+
+####################
 # emb-pattern.h
 ####################
 

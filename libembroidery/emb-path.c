@@ -3,11 +3,9 @@
 
 #include <stdio.h>
 
-
-
 int embPathObjectList_count(EmbPathObjectList* pointer)
 {
-    int i = 1; /* TODO: This should be set to 1. It's clearly wrong in multiple other places. Needs reviewed. */
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

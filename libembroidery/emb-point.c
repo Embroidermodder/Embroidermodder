@@ -49,6 +49,25 @@ EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
     return pointer;
 }
 
+int embPointList_count(EmbPointList* pointer)
+{
+    int i = 1;
+    if(!pointer) return 0;
+    while(pointer->next)
+    {
+        pointer = pointer->next;
+        i++;
+    }
+    return i;
+}
+
+int embPointList_empty(EmbPointList* pointer)
+{
+    if(pointer == 0)
+        return 1;
+    return 0;
+}
+
 void embPointList_free(EmbPointList* list)
 {
     EmbPointList* current = list;
@@ -101,7 +120,7 @@ EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPoint
 
 int embPointObjectList_count(EmbPointObjectList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {

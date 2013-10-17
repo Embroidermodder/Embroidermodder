@@ -112,7 +112,6 @@ int embThreadList_count(EmbThreadList* pointer)
 {
     int i = 1;
     if(!pointer) return 0;
-
     while(pointer->next)
     {
         pointer = pointer->next;

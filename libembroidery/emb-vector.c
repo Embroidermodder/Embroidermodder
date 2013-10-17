@@ -51,7 +51,7 @@ EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data)
 
 int embVectorList_count(EmbVectorList* pointer)
 {
-    int i = 0;
+    int i = 1;
     if(!pointer) return 0;
     while(pointer->next)
     {
