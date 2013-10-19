@@ -1,8 +1,29 @@
 #include "emb-polygon.h"
+#include <stdlib.h>
 
 /**************************************************/
 /* EmbPolygonObjectList                           */
 /**************************************************/
+
+EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data)
+{
+    EmbPolygonObjectList* heapPointObj = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
+    /* TODO: malloc fail error */
+    heapPointObj->polygonObj = data;
+    heapPointObj->next = 0;
+    return heapPointObj;
+}
+
+EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data)
+{
+    pointer->next = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
+    /* TODO: malloc fail error */
+    pointer = pointer->next;
+    pointer->polygonObj = data;
+    pointer->next = 0;
+
+    return pointer;
+}
 
 int embPolygonObjectList_count(EmbPolygonObjectList* pointer)
 {

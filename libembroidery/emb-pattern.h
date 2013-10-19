@@ -72,7 +72,9 @@ int embPattern_read(EmbPattern* p, const char* fileName);
 int embPattern_write(EmbPattern* p, const char *fileName);
 void embPattern_scale(EmbPattern* p, double scale);
 EmbRect embPattern_calcBoundingBox(EmbPattern* p);
+void embPattern_flipHorizontal(EmbPattern* p);
 void embPattern_flipVertical(EmbPattern* p);
+void embPattern_flip(EmbPattern* p, int horz, int vert);
 void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
 void embPattern_center(EmbPattern* p);
 void embPattern_loadExternalColorFile(EmbPattern* p, const char *fileName);
@@ -82,6 +84,7 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
 void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj);
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
+void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
 void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
 

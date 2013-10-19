@@ -11,6 +11,8 @@ extern "C" {
 typedef struct EmbPolylineObject_
 {
     EmbPointList* pointList;
+
+    /* Properties */
     int lineType;
     EmbColor color;
 } EmbPolylineObject;

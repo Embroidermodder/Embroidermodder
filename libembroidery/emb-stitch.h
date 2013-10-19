@@ -17,7 +17,7 @@ typedef struct EmbStitch_
 {
     int flags; /* uses codes defined above */
     double xx; /* absolute position (not relative) */
-    double yy;
+    double yy; /* positive is up, units are in mm  */
     int color; /* color number for this stitch */
 } EmbStitch;
 

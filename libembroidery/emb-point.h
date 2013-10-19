@@ -10,7 +10,7 @@ extern "C" {
 typedef struct EmbPoint_
 {
     double xx; /* absolute position (not relative) */
-    double yy;
+    double yy; /* positive is up, units are in mm  */
 } EmbPoint;
 
 double embPoint_x(EmbPoint point);

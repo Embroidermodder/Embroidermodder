@@ -10,8 +10,7 @@ extern "C" {
 
 typedef struct EmbPolygonObject_
 {
-    EmbPoint polygonPoint;
-    EmbPointList* nextPolygonPoint;
+    EmbPointList* pointList;
 
     /* Properties */
     int lineType;
@@ -20,10 +19,12 @@ typedef struct EmbPolygonObject_
 
 typedef struct EmbPolygonObjectList_
 {
-    EmbPolygonObject polygonObj;
+    EmbPolygonObject* polygonObj;
     struct EmbPolygonObjectList_* next;
 } EmbPolygonObjectList;
 
+EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data);
+EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data);
 int embPolygonObjectList_count(EmbPolygonObjectList* pointer);
 int embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
 

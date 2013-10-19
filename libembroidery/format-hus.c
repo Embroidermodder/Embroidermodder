@@ -12,6 +12,8 @@
  * EmbReaderWriter Functions
  ****************************************/
 
+/*TODO: 'husDecode' is defined but not used. Either remove it or use it. */
+/*
 static short husDecode(unsigned char a1, unsigned char a2)
 {
     unsigned short res = (a2 << 8) + a1;
@@ -24,6 +26,7 @@ static short husDecode(unsigned char a1, unsigned char a2)
         return (res);
 	}
 }
+*/
 
 static int husDecodeStitchType(unsigned char b)
 {
