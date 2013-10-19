@@ -35,6 +35,7 @@ typedef struct _bcf_file
 
 int bcfFile_read(FILE *file, bcf_file *bcfFile);
 FILE *GetFile(bcf_file *bcfFile, FILE *file, char *fileToFind);
+void bcf_file_free(bcf_file *bcfFile);
 
 #ifdef __cplusplus
 }

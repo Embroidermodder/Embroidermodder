@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include "compound-file.h"
 #include "helpers-binary.h"

@@ -16,6 +16,12 @@ $$PWD \
 
 QMAKE_CFLAGS += -std=c89
 
+#Ensure all implicit function declarations are errors rather than warnings
+QMAKE_CFLAGS_WARN_ON += -Werror=implicit-function-declaration
+
+#Uncomment line below to consider all warnings as errors
+#QMAKE_CFLAGS_WARN_ON += -Werror
+
 #Uncomment lines below to hide various warnings
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter 
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-but-set-variable

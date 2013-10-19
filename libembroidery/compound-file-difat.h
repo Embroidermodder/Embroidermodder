@@ -23,7 +23,7 @@ void bcf_file_difat_free(bcf_file_difat *difat);
 /**
   Constant representing the number of Double Indirect FAT entries in a single header
 */
-const static unsigned int NumberOfDifatEntriesInHeader = 109;
+static const unsigned int NumberOfDifatEntriesInHeader = 109;
 
 #ifdef __cplusplus
 }
