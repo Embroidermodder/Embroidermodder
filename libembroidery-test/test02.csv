@@ -1,0 +1,66 @@
+"#","Embroidermodder 2 CSV Embroidery File"
+"#","http://embroidermodder.sourceforge.net"
+
+"#","TEST FILE 02"
+
+"#","[THREAD_NUMBER]","[RED]","[GREEN]","[BLUE]","[DESCRIPTION]","[CATALOG_NUMBER]"
+"$","1","128","128","128","gray","1234567890"
+
+"#","STITCH INCREASING SQUARE"
+"*","JUMP",     "0",   "0"
+"*","STITCH",   "0",   "0"
+
+"*","STITCH",   "1",   "1"
+"*","STITCH",  "-1",   "1"
+"*","STITCH",  "-1",  "-1"
+"*","STITCH",   "1",  "-1"
+
+"*","STITCH",   "2",   "2"
+"*","STITCH",  "-2",   "2"
+"*","STITCH",  "-2",  "-2"
+"*","STITCH",   "2",  "-2"
+
+"*","STITCH",   "3",   "3"
+"*","STITCH",  "-3",   "3"
+"*","STITCH",  "-3",  "-3"
+"*","STITCH",   "3",  "-3"
+
+"*","STITCH",   "4",   "4"
+"*","STITCH",  "-4",   "4"
+"*","STITCH",  "-4",  "-4"
+"*","STITCH",   "4",  "-4"
+
+"*","STITCH",   "5",   "5"
+"*","STITCH",  "-5",   "5"
+"*","STITCH",  "-5",  "-5"
+"*","STITCH",   "5",  "-5"
+
+"*","STITCH",   "6",   "6"
+"*","STITCH",  "-6",   "6"
+"*","STITCH",  "-6",  "-6"
+"*","STITCH",   "6",  "-6"
+
+"*","STITCH",   "7",   "7"
+"*","STITCH",  "-7",   "7"
+"*","STITCH",  "-7",  "-7"
+"*","STITCH",   "7",  "-7"
+
+"*","STITCH",   "8",   "8"
+"*","STITCH",  "-8",   "8"
+"*","STITCH",  "-8",  "-8"
+"*","STITCH",   "8",  "-8"
+
+"*","STITCH",   "9",   "9"
+"*","STITCH",  "-9",   "9"
+"*","STITCH",  "-9",  "-9"
+"*","STITCH",   "9",  "-9"
+
+"*","STITCH",  "10",  "10"
+"*","STITCH", "-10",  "10"
+"*","STITCH", "-10", "-10"
+"*","STITCH",  "10", "-10"
+
+"*","JUMP",     "0",   "0"
+
+"#","WE ARE NOW DONE TESTING"
+"*","END","0.0","0.0"
