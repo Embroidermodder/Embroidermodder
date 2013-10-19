@@ -14,6 +14,7 @@ SvgAttribute svgAttribute_create(const char* name, const char* value)
     for(i = 0; i < last; i++)
     {
         if(modValue[i] == '"') modValue[i] = ' ';
+        if(modValue[i] == '\'') modValue[i] = ' ';
         if(modValue[i] == '/') modValue[i] = ' ';
         if(modValue[i] == ',') modValue[i] = ' ';
     }
@@ -119,8 +120,8 @@ void svgAddToPattern(EmbPattern* p)
     else if(!strcmp(buff, "circle"))
     {
         embPattern_addCircleObjectAbs(p, atof(svgAttribute_getValue(currentElement, "cx")),
-                                        atof(svgAttribute_getValue(currentElement, "cy")),
-                                        atof(svgAttribute_getValue(currentElement, "r")));
+                                         atof(svgAttribute_getValue(currentElement, "cy")),
+                                         atof(svgAttribute_getValue(currentElement, "r")));
     }
     else if(!strcmp(buff, "defs"))             {  }
     else if(!strcmp(buff, "desc"))             {  }
@@ -128,9 +129,9 @@ void svgAddToPattern(EmbPattern* p)
     else if(!strcmp(buff, "ellipse"))
     {
         embPattern_addEllipseObjectAbs(p, atof(svgAttribute_getValue(currentElement, "cx")),
-                                        atof(svgAttribute_getValue(currentElement, "cy")),
-                                        atof(svgAttribute_getValue(currentElement, "rx")),
-                                        atof(svgAttribute_getValue(currentElement, "ry")));
+                                          atof(svgAttribute_getValue(currentElement, "cy")),
+                                          atof(svgAttribute_getValue(currentElement, "rx")),
+                                          atof(svgAttribute_getValue(currentElement, "ry")));
     }
     else if(!strcmp(buff, "font"))             {  }
     else if(!strcmp(buff, "font-face"))        {  }
@@ -164,16 +165,101 @@ void svgAddToPattern(EmbPattern* p)
     {
         /* TODO: finish */
     }
-    else if(!strcmp(buff, "polygon"))          {  }
-    else if(!strcmp(buff, "polyline"))         {  }
+    else if(!strcmp(buff, "polygon") ||
+            !strcmp(buff, "polyline"))
+    {
+        char* pointStr = svgAttribute_getValue(currentElement, "points");
+        int last = strlen(pointStr);
+        int size = 32;
+        int i = 0;
+        int c = 0;
+        int pos = 0;
+        unsigned char odd = 1;
+        double xx = 0.0;
+        double yy = 0.0;
+
+        EmbPointList* startOfList = 0;
+        EmbPointList* polyObjPointList = 0;
+
+        char* polybuff = (char*)malloc(size);
+        if(!polybuff) { /* TODO: error */ return; }
+
+        for(i = 0; i < last; i++)
+        {
+            char c = pointStr[i];
+            switch(c)
+            {
+                case ' ':
+                    if(pos == 0)
+                        break;
+                    polybuff[pos] = 0;
+                    pos = 0;
+                    /*Compose Point List */
+                    if(odd)
+                    {
+                        odd = 0;
+                        xx = atof(polybuff);
+                    }
+                    else
+                    {
+                        odd = 1;
+                        yy = atof(polybuff);
+
+                        if(!polyObjPointList)
+                        {
+                            polyObjPointList = embPointList_create(xx, yy);
+                            startOfList = polyObjPointList;
+                        }
+                        else
+                        {
+                            polyObjPointList = embPointList_add(polyObjPointList, embPoint_make(xx, yy));
+                        }
+                    }
+
+                    break;
+                default:
+                    polybuff[pos++] = (char)c;
+                    break;
+            }
+            if(pos >= size - 1)
+            {
+                /* increase polybuff length - leave room for 0 */
+                size *= 2;
+                polybuff = (char*)realloc(polybuff,size);
+                if(!polybuff) { /*TODO: error */ return; }
+            }
+        }
+        free(polybuff);
+
+        if(!strcmp(buff, "polygon"))
+        {
+            EmbPolygonObject* polyObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
+            /* TODO: malloc fail error */
+            polyObj->pointList = 0;
+            polyObj->lineType = 1; /* TODO: Determine what the correct value should be */
+            polyObj->color = embColor_make(255, 0, 0); /* TODO: SVGTiny1.2 Spec Section 11.13.1 colorSyntax */
+            polyObj->pointList = startOfList;
+            embPattern_addPolygonObjectAbs(p, polyObj);
+        }
+        else /* polyline */
+        {
+            EmbPolylineObject* polyObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+            /* TODO: malloc fail error */
+            polyObj->pointList = 0;
+            polyObj->lineType = 1; /* TODO: Determine what the correct value should be */
+            polyObj->color = embColor_make(255, 0, 0); /* TODO: SVGTiny1.2 Spec Section 11.13.1 colorSyntax */
+            polyObj->pointList = startOfList;
+            embPattern_addPolylineObjectAbs(p, polyObj);
+        }
+    }
     else if(!strcmp(buff, "prefetch"))         {  }
     else if(!strcmp(buff, "radialGradient"))   {  }
     else if(!strcmp(buff, "rect"))
     {
         embPattern_addRectObjectAbs(p, atof(svgAttribute_getValue(currentElement, "x")),
-                                    atof(svgAttribute_getValue(currentElement, "y")),
-                                    atof(svgAttribute_getValue(currentElement, "width")),
-                                    atof(svgAttribute_getValue(currentElement, "height")));
+                                       atof(svgAttribute_getValue(currentElement, "y")),
+                                       atof(svgAttribute_getValue(currentElement, "width")),
+                                       atof(svgAttribute_getValue(currentElement, "height")));
     }
     else if(!strcmp(buff, "script"))           {  }
     else if(!strcmp(buff, "set"))              {  }
@@ -2606,14 +2692,14 @@ void svgProcess(int c, const char* buff)
         printf("VALUE:\n");
 
         /* single-value */
-        if(buff[0] == '"' && (buff[last] == '/' || buff[last] == '"'))
+        if((buff[0] == '"' || buff[0] == '\'') && (buff[last] == '/' || buff[last] == '"' || buff[last] == '\'') && !svgMultiValue)
         {
             svgExpect = SVG_EXPECT_ATTRIBUTE;
             svgElement_addAttribute(currentElement, svgAttribute_create(currentAttribute, buff));
         }
         else /* multi-value */
         {
-            int last;
+            svgMultiValue = 1;
             if(!currentValue)
             {
                 currentValue = emb_strdup(buff);
@@ -2633,9 +2719,9 @@ void svgProcess(int c, const char* buff)
                 tmp = 0;
             }
 
-            last = strlen(buff) - 1;
-            if(buff[last] == '/' || buff[last] == '"')
+            if(buff[last] == '/' || buff[last] == '"' || buff[last] == '\'')
             {
+                svgMultiValue = 0;
                 svgExpect = SVG_EXPECT_ATTRIBUTE;
                 svgElement_addAttribute(currentElement, svgAttribute_create(currentAttribute, currentValue));
                 free(currentValue);
@@ -2662,14 +2748,20 @@ int readSvg(EmbPattern* pattern, const char* fileName)
     EmbEllipseObjectList* eList;
     EmbLineObjectList* liList;
     EmbPointObjectList* poList;
+    EmbPolygonObjectList* pogList;
+    EmbPolylineObjectList* polList;
     char* buff = (char*)malloc(size);
     if(!buff) { /* TODO: error */ return 0; }
 
     svgExpect = SVG_EXPECT_NULL;
+    svgMultiValue = 0;
 
     currentElement = 0;
     currentAttribute = 0;
     currentValue = 0;
+
+    /* Pre-flip incase of multiple reads on the same pattern */
+    embPattern_flipVertical(pattern);
 
     file = fopen(fileName, "r");
     if(file)
@@ -2686,12 +2778,18 @@ int readSvg(EmbPattern* pattern, const char* fileName)
                         svgAddToPattern(pattern);
                         svgExpect = SVG_EXPECT_ELEMENT;
                     }
+                case '>':
+                    if(pos == 0) /* abnormal case that may occur in svg element where '>' is all by itself */
+                    {
+                        /*TODO: log a warning about this absurdity! */
+                        svgExpect = SVG_EXPECT_ELEMENT;
+                        break;
+                    }
                 case ' ':
                 case '\t':
                 case '\r':
                 case '\n':
                 case '=':
-                case '>':
                     if(pos == 0)
                         break;
                     buff[pos] = 0;
@@ -2747,6 +2845,20 @@ int readSvg(EmbPattern* pattern, const char* fileName)
         printf("point %f %f\n", embPoint_x(po), embPoint_y(po));
         poList = poList->next;
     }
+    pogList = pattern->polygonObjList;
+    while(pogList)
+    {
+        int vertices = embPointList_count(pogList->polygonObj->pointList);
+        printf("polygon %d\n", vertices);
+        pogList = pogList->next;
+    }
+    polList = pattern->polylineObjList;
+    while(polList)
+    {
+        int vertices = embPointList_count(polList->polylineObj->pointList);
+        printf("polyline %d\n", vertices);
+        polList = polList->next;
+    }
     rList = pattern->rectObjList;
     while(rList)
     {
@@ -2755,13 +2867,17 @@ int readSvg(EmbPattern* pattern, const char* fileName)
         rList = rList->next;
     }
 
+    /* Flip the pattern since SVG Y+ is down and libembroidery Y+ is up. */
+    embPattern_flipVertical(pattern);
+
     return 1; /*TODO: finish readSvg */
 }
 
 int writeSvg(EmbPattern* pattern, const char* fileName)
 {
+    FILE* file = 0;
     EmbRect boundingRect;
-    EmbStitchList* pointer;
+    EmbStitchList* stList;
     EmbCircleObjectList* cObjList = 0;
     EmbCircle circle;
     EmbEllipseObjectList* eObjList = 0;
@@ -2770,20 +2886,29 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     EmbLine line;
     EmbPointObjectList* poObjList = 0;
     EmbPoint point;
+    EmbPolylineObjectList* polObjList = 0;
+    EmbPointList* polPointList = 0;
     EmbRectObjectList* rObjList = 0;
     EmbRect rect;
 
-    FILE* file = fopen(fileName, "w");
+    char tmpX[32];
+    char tmpY[32];
 
+    file = fopen(fileName, "w");
+    if(!file)
+    {
+        /*TODO: error */
+        return 0;
+    }
+
+    /* Pre-flip the pattern since SVG Y+ is down and libembroidery Y+ is up. */
     embPattern_flipVertical(pattern);
+
     boundingRect = embPattern_calcBoundingBox(pattern);
     fprintf(file, "<?xml version=\"1.0\"?>\n");
     fprintf(file, "<!-- Embroidermodder 2 SVG Embroidery File -->\n");
     fprintf(file, "<!-- http://embroidermodder.sourceforge.net -->\n");
-    fprintf(file, "<svg xmlns=\"http://www.w3.org/2000/svg\" "
-        "version=\"1.2\" "
-        "baseProfile=\"tiny\" "
-    );
+    fprintf(file, "<svg ");
 
     /* TODO: See the SVG Tiny Version 1.2 Specification Section 7.14.
     *       Until all of the formats and API is stable, the width, height and viewBox attributes need to be left unspecified.
@@ -2794,7 +2919,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
             embRect_width(boundingRect),
             embRect_height(boundingRect)); */
 
-    fprintf(file, ">");
+    fprintf(file, "xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\">");
 
     /*TODO: Low Priority Optimization:
     *      Using %g in fprintf just doesn't work good enough at trimming trailing zeroes.
@@ -2865,6 +2990,28 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         poObjList = poObjList->next;
     }
 
+    /* write polylines */
+    polObjList = pattern->polylineObjList;
+    while(polObjList)
+    {
+        polPointList = polObjList->polylineObj->pointList;
+        if(polPointList)
+        {
+            /* TODO: use proper thread width for stoke-width rather than just 0.2 */
+            fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" points=\"%s,%s",
+                    emb_optOut(polPointList->point.xx, tmpX),
+                    emb_optOut(polPointList->point.yy, tmpY));
+            polPointList = polPointList->next;
+            while(polPointList)
+            {
+                fprintf(file, " %s,%s", emb_optOut(polPointList->point.xx, tmpX), emb_optOut(polPointList->point.yy, tmpY));
+                polPointList = polPointList->next;
+            }
+            fprintf(file, "\"/>");
+        }
+        polObjList = polObjList->next;
+    }
+
     /* write rects */
     rObjList = pattern->rectObjList;
     while(rObjList)
@@ -2879,38 +3026,37 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         rObjList = rObjList->next;
     }
 
-    pointer = pattern->stitchList;
-    if(embStitchList_count(pointer) > 0)
+    stList = pattern->stitchList;
+    if(stList)
     {
-        while(pointer)
+        /*TODO: #ifdef SVG_DEBUG for Josh which outputs JUMPS/TRIMS instead of chopping them out */
+        char isNormal = 0;
+        while(stList)
         {
-            if((pointer->stitch.flags & TRIM) || pointer == pattern->stitchList)
+            if(stList->stitch.flags == NORMAL && !isNormal)
             {
-                EmbColor c;
-                if(pointer != pattern->stitchList)
-                {
-                    fprintf(file, "\"/>");
-                }
+                    isNormal = 1;
+                    EmbColor color = embThreadList_getAt(pattern->threadList, stList->stitch.color).color;
+                    /* TODO: use proper thread width for stoke-width rather than just 0.2 */
+                    fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
+                                color.r,
+                                color.g,
+                                color.b,
+                                emb_optOut(stList->stitch.xx, tmpX),
+                                emb_optOut(stList->stitch.yy, tmpY));
+            }
+            else if(stList->stitch.flags == NORMAL && isNormal)
+            {
+                fprintf(file, " %s,%s", emb_optOut(stList->stitch.xx, tmpX), emb_optOut(stList->stitch.yy, tmpY));
+            }
+            else if(stList->stitch.flags != NORMAL && isNormal)
+            {
+                isNormal = 0;
+                fprintf(file, "\"/>");
+            }
 
-                c = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
-                /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-                fprintf(file, "\n<path stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" d=\"M %d %d",
-                            c.r,
-                            c.g,
-                            c.b,
-                            (int)((pointer->stitch.xx - boundingRect.left) * 10.0),
-                            (int)((pointer->stitch.yy - boundingRect.top) * 10.0));
-            }
-            else
-            {
-                fprintf(file, " L %d %d",
-                (int)((pointer->stitch.xx - boundingRect.left) * 10.0),
-                (int)((pointer->stitch.yy - boundingRect.top) * 10.0));
-            }
-            pointer = pointer->next;
+            stList = stList->next;
         }
-
-        fprintf(file, "\"/>");
     }
     fprintf(file, "\n</svg>\n");
     fclose(file);

@@ -21,7 +21,7 @@ int roundDouble(double src);
 
 char* rTrim(char* const string, char junk);
 char* lTrim(char* const string, char junk);
-
+char* emb_optOut(double num, char* str);
 char* emb_strdup(const char* src);
 
 #ifdef __cplusplus

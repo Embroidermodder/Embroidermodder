@@ -1523,6 +1523,7 @@ void MainWindow::nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 s
 {
 }
 
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
@@ -1546,6 +1547,7 @@ void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath
     }
 }
 
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
@@ -1569,6 +1571,7 @@ void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPat
     }
 }
 
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
 void MainWindow::nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
 {
 }

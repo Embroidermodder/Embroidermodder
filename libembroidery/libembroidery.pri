@@ -1,5 +1,19 @@
 INCLUDEPATH += ../libembroidery
 
+QMAKE_CFLAGS += -std=c89
+
+#Ensure all implicit function declarations are errors rather than warnings
+QMAKE_CFLAGS_WARN_ON += -Werror=implicit-function-declaration
+
+#Uncomment line below to consider all warnings as errors
+#QMAKE_CFLAGS_WARN_ON += -Werror
+
+#Uncomment lines below to hide various warnings
+#QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter 
+#QMAKE_CFLAGS_WARN_ON += -Wno-unused-but-set-variable
+#QMAKE_CFLAGS_WARN_ON += -Wno-unused-variable
+#QMAKE_CFLAGS_WARN_ON += -Wno-unknown-pragmas
+
 SOURCES += \
 ../libembroidery/compound-file.c\
 ../libembroidery/compound-file-difat.c\
@@ -92,14 +106,13 @@ SOURCES += \
 ../libembroidery/format-xxx.c \
 ../libembroidery/format-zsk.c \
 
-
-
 HEADERS += \
-../libembroidery/compound-file.h\
-../libembroidery/compound-file-difat.h\
-../libembroidery/compound-file-directory.h\
-../libembroidery/compound-file-fat.h\
-../libembroidery/compound-file-header.h\
+../libembroidery/compound-file.h \
+../libembroidery/compound-file-common.h \
+../libembroidery/compound-file-difat.h \
+../libembroidery/compound-file-directory.h \
+../libembroidery/compound-file-fat.h \
+../libembroidery/compound-file-header.h \
 ../libembroidery/emb-arc.h \
 ../libembroidery/emb-circle.h \
 ../libembroidery/emb-compress.h \
@@ -186,6 +199,4 @@ HEADERS += \
 ../libembroidery/format-vp3.h \
 ../libembroidery/format-xxx.h \
 ../libembroidery/format-zsk.h \
-    ../libembroidery/compound-file-common.h
-
 

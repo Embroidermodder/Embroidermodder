@@ -52,6 +52,7 @@ int readSvg(EmbPattern* pattern, const char* fileName);
 int writeSvg(EmbPattern* pattern, const char* fileName);
 
 int svgExpect;
+int svgMultiValue;
 
 SvgElement* currentElement;
 char* currentAttribute;

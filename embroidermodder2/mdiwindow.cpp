@@ -4,6 +4,7 @@
 #include "statusbar-button.h"
 #include "object-save.h"
 #include "object-data.h"
+#include "object-polygon.h"
 #include "object-polyline.h"
 
 #include <QFileDialog>
@@ -140,7 +141,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curCircleObj)
             {
                 EmbCircle c = curCircleObj->circleObj.circle;
-                mainWin->nativeAddCircle(embCircle_centerX(c), -embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mainWin->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
                 curCircleObj = curCircleObj->next;
             }
         }
@@ -150,7 +152,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curEllipseObj)
             {
                 EmbEllipse e = curEllipseObj->ellipseObj.ellipse;
-                mainWin->nativeAddEllipse(embEllipse_centerX(e), -embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mainWin->nativeAddEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curEllipseObj = curEllipseObj->next;
             }
         }
@@ -160,7 +163,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curLineObj)
             {
                 EmbLine li = curLineObj->lineObj.line;
-                mainWin->nativeAddLine(embLine_x1(li), -embLine_y1(li), embLine_x2(li), -embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mainWin->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
                 curLineObj = curLineObj->next;
             }
         }
@@ -170,8 +174,42 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curPointObj)
             {
                 EmbPoint po = curPointObj->pointObj.point;
-                mainWin->nativeAddPoint(embPoint_x(po), -embPoint_y(po));
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mainWin->nativeAddPoint(embPoint_x(po), embPoint_y(po));
                 curPointObj = curPointObj->next;
+            }
+        }
+        if(p->polygonObjList)
+        {
+            EmbPolygonObjectList* curPolygonObjList = p->polygonObjList;
+            while(curPolygonObjList)
+            {
+                QPainterPath polygonPath;
+                EmbPointList* curPointList = curPolygonObjList->polygonObj->pointList;
+                EmbColor thisColor = curPolygonObjList->polygonObj->color;
+                if(curPointList)
+                {
+                    EmbPoint pp = curPointList->point;
+                    polygonPath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    curPointList = curPointList->next;
+                }
+                while(curPointList)
+                {
+                    EmbPoint pp = curPointList->point;
+                    polygonPath.lineTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    curPointList = curPointList->next;
+                }
+
+                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                loadPen.setWidthF(0.35);
+                loadPen.setCapStyle(Qt::RoundCap);
+                loadPen.setJoinStyle(Qt::RoundJoin);
+
+                PolygonObject* obj = new PolygonObject(0,0, polygonPath, loadPen.color().rgb());
+                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
+                gscene->addItem(obj);
+
+                curPolygonObjList = curPolygonObjList->next;
             }
         }
         /* TODO: polyline testing. Appears to work somewhat but many files get stuck in endless loop in the stitch to conversion function.
@@ -187,13 +225,13 @@ bool MDIWindow::loadFile(const QString &fileName)
                 if(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
-                    polylinePath.moveTo(embPoint_x(pp), -embPoint_y(pp));
+                    polylinePath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                     curPointList = curPointList->next;
                 }
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
-                    polylinePath.lineTo(embPoint_x(pp), -embPoint_y(pp));
+                    polylinePath.lineTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                     curPointList = curPointList->next;
                 }
 
@@ -215,7 +253,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curRectObj)
             {
                 EmbRect r = curRectObj->rectObj.rect;
-                mainWin->nativeAddRectangle(embRect_x(r), -embRect_y(r), embRect_width(r), -embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mainWin->nativeAddRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curRectObj = curRectObj->next;
             }
         }
@@ -245,16 +284,16 @@ bool MDIWindow::loadFile(const QString &fileName)
                         previousColor = tempStitch.color;
                         path = QPainterPath();
                     }
-                    path.moveTo(tempStitch.xx, -tempStitch.yy);
+                    path.moveTo(tempStitch.xx, -tempStitch.yy); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                 }
                 else if((tempStitch.flags & JUMP) || (tempStitch.flags & TRIM))
                 {
                     //TODO: No objects should have moveTo in their path, so stop it here and add it to a BlockObject
-                    path.moveTo(tempStitch.xx, -tempStitch.yy);
+                    path.moveTo(tempStitch.xx, -tempStitch.yy); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                 }
                 else
                 {
-                    path.lineTo(tempStitch.xx, -tempStitch.yy);
+                    path.lineTo(tempStitch.xx, -tempStitch.yy); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                 }
             }
         }

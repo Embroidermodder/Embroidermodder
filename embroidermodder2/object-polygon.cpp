@@ -51,6 +51,8 @@ void PolygonObject::updatePath(const QPainterPath& p)
     QPainterPath reversePath = normalPath.toReversed();
     reversePath.connectPath(normalPath);
     setObjectPath(reversePath);
+
+    normalPath.closeSubpath(); //Polygon specific
 }
 
 void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
