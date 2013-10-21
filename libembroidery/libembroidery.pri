@@ -12,14 +12,13 @@ QMAKE_CFLAGS_WARN_ON += -Werror=implicit-function-declaration
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter 
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-but-set-variable
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-variable
-#QMAKE_CFLAGS_WARN_ON += -Wno-unknown-pragmas
 
 SOURCES += \
-../libembroidery/compound-file.c\
-../libembroidery/compound-file-difat.c\
-../libembroidery/compound-file-directory.c\
-../libembroidery/compound-file-fat.c\
-../libembroidery/compound-file-header.c\
+../libembroidery/compound-file.c \
+../libembroidery/compound-file-difat.c \
+../libembroidery/compound-file-directory.c \
+../libembroidery/compound-file-fat.c \
+../libembroidery/compound-file-header.c \
 ../libembroidery/emb-arc.c \
 ../libembroidery/emb-circle.c \
 ../libembroidery/emb-compress.c \

@@ -2,7 +2,9 @@
 #define EMB_FILE_H
 
 /* Disable warnings about unsafe use of fopen, fseek etc */
+#ifndef __GNUC__
 #pragma warning(disable: 4996)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
