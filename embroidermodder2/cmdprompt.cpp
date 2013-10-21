@@ -264,12 +264,12 @@ void CmdPromptHistory::appendHistory(QString txt)
     this->append(txt);
 }
 
-void CmdPromptHistory::startResizeHistory(int y)
+void CmdPromptHistory::startResizeHistory(int /*y*/)
 {
     tmpHeight = height();
 }
 
-void CmdPromptHistory::stopResizeHistory(int y)
+void CmdPromptHistory::stopResizeHistory(int /*y*/)
 {
     tmpHeight = height();
 }
@@ -419,7 +419,7 @@ void CmdPromptInput::checkSelection()
         this->deselect();
 }
 
-void CmdPromptInput::checkCursorPosition(int oldpos, int newpos)
+void CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
 {
     //qDebug("CmdPromptInput::checkCursorPosition - %d %d", oldpos, newpos);
     if(this->hasSelectedText())
