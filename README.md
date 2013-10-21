@@ -37,6 +37,11 @@ Build time can be considerably decreased on multi-core machines, for example:
 - Dual Core: qmake && make -j2
 - Quad Core: qmake && make -j4
 
+For building on windows:
+If you are using Qt/Mingw, substitute mingw32-make for make.
+If you are using Qt/MSVC, substitute nmake for make.
+You may need to add the directory where those executables are located to your system path.
+
 Sample Files
 ------------
 
