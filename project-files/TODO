@@ -1,41 +1,44 @@
 //====================
-Stuff for 2.0 alpha1:
+//Stuff for 2.0 alpha1:
 //====================
-DONE - CAD Command: Polygon (rt)
-DONE - CAD Command: Polyline (rt)
-DONE - Font Generation/Single Line Text (rt)
-DONE - Scaling (rt)
 WIP - Statistics from 1.0, needs histogram
-DONE - Undo/Redo (rt)
-DONE - Cut/Copy/Paste
-DONE - Rotation (rt)
 WIP - Saving DST/PES/JEF (varga)
-DONE - Otto Theme Icons - alpha (rt)
 WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
 
 //====================
-Stuff for 2.0 beta1:
+//Stuff for 2.0 alpha2:
 //====================
-TODO - automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="https://github.com/Embroidermodder/Embroidermodder/commit/%H">%s</a>'
-TODO - Custom Filter Bug - doesn't save changes in some cases
-TODO - Cannot open file with # in name when opening multiple files (works fine when opening the single file)
-TODO - Move libembroidery-convert source and pro files into a separate directory or sub-directory so it will automatically build properly when building from project-files/qmake directory
-TODO - Closing Settings Dialog with the X in the window saves settings rather than discards them
-WIP - Advanced Printing
+TODO - Import Raster Image
+TODO - SNAP/ORTHO/POLAR
+TODO - Layer Manager + LayerSwitcher DockWidget
+TODO - Reading DXF
+
+//====================
+//Stuff for 2.0 alpha3:
+//====================
+TODO - Writing DXF
+TODO - Up and Down keys cycle thru commands in the command prompt
+TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
+
+//====================
+//Stuff for 2.0 alpha4:
+//====================
 WIP - CAD Command: Arc (rt)
 TODO - Load/Save Menu/Toolbars configurations into settings.ini
-TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
-TODO - Reading DXF
-TODO - Writing DXF
-TODO - Import Raster Image
-TODO - Layer Manager + LayerSwitcher DockWidget
-TODO - SNAP/ORTHO/POLAR
-TODO - Up and Down keys cycle thru commands in the command prompt
+TODO - automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="https://github.com/Embroidermodder/Embroidermodder/commit/%H">%s</a>'
+
+//====================
+//Stuff for 2.0 beta1:
+//====================
+TODO - Custom Filter Bug - doesn't save changes in some cases
+TODO - Cannot open file with # in name when opening multiple files (works fine when opening the single file)
+TODO - Closing Settings Dialog with the X in the window saves settings rather than discards them
+WIP - Advanced Printing
 TODO - Filling Algorithms (varga)
 TODO - Otto Theme Icons - beta (rt) - Units, Render, Selectors
 
 //====================
-Stuff for 2.0 rc1:
+//Stuff for 2.0 rc1:
 //====================
 TODO - QDoc Comments
 TODO - Review KDE4 Thumbnailer
@@ -60,7 +63,7 @@ TODO - CAD Command review: star
 TODO - Clean up all compiler warning messages, right now theres plenty :P
 
 //====================
-Stuff for 2.0 release:
+//Stuff for 2.0 release:
 //====================
 TODO - tar.gz archive
 TODO - zip archive
@@ -71,7 +74,7 @@ TODO - press release
 TODO - website revamp
 
 //====================
-//Stuff for 2.x
+//Stuff for 2.x/Ideas:
 //====================
 TODO - Cut/Copy - Allow Post-selection
 TODO - CAD Command: Array
@@ -108,6 +111,8 @@ TODO - Stitching Simulation
 TODO - RPM packages?
 TODO - Reports?
 TODO - Record and Playback Commands
+TODO - Settings option for reversing zoom scrolling direction
+TODO - Qt GUI for libembroidery-convert
 TODO - EPS format?
 TODO - Realistic Visualization - Bump Mapping/OpenGL/Gradients?
 TODO - Stippling Fill
@@ -121,15 +126,14 @@ TODO - Offset Fill
 TODO - Brick Fill
 TODO - Trim jumps over a certain length.
 TODO - FAQ about setting high number of jumps for more controlled trimming.
-TODO - 'New Selection, shift to add' vs 'Add to Selection, shift to deselect' option. (PICKADD)
 TODO - Minimum stitch length option. (Many machines also have this option too)
 TODO - Add 'Design Details' functionality to libembroidery-convert
 TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
 TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
 
 //====================
-//Stuff for Arduino
+//Stuff for Arduino:
 //====================
 TODO - Fix emb-outline files
 TODO - Fix thread-color files
-
+TODO - Smoothieboard experiments
