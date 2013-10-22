@@ -133,7 +133,6 @@ bool MDIWindow::loadFile(const QString &fileName)
         //moveStitchListToPolyline(p); //TODO: Test more
         int stitchCount = embStitchList_count(p->stitchList);
         QPainterPath path;
-        int arcIndex = 0;
 
         if(p->circleObjList)
         {
@@ -393,7 +392,7 @@ QString MDIWindow::fileExtension(const QString& fileName)
     return QFileInfo(fileName).suffix().toLower();
 }
 
-void MDIWindow::closeEvent(QCloseEvent* e)
+void MDIWindow::closeEvent(QCloseEvent* /*e*/)
 {
     qDebug("MDIWindow closeEvent()");
     emit sendCloseMdiWin(this);
