@@ -1289,6 +1289,7 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
 
 void View::mousePressEvent(QMouseEvent* event)
 {
+    updateMouseCoords(event->x(), event->y());
     if(event->button() == Qt::LeftButton)
     {
         if(mainWin->isCommandActive())
@@ -1297,22 +1298,29 @@ void View::mousePressEvent(QMouseEvent* event)
             mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
             return;
         }
-        QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
-        if(item)
+        QPainterPath path;
+        QList<QGraphicsItem*> pickList = gscene->items(QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+                                                              mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
+
+        bool itemsInPickBox = pickList.size();
+        if(itemsInPickBox && !selectingActive)
         {
-            if(item->isSelected())
+            bool itemsAlreadySelected = pickList.at(0)->isSelected();
+            if(!itemsAlreadySelected)
+            {
+                pickList.at(0)->setSelected(true);
+            }
+            else
             {
                 movingActive = true;
-                movePoint = event->pos();
-                sceneMovePoint = mapToScene(movePoint);
+                pressPoint = event->pos();
+                scenePressPoint = mapToScene(pressPoint);
+
+                previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, sceneMousePoint.x(), sceneMousePoint.y(), 0);
             }
         }
-        QPainterPath path;
-        if(!selectingActive)
+        else if(!selectingActive)
         {
-            if(item)
-                item->setSelected(true);
-
             selectingActive = true;
             pressPoint = event->pos();
             scenePressPoint = mapToScene(pressPoint);
@@ -1450,7 +1458,6 @@ void View::mousePressEvent(QMouseEvent* event)
         undoStack->push(cmd);
         event->accept();
     }
-    updateMouseCoords(event->x(), event->y());
     gscene->update();
 }
 
@@ -1586,14 +1593,6 @@ void View::mouseMoveEvent(QMouseEvent* event)
     {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
-    if(movingActive)
-    {
-        selectingActive = false;
-        selectBox->hide();
-
-        //moveSelected(delta.x(), delta.y()); TODO: fix this to use another method.
-        event->accept();
-    }
     if(selectingActive)
     {
         if(sceneMovePoint.x() >= scenePressPoint.x()) { selectBox->setDirection(1); }
@@ -1614,9 +1613,15 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
 void View::mouseReleaseEvent(QMouseEvent* event)
 {
+    updateMouseCoords(event->x(), event->y());
     if(event->button() == Qt::LeftButton)
     {
-        movingActive = false;
+        if(movingActive)
+        {
+            previewOff();
+            moveSelected(sceneMousePoint.x()-scenePressPoint.x(), sceneMousePoint.y()-scenePressPoint.y());
+            movingActive = false;
+        }
         event->accept();
     }
     if(event->button() == Qt::MidButton)
@@ -1639,7 +1644,6 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         mainWin->redo(); //TODO: Make this customizable
         event->accept();
     }
-    updateMouseCoords(event->x(), event->y());
     gscene->update();
 }
 
