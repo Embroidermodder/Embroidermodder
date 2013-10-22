@@ -126,7 +126,7 @@ View::~View()
     previewObjectList.clear();
 }
 
-void View::enterEvent(QEvent* event)
+void View::enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
     if(mdiWin) mainWin->getMdiArea()->setActiveSubWindow(mdiWin);
@@ -171,7 +171,7 @@ void View::previewOn(int clone, int mode, qreal x, qreal y, qreal data)
     }
     else
     {
-        previewMode == PREVIEW_MODE_NULL;
+        previewMode = PREVIEW_MODE_NULL;
         previewPoint = QPointF();
         previewData = 0;
         previewActive = false;
@@ -451,7 +451,7 @@ void View::createGridIso()
     //Center the Grid
 
     QRectF gridRect = gridPath.boundingRect();
-    qreal bx = gridRect.width()/2.0;
+    // bx is unused
     qreal by = -gridRect.height()/2.0;
     qreal cx = mainWin->getSettingsGridCenterX();
     qreal cy = -mainWin->getSettingsGridCenterY();
@@ -626,57 +626,6 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         qsnapPen.setCosmetic(true);
         painter->setPen(qsnapPen);
         QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
-
-
-        //TODO: Incorporate this into the PolylineObject class
-        /*
-            if(objType == OBJ_TYPE_POLYLINE)
-            {
-                continue; //TODO: skip this until libembroidery polylines can be interfaced correctly
-
-                QGraphicsPathItem* polylineItem = (QGraphicsPathItem*)item;
-                if(polylineItem)
-                {
-                    QPainterPath path = polylineItem->path();
-                    QPointF pos = polylineItem->scenePos();
-                    qreal startX = pos.x();
-                    qreal startY = pos.y();
-
-                    QPainterPath::Element element;
-                    QPainterPath::Element P1;
-                    QPainterPath::Element P2;
-                    QPainterPath::Element P3;
-                    QPainterPath::Element P4;
-
-                    for(int i = 0; i < path.elementCount()-1; ++i)
-                    {
-                        element = path.elementAt(i);
-                        if(element.isMoveTo())
-                        {
-                            pos = QPointF(pos.x() + (element.x), pos.y() + (element.y));
-                            QPoint p = mapFromScene(pos) - QPoint(qsnapLocatorSize, qsnapLocatorSize);
-                            QPoint q = mapFromScene(pos) + QPoint(qsnapLocatorSize, qsnapLocatorSize);
-                            painter->drawRect(QRectF(mapToScene(p), mapToScene(q)));
-                        }
-                        else if(element.isLineTo())
-                        {
-                            QPoint p = mapFromScene(pos + QPointF((element.x), (element.y))) - QPoint(qsnapLocatorSize, qsnapLocatorSize);
-                            QPoint q = mapFromScene(pos + QPointF((element.x), (element.y))) + QPoint(qsnapLocatorSize, qsnapLocatorSize);
-                            painter->drawRect(QRectF(mapToScene(p), mapToScene(q)));
-                        }
-                        else if(element.isCurveTo())
-                        {
-                            P1 = path.elementAt(i-1); // start point
-                            P2 = path.elementAt(i);   // control point
-                            P3 = path.elementAt(i+1); // control point
-                            P4 = path.elementAt(i+2); // end point
-
-                            //TODO: qsnap for polyline curves
-                        }
-                    }
-                }
-            }
-        */
 
         QList<QPointF> apertureSnapPoints;
         QList<QGraphicsItem *> apertureItemList = items(viewMousePoint.x()-qsnapApertureSize,
@@ -1514,7 +1463,6 @@ void View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint&
 void View::mouseMoveEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->x(), event->y());
-    QPointF delta = mapToScene(event->pos()) - mapToScene(movePoint);
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
