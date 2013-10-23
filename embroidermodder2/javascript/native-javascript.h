@@ -7,6 +7,7 @@
 QScriptValue javaDebug                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaError                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaTodo                   (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaBlinkPrompt            (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaSetPromptPrefix        (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaAppendPromptHistory    (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaEnablePromptRapidFire  (QScriptContext* context, QScriptEngine* engine);

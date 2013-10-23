@@ -9,6 +9,7 @@
 #include <QContextMenuEvent>
 #include <QSplitter>
 #include <QTextStream>
+#include <QTimer>
 
 CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 {
@@ -50,8 +51,13 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
 
     updateStyle();
 
+    blinkState = false;
+    blinkTimer = new QTimer(this);
+    connect(blinkTimer, SIGNAL(timeout()), this, SLOT(blink()));
+
     this->show();
 
+    connect(promptInput, SIGNAL(stopBlinking()), this, SLOT(stopBlinking()));
     connect(promptInput, SIGNAL(appendHistory(const QString&)), promptHistory, SLOT(appendHistory(const QString&)));
     connect(this, SIGNAL(appendTheHistory(const QString&)), promptHistory, SLOT(appendHistory(const QString&)));
 
@@ -109,6 +115,32 @@ void CmdPrompt::saveHistory(const QString& fileName, bool html)
     else     { output << promptHistory->toPlainText(); }
 }
 
+void CmdPrompt::startBlinking()
+{
+    blinkTimer->start(750);
+    promptInput->isBlinking = true;
+
+}
+
+void CmdPrompt::stopBlinking()
+{
+    blinkTimer->stop();
+    promptInput->isBlinking = false;
+}
+
+void CmdPrompt::blink()
+{
+    blinkState = !blinkState;
+    if(blinkState)
+    {
+        qDebug("CmdPrompt blink1");
+    }
+    else
+    {
+        qDebug("CmdPrompt blink0");
+    }
+}
+
 void CmdPrompt::setPromptTextColor(const QColor& color)
 {
     styleHash->insert("color", color.name());
@@ -122,7 +154,6 @@ void CmdPrompt::setPromptBackgroundColor(const QColor& color)
     styleHash->insert("selection-color", color.name());
     updateStyle();
 }
-
 
 void CmdPrompt::setPromptFontFamily(const QString& family)
 {
@@ -306,6 +337,8 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
 
     rapidFireEnabled = false;
 
+    isBlinking = false;
+
     this->setText(prefix);
     this->setFrame(false);
     this->setMaxLength(266);
@@ -340,6 +373,7 @@ void CmdPromptInput::endCommand()
     lastCmd = curCmd;
     cmdActive = false;
     rapidFireEnabled = false;
+    emit stopBlinking();
 
     prefix = "Command: ";
     clear();
@@ -472,6 +506,8 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 {
     if(event->type() == QEvent::KeyPress)
     {
+        if(isBlinking) emit stopBlinking();
+
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
         //NOTE: These shortcuts need to be caught since QLineEdit uses them

@@ -638,6 +638,7 @@ private:
 
 public:
     //Natives
+    void nativeBlinkPrompt            ();
     void nativeSetPromptPrefix        (const QString& txt);
     void nativeAppendPromptHistory    (const QString& txt);
     void nativeEnablePromptRapidFire  ();

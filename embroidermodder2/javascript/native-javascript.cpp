@@ -40,6 +40,14 @@ QScriptValue javaTodo(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaBlinkPrompt(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("blinkPrompt() requires zero arguments");
+
+    mainWin()->nativeBlinkPrompt();
+    return QScriptValue();
+}
+
 QScriptValue javaSetPromptPrefix(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 1)    return context->throwError("setPromptPrefix() requires one argument");

@@ -999,6 +999,11 @@ void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 
 }
 
+void MainWindow::nativeBlinkPrompt()
+{
+    prompt->startBlinking();
+}
+
 void MainWindow::nativeSetPromptPrefix(const QString& txt)
 {
     prompt->setPrefix(txt);

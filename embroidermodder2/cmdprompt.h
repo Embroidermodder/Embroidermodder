@@ -15,6 +15,7 @@ class QAction;
 class QMenu;
 class QContextMenuEvent;
 class QSplitter;
+class QTimer;
 QT_END_NAMESPACE
 
 class CmdPromptHistory : public QTextBrowser
@@ -56,6 +57,7 @@ public:
     bool cmdActive;
 
     bool rapidFireEnabled;
+    bool isBlinking;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
@@ -91,6 +93,8 @@ signals:
 
     void shiftPressed();
     void shiftReleased();
+
+    void stopBlinking();
 
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
@@ -181,6 +185,10 @@ public slots:
     void disableRapidFire() { promptInput->rapidFireEnabled = false; }
     bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
 
+    void startBlinking();
+    void stopBlinking();
+    void blink();
+
     void setPromptTextColor(const QColor&);
     void setPromptBackgroundColor(const QColor&);
     void setPromptFontFamily(const QString&);
@@ -234,6 +242,8 @@ private:
 
     QHash<QString, QString>*  styleHash;
     void updateStyle();
+    QTimer* blinkTimer;
+    bool blinkState;
 };
 
 #endif
