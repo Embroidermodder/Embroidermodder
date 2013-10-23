@@ -107,6 +107,21 @@ private:
     View*   gview;
 };
 
+class UndoableGripEditCommand : public QUndoCommand
+{
+public:
+    UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+
+private:
+    BaseObject* object;
+    View*       gview;
+    QPointF     before;
+    QPointF     after;
+};
+
 #endif
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

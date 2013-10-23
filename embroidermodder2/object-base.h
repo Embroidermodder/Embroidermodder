@@ -44,12 +44,15 @@ public:
     void setObjectRubberPoint(const QString& key, const QPointF& point) { objRubberPoints.insert(key, point); }
     void setObjectRubberText(const QString& key, const QString& txt) { objRubberTexts.insert(key, txt); }
 
-    virtual QRectF boundingRect() const { return path().boundingRect(); }
+    virtual QRectF boundingRect() const;
     virtual QPainterPath shape() const { return path(); }
 
+    void drawRubberLine(const QLineF& rubLine, QPainter* painter = 0, const char* colorFromScene = 0);
+
+    virtual void vulcanize() = 0;
     virtual QPointF mouseSnapPoint(const QPointF& mousePoint) = 0;
     virtual QList<QPointF> allGripPoints() = 0;
-    virtual void vulcanize() = 0;
+    virtual void gripEdit(const QPointF& before, const QPointF& after) = 0;
 protected:
     QPen lineWeightPen() const { return lwtPen; }
     inline qreal pi() const { return (qAtan(1.0)*4.0); }

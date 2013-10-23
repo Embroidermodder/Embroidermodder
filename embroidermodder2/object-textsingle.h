@@ -47,10 +47,11 @@ public:
     void setObjectX(qreal x) { setObjectPos(x, objectY()); }
     void setObjectY(qreal y) { setObjectPos(objectX(), y); }
 
-    QPointF mouseSnapPoint(const QPointF& mousePoint);
-    QList<QPointF> allGripPoints();
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
+    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
+    virtual QList<QPointF> allGripPoints();
+    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
@@ -67,6 +68,7 @@ private:
     bool    objTextOverline;
     bool    objTextBackward;
     bool    objTextUpsideDown;
+    QPainterPath objTextPath;
 };
 
 #endif

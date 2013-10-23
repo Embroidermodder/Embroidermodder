@@ -122,13 +122,13 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    updateRubber(painter);
-
-    painter->drawLine(line());
+    if(objectRubberMode() != OBJ_RUBBER_LINE) painter->drawLine(line());
 
     //TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
     if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool())
@@ -160,6 +160,21 @@ void LineObject::updateRubber(QPainter* painter)
 
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
+
+        drawRubberLine(line(), painter, COLOR_CROSSHAIR);
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(QString())));
+            else if(gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(QString())));
+            else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+        }
     }
 }
 
@@ -196,6 +211,13 @@ QList<QPointF> LineObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
     return gripPoints;
+}
+
+void LineObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
+    else if(before == objectEndPoint2()) { setObjectEndPoint2(after); }
+    else if(before == objectMidPoint())  { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

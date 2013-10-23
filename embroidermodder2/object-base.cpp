@@ -4,6 +4,7 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QPainter>
 
 BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
 {
@@ -85,6 +86,28 @@ QString BaseObject::objectRubberText(const QString& key) const
     if(objRubberTexts.contains(key))
         return objRubberTexts.value(key);
     return QString();
+}
+
+QRectF BaseObject::boundingRect() const
+{
+    //If gripped, force this object to be drawn even if it is offscreen
+    if(objectRubberMode() == OBJ_RUBBER_GRIP)
+        return scene()->sceneRect();
+    return path().boundingRect();
+}
+
+void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
+{
+    if(painter)
+    {
+        QGraphicsScene* objScene = scene();
+        if(!objScene) return;
+        QPen colorPen = objPen;
+        colorPen.setColor(QColor(objScene->property(colorFromScene).toUInt()));
+        painter->setPen(colorPen);
+        painter->drawLine(rubLine);
+        painter->setPen(objPen);
+    }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

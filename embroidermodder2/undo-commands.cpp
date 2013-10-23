@@ -222,4 +222,27 @@ void UndoableNavCommand::redo()
     }
 }
 
+//==================================================
+// Grip Edit
+//==================================================
+
+UndoableGripEditCommand::UndoableGripEditCommand(const QPointF beforePoint, const QPointF afterPoint, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    before = beforePoint;
+    after = afterPoint;
+}
+
+void UndoableGripEditCommand::undo()
+{
+    object->gripEdit(after, before);
+}
+
+void UndoableGripEditCommand::redo()
+{
+    object->gripEdit(before, after);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

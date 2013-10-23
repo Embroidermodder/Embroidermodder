@@ -134,11 +134,11 @@ void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawRect(rect());
 }
@@ -156,6 +156,10 @@ void ImageObject::updateRubber(QPainter* painter)
         qreal h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        //TODO: updateRubber() gripping for ImageObject
     }
 }
 
@@ -195,6 +199,11 @@ QList<QPointF> ImageObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
+}
+
+void ImageObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    //TODO: gripEdit() for ImageObject
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

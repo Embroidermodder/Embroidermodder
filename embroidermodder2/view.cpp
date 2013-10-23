@@ -63,7 +63,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     gripColorHot = mainWin->getSettingsSelectionHotGripColor();
     gripSize = mainWin->getSettingsSelectionGripSize();
     pickBoxSize = mainWin->getSettingsSelectionPickBoxSize();
-    crosshairColor = mainWin->getSettingsDisplayCrossHairColor();
+    setCrossHairColor(mainWin->getSettingsDisplayCrossHairColor());
     setCrossHairSize(mainWin->getSettingsDisplayCrossHairPercent());
     setGridColor(mainWin->getSettingsGridColor());
 
@@ -75,6 +75,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     toggleRuler(mainWin->getSettingsRulerShowOnLoad());
     toggleReal(true); //TODO: load this from file, else settings with default being true
 
+    grippingActive = false;
     rapidMoveActive = false;
     previewMode = PREVIEW_MODE_NULL;
     previewData = 0;
@@ -91,6 +92,11 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     qSnapActive = false;
     qSnapToggle = false;
 
+    //Randomize the hot grip location initially so it's not located at (0,0)
+    qsrand(QDateTime::currentMSecsSinceEpoch());
+    sceneGripPoint = QPointF(qrand()*1000, qrand()*1000);
+
+    gripBaseObj = 0;
     tempBaseObj = 0;
 
     selectBox = new SelectBox(QRubberBand::Rectangle, this);
@@ -235,6 +241,7 @@ void View::vulcanizeRubberRoom()
 
 void View::vulcanizeObject(BaseObject* obj)
 {
+    if(!obj) return;
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
     obj->vulcanize();
 
@@ -307,7 +314,8 @@ void View::setRubberText(const QString& key, const QString& txt)
 void View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
-    gscene->update();
+    gscene->setProperty(COLOR_GRID, color);
+    if(gscene) gscene->update();
 }
 
 void View::setRulerColor(QRgb color)
@@ -608,7 +616,11 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                 {
                     QPoint p1 = mapFromScene(ssp) - gripOffset;
                     QPoint q1 = mapFromScene(ssp) + gripOffset;
-                    painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
+
+                    if(ssp == sceneGripPoint)
+                        painter->fillRect(QRectF(mapToScene(p1), mapToScene(q1)), QColor::fromRgb(gripColorHot));
+                    else
+                        painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
                 }
             }
         }
@@ -1252,7 +1264,7 @@ void View::mousePressEvent(QMouseEvent* event)
                                                               mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
-        if(itemsInPickBox && !selectingActive)
+        if(itemsInPickBox && !selectingActive && !grippingActive)
         {
             bool itemsAlreadySelected = pickList.at(0)->isSelected();
             if(!itemsAlreadySelected)
@@ -1261,12 +1273,36 @@ void View::mousePressEvent(QMouseEvent* event)
             }
             else
             {
-                movingActive = true;
-                pressPoint = event->pos();
-                scenePressPoint = mapToScene(pressPoint);
+                bool foundGrip = false;
+                BaseObject* base = static_cast<BaseObject*>(pickList.at(0)); //TODO: Allow multiple objects to be gripped at once
+                if(!base) return;
 
-                previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, sceneMousePoint.x(), sceneMousePoint.y(), 0);
+                QPoint qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
+                QPointF gripPoint = base->mouseSnapPoint(sceneMousePoint);
+                QPoint p1 = mapFromScene(gripPoint) - qsnapOffset;
+                QPoint q1 = mapFromScene(gripPoint) + qsnapOffset;
+                QRectF gripRect = QRectF(mapToScene(p1), mapToScene(q1));
+                QRectF pickRect = QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+                                        mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize));
+                if(gripRect.intersects(pickRect))
+                    foundGrip = true;
+
+                //If the pick point is within the item's grip box, start gripping
+                if(foundGrip)
+                {
+                    startGripping(base);
+                }
+                else //start moving
+                {
+                    movingActive = true;
+                    pressPoint = event->pos();
+                    scenePressPoint = mapToScene(pressPoint);
+                }
             }
+        }
+        else if(grippingActive)
+        {
+            stopGripping(true);
         }
         else if(!selectingActive)
         {
@@ -1541,6 +1577,12 @@ void View::mouseMoveEvent(QMouseEvent* event)
     {
         pasteObjectItemGroup->setPos(sceneMousePoint - pasteDelta);
     }
+    if(movingActive)
+    {
+        //Ensure that the preview is only shown if the mouse has moved.
+        if(!previewActive)
+            previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, scenePressPoint.x(), scenePressPoint.y(), 0);
+    }
     if(selectingActive)
     {
         if(sceneMovePoint.x() >= scenePressPoint.x()) { selectBox->setDirection(1); }
@@ -1567,7 +1609,10 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         if(movingActive)
         {
             previewOff();
-            moveSelected(sceneMousePoint.x()-scenePressPoint.x(), sceneMousePoint.y()-scenePressPoint.y());
+            qreal dx = sceneMousePoint.x()-scenePressPoint.x();
+            qreal dy = sceneMousePoint.y()-scenePressPoint.y();
+            //Ensure that moving only happens if the mouse has moved.
+            if(dx || dy) moveSelected(dx, dy);
             movingActive = false;
         }
         event->accept();
@@ -1769,6 +1814,7 @@ void View::deletePressed()
     zoomWindowActive = false;
     selectingActive = false;
     selectBox->hide();
+    stopGripping(false);
     deleteSelected();
 }
 
@@ -1784,7 +1830,36 @@ void View::escapePressed()
     zoomWindowActive = false;
     selectingActive = false;
     selectBox->hide();
-    clearSelection();
+    if(grippingActive) stopGripping(false);
+    else clearSelection();
+}
+
+void View::startGripping(BaseObject* obj)
+{
+    if(!obj) return;
+    grippingActive = true;
+    gripBaseObj = obj;
+    sceneGripPoint = gripBaseObj->mouseSnapPoint(sceneMousePoint);
+    gripBaseObj->setObjectRubberPoint("GRIP_POINT", sceneGripPoint);
+    gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
+}
+
+void View::stopGripping(bool accept)
+{
+    grippingActive = false;
+    if(gripBaseObj)
+    {
+        gripBaseObj->vulcanize();
+        if(accept)
+        {
+            UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
+            if(cmd) undoStack->push(cmd);
+            selectionChanged(); //Update the Property Editor
+        }
+        gripBaseObj = 0;
+    }
+    //Move the sceneGripPoint to a place where it will never be hot
+    sceneGripPoint = sceneRect().topLeft();
 }
 
 void View::clearSelection()
@@ -2147,12 +2222,15 @@ void View::showScrollBars(bool val)
 void View::setCrossHairColor(QRgb color)
 {
     crosshairColor = color;
-    gscene->update();
+    gscene->setProperty(COLOR_CROSSHAIR, color);
+    if(gscene) gscene->update();
 }
 
 void View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
+    gscene->setProperty(COLOR_BACKGROUND, color);
+    if(gscene) gscene->update();
 }
 
 void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)

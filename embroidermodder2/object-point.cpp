@@ -50,18 +50,30 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawPoint(0,0);
 }
 
 void PointObject::updateRubber(QPainter* painter)
 {
-    //TODO: Point Rubber Modes
+    int rubberMode = objectRubberMode();
+    if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if(gripPoint == scenePos())
+            {
+                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+            }
+        }
+    }
 }
 
 void PointObject::vulcanize()
@@ -83,6 +95,11 @@ QList<QPointF> PointObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
+}
+
+void PointObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

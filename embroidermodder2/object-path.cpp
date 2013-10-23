@@ -51,11 +51,11 @@ void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawPath(objectPath());
 }
@@ -63,6 +63,9 @@ void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 void PathObject::updateRubber(QPainter* painter)
 {
     //TODO: Path Rubber Modes
+
+    //TODO: updateRubber() gripping for PathObject
+
 }
 
 void PathObject::vulcanize()
@@ -84,6 +87,11 @@ QList<QPointF> PathObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
     return gripPoints;
+}
+
+void PathObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    //TODO: gripEdit() for PathObject
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

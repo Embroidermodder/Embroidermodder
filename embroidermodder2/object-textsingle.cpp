@@ -131,10 +131,16 @@ void TextSingleObject::setObjectText(const QString& str)
                                     horiz * P4.x, vert * P4.y);
             }
         }
-        setObjectPath(flippedPath);
+        objTextPath = flippedPath;
     }
     else
-        setObjectPath(textPath);
+        objTextPath = textPath;
+
+    //Add the grip point to the shape path
+    QPainterPath gripPath = objTextPath;
+    gripPath.connectPath(objTextPath);
+    gripPath.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    setObjectPath(gripPath);
 }
 
 void TextSingleObject::setObjectTextFont(const QString& font)
@@ -229,13 +235,13 @@ void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    updateRubber(painter);
-
-    painter->drawPath(objectPath());
+    painter->drawPath(objTextPath);
 }
 
 void TextSingleObject::updateRubber(QPainter* painter)
@@ -250,6 +256,20 @@ void TextSingleObject::updateRubber(QPainter* painter)
         setObjectTextSize(hr.x());
         setRotation(hr.y());
         setObjectText(objectRubberText("TEXT_RAPID"));
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if(gripPoint == scenePos())
+            {
+                painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
+            }
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+        }
     }
 }
 
@@ -272,6 +292,11 @@ QList<QPointF> TextSingleObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
+}
+
+void TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

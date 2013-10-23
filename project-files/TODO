@@ -100,6 +100,7 @@ TODO - CAD Command: Units
 TODO - CAD Command: Grid
 TODO - CAD Command: Find
 TODO - CAD Command: Divide
+TODO - CAD Command: ZoomWindow (Move out of view.cpp)
 TODO - native function that flashes the command prompt to get users attention when using the prompt is required for a command.
 TODO - libembroidery-composer like app that combines multiple files into one.
 TODO - Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. 

@@ -34,10 +34,11 @@ public:
     void setObjectX2(qreal x) { setObjectEndPoint2(x, objectY2()); }
     void setObjectY2(qreal y) { setObjectEndPoint2(objectX2(), y); }
 
-    QPointF mouseSnapPoint(const QPointF& mousePoint);
-    QList<QPointF> allGripPoints();
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
+    virtual QPointF mouseSnapPoint(const QPointF& mousePoint);
+    virtual QList<QPointF> allGripPoints();
+    virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:

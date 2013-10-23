@@ -159,11 +159,11 @@ void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
-
-    updateRubber(painter);
 
     painter->drawEllipse(rect());
 }
@@ -178,7 +178,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if(painter) painter->drawLine(itemLine);
+        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
@@ -211,7 +211,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) painter->drawLine(itemLine);
+        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
@@ -243,8 +243,12 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) painter->drawLine(itemLine);
+        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
         updatePath();
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        //TODO: updateRubber() gripping for EllipseObject
     }
 }
 
@@ -287,6 +291,11 @@ QList<QPointF> EllipseObject::allGripPoints()
     QList<QPointF> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
+}
+
+void EllipseObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    //TODO: gripEdit() for EllipseObject
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

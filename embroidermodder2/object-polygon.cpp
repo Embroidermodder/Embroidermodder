@@ -37,6 +37,7 @@ void PolygonObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
+    gripIndex = -1;
     updatePath(p);
     setObjectPos(x,y);
     setObjectColor(rgb);
@@ -48,11 +49,11 @@ void PolygonObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::
 void PolygonObject::updatePath(const QPainterPath& p)
 {
     normalPath = p;
-    QPainterPath reversePath = normalPath.toReversed();
-    reversePath.connectPath(normalPath);
+    QPainterPath closedPath = normalPath;
+    closedPath.closeSubpath();
+    QPainterPath reversePath = closedPath.toReversed();
+    reversePath.connectPath(closedPath);
     setObjectPath(reversePath);
-
-    normalPath.closeSubpath(); //Polygon specific
 }
 
 void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
@@ -61,13 +62,16 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     if(!objScene) return;
 
     QPen paintPen = pen();
+    painter->setPen(paintPen);
+    updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    updateRubber(painter);
-
     painter->drawPath(normalPath);
+    QPainterPath::Element zero = normalPath.elementAt(0);
+    QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
+    painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
 }
 
 void PolygonObject::updateRubber(QPainter* painter)
@@ -85,13 +89,14 @@ void PolygonObject::updateRubber(QPainter* painter)
 
         QString appendStr;
         QPainterPath rubberPath;
+        rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
         for(int i = 1; i <= num; i++)
         {
             appendStr = "POLYGON_POINT_" + QString().setNum(i);
             QPointF appendPoint = mapFromScene(objectRubberPoint(appendStr));
             rubberPath.lineTo(appendPoint);
         }
-        rubberPath.lineTo(0,0);
+        //rubberPath.lineTo(0,0);
         updatePath(rubberPath);
 
         //Ensure the path isn't updated until the number of points is changed again
@@ -108,7 +113,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal inscribeAngle = inscribeLine.angle();
         qreal inscribeInc = 360.0/numSides;
 
-        if(painter) painter->drawLine(inscribeLine);
+        if(painter) drawRubberLine(inscribeLine, painter, COLOR_CROSSHAIR);
 
         QPainterPath inscribePath;
         //First Point
@@ -119,7 +124,6 @@ void PolygonObject::updateRubber(QPainter* painter)
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
             inscribePath.lineTo(inscribeLine.p2());
         }
-        inscribePath.closeSubpath();
         updatePath(inscribePath);
     }
     else if(rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE)
@@ -133,7 +137,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal circumscribeAngle = circumscribeLine.angle();
         qreal circumscribeInc = 360.0/numSides;
 
-        if(painter) painter->drawLine(circumscribeLine);
+        if(painter) drawRubberLine(circumscribeLine, painter, COLOR_CROSSHAIR);
 
         QPainterPath circumscribePath;
         //First Point
@@ -155,8 +159,33 @@ void PolygonObject::updateRubber(QPainter* painter)
             perp.intersect(prev, &iPoint);
             circumscribePath.lineTo(iPoint);
         }
-        circumscribePath.closeSubpath();
         updatePath(circumscribePath);
+    }
+    else if(rubberMode == OBJ_RUBBER_GRIP)
+    {
+        if(painter)
+        {
+            int elemCount = normalPath.elementCount();
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            if(gripIndex == -1) gripIndex = findIndex(gripPoint);
+            if(gripIndex == -1) return;
+
+            int m = 0;
+            int n = 0;
+
+            if(!gripIndex)                    { m = elemCount-1; n = 1; }
+            else if(gripIndex == elemCount-1) { m = elemCount-2; n = 0; }
+            else                              { m = gripIndex-1; n = gripIndex+1; }
+            QPainterPath::Element em = normalPath.elementAt(m);
+            QPainterPath::Element en = normalPath.elementAt(n);
+            QPointF emPoint = QPointF(em.x, em.y);
+            QPointF enPoint = QPointF(en.x, en.y);
+            painter->drawLine(emPoint, mapFromScene(objectRubberPoint(QString())));
+            painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+        }
     }
 }
 
@@ -171,10 +200,11 @@ void PolygonObject::vulcanize()
 // Returns the closest snap point to the mouse point
 QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
 {
-    QPointF closestPoint = scenePos();
+    QPainterPath::Element element = normalPath.elementAt(0);
+    QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
     qreal closestDist = QLineF(mousePoint, closestPoint).length();
-    QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
+    int elemCount = normalPath.elementCount();
+    for(int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
@@ -198,6 +228,31 @@ QList<QPointF> PolygonObject::allGripPoints()
         gripPoints << mapToScene(element.x, element.y);
     }
     return gripPoints;
+}
+
+int PolygonObject::findIndex(const QPointF& point)
+{
+    int i = 0;
+    int elemCount = normalPath.elementCount();
+    //NOTE: Points here are in item coordinates
+    QPointF itemPoint = mapFromScene(point);
+    for(i = 0; i < elemCount; i++)
+    {
+        QPainterPath::Element e = normalPath.elementAt(i);
+        QPointF elemPoint = QPointF(e.x, e.y);
+        if(itemPoint == elemPoint) return i;
+    }
+    return -1;
+}
+
+void PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
+{
+    gripIndex = findIndex(before);
+    if(gripIndex == -1) return;
+    QPointF a = mapFromScene(after);
+    normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
+    updatePath(normalPath);
+    gripIndex = -1;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

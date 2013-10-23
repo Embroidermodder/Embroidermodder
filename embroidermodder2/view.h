@@ -154,6 +154,7 @@ private:
 
     void copySelected();
 
+    bool grippingActive;
     bool rapidMoveActive;
     bool previewActive;
     bool pastingActive;
@@ -166,6 +167,10 @@ private:
     bool qSnapActive;
     bool qSnapToggle;
 
+    void startGripping(BaseObject* obj);
+    void stopGripping(bool accept = false);
+
+    BaseObject* gripBaseObj;
     BaseObject* tempBaseObj;
 
     MainWindow* mainWin;
@@ -179,6 +184,7 @@ private:
     QPoint movePoint;
     QPointF sceneReleasePoint;
     QPoint releasePoint;
+    QPointF sceneGripPoint;
 
     void updateMouseCoords(int x, int y);
     QPoint  viewMousePoint;
