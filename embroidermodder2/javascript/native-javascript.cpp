@@ -1433,6 +1433,29 @@ QScriptValue javaRotateSelected(QScriptContext* context, QScriptEngine* /*engine
     return QScriptValue();
 }
 
+QScriptValue javaMirrorSelected(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 4)    return context->throwError("mirrorSelected() requires four arguments");
+    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument is not a number");
+    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument is not a number");
+    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument is not a number");
+    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument is not a number");
+
+    qreal x1 = context->argument(0).toNumber();
+    qreal y1 = context->argument(1).toNumber();
+    qreal x2 = context->argument(2).toNumber();
+    qreal y2 = context->argument(3).toNumber();
+
+    //isNaN check
+    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument failed isNaN check. There is an error in your code.");
+    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.");
+
+    mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
+    return QScriptValue();
+}
+
 QScriptValue javaQSnapX(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("qsnapX() requires zero arguments");

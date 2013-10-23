@@ -754,6 +754,7 @@ public:
     void nativeMoveSelected           (qreal dx, qreal dy);
     void nativeScaleSelected          (qreal x, qreal y, qreal factor);
     void nativeRotateSelected         (qreal x, qreal y, qreal rot);
+    void nativeMirrorSelected         (qreal x1, qreal y1, qreal x2, qreal y2);
 
     qreal nativeQSnapX                ();
     qreal nativeQSnapY                ();

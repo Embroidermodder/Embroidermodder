@@ -1734,6 +1734,12 @@ void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
     if(gview) { gview->rotateSelected(x, -y, -rot); }
 }
 
+void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+{
+    View* gview = activeView();
+    if(gview) { gview->mirrorSelected(x1, -y1, x2, -y2); }
+}
+
 qreal MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();

@@ -61,6 +61,7 @@ public slots:
     void scaleSelected(qreal x, qreal y, qreal factor);
     void rotateAction();
     void rotateSelected(qreal x, qreal y, qreal rot);
+    void mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
     int  numSelected();
 
     void deletePressed();

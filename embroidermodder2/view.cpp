@@ -2171,6 +2171,28 @@ void View::rotateSelected(qreal x, qreal y, qreal rot)
     gscene->clearSelection();
 }
 
+void View::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+{
+    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    int numSelected = itemList.size();
+    if(numSelected > 1)
+        undoStack->beginMacro("Mirror " + QString().setNum(itemList.size()));
+    foreach(QGraphicsItem* item, itemList)
+    {
+        BaseObject* base = static_cast<BaseObject*>(item);
+        if(base)
+        {
+            UndoableMirrorCommand* cmd = new UndoableMirrorCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+            if(cmd) undoStack->push(cmd);
+        }
+    }
+    if(numSelected > 1)
+        undoStack->endMacro();
+
+    //Always clear the selection after a mirror
+    gscene->clearSelection();
+}
+
 void View::scaleAction()
 {
     mainWin->prompt->endCommand();

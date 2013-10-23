@@ -122,6 +122,24 @@ private:
     QPointF     after;
 };
 
+
+class UndoableMirrorCommand : public QUndoCommand
+{
+public:
+    UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+
+    void undo();
+    void redo();
+
+private:
+    void mirror();
+
+    BaseObject* object;
+    View*       gview;
+    QLineF      mirrorLine;
+
+};
+
 #endif
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

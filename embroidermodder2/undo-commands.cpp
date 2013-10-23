@@ -245,4 +245,31 @@ void UndoableGripEditCommand::redo()
     object->gripEdit(before, after);
 }
 
+//==================================================
+// Mirror
+//==================================================
+
+UndoableMirrorCommand::UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+{
+    gview = v;
+    object = obj;
+    setText(text);
+    mirrorLine = QLineF(x1, y1, x2, y2);
+}
+
+void UndoableMirrorCommand::undo()
+{
+    mirror();
+}
+
+void UndoableMirrorCommand::redo()
+{
+    mirror();
+}
+
+void UndoableMirrorCommand::mirror()
+{
+    //TODO: finish undoable mirror
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

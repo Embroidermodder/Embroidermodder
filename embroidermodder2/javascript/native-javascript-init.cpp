@@ -102,6 +102,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValMoveSelected = engine->newFunction(javaMoveSelected); engine->globalObject().setProperty("moveSelected", scriptValMoveSelected);
     QScriptValue scriptValScaleSelected = engine->newFunction(javaScaleSelected); engine->globalObject().setProperty("scaleSelected", scriptValScaleSelected);
     QScriptValue scriptValRotateSelected = engine->newFunction(javaRotateSelected); engine->globalObject().setProperty("rotateSelected", scriptValRotateSelected);
+    QScriptValue scriptValMirrorSelected = engine->newFunction(javaMirrorSelected); engine->globalObject().setProperty("mirrorSelected", scriptValMirrorSelected);
     QScriptValue scriptValQSnapX = engine->newFunction(javaQSnapX); engine->globalObject().setProperty("qsnapX", scriptValQSnapX);
     QScriptValue scriptValQSnapY = engine->newFunction(javaQSnapY); engine->globalObject().setProperty("qsnapY", scriptValQSnapY);
     QScriptValue scriptValMouseX = engine->newFunction(javaMouseX); engine->globalObject().setProperty("mouseX", scriptValMouseX);

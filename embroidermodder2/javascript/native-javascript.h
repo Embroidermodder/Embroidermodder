@@ -105,6 +105,7 @@ QScriptValue javaPasteSelected          (QScriptContext* context, QScriptEngine*
 QScriptValue javaMoveSelected           (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaScaleSelected          (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaRotateSelected         (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaMirrorSelected         (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaQSnapX                 (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaQSnapY                 (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaMouseX                 (QScriptContext* context, QScriptEngine* engine);
