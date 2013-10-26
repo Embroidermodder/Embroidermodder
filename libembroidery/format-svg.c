@@ -7,13 +7,12 @@
 
 EmbColor svgColorToEmbColor(const char* colorString)
 {
-    /* Trim out any junk spaces */
     unsigned char r = 0;
     unsigned char g = 0;
     unsigned char b = 0;
     int i = 0;
-    char* pEnd;
-    char* colorStr = lTrim(rTrim(colorString, ' '), ' ');
+    char* pEnd = 0;
+    char* colorStr = lTrim(rTrim(colorString, ' '), ' '); /* Trim out any junk spaces */
     int length = strlen(colorStr);
 
     /* SVGTiny1.2 Spec Section 11.13.1 syntax for color values */
@@ -3014,8 +3013,12 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(cObjList)
     {
         circle = cObjList->circleObj.circle;
+        EmbColor color = cObjList->circleObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<circle stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" cx=\"%f\" cy=\"%f\" r=\"%f\" />",
+        fprintf(file, "\n<circle stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" r=\"%f\" />",
+                        color.r,
+                        color.g,
+                        color.b,
                         circle.centerX,
                         circle.centerY,
                         circle.radius);
@@ -3027,8 +3030,12 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(eObjList)
     {
         ellipse = eObjList->ellipseObj.ellipse;
+        EmbColor color = eObjList->ellipseObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<ellipse stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" />",
+        fprintf(file, "\n<ellipse stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" />",
+                        color.r,
+                        color.g,
+                        color.b,
                         ellipse.centerX,
                         ellipse.centerY,
                         ellipse.radiusX,
@@ -3041,8 +3048,12 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(liObjList)
     {
         line = liObjList->lineObj.line;
+        EmbColor color = liObjList->lineObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<line stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+        fprintf(file, "\n<line stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+                        color.r,
+                        color.g,
+                        color.b,
                         line.x1,
                         line.y1,
                         line.x2,
@@ -3055,11 +3066,15 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(poObjList)
     {
         point = poObjList->pointObj.point;
+        EmbColor color = poObjList->pointObj.color;
         /* See SVG Tiny 1.2 Spec:
         * Section 9.5 The 'line' element
         * Section C.6 'path' element implementation notes */
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<line stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+        fprintf(file, "\n<line stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+                        color.r,
+                        color.g,
+                        color.b,
                         point.xx,
                         point.yy,
                         point.xx,
@@ -3098,8 +3113,12 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(rObjList)
     {
         rect = rObjList->rectObj.rect;
+        EmbColor color = rObjList->rectObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<rect stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" />",
+        fprintf(file, "\n<rect stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" />",
+                        color.r,
+                        color.g,
+                        color.b,
                         embRect_x(rect),
                         embRect_y(rect),
                         embRect_width(rect),
