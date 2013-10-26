@@ -3,14 +3,7 @@
 #include "format-pec.h"
 #include "format-phc.h"
 #include "helpers-binary.h"
-
-static char startsWith(const char* pre, const char* str)
-{
-    /* TODO: pointer safety */
-    size_t lenpre = strlen(pre),
-           lenstr = strlen(str);
-    return lenstr < lenpre ? 0 : strncmp(pre, str, lenpre) == 0; /* TODO: cleanup return statement */
-}
+#include "helpers-misc.h"
 
 int readPlt(EmbPattern* pattern, const char* fileName)
 {

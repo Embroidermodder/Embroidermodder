@@ -18,6 +18,7 @@ extern "C" {
 #endif
 
 int roundDouble(double src);
+char startsWith(const char* pre, const char* str);
 
 char* rTrim(char* const string, char junk);
 char* lTrim(char* const string, char junk);

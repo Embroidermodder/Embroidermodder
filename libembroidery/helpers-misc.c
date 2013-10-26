@@ -11,6 +11,21 @@ int roundDouble(double src)
     return (int)floor(src+0.5);
 }
 
+/* Returns true if (str) begins with (pre), otherwise returns false. */
+char startsWith(const char* pre, const char* str)
+{
+    /* TODO: pointer safety */
+    char result = 0;
+    size_t lenpre = strlen(pre),
+           lenstr = strlen(str);
+    if(lenstr < lenpre)
+        return 0;
+    result = strncmp(pre, str, lenpre);
+    if(result == 0)
+        return 1;
+    return 0;
+}
+
 /* Removes all characters from the right end of the string that match (junk), moving left until a mismatch occurs. */
 char* rTrim(char* const string, char junk)
 {
