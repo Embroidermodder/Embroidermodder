@@ -5,6 +5,83 @@
 #include "format-svg.h"
 #include "helpers-misc.h"
 
+EmbColor svgColorToEmbColor(const char* colorString)
+{
+    /* Trim out any junk spaces */
+    unsigned char r = 0;
+    unsigned char g = 0;
+    unsigned char b = 0;
+    int i = 0;
+    char* pEnd;
+    char* colorStr = lTrim(rTrim(colorString, ' '), ' ');
+    int length = strlen(colorStr);
+
+    /* SVGTiny1.2 Spec Section 11.13.1 syntax for color values */
+    if(length == 7 && colorStr[0] == '#') /* Six digit hex — #rrggbb */
+    {
+        return embColor_fromHexStr(lTrim(colorStr, '#'));
+    }
+    else if(length == 4 && colorStr[0] == '#') /* Three digit hex — #rgb */
+    {
+        /* Convert the 3 digit hex to a six digit hex */
+        char hex[7] = { colorStr[1], colorStr[1], colorStr[2], colorStr[2], colorStr[3], colorStr[3], 0 };
+        return embColor_fromHexStr(hex);
+    }
+    else if(strstr(colorStr, "%")) /* Float functional — rgb(R%, G%, B%) */
+    {
+        for(i = 0; i < length; i++)
+        {
+            if(colorStr[i] == 'r') colorStr[i] = ' ';
+            if(colorStr[i] == 'g') colorStr[i] = ' ';
+            if(colorStr[i] == 'b') colorStr[i] = ' ';
+            if(colorStr[i] == ',') colorStr[i] = ' ';
+            if(colorStr[i] == '(') colorStr[i] = ' ';
+            if(colorStr[i] == ')') colorStr[i] = ' ';
+            if(colorStr[i] == '%') colorStr[i] = ' ';
+        }
+        r = (unsigned char)roundDouble(255.0/100.0 * strtod(colorStr, &pEnd));
+        g = (unsigned char)roundDouble(255.0/100.0 * strtod(pEnd,     &pEnd));
+        b = (unsigned char)roundDouble(255.0/100.0 * strtod(pEnd,     &pEnd));
+    }
+    else if(length > 3 && startsWith("rgb", colorStr)) /* Integer functional — rgb(rrr, ggg, bbb) */
+    {
+        for(i = 0; i < length; i++)
+        {
+            if(colorStr[i] == 'r') colorStr[i] = ' ';
+            if(colorStr[i] == 'g') colorStr[i] = ' ';
+            if(colorStr[i] == 'b') colorStr[i] = ' ';
+            if(colorStr[i] == ',') colorStr[i] = ' ';
+            if(colorStr[i] == '(') colorStr[i] = ' ';
+            if(colorStr[i] == ')') colorStr[i] = ' ';
+        }
+        r = (unsigned char)strtol(colorStr, &pEnd, 10);
+        g = (unsigned char)strtol(pEnd,     &pEnd, 10);
+        b = (unsigned char)strtol(pEnd,     &pEnd, 10);
+    }
+    else /* Color keyword */
+    {
+        if     (!strcmp(colorStr, "black"))   return embColor_make(  0,   0,   0);
+        else if(!strcmp(colorStr, "silver"))  return embColor_make(192, 192, 192);
+        else if(!strcmp(colorStr, "gray"))    return embColor_make(128, 128, 128);
+        else if(!strcmp(colorStr, "white"))   return embColor_make(255, 255, 255);
+        else if(!strcmp(colorStr, "maroon"))  return embColor_make(128,   0,   0) ;
+        else if(!strcmp(colorStr, "red"))     return embColor_make(255,   0,   0);
+        else if(!strcmp(colorStr, "purple"))  return embColor_make(128,   0, 128);
+        else if(!strcmp(colorStr, "fuchsia")) return embColor_make(255,   0, 255);
+        else if(!strcmp(colorStr, "green"))   return embColor_make(  0, 128,   0);
+        else if(!strcmp(colorStr, "lime"))    return embColor_make(  0, 255,   0);
+        else if(!strcmp(colorStr, "olive"))   return embColor_make(128, 128,   0);
+        else if(!strcmp(colorStr, "yellow"))  return embColor_make(255, 255,   0);
+        else if(!strcmp(colorStr, "navy"))    return embColor_make(  0,   0, 128);
+        else if(!strcmp(colorStr, "blue"))    return embColor_make(  0,   0, 255);
+        else if(!strcmp(colorStr, "teal"))    return embColor_make(  0, 128, 128);
+        else if(!strcmp(colorStr, "aqua"))    return embColor_make(  0, 255, 255);
+    }
+
+    /* Returns black if all else fails */
+    return embColor_make(r, g, b);
+}
+
 SvgAttribute svgAttribute_create(const char* name, const char* value)
 {
     SvgAttribute attribute;
@@ -237,7 +314,7 @@ void svgAddToPattern(EmbPattern* p)
             /* TODO: malloc fail error */
             polyObj->pointList = 0;
             polyObj->lineType = 1; /* TODO: Determine what the correct value should be */
-            polyObj->color = embColor_make(255, 0, 0); /* TODO: SVGTiny1.2 Spec Section 11.13.1 colorSyntax */
+            polyObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
             polyObj->pointList = startOfList;
             embPattern_addPolygonObjectAbs(p, polyObj);
         }
@@ -247,7 +324,7 @@ void svgAddToPattern(EmbPattern* p)
             /* TODO: malloc fail error */
             polyObj->pointList = 0;
             polyObj->lineType = 1; /* TODO: Determine what the correct value should be */
-            polyObj->color = embColor_make(255, 0, 0); /* TODO: SVGTiny1.2 Spec Section 11.13.1 colorSyntax */
+            polyObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
             polyObj->pointList = startOfList;
             embPattern_addPolylineObjectAbs(p, polyObj);
         }
@@ -2997,8 +3074,12 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         polPointList = polObjList->polylineObj->pointList;
         if(polPointList)
         {
+            EmbColor color = polObjList->polylineObj->color;
             /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-            fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#000000\" fill=\"none\" points=\"%s,%s",
+            fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
+                    color.r,
+                    color.g,
+                    color.b,
                     emb_optOut(polPointList->point.xx, tmpX),
                     emb_optOut(polPointList->point.yy, tmpY));
             polPointList = polPointList->next;
