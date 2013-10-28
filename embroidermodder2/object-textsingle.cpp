@@ -268,7 +268,7 @@ void TextSingleObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
 }

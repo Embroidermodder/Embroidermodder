@@ -161,7 +161,7 @@ void LineObject::updateRubber(QPainter* painter)
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
 
-        drawRubberLine(line(), painter, COLOR_CROSSHAIR);
+        drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
     }
     else if(rubberMode == OBJ_RUBBER_GRIP)
     {
@@ -173,7 +173,7 @@ void LineObject::updateRubber(QPainter* painter)
             else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
 }

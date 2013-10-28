@@ -219,9 +219,9 @@ const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";
 const char* const VIEW_MOUSE_POINT  = "VIEW_MOUSE_POINT";
 const char* const RUBBER_ROOM = "RUBBER_ROOM";
 
-const char* const COLOR_BACKGROUND = "COLOR_BACKGROUND";
-const char* const COLOR_CROSSHAIR  = "COLOR_CROSSHAIR";
-const char* const COLOR_GRID       = "COLOR_GRID";
+const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
+const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
+const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
 #endif
 

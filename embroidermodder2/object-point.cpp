@@ -70,7 +70,7 @@ void PointObject::updateRubber(QPainter* painter)
             if(gripPoint == scenePos())
             {
                 QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+                drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
             }
         }
     }
