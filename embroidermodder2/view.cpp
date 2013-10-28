@@ -314,7 +314,7 @@ void View::setRubberText(const QString& key, const QString& txt)
 void View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
-    gscene->setProperty(COLOR_GRID, color);
+    gscene->setProperty(VIEW_COLOR_GRID, color);
     if(gscene) gscene->update();
 }
 
@@ -2244,14 +2244,14 @@ void View::showScrollBars(bool val)
 void View::setCrossHairColor(QRgb color)
 {
     crosshairColor = color;
-    gscene->setProperty(COLOR_CROSSHAIR, color);
+    gscene->setProperty(VIEW_COLOR_CROSSHAIR, color);
     if(gscene) gscene->update();
 }
 
 void View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
-    gscene->setProperty(COLOR_BACKGROUND, color);
+    gscene->setProperty(VIEW_COLOR_BACKGROUND, color);
     if(gscene) gscene->update();
 }
 

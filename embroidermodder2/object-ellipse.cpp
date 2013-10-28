@@ -178,7 +178,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
@@ -211,7 +211,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
@@ -243,7 +243,7 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_GRIP)

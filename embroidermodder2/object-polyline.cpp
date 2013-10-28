@@ -109,7 +109,7 @@ void PolylineObject::updateRubber(QPainter* painter)
         setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
 
         QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(QString())));
-        if(painter) drawRubberLine(rubberLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR);
 
         bool ok = false;
         QString numStr = objectRubberText("POLYLINE_NUM_POINTS");
@@ -162,7 +162,7 @@ void PolylineObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
 }

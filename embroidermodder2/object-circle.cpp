@@ -136,7 +136,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         qreal radius = sceneLine.length();
         setObjectRadius(radius);
-        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA)
@@ -150,7 +150,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         qreal diameter = sceneLine.length();
         setObjectDiameter(diameter);
-        if(painter) drawRubberLine(itemLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_CIRCLE_2P)
@@ -198,7 +198,7 @@ void CircleObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
 }

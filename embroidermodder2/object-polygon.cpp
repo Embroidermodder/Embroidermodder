@@ -113,7 +113,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal inscribeAngle = inscribeLine.angle();
         qreal inscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(inscribeLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
         QPainterPath inscribePath;
         //First Point
@@ -137,7 +137,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         qreal circumscribeAngle = circumscribeLine.angle();
         qreal circumscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(circumscribeLine, painter, COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
         QPainterPath circumscribePath;
         //First Point
@@ -184,7 +184,7 @@ void PolygonObject::updateRubber(QPainter* painter)
             painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
 }
