@@ -1,10 +1,6 @@
 #include "mainwindow.h"
-
-#include <qapplication.h>
-#include <QPixmap>
+#include <QApplication>
 #include <QLocale>
-
-#include <QMessageBox>
 
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
@@ -44,6 +40,12 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
+
+    QString lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
+    qDebug("language: %s", qPrintable(lang));
+    QTranslator translator;
+    translator.load("translations/" + lang + "/embroidermodder2_" + lang);
+    app.installTranslator(&translator);
 
     QStringList filesToOpen;
 

@@ -21,6 +21,23 @@ INCLUDEPATH += \
 $$PWD \
 javascript \
 
+TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
+               translations/chinese/embroidermodder2_chinese.ts       \ #zh
+               translations/czech/embroidermodder2_czech.ts           \ #cs
+               translations/dutch/embroidermodder2_dutch.ts           \ #nl
+               translations/english/embroidermodder2_english.ts       \ #en
+               translations/french/embroidermodder2_french.ts         \ #fr
+               translations/german/embroidermodder2_german.ts         \ #de
+               translations/italian/embroidermodder2_italian.ts       \ #it
+               translations/japanese/embroidermodder2_japanese.ts     \ #ja
+               translations/korean/embroidermodder2_korean.ts         \ #ko
+               translations/latin/embroidermodder2_latin.ts           \ #la
+               translations/polish/embroidermodder2_polish.ts         \ #pl
+               translations/portuguese/embroidermodder2_portuguese.ts \ #pt
+               translations/russian/embroidermodder2_russian.ts       \ #ru
+               translations/spanish/embroidermodder2_spanish.ts       \ #es
+               translations/turkish/embroidermodder2_turkish.ts       \ #tr
+
 #GUI
 SOURCES += \
 main.cpp \
