@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Cancelar*</translation>
     </message>
 </context>
 <context>
@@ -170,7 +170,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="15"/>
         <source>Cl&amp;ose</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fechar</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="15"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close &amp;All</source>
-        <translation type="unfinished"></translation>
+        <translation>Fec&amp;har todos</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Novo</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>A&amp;brir</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
@@ -260,7 +260,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salvar</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save &amp;As</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;alvar como</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Im&amp;primir</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>Sa&amp;ir</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
@@ -1347,12 +1347,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="101"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriedades</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="805"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Geral</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1378,7 +1378,7 @@
         <location filename="../../property-editor.cpp" line="1356"/>
         <location filename="../../property-editor.cpp" line="1409"/>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometria</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="886"/>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="1376"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto</translation>
     </message>
 </context>
 <context>

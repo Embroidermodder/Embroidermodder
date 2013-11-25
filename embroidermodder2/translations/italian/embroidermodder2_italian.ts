@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Annulla*</translation>
     </message>
 </context>
 <context>
@@ -140,7 +140,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="13"/>
         <source>&amp;Cascade</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;ovrapponi</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="13"/>
@@ -170,7 +170,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="15"/>
         <source>Cl&amp;ose</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Chiudi</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="15"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close &amp;All</source>
-        <translation type="unfinished"></translation>
+        <translation>C&amp;hiudi tutto</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nuovo</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Apri</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
@@ -260,7 +260,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Salva</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save &amp;As</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva con &amp;nome</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Stam&amp;pa</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Esci</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
@@ -381,7 +381,7 @@
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <location filename="../../mainwindow.cpp" line="58"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Guida</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="35"/>
         <source>&amp;About </source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Informazioni su </translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="35"/>
@@ -441,7 +441,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Annulla</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
@@ -456,7 +456,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="38"/>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ripeti</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="38"/>
@@ -1239,17 +1239,17 @@
     <message>
         <location filename="../../mainwindow.cpp" line="54"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Modifica</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="55"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Visualizza</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="57"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Finestra</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="60"/>
@@ -1264,7 +1264,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="62"/>
         <source>&amp;Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Panoramica</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="64"/>
@@ -1274,12 +1274,12 @@
     <message>
         <location filename="../../mainwindow.cpp" line="65"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="66"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="67"/>
@@ -1289,7 +1289,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="68"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Panoramica</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="69"/>
@@ -1324,7 +1324,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="345"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="350"/>
@@ -1339,7 +1339,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="451"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva</translation>
     </message>
 </context>
 <context>
@@ -1347,12 +1347,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="101"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Proprietà</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="805"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1378,19 +1378,19 @@
         <location filename="../../property-editor.cpp" line="1356"/>
         <location filename="../../property-editor.cpp" line="1409"/>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometria</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="886"/>
         <location filename="../../property-editor.cpp" line="1251"/>
         <location filename="../../property-editor.cpp" line="1430"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Varie</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1376"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Testo</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1463,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="20"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="21"/>

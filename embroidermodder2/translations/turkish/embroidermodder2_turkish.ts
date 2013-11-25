@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*İptal*</translation>
     </message>
 </context>
 <context>
@@ -140,7 +140,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="13"/>
         <source>&amp;Cascade</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Basamakla</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="13"/>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close &amp;All</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;ümünü Kapat</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yeni</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aç</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
@@ -260,7 +260,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kaydet</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
@@ -275,7 +275,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save &amp;As</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Farklı Kaydet</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yazdır</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ç&amp;ıkış</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
@@ -335,7 +335,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Ke&amp;s</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
@@ -350,7 +350,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="29"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopyala</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="29"/>
@@ -365,7 +365,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yapıştır</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
@@ -381,7 +381,7 @@
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <location filename="../../mainwindow.cpp" line="58"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yardım</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
@@ -441,7 +441,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Geri Al</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
@@ -456,7 +456,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="38"/>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yinele</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="38"/>
@@ -1193,7 +1193,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="267"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kapat</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="746"/>
@@ -1234,7 +1234,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="53"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dosya</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="54"/>
@@ -1244,12 +1244,12 @@
     <message>
         <location filename="../../mainwindow.cpp" line="55"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Görünüm</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="57"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pencere</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="60"/>
@@ -1259,7 +1259,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="61"/>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yakınlaştır</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="62"/>
@@ -1284,7 +1284,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="67"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Yakınlaştır</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="68"/>
@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="70"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Yardım</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="71"/>
@@ -1352,7 +1352,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="805"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Genel</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1378,7 +1378,7 @@
         <location filename="../../property-editor.cpp" line="1356"/>
         <location filename="../../property-editor.cpp" line="1409"/>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometri</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="886"/>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="1376"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Metin</translation>
     </message>
 </context>
 <context>
@@ -1463,7 +1463,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="20"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Genel</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="21"/>

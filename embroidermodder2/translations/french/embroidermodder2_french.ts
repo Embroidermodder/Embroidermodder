@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Annuler*</translation>
     </message>
 </context>
 <context>
@@ -1347,12 +1347,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="101"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="805"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1378,19 +1378,19 @@
         <location filename="../../property-editor.cpp" line="1356"/>
         <location filename="../../property-editor.cpp" line="1409"/>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Géométrie</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="886"/>
         <location filename="../../property-editor.cpp" line="1251"/>
         <location filename="../../property-editor.cpp" line="1430"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Divers</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1376"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte</translation>
     </message>
 </context>
 <context>

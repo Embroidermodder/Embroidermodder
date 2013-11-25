@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Отмена*</translation>
     </message>
 </context>
 <context>
@@ -381,7 +381,7 @@
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <location filename="../../mainwindow.cpp" line="58"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Справка</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="35"/>
         <source>&amp;About </source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;О программе </translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="35"/>
@@ -441,7 +441,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Отменить</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
@@ -1234,22 +1234,22 @@
     <message>
         <location filename="../../mainwindow.cpp" line="53"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Файл</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="54"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Редактировать</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="55"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Вид</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="57"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Окно</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="60"/>
@@ -1269,17 +1269,17 @@
     <message>
         <location filename="../../mainwindow.cpp" line="64"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="65"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="66"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вид</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="67"/>
@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="70"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="71"/>

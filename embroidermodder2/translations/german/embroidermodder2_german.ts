@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Abbrechen*</translation>
     </message>
 </context>
 <context>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Neu</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
@@ -290,7 +290,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
         <source>&amp;Print</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Drucken</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
@@ -320,7 +320,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Beenden</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
@@ -335,7 +335,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausschnei&amp;den</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
@@ -350,7 +350,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="29"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kopieren</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="29"/>
@@ -381,7 +381,7 @@
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <location filename="../../mainwindow.cpp" line="58"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hilfe</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
@@ -1234,22 +1234,22 @@
     <message>
         <location filename="../../mainwindow.cpp" line="53"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Datei</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="54"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bearbeiten</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="55"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ansicht</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="57"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fenster</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="60"/>
@@ -1259,37 +1259,37 @@
     <message>
         <location filename="../../mainwindow.cpp" line="61"/>
         <source>&amp;Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zoomen</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="62"/>
         <source>&amp;Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Verschieben</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="64"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="65"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="66"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansicht</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="67"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zoomen</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="68"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschieben</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="69"/>
@@ -1299,7 +1299,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="70"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="71"/>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="72"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="73"/>
@@ -1347,12 +1347,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="101"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenshaften</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="805"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1378,14 +1378,14 @@
         <location filename="../../property-editor.cpp" line="1356"/>
         <location filename="../../property-editor.cpp" line="1409"/>
         <source>Geometry</source>
-        <translation type="unfinished"></translation>
+        <translation>Geometrie</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="886"/>
         <location filename="../../property-editor.cpp" line="1251"/>
         <location filename="../../property-editor.cpp" line="1430"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Verschiedenes</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1376"/>
@@ -1463,7 +1463,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="20"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="21"/>
@@ -1990,17 +1990,17 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1368"/>
         <source>Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Endpunkt</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1374"/>
         <source>Midpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittelpunkt</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1380"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentrum</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1386"/>
@@ -2030,7 +2030,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1416"/>
         <source>Perpendicular</source>
-        <translation type="unfinished"></translation>
+        <translation>Senkrecht</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1422"/>

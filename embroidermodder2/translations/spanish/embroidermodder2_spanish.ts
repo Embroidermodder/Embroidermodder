@@ -6,7 +6,7 @@
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Cancelar*</translation>
     </message>
 </context>
 <context>
@@ -1347,7 +1347,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="101"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propiedades</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="805"/>
@@ -1390,7 +1390,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="1376"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texto</translation>
     </message>
 </context>
 <context>
