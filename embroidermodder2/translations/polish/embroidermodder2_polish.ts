@@ -96,6 +96,46 @@
         <source>Layer Manager</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="27"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="28"/>
+        <source>Visible</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="29"/>
+        <source>Frozen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="30"/>
+        <source>Z Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="31"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="32"/>
+        <source>Linetype</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="33"/>
+        <source>Lineweight</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../layer-manager.cpp" line="34"/>
+        <source>Print</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>MDIWindow</name>
@@ -1013,6 +1053,46 @@
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="157"/>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="158"/>
+        <source>Yellow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="159"/>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="160"/>
+        <source>Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="161"/>
+        <source>Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="162"/>
+        <source>Magenta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="163"/>
+        <source>White</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow-toolbars.cpp" line="164"/>
+        <source>Other...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PropertyEditor</name>
@@ -1519,46 +1599,6 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../layer-manager.cpp" line="27"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="28"/>
-        <source>Visible</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="29"/>
-        <source>Frozen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="30"/>
-        <source>Z Value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="31"/>
-        <source>Color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="32"/>
-        <source>Linetype</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="33"/>
-        <source>Lineweight</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../layer-manager.cpp" line="34"/>
-        <source>Print</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../object-base.cpp" line="60"/>
         <source>Error - Negative Lineweight</source>
         <translation type="unfinished"></translation>
@@ -1578,6 +1618,11 @@
         <location filename="../../undo-commands.cpp" line="130"/>
         <location filename="../../view.cpp" line="1555"/>
         <source>Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../undo-commands.cpp" line="169"/>
+        <source>Navigation</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1659,6 +1704,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="75"/>
+        <source>Icon Theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="87"/>
+        <source>Icon Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="107"/>
         <source>Background</source>
         <translation type="unfinished"></translation>
@@ -1666,6 +1721,23 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="110"/>
         <source>Use Logo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="116"/>
+        <location filename="../../settings-dialog.cpp" line="129"/>
+        <location filename="../../settings-dialog.cpp" line="142"/>
+        <location filename="../../settings-dialog.cpp" line="276"/>
+        <location filename="../../settings-dialog.cpp" line="286"/>
+        <location filename="../../settings-dialog.cpp" line="296"/>
+        <location filename="../../settings-dialog.cpp" line="306"/>
+        <location filename="../../settings-dialog.cpp" line="316"/>
+        <location filename="../../settings-dialog.cpp" line="326"/>
+        <location filename="../../settings-dialog.cpp" line="410"/>
+        <location filename="../../settings-dialog.cpp" line="420"/>
+        <location filename="../../settings-dialog.cpp" line="1071"/>
+        <location filename="../../settings-dialog.cpp" line="1297"/>
+        <source>Choose</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1699,10 +1771,51 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="256"/>
+        <source>Perform action when clicking corner widget</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="273"/>
         <location filename="../../settings-dialog.cpp" line="407"/>
         <location filename="../../settings-dialog.cpp" line="1647"/>
         <source>Colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="275"/>
+        <source>Crosshair Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="285"/>
+        <location filename="../../settings-dialog.cpp" line="419"/>
+        <source>Background Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="295"/>
+        <source>Selection Box Color (Crossing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="305"/>
+        <source>Selection Box Fill (Crossing)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="315"/>
+        <source>Selection Box Color (Window)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="325"/>
+        <source>Selection Box Fill (Window)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="335"/>
+        <source>Selection Box Fill Alpha</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1711,8 +1824,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="363"/>
+        <source>Zoom In Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="371"/>
+        <source>Zoom Out Scale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="409"/>
+        <source>Text Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="438"/>
         <source>Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="440"/>
+        <source>Font Family</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="446"/>
+        <source>Font Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="452"/>
+        <source>Font Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1736,6 +1879,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="723"/>
+        <location filename="../../settings-dialog.cpp" line="1446"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="897"/>
         <source>File Open</source>
         <translation type="unfinished"></translation>
@@ -1743,6 +1892,11 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="901"/>
         <source>Preview Thumbnails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="906"/>
+        <source>Number of recently accessed files to show</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1766,8 +1920,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="945"/>
+        <source>DST Only: Minimum number of jumps to trim</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="982"/>
         <source>Default Printer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="984"/>
+        <source>Use as default device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="986"/>
+        <source>Use last used device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1797,6 +1966,7 @@
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1062"/>
+        <location filename="../../settings-dialog.cpp" line="1069"/>
         <source>Grid Color</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1816,8 +1986,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="1099"/>
+        <source>Grid Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="1110"/>
         <source>Center the grid on the origin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1116"/>
+        <source>Grid Center X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1126"/>
+        <source>Grid Center Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1136"/>
+        <source>Grid Size X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1146"/>
+        <source>Grid Size Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1156"/>
+        <source>Grid Spacing X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1166"/>
+        <source>Grid Spacing Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1176"/>
+        <source>Grid Size Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1186"/>
+        <source>Grid Spacing Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1196"/>
+        <source>Grid Spacing Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1831,13 +2051,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="1278"/>
+        <source>Ruler Units</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="1293"/>
+        <location filename="../../settings-dialog.cpp" line="1295"/>
         <source>Ruler Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1313"/>
         <source>Ruler Geometry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1315"/>
+        <source>Ruler Pixel Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1911,13 +2142,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="1462"/>
+        <source>Clear All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="1498"/>
         <source>Visual Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="1500"/>
+        <source>Locator Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1507"/>
+        <source>Locator Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="1522"/>
         <source>Sensitivity</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1524"/>
+        <source>Aperture Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1933,6 +2184,11 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1580"/>
         <source>RealRender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1589"/>
+        <source>Default weight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1956,8 +2212,63 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../settings-dialog.cpp" line="1649"/>
+        <source>Cool Grip (Unselected)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1656"/>
+        <source>Hot Grip (Selected)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../settings-dialog.cpp" line="1671"/>
         <source>Sizes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1673"/>
+        <source>Grip Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1680"/>
+        <source>Pickbox Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1712"/>
+        <source>Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1713"/>
+        <source>Yellow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1714"/>
+        <source>Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1715"/>
+        <source>Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1716"/>
+        <source>Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1717"/>
+        <source>Magenta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../settings-dialog.cpp" line="1718"/>
+        <source>White</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1975,6 +2286,11 @@
 </context>
 <context>
     <name>UndoEditor</name>
+    <message>
+        <location filename="../../undo-editor.cpp" line="17"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../../undo-editor.cpp" line="21"/>
         <source>History</source>

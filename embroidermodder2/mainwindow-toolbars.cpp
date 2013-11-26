@@ -154,14 +154,14 @@ void MainWindow::createPropertiesToolbar()
     //NOTE: Qt4.7 wont load icons without an extension...
     colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorbylayer" + ".png"), "ByLayer");
     colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorbyblock" + ".png"), "ByBlock");
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorred"     + ".png"), "Red",     qRgb(255,  0,  0));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "coloryellow"  + ".png"), "Yellow",  qRgb(255,255,  0));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorgreen"   + ".png"), "Green",   qRgb(  0,255,  0));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorcyan"    + ".png"), "Cyan",    qRgb(  0,255,255));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorblue"    + ".png"), "Blue",    qRgb(  0,  0,255));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colormagenta" + ".png"), "Magenta", qRgb(255,  0,255));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorwhite"   + ".png"), "White",   qRgb(255,255,255));
-    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorother"   + ".png"), "Other...");
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorred"     + ".png"), tr("Red"),     qRgb(255,  0,  0));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "coloryellow"  + ".png"), tr("Yellow"),  qRgb(255,255,  0));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorgreen"   + ".png"), tr("Green"),   qRgb(  0,255,  0));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorcyan"    + ".png"), tr("Cyan"),    qRgb(  0,255,255));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorblue"    + ".png"), tr("Blue"),    qRgb(  0,  0,255));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colormagenta" + ".png"), tr("Magenta"), qRgb(255,  0,255));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorwhite"   + ".png"), tr("White"),   qRgb(255,255,255));
+    colorSelector->addItem(QIcon("icons/" + icontheme + "/" + "colorother"   + ".png"), tr("Other..."));
     toolbarProperties->addWidget(colorSelector);
     connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
 

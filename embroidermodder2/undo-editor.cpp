@@ -14,7 +14,7 @@ UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWi
 
     undoGroup = new QUndoGroup(this);
     undoView = new QUndoView(undoGroup, this);
-    undoView->setEmptyLabel("New");
+    undoView->setEmptyLabel(tr("New"));
     undoView->setCleanIcon(QIcon(iconDir + "/" + "new" + ".png")); //TODO: new.png for new drawings, open.png for opened drawings, save.png for saved/cleared drawings?
 
     setWidget(undoView);

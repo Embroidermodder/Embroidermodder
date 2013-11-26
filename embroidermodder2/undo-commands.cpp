@@ -166,7 +166,7 @@ UndoableNavCommand::UndoableNavCommand(const QString& type, View* v, QUndoComman
 {
     gview = v;
     navType = type;
-    setText("Navigation");
+    setText(QObject::tr("Navigation"));
     done = false;
     fromTransform = gview->transform();
     fromCenter = gview->center();

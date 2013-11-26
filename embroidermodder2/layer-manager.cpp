@@ -24,14 +24,14 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
     setWindowTitle(tr("Layer Manager"));
     setMinimumSize(750, 550);
 
-    layerModel->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
-    layerModel->setHeaderData(1, Qt::Horizontal, QObject::tr("Visible"));
-    layerModel->setHeaderData(2, Qt::Horizontal, QObject::tr("Frozen"));
-    layerModel->setHeaderData(3, Qt::Horizontal, QObject::tr("Z Value"));
-    layerModel->setHeaderData(4, Qt::Horizontal, QObject::tr("Color"));
-    layerModel->setHeaderData(5, Qt::Horizontal, QObject::tr("Linetype"));
-    layerModel->setHeaderData(6, Qt::Horizontal, QObject::tr("Lineweight"));
-    layerModel->setHeaderData(7, Qt::Horizontal, QObject::tr("Print"));
+    layerModel->setHeaderData(0, Qt::Horizontal, tr("Name"));
+    layerModel->setHeaderData(1, Qt::Horizontal, tr("Visible"));
+    layerModel->setHeaderData(2, Qt::Horizontal, tr("Frozen"));
+    layerModel->setHeaderData(3, Qt::Horizontal, tr("Z Value"));
+    layerModel->setHeaderData(4, Qt::Horizontal, tr("Color"));
+    layerModel->setHeaderData(5, Qt::Horizontal, tr("Linetype"));
+    layerModel->setHeaderData(6, Qt::Horizontal, tr("Lineweight"));
+    layerModel->setHeaderData(7, Qt::Horizontal, tr("Print"));
 
     addLayer("0", true, false, 0.0, qRgb(0,0,0), "Continuous", "Default", true);
     addLayer("1", true, false, 1.0, qRgb(0,0,0), "Continuous", "Default", true);
