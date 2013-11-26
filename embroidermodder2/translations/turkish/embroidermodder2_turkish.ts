@@ -4,6 +4,13 @@
 <context>
     <name>CmdPromptInput</name>
     <message>
+        <location filename="../../cmdprompt.cpp" line="331"/>
+        <location filename="../../cmdprompt.cpp" line="378"/>
+        <location filename="../../cmdprompt.cpp" line="573"/>
+        <source>Command: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
         <translation>*İptal*</translation>
@@ -119,22 +126,12 @@
     <name>MainWindow</name>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="11"/>
-        <source>donothing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="11"/>
         <source>&amp;Do Nothing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="11"/>
         <source>Does Nothing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="13"/>
-        <source>windowcascade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -149,22 +146,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="14"/>
-        <source>windowtile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="14"/>
         <source>&amp;Tile</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="14"/>
         <source>Tile the windows.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="15"/>
-        <source>windowclose</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -179,22 +166,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
-        <source>windowcloseall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close &amp;All</source>
         <translation>T&amp;ümünü Kapat</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close all the windows.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="17"/>
-        <source>windownext</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -209,22 +186,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
-        <source>windowprevious</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="18"/>
         <source>Pre&amp;vious</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
         <source>Move the focus to the previous window.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="20"/>
-        <source>new</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -239,22 +206,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
-        <source>open</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
         <translation>&amp;Aç</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>Open an existing file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="22"/>
-        <source>save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -269,22 +226,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
-        <source>saveas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save &amp;As</source>
         <translation>&amp;Farklı Kaydet</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save the design under a new name.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="24"/>
-        <source>print</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -299,22 +246,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="25"/>
-        <source>designdetails</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="25"/>
         <source>&amp;Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="25"/>
         <source>Details of the current design.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="26"/>
-        <source>exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -329,22 +266,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
-        <source>cut</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="28"/>
         <source>Cu&amp;t</source>
         <translation>Ke&amp;s</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
         <source>Cut the current selection&apos;s contents to the clipboard.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="29"/>
-        <source>copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -359,11 +286,6 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
-        <source>paste</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="30"/>
         <source>&amp;Paste</source>
         <translation>&amp;Yapıştır</translation>
     </message>
@@ -374,23 +296,13 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
-        <source>help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="32"/>
-        <location filename="../../mainwindow.cpp" line="58"/>
+        <location filename="../../mainwindow.cpp" line="50"/>
         <source>&amp;Help</source>
         <translation>&amp;Yardım</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <source>Displays help.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="33"/>
-        <source>changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -405,22 +317,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="34"/>
-        <source>tipoftheday</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="34"/>
         <source>&amp;Tip Of The Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="34"/>
         <source>Displays a dialog with useful tips</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="35"/>
-        <source>about</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -435,22 +337,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
-        <source>undo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="37"/>
         <source>&amp;Undo</source>
         <translation>&amp;Geri Al</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
         <source>Reverses the most recent action.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="38"/>
-        <source>redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -465,22 +357,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="40"/>
-        <source>icon16</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="40"/>
         <source>Icon&amp;16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="40"/>
         <source>Sets the toolbar icon size to 16x16.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="41"/>
-        <source>icon24</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -495,22 +377,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="42"/>
-        <source>icon32</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="42"/>
         <source>Icon&amp;32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="42"/>
         <source>Sets the toolbar icon size to 32x32.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="43"/>
-        <source>icon48</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -525,22 +397,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="44"/>
-        <source>icon64</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="44"/>
         <source>Icon&amp;64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="44"/>
         <source>Sets the toolbar icon size to 64x64.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="45"/>
-        <source>icon128</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -555,23 +417,13 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="47"/>
-        <source>settingsdialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="47"/>
-        <location filename="../../mainwindow.cpp" line="56"/>
+        <location filename="../../mainwindow.cpp" line="48"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="47"/>
         <source>Configure settings specific to this product.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="49"/>
-        <source>makelayercurrent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -586,22 +438,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="50"/>
-        <source>layers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="50"/>
         <source>&amp;Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="50"/>
         <source>Manages layers and layer properties:  LAYER</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="51"/>
-        <source>layerselector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -616,22 +458,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="52"/>
-        <source>layerprevious</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="52"/>
         <source>&amp;Layer Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="52"/>
         <source>Restores the previous layer settings:  LAYERP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="53"/>
-        <source>colorselector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -646,22 +478,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="54"/>
-        <source>linetypeselector</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="54"/>
         <source>&amp;Stitchtype Selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="54"/>
         <source>Dropdown selector for changing the current stitch type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="55"/>
-        <source>lineweightselector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -676,22 +498,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="56"/>
-        <source>hidealllayers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="56"/>
         <source>&amp;Hide All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="56"/>
         <source>Turns the visibility off for all layers in the current drawing:  HIDEALL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="57"/>
-        <source>showalllayers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -706,22 +518,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="58"/>
-        <source>freezealllayers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="58"/>
         <source>&amp;Freeze All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="58"/>
         <source>Freezes all layers in the current drawing:  FREEZEALL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="59"/>
-        <source>thawalllayers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -736,22 +538,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="60"/>
-        <source>lockalllayers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="60"/>
         <source>&amp;Lock All Layers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="60"/>
         <source>Locks all layers in the current drawing:  LOCKALL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="61"/>
-        <source>unlockalllayers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -766,22 +558,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="63"/>
-        <source>textbold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="63"/>
         <source>&amp;Bold Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="63"/>
         <source>Sets text to be bold.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="64"/>
-        <source>textitalic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -796,22 +578,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="65"/>
-        <source>textunderline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="65"/>
         <source>&amp;Underline Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="65"/>
         <source>Sets text to be underlined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="66"/>
-        <source>textstrikeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -826,22 +598,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="67"/>
-        <source>textoverline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="67"/>
         <source>&amp;Overline Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="67"/>
         <source>Sets text to be overlined.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="69"/>
-        <source>zoomrealtime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -856,22 +618,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="70"/>
-        <source>zoomprevious</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="70"/>
         <source>Zoom &amp;Previous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="70"/>
         <source>Zooms to display the previous view.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="71"/>
-        <source>zoomwindow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -886,22 +638,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="72"/>
-        <source>zoomdynamic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="72"/>
         <source>Zoom &amp;Dynamic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="72"/>
         <source>Zooms to display the generated portion of the drawing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="73"/>
-        <source>zoomscale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -916,22 +658,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="74"/>
-        <source>zoomcenter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="74"/>
         <source>Zoom &amp;Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="74"/>
         <source>Zooms to display a view specified by a center point and magnification or height.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="75"/>
-        <source>zoomin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -946,22 +678,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="76"/>
-        <source>zoomout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="76"/>
         <source>Zoom &amp;Out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="76"/>
         <source>Zooms to decrease the apparent size of objects.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="77"/>
-        <source>zoomselected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -976,22 +698,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="78"/>
-        <source>zoomall</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="78"/>
         <source>Zoom &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="78"/>
         <source>Zooms to display the drawing extents or the grid limits.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="79"/>
-        <source>zoomextents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1006,22 +718,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="81"/>
-        <source>panrealtime</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="81"/>
         <source>&amp;Pan Realtime</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="81"/>
         <source>Moves the view in the current viewport.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="82"/>
-        <source>panpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1036,22 +738,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="83"/>
-        <source>panleft</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="83"/>
         <source>&amp;Pan Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="83"/>
         <source>Moves the view to the left.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="84"/>
-        <source>panright</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1066,22 +758,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="85"/>
-        <source>panup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="85"/>
         <source>&amp;Pan Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="85"/>
         <source>Moves the view up.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="86"/>
-        <source>pandown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1096,22 +778,12 @@
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="88"/>
-        <source>day</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="88"/>
         <source>&amp;Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="88"/>
         <source>Updates the current view using day vision settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../mainwindow-actions.cpp" line="89"/>
-        <source>night</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1232,112 +904,112 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="53"/>
+        <location filename="../../mainwindow.cpp" line="45"/>
         <source>&amp;File</source>
         <translation>&amp;Dosya</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="54"/>
+        <location filename="../../mainwindow.cpp" line="46"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="55"/>
+        <location filename="../../mainwindow.cpp" line="47"/>
         <source>&amp;View</source>
         <translation>&amp;Görünüm</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="57"/>
+        <location filename="../../mainwindow.cpp" line="49"/>
         <source>&amp;Window</source>
         <translation>&amp;Pencere</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="60"/>
+        <location filename="../../mainwindow.cpp" line="52"/>
         <source>Open &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="61"/>
+        <location filename="../../mainwindow.cpp" line="53"/>
         <source>&amp;Zoom</source>
         <translation>&amp;Yakınlaştır</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="62"/>
+        <location filename="../../mainwindow.cpp" line="54"/>
         <source>&amp;Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="64"/>
+        <location filename="../../mainwindow.cpp" line="56"/>
         <source>File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="65"/>
+        <location filename="../../mainwindow.cpp" line="57"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="66"/>
+        <location filename="../../mainwindow.cpp" line="58"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="67"/>
+        <location filename="../../mainwindow.cpp" line="59"/>
         <source>Zoom</source>
         <translation>Yakınlaştır</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="68"/>
+        <location filename="../../mainwindow.cpp" line="60"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="69"/>
+        <location filename="../../mainwindow.cpp" line="61"/>
         <source>Icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="70"/>
+        <location filename="../../mainwindow.cpp" line="62"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="71"/>
+        <location filename="../../mainwindow.cpp" line="63"/>
         <source>Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="72"/>
+        <location filename="../../mainwindow.cpp" line="64"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="73"/>
+        <location filename="../../mainwindow.cpp" line="65"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Metin</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="74"/>
+        <location filename="../../mainwindow.cpp" line="66"/>
         <source>Command Prompt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="345"/>
+        <location filename="../../mainwindow.cpp" line="340"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="350"/>
+        <location filename="../../mainwindow.cpp" line="345"/>
         <source>Open w/Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="389"/>
+        <location filename="../../mainwindow.cpp" line="384"/>
         <source>File(s) loaded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="451"/>
+        <location filename="../../mainwindow.cpp" line="446"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1350,9 +1022,150 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../property-editor.cpp" line="139"/>
+        <location filename="../../property-editor.cpp" line="198"/>
+        <source>No Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="268"/>
+        <source>Varies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="275"/>
+        <source>Arc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="276"/>
+        <source>Block</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="277"/>
+        <source>Circle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="278"/>
+        <source>Aligned Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="279"/>
+        <source>Angular Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="280"/>
+        <source>Arclength Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="281"/>
+        <source>Diameter Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="282"/>
+        <source>Leader Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="283"/>
+        <source>Linear Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="284"/>
+        <source>Ordinate Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="285"/>
+        <source>Radius Dimension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="286"/>
+        <source>Ellipse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="287"/>
+        <source>Image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="288"/>
+        <source>Infinite Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="289"/>
+        <source>Line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="290"/>
+        <source>Point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="291"/>
+        <source>Polygon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="292"/>
+        <source>Polyline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="293"/>
+        <source>Ray</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="294"/>
+        <source>Rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="295"/>
+        <source>Multiline Text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="297"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../property-editor.cpp" line="805"/>
         <source>General</source>
         <translation>Genel</translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="807"/>
+        <source>Layer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="808"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="809"/>
+        <source>LineType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="810"/>
+        <source>LineWeight</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1381,6 +1194,89 @@
         <translation>Geometri</translation>
     </message>
     <message>
+        <location filename="../../property-editor.cpp" line="831"/>
+        <location filename="../../property-editor.cpp" line="923"/>
+        <location filename="../../property-editor.cpp" line="1032"/>
+        <location filename="../../property-editor.cpp" line="1189"/>
+        <source>Center X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="832"/>
+        <location filename="../../property-editor.cpp" line="924"/>
+        <location filename="../../property-editor.cpp" line="1033"/>
+        <location filename="../../property-editor.cpp" line="1190"/>
+        <source>Center Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="833"/>
+        <location filename="../../property-editor.cpp" line="925"/>
+        <source>Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="834"/>
+        <source>Start Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="835"/>
+        <source>End Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="836"/>
+        <location filename="../../property-editor.cpp" line="1095"/>
+        <location filename="../../property-editor.cpp" line="1127"/>
+        <location filename="../../property-editor.cpp" line="1270"/>
+        <source>Start X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="837"/>
+        <location filename="../../property-editor.cpp" line="1096"/>
+        <location filename="../../property-editor.cpp" line="1128"/>
+        <location filename="../../property-editor.cpp" line="1271"/>
+        <source>Start Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="838"/>
+        <location filename="../../property-editor.cpp" line="1129"/>
+        <source>End X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="839"/>
+        <location filename="../../property-editor.cpp" line="1130"/>
+        <source>End Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="840"/>
+        <location filename="../../property-editor.cpp" line="927"/>
+        <location filename="../../property-editor.cpp" line="1227"/>
+        <location filename="../../property-editor.cpp" line="1312"/>
+        <source>Area</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="841"/>
+        <source>Arc Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="842"/>
+        <source>Chord</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="843"/>
+        <source>Included Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../property-editor.cpp" line="886"/>
         <location filename="../../property-editor.cpp" line="1251"/>
         <location filename="../../property-editor.cpp" line="1430"/>
@@ -1388,9 +1284,236 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../property-editor.cpp" line="888"/>
+        <source>Clockwise</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="903"/>
+        <location filename="../../property-editor.cpp" line="1069"/>
+        <location filename="../../property-editor.cpp" line="1168"/>
+        <location filename="../../property-editor.cpp" line="1358"/>
+        <location filename="../../property-editor.cpp" line="1411"/>
+        <source>Position X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="904"/>
+        <location filename="../../property-editor.cpp" line="1070"/>
+        <location filename="../../property-editor.cpp" line="1169"/>
+        <location filename="../../property-editor.cpp" line="1359"/>
+        <location filename="../../property-editor.cpp" line="1412"/>
+        <source>Position Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="926"/>
+        <source>Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="928"/>
+        <source>Circumference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1034"/>
+        <source>Major Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1035"/>
+        <source>Minor Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1036"/>
+        <source>Major Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1037"/>
+        <source>Minor Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1071"/>
+        <location filename="../../property-editor.cpp" line="1310"/>
+        <source>Width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1072"/>
+        <location filename="../../property-editor.cpp" line="1311"/>
+        <location filename="../../property-editor.cpp" line="1381"/>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1097"/>
+        <location filename="../../property-editor.cpp" line="1272"/>
+        <source>2nd X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1098"/>
+        <location filename="../../property-editor.cpp" line="1273"/>
+        <source>2nd Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1099"/>
+        <location filename="../../property-editor.cpp" line="1274"/>
+        <source>Vector X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1100"/>
+        <location filename="../../property-editor.cpp" line="1275"/>
+        <source>Vector Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1131"/>
+        <source>Delta X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1132"/>
+        <source>Delta Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1133"/>
+        <source>Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1134"/>
+        <location filename="../../property-editor.cpp" line="1228"/>
+        <source>Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1191"/>
+        <source>Vertex Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1192"/>
+        <source>Side Radius</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1193"/>
+        <source>Vertex Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1194"/>
+        <source>Side Diameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1195"/>
+        <source>Interior Angle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1224"/>
+        <source>Vertex #</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1225"/>
+        <source>Vertex X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1226"/>
+        <source>Vertex Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1253"/>
+        <source>Closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1302"/>
+        <source>Corner 1 X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1303"/>
+        <source>Corner 1 Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1304"/>
+        <source>Corner 2 X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1305"/>
+        <source>Corner 2 Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1306"/>
+        <source>Corner 3 X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1307"/>
+        <source>Corner 3 Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1308"/>
+        <source>Corner 4 X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1309"/>
+        <source>Corner 4 Y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="296"/>
         <location filename="../../property-editor.cpp" line="1376"/>
         <source>Text</source>
         <translation>Metin</translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1378"/>
+        <source>Contents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1379"/>
+        <source>Font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1380"/>
+        <source>Justify</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1382"/>
+        <source>Rotation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1432"/>
+        <source>Backward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1433"/>
+        <source>UpsideDown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1585,7 +1708,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="361"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Yakınlaştır</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="438"/>
@@ -1610,271 +1733,6 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="507"/>
         <source>Custom Filter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="511"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="515"/>
-        <source>10o</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="519"/>
-        <source>ART</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="523"/>
-        <source>BMC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="527"/>
-        <source>BRO</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="531"/>
-        <source>CND</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="535"/>
-        <source>COL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="539"/>
-        <source>CSD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="543"/>
-        <source>CSV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="547"/>
-        <source>DAT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="551"/>
-        <source>DEM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="555"/>
-        <source>DSB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="559"/>
-        <source>DST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="563"/>
-        <source>DSZ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="567"/>
-        <source>DXF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="571"/>
-        <source>EDR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="575"/>
-        <source>EMD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="579"/>
-        <source>EXP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="583"/>
-        <source>EXY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="587"/>
-        <source>EYS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="591"/>
-        <source>FXY</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="595"/>
-        <source>GNC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="599"/>
-        <source>GT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="603"/>
-        <source>HUS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="607"/>
-        <source>INB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="611"/>
-        <source>JEF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="615"/>
-        <source>KSM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="619"/>
-        <source>PCD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="623"/>
-        <source>PCM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="627"/>
-        <source>PCQ</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="631"/>
-        <source>PCS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="635"/>
-        <source>PEC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="639"/>
-        <source>PEL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="643"/>
-        <source>PEM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="647"/>
-        <source>PES</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="651"/>
-        <source>PHB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="655"/>
-        <source>PHC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="659"/>
-        <source>RGB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="663"/>
-        <source>SEW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="667"/>
-        <source>SHV</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="671"/>
-        <source>SST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="675"/>
-        <source>STX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="679"/>
-        <source>SVG</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="683"/>
-        <source>T09</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="687"/>
-        <source>TAP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="691"/>
-        <source>THR</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="695"/>
-        <source>TXT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="699"/>
-        <source>U00</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="703"/>
-        <source>U01</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="707"/>
-        <source>VIP</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="711"/>
-        <source>VP3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="715"/>
-        <source>XXX</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../settings-dialog.cpp" line="719"/>
-        <source>ZSK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

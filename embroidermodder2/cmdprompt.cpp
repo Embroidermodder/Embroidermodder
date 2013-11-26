@@ -328,7 +328,7 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     qDebug("CmdPromptInput Constructor");
     setObjectName("Command Prompt Input");
 
-    prefix = "Command: ";
+    prefix = tr("Command: ");
     curText = prefix;
 
     lastCmd = "help";
@@ -375,7 +375,7 @@ void CmdPromptInput::endCommand()
     rapidFireEnabled = false;
     emit stopBlinking();
 
-    prefix = "Command: ";
+    prefix = tr("Command: ");
     clear();
 }
 
@@ -570,7 +570,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
                 break;
             case Qt::Key_Escape:
                 pressedKey->accept();
-                prefix = "Command: ";
+                prefix = tr("Command: ");
                 clear();
                 emit appendHistory(curText + tr("*Cancel*"));
                 emit escapePressed();
