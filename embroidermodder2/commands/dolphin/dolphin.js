@@ -38,8 +38,8 @@ function click(x, y)
 {
 }
 
-//NOTE: move() is an optional function run only after
-//      enableMoveRapidFire() is called. This function
+//NOTE: move() is optional. It is run only after
+//      enableMoveRapidFire() is called. It
 //      will be called every time the mouse moves until
 //      disableMoveRapidFire() is called.
 function move(x, y)
