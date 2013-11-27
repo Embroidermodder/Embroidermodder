@@ -48,7 +48,6 @@ public:
     bool                       loadFile(const QString &fileName);
     bool                       saveFile(const QString &fileName);
 signals:
-    void                       message(const QString&, int );
     void                       sendCloseMdiWin(MDIWindow*);
 
 public slots:

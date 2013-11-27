@@ -51,7 +51,6 @@ MDIWindow::MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
     gview->setFocusProxy(mainWin->prompt);
 
-    connect(this, SIGNAL(message(const QString&, int)), mainWin->statusBar(), SLOT(message(const QString&, int)));
     resize(sizeHint());
 
     curLayer = "0";
