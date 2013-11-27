@@ -6,7 +6,7 @@ function main()
 {
     initCommand();
     clearSelection();
-    setPromptPrefix("Specify point: ");
+    setPromptPrefix(qsTr("Specify point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -35,9 +35,9 @@ function prompt(str)
     var strList = str.split(",");
     if(isNaN(strList[0]) || isNaN(strList[1]))
     {
-        setPromptPrefix("Invalid point.");
+        setPromptPrefix(qsTr("Invalid point."));
         appendPromptHistory();
-        setPromptPrefix("Specify point: ");
+        setPromptPrefix(qsTr("Specify point: "));
     }
     else
     {

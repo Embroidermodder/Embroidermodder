@@ -20,7 +20,7 @@ function main()
     global.firstY = NaN;
     global.prevX = NaN;
     global.prevY = NaN;
-    setPromptPrefix("Specify start point: ");
+    setPromptPrefix(qsTr("Specify start point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -37,7 +37,7 @@ function click(x, y)
         global.prevY = y;
         addPath(x,y);
         appendPromptHistory();
-        setPromptPrefix("Specify next point or [Arc/Undo]: ");
+        setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
     }
     else
     {
@@ -60,11 +60,11 @@ function context(str)
 //      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(str == "A" || str == "ARC")
+    if(str == "A" || str == "ARC")//TODO: Probably should add additional qsTr calls here.
     {
         todo("PATH", "prompt() for ARC");
     }
-    else if(str == "U" || str == "UNDO")
+    else if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
     {
         todo("PATH", "prompt() for UNDO");
     }
@@ -73,9 +73,9 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Point or option keyword required.");
+            setPromptPrefix(qsTr("Point or option keyword required."));
             appendPromptHistory();
-            setPromptPrefix("Specify next point or [Arc/Undo]: ");
+            setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
         }
         else
         {
@@ -89,7 +89,7 @@ function prompt(str)
                 global.prevX = x;
                 global.prevY = y;
                 addPath(x,y);
-                setPromptPrefix("Specify next point or [Arc/Undo]: ");
+                setPromptPrefix(qsTr("Specify next point or [Arc/Undo]: "));
             }
             else
             {

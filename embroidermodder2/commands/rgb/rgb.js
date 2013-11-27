@@ -15,7 +15,7 @@ function main()
     initCommand();
     clearSelection();
     global.mode = global.mode_BACKGROUND;
-    setPromptPrefix("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: ");
+    setPromptPrefix(qsTr("Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -40,15 +40,15 @@ function prompt(str)
 {
     if(global.mode == global.mode_BACKGROUND)
     {
-        if(str == "C" || str == "CROSSHAIR")
+        if(str == "C" || str == "CROSSHAIR") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_CROSSHAIR;
-            setPromptPrefix("Specify crosshair color: ");
+            setPromptPrefix(qsTr("Specify crosshair color: "));
         }
-        else if(str == "G" || str == "GRID")
+        else if(str == "G" || str == "GRID") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_GRID;
-            setPromptPrefix("Specify grid color: ");
+            setPromptPrefix(qsTr("Specify grid color: "));
         }
         else
         {
@@ -58,9 +58,9 @@ function prompt(str)
             var b = Number(strList[2]);
             if(!validRGB(r,g,b))
             {
-                setPromptPrefix("Invalid color. R,G,B values must be in the range of 0-255.");
+                setPromptPrefix(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
                 appendPromptHistory();
-                setPromptPrefix("Specify background color: ");
+                setPromptPrefix(qsTr("Specify background color: "));
             }
             else
             {
@@ -77,9 +77,9 @@ function prompt(str)
         var b = Number(strList[2]);
         if(!validRGB(r,g,b))
         {
-            setPromptPrefix("Invalid color. R,G,B values must be in the range of 0-255.");
+            setPromptPrefix(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
             appendPromptHistory();
-            setPromptPrefix("Specify crosshair color: ");
+            setPromptPrefix(qsTr("Specify crosshair color: "));
         }
         else
         {
@@ -95,9 +95,9 @@ function prompt(str)
         var b = Number(strList[2]);
         if(!validRGB(r,g,b))
         {
-            setPromptPrefix("Invalid color. R,G,B values must be in the range of 0-255.");
+            setPromptPrefix(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
             appendPromptHistory();
-            setPromptPrefix("Specify grid color: ");
+            setPromptPrefix(qsTr("Specify grid color: "));
         }
         else
         {

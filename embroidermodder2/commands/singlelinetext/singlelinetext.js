@@ -30,9 +30,9 @@ function main()
     global.textHeight = NaN;
     global.textRotation = NaN;
     global.mode = global.mode_SETGEOM;
-    setPromptPrefix("Current font: \"" + global.textFont + "\" Text height: " + textSize());
+    setPromptPrefix(qsTr("Current font: ") + "\"" + global.textFont + "\" " + qsTr("Text height: ") + textSize());
     appendPromptHistory();
-    setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+    setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -50,20 +50,20 @@ function click(x, y)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.textX, global.textY);
             appendPromptHistory();
-            setPromptPrefix("Specify text height <" + textSize() + ">: ");
+            setPromptPrefix(qsTr("Specify text height") + " <" + textSize() + ">: ");
         }
         else if(isNaN(global.textHeight))
         {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
-            setPromptPrefix("Specify text angle <" + textAngle() + ">: ");
+            setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
         }
         else if(isNaN(global.textRotation))
         {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setTextAngle(global.textRotation);
-            setPromptPrefix("Enter text: ");
+            setPromptPrefix(qsTr("Enter text: "));
             global.mode = global.mode_RAPID;
             enablePromptRapidFire();
             clearRubber();
@@ -96,109 +96,109 @@ function prompt(str)
 {
     if(global.mode == global.mode_JUSTIFY)
     {
-        if(str == "C" || str == "CENTER")
+        if(str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify center point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "R" || str == "RIGHT")
+        else if(str == "R" || str == "RIGHT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify right-end point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify right-end point of text or [Justify/Setfont]: "));
         }
-        else if(str == "A" || str == "ALIGN")
+        else if(str == "A" || str == "ALIGN") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if(str == "M" || str == "MIDDLE")
+        else if(str == "M" || str == "MIDDLE") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify middle point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify middle point of text or [Justify/Setfont]: "));
         }
-        else if(str == "F" || str == "FIT")
+        else if(str == "F" || str == "FIT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TL" || str == "TOPLEFT")
+        else if(str == "TL" || str == "TOPLEFT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify top-left point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify top-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TC" || str == "TOPCENTER")
+        else if(str == "TC" || str == "TOPCENTER") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify top-center point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify top-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "TR" || str == "TOPRIGHT")
+        else if(str == "TR" || str == "TOPRIGHT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify top-right point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify top-right point of text or [Justify/Setfont]: "));
         }
-        else if(str == "ML" || str == "MIDDLELEFT")
+        else if(str == "ML" || str == "MIDDLELEFT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify middle-left point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify middle-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "MC" || str == "MIDDLECENTER")
+        else if(str == "MC" || str == "MIDDLECENTER") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify middle-center point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify middle-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "MR" || str == "MIDDLERIGHT")
+        else if(str == "MR" || str == "MIDDLERIGHT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify middle-right point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify middle-right point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BL" || str == "BOTTOMLEFT")
+        else if(str == "BL" || str == "BOTTOMLEFT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify bottom-left point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify bottom-left point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BC" || str == "BOTTOMCENTER")
+        else if(str == "BC" || str == "BOTTOMCENTER") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify bottom-center point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
-        else if(str == "BR" || str == "BOTTOMRIGHT")
+        else if(str == "BR" || str == "BOTTOMRIGHT") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
             global.textJustify = "Bottom Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
-            setPromptPrefix("Specify bottom-right point of text or [Justify/Setfont]: ");
+            setPromptPrefix(qsTr("Specify bottom-right point of text or [Justify/Setfont]: "));
         }
         else
         {
-            setPromptPrefix("Invalid option keyword.");
+            setPromptPrefix(qsTr("Invalid option keyword."));
             appendPromptHistory();
-            setPromptPrefix("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
+            setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
     else if(global.mode == global.mode_SETFONT)
@@ -207,30 +207,30 @@ function prompt(str)
         global.textFont = str;
         setRubberText("TEXT_FONT", global.textFont);
         setTextFont(global.textFont);
-        setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+        setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
     }
     else if(global.mode == global.mode_SETGEOM)
     {
         if(isNaN(global.textX))
         {
-            if(str == "J" || str == "JUSTIFY")
+            if(str == "J" || str == "JUSTIFY") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_JUSTIFY;
-                setPromptPrefix("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ");
+                setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
-            else if(str == "S" || str == "SETFONT")
+            else if(str == "S" || str == "SETFONT") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_SETFONT;
-                setPromptPrefix("Specify font name: ");
+                setPromptPrefix(qsTr("Specify font name: "));
             }
             else
             {
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Point or option keyword required.");
+                    setPromptPrefix(qsTr("Point or option keyword required."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify start point of text or [Justify/Setfont]: ");
+                    setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
                 }
                 else
                 {
@@ -239,7 +239,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.textX, global.textY);
-                    setPromptPrefix("Specify text height <" + textSize() + ">: ");
+                    setPromptPrefix(qsTr("Specify text height") + " <" + textSize() + ">: ");
                 }
             }
         }
@@ -248,19 +248,19 @@ function prompt(str)
             if(str == "")
             {
                 global.textHeight = textSize();
-                setPromptPrefix("Specify text angle <" + textAngle() + ">: ");
+                setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
             }
             else if(isNaN(str))
             {
-                setPromptPrefix("Requires valid numeric distance or second point.");
+                setPromptPrefix(qsTr("Requires valid numeric distance or second point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify text height <" + textSize() + ">: ");
+                setPromptPrefix(qsTr("Specify text height") + " <" + textSize() + ">: ");
             }
             else
             {
                 global.textHeight = Number(str);
                 setTextSize(global.textHeight);
-                setPromptPrefix("Specify text angle <" + textAngle() + ">: ");
+                setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
             }
         }
         else if(isNaN(global.textRotation))
@@ -268,7 +268,7 @@ function prompt(str)
             if(str == "")
             {
                 global.textRotation = textAngle();
-                setPromptPrefix("Enter text: ");
+                setPromptPrefix(qsTr("Enter text: "));
                 global.mode = global.mode_RAPID;
                 enablePromptRapidFire();
                 clearRubber();
@@ -282,15 +282,15 @@ function prompt(str)
             }
             else if(isNaN(str))
             {
-                setPromptPrefix("Requires valid numeric angle or second point.");
+                setPromptPrefix(qsTr("Requires valid numeric angle or second point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify text angle <" + textAngle() + ">: ");
+                setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
             }
             else
             {
                 global.textRotation = Number(str);
                 setTextAngle(global.textRotation);
-                setPromptPrefix("Enter text: ");
+                setPromptPrefix(qsTr("Enter text: "));
                 global.mode = global.mode_RAPID;
                 enablePromptRapidFire();
                 clearRubber();

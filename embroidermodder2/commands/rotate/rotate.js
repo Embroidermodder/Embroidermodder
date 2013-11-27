@@ -44,14 +44,14 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix("Preselect objects before invoking the rotate command.");
+        setPromptPrefix(qsTr("Preselect objects before invoking the rotate command."));
         appendPromptHistory();
         endCommand();
-        messageBox("information", "Rotate Preselect", "Preselect objects before invoking the rotate command.");
+        messageBox("information", qsTr("Rotate Preselect"), qsTr("Preselect objects before invoking the rotate command."));
     }
     else
     {
-        setPromptPrefix("Specify base point: ");
+        setPromptPrefix(qsTr("Specify base point: "));
     }
 }
 
@@ -72,7 +72,7 @@ function click(x, y)
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
             appendPromptHistory();
-            setPromptPrefix("Specify rotation angle or [Reference]: ");
+            setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
         }
         else
         {
@@ -95,7 +95,7 @@ function click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-            setPromptPrefix("Specify second point: ");
+            setPromptPrefix(qsTr("Specify second point: "));
         }
         else if(isNaN(global.destRX))
         {
@@ -105,7 +105,7 @@ function click(x, y)
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
             appendPromptHistory();
-            setPromptPrefix("Specify the new angle: ");
+            setPromptPrefix(qsTr("Specify the new angle: "));
         }
         else if(isNaN(global.angleNew))
         {
@@ -136,9 +136,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify base point: ");
+                setPromptPrefix(qsTr("Specify base point: "));
             }
             else
             {
@@ -149,15 +149,15 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, 0);
-                setPromptPrefix("Specify rotation angle or [Reference]: ");
+                setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
             }
         }
         else
         {
-            if(str == "R" || str == "REFERENCE")
+            if(str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix("Specify the reference angle <0.00>: ");
+                setPromptPrefix(qsTr("Specify the reference angle") + " <0.00>: ");
                 clearRubber();
                 previewOff();
             }
@@ -165,9 +165,9 @@ function prompt(str)
             {
                 if(isNaN(str))
                 {
-                    setPromptPrefix("Requires valid numeric angle, second point, or option keyword.");
+                    setPromptPrefix(qsTr("Requires valid numeric angle, second point, or option keyword."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify rotation angle or [Reference]: ");
+                    setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
                 }
                 else
                 {
@@ -188,9 +188,9 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Requires valid numeric angle or two points.");
+                    setPromptPrefix(qsTr("Requires valid numeric angle or two points."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify the reference angle <0.00>: ");
+                    setPromptPrefix(qsTr("Specify the reference angle") + " <0.00>: ");
                 }
                 else
                 {
@@ -199,7 +199,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix("Specify second point: ");
+                    setPromptPrefix(qsTr("Specify second point: "));
                 }
             }
             else
@@ -215,7 +215,7 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix("Specify the new angle: ");
+                setPromptPrefix(qsTr("Specify the new angle: "));
             }
         }
         else if(isNaN(global.destRX))
@@ -225,9 +225,9 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Requires valid numeric angle or two points.");
+                    setPromptPrefix(qsTr("Requires valid numeric angle or two points."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify second point: ");
+                    setPromptPrefix(qsTr("Specify second point: "));
                 }
                 else
                 {
@@ -236,7 +236,7 @@ function prompt(str)
                     global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
                     previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
-                    setPromptPrefix("Specify the new angle: ");
+                    setPromptPrefix(qsTr("Specify the new angle: "));
                 }
             }
             else
@@ -249,7 +249,7 @@ function prompt(str)
                 //The reference angle is what we will use later.
                 global.angleRef = Number(str);
                 previewOn("SELECTED", "ROTATE", global.baseX, global.baseY, global.angleRef);
-                setPromptPrefix("Specify the new angle: ");
+                setPromptPrefix(qsTr("Specify the new angle: "));
             }
         }
         else if(isNaN(global.angleNew))
@@ -259,9 +259,9 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Requires valid numeric angle or second point.");
+                    setPromptPrefix(qsTr("Requires valid numeric angle or second point."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify the new angle: ");
+                    setPromptPrefix(qsTr("Specify the new angle: "));
                 }
                 else
                 {

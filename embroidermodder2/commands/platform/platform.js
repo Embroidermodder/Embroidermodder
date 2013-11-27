@@ -38,6 +38,6 @@ function prompt(str)
 
 function reportPlatform()
 {
-    setPromptPrefix("Platform = " + platformString());
+    setPromptPrefix(qsTr("Platform") + " = " + platformString());
     appendPromptHistory();
 }

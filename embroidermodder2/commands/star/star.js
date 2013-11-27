@@ -29,7 +29,7 @@ function main()
     global.x2       = NaN;
     global.y2       = NaN;
     global.mode = global.mode_NUM_POINTS;
-    setPromptPrefix("Enter number of star points <" + global.numPoints.toString() + ">: ");
+    setPromptPrefix(qsTr("Enter number of star points") + " <" + global.numPoints.toString() + ">: ");
 }
 
 //NOTE: click() is run only for left clicks.
@@ -46,7 +46,7 @@ function click(x, y)
         global.cx = x;
         global.cy = y;
         global.mode = global.mode_RAD_OUTER;
-        setPromptPrefix("Specify outer radius of star: ");
+        setPromptPrefix(qsTr("Specify outer radius of star: "));
         addRubber("POLYGON");
         setRubberMode("POLYGON");
         updateStar(global.cx, global.cy);
@@ -57,7 +57,7 @@ function click(x, y)
         global.x1 = x;
         global.y1 = y;
         global.mode = global.mode_RAD_INNER;
-        setPromptPrefix("Specify inner radius of star: ");
+        setPromptPrefix(qsTr("Specify inner radius of star: "));
         updateStar(global.x1, global.y1);
     }
     else if(global.mode == global.mode_RAD_INNER)
@@ -111,7 +111,7 @@ function prompt(str)
     {
         if(str == "" && global.numPoints >= 3 && global.numPoints <= 1024)
         {
-            setPromptPrefix("Specify center point: ");
+            setPromptPrefix(qsTr("Specify center point: "));
             global.mode = global.mode_CENTER_PT;
         }
         else
@@ -119,14 +119,14 @@ function prompt(str)
             var tmp = Number(str);
             if(isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
-                setPromptPrefix("Requires an integer between 3 and 1024.");
+                setPromptPrefix(qsTr("Requires an integer between 3 and 1024."));
                 appendPromptHistory();
-                setPromptPrefix("Enter number of star points <" + global.numPoints.toString() + ">: ");
+                setPromptPrefix(qsTr("Enter number of star points") + " <" + global.numPoints.toString() + ">: ");
             }
             else
             {
                 global.numPoints = tmp;
-                setPromptPrefix("Specify center point: ");
+                setPromptPrefix(qsTr("Specify center point: "));
                 global.mode = global.mode_CENTER_PT;
             }
         }
@@ -136,16 +136,16 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
+            setPromptPrefix(qsTr("Invalid point."));
             appendPromptHistory();
-            setPromptPrefix("Specify center point: ");
+            setPromptPrefix(qsTr("Specify center point: "));
         }
         else
         {
             global.cx = Number(strList[0]);
             global.cy = Number(strList[1]);
             global.mode = global.mode_RAD_OUTER;
-            setPromptPrefix("Specify outer radius of star: ");
+            setPromptPrefix(qsTr("Specify outer radius of star: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON");
             updateStar(qsnapX(), qsnapY());
@@ -157,16 +157,16 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
+            setPromptPrefix(qsTr("Invalid point."));
             appendPromptHistory();
-            setPromptPrefix("Specify outer radius of star: ");
+            setPromptPrefix(qsTr("Specify outer radius of star: "));
         }
         else
         {
             global.x1 = Number(strList[0]);
             global.y1 = Number(strList[1]);
             global.mode = global.mode_RAD_INNER;
-            setPromptPrefix("Specify inner radius of star: ");
+            setPromptPrefix(qsTr("Specify inner radius of star: "));
             updateStar(qsnapX(), qsnapY());
         }
     }
@@ -175,9 +175,9 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
+            setPromptPrefix(qsTr("Invalid point."));
             appendPromptHistory();
-            setPromptPrefix("Specify inner radius of star: ");
+            setPromptPrefix(qsTr("Specify inner radius of star: "));
         }
         else
         {

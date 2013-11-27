@@ -44,14 +44,14 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix("Preselect objects before invoking the scale command.");
+        setPromptPrefix(qsTr("Preselect objects before invoking the scale command."));
         appendPromptHistory();
         endCommand();
-        messageBox("information", "Scale Preselect", "Preselect objects before invoking the scale command.");
+        messageBox("information", qsTr("Scale Preselect"), qsTr("Preselect objects before invoking the scale command."));
     }
     else
     {
-        setPromptPrefix("Specify base point: ");
+        setPromptPrefix(qsTr("Specify base point: "));
     }
 }
 
@@ -72,7 +72,7 @@ function click(x, y)
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
             appendPromptHistory();
-            setPromptPrefix("Specify scale factor or [Reference]: ");
+            setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
         }
         else
         {
@@ -95,7 +95,7 @@ function click(x, y)
             addRubber("LINE");
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-            setPromptPrefix("Specify second point: ");
+            setPromptPrefix(qsTr("Specify second point: "));
         }
         else if(isNaN(global.destRX))
         {
@@ -107,16 +107,16 @@ function click(x, y)
                 global.destRX    = NaN;
                 global.destRY    = NaN;
                 global.factorRef = NaN;
-                setPromptPrefix("Value must be positive and nonzero.");
+                setPromptPrefix(qsTr("Value must be positive and nonzero."));
                 appendPromptHistory();
-                setPromptPrefix("Specify second point: ");
+                setPromptPrefix(qsTr("Specify second point: "));
             }
             else
             {
                 appendPromptHistory();
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                setPromptPrefix("Specify new length: ");
+                setPromptPrefix(qsTr("Specify new length: "));
             }
         }
         else if(isNaN(global.factorNew))
@@ -125,9 +125,9 @@ function click(x, y)
             if(global.factorNew <= 0.0)
             {
                 global.factorNew = NaN;
-                setPromptPrefix("Value must be positive and nonzero.");
+                setPromptPrefix(qsTr("Value must be positive and nonzero."));
                 appendPromptHistory();
-                setPromptPrefix("Specify new length: ");
+                setPromptPrefix(qsTr("Specify new length: "));
             }
             else
             {
@@ -159,9 +159,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify base point: ");
+                setPromptPrefix(qsTr("Specify base point: "));
             }
             else
             {
@@ -172,15 +172,15 @@ function prompt(str)
                 setRubberMode("LINE");
                 setRubberPoint("LINE_START", global.baseX, global.baseY);
                 previewOn("SELECTED", "SCALE", global.baseX, global.baseY, 1);
-                setPromptPrefix("Specify scale factor or [Reference]: ");
+                setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
             }
         }
         else
         {
-            if(str == "R" || str == "REFERENCE")
+            if(str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix("Specify reference length <1>: ");
+                setPromptPrefix(qsTr("Specify reference length") + " <1>: ");
                 clearRubber();
                 previewOff();
             }
@@ -188,9 +188,9 @@ function prompt(str)
             {
                 if(isNaN(str))
                 {
-                    setPromptPrefix("Requires valid numeric distance, second point, or option keyword.");
+                    setPromptPrefix(qsTr("Requires valid numeric distance, second point, or option keyword."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify scale factor or [Reference]: ");
+                    setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
                 }
                 else
                 {
@@ -211,9 +211,9 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Requires valid numeric distance or two points.");
+                    setPromptPrefix(qsTr("Requires valid numeric distance or two points."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify reference length <1>: ");
+                    setPromptPrefix(qsTr("Specify reference length") + " <1>: ");
                 }
                 else
                 {
@@ -222,7 +222,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseRX, global.baseRY);
-                    setPromptPrefix("Specify second point: ");
+                    setPromptPrefix(qsTr("Specify second point: "));
                 }
             }
             else
@@ -241,9 +241,9 @@ function prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    setPromptPrefix("Value must be positive and nonzero.");
+                    setPromptPrefix(qsTr("Value must be positive and nonzero."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify reference length <1>: ");
+                    setPromptPrefix(qsTr("Specify reference length") + " <1>: ");
                 }
                 else
                 {
@@ -251,7 +251,7 @@ function prompt(str)
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix("Specify new length: ");
+                    setPromptPrefix(qsTr("Specify new length: "));
                 }
             }
         }
@@ -262,9 +262,9 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Requires valid numeric distance or two points.");
+                    setPromptPrefix(qsTr("Requires valid numeric distance or two points."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify second point: ");
+                    setPromptPrefix(qsTr("Specify second point: "));
                 }
                 else
                 {
@@ -276,15 +276,15 @@ function prompt(str)
                         global.destRX    = NaN;
                         global.destRY    = NaN;
                         global.factorRef = NaN;
-                        setPromptPrefix("Value must be positive and nonzero.");
+                        setPromptPrefix(qsTr("Value must be positive and nonzero."));
                         appendPromptHistory();
-                        setPromptPrefix("Specify second point: ");
+                        setPromptPrefix(qsTr("Specify second point: "));
                     }
                     else
                     {
                         setRubberPoint("LINE_START", global.baseX, global.baseY);
                         previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                        setPromptPrefix("Specify new length: ");
+                        setPromptPrefix(qsTr("Specify new length: "));
                     }
                 }
             }
@@ -302,15 +302,15 @@ function prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    setPromptPrefix("Value must be positive and nonzero.");
+                    setPromptPrefix(qsTr("Value must be positive and nonzero."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify second point: ");
+                    setPromptPrefix(qsTr("Specify second point: "));
                 }
                 else
                 {
                     setRubberPoint("LINE_START", global.baseX, global.baseY);
                     previewOn("SELECTED", "SCALE", global.baseX, global.baseY, global.factorRef);
-                    setPromptPrefix("Specify new length: ");
+                    setPromptPrefix(qsTr("Specify new length: "));
                 }
             }
         }
@@ -321,9 +321,9 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Requires valid numeric distance or second point.");
+                    setPromptPrefix(qsTr("Requires valid numeric distance or second point."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify new length: ");
+                    setPromptPrefix(qsTr("Specify new length: "));
                 }
                 else
                 {
@@ -333,9 +333,9 @@ function prompt(str)
                     if(global.factorNew <= 0.0)
                     {
                         global.factorNew = NaN;
-                        setPromptPrefix("Value must be positive and nonzero.");
+                        setPromptPrefix(qsTr("Value must be positive and nonzero."));
                         appendPromptHistory();
-                        setPromptPrefix("Specify new length: ");
+                        setPromptPrefix(qsTr("Specify new length: "));
                     }
                     else
                     {
@@ -351,9 +351,9 @@ function prompt(str)
                 if(global.factorNew <= 0.0)
                 {
                     global.factorNew = NaN;
-                    setPromptPrefix("Value must be positive and nonzero.");
+                    setPromptPrefix(qsTr("Value must be positive and nonzero."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify new length: ");
+                    setPromptPrefix(qsTr("Specify new length: "));
                 }
                 else
                 {

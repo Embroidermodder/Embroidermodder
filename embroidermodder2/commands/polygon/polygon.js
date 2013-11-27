@@ -41,7 +41,7 @@ function main()
     global.pointCX = NaN;
     global.pointCY = NaN;
     global.mode = global.mode_NUM_SIDES;
-    setPromptPrefix("Enter number of sides <" + global.numSides.toString() + ">: ");
+    setPromptPrefix(qsTr("Enter number of sides") + " <" + global.numSides.toString() + ">: ");
 }
 
 //NOTE: click() is run only for left clicks.
@@ -58,7 +58,7 @@ function click(x, y)
         global.centerX = x;
         global.centerY = y;
         global.mode = global.mode_POLYTYPE;
-        setPromptPrefix("Specify polygon type [Inscribed in circle/Circumscribed around circle] <" + global.polyType + ">: ");
+        setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " <" + global.polyType + ">: ");
     }
     else if(global.mode == global.mode_POLYTYPE)
     {
@@ -106,7 +106,7 @@ function prompt(str)
     {
         if(str == "" && global.numSides >= 3 && global.numSides <= 1024)
         {
-            setPromptPrefix("Specify center point or [Sidelength]: ");
+            setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
             global.mode = global.mode_CENTER_PT;
         }
         else
@@ -114,40 +114,40 @@ function prompt(str)
             var tmp = Number(str);
             if(isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
-                setPromptPrefix("Requires an integer between 3 and 1024.");
+                setPromptPrefix(qsTr("Requires an integer between 3 and 1024."));
                 appendPromptHistory();
-                setPromptPrefix("Enter number of sides <" + global.numSides.toString() + ">: ");
+                setPromptPrefix(qsTr("Enter number of sides") + " <" + global.numSides.toString() + ">: ");
             }
             else
             {
                 global.numSides = tmp;
-                setPromptPrefix("Specify center point or [Sidelength]: ");
+                setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
                 global.mode = global.mode_CENTER_PT;
             }
         }
     }
     else if(global.mode == global.mode_CENTER_PT)
     {
-        if(str == "S" || str == "SIDELENGTH")
+        if(str == "S" || str == "SIDELENGTH") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SIDE_LEN;
-            setPromptPrefix("Specify start point: ");
+            setPromptPrefix(qsTr("Specify start point: "));
         }
         else
         {
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Point or option keyword required.");
+                setPromptPrefix(qsTr("Point or option keyword required."));
                 appendPromptHistory();
-                setPromptPrefix("Specify center point or [Sidelength]: ");
+                setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
             }
             else
             {
                 global.centerX = Number(strList[0]);
                 global.centerY = Number(strList[1]);
                 global.mode = global.mode_POLYTYPE;
-                setPromptPrefix("Specify polygon type [Inscribed in circle/Circumscribed around circle] <" + global.polyType + ">: ");
+                setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " <" + global.polyType + ">: ");
             }
         }
     }
@@ -161,11 +161,11 @@ function prompt(str)
            str == "INSCRI"   ||
            str == "INSCRIB"  ||
            str == "INSCRIBE" ||
-           str == "INSCRIBED")
+           str == "INSCRIBED") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_INSCRIBE;
             global.polyType = "Inscribed";
-            setPromptPrefix("Specify polygon corner point or [Distance]: ");
+            setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_INSCRIBE");
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -183,11 +183,11 @@ function prompt(str)
                 str == "CIRCUMSCRI"   ||
                 str == "CIRCUMSCRIB"  ||
                 str == "CIRCUMSCRIBE" ||
-                str == "CIRCUMSCRIBED")
+                str == "CIRCUMSCRIBED") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
-            setPromptPrefix("Specify polygon side point or [Distance]: ");
+            setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
             addRubber("POLYGON");
             setRubberMode("POLYGON_CIRCUMSCRIBE");
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -198,7 +198,7 @@ function prompt(str)
             if(global.polyType == "Inscribed")
             {
                 global.mode = global.mode_INSCRIBE;
-                setPromptPrefix("Specify polygon corner point or [Distance]: ");
+                setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_INSCRIBE");
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -207,7 +207,7 @@ function prompt(str)
             else if(global.polyType == "Circumscribed")
             {
                 global.mode = global.mode_CIRCUMSCRIBE;
-                setPromptPrefix("Specify polygon side point or [Distance]: ");
+                setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
                 addRubber("POLYGON");
                 setRubberMode("POLYGON_CIRCUMSCRIBE");
                 setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
@@ -215,31 +215,31 @@ function prompt(str)
             }
             else
             {
-                error("POLYGON", "polygon type is not Inscribed or Circumscribed.");
+                error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
             }
         }
         else
         {
-            setPromptPrefix("Invalid option keyword.");
+            setPromptPrefix(qsTr("Invalid option keyword."));
             appendPromptHistory();
-            setPromptPrefix("Specify polygon type [Inscribed in circle/Circumscribed around circle] <" + global.polyType + ">: ");
+            setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " <" + global.polyType + ">: ");
         }
     }
     else if(global.mode == global.mode_INSCRIBE)
     {
-        if(str == "D" || str == "DISTANCE")
+        if(str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_DISTANCE;
-            setPromptPrefix("Specify distance: ");
+            setPromptPrefix(qsTr("Specify distance: "));
         }
         else
         {
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Point or option keyword required.");
+                setPromptPrefix(qsTr("Point or option keyword required."));
                 appendPromptHistory();
-                setPromptPrefix("Specify polygon corner point or [Distance]: ");
+                setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
             }
             else
             {
@@ -253,19 +253,19 @@ function prompt(str)
     }
     else if(global.mode == global.mode_CIRCUMSCRIBE)
     {
-        if(str == "D" || str == "DISTANCE")
+        if(str == "D" || str == "DISTANCE") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_DISTANCE;
-            setPromptPrefix("Specify distance: ");
+            setPromptPrefix(qsTr("Specify distance: "));
         }
         else
         {
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Point or option keyword required.");
+                setPromptPrefix(qsTr("Point or option keyword required."));
                 appendPromptHistory();
-                setPromptPrefix("Specify polygon side point or [Distance]: ");
+                setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
             }
             else
             {
@@ -281,9 +281,9 @@ function prompt(str)
     {
         if(isNaN(str))
         {
-            setPromptPrefix("Requires valid numeric distance.");
+            setPromptPrefix(qsTr("Requires valid numeric distance."));
             appendPromptHistory();
-            setPromptPrefix("Specify distance: ");
+            setPromptPrefix(qsTr("Specify distance: "));
         }
         else
         {
@@ -305,7 +305,7 @@ function prompt(str)
             }
             else
             {
-                error("POLYGON", "polygon type is not Inscribed or Circumscribed.");
+                error("POLYGON", qsTr("Polygon type is not Inscribed or Circumscribed."));
             }
         }
     }

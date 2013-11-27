@@ -33,7 +33,7 @@ function main()
     global.y2 = NaN;
     global.x3 = NaN;
     global.y3 = NaN;
-    setPromptPrefix("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ");
+    setPromptPrefix(qsTr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -53,7 +53,7 @@ function click(x, y)
             setRubberMode("CIRCLE_1P_RAD");
             setRubberPoint("CIRCLE_CENTER", global.cx, global.cy);
             appendPromptHistory();
-            setPromptPrefix("Specify radius of circle or [Diameter]: ");
+            setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
         }
         else
         {
@@ -69,7 +69,7 @@ function click(x, y)
     {
         if(isNaN(global.x1))
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
         else
         {
@@ -91,7 +91,7 @@ function click(x, y)
             setRubberMode("CIRCLE_2P");
             setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
             appendPromptHistory();
-            setPromptPrefix("Specify second end point of circle's diameter: ");
+            setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
         }
         else if(isNaN(global.x2))
         {
@@ -104,7 +104,7 @@ function click(x, y)
         }
         else
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
     }
     else if(global.mode == global.mode_3P)
@@ -114,7 +114,7 @@ function click(x, y)
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
-            setPromptPrefix("Specify second point on circle: ");
+            setPromptPrefix(qsTr("Specify second point on circle: "));
         }
         else if(isNaN(global.x2))
         {
@@ -125,7 +125,7 @@ function click(x, y)
             setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
             setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
             appendPromptHistory();
-            setPromptPrefix("Specify third point on circle: ");
+            setPromptPrefix(qsTr("Specify third point on circle: "));
         }
         else if(isNaN(global.x3))
         {
@@ -138,7 +138,7 @@ function click(x, y)
         }
         else
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
     }
     else if(global.mode == global.mode_TTR)
@@ -148,21 +148,21 @@ function click(x, y)
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
-            setPromptPrefix("Specify point on object for second tangent of circle: ");
+            setPromptPrefix(qsTr("Specify point on object for second tangent of circle: "));
         }
         else if(isNaN(global.x2))
         {
             global.x2 = x;
             global.y2 = y;
             appendPromptHistory();
-            setPromptPrefix("Specify radius of circle: ");
+            setPromptPrefix(qsTr("Specify radius of circle: "));
         }
         else if(isNaN(global.x3))
         {
             global.x3 = x;
             global.y3 = y;
             appendPromptHistory();
-            setPromptPrefix("Specify second point: ");
+            setPromptPrefix(qsTr("Specify second point: "));
         }
         else
         {
@@ -187,29 +187,29 @@ function prompt(str)
     {
         if(isNaN(global.x1))
         {
-            if(str == "2P")
+            if(str == "2P") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_2P;
-                setPromptPrefix("Specify first end point of circle's diameter: ");
+                setPromptPrefix(qsTr("Specify first end point of circle's diameter: "));
             }
-            else if(str == "3P")
+            else if(str == "3P") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_3P;
-                setPromptPrefix("Specify first point of circle: ");
+                setPromptPrefix(qsTr("Specify first point of circle: "));
             }
-            else if(str == "T" || str == "TTR")
+            else if(str == "T" || str == "TTR") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_TTR;
-                setPromptPrefix("Specify point on object for first tangent of circle: ");
+                setPromptPrefix(qsTr("Specify point on object for first tangent of circle: "));
             }
             else
             {
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix("Point or option keyword required.");
+                    setPromptPrefix(qsTr("Point or option keyword required."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ");
+                    setPromptPrefix(qsTr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else
                 {
@@ -220,26 +220,26 @@ function prompt(str)
                     addRubber("CIRCLE");
                     setRubberMode("CIRCLE_1P_RAD");
                     setRubberPoint("CIRCLE_CENTER", global.cx, global.cy);
-                    setPromptPrefix("Specify radius of circle or [Diameter]: ");
+                    setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
                 }
             }
         }
         else
         {
-            if(str == "D" || str == "DIAMETER")
+            if(str == "D" || str == "DIAMETER") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
-                setPromptPrefix("Specify diameter of circle: ");
+                setPromptPrefix(qsTr("Specify diameter of circle: "));
             }
             else
             {
                 var num = Number(str);
                 if(isNaN(num))
                 {
-                    setPromptPrefix("Requires numeric radius, point on circumference, or \"D\".");
+                    setPromptPrefix(qsTr("Requires numeric radius, point on circumference, or \"D\"."));
                     appendPromptHistory();
-                    setPromptPrefix("Specify radius of circle or [Diameter]: ");
+                    setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
                 }
                 else
                 {
@@ -257,16 +257,16 @@ function prompt(str)
     {
         if(isNaN(global.x1))
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
         if(isNaN(global.x2))
         {
             var num = Number(str);
             if(isNaN(num))
             {
-                setPromptPrefix("Requires numeric distance or second point.");
+                setPromptPrefix(qsTr("Requires numeric distance or second point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify diameter of circle: ");
+                setPromptPrefix(qsTr("Specify diameter of circle: "));
             }
             else
             {
@@ -280,7 +280,7 @@ function prompt(str)
         }
         else
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
     }
     else if(global.mode == global.mode_2P)
@@ -290,9 +290,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify first end point of circle's diameter: ");
+                setPromptPrefix(qsTr("Specify first end point of circle's diameter: "));
             }
             else
             {
@@ -301,7 +301,7 @@ function prompt(str)
                 addRubber("CIRCLE");
                 setRubberMode("CIRCLE_2P");
                 setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
-                setPromptPrefix("Specify second end point of circle's diameter: ");
+                setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
             }
         }
         else if(isNaN(global.x2))
@@ -309,9 +309,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify second end point of circle's diameter: ");
+                setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
             }
             else
             {
@@ -324,7 +324,7 @@ function prompt(str)
         }
         else
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
     }
     else if(global.mode == global.mode_3P)
@@ -334,15 +334,15 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify first point of circle: ");
+                setPromptPrefix(qsTr("Specify first point of circle: "));
             }
             else
             {
                 global.x1 = Number(strList[0]);
                 global.y1 = Number(strList[1]);
-                setPromptPrefix("Specify second point of circle: ");
+                setPromptPrefix(qsTr("Specify second point of circle: "));
             }
         }
         else if(isNaN(global.x2))
@@ -350,9 +350,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify second point of circle: ");
+                setPromptPrefix(qsTr("Specify second point of circle: "));
             }
             else
             {
@@ -362,7 +362,7 @@ function prompt(str)
                 setRubberMode("CIRCLE_3P");
                 setRubberPoint("CIRCLE_TAN1", global.x1, global.y1);
                 setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
-                setPromptPrefix("Specify third point of circle: ");
+                setPromptPrefix(qsTr("Specify third point of circle: "));
             }
         }
         else if(isNaN(global.x3))
@@ -370,9 +370,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Invalid point.");
+                setPromptPrefix(qsTr("Invalid point."));
                 appendPromptHistory();
-                setPromptPrefix("Specify third point of circle: ");
+                setPromptPrefix(qsTr("Specify third point of circle: "));
             }
             else
             {                
@@ -385,7 +385,7 @@ function prompt(str)
         }
         else
         {
-            error("CIRCLE", "This should never happen.");
+            error("CIRCLE", qsTr("This should never happen."));
         }
         
     }

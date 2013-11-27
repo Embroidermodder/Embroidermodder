@@ -6,7 +6,7 @@ function main()
 {
     initCommand();
     clearSelection();
-    setPromptPrefix("Enter an option [Cascade/Tile]: ");
+    setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -29,20 +29,20 @@ function context(str)
 //      Any text in the command prompt is sent as an uppercase string.
 function prompt(str)
 {
-    if(str == "C" || str == "CASCADE")
+    if(str == "C" || str == "CASCADE") //TODO: Probably should add additional qsTr calls here.
     {
         windowCascade();
         endCommand();
     }
-    else if(str == "T" || str == "TILE")
+    else if(str == "T" || str == "TILE") //TODO: Probably should add additional qsTr calls here.
     {
         windowTile();
         endCommand();
     }
     else
     {
-        setPromptPrefix("Invalid option keyword.");
+        setPromptPrefix(qsTr("Invalid option keyword."));
         appendPromptHistory();
-        setPromptPrefix("Enter an option [Cascade/Tile]: ");
+        setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
     }
 }

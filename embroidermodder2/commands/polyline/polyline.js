@@ -20,7 +20,7 @@ function main()
     global.prevX = NaN;
     global.prevY = NaN;
     global.num = 0;
-    setPromptPrefix("Specify first point: ");
+    setPromptPrefix(qsTr("Specify first point: "));
 }
 
 //NOTE: click() is run only for left clicks.
@@ -39,7 +39,7 @@ function click(x, y)
         setRubberMode("POLYLINE");
         setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
         appendPromptHistory();
-        setPromptPrefix("Specify next point or [Undo]: ");
+        setPromptPrefix(qsTr("Specify next point or [Undo]: "));
     }
     else
     {
@@ -70,9 +70,9 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
+            setPromptPrefix(qsTr("Invalid point."));
             appendPromptHistory();
-            setPromptPrefix("Specify first point: ");
+            setPromptPrefix(qsTr("Specify first point: "));
         }
         else
         {
@@ -84,12 +84,12 @@ function prompt(str)
             addRubber("POLYLINE");
             setRubberMode("POLYLINE");
             setRubberPoint("POLYLINE_POINT_0", global.firstX, global.firstY);
-            setPromptPrefix("Specify next point or [Undo]: ");
+            setPromptPrefix(qsTr("Specify next point or [Undo]: "));
         }
     }
     else
     {
-        if(str == "U" || str == "UNDO")
+        if(str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
         {
             todo("POLYLINE", "prompt() for UNDO");
         }
@@ -98,9 +98,9 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix("Point or option keyword required.");
+                setPromptPrefix(qsTr("Point or option keyword required."));
                 appendPromptHistory();
-                setPromptPrefix("Specify next point or [Undo]: ");
+                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
             else
             {
@@ -112,7 +112,7 @@ function prompt(str)
                 spareRubber("POLYLINE");
                 global.prevX = x;
                 global.prevY = y;
-                setPromptPrefix("Specify next point or [Undo]: ");
+                setPromptPrefix(qsTr("Specify next point or [Undo]: "));
             }
         }
     }

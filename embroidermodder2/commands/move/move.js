@@ -25,14 +25,14 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix("Preselect objects before invoking the move command.");
+        setPromptPrefix(qsTr("Preselect objects before invoking the move command."));
         appendPromptHistory();
         endCommand();
-        messageBox("information", "Move Preselect", "Preselect objects before invoking the move command.");
+        messageBox("information", qsTr("Move Preselect"), qsTr("Preselect objects before invoking the move command."));
     }
     else
     {
-        setPromptPrefix("Specify base point: ");
+        setPromptPrefix(qsTr("Specify base point: "));
     }
 }
 
@@ -51,7 +51,7 @@ function click(x, y)
         setRubberPoint("LINE_START", global.baseX, global.baseY);
         previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
         appendPromptHistory();
-        setPromptPrefix("Specify destination point: ");
+        setPromptPrefix(qsTr("Specify destination point: "));
     }
     else
     {
@@ -82,9 +82,9 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
+            setPromptPrefix(qsTr("Invalid point."));
             appendPromptHistory();
-            setPromptPrefix("Specify base point: ");
+            setPromptPrefix(qsTr("Specify base point: "));
         }
         else
         {
@@ -95,7 +95,7 @@ function prompt(str)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.baseX, global.baseY);
             previewOn("SELECTED", "MOVE", global.baseX, global.baseY, 0);
-            setPromptPrefix("Specify destination point: ");
+            setPromptPrefix(qsTr("Specify destination point: "));
         }
     }
     else
@@ -103,9 +103,9 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix("Invalid point.");
+            setPromptPrefix(qsTr("Invalid point."));
             appendPromptHistory();
-            setPromptPrefix("Specify destination point: ");
+            setPromptPrefix(qsTr("Specify destination point: "));
         }
         else
         {

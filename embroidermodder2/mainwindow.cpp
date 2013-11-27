@@ -153,6 +153,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     initMainWinPointer(this);
 
     engine = new QScriptEngine(this);
+    engine->installTranslatorFunctions();
     debugger = new QScriptEngineDebugger(this);
     debugger->attachTo(engine);
     javaInitNatives(engine);
