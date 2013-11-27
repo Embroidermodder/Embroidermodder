@@ -24,20 +24,33 @@ Optionally, you may want to add:
 - [KDE](http://www.kde.org) for thumbnailer
 - [Valgrind](http://www.valgrind.org) for debugging
 
+Ubuntu repository packages:
+The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+```
+sudo apt-get install qt4-dev-tools kdelibs5-dev valgrind
+```
 Building
 --------
 
 Various methods of building can be found in the project-files subfolder.
 For most builds, it is as simple as opening a terminal in the
 project-files/qmake subfolder and typing:
+```
 qmake && make
+```
 
 Build time can be considerably decreased on multi-core machines, for example:
 
-- Dual Core: qmake && make -j2
-- Quad Core: qmake && make -j4
+- Dual Core:
+```
+qmake && make -j2
+```
+- Quad Core:
+```
+qmake && make -j4
+```
 
-For building on windows:
+For building on Windows:
 If you are using Qt/Mingw, substitute mingw32-make for make.
 If you are using Qt/MSVC, substitute nmake for make.
 You may need to add the directory where those executables are located to your system path.
