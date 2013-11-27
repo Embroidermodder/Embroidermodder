@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en_GB" sourcelanguage="en">
+<TS version="2.0" language="en" sourcelanguage="en">
 <context>
     <name>CmdPromptInput</name>
     <message>
@@ -140,24 +140,24 @@
 <context>
     <name>MDIWindow</name>
     <message>
-        <location filename="../../mdiwindow.cpp" line="92"/>
+        <location filename="../../mdiwindow.cpp" line="91"/>
         <source>Error reading file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mdiwindow.cpp" line="93"/>
+        <location filename="../../mdiwindow.cpp" line="92"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mdiwindow.cpp" line="128"/>
-        <location filename="../../mdiwindow.cpp" line="315"/>
+        <location filename="../../mdiwindow.cpp" line="127"/>
+        <location filename="../../mdiwindow.cpp" line="314"/>
         <source>Error reading pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mdiwindow.cpp" line="315"/>
+        <location filename="../../mdiwindow.cpp" line="314"/>
         <source>Cannot read pattern</source>
         <translation type="unfinished"></translation>
     </message>

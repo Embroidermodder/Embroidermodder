@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="it" sourcelanguage="en">
 <context>
     <name>circle</name>
     <message>
@@ -104,7 +104,7 @@
         <location filename="../../commands/circle/circle.js" line="353"/>
         <location filename="../../commands/circle/circle.js" line="373"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/circle/circle.js" line="345"/>
@@ -203,7 +203,7 @@
         <location filename="../../commands/ellipse/ellipse.js" line="170"/>
         <location filename="../../commands/ellipse/ellipse.js" line="255"/>
         <source>Specify center point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specifica il punto centrale: </translation>
     </message>
     <message>
         <location filename="../../commands/ellipse/ellipse.js" line="177"/>
@@ -217,7 +217,7 @@
         <location filename="../../commands/ellipse/ellipse.js" line="253"/>
         <location filename="../../commands/ellipse/ellipse.js" line="275"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/ellipse/ellipse.js" line="223"/>
@@ -269,7 +269,7 @@
     <message>
         <location filename="../../commands/line/line.js" line="72"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/line/line.js" line="100"/>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../../commands/locatepoint/locatepoint.js" line="38"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
 </context>
 <context>
@@ -308,7 +308,7 @@
         <location filename="../../commands/move/move.js" line="35"/>
         <location filename="../../commands/move/move.js" line="87"/>
         <source>Specify base point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specificare il punto base: </translation>
     </message>
     <message>
         <location filename="../../commands/move/move.js" line="54"/>
@@ -321,7 +321,7 @@
         <location filename="../../commands/move/move.js" line="85"/>
         <location filename="../../commands/move/move.js" line="106"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
 </context>
 <context>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../../commands/path/path.js" line="23"/>
         <source>Specify start point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specifica il punto iniziale: </translation>
     </message>
     <message>
         <location filename="../../commands/path/path.js" line="40"/>
@@ -366,13 +366,13 @@
         <location filename="../../commands/point/point.js" line="82"/>
         <location filename="../../commands/point/point.js" line="88"/>
         <source>Specify next point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specifica il punto successivo: </translation>
     </message>
     <message>
         <location filename="../../commands/point/point.js" line="62"/>
         <location filename="../../commands/point/point.js" line="80"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
 </context>
 <context>
@@ -400,12 +400,12 @@
     <message>
         <location filename="../../commands/polygon/polygon.js" line="117"/>
         <source>Requires an integer between 3 and 1024.</source>
-        <translation type="unfinished"></translation>
+        <translation>Richiede un valore intero compreso tra 3 e 1024.</translation>
     </message>
     <message>
         <location filename="../../commands/polygon/polygon.js" line="134"/>
         <source>Specify start point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specifica il punto iniziale: </translation>
     </message>
     <message>
         <location filename="../../commands/polygon/polygon.js" line="141"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../../commands/polyline/polyline.js" line="73"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/polyline/polyline.js" line="101"/>
@@ -517,7 +517,7 @@
     <message>
         <location filename="../../commands/rectangle/rectangle.js" line="79"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/rectangle/rectangle.js" line="81"/>
@@ -574,7 +574,7 @@
         <location filename="../../commands/rotate/rotate.js" line="54"/>
         <location filename="../../commands/rotate/rotate.js" line="141"/>
         <source>Specify base point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specificare il punto base: </translation>
     </message>
     <message>
         <location filename="../../commands/rotate/rotate.js" line="75"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="../../commands/rotate/rotate.js" line="139"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/rotate/rotate.js" line="160"/>
@@ -644,7 +644,7 @@
         <location filename="../../commands/scale/scale.js" line="54"/>
         <location filename="../../commands/scale/scale.js" line="164"/>
         <source>Specify base point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specificare il punto base: </translation>
     </message>
     <message>
         <location filename="../../commands/scale/scale.js" line="75"/>
@@ -689,7 +689,7 @@
     <message>
         <location filename="../../commands/scale/scale.js" line="162"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
     <message>
         <location filename="../../commands/scale/scale.js" line="183"/>
@@ -877,19 +877,19 @@
         <location filename="../../commands/star/star.js" line="129"/>
         <location filename="../../commands/star/star.js" line="141"/>
         <source>Specify center point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Specifica il punto centrale: </translation>
     </message>
     <message>
         <location filename="../../commands/star/star.js" line="122"/>
         <source>Requires an integer between 3 and 1024.</source>
-        <translation type="unfinished"></translation>
+        <translation>Richiede un valore intero compreso tra 3 e 1024.</translation>
     </message>
     <message>
         <location filename="../../commands/star/star.js" line="139"/>
         <location filename="../../commands/star/star.js" line="160"/>
         <location filename="../../commands/star/star.js" line="178"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto non valido.</translation>
     </message>
 </context>
 <context>

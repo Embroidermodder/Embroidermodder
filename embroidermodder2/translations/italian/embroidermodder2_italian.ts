@@ -8,7 +8,7 @@
         <location filename="../../cmdprompt.cpp" line="378"/>
         <location filename="../../cmdprompt.cpp" line="573"/>
         <source>Command: </source>
-        <translation type="unfinished"></translation>
+        <translation>Comando: </translation>
     </message>
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../../layer-manager.cpp" line="27"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="28"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../../layer-manager.cpp" line="29"/>
         <source>Frozen</source>
-        <translation type="unfinished"></translation>
+        <translation>Congelato</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="30"/>
@@ -129,35 +129,35 @@
     <message>
         <location filename="../../layer-manager.cpp" line="33"/>
         <source>Lineweight</source>
-        <translation type="unfinished"></translation>
+        <translation>SpessLinea</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="34"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Stampa</translation>
     </message>
 </context>
 <context>
     <name>MDIWindow</name>
     <message>
-        <location filename="../../mdiwindow.cpp" line="92"/>
+        <location filename="../../mdiwindow.cpp" line="91"/>
         <source>Error reading file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mdiwindow.cpp" line="93"/>
+        <location filename="../../mdiwindow.cpp" line="92"/>
         <source>Cannot read file %1:
 %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mdiwindow.cpp" line="128"/>
-        <location filename="../../mdiwindow.cpp" line="315"/>
+        <location filename="../../mdiwindow.cpp" line="127"/>
+        <location filename="../../mdiwindow.cpp" line="314"/>
         <source>Error reading pattern</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mdiwindow.cpp" line="315"/>
+        <location filename="../../mdiwindow.cpp" line="314"/>
         <source>Cannot read pattern</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1011,7 +1011,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="62"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Guida</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="63"/>
@@ -1021,12 +1021,12 @@
     <message>
         <location filename="../../mainwindow.cpp" line="64"/>
         <source>Properties</source>
-        <translation type="unfinished">Proprietà</translation>
+        <translation>Proprietà</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="65"/>
         <source>Text</source>
-        <translation type="unfinished">Testo</translation>
+        <translation>Testo</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="66"/>
@@ -1056,27 +1056,27 @@
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="157"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosso</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="158"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Giallo</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="159"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="160"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="161"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blu</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="162"/>
@@ -1086,12 +1086,12 @@
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="163"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Bianco</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="164"/>
         <source>Other...</source>
-        <translation type="unfinished"></translation>
+        <translation>Altro...</translation>
     </message>
 </context>
 <context>
@@ -1105,7 +1105,7 @@
         <location filename="../../property-editor.cpp" line="139"/>
         <location filename="../../property-editor.cpp" line="198"/>
         <source>No Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuna selezione</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="268"/>
@@ -1115,7 +1115,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="275"/>
         <source>Arc</source>
-        <translation type="unfinished"></translation>
+        <translation>Arco</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="276"/>
@@ -1125,7 +1125,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="277"/>
         <source>Circle</source>
-        <translation type="unfinished"></translation>
+        <translation>Cerchio</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="278"/>
@@ -1170,7 +1170,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="286"/>
         <source>Ellipse</source>
-        <translation type="unfinished"></translation>
+        <translation>Ellisse</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="287"/>
@@ -1185,22 +1185,22 @@
     <message>
         <location filename="../../property-editor.cpp" line="289"/>
         <source>Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Linea</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="290"/>
         <source>Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Puntiforme</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="291"/>
         <source>Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>Poligono</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="292"/>
         <source>Polyline</source>
-        <translation type="unfinished"></translation>
+        <translation>Polilinea</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="293"/>
@@ -1210,7 +1210,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="294"/>
         <source>Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Rettangolo</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="295"/>
@@ -1245,7 +1245,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="810"/>
         <source>LineWeight</source>
-        <translation type="unfinished"></translation>
+        <translation>SpessLinea</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="829"/>
@@ -1279,7 +1279,7 @@
         <location filename="../../property-editor.cpp" line="1032"/>
         <location filename="../../property-editor.cpp" line="1189"/>
         <source>Center X</source>
-        <translation type="unfinished"></translation>
+        <translation>X centrale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="832"/>
@@ -1287,23 +1287,23 @@
         <location filename="../../property-editor.cpp" line="1033"/>
         <location filename="../../property-editor.cpp" line="1190"/>
         <source>Center Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y centrale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="833"/>
         <location filename="../../property-editor.cpp" line="925"/>
         <source>Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>Raggio</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="834"/>
         <source>Start Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Angolo Iniziale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="835"/>
         <source>End Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Angolo Finale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="836"/>
@@ -1311,7 +1311,7 @@
         <location filename="../../property-editor.cpp" line="1127"/>
         <location filename="../../property-editor.cpp" line="1270"/>
         <source>Start X</source>
-        <translation type="unfinished"></translation>
+        <translation>X iniziale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="837"/>
@@ -1319,19 +1319,19 @@
         <location filename="../../property-editor.cpp" line="1128"/>
         <location filename="../../property-editor.cpp" line="1271"/>
         <source>Start Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y iniziale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="838"/>
         <location filename="../../property-editor.cpp" line="1129"/>
         <source>End X</source>
-        <translation type="unfinished"></translation>
+        <translation>X finale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="839"/>
         <location filename="../../property-editor.cpp" line="1130"/>
         <source>End Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y finale</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="840"/>
@@ -1344,7 +1344,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="841"/>
         <source>Arc Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Lunghezza arco</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="842"/>
@@ -1375,7 +1375,7 @@
         <location filename="../../property-editor.cpp" line="1358"/>
         <location filename="../../property-editor.cpp" line="1411"/>
         <source>Position X</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="904"/>
@@ -1384,17 +1384,17 @@
         <location filename="../../property-editor.cpp" line="1359"/>
         <location filename="../../property-editor.cpp" line="1412"/>
         <source>Position Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Posizione Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="926"/>
         <source>Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Diametro</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="928"/>
         <source>Circumference</source>
-        <translation type="unfinished"></translation>
+        <translation>Circonferenza</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1034"/>
@@ -1420,14 +1420,14 @@
         <location filename="../../property-editor.cpp" line="1071"/>
         <location filename="../../property-editor.cpp" line="1310"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Larghezza</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1072"/>
         <location filename="../../property-editor.cpp" line="1311"/>
         <location filename="../../property-editor.cpp" line="1381"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Altezza</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1097"/>
@@ -1466,13 +1466,13 @@
     <message>
         <location filename="../../property-editor.cpp" line="1133"/>
         <source>Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Angolo</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1134"/>
         <location filename="../../property-editor.cpp" line="1228"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Lunghezza</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1191"/>
@@ -1502,22 +1502,22 @@
     <message>
         <location filename="../../property-editor.cpp" line="1224"/>
         <source>Vertex #</source>
-        <translation type="unfinished"></translation>
+        <translation># Vertice</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1225"/>
         <source>Vertex X</source>
-        <translation type="unfinished"></translation>
+        <translation>X vertice</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1226"/>
         <source>Vertex Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Y vertice</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1253"/>
         <source>Closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiuso</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1302"/>
@@ -1588,12 +1588,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="1432"/>
         <source>Backward</source>
-        <translation type="unfinished"></translation>
+        <translation>All&apos;indietro</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1433"/>
         <source>UpsideDown</source>
-        <translation type="unfinished"></translation>
+        <translation>CapoVolto</translation>
     </message>
 </context>
 <context>
@@ -1686,7 +1686,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="31"/>
         <source>LineWeight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">SpessLinea</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="32"/>
@@ -2084,22 +2084,22 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1374"/>
         <source>Midpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto medio</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1380"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1386"/>
         <source>Node</source>
-        <translation type="unfinished"></translation>
+        <translation>Nodo</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1392"/>
         <source>Quadrant</source>
-        <translation type="unfinished"></translation>
+        <translation>Quadrante</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1398"/>
@@ -2119,17 +2119,17 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1416"/>
         <source>Perpendicular</source>
-        <translation type="unfinished"></translation>
+        <translation>Perpendicolare</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1422"/>
         <source>Tangent</source>
-        <translation type="unfinished"></translation>
+        <translation>Tangente</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1428"/>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>Vicino</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1434"/>
@@ -2139,7 +2139,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1440"/>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation>Parallela</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1462"/>
@@ -2239,27 +2239,27 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1712"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosso</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1713"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Giallo</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1714"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1715"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1716"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blu</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1717"/>
@@ -2269,7 +2269,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1718"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Bianco</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1753"/>
@@ -2289,7 +2289,7 @@
     <message>
         <location filename="../../undo-editor.cpp" line="17"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuovo</translation>
     </message>
     <message>
         <location filename="../../undo-editor.cpp" line="21"/>
@@ -2317,7 +2317,7 @@
     <message>
         <location filename="../../view.cpp" line="1883"/>
         <source>Delete 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella 1 </translation>
     </message>
     <message>
         <location filename="../../view.cpp" line="1897"/>
@@ -2342,22 +2342,22 @@
     <message>
         <location filename="../../view.cpp" line="2134"/>
         <source>Move 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Sposta 1 </translation>
     </message>
     <message>
         <location filename="../../view.cpp" line="2163"/>
         <source>Rotate 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ruota 1 </translation>
     </message>
     <message>
         <location filename="../../view.cpp" line="2185"/>
         <source>Mirror 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Specchia 1 </translation>
     </message>
     <message>
         <location filename="../../view.cpp" line="2214"/>
         <source>Scale 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Scala 1 </translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="pl" sourcelanguage="en">
 <context>
     <name>circle</name>
     <message>
@@ -104,7 +104,7 @@
         <location filename="../../commands/circle/circle.js" line="353"/>
         <location filename="../../commands/circle/circle.js" line="373"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/circle/circle.js" line="345"/>
@@ -217,7 +217,7 @@
         <location filename="../../commands/ellipse/ellipse.js" line="253"/>
         <location filename="../../commands/ellipse/ellipse.js" line="275"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/ellipse/ellipse.js" line="223"/>
@@ -269,7 +269,7 @@
     <message>
         <location filename="../../commands/line/line.js" line="72"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/line/line.js" line="100"/>
@@ -288,7 +288,7 @@
     <message>
         <location filename="../../commands/locatepoint/locatepoint.js" line="38"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
 </context>
 <context>
@@ -321,7 +321,7 @@
         <location filename="../../commands/move/move.js" line="85"/>
         <location filename="../../commands/move/move.js" line="106"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
 </context>
 <context>
@@ -329,7 +329,7 @@
     <message>
         <location filename="../../commands/path/path.js" line="23"/>
         <source>Specify start point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Określ punkt początkowy: </translation>
     </message>
     <message>
         <location filename="../../commands/path/path.js" line="40"/>
@@ -372,7 +372,7 @@
         <location filename="../../commands/point/point.js" line="62"/>
         <location filename="../../commands/point/point.js" line="80"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
 </context>
 <context>
@@ -400,12 +400,12 @@
     <message>
         <location filename="../../commands/polygon/polygon.js" line="117"/>
         <source>Requires an integer between 3 and 1024.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagana liczba całkowita z zakresu od 3 do 1024.</translation>
     </message>
     <message>
         <location filename="../../commands/polygon/polygon.js" line="134"/>
         <source>Specify start point: </source>
-        <translation type="unfinished"></translation>
+        <translation>Określ punkt początkowy: </translation>
     </message>
     <message>
         <location filename="../../commands/polygon/polygon.js" line="141"/>
@@ -437,7 +437,7 @@
     <message>
         <location filename="../../commands/polygon/polygon.js" line="223"/>
         <source>Invalid option keyword.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowe słowo kluczowe opcji.</translation>
     </message>
     <message>
         <location filename="../../commands/polygon/polygon.js" line="233"/>
@@ -471,7 +471,7 @@
     <message>
         <location filename="../../commands/polyline/polyline.js" line="73"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/polyline/polyline.js" line="101"/>
@@ -517,7 +517,7 @@
     <message>
         <location filename="../../commands/rectangle/rectangle.js" line="79"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/rectangle/rectangle.js" line="81"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="../../commands/rotate/rotate.js" line="139"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/rotate/rotate.js" line="160"/>
@@ -689,7 +689,7 @@
     <message>
         <location filename="../../commands/scale/scale.js" line="162"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
     <message>
         <location filename="../../commands/scale/scale.js" line="183"/>
@@ -821,7 +821,7 @@
     <message>
         <location filename="../../commands/singlelinetext/singlelinetext.js" line="199"/>
         <source>Invalid option keyword.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowe słowo kluczowe opcji.</translation>
     </message>
     <message>
         <location filename="../../commands/singlelinetext/singlelinetext.js" line="201"/>
@@ -882,14 +882,14 @@
     <message>
         <location filename="../../commands/star/star.js" line="122"/>
         <source>Requires an integer between 3 and 1024.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wymagana liczba całkowita z zakresu od 3 do 1024.</translation>
     </message>
     <message>
         <location filename="../../commands/star/star.js" line="139"/>
         <location filename="../../commands/star/star.js" line="160"/>
         <location filename="../../commands/star/star.js" line="178"/>
         <source>Invalid point.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowy punkt.</translation>
     </message>
 </context>
 <context>
@@ -903,7 +903,7 @@
     <message>
         <location filename="../../commands/syswindows/syswindows.js" line="44"/>
         <source>Invalid option keyword.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieprawidłowe słowo kluczowe opcji.</translation>
     </message>
 </context>
 </TS>
