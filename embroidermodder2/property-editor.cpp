@@ -75,6 +75,7 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, Q
     vboxLayoutProperties->addWidget(createGroupBoxGeometryDimRadius());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryEllipse());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryImage());
+    vboxLayoutProperties->addWidget(createGroupBoxMiscImage());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryInfiniteLine());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryLine());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryPoint());
@@ -615,7 +616,7 @@ void PropertyEditor::showGroups(int objType)
     else if(objType == OBJ_TYPE_DIMORDINATE)  { groupBoxGeometryDimOrdinate->show(); }
     else if(objType == OBJ_TYPE_DIMRADIUS)    { groupBoxGeometryDimRadius->show(); }
     else if(objType == OBJ_TYPE_ELLIPSE)      { groupBoxGeometryEllipse->show(); }
-    else if(objType == OBJ_TYPE_IMAGE)        { groupBoxGeometryImage->show(); }
+    else if(objType == OBJ_TYPE_IMAGE)        { groupBoxGeometryImage->show(); groupBoxMiscImage->show(); }
     else if(objType == OBJ_TYPE_INFINITELINE) { groupBoxGeometryInfiniteLine->show(); }
     else if(objType == OBJ_TYPE_LINE)         { groupBoxGeometryLine->show(); }
     else if(objType == OBJ_TYPE_POINT)        { groupBoxGeometryPoint->show(); }
@@ -650,6 +651,7 @@ void PropertyEditor::hideAllGroups()
     groupBoxGeometryDimRadius->hide();
     groupBoxGeometryEllipse->hide();
     groupBoxGeometryImage->hide();
+    groupBoxMiscImage->hide();
     groupBoxGeometryInfiniteLine->hide();
     groupBoxGeometryLine->hide();
     groupBoxGeometryPoint->hide();
@@ -1086,6 +1088,24 @@ QGroupBox* PropertyEditor::createGroupBoxGeometryImage()
     groupBoxGeometryImage->setLayout(formLayout);
 
     return groupBoxGeometryImage;
+}
+
+QGroupBox* PropertyEditor::createGroupBoxMiscImage()
+{
+    groupBoxMiscImage = new QGroupBox(tr("Misc"), this);
+
+    toolButtonImageName = createToolButton("blank", tr("Name")); //TODO: use proper icon
+    toolButtonImagePath = createToolButton("blank", tr("Path")); //TODO: use proper icon
+
+    lineEditImageName = createLineEdit("double", true);
+    lineEditImagePath = createLineEdit("double", true);
+
+    QFormLayout* formLayout = new QFormLayout(this);
+    formLayout->addRow(toolButtonImageName, lineEditImageName);
+    formLayout->addRow(toolButtonImagePath, lineEditImagePath);
+    groupBoxMiscImage->setLayout(formLayout);
+
+    return groupBoxMiscImage;
 }
 
 QGroupBox* PropertyEditor::createGroupBoxGeometryInfiniteLine()

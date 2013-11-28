@@ -309,6 +309,15 @@ private:
     QLineEdit*   lineEditImageWidth;
     QLineEdit*   lineEditImageHeight;
 
+    QGroupBox*   createGroupBoxMiscImage();
+    QGroupBox*   groupBoxMiscImage;
+
+    QToolButton* toolButtonImageName;
+    QToolButton* toolButtonImagePath;
+
+    QLineEdit*   lineEditImageName;
+    QLineEdit*   lineEditImagePath;
+
     //Infinite Line
     QGroupBox*   createGroupBoxGeometryInfiniteLine();
     QGroupBox*   groupBoxGeometryInfiniteLine;
