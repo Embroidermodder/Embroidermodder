@@ -134,6 +134,10 @@ embapp.path  = "/usr/share/embroidermodder2"
 embapp.files = "embroidermodder2"
 embapp.extra = "strip embroidermodder2; cp -f embroidermodder2 /usr/share/embroidermodder2/embroidermodder2" #ensure the binary gets stripped of debug symbols
 
+embtips.path  = "/usr/share/embroidermodder2"
+embtips.files = "tips.txt"
+embtips.extra = "cp -f tips.txt /usr/share/embroidermodder2/tips.txt"
+
 embcommands.path  = "/usr/share/embroidermodder2"
 embcommands.files = "commands"
 
@@ -149,12 +153,17 @@ embimages.files = "images"
 embsamples.path  = "/usr/share/embroidermodder2"
 embsamples.files = "samples"
 
+embtrans.path  = "/usr/share/embroidermodder2"
+embtrans.files = "translations"
+
 INSTALLS += embapp      \
+            embtips     \
             embcommands \
             embhelp     \
             embicons    \
             embimages   \
             embsamples  \
+            embtrans    \
 
 }
 
