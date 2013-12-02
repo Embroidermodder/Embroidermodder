@@ -43,9 +43,21 @@ int main(int argc, char* argv[])
 
     QString lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
     qDebug("language: %s", qPrintable(lang));
-    QTranslator translator;
-    translator.load("translations/" + lang + "/embroidermodder2_" + lang);
-    app.installTranslator(&translator);
+
+    //Load translations for the Embroidermodder 2 GUI
+    QTranslator translatorEmb;
+    translatorEmb.load("translations/" + lang + "/embroidermodder2_" + lang);
+    app.installTranslator(&translatorEmb);
+
+    //Load translations for the commands
+    QTranslator translatorCmd;
+    translatorCmd.load("translations/" + lang + "/commands_" + lang);
+    app.installTranslator(&translatorCmd);
+
+    //Load translations provided by Qt - this covers dialog buttons and other common things.
+    QTranslator translatorQt;
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    app.installTranslator(&translatorQt);
 
     QStringList filesToOpen;
 

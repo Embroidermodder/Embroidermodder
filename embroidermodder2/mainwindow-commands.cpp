@@ -965,37 +965,42 @@ void MainWindow::runCommand()
 void MainWindow::runCommandMain(const QString& cmd)
 {
     qDebug("runCommandMain(%s)", qPrintable(cmd));
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //if(!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
-    engine->evaluate(cmd + "_main()");
+    engine->evaluate(cmd + "_main()", fileName);
 }
 
 void MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
 {
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
 }
 
 void MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
 {
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    engine->evaluate(cmd + "_move(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
 }
 
 void MainWindow::runCommandContext(const QString& cmd, const QString& str)
 {
     qDebug("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
-    engine->evaluate(cmd + "_context('" + str.toUpper() + "')");
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
+    engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
 }
 
 void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
 {
     qDebug("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
+    QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //NOTE: Replace any special characters that will cause a syntax error
     QString safeStr = str;
     safeStr.replace("\\", "\\\\");
     safeStr.replace("\'", "\\\'");
-    if(prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')"); }
-    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')"); }
+    if(prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName); }
+    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
 
 }
 
