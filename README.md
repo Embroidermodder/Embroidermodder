@@ -55,6 +55,30 @@ If you are using Qt/Mingw, substitute mingw32-make for make.
 If you are using Qt/MSVC, substitute nmake for make.
 You may need to add the directory where those executables are located to your system path.
 
+Help Files
+------------
+The help files for Embroidermodder 2 are a git submodule, which means that
+they reside in a separate repository. They are not required for the application
+to run, but if they are not present, you will likely receive an error that they
+do not exist when pressing F1 or attempting to access help through the menu.
+
+If you used ```git clone``` to obtain the Embroidermodder source,
+you need to run these commands from the toplevel of
+the working tree(which is the Embroidermodder directory):
+
+```
+git submodule init
+git submodule update
+```
+
+If you downloaded a zip file of the Embroidermodder source rather than using git,
+you will need to:
+
+- Download the [help files](https://github.com/Embroidermodder/Embroidermodder.github.io/archive/master.zip)
+- Unzip the archive
+- Rename the "Embroidermodder.github.io-master" directory to "help"
+- Copy the "help" directory to "Embroidermodder-master/embroidermodder2/help"
+
 Sample Files
 ------------
 
