@@ -22,20 +22,26 @@ $$PWD \
 javascript \
 
 TRANSLATIONS = translations/afrikaans/embroidermodder2_afrikaans.ts   \ #af
+               translations/arabic/embroidermodder2_arabic.ts         \ #ar
                translations/chinese/embroidermodder2_chinese.ts       \ #zh
                translations/czech/embroidermodder2_czech.ts           \ #cs
+               translations/danish/embroidermodder2_danish.ts         \ #da
                translations/dutch/embroidermodder2_dutch.ts           \ #nl
                translations/english/embroidermodder2_english.ts       \ #en
+               translations/finnish/embroidermodder2_finnish.ts       \ #fi
                translations/french/embroidermodder2_french.ts         \ #fr
                translations/german/embroidermodder2_german.ts         \ #de
+               translations/greek/embroidermodder2_greek.ts           \ #el
                translations/italian/embroidermodder2_italian.ts       \ #it
                translations/japanese/embroidermodder2_japanese.ts     \ #ja
                translations/korean/embroidermodder2_korean.ts         \ #ko
                translations/latin/embroidermodder2_latin.ts           \ #la
                translations/polish/embroidermodder2_polish.ts         \ #pl
                translations/portuguese/embroidermodder2_portuguese.ts \ #pt
+               translations/romanian/embroidermodder2_romanian.ts     \ #ro
                translations/russian/embroidermodder2_russian.ts       \ #ru
                translations/spanish/embroidermodder2_spanish.ts       \ #es
+               translations/swedish/embroidermodder2_swedish.ts       \ #sv
                translations/turkish/embroidermodder2_turkish.ts       \ #tr
 
 #GUI
