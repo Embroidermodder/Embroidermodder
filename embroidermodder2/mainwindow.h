@@ -59,6 +59,7 @@ public:
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
+    QString getSettingsGeneralLanguage()              { return settings_general_language;               }
     QString getSettingsGeneralIconTheme()             { return settings_general_icon_theme;             }
     int     getSettingsGeneralIconSize()              { return settings_general_icon_size;              }
     bool    getSettingsGeneralMdiBGUseLogo()          { return settings_general_mdi_bg_use_logo;        }
@@ -163,6 +164,7 @@ public:
     bool    getSettingsTextStyleStrikeOut()           { return settings_text_style_strikeout;           }
     bool    getSettingsTextStyleOverline()            { return settings_text_style_overline;            }
 
+    void setSettingsGeneralLanguage(const QString& newValue)           { settings_general_language               = newValue; }
     void setSettingsGeneralIconTheme(const QString& newValue)          { settings_general_icon_theme             = newValue; }
     void setSettingsGeneralIconSize(int newValue)                      { settings_general_icon_size              = newValue; }
     void setSettingsGeneralMdiBGUseLogo(bool newValue)                 { settings_general_mdi_bg_use_logo        = newValue; }
@@ -318,6 +320,7 @@ protected:
 
 private:
 
+    QString                         settings_general_language;
     QString                         settings_general_icon_theme;
     int                             settings_general_icon_size;
     bool                            settings_general_mdi_bg_use_logo;

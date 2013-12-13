@@ -36,9 +36,32 @@
 #include <QComboBox>
 #include <QCloseEvent>
 #include <QMetaObject>
+#include <QLocale>
 
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    readSettings();
+
+    QString lang = getSettingsGeneralLanguage();
+    qDebug("language: %s", qPrintable(lang));
+    if(lang == "system")
+        lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
+
+    //Load translations for the Embroidermodder 2 GUI
+    QTranslator translatorEmb;
+    translatorEmb.load("translations/" + lang + "/embroidermodder2_" + lang);
+    qApp->installTranslator(&translatorEmb);
+
+    //Load translations for the commands
+    QTranslator translatorCmd;
+    translatorCmd.load("translations/" + lang + "/commands_" + lang);
+    qApp->installTranslator(&translatorCmd);
+
+    //Load translations provided by Qt - this covers dialog buttons and other common things.
+    QTranslator translatorQt;
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    qApp->installTranslator(&translatorQt);
+
     //Init
     mainWin = this;
     //Menus
@@ -76,8 +99,6 @@ MainWindow::MainWindow() : QMainWindow(0)
     docIndex = 0;
 
     shiftKeyPressedState = false;
-
-    readSettings();
 
     setWindowIcon(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
 

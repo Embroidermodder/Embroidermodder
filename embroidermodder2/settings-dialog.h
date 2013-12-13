@@ -90,6 +90,7 @@ private:
     bool    preview_lwt_real_render;
 
     //Temporary until changes are accepted
+    QString dialog_general_language;
     QString dialog_general_icon_theme;
     int     dialog_general_icon_size;
     bool    dialog_general_mdi_bg_use_logo;
@@ -185,6 +186,7 @@ private:
     quint8  dialog_selection_pickbox_size;
 
 private slots:
+    void comboBoxLanguageCurrentIndexChanged(const QString&);
     void comboBoxIconThemeCurrentIndexChanged(const QString&);
     void comboBoxIconSizeCurrentIndexChanged(int);
     void checkBoxGeneralMdiBGUseLogoStateChanged(int);

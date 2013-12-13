@@ -19,6 +19,7 @@ void MainWindow::readSettings()
     }
 
     //General
+    settings_general_language               = settings.value("Language",                            "default").toString();
     settings_general_icon_theme             = settings.value("IconTheme",                           "default").toString();
     settings_general_icon_size              = settings.value("IconSize",                                   16).toInt();
     settings_general_mdi_bg_use_logo        = settings.value("MdiBGUseLogo",                             true).toBool();
@@ -150,6 +151,7 @@ void MainWindow::writeSettings()
 
     //General
     settings.setValue("LayoutState",                               layoutState);
+    settings.setValue("Language",                                  settings_general_language);
     settings.setValue("IconTheme",                                 settings_general_icon_theme);
     settings.setValue("IconSize",                       tmp.setNum(settings_general_icon_size));
     settings.setValue("MdiBGUseLogo",                              settings_general_mdi_bg_use_logo);

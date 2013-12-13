@@ -69,6 +69,32 @@ QWidget* Settings_Dialog::createTabGeneral()
 {
     QWidget* widget = new QWidget(this);
 
+    //Language
+    QGroupBox* groupBoxLanguage = new QGroupBox(tr("Language"), widget);
+
+    QLabel* labelLanguage = new QLabel(tr("Language (Requires Restart)"), groupBoxLanguage);
+    QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
+    dialog_general_language = mainWin->getSettingsGeneralLanguage().toLower();
+    comboBoxLanguage->addItem("Default");
+    comboBoxLanguage->addItem("System");
+    comboBoxLanguage->insertSeparator(2);
+    QDir trDir(qApp->applicationDirPath());
+    trDir.cd("translations");
+    foreach(QString dirName, trDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+    {
+        dirName[0] = dirName[0].toUpper();
+        comboBoxLanguage->addItem(dirName);
+    }
+    QString current = dialog_general_language;
+    current[0] = current[0].toUpper();
+    comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
+    connect(comboBoxLanguage, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboBoxLanguageCurrentIndexChanged(const QString&)));
+
+    QVBoxLayout* vboxLayoutLanguage = new QVBoxLayout(groupBoxLanguage);
+    vboxLayoutLanguage->addWidget(labelLanguage);
+    vboxLayoutLanguage->addWidget(comboBoxLanguage);
+    groupBoxLanguage->setLayout(vboxLayoutLanguage);
+
     //Icons
     QGroupBox* groupBoxIcon = new QGroupBox(tr("Icons"), widget);
 
@@ -173,6 +199,7 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     //Widget Layout
     QVBoxLayout* vboxLayoutMain = new QVBoxLayout(widget);
+    vboxLayoutMain->addWidget(groupBoxLanguage);
     vboxLayoutMain->addWidget(groupBoxIcon);
     vboxLayoutMain->addWidget(groupBoxMdiBG);
     vboxLayoutMain->addWidget(groupBoxTips);
@@ -1719,6 +1746,11 @@ void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
     //TODO: Add Other... so the user can select custom colors
 }
 
+void Settings_Dialog::comboBoxLanguageCurrentIndexChanged(const QString& lang)
+{
+    dialog_general_language = lang.toLower();
+}
+
 void Settings_Dialog::comboBoxIconThemeCurrentIndexChanged(const QString& theme)
 {
     dialog_general_icon_theme = theme;
@@ -2752,6 +2784,7 @@ void Settings_Dialog::acceptChanges()
     dialog_lwt_show_lwt = preview_lwt_show_lwt;
     dialog_lwt_real_render = preview_lwt_real_render;
 
+    mainWin->setSettingsGeneralLanguage(dialog_general_language);
     mainWin->setSettingsGeneralIconTheme(dialog_general_icon_theme);
     mainWin->setSettingsGeneralIconSize(dialog_general_icon_size);
     mainWin->setSettingsGeneralMdiBGUseLogo(dialog_general_mdi_bg_use_logo);
