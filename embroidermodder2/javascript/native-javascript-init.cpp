@@ -244,6 +244,7 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
             tb->setObjectName("toolbar" + toolbarName);
             connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
             addToolBar(Qt::LeftToolBarArea, tb);
+            addToolBarBreak(Qt::LeftToolBarArea);
             toolbarHash.insert(toolbarName, tb);
         }
 
