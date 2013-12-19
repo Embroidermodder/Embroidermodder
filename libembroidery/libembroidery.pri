@@ -25,6 +25,7 @@ SOURCES += \
 ../libembroidery/emb-color.c \
 ../libembroidery/emb-ellipse.c \
 ../libembroidery/emb-file.c \
+../libembroidery/emb-hash.c \
 ../libembroidery/emb-hoop.c \
 ../libembroidery/emb-layer.c \
 ../libembroidery/emb-line.c \
@@ -42,6 +43,7 @@ SOURCES += \
 ../libembroidery/emb-thread.c \
 ../libembroidery/emb-time.c \
 ../libembroidery/emb-vector.c \
+../libembroidery/hashtable.c \
 ../libembroidery/helpers-binary.c \
 ../libembroidery/helpers-misc.c \
 ../libembroidery/thread-color.c \
@@ -118,6 +120,7 @@ HEADERS += \
 ../libembroidery/emb-color.h \
 ../libembroidery/emb-ellipse.h \
 ../libembroidery/emb-file.h \
+../libembroidery/emb-hash.h \
 ../libembroidery/emb-hoop.h \
 ../libembroidery/emb-layer.h \
 ../libembroidery/emb-line.h \
@@ -135,6 +138,7 @@ HEADERS += \
 ../libembroidery/emb-thread.h \
 ../libembroidery/emb-time.h \
 ../libembroidery/emb-vector.h \
+../libembroidery/hashtable.h \
 ../libembroidery/helpers-binary.h \
 ../libembroidery/helpers-misc.h \
 ../libembroidery/thread-color.h \
