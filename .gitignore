@@ -33,6 +33,17 @@ libembroidery-convert/libembroidery-convert
 libembroidery-convert/libembroidery-convert.exe
 
 #########################
+# libembroidery-test    #
+#########################
+libembroidery-test/.moc
+libembroidery-test/.obj
+libembroidery-test/TODO
+libembroidery-test/Makefile
+libembroidery-test/_memleak*
+libembroidery-test/libembroidery-test
+libembroidery-test/libembroidery-test.exe
+
+#########################
 # KDE4 Thumbnailer      #
 #########################
 thumbnailer-kde4/.moc
