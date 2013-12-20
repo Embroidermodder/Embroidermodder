@@ -924,22 +924,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1117"/>
+        <location filename="../../mainwindow-commands.cpp" line="1122"/>
         <source>Native MessageBox Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1117"/>
+        <location filename="../../mainwindow-commands.cpp" line="1122"/>
         <source>Incorrect use of the native messageBox function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1727"/>
+        <location filename="../../mainwindow-commands.cpp" line="1732"/>
         <source>ScaleFactor Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mainwindow-commands.cpp" line="1728"/>
+        <location filename="../../mainwindow-commands.cpp" line="1733"/>
         <source>Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1097,501 +1097,512 @@
 <context>
     <name>PropertyEditor</name>
     <message>
-        <location filename="../../property-editor.cpp" line="101"/>
+        <location filename="../../property-editor.cpp" line="102"/>
         <source>Properties</source>
         <translation>Eigenshaften</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="139"/>
-        <location filename="../../property-editor.cpp" line="198"/>
+        <location filename="../../property-editor.cpp" line="140"/>
+        <location filename="../../property-editor.cpp" line="199"/>
         <source>No Selection</source>
         <translation>Keine Auswahl</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="268"/>
+        <location filename="../../property-editor.cpp" line="269"/>
         <source>Varies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="275"/>
+        <location filename="../../property-editor.cpp" line="276"/>
         <source>Arc</source>
         <translation>Bogen</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="276"/>
+        <location filename="../../property-editor.cpp" line="277"/>
         <source>Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="277"/>
+        <location filename="../../property-editor.cpp" line="278"/>
         <source>Circle</source>
         <translation>Kreis</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="278"/>
+        <location filename="../../property-editor.cpp" line="279"/>
         <source>Aligned Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="279"/>
+        <location filename="../../property-editor.cpp" line="280"/>
         <source>Angular Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="280"/>
+        <location filename="../../property-editor.cpp" line="281"/>
         <source>Arclength Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="281"/>
+        <location filename="../../property-editor.cpp" line="282"/>
         <source>Diameter Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="282"/>
+        <location filename="../../property-editor.cpp" line="283"/>
         <source>Leader Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="283"/>
+        <location filename="../../property-editor.cpp" line="284"/>
         <source>Linear Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="284"/>
+        <location filename="../../property-editor.cpp" line="285"/>
         <source>Ordinate Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="285"/>
+        <location filename="../../property-editor.cpp" line="286"/>
         <source>Radius Dimension</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="286"/>
+        <location filename="../../property-editor.cpp" line="287"/>
         <source>Ellipse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="287"/>
+        <location filename="../../property-editor.cpp" line="288"/>
         <source>Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="288"/>
+        <location filename="../../property-editor.cpp" line="289"/>
         <source>Infinite Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="289"/>
+        <location filename="../../property-editor.cpp" line="290"/>
         <source>Line</source>
         <translation>Linie</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="290"/>
+        <location filename="../../property-editor.cpp" line="291"/>
         <source>Point</source>
         <translation>Punkt</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="291"/>
+        <location filename="../../property-editor.cpp" line="292"/>
         <source>Polygon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="292"/>
+        <location filename="../../property-editor.cpp" line="293"/>
         <source>Polyline</source>
         <translation>PolyLinie</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="293"/>
+        <location filename="../../property-editor.cpp" line="294"/>
         <source>Ray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="294"/>
+        <location filename="../../property-editor.cpp" line="295"/>
         <source>Rectangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="295"/>
+        <location filename="../../property-editor.cpp" line="296"/>
         <source>Multiline Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="297"/>
+        <location filename="../../property-editor.cpp" line="298"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="805"/>
+        <location filename="../../property-editor.cpp" line="807"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="807"/>
+        <location filename="../../property-editor.cpp" line="809"/>
         <source>Layer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="808"/>
+        <location filename="../../property-editor.cpp" line="810"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="809"/>
+        <location filename="../../property-editor.cpp" line="811"/>
         <source>LineType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="810"/>
+        <location filename="../../property-editor.cpp" line="812"/>
         <source>LineWeight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="829"/>
-        <location filename="../../property-editor.cpp" line="901"/>
-        <location filename="../../property-editor.cpp" line="921"/>
-        <location filename="../../property-editor.cpp" line="958"/>
-        <location filename="../../property-editor.cpp" line="967"/>
-        <location filename="../../property-editor.cpp" line="976"/>
-        <location filename="../../property-editor.cpp" line="985"/>
-        <location filename="../../property-editor.cpp" line="994"/>
-        <location filename="../../property-editor.cpp" line="1003"/>
-        <location filename="../../property-editor.cpp" line="1012"/>
-        <location filename="../../property-editor.cpp" line="1021"/>
-        <location filename="../../property-editor.cpp" line="1030"/>
-        <location filename="../../property-editor.cpp" line="1067"/>
-        <location filename="../../property-editor.cpp" line="1093"/>
-        <location filename="../../property-editor.cpp" line="1125"/>
-        <location filename="../../property-editor.cpp" line="1166"/>
-        <location filename="../../property-editor.cpp" line="1187"/>
-        <location filename="../../property-editor.cpp" line="1222"/>
-        <location filename="../../property-editor.cpp" line="1268"/>
-        <location filename="../../property-editor.cpp" line="1300"/>
-        <location filename="../../property-editor.cpp" line="1356"/>
-        <location filename="../../property-editor.cpp" line="1409"/>
+        <location filename="../../property-editor.cpp" line="831"/>
+        <location filename="../../property-editor.cpp" line="903"/>
+        <location filename="../../property-editor.cpp" line="923"/>
+        <location filename="../../property-editor.cpp" line="960"/>
+        <location filename="../../property-editor.cpp" line="969"/>
+        <location filename="../../property-editor.cpp" line="978"/>
+        <location filename="../../property-editor.cpp" line="987"/>
+        <location filename="../../property-editor.cpp" line="996"/>
+        <location filename="../../property-editor.cpp" line="1005"/>
+        <location filename="../../property-editor.cpp" line="1014"/>
+        <location filename="../../property-editor.cpp" line="1023"/>
+        <location filename="../../property-editor.cpp" line="1032"/>
+        <location filename="../../property-editor.cpp" line="1069"/>
+        <location filename="../../property-editor.cpp" line="1113"/>
+        <location filename="../../property-editor.cpp" line="1145"/>
+        <location filename="../../property-editor.cpp" line="1186"/>
+        <location filename="../../property-editor.cpp" line="1207"/>
+        <location filename="../../property-editor.cpp" line="1242"/>
+        <location filename="../../property-editor.cpp" line="1288"/>
+        <location filename="../../property-editor.cpp" line="1320"/>
+        <location filename="../../property-editor.cpp" line="1376"/>
+        <location filename="../../property-editor.cpp" line="1429"/>
         <source>Geometry</source>
         <translation>Geometrie</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="831"/>
-        <location filename="../../property-editor.cpp" line="923"/>
-        <location filename="../../property-editor.cpp" line="1032"/>
-        <location filename="../../property-editor.cpp" line="1189"/>
+        <location filename="../../property-editor.cpp" line="833"/>
+        <location filename="../../property-editor.cpp" line="925"/>
+        <location filename="../../property-editor.cpp" line="1034"/>
+        <location filename="../../property-editor.cpp" line="1209"/>
         <source>Center X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="832"/>
-        <location filename="../../property-editor.cpp" line="924"/>
-        <location filename="../../property-editor.cpp" line="1033"/>
-        <location filename="../../property-editor.cpp" line="1190"/>
+        <location filename="../../property-editor.cpp" line="834"/>
+        <location filename="../../property-editor.cpp" line="926"/>
+        <location filename="../../property-editor.cpp" line="1035"/>
+        <location filename="../../property-editor.cpp" line="1210"/>
         <source>Center Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="833"/>
-        <location filename="../../property-editor.cpp" line="925"/>
+        <location filename="../../property-editor.cpp" line="835"/>
+        <location filename="../../property-editor.cpp" line="927"/>
         <source>Radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="834"/>
+        <location filename="../../property-editor.cpp" line="836"/>
         <source>Start Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="835"/>
+        <location filename="../../property-editor.cpp" line="837"/>
         <source>End Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="836"/>
-        <location filename="../../property-editor.cpp" line="1095"/>
-        <location filename="../../property-editor.cpp" line="1127"/>
-        <location filename="../../property-editor.cpp" line="1270"/>
+        <location filename="../../property-editor.cpp" line="838"/>
+        <location filename="../../property-editor.cpp" line="1115"/>
+        <location filename="../../property-editor.cpp" line="1147"/>
+        <location filename="../../property-editor.cpp" line="1290"/>
         <source>Start X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="837"/>
-        <location filename="../../property-editor.cpp" line="1096"/>
-        <location filename="../../property-editor.cpp" line="1128"/>
-        <location filename="../../property-editor.cpp" line="1271"/>
+        <location filename="../../property-editor.cpp" line="839"/>
+        <location filename="../../property-editor.cpp" line="1116"/>
+        <location filename="../../property-editor.cpp" line="1148"/>
+        <location filename="../../property-editor.cpp" line="1291"/>
         <source>Start Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="838"/>
-        <location filename="../../property-editor.cpp" line="1129"/>
+        <location filename="../../property-editor.cpp" line="840"/>
+        <location filename="../../property-editor.cpp" line="1149"/>
         <source>End X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="839"/>
-        <location filename="../../property-editor.cpp" line="1130"/>
+        <location filename="../../property-editor.cpp" line="841"/>
+        <location filename="../../property-editor.cpp" line="1150"/>
         <source>End Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="840"/>
-        <location filename="../../property-editor.cpp" line="927"/>
-        <location filename="../../property-editor.cpp" line="1227"/>
-        <location filename="../../property-editor.cpp" line="1312"/>
+        <location filename="../../property-editor.cpp" line="842"/>
+        <location filename="../../property-editor.cpp" line="929"/>
+        <location filename="../../property-editor.cpp" line="1247"/>
+        <location filename="../../property-editor.cpp" line="1332"/>
         <source>Area</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="841"/>
+        <location filename="../../property-editor.cpp" line="843"/>
         <source>Arc Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="842"/>
+        <location filename="../../property-editor.cpp" line="844"/>
         <source>Chord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="843"/>
+        <location filename="../../property-editor.cpp" line="845"/>
         <source>Included Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="886"/>
-        <location filename="../../property-editor.cpp" line="1251"/>
-        <location filename="../../property-editor.cpp" line="1430"/>
+        <location filename="../../property-editor.cpp" line="888"/>
+        <location filename="../../property-editor.cpp" line="1095"/>
+        <location filename="../../property-editor.cpp" line="1271"/>
+        <location filename="../../property-editor.cpp" line="1450"/>
         <source>Misc</source>
         <translation>Verschiedenes</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="888"/>
+        <location filename="../../property-editor.cpp" line="890"/>
         <source>Clockwise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="903"/>
-        <location filename="../../property-editor.cpp" line="1069"/>
-        <location filename="../../property-editor.cpp" line="1168"/>
-        <location filename="../../property-editor.cpp" line="1358"/>
-        <location filename="../../property-editor.cpp" line="1411"/>
+        <location filename="../../property-editor.cpp" line="905"/>
+        <location filename="../../property-editor.cpp" line="1071"/>
+        <location filename="../../property-editor.cpp" line="1188"/>
+        <location filename="../../property-editor.cpp" line="1378"/>
+        <location filename="../../property-editor.cpp" line="1431"/>
         <source>Position X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="904"/>
-        <location filename="../../property-editor.cpp" line="1070"/>
-        <location filename="../../property-editor.cpp" line="1169"/>
-        <location filename="../../property-editor.cpp" line="1359"/>
-        <location filename="../../property-editor.cpp" line="1412"/>
+        <location filename="../../property-editor.cpp" line="906"/>
+        <location filename="../../property-editor.cpp" line="1072"/>
+        <location filename="../../property-editor.cpp" line="1189"/>
+        <location filename="../../property-editor.cpp" line="1379"/>
+        <location filename="../../property-editor.cpp" line="1432"/>
         <source>Position Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="926"/>
+        <location filename="../../property-editor.cpp" line="928"/>
         <source>Diameter</source>
         <translation>Durchmesser</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="928"/>
+        <location filename="../../property-editor.cpp" line="930"/>
         <source>Circumference</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1034"/>
+        <location filename="../../property-editor.cpp" line="1036"/>
         <source>Major Radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1035"/>
+        <location filename="../../property-editor.cpp" line="1037"/>
         <source>Minor Radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1036"/>
+        <location filename="../../property-editor.cpp" line="1038"/>
         <source>Major Diameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1037"/>
+        <location filename="../../property-editor.cpp" line="1039"/>
         <source>Minor Diameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1071"/>
-        <location filename="../../property-editor.cpp" line="1310"/>
+        <location filename="../../property-editor.cpp" line="1073"/>
+        <location filename="../../property-editor.cpp" line="1330"/>
         <source>Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1072"/>
-        <location filename="../../property-editor.cpp" line="1311"/>
-        <location filename="../../property-editor.cpp" line="1381"/>
+        <location filename="../../property-editor.cpp" line="1074"/>
+        <location filename="../../property-editor.cpp" line="1331"/>
+        <location filename="../../property-editor.cpp" line="1401"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1097"/>
-        <location filename="../../property-editor.cpp" line="1272"/>
-        <source>2nd X</source>
+        <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1098"/>
-        <location filename="../../property-editor.cpp" line="1273"/>
+        <source>Path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1117"/>
+        <location filename="../../property-editor.cpp" line="1292"/>
+        <source>2nd X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../property-editor.cpp" line="1118"/>
+        <location filename="../../property-editor.cpp" line="1293"/>
         <source>2nd Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1099"/>
-        <location filename="../../property-editor.cpp" line="1274"/>
+        <location filename="../../property-editor.cpp" line="1119"/>
+        <location filename="../../property-editor.cpp" line="1294"/>
         <source>Vector X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1100"/>
-        <location filename="../../property-editor.cpp" line="1275"/>
+        <location filename="../../property-editor.cpp" line="1120"/>
+        <location filename="../../property-editor.cpp" line="1295"/>
         <source>Vector Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1131"/>
+        <location filename="../../property-editor.cpp" line="1151"/>
         <source>Delta X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1132"/>
+        <location filename="../../property-editor.cpp" line="1152"/>
         <source>Delta Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1133"/>
+        <location filename="../../property-editor.cpp" line="1153"/>
         <source>Angle</source>
         <translation>Winkel</translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1134"/>
-        <location filename="../../property-editor.cpp" line="1228"/>
+        <location filename="../../property-editor.cpp" line="1154"/>
+        <location filename="../../property-editor.cpp" line="1248"/>
         <source>Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1191"/>
+        <location filename="../../property-editor.cpp" line="1211"/>
         <source>Vertex Radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1192"/>
+        <location filename="../../property-editor.cpp" line="1212"/>
         <source>Side Radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1193"/>
+        <location filename="../../property-editor.cpp" line="1213"/>
         <source>Vertex Diameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1194"/>
+        <location filename="../../property-editor.cpp" line="1214"/>
         <source>Side Diameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1195"/>
+        <location filename="../../property-editor.cpp" line="1215"/>
         <source>Interior Angle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1224"/>
+        <location filename="../../property-editor.cpp" line="1244"/>
         <source>Vertex #</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1225"/>
+        <location filename="../../property-editor.cpp" line="1245"/>
         <source>Vertex X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1226"/>
+        <location filename="../../property-editor.cpp" line="1246"/>
         <source>Vertex Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1253"/>
+        <location filename="../../property-editor.cpp" line="1273"/>
         <source>Closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1302"/>
+        <location filename="../../property-editor.cpp" line="1322"/>
         <source>Corner 1 X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1303"/>
+        <location filename="../../property-editor.cpp" line="1323"/>
         <source>Corner 1 Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1304"/>
+        <location filename="../../property-editor.cpp" line="1324"/>
         <source>Corner 2 X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1305"/>
+        <location filename="../../property-editor.cpp" line="1325"/>
         <source>Corner 2 Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1306"/>
+        <location filename="../../property-editor.cpp" line="1326"/>
         <source>Corner 3 X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1307"/>
+        <location filename="../../property-editor.cpp" line="1327"/>
         <source>Corner 3 Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1308"/>
+        <location filename="../../property-editor.cpp" line="1328"/>
         <source>Corner 4 X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1309"/>
+        <location filename="../../property-editor.cpp" line="1329"/>
         <source>Corner 4 Y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="296"/>
-        <location filename="../../property-editor.cpp" line="1376"/>
+        <location filename="../../property-editor.cpp" line="297"/>
+        <location filename="../../property-editor.cpp" line="1396"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1378"/>
+        <location filename="../../property-editor.cpp" line="1398"/>
         <source>Contents</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1379"/>
+        <location filename="../../property-editor.cpp" line="1399"/>
         <source>Font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1380"/>
+        <location filename="../../property-editor.cpp" line="1400"/>
         <source>Justify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1382"/>
+        <location filename="../../property-editor.cpp" line="1402"/>
         <source>Rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1432"/>
+        <location filename="../../property-editor.cpp" line="1452"/>
         <source>Backward</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../property-editor.cpp" line="1433"/>
+        <location filename="../../property-editor.cpp" line="1453"/>
         <source>UpsideDown</source>
         <translation type="unfinished"></translation>
     </message>
