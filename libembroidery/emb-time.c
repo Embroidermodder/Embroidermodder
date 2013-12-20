@@ -6,7 +6,7 @@
 #include <time.h>
 #endif
 
-void embTime_initNow(EmbTime *t)
+void embTime_initNow(EmbTime* t)
 {
 #ifdef ARDUINO
 /*TODO: arduino embTime_initNow */
@@ -22,7 +22,19 @@ void embTime_initNow(EmbTime *t)
     t->hour   = timeinfo->tm_hour;
     t->minute = timeinfo->tm_min;
     t->second = timeinfo->tm_sec;
-#endif
+#endif /* ARDUINO */
+}
+
+EmbTime embTime_time(EmbTime* t)
+{
+#ifdef ARDUINO
+/*TODO: arduino embTime_time */
+#else
+
+#include <assert.h>
+assert(0); /*TODO: wrap time() from time.h and verify it works consistently */
+
+#endif /* ARDUINO */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

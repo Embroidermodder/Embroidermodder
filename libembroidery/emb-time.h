@@ -20,7 +20,8 @@ typedef struct EmbTime_
     unsigned int second;
 } EmbTime;
 
-void embTime_initNow(EmbTime *t);
+void embTime_initNow(EmbTime* t);
+EmbTime embTime_time(EmbTime* t);
 
 #ifdef __cplusplus
 }

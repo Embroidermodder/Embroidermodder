@@ -1,5 +1,8 @@
 #include "thread-color.h"
 
+#ifdef ARDUINO /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
+#else          /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
+
 int getNum_Arc_Polyester(unsigned int color) { return -1; } /*TODO: finish */
 const char* getName_Arc_Polyester(unsigned int color) { return ""; } /*TODO: finish */
 
@@ -4998,6 +5001,8 @@ int getNum_Z102_Isacord_Polyester(unsigned int color)
 }
 
 const char* getName_Z102_Isacord_Polyester(unsigned int color) { return ""; } /*TODO: finish */
+
+#endif /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
 
 int threadColorNum(unsigned int color, ThreadBrand brand)
 {

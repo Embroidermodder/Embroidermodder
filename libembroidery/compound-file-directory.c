@@ -37,11 +37,11 @@ bcf_directory *CompoundFileDirectory( const unsigned int maxNumberOfDirectoryEnt
     return dir;
 }
 
-time_t parseTime(FILE *file)
+EmbTime parseTime(FILE *file)
 {
-    time_t returnVal;
+    EmbTime returnVal;
     unsigned int ft_low, ft_high;
-    time (&returnVal);
+    /*embTime_time(&returnVal); TODO: use embTime_time() rather than time(). */
     ft_low = binaryReadInt32(file);
     ft_high = binaryReadInt32(file);
     /* TODO: translate to actual date time */

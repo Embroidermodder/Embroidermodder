@@ -7,7 +7,8 @@ extern "C" {
 
 /* This file contains wrapper functions around Keith Pomakis' HashTable Library */
 
-typedef struct HashTable EmbHash; /* forward typedef so hashtable.h is not exposed here */
+#include "hashtable.h"
+typedef HashTable EmbHash;
 
 EmbHash* embHash_create();
 void embHash_free(EmbHash* hash);

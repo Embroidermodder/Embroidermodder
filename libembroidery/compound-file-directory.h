@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include <time.h>
+#include <emb-time.h>
 
 typedef struct _bcf_directory_entry
 {
@@ -18,8 +18,8 @@ typedef struct _bcf_directory_entry
     unsigned int                  childId;
     unsigned char                 CLSID[16];
     unsigned int                  stateBits;
-    time_t                        creationTime;
-    time_t                        modifiedTime;
+    EmbTime                       creationTime;
+    EmbTime                       modifiedTime;
     unsigned int                  startingSectorLocation;
     unsigned long                 streamSize; /* should be long long but in our case we shouldn't need it, and hard to support on c89 cross platform */
     unsigned int                  streamSizeHigh; /* store the high int of streamsize */

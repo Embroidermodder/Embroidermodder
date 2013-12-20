@@ -1,6 +1,9 @@
 #include "emb-outline.h"
 #include "emb-pattern.h"
 
+#ifdef ARDUINO /* ARDUINO TODO: remove this line when emb-outline is C89 complete. This is a temporary arduino build fix. */
+#else          /* ARDUINO TODO: remove this line when emb-outline is C89 complete. This is a temporary arduino build fix. */
+
 struct StitchBlock
 {
     IThread Thread { get; set; }
@@ -542,5 +545,7 @@ Vertices ReduceByNth(Vertices vertices, int nth)
 
     return result;
 }
+
+#endif /* ARDUINO TODO: remove this line when emb-outline is C89 complete. This is a temporary arduino build fix. */
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

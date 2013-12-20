@@ -1,5 +1,5 @@
 #include "emb-hash.h"
-#include "hashtable.h"
+
 /* This file contains wrapper functions around Keith Pomakis' HashTable Library */
 
 EmbHash* embHash_create() { return HashTableCreate(1); }

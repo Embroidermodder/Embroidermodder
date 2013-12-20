@@ -18,8 +18,11 @@ extern "C" {
 
 typedef struct EmbFile_
 {
+#ifdef ARDUINO
+    int junk; /* ARDUINO TODO: temporary build fix. remove when complete */
+#else
     FILE* file;
-
+#endif /* ARDUINO */
 } EmbFile;
 
 EmbFile* embFile_open(const char* fileName, const char* mode);
