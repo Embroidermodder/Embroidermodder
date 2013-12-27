@@ -11,19 +11,15 @@ extern "C" {
 #endif
 
 #ifdef ARDUINO
-/*TODO: arduino embFile includes */
+#include "ino-file.h"
 #else
-#include <stdio.h>
-#endif
 
+#include <stdio.h>
 typedef struct EmbFile_
 {
-#ifdef ARDUINO
-    int junk; /* ARDUINO TODO: temporary build fix. remove when complete */
-#else
     FILE* file;
-#endif /* ARDUINO */
 } EmbFile;
+#endif /* ARDUINO */
 
 EmbFile* embFile_open(const char* fileName, const char* mode);
 int embFile_close(EmbFile* stream);

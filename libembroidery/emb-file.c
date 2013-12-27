@@ -4,7 +4,7 @@
 EmbFile* embFile_open(const char* fileName, const char* mode)
 {
 #ifdef ARDUINO
-    /*TODO: embFile_open */
+    return inoFile_open(fileName, mode);
 #else
     EmbFile* eFile;
     FILE* oFile = fopen(fileName, mode);
@@ -26,7 +26,7 @@ EmbFile* embFile_open(const char* fileName, const char* mode)
 int embFile_close(EmbFile* stream)
 {
 #ifdef ARDUINO
-    /*TODO: embFile_close */
+    return inoFile_close(stream);
 #else
     int retVal = fclose(stream->file);
     free(stream);
@@ -38,7 +38,7 @@ int embFile_close(EmbFile* stream)
 int embFile_eof(EmbFile* stream)
 {
 #ifdef ARDUINO
-    /*TODO: embFile_eof */
+    return inoFile_eof(stream);
 #else
     return feof(stream->file);
 #endif
@@ -47,7 +47,7 @@ int embFile_eof(EmbFile* stream)
 int embFile_getc(EmbFile* stream)
 {
 #ifdef ARDUINO
-    /*TODO: embFile_getc */
+    return inoFile_getc(stream);
 #else
     return fgetc(stream->file);
 #endif
@@ -56,7 +56,7 @@ int embFile_getc(EmbFile* stream)
 int embFile_seek(EmbFile* stream, long offset, int origin)
 {
 #ifdef ARDUINO
-    /*TODO: embFile_seek */
+    return inoFile_seek(stream, offset, origin);
 #else
     return fseek(stream->file, offset, origin);
 #endif
@@ -65,7 +65,7 @@ int embFile_seek(EmbFile* stream, long offset, int origin)
 long embFile_tell(EmbFile* stream)
 {
 #ifdef ARDUINO
-    /*TODO: embFile_tell */
+    return inoFile_tell(stream);
 #else
     return ftell(stream->file);
 #endif
