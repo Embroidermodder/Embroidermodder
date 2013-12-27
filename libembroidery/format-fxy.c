@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "format-fxy.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readFxy(EmbPattern* pattern, const char* fileName)
 {
@@ -42,7 +43,9 @@ int readFxy(EmbPattern* pattern, const char* fileName)
 
 int writeFxy(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteFxy */
+    emb_unused(pattern); /*TODO: finish writeFxy */
+    emb_unused(fileName); /*TODO: finish writeFxy */
+    return 0; /*TODO: finish writeFxy */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

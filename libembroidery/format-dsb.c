@@ -1,8 +1,9 @@
+#include "format-dsb.h"
+#include "helpers-misc.h"
+#include "helpers-unused.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "helpers-misc.h"
-#include "format-dsb.h"
 
 int readDsb(EmbPattern* pattern, const char* fileName)
 {
@@ -56,6 +57,8 @@ int readDsb(EmbPattern* pattern, const char* fileName)
 
 int writeDsb(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeDsb */
+    emb_unused(fileName); /*TODO: finish writeDsb */
     return 0; /*TODO: finish writeDsb */
 }
 

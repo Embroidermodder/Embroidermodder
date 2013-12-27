@@ -1,6 +1,7 @@
 #include "format-dsz.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "helpers-unused.h"
 
 /*! Reads ZSK file format (.DSZ) */
 int readDsz(EmbPattern* pattern, const char* fileName)
@@ -47,6 +48,8 @@ int readDsz(EmbPattern* pattern, const char* fileName)
 
 int writeDsz(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeDsz */
+    emb_unused(fileName); /*TODO: finish writeDsz */
     return 0; /*TODO: finish writeDsz */
 }
 

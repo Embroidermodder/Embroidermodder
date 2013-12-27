@@ -1,5 +1,7 @@
 #include "format-u01.h"
+#include "helpers-unused.h"
 #include <stdio.h>
+
 int readU01(EmbPattern* pattern, const char* fileName)
 {
     int fileLength, negativeX = 0, negativeY = 0, flags = NORMAL;
@@ -48,6 +50,8 @@ int readU01(EmbPattern* pattern, const char* fileName)
 
 int writeU01(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeU01 */
+    emb_unused(fileName); /*TODO: finish writeU01 */
     return 0; /*TODO: finish writeU01 */
 }
 

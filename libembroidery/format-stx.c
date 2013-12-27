@@ -1,9 +1,9 @@
+#include "format-stx.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
+#include "helpers-unused.h"
 #include <stdlib.h>
 #include <string.h>
-#include "helpers-binary.h"
-#include "emb-pattern.h"
-#include "helpers-misc.h"
-#include "format-stx.h"
 
 typedef struct SubDescriptor_
 {
@@ -223,7 +223,9 @@ int readStx(EmbPattern* pattern, const char* fileName)
 
 int writeStx(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteStx */
+    emb_unused(pattern); /*TODO: finish writeStx */
+    emb_unused(fileName); /*TODO: finish writeStx */
+    return 0; /*TODO: finish writeStx */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

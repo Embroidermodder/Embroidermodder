@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "format-gt.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readGt(EmbPattern* pattern, const char* fileName)
 {
@@ -42,6 +43,8 @@ int readGt(EmbPattern* pattern, const char* fileName)
 
 int writeGt(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeGt */
+    emb_unused(fileName); /*TODO: finish writeGt */
     return 0; /*TODO: finish writeGt */
 }
 

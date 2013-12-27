@@ -3,6 +3,7 @@
 #include <string.h>
 #include "format-jef.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 static char shvDecode(unsigned char inputByte)
 {
@@ -133,6 +134,8 @@ int readShv(EmbPattern* pattern, const char* fileName)
 
 int writeShv(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeShv */
+    emb_unused(fileName); /*TODO: finish writeShv */
     return 0; /*TODO: finish writeShv */
 }
 

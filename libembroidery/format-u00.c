@@ -1,6 +1,7 @@
 #include "format-u00.h"
 #include <stdio.h>
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readU00(EmbPattern* pattern, const char* fileName)
 {
@@ -70,6 +71,8 @@ int readU00(EmbPattern* pattern, const char* fileName)
 
 int writeU00(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeU00 */
+    emb_unused(fileName); /*TODO: finish writeU00 */
     return 0; /*TODO: finish WriteU00 */
 }
 

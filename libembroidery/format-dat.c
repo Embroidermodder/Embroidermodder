@@ -1,5 +1,6 @@
 #include "format-dat.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readDat(EmbPattern* pattern, const char* fileName)
 {
@@ -54,6 +55,8 @@ int readDat(EmbPattern* pattern, const char* fileName)
 
 int writeDat(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeDat */
+    emb_unused(fileName); /*TODO: finish writeDat */
     return 0; /*TODO: finish writeDat */
 }
 

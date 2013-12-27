@@ -1,9 +1,10 @@
+#include "format-ofm.h"
+#include "compound-file.h"
+#include "helpers-binary.h"
+#include "helpers-unused.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "compound-file.h"
-#include "format-ofm.h"
-#include "helpers-binary.h"
 
 static char *ReadLibrary(FILE *file)
 {
@@ -194,6 +195,8 @@ int readOfm(EmbPattern* pattern, const char* fileName)
 
 int writeOfm(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeOfm */
+    emb_unused(fileName); /*TODO: finish writeOfm */
     return 0; /*TODO: finish writeOfm */
 }
 

@@ -1,5 +1,6 @@
 #include "format-emd.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 static char emdDecode(unsigned char inputByte)
 {
@@ -71,7 +72,9 @@ int readEmd(EmbPattern* pattern, const char* fileName)
 
 int writeEmd(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteEmd */
+    emb_unused(pattern); /*TODO: finish writeEmd */
+    emb_unused(fileName); /*TODO: finish writeEmd */
+    return 0; /*TODO: finish writeEmd */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

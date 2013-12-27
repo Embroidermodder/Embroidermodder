@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "format-mit.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 static int decodeMitStitch(unsigned char value)
 {
@@ -30,6 +31,8 @@ int readMit(EmbPattern* pattern, const char* fileName)
 
 int writeMit(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeMit */
+    emb_unused(fileName); /*TODO: finish writeMit */
     return 0; /*TODO: finish writeMit */
 }
 

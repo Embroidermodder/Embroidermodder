@@ -141,6 +141,7 @@ HEADERS += \
 ../libembroidery/hashtable.h \
 ../libembroidery/helpers-binary.h \
 ../libembroidery/helpers-misc.h \
+../libembroidery/helpers-unused.h \
 ../libembroidery/thread-color.h \
 ../libembroidery/formats.h \
 ../libembroidery/format-10o.h \

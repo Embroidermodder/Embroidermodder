@@ -1,6 +1,7 @@
 #include "format-pcm.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "helpers-unused.h"
 
 static double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
@@ -66,6 +67,8 @@ int readPcm(EmbPattern* pattern, const char* fileName)
 
 int writePcm(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writePcm */
+    emb_unused(fileName); /*TODO: finish writePcm */
     return 0; /*TODO: finish writePcm */
 }
 

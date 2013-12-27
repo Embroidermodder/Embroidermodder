@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include "format-txt.h"
 #include "helpers-misc.h"
+#include "helpers-unused.h"
 
 int readTxt(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish readTxt */
+    emb_unused(fileName); /*TODO: finish readTxt */
     return 0; /*TODO: finish readTxt */
 }
 

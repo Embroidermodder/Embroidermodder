@@ -2,6 +2,7 @@
 #include "format-phb.h"
 #include "format-pec.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readPhb(EmbPattern* pattern, const char* fileName)
 {
@@ -62,7 +63,9 @@ int readPhb(EmbPattern* pattern, const char* fileName)
 
 int writePhb(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WritePhb */
+    emb_unused(pattern); /*TODO: finish writePhb */
+    emb_unused(fileName); /*TODO: finish writePhb */
+    return 0; /*TODO: finish writePhb */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,5 +1,6 @@
 #include "format-vp3.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -224,7 +225,9 @@ int readVp3(EmbPattern* pattern, const char* fileName)
 
 int writeVp3(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteVp3 */
+    emb_unused(pattern); /*TODO: finish writeVp3 */
+    emb_unused(fileName); /*TODO: finish writeVp3 */
+    return 0; /*TODO: finish writeVp3 */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

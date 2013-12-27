@@ -1,8 +1,9 @@
 #include "format-csd.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "helpers-unused.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define CsdSubMaskSize  479
 #define CsdXorMaskSize  501
@@ -160,7 +161,7 @@ int readCsd(EmbPattern* pattern, const char* fileName)
         else if((b0 & 0x0C) > 0)
         {
             flags = STOP;
-            if(colorChange >= 14) 
+            if(colorChange >= 14)
             {
                 printf("Invalid color change detected\n");
             }
@@ -184,6 +185,8 @@ int readCsd(EmbPattern* pattern, const char* fileName)
 
 int writeCsd(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeCsd */
+    emb_unused(fileName); /*TODO: finish writeCsd */
     return 0; /*TODO: finish writeCsd */
 }
 

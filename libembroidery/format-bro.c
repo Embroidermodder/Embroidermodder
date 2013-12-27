@@ -1,5 +1,6 @@
 #include "format-bro.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readBro(EmbPattern* pattern, const char* fileName)
 {
@@ -60,6 +61,8 @@ int readBro(EmbPattern* pattern, const char* fileName)
 
 int writeBro(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeBro */
+    emb_unused(fileName); /*TODO: finish writeBro */
     return 0; /*TODO: finish writeBro */
 }
 

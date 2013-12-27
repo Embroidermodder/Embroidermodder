@@ -1,5 +1,6 @@
-#include <stdio.h>
 #include "format-100.h"
+#include "helpers-unused.h"
+#include <stdio.h>
 
 int read100(EmbPattern* pattern, const char* fileName)
 {
@@ -30,6 +31,8 @@ int read100(EmbPattern* pattern, const char* fileName)
 
 int write100(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish write100 */
+    emb_unused(fileName); /*TODO: finish write100 */
     return 0; /*TODO: finish write100 */
 }
 

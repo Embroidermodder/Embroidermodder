@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "format-inb.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readInb(EmbPattern* pattern, const char* fileName)
 {
@@ -78,6 +79,8 @@ int readInb(EmbPattern* pattern, const char* fileName)
 
 int writeInb(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeInb */
+    emb_unused(fileName); /*TODO: finish writeInb */
     return 0; /*TODO: finish writeInb */
 }
 

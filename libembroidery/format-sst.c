@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "format-sst.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 int readSst(EmbPattern* pattern, const char* fileName)
 {
@@ -49,6 +50,8 @@ int readSst(EmbPattern* pattern, const char* fileName)
 
 int writeSst(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeSst */
+    emb_unused(fileName); /*TODO: finish writeSst */
     return 0; /*TODO: finish writeSst */
 }
 

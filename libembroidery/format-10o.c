@@ -1,4 +1,5 @@
 #include "format-10o.h"
+#include "helpers-unused.h"
 #include <stdio.h>
 
 int read10o(EmbPattern* pattern, const char* fileName)
@@ -48,6 +49,8 @@ int read10o(EmbPattern* pattern, const char* fileName)
 
 int write10o(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish write10o */
+    emb_unused(fileName); /*TODO: finish write10o */
     return 0; /*TODO: finish write10o */
 }
 

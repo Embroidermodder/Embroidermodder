@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "format-new.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 
 static int decodeNewStitch(unsigned char value)
 {
@@ -63,6 +64,8 @@ int readNew(EmbPattern* pattern, const char* fileName)
 
 int writeNew(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeNew */
+    emb_unused(fileName); /*TODO: finish writeNew */
     return 0; /*TODO: finish writeNew */
 }
 

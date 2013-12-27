@@ -1,4 +1,5 @@
 #include "format-tap.h"
+#include "helpers-unused.h"
 #include <stdio.h>
 
 static int decodeRecordFlags(unsigned char b2)
@@ -86,7 +87,9 @@ int readTap(EmbPattern* pattern, const char* fileName)
 
 int writeTap(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteTap */
+    emb_unused(pattern); /*TODO: finish writeTap */
+    emb_unused(fileName); /*TODO: finish writeTap */
+    return 0; /*TODO: finish writeTap */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

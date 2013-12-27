@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "format-sew.h"
 #include "helpers-binary.h"
+#include "helpers-unused.h"
 #include "format-jef.h"
 
 static char sewDecode(unsigned char inputByte)
@@ -87,6 +88,8 @@ int readSew(EmbPattern* pattern, const char* fileName)
 
 int writeSew(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeSew */
+    emb_unused(fileName); /*TODO: finish writeSew */
     return 0; /*TODO: finish writeSew */
 }
 

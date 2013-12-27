@@ -1,5 +1,6 @@
-#include <stdio.h>
 #include "format-exy.h"
+#include "helpers-unused.h"
+#include <stdio.h>
 
 static int exyDecodeFlags(unsigned char b2)
 {
@@ -90,6 +91,8 @@ int readExy(EmbPattern* pattern, const char* fileName)
 
 int writeExy(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeExy */
+    emb_unused(fileName); /*TODO: finish writeExy */
     return 0; /*TODO: finish writeExy */
 }
 

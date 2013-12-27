@@ -1,4 +1,5 @@
 #include "format-zsk.h"
+#include "helpers-unused.h"
 #include <stdio.h>
 
 int readZsk(EmbPattern* pattern, const char* fileName)
@@ -34,7 +35,9 @@ int readZsk(EmbPattern* pattern, const char* fileName)
 
 int writeZsk(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteZsk */
+    emb_unused(pattern); /*TODO: finish writeZsk */
+    emb_unused(fileName); /*TODO: finish writeZsk */
+    return 0; /*TODO: finish writeZsk */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,5 +1,7 @@
-#include <stdio.h>
 #include "format-t09.h"
+#include "helpers-unused.h"
+#include <stdio.h>
+
 
 int readT09(EmbPattern* pattern, const char* fileName)
 {
@@ -36,7 +38,9 @@ int readT09(EmbPattern* pattern, const char* fileName)
 
 int writeT09(EmbPattern* pattern, const char* fileName)
 {
-    return 0; /*TODO: finish WriteT09 */
+    emb_unused(pattern); /*TODO: finish writeT09 */
+    emb_unused(fileName); /*TODO: finish writeT09 */
+    return 0; /*TODO: finish writeT09 */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
