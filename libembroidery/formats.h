@@ -5,6 +5,12 @@
 extern "C" {
 #endif
 
+#ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
+
+#include "format-exp.h"
+
+#else /* ARDUINO TODO: This is temporary. Remove when complete. */
+
 #include "format-10o.h"
 #include "format-100.h"
 #include "format-art.h"
@@ -64,6 +70,8 @@ extern "C" {
 #include "format-vp3.h"
 #include "format-xxx.h"
 #include "format-zsk.h"
+
+#endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 
 #ifdef __cplusplus
 }

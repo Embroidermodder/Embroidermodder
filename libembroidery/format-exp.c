@@ -3,6 +3,7 @@
 #include "format-exp.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "emb-file.h"
 
 static char expDecode(unsigned char a1)
 {
@@ -34,13 +35,13 @@ static void expEncode(unsigned char *b, char dx, char dy, int flags)
 
 int readExp(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i = 0;
     unsigned char b0 = 0, b1 = 0;
     char dx = 0, dy = 0;
     int flags = 0;
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         /*TODO: set status here "Error opening EXP file for read:" */
@@ -48,24 +49,24 @@ int readExp(EmbPattern* pattern, const char* fileName)
     }
     embPattern_loadExternalColorFile(pattern, fileName);
 
-    for(i = 0; !feof(file); i++)
+    for(i = 0; !embFile_eof(file); i++)
     {
         flags = NORMAL;
-        b0 = (unsigned char)fgetc(file);
-        if(feof(file))
+        b0 = (unsigned char)embFile_getc(file);
+        if(embFile_eof(file))
             break;
-        b1 = (unsigned char)fgetc(file);
-        if(feof(file))
+        b1 = (unsigned char)embFile_getc(file);
+        if(embFile_eof(file))
             break;
         if(b0 == 0x80)
         {
             if(b1 & 1)
             {
-                b0 = (unsigned char)fgetc(file);
-                if(feof(file))
+                b0 = (unsigned char)embFile_getc(file);
+                if(embFile_eof(file))
                     break;
-                b1 = (unsigned char)fgetc(file);
-                if(feof(file))
+                b1 = (unsigned char)embFile_getc(file);
+                if(embFile_eof(file))
                     break;
                 flags = STOP;
             }
@@ -73,20 +74,20 @@ int readExp(EmbPattern* pattern, const char* fileName)
             {
                 flags = TRIM;
                 if(b1 == 2) flags = NORMAL;
-                b0 = (unsigned char)fgetc(file);
-                if(feof(file))
+                b0 = (unsigned char)embFile_getc(file);
+                if(embFile_eof(file))
                     break;
-                b1 = (unsigned char)fgetc(file);
-                if(feof(file))
+                b1 = (unsigned char)embFile_getc(file);
+                if(embFile_eof(file))
                     break;
             }
             else if(b1 == 0x80)
             {
-                b0 = (unsigned char)fgetc(file);
-                if(feof(file))
+                b0 = (unsigned char)embFile_getc(file);
+                if(embFile_eof(file))
                     break;
-                b1 = (unsigned char)fgetc(file);
-                if(feof(file))
+                b1 = (unsigned char)embFile_getc(file);
+                if(embFile_eof(file))
                     break;
                 /* Seems to be b0=0x07 and b1=0x00
                  * Maybe used as extension functions */
@@ -100,20 +101,24 @@ int readExp(EmbPattern* pattern, const char* fileName)
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 
 int writeExp(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+#ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
+return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
+#else /* ARDUINO TODO: This is temporary. Remove when complete. */
+
+    EmbFile* file = 0;
     EmbStitchList* stitches = 0;
     double dx = 0.0, dy = 0.0;
     double xx = 0.0, yy = 0.0;
     int flags = 0;
     unsigned char b[4];
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         /*TODO: set status here "Error opening EXP file for write:" */
@@ -141,8 +146,9 @@ int writeExp(EmbPattern* pattern, const char* fileName)
         stitches = stitches->next;
     }
     fprintf(file, "\x1a");
-    fclose(file);
+    embFile_close(file);
     return 1;
+#endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
