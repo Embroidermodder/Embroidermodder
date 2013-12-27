@@ -78,7 +78,7 @@ int embPattern_addThread(EmbPattern* p, EmbThread thread)
     if(!(p->threadList))
     {
         EmbThreadList* t = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-        if(!t) return 0;
+        if(!t) { /* TODO: error allocating memory */ return 0; }
         t->thread = thread;
         t->next = NULL;
         p->threadList = t;
@@ -102,10 +102,15 @@ void embPattern_fixColorCount(EmbPattern* p)
         maxColorIndex = max(maxColorIndex, list->stitch.color);
         list = list->next;
     }
+#ifndef ARDUINO
+    /* ARDUINO TODO: The while loop below never ends because memory cannot be allocated in the addThread
+     *               function and thus the thread count is never incremented. Arduino or not, it's wrong.
+     */
     while((int)embThreadList_count(p->threadList) <= maxColorIndex)
     {
         embPattern_addThread(p, embThread_getRandom());
     }
+#endif
     /*
     while(embThreadList_count(p->threadList) > (maxColorIndex + 1))
     {
@@ -210,7 +215,6 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 
     if(flags & END)
     {
-
         embPattern_fixColorCount(p);
 
         /* HideStitchesOverLength(127); TODO: fix or remove this */
@@ -633,7 +637,7 @@ void embPattern_combineJumpStitches(EmbPattern* p)
     EmbStitchList* pointer = 0;
     int jumpCount = 0;
     EmbStitchList* jumpListStart = 0;
-	pointer = p->stitchList;
+    pointer = p->stitchList;
     while(pointer)
     {
         if(pointer->stitch.flags & JUMP)
