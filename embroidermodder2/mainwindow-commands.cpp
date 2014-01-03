@@ -425,6 +425,13 @@ void MainWindow::icon128()
     iconResize(128);
 }
 
+MDIWindow* MainWindow::activeMdiWindow()
+{
+    qDebug("activeMdiWindow()");
+    MDIWindow* win = (MDIWindow*)mdiArea->activeSubWindow();
+    return win;
+}
+
 View* MainWindow::activeView()
 {
     qDebug("activeView()");
@@ -950,6 +957,30 @@ void MainWindow::disableMoveRapidFire()
     if(gview) gview->disableMoveRapidFire();
 }
 
+void MainWindow::promptHistoryAppended(const QString& txt)
+{
+    MDIWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->promptHistoryAppended(txt);
+}
+
+void MainWindow::logPromptInput(const QString& txt)
+{
+    MDIWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->logPromptInput(txt);
+}
+
+void MainWindow::promptInputPrevious()
+{
+    MDIWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->promptInputPrevious();
+}
+
+void MainWindow::promptInputNext()
+{
+    MDIWindow* mdiWin = activeMdiWindow();
+    if(mdiWin) mdiWin->promptInputNext();
+}
+
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
@@ -1002,6 +1033,11 @@ void MainWindow::runCommandPrompt(const QString& cmd, const QString& str)
     if(prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName); }
     else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
 
+}
+
+void MainWindow::nativeAlert(const QString& txt)
+{
+    prompt->alert(txt);
 }
 
 void MainWindow::nativeBlinkPrompt()

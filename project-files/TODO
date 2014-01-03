@@ -17,7 +17,7 @@ TODO - Reading DXF
 //Stuff for 2.0 alpha3:
 //====================
 TODO - Writing DXF
-TODO - Up and Down keys cycle thru commands in the command prompt
+DONE - Up and Down keys cycle thru commands in the command prompt
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
 
 //====================
@@ -137,4 +137,5 @@ TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
 //====================
 TODO - Fix emb-outline files
 TODO - Fix thread-color files
+TODO - Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
 TODO - Smoothieboard experiments

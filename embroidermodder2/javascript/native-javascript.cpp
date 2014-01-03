@@ -34,9 +34,17 @@ QScriptValue javaTodo(QScriptContext* context, QScriptEngine* /*engine*/)
     QString strCmd  = context->argument(0).toString();
     QString strTodo = context->argument(1).toString();
 
-    mainWin()->nativeSetPromptPrefix("TODO: (" + strCmd + ") " + strTodo);
-    mainWin()->nativeAppendPromptHistory(QString());
+    mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
     mainWin()->nativeEndCommand();
+    return QScriptValue();
+}
+
+QScriptValue javaAlert(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 1)    return context->throwError("alert() requires one argument");
+    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "alert(): first argument is not a string");
+
+    mainWin()->nativeAlert(context->argument(0).toString());
     return QScriptValue();
 }
 

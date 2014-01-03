@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QTextBrowser>
 #include <QSplitter>
+#include <QTextLayout>
 
 QT_BEGIN_NAMESPACE
 class QString;
@@ -18,29 +19,6 @@ class QSplitter;
 class QTimer;
 QT_END_NAMESPACE
 
-class CmdPromptHistory : public QTextBrowser
-{
-    Q_OBJECT
-
-public:
-    CmdPromptHistory();
-    ~CmdPromptHistory();
-
-protected:
-    void contextMenuEvent(QContextMenuEvent* event);
-
-public slots:
-    void appendHistory(QString txt);
-    void startResizeHistory(int y);
-    void stopResizeHistory(int y);
-    void resizeHistory(int y);
-
-private:
-    int tmpHeight;
-};
-
-//==========================================================================
-
 class CmdPromptInput : public QLineEdit
 {
     Q_OBJECT
@@ -50,6 +28,7 @@ public:
     ~CmdPromptInput();
 
     QString curText;
+    QString defaultPrefix;
     QString prefix;
 
     QString lastCmd;
@@ -64,7 +43,7 @@ protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
-    void appendHistory(QString txt);
+    void appendHistory(const QString& txt, int prefixLength);
 
     //These connect to the CmdPrompt signals
     void startCommand(const QString& cmd);
@@ -72,6 +51,8 @@ signals:
     void deletePressed();
     void tabPressed();
     void escapePressed();
+    void upPressed();
+    void downPressed();
     void F1Pressed();
     void F2Pressed();
     void F3Pressed();
@@ -107,6 +88,37 @@ public slots:
     void checkCursorPosition(int oldpos, int newpos);
 private:
     QHash<QString, QString>*  aliasHash;
+
+    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
+    void clearFormatting();
+    void applyFormatting();
+};
+
+//==========================================================================
+
+class CmdPromptHistory : public QTextBrowser
+{
+    Q_OBJECT
+
+public:
+    CmdPromptHistory(QWidget* parent = 0);
+    ~CmdPromptHistory();
+
+protected:
+    void contextMenuEvent(QContextMenuEvent* event);
+
+public slots:
+    void appendHistory(const QString& txt, int prefixLength);
+    void startResizeHistory(int y);
+    void stopResizeHistory(int y);
+    void resizeHistory(int y);
+
+signals:
+    void historyAppended(const QString& txt);
+
+private:
+    int tmpHeight;
+    QString applyFormatting(const QString& txt, int prefixLength);
 };
 
 //==========================================================================
@@ -167,9 +179,11 @@ public:
 protected:
 
 public slots:
+    QString getHistory() { return promptHistory->toHtml(); }
     QString getPrefix() { return promptInput->prefix; }
     QString getCurrentText() { return promptInput->curText; }
-    void setCurrentText(const QString& txt) { promptInput->curText = promptInput->prefix + txt; }
+    void setCurrentText(const QString& txt) { promptInput->curText = promptInput->prefix + txt; promptInput->setText(promptInput->curText); }
+    void setHistory(const QString& txt) { promptHistory->setHtml(txt); promptHistory->moveCursor(QTextCursor::End, QTextCursor::MoveAnchor); }
     void setPrefix(const QString& txt);
     void appendHistory(const QString& txt);
     void startResizingTheHistory(int y) { promptHistory->startResizeHistory(y); }
@@ -184,6 +198,8 @@ public slots:
     void enableRapidFire() { promptInput->rapidFireEnabled = true; }
     void disableRapidFire() { promptInput->rapidFireEnabled = false; }
     bool isRapidFireEnabled() { return promptInput->rapidFireEnabled; }
+
+    void alert(const QString& txt);
 
     void startBlinking();
     void stopBlinking();
@@ -202,7 +218,7 @@ public slots:
 private slots:
 
 signals:
-    void appendTheHistory(QString txt);
+    void appendTheHistory(const QString& txt, int prefixLength);
 
     //For connecting outside of command prompt
     void startCommand(const QString& cmd);
@@ -210,6 +226,8 @@ signals:
     void deletePressed();
     void tabPressed();
     void escapePressed();
+    void upPressed();
+    void downPressed();
     void F1Pressed();
     void F2Pressed();
     void F3Pressed();
@@ -231,6 +249,8 @@ signals:
 
     void shiftPressed();
     void shiftReleased();
+
+    void historyAppended(const QString& txt);
 
 private:
     CmdPromptInput*    promptInput;

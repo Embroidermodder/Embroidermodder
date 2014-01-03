@@ -130,12 +130,16 @@ MainWindow::MainWindow() : QMainWindow(0)
     prompt->setPromptTextColor(QColor(getSettingsPromptTextColor()));
     prompt->setPromptBackgroundColor(QColor(getSettingsPromptBGColor()));
 
+    connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
+
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(runCommandMain(const QString&)));
     connect(prompt, SIGNAL(runCommand(const QString&, const QString&)), this, SLOT(runCommandPrompt(const QString&, const QString&)));
 
             connect(prompt, SIGNAL(deletePressed()),    this, SLOT(deletePressed()));
     //TODO: connect(prompt, SIGNAL(tabPressed()),       this, SLOT(someUnknownSlot()));
             connect(prompt, SIGNAL(escapePressed()),    this, SLOT(escapePressed()));
+            connect(prompt, SIGNAL(upPressed()),        this, SLOT(promptInputPrevious()));
+            connect(prompt, SIGNAL(downPressed()),      this, SLOT(promptInputNext()));
             connect(prompt, SIGNAL(F1Pressed()),        this, SLOT(help()));
     //TODO: connect(prompt, SIGNAL(F2Pressed()),        this, SLOT(floatHistory()));
     //TODO: connect(prompt, SIGNAL(F3Pressed()),        this, SLOT(toggleQSNAP()));
@@ -157,6 +161,8 @@ MainWindow::MainWindow() : QMainWindow(0)
 
             connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
             connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+
+            connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
     dockPropEdit = new PropertyEditor("icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);

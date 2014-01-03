@@ -44,6 +44,7 @@ public:
 
     MdiArea*                        getMdiArea();
     MainWindow*                     getApplication();
+    MDIWindow*                      activeMdiWindow();
     View*                           activeView();
     QGraphicsScene*                 activeScene();
     QUndoStack*                     activeUndoStack();
@@ -515,6 +516,11 @@ public slots:
     void stub_implement(QString txt);
     void stub_testing();
 
+    void promptHistoryAppended(const QString& txt);
+    void logPromptInput(const QString& txt);
+    void promptInputPrevious();
+    void promptInputNext();
+
     void runCommand();
     void runCommandMain(const QString& cmd);
     void runCommandClick(const QString& cmd,  qreal x, qreal y);
@@ -641,6 +647,7 @@ private:
 
 public:
     //Natives
+    void nativeAlert                  (const QString& txt);
     void nativeBlinkPrompt            ();
     void nativeSetPromptPrefix        (const QString& txt);
     void nativeAppendPromptHistory    (const QString& txt);

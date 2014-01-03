@@ -73,6 +73,11 @@ public slots:
     void                       print();
     void                       saveBMC();
 
+    void promptHistoryAppended(const QString& txt);
+    void logPromptInput(const QString& txt);
+    void promptInputPrevious();
+    void promptInputNext();
+
 protected:
 
 private:
@@ -80,6 +85,10 @@ private:
     QMdiArea*                  mdiArea;
     QGraphicsScene*            gscene;
     View*                      gview;
+
+    QString promptHistory;
+    QList<QString> promptInputList;
+    int promptInputNum;
 
     QPrinter                   printer;
 
@@ -93,6 +102,8 @@ private:
     QRgb                       curColor;
     QString                    curLineType;
     QString                    curLineWeight;
+
+    void promptInputPrevNext(bool prev);
 };
 
 #endif

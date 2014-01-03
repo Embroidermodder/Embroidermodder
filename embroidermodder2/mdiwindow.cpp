@@ -53,6 +53,11 @@ MDIWindow::MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
     resize(sizeHint());
 
+    promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
+    mainWin->prompt->setHistory(promptHistory);
+    promptInputList << "";
+    promptInputNum = 0;
+
     curLayer = "0";
     curColor = 0; //TODO: color ByLayer
     curLineType = "ByLayer";
@@ -409,6 +414,7 @@ void MDIWindow::onWindowActivated()
     mainWin->statusbar->statusBarQSnapButton->setChecked(gscene->property(ENABLE_QSNAP).toBool());
     mainWin->statusbar->statusBarQTrackButton->setChecked(gscene->property(ENABLE_QTRACK).toBool());
     mainWin->statusbar->statusBarLwtButton->setChecked(gscene->property(ENABLE_LWT).toBool());
+    mainWin->prompt->setHistory(promptHistory);
 }
 
 QSize MDIWindow::sizeHint() const
@@ -479,6 +485,46 @@ void MDIWindow::setViewGridColor(QRgb color)
 void MDIWindow::setViewRulerColor(QRgb color)
 {
     gview->setRulerColor(color);
+}
+
+void MDIWindow::promptHistoryAppended(const QString& txt)
+{
+    promptHistory.append("<br/>" + txt);
+}
+
+void MDIWindow::logPromptInput(const QString& txt)
+{
+    promptInputList << txt;
+    promptInputNum = promptInputList.size();
+}
+
+void MDIWindow::promptInputPrevious()
+{
+    promptInputPrevNext(true);
+}
+
+void MDIWindow::promptInputNext()
+{
+    promptInputPrevNext(false);
+}
+
+void MDIWindow::promptInputPrevNext(bool prev)
+{
+    if(promptInputList.isEmpty())
+    {
+        if(prev) QMessageBox::critical(this, tr("Prompt Previous Error"), tr("The prompt input is empty! Please report this as a bug!"));
+        else     QMessageBox::critical(this, tr("Prompt Next Error"),     tr("The prompt input is empty! Please report this as a bug!"));
+        qDebug("The prompt input is empty! Please report this as a bug!");
+    }
+    else
+    {
+        if(prev) promptInputNum--;
+        else     promptInputNum++;
+        int maxNum = promptInputList.size();
+        if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
+        else if(promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
+        else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+    }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -5,6 +5,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValDebug = engine->newFunction(javaDebug); engine->globalObject().setProperty("debug", scriptValDebug);
     QScriptValue scriptValError = engine->newFunction(javaError); engine->globalObject().setProperty("error", scriptValError);
     QScriptValue scriptValTodo = engine->newFunction(javaTodo); engine->globalObject().setProperty("todo", scriptValTodo);
+    QScriptValue scriptValAlert = engine->newFunction(javaAlert); engine->globalObject().setProperty("alert", scriptValAlert);
     QScriptValue scriptValBlinkPrompt = engine->newFunction(javaBlinkPrompt); engine->globalObject().setProperty("blinkPrompt", scriptValBlinkPrompt);
     QScriptValue scriptValSetPromptPrefix = engine->newFunction(javaSetPromptPrefix); engine->globalObject().setProperty("setPromptPrefix", scriptValSetPromptPrefix);
     QScriptValue scriptValAppendPromptHistory = engine->newFunction(javaAppendPromptHistory); engine->globalObject().setProperty("appendPromptHistory", scriptValAppendPromptHistory);
