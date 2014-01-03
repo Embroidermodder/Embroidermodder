@@ -64,8 +64,7 @@ function prompt(str)
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Requires two points."));
-            appendPromptHistory();
+            alert(qsTr("Requires two points."));
             setPromptPrefix(qsTr("Specify first point: "));
         }
         else
@@ -82,8 +81,7 @@ function prompt(str)
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Requires two points."));
-            appendPromptHistory();
+            alert(qsTr("Requires two points."));
             setPromptPrefix(qsTr("Specify second point: "));
         }
         else

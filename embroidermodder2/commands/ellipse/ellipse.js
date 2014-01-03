@@ -174,8 +174,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Point or option keyword required."));
-                    appendPromptHistory();
+                    alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify first axis start point or [Center]: "));
                 }
                 else
@@ -194,8 +193,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify first axis end point: "));
             }
             else
@@ -227,8 +225,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Point or option keyword required."));
-                    appendPromptHistory();
+                    alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
                 }
                 else
@@ -250,8 +247,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify center point: "));
             }
             else
@@ -272,8 +268,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify first axis end point: "));
             }
             else
@@ -301,8 +296,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Point or option keyword required."));
-                    appendPromptHistory();
+                    alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify second axis end point or [Rotation]: "));
                 }
                 else
@@ -331,8 +325,7 @@ function prompt(str)
         {
             if(isNaN(str))
             {
-                setPromptPrefix(qsTr("Invalid angle. Input a numeric angle or pick a point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid angle. Input a numeric angle or pick a point."));
                 setPromptPrefix(qsTr("Specify rotation: "));
             }
             else

@@ -61,8 +61,7 @@ function prompt(str)
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Requires numeric distance or two points."));
-            appendPromptHistory();
+            alert(qsTr("Requires numeric distance or two points."));
             setPromptPrefix(qsTr("Specify first point: "));
         }
         else
@@ -79,8 +78,7 @@ function prompt(str)
     {
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Requires numeric distance or two points."));
-            appendPromptHistory();
+            alert(qsTr("Requires numeric distance or two points."));
             setPromptPrefix(qsTr("Specify second point: "));
         }
         else

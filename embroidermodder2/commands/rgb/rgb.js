@@ -58,8 +58,7 @@ function prompt(str)
             var b = Number(strList[2]);
             if(!validRGB(r,g,b))
             {
-                setPromptPrefix(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
-                appendPromptHistory();
+                alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
                 setPromptPrefix(qsTr("Specify background color: "));
             }
             else
@@ -77,8 +76,7 @@ function prompt(str)
         var b = Number(strList[2]);
         if(!validRGB(r,g,b))
         {
-            setPromptPrefix(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
-            appendPromptHistory();
+            alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
             setPromptPrefix(qsTr("Specify crosshair color: "));
         }
         else
@@ -95,8 +93,7 @@ function prompt(str)
         var b = Number(strList[2]);
         if(!validRGB(r,g,b))
         {
-            setPromptPrefix(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
-            appendPromptHistory();
+            alert(qsTr("Invalid color. R,G,B values must be in the range of 0-255."));
             setPromptPrefix(qsTr("Specify grid color: "));
         }
         else

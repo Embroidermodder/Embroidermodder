@@ -207,8 +207,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Point or option keyword required."));
-                    appendPromptHistory();
+                    alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
                 else
@@ -237,8 +236,7 @@ function prompt(str)
                 var num = Number(str);
                 if(isNaN(num))
                 {
-                    setPromptPrefix(qsTr("Requires numeric radius, point on circumference, or \"D\"."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires numeric radius, point on circumference, or \"D\"."));
                     setPromptPrefix(qsTr("Specify radius of circle or [Diameter]: "));
                 }
                 else
@@ -264,8 +262,7 @@ function prompt(str)
             var num = Number(str);
             if(isNaN(num))
             {
-                setPromptPrefix(qsTr("Requires numeric distance or second point."));
-                appendPromptHistory();
+                alert(qsTr("Requires numeric distance or second point."));
                 setPromptPrefix(qsTr("Specify diameter of circle: "));
             }
             else
@@ -290,8 +287,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify first end point of circle's diameter: "));
             }
             else
@@ -309,8 +305,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify second end point of circle's diameter: "));
             }
             else
@@ -334,8 +329,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify first point of circle: "));
             }
             else
@@ -350,8 +344,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify second point of circle: "));
             }
             else
@@ -370,8 +363,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify third point of circle: "));
             }
             else

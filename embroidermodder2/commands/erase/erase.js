@@ -9,8 +9,7 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix(qsTr("Preselect objects before invoking the delete command."));
-        appendPromptHistory();
+        alert(qsTr("Preselect objects before invoking the delete command."));
         endCommand();
         messageBox("information", qsTr("Delete Preselect"), qsTr("Preselect objects before invoking the delete command."));
     }

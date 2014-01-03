@@ -119,8 +119,7 @@ function prompt(str)
             var tmp = Number(str);
             if(isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
-                setPromptPrefix(qsTr("Requires an integer between 3 and 1024."));
-                appendPromptHistory();
+                alert(qsTr("Requires an integer between 3 and 1024."));
                 setPromptPrefix(qsTr("Enter number of star points") + " <" + global.numPoints.toString() + ">: ");
             }
             else
@@ -136,8 +135,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify center point: "));
         }
         else
@@ -157,8 +155,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify outer radius of star: "));
         }
         else
@@ -175,8 +172,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify inner radius of star: "));
         }
         else

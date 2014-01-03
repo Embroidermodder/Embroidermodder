@@ -44,8 +44,7 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix(qsTr("Preselect objects before invoking the scale command."));
-        appendPromptHistory();
+        alert(qsTr("Preselect objects before invoking the scale command."));
         endCommand();
         messageBox("information", qsTr("Scale Preselect"), qsTr("Preselect objects before invoking the scale command."));
     }
@@ -107,8 +106,7 @@ function click(x, y)
                 global.destRX    = NaN;
                 global.destRY    = NaN;
                 global.factorRef = NaN;
-                setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                appendPromptHistory();
+                alert(qsTr("Value must be positive and nonzero."));
                 setPromptPrefix(qsTr("Specify second point: "));
             }
             else
@@ -125,8 +123,7 @@ function click(x, y)
             if(global.factorNew <= 0.0)
             {
                 global.factorNew = NaN;
-                setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                appendPromptHistory();
+                alert(qsTr("Value must be positive and nonzero."));
                 setPromptPrefix(qsTr("Specify new length: "));
             }
             else
@@ -159,8 +156,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify base point: "));
             }
             else
@@ -180,7 +176,7 @@ function prompt(str)
             if(str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix(qsTr("Specify reference length") + " <1>: ");
+                setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
                 clearRubber();
                 previewOff();
             }
@@ -188,8 +184,7 @@ function prompt(str)
             {
                 if(isNaN(str))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric distance, second point, or option keyword."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires valid numeric distance, second point, or option keyword."));
                     setPromptPrefix(qsTr("Specify scale factor or [Reference]: "));
                 }
                 else
@@ -211,9 +206,8 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric distance or two points."));
-                    appendPromptHistory();
-                    setPromptPrefix(qsTr("Specify reference length") + " <1>: ");
+                    alert(qsTr("Requires valid numeric distance or two points."));
+                    setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
                 }
                 else
                 {
@@ -241,9 +235,8 @@ function prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                    appendPromptHistory();
-                    setPromptPrefix(qsTr("Specify reference length") + " <1>: ");
+                    alert(qsTr("Value must be positive and nonzero."));
+                    setPromptPrefix(qsTr("Specify reference length") + " {1}: ");
                 }
                 else
                 {
@@ -262,8 +255,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric distance or two points."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires valid numeric distance or two points."));
                     setPromptPrefix(qsTr("Specify second point: "));
                 }
                 else
@@ -276,8 +268,7 @@ function prompt(str)
                         global.destRX    = NaN;
                         global.destRY    = NaN;
                         global.factorRef = NaN;
-                        setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                        appendPromptHistory();
+                        alert(qsTr("Value must be positive and nonzero."));
                         setPromptPrefix(qsTr("Specify second point: "));
                     }
                     else
@@ -302,8 +293,7 @@ function prompt(str)
                     global.destRX    = NaN;
                     global.destRY    = NaN;
                     global.factorRef = NaN;
-                    setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                    appendPromptHistory();
+                    alert(qsTr("Value must be positive and nonzero."));
                     setPromptPrefix(qsTr("Specify second point: "));
                 }
                 else
@@ -321,8 +311,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric distance or second point."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires valid numeric distance or second point."));
                     setPromptPrefix(qsTr("Specify new length: "));
                 }
                 else
@@ -333,8 +322,7 @@ function prompt(str)
                     if(global.factorNew <= 0.0)
                     {
                         global.factorNew = NaN;
-                        setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                        appendPromptHistory();
+                        alert(qsTr("Value must be positive and nonzero."));
                         setPromptPrefix(qsTr("Specify new length: "));
                     }
                     else
@@ -351,8 +339,7 @@ function prompt(str)
                 if(global.factorNew <= 0.0)
                 {
                     global.factorNew = NaN;
-                    setPromptPrefix(qsTr("Value must be positive and nonzero."));
-                    appendPromptHistory();
+                    alert(qsTr("Value must be positive and nonzero."));
                     setPromptPrefix(qsTr("Specify new length: "));
                 }
                 else

@@ -41,7 +41,7 @@ function main()
     global.pointCX = NaN;
     global.pointCY = NaN;
     global.mode = global.mode_NUM_SIDES;
-    setPromptPrefix(qsTr("Enter number of sides") + " <" + global.numSides.toString() + ">: ");
+    setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
 }
 
 //NOTE: click() is run only for left clicks.
@@ -58,7 +58,8 @@ function click(x, y)
         global.centerX = x;
         global.centerY = y;
         global.mode = global.mode_POLYTYPE;
-        setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " <" + global.polyType + ">: ");
+        appendPromptHistory();
+        setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
     }
     else if(global.mode == global.mode_POLYTYPE)
     {
@@ -70,6 +71,7 @@ function click(x, y)
         global.pointIY = y;
         setRubberPoint("POLYGON_INSCRIBE_POINT", global.pointIX, global.pointIY);
         vulcanize();
+        appendPromptHistory();
         endCommand();
     }
     else if(global.mode == global.mode_CIRCUMSCRIBE)
@@ -78,6 +80,7 @@ function click(x, y)
         global.pointCY = y;
         setRubberPoint("POLYGON_CIRCUMSCRIBE_POINT", global.pointCX, global.pointCY);
         vulcanize();
+        appendPromptHistory();
         endCommand();
     }
     else if(global.mode == global.mode_DISTANCE)
@@ -114,9 +117,8 @@ function prompt(str)
             var tmp = Number(str);
             if(isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
-                setPromptPrefix(qsTr("Requires an integer between 3 and 1024."));
-                appendPromptHistory();
-                setPromptPrefix(qsTr("Enter number of sides") + " <" + global.numSides.toString() + ">: ");
+                alert(qsTr("Requires an integer between 3 and 1024."));
+                setPromptPrefix(qsTr("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
             }
             else
             {
@@ -138,8 +140,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Point or option keyword required."));
-                appendPromptHistory();
+                alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify center point or [Sidelength]: "));
             }
             else
@@ -147,7 +148,7 @@ function prompt(str)
                 global.centerX = Number(strList[0]);
                 global.centerY = Number(strList[1]);
                 global.mode = global.mode_POLYTYPE;
-                setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " <" + global.polyType + ">: ");
+                setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
             }
         }
     }
@@ -220,9 +221,8 @@ function prompt(str)
         }
         else
         {
-            setPromptPrefix(qsTr("Invalid option keyword."));
-            appendPromptHistory();
-            setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " <" + global.polyType + ">: ");
+            alert(qsTr("Invalid option keyword."));
+            setPromptPrefix(qsTr("Specify polygon type [Inscribed in circle/Circumscribed around circle]") + " {" + global.polyType + "}: ");
         }
     }
     else if(global.mode == global.mode_INSCRIBE)
@@ -237,8 +237,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Point or option keyword required."));
-                appendPromptHistory();
+                alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify polygon corner point or [Distance]: "));
             }
             else
@@ -263,8 +262,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Point or option keyword required."));
-                appendPromptHistory();
+                alert(qsTr("Point or option keyword required."));
                 setPromptPrefix(qsTr("Specify polygon side point or [Distance]: "));
             }
             else
@@ -281,8 +279,7 @@ function prompt(str)
     {
         if(isNaN(str))
         {
-            setPromptPrefix(qsTr("Requires valid numeric distance."));
-            appendPromptHistory();
+            alert(qsTr("Requires valid numeric distance."));
             setPromptPrefix(qsTr("Specify distance: "));
         }
         else

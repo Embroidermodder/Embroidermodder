@@ -25,8 +25,7 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix(qsTr("Preselect objects before invoking the move command."));
-        appendPromptHistory();
+        alert(qsTr("Preselect objects before invoking the move command."));
         endCommand();
         messageBox("information", qsTr("Move Preselect"), qsTr("Preselect objects before invoking the move command."));
     }
@@ -82,8 +81,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify base point: "));
         }
         else
@@ -103,8 +101,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify destination point: "));
         }
         else

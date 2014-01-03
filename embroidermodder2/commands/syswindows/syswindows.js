@@ -41,8 +41,7 @@ function prompt(str)
     }
     else
     {
-        setPromptPrefix(qsTr("Invalid option keyword."));
-        appendPromptHistory();
+        alert(qsTr("Invalid option keyword."));
         setPromptPrefix(qsTr("Enter an option [Cascade/Tile]: "));
     }
 }

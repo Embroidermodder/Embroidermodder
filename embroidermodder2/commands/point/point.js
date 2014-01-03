@@ -59,8 +59,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify first point: "));
         }
         else
@@ -77,8 +76,7 @@ function prompt(str)
         var strList = str.split(",");
         if(isNaN(strList[0]) || isNaN(strList[1]))
         {
-            setPromptPrefix(qsTr("Invalid point."));
-            appendPromptHistory();
+            alert(qsTr("Invalid point."));
             setPromptPrefix(qsTr("Specify next point: "));
         }
         else

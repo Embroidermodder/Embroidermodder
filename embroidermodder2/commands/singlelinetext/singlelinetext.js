@@ -30,7 +30,7 @@ function main()
     global.textHeight = NaN;
     global.textRotation = NaN;
     global.mode = global.mode_SETGEOM;
-    setPromptPrefix(qsTr("Current font: ") + "\"" + global.textFont + "\" " + qsTr("Text height: ") + textSize());
+    setPromptPrefix(qsTr("Current font: ") + "{" + global.textFont + "} " + qsTr("Text height: ") + "{" +  textSize() + "}");
     appendPromptHistory();
     setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
 }
@@ -50,19 +50,20 @@ function click(x, y)
             setRubberMode("LINE");
             setRubberPoint("LINE_START", global.textX, global.textY);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify text height") + " <" + textSize() + ">: ");
+            setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
         }
         else if(isNaN(global.textHeight))
         {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
-            setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
+            setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
         }
         else if(isNaN(global.textRotation))
         {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setTextAngle(global.textRotation);
+            appendPromptHistory();
             setPromptPrefix(qsTr("Enter text: "));
             global.mode = global.mode_RAPID;
             enablePromptRapidFire();
@@ -196,8 +197,7 @@ function prompt(str)
         }
         else
         {
-            setPromptPrefix(qsTr("Invalid option keyword."));
-            appendPromptHistory();
+            alert(qsTr("Invalid option keyword."));
             setPromptPrefix(qsTr("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
@@ -228,8 +228,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Point or option keyword required."));
-                    appendPromptHistory();
+                    alert(qsTr("Point or option keyword required."));
                     setPromptPrefix(qsTr("Specify start point of text or [Justify/Setfont]: "));
                 }
                 else
@@ -239,7 +238,7 @@ function prompt(str)
                     addRubber("LINE");
                     setRubberMode("LINE");
                     setRubberPoint("LINE_START", global.textX, global.textY);
-                    setPromptPrefix(qsTr("Specify text height") + " <" + textSize() + ">: ");
+                    setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
                 }
             }
         }
@@ -248,19 +247,18 @@ function prompt(str)
             if(str == "")
             {
                 global.textHeight = textSize();
-                setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
+                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else if(isNaN(str))
             {
-                setPromptPrefix(qsTr("Requires valid numeric distance or second point."));
-                appendPromptHistory();
-                setPromptPrefix(qsTr("Specify text height") + " <" + textSize() + ">: ");
+                alert(qsTr("Requires valid numeric distance or second point."));
+                setPromptPrefix(qsTr("Specify text height") + " {" + textSize() + "}: ");
             }
             else
             {
                 global.textHeight = Number(str);
                 setTextSize(global.textHeight);
-                setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
+                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
         else if(isNaN(global.textRotation))
@@ -282,9 +280,8 @@ function prompt(str)
             }
             else if(isNaN(str))
             {
-                setPromptPrefix(qsTr("Requires valid numeric angle or second point."));
-                appendPromptHistory();
-                setPromptPrefix(qsTr("Specify text angle") + " <" + textAngle() + ">: ");
+                alert(qsTr("Requires valid numeric angle or second point."));
+                setPromptPrefix(qsTr("Specify text angle") + " {" + textAngle() + "}: ");
             }
             else
             {

@@ -44,8 +44,7 @@ function main()
     if(numSelected() <= 0)
     {
         //TODO: Prompt to select objects if nothing is preselected
-        setPromptPrefix(qsTr("Preselect objects before invoking the rotate command."));
-        appendPromptHistory();
+        alert(qsTr("Preselect objects before invoking the rotate command."));
         endCommand();
         messageBox("information", qsTr("Rotate Preselect"), qsTr("Preselect objects before invoking the rotate command."));
     }
@@ -136,8 +135,7 @@ function prompt(str)
             var strList = str.split(",");
             if(isNaN(strList[0]) || isNaN(strList[1]))
             {
-                setPromptPrefix(qsTr("Invalid point."));
-                appendPromptHistory();
+                alert(qsTr("Invalid point."));
                 setPromptPrefix(qsTr("Specify base point: "));
             }
             else
@@ -157,7 +155,7 @@ function prompt(str)
             if(str == "R" || str == "REFERENCE") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_REFERENCE;
-                setPromptPrefix(qsTr("Specify the reference angle") + " <0.00>: ");
+                setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
                 previewOff();
             }
@@ -165,8 +163,7 @@ function prompt(str)
             {
                 if(isNaN(str))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric angle, second point, or option keyword."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires valid numeric angle, second point, or option keyword."));
                     setPromptPrefix(qsTr("Specify rotation angle or [Reference]: "));
                 }
                 else
@@ -188,9 +185,8 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric angle or two points."));
-                    appendPromptHistory();
-                    setPromptPrefix(qsTr("Specify the reference angle") + " <0.00>: ");
+                    alert(qsTr("Requires valid numeric angle or two points."));
+                    setPromptPrefix(qsTr("Specify the reference angle") + " {0.00}: ");
                 }
                 else
                 {
@@ -225,8 +221,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric angle or two points."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires valid numeric angle or two points."));
                     setPromptPrefix(qsTr("Specify second point: "));
                 }
                 else
@@ -259,8 +254,7 @@ function prompt(str)
                 var strList = str.split(",");
                 if(isNaN(strList[0]) || isNaN(strList[1]))
                 {
-                    setPromptPrefix(qsTr("Requires valid numeric angle or second point."));
-                    appendPromptHistory();
+                    alert(qsTr("Requires valid numeric angle or second point."));
                     setPromptPrefix(qsTr("Specify the new angle: "));
                 }
                 else
