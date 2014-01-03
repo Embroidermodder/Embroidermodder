@@ -8,12 +8,12 @@
         <location filename="../../cmdprompt.cpp" line="378"/>
         <location filename="../../cmdprompt.cpp" line="573"/>
         <source>Command: </source>
-        <translation type="unfinished"></translation>
+        <translation>Opdrag: </translation>
     </message>
     <message>
         <location filename="../../cmdprompt.cpp" line="575"/>
         <source>*Cancel*</source>
-        <translation type="unfinished"></translation>
+        <translation>*Kanselleer*</translation>
     </message>
 </context>
 <context>
@@ -21,72 +21,72 @@
     <message>
         <location filename="../../embdetails-dialog.cpp" line="28"/>
         <source>Embroidery Design Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Borduur-ontwerp Inligting</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="58"/>
         <source>General Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Algmene Inligting</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="60"/>
         <source>Total Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid Steke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="61"/>
         <source>Real Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid Borduursteke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="62"/>
         <source>Jump Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spring Steke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="63"/>
         <source>Trim Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Knip Steke:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="64"/>
         <source>Total Colors:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoeveelheid Kleure:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="65"/>
         <source>Color Changes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur Veranderings:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="66"/>
         <source>Left:</source>
-        <translation type="unfinished"></translation>
+        <translation>Links:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="67"/>
         <source>Top:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bopunt:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="68"/>
         <source>Right:</source>
-        <translation type="unfinished"></translation>
+        <translation>Regs:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="69"/>
         <source>Bottom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderpunt:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="70"/>
         <source>Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wydte:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="71"/>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoogte:</translation>
     </message>
 </context>
 <context>
@@ -94,47 +94,47 @@
     <message>
         <location filename="../../layer-manager.cpp" line="24"/>
         <source>Layer Manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Laag Beheer</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="27"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="28"/>
         <source>Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Sigbaar</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="29"/>
         <source>Frozen</source>
-        <translation type="unfinished"></translation>
+        <translation>Gevries</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="30"/>
         <source>Z Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Z Waarde</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="31"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="32"/>
         <source>Linetype</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyn Tipe</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="33"/>
         <source>Lineweight</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyn Gewig</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="34"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Afdruk</translation>
     </message>
 </context>
 <context>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="17"/>
         <source>Ne&amp;xt</source>
-        <translation type="unfinished"></translation>
+        <translation>Vo&amp;lgende</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="17"/>
@@ -227,7 +227,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
         <source>Pre&amp;vious</source>
-        <translation type="unfinished"></translation>
+        <translation>Vo&amp;rige</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Open</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
@@ -327,7 +327,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Plak</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
@@ -338,7 +338,7 @@
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <location filename="../../mainwindow.cpp" line="50"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Help</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
@@ -619,7 +619,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="65"/>
         <source>&amp;Underline Text</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Onderlyn Teks</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="65"/>
@@ -819,7 +819,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="88"/>
         <source>&amp;Day</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dag</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="88"/>
@@ -829,7 +829,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="89"/>
         <source>&amp;Night</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nag</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="89"/>
@@ -859,7 +859,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="189"/>
         <source>http://embroidermodder.sourceforge.net</source>
-        <translation type="unfinished"></translation>
+        <translation>http://embroidermodder.sourceforge.net</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="191"/>
@@ -869,7 +869,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="193"/>
         <source>Embroidery formats by Josh Varga.</source>
-        <translation type="unfinished"></translation>
+        <translation>Borduur formate deur Josh Varga.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="194"/>
@@ -885,7 +885,7 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="197"/>
         <source>Free under the zlib/libpng license.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gratis onder the zlib/libpng lisensie.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="246"/>
@@ -895,12 +895,12 @@
     <message>
         <location filename="../../mainwindow-commands.cpp" line="265"/>
         <source>&amp;Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vorige</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="266"/>
         <source>&amp;Next</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Volgende</translation>
     </message>
     <message>
         <location filename="../../mainwindow-commands.cpp" line="267"/>
@@ -1011,7 +1011,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="62"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Help</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="63"/>
@@ -1026,7 +1026,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="65"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="66"/>
@@ -1036,7 +1036,7 @@
     <message>
         <location filename="../../mainwindow.cpp" line="340"/>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Open</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="345"/>
@@ -1056,27 +1056,27 @@
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="157"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rooi</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="158"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Geel</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="159"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Groen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="160"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Siaan</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="161"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blou</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="162"/>
@@ -1086,12 +1086,12 @@
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="163"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Wit</translation>
     </message>
     <message>
         <location filename="../../mainwindow-toolbars.cpp" line="164"/>
         <source>Other...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ander...</translation>
     </message>
 </context>
 <context>
@@ -1099,7 +1099,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="102"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eienskappe</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="140"/>
@@ -1120,12 +1120,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="277"/>
         <source>Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Blok</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="278"/>
         <source>Circle</source>
-        <translation type="unfinished"></translation>
+        <translation>Sirkel</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="279"/>
@@ -1175,7 +1175,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="288"/>
         <source>Image</source>
-        <translation type="unfinished"></translation>
+        <translation>Beeld</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="289"/>
@@ -1185,17 +1185,17 @@
     <message>
         <location filename="../../property-editor.cpp" line="290"/>
         <source>Line</source>
-        <translation type="unfinished"></translation>
+        <translation>Lyn</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="291"/>
         <source>Point</source>
-        <translation type="unfinished"></translation>
+        <translation>Punt</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="292"/>
         <source>Polygon</source>
-        <translation type="unfinished"></translation>
+        <translation>Veelhoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="293"/>
@@ -1210,7 +1210,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="295"/>
         <source>Rectangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Reghoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="296"/>
@@ -1220,12 +1220,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="298"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekend</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="807"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="809"/>
@@ -1235,7 +1235,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="810"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleur</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="811"/>
@@ -1293,7 +1293,7 @@
         <location filename="../../property-editor.cpp" line="835"/>
         <location filename="../../property-editor.cpp" line="927"/>
         <source>Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>Radius</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="836"/>
@@ -1311,7 +1311,7 @@
         <location filename="../../property-editor.cpp" line="1147"/>
         <location filename="../../property-editor.cpp" line="1290"/>
         <source>Start X</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="839"/>
@@ -1319,13 +1319,13 @@
         <location filename="../../property-editor.cpp" line="1148"/>
         <location filename="../../property-editor.cpp" line="1291"/>
         <source>Start Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Begin Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="840"/>
         <location filename="../../property-editor.cpp" line="1149"/>
         <source>End X</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="841"/>
@@ -1339,7 +1339,7 @@
         <location filename="../../property-editor.cpp" line="1247"/>
         <location filename="../../property-editor.cpp" line="1332"/>
         <source>Area</source>
-        <translation type="unfinished"></translation>
+        <translation>Area</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="843"/>
@@ -1349,12 +1349,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="844"/>
         <source>Chord</source>
-        <translation type="unfinished"></translation>
+        <translation>Koord</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="845"/>
         <source>Included Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingeslote Hoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="888"/>
@@ -1367,7 +1367,7 @@
     <message>
         <location filename="../../property-editor.cpp" line="890"/>
         <source>Clockwise</source>
-        <translation type="unfinished"></translation>
+        <translation>Kloksgewyse</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="905"/>
@@ -1376,7 +1376,7 @@
         <location filename="../../property-editor.cpp" line="1378"/>
         <location filename="../../property-editor.cpp" line="1431"/>
         <source>Position X</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisie X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="906"/>
@@ -1385,17 +1385,17 @@
         <location filename="../../property-editor.cpp" line="1379"/>
         <location filename="../../property-editor.cpp" line="1432"/>
         <source>Position Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Posisie Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="928"/>
         <source>Diameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Deursnee</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="930"/>
         <source>Circumference</source>
-        <translation type="unfinished"></translation>
+        <translation>Omtrek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1036"/>
@@ -1421,19 +1421,19 @@
         <location filename="../../property-editor.cpp" line="1073"/>
         <location filename="../../property-editor.cpp" line="1330"/>
         <source>Width</source>
-        <translation type="unfinished"></translation>
+        <translation>Wydte</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1074"/>
         <location filename="../../property-editor.cpp" line="1331"/>
         <location filename="../../property-editor.cpp" line="1401"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoogte</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1097"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Naam</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1098"/>
@@ -1444,13 +1444,13 @@
         <location filename="../../property-editor.cpp" line="1117"/>
         <location filename="../../property-editor.cpp" line="1292"/>
         <source>2nd X</source>
-        <translation type="unfinished"></translation>
+        <translation>2de X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1118"/>
         <location filename="../../property-editor.cpp" line="1293"/>
         <source>2nd Y</source>
-        <translation type="unfinished"></translation>
+        <translation>de Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1119"/>
@@ -1477,13 +1477,13 @@
     <message>
         <location filename="../../property-editor.cpp" line="1153"/>
         <source>Angle</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1154"/>
         <location filename="../../property-editor.cpp" line="1248"/>
         <source>Length</source>
-        <translation type="unfinished"></translation>
+        <translation>Lengte</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1211"/>
@@ -1533,53 +1533,53 @@
     <message>
         <location filename="../../property-editor.cpp" line="1322"/>
         <source>Corner 1 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 1 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1323"/>
         <source>Corner 1 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 1 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1324"/>
         <source>Corner 2 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 2 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1325"/>
         <source>Corner 2 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 2 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1326"/>
         <source>Corner 3 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 3 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1327"/>
         <source>Corner 3 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 3 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1328"/>
         <source>Corner 4 X</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 4 X</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1329"/>
         <source>Corner 4 Y</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoek 4 Y</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="297"/>
         <location filename="../../property-editor.cpp" line="1396"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1398"/>
         <source>Contents</source>
-        <translation type="unfinished"></translation>
+        <translation>Inhoud</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1399"/>
@@ -1599,12 +1599,12 @@
     <message>
         <location filename="../../property-editor.cpp" line="1452"/>
         <source>Backward</source>
-        <translation type="unfinished"></translation>
+        <translation>Agteruit</translation>
     </message>
     <message>
         <location filename="../../property-editor.cpp" line="1453"/>
         <source>UpsideDown</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondertebo</translation>
     </message>
 </context>
 <context>
@@ -1642,7 +1642,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="20"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Algemeen</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="21"/>
@@ -1727,7 +1727,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="107"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Agtergrond</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="110"/>
@@ -1754,12 +1754,12 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="123"/>
         <source>Use Texture</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik Tekstuur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="136"/>
         <source>Use Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="163"/>
@@ -1791,7 +1791,7 @@
         <location filename="../../settings-dialog.cpp" line="407"/>
         <location filename="../../settings-dialog.cpp" line="1647"/>
         <source>Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleure</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="275"/>
@@ -1802,7 +1802,7 @@
         <location filename="../../settings-dialog.cpp" line="285"/>
         <location filename="../../settings-dialog.cpp" line="419"/>
         <source>Background Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Agtergrond Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="295"/>
@@ -1847,7 +1847,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="409"/>
         <source>Text Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="438"/>
@@ -1872,7 +1872,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="470"/>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Geskiedenis</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="472"/>
@@ -1928,7 +1928,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="943"/>
         <source>Trimming</source>
-        <translation type="unfinished"></translation>
+        <translation>Knip</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="945"/>
@@ -1953,7 +1953,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1003"/>
         <source>Save Ink</source>
-        <translation type="unfinished"></translation>
+        <translation>Bespaar Ink</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1005"/>
@@ -2064,13 +2064,13 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1278"/>
         <source>Ruler Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Liniaal Eenhede</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1293"/>
         <location filename="../../settings-dialog.cpp" line="1295"/>
         <source>Ruler Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Liniaal Kleur</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1313"/>
@@ -2090,12 +2090,12 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1368"/>
         <source>Endpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Eindpunt</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1374"/>
         <source>Midpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>Middelpunt</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1380"/>
@@ -2110,7 +2110,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1392"/>
         <source>Quadrant</source>
-        <translation type="unfinished"></translation>
+        <translation>Kwadrant</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1398"/>
@@ -2140,7 +2140,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1428"/>
         <source>Nearest</source>
-        <translation type="unfinished"></translation>
+        <translation>Naaste</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1434"/>
@@ -2150,7 +2150,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1440"/>
         <source>Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Paralel</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1462"/>
@@ -2235,7 +2235,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1671"/>
         <source>Sizes</source>
-        <translation type="unfinished"></translation>
+        <translation>Groottes</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1673"/>
@@ -2250,27 +2250,27 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1712"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rooi</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1713"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Geel</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1714"/>
         <source>Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Groen</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1715"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Siaan</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1716"/>
         <source>Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Blou</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1717"/>
@@ -2280,7 +2280,7 @@
     <message>
         <location filename="../../settings-dialog.cpp" line="1718"/>
         <source>White</source>
-        <translation type="unfinished"></translation>
+        <translation>Wit</translation>
     </message>
     <message>
         <location filename="../../settings-dialog.cpp" line="1753"/>
@@ -2358,7 +2358,7 @@
     <message>
         <location filename="../../view.cpp" line="2163"/>
         <source>Rotate 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Roteer 1</translation>
     </message>
     <message>
         <location filename="../../view.cpp" line="2185"/>
@@ -2368,7 +2368,7 @@
     <message>
         <location filename="../../view.cpp" line="2214"/>
         <source>Scale 1 </source>
-        <translation type="unfinished"></translation>
+        <translation>Skaal 1</translation>
     </message>
 </context>
 </TS>
