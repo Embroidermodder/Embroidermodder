@@ -1,11 +1,14 @@
 #include "format-dxf.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "helpers-misc.h"
+#include "helpers-unused.h"
+#include "emb-hash.h"
 
 #include "geom-arc.h"
 /*#include "geom-line.h" */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 /* DXF Version Identifiers */
 #define DXF_VERSION_R10 "AC1006"
@@ -17,6 +20,7 @@
 #define DXF_VERSION_R18 "AC1018"
 #define DXF_VERSION_R21 "AC1021"
 #define DXF_VERSION_R24 "AC1024"
+#define DXF_VERSION_R27 "AC1027"
 
 #define DXF_VERSION_2000 "AC1015"
 #define DXF_VERSION_2002 "AC1015"
@@ -25,6 +29,7 @@
 #define DXF_VERSION_2007 "AC1021"
 #define DXF_VERSION_2009 "AC1021"
 #define DXF_VERSION_2010 "AC1024"
+#define DXF_VERSION_2013 "AC1027"
 
 /* Based on the DraftSight color table */
 static const unsigned char _dxfColorTable[][3] = {
@@ -297,22 +302,32 @@ char* readLine(FILE* file)
 int readDxf(EmbPattern* pattern, const char* fileName)
 {
 
-    FILE* file = fopen(fileName, "r");
-    char* buff;
+    FILE* file = 0;
+    char* buff = "";
 
-    char* dxfVersion;
-    char* section;
-    char* tableName;
-    char* layerName;
-    char* entityType;
-    /*std::map<string, char> layerMap; TODO: port to C */     /* <layerName, colorNum> */
-    /*std::map<string, int> colorIndexMap; TODO: port to C */ /* <layerName, pattern->currentColorIndex> */
+    char* dxfVersion = "";
+    char* section = "";
+    char* tableName = "";
+    char* layerName = "";
+    char* entityType = "";
+    EmbHash* layerColorHash = 0; /* hash <layerName, EmbColor> */
+
+    int eof = 0; /* End Of File */
 
     double bulge, firstX, firstY, x, y, prevX, prevY;
     char firstStitch = 1;
     char bulgeFlag = 0;
     int fileLength = 0;
     unsigned char colorNum = 0;
+
+    layerColorHash = embHash_create();
+    if(!layerColorHash) { /* TODO: error allocating memory for layerColorHash */ return 0; }
+
+    file = fopen(fileName, "r");
+    if(!file)
+    {
+        return 0;
+    }
 
     fseek(file, 0L, SEEK_END);
 
@@ -322,163 +337,177 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     while(ftell(file) < fileLength)
     {
         buff = readLine(file);
-        if((strcmp(buff,"HEADER") == 0) || (strcmp(buff, "TABLES") == 0) || (strcmp(buff, "ENTITIES") == 0))
+        /*printf("%s\n", buff);*/
+        if((!strcmp(buff, "HEADER"))   ||
+           (!strcmp(buff, "CLASSES"))  ||
+           (!strcmp(buff, "TABLES"))   ||
+           (!strcmp(buff, "BLOCKS"))   ||
+           (!strcmp(buff, "ENTITIES")) ||
+           (!strcmp(buff, "OBJECTS"))  ||
+           (!strcmp(buff, "THUMBNAILIMAGE")))
         {
             section = buff;
+            printf("SECTION:%s\n", buff);
         }
-        if(strcmp(buff, "ENDSEC") == 0)
+        if(!strcmp(buff, "ENDSEC"))
         {
-            section = NULL;
+            section = "";
+            printf("ENDSEC:%s\n", buff);
         }
-        if((strcmp(buff, "LWPOLYLINE") == 0) || (strcmp(buff, "CIRCLE") == 0))
+        if((!strcmp(buff, "LWPOLYLINE")) || (!strcmp(buff, "CIRCLE")))
         {
             entityType = buff;
         }
-        if(strcmp(buff, "EOF") == 0)
+        if(!strcmp(buff, "EOF"))
         {
-            /* embPattern_addStitchAbs(pattern, 0.0, 0.0, END, 1); TODO: determine if this is needed for the C port */
+            eof = 1;
         }
 
-        if(strcmp(section, "HEADER") == 0)
+        if(!strcmp(section, "HEADER"))
         {
-            if(strcmp(buff, "$ACADVER") == 0)
+            if(!strcmp(buff, "$ACADVER"))
             {
                 buff = readLine(file);
                 dxfVersion = readLine(file);
                 /* TODO: Allow these versions when POLYLINE is handled. */
-                if((strcmp(dxfVersion, DXF_VERSION_R10) == 0)
-                || (strcmp(dxfVersion, DXF_VERSION_R11) == 0)
-                || (strcmp(dxfVersion, DXF_VERSION_R12) == 0)
-                || (strcmp(dxfVersion, DXF_VERSION_R13) == 0)
-                || (strcmp(dxfVersion, DXF_VERSION_R14) == 0))
+                if((!strcmp(dxfVersion, DXF_VERSION_R10))
+                || (!strcmp(dxfVersion, DXF_VERSION_R11))
+                || (!strcmp(dxfVersion, DXF_VERSION_R12))
+                || (!strcmp(dxfVersion, DXF_VERSION_R13))
+                || (!strcmp(dxfVersion, DXF_VERSION_R14)))
                     return 0;
             }
         }
-        else if (strcmp(section,"TABLES") == 0)
+        else if(!strcmp(section,"TABLES"))
         {
-            if(strcmp(buff,"ENDTAB") == 0)
+            if(!strcmp(buff,"ENDTAB"))
             {
                 tableName = NULL;
             }
 
             if(tableName == NULL)
             {
-                if(strcmp(buff,"2") == 0) /* Table Name */
+                if(!strcmp(buff,"2")) /* Table Name */
                 {
                     tableName = readLine(file);
                 }
             }
-            else if (strcmp(tableName, "LAYER") == 0)
+            else if(!strcmp(tableName, "LAYER"))
             {
                 /* Common Group Codes for Tables */
-                if(strcmp(buff,"5") == 0) /* Handle */
+                if(!strcmp(buff,"5")) /* Handle */
                 {
                     buff = readLine(file);
                     continue;
                 }
-                else if(strcmp(buff,"330") == 0) /* Soft Pointer */
+                else if(!strcmp(buff,"330")) /* Soft Pointer */
                 {
                     buff = readLine(file);
                     continue;
                 }
-                else if(strcmp(buff,"100") == 0) /* Subclass Marker */
+                else if(!strcmp(buff,"100")) /* Subclass Marker */
                 {
                     buff = readLine(file);
                     continue;
                 }
-                else if(strcmp(buff,"70") == 0) /* Number of Entries in Table */
+                else if(!strcmp(buff,"70")) /* Number of Entries in Table */
                 {
                     buff = readLine(file);
                     continue;
                 }
                 /* The meaty stuff */
-                else if(strcmp(buff,"2") == 0) /* Layer Name */
+                else if(!strcmp(buff,"2")) /* Layer Name */
                 {
                     layerName = readLine(file);
                 }
-                else if(strcmp(buff,"62") == 0) /* Color Number */
+                else if(!strcmp(buff,"62")) /* Color Number */
                 {
                     buff = readLine(file);
                     colorNum = atoi(buff);
-                    /*layerMap[layerName] = colorNum;
-                    colorIndexMap[layerName] = (pattern_AddThread(pattern,
-                            _dxfColorTable[colorNum][0],
-                            _dxfColorTable[colorNum][1],
-                            _dxfColorTable[colorNum][2], layerName,
-                            buff) - 1); TODO: port to C */
+/*
+                    TODO: finish this
+                    unsigned char colorNum = atoi(buff);
+                    EmbColor* co = embColor_create(_dxfColorTable[colorNum][0], _dxfColorTable[colorNum][1], _dxfColorTable[colorNum][2]);
+                    if(!co) { / TODO: error allocating memory for EmbColor  return 0; }
+                    printf("inserting:%s,%d,%d,%d\n", layerName, co->r, co->g, co->b);
+                    if(embHash_insert(layerColorHash, emb_strdup(layerName), co))
+                    {
+                         TODO: log error: failed inserting into layerColorHash
+                    }
+*/
                     layerName = NULL;
                 }
             }
         }
-        else if(strcmp(section,"ENTITIES") == 0)
+        else if(!strcmp(section,"ENTITIES"))
         {
             /* Common Group Codes for Entities */
-            if(strcmp(buff, "5") == 0) /* Handle */
+            if(!strcmp(buff, "5")) /* Handle */
             {
                 buff = readLine(file);
                 continue;
             }
-            else if(strcmp(buff, "330") == 0) /* Soft Pointer */
+            else if(!strcmp(buff, "330")) /* Soft Pointer */
             {
                 buff = readLine(file);
                 continue;
             }
-            else if(strcmp(buff, "100") == 0) /* Subclass Marker */
+            else if(!strcmp(buff, "100")) /* Subclass Marker */
             {
                 buff = readLine(file);
                 continue;
             }
-            else if(strcmp(buff, "8") == 0) /* Layer Name */
+            else if(!strcmp(buff, "8")) /* Layer Name */
             {
                 buff = readLine(file);
                 /* embPattern_changeColor(pattern, colorIndexMap[buff]); TODO: port to C */
                 continue;
             }
 
-            if(strcmp(entityType,"LWPOLYLINE") == 0)
+            if(!strcmp(entityType,"LWPOLYLINE"))
             {
                 double* arcMidX = 0;
                 double* arcMidY = 0;
                 /* The not so important group codes */
-                if(strcmp(buff, "90") == 0) /* Vertices */
+                if(!strcmp(buff, "90")) /* Vertices */
                 {
                     buff = readLine(file);
                     continue;
                 }
-                else if(strcmp(buff,"70") == 0) /* Polyline Flag */
+                else if(!strcmp(buff,"70")) /* Polyline Flag */
                 {
                     buff = readLine(file);
                     continue;
                 }
                 /* TODO: Try to use the widths at some point */
-                else if(strcmp(buff,"40") == 0) /* Starting Width */
+                else if(!strcmp(buff,"40")) /* Starting Width */
                 {
                     buff = readLine(file);
                     continue;
                 }
-                else if(strcmp(buff,"41") == 0) /* Ending Width */
+                else if(!strcmp(buff,"41")) /* Ending Width */
                 {
                     buff = readLine(file);
                     continue;
                 }
-                else if(strcmp(buff,"43") == 0) /* Constant Width */
+                else if(!strcmp(buff,"43")) /* Constant Width */
                 {
                     buff = readLine(file);
                     continue;
                 }
                 /* The meaty stuff */
-                else if(strcmp(buff,"42") == 0) /* Bulge */
+                else if(!strcmp(buff,"42")) /* Bulge */
                 {
                     buff = readLine(file);
                     bulge = atof(buff);
                     bulgeFlag = 1;
                 }
-                else if(strcmp(buff,"10") == 0) /* X */
+                else if(!strcmp(buff,"10")) /* X */
                 {
                     buff = readLine(file);
                     x = atof(buff);
                 }
-                else if(strcmp(buff,"20") == 0) /* Y */
+                else if(!strcmp(buff,"20")) /* Y */
                 {
                     buff = readLine(file);
                     y = atof(buff);
@@ -511,7 +540,7 @@ int readDxf(EmbPattern* pattern, const char* fileName)
                         firstStitch = 0;
                     }
                 }
-                else if(strcmp(buff,"0") == 0)
+                else if(!strcmp(buff,"0"))
                 {
                     entityType = NULL;
                     firstStitch = 1;
@@ -536,14 +565,19 @@ int readDxf(EmbPattern* pattern, const char* fileName)
 
     fclose(file);
 
-    return 1;
-
-    return 0; /*TODO: remove this. Port ReadDxf to C */
+    if(!eof)
+    {
+        /* The EOF item must be present at the end of file to be considered a valid DXF file. */
+        /* TODO: log error: missing EOF at end of DXF file */
+    }
+    return eof;
 }
 
 
 int writeDxf(EmbPattern* pattern, const char* fileName)
 {
+    emb_unused(pattern); /*TODO: finish writeDxf */
+    emb_unused(fileName); /*TODO: finish writeDxf */
     return 0; /*TODO: finish writeDxf */
 }
 
