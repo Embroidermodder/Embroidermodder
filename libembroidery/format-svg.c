@@ -2966,6 +2966,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     EmbPointList* polPointList = 0;
     EmbRectObjectList* rObjList = 0;
     EmbRect rect;
+    EmbColor color;
 
     char tmpX[32];
     char tmpY[32];
@@ -3013,7 +3014,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(cObjList)
     {
         circle = cObjList->circleObj.circle;
-        EmbColor color = cObjList->circleObj.color;
+        color = cObjList->circleObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
         fprintf(file, "\n<circle stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" r=\"%f\" />",
                         color.r,
@@ -3030,7 +3031,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(eObjList)
     {
         ellipse = eObjList->ellipseObj.ellipse;
-        EmbColor color = eObjList->ellipseObj.color;
+        color = eObjList->ellipseObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
         fprintf(file, "\n<ellipse stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" />",
                         color.r,
@@ -3048,7 +3049,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(liObjList)
     {
         line = liObjList->lineObj.line;
-        EmbColor color = liObjList->lineObj.color;
+        color = liObjList->lineObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
         fprintf(file, "\n<line stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                         color.r,
@@ -3066,7 +3067,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(poObjList)
     {
         point = poObjList->pointObj.point;
-        EmbColor color = poObjList->pointObj.color;
+        color = poObjList->pointObj.color;
         /* See SVG Tiny 1.2 Spec:
         * Section 9.5 The 'line' element
         * Section C.6 'path' element implementation notes */
@@ -3089,7 +3090,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         polPointList = polObjList->polylineObj->pointList;
         if(polPointList)
         {
-            EmbColor color = polObjList->polylineObj->color;
+            color = polObjList->polylineObj->color;
             /* TODO: use proper thread width for stoke-width rather than just 0.2 */
             fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
                     color.r,
@@ -3113,7 +3114,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     while(rObjList)
     {
         rect = rObjList->rectObj.rect;
-        EmbColor color = rObjList->rectObj.color;
+        color = rObjList->rectObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
         fprintf(file, "\n<rect stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" />",
                         color.r,
@@ -3136,7 +3137,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
             if(stList->stitch.flags == NORMAL && !isNormal)
             {
                     isNormal = 1;
-                    EmbColor color = embThreadList_getAt(pattern->threadList, stList->stitch.color).color;
+                    color = embThreadList_getAt(pattern->threadList, stList->stitch.color).color;
                     /* TODO: use proper thread width for stoke-width rather than just 0.2 */
                     fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
                                 color.r,
