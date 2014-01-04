@@ -137,15 +137,15 @@ return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
         expEncode(b, (char)roundDouble(dx), (char)roundDouble(dy), flags);
         if((b[0] == 128) && ((b[1] == 1) || (b[1] == 2) || (b[1] == 4)))
         {
-            fprintf(file, "%c%c%c%c", b[0], b[1], b[2], b[3]);
+            /* fprintf(file, "%c%c%c%c", b[0], b[1], b[2], b[3]); TODO: finish embFile_printf */
         }
         else
         {
-            fprintf(file, "%c%c", b[0], b[1]);
+            /* fprintf(file, "%c%c", b[0], b[1]); TODO: finish embFile_printf */
         }
         stitches = stitches->next;
     }
-    fprintf(file, "\x1a");
+    /* fprintf(file, "\x1a"); TODO: finish embFile_printf */
     embFile_close(file);
     return 1;
 #endif /* ARDUINO TODO: This is temporary. Remove when complete. */

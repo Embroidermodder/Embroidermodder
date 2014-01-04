@@ -5,7 +5,7 @@
 #include "format-svg.h"
 #include "helpers-misc.h"
 
-EmbColor svgColorToEmbColor(const char* colorString)
+EmbColor svgColorToEmbColor(char* colorString)
 {
     unsigned char r = 0;
     unsigned char g = 0;
@@ -23,7 +23,15 @@ EmbColor svgColorToEmbColor(const char* colorString)
     else if(length == 4 && colorStr[0] == '#') /* Three digit hex — #rgb */
     {
         /* Convert the 3 digit hex to a six digit hex */
-        char hex[7] = { colorStr[1], colorStr[1], colorStr[2], colorStr[2], colorStr[3], colorStr[3], 0 };
+        char hex[7];
+        hex[0] = colorStr[1];
+        hex[1] = colorStr[1];
+        hex[2] = colorStr[2];
+        hex[3] = colorStr[2];
+        hex[4] = colorStr[3];
+        hex[5] = colorStr[3];
+        hex[6] = 0;
+
         return embColor_fromHexStr(hex);
     }
     else if(strstr(colorStr, "%")) /* Float functional — rgb(R%, G%, B%) */
