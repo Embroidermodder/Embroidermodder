@@ -311,10 +311,12 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     double bulge, firstX, firstY, x, y, prevX, prevY;
     char firstStitch = 1;
     char bulgeFlag = 0;
+    int fileLength = 0;
+    unsigned char colorNum = 0;
 
     fseek(file, 0L, SEEK_END);
 
-    int fileLength = ftell(file);
+    fileLength = ftell(file);
     fseek(file, 0L, SEEK_SET);
 
     while(ftell(file) < fileLength)
@@ -397,7 +399,7 @@ int readDxf(EmbPattern* pattern, const char* fileName)
                 else if(strcmp(buff,"62") == 0) /* Color Number */
                 {
                     buff = readLine(file);
-                    unsigned char colorNum = atoi(buff);
+                    colorNum = atoi(buff);
                     /*layerMap[layerName] = colorNum;
                     colorIndexMap[layerName] = (pattern_AddThread(pattern,
                             _dxfColorTable[colorNum][0],
