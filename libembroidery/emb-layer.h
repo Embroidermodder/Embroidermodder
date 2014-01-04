@@ -5,7 +5,13 @@
 extern "C" {
 #endif
 
+#include "emb-color.h"
 
+typedef struct EmbLayer_
+{
+    EmbColor color;
+    const char* name;
+} EmbLayer;
 
 #ifdef __cplusplus
 }

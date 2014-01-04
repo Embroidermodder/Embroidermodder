@@ -1,7 +1,7 @@
 INCLUDEPATH += ../libembroidery
 
 msvc {
-QMAKE_CFLAGS += /Za #equivalent of -pedantic
+QMAKE_CFLAGS += /Za #equivalent of -pedantic-errors
 }
 
 !msvc {
