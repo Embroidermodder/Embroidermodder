@@ -2,8 +2,19 @@ INCLUDEPATH += ../libembroidery
 
 QMAKE_CFLAGS += -std=c89
 
+msvc {
+QMAKE_CFLAGS += /Za #equivalent of -pedantic
+}
+
+!msvc {
+QMAKE_CFLAGS += -pedantic
+
+#Ensure anything that does not strictly adhere to C89 is treated as an error
+QMAKE_CFLAGS_WARN_ON += -Werror=pedantic
+
 #Ensure all implicit function declarations are errors rather than warnings
 QMAKE_CFLAGS_WARN_ON += -Werror=implicit-function-declaration
+}
 
 #Uncomment line below to consider all warnings as errors
 #QMAKE_CFLAGS_WARN_ON += -Werror
