@@ -3,6 +3,7 @@ CONFIG -= debug_and_release qt
 CONFIG += console debug
 #CONFIG += console release
 CONFIG -= app_bundle
+CONFIG += silent #Comment this out for verbose output
 
 TARGET = libembroidery-convert
 

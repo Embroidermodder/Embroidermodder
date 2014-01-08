@@ -1,6 +1,7 @@
 TEMPLATE = app
 CONFIG -= debug_and_release
 CONFIG += debug #This adds -g to CXXFLAGS so valgrind can locate the exact line.
+CONFIG += silent #Comment this out for verbose output
 
 ICON = embroidermodder2.icns
 

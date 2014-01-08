@@ -3,6 +3,7 @@ CONFIG  += plugin shared warn_on
 CONFIG  -= debug_and_release
 CONFIG  += release
 CONFIG  -= debug
+CONFIG += silent #Comment this out for verbose output
 
 TARGET = embroidery-thumbnailer-kde4
 
