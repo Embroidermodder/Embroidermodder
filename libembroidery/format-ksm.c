@@ -1,10 +1,15 @@
 #include "format-ksm.h"
 #include "helpers-binary.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
-static void ksmEncode(unsigned char *b, char dx, char dy, int flags)
+static void ksmEncode(unsigned char* b, char dx, char dy, int flags)
 {
-    /* TODO: pointer safety */
+    if(!b)
+    {
+        embLog_error("format-ksm.c ksmEncode(), b argument is null\n");
+        return;
+    }
     if(flags == TRIM)
     {
         b[0] = 128;
@@ -32,10 +37,13 @@ int readKsm(EmbPattern* pattern, const char* fileName)
     char b[3];
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-ksm.c readKsm(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-ksm.c readKsm(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
-        /*TODO: set status here "Error opening KSM file for read:" */
+        embLog_error("format-ksm.c readKsm(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -74,9 +82,13 @@ int writeKsm(EmbPattern* pattern, const char* fileName)
     int i;
     unsigned char b[4];
 
+    if(!pattern) { embLog_error("format-ksm.c writeKsm(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-ksm.c writeKsm(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-ksm.c writeKsm(), cannot open %s for writing\n", fileName);
         return 0;
     }
     for(i = 0; i < 0x80; i++)

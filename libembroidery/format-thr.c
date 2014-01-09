@@ -1,5 +1,6 @@
 #include "format-thr.h"
 #include "helpers-binary.h"
+#include "emb-logging.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -48,14 +49,18 @@ int readThr(EmbPattern* pattern, const char* fileName)
     unsigned char r, g, b;
     int currentColor;
     int i;
-
     FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-thr.c readThr(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-thr.c readThr(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-thr.c readThr(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     header.sigVersion  = binaryReadUInt32(file);
     header.length      = binaryReadUInt32(file);
     header.numStiches  = binaryReadUInt16(file);
@@ -137,12 +142,16 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colorpointer = 0;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-thr.c writeThr(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-thr.c writeThr(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
-        /*TODO: set status here "Error opening THR file for write:" */
+        embLog_error("format-thr.c writeThr(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
     stitchLength = embStitchList_count(pattern->stitchList);
     memset(&header, 0, sizeof(ThredHeader));
     header.sigVersion = 0x746872 | (version << 24);

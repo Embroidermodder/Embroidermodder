@@ -1,4 +1,5 @@
 #include "emb-point.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /**************************************************/
@@ -30,17 +31,17 @@ EmbPoint embPoint_make(double x, double y)
 
 EmbPointList* embPointList_create(double x, double y)
 {
-    EmbPointList* heapPointObj = (EmbPointList*)malloc(sizeof(EmbPointList));
-    /* TODO: malloc fail error */
-    heapPointObj->point.xx = x;
-    heapPointObj->point.yy = y;
-    heapPointObj->next = 0;
-    return heapPointObj;
+    EmbPointList* heapPointList = (EmbPointList*)malloc(sizeof(EmbPointList));
+    if(!heapPointList) { embLog_error("emb-point.c embPointList_create(), cannot allocate memory for heapPointList\n"); return 0; }
+    heapPointList->point.xx = x;
+    heapPointList->point.yy = y;
+    heapPointList->next = 0;
+    return heapPointList;
 }
 
 EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
 {
-    /* TODO: pointer safety */
+    if(!pointer) { embLog_error("emb-point.c embPointList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbPointList*)malloc(sizeof(EmbPointList));
     /* TODO: malloc fail error */
     pointer = pointer->next;
@@ -97,7 +98,7 @@ EmbPointObject embPointObject_make(double x, double y)
 EmbPointObject* embPointObject_create(double x, double y)
 {
     EmbPointObject* heapPointObj = (EmbPointObject*)malloc(sizeof(EmbPointObject));
-    /* TODO: malloc fail error */
+    if(!heapPointObj) { embLog_error("emb-point.c embPointObject_create(), cannot allocate memory for heapPointObj\n"); return 0; }
     heapPointObj->point.xx = x;
     heapPointObj->point.yy = y;
     return heapPointObj;
@@ -107,15 +108,14 @@ EmbPointObject* embPointObject_create(double x, double y)
 /* EmbPointObjectList                             */
 /**************************************************/
 
-EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data)
+void embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data)
 {
-    /* TODO: pointer safety */
+    if(!pointer) { embLog_error("emb-point.c embPointObjectList_add(), pointer argument is null\n"); return; }
     pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
     pointer = pointer->next;
     pointer->pointObj = data;
     pointer->next = 0;
-    return pointer;
 }
 
 int embPointObjectList_count(EmbPointObjectList* pointer)

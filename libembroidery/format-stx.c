@@ -2,6 +2,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 #include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -91,7 +92,7 @@ static int ReadStxThread(StxThread* thread, FILE* file)
 int readStx(EmbPattern* pattern, const char* fileName)
 {
     int i, threadCount;
-    unsigned char* gif;
+    unsigned char* gif = 0;
     /* public Bitmap Image; */
     StxThread* StxThreads = 0;
     unsigned char headerBytes[7];
@@ -104,9 +105,13 @@ int readStx(EmbPattern* pattern, const char* fileName)
     int bottom,top;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-stx.c readStx(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-stx.c readStx(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-stx.c readStx(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -223,8 +228,8 @@ int readStx(EmbPattern* pattern, const char* fileName)
 
 int writeStx(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeStx */
-    emb_unused(fileName); /*TODO: finish writeStx */
+    if(!pattern) { embLog_error("format-stx.c writeStx(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-stx.c writeStx(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeStx */
 }
 

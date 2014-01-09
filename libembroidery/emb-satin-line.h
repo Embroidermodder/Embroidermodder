@@ -10,11 +10,11 @@ extern "C" {
 typedef struct EmbSatinOutline_
 {
     int length;
-    EmbVector* Side1;
-    EmbVector* Side2;
+    EmbVector* side1;
+    EmbVector* side2;
 } EmbSatinOutline;
 
-void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
+void embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
 EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double density);
 
 #ifdef __cplusplus

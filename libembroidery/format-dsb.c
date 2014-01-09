@@ -1,18 +1,24 @@
 #include "format-dsb.h"
 #include "helpers-misc.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
 int readDsb(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file= fopen(fileName,"rb");
+    FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-dsb.c readDsb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dsb.c readDsb(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName,"rb");
     if(file==0)
     {
-        /*TODO: set messages here "Error opening DSB file for read:" */
+        embLog_error("format-dsb.c readDsb(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
     /*TODO: READ 512 BYTE HEADER INTO header[] */
     /*
@@ -38,8 +44,8 @@ int readDsb(EmbPattern* pattern, const char* fileName)
             y = -y;
         if(ctrl & 0x01)
             stitchType = TRIM;
-		/* ctrl & 0x02 - Speed change? */
-		/* ctrl & 0x04 - Clutch? */
+        /* ctrl & 0x02 - Speed change? */
+        /* ctrl & 0x04 - Clutch? */
         if((ctrl & 0x05) == 0x05)
         {
             stitchType = STOP;
@@ -57,8 +63,8 @@ int readDsb(EmbPattern* pattern, const char* fileName)
 
 int writeDsb(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeDsb */
-    emb_unused(fileName); /*TODO: finish writeDsb */
+    if(!pattern) { embLog_error("format-dsb.c writeDsb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dsb.c writeDsb(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeDsb */
 }
 

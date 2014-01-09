@@ -1,4 +1,5 @@
 #include "emb-circle.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /**************************************************/
@@ -38,7 +39,7 @@ EmbCircleObject embCircleObject_make(double cx, double cy, double r)
 EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 {
     EmbCircleObject* heapCircleObj = (EmbCircleObject*)malloc(sizeof(EmbCircleObject));
-    /* TODO: malloc fail error */
+    if(!heapCircleObj) { embLog_error("emb-circle.c embCircleObject_create(), cannot allocate memory for heapCircleObj\n"); return 0; }
     heapCircleObj->circle.centerX = cx;
     heapCircleObj->circle.centerY = cy;
     heapCircleObj->circle.radius  = r;
@@ -51,9 +52,9 @@ EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 
 void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 {
-    /* TODO: pointer safety */
+    if(!pointer) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer argument is null\n"); return; }
     pointer->next = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
     pointer = pointer->next;
     pointer->circleObj = data;
     pointer->next = 0;

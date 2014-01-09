@@ -1,4 +1,5 @@
 #include "emb-line.h"
+#include "emb-logging.h"
 #include "emb-vector.h"
 #include <stdlib.h>
 
@@ -45,7 +46,7 @@ EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2)
 EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 {
     EmbLineObject* heapLineObj = (EmbLineObject*)malloc(sizeof(EmbLineObject));
-    /* TODO: malloc fail error */
+    if(!heapLineObj) { embLog_error("emb-line.c embLineObject_create(), cannot allocate memory for heapLineObj\n"); return 0; }
     heapLineObj->line.x1 = x1;
     heapLineObj->line.y1 = y1;
     heapLineObj->line.x2 = x2;
@@ -59,9 +60,9 @@ EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 
 void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
-    /* TODO: pointer safety */
+    if(!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return; }
     pointer->next = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
     pointer = pointer->next;
     pointer->lineObj = data;
     pointer->next = 0;
@@ -89,8 +90,8 @@ int embLineObjectList_empty(EmbLineObjectList* pointer)
 /*! Finds the normalized vector perpendicular (clockwise) to the line given by v1->v2 (normal to the line) */
 void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbVector* result)
 {
-    /* TODO: pointer safety */
     double temp;
+    if(!result) { embLog_error("emb-line.c embLine_GetPerpendicularCWVector(), result argument is null\n"); return; }
     result->X = vector2.X - vector1.X;
     result->Y = vector2.Y - vector1.Y;
     embVector_Normalize(*result, result);
@@ -102,7 +103,6 @@ void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbV
 /*! Finds the intersection of two lines given by v1->v2 and v3->v4 and sets the value in the result variable */
 void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result)
 {
-    /* TODO: pointer safety */
     double A2 = v2.Y - v1.Y;
     double B2 = v1.X - v2.X;
     double C2 = A2 * v1.X + B2 * v1.Y;
@@ -112,7 +112,9 @@ void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVecto
     double C1 = A1 * v3.X + B1 * v3.Y;
 
     double det = A1 * B2 - A2 * B1;
-    if (det < 1e-10 && det > -1e-10)
+
+    if(!result) { embLog_error("emb-line.c embLine_IntersectionWith(), result argument is null\n"); return; }
+    if(det < 1e-10 && det > -1e-10)
     {
         result->X = -10000;
         result->Y = -10000;

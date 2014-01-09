@@ -1,4 +1,5 @@
 #include "emb-ellipse.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /**************************************************/
@@ -64,7 +65,7 @@ EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double r
 EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject* heapEllipseObj = (EmbEllipseObject*)malloc(sizeof(EmbEllipseObject));
-    if(!heapEllipseObj) return 0;
+    if(!heapEllipseObj) { embLog_error("emb-ellipse.c embEllipseObject_create(), cannot allocate memory for heapEllipseObj\n"); return 0; }
     heapEllipseObj->ellipse.centerX = cx;
     heapEllipseObj->ellipse.centerY = cy;
     heapEllipseObj->ellipse.radiusX = rx;
@@ -78,9 +79,9 @@ EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, doubl
 
 void embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
 {
-    /* TODO: pointer safety */
+    if(!pointer) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer argument is null\n"); return; }
     pointer->next = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
     pointer = pointer->next;
     pointer->ellipseObj = data;
     pointer->next = 0;

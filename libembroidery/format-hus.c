@@ -1,12 +1,13 @@
 #include "format-hus.h"
+#include "emb-compress.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include <limits.h>
-#include "emb-compress.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
 
 /*****************************************
  * EmbReaderWriter Functions
@@ -48,7 +49,7 @@ static int husDecodeStitchType(unsigned char b)
 static unsigned char* husDecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedContentLength);
-    if(!decompressedData) return 0;
+    if(!decompressedData) { embLog_error("format-hus.c husDecompressData(), cannot allocate memory for decompressedData\n"); return 0; }
     husExpand((unsigned char*) input, decompressedData, compressedInputLength, 10);
     return decompressedData;
 }
@@ -56,7 +57,7 @@ static unsigned char* husDecompressData(unsigned char* input, int compressedInpu
 static unsigned char* husCompressData(unsigned char* input, int decompressedInputSize, int* compressedSize)
 {
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
-     if(!compressedData) return 0;
+    if(!compressedData) { embLog_error("format-hus.c husCompressData(), cannot allocate memory for compressedData\n"); return 0; }
     *compressedSize = husCompress(input, (unsigned long) decompressedInputSize, compressedData, 10, 0);
     return compressedData;
 }
@@ -108,9 +109,13 @@ int readHus(EmbPattern* pattern, const char* fileName)
     int unknown, i = 0;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-hus.c readHus(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-hus.c readHus(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-hus.c readHus(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -159,7 +164,8 @@ int readHus(EmbPattern* pattern, const char* fileName)
 
     for(i = 0; i < numberOfStitches; i++)
     {
-        embPattern_addStitchRel(pattern, husDecodeByte(xDecompressed[i]) / 10.0,
+        embPattern_addStitchRel(pattern,
+                                husDecodeByte(xDecompressed[i]) / 10.0,
                                 husDecodeByte(yDecompressed[i]) / 10.0,
                                 husDecodeStitchType(attributeDataDecompressed[i]), 1);
     }
@@ -186,19 +192,22 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     int yCompressedSize = 0;
     double previousX = 0;
     double previousY = 0;
-    unsigned char* xValues, *yValues, *attributeValues;
+    unsigned char* xValues = 0, *yValues = 0, *attributeValues = 0;
     EmbStitchList* pointer = 0;
     double xx = 0.0;
     double yy = 0.0;
     int flags = 0;
     int i = 0;
-    unsigned char* attributeCompressed, *xCompressed, *yCompressed;
+    unsigned char* attributeCompressed = 0, *xCompressed = 0, *yCompressed = 0;
     FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-hus.c writeHus(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-hus.c writeHus(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "wb");
     if(!file)
     {
-        /*TODO: set status here "Error opening HUS file for write:" */
+        embLog_error("format-hus.c writeHus(), cannot open %s for writing\n", fileName);
         return 0;
     }
 

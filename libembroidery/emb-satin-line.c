@@ -1,20 +1,20 @@
+#include "emb-satin-line.h"
+#include "emb-line.h"
+#include "emb-logging.h"
+#include "emb-vector.h"
 #include <math.h>
 #include <stdlib.h>
 
-#include "emb-line.h"
-#include "emb-vector.h"
-#include "emb-satin-line.h"
-
-void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result)
+void embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result)
 {
     int i;
     EmbSatinOutline outline;
     double halfThickness = thickness / 2.0;
     int intermediateOutlineCount = 2 * numberOfPoints - 2;
-    outline.Side1 = (EmbVector*)malloc(sizeof(EmbVector) * intermediateOutlineCount);
-    /* TODO: malloc fail error */
-    outline.Side2 = (EmbVector*)malloc(sizeof(EmbVector) * intermediateOutlineCount);
-    /* TODO: malloc fail error */
+    outline.side1 = (EmbVector*)malloc(sizeof(EmbVector) * intermediateOutlineCount);
+    if(!outline.side1) { embLog_error("emb-satin-line.c embSatinOutline_generateSatinOutline(), cannot allocate memory for outline->side1\n"); return; }
+    outline.side2 = (EmbVector*)malloc(sizeof(EmbVector) * intermediateOutlineCount);
+    if(!outline.side2) { embLog_error("emb-satin-line.c embSatinOutline_generateSatinOutline(), cannot allocate memory for outline->side2\n"); return; }
 
     for(i = 1; i < numberOfPoints; i++)
     {
@@ -25,35 +25,35 @@ void embSatinOutline_GenerateSatineOutline(EmbVector lines[], int numberOfPoints
         embLine_GetPerpendicularCWVector(lines[i - 1], lines[i], &v1);
 
         embVector_Multiply(v1, halfThickness, &temp);
-        embVector_Add(temp, lines[i - 1], &outline.Side1[j]);
-        embVector_Add(temp, lines[i], &outline.Side1[j + 1]);
+        embVector_Add(temp, lines[i - 1], &outline.side1[j]);
+        embVector_Add(temp, lines[i], &outline.side1[j + 1]);
 
         embVector_Multiply(v1, -halfThickness, &temp);
-        embVector_Add(temp, lines[i - 1], &outline.Side2[j]);
-        embVector_Add(temp, lines[i], &outline.Side2[j + 1]);
+        embVector_Add(temp, lines[i - 1], &outline.side2[j]);
+        embVector_Add(temp, lines[i], &outline.side2[j + 1]);
     }
 
-    /* TODO: pointer safety for result param */
-    result->Side1 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
-    if(!result->Side1) return;
-    result->Side2 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
-    if(!result->Side2) return;
+    if(!result) { embLog_error("emb-satin-line.c embSatinOutline_generateSatinOutline(), result argument is null\n"); return; }
+    result->side1 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
+    if(!result->side1) { embLog_error("emb-satin-line.c embSatinOutline_generateSatinOutline(), cannot allocate memory for result->side1\n"); return; }
+    result->side2 = (EmbVector*)malloc(sizeof(EmbVector) * numberOfPoints);
+    if(!result->side2) { embLog_error("emb-satin-line.c embSatinOutline_generateSatinOutline(), cannot allocate memory for result->side2\n"); return; }
 
-    result->Side1[0] = outline.Side1[0];
-    result->Side2[0] = outline.Side2[0];
+    result->side1[0] = outline.side1[0];
+    result->side2[0] = outline.side2[0];
 
     for(i = 3; i < intermediateOutlineCount; i += 2)
     {
-        embLine_IntersectionWith(outline.Side1[i - 3], outline.Side1[i - 2], outline.Side1[i - 1], outline.Side1[i], &result->Side1[(i - 1) / 2]);
+        embLine_IntersectionWith(outline.side1[i - 3], outline.side1[i - 2], outline.side1[i - 1], outline.side1[i], &result->side1[(i - 1) / 2]);
     }
 
     for(i = 3; i < intermediateOutlineCount; i += 2)
     {
-        embLine_IntersectionWith(outline.Side2[i - 3], outline.Side2[i - 2], outline.Side2[i - 1], outline.Side2[i], &result->Side2[(i - 1) / 2]);
+        embLine_IntersectionWith(outline.side2[i - 3], outline.side2[i - 2], outline.side2[i - 1], outline.side2[i], &result->side2[(i - 1) / 2]);
     }
 
-    result->Side1[numberOfPoints - 1] = outline.Side1[2 * numberOfPoints - 3];
-    result->Side2[numberOfPoints - 1] = outline.Side2[2 * numberOfPoints - 3];
+    result->side1[numberOfPoints - 1] = outline.side1[2 * numberOfPoints - 3];
+    result->side2[numberOfPoints - 1] = outline.side2[2 * numberOfPoints - 3];
     result->length = numberOfPoints;
 }
 
@@ -64,7 +64,8 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
     EmbVectorList* currentStitch = 0;
     EmbVector temp;
 
-    /* TODO: pointer safety for result param */
+    if(!result) { embLog_error("emb-satin-line.c embSatinOutline_renderStitches(), result argument is null\n"); return 0; }
+
     if(result->length > 0)
     {
         double currTopX = 0;
@@ -74,10 +75,10 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
 
         for(j = 0; j < result->length - 1; j++)
         {
-            EmbVector p1 = result->Side1[j];
-            EmbVector p2 = result->Side1[j + 1];
-            EmbVector p3 = result->Side2[j];
-            EmbVector p4 = result->Side2[j + 1];
+            EmbVector p1 = result->side1[j];
+            EmbVector p2 = result->side1[j + 1];
+            EmbVector p3 = result->side2[j];
+            EmbVector p4 = result->side2[j + 1];
 
             double topXDiff = p2.X - p1.X;
             double topYDiff = p2.Y - p1.Y;
