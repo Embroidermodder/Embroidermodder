@@ -161,6 +161,7 @@ void svgElement_free(SvgElement* element)
 SvgElement* svgElement_create(const char* name)
 {
     SvgElement* element = 0;
+
     element = (SvgElement*)malloc(sizeof(SvgElement));
     if(!element) { embLog_error("format-svg.c svgElement_create(), cannot allocate memory for element\n"); return 0; }
     element->name = emb_strdup(name);
@@ -173,7 +174,9 @@ SvgElement* svgElement_create(const char* name)
 char* svgAttribute_getValue(SvgElement* element, const char* name)
 {
     SvgAttributeList* pointer;
-    if(!element) { /* TODO: error */ return "none"; }
+
+    if(!element) { embLog_error("format-svg.c svgAttribute_getValue(), element argument is null\n"); return "none"; }
+    if(!name) { embLog_error("format-svg.c svgAttribute_getValue(), name argument is null\n"); return "none"; }
     if(!element->attributeList) { /* TODO: error */ return "none"; }
 
     pointer = element->attributeList;
@@ -189,6 +192,8 @@ char* svgAttribute_getValue(SvgElement* element, const char* name)
 void svgAddToPattern(EmbPattern* p)
 {
     const char* buff;
+
+    if(!p) { embLog_error("format-svg.c svgAddToPattern(), p argument is null\n"); return; }
     if(!currentElement) { return; }
 
     buff = currentElement->name;
@@ -267,7 +272,7 @@ void svgAddToPattern(EmbPattern* p)
         EmbPointList* polyObjPointList = 0;
 
         char* polybuff = (char*)malloc(size);
-        if(!polybuff) { /* TODO: error */ return; }
+        if(!polybuff) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for polybuff\n"); return; }
 
         for(i = 0; i < last; i++)
         {
@@ -311,7 +316,7 @@ void svgAddToPattern(EmbPattern* p)
                 /* increase polybuff length - leave room for 0 */
                 size *= 2;
                 polybuff = (char*)realloc(polybuff,size);
-                if(!polybuff) { /*TODO: error */ return; }
+                if(!polybuff) { embLog_error("format-svg.c svgAddToPattern(), cannot re-allocate memory for polybuff\n"); return; }
             }
         }
         free(polybuff);
@@ -2836,7 +2841,7 @@ int readSvg(EmbPattern* pattern, const char* fileName)
     EmbPolygonObjectList* pogList;
     EmbPolylineObjectList* polList;
     char* buff = (char*)malloc(size);
-    if(!buff) { /* TODO: error */ return 0; }
+    if(!buff) { embLog_error("format-svg.c readSvg(), cannot allocate memory for buff\n"); return 0; }
 
     svgExpect = SVG_EXPECT_NULL;
     svgMultiValue = 0;
@@ -2890,7 +2895,7 @@ int readSvg(EmbPattern* pattern, const char* fileName)
                 /* increase buff length - leave room for 0 */
                 size *= 2;
                 buff = (char*)realloc(buff,size);
-                if(!buff) { /*TODO: error */ return 0; }
+                if(!buff) { embLog_error("format-svg.c readSvg(), cannot re-allocate memory for buff\n"); return 0; }
             }
         }
         while(c != EOF);
@@ -2983,7 +2988,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     file = fopen(fileName, "w");
     if(!file)
     {
-        /*TODO: error */
+        embLog_error("format-svg.c writeSvg(), cannot open %s for writing\n", fileName);
         return 0;
     }
 

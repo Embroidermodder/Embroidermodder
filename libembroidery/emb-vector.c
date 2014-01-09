@@ -1,25 +1,27 @@
+#include "emb-vector.h"
+#include "emb-logging.h"
 #include <math.h>
 #include <stdlib.h>
-#include "emb-vector.h"
 
 void embVector_Normalize(EmbVector vector, EmbVector* result)
 {
-    /* TODO: pointer safety */
     double length = embVector_GetLength(vector);
+    
+    if(!result) { embLog_error("emb-vector.c embVector_Normalize(), result argument is null\n"); return; }
     result->X = vector.X / length;
     result->Y = vector.Y / length;
 }
 
 void embVector_Multiply(EmbVector vector, double magnitude, EmbVector* result)
 {
-    /* TODO: pointer safety */
+    if(!result) { embLog_error("emb-vector.c embVector_Multiply(), result argument is null\n"); return; }
     result->X = vector.X * magnitude;
     result->Y = vector.Y * magnitude;
 }
 
 void embVector_Add(EmbVector v1, EmbVector v2, EmbVector* result)
 {
-    /* TODO: pointer safety */
+    if(!result) { embLog_error("emb-vector.c embVector_Add(), result argument is null\n"); return; }
     result->X = v1.X + v2.X;
     result->Y = v1.Y + v2.Y;
 }
@@ -32,7 +34,7 @@ double embVector_GetLength(EmbVector vector)
 EmbVectorList* embVectorList_create(EmbVector data)
 {
     EmbVectorList* pointer = (EmbVectorList*)malloc(sizeof(EmbVectorList));
-    /* TODO: malloc fail error */
+    if(!pointer) { embLog_error("emb-vector.c embVectorList_create(), cannot allocate memory for pointer\n"); return 0; }
     pointer->vector = data;
     pointer->next = 0;
     return pointer;
@@ -42,7 +44,7 @@ EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data)
 {
     if(!pointer) return embVectorList_create(data);
     pointer->next = (EmbVectorList*)malloc(sizeof(EmbVectorList));
-    if(!pointer->next) return 0;
+    if(!pointer->next) { embLog_error("emb-vector.c embVectorList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->vector = data;
     pointer->next = 0;
