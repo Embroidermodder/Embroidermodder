@@ -1,9 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "format-xxx.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "emb-logging.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 static char xxxDecodeByte(unsigned char inputByte)
 {
@@ -26,9 +27,13 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     EmbStitchList* lastStitch;
     EmbStitchList* secondLast = 0;
 
+    if(!pattern) { embLog_error("format-xxx.c readXxx(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-xxx.c readXxx(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-xxx.c readXxx(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -182,11 +187,14 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colors;
     int curColor = 0;
 
+    if(!pattern) { embLog_error("format-xxx.c writeXxx(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-xxx.c writeXxx(), fileName argument is null\n"); return 0; }
+
     embPattern_correctForMaxStitchLength(pattern, 124, 127);
     file = fopen(fileName, "wb");
     if(!file)
     {
-        /*TODO: set status here "Error opening XXX file for write:" */
+        embLog_error("format-xxx.c writeXxx(), cannot open %s for writing\n", fileName);
         return 0;
     }
     for(i = 0; i < 0x17; i++)

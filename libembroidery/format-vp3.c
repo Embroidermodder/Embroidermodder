@@ -1,14 +1,14 @@
 #include "format-vp3.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-static unsigned char* ReadString(FILE* file)
+static unsigned char* vp3ReadString(FILE* file)
 {
     int stringLength = binaryReadInt16BE(file);
     unsigned char* charString = (unsigned char*)malloc(stringLength);
-    /* TODO: malloc fail error */
+    if(!charString) { embLog_error("format-vp3.c vp3ReadString(), cannot allocate memory for charString\n"); return 0; }
     binaryReadBytes(file, charString, stringLength);
     return charString;
 }
@@ -105,27 +105,31 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     int i;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-vp3.c readVp3(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-vp3.c readVp3(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
-        /*TODO: set messages here "Error opening VP3 file for read:" */
+        embLog_error("format-vp3.c readVp3(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
     binaryReadBytes(file, magicString, 5); /* %vsm% */
 
     some = binaryReadByte(file); /* 0 */
-    someString = ReadString(file);
+    someString = vp3ReadString(file);
     someShort = binaryReadInt16(file);
     someByte = binaryReadByte(file);
     bytesRemainingInFile = binaryReadInt32(file);
-    unknownByteString = ReadString(file);
+    unknownByteString = vp3ReadString(file);
     hoopConfigurationOffset =(int) ftell(file);
 
     vp3ReadHoopSection(file);
 
-    unknownString2 = ReadString(file);
+    unknownString2 = vp3ReadString(file);
 
+    /* TODO: review v1 thru v18 variables and use emb_unused() if needed */
     v1 = binaryReadByte(file);
     v2 = binaryReadByte(file);
     v3 = binaryReadByte(file);
@@ -147,7 +151,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
 
     binaryReadBytes(file, magicCode, 6); /* 0x78 0x78 0x55 0x55 0x01 0x00 */
 
-    unknownString3 = ReadString(file);
+    unknownString3 = vp3ReadString(file);
 
     numberOfColors = binaryReadInt16BE(file);
     colorSectionOffset = (int) ftell(file);
@@ -177,9 +181,9 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         embPattern_addThread(pattern, t);
         fseek(file, 6*tableSize, SEEK_CUR);
 
-        str1 = ReadString(file);
-        str2 = ReadString(file);
-        str3 = ReadString(file);
+        str1 = vp3ReadString(file);
+        str2 = vp3ReadString(file);
+        str3 = vp3ReadString(file);
 
         unknownX2 = binaryReadInt32BE(file);
         unknownY2 = binaryReadInt32BE(file);
@@ -225,8 +229,8 @@ int readVp3(EmbPattern* pattern, const char* fileName)
 
 int writeVp3(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeVp3 */
-    emb_unused(fileName); /*TODO: finish writeVp3 */
+    if(!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-vp3.c writeVp3(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeVp3 */
 }
 

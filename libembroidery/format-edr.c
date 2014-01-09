@@ -10,10 +10,13 @@ int readEdr(EmbPattern* pattern, const char* fileName)
     int i;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-edr.c readEdr(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-edr.c readEdr(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
-        /*TODO: set messages here "Error opening EDR file for read:" */
+        embLog_error("format-edr.c readEdr(), cannot open %s for reading\n", fileName);
         return 0;
     }
     fseek(file, 0x00, SEEK_END);
@@ -40,10 +43,13 @@ int writeEdr(EmbPattern* pattern, const char* fileName)
     EmbThreadList* pointer = 0;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-edr.c writeEdr(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-edr.c writeEdr(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
-        /*TODO: set messages here "Error creating/editing EDR file for read:" */
+        embLog_error("format-edr.c writeEdr(), cannot open %s for writing\n", fileName);
         return 0;
     }
     pointer = pattern->threadList;

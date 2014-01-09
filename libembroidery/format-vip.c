@@ -1,23 +1,24 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "format-vip.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 #include "emb-compress.h"
+#include "emb-logging.h"
+#include <stdio.h>
+#include <stdlib.h>
 
-static int DecodeByte(unsigned char b)
+static int vipDecodeByte(unsigned char b)
 {
     if (b >= 0x80) return (-(unsigned char) (~b + 1));
     return b;
 }
 
-static int DecodeStitchType(unsigned char b)
+static int vipDecodeStitchType(unsigned char b)
 {
     switch (b)
     {
         case 0x80:
             return NORMAL;
-		case 0x81:
+        case 0x81:
             return TRIM;
         case 0x84:
             return STOP;
@@ -28,11 +29,12 @@ static int DecodeStitchType(unsigned char b)
     }
 }
 
-static unsigned char* DecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
+static unsigned char* vipDecompressData(unsigned char* input, int compressedInputLength, int decompressedContentLength)
 {
     unsigned char* decompressedData = (unsigned char*)malloc(decompressedContentLength);
     if(!decompressedData)
     {
+        embLog_error("format-vip.c vipDecompressData(), cannot allocate memory for decompressedData\n");
         return 0;
     }
     husExpand((unsigned char*)input, decompressedData, compressedInputLength, 10);
@@ -61,14 +63,21 @@ int readVip(EmbPattern* pattern, const char* fileName)
     int fileLength;
     int i;
     unsigned char prevByte = 0;
-    unsigned char *attributeData, *decodedColors, *attributeDataDecompressed;
-    unsigned char *xData, *xDecompressed, *yData, *yDecompressed;
+    unsigned char *attributeData = 0, *decodedColors = 0, *attributeDataDecompressed = 0;
+    unsigned char *xData = 0, *xDecompressed = 0, *yData = 0, *yDecompressed = 0;
     VipHeader header;
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-vip.c readVip(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-vip.c readVip(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName, "rb");
     if(file == 0)
     {
+        embLog_error("format-vip.c readVip(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0x0, SEEK_END);
     fileLength = ftell(file);
     fseek(file, 0x00, SEEK_SET);
@@ -93,7 +102,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
 
     header.colorLength = binaryReadInt32(file);
     decodedColors = (unsigned char*)malloc(header.numberOfColors*4);
-    /* TODO: malloc fail error */
+    if(!decodedColors) { embLog_error("format-vip.c readVip(), cannot allocate memory for decodedColors\n"); return 0; }
     for(i = 0; i < header.numberOfColors*4; ++i)
     {
         unsigned char inputByte = binaryReadByte(file);
@@ -108,31 +117,33 @@ int readVip(EmbPattern* pattern, const char* fileName)
         thread.color.r = decodedColors[startIndex];
         thread.color.g = decodedColors[startIndex + 1];
         thread.color.b = decodedColors[startIndex + 2];
-		/* printf("%d\n", decodedColors[startIndex + 3]); */
+        /* printf("%d\n", decodedColors[startIndex + 3]); */
         embPattern_addThread(pattern, thread);
     }
     fseek(file, header.attributeOffset, SEEK_SET);
     attributeData = (unsigned char*)malloc(header.xOffset - header.attributeOffset);
-    /* TODO: malloc fail error */
+    if(!attributeData) { embLog_error("format-vip.c readVip(), cannot allocate memory for attributeData\n"); return 0; }
     binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset);
-    attributeDataDecompressed = DecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
+    attributeDataDecompressed = vipDecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
 
     fseek(file, header.xOffset, SEEK_SET);
     xData = (unsigned char*)malloc(header.yOffset - header.xOffset);
-    /* TODO: malloc fail error */
+    if(!xData) { embLog_error("format-vip.c readVip(), cannot allocate memory for xData\n"); return 0; }
     binaryReadBytes(file, xData, header.yOffset - header.xOffset);
-    xDecompressed = DecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
+    xDecompressed = vipDecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
 
     fseek(file, header.yOffset, SEEK_SET);
     yData = (unsigned char*)malloc(fileLength - header.yOffset);
-    /* TODO: malloc fail error */
+    if(!yData) { embLog_error("format-vip.c readVip(), cannot allocate memory for yData\n"); return 0; }
     binaryReadBytes(file, yData, fileLength - header.yOffset);
-    yDecompressed = DecompressData(yData, fileLength - header.yOffset, header.numberOfStitches);
+    yDecompressed = vipDecompressData(yData, fileLength - header.yOffset, header.numberOfStitches);
 
     for(i = 0; i < header.numberOfStitches; i++)
     {
-        embPattern_addStitchRel(pattern, DecodeByte(xDecompressed[i]) / 10.0,
-            DecodeByte(yDecompressed[i]) / 10.0, DecodeStitchType(attributeDataDecompressed[i]), 1);
+        embPattern_addStitchRel(pattern,
+                                vipDecodeByte(xDecompressed[i]) / 10.0,
+                                vipDecodeByte(yDecompressed[i]) / 10.0,
+                                vipDecodeStitchType(attributeDataDecompressed[i]), 1);
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
@@ -153,6 +164,7 @@ static unsigned char* vipCompressData(unsigned char* input, int decompressedInpu
     unsigned char* compressedData = (unsigned char*)malloc(sizeof(unsigned char)*decompressedInputSize*2);
     if(!compressedData)
     {
+        embLog_error("format-vip.c vipCompressData(), cannot allocate memory for compressedData\n");
         return 0;
     }
     *compressedSize = husCompress(input, (unsigned long) decompressedInputSize, compressedData, 10, 0);
@@ -170,7 +182,7 @@ static unsigned char vipEncodeStitchType(int st)
     {
         case NORMAL:
             return (0x80);
-		case JUMP:
+        case JUMP:
         case TRIM:
             return (0x81);
         case STOP:
@@ -192,27 +204,32 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     double previousX = 0;
     double previousY = 0;
     unsigned char* xValues = 0, *yValues = 0, *attributeValues = 0;
-    EmbStitchList* pointer;
+    EmbStitchList* pointer = 0;
     double xx = 0.0;
     double yy = 0.0;
     int flags = 0;
     int i = 0;
     unsigned char* attributeCompressed = 0, *xCompressed = 0, *yCompressed = 0, *decodedColors = 0, *encodedColors = 0;
-	unsigned char prevByte = 0;
-	EmbThreadList *colorPointer;
+    unsigned char prevByte = 0;
+    EmbThreadList *colorPointer;
+    FILE* file = 0;
 
-    FILE* file = fopen(fileName, "wb");
+    if(!pattern) { embLog_error("format-vip.c writeVip(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-vip.c writeVip(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName, "wb");
     if(file == 0)
     {
+        embLog_error("format-vip.c writeVip(), cannot open %s for writing\n", fileName);
         return 0;
     }
 
     stitchCount = embStitchList_count(pattern->stitchList);
-	minColors = embThreadList_count(pattern->threadList);
-	decodedColors = (unsigned char*)malloc(minColors << 2);
+    minColors = embThreadList_count(pattern->threadList);
+    decodedColors = (unsigned char*)malloc(minColors << 2);
     if(!decodedColors) return 0;
-	encodedColors = (unsigned char*)malloc(minColors << 2);
-    if(encodedColors)
+    encodedColors = (unsigned char*)malloc(minColors << 2);
+    if(encodedColors) /* TODO: review this line. It looks clearly wrong. If not, note why. */
     {
         free(decodedColors);
         return 0;
@@ -263,36 +280,36 @@ int writeVip(EmbPattern* pattern, const char* fileName)
         binaryWriteUInt(file, 0x00000000);
         binaryWriteUShort(file, 0x0000);
 
-	    binaryWriteInt(file, minColors << 2);
+        binaryWriteInt(file, minColors << 2);
 
-	    colorPointer = pattern->threadList;
+        colorPointer = pattern->threadList;
 
         for (i = 0; i < minColors; i++)
         {
             int byteChunk = i << 2;
-		    EmbColor currentColor = colorPointer->thread.color;
-		    decodedColors[byteChunk] = currentColor.r;
+            EmbColor currentColor = colorPointer->thread.color;
+            decodedColors[byteChunk] = currentColor.r;
             decodedColors[byteChunk + 1] = currentColor.g;
             decodedColors[byteChunk + 2] = currentColor.b;
             decodedColors[byteChunk + 3] = 0x01;
-		    colorPointer = colorPointer->next;
+            colorPointer = colorPointer->next;
         }
 
         for (i = 0; i < minColors << 2; ++i)
         {
             unsigned char tmpByte = (unsigned char) (decodedColors[i] ^ vipDecodingTable[i]);
-		    prevByte = (unsigned char) (tmpByte ^ prevByte);
-		    binaryWriteByte(file, prevByte);
-	    }
-	    for (i = 0; i <= minColors; i++)
+            prevByte = (unsigned char) (tmpByte ^ prevByte);
+            binaryWriteByte(file, prevByte);
+        }
+        for (i = 0; i <= minColors; i++)
         {
             binaryWriteInt(file, 1);
         }
         binaryWriteUInt(file, 0); /* string length */
-	    binaryWriteShort(file, 0);
+        binaryWriteShort(file, 0);
         binaryWriteBytes(file, (char*) attributeCompressed, attributeSize);
-	    binaryWriteBytes(file, (char*) xCompressed, xCompressedSize);
-	    binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
+        binaryWriteBytes(file, (char*) xCompressed, xCompressedSize);
+        binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
     }
 
     if(attributeCompressed) free(attributeCompressed);
