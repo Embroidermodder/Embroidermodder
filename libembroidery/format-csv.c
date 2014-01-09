@@ -1,4 +1,6 @@
 #include "format-csv.h"
+#include "emb-logging.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,6 +32,11 @@ static char* csvStitchFlagToStr(int flags)
 
 static int csvStrToStitchFlag(const char* str)
 {
+    if(!str)
+    {
+        embLog_error("format-csv.c csvStrToStitchFlag(), str argument is null\n");
+        return -1;
+    }
     if(!strcmp(str, "STITCH"))
         return NORMAL;
     else if(!strcmp(str, "JUMP"))
@@ -60,9 +67,13 @@ int readCsv(EmbPattern* pattern, const char* fileName)
     double xx = 0.0;
     double yy = 0.0;
     unsigned char r = 0, g = 0, b = 0;
+    char* buff = 0;
 
-    char* buff = (char*)malloc(size);
-    if(!buff) { /* TODO: error */ return 0; }
+    if(!pattern) { embLog_error("format-csv.c readCsv(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-csv.c readCsv(), fileName argument is null\n"); return 0; }
+
+    buff = (char*)malloc(size);
+    if(!buff) { embLog_error("format-csv.c readCsv(), unable to allocate memory for buff\n"); return 0; }
 
     file = fopen(fileName,"r");
     if(!file)
@@ -227,12 +238,15 @@ int readCsv(EmbPattern* pattern, const char* fileName)
 int writeCsv(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
-    EmbStitchList* sList;
-    EmbThreadList* tList;
+    EmbStitchList* sList = 0;
+    EmbThreadList* tList = 0;
     EmbRect boundingRect;
     int i = 0;
     int stitchCount = 0;
     int threadCount = 0;
+
+    if(!pattern) { embLog_error("format-csv.c writeCsv(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-csv.c writeCsv(), fileName argument is null\n"); return 0; }
 
     sList = pattern->stitchList;
     stitchCount = embStitchList_count(sList);

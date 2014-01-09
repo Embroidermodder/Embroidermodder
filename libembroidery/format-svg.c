@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "format-svg.h"
 #include "helpers-misc.h"
+#include "emb-logging.h"
 
 EmbColor svgColorToEmbColor(char* colorString)
 {
@@ -109,12 +110,12 @@ SvgAttribute svgAttribute_create(const char* name, const char* value)
 
 void svgElement_addAttribute(SvgElement* element, SvgAttribute data)
 {
-    if(!element) { /* TODO: error */ return; }
+    if(!element) { embLog_error("format-svg.c svgElement_addAttribute(), element argument is null\n"); return; }
 
     if(!(element->attributeList))
     {
         element->attributeList = (SvgAttributeList*)malloc(sizeof(SvgAttributeList));
-        if(!(element->attributeList)) { /* TODO: error */ return; }
+        if(!(element->attributeList)) { embLog_error("format-svg.c svgElement_addAttribute(), cannot allocate memory for element->attributeList\n"); return; }
         element->attributeList->attribute = data;
         element->attributeList->next = 0;
         element->lastAttribute = element->attributeList;
@@ -124,7 +125,7 @@ void svgElement_addAttribute(SvgElement* element, SvgAttribute data)
     {
         SvgAttributeList* pointerLast = element->lastAttribute;
         SvgAttributeList* list = (SvgAttributeList*)malloc(sizeof(SvgAttributeList));
-        if(!list) { /* TODO: error */ return; }
+        if(!list) { embLog_error("format-svg.c svgElement_addAttribute(), cannot allocate memory for list\n"); return; }
         list->attribute = data;
         list->next = 0;
         pointerLast->next = list;
@@ -161,9 +162,9 @@ SvgElement* svgElement_create(const char* name)
 {
     SvgElement* element = 0;
     element = (SvgElement*)malloc(sizeof(SvgElement));
-    if(!element) { /* TODO: error */ return 0; }
+    if(!element) { embLog_error("format-svg.c svgElement_create(), cannot allocate memory for element\n"); return 0; }
     element->name = emb_strdup(name);
-    if(!element->name) { /* TODO: error */ return 0; }
+    if(!element->name) { embLog_error("format-svg.c svgElement_create(), element->name is null\n"); return 0; }
     element->attributeList = 0;
     element->lastAttribute = 0;
     return element;

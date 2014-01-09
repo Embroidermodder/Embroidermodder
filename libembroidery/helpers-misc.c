@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include "helpers-misc.h"
+#include "emb-logging.h"
 
 int roundDouble(double src)
 {
@@ -14,10 +15,13 @@ int roundDouble(double src)
 /* Returns true if (str) begins with (pre), otherwise returns false. */
 char startsWith(const char* pre, const char* str)
 {
-    /* TODO: pointer safety */
     char result = 0;
-    size_t lenpre = strlen(pre),
-           lenstr = strlen(str);
+    size_t lenpre;
+    size_t lenstr;
+    if(!pre) { embLog_error("helpers-misc.c startsWith(), pre argument is null\n"); return 0; }
+    if(!str) { embLog_error("helpers-misc.c startsWith(), str argument is null\n"); return 0; }
+    lenpre = strlen(pre);
+    lenstr = strlen(str);
     if(lenstr < lenpre)
         return 0;
     result = strncmp(pre, str, lenpre);
@@ -68,9 +72,11 @@ char* emb_optOut(double num, char* str)
 /* Duplicates the string (src) and returns it. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 char* emb_strdup(const char* src)
 {
-    char* dest = (char*)malloc(strlen(src) + 1);
-    /* TODO: malloc fail error */
-    if(dest) strcpy(dest, src);
+    char* dest = 0;
+    if(!src) { embLog_error("helpers-misc.c emb_strdup(), src argument is null\n"); return 0; }
+    dest = (char*)malloc(strlen(src) + 1);
+    if(!dest) { embLog_error("helpers-misc.c emb_strdup(), cannot allocate memory\n"); }
+    else { strcpy(dest, src); }
     return dest;
 }
 

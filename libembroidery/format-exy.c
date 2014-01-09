@@ -1,5 +1,5 @@
 #include "format-exy.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
 static int exyDecodeFlags(unsigned char b2)
@@ -21,10 +21,13 @@ int readExy(EmbPattern* pattern, const char* fileName)
     unsigned char b[3];
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-exy.c readExy(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-exy.c readExy(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
-        /*TODO: set status here "Error opening EXY file for read:" */
+        embLog_error("format-exy.c readExy(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -91,8 +94,8 @@ int readExy(EmbPattern* pattern, const char* fileName)
 
 int writeExy(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeExy */
-    emb_unused(fileName); /*TODO: finish writeExy */
+    if(!pattern) { embLog_error("format-exy.c writeExy(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-exy.c writeExy(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeExy */
 }
 

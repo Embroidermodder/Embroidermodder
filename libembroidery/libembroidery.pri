@@ -36,6 +36,7 @@ SOURCES += \
 ../libembroidery/emb-hoop.c \
 ../libembroidery/emb-layer.c \
 ../libembroidery/emb-line.c \
+../libembroidery/emb-logging.c \
 ../libembroidery/emb-path.c \
 ../libembroidery/emb-pattern.c \
 ../libembroidery/emb-point.c \
@@ -131,6 +132,7 @@ HEADERS += \
 ../libembroidery/emb-hoop.h \
 ../libembroidery/emb-layer.h \
 ../libembroidery/emb-line.h \
+../libembroidery/emb-logging.h \
 ../libembroidery/emb-path.h \
 ../libembroidery/emb-pattern.h \
 ../libembroidery/emb-point.h \

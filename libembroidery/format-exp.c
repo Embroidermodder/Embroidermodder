@@ -4,6 +4,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 #include "emb-file.h"
+#include "emb-logging.h"
 
 static char expDecode(unsigned char a1)
 {
@@ -41,10 +42,13 @@ int readExp(EmbPattern* pattern, const char* fileName)
     char dx = 0, dy = 0;
     int flags = 0;
 
+    if(!pattern) { embLog_error("format-exp.c readExp(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-exp.c readExp(), fileName argument is null\n"); return 0; }
+
     file = embFile_open(fileName, "rb");
     if(!file)
     {
-        /*TODO: set status here "Error opening EXP file for read:" */
+        embLog_error("format-exp.c readExp(), cannot open %s for reading\n", fileName);
         return 0;
     }
     embPattern_loadExternalColorFile(pattern, fileName);
@@ -118,10 +122,13 @@ return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
     int flags = 0;
     unsigned char b[4];
 
+    if(!pattern) { embLog_error("format-exp.c writeExp(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-exp.c writeExp(), fileName argument is null\n"); return 0; }
+
     file = embFile_open(fileName, "wb");
     if(!file)
     {
-        /*TODO: set status here "Error opening EXP file for write:" */
+        embLog_error("format-exp.c writeExp(), cannot open %s for writing\n", fileName);
         return 0;
     }
 

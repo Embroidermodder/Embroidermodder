@@ -1,7 +1,8 @@
 #include "format-edr.h"
+#include "helpers-binary.h"
+#include "emb-logging.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "helpers-binary.h"
 
 int readEdr(EmbPattern* pattern, const char* fileName)
 {

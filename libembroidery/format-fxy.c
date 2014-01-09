@@ -1,16 +1,19 @@
-#include <stdio.h>
 #include "format-fxy.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
+#include <stdio.h>
 
 int readFxy(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-fxy.c readFxy(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-fxy.c readFxy(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
-        /*TODO: set messages here "Error opening FXY file for read:" */
+        embLog_error("format-fxy.c readFxy(), cannot open %s for reading\n", fileName);
         return 0;
     }
     embPattern_loadExternalColorFile(pattern, fileName);
@@ -43,8 +46,8 @@ int readFxy(EmbPattern* pattern, const char* fileName)
 
 int writeFxy(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeFxy */
-    emb_unused(fileName); /*TODO: finish writeFxy */
+    if(!pattern) { embLog_error("format-fxy.c writeFxy(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-fxy.c writeFxy(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeFxy */
 }
 
