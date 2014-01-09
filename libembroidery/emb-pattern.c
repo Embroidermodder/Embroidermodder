@@ -1,19 +1,20 @@
+#include "emb-pattern.h"
+#include "emb-reader-writer.h"
+#include "emb-settings.h"
+#include "emb-logging.h"
+#include "helpers-misc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-#include "emb-pattern.h"
-#include "emb-reader-writer.h"
-#include "emb-settings.h"
-#include "helpers-misc.h"
 
 /* Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with embPattern_free(). */
 EmbPattern* embPattern_create(void)
 {
     EmbPattern* p = 0;
     p = (EmbPattern*)malloc(sizeof(EmbPattern));
-    if(!p) { /* TODO: error */ return 0; }
+    if(!p) { embLog_error("emb-pattern.c embPattern_create(), unable to allocate memory for p\n"); return 0; }
 
     p->settings = embSettings_init();
     p->currentColorIndex = 0;
@@ -54,10 +55,11 @@ EmbPattern* embPattern_create(void)
 
 void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
 {
-    /* TODO: pointer safety */
     double prevX = 0;
     double prevY = 0;
     EmbStitchList* pointer = 0;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_hideStitchesOverLength(), p argument is null\n"); return; }
     pointer = p->stitchList;
     while(pointer)
     {
@@ -74,13 +76,13 @@ void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
 
 int embPattern_addThread(EmbPattern* p, EmbThread thread)
 {
-    /* TODO: pointer safety */
+    if(!p) { embLog_error("emb-pattern.c embPattern_addThread(), p argument is null\n"); return 0; }
     if(!(p->threadList))
     {
         EmbThreadList* t = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-        if(!t) { /* TODO: error allocating memory */ return 0; }
+        if(!t) { embLog_error("emb-pattern.c embPattern_addThread(), unable to allocate memory for t\n"); return 0; }
         t->thread = thread;
-        t->next = NULL;
+        t->next = 0;
         p->threadList = t;
     }
     else
@@ -92,11 +94,12 @@ int embPattern_addThread(EmbPattern* p, EmbThread thread)
 
 void embPattern_fixColorCount(EmbPattern* p)
 {
-    /* TODO: pointer safety */
-
     /* fix color count to be max of color index. */
     int maxColorIndex = 0;
-    EmbStitchList* list = p->stitchList;
+    EmbStitchList* list = 0;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_fixColorCount(), p argument is null\n"); return; }
+    list = p->stitchList;
     while(list)
     {
         maxColorIndex = max(maxColorIndex, list->stitch.color);
@@ -122,14 +125,16 @@ void embPattern_fixColorCount(EmbPattern* p)
 /* TODO: It doesn't appear that this function actually clears the stitchList so it is more of a copy than a move. */
 void moveStitchListToPolyline(EmbPattern* p)
 {
-    /* TODO: pointer safety */
-    EmbStitchList* stitches = p->stitchList;
+    EmbStitchList* stitches = 0;
     EmbPolylineObjectList* currentList = 0;
+
+    if(!p) { embLog_error("emb-pattern.c moveStitchListToPolyline(), p argument is null\n"); return; }
+    stitches = p->stitchList;
     while(stitches)
     {
         EmbPointList* currentPointList = 0;
         EmbPolylineObject* currentPolyline = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-        /* TODO: malloc fail error */
+        if(!currentPolyline) { embLog_error("emb-pattern.c moveStitchListToPolyline(), cannot allocate memory for currentPolyline\n"); return; }
         currentPolyline->pointList = 0;
         currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
         currentPolyline->color = embThreadList_getAt(p->threadList, stitches->stitch.color).color;
@@ -174,44 +179,45 @@ void moveStitchListToPolyline(EmbPattern* p)
 /* TODO: It doesn't appear that this function actually clears the polylineObjList so it is more of a copy than a move. */
 void movePolylinesToStitchList(EmbPattern* p)
 {
-    if(p)
-    {
-        EmbPolylineObjectList* polyList = p->polylineObjList;
-        EmbStitchList* currentList = 0;
-        int firstObject = 1;
-        /*int currentColor = polyList->polylineObj->color TODO: polyline color */
-        while(polyList)
-        {
-            EmbPolylineObject* currentPoly = polyList->polylineObj;
-            EmbPointList* currentPointList = currentPoly->pointList;
-            EmbThread thread;
-            thread.catalogNumber = 0;
-            thread.color = currentPoly->color;
-            thread.description = 0;
-            embPattern_addThread(p, thread);
-            if(!firstObject)
-            {
-                embPattern_addStitchRel(p, currentPointList->point.xx, currentPointList->point.yy, TRIM, 1);
-                embPattern_addStitchRel(p, 0.0, 0.0, STOP, 1);
-                firstObject = 0;
-            }
-            while(currentPointList)
-            {
-                embPattern_addStitchAbs(p, currentPointList->point.xx, currentPointList->point.yy, NORMAL, 1);
-                currentPointList = currentPointList->next;
-            }
+    EmbPolylineObjectList* polyList = 0;
+    EmbStitchList* currentList = 0;
+    int firstObject = 1;
+    /*int currentColor = polyList->polylineObj->color TODO: polyline color */
 
-            polyList = polyList->next;
+    if(!p) { embLog_error("emb-pattern.c movePolylinesToStitchList(), p argument is null\n"); return; }
+    polyList = p->polylineObjList;
+    while(polyList)
+    {
+        EmbPolylineObject* currentPoly = polyList->polylineObj;
+        EmbPointList* currentPointList = currentPoly->pointList;
+        EmbThread thread;
+        thread.catalogNumber = 0;
+        thread.color = currentPoly->color;
+        thread.description = 0;
+        embPattern_addThread(p, thread);
+        if(!firstObject)
+        {
+            embPattern_addStitchRel(p, currentPointList->point.xx, currentPointList->point.yy, TRIM, 1);
+            embPattern_addStitchRel(p, 0.0, 0.0, STOP, 1);
+            firstObject = 0;
         }
-        embPattern_addStitchRel(p, 0.0, 0.0, END, 1);
+        while(currentPointList)
+        {
+            embPattern_addStitchAbs(p, currentPointList->point.xx, currentPointList->point.yy, NORMAL, 1);
+            currentPointList = currentPointList->next;
+        }
+
+        polyList = polyList->next;
     }
+    embPattern_addStitchRel(p, 0.0, 0.0, END, 1);
 }
 
 /* Adds a stitch at the absolute position (x,y). Positive y is up. Units are in millimeters. */
 void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex)
 {
-    /* TODO: pointer safety */
     EmbStitch s;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_addStitchAbs(), p argument is null\n"); return; }
 
     if(flags & END)
     {
@@ -234,7 +240,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     if(!(p->stitchList))
     {
         p->stitchList = (EmbStitchList*)malloc(sizeof(EmbStitchList));
-        /* TODO: malloc fail error */
+        if(!p->stitchList) { embLog_error("emb-pattern.c embPattern_addStitchAbs(), cannot allocate memory for p->stitchList\n"); return; }
         p->stitchList->stitch = s;
         p->stitchList->next = 0;
         p->lastStitch = p->stitchList;
@@ -251,8 +257,9 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 /* Adds a stitch at the relative position (dx,dy) to the previous stitch. Positive y is up. Units are in millimeters. */
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex)
 {
-    /* TODO: pointer safety */
     double x,y;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_addStitchRel(), p argument is null\n"); return; }
     if(!embStitchList_empty(p->stitchList))
     {
         x = p->lastX + dx;
@@ -269,7 +276,7 @@ void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int
 
 void embPattern_changeColor(EmbPattern* p, int index)
 {
-    /* TODO: pointer safety */
+    if(!p) { embLog_error("emb-pattern.c embPattern_changeColor(), p argument is null\n"); return; }
     p->currentColorIndex = index;
 }
 
@@ -305,8 +312,9 @@ int embPattern_write(EmbPattern* p, const char *fileName) /* TODO: Write test ca
 * Doesn't insert or delete stitches to preserve density. */
 void embPattern_scale(EmbPattern* p, double scale)
 {
-    /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_scale(), p argument is null\n"); return; }
     pointer = p->stitchList;
     while(pointer)
     {
@@ -319,9 +327,8 @@ void embPattern_scale(EmbPattern* p, double scale)
 /* Calculates a rectangle that encapsulates all stitches and objects in the pattern. */
 EmbRect embPattern_calcBoundingBox(EmbPattern* p)
 {
-    /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
-    EmbRect BoundingRect;
+    EmbRect boundingRect;
     EmbStitch pt;
     EmbArcObjectList* aObjList = 0;
     EmbArc arc;
@@ -343,6 +350,9 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     EmbRect rect;
     EmbSplineObjectList* sObjList = 0;
     EmbBezier bezier;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_calcBoundingBox(), p argument is null\n"); return boundingRect; }
+
     /* Calculate the bounding rectangle.  It's needed for smart repainting. */
     /* TODO: Come back and optimize this mess so that after going thru all objects
             and stitches, if the rectangle isn't reasonable, then return a default rect */
@@ -357,16 +367,16 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     embRectObjectList_empty(p->rectObjList) &&
     embSplineObjectList_empty(p->splineObjList))
     {
-        BoundingRect.top = 0.0;
-        BoundingRect.left = 0.0;
-        BoundingRect.bottom = 1.0;
-        BoundingRect.right = 1.0;
-        return BoundingRect;
+        boundingRect.top = 0.0;
+        boundingRect.left = 0.0;
+        boundingRect.bottom = 1.0;
+        boundingRect.right = 1.0;
+        return boundingRect;
     }
-    BoundingRect.left = 99999.0;
-    BoundingRect.top =  99999.0;
-    BoundingRect.right = -99999.0;
-    BoundingRect.bottom = -99999.0;
+    boundingRect.left = 99999.0;
+    boundingRect.top =  99999.0;
+    boundingRect.right = -99999.0;
+    boundingRect.bottom = -99999.0;
 
     pointer = p->stitchList;
     while(pointer)
@@ -376,10 +386,10 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
         pt = pointer->stitch;
         if(!(pt.flags & TRIM))
         {
-            BoundingRect.left = (double)min(BoundingRect.left, pt.xx);
-            BoundingRect.top = (double)min(BoundingRect.top, pt.yy);
-            BoundingRect.right = (double)max(BoundingRect.right, pt.xx);
-            BoundingRect.bottom = (double)max(BoundingRect.bottom, pt.yy);
+            boundingRect.left = (double)min(boundingRect.left, pt.xx);
+            boundingRect.top = (double)min(boundingRect.top, pt.yy);
+            boundingRect.right = (double)max(boundingRect.right, pt.xx);
+            boundingRect.bottom = (double)max(boundingRect.bottom, pt.yy);
         }
         pointer = pointer->next;
     }
@@ -397,10 +407,10 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     while(cObjList)
     {
         circle = cObjList->circleObj.circle;
-        BoundingRect.left = (double)min(BoundingRect.left, circle.centerX - circle.radius);
-        BoundingRect.top = (double)min(BoundingRect.top, circle.centerY - circle.radius);
-        BoundingRect.right = (double)max(BoundingRect.right, circle.centerX + circle.radius);
-        BoundingRect.bottom = (double)max(BoundingRect.bottom, circle.centerY + circle.radius);
+        boundingRect.left = (double)min(boundingRect.left, circle.centerX - circle.radius);
+        boundingRect.top = (double)min(boundingRect.top, circle.centerY - circle.radius);
+        boundingRect.right = (double)max(boundingRect.right, circle.centerX + circle.radius);
+        boundingRect.bottom = (double)max(boundingRect.bottom, circle.centerY + circle.radius);
 
         cObjList = cObjList->next;
     }
@@ -478,28 +488,20 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
         sObjList = sObjList->next;
     }
 
-    return BoundingRect;
+    return boundingRect;
 }
 
 /* Flips the entire pattern horizontally about the y-axis. */
 void embPattern_flipHorizontal(EmbPattern* p)
 {
-    if(!p)
-    {
-        /*TODO: error */
-        return;
-    }
+    if(!p) { embLog_error("emb-pattern.c embPattern_flipHorizontal(), p argument is null\n"); return; }
     embPattern_flip(p, 1, 0);
 }
 
 /* Flips the entire pattern vertically about the x-axis. */
 void embPattern_flipVertical(EmbPattern* p)
 {
-    if(!p)
-    {
-        /*TODO: error */
-        return;
-    }
+    if(!p) { embLog_error("emb-pattern.c embPattern_flipVertical(), p argument is null\n"); return; }
     embPattern_flip(p, 0, 1);
 }
 
@@ -520,11 +522,7 @@ void embPattern_flip(EmbPattern* p, int horz, int vert)
     EmbRectObjectList* rObjList = 0;
     EmbSplineObjectList* sObjList = 0;
 
-    if(!p)
-    {
-        /*TODO: error */
-        return;
-    }
+    if(!p) { embLog_error("emb-pattern.c embPattern_flip(), p argument is null\n"); return; }
 
     stList = p->stitchList;
     while(stList)
@@ -633,10 +631,11 @@ void embPattern_flip(EmbPattern* p, int horz, int vert)
 
 void embPattern_combineJumpStitches(EmbPattern* p)
 {
-    /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
     int jumpCount = 0;
     EmbStitchList* jumpListStart = 0;
+
+    if(!p) { embLog_error("emb-pattern.c embPattern_combineJumpStitches(), p argument is null\n"); return; }
     pointer = p->stitchList;
     while(pointer)
     {
@@ -673,10 +672,10 @@ void embPattern_combineJumpStitches(EmbPattern* p)
 /*TODO: The params determine the max XY movement rather than the length. They need renamed or clarified further. */
 void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength)
 {
-    /* TODO: pointer safety */
     int j = 0, splits;
     double maxXY, maxLen, addX, addY;
 
+    if(!p) { embLog_error("emb-pattern.c embPattern_correctForMaxStitchLength(), p argument is null\n"); return; }
     if(embStitchList_count(p->stitchList) > 1)
     {
         EmbStitchList* pointer = 0;
@@ -714,7 +713,7 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
                         s.flags = flagsToUse;
                         s.color = colorToUse;
                         item = (EmbStitchList *)malloc(sizeof(EmbStitchList));
-                        /* TODO: malloc fail error */
+                        if(!item) { embLog_error("emb-pattern.c embPattern_correctForMaxStitchLength(), cannot allocate memory for item\n"); return; }
                         item->stitch = s;
                         item->next = pointer;
                         prev->next = item;
@@ -737,13 +736,12 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
 
 void embPattern_center(EmbPattern* p)
 {
-    /* TODO: pointer safety */
-
     /* TODO: review this. currently not used in anywhere. Also needs to handle various design objects */
     int moveLeft, moveTop;
     EmbRect boundingRect;
     EmbStitchList* pointer = 0;
 
+    if(!p) { embLog_error("emb-pattern.c embPattern_center(), p argument is null\n"); return; }
     boundingRect = embPattern_calcBoundingBox(p);
 
     moveLeft = (int)(boundingRect.left - (embRect_width(boundingRect) / 2.0));
@@ -762,14 +760,17 @@ void embPattern_center(EmbPattern* p)
 /*TODO: Description needed. */
 void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 {
-    /* TODO: pointer safety */
     char hasRead = 0;
     EmbReaderWriter* colorFile = 0;
     const char* dotPos = strrchr(fileName, '.');
+    char* extractName = 0;
 
-    char* extractName = (char*)malloc(dotPos - fileName + 5);
-    if(!extractName) return;
-    extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
+    if(!p) { embLog_error("emb-pattern.c embPattern_loadExternalColorFile(), p argument is null\n"); return; }
+    if(!fileName) { embLog_error("emb-pattern.c embPattern_loadExternalColorFile(), fileName argument is null\n"); return; }
+
+    extractName = (char*)malloc(dotPos - fileName + 5);
+    if(!extractName) { embLog_error("emb-pattern.c embPattern_loadExternalColorFile(), cannot allocate memory for extractName\n"); return; }
+    extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
     extractName[dotPos - fileName] = '\0';
     strcat(extractName,".edr");
     colorFile = embReaderWriter_getByFileName(extractName);
@@ -780,7 +781,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     if(!hasRead)
     {
         free(colorFile);
-        extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
+        extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".rgb");
         colorFile = embReaderWriter_getByFileName(extractName);
@@ -792,7 +793,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     if(!hasRead)
     {
         free(colorFile);
-        extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
+        extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".col");
         colorFile = embReaderWriter_getByFileName(extractName);
@@ -804,7 +805,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     if(!hasRead)
     {
         free(colorFile);
-        extractName = (char *)memcpy(extractName, fileName, dotPos - fileName);
+        extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".inf");
         colorFile = embReaderWriter_getByFileName(extractName);
@@ -848,7 +849,7 @@ void embPattern_free(EmbPattern* p)
     EmbSplineObjectList* thisSplineObjList = 0;
     EmbSplineObjectList* nextSplineObjList = 0;
 
-    if(!p) return;
+    if(!p) { embLog_error("emb-pattern.c embPattern_free(), p argument is null\n"); return; }
     thisStitchList = p->stitchList;
     while(thisStitchList)
     {
@@ -961,13 +962,13 @@ void embPattern_free(EmbPattern* p)
 /* Adds a circle with its center at the absolute position (cx,cy) with a radius of (r). Positive y is up. Units are in millimeters. */
 void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r)
 {
-    /* TODO: pointer safety */
     EmbCircleObject circleObj = embCircleObject_make(cx, cy, r);
 
+    if(!p) { embLog_error("emb-pattern.c embPattern_addCircleObjectAbs(), p argument is null\n"); return; }
     if(!(p->circleObjList))
     {
         p->circleObjList = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
-        /* TODO: malloc fail error */
+        if(!p->circleObjList) { embLog_error("emb-pattern.c embPattern_addCircleObjectAbs(), cannot allocate memory for p->circleObjList\n"); return; }
         p->circleObjList->circleObj = circleObj;
         p->circleObjList->next = 0;
         p->lastCircleObj = p->circleObjList;
@@ -982,13 +983,13 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
 /* Adds an ellipse with its center at the absolute position (cx,cy) with radii of (rx,ry). Positive y is up. Units are in millimeters. */
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry)
 {
-    /* TODO: pointer safety */
     EmbEllipseObject ellipseObj = embEllipseObject_make(cx, cy, rx, ry);
 
+    if(!p) { embLog_error("emb-pattern.c embPattern_addEllipseObjectAbs(), p argument is null\n"); return; }
     if(!(p->ellipseObjList))
     {
         p->ellipseObjList = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
-        /* TODO: malloc fail error */
+        if(!p->ellipseObjList) { embLog_error("emb-pattern.c embPattern_addEllipseObjectAbs(), cannot allocate memory for p->ellipseObjList\n"); return; }
         p->ellipseObjList->ellipseObj = ellipseObj;
         p->ellipseObjList->next = 0;
         p->lastEllipseObj = p->ellipseObjList;
@@ -1003,13 +1004,13 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
 /* Adds a line starting at the absolute position (x1,y1) and ending at the absolute position (x2,y2). Positive y is up. Units are in millimeters. */
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2)
 {
-    /* TODO: pointer safety */
     EmbLineObject lineObj = embLineObject_make(x1, y1, x2, y2);
 
+    if(!p) { embLog_error("emb-pattern.c embPattern_addLineObjectAbs(), p argument is null\n"); return; }
     if(!(p->lineObjList))
     {
         p->lineObjList = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
-        /* TODO: malloc fail error */
+        if(!p->lineObjList) { embLog_error("emb-pattern.c embPattern_addLineObjectAbs(), cannot allocate memory for p->lineObjList\n"); return; }
         p->lineObjList->lineObj = lineObj;
         p->lineObjList->next = 0;
         p->lastLineObj = p->lineObjList;
@@ -1027,70 +1028,76 @@ void embPattern_addPathObjectAbs(EmbPattern* pattern, EmbPathObject* pathObj)
 }
 
 /* Adds a point at the absolute position (x,y). Positive y is up. Units are in millimeters. */
-void embPattern_addPointObjectAbs(EmbPattern* pattern, double x, double y)
+void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
 {
-    /* TODO: pointer safety */
     EmbPointObject pointObj = embPointObject_make(x, y);
 
-    if(!(pattern->pointObjList))
+    if(!p) { embLog_error("emb-pattern.c embPattern_addPointObjectAbs(), p argument is null\n"); return; }
+    if(!(p->pointObjList))
     {
-        pattern->pointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
-        /* TODO: malloc fail error */
-        pattern->pointObjList->pointObj = pointObj;
-        pattern->pointObjList->next = 0;
-        pattern->lastPointObj = pattern->pointObjList;
+        p->pointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
+        if(!p->pointObjList) { embLog_error("emb-pattern.c embPattern_addPointObjectAbs(), cannot allocate memory for p->pointObjList\n"); return; }
+        p->pointObjList->pointObj = pointObj;
+        p->pointObjList->next = 0;
+        p->lastPointObj = p->pointObjList;
     }
     else
     {
-        embPointObjectList_add(pattern->lastPointObj, pointObj);
-        pattern->lastPointObj = pattern->lastPointObj->next;
+        embPointObjectList_add(p->lastPointObj, pointObj);
+        p->lastPointObj = p->lastPointObj->next;
     }
 }
 
-void embPattern_addPolygonObjectAbs(EmbPattern* pattern, EmbPolygonObject* obj)
+void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj)
 {
-    if(!(pattern->polygonObjList))
+    if(!p) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), p argument is null\n"); return; }
+    if(!obj) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), obj argument is null\n"); return; }
+
+    if(!(p->polygonObjList))
     {
-        pattern->polygonObjList = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
-        /* TODO: malloc fail error */
-        pattern->polygonObjList->polygonObj = obj;
-        pattern->polygonObjList->next = 0;
-        pattern->lastPolygonObj = pattern->polygonObjList;
+        p->polygonObjList = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
+        if(!p->polygonObjList) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), cannot allocate memory for p->polygonObjList\n"); return; }
+        p->polygonObjList->polygonObj = obj;
+        p->polygonObjList->next = 0;
+        p->lastPolygonObj = p->polygonObjList;
     }
     else
     {
-        embPolygonObjectList_add(pattern->lastPolygonObj, obj);
-        pattern->lastPolygonObj = pattern->lastPolygonObj->next;
+        embPolygonObjectList_add(p->lastPolygonObj, obj);
+        p->lastPolygonObj = p->lastPolygonObj->next;
     }
 }
 
-void embPattern_addPolylineObjectAbs(EmbPattern* pattern, EmbPolylineObject* obj)
+void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
 {
-    if(!(pattern->polylineObjList))
+    if(!p) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), p argument is null\n"); return; }
+    if(!obj) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), obj argument is null\n"); return; }
+
+    if(!(p->polylineObjList))
     {
-        pattern->polylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
-        /* TODO: malloc fail error */
-        pattern->polylineObjList->polylineObj = obj;
-        pattern->polylineObjList->next = 0;
-        pattern->lastPolylineObj = pattern->polylineObjList;
+        p->polylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+        if(!p->polylineObjList) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), cannot allocate memory for p->polylineObjList\n"); return; }
+        p->polylineObjList->polylineObj = obj;
+        p->polylineObjList->next = 0;
+        p->lastPolylineObj = p->polylineObjList;
     }
     else
     {
-        embPolylineObjectList_add(pattern->lastPolylineObj, obj);
-        pattern->lastPolylineObj = pattern->lastPolylineObj->next;
+        embPolylineObjectList_add(p->lastPolylineObj, obj);
+        p->lastPolylineObj = p->lastPolylineObj->next;
     }
 }
 
 /* Adds a rectangle at the absolute position (x,y) with a width of (w) and a height of (h). Positive y is up. Units are in millimeters. */
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h)
 {
-    /* TODO: pointer safety */
     EmbRectObject rectObj = embRectObject_make(x, y, w, h);
 
+    if(!p) { embLog_error("emb-pattern.c embPattern_addRectObjectAbs(), p argument is null\n"); return; }
     if(!(p->rectObjList))
     {
         p->rectObjList = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
-        /* TODO: malloc fail error */
+        if(!p->rectObjList) { embLog_error("emb-pattern.c embPattern_addRectObjectAbs(), cannot allocate memory for p->rectObjList\n"); return; }
         p->rectObjList->rectObj = rectObj;
         p->rectObjList->next = 0;
         p->lastRectObj = p->rectObjList;
