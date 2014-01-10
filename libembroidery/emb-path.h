@@ -23,17 +23,24 @@ extern "C" {
 
 typedef struct EmbPathObject_
 {
-    int x; /* dummy variable, some compilers require a struct to have at least one member */
+    EmbPointList* pointList;
+
+    /* Properties */
+    int lineType;
+    EmbColor color;
 } EmbPathObject;
 
 typedef struct EmbPathObjectList_
 {
-    EmbPathObject pathObj;
+    EmbPathObject* pathObj;
     struct EmbPathObjectList_* next;
-} EmbPathObjectList; /* TODO: This struct/file needs reworked to work internally similar to polylines */
+} EmbPathObjectList;
 
+EmbPathObjectList* embPathObjectList_create(EmbPathObject* data);
+EmbPathObjectList* embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data);
 int embPathObjectList_count(EmbPathObjectList* pointer);
 int embPathObjectList_empty(EmbPathObjectList* pointer);
+void embPathObjectList_free(EmbPathObjectList* pointer);
 
 #ifdef __cplusplus
 }
