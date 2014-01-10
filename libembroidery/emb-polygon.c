@@ -1,4 +1,5 @@
 #include "emb-polygon.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /**************************************************/
@@ -7,21 +8,21 @@
 
 EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data)
 {
-    EmbPolygonObjectList* heapPointObj = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
-    /* TODO: malloc fail error */
-    heapPointObj->polygonObj = data;
-    heapPointObj->next = 0;
-    return heapPointObj;
+    EmbPolygonObjectList* heapPolygonObjList = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
+    if(!heapPolygonObjList) { embLog_error("emb-polygon.c embPolygonObjectList_create(), cannot allocate memory for heapPolygonObjList\n"); return 0; }
+    heapPolygonObjList->polygonObj = data;
+    heapPolygonObjList->next = 0;
+    return heapPolygonObjList;
 }
 
 EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data)
 {
+    if(!pointer) { embLog_error("emb-polygon.c embPolygonObjectList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-polygon.c embPolygonObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->polygonObj = data;
     pointer->next = 0;
-
     return pointer;
 }
 

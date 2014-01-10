@@ -42,7 +42,7 @@ EmbVectorList* embVectorList_create(EmbVector data)
 
 EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data)
 {
-    if(!pointer) return embVectorList_create(data);
+    if(!pointer) { embLog_error("emb-vector.c embVectorList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbVectorList*)malloc(sizeof(EmbVectorList));
     if(!pointer->next) { embLog_error("emb-vector.c embVectorList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

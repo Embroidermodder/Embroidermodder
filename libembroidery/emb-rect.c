@@ -1,4 +1,5 @@
 #include "emb-rect.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /**************************************************/
@@ -84,7 +85,7 @@ EmbRectObject embRectObject_make(double x, double y, double w, double h)
 EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 {
     EmbRectObject* heapRectObj = (EmbRectObject*)malloc(sizeof(EmbRectObject));
-    if(!heapRectObj) return 0;
+    if(!heapRectObj) { embLog_error("emb-rect.c embRectObject_create(), cannot allocate memory for heapRectObj\n"); return 0; }
     heapRectObj->rect.left = x;
     heapRectObj->rect.top = y;
     heapRectObj->rect.right = x + w;
@@ -98,8 +99,9 @@ EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 
 void embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data)
 {
-    /* TODO: pointer safety */
+    if(!pointer) { embLog_error("emb-rect.c embRectObjectList_add(), pointer argument is null\n"); return; }
     pointer->next = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
+    if(!pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
     pointer = pointer->next;
     pointer->rectObj = data;
     pointer->next = 0;

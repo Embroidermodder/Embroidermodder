@@ -1,4 +1,5 @@
 #include "emb-polyline.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /**************************************************/
@@ -7,21 +8,21 @@
 
 EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 {
-    EmbPolylineObjectList* heapPointObj = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
-    /* TODO: malloc fail error */
-    heapPointObj->polylineObj = data;
-    heapPointObj->next = 0;
-    return heapPointObj;
+    EmbPolylineObjectList* heapPolylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    if(!heapPolylineObjList) { embLog_error("emb-polyline.c embPolylineObjectList_create(), cannot allocate memory for heapPolylineObjList\n"); return 0; }
+    heapPolylineObjList->polylineObj = data;
+    heapPolylineObjList->next = 0;
+    return heapPolylineObjList;
 }
 
 EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
 {
+    if(!pointer) { embLog_error("emb-polyline.c embPolylineObjectList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-polyline.c embPolylineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->polylineObj = data;
     pointer->next = 0;
-
     return pointer;
 }
 
