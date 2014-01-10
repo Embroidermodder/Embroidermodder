@@ -58,14 +58,15 @@ EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 /* EmbLineObjectList                              */
 /**************************************************/
 
-void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
+EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
-    if(!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return; }
+    if(!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
-    if(!pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
+    if(!pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->lineObj = data;
     pointer->next = 0;
+    return pointer;
 }
 
 int embLineObjectList_count(EmbLineObjectList* pointer)

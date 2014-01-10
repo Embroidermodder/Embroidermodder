@@ -50,14 +50,15 @@ EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 /* EmbCircleObjectList                            */
 /**************************************************/
 
-void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
+EmbCircleObjectList* embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 {
-    if(!pointer) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer argument is null\n"); return; }
+    if(!pointer) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
-    if(!pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
+    if(!pointer->next) { embLog_error("emb-circle.c embCircleObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->circleObj = data;
     pointer->next = 0;
+    return pointer;
 }
 
 int embCircleObjectList_count(EmbCircleObjectList* pointer)

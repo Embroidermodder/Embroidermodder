@@ -47,7 +47,7 @@ typedef struct EmbPointObjectList_
     struct EmbPointObjectList_* next;
 } EmbPointObjectList;
 
-void embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
+EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
 int embPointObjectList_count(EmbPointObjectList* pointer);
 int embPointObjectList_empty(EmbPointObjectList* pointer);
 void embPointObjectList_free(EmbPointObjectList* pointer);

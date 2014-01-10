@@ -37,7 +37,7 @@ typedef struct EmbArcObjectList_
     struct EmbArcObjectList_* next;
 } EmbArcObjectList;
 
-void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
+EmbArcObjectList* embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
 int embArcObjectList_count(EmbArcObjectList* pointer);
 int embArcObjectList_empty(EmbArcObjectList* pointer);
 void embArcObjectList_free(EmbArcObjectList* pointer);

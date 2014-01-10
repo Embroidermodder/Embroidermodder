@@ -27,7 +27,7 @@ typedef struct EmbStitchList_
     struct EmbStitchList_* next;
 } EmbStitchList;
 
-void embStitchList_add(EmbStitchList* pointer, EmbStitch data);
+EmbStitchList* embStitchList_add(EmbStitchList* pointer, EmbStitch data);
 int embStitchList_count(EmbStitchList* pointer);
 int embStitchList_empty(EmbStitchList* pointer);
 void embStitchList_free(EmbStitchList* pointer);

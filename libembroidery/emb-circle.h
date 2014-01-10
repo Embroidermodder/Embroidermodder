@@ -36,7 +36,7 @@ typedef struct EmbCircleObjectList_
     struct EmbCircleObjectList_* next;
 } EmbCircleObjectList;
 
-void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data);
+EmbCircleObjectList* embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data);
 int embCircleObjectList_count(EmbCircleObjectList* pointer);
 int embCircleObjectList_empty(EmbCircleObjectList* pointer);
 void embCircleObjectList_free(EmbCircleObjectList* pointer);

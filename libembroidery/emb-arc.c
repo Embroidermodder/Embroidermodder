@@ -1,4 +1,5 @@
 #include "emb-arc.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 
 /* Returns an EmbArcObject. It is created on the stack. */
@@ -28,21 +29,15 @@ EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, do
     return heapArcObj;
 }
 
-void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
+EmbArcObjectList* embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
 {
-    while(pointer->next != 0)
-    {
-        pointer = pointer->next;
-    }
+    if(!pointer) { embLog_error("emb-arc.c embArcObjectList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbArcObjectList*)malloc(sizeof(EmbArcObjectList));
-    if(!pointer->next)
-    {
-        pointer->next = 0;
-        return;
-    }
+    if(!pointer->next) { embLog_error("emb-arc.c embArcObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->arcObj = data;
     pointer->next = 0;
+    return pointer;
 }
 
 int embArcObjectList_count(EmbArcObjectList* pointer)

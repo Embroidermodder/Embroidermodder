@@ -77,14 +77,15 @@ EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, doubl
 /* EmbEllipseObjectList                           */
 /**************************************************/
 
-void embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
+EmbEllipseObjectList* embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
 {
-    if(!pointer) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer argument is null\n"); return; }
+    if(!pointer) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
-    if(!pointer->next) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), cannot allocate memory for pointer->next\n"); return; }
+    if(!pointer->next) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->ellipseObj = data;
     pointer->next = 0;
+    return pointer;
 }
 
 int embEllipseObjectList_count(EmbEllipseObjectList* pointer)
