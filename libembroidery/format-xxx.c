@@ -24,7 +24,7 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     int paletteOffset;
     int i;
     char thisStitchJump = 0;
-    EmbStitchList* lastStitch;
+    EmbStitchList* lastStitch = 0;
     EmbStitchList* secondLast = 0;
 
     if(!pattern) { embLog_error("format-xxx.c readXxx(), pattern argument is null\n"); return 0; }
@@ -145,7 +145,7 @@ static void xxxEncodeDesign(FILE* file, EmbPattern* p)
 {
     double thisX = 0.0f;
     double thisY = 0.0f;
-    EmbStitchList* stitches;
+    EmbStitchList* stitches = 0;
 
     if(!embStitchList_empty(p->stitchList))
     {
@@ -184,7 +184,7 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     int i;
     EmbRect rect;
     int endOfStitches;
-    EmbThreadList* colors;
+    EmbThreadList* colors = 0;
     int curColor = 0;
 
     if(!pattern) { embLog_error("format-xxx.c writeXxx(), pattern argument is null\n"); return 0; }

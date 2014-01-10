@@ -102,7 +102,7 @@ int readCsd(EmbPattern* pattern, const char* fileName)
     int colorChange = -1;
     int flags;
     char endOfStream = 0;
-    FILE* file;
+    FILE* file = 0;
     unsigned char colorOrder[14];
 
     if(!pattern) { embLog_error("format-csd.c readCsd(), pattern argument is null\n"); return 0; }

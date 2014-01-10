@@ -50,7 +50,7 @@ int readCol(EmbPattern* pattern, const char* fileName)
 
 int writeCol(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     int i, colorCount;
     EmbThreadList *colors;
 

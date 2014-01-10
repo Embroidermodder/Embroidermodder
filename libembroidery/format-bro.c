@@ -8,7 +8,7 @@ int readBro(EmbPattern* pattern, const char* fileName)
     short unknown1, unknown2, unknown3, unknown4, moreBytesToEnd;
     char name[8];
     int stitchType;
-    FILE* file;
+    FILE* file = 0;
 
     if(!pattern) { embLog_error("format-bro.c readBro(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-bro.c readBro(), fileName argument is null\n"); return 0; }

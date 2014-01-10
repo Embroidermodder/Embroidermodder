@@ -66,7 +66,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, FILE* file)
     /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
     EmbStitchList* mainPointer = 0;
-    short *colorInfo = 0;
+    short* colorInfo = 0;
     int flag = 0;
     int count = 0;
     int colorCode = -1;

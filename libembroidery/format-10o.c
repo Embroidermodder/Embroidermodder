@@ -1,16 +1,21 @@
 #include "format-10o.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
 int read10o(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-10o.c read10o(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-10o.c read10o(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName,"rb");
     if(!file)
     {
+        embLog_error("format-10o.c read10o(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
 
     while(1)
@@ -49,8 +54,8 @@ int read10o(EmbPattern* pattern, const char* fileName)
 
 int write10o(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish write10o */
-    emb_unused(fileName); /*TODO: finish write10o */
+    if(!pattern) { embLog_error("format-10o.c write10o(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-10o.c write10o(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish write10o */
 }
 

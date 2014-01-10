@@ -2829,18 +2829,23 @@ void svgProcess(int c, const char* buff)
 
 int readSvg(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     int size = 1024;
     int pos;
     int c = 0;
-    EmbRectObjectList* rList;
-    EmbCircleObjectList* cList;
-    EmbEllipseObjectList* eList;
-    EmbLineObjectList* liList;
-    EmbPointObjectList* poList;
-    EmbPolygonObjectList* pogList;
-    EmbPolylineObjectList* polList;
-    char* buff = (char*)malloc(size);
+    EmbRectObjectList* rList = 0;
+    EmbCircleObjectList* cList = 0;
+    EmbEllipseObjectList* eList = 0;
+    EmbLineObjectList* liList = 0;
+    EmbPointObjectList* poList = 0;
+    EmbPolygonObjectList* pogList = 0;
+    EmbPolylineObjectList* polList = 0;
+    char* buff = 0;
+
+    if(!pattern) { embLog_error("format-svg.c readSvg(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-svg.c readSvg(), fileName argument is null\n"); return 0; }
+
+    buff = (char*)malloc(size);
     if(!buff) { embLog_error("format-svg.c readSvg(), cannot allocate memory for buff\n"); return 0; }
 
     svgExpect = SVG_EXPECT_NULL;
@@ -2984,6 +2989,9 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
 
     char tmpX[32];
     char tmpY[32];
+
+    if(!pattern) { embLog_error("format-svg.c writeSvg(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-svg.c writeSvg(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "w");
     if(!file)

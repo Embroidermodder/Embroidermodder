@@ -1,17 +1,21 @@
 #include "format-100.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
 int read100(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file;
+    FILE* file = 0;
     int x,y;
     int stitchType;
     unsigned char b[4];
 
-    file= fopen(fileName,"rb");
-    if(file==0)
+    if(!pattern) { embLog_error("format-100.c read100(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-100.c read100(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName,"rb");
+    if(!file)
     {
+        embLog_error("format-100.c read100(), cannot open %s for reading\n", fileName);
         return 0;
     }
     embPattern_loadExternalColorFile(pattern, fileName);
@@ -31,8 +35,8 @@ int read100(EmbPattern* pattern, const char* fileName)
 
 int write100(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish write100 */
-    emb_unused(fileName); /*TODO: finish write100 */
+    if(!pattern) { embLog_error("format-100.c write100(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-100.c write100(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish write100 */
 }
 
