@@ -1,17 +1,21 @@
 #include "format-rgb.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "helpers-binary.h"
 
 int readRgb(EmbPattern* pattern, const char* fileName)
 {
     int i, numberOfColors;
-
     FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-rgb.c readRgb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-rgb.c readRgb(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "rb");
     if(!file)
     {
+        /* NOTE: The .rgb format is an optional color file. Do not log an error if the file does not exist */
         return 0;
     }
     fseek(file, 0x00, SEEK_END);
@@ -38,9 +42,13 @@ int writeRgb(EmbPattern* pattern, const char* fileName)
     EmbThreadList* colors = pattern->threadList;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-rgb.c writeRgb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-rgb.c writeRgb(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-rgb.c writeRgb(), cannot open %s for writing\n", fileName);
         return 0;
     }
 

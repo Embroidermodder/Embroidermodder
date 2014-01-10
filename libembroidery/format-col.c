@@ -1,19 +1,26 @@
-#include <stdlib.h>
 #include "format-col.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
+#include <stdlib.h>
 
 int readCol(EmbPattern* pattern, const char* fileName)
 {
     int numberOfColors, i;
+    FILE* file = 0;
 
-    FILE* file = fopen(fileName, "r");
-    if(file==0)
+    if(!pattern) { embLog_error("format-col.c readCol(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-col.c readCol(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName, "r");
+    if(!file)
     {
+        /* NOTE: The .col format is an optional color file. Do not log an error if the file does not exist */
         return 0;
     }
     embThreadList_free(pattern->threadList);
-    if(fscanf(file, "%d\r", &numberOfColors) < 1) 
+    if(fscanf(file, "%d\r", &numberOfColors) < 1)
     {
+        /* TODO: log error */
         return 0;
     }
     for(i = 0; i < numberOfColors; i++)
@@ -23,6 +30,7 @@ int readCol(EmbPattern* pattern, const char* fileName)
         char line[30];
         if(fscanf(file, "%s\r", line) < 1)
         {
+            /* TODO: log error */
             return 0;
         }
         if(sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red) != 4)
@@ -46,9 +54,13 @@ int writeCol(EmbPattern* pattern, const char* fileName)
     int i, colorCount;
     EmbThreadList *colors;
 
+    if(!pattern) { embLog_error("format-col.c writeCol(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-col.c writeCol(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "w");
-    if(file==0)
+    if(!file)
     {
+        embLog_error("format-col.c writeCol(), cannot open %s for writing\n", fileName);
         return 0;
     }
     colorCount = embThreadList_count(pattern->threadList);

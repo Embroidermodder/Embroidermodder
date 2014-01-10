@@ -16,7 +16,7 @@ int readEdr(EmbPattern* pattern, const char* fileName)
     file = fopen(fileName, "rb");
     if(!file)
     {
-        embLog_error("format-edr.c readEdr(), cannot open %s for reading\n", fileName);
+        /* NOTE: The .edr format is an optional color file. Do not log an error if the file does not exist */
         return 0;
     }
     fseek(file, 0x00, SEEK_END);

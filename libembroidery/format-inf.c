@@ -1,7 +1,8 @@
 #include "format-inf.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "helpers-binary.h"
 #include <string.h>
 
 int readInf(EmbPattern* pattern, const char* fileName)
@@ -10,9 +11,13 @@ int readInf(EmbPattern* pattern, const char* fileName)
     int i;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-inf.c readInf(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-inf.c readInf(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        /* NOTE: The .inf format is an optional color file. Do not log an error if the file does not exist */
         return 0;
     }
 
@@ -46,9 +51,13 @@ int writeInf(EmbPattern* pattern, const char* fileName)
     int i = 1, bytesRemaining;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-inf.c writeInf(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-inf.c writeInf(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-inf.c writeInf(), cannot open %s for writing\n", fileName);
         return 0;
     }
     binaryWriteUIntBE(file, 0x01);
