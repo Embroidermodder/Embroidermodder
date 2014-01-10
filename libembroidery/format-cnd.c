@@ -1,17 +1,17 @@
 #include "format-cnd.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 
 int readCnd(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish readCnd */
-    emb_unused(fileName); /*TODO: finish readCnd */
+    if(!pattern) { embLog_error("format-cnd.c readCnd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-cnd.c readCnd(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish readCnd */
 }
 
 int writeCnd(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeCnd */
-    emb_unused(fileName); /*TODO: finish writeCnd */
+    if(!pattern) { embLog_error("format-cnd.c writeCnd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-cnd.c writeCnd(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeCnd */
 }
 

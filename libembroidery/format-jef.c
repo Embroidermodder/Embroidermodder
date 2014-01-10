@@ -1,5 +1,6 @@
-#include "emb-time.h"
 #include "format-jef.h"
+#include "emb-logging.h"
+#include "emb-time.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
@@ -17,7 +18,7 @@ static int jefGetHoopSize(int width, int height)
     return ((int) HOOP_110X110);
 }
 
-static void jefSetHoopFromId(EmbPattern *pattern, int hoopCode)
+static void jefSetHoopFromId(EmbPattern* pattern, int hoopCode)
 {
     switch(hoopCode)
     {
@@ -44,7 +45,8 @@ static void jefSetHoopFromId(EmbPattern *pattern, int hoopCode)
     }
 }
 
-struct hoop_padding {
+struct hoop_padding
+{
     int left;
     int right;
     int top;
@@ -59,12 +61,17 @@ int readJef(EmbPattern* pattern, const char* fileName)
     int stitchCount;
     char date[8], time[8];
     char dx, dy;
-
     FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-jef.c readJef(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-jef.c readJef(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "rb");
     if(!file)
+    {
+        embLog_error("format-jef.c readJef(), cannot open %s for reading\n", fileName);
         return 0;
+    }
 
     stitchOffset = binaryReadInt32(file);
     formatFlags = binaryReadInt32(file); /* TODO: find out what this means */
@@ -184,11 +191,16 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     EmbStitchList* pointer = 0;
     double prevX, prevY;
 
+    if(!pattern) { embLog_error("format-jef.c writeJef(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-jef.c writeJef(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-jef.c writeJef(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
     embPattern_correctForMaxStitchLength(pattern, 127, 127);
 
     colorlistSize = embThreadList_count(pattern->threadList);

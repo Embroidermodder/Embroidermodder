@@ -1,17 +1,17 @@
 #include "format-art.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 
 int readArt(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish readArt */
-    emb_unused(fileName); /*TODO: finish readArt */
+    if(!pattern) { embLog_error("format-art.c readArt(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-art.c readArt(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish readArt */
 }
 
 int writeArt(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeArt */
-    emb_unused(fileName); /*TODO: finish writeArt */
+    if(!pattern) { embLog_error("format-art.c writeArt(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-art.c writeArt(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeArt */
 }
 

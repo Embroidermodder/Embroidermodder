@@ -1,4 +1,5 @@
 #include "format-pcd.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
@@ -47,9 +48,13 @@ int readPcd(EmbPattern* pattern, const char* fileName)
     unsigned short colorCount;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-pcd.c readPcd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pcd.c readPcd(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-pcd.c readPcd(), cannot open %s for reading\n", fileName);
         return 0;
     }
     version = binaryReadByte(file);
@@ -112,11 +117,16 @@ int writePcd(EmbPattern* pattern, const char* fileName)
     unsigned char colorCount;
     double xx = 0.0, yy = 0.0;
 
+    if(!pattern) { embLog_error("format-pcd.c writePcd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pcd.c writePcd(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-pcd.c writePcd(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
     binaryWriteByte(file, (unsigned char)'2');
     binaryWriteByte(file, 3); /* TODO: select hoop size defaulting to Large PCS hoop */
     colorCount = (unsigned char) embThreadList_count(pattern->threadList);

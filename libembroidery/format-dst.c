@@ -217,6 +217,10 @@ int readDst(EmbPattern* pattern, const char* fileName)
     char thisJump = 0;
     unsigned char b[3];
     char header[512 + 1];
+    FILE* file = 0;
+    int i;
+    int flags; /* for converting stitches from file encoding */
+
     /*
     * The header seems to contain information about the design.
     * Seems to be ASCII text delimited by 0x0D (carriage returns).
@@ -262,15 +266,15 @@ int readDst(EmbPattern* pattern, const char* fileName)
     *
     * char PD[9+1];   PD is also storing some information for multi-volume design.
     */
-    FILE* file = 0;
-    int i;
 
-    /* for converting stitches from file encoding */
-    int flags;
     /* TODO: review commented code below
     pattern->clear();
     pattern->set_variable("file_name",filename);
     */
+
+    if(!pattern) { embLog_error("format-dst.c readDst(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dst.c readDst(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
@@ -388,6 +392,9 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     int ax, ay, mx, my;
     char* pd = 0;
     EmbStitchList* pointer = 0;
+
+    if(!pattern) { embLog_error("format-dst.c writeDst(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dst.c writeDst(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "wb");
     if(!file)

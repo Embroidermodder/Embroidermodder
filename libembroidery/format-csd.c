@@ -1,7 +1,7 @@
 #include "format-csd.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -104,9 +104,14 @@ int readCsd(EmbPattern* pattern, const char* fileName)
     char endOfStream = 0;
     FILE* file;
     unsigned char colorOrder[14];
+
+    if(!pattern) { embLog_error("format-csd.c readCsd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-csd.c readCsd(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
-    if(file==0)
+    if(!file)
     {
+        embLog_error("format-csd.c readCsd(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -185,8 +190,8 @@ int readCsd(EmbPattern* pattern, const char* fileName)
 
 int writeCsd(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeCsd */
-    emb_unused(fileName); /*TODO: finish writeCsd */
+    if(!pattern) { embLog_error("format-csd.c writeCsd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-csd.c writeCsd(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeCsd */
 }
 

@@ -78,7 +78,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
     file = fopen(fileName,"r");
     if(!file)
     {
-        /* TODO: error */
+        embLog_error("format-csv.c readCsv(), cannot open %s for reading\n", fileName);
         return 0;
     }
     else
@@ -256,16 +256,16 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
 
     boundingRect = embPattern_calcBoundingBox(pattern);
 
-    if(stitchCount == 0)
+    if(!stitchCount)
     {
-        fprintf(stderr,"No file to save\n");
+        embLog_error("format-csv.c writeCsv(), pattern contains no stitches\n");
         return 0;
     }
 
     file = fopen(fileName, "w");
     if(!file)
     {
-        fprintf(stderr, "Error opening %s for write\n", fileName);
+        embLog_error("format-csv.c writeCsv(), cannot open %s for writing\n", fileName);
         return 0;
     }
 

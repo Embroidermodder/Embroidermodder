@@ -1,17 +1,17 @@
 #include "format-bmc.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 
 int readBmc(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish readBmc */
-    emb_unused(fileName); /*TODO: finish readBmc */
+    if(!pattern) { embLog_error("format-bmc.c readBmc(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-bmc.c readBmc(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish readBmc */
 }
 
 int writeBmc(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeBmc */
-    emb_unused(fileName); /*TODO: finish writeBmc */
+    if(!pattern) { embLog_error("format-bmc.c writeBmc(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-bmc.c writeBmc(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeBmc */
 }
 

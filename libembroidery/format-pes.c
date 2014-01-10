@@ -1,7 +1,8 @@
-#include <stdlib.h>
 #include "format-pes.h"
 #include "format-pec.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
+#include <stdlib.h>
 
 static short pecDecodeNormal(unsigned char inputByte)
 {
@@ -32,11 +33,16 @@ int readPes(EmbPattern* pattern, const char* fileName)
     int pecstart, numColors, x;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-pes.c readPes(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pes.c readPes(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-pes.c readPes(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 8, SEEK_SET);
     pecstart = binaryReadInt32(file);
 
@@ -55,7 +61,7 @@ int readPes(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-static void writeSewSegSection(EmbPattern* pattern, FILE* file)
+static void pesWriteSewSegSection(EmbPattern* pattern, FILE* file)
 {
     /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
@@ -162,7 +168,7 @@ static void writeSewSegSection(EmbPattern* pattern, FILE* file)
         free(colorInfo);
     }
 }
-static void writeEmbOneSection(EmbPattern* pattern, FILE* file)
+static void pesWriteEmbOneSection(EmbPattern* pattern, FILE* file)
 {
     /* TODO: pointer safety */
     int i;
@@ -209,12 +215,22 @@ int writePes(EmbPattern* pattern, const char* fileName)
     int pecLocation;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-pes.c writePes(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pes.c writePes(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-pes.c writePes(), cannot open %s for writing\n", fileName);
         return 0;
     }
-    if(!pattern->stitchList || embStitchList_count(pattern->stitchList) == 0) return 0;
+
+    if(!pattern->stitchList || embStitchList_count(pattern->stitchList) == 0) /* TODO: review this. seems like only embStitchList_count should be needed. */
+    {
+        embLog_error("format-pes.c writePes(), pattern contains no stitches\n");
+        return 0;
+    }
+
     embPattern_flipVertical(pattern);
     embPattern_scale(pattern, 10.0);
     binaryWriteBytes(file, "#PES0001", 8);
@@ -229,8 +245,8 @@ int writePes(EmbPattern* pattern, const char* fileName)
     binaryWriteShort(file, 0xFFFF); /* command */
     binaryWriteShort(file, 0x00); /* unknown */
 
-    writeEmbOneSection(pattern, file);
-    writeSewSegSection(pattern, file);
+    pesWriteEmbOneSection(pattern, file);
+    pesWriteSewSegSection(pattern, file);
 
     pecLocation = ftell(file);
     fseek(file, 0x08, SEEK_SET);
