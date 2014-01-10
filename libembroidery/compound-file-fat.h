@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
 
 typedef struct _bcf_file_fat
 {
@@ -13,9 +14,9 @@ typedef struct _bcf_file_fat
     unsigned int    numberOfEntriesInFatSector;
 } bcf_file_fat;
 
-bcf_file_fat *bcfFileFat_create(const unsigned int sectorSize);
-void loadFatFromSector(bcf_file_fat *fat, FILE *file);
-void bcf_file_fat_free(bcf_file_fat *fat);
+bcf_file_fat* bcfFileFat_create(const unsigned int sectorSize);
+void loadFatFromSector(bcf_file_fat* fat, FILE* file);
+void bcf_file_fat_free(bcf_file_fat* fat);
 
 #ifdef __cplusplus
 }

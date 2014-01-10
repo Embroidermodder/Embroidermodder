@@ -4,7 +4,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <stdio.h>
+
+#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
 
 typedef struct _bcf_file_header
 {
@@ -28,7 +29,7 @@ typedef struct _bcf_file_header
     unsigned int     numberOfDifatSectors;
 } bcf_file_header;
 
-bcf_file_header bcfFileHeader_read(FILE *file);
+bcf_file_header bcfFileHeader_read(FILE* file);
 int bcfFileHeader_isValid(bcf_file_header header);
 
 #ifdef __cplusplus

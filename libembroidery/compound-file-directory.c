@@ -1,43 +1,47 @@
+#include "compound-file-directory.h"
+#include "compound-file-common.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "compound-file-directory.h"
-#include "compound-file-common.h"
-#include "helpers-binary.h"
 
-static void parseDirectoryEntryName(FILE *file, bcf_directory_entry *dir)
+static void parseDirectoryEntryName(FILE* file, bcf_directory_entry* dir)
 {
     int i;
     unsigned short unicodechar;
-    for (i = 0; i < 32; ++i)
+    for(i = 0; i < 32; ++i)
     {
         unicodechar = binaryReadUInt16(file);
-        if (unicodechar != 0x0000)
+        if(unicodechar != 0x0000)
         {
             dir->directoryEntryName[i] = (char)unicodechar;
         }
     }
 }
 
-static void readCLSID(FILE *file, bcf_directory_entry *dir)
+static void readCLSID(FILE* file, bcf_directory_entry* dir)
 {
     int i;
     unsigned char scratch;
     const int guidSize = 16;
-    for (i = 0; i < guidSize; ++i ) {
+    for(i = 0; i < guidSize; ++i)
+    {
         scratch = binaryReadByte(file);
         dir->CLSID[i] = scratch;
     }
 }
-bcf_directory *CompoundFileDirectory( const unsigned int maxNumberOfDirectoryEntries)
+
+bcf_directory* CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries)
 {
-    bcf_directory *dir = (bcf_directory *)malloc(sizeof(bcf_directory));
+    bcf_directory* dir = (bcf_directory*)malloc(sizeof(bcf_directory));
+    if(!dir) { embLog_error("compound-file-directory.c CompoundFileDirectory(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
     dir->maxNumberOfDirectoryEntries = maxNumberOfDirectoryEntries;
     dir->dirEntries = 0;
     return dir;
 }
 
-EmbTime parseTime(FILE *file)
+EmbTime parseTime(FILE* file)
 {
     EmbTime returnVal;
     unsigned int ft_low, ft_high;
@@ -48,19 +52,21 @@ EmbTime parseTime(FILE *file)
     return returnVal;
 }
 
-bcf_directory_entry *CompoundFileDirectoryEntry(FILE *file)
+bcf_directory_entry* CompoundFileDirectoryEntry(FILE* file)
 {
-    bcf_directory_entry *dir = (bcf_directory_entry *)malloc(sizeof(bcf_directory_entry));
+    bcf_directory_entry* dir = (bcf_directory_entry*)malloc(sizeof(bcf_directory_entry));
+    if(!dir) { embLog_error("compound-file-directory.c CompoundFileDirectoryEntry(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
     memset(dir->directoryEntryName, 0, 32);
     parseDirectoryEntryName(file, dir);
     dir->next = 0;
     dir->directoryEntryNameLength = binaryReadUInt16(file);
     dir->objectType = (unsigned char)binaryReadByte(file);
-    if ( ( dir->objectType != ObjectTypeStorage ) &&
-        ( dir->objectType != ObjectTypeStream ) &&
-        ( dir->objectType != ObjectTypeRootEntry ) ) {
-            printf("unexpected object type: %d\n", dir->objectType);
-            return 0;
+    if( (dir->objectType != ObjectTypeStorage) &&
+        (dir->objectType != ObjectTypeStream) &&
+        (dir->objectType != ObjectTypeRootEntry))
+    {
+        embLog_error("compound-file-directory.c CompoundFileDirectoryEntry(), unexpected object type: %d\n", dir->objectType);
+        return 0;
     }
     dir->colorFlag = (unsigned char)binaryReadByte(file);
     dir->leftSiblingId = binaryReadUInt32(file);
@@ -76,13 +82,13 @@ bcf_directory_entry *CompoundFileDirectoryEntry(FILE *file)
     return dir;
 }
 
-void readNextSector(FILE* file, bcf_directory *dir)
+void readNextSector(FILE* file, bcf_directory* dir)
 {
     unsigned int i;
-    for (i = 0; i < dir->maxNumberOfDirectoryEntries; ++i )
+    for(i = 0; i < dir->maxNumberOfDirectoryEntries; ++i)
     {
-        bcf_directory_entry *dirEntry = CompoundFileDirectoryEntry(file);
-        bcf_directory_entry *pointer = dir->dirEntries;
+        bcf_directory_entry* dirEntry = CompoundFileDirectoryEntry(file);
+        bcf_directory_entry* pointer = dir->dirEntries;
         if(!pointer)
         {
             dir->dirEntries = dirEntry;
@@ -102,10 +108,10 @@ void readNextSector(FILE* file, bcf_directory *dir)
     }
 }
 
-void bcf_directory_free(bcf_directory *dir)
+void bcf_directory_free(bcf_directory* dir)
 {
-    bcf_directory_entry *pointer = dir->dirEntries;
-    bcf_directory_entry *entryToFree = 0;
+    bcf_directory_entry* pointer = dir->dirEntries;
+    bcf_directory_entry* entryToFree = 0;
     while(pointer)
     {
         entryToFree = pointer;

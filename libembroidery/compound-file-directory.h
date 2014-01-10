@@ -5,7 +5,8 @@
 extern "C" {
 #endif
 
-#include <emb-time.h>
+#include "emb-time.h"
+#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
 
 typedef struct _bcf_directory_entry
 {
@@ -34,10 +35,10 @@ typedef struct _bcf_directory
 
 } bcf_directory;
 
-bcf_directory_entry *CompoundFileDirectoryEntry(FILE *file);
-bcf_directory *CompoundFileDirectory( const unsigned int maxNumberOfDirectoryEntries);
-void readNextSector(FILE* file, bcf_directory *dir);
-void bcf_directory_free(bcf_directory *dir);
+bcf_directory_entry* CompoundFileDirectoryEntry(FILE* file);
+bcf_directory* CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries);
+void readNextSector(FILE* file, bcf_directory* dir);
+void bcf_directory_free(bcf_directory* dir);
 
 #ifdef __cplusplus
 }

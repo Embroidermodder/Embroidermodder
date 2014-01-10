@@ -28,7 +28,6 @@ extern "C" {
 #define CompoundFileStreamId_MaxRegularStreamId 0xFFFFFFFA /*!< All real stream Ids are less than this */
 #define CompoundFileStreamId_NoStream           0xFFFFFFFF /*!< There is no valid stream Id            */
 
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
