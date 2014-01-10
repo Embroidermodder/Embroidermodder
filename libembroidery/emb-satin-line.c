@@ -22,15 +22,15 @@ void embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints,
         EmbVector v1;
         EmbVector temp;
 
-        embLine_GetPerpendicularCWVector(lines[i - 1], lines[i], &v1);
+        embLine_normalVector(lines[i - 1], lines[i], &v1, 1);
 
-        embVector_Multiply(v1, halfThickness, &temp);
-        embVector_Add(temp, lines[i - 1], &outline.side1[j]);
-        embVector_Add(temp, lines[i], &outline.side1[j + 1]);
+        embVector_multiply(v1, halfThickness, &temp);
+        embVector_add(temp, lines[i - 1], &outline.side1[j]);
+        embVector_add(temp, lines[i], &outline.side1[j + 1]);
 
-        embVector_Multiply(v1, -halfThickness, &temp);
-        embVector_Add(temp, lines[i - 1], &outline.side2[j]);
-        embVector_Add(temp, lines[i], &outline.side2[j + 1]);
+        embVector_multiply(v1, -halfThickness, &temp);
+        embVector_add(temp, lines[i - 1], &outline.side2[j]);
+        embVector_add(temp, lines[i], &outline.side2[j + 1]);
     }
 
     if(!result) { embLog_error("emb-satin-line.c embSatinOutline_generateSatinOutline(), result argument is null\n"); return; }
@@ -44,12 +44,12 @@ void embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints,
 
     for(i = 3; i < intermediateOutlineCount; i += 2)
     {
-        embLine_IntersectionWith(outline.side1[i - 3], outline.side1[i - 2], outline.side1[i - 1], outline.side1[i], &result->side1[(i - 1) / 2]);
+        embLine_intersectionPoint(outline.side1[i - 3], outline.side1[i - 2], outline.side1[i - 1], outline.side1[i], &result->side1[(i - 1) / 2]);
     }
 
     for(i = 3; i < intermediateOutlineCount; i += 2)
     {
-        embLine_IntersectionWith(outline.side2[i - 3], outline.side2[i - 2], outline.side2[i - 1], outline.side2[i], &result->side2[(i - 1) / 2]);
+        embLine_intersectionPoint(outline.side2[i - 3], outline.side2[i - 2], outline.side2[i - 1], outline.side2[i], &result->side2[(i - 1) / 2]);
     }
 
     result->side1[numberOfPoints - 1] = outline.side1[2 * numberOfPoints - 3];

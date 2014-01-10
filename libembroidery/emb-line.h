@@ -43,8 +43,8 @@ void embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
 int embLineObjectList_count(EmbLineObjectList* pointer);
 int embLineObjectList_empty(EmbLineObjectList* pointer);
 
-void embLine_GetPerpendicularCWVector(EmbVector vector1, EmbVector vector2, EmbVector* result); /* TODO: API cleanup: This belongs in emb-vector.h */
-void embLine_IntersectionWith(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result); /* TODO: API cleanup: This belongs in emb-vector.h */
+void embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise);
+void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
 
 #ifdef __cplusplus
 }

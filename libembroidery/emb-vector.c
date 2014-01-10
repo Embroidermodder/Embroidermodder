@@ -3,30 +3,30 @@
 #include <math.h>
 #include <stdlib.h>
 
-void embVector_Normalize(EmbVector vector, EmbVector* result)
+void embVector_normalize(EmbVector vector, EmbVector* result)
 {
-    double length = embVector_GetLength(vector);
-    
-    if(!result) { embLog_error("emb-vector.c embVector_Normalize(), result argument is null\n"); return; }
+    double length = embVector_getLength(vector);
+
+    if(!result) { embLog_error("emb-vector.c embVector_normalize(), result argument is null\n"); return; }
     result->X = vector.X / length;
     result->Y = vector.Y / length;
 }
 
-void embVector_Multiply(EmbVector vector, double magnitude, EmbVector* result)
+void embVector_multiply(EmbVector vector, double magnitude, EmbVector* result)
 {
-    if(!result) { embLog_error("emb-vector.c embVector_Multiply(), result argument is null\n"); return; }
+    if(!result) { embLog_error("emb-vector.c embVector_multiply(), result argument is null\n"); return; }
     result->X = vector.X * magnitude;
     result->Y = vector.Y * magnitude;
 }
 
-void embVector_Add(EmbVector v1, EmbVector v2, EmbVector* result)
+void embVector_add(EmbVector v1, EmbVector v2, EmbVector* result)
 {
-    if(!result) { embLog_error("emb-vector.c embVector_Add(), result argument is null\n"); return; }
+    if(!result) { embLog_error("emb-vector.c embVector_add(), result argument is null\n"); return; }
     result->X = v1.X + v2.X;
     result->Y = v1.Y + v2.Y;
 }
 
-double embVector_GetLength(EmbVector vector)
+double embVector_getLength(EmbVector vector)
 {
     return sqrt(vector.X * vector.X + vector.Y * vector.Y);
 }
@@ -79,3 +79,5 @@ void embVectorList_free(EmbVectorList* pointer)
         free(temp);
     }
 }
+
+/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

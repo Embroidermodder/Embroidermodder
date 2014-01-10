@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+/* TODO: EmbVector should just be a typedef of EmbPoint since internally, they are the same.
+         In cases where it represents vector data, then the name can be used to avoid confusion.
+         */
 typedef struct EmbVector_
 {
     double X;
@@ -18,10 +21,10 @@ typedef struct EmbVectorList_
 } EmbVectorList;
 
 
-void embVector_Normalize(EmbVector vector, EmbVector* result);
-void embVector_Multiply(EmbVector vector, double magnitude, EmbVector* result);
-void embVector_Add(EmbVector v1, EmbVector v2, EmbVector* result);
-double embVector_GetLength(EmbVector vector);
+void embVector_normalize(EmbVector vector, EmbVector* result);
+void embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
+void embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);
+double embVector_getLength(EmbVector vector);
 
 EmbVectorList* embVectorList_create(EmbVector data);
 EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data);
