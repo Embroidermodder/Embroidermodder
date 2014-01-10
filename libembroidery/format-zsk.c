@@ -1,16 +1,22 @@
 #include "format-zsk.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
 int readZsk(EmbPattern* pattern, const char* fileName)
 {
     int b[3];
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-zsk.c readZsk(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-zsk.c readZsk(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-zsk.c readZsk(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 512, SEEK_SET);
 
     while(fread(b, 1, 3, file) == 3)
@@ -35,8 +41,8 @@ int readZsk(EmbPattern* pattern, const char* fileName)
 
 int writeZsk(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeZsk */
-    emb_unused(fileName); /*TODO: finish writeZsk */
+    if(!pattern) { embLog_error("format-zsk.c writeZsk(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-zsk.c writeZsk(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeZsk */
 }
 

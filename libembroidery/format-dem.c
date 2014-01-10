@@ -1,17 +1,17 @@
 #include "format-dem.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 
 int readDem(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish readDem */
-    emb_unused(fileName); /*TODO: finish readDem */
+    if(!pattern) { embLog_error("format-dem.c readDem(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dem.c readDem(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish readDem */
 }
 
 int writeDem(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeDem */
-    emb_unused(fileName); /*TODO: finish writeDem */
+    if(!pattern) { embLog_error("format-dem.c writeDem(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dem.c writeDem(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeDem */
 }
 

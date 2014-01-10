@@ -1,17 +1,22 @@
-#include <stdio.h>
 #include "format-gt.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 int readGt(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-gt.c readGt(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-gt.c readGt(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-gt.c readGt(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
     fseek(file, 0x200, SEEK_SET);
 
@@ -43,8 +48,8 @@ int readGt(EmbPattern* pattern, const char* fileName)
 
 int writeGt(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeGt */
-    emb_unused(fileName); /*TODO: finish writeGt */
+    if(!pattern) { embLog_error("format-gt.c writeGt(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-gt.c writeGt(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeGt */
 }
 

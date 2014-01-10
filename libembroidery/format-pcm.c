@@ -1,7 +1,7 @@
 #include "format-pcm.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
-#include "helpers-unused.h"
 
 static double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
@@ -21,9 +21,13 @@ int readPcm(EmbPattern* pattern, const char* fileName)
     int flags = 0, st = 0;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-pcm.c readPcm(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pcm.c readPcm(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-pcm.c readPcm(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -67,8 +71,8 @@ int readPcm(EmbPattern* pattern, const char* fileName)
 
 int writePcm(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writePcm */
-    emb_unused(fileName); /*TODO: finish writePcm */
+    if(!pattern) { embLog_error("format-pcm.c writePcm(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pcm.c writePcm(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writePcm */
 }
 

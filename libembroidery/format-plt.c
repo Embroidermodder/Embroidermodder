@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <string.h>
-#include "format-pec.h"
-#include "format-phc.h"
+#include "format-plt.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include <stdio.h>
+#include <string.h>
 
 int readPlt(EmbPattern* pattern, const char* fileName)
 {
@@ -12,11 +12,16 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     char input[512];
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-plt.c readPlt(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-plt.c readPlt(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-plt.c readPlt(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
     while(fscanf(file, "%s", input) >= 0)
     {
@@ -51,11 +56,16 @@ int writePlt(EmbPattern* pattern, const char* fileName)
     char firstStitchOfBlock = 1;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-plt.c writePlt(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-plt.c writePlt(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-plt.c writePlt(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
     fprintf(file, "IN;");
     fprintf(file, "ND;");
 

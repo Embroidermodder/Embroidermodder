@@ -1,17 +1,17 @@
 #include "format-gnc.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 
 int readGnc(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish readGnc */
-    emb_unused(fileName); /*TODO: finish readGnc */
+    if(!pattern) { embLog_error("format-gnc.c readGnc(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-gnc.c readGnc(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish readGnc */
 }
 
 int writeGnc(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeGnc */
-    emb_unused(fileName); /*TODO: finish writeGnc */
+    if(!pattern) { embLog_error("format-gnc.c writeGnc(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-gnc.c writeGnc(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeGnc */
 }
 

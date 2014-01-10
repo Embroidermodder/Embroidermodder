@@ -1,18 +1,23 @@
-#include <stdio.h>
 #include "format-sst.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 int readSst(EmbPattern* pattern, const char* fileName)
 {
     int fileLength;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-sst.c readSst(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-sst.c readSst(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-sst.c readSst(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
     fseek(file, 0, SEEK_END);
     fileLength = ftell(file);
@@ -50,8 +55,8 @@ int readSst(EmbPattern* pattern, const char* fileName)
 
 int writeSst(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeSst */
-    emb_unused(fileName); /*TODO: finish writeSst */
+    if(!pattern) { embLog_error("format-sst.c writeSst(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-sst.c writeSst(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeSst */
 }
 

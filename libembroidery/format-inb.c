@@ -1,10 +1,11 @@
-#include <stdio.h>
 #include "format-inb.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 int readInb(EmbPattern* pattern, const char* fileName)
 {
+    FILE* file = 0;
     unsigned char fileDescription[8];
     unsigned char nullVal;
     int stitchCount;
@@ -26,11 +27,16 @@ int readInb(EmbPattern* pattern, const char* fileName)
     int i;
     int fileLength;
 
-    FILE* file = fopen(fileName, "rb");
+    if(!pattern) { embLog_error("format-inb.c readInb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-inb.c readInb(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-inb.c readInb(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
     fseek(file, 0, SEEK_END);
     fileLength = ftell(file);
@@ -79,8 +85,8 @@ int readInb(EmbPattern* pattern, const char* fileName)
 
 int writeInb(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeInb */
-    emb_unused(fileName); /*TODO: finish writeInb */
+    if(!pattern) { embLog_error("format-inb.c writeInb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-inb.c writeInb(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeInb */
 }
 

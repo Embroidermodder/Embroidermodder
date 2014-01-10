@@ -1,4 +1,6 @@
+#include "format-max.h"
 #include "format-pcd.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
@@ -39,11 +41,16 @@ int readMax(EmbPattern* pattern, const char* fileName)
     int stitchCount;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-max.c readMax(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-max.c readMax(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-max.c readMax(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0xD5, SEEK_SET);
     stitchCount = binaryReadUInt32(file);
 
@@ -66,6 +73,7 @@ int readMax(EmbPattern* pattern, const char* fileName)
 
 int writeMax(EmbPattern* pattern, const char* fileName)
 {
+    FILE* file = 0;
     EmbStitchList* pointer = 0;
     char header[] = {
         0x56,0x43,0x53,0x4D,0xFC,0x03,0x00,0x00,0x01,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
@@ -83,13 +91,16 @@ int writeMax(EmbPattern* pattern, const char* fileName)
         0x01,0x38,0x09,0x31,0x33,0x30,0x2F,0x37,0x30,0x35,0x20,0x48,0xFA,0x00,0x00,0x00,
         0x00,0x00,0x00,0x00,0x00 };
 
-    FILE* file = 0;
+    if(!pattern) { embLog_error("format-max.c writeMax(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-max.c writeMax(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "wb");
     if(!file)
     {
+        embLog_error("format-max.c writeMax(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
     binaryWriteBytes(file, header, 0xD5);
     pointer = pattern->stitchList;
     while(pointer)

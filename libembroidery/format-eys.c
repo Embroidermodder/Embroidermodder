@@ -1,17 +1,17 @@
 #include "format-eys.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 
 int readEys(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish readEys */
-    emb_unused(fileName); /*TODO: finish readEys */
+    if(!pattern) { embLog_error("format-eys.c readEys(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-eys.c readEys(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish readEys */
 }
 
 int writeEys(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeEys */
-    emb_unused(fileName); /*TODO: finish writeEys */
+    if(!pattern) { embLog_error("format-eys.c writeEys(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-eys.c writeEys(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeEys */
 }
 

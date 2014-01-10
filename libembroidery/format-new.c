@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include "format-new.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 static int decodeNewStitch(unsigned char value)
 {
@@ -14,11 +14,16 @@ int readNew(EmbPattern* pattern, const char* fileName)
     unsigned char data[3];
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-new.c readNew(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-new.c readNew(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-new.c readNew(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
     stitchCount = binaryReadUInt16(file);
     while(binaryReadBytes(file, data, 3) == 3)
@@ -64,8 +69,8 @@ int readNew(EmbPattern* pattern, const char* fileName)
 
 int writeNew(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeNew */
-    emb_unused(fileName); /*TODO: finish writeNew */
+    if(!pattern) { embLog_error("format-new.c writeNew(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-new.c writeNew(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeNew */
 }
 

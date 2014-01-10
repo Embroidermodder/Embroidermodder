@@ -2,6 +2,8 @@
 #include "helpers-unused.h"
 #include <stdio.h>
 
+/* TODO: AFAIK this is a duplicate of U00. Review for differences and merge files and handle accordingly. */
+
 int readU01(EmbPattern* pattern, const char* fileName)
 {
     int fileLength, negativeX = 0, negativeY = 0, flags = NORMAL;

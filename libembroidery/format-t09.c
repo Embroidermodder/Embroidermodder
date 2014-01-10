@@ -1,5 +1,5 @@
 #include "format-t09.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
 
@@ -8,11 +8,16 @@ int readT09(EmbPattern* pattern, const char* fileName)
     unsigned char b[3];
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-t09.c readT09(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-t09.c readT09(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-t09.c readT09(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0x0C, SEEK_SET);
 
     while(fread(b, 1, 3, file) == 3)
@@ -38,8 +43,8 @@ int readT09(EmbPattern* pattern, const char* fileName)
 
 int writeT09(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeT09 */
-    emb_unused(fileName); /*TODO: finish writeT09 */
+    if(!pattern) { embLog_error("format-t09.c writeT09(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-t09.c writeT09(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeT09 */
 }
 

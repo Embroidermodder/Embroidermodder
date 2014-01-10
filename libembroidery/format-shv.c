@@ -1,9 +1,9 @@
 #include "format-shv.h"
+#include "format-jef.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 #include <string.h>
-#include "format-jef.h"
-#include "helpers-binary.h"
-#include "helpers-unused.h"
 
 static char shvDecode(unsigned char inputByte)
 {
@@ -25,6 +25,7 @@ static short shvDecodeShort(unsigned short inputByte)
 
 int readShv(EmbPattern* pattern, const char* fileName)
 {
+    FILE* file = 0;
     int i;
     char inJump = 0;
     unsigned char fileNameLength, designWidth, designHeight;
@@ -35,13 +36,15 @@ int readShv(EmbPattern* pattern, const char* fileName)
     unsigned short magicCode;
     int something;
     short left,top,right,bottom;
-
     char something2, numberOfSections, something3;
-    FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-shv.c readShv(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-shv.c readShv(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-shv.c readShv(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -134,8 +137,8 @@ int readShv(EmbPattern* pattern, const char* fileName)
 
 int writeShv(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeShv */
-    emb_unused(fileName); /*TODO: finish writeShv */
+    if(!pattern) { embLog_error("format-shv.c writeShv(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-shv.c writeShv(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeShv */
 }
 

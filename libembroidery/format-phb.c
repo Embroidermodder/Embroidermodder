@@ -1,8 +1,8 @@
-#include <stdio.h>
 #include "format-phb.h"
 #include "format-pec.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 int readPhb(EmbPattern* pattern, const char* fileName)
 {
@@ -11,11 +11,16 @@ int readPhb(EmbPattern* pattern, const char* fileName)
     FILE* file = 0;
     int i;
 
+    if(!pattern) { embLog_error("format-phb.c readPhb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-phb.c readPhb(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-phb.c readPhb(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0x71, SEEK_SET);
     colorCount = binaryReadInt16(file);
 
@@ -63,8 +68,8 @@ int readPhb(EmbPattern* pattern, const char* fileName)
 
 int writePhb(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writePhb */
-    emb_unused(fileName); /*TODO: finish writePhb */
+    if(!pattern) { embLog_error("format-phb.c writePhb(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-phb.c writePhb(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writePhb */
 }
 

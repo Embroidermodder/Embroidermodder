@@ -1,10 +1,10 @@
+#include "format-sew.h"
+#include "format-jef.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "format-sew.h"
-#include "helpers-binary.h"
-#include "helpers-unused.h"
-#include "format-jef.h"
 
 static char sewDecode(unsigned char inputByte)
 {
@@ -13,6 +13,7 @@ static char sewDecode(unsigned char inputByte)
 
 int readSew(EmbPattern* pattern, const char* fileName)
 {
+    FILE* file = 0;
     int i;
     int fileLength;
     char dx = 0, dy = 0;
@@ -20,13 +21,16 @@ int readSew(EmbPattern* pattern, const char* fileName)
     int numberOfColors;
     char thisStitchIsJump = 0;
 
-    FILE* file = 0;
+    if(!pattern) { embLog_error("format-sew.c readSew(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-sew.c readSew(), fileName argument is null\n"); return 0; }
 
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-sew.c readSew(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0x00, SEEK_END);
     fileLength = ftell(file);
     fseek(file, 0x00, SEEK_SET);
@@ -88,8 +92,8 @@ int readSew(EmbPattern* pattern, const char* fileName)
 
 int writeSew(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeSew */
-    emb_unused(fileName); /*TODO: finish writeSew */
+    if(!pattern) { embLog_error("format-sew.c writeSew(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-sew.c writeSew(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeSew */
 }
 

@@ -1,6 +1,6 @@
 #include "format-emd.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
 
 static char emdDecode(unsigned char inputByte)
 {
@@ -18,11 +18,16 @@ int readEmd(EmbPattern* pattern, const char* fileName)
     int i;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-emd.c readEmd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-emd.c readEmd(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-emd.c readEmd(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     embPattern_loadExternalColorFile(pattern, fileName);
 
     binaryReadBytes(file, jemd0, 6);
@@ -72,8 +77,8 @@ int readEmd(EmbPattern* pattern, const char* fileName)
 
 int writeEmd(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeEmd */
-    emb_unused(fileName); /*TODO: finish writeEmd */
+    if(!pattern) { embLog_error("format-emd.c writeEmd(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-emd.c writeEmd(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeEmd */
 }
 

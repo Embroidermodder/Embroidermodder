@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include "format-pec.h"
 #include "format-phc.h"
+#include "format-pec.h"
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 int readPhc(EmbPattern* pattern, const char* fileName)
 {
@@ -12,11 +12,16 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     FILE* file = 0;
     int i;
 
+    if(!pattern) { embLog_error("format-phc.c readPhc(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-phc.c readPhc(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-phc.c readPhc(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0x07, SEEK_SET);
     version = binaryReadByte(file) - 0x30; /* converting from ansi number */
     fseek(file, 0x4D, SEEK_SET);
@@ -49,8 +54,8 @@ int readPhc(EmbPattern* pattern, const char* fileName)
 
 int writePhc(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writePhc */
-    emb_unused(fileName); /*TODO: finish writePhc */
+    if(!pattern) { embLog_error("format-phc.c writePhc(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-phc.c writePhc(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writePhc */
 }
 

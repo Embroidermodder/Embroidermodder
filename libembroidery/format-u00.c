@@ -1,7 +1,7 @@
 #include "format-u00.h"
-#include <stdio.h>
+#include "emb-logging.h"
 #include "helpers-binary.h"
-#include "helpers-unused.h"
+#include <stdio.h>
 
 int readU00(EmbPattern* pattern, const char* fileName)
 {
@@ -11,11 +11,16 @@ int readU00(EmbPattern* pattern, const char* fileName)
     char endOfStream = 0;
     FILE* file = 0;
 
+    if(!pattern) { embLog_error("format-u00.c readU00(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-u00.c readU00(), fileName argument is null\n"); return 0; }
+
     file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-u00.c readU00(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     /* 16 3byte RGB's start @ 0x08 followed by 14 bytes between 0 and 15 with index of color for each color change */
     fseek(file, 0x08, SEEK_SET);
 
@@ -68,11 +73,10 @@ int readU00(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-
 int writeU00(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeU00 */
-    emb_unused(fileName); /*TODO: finish writeU00 */
+    if(!pattern) { embLog_error("format-u00.c writeU00(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-u00.c writeU00(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish WriteU00 */
 }
 
