@@ -214,14 +214,14 @@ void embPattern_moveStitchListToPolylines(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_moveStitchListToPolylines(), p argument is null\n"); return; }
     embPattern_copyStitchListToPolylines(p);
-    /* TODO: free stitchList */
+    embStitchList_free(p->stitchList);
 }
 
 void embPattern_movePolylinesToStitchList(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_movePolylinesToStitchList(), p argument is null\n"); return; }
     embPattern_copyPolylinesToStitchList(p);
-    /* TODO: free polylineObjList */
+    embPolylineObjectList_free(p->polylineObjList);
 }
 
 /* Adds a stitch at the absolute position (x,y). Positive y is up. Units are in millimeters. */
