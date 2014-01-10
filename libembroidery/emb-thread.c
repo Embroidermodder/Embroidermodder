@@ -127,12 +127,13 @@ int embThreadList_empty(EmbThreadList* pointer)
 
 void embThreadList_free(EmbThreadList* pointer)
 {
-    EmbThreadList *colors = pointer;
-    while(colors)
+    EmbThreadList* tempPointer = pointer;
+    EmbThreadList* nextPointer = 0;
+    while(tempPointer)
     {
-        EmbThreadList* next = colors->next;
-        free(colors);
-        colors = next;
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
     }
 	pointer = 0;
 }

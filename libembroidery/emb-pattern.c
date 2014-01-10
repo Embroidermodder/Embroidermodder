@@ -833,140 +833,21 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 /* Frees all memory allocated in the pattern. */
 void embPattern_free(EmbPattern* p)
 {
-    EmbThreadList* thisThreadList = 0;
-    EmbThreadList* nextThreadList = 0;
-    EmbStitchList* thisStitchList = 0;
-    EmbStitchList* nextStitchList = 0;
-
-    EmbArcObjectList* thisArcObjList = 0;
-    EmbArcObjectList* nextArcObjList = 0;
-    EmbCircleObjectList* thisCircleObjList = 0;
-    EmbCircleObjectList* nextCircleObjList = 0;
-    EmbEllipseObjectList* thisEllipseObjList = 0;
-    EmbEllipseObjectList* nextEllipseObjList = 0;
-    EmbLineObjectList* thisLineObjList = 0;
-    EmbLineObjectList* nextLineObjList = 0;
-    EmbPathObjectList* thisPathObjList = 0;
-    EmbPathObjectList* nextPathObjList = 0;
-    EmbPathObject* thisPathObj = 0;
-    EmbPathObject* nextPathObj = 0;
-    EmbPointObjectList* thisPointObjList = 0;
-    EmbPointObjectList* nextPointObjList = 0;
-    EmbPolygonObjectList* thisPolygonObjList = 0;
-    EmbPolygonObjectList* nextPolygonObjList = 0;
-    EmbPolylineObjectList* thisPolylineObjList = 0;
-    EmbPolylineObjectList* nextPolylineObjList = 0;
-    EmbRectObjectList* thisRectObjList = 0;
-    EmbRectObjectList* nextRectObjList = 0;
-    EmbSplineObjectList* thisSplineObjList = 0;
-    EmbSplineObjectList* nextSplineObjList = 0;
-
     if(!p) { embLog_error("emb-pattern.c embPattern_free(), p argument is null\n"); return; }
-    thisStitchList = p->stitchList;
-    while(thisStitchList)
-    {
-        nextStitchList = thisStitchList->next;
-        free(thisStitchList);
-        thisStitchList = nextStitchList;
-    }
-    thisThreadList = p->threadList;
-    while(thisThreadList)
-    {
-        nextThreadList = thisThreadList->next;
-        free(thisThreadList);
-        thisThreadList = nextThreadList;
-    }
+    embStitchList_free(p->stitchList);
+    embThreadList_free(p->threadList);
 
-    thisArcObjList = p->arcObjList;
-    while(thisArcObjList)
-    {
-        nextArcObjList = thisArcObjList->next;
-        free(thisArcObjList);
-        thisArcObjList = nextArcObjList;
-    }
-    thisCircleObjList = p->circleObjList;
-    while(thisCircleObjList)
-    {
-        nextCircleObjList = thisCircleObjList->next;
-        free(thisCircleObjList);
-        thisCircleObjList = nextCircleObjList;
-    }
-    thisEllipseObjList = p->ellipseObjList;
-    while(thisEllipseObjList)
-    {
-        nextEllipseObjList = thisEllipseObjList->next;
-        free(thisEllipseObjList);
-        thisEllipseObjList = nextEllipseObjList;
-    }
-    thisLineObjList = p->lineObjList;
-    while(thisLineObjList)
-    {
-        nextLineObjList = thisLineObjList->next;
-        free(thisLineObjList);
-        thisLineObjList = nextLineObjList;
-    }
+    embArcObjectList_free(p->arcObjList);
+    embCircleObjectList_free(p->circleObjList);
+    embEllipseObjectList_free(p->ellipseObjList);
+    embLineObjectList_free(p->lineObjList);
+    /* TODO: embPathObjectList_free(p->pathObjList); */
+    embPointObjectList_free(p->pointObjList);
+    embPolygonObjectList_free(p->polygonObjList);
+    embPolylineObjectList_free(p->polylineObjList);
+    embRectObjectList_free(p->rectObjList);
+    /* TODO: embSplineObjectList_free(p->splineObjList); */
 
-    /*
-    thisPathObjList = p->pathObjList;
-    while(thisPathObjList)
-    {
-
-
-        thisPathObj = &thisPathObjList->pathObj;
-        while(thisPathObj)
-        {
-            nextPathObj = thisPathObj->next;
-            free(thisPathObj);
-            thisPathObj = nextPathObj;
-        }
-
-
-
-
-
-        nextPathObjList = thisPathObjList->next;
-        free(thisPathObjList);
-        thisPathObjList = nextPathObjList;
-    }
-    */
-
-    thisPointObjList = p->pointObjList;
-    while(thisPointObjList)
-    {
-        nextPointObjList = thisPointObjList->next;
-        free(thisPointObjList);
-        thisPointObjList = nextPointObjList;
-    }
-    thisPolygonObjList = p->polygonObjList;
-    while(thisPolygonObjList)
-    {
-        nextPolygonObjList = thisPolygonObjList->next;
-        embPointList_free(thisPolygonObjList->polygonObj->pointList);
-        free(thisPolygonObjList);
-        thisPolygonObjList = nextPolygonObjList;
-    }
-    thisPolylineObjList = p->polylineObjList;
-    while(thisPolylineObjList)
-    {
-        nextPolylineObjList = thisPolylineObjList->next;
-        embPointList_free(thisPolylineObjList->polylineObj->pointList);
-        free(thisPolylineObjList);
-        thisPolylineObjList = nextPolylineObjList;
-    }
-    thisRectObjList = p->rectObjList;
-    while(thisRectObjList)
-    {
-        nextRectObjList = thisRectObjList->next;
-        free(thisRectObjList);
-        thisRectObjList = nextRectObjList;
-    }
-    thisSplineObjList = p->splineObjList;
-    while(thisSplineObjList)
-    {
-        nextSplineObjList = thisSplineObjList->next;
-        free(thisSplineObjList);
-        thisSplineObjList = nextSplineObjList;
-    }
     free(p);
     p = 0;
 }

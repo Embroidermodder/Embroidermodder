@@ -27,6 +27,7 @@ EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data);
 EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
 int embPolylineObjectList_count(EmbPolylineObjectList* pointer);
 int embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
+void embPolylineObjectList_free(EmbPolylineObjectList* pointer);
 
 #ifdef __cplusplus
 }

@@ -34,7 +34,7 @@ typedef struct EmbSplineObjectList_
 {
     EmbSplineObject splineObj;
     struct EmbSplineObjectList_* next;
-} EmbSplineObjectList;
+} EmbSplineObjectList; /* TODO: This struct/file needs reworked to work internally similar to polylines */
 
 int embSplineObjectList_count(EmbSplineObjectList* pointer);
 int embSplineObjectList_empty(EmbSplineObjectList* pointer);

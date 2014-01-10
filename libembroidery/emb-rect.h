@@ -51,6 +51,7 @@ typedef struct EmbRectObjectList_
 void embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
 int embRectObjectList_count(EmbRectObjectList* pointer);
 int embRectObjectList_empty(EmbRectObjectList* pointer);
+void embRectObjectList_free(EmbRectObjectList* pointer);
 
 #ifdef __cplusplus
 }

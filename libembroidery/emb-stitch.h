@@ -30,7 +30,7 @@ typedef struct EmbStitchList_
 void embStitchList_add(EmbStitchList* pointer, EmbStitch data);
 int embStitchList_count(EmbStitchList* pointer);
 int embStitchList_empty(EmbStitchList* pointer);
-/* TODO: Shouldn't there be a embStitchList_free function? */
+void embStitchList_free(EmbStitchList* pointer);
 EmbStitch embStitchList_getAt(EmbStitchList* pointer, int num);
 
 #ifdef __cplusplus

@@ -40,6 +40,7 @@ typedef struct EmbArcObjectList_
 void embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
 int embArcObjectList_count(EmbArcObjectList* pointer);
 int embArcObjectList_empty(EmbArcObjectList* pointer);
+void embArcObjectList_free(EmbArcObjectList* pointer);
 
 #ifdef __cplusplus
 }

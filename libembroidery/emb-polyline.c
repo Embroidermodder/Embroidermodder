@@ -44,4 +44,18 @@ int embPolylineObjectList_empty(EmbPolylineObjectList* pointer)
     return 0;
 }
 
+void embPolylineObjectList_free(EmbPolylineObjectList* pointer)
+{
+    EmbPolylineObjectList* tempPointer = pointer;
+    EmbPolylineObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        embPointList_free(tempPointer->polylineObj->pointList);
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -79,4 +79,17 @@ int embCircleObjectList_empty(EmbCircleObjectList* pointer)
     return 0;
 }
 
+void embCircleObjectList_free(EmbCircleObjectList* pointer)
+{
+    EmbCircleObjectList* tempPointer = pointer;
+    EmbCircleObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -30,7 +30,7 @@ typedef struct EmbPathObjectList_
 {
     EmbPathObject pathObj;
     struct EmbPathObjectList_* next;
-} EmbPathObjectList;
+} EmbPathObjectList; /* TODO: This struct/file needs reworked to work internally similar to polylines */
 
 int embPathObjectList_count(EmbPathObjectList* pointer);
 int embPathObjectList_empty(EmbPathObjectList* pointer);

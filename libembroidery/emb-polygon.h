@@ -27,6 +27,7 @@ EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data);
 EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data);
 int embPolygonObjectList_count(EmbPolygonObjectList* pointer);
 int embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
+void embPolygonObjectList_free(EmbPolygonObjectList* pointer);
 
 #ifdef __cplusplus
 }

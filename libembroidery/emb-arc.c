@@ -64,4 +64,17 @@ int embArcObjectList_empty(EmbArcObjectList* pointer)
     return 0;
 }
 
+void embArcObjectList_free(EmbArcObjectList* pointer)
+{
+    EmbArcObjectList* tempPointer = pointer;
+    EmbArcObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -124,4 +124,17 @@ int embRectObjectList_empty(EmbRectObjectList* pointer)
     return 0;
 }
 
+void embRectObjectList_free(EmbRectObjectList* pointer)
+{
+    EmbRectObjectList* tempPointer = pointer;
+    EmbRectObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

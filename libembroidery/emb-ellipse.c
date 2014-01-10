@@ -106,4 +106,17 @@ int embEllipseObjectList_empty(EmbEllipseObjectList* pointer)
     return 0;
 }
 
+void embEllipseObjectList_free(EmbEllipseObjectList* pointer)
+{
+    EmbEllipseObjectList* tempPointer = pointer;
+    EmbEllipseObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

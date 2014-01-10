@@ -46,6 +46,7 @@ typedef struct EmbEllipseObjectList_
 void embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
 int embEllipseObjectList_count(EmbEllipseObjectList* pointer);
 int embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
+void embEllipseObjectList_free(EmbEllipseObjectList* pointer);
 
 #ifdef __cplusplus
 }

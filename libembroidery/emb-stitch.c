@@ -43,4 +43,17 @@ int embStitchList_empty(EmbStitchList* pointer)
     return 0;
 }
 
+void embStitchList_free(EmbStitchList* pointer)
+{
+    EmbStitchList* tempPointer = pointer;
+    EmbStitchList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

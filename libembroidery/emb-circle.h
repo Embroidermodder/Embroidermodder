@@ -39,6 +39,7 @@ typedef struct EmbCircleObjectList_
 void embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data);
 int embCircleObjectList_count(EmbCircleObjectList* pointer);
 int embCircleObjectList_empty(EmbCircleObjectList* pointer);
+void embCircleObjectList_free(EmbCircleObjectList* pointer);
 
 #ifdef __cplusplus
 }

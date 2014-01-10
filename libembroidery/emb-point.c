@@ -137,16 +137,17 @@ int embPointObjectList_empty(EmbPointObjectList* pointer)
     return 0;
 }
 
-void embPointObjectList_free(EmbPointObjectList* list)
+void embPointObjectList_free(EmbPointObjectList* pointer)
 {
-    EmbPointObjectList* current = list;
-    EmbPointObjectList* next;
-    while(current)
+    EmbPointObjectList* tempPointer = pointer;
+    EmbPointObjectList* nextPointer = 0;
+    while(tempPointer)
     {
-        next= current->next;
-        free(current);
-        current = next;
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
     }
+    pointer = 0;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

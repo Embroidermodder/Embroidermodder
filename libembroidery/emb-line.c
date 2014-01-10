@@ -87,6 +87,19 @@ int embLineObjectList_empty(EmbLineObjectList* pointer)
     return 0;
 }
 
+void embLineObjectList_free(EmbLineObjectList* pointer)
+{
+    EmbLineObjectList* tempPointer = pointer;
+    EmbLineObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* TODO: API Cleanup: This function should use an embLine parameter, not vector1/vector2, and look like this:
                       embLine_normalVector(EmbLine line, EmbVector* result, int clockwise) */
 /*! Finds the normalized vector perpendicular (clockwise) to the line given by v1->v2 (normal to the line) */

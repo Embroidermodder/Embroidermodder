@@ -44,4 +44,18 @@ int embPolygonObjectList_empty(EmbPolygonObjectList* pointer)
     return 0;
 }
 
+void embPolygonObjectList_free(EmbPolygonObjectList* pointer)
+{
+    EmbPolygonObjectList* tempPointer = pointer;
+    EmbPolygonObjectList* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        embPointList_free(tempPointer->polygonObj->pointList);
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

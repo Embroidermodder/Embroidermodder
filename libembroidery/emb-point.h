@@ -50,7 +50,7 @@ typedef struct EmbPointObjectList_
 void embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
 int embPointObjectList_count(EmbPointObjectList* pointer);
 int embPointObjectList_empty(EmbPointObjectList* pointer);
-void embPointObjectList_free(EmbPointObjectList* list);
+void embPointObjectList_free(EmbPointObjectList* pointer);
 
 #ifdef __cplusplus
 }
