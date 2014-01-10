@@ -91,8 +91,11 @@ void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
 
 
-void moveStitchListToPolyline(EmbPattern *pattern);
-void movePolylinesToStitchList(EmbPattern* pattern);
+void embPattern_copyStitchListToPolylines(EmbPattern *pattern);
+void embPattern_copyPolylinesToStitchList(EmbPattern* pattern);
+void embPattern_moveStitchListToPolylines(EmbPattern *pattern);
+void embPattern_movePolylinesToStitchList(EmbPattern* pattern);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

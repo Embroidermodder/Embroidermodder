@@ -122,19 +122,18 @@ void embPattern_fixColorCount(EmbPattern* p)
     */
 }
 
-/* TODO: It doesn't appear that this function actually clears the stitchList so it is more of a copy than a move. */
-void moveStitchListToPolyline(EmbPattern* p)
+void embPattern_copyStitchListToPolylines(EmbPattern* p)
 {
     EmbStitchList* stitches = 0;
     EmbPolylineObjectList* currentList = 0;
 
-    if(!p) { embLog_error("emb-pattern.c moveStitchListToPolyline(), p argument is null\n"); return; }
+    if(!p) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), p argument is null\n"); return; }
     stitches = p->stitchList;
     while(stitches)
     {
         EmbPointList* currentPointList = 0;
         EmbPolylineObject* currentPolyline = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-        if(!currentPolyline) { embLog_error("emb-pattern.c moveStitchListToPolyline(), cannot allocate memory for currentPolyline\n"); return; }
+        if(!currentPolyline) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), cannot allocate memory for currentPolyline\n"); return; }
         currentPolyline->pointList = 0;
         currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
         currentPolyline->color = embThreadList_getAt(p->threadList, stitches->stitch.color).color;
@@ -176,15 +175,14 @@ void moveStitchListToPolyline(EmbPattern* p)
     }
 }
 
-/* TODO: It doesn't appear that this function actually clears the polylineObjList so it is more of a copy than a move. */
-void movePolylinesToStitchList(EmbPattern* p)
+void embPattern_copyPolylinesToStitchList(EmbPattern* p)
 {
     EmbPolylineObjectList* polyList = 0;
     EmbStitchList* currentList = 0;
     int firstObject = 1;
     /*int currentColor = polyList->polylineObj->color TODO: polyline color */
 
-    if(!p) { embLog_error("emb-pattern.c movePolylinesToStitchList(), p argument is null\n"); return; }
+    if(!p) { embLog_error("emb-pattern.c embPattern_copyPolylinesToStitchList(), p argument is null\n"); return; }
     polyList = p->polylineObjList;
     while(polyList)
     {
@@ -210,6 +208,20 @@ void movePolylinesToStitchList(EmbPattern* p)
         polyList = polyList->next;
     }
     embPattern_addStitchRel(p, 0.0, 0.0, END, 1);
+}
+
+void embPattern_moveStitchListToPolylines(EmbPattern* p)
+{
+    if(!p) { embLog_error("emb-pattern.c embPattern_moveStitchListToPolylines(), p argument is null\n"); return; }
+    embPattern_copyStitchListToPolylines(p);
+    /* TODO: free stitchList */
+}
+
+void embPattern_movePolylinesToStitchList(EmbPattern* p)
+{
+    if(!p) { embLog_error("emb-pattern.c embPattern_movePolylinesToStitchList(), p argument is null\n"); return; }
+    embPattern_copyPolylinesToStitchList(p);
+    /* TODO: free polylineObjList */
 }
 
 /* Adds a stitch at the absolute position (x,y). Positive y is up. Units are in millimeters. */
