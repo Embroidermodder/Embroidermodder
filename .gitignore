@@ -11,6 +11,7 @@ embroidermodder2/prompt.log
 embroidermodder2/embroidermodder2
 embroidermodder2/embroidermodder2.exe
 embroidermodder2/embroidermodder2.app
+embroidermodder2/doxygen
 
 #########################
 # libembroidery         #
@@ -20,6 +21,7 @@ libembroidery/.obj
 libembroidery/TODO
 libembroidery/Makefile
 libembroidery/_memleak*
+libembroidery/doxygen
 
 #########################
 # libembroidery-convert #
