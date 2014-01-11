@@ -5,6 +5,7 @@
 #include "helpers-misc.h"
 #include "emb-logging.h"
 
+/*! Rounds a double (\a src) and returns it as an \c int. */
 int roundDouble(double src)
 {
     if(src < 0.0)
@@ -12,7 +13,7 @@ int roundDouble(double src)
     return (int)floor(src+0.5);
 }
 
-/* Returns true if (str) begins with (pre), otherwise returns false. */
+/*! Returns \c true if string (\a str) begins with substring (\a pre), otherwise returns \c false. */
 char startsWith(const char* pre, const char* str)
 {
     char result = 0;
@@ -30,19 +31,19 @@ char startsWith(const char* pre, const char* str)
     return 0;
 }
 
-/* Removes all characters from the right end of the string that match (junk), moving left until a mismatch occurs. */
-char* rTrim(char* const string, char junk)
+/*! Removes all characters from the right end of the string (\a str) that match (\a junk), moving left until a mismatch occurs. */
+char* rTrim(char* const str, char junk)
 {
-    char* original = string + strlen(string);
+    char* original = str + strlen(str);
     while(*--original == junk);
     *(original + 1) = '\0';
-    return string;
+    return str;
 }
 
-/* Removes all characters from the left end of the string that match (junk), moving right until a mismatch occurs. */
-char* lTrim(char* const string, char junk)
+/*! Removes all characters from the left end of the string (\a str) that match (\a junk), moving right until a mismatch occurs. */
+char* lTrim(char* const str, char junk)
 {
-    char* original = string;
+    char* original = str;
     char* p = original;
     int trimmed = 0;
     do
@@ -54,10 +55,10 @@ char* lTrim(char* const string, char junk)
         }
     }
     while(*original++ != '\0');
-    return string;
+    return str;
 }
 
-/* Optimizes the number for output to a text file and returns it as a string. */
+/*! Optimizes the number (\a num) for output to a text file and returns it as a string (\a str). */
 char* emb_optOut(double num, char* str)
 {
     /* Convert the number to a string */
@@ -69,7 +70,7 @@ char* emb_optOut(double num, char* str)
     return str;
 }
 
-/* Duplicates the string (src) and returns it. It is created on the heap. The caller is responsible for freeing the allocated memory. */
+/*! Duplicates the string (\a src) and returns it. It is created on the heap. The caller is responsible for freeing the allocated memory. */
 char* emb_strdup(const char* src)
 {
     char* dest = 0;

@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 
-/* Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with embPattern_free(). */
+/*! Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with embPattern_free(). */
 EmbPattern* embPattern_create(void)
 {
     EmbPattern* p = 0;
@@ -266,7 +266,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     p->lastY = s.yy;
 }
 
-/* Adds a stitch at the relative position (dx,dy) to the previous stitch. Positive y is up. Units are in millimeters. */
+/*! Adds a stitch at the relative position (\a dx,\a dy) to the previous stitch. Positive y is up. Units are in millimeters. */
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex)
 {
     double x,y;
@@ -336,7 +336,7 @@ void embPattern_scale(EmbPattern* p, double scale)
     }
 }
 
-/* Calculates a rectangle that encapsulates all stitches and objects in the pattern. */
+/*! Returns an EmbRect that encapsulates all stitches and objects in the pattern. */
 EmbRect embPattern_calcBoundingBox(EmbPattern* p)
 {
     EmbStitchList* pointer = 0;
@@ -503,14 +503,14 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     return boundingRect;
 }
 
-/* Flips the entire pattern horizontally about the y-axis. */
+/*! Flips the entire pattern (\a p) horizontally about the y-axis. */
 void embPattern_flipHorizontal(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_flipHorizontal(), p argument is null\n"); return; }
     embPattern_flip(p, 1, 0);
 }
 
-/* Flips the entire pattern vertically about the x-axis. */
+/*! Flips the entire pattern (\a p) vertically about the x-axis. */
 void embPattern_flipVertical(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_flipVertical(), p argument is null\n"); return; }
@@ -830,7 +830,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     free(extractName);
 }
 
-/* Frees all memory allocated in the pattern. */
+/*! Frees all memory allocated in the pattern (\a p). */
 void embPattern_free(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_free(), p argument is null\n"); return; }
@@ -852,7 +852,7 @@ void embPattern_free(EmbPattern* p)
     p = 0;
 }
 
-/* Adds a circle with its center at the absolute position (cx,cy) with a radius of (r). Positive y is up. Units are in millimeters. */
+/*! Adds a circle object to pattern (\a p) with its center at the absolute position (\a cx,\a cy) with a radius of (\a r). Positive y is up. Units are in millimeters. */
 void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r)
 {
     EmbCircleObject circleObj = embCircleObject_make(cx, cy, r);
@@ -873,7 +873,7 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
     }
 }
 
-/* Adds an ellipse with its center at the absolute position (cx,cy) with radii of (rx,ry). Positive y is up. Units are in millimeters. */
+/*! Adds an ellipse object to pattern (\a p) with its center at the absolute position (\a cx,\a cy) with radii of (\a rx,\a ry). Positive y is up. Units are in millimeters. */
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry)
 {
     EmbEllipseObject ellipseObj = embEllipseObject_make(cx, cy, rx, ry);
@@ -894,7 +894,7 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
     }
 }
 
-/* Adds a line starting at the absolute position (x1,y1) and ending at the absolute position (x2,y2). Positive y is up. Units are in millimeters. */
+/*! Adds a line object to pattern (\a p) starting at the absolute position (\a x1,\a y1) and ending at the absolute position (\a x2,\a y2). Positive y is up. Units are in millimeters. */
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2)
 {
     EmbLineObject lineObj = embLineObject_make(x1, y1, x2, y2);
@@ -920,7 +920,7 @@ void embPattern_addPathObjectAbs(EmbPattern* pattern, EmbPathObject* pathObj)
     /* TODO: pointer safety */
 }
 
-/* Adds a point at the absolute position (x,y). Positive y is up. Units are in millimeters. */
+/*! Adds a point object to pattern (\a p) at the absolute position (\a x,\a y). Positive y is up. Units are in millimeters. */
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
 {
     EmbPointObject pointObj = embPointObject_make(x, y);
@@ -981,7 +981,7 @@ void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
     }
 }
 
-/* Adds a rectangle at the absolute position (x,y) with a width of (w) and a height of (h). Positive y is up. Units are in millimeters. */
+/*! Adds a rectangle object to pattern (\a p) at the absolute position (\a x,\a y) with a width of (\a w) and a height of (\a h). Positive y is up. Units are in millimeters. */
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h)
 {
     EmbRectObject rectObj = embRectObject_make(x, y, w, h);

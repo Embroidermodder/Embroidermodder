@@ -21,8 +21,8 @@ extern "C" {
 int roundDouble(double src);
 char startsWith(const char* pre, const char* str);
 
-char* rTrim(char* const string, char junk);
-char* lTrim(char* const string, char junk);
+char* rTrim(char* const str, char junk);
+char* lTrim(char* const str, char junk);
 char* emb_optOut(double num, char* str);
 char* emb_strdup(const char* src);
 
