@@ -10,6 +10,8 @@
 #include "object-polyline.h"
 #include "object-rect.h"
 
+#include "emb-color.h"
+
 #include <QGraphicsScene>
 #include <QGraphicsItem>
 
@@ -147,7 +149,7 @@ bool SaveObject::save(const QString &fileName)
             else if(objType == OBJ_TYPE_TEXTMULTI)    { addTextMulti(pattern, item);    }
             else if(objType == OBJ_TYPE_TEXTSINGLE)   { addTextSingle(pattern, item);   }
         }
-        movePolylinesToStitchList(pattern);
+        //movePolylinesToStitchList(pattern); //TODO: handle this properly
         writeSuccessful = writer->writer(pattern, qPrintable(fileName));
         if(!writeSuccessful) { qDebug("Writing file %s was unsuccessful", qPrintable(fileName)); }
     }
@@ -310,34 +312,34 @@ void SaveObject::addPolygon(EmbPattern* pattern, QGraphicsItem* item)
 void SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
 {
     PolylineObject* obj = static_cast<PolylineObject*>(item);
-        if(obj)
+    if(obj)
+    {
+        EmbPolylineObject* polyObject = (EmbPolylineObject*) malloc(sizeof(EmbPolylineObject));
+        QColor color = obj->objectColor();
+        polyObject->color = embColor_make(color.red(), color.green(), color.blue());
+        polyObject->lineType = obj->type();
+
+        QPainterPath path = obj->objectPath();
+        QPointF pos = obj->pos();
+        qreal startX = pos.x();
+        qreal startY = pos.y();
+        EmbPointList* pointList = 0;
+        QPainterPath::Element element;
+        for(int i = 0; i < path.elementCount()-1; ++i)
         {
-            EmbPolylineObject* polyObject = (EmbPolylineObject*) malloc(sizeof(EmbPolylineObject));
-            //QColor color = obj->objectColor();
-            //polyObject->color = embColor_create(color.red(), color.green(), color.blue());
-            polyObject->lineType = obj->type();
-
-            QPainterPath path = obj->objectPath();
-            QPointF pos = obj->pos();
-            qreal startX = pos.x();
-            qreal startY = pos.y();
-            EmbPointList* pointList = 0;
-            QPainterPath::Element element;
-            for(int i = 0; i < path.elementCount()-1; ++i)
+            element = path.elementAt(i);
+            if(!pointList)
             {
-                element = path.elementAt(i);
-                if(!pointList)
-                {
-                    polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
-                }
-                else
-                {
-                    pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
-                }
+                polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
             }
-
-            embPattern_addPolylineObjectAbs(pattern, polyObject);
+            else
+            {
+                pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
+            }
         }
+
+        embPattern_addPolylineObjectAbs(pattern, polyObject);
+    }
 }
 void SaveObject::addRay(EmbPattern* pattern, QGraphicsItem* item)
 {

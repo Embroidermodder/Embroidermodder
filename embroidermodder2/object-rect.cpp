@@ -162,6 +162,7 @@ void RectObject::updateRubber(QPainter* painter)
         if(painter)
         {
             //TODO: Make this work with rotation & scaling
+            /*
             QPointF gripPoint = objectRubberPoint("GRIP_POINT");
             QPointF after = objectRubberPoint(QString());
             QPointF delta = after-gripPoint;
@@ -169,6 +170,14 @@ void RectObject::updateRubber(QPainter* painter)
             else if(gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
             else if(gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
             else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+
+            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            */
+
+            QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+            QPointF after = objectRubberPoint(QString());
+            QPointF delta = after-gripPoint;
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);

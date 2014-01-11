@@ -1,7 +1,7 @@
 #include "format-dxf.h"
 #include "helpers-misc.h"
-#include "helpers-unused.h"
 #include "emb-hash.h"
+#include "emb-logging.h"
 
 #include "geom-arc.h"
 /*#include "geom-line.h" */
@@ -299,6 +299,8 @@ char* readLine(FILE* file)
     return lTrim(str, ' ');
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readDxf(EmbPattern* pattern, const char* fileName)
 {
 
@@ -320,12 +322,16 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     int fileLength = 0;
     unsigned char colorNum = 0;
 
+    if(!pattern) { embLog_error("format-dxf.c readDxf(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dxf.c readDxf(), fileName argument is null\n"); return 0; }
+
     layerColorHash = embHash_create();
-    if(!layerColorHash) { /* TODO: error allocating memory for layerColorHash */ return 0; }
+    if(!layerColorHash) { embLog_error("format-dxf.c readDxf(), unable to allocate memory for layerColorHash\n"); return 0; }
 
     file = fopen(fileName, "r");
     if(!file)
     {
+        embLog_error("format-dxf.c readDxf(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -565,19 +571,27 @@ int readDxf(EmbPattern* pattern, const char* fileName)
 
     fclose(file);
 
+    /*
+    EmbColor* testColor = 0;
+    testColor = embHash_value(layerColorHash, "OMEGA");
+    if(!testColor) printf("NULL POINTER!!!!!!!!!!!!!!\n");
+    else printf("LAYERCOLOR: %d,%d,%d\n", testColor->r, testColor->g, testColor->b);
+    */
+
     if(!eof)
     {
-        /* The EOF item must be present at the end of file to be considered a valid DXF file. */
-        /* TODO: log error: missing EOF at end of DXF file */
+        /* NOTE: The EOF item must be present at the end of file to be considered a valid DXF file. */
+        embLog_error("format-dxf.c readDxf(), missing EOF at end of DXF file\n");
     }
     return eof;
 }
 
-
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeDxf(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeDxf */
-    emb_unused(fileName); /*TODO: finish writeDxf */
+    if(!pattern) { embLog_error("format-dxf.c writeDxf(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-dxf.c writeDxf(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeDxf */
 }
 
