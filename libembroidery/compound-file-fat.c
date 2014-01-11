@@ -31,6 +31,7 @@ void loadFatFromSector(bcf_file_fat* fat, FILE* file)
 void bcf_file_fat_free(bcf_file_fat* fat)
 {
     free(fat);
+    fat = 0;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

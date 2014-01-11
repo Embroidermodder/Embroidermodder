@@ -53,6 +53,7 @@ void embPolylineObjectList_free(EmbPolylineObjectList* pointer)
     {
         nextPointer = tempPointer->next;
         embPointList_free(tempPointer->polylineObj->pointList);
+        tempPointer->polylineObj->pointList = 0;
         free(tempPointer);
         tempPointer = nextPointer;
     }

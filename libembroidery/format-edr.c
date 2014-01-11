@@ -26,6 +26,8 @@ int readEdr(EmbPattern* pattern, const char* fileName)
     fseek(file, 0x00, SEEK_SET);
 
     embThreadList_free(pattern->threadList);
+    pattern->threadList = 0;
+    pattern->lastThread = 0;
 
     for(i = 0; i < numberOfColors; i++)
     {

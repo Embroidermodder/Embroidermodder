@@ -125,6 +125,7 @@ static void ofmReadThreads(FILE* file, EmbPattern* p)
         /*libraries.Add( TODO: review */
         char* libName = ofmReadLibrary(file);
         free(libName);
+        libName = 0;
     }
 }
 
@@ -178,6 +179,7 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     bcfFile_read(fileCompound, bcfFile);
     file = GetFile(bcfFile, fileCompound, "EdsIV Object");
     bcf_file_free(bcfFile);
+    bcfFile = 0;
     fseek(file, 0x1C6, SEEK_SET);
     ofmReadThreads(file, pattern);
     fseek(file, 0x110, SEEK_CUR);

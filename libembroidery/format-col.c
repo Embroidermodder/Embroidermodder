@@ -19,7 +19,11 @@ int readCol(EmbPattern* pattern, const char* fileName)
         /* NOTE: The .col format is an optional color file. Do not log an error if the file does not exist */
         return 0;
     }
+
     embThreadList_free(pattern->threadList);
+    pattern->threadList = 0;
+    pattern->lastThread = 0;
+
     if(fscanf(file, "%d\r", &numberOfColors) < 1)
     {
         /* TODO: log error */

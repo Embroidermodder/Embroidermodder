@@ -233,6 +233,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
     }
 
     free(buff);
+    buff = 0;
 
     return 1;
 }

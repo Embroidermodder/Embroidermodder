@@ -107,11 +107,12 @@ int readXxx(EmbPattern* pattern, const char* fileName)
         while(lastStitch->next)
         {
             secondLast = lastStitch;
-            lastStitch=lastStitch->next;
+            lastStitch = lastStitch->next;
         }
         if((!pattern->stitchList) && lastStitch->stitch.flags == STOP && secondLast)
         {
             free(lastStitch);
+            lastStitch = 0;
             secondLast->next = NULL;
             embPattern_changeColor(pattern, pattern->currentColorIndex - 1);
         }

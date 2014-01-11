@@ -124,15 +124,20 @@ FILE* GetFile(bcf_file* bcfFile, FILE* file, char* fileToFind)
         currentSector = bcfFile->fat->fatEntries[currentSector];
     }
     free(input);
+    input = 0;
     return fileOut;
 }
 
 void bcf_file_free(bcf_file* bcfFile)
 {
     bcf_file_difat_free(bcfFile->difat);
+    bcfFile->difat = 0;
     bcf_file_fat_free(bcfFile->fat);
+    bcfFile->fat = 0;
     bcf_directory_free(bcfFile->directory);
+    bcfFile->directory = 0;
     free(bcfFile);
+    bcfFile = 0;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

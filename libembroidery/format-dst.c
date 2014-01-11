@@ -29,11 +29,13 @@ static unsigned char setbit(int pos)
     return (unsigned char)(1 << pos);
 }
 
+/* TODO: review this then remove since emb-pattern.c has a similar function */
 /* void combineJumpStitches(EmbPattern* p, int jumpsPerTrim)
 {
+    if(!p) { embLog_error("format-dst.c combineJumpStitches(), p argument is null\n"); return; }
     EmbStitchList* pointer = p->stitchList;
     int jumpCount = 0;
-    EmbStitchList* jumpListStart;
+    EmbStitchList* jumpListStart = 0;
     char needleDown = 0;
     while(pointer)
     {
@@ -58,6 +60,7 @@ static unsigned char setbit(int pos)
                     EmbStitchList* tempPointer = removePointer->next;
                     jumpListStart->stitch.flags |= removePointer->stitch.flags;
                     free(removePointer);
+                    removePointer = 0;
                     removePointer = tempPointer;
                 }
                 jumpCount = 0;
@@ -74,7 +77,8 @@ static unsigned char setbit(int pos)
         }
         pointer = pointer->next;
     }
-} */
+}
+*/
 
 static void encode_record(FILE* file, int x, int y, int flags)
 {

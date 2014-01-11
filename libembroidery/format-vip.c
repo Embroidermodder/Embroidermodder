@@ -151,12 +151,12 @@ int readVip(EmbPattern* pattern, const char* fileName)
 
     fclose(file);
 
-    free(attributeData);
-    free(xData);
-    free(yData);
-    free(attributeDataDecompressed);
-    free(xDecompressed);
-    free(yDecompressed);
+    free(attributeData);             attributeData = 0;
+    free(xData);                     xData = 0;
+    free(yData);                     yData = 0;
+    free(attributeDataDecompressed); attributeDataDecompressed = 0;
+    free(xDecompressed);             xDecompressed = 0;
+    free(yDecompressed);             yDecompressed = 0;
 
     return 1;
 }
@@ -236,6 +236,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     if(encodedColors) /* TODO: review this line. It looks clearly wrong. If not, note why. */
     {
         free(decodedColors);
+        decodedColors = 0;
         return 0;
     }
     /* embPattern_correctForMaxStitchLength(pattern, 0x7F, 0x7F); */
@@ -316,16 +317,16 @@ int writeVip(EmbPattern* pattern, const char* fileName)
         binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
     }
 
-    if(attributeCompressed) free(attributeCompressed);
-    if(xCompressed) free(xCompressed);
-    if(yCompressed) free(yCompressed);
+    if(attributeCompressed) { free(attributeCompressed); attributeCompressed = 0; }
+    if(xCompressed) { free(xCompressed); xCompressed = 0; }
+    if(yCompressed) { free(yCompressed); yCompressed = 0; }
 
-    if(attributeValues) free(attributeValues);
-    if(xValues) free(xValues);
-    if(yValues) free(yValues);
+    if(attributeValues) { free(attributeValues); attributeValues = 0; }
+    if(xValues) { free(xValues); xValues = 0; }
+    if(yValues) { free(yValues); yValues = 0; }
 
-    if(decodedColors) free(decodedColors);
-    if(encodedColors) free(encodedColors);
+    if(decodedColors) { free(decodedColors); decodedColors = 0; }
+    if(encodedColors) { free(encodedColors); encodedColors = 0; }
 
     fclose(file);
     return 1;

@@ -28,7 +28,7 @@ EmbPointList* embPointList_create(double x, double y);
 EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data);
 int embPointList_count(EmbPointList* pointer);
 int embPointList_empty(EmbPointList* pointer);
-void embPointList_free(EmbPointList* list);
+void embPointList_free(EmbPointList* pointer);
 
 typedef struct EmbPointObject_
 {

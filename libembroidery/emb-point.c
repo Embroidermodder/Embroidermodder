@@ -69,16 +69,17 @@ int embPointList_empty(EmbPointList* pointer)
     return 0;
 }
 
-void embPointList_free(EmbPointList* list)
+void embPointList_free(EmbPointList* pointer)
 {
-    EmbPointList* current = list;
-    EmbPointList* next;
-    while(current)
+    EmbPointList* tempPointer = pointer;
+    EmbPointList* nextPointer = 0;
+    while(tempPointer)
     {
-        next = current->next;
-        free(current);
-        current = next;
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
     }
+    pointer = 0;
 }
 
 /**************************************************/

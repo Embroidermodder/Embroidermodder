@@ -27,7 +27,11 @@ int readInf(EmbPattern* pattern, const char* fileName)
     binaryReadUInt32BE(file);
     binaryReadUInt32BE(file);
     numberOfColors = binaryReadUInt32BE(file);
+
     embThreadList_free(pattern->threadList);
+    pattern->threadList = 0;
+    pattern->lastThread = 0;
+
     for(i = 0; i < numberOfColors; i++)
     {
         char colorType[50];

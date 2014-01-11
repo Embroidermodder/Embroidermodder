@@ -173,13 +173,13 @@ int readHus(EmbPattern* pattern, const char* fileName)
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    if(stringVal) free(stringVal);
-    if(xData) free(xData);
-    if(xDecompressed) free(xDecompressed);
-    if(yData) free(yData);
-    if(yDecompressed) free(yDecompressed);
-    if(attributeData) free(attributeData);
-    if(attributeDataDecompressed) free(attributeDataDecompressed);
+    if(stringVal) { free(stringVal); stringVal = 0; }
+    if(xData) { free(xData); xData = 0; }
+    if(xDecompressed) { free(xDecompressed); xDecompressed = 0; }
+    if(yData) { free(yData); yData = 0; }
+    if(yDecompressed) { free(yDecompressed); yDecompressed = 0; }
+    if(attributeData) { free(attributeData); attributeData = 0; }
+    if(attributeDataDecompressed) { free(attributeDataDecompressed); attributeDataDecompressed = 0; }
 
     fclose(file);
     return 1;
@@ -273,12 +273,12 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     binaryWriteBytes(file, (char*) xCompressed, xCompressedSize);
     binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
 
-    free(xValues);
-    free(xCompressed);
-    free(yValues);
-    free(yCompressed);
-    free(attributeValues);
-    free(attributeCompressed);
+    free(xValues); xValues = 0;
+    free(xCompressed); xCompressed = 0;
+    free(yValues); yValues = 0;
+    free(yCompressed); yCompressed = 0;
+    free(attributeValues); attributeValues = 0;
+    free(attributeCompressed); attributeCompressed = 0;
 
     fclose(file);
     return 1;

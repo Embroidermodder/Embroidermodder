@@ -77,6 +77,7 @@ void embVectorList_free(EmbVectorList* pointer)
         EmbVectorList* temp = pointer;
         pointer = pointer->next;
         free(temp);
+        temp = 0;
     }
 }
 

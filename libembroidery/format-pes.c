@@ -168,6 +168,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, FILE* file)
     if(colorInfo)
     {
         free(colorInfo);
+        colorInfo = 0;
     }
 }
 

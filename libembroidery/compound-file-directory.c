@@ -117,10 +117,12 @@ void bcf_directory_free(bcf_directory* dir)
         entryToFree = pointer;
         pointer = pointer->next;
         free(entryToFree);
+        entryToFree = 0;
     }
     if(dir)
     {
         free(dir);
+        dir = 0;
     }
 }
 

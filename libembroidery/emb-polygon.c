@@ -53,6 +53,7 @@ void embPolygonObjectList_free(EmbPolygonObjectList* pointer)
     {
         nextPointer = tempPointer->next;
         embPointList_free(tempPointer->polygonObj->pointList);
+        tempPointer->polygonObj->pointList = 0;
         free(tempPointer);
         tempPointer = nextPointer;
     }

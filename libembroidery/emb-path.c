@@ -53,6 +53,7 @@ void embPathObjectList_free(EmbPathObjectList* pointer)
     {
         nextPointer = tempPointer->next;
         embPointList_free(tempPointer->pathObj->pointList);
+        tempPointer->pathObj->pointList = 0;
         free(tempPointer);
         tempPointer = nextPointer;
     }

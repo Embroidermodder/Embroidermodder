@@ -155,7 +155,9 @@ void svgElement_free(SvgElement* element)
 
     element->lastAttribute = 0;
     free(element->name);
+    element->name = 0;
     free(element);
+    element = 0;
 }
 
 SvgElement* svgElement_create(const char* name)
@@ -320,6 +322,7 @@ void svgAddToPattern(EmbPattern* p)
             }
         }
         free(polybuff);
+        polybuff = 0;
 
         if(!strcmp(buff, "polygon"))
         {
@@ -366,6 +369,7 @@ void svgAddToPattern(EmbPattern* p)
     else if(!strcmp(buff, "video"))            {  }
 
     svgElement_free(currentElement);
+    currentElement = 0;
 }
 
 
@@ -2774,7 +2778,14 @@ void svgProcess(int c, const char* buff)
             if(!advance) { advance = (char)svgIsVideoAttribute(buff); }
         }
 
-        if(advance) { printf("ATTRIBUTE:\n"); svgExpect = SVG_EXPECT_VALUE; free(currentAttribute); currentAttribute = emb_strdup(buff); }
+        if(advance)
+        {
+            printf("ATTRIBUTE:\n");
+            svgExpect = SVG_EXPECT_VALUE;
+            free(currentAttribute);
+            currentAttribute = 0;
+            currentAttribute = emb_strdup(buff);
+        }
     }
     else if(svgExpect == SVG_EXPECT_VALUE)
     {
@@ -2799,6 +2810,7 @@ void svgProcess(int c, const char* buff)
             {
                 char* tmp = emb_strdup(currentValue);
                 free(currentValue);
+                currentValue = 0;
                 currentValue = (char*)malloc(strlen(buff) + strlen(tmp) + 2);
                 if(!currentValue) { return; }
                 if(currentValue) memset(currentValue, 0, strlen(buff) + strlen(tmp) + 2);
@@ -2909,8 +2921,11 @@ int readSvg(EmbPattern* pattern, const char* fileName)
         fclose(file);
     }
     free(buff);
+    buff = 0;
     free(currentAttribute);
+    currentAttribute = 0;
     free(currentValue);
+    currentValue = 0;
 
     /*TODO: remove this summary after testing is complete */
     printf("OBJECT SUMMARY:\n");

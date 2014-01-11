@@ -82,6 +82,7 @@ unsigned int readFullSector(FILE* file, bcf_file_difat* bcfFile, unsigned int* n
 void bcf_file_difat_free(bcf_file_difat* difat)
 {
     free(difat);
+    difat = 0;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
