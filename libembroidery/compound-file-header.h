@@ -1,3 +1,4 @@
+/*! @file compound-file-header.h */
 #ifndef COMPOUND_FILE_HEADER_H
 #define COMPOUND_FILE_HEADER_H
 

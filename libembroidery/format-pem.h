@@ -1,3 +1,4 @@
+/*! @file format-pem.h */
 #ifndef FORMAT_PEM_H
 #define FORMAT_PEM_H
 

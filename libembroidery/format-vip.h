@@ -1,3 +1,4 @@
+/*! @file format-vip.h */
 #ifndef FORMAT_VIP_H
 #define FORMAT_VIP_H
 

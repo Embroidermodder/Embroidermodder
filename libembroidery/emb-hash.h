@@ -1,3 +1,4 @@
+/*! @file emb-hash.h */
 #ifndef EMB_HASH_H
 #define EMB_HASH_H
 

@@ -1,3 +1,4 @@
+/*! @file emb-stitch.h */
 #ifndef EMB_STITCH_H
 #define EMB_STITCH_H
 

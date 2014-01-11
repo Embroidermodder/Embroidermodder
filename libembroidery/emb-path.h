@@ -1,3 +1,4 @@
+/*! @file emb-path.h */
 #ifndef EMB_PATH_H
 #define EMB_PATH_H
 

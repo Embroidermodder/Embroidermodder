@@ -1,3 +1,4 @@
+/*! @file emb-point.h */
 #ifndef EMB_POINT_H
 #define EMB_POINT_H
 

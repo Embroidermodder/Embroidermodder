@@ -1,3 +1,4 @@
+/*! @file format-rgb.h */
 #ifndef FORMAT_RGB_H
 #define FORMAT_RGB_H
 

@@ -1,3 +1,4 @@
+/*! @file emb-time.h */
 #ifndef EMB_TIME_H
 #define EMB_TIME_H
 

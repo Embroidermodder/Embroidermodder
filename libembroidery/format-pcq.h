@@ -1,3 +1,4 @@
+/*! @file format-pcq.h */
 #ifndef FORMAT_PCQ_H
 #define FORMAT_PCQ_H
 

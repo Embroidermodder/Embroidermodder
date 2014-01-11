@@ -1,3 +1,4 @@
+/*! @file format-col.h */
 #ifndef FORMAT_COL_H
 #define FORMAT_COL_H
 

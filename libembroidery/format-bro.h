@@ -1,3 +1,4 @@
+/*! @file format-bro.h */
 #ifndef FORMAT_BRO_H
 #define FORMAT_BRO_H
 

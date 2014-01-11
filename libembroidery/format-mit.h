@@ -1,3 +1,4 @@
+/*! @file format-mit.h */
 #ifndef FORMAT_MIT_H
 #define FORMAT_MIT_H
 

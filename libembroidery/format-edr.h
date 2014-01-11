@@ -1,3 +1,4 @@
+/*! @file format-edr.h */
 #ifndef FORMAT_EDR_H
 #define FORMAT_EDR_H
 

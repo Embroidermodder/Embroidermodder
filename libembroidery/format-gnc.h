@@ -1,3 +1,4 @@
+/*! @file format-gnc.h */
 #ifndef FORMAT_GNC_H
 #define FORMAT_GNC_H
 

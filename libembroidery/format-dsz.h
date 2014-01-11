@@ -1,3 +1,4 @@
+/*! @file format-dsz.h */
 #ifndef FORMAT_DSZ_H
 #define FORMAT_DSZ_H
 

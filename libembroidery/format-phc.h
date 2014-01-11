@@ -1,3 +1,4 @@
+/*! @file format-phc.h */
 #ifndef FORMAT_PHC_H
 #define FORMAT_PHC_H
 

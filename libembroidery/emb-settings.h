@@ -1,3 +1,4 @@
+/*! @file emb-settings.h */
 #ifndef EMB_SETTINGS_H
 #define EMB_SETTINGS_H
 

@@ -1,3 +1,4 @@
+/*! @file format-sst.h */
 #ifndef FORMAT_SST_H
 #define FORMAT_SST_H
 

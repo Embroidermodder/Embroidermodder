@@ -1,3 +1,4 @@
+/*! @file format-inb.h */
 #ifndef FORMAT_INB_H
 #define FORMAT_INB_H
 

@@ -1,3 +1,4 @@
+/*! @file helpers-binary.h */
 #ifndef HELPERS_BINARY_H
 #define HELPERS_BINARY_H
 

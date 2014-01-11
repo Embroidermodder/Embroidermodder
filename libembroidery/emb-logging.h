@@ -1,3 +1,4 @@
+/*! @file emb-logging.h */
 #ifndef EMB_LOGGING_H
 #define EMB_LOGGING_H
 

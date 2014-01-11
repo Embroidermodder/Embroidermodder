@@ -1,3 +1,4 @@
+/*! @file format-txt.h */
 #ifndef FORMAT_TXT_H
 #define FORMAT_TXT_H
 

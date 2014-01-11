@@ -1,3 +1,4 @@
+/*! @file format-vp3.h */
 #ifndef FORMAT_VP3_H
 #define FORMAT_VP3_H
 

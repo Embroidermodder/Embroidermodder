@@ -1,3 +1,4 @@
+/*! @file compound-file-fat.h */
 #ifndef COMPOUND_FILE_FAT_H
 #define COMPOUND_FILE_FAT_H
 

@@ -1,3 +1,4 @@
+/*! @file emb-ellipse.h */
 #ifndef EMB_ELLIPSE_H
 #define EMB_ELLIPSE_H
 

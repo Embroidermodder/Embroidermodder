@@ -1,3 +1,4 @@
+/*! @file format-bmc.h */
 #ifndef FORMAT_BMC_H
 #define FORMAT_BMC_H
 

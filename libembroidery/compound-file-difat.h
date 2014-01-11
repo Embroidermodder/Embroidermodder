@@ -1,3 +1,4 @@
+/*! @file compound-file-difat.h */
 #ifndef COMPOUND_FILE_DIFAT_H
 #define COMPOUND_FILE_DIFAT_H
 

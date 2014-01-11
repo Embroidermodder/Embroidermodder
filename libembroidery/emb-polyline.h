@@ -1,3 +1,4 @@
+/*! @file emb-polyline.h */
 #ifndef EMB_POLYLINE_H
 #define EMB_POLYLINE_H
 

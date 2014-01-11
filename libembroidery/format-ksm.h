@@ -1,3 +1,4 @@
+/*! @file format-ksm.h */
 #ifndef FORMAT_KSM_H
 #define FORMAT_KSM_H
 

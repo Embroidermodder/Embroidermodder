@@ -1,3 +1,4 @@
+/*! @file format-max.h */
 #ifndef FORMAT_MAX_H
 #define FORMAT_MAX_H
 

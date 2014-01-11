@@ -1,3 +1,4 @@
+/*! @file emb-polygon.h */
 #ifndef EMB_POLYGON_H
 #define EMB_POLYGON_H
 

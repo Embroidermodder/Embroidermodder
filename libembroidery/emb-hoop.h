@@ -1,3 +1,4 @@
+/*! @file emb-hoop.h */
 #ifndef EMB_HOOP_H
 #define EMB_HOOP_H
 

@@ -1,3 +1,4 @@
+/*! @file emb-rect.h */
 #ifndef EMB_RECT_H
 #define EMB_RECT_H
 

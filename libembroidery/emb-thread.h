@@ -1,3 +1,4 @@
+/*! @file emb-thread.h */
 #ifndef EMB_THREAD_H
 #define EMB_THREAD_H
 

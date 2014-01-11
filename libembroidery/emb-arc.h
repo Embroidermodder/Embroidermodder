@@ -1,3 +1,4 @@
+/*! @file emb-arc.h */
 #ifndef EMB_ARC_H
 #define EMB_ARC_H
 

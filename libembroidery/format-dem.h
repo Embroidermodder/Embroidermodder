@@ -1,3 +1,4 @@
+/*! @file format-dem.h */
 #ifndef FORMAT_DEM_H
 #define FORMAT_DEM_H
 

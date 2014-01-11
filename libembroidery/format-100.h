@@ -1,3 +1,4 @@
+/*! @file format-100.h */
 #ifndef FORMAT_100_H
 #define FORMAT_100_H
 

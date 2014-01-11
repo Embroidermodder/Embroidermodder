@@ -1,3 +1,4 @@
+/*! @file format-dxf.h */
 #ifndef FORMAT_DXF_H
 #define FORMAT_DXF_H
 

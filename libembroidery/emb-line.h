@@ -1,3 +1,4 @@
+/*! @file emb-line.h */
 #ifndef EMB_LINE_H
 #define EMB_LINE_H
 

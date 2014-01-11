@@ -1,3 +1,4 @@
+/*! @file format-pcd.h */
 #ifndef FORMAT_PCD_H
 #define FORMAT_PCD_H
 

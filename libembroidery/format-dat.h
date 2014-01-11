@@ -1,3 +1,4 @@
+/*! @file format-dat.h */
 #ifndef FORMAT_DAT_H
 #define FORMAT_DAT_H
 

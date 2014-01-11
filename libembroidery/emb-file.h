@@ -1,3 +1,4 @@
+/*! @file emb-file.h */
 #ifndef EMB_FILE_H
 #define EMB_FILE_H
 

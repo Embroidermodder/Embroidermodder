@@ -1,3 +1,4 @@
+/*! @file emb-compress.h */
 #ifndef EMB_COMPRESS_H
 #define EMB_COMPRESS_H
 

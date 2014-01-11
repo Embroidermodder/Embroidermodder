@@ -1,3 +1,4 @@
+/*! @file format-pcm.h */
 #ifndef FORMAT_PCM_H
 #define FORMAT_PCM_H
 

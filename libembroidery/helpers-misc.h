@@ -1,3 +1,4 @@
+/*! @file helpers-misc.h */
 #ifndef HELPERS_MISC_H
 #define HELPERS_MISC_H
 

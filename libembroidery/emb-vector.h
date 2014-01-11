@@ -1,3 +1,4 @@
+/*! @file emb-vector.h */
 #ifndef EMB_VECTOR_H
 #define EMB_VECTOR_H
 

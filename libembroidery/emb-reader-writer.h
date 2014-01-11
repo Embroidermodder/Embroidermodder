@@ -1,3 +1,4 @@
+/*! @file emb-reader-writer.h */
 #ifndef EMB_READER_WRITER_H
 #define EMB_READER_WRITER_H
 

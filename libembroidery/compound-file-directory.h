@@ -1,3 +1,4 @@
+/*! @file compound-file-directory.h */
 #ifndef COMPOUND_FILE_DIRECTORY_H
 #define COMPOUND_FILE_DIRECTORY_H
 

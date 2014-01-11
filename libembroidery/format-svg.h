@@ -1,3 +1,4 @@
+/*! @file format-svg.h */
 #ifndef FORMAT_SVG_H
 #define FORMAT_SVG_H
 

@@ -1,3 +1,4 @@
+/*! @file emb-layer.h */
 #ifndef EMB_LAYER_H
 #define EMB_LAYER_H
 

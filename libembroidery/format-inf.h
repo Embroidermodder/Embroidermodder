@@ -1,3 +1,4 @@
+/*! @file format-inf.h */
 #ifndef FORMAT_INF_H
 #define FORMAT_INF_H
 

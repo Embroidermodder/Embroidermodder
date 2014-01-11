@@ -1,3 +1,4 @@
+/*! @file emb-color.h */
 #ifndef EMB_COLOR_H
 #define EMB_COLOR_H
 

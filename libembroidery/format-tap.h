@@ -1,3 +1,4 @@
+/*! @file format-tap.h */
 #ifndef FORMAT_TAP_H
 #define FORMAT_TAP_H
 

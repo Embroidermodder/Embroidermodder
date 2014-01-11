@@ -1,3 +1,4 @@
+/*! @file emb-circle.h */
 #ifndef EMB_CIRCLE_H
 #define EMB_CIRCLE_H
 

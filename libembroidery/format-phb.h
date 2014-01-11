@@ -1,3 +1,4 @@
+/*! @file format-phb.h */
 #ifndef FORMAT_PHB_H
 #define FORMAT_PHB_H
 

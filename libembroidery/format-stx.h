@@ -1,3 +1,4 @@
+/*! @file format-stx.h */
 #ifndef FORMAT_STX_H
 #define FORMAT_STX_H
 

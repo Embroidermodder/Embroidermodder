@@ -1,3 +1,4 @@
+/*! @file emb-spline.h */
 #ifndef EMB_SPLINE_H
 #define EMB_SPLINE_H
 

@@ -1,3 +1,4 @@
+/*! @file emb-satin-line.h */
 #ifndef EMB_SATINLINE_H
 #define EMB_SATINLINE_H
 

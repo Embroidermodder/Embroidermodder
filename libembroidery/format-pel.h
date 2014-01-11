@@ -1,3 +1,4 @@
+/*! @file format-pel.h */
 #ifndef FORMAT_PEL_H
 #define FORMAT_PEL_H
 

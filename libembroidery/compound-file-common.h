@@ -1,3 +1,4 @@
+/*! @file compound-file-common.h */
 #ifndef COMPOUND_FILE_COMMON_H
 #define COMPOUND_FILE_COMMON_H
 

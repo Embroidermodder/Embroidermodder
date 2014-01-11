@@ -1,3 +1,4 @@
+/*! @file format-hus.h */
 #ifndef FORMAT_HUS_H
 #define FORMAT_HUS_H
 

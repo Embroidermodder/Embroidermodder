@@ -1,3 +1,4 @@
+/*! @file format-thr.h */
 #ifndef FORMAT_THR_H
 #define FORMAT_THR_H
 

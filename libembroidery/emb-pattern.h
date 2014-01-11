@@ -1,3 +1,4 @@
+/*! @file emb-pattern.h */
 #ifndef EMB_PATTERN_H
 #define EMB_PATTERN_H
 
@@ -89,7 +90,6 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
 void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
 void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
 void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
-
 
 void embPattern_copyStitchListToPolylines(EmbPattern *pattern);
 void embPattern_copyPolylinesToStitchList(EmbPattern* pattern);

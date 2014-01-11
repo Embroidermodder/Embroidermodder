@@ -1,3 +1,4 @@
+/*! @file format-emd.h */
 #ifndef FORMAT_EMD_H
 #define FORMAT_EMD_H
 
