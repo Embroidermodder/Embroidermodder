@@ -32,6 +32,8 @@ static void maxEncode(FILE* file, int x, int y)
     binaryWriteByte(file, (unsigned char)((y >> 16) & 0xFF));
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readMax(EmbPattern* pattern, const char* fileName)
 {
     int i;
@@ -71,6 +73,8 @@ int readMax(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeMax(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;

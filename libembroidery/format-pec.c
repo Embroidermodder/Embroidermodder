@@ -95,6 +95,8 @@ static void pecEncodeStop(FILE* file, unsigned char val)
     binaryWriteByte(file, val);
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readPec(EmbPattern* pattern, const char* fileName)
 {
     unsigned int graphicsOffset;
@@ -351,6 +353,8 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     }
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writePec(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = fopen(fileName, "wb");

@@ -3,6 +3,8 @@
 #include "emb-logging.h"
 #include <stdio.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readTxt(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-txt.c readTxt(), pattern argument is null\n"); return 0; }
@@ -10,6 +12,8 @@ int readTxt(EmbPattern* pattern, const char* fileName)
     return 0; /*TODO: finish readTxt */
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeTxt(EmbPattern* pattern, const char* fileName)
 {
     EmbStitchList* pointer = 0;

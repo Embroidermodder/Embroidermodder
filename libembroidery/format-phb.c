@@ -4,6 +4,8 @@
 #include "helpers-binary.h"
 #include <stdio.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readPhb(EmbPattern* pattern, const char* fileName)
 {
     unsigned int fileOffset;
@@ -66,6 +68,8 @@ int readPhb(EmbPattern* pattern, const char* fileName)
     return 1; /*TODO: finish ReadPhb */
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writePhb(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-phb.c writePhb(), pattern argument is null\n"); return 0; }

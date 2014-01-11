@@ -208,6 +208,8 @@ static void set_dst_variable(EmbPattern* pattern, char* var, char* val)
     }
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readDst(EmbPattern* pattern, const char* fileName)
 {
     char var[3];   /* temporary storage variable name */
@@ -382,6 +384,8 @@ int readDst(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeDst(EmbPattern* pattern, const char* fileName)
 {
     EmbRect boundingRect;

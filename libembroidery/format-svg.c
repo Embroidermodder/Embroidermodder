@@ -2827,6 +2827,8 @@ void svgProcess(int c, const char* buff)
         svgExpect = SVG_EXPECT_NULL;
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readSvg(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
@@ -2968,6 +2970,8 @@ int readSvg(EmbPattern* pattern, const char* fileName)
     return 1; /*TODO: finish readSvg */
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeSvg(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;

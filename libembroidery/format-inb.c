@@ -3,6 +3,8 @@
 #include "helpers-binary.h"
 #include <stdio.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readInb(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
@@ -83,6 +85,8 @@ int readInb(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeInb(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-inb.c writeInb(), pattern argument is null\n"); return 0; }

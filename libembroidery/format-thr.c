@@ -43,6 +43,8 @@ bit definitions for attributes of stitch
 31      set for user edited stitches
 */
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readThr(EmbPattern* pattern, const char* fileName)
 {
     ThredHeader header;
@@ -131,6 +133,8 @@ int readThr(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeThr(EmbPattern* pattern, const char* fileName)
 {
     int i, stitchLength;

@@ -37,6 +37,8 @@ static void pcsEncode(FILE* file, int dx, int dy, int flags)
     binaryWriteByte(file, flagsToWrite);
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readPcs(EmbPattern* pattern, const char* fileName)
 {
     char allZeroColor = 1;
@@ -121,6 +123,8 @@ int readPcs(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writePcs(EmbPattern* pattern, const char* fileName)
 {
     EmbStitchList* pointer = 0;

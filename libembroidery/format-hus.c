@@ -78,7 +78,7 @@ static unsigned char husEncodeStitchType(int st)
     {
         case NORMAL:
             return (0x80);
-		case JUMP:
+        case JUMP:
         case TRIM:
             return (0x81);
         case STOP:
@@ -90,6 +90,8 @@ static unsigned char husEncodeStitchType(int st)
     }
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readHus(EmbPattern* pattern, const char* fileName)
 {
     int fileLength;
@@ -179,10 +181,12 @@ int readHus(EmbPattern* pattern, const char* fileName)
     if(attributeData) free(attributeData);
     if(attributeDataDecompressed) free(attributeDataDecompressed);
 
-	fclose(file);
+    fclose(file);
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeHus(EmbPattern* pattern, const char* fileName)
 {
     EmbRect boundingRect;
@@ -269,12 +273,12 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     binaryWriteBytes(file, (char*) xCompressed, xCompressedSize);
     binaryWriteBytes(file, (char*) yCompressed, yCompressedSize);
 
-	free(xValues);
+    free(xValues);
     free(xCompressed);
-	free(yValues);
-	free(yCompressed);
-	free(attributeValues);
-	free(attributeCompressed);
+    free(yValues);
+    free(yCompressed);
+    free(attributeValues);
+    free(attributeCompressed);
 
     fclose(file);
     return 1;

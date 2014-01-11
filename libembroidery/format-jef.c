@@ -53,6 +53,8 @@ struct hoop_padding
     int bottom;
 };
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readJef(EmbPattern* pattern, const char* fileName)
 {
     int stitchOffset, formatFlags, numberOfColors, numberOfStitchs;
@@ -180,6 +182,8 @@ static void jefEncode(FILE* file, float x, float y, int stitchType)
     }
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeJef(EmbPattern* pattern, const char* fileName)
 {
     int colorlistSize, minColors, designWidth, designHeight, i;

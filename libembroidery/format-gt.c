@@ -3,6 +3,8 @@
 #include "helpers-binary.h"
 #include <stdio.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readGt(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
@@ -46,6 +48,8 @@ int readGt(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeGt(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-gt.c writeGt(), pattern argument is null\n"); return 0; }

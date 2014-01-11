@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readEdr(EmbPattern* pattern, const char* fileName)
 {
     int numberOfColors;
@@ -38,6 +40,8 @@ int readEdr(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeEdr(EmbPattern* pattern, const char* fileName)
 {
     EmbThreadList* pointer = 0;

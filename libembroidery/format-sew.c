@@ -11,6 +11,8 @@ static char sewDecode(unsigned char inputByte)
     return (inputByte >= 0x80) ? (char) (-~(inputByte - 1)) : (char) inputByte; /* TODO: fix return statement */
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readSew(EmbPattern* pattern, const char* fileName)
 {
     FILE* file = 0;
@@ -90,6 +92,8 @@ int readSew(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeSew(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-sew.c writeSew(), pattern argument is null\n"); return 0; }

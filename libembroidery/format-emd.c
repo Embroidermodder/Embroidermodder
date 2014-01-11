@@ -7,6 +7,8 @@ static char emdDecode(unsigned char inputByte)
     return (inputByte >= 0x80) ? ((-~inputByte) - 1) : inputByte;
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readEmd(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b0 = 0, b1 = 0;
@@ -75,6 +77,8 @@ int readEmd(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeEmd(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-emd.c writeEmd(), pattern argument is null\n"); return 0; }

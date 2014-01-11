@@ -9,6 +9,8 @@ static int mitDecodeStitch(unsigned char value)
     return value;
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readMit(EmbPattern* pattern, const char* fileName)
 {
     unsigned char data[2];
@@ -34,6 +36,8 @@ int readMit(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeMit(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-mit.c writeMit(), pattern argument is null\n"); return 0; }

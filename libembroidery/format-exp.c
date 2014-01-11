@@ -34,6 +34,8 @@ static void expEncode(unsigned char *b, char dx, char dy, int flags)
     }
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readExp(EmbPattern* pattern, const char* fileName)
 {
     EmbFile* file = 0;
@@ -109,6 +111,8 @@ int readExp(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeExp(EmbPattern* pattern, const char* fileName)
 {
 #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */

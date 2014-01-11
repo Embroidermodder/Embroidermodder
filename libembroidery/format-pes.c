@@ -28,6 +28,8 @@ static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
     }
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readPes(EmbPattern* pattern, const char* fileName)
 {
     int pecstart, numColors, x;
@@ -168,6 +170,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, FILE* file)
         free(colorInfo);
     }
 }
+
 static void pesWriteEmbOneSection(EmbPattern* pattern, FILE* file)
 {
     /* TODO: pointer safety */
@@ -210,6 +213,8 @@ static void pesWriteEmbOneSection(EmbPattern* pattern, FILE* file)
     /*WriteSubObjects(br, pes, SubBlocks); */
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writePes(EmbPattern* pattern, const char* fileName)
 {
     int pecLocation;

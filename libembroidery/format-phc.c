@@ -4,6 +4,8 @@
 #include "helpers-binary.h"
 #include <stdio.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readPhc(EmbPattern* pattern, const char* fileName)
 {
     int colorChanges, version, bytesInSection2;
@@ -52,6 +54,8 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     return 1; /*TODO: finish ReadPhc */
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writePhc(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-phc.c writePhc(), pattern argument is null\n"); return 0; }

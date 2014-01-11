@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readPlt(EmbPattern* pattern, const char* fileName)
 {
     double x, y;
@@ -47,6 +49,8 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writePlt(EmbPattern* pattern, const char* fileName)
 {
     /* TODO: pointer safety */

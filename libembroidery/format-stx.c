@@ -89,6 +89,8 @@ static int ReadStxThread(StxThread* thread, FILE* file)
     return 1;
 }
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readStx(EmbPattern* pattern, const char* fileName)
 {
     int i, threadCount;
@@ -226,6 +228,8 @@ int readStx(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeStx(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-stx.c writeStx(), pattern argument is null\n"); return 0; }

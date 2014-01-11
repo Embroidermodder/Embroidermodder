@@ -4,6 +4,8 @@
 
 /* TODO: AFAIK this is a duplicate of U00. Review for differences and merge files and handle accordingly. */
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readU01(EmbPattern* pattern, const char* fileName)
 {
     int fileLength, negativeX = 0, negativeY = 0, flags = NORMAL;
@@ -50,6 +52,8 @@ int readU01(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeU01(EmbPattern* pattern, const char* fileName)
 {
     emb_unused(pattern); /*TODO: finish writeU01 */

@@ -2,6 +2,8 @@
 #include "emb-logging.h"
 #include <stdio.h>
 
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int readZsk(EmbPattern* pattern, const char* fileName)
 {
     int b[3];
@@ -39,6 +41,8 @@ int readZsk(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
 int writeZsk(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-zsk.c writeZsk(), pattern argument is null\n"); return 0; }
