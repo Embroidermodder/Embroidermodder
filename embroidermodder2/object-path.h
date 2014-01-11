@@ -13,6 +13,8 @@ public:
     enum { Type = OBJ_TYPE_PATH };
     virtual int type() const { return Type; }
 
+    QPainterPath objectSavePath() const { return normalPath; }
+
     QPointF objectPos() const { return scenePos(); }
     qreal   objectX()   const { return scenePos().x(); }
     qreal   objectY()   const { return scenePos().y(); }
@@ -30,7 +32,10 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::PenStyle lineType);
+    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath(const QPainterPath& p);
+    QPainterPath normalPath;
+    //TODO: make paths similar to polylines. Review and implement any missing functions/members.
 };
 
 #endif

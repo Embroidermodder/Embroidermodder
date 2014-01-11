@@ -149,7 +149,10 @@ bool SaveObject::save(const QString &fileName)
             else if(objType == OBJ_TYPE_TEXTMULTI)    { addTextMulti(pattern, item);    }
             else if(objType == OBJ_TYPE_TEXTSINGLE)   { addTextSingle(pattern, item);   }
         }
-        //movePolylinesToStitchList(pattern); //TODO: handle this properly
+
+        if(stitchOnly)
+            embPattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
+
         writeSuccessful = writer->writer(pattern, qPrintable(fileName));
         if(!writeSuccessful) { qDebug("Writing file %s was unsuccessful", qPrintable(fileName)); }
     }
@@ -319,7 +322,7 @@ void SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
         polyObject->color = embColor_make(color.red(), color.green(), color.blue());
         polyObject->lineType = obj->type();
 
-        QPainterPath path = obj->objectPath();
+        QPainterPath path = obj->objectSavePath();
         QPointF pos = obj->pos();
         qreal startX = pos.x();
         qreal startY = pos.y();

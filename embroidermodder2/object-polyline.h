@@ -13,6 +13,8 @@ public:
     enum { Type = OBJ_TYPE_POLYLINE };
     virtual int type() const { return Type; }
 
+    QPainterPath objectSavePath() const { return normalPath; }
+
     QPointF objectPos() const { return scenePos(); }
     qreal   objectX()   const { return scenePos().x(); }
     qreal   objectY()   const { return scenePos().y(); }

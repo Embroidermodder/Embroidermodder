@@ -27,7 +27,7 @@ PathObject::~PathObject()
     qDebug("PathObject Destructor()");
 }
 
-void PathObject::init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::PenStyle lineType)
+void PathObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_PATH);
@@ -37,12 +37,20 @@ void PathObject::init(qreal x, qreal y, const QPainterPath p, QRgb rgb, Qt::PenS
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setObjectPath(p);
+    updatePath(p);
     setObjectPos(x,y);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objectPen());
+}
+
+void PathObject::updatePath(const QPainterPath& p)
+{
+    normalPath = p;
+    QPainterPath reversePath = normalPath.toReversed();
+    reversePath.connectPath(normalPath);
+    setObjectPath(reversePath);
 }
 
 void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)

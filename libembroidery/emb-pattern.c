@@ -215,6 +215,8 @@ void embPattern_moveStitchListToPolylines(EmbPattern* p)
     if(!p) { embLog_error("emb-pattern.c embPattern_moveStitchListToPolylines(), p argument is null\n"); return; }
     embPattern_copyStitchListToPolylines(p);
     embStitchList_free(p->stitchList);
+    p->stitchList = 0;
+    p->lastStitch = 0;
 }
 
 void embPattern_movePolylinesToStitchList(EmbPattern* p)
@@ -222,6 +224,8 @@ void embPattern_movePolylinesToStitchList(EmbPattern* p)
     if(!p) { embLog_error("emb-pattern.c embPattern_movePolylinesToStitchList(), p argument is null\n"); return; }
     embPattern_copyPolylinesToStitchList(p);
     embPolylineObjectList_free(p->polylineObjList);
+    p->polylineObjList = 0;
+    p->lastPolylineObj = 0;
 }
 
 /* Adds a stitch at the absolute position (x,y). Positive y is up. Units are in millimeters. */
@@ -296,14 +300,17 @@ int embPattern_read(EmbPattern* p, const char* fileName) /* TODO: This doesn't w
 {
     EmbReaderWriter* reader = 0;
     embPattern_free(p);
+    p = 0;
     p = embPattern_create();
     reader = embReaderWriter_getByFileName(fileName);
     if(reader->reader(p, fileName))
     {
         free(reader);
+        reader = 0;
         return 1;
     }
     free(reader);
+    reader = 0;
     return 0;
 }
 
@@ -314,9 +321,11 @@ int embPattern_write(EmbPattern* p, const char *fileName) /* TODO: Write test ca
     if(writer->writer(p, fileName))
     {
         free(writer);
+        writer = 0;
         return 1;
     }
     free(writer);
+    writer = 0;
     return 0;
 }
 
@@ -793,6 +802,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     if(!hasRead)
     {
         free(colorFile);
+        colorFile = 0;
         extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".rgb");
@@ -805,6 +815,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     if(!hasRead)
     {
         free(colorFile);
+        colorFile = 0;
         extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".col");
@@ -817,6 +828,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
     if(!hasRead)
     {
         free(colorFile);
+        colorFile = 0;
         extractName = (char*)memcpy(extractName, fileName, dotPos - fileName);
         extractName[dotPos - fileName] = '\0';
         strcat(extractName,".inf");
@@ -827,26 +839,28 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
         }
     }
     free(colorFile);
+    colorFile = 0;
     free(extractName);
+    extractName = 0;
 }
 
 /*! Frees all memory allocated in the pattern (\a p). */
 void embPattern_free(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_free(), p argument is null\n"); return; }
-    embStitchList_free(p->stitchList);
-    embThreadList_free(p->threadList);
+    embStitchList_free(p->stitchList);              p->stitchList = 0;      p->lastStitch = 0;
+    embThreadList_free(p->threadList);              p->threadList = 0;      p->lastThread = 0;
 
-    embArcObjectList_free(p->arcObjList);
-    embCircleObjectList_free(p->circleObjList);
-    embEllipseObjectList_free(p->ellipseObjList);
-    embLineObjectList_free(p->lineObjList);
-    /* TODO: embPathObjectList_free(p->pathObjList); */
-    embPointObjectList_free(p->pointObjList);
-    embPolygonObjectList_free(p->polygonObjList);
-    embPolylineObjectList_free(p->polylineObjList);
-    embRectObjectList_free(p->rectObjList);
-    /* TODO: embSplineObjectList_free(p->splineObjList); */
+    embArcObjectList_free(p->arcObjList);           p->arcObjList = 0;      p->lastArcObj = 0;
+    embCircleObjectList_free(p->circleObjList);     p->circleObjList = 0;   p->lastCircleObj = 0;
+    embEllipseObjectList_free(p->ellipseObjList);   p->ellipseObjList = 0;  p->lastEllipseObj = 0;
+    embLineObjectList_free(p->lineObjList);         p->lineObjList = 0;     p->lastLineObj = 0;
+ /* embPathObjectList_free(p->pathObjList);         p->pathObjList = 0;     p->lastPathObj = 0; TODO: finish this */
+    embPointObjectList_free(p->pointObjList);       p->pointObjList = 0;    p->lastPointObj = 0;
+    embPolygonObjectList_free(p->polygonObjList);   p->polygonObjList = 0;  p->lastPolygonObj = 0;
+    embPolylineObjectList_free(p->polylineObjList); p->polylineObjList = 0; p->lastPolylineObj = 0;
+    embRectObjectList_free(p->rectObjList);         p->rectObjList = 0;     p->lastRectObj = 0;
+ /* embSplineObjectList_free(p->splineObjList);     p->splineObjList = 0;   p->lastSplineObj = 0; TODO: finish this */
 
     free(p);
     p = 0;
