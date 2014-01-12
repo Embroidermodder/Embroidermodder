@@ -328,7 +328,7 @@ void SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
         qreal startY = pos.y();
         EmbPointList* pointList = 0;
         QPainterPath::Element element;
-        for(int i = 0; i < path.elementCount()-1; ++i)
+        for(int i = 0; i < path.elementCount(); ++i)
         {
             element = path.elementAt(i);
             if(!pointList)

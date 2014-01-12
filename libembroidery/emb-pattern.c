@@ -193,12 +193,19 @@ void embPattern_copyPolylinesToStitchList(EmbPattern* p)
         thread.color = currentPoly->color;
         thread.description = 0;
         embPattern_addThread(p, thread);
+
+        /* TODO: The commented out code below is jacked up. We should check the previous color against this color
+                 and only if they do not match the thread should be trimmed. */
+        /*
         if(!firstObject)
         {
             embPattern_addStitchRel(p, currentPointList->point.xx, currentPointList->point.yy, TRIM, 1);
             embPattern_addStitchRel(p, 0.0, 0.0, STOP, 1);
             firstObject = 0;
         }
+        */
+
+        embPattern_addStitchAbs(p, currentPointList->point.xx, currentPointList->point.yy, JUMP, 1);
         while(currentPointList)
         {
             embPattern_addStitchAbs(p, currentPointList->point.xx, currentPointList->point.yy, NORMAL, 1);
@@ -214,9 +221,13 @@ void embPattern_moveStitchListToPolylines(EmbPattern* p)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_moveStitchListToPolylines(), p argument is null\n"); return; }
     embPattern_copyStitchListToPolylines(p);
+    /* Free the stitchList and threadList since their data has now been transferred to polylines */
     embStitchList_free(p->stitchList);
     p->stitchList = 0;
     p->lastStitch = 0;
+    embThreadList_free(p->threadList);
+    p->threadList = 0;
+    p->lastThread = 0;
 }
 
 void embPattern_movePolylinesToStitchList(EmbPattern* p)
