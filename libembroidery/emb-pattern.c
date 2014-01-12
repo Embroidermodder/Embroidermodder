@@ -307,37 +307,40 @@ void embPattern_changeColor(EmbPattern* p, int index)
     p->currentColorIndex = index;
 }
 
-int embPattern_read(EmbPattern* p, const char* fileName) /* TODO: This doesn't work. Write test case using this convenience function. */
+/*! Reads a file with the given \a fileName and loads the data into \a pattern.
+ *  Returns \c true if successful, otherwise returns \c false. */
+int embPattern_read(EmbPattern* pattern, const char* fileName) /* TODO: This doesn't work. Write test case using this convenience function. */
 {
     EmbReaderWriter* reader = 0;
-    embPattern_free(p);
-    p = 0;
-    p = embPattern_create();
+    int result = 0;
+
+    if(!pattern) { embLog_error("emb-pattern.c embPattern_read(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("emb-pattern.c embPattern_read(), fileName argument is null\n"); return 0; }
+
     reader = embReaderWriter_getByFileName(fileName);
-    if(reader->reader(p, fileName))
-    {
-        free(reader);
-        reader = 0;
-        return 1;
-    }
+    if(!reader) { embLog_error("emb-pattern.c embPattern_read(), unsupported read file type: %s\n", fileName); return 0; }
+    result = reader->reader(pattern, fileName);
     free(reader);
     reader = 0;
-    return 0;
+    return result;
 }
 
-int embPattern_write(EmbPattern* p, const char *fileName) /* TODO: Write test case using this convenience function. */
+/*! Writes the data from \a pattern to a file with the given \a fileName.
+ *  Returns \c true if successful, otherwise returns \c false. */
+int embPattern_write(EmbPattern* pattern, const char *fileName) /* TODO: Write test case using this convenience function. */
 {
     EmbReaderWriter* writer = 0;
+    int result = 0;
+
+    if(!pattern) { embLog_error("emb-pattern.c embPattern_write(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("emb-pattern.c embPattern_write(), fileName argument is null\n"); return 0; }
+
     writer = embReaderWriter_getByFileName(fileName);
-    if(writer->writer(p, fileName))
-    {
-        free(writer);
-        writer = 0;
-        return 1;
-    }
+    if(!writer) { embLog_error("emb-pattern.c embPattern_write(), unsupported write file type: %s\n", fileName); return 0; }
+    result = writer->writer(pattern, fileName);
     free(writer);
     writer = 0;
-    return 0;
+    return result;
 }
 
 /* Very simple scaling of the x and y axis for every point.

@@ -71,8 +71,6 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
 void embPattern_changeColor(EmbPattern* p, int index);
 void embPattern_free(EmbPattern* p);
-int embPattern_read(EmbPattern* p, const char* fileName);
-int embPattern_write(EmbPattern* p, const char *fileName);
 void embPattern_scale(EmbPattern* p, double scale);
 EmbRect embPattern_calcBoundingBox(EmbPattern* p);
 void embPattern_flipHorizontal(EmbPattern* p);
@@ -80,7 +78,7 @@ void embPattern_flipVertical(EmbPattern* p);
 void embPattern_flip(EmbPattern* p, int horz, int vert);
 void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
 void embPattern_center(EmbPattern* p);
-void embPattern_loadExternalColorFile(EmbPattern* p, const char *fileName);
+void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
 
 void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r);
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry); /* TODO: ellipse rotation */
@@ -95,6 +93,9 @@ void embPattern_copyStitchListToPolylines(EmbPattern* pattern);
 void embPattern_copyPolylinesToStitchList(EmbPattern* pattern);
 void embPattern_moveStitchListToPolylines(EmbPattern* pattern);
 void embPattern_movePolylinesToStitchList(EmbPattern* pattern);
+
+int embPattern_read(EmbPattern* pattern, const char* fileName);
+int embPattern_write(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }

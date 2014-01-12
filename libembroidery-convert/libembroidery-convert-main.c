@@ -1,7 +1,9 @@
+#include "emb-reader-writer.h"
+#include "emb-logging.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "emb-reader-writer.h"
+
 
 static const int formatCount = 59;
 static const char* const formats[] = {
@@ -110,12 +112,22 @@ void usage(void)
 
 /* TODO: Add capability for converting multiple files of various types to a single format. Currently, we only convert a single file to multiple formats. */
 
+/*! Developers incorporating libembroidery into another project should use the SHORT_WAY of using libembroidery. It uses
+ *  convenience functions and is approximately 20 lines shorter than the long way.
+ *
+ *  Developers who are interested improving libembroidery or using it to its fullest extent should use the LONG_WAY.
+ *  It essentially does the same work the convenience function do.
+ *
+ *  Both methods are acceptable and it is up to you which to choose. Both will stay here for regression testing.
+ */
+
+#define SHORT_WAY
+
 int main(int argc, const char* argv[])
 {
+#ifdef SHORT_WAY
     EmbPattern* p = 0;
-    EmbReaderWriter* reader = 0;
-    EmbReaderWriter* writer = 0;
-    int readSuccessful, writeSuccessful, i;
+    int successful = 0, i = 0;
     if(argc < 3)
     {
         usage();
@@ -123,47 +135,79 @@ int main(int argc, const char* argv[])
     }
 
     p = embPattern_create();
-    if(!p) { printf("Could not allocate memory for embroidery pattern\n"); exit(1); }
+    if(!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
 
-    /* Read */
-    readSuccessful = 0;
+    successful = embPattern_read(p, argv[1]);
+    if(!successful)
+    {
+        embLog_error("libembroidery-convert-main.c main(), reading file %s was unsuccessful\n", argv[1]);
+        embPattern_free(p);
+        exit(1);
+    }
+
+    i = 2;
+    for(i = 2; i < argc; i++)
+    {
+        successful = embPattern_write(p, argv[i]);
+        if(!successful)
+            embLog_error("libembroidery-convert-main.c main(), writing file %s was unsuccessful\n", argv[i]);
+    }
+
+    embPattern_free(p);
+    return 0;
+#else /* LONG_WAY */
+    EmbPattern* p = 0;
+    EmbReaderWriter* reader = 0, *writer = 0;
+    int successful = 0, i = 0;
+    if(argc < 3)
+    {
+        usage();
+        exit(0);
+    }
+
+    p = embPattern_create();
+    if(!p) { embLog_error("libembroidery-convert-main.c main(), cannot allocate memory for p\n"); exit(1); }
+
+    successful = 0;
     reader = embReaderWriter_getByFileName(argv[1]);
     if(!reader)
     {
-        readSuccessful = 0;
-        printf("Unsupported read file type: %s\n", argv[1]);
+        successful = 0;
+        embLog_error("libembroidery-convert-main.c main(), unsupported read file type: %s\n", argv[1]);
     }
     else
     {
-        readSuccessful = reader->reader(p, argv[1]);
-        if(!readSuccessful) printf("Reading file was unsuccessful: %s\n", argv[1]);
+        successful = reader->reader(p, argv[1]);
+        if(!successful) embLog_error("libembroidery-convert-main.c main(), reading file was unsuccessful: %s\n", argv[1]);
     }
     free(reader);
-    if(!readSuccessful)
+    if(!successful)
     {
         embPattern_free(p);
         exit(1);
     }
 
-    /* Write */
     i = 2;
     for(i = 2; i < argc; i++)
     {
         writer = embReaderWriter_getByFileName(argv[i]);
         if(!writer)
         {
-            printf("Unsupported write file type: %s\n", argv[i]);
+            embLog_error("libembroidery-convert-main.c main(), unsupported write file type: %s\n", argv[i]);
         }
         else
         {
-            writeSuccessful = writer->writer(p, argv[i]);
-            if(!writeSuccessful) printf("Writing file %s was unsuccessful\n", argv[i]);
+            successful = writer->writer(p, argv[i]);
+            if(!successful)
+                embLog_error("libembroidery-convert-main.c main(), writing file %s was unsuccessful\n", argv[i]);
         }
         free(writer);
     }
 
     embPattern_free(p);
     return 0;
+#endif /* SHORT_WAY */
+
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

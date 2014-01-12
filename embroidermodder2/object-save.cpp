@@ -344,6 +344,7 @@ void SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
         embPattern_addPolylineObjectAbs(pattern, polyObject);
     }
 }
+
 void SaveObject::addRay(EmbPattern* pattern, QGraphicsItem* item)
 {
 }

@@ -1,19 +1,21 @@
+#include "emb-reader-writer.h"
+#include "emb-logging.h"
+#include "formats.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "emb-reader-writer.h"
 
-#include "formats.h"
-
-EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
+EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
 {
     int i = 0;
     char ending[5];
-    EmbReaderWriter* rw;
+    EmbReaderWriter* rw = 0;
 
-    if(strlen(filename) == 0) return NULL;
-    strcpy(ending, strrchr(filename, '.'));
+    if(!fileName) { embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), fileName argument is null\n"); return 0; }
+
+    if(strlen(fileName) == 0) return 0;
+    strcpy(ending, strrchr(fileName, '.'));
 
     while(ending[i] != '\0')
     {
@@ -21,8 +23,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* filename)
         ++i;
     }
     rw = (EmbReaderWriter*)malloc(sizeof(EmbReaderWriter));
-
-    if(!rw) return 0;
+    if(!rw) { embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), cannot allocate memory for rw\n"); return 0; }
 
     if(!strcmp(ending, ".10o"))
     {

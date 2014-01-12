@@ -14,7 +14,7 @@ typedef struct EmbReaderWriter_
     int (*writer)(EmbPattern*, const char*);
 } EmbReaderWriter;
 
-EmbReaderWriter* embReaderWriter_getByFileName(const char* filename);
+EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName);
 
 #ifdef __cplusplus
 }
