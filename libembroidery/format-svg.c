@@ -93,9 +93,12 @@ EmbColor svgColorToEmbColor(char* colorString)
 SvgAttribute svgAttribute_create(const char* name, const char* value)
 {
     SvgAttribute attribute;
-    char* modValue = emb_strdup(value);
-    int last = strlen(modValue);
+    char* modValue = 0;
+    int last = 0;
     int i = 0;
+
+    modValue = emb_strdup(value);
+    last = strlen(modValue);
     for(i = 0; i < last; i++)
     {
         if(modValue[i] == '"') modValue[i] = ' ';
@@ -135,7 +138,7 @@ void svgElement_addAttribute(SvgElement* element, SvgAttribute data)
 
 void svgElement_free(SvgElement* element)
 {
-    SvgAttributeList* list;
+    SvgAttributeList* list = 0;
     SvgAttributeList* nextList = 0;
     if(!element) return;
 
@@ -175,7 +178,7 @@ SvgElement* svgElement_create(const char* name)
 
 char* svgAttribute_getValue(SvgElement* element, const char* name)
 {
-    SvgAttributeList* pointer;
+    SvgAttributeList* pointer = 0;
 
     if(!element) { embLog_error("format-svg.c svgAttribute_getValue(), element argument is null\n"); return "none"; }
     if(!name) { embLog_error("format-svg.c svgAttribute_getValue(), name argument is null\n"); return "none"; }
@@ -193,7 +196,7 @@ char* svgAttribute_getValue(SvgElement* element, const char* name)
 
 void svgAddToPattern(EmbPattern* p)
 {
-    const char* buff;
+    const char* buff = 0;
 
     if(!p) { embLog_error("format-svg.c svgAddToPattern(), p argument is null\n"); return; }
     if(!currentElement) { return; }
@@ -273,7 +276,8 @@ void svgAddToPattern(EmbPattern* p)
         EmbPointList* startOfList = 0;
         EmbPointList* polyObjPointList = 0;
 
-        char* polybuff = (char*)malloc(size);
+        char* polybuff = 0;
+        polybuff = (char*)malloc(size);
         if(!polybuff) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for polybuff\n"); return; }
 
         for(i = 0; i < last; i++)
@@ -326,23 +330,29 @@ void svgAddToPattern(EmbPattern* p)
 
         if(!strcmp(buff, "polygon"))
         {
-            EmbPolygonObject* polyObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
-            /* TODO: malloc fail error */
-            polyObj->pointList = 0;
-            polyObj->lineType = 1; /* TODO: Determine what the correct value should be */
-            polyObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
-            polyObj->pointList = startOfList;
-            embPattern_addPolygonObjectAbs(p, polyObj);
+            EmbPolygonObject* polygonObj = 0;
+            polygonObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
+            if(!polygonObj) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for polygonObj\n"); return; }
+            polygonObj->pointList = 0;
+            polygonObj->lineType = 1; /* TODO: Determine what the correct value should be */
+            polygonObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
+            polygonObj->pointList = startOfList;
+            embPattern_addPolygonObjectAbs(p, polygonObj);
+            free(polygonObj);
+            polygonObj = 0;
         }
         else /* polyline */
         {
-            EmbPolylineObject* polyObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-            /* TODO: malloc fail error */
-            polyObj->pointList = 0;
-            polyObj->lineType = 1; /* TODO: Determine what the correct value should be */
-            polyObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
-            polyObj->pointList = startOfList;
-            embPattern_addPolylineObjectAbs(p, polyObj);
+            EmbPolylineObject* polylineObj = 0;
+            polylineObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+            if(!polylineObj) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for polylineObj\n"); return; }
+            polylineObj->pointList = 0;
+            polylineObj->lineType = 1; /* TODO: Determine what the correct value should be */
+            polylineObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
+            polylineObj->pointList = startOfList;
+            embPattern_addPolylineObjectAbs(p, polylineObj);
+            free(polylineObj);
+            polylineObj = 0;
         }
     }
     else if(!strcmp(buff, "prefetch"))         {  }
@@ -2553,7 +2563,7 @@ void svgProcess(int c, const char* buff)
     else if(svgExpect == SVG_EXPECT_ATTRIBUTE)
     {
         char advance = 0;
-        const char* name;
+        const char* name = 0;
         if(!currentElement) { /* TODO: error */ return; }
         name = currentElement->name;
 
@@ -2808,11 +2818,12 @@ void svgProcess(int c, const char* buff)
             }
             else
             {
-                char* tmp = emb_strdup(currentValue);
+                char* tmp = 0;
+                tmp = emb_strdup(currentValue);
                 free(currentValue);
                 currentValue = 0;
                 currentValue = (char*)malloc(strlen(buff) + strlen(tmp) + 2);
-                if(!currentValue) { return; }
+                if(!currentValue) { embLog_error("format-svg.c svgProcess(), cannot allocate memory for currentValue\n"); return; }
                 if(currentValue) memset(currentValue, 0, strlen(buff) + strlen(tmp) + 2);
                 strcat(currentValue, tmp);
                 strcat(currentValue, " ");
