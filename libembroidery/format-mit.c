@@ -5,7 +5,8 @@
 
 static int mitDecodeStitch(unsigned char value)
 {
-    if(value & 0x80) return -(value & 0x1F);
+    if(value & 0x80)
+        return -(value & 0x1F);
     return value;
 }
 

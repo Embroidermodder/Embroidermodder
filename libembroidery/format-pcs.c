@@ -15,8 +15,8 @@ static double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 
 static void pcsEncode(FILE* file, int dx, int dy, int flags)
 {
-    /* TODO: pointer safety */
     unsigned char flagsToWrite = 0;
+    if(!file) { embLog_error("format-pcs.c pcsEncode(), file argument is null\n"); return; }
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(dx & 0xFF));
     binaryWriteByte(file, (unsigned char)((dx >> 8) & 0xFF));

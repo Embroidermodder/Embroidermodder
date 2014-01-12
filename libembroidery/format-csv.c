@@ -289,7 +289,7 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
     fprintf(file, "\"#\",\"STITCH instructs the machine to move to the position [X][Y] and then make a stitch.\"\n");
     fprintf(file, "\"#\",\"JUMP instructs the machine to move to the position [X][Y] without making a stitch.\"\n");
     fprintf(file, "\"#\",\"TRIM instructs the machine to cut the thread before moving to the position [X][Y] without making a stitch.\"\n");
-    fprintf(file, "\"#\",\"COLOR instructs the machine to stop so that the user can change to a different color thread.\"\n");
+    fprintf(file, "\"#\",\"COLOR instructs the machine to stop temporarily so that the user can change to a different color thread before resuming.\"\n");
     fprintf(file, "\"#\",\"END instructs the machine that the design is completed and there are no further instructions.\"\n");
     fprintf(file, "\"#\",\"UNKNOWN encompasses instructions that may not be supported currently.\"\n");
     fprintf(file, "\"#\",\"[X] and [Y] are absolute coordinates in millimeters (mm).\"\n");
