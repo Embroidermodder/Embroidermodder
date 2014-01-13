@@ -873,7 +873,7 @@ void embPattern_free(EmbPattern* p)
     embCircleObjectList_free(p->circleObjList);     p->circleObjList = 0;   p->lastCircleObj = 0;
     embEllipseObjectList_free(p->ellipseObjList);   p->ellipseObjList = 0;  p->lastEllipseObj = 0;
     embLineObjectList_free(p->lineObjList);         p->lineObjList = 0;     p->lastLineObj = 0;
- /* embPathObjectList_free(p->pathObjList);         p->pathObjList = 0;     p->lastPathObj = 0; TODO: finish this */
+    embPathObjectList_free(p->pathObjList);         p->pathObjList = 0;     p->lastPathObj = 0;
     embPointObjectList_free(p->pointObjList);       p->pointObjList = 0;    p->lastPointObj = 0;
     embPolygonObjectList_free(p->polygonObjList);   p->polygonObjList = 0;  p->lastPolygonObj = 0;
     embPolylineObjectList_free(p->polylineObjList); p->polylineObjList = 0; p->lastPolylineObj = 0;
@@ -943,7 +943,16 @@ void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj)
     if(!p) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), obj argument is null\n"); return; }
 
-    /* TODO: finish this */
+    if(!(p->pathObjList))
+    {
+        p->pathObjList = embPathObjectList_create(obj);
+        p->lastPathObj = p->pathObjList;
+    }
+    else
+    {
+        embPathObjectList_add(p->lastPathObj, obj);
+        p->lastPathObj = p->lastPathObj->next;
+    }
 }
 
 /*! Adds a point object to pattern (\a p) at the absolute position (\a x,\a y). Positive y is up. Units are in millimeters. */
