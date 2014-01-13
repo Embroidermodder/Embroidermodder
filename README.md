@@ -27,7 +27,7 @@ Optionally, you may want to add:
 Ubuntu repository packages:
 The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
 ```
-sudo apt-get install qt4-dev-tools kdelibs5-dev valgrind
+sudo apt-get install qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind
 ```
 Building
 --------
