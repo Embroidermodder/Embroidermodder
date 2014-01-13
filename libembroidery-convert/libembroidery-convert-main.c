@@ -145,6 +145,8 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
+    embPattern_movePolylinesToStitchList(p); /* TODO: determine if output is a stitch only format and handle accordingly. */
+
     i = 2;
     for(i = 2; i < argc; i++)
     {
