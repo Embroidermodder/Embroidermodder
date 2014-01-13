@@ -40,6 +40,7 @@ typedef struct EmbLineObjectList_
     struct EmbLineObjectList_* next;
 } EmbLineObjectList;
 
+EmbLineObjectList* embLineObjectList_create(EmbLineObject data);
 EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
 int embLineObjectList_count(EmbLineObjectList* pointer);
 int embLineObjectList_empty(EmbLineObjectList* pointer);

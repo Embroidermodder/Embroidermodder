@@ -97,6 +97,15 @@ EmbRectObject* embRectObject_create(double x, double y, double w, double h)
 /* EmbRectObjectList                              */
 /**************************************************/
 
+EmbRectObjectList* embRectObjectList_create(EmbRectObject data)
+{
+    EmbRectObjectList* heapRectObjList = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
+    if(!heapRectObjList) { embLog_error("emb-rect.c embRectObjectList_create(), cannot allocate memory for heapRectObjList\n"); return 0; }
+    heapRectObjList->rectObj = data;
+    heapRectObjList->next = 0;
+    return heapRectObjList;
+}
+
 EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data)
 {
     if(!pointer) { embLog_error("emb-rect.c embRectObjectList_add(), pointer argument is null\n"); return 0; }

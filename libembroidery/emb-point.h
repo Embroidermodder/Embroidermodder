@@ -48,6 +48,7 @@ typedef struct EmbPointObjectList_
     struct EmbPointObjectList_* next;
 } EmbPointObjectList;
 
+EmbPointObjectList* embPointObjectList_create(EmbPointObject data);
 EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
 int embPointObjectList_count(EmbPointObjectList* pointer);
 int embPointObjectList_empty(EmbPointObjectList* pointer);

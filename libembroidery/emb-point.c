@@ -109,6 +109,15 @@ EmbPointObject* embPointObject_create(double x, double y)
 /* EmbPointObjectList                             */
 /**************************************************/
 
+EmbPointObjectList* embPointObjectList_create(EmbPointObject data)
+{
+    EmbPointObjectList* heapPointObjList = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
+    if(!heapPointObjList) { embLog_error("emb-point.c embPointObjectList_create(), cannot allocate memory for heapPointObjList\n"); return 0; }
+    heapPointObjList->pointObj = data;
+    heapPointObjList->next = 0;
+    return heapPointObjList;
+}
+
 EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data)
 {
     if(!pointer) { embLog_error("emb-point.c embPointObjectList_add(), pointer argument is null\n"); return 0; }

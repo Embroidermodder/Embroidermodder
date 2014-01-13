@@ -50,6 +50,15 @@ EmbCircleObject* embCircleObject_create(double cx, double cy, double r)
 /* EmbCircleObjectList                            */
 /**************************************************/
 
+EmbCircleObjectList* embCircleObjectList_create(EmbCircleObject data)
+{
+    EmbCircleObjectList* heapCircleObjList = (EmbCircleObjectList*)malloc(sizeof(EmbCircleObjectList));
+    if(!heapCircleObjList) { embLog_error("emb-circle.c embCircleObjectList_create(), cannot allocate memory for heapCircleObjList\n"); return 0; }
+    heapCircleObjList->circleObj = data;
+    heapCircleObjList->next = 0;
+    return heapCircleObjList;
+}
+
 EmbCircleObjectList* embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data)
 {
     if(!pointer) { embLog_error("emb-circle.c embCircleObjectList_add(), pointer argument is null\n"); return 0; }

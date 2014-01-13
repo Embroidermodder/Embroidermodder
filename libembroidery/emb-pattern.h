@@ -83,7 +83,7 @@ void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
 void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r);
 void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry); /* TODO: ellipse rotation */
 void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
-void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* pathObj);
+void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj);
 void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
 void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
 void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);

@@ -77,6 +77,15 @@ EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, doubl
 /* EmbEllipseObjectList                           */
 /**************************************************/
 
+EmbEllipseObjectList* embEllipseObjectList_create(EmbEllipseObject data)
+{
+    EmbEllipseObjectList* heapEllipseObjList = (EmbEllipseObjectList*)malloc(sizeof(EmbEllipseObjectList));
+    if(!heapEllipseObjList) { embLog_error("emb-ellipse.c embEllipseObjectList_create(), cannot allocate memory for heapEllipseObjList\n"); return 0; }
+    heapEllipseObjList->ellipseObj = data;
+    heapEllipseObjList->next = 0;
+    return heapEllipseObjList;
+}
+
 EmbEllipseObjectList* embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data)
 {
     if(!pointer) { embLog_error("emb-ellipse.c embEllipseObjectList_add(), pointer argument is null\n"); return 0; }

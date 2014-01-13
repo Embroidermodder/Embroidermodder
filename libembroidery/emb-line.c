@@ -58,6 +58,15 @@ EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2)
 /* EmbLineObjectList                              */
 /**************************************************/
 
+EmbLineObjectList* embLineObjectList_create(EmbLineObject data)
+{
+    EmbLineObjectList* heapLineObjList = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
+    if(!heapLineObjList) { embLog_error("emb-line.c embLineObjectList_create(), cannot allocate memory for heapLineObjList\n"); return 0; }
+    heapLineObjList->lineObj = data;
+    heapLineObjList->next = 0;
+    return heapLineObjList;
+}
+
 EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
     if(!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return 0; }

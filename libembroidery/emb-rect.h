@@ -49,6 +49,7 @@ typedef struct EmbRectObjectList_
     struct EmbRectObjectList_* next;
 } EmbRectObjectList;
 
+EmbRectObjectList* embRectObjectList_create(EmbRectObject data);
 EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
 int embRectObjectList_count(EmbRectObjectList* pointer);
 int embRectObjectList_empty(EmbRectObjectList* pointer);
