@@ -338,8 +338,7 @@ void svgAddToPattern(EmbPattern* p)
             polygonObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
             polygonObj->pointList = startOfList;
             embPattern_addPolygonObjectAbs(p, polygonObj);
-            free(polygonObj);
-            polygonObj = 0;
+
         }
         else /* polyline */
         {
@@ -351,8 +350,7 @@ void svgAddToPattern(EmbPattern* p)
             polylineObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
             polylineObj->pointList = startOfList;
             embPattern_addPolylineObjectAbs(p, polylineObj);
-            free(polylineObj);
-            polylineObj = 0;
+
         }
     }
     else if(!strcmp(buff, "prefetch"))         {  }
