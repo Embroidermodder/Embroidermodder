@@ -8,8 +8,9 @@ extern "C" {
 
 #include "emb-color.h"
 #include "emb-point.h"
+#include "emb-flag.h"
 
-/* flags codes */
+/* path flag codes */
 #define LINETO             0
 #define MOVETO             1
 #define ARCTOMID           2
@@ -25,6 +26,7 @@ extern "C" {
 typedef struct EmbPathObject_
 {
     EmbPointList* pointList;
+    EmbFlagList* flagList;
 
     /* Properties */
     int lineType;
