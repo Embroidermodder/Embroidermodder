@@ -19,7 +19,7 @@ typedef struct EmbStitch_
     int flags; /* uses codes defined above */
     double xx; /* absolute position (not relative) */
     double yy; /* positive is up, units are in mm  */
-    int color; /* color number for this stitch */
+    int color; /* color number for this stitch */ /* TODO: this should be called colorIndex since it is not an EmbColor */
 } EmbStitch;
 
 typedef struct EmbStitchList_
@@ -28,6 +28,7 @@ typedef struct EmbStitchList_
     struct EmbStitchList_* next;
 } EmbStitchList;
 
+EmbStitchList* embStitchList_create();
 EmbStitchList* embStitchList_add(EmbStitchList* pointer, EmbStitch data);
 int embStitchList_count(EmbStitchList* pointer);
 int embStitchList_empty(EmbStitchList* pointer);

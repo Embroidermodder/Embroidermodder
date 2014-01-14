@@ -264,23 +264,19 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
         p->currentColorIndex++;
     }
 
+    /* NOTE: If the stitchList is empty, we will create it before adding stitches to it. The first coordinate will be the HOME position. */
+    if(embStitchList_empty(p->stitchList))
+    {
+        p->stitchList = embStitchList_create();
+        p->lastStitch = p->stitchList;
+    }
+
     s.xx = x;
     s.yy = y;
     s.flags = flags;
     s.color = p->currentColorIndex;
-    if(!(p->stitchList))
-    {
-        p->stitchList = (EmbStitchList*)malloc(sizeof(EmbStitchList));
-        if(!p->stitchList) { embLog_error("emb-pattern.c embPattern_addStitchAbs(), cannot allocate memory for p->stitchList\n"); return; }
-        p->stitchList->stitch = s;
-        p->stitchList->next = 0;
-        p->lastStitch = p->stitchList;
-    }
-    else
-    {
-        embStitchList_add(p->lastStitch, s);
-        p->lastStitch = p->lastStitch->next;
-    }
+    p->lastStitch = embStitchList_add(p->lastStitch, s);
+
     p->lastX = s.xx;
     p->lastY = s.yy;
 }
@@ -298,9 +294,9 @@ void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int
     }
     else
     {
-        /* the list is empty so assume starting location is 0,0 */
-        x = dx;
-        y = dy;
+        /* NOTE: The stitchList is empty, so add it to the HOME position. The embStitchList_create function will ensure the first coordinate is at the HOME position. */
+        x = dx; /* x = embSettings_home().xx + dx      TODO: Incase HOME is not (0,0) */
+        y = dy; /* y = embSettings_home().yy + dx      TODO: Incase HOME is not (0,0) */
     }
     embPattern_addStitchAbs(p, x, y, flags, isAutoColorIndex);
 }
@@ -745,7 +741,7 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
 
                     for(j = 1; j < splits; j++)
                     {
-                        EmbStitchList *item;
+                        EmbStitchList* item = 0;
                         EmbStitch s;
                         s.xx = xx + addX * j;
                         s.yy = yy + addY * j;
