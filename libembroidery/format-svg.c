@@ -330,27 +330,13 @@ void svgAddToPattern(EmbPattern* p)
 
         if(!strcmp(buff, "polygon"))
         {
-            EmbPolygonObject* polygonObj = 0;
-            polygonObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
-            if(!polygonObj) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for polygonObj\n"); return; }
-            polygonObj->pointList = 0;
-            polygonObj->lineType = 1; /* TODO: Determine what the correct value should be */
-            polygonObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
-            polygonObj->pointList = startOfList;
+            EmbPolygonObject* polygonObj = embPolygonObject_create(startOfList, svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke")), 1); /* TODO: use lineType enum */
             embPattern_addPolygonObjectAbs(p, polygonObj);
-
         }
         else /* polyline */
         {
-            EmbPolylineObject* polylineObj = 0;
-            polylineObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-            if(!polylineObj) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for polylineObj\n"); return; }
-            polylineObj->pointList = 0;
-            polylineObj->lineType = 1; /* TODO: Determine what the correct value should be */
-            polylineObj->color = svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke"));
-            polylineObj->pointList = startOfList;
+            EmbPolylineObject* polylineObj = embPolylineObject_create(startOfList, svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke")), 1); /* TODO: use lineType enum */
             embPattern_addPolylineObjectAbs(p, polylineObj);
-
         }
     }
     else if(!strcmp(buff, "prefetch"))         {  }

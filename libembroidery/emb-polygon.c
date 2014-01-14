@@ -3,6 +3,29 @@
 #include <stdlib.h>
 
 /**************************************************/
+/* EmbPolygonObject                              */
+/**************************************************/
+
+EmbPolygonObject* embPolygonObject_create(EmbPointList* points, EmbColor color, int lineType)
+{
+    EmbPolygonObject* heapPolygonObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
+    if(!heapPolygonObj) { embLog_error("emb-polygon.c embPolygonObject_create(), cannot allocate memory for heapPolygonObj\n"); return 0; }
+    heapPolygonObj->pointList = points;
+    /* TODO: layer */
+    heapPolygonObj->color = color;
+    heapPolygonObj->lineType = lineType;
+    return heapPolygonObj;
+}
+
+void embPolygonObject_free(EmbPolygonObject* pointer)
+{
+    embPointList_free(pointer->pointList);
+    pointer->pointList = 0;
+    free(pointer);
+    pointer = 0;
+}
+
+/**************************************************/
 /* EmbPolygonObjectList                           */
 /**************************************************/
 
@@ -52,8 +75,8 @@ void embPolygonObjectList_free(EmbPolygonObjectList* pointer)
     while(tempPointer)
     {
         nextPointer = tempPointer->next;
-        embPointList_free(tempPointer->polygonObj->pointList);
-        tempPointer->polygonObj->pointList = 0;
+        embPolygonObject_free(tempPointer->polygonObj);
+        tempPointer->polygonObj = 0;
         free(tempPointer);
         tempPointer = nextPointer;
     }

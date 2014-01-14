@@ -33,6 +33,9 @@ typedef struct EmbPathObject_
     EmbColor color;
 } EmbPathObject;
 
+EmbPathObject* embPathObject_create(EmbPointList* points, EmbFlagList* flags, EmbColor color, int lineType);
+void embPathObject_free(EmbPathObject* pointer);
+
 typedef struct EmbPathObjectList_
 {
     EmbPathObject* pathObj;

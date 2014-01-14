@@ -3,6 +3,32 @@
 #include <stdlib.h>
 
 /**************************************************/
+/* EmbPathObject                                  */
+/**************************************************/
+
+EmbPathObject* embPathObject_create(EmbPointList* points, EmbFlagList* flags, EmbColor color, int lineType)
+{
+    EmbPathObject* heapPathObj = (EmbPathObject*)malloc(sizeof(EmbPathObject));
+    if(!heapPathObj) { embLog_error("emb-path.c embPathObject_create(), cannot allocate memory for heapPathObj\n"); return 0; }
+    heapPathObj->pointList = points;
+    heapPathObj->flagList = flags;
+    /* TODO: layer */
+    heapPathObj->color = color;
+    heapPathObj->lineType = lineType;
+    return heapPathObj;
+}
+
+void embPathObject_free(EmbPathObject* pointer)
+{
+    embPointList_free(pointer->pointList);
+    pointer->pointList = 0;
+    embFlagList_free(pointer->flagList);
+    pointer->flagList = 0;
+    free(pointer);
+    pointer = 0;
+}
+
+/**************************************************/
 /* EmbPathObjectList                              */
 /**************************************************/
 
@@ -52,8 +78,8 @@ void embPathObjectList_free(EmbPathObjectList* pointer)
     while(tempPointer)
     {
         nextPointer = tempPointer->next;
-        embPointList_free(tempPointer->pathObj->pointList);
-        tempPointer->pathObj->pointList = 0;
+        embPathObject_free(tempPointer->pathObj);
+        tempPointer->pathObj = 0;
         free(tempPointer);
         tempPointer = nextPointer;
     }

@@ -18,6 +18,9 @@ typedef struct EmbPolylineObject_
     EmbColor color;
 } EmbPolylineObject;
 
+EmbPolylineObject* embPolylineObject_create(EmbPointList* points, EmbColor color, int lineType);
+void embPolylineObject_free(EmbPolylineObject* pointer);
+
 typedef struct EmbPolylineObjectList_
 {
     EmbPolylineObject* polylineObj;

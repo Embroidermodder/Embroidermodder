@@ -3,6 +3,29 @@
 #include <stdlib.h>
 
 /**************************************************/
+/* EmbPolylineObject                              */
+/**************************************************/
+
+EmbPolylineObject* embPolylineObject_create(EmbPointList* points, EmbColor color, int lineType)
+{
+    EmbPolylineObject* heapPolylineObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+    if(!heapPolylineObj) { embLog_error("emb-polyline.c embPolylineObject_create(), cannot allocate memory for heapPolylineObj\n"); return 0; }
+    heapPolylineObj->pointList = points;
+    /* TODO: layer */
+    heapPolylineObj->color = color;
+    heapPolylineObj->lineType = lineType;
+    return heapPolylineObj;
+}
+
+void embPolylineObject_free(EmbPolylineObject* pointer)
+{
+    embPointList_free(pointer->pointList);
+    pointer->pointList = 0;
+    free(pointer);
+    pointer = 0;
+}
+
+/**************************************************/
 /* EmbPolylineObjectList                          */
 /**************************************************/
 
@@ -52,8 +75,8 @@ void embPolylineObjectList_free(EmbPolylineObjectList* pointer)
     while(tempPointer)
     {
         nextPointer = tempPointer->next;
-        embPointList_free(tempPointer->polylineObj->pointList);
-        tempPointer->polylineObj->pointList = 0;
+        embPolylineObject_free(tempPointer->polylineObj);
+        tempPointer->polylineObj = 0;
         free(tempPointer);
         tempPointer = nextPointer;
     }

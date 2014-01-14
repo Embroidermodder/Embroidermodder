@@ -18,6 +18,9 @@ typedef struct EmbPolygonObject_
     EmbColor color;
 } EmbPolygonObject;
 
+EmbPolygonObject* embPolygonObject_create(EmbPointList* points, EmbColor color, int lineType);
+void embPolygonObject_free(EmbPolygonObject* pointer);
+
 typedef struct EmbPolygonObjectList_
 {
     EmbPolygonObject* polygonObj;
