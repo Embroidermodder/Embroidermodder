@@ -3,18 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-EmbStitchList* embStitchList_create()
+EmbStitchList* embStitchList_create(EmbStitch data)
 {
-    EmbStitch data;
     EmbStitchList* heapStitchList = (EmbStitchList*)malloc(sizeof(EmbStitchList));
     if(!heapStitchList) { embLog_error("emb-stitch.c embStitchList_create(), cannot allocate memory for heapStitchList\n"); return 0; }
-
-    /* NOTE: Always HOME the machine before starting any stitching */
-    data.xx = 0.0; /* TODO: Add HOME position to EmbSettings */
-    data.yy = 0.0;
-    data.flags = JUMP;
-    data.color = 0;
-
     heapStitchList->stitch = data;
     heapStitchList->next = 0;
     return heapStitchList;

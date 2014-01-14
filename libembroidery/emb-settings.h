@@ -6,12 +6,18 @@
 extern "C" {
 #endif
 
+#include "emb-point.h"
+
 typedef struct EmbSettings_
 {
     unsigned int dstJumpsPerTrim;
+    EmbPoint home;
 } EmbSettings;
 
 EmbSettings embSettings_init(void);
+
+EmbPoint embSettings_home(EmbSettings settings);
+void embSettings_setHome(EmbSettings settings, EmbPoint point);
 
 #ifdef __cplusplus
 }

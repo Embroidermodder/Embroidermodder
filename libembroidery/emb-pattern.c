@@ -267,7 +267,14 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     /* NOTE: If the stitchList is empty, we will create it before adding stitches to it. The first coordinate will be the HOME position. */
     if(embStitchList_empty(p->stitchList))
     {
-        p->stitchList = embStitchList_create();
+        /* NOTE: Always HOME the machine before starting any stitching */
+        EmbPoint home = embSettings_home(p->settings);
+        EmbStitch h;
+        h.xx = home.xx;
+        h.yy = home.yy;
+        h.flags = JUMP;
+        h.color = p->currentColorIndex;
+        p->stitchList = embStitchList_create(h);
         p->lastStitch = p->stitchList;
     }
 
@@ -295,8 +302,9 @@ void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int
     else
     {
         /* NOTE: The stitchList is empty, so add it to the HOME position. The embStitchList_create function will ensure the first coordinate is at the HOME position. */
-        x = dx; /* x = embSettings_home().xx + dx      TODO: Incase HOME is not (0,0) */
-        y = dy; /* y = embSettings_home().yy + dx      TODO: Incase HOME is not (0,0) */
+        EmbPoint home = embSettings_home(p->settings);
+        x = home.xx + dx;
+        y = home.yy + dy;
     }
     embPattern_addStitchAbs(p, x, y, flags, isAutoColorIndex);
 }
