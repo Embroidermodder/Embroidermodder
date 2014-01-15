@@ -13,8 +13,8 @@ extern "C" {
 /* path flag codes */
 #define LINETO             0
 #define MOVETO             1
-#define ARCTOMID           2
-#define ARCTOEND           4
+#define BULGETOCONTROL     2
+#define BULGETOEND         4
 #define ELLIPSETORAD       8
 #define ELLIPSETOEND      16
 #define CUBICTOCONTROL1   32
