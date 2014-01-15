@@ -78,6 +78,8 @@ PropertyEditor::PropertyEditor(const QString& iconDirectory, bool pickAddMode, Q
     vboxLayoutProperties->addWidget(createGroupBoxMiscImage());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryInfiniteLine());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryLine());
+    vboxLayoutProperties->addWidget(createGroupBoxGeometryPath());
+    vboxLayoutProperties->addWidget(createGroupBoxMiscPath());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryPoint());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryPolygon());
     vboxLayoutProperties->addWidget(createGroupBoxGeometryPolyline());
@@ -218,6 +220,7 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
     int numImage      = 0;
     int numInfLine    = 0;
     int numLine       = 0;
+    int numPath       = 0;
     int numPoint      = 0;
     int numPolygon    = 0;
     int numPolyline   = 0;
@@ -249,6 +252,7 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         else if(objType == OBJ_TYPE_IMAGE)        numImage++;
         else if(objType == OBJ_TYPE_INFINITELINE) numInfLine++;
         else if(objType == OBJ_TYPE_LINE)         numLine++;
+        else if(objType == OBJ_TYPE_PATH)         numPath++;
         else if(objType == OBJ_TYPE_POINT)        numPoint++;
         else if(objType == OBJ_TYPE_POLYGON)      numPolygon++;
         else if(objType == OBJ_TYPE_POLYLINE)     numPolyline++;
@@ -288,6 +292,7 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
         else if(objType == OBJ_TYPE_IMAGE)        comboBoxStr = tr("Image") + " (" + QString().setNum(numImage) + ")";
         else if(objType == OBJ_TYPE_INFINITELINE) comboBoxStr = tr("Infinite Line") + " (" + QString().setNum(numInfLine) + ")";
         else if(objType == OBJ_TYPE_LINE)         comboBoxStr = tr("Line") + " (" + QString().setNum(numLine) + ")";
+        else if(objType == OBJ_TYPE_PATH)         comboBoxStr = tr("Path") + " (" + QString().setNum(numPath) + ")";
         else if(objType == OBJ_TYPE_POINT)        comboBoxStr = tr("Point") + " (" + QString().setNum(numPoint) + ")";
         else if(objType == OBJ_TYPE_POLYGON)      comboBoxStr = tr("Polygon") + " (" + QString().setNum(numPolygon) + ")";
         else if(objType == OBJ_TYPE_POLYLINE)     comboBoxStr = tr("Polyline") + " (" + QString().setNum(numPolyline) + ")";
@@ -419,6 +424,10 @@ void PropertyEditor::setSelectedItems(QList<QGraphicsItem*> itemList)
                 updateLineEditNumIfVaries(lineEditLineAngle,   obj->objectAngle(),   true);
                 updateLineEditNumIfVaries(lineEditLineLength,  obj->objectLength(), false);
             }
+        }
+        else if(objType == OBJ_TYPE_PATH)
+        {
+            //TODO: load path data
         }
         else if(objType == OBJ_TYPE_POINT)
         {
@@ -619,6 +628,7 @@ void PropertyEditor::showGroups(int objType)
     else if(objType == OBJ_TYPE_IMAGE)        { groupBoxGeometryImage->show(); groupBoxMiscImage->show(); }
     else if(objType == OBJ_TYPE_INFINITELINE) { groupBoxGeometryInfiniteLine->show(); }
     else if(objType == OBJ_TYPE_LINE)         { groupBoxGeometryLine->show(); }
+    else if(objType == OBJ_TYPE_PATH)         { groupBoxGeometryPath->show(); groupBoxMiscPath->show(); }
     else if(objType == OBJ_TYPE_POINT)        { groupBoxGeometryPoint->show(); }
     else if(objType == OBJ_TYPE_POLYGON)      { groupBoxGeometryPolygon->show(); }
     else if(objType == OBJ_TYPE_POLYLINE)     { groupBoxGeometryPolyline->show(); groupBoxMiscPolyline->show(); }
@@ -654,6 +664,8 @@ void PropertyEditor::hideAllGroups()
     groupBoxMiscImage->hide();
     groupBoxGeometryInfiniteLine->hide();
     groupBoxGeometryLine->hide();
+    groupBoxGeometryPath->hide();
+    groupBoxMiscPath->hide();
     groupBoxGeometryPoint->hide();
     groupBoxGeometryPolygon->hide();
     groupBoxGeometryPolyline->hide();
@@ -742,6 +754,14 @@ void PropertyEditor::clearAllFields()
     lineEditLineDeltaY->clear();
     lineEditLineAngle->clear();
     lineEditLineLength->clear();
+
+    //Path
+    comboBoxPathVertexNum->clear();
+    lineEditPathVertexX->clear();
+    lineEditPathVertexY->clear();
+    lineEditPathArea->clear();
+    lineEditPathLength->clear();
+    comboBoxPathClosed->clear();
 
     //Point
     lineEditPointX->clear();
@@ -1181,6 +1201,52 @@ QGroupBox* PropertyEditor::createGroupBoxGeometryLine()
     return groupBoxGeometryLine;
 }
 
+QGroupBox* PropertyEditor::createGroupBoxGeometryPath()
+{
+    groupBoxGeometryPath = new QGroupBox(tr("Geometry"), this);
+
+    toolButtonPathVertexNum = createToolButton("blank", tr("Vertex #")); //TODO: use proper icon
+    toolButtonPathVertexX   = createToolButton("blank", tr("Vertex X")); //TODO: use proper icon
+    toolButtonPathVertexY   = createToolButton("blank", tr("Vertex Y")); //TODO: use proper icon
+    toolButtonPathArea      = createToolButton("blank", tr("Area"));     //TODO: use proper icon
+    toolButtonPathLength    = createToolButton("blank", tr("Length"));   //TODO: use proper icon
+
+    comboBoxPathVertexNum = createComboBox(false);
+    lineEditPathVertexX   = createLineEdit("double", false);
+    lineEditPathVertexY   = createLineEdit("double", false);
+    lineEditPathArea      = createLineEdit("double", true);
+    lineEditPathLength    = createLineEdit("double", true);
+
+    //TODO: mapSignal for paths
+
+    QFormLayout* formLayout = new QFormLayout(this);
+    formLayout->addRow(toolButtonPathVertexNum, comboBoxPathVertexNum);
+    formLayout->addRow(toolButtonPathVertexX,   lineEditPathVertexX);
+    formLayout->addRow(toolButtonPathVertexY,   lineEditPathVertexY);
+    formLayout->addRow(toolButtonPathArea,      lineEditPathArea);
+    formLayout->addRow(toolButtonPathLength,    lineEditPathLength);
+    groupBoxGeometryPath->setLayout(formLayout);
+
+    return groupBoxGeometryPath;
+}
+
+QGroupBox* PropertyEditor::createGroupBoxMiscPath()
+{
+    groupBoxMiscPath = new QGroupBox(tr("Misc"), this);
+
+    toolButtonPathClosed = createToolButton("blank", tr("Closed")); //TODO: use proper icon
+
+    comboBoxPathClosed = createComboBox(false);
+
+    //TODO: mapSignal for paths
+
+    QFormLayout* formLayout = new QFormLayout(this);
+    formLayout->addRow(toolButtonPathClosed, comboBoxPathClosed);
+    groupBoxMiscPath->setLayout(formLayout);
+
+    return groupBoxMiscPath;
+}
+
 QGroupBox* PropertyEditor::createGroupBoxGeometryPoint()
 {
     groupBoxGeometryPoint = new QGroupBox(tr("Geometry"), this);
@@ -1618,6 +1684,8 @@ void PropertyEditor::fieldEdited(QObject* fieldObj)
                 if(objName == "lineEditLineEndY") {
                     tempLineObj = static_cast<LineObject*>(item);
                     if(tempLineObj) { tempLineObj->setObjectY2(-lineEditLineEndY->text().toDouble()); } }
+                break;
+            case OBJ_TYPE_PATH: //TODO: field editing
                 break;
             case OBJ_TYPE_POINT:
                 if(objName == "lineEditPointX") {

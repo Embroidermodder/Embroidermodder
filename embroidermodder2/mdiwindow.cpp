@@ -4,6 +4,7 @@
 #include "statusbar-button.h"
 #include "object-save.h"
 #include "object-data.h"
+#include "object-path.h"
 #include "object-polygon.h"
 #include "object-polyline.h"
 
@@ -134,7 +135,7 @@ bool MDIWindow::loadFile(const QString &fileName)
 
     if(readSuccessful)
     {
-        //moveStitchListToPolyline(p); //TODO: Test more
+        embPattern_moveStitchListToPolylines(p); //TODO: Test more
         int stitchCount = embStitchList_count(p->stitchList);
         QPainterPath path;
 
@@ -169,6 +170,40 @@ bool MDIWindow::loadFile(const QString &fileName)
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
                 curLineObj = curLineObj->next;
+            }
+        }
+        if(p->pathObjList)
+        {
+            //TODO: This is unfinished. It needs more work
+            EmbPathObjectList* curPathObjList = p->pathObjList;
+            while(curPathObjList)
+            {
+                QPainterPath pathPath;
+                EmbPointList* curPointList = curPathObjList->pathObj->pointList;
+                EmbColor thisColor = curPathObjList->pathObj->color;
+                if(curPointList)
+                {
+                    EmbPoint pp = curPointList->point;
+                    pathPath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    curPointList = curPointList->next;
+                }
+                while(curPointList)
+                {
+                    EmbPoint pp = curPointList->point;
+                    pathPath.lineTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    curPointList = curPointList->next;
+                }
+
+                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                loadPen.setWidthF(0.35);
+                loadPen.setCapStyle(Qt::RoundCap);
+                loadPen.setJoinStyle(Qt::RoundJoin);
+
+                PathObject* obj = new PathObject(0,0, pathPath, loadPen.color().rgb());
+                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
+                gscene->addItem(obj);
+
+                curPathObjList = curPathObjList->next;
             }
         }
         if(p->pointObjList)

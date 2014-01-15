@@ -20,6 +20,7 @@ class HatchObject;
 class ImageObject;
 class InfiniteLineObject;
 class LineObject;
+class PathObject;
 class PointObject;
 class PolygonObject;
 class PolylineObject;
@@ -93,6 +94,7 @@ private:
     ImageObject*        tempImageObj;
     InfiniteLineObject* tempInfLineObj;
     LineObject*         tempLineObj;
+    PathObject*         tempPathObj;
     PointObject*        tempPointObj;
     PolygonObject*      tempPolygonObj;
     PolylineObject*     tempPolylineObj;
@@ -357,6 +359,29 @@ private:
     QLineEdit*   lineEditLineDeltaY;
     QLineEdit*   lineEditLineAngle;
     QLineEdit*   lineEditLineLength;
+
+    //Path
+    QGroupBox*   createGroupBoxGeometryPath();
+    QGroupBox*   groupBoxGeometryPath;
+
+    QToolButton* toolButtonPathVertexNum;
+    QToolButton* toolButtonPathVertexX;
+    QToolButton* toolButtonPathVertexY;
+    QToolButton* toolButtonPathArea;
+    QToolButton* toolButtonPathLength;
+
+    QComboBox*   comboBoxPathVertexNum;
+    QLineEdit*   lineEditPathVertexX;
+    QLineEdit*   lineEditPathVertexY;
+    QLineEdit*   lineEditPathArea;
+    QLineEdit*   lineEditPathLength;
+
+    QGroupBox*   createGroupBoxMiscPath();
+    QGroupBox*   groupBoxMiscPath;
+
+    QToolButton* toolButtonPathClosed;
+
+    QComboBox*   comboBoxPathClosed;
 
     //Point
     QGroupBox*   createGroupBoxGeometryPoint();

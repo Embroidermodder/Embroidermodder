@@ -2050,7 +2050,12 @@ QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
         }
         else if(objType == OBJ_TYPE_PATH)
         {
-            //TODO: cut/copy paths
+            PathObject* pathObj = static_cast<PathObject*>(item);
+            if(pathObj)
+            {
+                PathObject* copyPathObj = new PathObject(pathObj);
+                copyList.append(copyPathObj);
+            }
         }
         else if(objType == OBJ_TYPE_POINT)
         {
