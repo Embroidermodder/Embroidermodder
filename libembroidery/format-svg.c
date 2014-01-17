@@ -289,66 +289,6 @@ void svgAddToPattern(EmbPattern* p)
     else if(!strcmp(buff, "metadata"))         {  }
     else if(!strcmp(buff, "missing-glyph"))    {  }
     else if(!strcmp(buff, "mpath"))            {  }
-    /*
-    else if(!strcmp(buff, "path")) TODO: Alternate way
-    {
-        char* pointStr = svgAttribute_getValue(currentElement, "d");
-        int last = strlen(pointStr);
-        int size = 32;
-        int i = 0;
-        int c = 0;
-        int pos = 0;
-
-        EmbStitchList* stitches = 0;
-        EmbPolylineObjectList* currentList = 0;
-
-        stitches = p->stitchList;
-        while(stitches)
-        {
-            EmbPointList* currentPointList = 0;
-            EmbPolylineObject* currentPolyline = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-            if(!currentPolyline) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), cannot allocate memory for currentPolyline\n"); return; }
-            currentPolyline->pointList = 0;
-            currentPolyline->lineType = 1; TODO: Determine what the correct value should be
-            currentPolyline->color = embThreadList_getAt(p->threadList, stitches->stitch.color).color;
-
-            while(stitches)
-            {
-                if(stitches->stitch.flags & (STOP | TRIM))
-                {
-                    break;
-                }
-                if(!(stitches->stitch.flags & JUMP))
-                {
-                    if(!currentPointList)
-                    {
-                        currentPointList = embPointList_create(stitches->stitch.xx, stitches->stitch.yy);
-                        currentPolyline->pointList = currentPointList;
-                    }
-                    else
-                    {
-                        currentPointList = embPointList_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
-                    }
-                }
-                stitches = stitches->next;
-            }
-            currentPointList = 0;
-            if(!currentList)
-            {
-                currentList = embPolylineObjectList_create(currentPolyline);
-                p->polylineObjList = currentList;
-            }
-            else
-            {
-                currentList = embPolylineObjectList_add(currentList, currentPolyline);
-            }
-            if(stitches && stitches->next)
-            {
-                stitches = stitches->next;
-            }
-        }
-    }
-    */
     else if(!strcmp(buff, "path"))
     {
         /* TODO: finish */
@@ -446,12 +386,6 @@ void svgAddToPattern(EmbPattern* p)
                     /* Check wether prior command need to be saved */
                     if(trip>=0)
                     {
-                        /* printf("val:%s\n", pathbuff); */
-                        /* pathData[trip] = atof(pathbuff); */
-
-                        /* the reset the trip and convert the pathData into an EmbPathObject */
-                        /*if(trip == reset)
-                        {*/
                             trip = -1;
                             reset = -1;
 
@@ -491,11 +425,7 @@ void svgAddToPattern(EmbPattern* p)
                                 pathObjFlagList = embFlagList_add(pathObjFlagList, svgPathCmdToEmbPathFlag(cmd));
                             }
                             lx = xx; ly = yy;
-                        /*}
-                        else
-                        {
-                            trip++;
-                        }*/
+
                             pathbuff[0] = (char)cmd;                  /* set the command for compare */
                             pathbuff[1] = 0;
                             pos = 0;
@@ -511,7 +441,7 @@ void svgAddToPattern(EmbPattern* p)
                                    );
 
                     }
-                    /*else*/
+
                     /* assign new command */
                     if(trip == -1 && reset == -1)
                     {
@@ -563,12 +493,6 @@ void svgAddToPattern(EmbPattern* p)
         /* Check wether the loop above yields a last command that need to be saved */
         if(trip>=0 || cmd == 'z' || cmd=='Z')
         {
-            /* printf("val:%s\n", pathbuff); */
-            /* pathData[trip] = atof(pathbuff); */
-
-            /* the reset the trip and convert the pathData into an EmbPathObject */
-            /*if(trip == reset)
-            {*/
                 trip = -1;
                 reset = -1;
 
@@ -608,11 +532,7 @@ void svgAddToPattern(EmbPattern* p)
                     pathObjFlagList = embFlagList_add(pathObjFlagList, svgPathCmdToEmbPathFlag(cmd));
                 }
                 lx = xx; ly = yy;
-            /*}
-            else
-            {
-                trip++;
-            }*/
+
                 pathbuff[0] = (char)cmd;                  /* set the command for compare */
                 pathbuff[1] = 0;
                 pos = 0;
@@ -629,151 +549,6 @@ void svgAddToPattern(EmbPattern* p)
 
         }
 
-
-        free(pathbuff);
-        pathbuff = 0;
-
-        /* TODO: subdivide numMoves > 1 */
-
-        embPattern_addPathObjectAbs(p, embPathObject_create(startOfPointList, startOfFlagList, svgColorToEmbColor(svgAttribute_getValue(currentElement, "stroke")), 1));
-    }
-
-    else if(!strcmp(buff, "path x")) /* {obsolete original, historical. will be deleted in future.} */
-    {
-        /* TODO: finish */
-
-        char* pointStr = svgAttribute_getValue(currentElement, "d");
-        int last = strlen(pointStr);
-        int size = 32;
-        int i = 0;
-        int c = 0;
-        int pos = 0;
-        char trip = -1, reset = -1; /* An odometer aka 'tripometer' used for stepping thru the pathData */
-        double xx = 0.0;
-        double yy = 0.0;
-        double fx = 0.0;
-        double fy = 0.0;
-        double lx = 0.0;
-        double ly = 0.0;
-        double cx1 = 0.0, cx2 = 0.0;
-        double cy1 = 0.0, cy2 = 0.0;
-        int cmd = 0;
-        double pathData[7];
-        unsigned int numMoves = 0;
-
-        EmbPointList* startOfPointList = 0;
-        EmbPointList* pathObjPointList = 0;
-        EmbFlagList* startOfFlagList = 0;
-        EmbFlagList* pathObjFlagList = 0;
-
-        char* pathbuff = 0;
-        pathbuff = (char*)malloc(size);
-        if(!pathbuff) { embLog_error("format-svg.c svgAddToPattern(), cannot allocate memory for pathbuff\n"); return; }
-
-        for(i = 0; i < last; i++)
-        {
-            char c = pointStr[i];
-            switch(c)
-            {
-                case ' ':
-                    if(pos == 0)
-                        break;
-                    pathbuff[pos] = 0;
-                    pos = 0;
-                    /*Compose Point List */
-                    if(trip == -1 && reset == -1)
-                    {
-                        trip++;
-                        printf("cmd:%s\n", pathbuff);
-                        if     (!strcmp(pathbuff, "M")) { cmd = 'M'; reset = 2; numMoves++; }
-                        else if(!strcmp(pathbuff, "m")) { cmd = 'm'; reset = 2; numMoves++; }
-                        else if(!strcmp(pathbuff, "L")) { cmd = 'L'; reset = 2; }
-                        else if(!strcmp(pathbuff, "l")) { cmd = 'l'; reset = 2; }
-                        else if(!strcmp(pathbuff, "C")) { cmd = 'C'; reset = 6; }
-                        else if(!strcmp(pathbuff, "c")) { cmd = 'c'; reset = 6; }
-                        else if(!strcmp(pathbuff, "H")) { cmd = 'H'; reset = 1; }
-                        else if(!strcmp(pathbuff, "h")) { cmd = 'h'; reset = 1; }
-                        else if(!strcmp(pathbuff, "V")) { cmd = 'V'; reset = 1; }
-                        else if(!strcmp(pathbuff, "v")) { cmd = 'v'; reset = 1; }
-                        else if(!strcmp(pathbuff, "S")) { cmd = 'S'; reset = 4; }
-                        else if(!strcmp(pathbuff, "s")) { cmd = 's'; reset = 4; }
-                        else if(!strcmp(pathbuff, "Q")) { cmd = 'Q'; reset = 4; }
-                        else if(!strcmp(pathbuff, "q")) { cmd = 'q'; reset = 4; }
-                        else if(!strcmp(pathbuff, "T")) { cmd = 'T'; reset = 2; }
-                        else if(!strcmp(pathbuff, "t")) { cmd = 't'; reset = 2; }
-                        else if(!strcmp(pathbuff, "A")) { cmd = 'A'; reset = 7; }
-                        else if(!strcmp(pathbuff, "a")) { cmd = 'a'; reset = 7; }
-                        else if(!strcmp(pathbuff, "Z")) { cmd = 'Z'; reset = 0; }
-                        else if(!strcmp(pathbuff, "z")) { cmd = 'z'; reset = 0; }
-                        else { embLog_error("format-svg.c svgAddToPattern(), %s is not a valid svg path command, skipping...\n", pathbuff); trip = -1; reset = -1; }
-                    }
-                    else
-                    {
-                        printf("val:%s\n", pathbuff);
-                        pathData[trip] = atof(pathbuff);
-
-                        /* the reset the trip and convert the pathData into an EmbPathObject */
-                        if(trip == reset)
-                        {
-                            trip = -1;
-                            reset = -1;
-
-                            if     (cmd == 'M') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; }
-                            else if(cmd == 'm') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; }
-                            else if(cmd == 'L') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'l') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'H') { xx = pathData[0]; yy = ly; }
-                            else if(cmd == 'h') { xx = pathData[0]; yy = ly; }
-                            else if(cmd == 'V') { xx = lx;          yy = pathData[1]; }
-                            else if(cmd == 'v') { xx = lx;          yy = pathData[1]; }
-                            else if(cmd == 'C') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; }
-                            else if(cmd == 'c') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; }
-                            /*
-                            else if(cmd == 'S') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 's') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'Q') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'q') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'T') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 't') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'A') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'a') { xx = pathData[0]; yy = pathData[1]; }
-                            */
-                            else if(cmd == 'Z') { xx = fx;          yy = fy; }
-                            else if(cmd == 'z') { xx = fx;          yy = fy; }
-
-                            if(!pathObjPointList && !pathObjFlagList)
-                            {
-                                pathObjPointList = embPointList_create(xx, yy);
-                                startOfPointList = pathObjPointList;
-                                pathObjFlagList = embFlagList_create(svgPathCmdToEmbPathFlag(cmd));
-                                startOfFlagList = pathObjFlagList;
-                            }
-                            else
-                            {
-                                pathObjPointList = embPointList_add(pathObjPointList, embPoint_make(xx, yy));
-                                pathObjFlagList = embFlagList_add(pathObjFlagList, svgPathCmdToEmbPathFlag(cmd));
-                            }
-                            lx = xx; ly = yy;
-                        }
-                        else
-                        {
-                            trip++;
-                        }
-                    }
-
-                    break;
-                default:
-                    pathbuff[pos++] = (char)c;
-                    break;
-            }
-            if(pos >= size - 1)
-            {
-                /* increase pathbuff length - leave room for 0 */
-                size *= 2;
-                pathbuff = (char*)realloc(pathbuff, size);
-                if(!pathbuff) { embLog_error("format-svg.c svgAddToPattern(), cannot re-allocate memory for pathbuff\n"); return; }
-            }
-        }
         free(pathbuff);
         pathbuff = 0;
 
