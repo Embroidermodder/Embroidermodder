@@ -19,10 +19,14 @@ EmbColor svgColorToEmbColor(char* colorString)
     /* SVGTiny1.2 Spec Section 11.13.1 syntax for color values */
     if(length == 7 && colorStr[0] == '#') /* Six digit hex — #rrggbb */
     {
-        return embColor_fromHexStr(lTrim(colorStr, '#'));
+        EmbColor hexColor = embColor_fromHexStr(lTrim(colorStr, '#'));
+        r = hexColor.r;
+        g = hexColor.g;
+        b = hexColor.b;
     }
     else if(length == 4 && colorStr[0] == '#') /* Three digit hex — #rgb */
     {
+        EmbColor hexColor;
         /* Convert the 3 digit hex to a six digit hex */
         char hex[7];
         hex[0] = colorStr[1];
@@ -33,7 +37,10 @@ EmbColor svgColorToEmbColor(char* colorString)
         hex[5] = colorStr[3];
         hex[6] = 0;
 
-        return embColor_fromHexStr(hex);
+        hexColor = embColor_fromHexStr(hex);
+        r = hexColor.r;
+        g = hexColor.g;
+        b = hexColor.b;
     }
     else if(strstr(colorStr, "%")) /* Float functional — rgb(R%, G%, B%) */
     {
@@ -68,25 +75,25 @@ EmbColor svgColorToEmbColor(char* colorString)
     }
     else /* Color keyword */
     {
-        if     (!strcmp(colorStr, "none"))   return embColor_make(  0,   0,   0);
-        else if(!strcmp(colorStr, "black"))   return embColor_make(  0,   0,   0);
-        else if(!strcmp(colorStr, "silver"))  return embColor_make(192, 192, 192);
-        else if(!strcmp(colorStr, "gray"))    return embColor_make(128, 128, 128);
-        else if(!strcmp(colorStr, "white"))   return embColor_make(255, 255, 255);
-        else if(!strcmp(colorStr, "maroon"))  return embColor_make(128,   0,   0) ;
-        else if(!strcmp(colorStr, "red"))     return embColor_make(255,   0,   0);
-        else if(!strcmp(colorStr, "purple"))  return embColor_make(128,   0, 128);
-        else if(!strcmp(colorStr, "fuchsia")) return embColor_make(255,   0, 255);
-        else if(!strcmp(colorStr, "green"))   return embColor_make(  0, 128,   0);
-        else if(!strcmp(colorStr, "lime"))    return embColor_make(  0, 255,   0);
-        else if(!strcmp(colorStr, "olive"))   return embColor_make(128, 128,   0);
-        else if(!strcmp(colorStr, "yellow"))  return embColor_make(255, 255,   0);
-        else if(!strcmp(colorStr, "navy"))    return embColor_make(  0,   0, 128);
-        else if(!strcmp(colorStr, "blue"))    return embColor_make(  0,   0, 255);
-        else if(!strcmp(colorStr, "teal"))    return embColor_make(  0, 128, 128);
-        else if(!strcmp(colorStr, "aqua"))    return embColor_make(  0, 255, 255);
+        if     (!strcmp(colorStr, "black"))   { r =   0; g =   0; b =   0; }
+        else if(!strcmp(colorStr, "silver"))  { r = 192; g = 192; b = 192; }
+        else if(!strcmp(colorStr, "gray"))    { r = 128; g = 128; b = 128; }
+        else if(!strcmp(colorStr, "white"))   { r = 255; g = 255; b = 255; }
+        else if(!strcmp(colorStr, "maroon"))  { r = 128; g =   0; b =   0; }
+        else if(!strcmp(colorStr, "red"))     { r = 255; g =   0; b =   0; }
+        else if(!strcmp(colorStr, "purple"))  { r = 128; g =   0; b = 128; }
+        else if(!strcmp(colorStr, "fuchsia")) { r = 255; g =   0; b = 255; }
+        else if(!strcmp(colorStr, "green"))   { r =   0; g = 128; b =   0; }
+        else if(!strcmp(colorStr, "lime"))    { r =   0; g = 255; b =   0; }
+        else if(!strcmp(colorStr, "olive"))   { r = 128; g = 128; b =   0; }
+        else if(!strcmp(colorStr, "yellow"))  { r = 255; g = 255; b =   0; }
+        else if(!strcmp(colorStr, "navy"))    { r =   0; g =   0; b = 128; }
+        else if(!strcmp(colorStr, "blue"))    { r =   0; g =   0; b = 255; }
+        else if(!strcmp(colorStr, "teal"))    { r =   0; g = 128; b = 128; }
+        else if(!strcmp(colorStr, "aqua"))    { r =   0; g = 255; b = 255; }
     }
 
+    free(colorStr);
     /* Returns black if all else fails */
     return embColor_make(r, g, b);
 }

@@ -58,13 +58,15 @@ char* lTrim(char* const str, char junk)
     return str;
 }
 
+/* TODO: trimming function should handle any character, not just whitespace */
 static char const WHITESPACE[] = " \t\n\r";
 
-static void get_trim_bounds(char  const *s,
+/* TODO: description */
+static void get_trim_bounds(char const *s,
                             char const **firstWord,
                             char const **trailingSpace)
 {
-    char const *lastWord;
+    char const* lastWord = 0;
     *firstWord = lastWord = s + strspn(s, WHITESPACE);
     do
     {
@@ -74,24 +76,26 @@ static void get_trim_bounds(char  const *s,
     while (*lastWord != '\0');
 }
 
-char *copy_trim(char const *s)
+/* TODO: description */
+char* copy_trim(char const *s)
 {
-    char const *firstWord, *trailingSpace;
-    char *result;
+    char const *firstWord = 0, *trailingSpace = 0;
+    char* result = 0;
     size_t newLength;
 
     get_trim_bounds(s, &firstWord, &trailingSpace);
     newLength = trailingSpace - firstWord;
 
-    result = malloc(newLength + 1);
+    result = (char*)malloc(newLength + 1);
     memcpy(result, firstWord, newLength);
     result[newLength] = '\0';
     return result;
 }
 
-void inplace_trim(char *s)
+/* TODO: description */
+void inplace_trim(char* s)
 {
-    char const *firstWord, *trailingSpace;
+    char const *firstWord = 0, *trailingSpace = 0;
     size_t newLength;
 
     get_trim_bounds(s, &firstWord, &trailingSpace);
@@ -100,6 +104,7 @@ void inplace_trim(char *s)
     memmove(s, firstWord, newLength);
     s[newLength] = '\0';
 }
+
 /*! Optimizes the number (\a num) for output to a text file and returns it as a string (\a str). */
 char* emb_optOut(double num, char* str)
 {
