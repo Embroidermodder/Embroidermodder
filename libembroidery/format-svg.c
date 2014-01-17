@@ -13,8 +13,17 @@ EmbColor svgColorToEmbColor(char* colorString)
     unsigned char b = 0;
     int i = 0;
     char* pEnd = 0;
-    char* colorStr = lTrim(rTrim(colorString, ' '), ' '); /* Trim out any junk spaces */
-    int length = strlen(colorStr);
+    char* colorStr = 0;
+    int length = 0;
+    char tmpColor[32];
+
+    for(i = 0; i < strlen(colorString); i++)
+    {
+        tmpColor[i] = colorString[i];
+    }
+
+    colorStr = lTrim(rTrim(tmpColor, ' '), ' '); /* Trim out any junk spaces */
+    length = strlen(colorStr);
 
     /* SVGTiny1.2 Spec Section 11.13.1 syntax for color values */
     if(length == 7 && colorStr[0] == '#') /* Six digit hex — #rrggbb */
