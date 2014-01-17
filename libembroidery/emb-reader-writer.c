@@ -6,6 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 
+/*! Returns a pointer to an EmbReaderWriter if the \a fileName is a supported file type. */
 EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
 {
     int i = 0;
@@ -554,6 +555,7 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
     }
     else
     {
+        embLog_error("emb-reader-writer.c embReaderWriter_getByFileName(), unsupported file type: %s\n", ending);
         return 0;
     }
     return rw;

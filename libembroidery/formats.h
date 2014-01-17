@@ -5,6 +5,12 @@
 extern "C" {
 #endif
 
+#define EMBFORMAT_STITCHONLY 0
+#define EMBFORMAT_STCHANDOBJ 1
+#define EMBFORMAT_OBJECTONLY 2
+
+int embFormat_type(const char* fileName);
+
 #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
 
 #include "format-exp.h"

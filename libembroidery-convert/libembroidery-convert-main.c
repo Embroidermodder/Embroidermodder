@@ -1,9 +1,9 @@
 #include "emb-reader-writer.h"
 #include "emb-logging.h"
+#include "formats.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 
 static const int formatCount = 59;
 static const char* const formats[] = {
@@ -145,7 +145,11 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    embPattern_movePolylinesToStitchList(p); /* TODO: determine if output is a stitch only format and handle accordingly. */
+    if(embFormat_type(argv[1]) == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
+    {
+        if(embFormat_type(argv[2]) == EMBFORMAT_STITCHONLY)
+            embPattern_movePolylinesToStitchList(p);
+    }
 
     i = 2;
     for(i = 2; i < argc; i++)
@@ -187,6 +191,12 @@ int main(int argc, const char* argv[])
     {
         embPattern_free(p);
         exit(1);
+    }
+
+    if(embFormat_type(argv[1]) == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
+    {
+        if(embFormat_type(argv[2]) == EMBFORMAT_STITCHONLY)
+            embPattern_movePolylinesToStitchList(p);
     }
 
     i = 2;
