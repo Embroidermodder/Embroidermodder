@@ -33,6 +33,14 @@ struct SvgElement_
 
 typedef enum
 {
+    SVG_CREATOR_NULL,
+    SVG_CREATOR_EMBROIDERMODDER,
+    SVG_CREATOR_ILLUSTRATOR,
+    SVG_CREATOR_INKSCAPE
+} SVG_CREATOR;
+
+typedef enum
+{
     SVG_EXPECT_NULL,
     SVG_EXPECT_ELEMENT,
     SVG_EXPECT_ATTRIBUTE,
@@ -51,6 +59,8 @@ typedef enum
 
 int readSvg(EmbPattern* pattern, const char* fileName);
 int writeSvg(EmbPattern* pattern, const char* fileName);
+
+int svgCreator;
 
 int svgExpect;
 int svgMultiValue;

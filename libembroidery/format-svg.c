@@ -642,6 +642,12 @@ int svgIsElement(const char* buff)
     else if(!strcmp(buff, "tspan"))            { type = SVG_ELEMENT; }
     else if(!strcmp(buff, "use"))              { type = SVG_ELEMENT; }
     else if(!strcmp(buff, "video"))            { type = SVG_ELEMENT; }
+
+    /* Attempt to identify the program that created the SVG file. This should be in a comment at that occurs before the svg element. */
+    else if(!strcmp(buff, "Embroidermodder"))  { type = SVG_NULL; svgCreator = SVG_CREATOR_EMBROIDERMODDER; }
+    else if(!strcmp(buff, "Illustrator"))      { type = SVG_NULL; svgCreator = SVG_CREATOR_ILLUSTRATOR; }
+    else if(!strcmp(buff, "Inkscape"))         { type = SVG_NULL; svgCreator = SVG_CREATOR_INKSCAPE; }
+
     else                                       { type = SVG_NULL; }
     return type;
 }
@@ -714,6 +720,8 @@ int svgIsXmlAttribute(const char* buff)
     else if(!strcmp(buff, "standalone")) { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "version"))    { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))          { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsXmlAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -763,6 +771,8 @@ int svgIsLinkAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsLinkAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -817,6 +827,8 @@ int svgIsAnimateAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsAnimateAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -871,6 +883,8 @@ int svgIsAnimateColorAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsAnimateColorAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -927,6 +941,8 @@ int svgIsAnimateMotionAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsAnimateMotionAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -982,6 +998,8 @@ int svgIsAnimateTransformAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsAnimateTransformAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1048,6 +1066,8 @@ int svgIsAnimationAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                         { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsAnimationAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1096,6 +1116,8 @@ int svgIsAudioAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsAudioAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1139,6 +1161,8 @@ int svgIsCircleAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsCircleAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1161,6 +1185,8 @@ int svgIsDefsAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space")) { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsDefsAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1188,6 +1214,8 @@ int svgIsDescAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsDescAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1223,6 +1251,8 @@ int svgIsDiscardAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsDiscardAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1267,6 +1297,8 @@ int svgIsEllipseAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsEllipseAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1292,6 +1324,8 @@ int svgIsFontAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsFontAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1343,6 +1377,8 @@ int svgIsFontFaceAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsFontFaceAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1365,6 +1401,8 @@ int svgIsFontFaceSrcAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space")) { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsFontFaceSrcAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1395,6 +1433,8 @@ int svgIsFontFaceUriAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsFontFaceUriAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1447,6 +1487,8 @@ int svgIsForeignObjectAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                         { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsForeignObjectAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1488,6 +1530,8 @@ int svgIsGroupAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsGroupAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1516,6 +1560,8 @@ int svgIsGlyphAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))    { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))   { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))           { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsGlyphAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1548,6 +1594,8 @@ int svgIsHandlerAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsHandlerAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1575,6 +1623,8 @@ int svgIsHKernAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space")) { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsHKernAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1630,6 +1680,8 @@ int svgIsImageAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                         { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsImageAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1674,6 +1726,8 @@ int svgIsLineAttribute(const char* buff)
     else if(!strcmp(buff, "y1"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y2"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsLineAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1701,6 +1755,8 @@ int svgIsLinearGradientAttribute(const char* buff)
     else if(!strcmp(buff, "y1"))            { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y2"))            { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))             { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsLinearGradientAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1730,6 +1786,8 @@ int svgIsListenerAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))      { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))     { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))             { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsListenerAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1757,6 +1815,8 @@ int svgIsMetadataAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsMetadataAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1781,6 +1841,8 @@ int svgIsMissingGlyphAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))    { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))   { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))           { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsMissingGlyphAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1810,6 +1872,8 @@ int svgIsMPathAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))      { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))     { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))             { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsMPathAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1852,6 +1916,8 @@ int svgIsPathAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsPathAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1893,6 +1959,8 @@ int svgIsPolygonAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsPolygonAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1934,6 +2002,8 @@ int svgIsPolylineAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsPolylineAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1968,6 +2038,8 @@ int svgIsPrefetchAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))               { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))              { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                      { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsPrefetchAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -1994,6 +2066,8 @@ int svgIsRadialGradientAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))      { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))     { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))             { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsRadialGradientAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2040,6 +2114,8 @@ int svgIsRectAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsRectAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2071,6 +2147,8 @@ int svgIsScriptAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsScriptAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2116,6 +2194,8 @@ int svgIsSetAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsSetAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2138,6 +2218,8 @@ int svgIsSolidColorAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space")) { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsSolidColorAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2161,6 +2243,8 @@ int svgIsStopAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space")) { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsStopAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2209,6 +2293,16 @@ int svgIsSvgAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "zoomAndPan"))                { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+    else if(svgCreator == SVG_CREATOR_INKSCAPE)
+    {
+        if     (!strcmp(buff, "xmlns:dc"))              { type = SVG_ATTRIBUTE; }
+        else if(!strcmp(buff, "xmlns:cc"))              { type = SVG_ATTRIBUTE; }
+        else if(!strcmp(buff, "xmlns:rdf"))             { type = SVG_ATTRIBUTE; }
+        else if(!strcmp(buff, "xmlns:svg"))             { type = SVG_ATTRIBUTE; }
+        else if(!strcmp(buff, "xmlns"))                 { type = SVG_ATTRIBUTE; }
+    }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsSvgAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2250,6 +2344,8 @@ int svgIsSwitchAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsSwitchAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2277,6 +2373,8 @@ int svgIsTBreakAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsTBreakAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2321,6 +2419,8 @@ int svgIsTextAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsTextAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2366,6 +2466,8 @@ int svgIsTextAreaAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                  { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsTextAreaAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2393,6 +2495,8 @@ int svgIsTitleAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsTitleAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2432,6 +2536,8 @@ int svgIsTSpanAttribute(const char* buff)
     else if(!strcmp(buff, "xml:lang"))           { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "xml:space"))          { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                  { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsTSpanAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2482,6 +2588,8 @@ int svgIsUseAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                         { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsUseAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -2551,6 +2659,8 @@ int svgIsVideoAttribute(const char* buff)
     else if(!strcmp(buff, "xml:space"))                 { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "y"))                         { type = SVG_ATTRIBUTE; }
     else if(!strcmp(buff, "/"))                         { type = SVG_ATTRIBUTE; }
+
+    if(type == SVG_NULL) { embLog_print("format-svg.c svgIsVideoAttribute(), unknown: %s\n", buff); }
     return type;
 }
 
@@ -3022,7 +3132,7 @@ void svgProcess(int c, const char* buff)
             if(!currentValue)
             {
                 currentValue = emb_strdup(buff);
-                if(!currentValue) { return; }
+                if(!currentValue) { /*TODO: error */ return; }
             }
             else
             {
@@ -3080,6 +3190,8 @@ int readSvg(EmbPattern* pattern, const char* fileName)
 
     buff = (char*)malloc(size);
     if(!buff) { embLog_error("format-svg.c readSvg(), cannot allocate memory for buff\n"); return 0; }
+
+    svgCreator = SVG_CREATOR_NULL;
 
     svgExpect = SVG_EXPECT_NULL;
     svgMultiValue = 0;
