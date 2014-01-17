@@ -23,6 +23,8 @@ char startsWith(const char* pre, const char* str);
 
 char* rTrim(char* const str, char junk);
 char* lTrim(char* const str, char junk);
+char *copy_trim(char const *s);
+void inplace_trim(char *s);
 char* emb_optOut(double num, char* str);
 char* emb_strdup(const char* src);
 
