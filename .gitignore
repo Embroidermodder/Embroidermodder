@@ -22,6 +22,7 @@ libembroidery/TODO
 libembroidery/Makefile
 libembroidery/_memleak*
 libembroidery/doxygen
+libembroidery/lib
 
 #########################
 # libembroidery-convert #
