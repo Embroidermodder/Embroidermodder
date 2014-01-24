@@ -557,6 +557,8 @@ void embPattern_flip(EmbPattern* p, int horz, int vert)
     EmbCircleObjectList* cObjList = 0;
     EmbEllipseObjectList* eObjList = 0;
     EmbLineObjectList* liObjList = 0;
+    EmbPathObjectList* paObjList = 0;
+    EmbPointList* paPointList = 0;
     EmbPointObjectList* pObjList = 0;
     EmbPolygonObjectList* pogObjList = 0;
     EmbPointList* pogPointList = 0;
@@ -612,6 +614,19 @@ void embPattern_flip(EmbPattern* p, int horz, int vert)
             liObjList->lineObj.line.y2 = -liObjList->lineObj.line.y2;
         }
         liObjList = liObjList->next;
+    }
+
+    paObjList = p->pathObjList;
+    while(paObjList)
+    {
+        paPointList = paObjList->pathObj->pointList;
+        while(paPointList)
+        {
+            if(horz) { paPointList->point.xx = -paPointList->point.xx; }
+            if(vert) { paPointList->point.yy = -paPointList->point.yy; }
+            paPointList = paPointList->next;
+        }
+        paObjList = paObjList->next;
     }
 
     pObjList = p->pointObjList;
