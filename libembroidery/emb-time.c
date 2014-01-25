@@ -31,8 +31,8 @@ EmbTime embTime_time(EmbTime* t)
 /*TODO: arduino embTime_time */
 #else
 
-#include <assert.h>
-assert(0); /*TODO: wrap time() from time.h and verify it works consistently */
+int divideByZero = 0;
+divideByZero = divideByZero/divideByZero; /*TODO: wrap time() from time.h and verify it works consistently */
 
 #endif /* ARDUINO */
 }
