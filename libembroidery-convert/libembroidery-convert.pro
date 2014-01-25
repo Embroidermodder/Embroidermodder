@@ -5,6 +5,10 @@ CONFIG += console debug
 CONFIG -= app_bundle
 CONFIG += silent #Comment this out for verbose output
 
+!msvc {
+QMAKE_LFLAGS += -static-libgcc
+}
+
 TARGET = libembroidery-convert
 
 OBJECTS_DIR = .obj
