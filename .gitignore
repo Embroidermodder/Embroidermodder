@@ -23,6 +23,7 @@ libembroidery/Makefile
 libembroidery/_memleak*
 libembroidery/doxygen
 libembroidery/lib
+libembroidery/object_script.*
 
 #########################
 # libembroidery-convert #
