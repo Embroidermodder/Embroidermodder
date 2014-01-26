@@ -299,7 +299,7 @@ void svgAddToPattern(EmbPattern* p)
         int last = strlen(pointStr);
         int size = 32;
         int i = 0;
-        int c = 0;
+        int j = 0;
         int pos = 0;
         /* An odometer aka 'tripometer' used for stepping thru the pathData */
         int trip = -1; /* count of float[] that has been filled. 0=first item of array, -1=not filled = empty array */
@@ -315,6 +315,8 @@ void svgAddToPattern(EmbPattern* p)
         int cmd = 0;
         double pathData[7];
         unsigned int numMoves = 0;
+        int pendingTask = 0;
+        int relative = 0;
 
         EmbPointList* startOfPointList = 0;
         EmbPointList* pathObjPointList = 0;
@@ -383,22 +385,31 @@ void svgAddToPattern(EmbPattern* p)
 
                     /**** Compose Point List ****/
 
+                    /* below "while" is for avoid loosing last 'z' command that maybe never accomodated. */
+                    pendingTask = 1; if (i==last-1) {pendingTask = 2;}
+
+                    while (pendingTask > 0)
+                    {
+                        pendingTask -= 1;
+
                     /* Check wether prior command need to be saved */
                     if(trip>=0)
                     {
                             trip = -1;
                             reset = -1;
 
+                            relative = 0; /* relative to prior coordinate point or absolute coordinate? */
+
                             if     (cmd == 'M') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; }
-                            else if(cmd == 'm') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; }
+                            else if(cmd == 'm') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; relative=1; }
                             else if(cmd == 'L') { xx = pathData[0]; yy = pathData[1]; }
-                            else if(cmd == 'l') { xx = pathData[0]; yy = pathData[1]; }
+                            else if(cmd == 'l') { xx = pathData[0]; yy = pathData[1]; relative=1;}
                             else if(cmd == 'H') { xx = pathData[0]; yy = ly; }
-                            else if(cmd == 'h') { xx = pathData[0]; yy = ly; }
+                            else if(cmd == 'h') { xx = pathData[0]; yy = ly; relative=1;}
                             else if(cmd == 'V') { xx = lx;          yy = pathData[1]; }
-                            else if(cmd == 'v') { xx = lx;          yy = pathData[1]; }
+                            else if(cmd == 'v') { xx = lx;          yy = pathData[1]; relative=1;}
                             else if(cmd == 'C') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; }
-                            else if(cmd == 'c') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; }
+                            else if(cmd == 'c') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; relative=1;}
                             /*
                             else if(cmd == 'S') { xx = pathData[0]; yy = pathData[1]; }
                             else if(cmd == 's') { xx = pathData[0]; yy = pathData[1]; }
@@ -475,6 +486,11 @@ void svgAddToPattern(EmbPattern* p)
                             reset = -1;
                         }
                     }
+                    /* avoid loosing 'z' command that maybe never accomodated. */
+                        if (i==last-1) {
+                            trip = 2;
+                        }
+                    } /* while pendingTask */
 
 
                     break;
@@ -490,65 +506,6 @@ void svgAddToPattern(EmbPattern* p)
                 if(!pathbuff) { embLog_error("format-svg.c svgAddToPattern(), cannot re-allocate memory for pathbuff\n"); return; }
             }
         }
-        /* Check wether the loop above yields a last command that need to be saved */
-        if(trip>=0 || cmd == 'z' || cmd=='Z')
-        {
-                trip = -1;
-                reset = -1;
-
-                if     (cmd == 'M') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; }
-                else if(cmd == 'm') { xx = pathData[0]; yy = pathData[1]; fx = xx; fy = yy; }
-                else if(cmd == 'L') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'l') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'H') { xx = pathData[0]; yy = ly; }
-                else if(cmd == 'h') { xx = pathData[0]; yy = ly; }
-                else if(cmd == 'V') { xx = lx;          yy = pathData[1]; }
-                else if(cmd == 'v') { xx = lx;          yy = pathData[1]; }
-                else if(cmd == 'C') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; }
-                else if(cmd == 'c') { xx = pathData[4]; yy = pathData[5]; cx1 = pathData[0]; cy1 = pathData[1]; cx2 = pathData[2]; cy2 = pathData[3]; }
-                /*
-                else if(cmd == 'S') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 's') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'Q') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'q') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'T') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 't') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'A') { xx = pathData[0]; yy = pathData[1]; }
-                else if(cmd == 'a') { xx = pathData[0]; yy = pathData[1]; }
-                */
-                else if(cmd == 'Z') { xx = fx;          yy = fy; }
-                else if(cmd == 'z') { xx = fx;          yy = fy; }
-
-                if(!pathObjPointList && !pathObjFlagList)
-                {
-                    pathObjPointList = embPointList_create(xx, yy);
-                    startOfPointList = pathObjPointList;
-                    pathObjFlagList = embFlagList_create(svgPathCmdToEmbPathFlag(cmd));
-                    startOfFlagList = pathObjFlagList;
-                }
-                else
-                {
-                    pathObjPointList = embPointList_add(pathObjPointList, embPoint_make(xx, yy));
-                    pathObjFlagList = embFlagList_add(pathObjFlagList, svgPathCmdToEmbPathFlag(cmd));
-                }
-                lx = xx; ly = yy;
-
-                pathbuff[0] = (char)cmd;                  /* set the command for compare */
-                pathbuff[1] = 0;
-                pos = 0;
-
-                printf("*prior:%s (%f, %f,  %f, %f,     %f,%f,  %f) \n", pathbuff,
-                       pathData[0],
-                       pathData[1],
-                       pathData[2],
-                       pathData[3],
-                       pathData[4],
-                       pathData[5],
-                       pathData[6]
-                       );
-
-        }
-
         free(pathbuff);
         pathbuff = 0;
 
