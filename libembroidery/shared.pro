@@ -12,6 +12,10 @@ TARGET = embroidery
 
 OBJECTS_DIR = .obj
 
+!msvc {
+QMAKE_LFLAGS += -static-libgcc
+}
+
 win32 {
     TARGET = lib$$qtLibraryTarget($$TARGET) #force name to be libembroidery.dll
     

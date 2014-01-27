@@ -12,6 +12,10 @@ TARGET = embroidery
 
 OBJECTS_DIR = .obj
 
+!msvc {
+QMAKE_LFLAGS += -static-libgcc
+}
+
 win32 {
     #Find out if we are cross-compiling from a Linux machine
     UNAME = $$system(uname -s)
