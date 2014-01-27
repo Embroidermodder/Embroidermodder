@@ -20,6 +20,7 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
                                  /* Intersection Point */
                                  double* px4, double* py4)
 {
+	double a, h, px2, py2, mx, my;
     double dx = px1-px0;
     double dy = py1-py0;
     double d = sqrt(dx*dx + dy*dy); /* Distance between centers */
@@ -61,13 +62,13 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
      * END PROOF
      */
 
-    double a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d);
+    a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d);
     /* Solve for h by substituting a into a^2 + h^2 = r0^2 */
-    double h = sqrt((r0*r0) - (a*a));
+    h = sqrt((r0*r0) - (a*a));
 
     /*Find point p2 by adding the a offset in relation to line d to point p0 */
-    double px2 = px0 + (dx * a/d);
-    double py2 = py0 + (dy * a/d);
+    px2 = px0 + (dx * a/d);
+    py2 = py0 + (dy * a/d);
 
     /* Tangent circles have only one intersection */
     if(d == (r0 + r1))
@@ -79,8 +80,8 @@ int getCircleCircleIntersections(/* Circle 0 Radius */
 
     /* Get the perpendicular slope by multiplying by the negative reciprocal
      * Then multiply by the h offset in relation to d to get the actual offsets */
-    double mx = -(dy * h/d);
-    double my =  (dx * h/d);
+    mx = -(dy * h/d);
+    my =  (dx * h/d);
 
     /* Add the offsets to point p2 to obtain the intersection points */
     *px3 = px2 + mx;
@@ -105,6 +106,7 @@ int getCircleTangentPoints(/* Circle Radius and Center */
                            /* Tangent Point 1 */
                            double* tx1, double* ty1)
 {
+	double pr;
     double dx  = px-cx;
     double dy  = py-cy;
     double hyp = sqrt(dx*dx + dy*dy); /* Distance to center of circle */
@@ -122,7 +124,7 @@ int getCircleTangentPoints(/* Circle Radius and Center */
 
     /* Since the tangent lines are always perpendicular to the radius, so
      * we can use the Pythagorean theorem to solve for the missing side */
-    double pr = sqrt((hyp*hyp) - (cr*cr));
+    pr = sqrt((hyp*hyp) - (cr*cr));
 
     return getCircleCircleIntersections(cr,
                                         cx, cy,
