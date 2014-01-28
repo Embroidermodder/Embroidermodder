@@ -12,84 +12,95 @@ unit libembroidery;
 
 interface
 uses
-{$IFDEF WIN32}
-  Windows;
+{$IFDEF FPC}
+  dynlibs;
 {$ELSE}
-  Wintypes, WinProcs;
-{$ENDIF}
+  {$IFDEF WIN32}
+    Windows;
+  {$ELSE}
+    Wintypes, WinProcs;
+  {$ENDIF}
+{$ENDIF}  
 
+{$DEFINE EMBOBJECT}
+{.$DEFINE EMBOBJECTS_PREV}
+{$IFNDEF FPC}
+  {$IFNDEF MSDOS}
+    {$DEFINE SetErrorMode}
+  {$ENDIF}
+{$ENDIF}
 
 type
 
-  EmbColor = record
+  TEmbColor = record
     r: Byte;
     g: Byte;
     b: Byte;
   end {EmbColor_};
   
-  EmbPoint = record
+  TEmbPoint = record
     xx: Double;   {= absolute position (not relative) }
     yy: Double;   {= positive is up, units are in mm }
   end {EmbPoint_};
 
-  PEmbPointList = ^EmbPointList;
-  EmbPointList = record
-    point: EMBPOINT;
-    next: PEMBPOINTLIST;
+  PEmbPointList = ^TEmbPointList;
+  TEmbPointList = record
+    point: TEmbPoint;
+    next: PEmbPointList;
   end {EmbPointList_};
 
-  EmbPointObject = record
-    point: EMBPOINT;
+  TEmbPointObject = record
+    point: TEmbPoint;
 	  // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbPointObject_};
 
-  PEmbPointObjectList = ^EmbPointObjectList;
-  EmbPointObjectList = record
-    pointObj: EMBPOINTOBJECT;
-    next: PEMBPOINTOBJECTLIST;
+  PEmbPointObjectList = ^TEmbPointObjectList;
+  TEmbPointObjectList = record
+    pointObj: TEmbPointObject;
+    next: PEmbPointObjectList;
   end {EmbPointObjectList_};
 
 
-  EmbSettings = record
+  TEmbSettings = record
     dstJumpsPerTrim: Word;
-    home: EmbPoint;
+    home: TEmbPoint;
   end {EmbSettings_};
 
-  EmbHoop = record
+  TEmbHoop = record
     width: Double;
     height: Double;
   end {EmbHoop_};
 
-  EmbStitch = record
+  TEmbStitch = record
     flags: Integer;   {= uses codes defined above }
     xx: Double;       {= absolute position (not relative) }
     yy: Double;       {= positive is up, units are in mm }
     color: Integer;
   end {EmbStitch_};
 
-  PEmbStitchList = ^EmbStitchList;
-  EmbStitchList = record
-    stitch: EmbStitch;
+  PEmbStitchList = ^TEmbStitchList;
+  TEmbStitchList = record
+    stitch: TEmbStitch;
     next: PEmbStitchList;
   end;
 
 
-  EmbThread = record
-    color: EMBCOLOR;
+  TEmbThread = record
+    color: TEmbColor;
     description: PCHAR;
     catalogNumber: PCHAR;
   end {EmbThread_};
 
-  PEmbThreadList = ^EmbThreadList;
-  EmbThreadList = record
-    thread: EMBTHREAD;
+  PEmbThreadList = ^TEmbThreadList;
+  TEmbThreadList = record
+    thread: TEmbThread;
     next: PEmbThreadList;
   end {EmbThreadList_};
 
 
-  EmbArc = record
+  TEmbArc = record
     startX: Double; {= absolute position (not relative) }
     startY: Double;
     midX: Double;   {= absolute position (not relative) }
@@ -98,165 +109,165 @@ type
     endY: Double;
   end {EmbArc_};
 
-  EmbArcObject = record
-    arc: EMBARC;  {+// Properties*/ }
+  TEmbArcObject = record
+    arc: TEmbArc;  {+// Properties*/ }
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbArcObject_};
 
 
-  PEmbArcObjectList = ^EmbArcObjectList;
-  EmbArcObjectList = record
-    arcObj: EMBARCOBJECT;
-    next: PEMBARCOBJECTLIST;
+  PEmbArcObjectList = ^TEmbArcObjectList;
+  TEmbArcObjectList = record
+    arcObj: TEmbArcObject;
+    next: PEmbArcObjectList;
   end {EmbArcObjectList_};
 
 
 
-  EmbCircle = record
+  TEmbCircle = record
     centerX: Double;
     centerY: Double;
     radius: Double;
   end {EmbCircle_};
 
-  EmbCircleObject = record
-    circle: EMBCIRCLE;
+  TEmbCircleObject = record
+    circle: TEmbCircle;
 
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbCircleObject_};
 
-  PEmbCircleObjectList = ^EmbCircleObjectList;
-  EmbCircleObjectList = record
-    circleObj : EmbCircleObject;
+  PEmbCircleObjectList = ^TEmbCircleObjectList;
+  TEmbCircleObjectList = record
+    circleObj : TEmbCircleObject;
     next : PEmbCircleObjectList;
   end;
 
-  EmbEllipse = record
+  TEmbEllipse = record
     centerX: Double;
     centerY: Double;
     radiusX: Double;
     radiusY: Double;
   end {EmbEllipse_};
 
-  EmbEllipseObject = record
-    ellipse: EMBELLIPSE;
+  TEmbEllipseObject = record
+    ellipse: TEmbEllipse;
     rotation: Double;
     //Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbEllipseObject_};
 
-  PEmbEllipseObjectList = ^EmbEllipseObjectList;
-  EmbEllipseObjectList = record
-    EllipseObj : EmbEllipseObject;
+  PEmbEllipseObjectList = ^TEmbEllipseObjectList;
+  TEmbEllipseObjectList = record
+    EllipseObj : TEmbEllipseObject;
     next : PEmbEllipseObjectList;
   end;
 
 
-  EmbLine = record
+  TEmbLine = record
     x1: Double;
     y1: Double;
     x2: Double;
     y2: Double;
   end {EmbLine_};
 
-  EmbLineObject = record
-    line: EMBLINE;
+  TEmbLineObject = record
+    line: TEmbLine;
 
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbLineObject_};
 
 
-  PEmbLineObjectList = ^EmbLineObjectList;
-  EmbLineObjectList = record
-    LineObj : EmbLineObject;
+  PEmbLineObjectList = ^TEmbLineObjectList;
+  TEmbLineObjectList = record
+    LineObj : TEmbLineObject;
     next : PEmbLineObjectList;
   end;
 
 type
-  EmbFlag = Integer;
+  TEmbFlag = Integer;
 
-  PEmbFlagList = ^EmbFlagList;
-  EmbFlagList = record
+  PEmbFlagList = ^TEmbFlagList;
+  TEmbFlagList = record
     flag: Integer;
-    next: PEMBFLAGLIST;
+    next: PEmbFLAGList;
   end {EmbFlagList_};
 
-  EmbPathObject = record
-    pointList: PEMBPOINTLIST;
-    flagList: PEMBFLAGLIST;
+  TEmbPathObject = record
+    pointList: PEmbPointList;
+    flagList: PEmbFLAGList;
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbPathObject_};
-  PEmbPathObject = ^EmbPathObject;
+  PEmbPathObject = ^TEmbPathObject;
 
-  PEmbPathObjectList = ^EmbPathObjectList;
-  EmbPathObjectList = record
-    pathObj: PEMBPATHOBJECT;
-    next: PEMBPATHOBJECTLIST;
+  PEmbPathObjectList = ^TEmbPathObjectList;
+  TEmbPathObjectList = record
+    pathObj: PEmbPathObject;
+    next: PEmbPathObjectList;
   end {EmbPathObjectList_};
 
-  EmbPolygonObject = record
-    pointList: PEMBPOINTLIST;
+  TEmbPolygonObject = record
+    pointList: PEmbPointList;
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbPolygonObject_};
-  PEmbPolygonObject = EmbPolygonObject;
+  PEmbPolygonObject = TEmbPolygonObject;
 
 
-  PEmbPolygonObjectList = ^EmbPolygonObjectList;
-  EmbPolygonObjectList = record
-    polygonObj: PEMBPOLYGONOBJECT;
-    next: PEMBPOLYGONOBJECTLIST;
+  PEmbPolygonObjectList = ^TEmbPolygonObjectList;
+  TEmbPolygonObjectList = record
+    polygonObj: PEmbPolygonObject;
+    next: PEmbPolygonObjectList;
   end {EmbPolygonObjectList_};
 
 
-  EmbPolylineObject = record
-    pointList: PEMBPOINTLIST;
+  TEmbPolylineObject = record
+    pointList: PEmbPointList;
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbPolylineObject_};
-  PEmbPolylineObject= ^EmbPolylineObject;
+  PEmbPolylineObject= ^TEmbPolylineObject;
 
-  PEmbPolylineObjectList = ^EmbPolylineObjectList;
-  EmbPolylineObjectList = record
-    polylineObj: PEMBPOLYLINEOBJECT;
-    next: PEMBPOLYLINEOBJECTLIST;
+  PEmbPolylineObjectList = ^TEmbPolylineObjectList;
+  TEmbPolylineObjectList = record
+    polylineObj: PEmbPolylineObject;
+    next: PEmbPolylineObjectList;
   end {EmbPolylineObjectList_};
 
 
-  EmbRect = record
+  TEmbRect = record
     top: Double;
     left: Double;
     bottom: Double;
     right: Double;
   end {EmbRect_};
 
-  EmbRectObject = record
-    rect: EMBRECT;
+  TEmbRectObject = record
+    rect: TEmbRect;
     rotation: Double;
     radius: Double;
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbRectObject_};
 
 
-  PEmbRectObjectList = ^PEmbRectObjectList;
-  EmbRectObjectList = record
-    rectObj: EMBRECTOBJECT;
-    next: PEMBRECTOBJECTLIST;
+  PEmbRectObjectList = ^TEmbRectObjectList;
+  TEmbRectObjectList = record
+    rectObj: TEmbRectObject;
+    next: PEmbRectObjectList;
   end {EmbRectObjectList_};
 
 
-  EmbBezier = record
+  TEmbBezier = record
     startX: Double;
     startY: Double;
     control1X: Double;
@@ -267,66 +278,104 @@ type
     endY: Double;
   end {EmbBezier_};
 
-  PEmbSplineObject = ^EmbSplineObject;
-  EmbSplineObject = record
-    bezier: EMBBEZIER;
-    next: PEMBSPLINEOBJECT;
+  PEmbSplineObject = ^TEmbSplineObject;
+  TEmbSplineObject = record
+    bezier: TEmbBezier;
+    next: PEmbSplineObject;
     // Properties
     lineType: Integer;
-    color: EMBCOLOR;
+    color: TEmbColor;
   end {EmbSplineObject_};
 
 { A list of bezier curves is a B-spline }
-  PEmbSplineObjectList = ^EmbSplineObjectList;
-  EmbSplineObjectList = record
-    splineObj: EMBSPLINEOBJECT;
-    next: PEMBSPLINEOBJECTLIST;
+  PEmbSplineObjectList = ^TEmbSplineObjectList;
+  TEmbSplineObjectList = record
+    splineObj: TEmbSplineObject;
+    next: PEmbSplineObjectList;
   end {EmbSplineObjectList_};
 
-  EmbPattern = record
-    settings: EMBSETTINGS;
-    hoop: EMBHOOP;
-    stitchList: PEMBSTITCHLIST;
-    threadList: PEMBTHREADLIST;
-    arcObjList: PEMBARCOBJECTLIST;
-    circleObjList: PEMBCIRCLEOBJECTLIST;
-    ellipseObjList: PEMBELLIPSEOBJECTLIST;
-    lineObjList: PEMBLINEOBJECTLIST;
-    pathObjList: PEMBPATHOBJECTLIST;
-    pointObjList: PEMBPOINTOBJECTLIST;
-    polygonObjList: PEMBPOLYGONOBJECTLIST;
-    polylineObjList: PEMBPOLYLINEOBJECTLIST;
-    rectObjList: PEMBRECTOBJECTLIST;
-    splineObjList: PEMBSPLINEOBJECTLIST;
-    lastStitch: PEMBSTITCHLIST;
-    lastThread: PEMBTHREADLIST;
-    lastArcObj: PEMBARCOBJECTLIST;
-    lastCircleObj: PEMBCIRCLEOBJECTLIST;
-    lastEllipseObj: PEMBELLIPSEOBJECTLIST;
-    lastLineObj: PEMBLINEOBJECTLIST;
-    lastPathObj: PEMBPATHOBJECTLIST;
-    lastPointObj: PEMBPOINTOBJECTLIST;
-    lastPolygonObj: PEMBPOLYGONOBJECTLIST;
-    lastPolylineObj: PEMBPOLYLINEOBJECTLIST;
-    lastRectObj: PEMBRECTOBJECTLIST;
-    lastSplineObj: PEMBSPLINEOBJECTLIST;
+{$IFDEF EMBOBJECT}
+type
+  PEmbObject = ^TEmbObject;
+  TEmbObject = record
+    kind: Char;
+    pointList: PEmbPointList;
+
+    // Properties*/
+    lineType: Integer;
+    color: TEmbColor;
+  end {};
+
+  PEmbObjectList = ^TEmbObjectList;
+  TEmbObjectList = record
+    objectObj: PEmbObject;
+    {$IFDEF EMBOBJECTS_PREV}
+    prev: PEmbObjectList;
+    {$ENDIF}
+    next: PEmbObjectList;
+    child: PEmbObjectList;
+  end {EmbObjectList_};
+{$ENDIF}
+
+  TEmbPattern = record
+    settings: TEmbSettings;
+    hoop: TEmbHoop;
+    stitchList: PEmbStitchList;
+    threadList: PEmbThreadList;
+    arcObjList: PEmbArcObjectList;
+    circleObjList: PEmbCircleObjectList;
+    ellipseObjList: PEmbEllipseObjectList;
+    lineObjList: PEmbLineObjectList;
+    pathObjList: PEmbPathObjectList;
+    pointObjList: PEmbPointObjectList;
+    polygonObjList: PEmbPolygonObjectList;
+    polylineObjList: PEmbPolylineObjectList;
+    rectObjList: PEmbRectObjectList;
+    splineObjList: PEmbSplineObjectList;
+    lastStitch: PEmbStitchList;
+    lastThread: PEmbThreadList;
+    lastArcObj: PEmbArcObjectList;
+    lastCircleObj: PEmbCircleObjectList;
+    lastEllipseObj: PEmbEllipseObjectList;
+    lastLineObj: PEmbLineObjectList;
+    lastPathObj: PEmbPathObjectList;
+    lastPointObj: PEmbPointObjectList;
+    lastPolygonObj: PEmbPolygonObjectList;
+    lastPolylineObj: PEmbPolylineObjectList;
+    lastRectObj: PEmbRectObjectList;
+    lastSplineObj: PEmbSplineObjectList;
     
     currentColorIndex: Integer;
     lastX: Double;
     lastY: Double;
   end {EmbPattern_};
-  PEmbPattern = ^EmbPattern;
+  PEmbPattern = ^TEmbPattern;
 
 
 var
-  embPattern_create: function(): PEMBPATTERN cdecl  {$IFDEF WIN32} stdcall {$ENDIF}; 
-  embPattern_read: function(pattern: PEMBPATTERN;
-                            const fileName: PChar): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embPattern_create:  function(): PEmbPattern cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embPattern_read:    function(pattern: PEmbPattern;
+            const fileName: PChar): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
 
-  embPattern_write: function(const pattern: PEMBPATTERN; 
-                             const fileName: PChar): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF}; 
+  embPattern_write:   function(const pattern: PEmbPattern;
+             const fileName: PChar): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
 
-  embFormat_type: function(const fileName: PChar): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF}; 
+  embFormat_type:     function(const fileName: PChar): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+
+{$IFDEF EMBOBJECT}
+ embObject_create:   function (kind: Char;
+					  points: PEmbPointList;
+					  color: TEmbColor;
+					  lineType: Integer): PEmbObject cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+ embObject_free:     procedure (pointer: PEmbObject) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+ embObjectList_create: function (data: PEmbObject): PEmbObjectList cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+ embObjectList_add:  function (pointer: PEmbObjectList;
+						 data: PEmbObject): PEmbObjectList cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+ embObjectList_count:  function (pointer: PEmbObjectList): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+ embObjectList_empty:  function (pointer: PEmbObjectList): Integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+ embObjectList_free:   procedure (pointer: PEmbObjectList) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+{$ENDIF}
+
 
 var
   DLLLoaded: Boolean { is DLL (dynamically) loaded already? }
@@ -334,10 +383,22 @@ var
 
 implementation
 
+const
+{$IFDEF win32}
+  emblib = 'libembroidery.dll';
+{$ELSE}
+  {$IFDEF darwin}
+    emblib = 'libembroidery';
+    {$linklib libembroidery}
+  {$ELSE}
+    emblib = 'libembroidery.so';
+  {$ENDIF}
+{$ENDIF}
+
 var
   SaveExit: pointer;
   DLLHandle: THandle;
-{$IFNDEF MSDOS}
+{$IFDEF SetErrorMode}
   ErrorMode: Integer;
 {$ENDIF}
 
@@ -350,10 +411,10 @@ var
 procedure LoadDLL;
 begin
   if DLLLoaded then Exit;
-{$IFNDEF MSDOS}
+{$IFDEF SetErrorMode}
   ErrorMode := SetErrorMode($8000{SEM_NoOpenFileErrorBox});
 {$ENDIF}
-  DLLHandle := LoadLibrary('libembroidery.dll');
+  DLLHandle := LoadLibrary(emblib);
   if DLLHandle >= 32 then
   begin
     DLLLoaded := True;
@@ -362,27 +423,32 @@ begin
 
     @embPattern_create := GetProcAddress(DLLHandle,'embPattern_create');
   {$IFDEF WIN32}
-    //Assert(pointer(longint(@embPattern_read)) <> nil);
+    //I need to sure we are using correct lib, but this context doesn't work:
+    //Assert(assigned(@embPattern_read));
   {$ENDIF}
 
     @embPattern_read := GetProcAddress(DLLHandle,'embPattern_read');
-  {$IFDEF WIN32}
-    //Assert(@embPattern_read <> nil);
-  {$ENDIF}
-
     @embPattern_write := GetProcAddress(DLLHandle,'embPattern_write');
-  {$IFDEF WIN32}
-    //Assert(@embPattern_write <> nil);
-  {$ENDIF}
-
     @embFormat_type := GetProcAddress(DLLHandle,'embFormat_type');
+
+{$IFDEF EMBOBJECT}
+    @embObject_create   := GetProcAddress(DLLHandle,'embObject_create');
+    @embObject_free     := GetProcAddress(DLLHandle,'embObject_free');
+    @embObjectList_create := GetProcAddress(DLLHandle,'embObjectList_create');
+    @embObjectList_add    := GetProcAddress(DLLHandle,'embObjectList_add');
+    @embObjectList_count  := GetProcAddress(DLLHandle,'embObjectList_count');
+    @embObjectList_empty  := GetProcAddress(DLLHandle,'embObjectList_empty');
+    @embObjectList_free   := GetProcAddress(DLLHandle,'embObjectList_free');
+{$ENDIF}  
+
+
   end
   else
   begin
     DLLLoaded := False;
     { Error: LIBEMBROIDERMODDER2.DLL could not be loaded !! }
   end;
-{$IFNDEF MSDOS}
+{$IFDEF SetErrorMode}
   SetErrorMode(ErrorMode)
 {$ENDIF}
 end {LoadDLL};
