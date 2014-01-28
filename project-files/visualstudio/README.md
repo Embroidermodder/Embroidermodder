@@ -1,0 +1,1 @@
+We recommend using Visual Studio 2010 or newer.
