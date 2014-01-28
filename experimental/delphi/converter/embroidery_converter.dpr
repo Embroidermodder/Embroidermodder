@@ -1,5 +1,9 @@
 program embroidery_converter;
 
+{$IFDEF FPC}
+  {$MODE Delphi}
+{$ENDIF}
+
 {$APPTYPE CONSOLE}
 
 uses
@@ -136,7 +140,7 @@ begin
   { TODO -oUser -cConsole Main : Insert code here }
 
 {$ifdef SHORT_WAY}
-    fillchar(p,sizeof(embPattern), 0);
+    fillchar(p,sizeof(TEmbPattern), 0);
     successful := 0; i := 0;
     if paramcount < 2 then
     begin
@@ -242,5 +246,3 @@ begin
 {$endif} //SHORT_WAY 
 
 end.
-
-(* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; *)
