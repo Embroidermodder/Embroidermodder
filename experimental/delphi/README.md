@@ -11,7 +11,7 @@ TODO: Proper download links for Lazarus, etc...
 Ubuntu repository packages:
 The FreePascal and Lazarus build dependencies can be installed easily by opening a terminal and issuing this command:
 ```
-sudo apt-get install fpc-source lazarus
+sudo apt-get install fpc-source lazarus lcl
 ```
 Building
 --------
