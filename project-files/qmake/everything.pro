@@ -1,16 +1,17 @@
-######################
-#  EmbroiderModder2  #
-######################
-#  This Qt4 project  #
-#  file will build   #
-#  the application   #
-######################
+########################
+#    everything.pro    #
+########################
+#  This Qt4/5 project  #
+#  file will build all #
+#  applications        #
+########################
 
 TEMPLATE = subdirs
+CONFIG += ordered
 
-######################
-# Linux/Unix         #
-######################
+##########################
+# Linux/Unix             #
+##########################
 
 unix {
 SUBDIRS  = \
@@ -65,9 +66,9 @@ INSTALLS += usrbin       \
 
 }
 
-######################
-# Windows            #
-######################
+##########################
+# Windows                #
+##########################
 
 win32 {
 SUBDIRS  = \
@@ -82,9 +83,9 @@ INSTALLS += nullsoft
 
 }
 
-######################
-# Mac OSX            #
-######################
+##########################
+# Mac OSX                #
+##########################
 
 macx {
 SUBDIRS  = \

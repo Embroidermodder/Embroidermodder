@@ -12,6 +12,8 @@ TARGET = embroidery
 
 OBJECTS_DIR = .obj
 
+DEFINES += LIBEMBROIDERY_STATIC
+
 !msvc {
 QMAKE_LFLAGS += -static-libgcc
 }
