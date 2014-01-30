@@ -2,6 +2,7 @@
 #ifndef COMPOUND_FILE_COMMON_H
 #define COMPOUND_FILE_COMMON_H
 
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,6 +33,7 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* COMPOUND_FILE_COMMON_H */
 

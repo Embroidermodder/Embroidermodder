@@ -2,13 +2,14 @@
 #ifndef EMB_PATH_H
 #define EMB_PATH_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "emb-color.h"
 #include "emb-point.h"
 #include "emb-flag.h"
+
+#include "api-start.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* path flag codes */
 #define LINETO             0
@@ -33,8 +34,8 @@ typedef struct EmbPathObject_
     EmbColor color;
 } EmbPathObject;
 
-EmbPathObject* embPathObject_create(EmbPointList* points, EmbFlagList* flags, EmbColor color, int lineType);
-void embPathObject_free(EmbPathObject* pointer);
+extern EMB_PUBLIC EmbPathObject* EMB_CALL embPathObject_create(EmbPointList* points, EmbFlagList* flags, EmbColor color, int lineType);
+extern EMB_PUBLIC void EMB_CALL embPathObject_free(EmbPathObject* pointer);
 
 typedef struct EmbPathObjectList_
 {
@@ -42,15 +43,16 @@ typedef struct EmbPathObjectList_
     struct EmbPathObjectList_* next;
 } EmbPathObjectList;
 
-EmbPathObjectList* embPathObjectList_create(EmbPathObject* data);
-EmbPathObjectList* embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data);
-int embPathObjectList_count(EmbPathObjectList* pointer);
-int embPathObjectList_empty(EmbPathObjectList* pointer);
-void embPathObjectList_free(EmbPathObjectList* pointer);
+extern EMB_PUBLIC EmbPathObjectList* EMB_CALL embPathObjectList_create(EmbPathObject* data);
+extern EMB_PUBLIC EmbPathObjectList* EMB_CALL embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data);
+extern EMB_PUBLIC int EMB_CALL embPathObjectList_count(EmbPathObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embPathObjectList_empty(EmbPathObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embPathObjectList_free(EmbPathObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_PATH_H */
 

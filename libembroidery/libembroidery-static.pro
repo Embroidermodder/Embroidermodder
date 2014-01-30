@@ -30,4 +30,4 @@ win32 {
     VERSION = 1.9.0 #TODO: update this to 2.0.0 for proper release. Better yet, grep a file with the version number
 }
 
-QMAKE_DISTCLEAN += lib/*embroidery.prl lib/*embroidery.a
+QMAKE_DISTCLEAN += lib/*embroidery.prl lib/*embroidery.a object_script.*

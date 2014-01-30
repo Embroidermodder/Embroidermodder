@@ -2,12 +2,13 @@
 #ifndef EMB_POLYGON_H
 #define EMB_POLYGON_H
 
+#include "emb-color.h"
+#include "emb-point.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
-#include "emb-point.h"
 
 typedef struct EmbPolygonObject_
 {
@@ -18,8 +19,8 @@ typedef struct EmbPolygonObject_
     EmbColor color;
 } EmbPolygonObject;
 
-EmbPolygonObject* embPolygonObject_create(EmbPointList* points, EmbColor color, int lineType);
-void embPolygonObject_free(EmbPolygonObject* pointer);
+extern EMB_PUBLIC EmbPolygonObject* EMB_CALL embPolygonObject_create(EmbPointList* points, EmbColor color, int lineType);
+extern EMB_PUBLIC void EMB_CALL embPolygonObject_free(EmbPolygonObject* pointer);
 
 typedef struct EmbPolygonObjectList_
 {
@@ -27,15 +28,16 @@ typedef struct EmbPolygonObjectList_
     struct EmbPolygonObjectList_* next;
 } EmbPolygonObjectList;
 
-EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data);
-EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data);
-int embPolygonObjectList_count(EmbPolygonObjectList* pointer);
-int embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
-void embPolygonObjectList_free(EmbPolygonObjectList* pointer);
+extern EMB_PUBLIC EmbPolygonObjectList* EMB_CALL embPolygonObjectList_create(EmbPolygonObject* data);
+extern EMB_PUBLIC EmbPolygonObjectList* EMB_CALL embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data);
+extern EMB_PUBLIC int EMB_CALL embPolygonObjectList_count(EmbPolygonObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embPolygonObjectList_free(EmbPolygonObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_POLYGON_H */
 

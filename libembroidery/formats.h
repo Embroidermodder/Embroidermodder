@@ -1,16 +1,6 @@
 #ifndef FORMATS_H
 #define FORMATS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#define EMBFORMAT_STITCHONLY 0
-#define EMBFORMAT_STCHANDOBJ 1
-#define EMBFORMAT_OBJECTONLY 2
-
-int embFormat_type(const char* fileName);
-
 #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
 
 #include "format-exp.h"
@@ -79,9 +69,21 @@ int embFormat_type(const char* fileName);
 
 #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 
+#include "api-start.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#define EMBFORMAT_STITCHONLY 0
+#define EMBFORMAT_STCHANDOBJ 1
+#define EMBFORMAT_OBJECTONLY 2
+
+extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMATS_H */
 

@@ -2,11 +2,12 @@
 #ifndef EMB_POINT_H
 #define EMB_POINT_H
 
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
 
 typedef struct EmbPoint_
 {
@@ -14,9 +15,9 @@ typedef struct EmbPoint_
     double yy; /* positive is up, units are in mm  */
 } EmbPoint;
 
-double embPoint_x(EmbPoint point);
-double embPoint_y(EmbPoint point);
-EmbPoint embPoint_make(double x, double y);
+extern EMB_PUBLIC double EMB_CALL embPoint_x(EmbPoint point);
+extern EMB_PUBLIC double EMB_CALL embPoint_y(EmbPoint point);
+extern EMB_PUBLIC EmbPoint EMB_CALL embPoint_make(double x, double y);
 
 typedef struct EmbPointList_
 {
@@ -24,11 +25,11 @@ typedef struct EmbPointList_
     struct EmbPointList_* next;
 } EmbPointList;
 
-EmbPointList* embPointList_create(double x, double y);
-EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data);
-int embPointList_count(EmbPointList* pointer);
-int embPointList_empty(EmbPointList* pointer);
-void embPointList_free(EmbPointList* pointer);
+extern EMB_PUBLIC EmbPointList* EMB_CALL embPointList_create(double x, double y);
+extern EMB_PUBLIC EmbPointList* EMB_CALL embPointList_add(EmbPointList* pointer, EmbPoint data);
+extern EMB_PUBLIC int EMB_CALL embPointList_count(EmbPointList* pointer);
+extern EMB_PUBLIC int EMB_CALL embPointList_empty(EmbPointList* pointer);
+extern EMB_PUBLIC void EMB_CALL embPointList_free(EmbPointList* pointer);
 
 typedef struct EmbPointObject_
 {
@@ -39,8 +40,8 @@ typedef struct EmbPointObject_
     EmbColor color;
 } EmbPointObject;
 
-EmbPointObject embPointObject_make(double x, double y);
-EmbPointObject* embPointObject_create(double x, double y);
+extern EMB_PUBLIC EmbPointObject EMB_CALL embPointObject_make(double x, double y);
+extern EMB_PUBLIC EmbPointObject* EMB_CALL embPointObject_create(double x, double y);
 
 typedef struct EmbPointObjectList_
 {
@@ -48,15 +49,16 @@ typedef struct EmbPointObjectList_
     struct EmbPointObjectList_* next;
 } EmbPointObjectList;
 
-EmbPointObjectList* embPointObjectList_create(EmbPointObject data);
-EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
-int embPointObjectList_count(EmbPointObjectList* pointer);
-int embPointObjectList_empty(EmbPointObjectList* pointer);
-void embPointObjectList_free(EmbPointObjectList* pointer);
+extern EMB_PUBLIC EmbPointObjectList* EMB_CALL embPointObjectList_create(EmbPointObject data);
+extern EMB_PUBLIC EmbPointObjectList* EMB_CALL embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
+extern EMB_PUBLIC int EMB_CALL embPointObjectList_count(EmbPointObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embPointObjectList_empty(EmbPointObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embPointObjectList_free(EmbPointObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_POINT_H */
 

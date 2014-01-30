@@ -2,11 +2,7 @@
 #ifndef EMB_FILE_H
 #define EMB_FILE_H
 
-/* Disable warnings about unsafe use of fopen, fseek etc */
-#ifndef __GNUC__
-#pragma warning(disable: 4996)
-#endif
-
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -22,16 +18,17 @@ typedef struct EmbFile_
 } EmbFile;
 #endif /* ARDUINO */
 
-EmbFile* embFile_open(const char* fileName, const char* mode);
-int embFile_close(EmbFile* stream);
-int embFile_eof(EmbFile* stream);
-int embFile_getc(EmbFile* stream);
-int embFile_seek(EmbFile* stream, long offset, int origin);
-long embFile_tell(EmbFile* stream);
+extern EMB_PUBLIC EmbFile* EMB_CALL embFile_open(const char* fileName, const char* mode);
+extern EMB_PUBLIC int EMB_CALL embFile_close(EmbFile* stream);
+extern EMB_PUBLIC int EMB_CALL embFile_eof(EmbFile* stream);
+extern EMB_PUBLIC int EMB_CALL embFile_getc(EmbFile* stream);
+extern EMB_PUBLIC int EMB_CALL embFile_seek(EmbFile* stream, long offset, int origin);
+extern EMB_PUBLIC long EMB_CALL embFile_tell(EmbFile* stream);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_FILE_H */
 

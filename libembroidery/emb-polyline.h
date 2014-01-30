@@ -2,12 +2,13 @@
 #ifndef EMB_POLYLINE_H
 #define EMB_POLYLINE_H
 
+#include "emb-color.h"
+#include "emb-point.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
-#include "emb-point.h"
 
 typedef struct EmbPolylineObject_
 {
@@ -18,8 +19,8 @@ typedef struct EmbPolylineObject_
     EmbColor color;
 } EmbPolylineObject;
 
-EmbPolylineObject* embPolylineObject_create(EmbPointList* points, EmbColor color, int lineType);
-void embPolylineObject_free(EmbPolylineObject* pointer);
+extern EMB_PUBLIC EmbPolylineObject* EMB_CALL embPolylineObject_create(EmbPointList* points, EmbColor color, int lineType);
+extern EMB_PUBLIC void EMB_CALL embPolylineObject_free(EmbPolylineObject* pointer);
 
 typedef struct EmbPolylineObjectList_
 {
@@ -27,15 +28,16 @@ typedef struct EmbPolylineObjectList_
     struct EmbPolylineObjectList_* next;
 } EmbPolylineObjectList;
 
-EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data);
-EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
-int embPolylineObjectList_count(EmbPolylineObjectList* pointer);
-int embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
-void embPolylineObjectList_free(EmbPolylineObjectList* pointer);
+extern EMB_PUBLIC EmbPolylineObjectList* EMB_CALL embPolylineObjectList_create(EmbPolylineObject* data);
+extern EMB_PUBLIC EmbPolylineObjectList* EMB_CALL embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
+extern EMB_PUBLIC int EMB_CALL embPolylineObjectList_count(EmbPolylineObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embPolylineObjectList_free(EmbPolylineObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_POLYLINE_H */
 

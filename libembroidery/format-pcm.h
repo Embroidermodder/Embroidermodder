@@ -2,14 +2,15 @@
 #ifndef FORMAT_PCM_H
 #define FORMAT_PCM_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readPcm(EmbPattern* pattern, const char* fileName);
-int writePcm(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readPcm(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writePcm(EmbPattern* pattern, const char* fileName);
 
 static const int pcmThreadCount = 65;
 static const EmbThread pcmThreads[] = {
@@ -34,6 +35,7 @@ static const EmbThread pcmThreads[] = {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_PCM_H */
 

@@ -2,11 +2,12 @@
 #ifndef EMB_READER_WRITER_H
 #define EMB_READER_WRITER_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-pattern.h"
 
 typedef struct EmbReaderWriter_
 {
@@ -14,11 +15,12 @@ typedef struct EmbReaderWriter_
     int (*writer)(EmbPattern*, const char*);
 } EmbReaderWriter;
 
-EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName);
+extern EMB_PUBLIC EmbReaderWriter* EMB_CALL embReaderWriter_getByFileName(const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_READER_WRITER_H */
 

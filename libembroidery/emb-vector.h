@@ -2,6 +2,7 @@
 #ifndef EMB_VECTOR_H
 #define EMB_VECTOR_H
 
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,21 +22,21 @@ typedef struct EmbVectorList_
     struct EmbVectorList_* next;
 } EmbVectorList;
 
+extern EMB_PUBLIC void EMB_CALL embVector_normalize(EmbVector vector, EmbVector* result);
+extern EMB_PUBLIC void EMB_CALL embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
+extern EMB_PUBLIC void EMB_CALL embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);
+extern EMB_PUBLIC double EMB_CALL embVector_getLength(EmbVector vector);
 
-void embVector_normalize(EmbVector vector, EmbVector* result);
-void embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
-void embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);
-double embVector_getLength(EmbVector vector);
-
-EmbVectorList* embVectorList_create(EmbVector data);
-EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data);
-int embVectorList_count(EmbVectorList* pointer);
-int embVectorList_empty(EmbVectorList* pointer);
-void embVectorList_free(EmbVectorList* pointer);
+extern EMB_PUBLIC EmbVectorList* EMB_CALL embVectorList_create(EmbVector data);
+extern EMB_PUBLIC EmbVectorList* EMB_CALL embVectorList_add(EmbVectorList* pointer, EmbVector data);
+extern EMB_PUBLIC int EMB_CALL embVectorList_count(EmbVectorList* pointer);
+extern EMB_PUBLIC int EMB_CALL embVectorList_empty(EmbVectorList* pointer);
+extern EMB_PUBLIC void EMB_CALL embVectorList_free(EmbVectorList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_VECTOR_H */
 

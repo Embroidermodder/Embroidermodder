@@ -2,18 +2,20 @@
 #ifndef FORMAT_OFM_H
 #define FORMAT_OFM_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readOfm(EmbPattern* pattern, const char* fileName);
-int writeOfm(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readOfm(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeOfm(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_OFM_H */
 

@@ -2,14 +2,15 @@
 #ifndef FORMAT_VIP_H
 #define FORMAT_VIP_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readVip(EmbPattern* pattern, const char* fileName);
-int writeVip(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readVip(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeVip(EmbPattern* pattern, const char* fileName);
 
 static const unsigned char vipDecodingTable[] = {
         0x2E, 0x82, 0xE4, 0x6F, 0x38, 0xA9, 0xDC, 0xC6, 0x7B, 0xB6, 0x28, 0xAC, 0xFD, 0xAA, 0x8A, 0x4E,
@@ -42,6 +43,7 @@ static const unsigned char vipDecodingTable[] = {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_VIP_H */
 

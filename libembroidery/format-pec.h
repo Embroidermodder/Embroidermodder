@@ -2,17 +2,18 @@
 #ifndef FORMAT_PEC_H
 #define FORMAT_PEC_H
 
+#include <stdio.h>
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdio.h>
-#include "emb-pattern.h"
-
-int readPec(EmbPattern* pattern, const char* fileName);
-int writePec(EmbPattern* pattern, const char* fileName);
-void readPecStitches(EmbPattern* pattern, FILE* file);
-void writePecStitches(EmbPattern* pattern, FILE* file, const char* filename);
+extern EMB_PRIVATE int EMB_CALL readPec(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writePec(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE void EMB_CALL readPecStitches(EmbPattern* pattern, FILE* file);
+extern EMB_PRIVATE void EMB_CALL writePecStitches(EmbPattern* pattern, FILE* file, const char* filename);
 
 static const int pecThreadCount = 65;
 static const EmbThread pecThreads[] = {{{0, 0, 0}, "Unknown", ""},
@@ -125,6 +126,7 @@ static const char imageWithFrame[38][48] = {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_PEC_H */
 

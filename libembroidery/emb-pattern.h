@@ -2,15 +2,6 @@
 #ifndef EMB_PATTERN_H
 #define EMB_PATTERN_H
 
-/* Disable warnings about unsafe use of fopen, fseek etc */
-#ifndef __GNUC__
-#pragma warning(disable: 4996)
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "emb-arc.h"
 #include "emb-circle.h"
 #include "emb-ellipse.h"
@@ -25,6 +16,11 @@ extern "C" {
 #include "emb-spline.h"
 #include "emb-stitch.h"
 #include "emb-thread.h"
+
+#include "api-start.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct EmbPattern_
 {
@@ -63,43 +59,44 @@ typedef struct EmbPattern_
     double lastY;
 } EmbPattern;
 
-EmbPattern* embPattern_create(void);
-void embPattern_hideStitchesOverLength(EmbPattern* p, int length);
-void embPattern_fixColorCount(EmbPattern* p);
-int embPattern_addThread(EmbPattern* p, EmbThread thread);
-void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex);
-void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
-void embPattern_changeColor(EmbPattern* p, int index);
-void embPattern_free(EmbPattern* p);
-void embPattern_scale(EmbPattern* p, double scale);
-EmbRect embPattern_calcBoundingBox(EmbPattern* p);
-void embPattern_flipHorizontal(EmbPattern* p);
-void embPattern_flipVertical(EmbPattern* p);
-void embPattern_flip(EmbPattern* p, int horz, int vert);
-void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
-void embPattern_center(EmbPattern* p);
-void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
+extern EMB_PUBLIC EmbPattern* EMB_CALL embPattern_create(void);
+extern EMB_PUBLIC void EMB_CALL embPattern_hideStitchesOverLength(EmbPattern* p, int length);
+extern EMB_PUBLIC void EMB_CALL embPattern_fixColorCount(EmbPattern* p);
+extern EMB_PUBLIC int EMB_CALL embPattern_addThread(EmbPattern* p, EmbThread thread);
+extern EMB_PUBLIC void EMB_CALL embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex);
+extern EMB_PUBLIC void EMB_CALL embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
+extern EMB_PUBLIC void EMB_CALL embPattern_changeColor(EmbPattern* p, int index);
+extern EMB_PUBLIC void EMB_CALL embPattern_free(EmbPattern* p);
+extern EMB_PUBLIC void EMB_CALL embPattern_scale(EmbPattern* p, double scale);
+extern EMB_PUBLIC EmbRect EMB_CALL embPattern_calcBoundingBox(EmbPattern* p);
+extern EMB_PUBLIC void EMB_CALL embPattern_flipHorizontal(EmbPattern* p);
+extern EMB_PUBLIC void EMB_CALL embPattern_flipVertical(EmbPattern* p);
+extern EMB_PUBLIC void EMB_CALL embPattern_flip(EmbPattern* p, int horz, int vert);
+extern EMB_PUBLIC void EMB_CALL embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
+extern EMB_PUBLIC void EMB_CALL embPattern_center(EmbPattern* p);
+extern EMB_PUBLIC void EMB_CALL embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
 
-void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r);
-void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry); /* TODO: ellipse rotation */
-void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
-void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj);
-void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
-void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
-void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
-void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
+extern EMB_PUBLIC void EMB_CALL embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r);
+extern EMB_PUBLIC void EMB_CALL embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry); /* TODO: ellipse rotation */
+extern EMB_PUBLIC void EMB_CALL embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
+extern EMB_PUBLIC void EMB_CALL embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj);
+extern EMB_PUBLIC void EMB_CALL embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
+extern EMB_PUBLIC void EMB_CALL embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
+extern EMB_PUBLIC void EMB_CALL embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
+extern EMB_PUBLIC void EMB_CALL embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
 
-void embPattern_copyStitchListToPolylines(EmbPattern* pattern);
-void embPattern_copyPolylinesToStitchList(EmbPattern* pattern);
-void embPattern_moveStitchListToPolylines(EmbPattern* pattern);
-void embPattern_movePolylinesToStitchList(EmbPattern* pattern);
+extern EMB_PUBLIC void EMB_CALL embPattern_copyStitchListToPolylines(EmbPattern* pattern);
+extern EMB_PUBLIC void EMB_CALL embPattern_copyPolylinesToStitchList(EmbPattern* pattern);
+extern EMB_PUBLIC void EMB_CALL embPattern_moveStitchListToPolylines(EmbPattern* pattern);
+extern EMB_PUBLIC void EMB_CALL embPattern_movePolylinesToStitchList(EmbPattern* pattern);
 
-int embPattern_read(EmbPattern* pattern, const char* fileName);
-int embPattern_write(EmbPattern* pattern, const char* fileName);
+extern EMB_PUBLIC int EMB_CALL embPattern_read(EmbPattern* pattern, const char* fileName);
+extern EMB_PUBLIC int EMB_CALL embPattern_write(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_PATTERN_H */
 

@@ -2,14 +2,15 @@
 #ifndef FORMAT_JEF_H
 #define FORMAT_JEF_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readJef(EmbPattern* pattern, const char* fileName);
-int writeJef(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readJef(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeJef(EmbPattern* pattern, const char* fileName);
 
 static const EmbThread jefThreads[] = {
     {{0, 0 ,0}, "Black", ""},
@@ -95,6 +96,7 @@ static const EmbThread jefThreads[] = {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_JEF_H */
 

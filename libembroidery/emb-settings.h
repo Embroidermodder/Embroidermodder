@@ -2,11 +2,12 @@
 #ifndef EMB_SETTINGS_H
 #define EMB_SETTINGS_H
 
+#include "emb-point.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-point.h"
 
 typedef struct EmbSettings_
 {
@@ -14,14 +15,15 @@ typedef struct EmbSettings_
     EmbPoint home;
 } EmbSettings;
 
-EmbSettings embSettings_init(void);
+extern EMB_PUBLIC EmbSettings EMB_CALL embSettings_init(void);
 
-EmbPoint embSettings_home(EmbSettings settings);
-void embSettings_setHome(EmbSettings settings, EmbPoint point);
+extern EMB_PUBLIC EmbPoint EMB_CALL embSettings_home(EmbSettings settings);
+extern EMB_PUBLIC void EMB_CALL embSettings_setHome(EmbSettings settings, EmbPoint point);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_SETTINGS_H */
 

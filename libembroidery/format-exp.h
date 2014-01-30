@@ -2,18 +2,20 @@
 #ifndef FORMAT_EXP_H
 #define FORMAT_EXP_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readExp(EmbPattern* pattern, const char* fileName);
-int writeExp(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readExp(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeExp(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_EXP_H */
 

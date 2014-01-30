@@ -2,11 +2,7 @@
 #ifndef EMB_TIME_H
 #define EMB_TIME_H
 
-/* Disable warnings about unsafe use of fopen, fseek etc */
-#ifndef __GNUC__
-#pragma warning(disable: 4996)
-#endif
-
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,12 +17,13 @@ typedef struct EmbTime_
     unsigned int second;
 } EmbTime;
 
-void embTime_initNow(EmbTime* t);
-EmbTime embTime_time(EmbTime* t);
+extern EMB_PUBLIC void EMB_CALL embTime_initNow(EmbTime* t);
+extern EMB_PUBLIC EmbTime EMB_CALL embTime_time(EmbTime* t);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_TIME_H */
 

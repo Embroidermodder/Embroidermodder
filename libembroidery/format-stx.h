@@ -2,18 +2,20 @@
 #ifndef FORMAT_STX_H
 #define FORMAT_STX_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readStx(EmbPattern* pattern, const char* fileName);
-int writeStx(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readStx(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeStx(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_STX_H */
 

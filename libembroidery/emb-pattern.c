@@ -50,6 +50,8 @@ EmbPattern* embPattern_create(void)
 
     p->lastX = 0.0;
     p->lastY = 0.0;
+
+    printf("__GNUC__:%d\n", __GNUC__);
     return p;
 }
 

@@ -2,18 +2,20 @@
 #ifndef FORMAT_GNC_H
 #define FORMAT_GNC_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readGnc(EmbPattern* pattern, const char* fileName);
-int writeGnc(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readGnc(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeGnc(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_GNC_H */
 

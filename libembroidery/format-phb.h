@@ -2,18 +2,20 @@
 #ifndef FORMAT_PHB_H
 #define FORMAT_PHB_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readPhb(EmbPattern* pattern, const char* fileName);
-int writePhb(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readPhb(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writePhb(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_PHB_H */
 

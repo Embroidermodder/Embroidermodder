@@ -2,11 +2,12 @@
 #ifndef EMB_RECT_H
 #define EMB_RECT_H
 
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
 
 typedef struct EmbRect_
 {
@@ -16,18 +17,18 @@ typedef struct EmbRect_
     double right;
 } EmbRect;
 
-double embRect_x(EmbRect rect);
-double embRect_y(EmbRect rect);
-double embRect_width(EmbRect rect);
-double embRect_height(EmbRect rect);
+extern EMB_PUBLIC double EMB_CALL embRect_x(EmbRect rect);
+extern EMB_PUBLIC double EMB_CALL embRect_y(EmbRect rect);
+extern EMB_PUBLIC double EMB_CALL embRect_width(EmbRect rect);
+extern EMB_PUBLIC double EMB_CALL embRect_height(EmbRect rect);
 
-void embRect_setX(EmbRect* rect, double x);
-void embRect_setY(EmbRect* rect, double y);
-void embRect_setWidth(EmbRect* rect, double w);
-void embRect_setHeight(EmbRect* rect, double h);
+extern EMB_PUBLIC void EMB_CALL embRect_setX(EmbRect* rect, double x);
+extern EMB_PUBLIC void EMB_CALL embRect_setY(EmbRect* rect, double y);
+extern EMB_PUBLIC void EMB_CALL embRect_setWidth(EmbRect* rect, double w);
+extern EMB_PUBLIC void EMB_CALL embRect_setHeight(EmbRect* rect, double h);
 
-void embRect_setCoords(EmbRect* rect, double x1, double y1, double x2, double y2);
-void embRect_setRect(EmbRect* rect, double x, double y, double w, double h);
+extern EMB_PUBLIC void EMB_CALL embRect_setCoords(EmbRect* rect, double x1, double y1, double x2, double y2);
+extern EMB_PUBLIC void EMB_CALL embRect_setRect(EmbRect* rect, double x, double y, double w, double h);
 
 typedef struct EmbRectObject_
 {
@@ -40,8 +41,8 @@ typedef struct EmbRectObject_
     EmbColor color;
 } EmbRectObject;
 
-EmbRectObject embRectObject_make(double x, double y, double w, double h);
-EmbRectObject* embRectObject_create(double x, double y, double w, double h);
+extern EMB_PUBLIC EmbRectObject EMB_CALL embRectObject_make(double x, double y, double w, double h);
+extern EMB_PUBLIC EmbRectObject* EMB_CALL embRectObject_create(double x, double y, double w, double h);
 
 typedef struct EmbRectObjectList_
 {
@@ -49,15 +50,16 @@ typedef struct EmbRectObjectList_
     struct EmbRectObjectList_* next;
 } EmbRectObjectList;
 
-EmbRectObjectList* embRectObjectList_create(EmbRectObject data);
-EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
-int embRectObjectList_count(EmbRectObjectList* pointer);
-int embRectObjectList_empty(EmbRectObjectList* pointer);
-void embRectObjectList_free(EmbRectObjectList* pointer);
+extern EMB_PUBLIC EmbRectObjectList* EMB_CALL embRectObjectList_create(EmbRectObject data);
+extern EMB_PUBLIC EmbRectObjectList* EMB_CALL embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
+extern EMB_PUBLIC int EMB_CALL embRectObjectList_count(EmbRectObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embRectObjectList_empty(EmbRectObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embRectObjectList_free(EmbRectObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_RECT_H */
 

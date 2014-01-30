@@ -2,18 +2,20 @@
 #ifndef FORMAT_INB_H
 #define FORMAT_INB_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readInb(EmbPattern* pattern, const char* fileName);
-int writeInb(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readInb(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeInb(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_INB_H */
 

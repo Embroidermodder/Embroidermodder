@@ -2,17 +2,18 @@
 #ifndef FORMAT_HUS_H
 #define FORMAT_HUS_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
 /*****************************************
  * EmbReaderWriter Functions
  ****************************************/
-int readHus(EmbPattern* pattern, const char* fileName);
-int writeHus(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readHus(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeHus(EmbPattern* pattern, const char* fileName);
 
 /*****************************************
  * HUS Colors
@@ -53,6 +54,7 @@ static const EmbThread husThreads[] = {
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_HUS_H */
 

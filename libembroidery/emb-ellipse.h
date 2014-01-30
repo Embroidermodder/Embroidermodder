@@ -2,11 +2,12 @@
 #ifndef EMB_ELLIPSE_H
 #define EMB_ELLIPSE_H
 
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
 
 typedef struct EmbEllipse_
 {
@@ -16,14 +17,14 @@ typedef struct EmbEllipse_
     double radiusY;
 } EmbEllipse;
 
-double embEllipse_centerX(EmbEllipse ellipse);
-double embEllipse_centerY(EmbEllipse ellipse);
-double embEllipse_radiusX(EmbEllipse ellipse);
-double embEllipse_radiusY(EmbEllipse ellipse);
-double embEllipse_diameterX(EmbEllipse ellipse);
-double embEllipse_diameterY(EmbEllipse ellipse);
-double embEllipse_width(EmbEllipse ellipse);
-double embEllipse_height(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_centerX(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_centerY(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_radiusX(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_radiusY(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_diameterX(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_diameterY(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_width(EmbEllipse ellipse);
+extern EMB_PUBLIC double EMB_CALL embEllipse_height(EmbEllipse ellipse);
 
 typedef struct EmbEllipseObject_
 {
@@ -35,8 +36,8 @@ typedef struct EmbEllipseObject_
     EmbColor color;
 } EmbEllipseObject;
 
-EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double ry);
-EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry);
+extern EMB_PUBLIC EmbEllipseObject EMB_CALL embEllipseObject_make(double cx, double cy, double rx, double ry);
+extern EMB_PUBLIC EmbEllipseObject* EMB_CALL embEllipseObject_create(double cx, double cy, double rx, double ry);
 
 typedef struct EmbEllipseObjectList_
 {
@@ -44,15 +45,16 @@ typedef struct EmbEllipseObjectList_
     struct EmbEllipseObjectList_* next;
 } EmbEllipseObjectList;
 
-EmbEllipseObjectList* embEllipseObjectList_create(EmbEllipseObject data);
-EmbEllipseObjectList* embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
-int embEllipseObjectList_count(EmbEllipseObjectList* pointer);
-int embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
-void embEllipseObjectList_free(EmbEllipseObjectList* pointer);
+extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL embEllipseObjectList_create(EmbEllipseObject data);
+extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
+extern EMB_PUBLIC int EMB_CALL embEllipseObjectList_count(EmbEllipseObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embEllipseObjectList_free(EmbEllipseObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_ELLIPSE_H */
 

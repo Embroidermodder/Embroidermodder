@@ -2,11 +2,12 @@
 #ifndef EMB_ARC_H
 #define EMB_ARC_H
 
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
 
 typedef struct EmbArc_
 {
@@ -29,8 +30,8 @@ typedef struct EmbArcObject_
     EmbColor color;
 } EmbArcObject;
 
-EmbArcObject embArcObject_make(double sx, double sy, double mx, double my, double ex, double ey);
-EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey);
+extern EMB_PUBLIC EmbArcObject EMB_CALL embArcObject_make(double sx, double sy, double mx, double my, double ex, double ey);
+extern EMB_PUBLIC EmbArcObject* EMB_CALL embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey);
 
 typedef struct EmbArcObjectList_
 {
@@ -38,14 +39,15 @@ typedef struct EmbArcObjectList_
     struct EmbArcObjectList_* next;
 } EmbArcObjectList;
 
-EmbArcObjectList* embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
-int embArcObjectList_count(EmbArcObjectList* pointer);
-int embArcObjectList_empty(EmbArcObjectList* pointer);
-void embArcObjectList_free(EmbArcObjectList* pointer);
+extern EMB_PUBLIC EmbArcObjectList* EMB_CALL embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
+extern EMB_PUBLIC int EMB_CALL embArcObjectList_count(EmbArcObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embArcObjectList_empty(EmbArcObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embArcObjectList_free(EmbArcObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_ARC_H */
 

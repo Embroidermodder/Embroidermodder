@@ -2,48 +2,50 @@
 #ifndef COMPOUND_FILE_DIRECTORY_H
 #define COMPOUND_FILE_DIRECTORY_H
 
+#include "emb-time.h"
+#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-time.h"
-#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
-
 typedef struct _bcf_directory_entry
 {
-    char                          directoryEntryName[32];
-    unsigned short                directoryEntryNameLength;
-    unsigned char                 objectType;
-    unsigned char                 colorFlag;
-    unsigned int                  leftSiblingId;
-    unsigned int                  rightSiblingId;
-    unsigned int                  childId;
-    unsigned char                 CLSID[16];
-    unsigned int                  stateBits;
-    EmbTime                       creationTime;
-    EmbTime                       modifiedTime;
-    unsigned int                  startingSectorLocation;
-    unsigned long                 streamSize; /* should be long long but in our case we shouldn't need it, and hard to support on c89 cross platform */
-    unsigned int                  streamSizeHigh; /* store the high int of streamsize */
-    struct _bcf_directory_entry * next;
+    char                         directoryEntryName[32];
+    unsigned short               directoryEntryNameLength;
+    unsigned char                objectType;
+    unsigned char                colorFlag;
+    unsigned int                 leftSiblingId;
+    unsigned int                 rightSiblingId;
+    unsigned int                 childId;
+    unsigned char                CLSID[16];
+    unsigned int                 stateBits;
+    EmbTime                      creationTime;
+    EmbTime                      modifiedTime;
+    unsigned int                 startingSectorLocation;
+    unsigned long                streamSize; /* should be long long but in our case we shouldn't need it, and hard to support on c89 cross platform */
+    unsigned int                 streamSizeHigh; /* store the high int of streamsize */
+    struct _bcf_directory_entry* next;
 } bcf_directory_entry;
 
 typedef struct _bcf_directory
 {
-    bcf_directory_entry *   dirEntries;
-    unsigned int            maxNumberOfDirectoryEntries;
-    /* possibly add a directory tree in the future */
+    bcf_directory_entry* dirEntries;
+    unsigned int         maxNumberOfDirectoryEntries;
+    /* TODO: possibly add a directory tree in the future */
 
 } bcf_directory;
 
-bcf_directory_entry* CompoundFileDirectoryEntry(FILE* file);
-bcf_directory* CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries);
-void readNextSector(FILE* file, bcf_directory* dir);
-void bcf_directory_free(bcf_directory* dir);
+extern EMB_PRIVATE bcf_directory_entry* EMB_CALL CompoundFileDirectoryEntry(FILE* file);
+extern EMB_PRIVATE bcf_directory* EMB_CALL CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries);
+extern EMB_PRIVATE void EMB_CALL readNextSector(FILE* file, bcf_directory* dir);
+extern EMB_PRIVATE void EMB_CALL bcf_directory_free(bcf_directory* dir);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* COMPOUND_FILE_DIRECTORY_H */
 

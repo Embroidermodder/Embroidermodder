@@ -2,18 +2,20 @@
 #ifndef FORMAT_SHV_H
 #define FORMAT_SHV_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readShv(EmbPattern* pattern, const char* fileName);
-int writeShv(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readShv(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeShv(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_SHV_H */
 

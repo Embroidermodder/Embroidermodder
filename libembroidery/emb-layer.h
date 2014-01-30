@@ -2,11 +2,12 @@
 #ifndef EMB_LAYER_H
 #define EMB_LAYER_H
 
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
 
 typedef struct EmbLayer_
 {
@@ -17,6 +18,7 @@ typedef struct EmbLayer_
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_LAYER_H */
 

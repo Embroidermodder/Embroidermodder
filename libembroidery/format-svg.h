@@ -2,11 +2,12 @@
 #ifndef FORMAT_SVG_H
 #define FORMAT_SVG_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-pattern.h"
 
 typedef struct SvgAttribute_     SvgAttribute;
 typedef struct SvgAttributeList_ SvgAttributeList;
@@ -57,8 +58,8 @@ typedef enum
     SVG_CATCH_ALL
 } SVG_TYPES;
 
-int readSvg(EmbPattern* pattern, const char* fileName);
-int writeSvg(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readSvg(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeSvg(EmbPattern* pattern, const char* fileName);
 
 int svgCreator;
 
@@ -72,6 +73,7 @@ char* currentValue;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_SVG_H */
 

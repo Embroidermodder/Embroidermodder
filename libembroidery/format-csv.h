@@ -2,11 +2,12 @@
 #ifndef FORMAT_CSV_H
 #define FORMAT_CSV_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-pattern.h"
 
 typedef enum
 {
@@ -25,12 +26,13 @@ typedef enum
     CSV_MODE_STITCH
 } CSV_MODE;
 
-int readCsv(EmbPattern* pattern, const char* fileName);
-int writeCsv(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readCsv(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeCsv(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_CSV_H */
 

@@ -2,6 +2,7 @@
 #ifndef EMB_STITCH_H
 #define EMB_STITCH_H
 
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -28,16 +29,17 @@ typedef struct EmbStitchList_
     struct EmbStitchList_* next;
 } EmbStitchList;
 
-EmbStitchList* embStitchList_create(EmbStitch data);
-EmbStitchList* embStitchList_add(EmbStitchList* pointer, EmbStitch data);
-int embStitchList_count(EmbStitchList* pointer);
-int embStitchList_empty(EmbStitchList* pointer);
-void embStitchList_free(EmbStitchList* pointer);
-EmbStitch embStitchList_getAt(EmbStitchList* pointer, int num);
+extern EMB_PUBLIC EmbStitchList* EMB_CALL embStitchList_create(EmbStitch data);
+extern EMB_PUBLIC EmbStitchList* EMB_CALL embStitchList_add(EmbStitchList* pointer, EmbStitch data);
+extern EMB_PUBLIC int EMB_CALL embStitchList_count(EmbStitchList* pointer);
+extern EMB_PUBLIC int EMB_CALL embStitchList_empty(EmbStitchList* pointer);
+extern EMB_PUBLIC void EMB_CALL embStitchList_free(EmbStitchList* pointer);
+extern EMB_PUBLIC EmbStitch EMB_CALL embStitchList_getAt(EmbStitchList* pointer, int num);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_STITCH_H */
 

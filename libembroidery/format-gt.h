@@ -2,18 +2,20 @@
 #ifndef FORMAT_GT_H
 #define FORMAT_GT_H
 
+#include "emb-pattern.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "emb-pattern.h"
-
-int readGt(EmbPattern* pattern, const char* fileName);
-int writeGt(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL readGt(EmbPattern* pattern, const char* fileName);
+extern EMB_PRIVATE int EMB_CALL writeGt(EmbPattern* pattern, const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* FORMAT_GT_H */
 

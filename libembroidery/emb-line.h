@@ -2,12 +2,13 @@
 #ifndef EMB_LINE_H
 #define EMB_LINE_H
 
+#include "emb-color.h"
+#include "emb-vector.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
-#include "emb-vector.h"
 
 typedef struct EmbLine_
 {
@@ -17,10 +18,10 @@ typedef struct EmbLine_
     double y2;
 } EmbLine;
 
-double embLine_x1(EmbLine line);
-double embLine_y1(EmbLine line);
-double embLine_x2(EmbLine line);
-double embLine_y2(EmbLine line);
+extern EMB_PUBLIC double EMB_CALL embLine_x1(EmbLine line);
+extern EMB_PUBLIC double EMB_CALL embLine_y1(EmbLine line);
+extern EMB_PUBLIC double EMB_CALL embLine_x2(EmbLine line);
+extern EMB_PUBLIC double EMB_CALL embLine_y2(EmbLine line);
 
 typedef struct EmbLineObject_
 {
@@ -31,8 +32,8 @@ typedef struct EmbLineObject_
     EmbColor color;
 } EmbLineObject;
 
-EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2);
-EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2);
+extern EMB_PUBLIC EmbLineObject EMB_CALL embLineObject_make(double x1, double y1, double x2, double y2);
+extern EMB_PUBLIC EmbLineObject* EMB_CALL embLineObject_create(double x1, double y1, double x2, double y2);
 
 typedef struct EmbLineObjectList_
 {
@@ -40,18 +41,19 @@ typedef struct EmbLineObjectList_
     struct EmbLineObjectList_* next;
 } EmbLineObjectList;
 
-EmbLineObjectList* embLineObjectList_create(EmbLineObject data);
-EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
-int embLineObjectList_count(EmbLineObjectList* pointer);
-int embLineObjectList_empty(EmbLineObjectList* pointer);
-void embLineObjectList_free(EmbLineObjectList* pointer);
+extern EMB_PUBLIC EmbLineObjectList* EMB_CALL embLineObjectList_create(EmbLineObject data);
+extern EMB_PUBLIC EmbLineObjectList* EMB_CALL embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
+extern EMB_PUBLIC int EMB_CALL embLineObjectList_count(EmbLineObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embLineObjectList_empty(EmbLineObjectList* pointer);
+extern EMB_PUBLIC void EMB_CALL embLineObjectList_free(EmbLineObjectList* pointer);
 
-void embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise);
-void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
+extern EMB_PUBLIC void EMB_CALL embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise);
+extern EMB_PUBLIC void EMB_CALL embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_LINE_H */
 

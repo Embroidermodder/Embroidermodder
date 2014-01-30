@@ -2,12 +2,14 @@
 #ifndef EMB_THREAD_H
 #define EMB_THREAD_H
 
+/* TODO: what the heck is math.h doing here? This needs moved to the source file instead of being here. */
+#include <math.h>
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <math.h>
-#include "emb-color.h"
 
 typedef struct EmbThread_
 {
@@ -22,19 +24,20 @@ typedef struct EmbThreadList_
     struct EmbThreadList_* next;
 } EmbThreadList;
 
-int embThread_findNearestColor(EmbColor color, EmbThreadList* colors);
-int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
-EmbThread embThread_getRandom(void);
+extern EMB_PUBLIC int EMB_CALL embThread_findNearestColor(EmbColor color, EmbThreadList* colors);
+extern EMB_PUBLIC int EMB_CALL embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
+extern EMB_PUBLIC EmbThread EMB_CALL embThread_getRandom(void);
 
-void embThreadList_add(EmbThreadList* pointer, EmbThread data);
-int embThreadList_count(EmbThreadList* pointer);
-int embThreadList_empty(EmbThreadList* pointer);
-void embThreadList_free(EmbThreadList* pointer);
-EmbThread embThreadList_getAt(EmbThreadList* pointer, int num);
+extern EMB_PUBLIC void EMB_CALL embThreadList_add(EmbThreadList* pointer, EmbThread data);
+extern EMB_PUBLIC int EMB_CALL embThreadList_count(EmbThreadList* pointer);
+extern EMB_PUBLIC int EMB_CALL embThreadList_empty(EmbThreadList* pointer);
+extern EMB_PUBLIC void EMB_CALL embThreadList_free(EmbThreadList* pointer);
+extern EMB_PUBLIC EmbThread EMB_CALL embThreadList_getAt(EmbThreadList* pointer, int num);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_THREAD_H */
 

@@ -2,11 +2,12 @@
 #ifndef EMB_SPLINE_H
 #define EMB_SPLINE_H
 
+#include "emb-color.h"
+
+#include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "emb-color.h"
 
 typedef struct EmbBezier_
 {
@@ -37,12 +38,13 @@ typedef struct EmbSplineObjectList_
     struct EmbSplineObjectList_* next;
 } EmbSplineObjectList; /* TODO: This struct/file needs reworked to work internally similar to polylines */
 
-int embSplineObjectList_count(EmbSplineObjectList* pointer);
-int embSplineObjectList_empty(EmbSplineObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embSplineObjectList_count(EmbSplineObjectList* pointer);
+extern EMB_PUBLIC int EMB_CALL embSplineObjectList_empty(EmbSplineObjectList* pointer);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#include "api-stop.h"
 
 #endif /* EMB_SPLINE_H */
 
