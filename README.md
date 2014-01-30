@@ -50,10 +50,12 @@ qmake && make -j2
 qmake && make -j4
 ```
 
-For building on Windows:
+When building for Windows:
 If you are using Qt/Mingw, substitute mingw32-make for make.
 If you are using Qt/MSVC, substitute nmake for make.
 You may need to add the directory where those executables are located to your system path.
+It is recommended that when targeting Windows, that you should omit the -j switch completely,
+otherwise build errors may occur unless you are building an individual pro file.
 
 Help Files
 ------------
