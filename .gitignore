@@ -11,6 +11,7 @@ embroidermodder2/prompt.log
 embroidermodder2/embroidermodder2
 embroidermodder2/embroidermodder2.exe
 embroidermodder2/embroidermodder2.app
+embroidermodder2/object_script.*
 embroidermodder2/doxygen
 
 #########################
@@ -35,6 +36,7 @@ libembroidery-convert/Makefile
 libembroidery-convert/_memleak*
 libembroidery-convert/libembroidery-convert
 libembroidery-convert/libembroidery-convert.exe
+libembroidery-convert/object_script.*
 
 #########################
 # libembroidery-test    #
@@ -46,6 +48,7 @@ libembroidery-test/Makefile
 libembroidery-test/_memleak*
 libembroidery-test/libembroidery-test
 libembroidery-test/libembroidery-test.exe
+libembroidery-test/object_script.*
 
 #########################
 # KDE4 Thumbnailer      #
@@ -54,6 +57,7 @@ thumbnailer-kde4/.moc
 thumbnailer-kde4/.obj
 thumbnailer-kde4/Makefile
 thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
+thumbnailer-kde4/object_script.*
 
 #########################
 # Project Files         #
