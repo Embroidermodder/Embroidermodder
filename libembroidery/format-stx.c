@@ -24,7 +24,7 @@ typedef struct StxThread_
     EmbColor StxColor;
 } StxThread;
 
-static int ReadStxThread(StxThread* thread, FILE* file)
+static int stxReadThread(StxThread* thread, FILE* file)
 {
     /* TODO: pointer safety */
     int j, colorNameLength, sectionNameLength;
@@ -36,12 +36,12 @@ static int ReadStxThread(StxThread* thread, FILE* file)
 
     int codeLength = binaryReadUInt8(file);
     char* codeBuff = (char*)malloc(codeLength);
-    /* TODO: malloc fail error */
+    if(!codeBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for codeBuff\n"); return 0; }
     binaryReadBytes(file, (unsigned char*)codeBuff, codeLength);
     thread->ColorCode = codeBuff;
     colorNameLength = binaryReadUInt8(file);
     codeNameBuff = (char*)malloc(colorNameLength);
-    /* TODO: malloc fail error */
+    if(!codeNameBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for codeNameBuff\n"); return 0; }
     binaryReadBytes(file, (unsigned char*)codeNameBuff, colorNameLength);
     thread->ColorName = codeNameBuff;
 
@@ -53,7 +53,7 @@ static int ReadStxThread(StxThread* thread, FILE* file)
 
     sectionNameLength = binaryReadUInt8(file);
     sectionNameBuff = (char*)malloc(sectionNameLength);
-    /* TODO: malloc fail error */
+    if(!sectionNameBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for sectionNameBuff\n"); return 0; }
     binaryReadBytes(file, (unsigned char*)sectionNameBuff, sectionNameLength);
     thread->SectionName = sectionNameBuff;
 
@@ -75,12 +75,12 @@ static int ReadStxThread(StxThread* thread, FILE* file)
         sd.SomeInt = binaryReadInt32(file);
         subcodeLength = binaryReadUInt8(file);
         subCodeBuff = (char*)malloc(subcodeLength);
-        /* TODO: malloc fail error */
+        if(!subCodeBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for subCodeBuff\n"); return 0; }
         binaryReadBytes(file, (unsigned char*)subCodeBuff, subcodeLength);
         sd.ColorCode = subCodeBuff;
         subcolorNameLength = binaryReadUInt8(file);
         subColorNameBuff = (char*)malloc(subcolorNameLength);
-        /* TODO: malloc fail error */
+        if(!subColorNameBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for subColorNameBuff\n"); return 0; }
         binaryReadBytes(file, (unsigned char*)subColorNameBuff, subcolorNameLength);
         sd.ColorName = subColorNameBuff;
         sd.SomeOtherInt = binaryReadInt32(file);
@@ -96,7 +96,7 @@ int readStx(EmbPattern* pattern, const char* fileName)
     int i, threadCount;
     unsigned char* gif = 0;
     /* public Bitmap Image; */
-    StxThread* StxThreads = 0;
+    StxThread* stxThreads = 0;
     unsigned char headerBytes[7];
     char* header = 0;
     char filetype[4], version[5];
@@ -139,19 +139,19 @@ int readStx(EmbPattern* pattern, const char* fileName)
     top = binaryReadInt16(file);
 
     gif = (unsigned char*)malloc(imageLength);
-    /* TODO: malloc fail error */
+    if(!gif) { embLog_error("format-stx.c readStx(), unable to allocate memory for gif\n"); return 0; }
     binaryReadBytes(file, gif, imageLength);
     /*Stream s2 = new MemoryStream(gif); */
     /*Image = new Bitmap(s2); */
 
     threadCount = binaryReadInt16(file);
-    StxThreads = (StxThread*)malloc(sizeof(StxThread) * threadCount);
-    /* TODO: malloc fail error */
+    stxThreads = (StxThread*)malloc(sizeof(StxThread) * threadCount);
+    if(!stxThreads) { embLog_error("format-stx.c readStx(), unable to allocate memory for stxThreads\n"); return 0; }
     for(i = 0; i < threadCount; i++)
     {
         EmbThread t;
         StxThread st;
-        ReadStxThread(&st, file);
+        stxReadThread(&st, file);
 
         t.color.r = st.StxColor.r;
         t.color.g = st.StxColor.g;
@@ -159,7 +159,7 @@ int readStx(EmbPattern* pattern, const char* fileName)
         t.description = st.ColorName;
         t.catalogNumber = st.ColorCode;
         embPattern_addThread(pattern, t);
-        StxThreads[i] = st;
+        stxThreads[i] = st;
     }
 
     binaryReadInt32(file);
