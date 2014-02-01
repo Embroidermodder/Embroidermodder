@@ -96,8 +96,10 @@ int readVip(EmbPattern* pattern, const char* fileName)
     header.xOffset = binaryReadInt32(file);
     header.yOffset = binaryReadInt32(file);
 
-    /*stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8); TODO: review this line and uncomment or remove */
-    /* TODO: malloc fail error */
+    /*stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8); TODO: review this and uncomment or remove
+        if(!stringVal) { embLog_error("format-vip.c readVip(), cannot allocate memory for stringVal\n"); return 0; }
+     */
+
     binaryReadBytes(file, header.stringVal, 8);
 
     header.unknown = binaryReadInt16(file);
