@@ -15,7 +15,7 @@ static char* ofmReadLibrary(FILE* file)
     binaryReadBytes(file, leadin, 3);
     stringLength = binaryReadByte(file);
     libraryName = (char*)malloc(sizeof(char) * stringLength * 2);
-    /* TODO: malloc fail error */
+    if(!libraryName) { embLog_error("format-ofm.c ofmReadLibrary(), unable to allocate memory for libraryName\n"); return 0; }
     binaryReadBytes(file, (unsigned char*)libraryName, stringLength * 2);
     return libraryName;
 }
@@ -28,7 +28,7 @@ static int ofmReadClass(FILE* file)
     len = binaryReadInt16(file);
 
     s = (char*)malloc(sizeof(char) * len + 1);
-    /* TODO: malloc fail error */
+    if(!s) { embLog_error("format-ofm.c ofmReadClass(), unable to allocate memory for s\n"); return 0; }
     binaryReadBytes(file, (unsigned char*)s, len);
     s[len] = '\0';
     if(strcmp(s, "CExpStitch") == 0)
@@ -52,7 +52,7 @@ static void ofmReadBlockHeader(FILE* file)
     binaryReadByte(file);
     len = binaryReadByte(file);
     s = (char*)malloc(2 * len);
-    /* TODO: malloc fail error */
+    if(!s) { embLog_error("format-ofm.c ofmReadBlockHeader(), unable to allocate memory for s\n"); return; }
     binaryReadBytes(file, (unsigned char *)s, 2 * len);
     val1 = binaryReadInt32(file);   /*  0 */
     val2 = binaryReadInt32(file);   /*  0 */
@@ -87,7 +87,7 @@ static void ofmReadThreads(FILE* file, EmbPattern* p)
     binaryReadInt16(file);
     stringLen = binaryReadInt16(file);
     expandedString = (char*)malloc(stringLen);
-    /* TODO: malloc fail error */
+    if(!expandedString) { embLog_error("format-ofm.c ofmReadThreads(), unable to allocate memory for expandedString\n"); return; }
     binaryReadBytes(file, (unsigned char*)expandedString, stringLen);
     for(i = 0; i < numberOfColors; i++)
     {
@@ -106,7 +106,7 @@ static void ofmReadThreads(FILE* file, EmbPattern* p)
         binaryReadInt16(file);
         colorNameLength = binaryReadByte(file);
         colorName = (char*)malloc(colorNameLength * 2);
-        /* TODO: malloc fail error */
+        if(!colorName) { embLog_error("format-ofm.c ofmReadThreads(), unable to allocate memory for colorName\n"); return; }
         binaryReadBytes(file, (unsigned char *)colorName, colorNameLength*2);
         binaryReadInt16(file);
      /* itoa(colorNumber, colorNumberText, 10); TODO: never use itoa, it's non-standard, use sprintf: http://stackoverflow.com/questions/5242524/converting-int-to-string-in-c */
@@ -175,7 +175,7 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     }
 
     bcfFile = (bcf_file*)malloc(sizeof(bcf_file));
-    /* TODO: malloc fail error */
+    if(!bcfFile) { embLog_error("format-ofm.c readOfm(), unable to allocate memory for bcfFile\n"); return 0; }
     bcfFile_read(fileCompound, bcfFile);
     file = GetFile(bcfFile, fileCompound, "EdsIV Object");
     bcf_file_free(bcfFile);
@@ -186,7 +186,7 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     binaryReadInt32(file);
     classNameLength = binaryReadInt16(file);
     s = (char*)malloc(sizeof(char) * classNameLength);
-    /* TODO: malloc fail error */
+    if(!s) { embLog_error("format-ofm.c readOfm(), unable to allocate memory for s\n"); return 0; }
     binaryReadBytes(file, (unsigned char*)s, classNameLength);
     unknownCount = binaryReadInt16(file); /* unknown count */
 
