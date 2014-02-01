@@ -43,7 +43,7 @@ EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
 {
     if(!pointer) { embLog_error("emb-point.c embPointList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbPointList*)malloc(sizeof(EmbPointList));
-    /* TODO: malloc fail error */
+    if(!pointer->next) { embLog_error("emb-point.c embPointList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->point = data;
     pointer->next = 0;
