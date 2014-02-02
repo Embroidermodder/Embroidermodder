@@ -382,10 +382,6 @@ var
   DLLLoaded: Boolean { is DLL (dynamically) loaded already? }
     {$IFDEF WIN32} = False {$ENDIF};
 
-implementation
-
-uses
-  SysUtils;
 const
 {$IFDEF win32}
   emblib = 'libembroidery.dll';
@@ -397,7 +393,11 @@ const
     emblib = 'libembroidery.so';
   {$ENDIF}
 {$ENDIF}
+    
+implementation
 
+uses
+  SysUtils;
 var
   SaveExit: pointer;
   DLLHandle: THandle;
