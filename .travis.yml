@@ -36,22 +36,22 @@ after_success:
     - git remote rm origin
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - git fetch origin
-    - git checkout -b $PLATFORM origin/$PLATFORM
+    - git checkout -b ${PLATFORM} origin/${PLATFORM}
     - README_FILE=README.md
-    - rm -f $README_FILE
-    - echo "Nightly Build" >> $README_FILE
-    - echo "------------------------------" >> $README_FILE
-    - echo "" >> $README_FILE
-    - echo "Commit Date: $NIGHTLY_DATE" >> $README_FILE
-    - echo "Commit Build Number: $NIGHTLY_BUILDNUM" >> $README_FILE
-    - echo "Commit Hash: $NIGHTLY_HASH" >> $README_FILE
-    - echo "" >> $README_FILE
-    - echo "This is a development build for $PLATFORM and may be unstable or even unusable." >> $README_FILE
-    - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> $README_FILE
-    - echo "" >> README.md
+    - rm -f ${README_FILE}
+    - echo "Nightly Build" >> ${README_FILE}
+    - echo "------------------------------" >> ${README_FILE}
+    - echo "" >> ${README_FILE}
+    - echo "Commit Date: ${NIGHTLY_DATE}" >> ${README_FILE}
+    - echo "Commit Build Number: ${NIGHTLY_BUILDNUM}" >> ${README_FILE}
+    - echo "Commit Hash: ${NIGHTLY_HASH}" >> ${README_FILE}
+    - echo "" >> ${README_FILE}
+    - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
+    - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
+    - echo "" >> ${README_FILE}
     - ls
-    - git commit -am "Success $NIGHTLY_BUILDNUM $NIGHTLY_HASH"
-    - git push origin $PLATFORM
+    - git commit -am "Success ${NIGHTLY_BUILDNUM} ${NIGHTLY_HASH}"
+    - git push origin ${PLATFORM}
 
 env:
   global:
