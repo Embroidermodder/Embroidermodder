@@ -1,0 +1,42 @@
+language:
+    - c
+    - cpp
+
+compiler:
+    - gcc
+
+before_install:
+    - sudo apt-get update -qq
+
+install:
+    - sudo apt-get install git qt4-qmake libqt4-opengl-dev kdelibs5-dev valgrind
+
+before_script:
+    - cat /etc/lsb-release
+    - uname -a
+
+script:
+    - cd project-files/qmake
+    - qmake
+    - make
+    - ./libembroidery-convert
+    - which ../../embroidermodder2/embroidermodder2
+
+after_success:
+    - git config --global user.email \<\>
+    - git config --global user.name "Embroidermodder-Travis"  
+    - cd ~
+    - git clone https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
+    - git remote rm origin
+    - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
+    - cd nightly-ci
+    - export BUILD_DATETIME=`date +%Y%m%d%H%M%S`
+    - echo $BUILD_DATETIME > $BUILD_DATETIME.txt
+    - ls
+    - git add $BUILD_DATETIME.txt
+    - git commit -m "test build $BUILD_DATETIME"
+    - git push origin linux64
+
+env:
+  global:
+    secure: JLGoPvDtTC/yLEIErTo2XJSnqwflVU+aVYkoIgHCQIqyt06a5MK3s7rpaTprjk+TWSLhrH5P2enUYjBRL2ivsG9Z2khH5zKg9m6RZu13I1PNBVmMRMcHLoaj+JjGYIeS7GvlkcWQYwS+o2j73/4wbdNNqDR6QDHVDEbDzD6vl/k=
