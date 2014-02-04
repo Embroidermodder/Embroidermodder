@@ -6,7 +6,10 @@ compiler:
     - gcc
 
 before_install:
-    - export BUILD_DATETIME=`date +%Y%m%d%H%M%S`
+    - PLATFORM=linux64
+    - README=README.md
+    - export NIGHTLY_BUILDNUM=`date +%Y%m%d%H%M%S`
+    - export NIGHTLY_HASH=`git ls-remote git://github.com/Embroidermodder/Embroidermodder.git | grep refs/heads/master | cut -f 1`
     - sudo apt-get update -qq
 
 install:
@@ -26,20 +29,40 @@ script:
 
 after_success:
     - git config --global user.email \<\>
-    - git config --global user.name "Embroidermodder-Travis"  
+    - git config --global user.name "Embroidermodder-Travis"
     - cd ~
     - git clone https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - cd nightly-ci
     - git remote rm origin
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - git fetch origin
-    - git checkout -b linux64 origin/linux64
-    - echo $BUILD_DATETIME > $BUILD_DATETIME.txt
+    - git checkout -b $PLATFORM origin/$PLATFORM
+
+    - rm -f $README_FILE
+    - echo "Nightly Build" >> $README_FILE
+    - echo "------------------------------" >> $README_FILE
+    - echo "" >> $README_FILE
+    - echo "Commit Date: $NIGHTLY_DATE" >> $README_FILE
+    - echo "Commit Build Number: $NIGHTLY_BUILDNUM" >> $README_FILE
+    - echo "Commit Hash: $NIGHTLY_HASH" >> $README_FILE
+    - echo "" >> $README_FILE
+    - echo "This is a development build for $PLATFORM and may be unstable or even unusable." >> $README_FILE
+    - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> $README_FILE
+    - echo "" >> README.md
+
     - ls
-    - git add $BUILD_DATETIME.txt
-    - git commit -m "test build successful $BUILD_DATETIME"
-    - git push origin linux64
+
+    - git commit -am "test build successful. BuildNumber: $NIGHTLY_BUILDNUM: $NIGHTLY_HASH"
+    - git push origin $PLATFORM
 
 env:
   global:
     secure: JLGoPvDtTC/yLEIErTo2XJSnqwflVU+aVYkoIgHCQIqyt06a5MK3s7rpaTprjk+TWSLhrH5P2enUYjBRL2ivsG9Z2khH5zKg9m6RZu13I1PNBVmMRMcHLoaj+JjGYIeS7GvlkcWQYwS+o2j73/4wbdNNqDR6QDHVDEbDzD6vl/k=
+
+notifications:
+  recipients:
+    - embroidermodder@gmail.com
+  email:
+    on_success: always # TODO: modify 'always' to 'change'
+    on_failure: always
+
