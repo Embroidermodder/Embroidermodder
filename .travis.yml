@@ -35,7 +35,7 @@ after_success:
     - ls
     - git add $BUILD_DATETIME.txt
     - git commit -m "test build $BUILD_DATETIME"
-    - git push origin linux64
+    - git push origin master
 
 env:
   global:
