@@ -49,7 +49,7 @@ after_success:
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> $README_FILE
     - echo "" >> README.md
     - ls
-    - git commit -am "test build successful. BuildNumber: $NIGHTLY_BUILDNUM: $NIGHTLY_HASH"
+    - git commit -am "test build successful. BuildNumber - $NIGHTLY_BUILDNUM - $NIGHTLY_HASH"
     - git push origin $PLATFORM
 
 env:
