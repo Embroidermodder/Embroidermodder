@@ -1,68 +1,55 @@
 #########################
 # Embroidermodder 2     #
 #########################
-embroidermodder2/.moc
-embroidermodder2/.obj
 embroidermodder2/TODO
-embroidermodder2/Makefile
-embroidermodder2/_memleak*
 embroidermodder2/settings.ini
 embroidermodder2/prompt.log
 embroidermodder2/embroidermodder2
 embroidermodder2/embroidermodder2.exe
 embroidermodder2/embroidermodder2.app
-embroidermodder2/object_script.*
 embroidermodder2/doxygen
 
 #########################
 # libembroidery         #
 #########################
-libembroidery/.moc
-libembroidery/.obj
 libembroidery/TODO
-libembroidery/Makefile
-libembroidery/_memleak*
 libembroidery/doxygen
 libembroidery/lib
-libembroidery/object_script.*
 
 #########################
 # libembroidery-convert #
 #########################
-libembroidery-convert/.moc
-libembroidery-convert/.obj
 libembroidery-convert/TODO
-libembroidery-convert/Makefile
-libembroidery-convert/_memleak*
 libembroidery-convert/libembroidery-convert
 libembroidery-convert/libembroidery-convert.exe
-libembroidery-convert/object_script.*
 
 #########################
 # libembroidery-test    #
 #########################
-libembroidery-test/.moc
-libembroidery-test/.obj
 libembroidery-test/TODO
-libembroidery-test/Makefile
-libembroidery-test/_memleak*
 libembroidery-test/libembroidery-test
 libembroidery-test/libembroidery-test.exe
-libembroidery-test/object_script.*
+
 
 #########################
 # KDE4 Thumbnailer      #
 #########################
-thumbnailer-kde4/.moc
-thumbnailer-kde4/.obj
-thumbnailer-kde4/Makefile
 thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
-thumbnailer-kde4/object_script.*
 
 #########################
 # Project Files         #
 #########################
 project-files/qmake/Makefile
+
+#########################
+# Misc Dev Files        #
+#########################
+*/.moc
+*/.obj
+*/Makefile
+*/_memleak*
+*/callgrind.*
+*/object_script.*
 
 #########################
 # OS generated files    #
