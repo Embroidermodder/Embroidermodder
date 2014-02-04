@@ -8,6 +8,7 @@ compiler:
 before_install:
     - PLATFORM=linux64
     - README=README.md
+    - export NIGHTLY_DATE=`date`
     - export NIGHTLY_BUILDNUM=`date +%Y%m%d%H%M%S`
     - export NIGHTLY_HASH=`git ls-remote git://github.com/Embroidermodder/Embroidermodder.git | grep refs/heads/master | cut -f 1`
     - sudo apt-get update -qq
@@ -49,7 +50,7 @@ after_success:
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> $README_FILE
     - echo "" >> README.md
     - ls
-    - git commit -am "test build successful. BuildNumber - $NIGHTLY_BUILDNUM - $NIGHTLY_HASH"
+    - git commit -am "test build successful.\nBuildNumber $NIGHTLY_BUILDNUM\n Build Hash $NIGHTLY_HASH"
     - git push origin $PLATFORM
 
 env:
