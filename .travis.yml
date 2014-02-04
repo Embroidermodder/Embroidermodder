@@ -38,7 +38,7 @@ after_success:
     - git fetch origin
     - git checkout -b ${PLATFORM} origin/${PLATFORM}
     - README_FILE=README.md
-    - rm -f ${README_FILE}
+    - echo "" > ${README_FILE}
     - echo "Nightly Build" >> ${README_FILE}
     - echo "------------------------------" >> ${README_FILE}
     - echo "" >> ${README_FILE}
