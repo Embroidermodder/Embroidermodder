@@ -7,7 +7,6 @@ compiler:
 
 before_install:
     - PLATFORM=linux64
-    - README=README.md
     - export NIGHTLY_DATE=`date`
     - export NIGHTLY_BUILDNUM=`date +%Y%m%d%H%M%S`
     - export NIGHTLY_HASH=`git ls-remote git://github.com/Embroidermodder/Embroidermodder.git | grep refs/heads/master | cut -f 1`
@@ -38,6 +37,7 @@ after_success:
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - git fetch origin
     - git checkout -b $PLATFORM origin/$PLATFORM
+    - README_FILE=README.md
     - rm -f $README_FILE
     - echo "Nightly Build" >> $README_FILE
     - echo "------------------------------" >> $README_FILE
