@@ -37,7 +37,6 @@ after_success:
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - git fetch origin
     - git checkout -b $PLATFORM origin/$PLATFORM
-
     - rm -f $README_FILE
     - echo "Nightly Build" >> $README_FILE
     - echo "------------------------------" >> $README_FILE
@@ -49,9 +48,7 @@ after_success:
     - echo "This is a development build for $PLATFORM and may be unstable or even unusable." >> $README_FILE
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> $README_FILE
     - echo "" >> README.md
-
     - ls
-
     - git commit -am "test build successful. BuildNumber: $NIGHTLY_BUILDNUM: $NIGHTLY_HASH"
     - git push origin $PLATFORM
 
