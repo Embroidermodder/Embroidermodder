@@ -42,20 +42,21 @@ after_success:
     - echo "Nightly Build" >> ${README_FILE}
     - echo "------------------------------" >> ${README_FILE}
     - echo "" >> ${README_FILE}
-    - echo "Commit Date: ${NIGHTLY_DATE}" >> ${README_FILE}
-    - echo "Commit Build Number: ${NIGHTLY_BUILDNUM}" >> ${README_FILE}
-    - echo "Commit Hash: ${NIGHTLY_HASH}" >> ${README_FILE}
+    - echo "* Commit Date = ${NIGHTLY_DATE}" >> ${README_FILE}
+    - echo "* Commit Build Number = ${NIGHTLY_BUILDNUM}" >> ${README_FILE}
+    - echo "* Commit Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     - ls
-    - git commit -am "Success ${NIGHTLY_BUILDNUM} ${NIGHTLY_HASH}"
-    - git push origin ${PLATFORM}
+    - git commit -am "Success ${NIGHTLY_BUILDNUM}"
+    # TODO: windows will need to be: git push origin ${PLATFORM} > nul 2>&1
+    - git push origin ${PLATFORM} &>/dev/null
 
 env:
   global:
-    secure: JLGoPvDtTC/yLEIErTo2XJSnqwflVU+aVYkoIgHCQIqyt06a5MK3s7rpaTprjk+TWSLhrH5P2enUYjBRL2ivsG9Z2khH5zKg9m6RZu13I1PNBVmMRMcHLoaj+JjGYIeS7GvlkcWQYwS+o2j73/4wbdNNqDR6QDHVDEbDzD6vl/k=
+    - secure: KeXCxuhU7FHzw1xSoZ37C37QEIhk9H1AW1M9VRzIPkoY0QWIcRBarg7yXtaGdhY2PLXy2rTX/o8IEzGERoEP544D4E1+sk9Mv3Zfx4JxLQs0gMN8OAHxS8RAd9RzBPqP3seLTf+K0v7ZfWSIZY80Ma+hsAu4grXrSzvnwPszS2M=
 
 notifications:
   recipients:
