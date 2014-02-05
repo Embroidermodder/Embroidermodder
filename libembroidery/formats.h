@@ -74,8 +74,8 @@
 extern "C" {
 #endif
 
-#define EMBFORMAT_STITCHONLY 0
-#define EMBFORMAT_STCHANDOBJ 1
+#define EMBFORMAT_STITCHONLY 1
+#define EMBFORMAT_STCHANDOBJ 3 /* binary operation: 1+2=3 */
 #define EMBFORMAT_OBJECTONLY 2
 
 extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
