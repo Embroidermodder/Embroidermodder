@@ -176,12 +176,12 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         fs.Seek(0x08, SeekOrigin.Current);
         */
         tableSize = binaryReadByte(file);
-
-        t.color.b = binaryReadByte(file);
+        binaryReadByte(file);
         t.color.r = binaryReadByte(file);
         t.color.g = binaryReadByte(file);
+        t.color.b = binaryReadByte(file);
         embPattern_addThread(pattern, t);
-        fseek(file, 6*tableSize, SEEK_CUR);
+        fseek(file, 6*tableSize - 1, SEEK_CUR);
 
         str1 = vp3ReadString(file);
         str2 = vp3ReadString(file);
