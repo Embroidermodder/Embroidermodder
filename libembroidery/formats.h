@@ -74,10 +74,24 @@
 extern "C" {
 #endif
 
+#define EMBFORMAT_UNSUPPORTED 0
 #define EMBFORMAT_STITCHONLY 1
 #define EMBFORMAT_STCHANDOBJ 3 /* binary operation: 1+2=3 */
 #define EMBFORMAT_OBJECTONLY 2
+#define EMBFORMAT_HASREADER 1024
+#define EMBFORMAT_HASWRITER 2048
+#define EMBFORMAT_HASSUBWRITER 4096
 
+typedef struct EmbFormat_
+{
+    char* ext;
+    long features;      /* combinations of EMBFORMAT_XXXX above. */
+    char* smallInfo;    /* default decription such "Machine X Embroidery". */
+    char* nextExt;      /* next format's key */
+    struct EmbFormat_* next;
+} EmbFormat;
+
+extern EMB_PUBLIC int EMB_CALL embFormat_count(int stableOnly);
 extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
 
 #ifdef __cplusplus

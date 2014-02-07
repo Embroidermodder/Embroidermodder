@@ -1,8 +1,124 @@
 #include "formats.h"
+#include "emb-hash.h"
 #include "emb-logging.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+
+EmbFormat* embFormat_create(char* key, char* smallInfo, long features){
+    EmbFormat* heapEmbFormat = (EmbFormat*)malloc(sizeof(EmbFormat));
+    if(!heapEmbFormat) {
+        embLog_error("formats.c embFormat_create(), unable to allocate memory for heapEmbFormat\n");
+        return 0;
+    }
+    heapEmbFormat->ext = key;
+    heapEmbFormat->features = features;
+    heapEmbFormat->smallInfo = smallInfo;
+    heapEmbFormat->next = NULL;
+}
+
+/*  Returns 0 if successful, -1 if an error was encountered  */
+int embFormatList_insert(EmbHash* hash, char* key, char* smallInfo, long features){
+    EmbFormat* heapEmbFormat = embFormat_create(key, smallInfo, features);
+    if(!heapEmbFormat) {
+        return -1;
+    }
+    return embHash_insert(hash, key, heapEmbFormat);
+}
+
+/* TEMPORARY MACROS SORTCUT OF SUPPORTED FEATURES */
+#define StitchFea EMBFORMAT_STITCHONLY
+#define ObjectFea EMBFORMAT_OBJECTONLY
+#define ReaderFea EMBFORMAT_HASREADER
+#define WriterFea EMBFORMAT_HASWRITER
+#define SubFormatFea EMBFORMAT_HASSUBWRITER
+#define noFea EMBFORMAT_UNSUPPORTED
+
+int str_cmp(const void *key1, const void *key2) {
+    return strcmp(key1, key2);
+}
+
+EmbHash* embFormatList_create() {
+    EmbHash* formatsHash = 0; /* hash <layerName, EmbColor> */
+    EmbFormat* prior;
+    EmbFormat* latest;
+    int fail = 0;
+    formatsHash = embHash_create();
+    if(!formatsHash) {
+        embLog_error("formats.c embFormatList_create(), unable to allocate memory for formatsHash\n");
+        return 0;
+    }
+    formatsHash->keycmp = str_cmp;
+
+
+    fail = embFormatList_insert(formatsHash, ".10o", "Toyota Embroidery", StitchFea + ReaderFea);
+    if(!fail)
+    {
+        fail = embFormatList_insert(formatsHash, ".100", "Toyota Embroidery", StitchFea + ReaderFea);
+    }
+    if(!fail)
+    {
+        fail = embFormatList_insert(formatsHash, ".art", "Bernina Embroidery", noFea);
+    }
+    if(!fail)
+    {
+        fail = embFormatList_insert(formatsHash, ".pes", "Brother Embroidery", StitchFea + ReaderFea +WriterFea);
+    }
+
+    return formatsHash;
+}
+
+
+
+
+
+void embFormatList_free(EmbHash* hash){
+    embHash_free(hash);
+}
+
+EmbFormat* embFormatList_first(EmbHash* hash){
+    return embHash_value(hash, ".10o");
+}
+EmbFormat* embFormatList_next(EmbHash* hash, const char* key){
+    return embHash_value(hash, key);
+}
+
+/*void embFormat_get(int index, EmbFormat* format){
+
+    format->writeInfo = NULL;
+    format->setting   = 0;
+    switch(index)
+    {
+    case 0:
+        format->ext = ".10o";
+        format->display = "Toyota Embroidery";
+        break;
+    case 1:
+        format->ext = ".pes";
+        format->display  = "Brother Embroidery";
+        format->versions = "001,006";
+        format->features = EMBFORMAT_STITCHONLY ;
+        break;
+    case 2:
+        format->ext = ".pes";
+        format->readInfo  = "Brother Embroidery Format";
+        format->writeInfo = "Brother Embroidery ver 6 Format";
+        format->setting   = 6;
+        format->formatType = EMBFORMAT_STITCHONLY;
+        break;
+
+    default:
+
+            break;
+    }
+
+    if (format->writeInfo == NULL) {
+        format->writeInfo = format->readInfo;
+    }
+
+}
+*/
 
 /*! Returns EMBFORMAT_STITCHONLY if the format type only contains stitch data.
  *  Returns EMBFORMAT_OBJECTONLY if the format type only contains object data.
