@@ -6,7 +6,7 @@
 #include <string.h>
 #include <ctype.h>
 
-EmbFormat* embFormat_create(char* key, char* smallInfo, long features){
+EmbFormat* embFormat_create(char* key, char* smallInfo, unsigned long features){
     EmbFormat* heapEmbFormat = (EmbFormat*)malloc(sizeof(EmbFormat));
     if(!heapEmbFormat) {
         embLog_error("formats.c embFormat_create(), unable to allocate memory for heapEmbFormat\n");
@@ -19,7 +19,7 @@ EmbFormat* embFormat_create(char* key, char* smallInfo, long features){
 }
 
 /*  Returns 0 if successful, -1 if an error was encountered  */
-int embFormatList_insert(EmbHash* hash, char* key, char* smallInfo, long features){
+int embFormatList_insert(EmbHash* hash, char* key, char* smallInfo, unsigned long features){
     EmbFormat* heapEmbFormat = embFormat_create(key, smallInfo, features);
     if(!heapEmbFormat) {
         return -1;
@@ -32,6 +32,8 @@ int embFormatList_insert(EmbHash* hash, char* key, char* smallInfo, long feature
 #define ObjectFea EMBFORMAT_OBJECTONLY
 #define ReaderFea EMBFORMAT_HASREADER
 #define WriterFea EMBFORMAT_HASWRITER
+#define ReaderUFea EMBFORMAT_HASREADER + EMBFORMAT_UNSTABLEREADER
+#define WriterUFea EMBFORMAT_HASWRITER + EMBFORMAT_UNSTABLEWRITER
 #define SubFormatFea EMBFORMAT_HASSUBWRITER
 #define noFea EMBFORMAT_UNSUPPORTED
 
@@ -39,10 +41,37 @@ int str_cmp(const void *key1, const void *key2) {
     return strcmp(key1, key2);
 }
 
+void embFormatList_chainUp(EmbHash* hashTable){
+    int i;
+    EmbFormat* prior = 0;
+    EmbFormat* cur = 0;
+    if(!hashTable) {
+        return;
+    }
+
+    for (i=0; i<hashTable->numOfBuckets; i++) {
+        KeyValuePair *pair = hashTable->bucketArray[i];
+        cur = pair->value;
+        if(prior && cur) {prior->next = cur;}
+        prior = cur;
+        while (pair != NULL) {
+            KeyValuePair *nextPair = pair->next;
+            if(nextPair){
+                cur = nextPair->value;
+                if(prior && cur) {
+                    prior->next = cur;
+                    prior = cur;
+                }
+            }
+
+            pair = nextPair;
+        }
+    }
+
+}
+
 EmbHash* embFormatList_create() {
-    EmbHash* formatsHash = 0; /* hash <layerName, EmbColor> */
-    EmbFormat* prior;
-    EmbFormat* latest;
+    EmbHash* formatsHash = 0; /* hash <.fileExtension, EmbFormat> */
     int fail = 0;
     formatsHash = embHash_create();
     if(!formatsHash) {
@@ -52,10 +81,10 @@ EmbHash* embFormatList_create() {
     formatsHash->keycmp = str_cmp;
 
 
-    fail = embFormatList_insert(formatsHash, ".10o", "Toyota Embroidery", StitchFea + ReaderFea);
+    fail = embFormatList_insert(formatsHash, ".10o", "Toyota Embroidery", StitchFea | ReaderUFea);
     if(!fail)
     {
-        fail = embFormatList_insert(formatsHash, ".100", "Toyota Embroidery", StitchFea + ReaderFea);
+        fail = embFormatList_insert(formatsHash, ".100", "Toyota Embroidery", StitchFea | ReaderUFea);
     }
     if(!fail)
     {
@@ -63,9 +92,14 @@ EmbHash* embFormatList_create() {
     }
     if(!fail)
     {
-        fail = embFormatList_insert(formatsHash, ".pes", "Brother Embroidery", StitchFea + ReaderFea +WriterFea);
+        fail = embFormatList_insert(formatsHash, ".pes", "Brother Embroidery", StitchFea | ReaderFea | WriterFea);
+    }
+    if(!fail)
+    {
+        fail = embFormatList_insert(formatsHash, ".svg", "Scalable Vector Graphics", ObjectFea | ReaderUFea | WriterUFea);
     }
 
+    embFormatList_chainUp(formatsHash);
     return formatsHash;
 }
 
@@ -77,8 +111,13 @@ void embFormatList_free(EmbHash* hash){
     embHash_free(hash);
 }
 
-EmbFormat* embFormatList_first(EmbHash* hash){
-    return embHash_value(hash, ".10o");
+EmbFormat* embFormatList_first(EmbHash* hashTable){
+    if (hashTable->numOfBuckets >0)
+    {
+        KeyValuePair *pair = hashTable->bucketArray[0];
+        return pair->value;
+    }
+    return NULL;
 }
 EmbFormat* embFormatList_next(EmbHash* hash, const char* key){
     return embHash_value(hash, key);

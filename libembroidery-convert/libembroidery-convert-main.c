@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static const int formatCount = 59;
+/*static const int formatCount = 59;
 static const char* const formats[] = {
 ".10o", "U", " ", " Toyota Embroidery Format                         ",
 ".100", "U", " ", " Toyota Embroidery Format                         ",
@@ -66,11 +66,15 @@ static const char* const formats[] = {
 ".vp3", "U", " ", " Pfaff Embroidery Format                          ",
 ".xxx", "U", "U", " Singer Embroidery Format                         ",
 ".zsk", "U", " ", " ZSK USA Embroidery Format                        "
-};
+};*/
 
 void usage(void)
 {
     int i = 0;
+    EmbHash* formatsHash;
+    EmbFormat* cur;
+    char* hasReader;
+    char* hasWriter;
 
     printf(" _____________________________________________________________________________ \n");
     printf("|          _   _ ___  ___ _____ ___  ___   __  _ ___  ___ ___   _ _           |\n");
@@ -99,10 +103,27 @@ void usage(void)
     printf("| Format | Read  | Write | Description                                        |\n");
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");
-    for(i = 0; i < formatCount; i++)
+    /*for(i = 0; i < formatCount; i++)
     {
         printf("|  %s  |   %s   |   %s   | %s |\n", formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3]);
+    }*/
+
+
+    formatsHash = embFormatList_create();
+    cur = embFormatList_first(formatsHash);
+    while (cur != NULL) {
+        if((cur->features & EMBFORMAT_HASREADER) != 0) {if((cur->features & EMBFORMAT_UNSTABLEREADER) == 0) hasReader = "S"; else hasReader = "U";}
+        else {hasReader =" ";}
+
+        if((cur->features & EMBFORMAT_HASWRITER) != 0) {if((cur->features & EMBFORMAT_UNSTABLEWRITER) == 0) {hasWriter = "S";} else hasWriter = "U";}
+        else {hasWriter =" ";}
+        printf("|  %s  |   %s   |   %s   |  %-49s |\n", cur->ext, hasReader, hasWriter, cur->smallInfo);
+        /* debug
+        printf("|  %s  |   %s   |   %s   |  %s | %d r=%d\n", cur->ext, hasReader, hasWriter, cur->smallInfo, cur->features, cur->features & EMBFORMAT_UNSTABLEREADER);*/
+        cur = cur->next;
     }
+    embFormatList_free(formatsHash);
+
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|                                                                             |\n");
     printf("|                   http://embroidermodder.sourceforge.net                    |\n");

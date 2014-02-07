@@ -69,7 +69,8 @@
 
 #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 
-#include "api-start.h"
+/*#include "api-start.h"*/
+#include "emb-hash.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -78,20 +79,26 @@ extern "C" {
 #define EMBFORMAT_STITCHONLY 1
 #define EMBFORMAT_STCHANDOBJ 3 /* binary operation: 1+2=3 */
 #define EMBFORMAT_OBJECTONLY 2
+/* unassigned slot feature BIT 4,8,16,32,64,128,256,512  */
 #define EMBFORMAT_HASREADER 1024
 #define EMBFORMAT_HASWRITER 2048
 #define EMBFORMAT_HASSUBWRITER 4096
+/* unassigned slot feature  BIT  8192  */
+#define EMBFORMAT_UNSTABLEREADER 16384
+#define EMBFORMAT_UNSTABLEWRITER 32768
 
 typedef struct EmbFormat_
 {
     char* ext;
-    long features;      /* combinations of EMBFORMAT_XXXX above. */
+    unsigned long features;      /* combinations of EMBFORMAT_XXXX above. */
     char* smallInfo;    /* default decription such "Machine X Embroidery". */
     char* nextExt;      /* next format's key */
     struct EmbFormat_* next;
 } EmbFormat;
 
-extern EMB_PUBLIC int EMB_CALL embFormat_count(int stableOnly);
+extern EMB_PUBLIC EmbHash* EMB_CALL embFormatList_create();
+extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbHash* hash);
+extern EMB_PUBLIC EmbFormat* EMB_CALL embFormatList_first(EmbHash* hash);
 extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
 
 #ifdef __cplusplus

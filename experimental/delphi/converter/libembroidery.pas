@@ -352,6 +352,32 @@ type
   end {EmbPattern_};
   PEmbPattern = ^TEmbPattern;
 
+  PEmbFormat = ^TEmbFormat;
+  TEmbFormat = record
+    ext: PChar;
+    features: Longword ;  // combinations of EMBFORMAT_XXXX above. 
+    smallInfo: PChar;   // default decription such "Machine X Embroidery".
+    nextExt: PChar;     // next format's key
+    next: PEmbFormat;
+  end {EmbFormat_};
+
+  PEMBHASH  = type pointer;
+
+const
+  EMBFORMAT_UNSUPPORTED = 0;
+  EMBFORMAT_STITCHONLY  = 1;
+  EMBFORMAT_STCHANDOBJ  = 3; {/* binary operation: 1+2=3*/}
+  EMBFORMAT_OBJECTONLY  = 2;
+  EMBFORMAT_HASREADER   = 1024;
+  EMBFORMAT_HASWRITER   = 2048;
+  EMBFORMAT_HASSUBWRITER = 4096;
+  EMBFORMAT_UNSTABLEREADER = 16384;
+  EMBFORMAT_UNSTABLEWRITER = 32768;
+var
+  embFormatList_create: function:  PEMBHASH cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormatList_free: procedure(hash: PEMBHASH) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormatList_first: function(hash: PEMBHASH): PEmbFormat cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+
 
 var
   embPattern_create:  function(): PEmbPattern cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
@@ -442,8 +468,11 @@ begin
     @embObjectList_count  := GetProcAddress(DLLHandle,'embObjectList_count');
     @embObjectList_empty  := GetProcAddress(DLLHandle,'embObjectList_empty');
     @embObjectList_free   := GetProcAddress(DLLHandle,'embObjectList_free');
-{$ENDIF}  
+{$ENDIF}
 
+    embFormatList_create  := GetProcAddress(DLLHandle,'embFormatList_create');
+    embFormatList_free    := GetProcAddress(DLLHandle,'embFormatList_free');
+    embFormatList_first   := GetProcAddress(DLLHandle,'embFormatList_first');
 
   end
   else

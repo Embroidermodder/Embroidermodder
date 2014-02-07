@@ -77,9 +77,34 @@ const
 
 
 procedure usage();
+const
+  TextOf : array[boolean,boolean] of string = ((' ',' '),('U','S'));
+  function ReaderSupport(features: integer): String ;
+  var supported,stable : boolean;
+  begin
+    supported := features and EMBFORMAT_HASREADER <> 0;
+    stable := features and EMBFORMAT_UNSTABLEREADER = 0;
+    result := TextOf[supported,stable];
+  end;
+
+  function WriterSupport(features: integer): String ;
+  var supported,stable : boolean;
+  begin
+    supported := features and EMBFORMAT_HASWRITER <> 0;
+    stable := features and EMBFORMAT_UNSTABLEWRITER = 0;
+    result := TextOf[supported,stable];
+  end;
+
 var
   i : integer;
+  hformats : PEMBHASH;
+  first : PEmbFormat;
+
 begin
+  hformats := embFormatList_create();
+  first  := embFormatList_first(hformats);
+
+
     i := 0;
 
     writeln(' _____________________________________________________________________________ ');
@@ -109,15 +134,22 @@ begin
     writeln('| Format | Read  | Write | Description                                        |');
     writeln('|________|_______|_______|____________________________________________________|');
     writeln('|        |       |       |                                                    |');
-    for i := 0 to formatCount-1 do
+    {for i := 0 to formatCount-1 do
     begin
         writeln(format('|  %s  |   %s   |   %s   | %s |', [ formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3] ] ));
+    end;}
+    while first <> nil do
+    begin
+      writeln(format('|  %s  |   %s   |   %s   |  %-49s |', [ first^.ext, ReaderSupport(first^.features), WriterSupport(first^.features), first^.smallInfo]) );
+      first := first^.next;
     end;
+
     writeln('|________|_______|_______|____________________________________________________|');
     writeln('|                                                                             |');
     writeln('|                   http://embroidermodder.sourceforge.net                    |');
     writeln('|_____________________________________________________________________________|');
     writeln('');
+  embFormatList_free(hformats);
 end;
 
 (* TODO: Add capability for converting multiple files of various types to a single format. Currently, we only convert a single file to multiple formats. *)
@@ -135,7 +167,7 @@ end;
 
 var
   P : PEmbPattern;
-  i, successful : Integer;              
+  i, successful : Integer;
 begin
   { TODO -oUser -cConsole Main : Insert code here }
 
