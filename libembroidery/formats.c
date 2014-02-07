@@ -16,6 +16,7 @@ EmbFormat* embFormat_create(char* key, char* smallInfo, unsigned long features){
     heapEmbFormat->features = features;
     heapEmbFormat->smallInfo = smallInfo;
     heapEmbFormat->next = NULL;
+    return heapEmbFormat;
 }
 
 /*  Returns 0 if successful, -1 if an error was encountered  */
@@ -28,14 +29,14 @@ int embFormatList_insert(EmbHash* hash, char* key, char* smallInfo, unsigned lon
 }
 
 /* TEMPORARY MACROS SORTCUT OF SUPPORTED FEATURES */
-#define StitchFea EMBFORMAT_STITCHONLY
-#define ObjectFea EMBFORMAT_OBJECTONLY
-#define ReaderFea EMBFORMAT_HASREADER
-#define WriterFea EMBFORMAT_HASWRITER
-#define ReaderUFea EMBFORMAT_HASREADER + EMBFORMAT_UNSTABLEREADER
-#define WriterUFea EMBFORMAT_HASWRITER + EMBFORMAT_UNSTABLEWRITER
-#define SubFormatFea EMBFORMAT_HASSUBWRITER
-#define noFea EMBFORMAT_UNSUPPORTED
+#define Stitch_Fea  EMBFORMAT_STITCHONLY
+#define Object_Fea  EMBFORMAT_OBJECTONLY
+#define Read_Fea    EMBFORMAT_HASREADER
+#define Write_Fea   EMBFORMAT_HASWRITER
+#define ReadU_Fea   EMBFORMAT_HASREADER + EMBFORMAT_UNSTABLEREADER
+#define WriteU_Fea  EMBFORMAT_HASWRITER + EMBFORMAT_UNSTABLEWRITER
+#define SubFormat_Fea EMBFORMAT_HASSUBWRITER
+#define noFea       EMBFORMAT_UNSUPPORTED
 
 int str_cmp(const void *key1, const void *key2) {
     return strcmp(key1, key2);
@@ -81,23 +82,73 @@ EmbHash* embFormatList_create() {
     formatsHash->keycmp = str_cmp;
 
 
-    fail = embFormatList_insert(formatsHash, ".10o", "Toyota Embroidery", StitchFea | ReaderUFea);
-    if(!fail)
-    {
-        fail = embFormatList_insert(formatsHash, ".100", "Toyota Embroidery", StitchFea | ReaderUFea);
-    }
-    if(!fail)
-    {
-        fail = embFormatList_insert(formatsHash, ".art", "Bernina Embroidery", noFea);
-    }
-    if(!fail)
-    {
-        fail = embFormatList_insert(formatsHash, ".pes", "Brother Embroidery", StitchFea | ReaderFea | WriterFea);
-    }
-    if(!fail)
-    {
-        fail = embFormatList_insert(formatsHash, ".svg", "Scalable Vector Graphics", ObjectFea | ReaderUFea | WriterUFea);
-    }
+    fail = embFormatList_insert(formatsHash, ".10o", "Toyota Embroidery", Stitch_Fea + ReadU_Fea);
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".100", "Toyota Embroidery",        Stitch_Fea + ReadU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".art", "Bernina Embroidery",       noFea);}
+
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".100", "Toyota Embroidery",        Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".art", "Bernina Embroidery",       noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".bmc", "Bitmap Cache Embroidery",  noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".bro", "Bits & Volts Embroidery",  Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".cdr", "Corel Draw!",              noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".cnd", "Melco Embroidery",         noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".col", "Embroidery Thread Color",  Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".csd", "Singer Embroidery",        Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".csv", "Comma Separated Values ",  Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".dat", "Barudan Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".dem", "Melco Embroidery",         noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".dsb", "Barudan Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".dst", "Tajima Embroidery",        Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".dsz", "ZSK USA Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".dxf", "Drawing Exchange",         Object_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".edr", "Embird Embroidery",        Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".emd", "Elna Embroidery",          Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".exp", "Melco Embroidery",         Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".exy", "Eltac Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".eys", "Sierra Expanded Embroidery", noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".fxy", "Fortron Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".gnc", "Great Notions Embroidery", noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".gt" , "Gold Thread Embroidery",   Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".hus", "Husqvarna Viking Embroidery", Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".inb", "Inbro Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".inf", "Embroidery Color",         Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".jef", "Janome Embroidery",        Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".ksm", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".max", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".mit", "Mitsubishi Embroidery",    Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".new", "Ameco Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".ofm", "Melco Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".odg", "OpenOffice Drawing",       noFea);}
+
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pcd", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pcm", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pcq", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pcs", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pec", "Brother Embroidery",       Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pel", "Brother Embroidery",       noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pem", "Brother Embroidery",       noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".pes", "Brother Embroidery",       Stitch_Fea + Read_Fea + Write_Fea + SubFormat_Fea);}
+
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".phb", "Brother Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".phc", "Brother Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".plt", "AutoCAD plot drawing",     Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".rgb", "RGB Embroidery",           Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".sew", "Janome Embroidery",        Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".shv", "Husqvarna Viking Embroidery", Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".sst", "Sunstar Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".stx", "Data Stitch Embroidery",   Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".svg", "Scalable Vector Graphics", Object_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".t09", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".tap", "Happy Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".thr", "ThredWorks Embroidery",    Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".txt", "Text File ",               Stitch_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".u00", "Barudan Embroidery",       Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".u01", "Barudan Embroidery",       noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".vip", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".vp3", "Pfaff Embroidery",         Stitch_Fea + ReadU_Fea );}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".wmf", "Windows Meta File Clipart",        noFea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".xxx", "Singer Embroidery",        Stitch_Fea + ReadU_Fea + WriteU_Fea);}
+    if(!fail) {fail = embFormatList_insert(formatsHash, ".zsk", "ZSK USA Embroidery",       Stitch_Fea + ReadU_Fea );}
 
     embFormatList_chainUp(formatsHash);
     return formatsHash;
