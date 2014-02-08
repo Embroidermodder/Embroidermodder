@@ -96,9 +96,16 @@ typedef struct EmbFormat_
     struct EmbFormat_* next;
 } EmbFormat;
 
-extern EMB_PUBLIC EmbHash* EMB_CALL embFormatList_create();
-extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbHash* hash);
-extern EMB_PUBLIC EmbFormat* EMB_CALL embFormatList_first(EmbHash* hash);
+typedef struct EmbFormatList_
+{
+    EmbFormat* firstFormat;
+    EmbFormat* lastFormat;
+    int formatCount;
+} EmbFormatList;
+
+extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
+extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* hash);
+/*extern EMB_PUBLIC EmbFormat* EMB_CALL embFormatList_first(EmbHash* hash);*/
 extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
 
 #ifdef __cplusplus
