@@ -22,7 +22,7 @@ before_script:
 script:
     - ROOT_BUILD_DIR=`pwd`
     - cd project-files/qmake
-    - qmake
+    - qmake CONFIG+=deploy
     - make
     - ./libembroidery-convert
     - which ../../embroidermodder2/embroidermodder2
@@ -37,6 +37,10 @@ after_success:
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - git fetch origin
     - git checkout -b ${PLATFORM} origin/${PLATFORM}
+    # Remove previous build
+    - rm -rf embroidermodder2
+    - rm -rf libembroidery-convert
+    # Generate a new README file
     - README_FILE=README.md
     - echo "" > ${README_FILE}
     - echo "Nightly Build" >> ${README_FILE}
@@ -49,8 +53,18 @@ after_success:
     - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
     - echo "" >> ${README_FILE}
+    # Embroidermodder 2
+    - cp -f  ${ROOT_BUILD_DIR}/embroidermodder2/embroidermodder2 ./embroidermodder2/embroidermodder2
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/commands         ./embroidermodder2/commands
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/help             ./embroidermodder2/help
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/icons            ./embroidermodder2/icons
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/images           ./embroidermodder2/images
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/samples          ./embroidermodder2/samples
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/translations     ./embroidermodder2/translations
+    # libembroidery-convert
+    - cp -f  ${ROOT_BUILD_DIR}/libembroidery-convert/libembroidery-convert ./libembroidery-convert/libembroidery-convert
     - ls
-    - git commit -am "Success ${NIGHTLY_BUILDNUM}"
+    - git add -A && git commit -m "Successful Build #${TRAVIS_BUILD_NUMBER} - ${NIGHTLY_BUILDNUM}"
     # TODO: windows will need to be: git push origin ${PLATFORM} > nul 2>&1
     - git push origin ${PLATFORM} &>/dev/null
 
