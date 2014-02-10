@@ -90,10 +90,11 @@ extern "C" {
 typedef struct EmbFormat_
 {
     char* ext;
-    unsigned long features;      /* combinations of EMBFORMAT_XXXX above. */
-    char* smallInfo;    /* default decription such "Machine X Embroidery". */
-    char* nextExt;      /* next format's key */
-    struct EmbFormat_* next;
+    unsigned long features;     /* combinations of EMBFORMAT_XXXX above. */
+    char* smallInfo;            /* default decription such "Machine X Embroidery". */
+    char* version;              /* for distinct between version, optional. */
+    struct EmbFormat_* same;    /* similar extension */
+    struct EmbFormat_* next;    /* another extension */
 } EmbFormat;
 
 typedef struct EmbFormatList_
