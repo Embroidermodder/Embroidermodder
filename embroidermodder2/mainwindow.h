@@ -71,6 +71,7 @@ public:
     QRgb    getSettingsGeneralMdiBGColor()            { return settings_general_mdi_bg_color;           }
     bool    getSettingsGeneralTipOfTheDay()           { return settings_general_tip_of_the_day;         }
     int     getSettingsGeneralCurrentTip()            { return settings_general_current_tip;            }
+    bool    getSettingsGeneralSystemHelpBrowser()     { return settings_general_system_help_browser;    }
     bool    getSettingsGeneralCheckForUpdates()       { return settings_general_check_for_updates;      }
     bool    getSettingsDisplayUseOpenGL()             { return settings_display_use_opengl;             }
     bool    getSettingsDisplayRenderHintAA()          { return settings_display_renderhint_aa;          }
@@ -176,6 +177,7 @@ public:
     void setSettingsGeneralMdiBGColor(QRgb newValue)                   { settings_general_mdi_bg_color           = newValue; }
     void setSettingsGeneralTipOfTheDay(bool newValue)                  { settings_general_tip_of_the_day         = newValue; }
     void setSettingsGeneralCurrentTip(int newValue)                    { settings_general_current_tip            = newValue; }
+    void setSettingsGeneralSystemHelpBrowser(bool newValue)            { settings_general_system_help_browser    = newValue; }
     void setSettingsGeneralCheckForUpdates(bool newValue)              { settings_general_check_for_updates      = newValue; }
     void setSettingsDisplayUseOpenGL(bool newValue)                    { settings_display_use_opengl             = newValue; }
     void setSettingsDisplayRenderHintAA(bool newValue)                 { settings_display_renderhint_aa          = newValue; }
@@ -332,6 +334,7 @@ private:
     QRgb                            settings_general_mdi_bg_color;
     bool                            settings_general_tip_of_the_day;
     quint16                         settings_general_current_tip;
+    bool                            settings_general_system_help_browser;
     bool                            settings_general_check_for_updates;
     bool                            settings_display_use_opengl;
     bool                            settings_display_renderhint_aa;

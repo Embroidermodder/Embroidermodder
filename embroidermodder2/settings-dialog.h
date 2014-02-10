@@ -100,6 +100,7 @@ private:
     QString dialog_general_mdi_bg_texture;
     QRgb    dialog_general_mdi_bg_color;
     bool    dialog_general_tip_of_the_day;
+    bool    dialog_general_system_help_browser;
     bool    dialog_display_use_opengl;
     bool    dialog_display_renderhint_aa;
     bool    dialog_display_renderhint_text_aa;
