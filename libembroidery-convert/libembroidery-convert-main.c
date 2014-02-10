@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+/* va_list, va_start, va_copy, va_arg, va_end */
 
 /*static const int formatCount = 59;
 static const char* const formats[] = {
@@ -68,15 +69,20 @@ static const char* const formats[] = {
 ".zsk", "U", " ", " ZSK USA Embroidery Format                        "
 };*/
 
+
+
+/*#define STABLE_ONLY*/
+
 void usage(void)
 {
-    EmbHash* formatsHash;
+    EmbFormatList* formatList;
     EmbFormat* cur;
     char* hasReader;
     char* hasWriter;
     int readers = 0;
     int writers = 0;
-
+    /*create(40000,3000,200,10,0);
+    /*PrintChars( "OKE","yes", "NOT","the end."); return; */
     printf(" _____________________________________________________________________________ \n");
     printf("|          _   _ ___  ___ _____ ___  ___   __  _ ___  ___ ___   _ _           |\n");
     printf("|         | | | | _ \\| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ | | |          |\n");
@@ -109,21 +115,24 @@ void usage(void)
         printf("|  %s  |   %s   |   %s   | %s |\n", formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3]);
     }*/
 
-
-    formatsHash = embFormatList_create();
-    cur = embFormatList_first(formatsHash);
+#ifdef STABLE_ONLY
+    formatList = embFormatList_create(EMBFORMAT_HASSTABLEREADER, EMBFORMAT_HASSTABLEWRITER);
+#else
+    formatList = embFormatList_create(EMBFORMAT_HASREADER, EMBFORMAT_HASWRITER);
+#endif
+    cur = formatList->firstFormat;
     while (cur != NULL) {
-        if((cur->features & EMBFORMAT_HASREADER) != 0) {readers+=1; if((cur->features & EMBFORMAT_UNSTABLEREADER) == 0) hasReader = "S"; else hasReader = "U";}
+        if((cur->features & EMBFORMAT_HASREADER) != 0) {readers+=1; if((cur->features & EMBFORMAT_HASSTABLEREADER) == EMBFORMAT_HASSTABLEREADER) hasReader = "S"; else hasReader = "U";}
         else {hasReader =" ";}
 
-        if((cur->features & EMBFORMAT_HASWRITER) != 0) {writers+=1;if((cur->features & EMBFORMAT_UNSTABLEWRITER) == 0) {hasWriter = "S";} else hasWriter = "U";}
+        if((cur->features & EMBFORMAT_HASWRITER) != 0) {writers+=1;if((cur->features & EMBFORMAT_HASSTABLEWRITER) == EMBFORMAT_HASSTABLEWRITER) {hasWriter = "S";} else hasWriter = "U";}
         else {hasWriter =" ";}
         printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", cur->ext, hasReader, hasWriter, cur->smallInfo);
         /* debug
         printf("|  %s  |   %s   |   %s   |  %s | %d r=%d\n", cur->ext, hasReader, hasWriter, cur->smallInfo, cur->features, cur->features & EMBFORMAT_UNSTABLEREADER);*/
         cur = cur->next;
     }
-    embFormatList_free(formatsHash);
+    embFormatList_free(formatList);
 
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");

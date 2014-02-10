@@ -84,8 +84,8 @@ extern "C" {
 #define EMBFORMAT_HASWRITER 2048
 #define EMBFORMAT_HASSUBWRITER 4096
 /* unassigned slot feature  BIT  8192  */
-#define EMBFORMAT_UNSTABLEREADER 16384
-#define EMBFORMAT_UNSTABLEWRITER 32768
+#define EMBFORMAT_HASSTABLEREADER (16384 | EMBFORMAT_HASREADER)
+#define EMBFORMAT_HASSTABLEWRITER (32768 | EMBFORMAT_HASWRITER)
 
 typedef struct EmbFormat_
 {
@@ -103,7 +103,7 @@ typedef struct EmbFormatList_
     int formatCount;
 } EmbFormatList;
 
-extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
+extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create(unsigned long featureFlag1, ...);
 extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* hash);
 /*extern EMB_PUBLIC EmbFormat* EMB_CALL embFormatList_first(EmbHash* hash);*/
 extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
