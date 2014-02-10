@@ -8,6 +8,7 @@ WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
 //====================
 //Stuff for 2.0 alpha2:
 //====================
+TODO - Notify user of data loss if not saving to an object format.
 TODO - Import Raster Image
 TODO - SNAP/ORTHO/POLAR
 TODO - Layer Manager + LayerSwitcher DockWidget
