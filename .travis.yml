@@ -25,9 +25,17 @@ script:
     - qmake CONFIG+=deploy
     - make
     - ./libembroidery-convert
-    - which ../../embroidermodder2/embroidermodder2
+    - cd ../../embroidermodder2
+    - which ./embroidermodder2
+    # Grab the help submodule and prepare it for copying
+    - git clone https://github.com/Embroidermodder/Embroidermodder.github.io.git
+    - mv Embroidermodder.github.io help-submodule
+    - rm -rf help-submodule/.git
+    - rm -f help-submodule/.gitignore
+    - rm -f help-submodule/documentation.pro
 
 after_success:
+    # Setup git for pushing into another repository
     - git config --global user.email \<\>
     - git config --global user.name "Embroidermodder-Travis"
     - cd ~
@@ -57,7 +65,8 @@ after_success:
     - mkdir embroidermodder2
     - cp -f  ${ROOT_BUILD_DIR}/embroidermodder2/embroidermodder2 ./embroidermodder2/embroidermodder2
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/commands         ./embroidermodder2/commands
-    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/help             ./embroidermodder2/help
+    # Use prepared help submodule so the commit doesn't fail
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/help-submodule   ./embroidermodder2/help
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/icons            ./embroidermodder2/icons
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/images           ./embroidermodder2/images
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/samples          ./embroidermodder2/samples
