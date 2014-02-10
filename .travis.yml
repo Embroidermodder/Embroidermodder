@@ -8,7 +8,7 @@ compiler:
 before_install:
     - PLATFORM=linux64
     - export NIGHTLY_DATE=`date`
-    - export NIGHTLY_BUILDNUM=`date +%Y%m%d%H%M%S`
+    - export NIGHTLY_BUILD_NUMBER=`date +%Y%m%d%H%M%S`
     - export NIGHTLY_HASH=`git ls-remote git://github.com/Embroidermodder/Embroidermodder.git | grep refs/heads/master | cut -f 1`
     - sudo apt-get update -qq
 
@@ -46,14 +46,15 @@ after_success:
     - echo "Nightly Build" >> ${README_FILE}
     - echo "------------------------------" >> ${README_FILE}
     - echo "" >> ${README_FILE}
-    - echo "* Commit Date = ${NIGHTLY_DATE}" >> ${README_FILE}
-    - echo "* Commit Build Number = ${NIGHTLY_BUILDNUM}" >> ${README_FILE}
-    - echo "* Commit Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
+    - echo "* Nightly Build Date = ${NIGHTLY_DATE}" >> ${README_FILE}
+    - echo "* Nightly Build Number = ${NIGHTLY_BUILD_NUMBER}" >> ${README_FILE}
+    - echo "* Nightly Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     # Embroidermodder 2
+    - mkdir embroidermodder2
     - cp -f  ${ROOT_BUILD_DIR}/embroidermodder2/embroidermodder2 ./embroidermodder2/embroidermodder2
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/commands         ./embroidermodder2/commands
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/help             ./embroidermodder2/help
@@ -61,10 +62,12 @@ after_success:
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/images           ./embroidermodder2/images
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/samples          ./embroidermodder2/samples
     - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/translations     ./embroidermodder2/translations
+    - rm -f embroidermodder2/commands/commands.pro
     # libembroidery-convert
+    - mkdir libembroidery-convert
     - cp -f  ${ROOT_BUILD_DIR}/libembroidery-convert/libembroidery-convert ./libembroidery-convert/libembroidery-convert
     - ls
-    - git add -A && git commit -m "Successful Build #${TRAVIS_BUILD_NUMBER} - ${NIGHTLY_BUILDNUM}"
+    - git add -A && git commit -m "Travis Build ${TRAVIS_BUILD_NUMBER} - Nightly Build ${NIGHTLY_BUILD_NUMBER}"
     # TODO: windows will need to be: git push origin ${PLATFORM} > nul 2>&1
     - git push origin ${PLATFORM} &>/dev/null
 
