@@ -8,7 +8,7 @@ compiler:
 before_install:
     - PLATFORM=linux64
     - export NIGHTLY_DATE=`date`
-    - export NIGHTLY_BUILDNUM=`date +%Y%m%d%H%M%S`
+    - export NIGHTLY_BUILD_NUMBER=`date +%Y%m%d%H%M%S`
     - export NIGHTLY_HASH=`git ls-remote git://github.com/Embroidermodder/Embroidermodder.git | grep refs/heads/master | cut -f 1`
     - sudo apt-get update -qq
 
@@ -22,12 +22,20 @@ before_script:
 script:
     - ROOT_BUILD_DIR=`pwd`
     - cd project-files/qmake
-    - qmake
+    - qmake CONFIG+=deploy
     - make
     - ./libembroidery-convert
-    - which ../../embroidermodder2/embroidermodder2
+    - cd ../../embroidermodder2
+    - which ./embroidermodder2
+    # Grab the help submodule and prepare it for copying
+    - git clone https://github.com/Embroidermodder/Embroidermodder.github.io.git
+    - mv Embroidermodder.github.io help-submodule
+    - rm -rf help-submodule/.git
+    - rm -f help-submodule/.gitignore
+    - rm -f help-submodule/documentation.pro
 
 after_success:
+    # Setup git for pushing into another repository
     - git config --global user.email \<\>
     - git config --global user.name "Embroidermodder-Travis"
     - cd ~
@@ -37,20 +45,38 @@ after_success:
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/nightly-ci.git
     - git fetch origin
     - git checkout -b ${PLATFORM} origin/${PLATFORM}
+    # Remove previous build
+    - rm -rf embroidermodder2
+    - rm -rf libembroidery-convert
+    # Generate a new README file
     - README_FILE=README.md
     - echo "" > ${README_FILE}
     - echo "Nightly Build" >> ${README_FILE}
     - echo "------------------------------" >> ${README_FILE}
     - echo "" >> ${README_FILE}
-    - echo "* Commit Date = ${NIGHTLY_DATE}" >> ${README_FILE}
-    - echo "* Commit Build Number = ${NIGHTLY_BUILDNUM}" >> ${README_FILE}
-    - echo "* Commit Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
+    - echo "* Nightly Build Date = ${NIGHTLY_DATE}" >> ${README_FILE}
+    - echo "* Nightly Build Number = ${NIGHTLY_BUILD_NUMBER}" >> ${README_FILE}
+    - echo "* Nightly Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
     - echo "" >> ${README_FILE}
+    # Embroidermodder 2
+    - mkdir embroidermodder2
+    - cp -f  ${ROOT_BUILD_DIR}/embroidermodder2/embroidermodder2 ./embroidermodder2/embroidermodder2
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/commands         ./embroidermodder2/commands
+    # Use prepared help submodule so the commit doesn't fail
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/help-submodule   ./embroidermodder2/help
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/icons            ./embroidermodder2/icons
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/images           ./embroidermodder2/images
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/samples          ./embroidermodder2/samples
+    - cp -rf ${ROOT_BUILD_DIR}/embroidermodder2/translations     ./embroidermodder2/translations
+    - rm -f embroidermodder2/commands/commands.pro
+    # libembroidery-convert
+    - mkdir libembroidery-convert
+    - cp -f  ${ROOT_BUILD_DIR}/libembroidery-convert/libembroidery-convert ./libembroidery-convert/libembroidery-convert
     - ls
-    - git commit -am "Success ${NIGHTLY_BUILDNUM}"
+    - git add -A && git commit -m "Travis Build ${TRAVIS_BUILD_NUMBER} - Nightly Build ${NIGHTLY_BUILD_NUMBER}"
     # TODO: windows will need to be: git push origin ${PLATFORM} > nul 2>&1
     - git push origin ${PLATFORM} &>/dev/null
 

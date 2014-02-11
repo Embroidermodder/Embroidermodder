@@ -30,6 +30,7 @@ void MainWindow::readSettings()
     settings_general_mdi_bg_color           = settings.value("MdiBGColor",                  qRgb(192,192,192)).toInt();
     settings_general_tip_of_the_day         = settings.value("TipOfTheDay",                              true).toBool();
     settings_general_current_tip            = settings.value("CurrentTip",                                  0).toInt();
+    settings_general_system_help_browser    = settings.value("SystemHelpBrowser",                        true).toBool();
     //Display
     settings_display_use_opengl             = settings.value("Display/UseOpenGL",                       false).toBool();
     settings_display_renderhint_aa          = settings.value("Display/RenderHintAntiAlias",             false).toBool();
@@ -162,6 +163,7 @@ void MainWindow::writeSettings()
     settings.setValue("MdiBGColor",                     tmp.setNum(settings_general_mdi_bg_color));
     settings.setValue("TipOfTheDay",                               settings_general_tip_of_the_day);
     settings.setValue("CurrentTip",                     tmp.setNum(settings_general_current_tip + 1));
+    settings.setValue("SystemHelpBrowser",                         settings_general_system_help_browser);
     //Display
     settings.setValue("Display/UseOpenGL",                         settings_display_use_opengl);
     settings.setValue("Display/RenderHintAntiAlias",               settings_display_renderhint_aa);
