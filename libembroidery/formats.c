@@ -252,6 +252,123 @@ void embFormat_get(int index, EmbFormat* format){
 }
 */
 
+int embFormat_info(const char* fileName, char* extension, char* description, char* reader, char* writer, char* type){
+    int i = 0;
+    char ending[4];
+    char c;
+
+    if(!fileName) { embLog_error("formats.c embFormat_info(), fileName argument is null\n"); return 0; }
+
+    if(strlen(fileName) == 0) return 0;
+    if(strrchr(fileName, '.')) return 0;
+    strcpy(ending, strrchr(fileName, '.')+1);
+
+    while(ending[i] != '\0')
+    {
+        ending[i] = (char)tolower(ending[i]);
+        ++i;
+    }
+    /* set default */
+    strcpy(extension, ending);
+    type = 0;
+    reader = NULL;
+    writer = NULL;
+
+    c = ending[i];
+    if(c < 'a') /* 1..._ */
+    {
+              if(!strcmp(ending, "10o")) {description="Toyota Embroidery"; reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+         else if(!strcmp(ending, "100")) {description="Toyota Embroidery"; reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+         else return 0;
+
+    }
+    else if(c <= 'o')  /* a...o */
+    {
+        if(c <= 'f')  /* a...f */
+        {
+                 if(!strcmp(ending, "art")) {description="Bernina Embroidery";      reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "bmc")) {description="Bitmap Cache Embroidery"; reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "bro")) {description="Bits & Volts Embroidery"; reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "cnd")) {description="Melco Embroidery";        reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "col")) {description="Embroidery Thread Color"; reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "csd")) {description="Singer Embroidery";       reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "csv")) {description="Comma Separated Values "; reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "dat")) {description="Barudan Embroidery";      reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "dem")) {description="Melco Embroidery";        reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "dsb")) {description="Barudan Embroidery";      reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "dst")) {description="Tajima Embroidery";       reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "dsz")) {description="ZSK USA Embroidery";      reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "dxf")) {description="Drawing Exchange";        reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "edr")) {description="Embird Embroidery";       reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "emd")) {description="Elna Embroidery";         reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "exp")) {description="Melco Embroidery";        reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "exy")) {description="Eltac Embroidery";        reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "eys")) {description="Sierra Expanded Embroidery"; reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "fxy")) {description="Fortron Embroidery";      reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else return 0;
+
+        }
+        else /* G...O */
+        {
+                 if(!strcmp(ending, "gnc")) {description="Great Notions Embroidery"; reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "gt ")) {description="Gold Thread Embroidery";   reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "hus")) {description="Husqvarna Viking Embroidery"; reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "inb")) {description="Inbro Embroidery";        reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "inf")) {description="Embroidery Color";        reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "jef")) {description="Janome Embroidery";       reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "ksm")) {description="Pfaff Embroidery";        reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "max")) {description="Pfaff Embroidery";        reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "mit")) {description="Mitsubishi Embroidery";   reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "new")) {description="Ameco Embroidery";        reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, "ofm")) {description="Melco Embroidery";        reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+            else return 0;
+
+        }
+
+    }
+    else if(c <= 's')  /* p...s */
+    {
+             if(!strcmp(ending, "pcd")) {description="Pfaff Embroidery";            reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pcm")) {description="Pfaff Embroidery";            reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pcq")) {description="Pfaff Embroidery";            reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pcs")) {description="Pfaff Embroidery";            reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pec")) {description="Brother Embroidery";          reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pel")) {description="Brother Embroidery";          reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pem")) {description="Brother Embroidery";          reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "pes")) {description="Brother Embroidery";          reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "phb")) {description="Brother Embroidery";          reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "phc")) {description="Brother Embroidery";          reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "plt")) {description="AutoCAD plot drawing ";       reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "rgb")) {description="RGB Embroidery";              reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "sew")) {description="Janome Embroidery";           reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "shv")) {description="Husqvarna Viking Embroidery"; reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "sst")) {description="Sunstar Embroidery";          reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "stx")) {description="Data Stitch Embroidery";      reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "svg")) {description="Scalable Vector Graphics ";   reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else return 0;
+
+    }
+    else if(c <= 'z')  /* t..z */
+    {
+             if(!strcmp(ending, "t09")) {description="Pfaff Embroidery";            reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "tap")) {description="Happy Embroidery";            reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "thr")) {description="ThredWorks Embroidery";       reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "txt")) {description="Text File";                   reader=" "; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "u00")) {description="Barudan Embroidery";          reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "u01")) {description="Barudan Embroidery";          reader=" "; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "vip")) {description="Pfaff Embroidery";            reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "vp3")) {description="Pfaff Embroidery";            reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "xxx")) {description="Singer Embroidery";           reader="U"; writer="U";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, "zsk")) {description="ZSK USA Embroidery";          reader="U"; writer=" ";  type=(char*)EMBFORMAT_STITCHONLY;}
+        else return 0;
+    }
+    else
+    {
+        return 0;
+    }
+    return 1;
+}
+
 /*! Returns EMBFORMAT_STITCHONLY if the format type only contains stitch data.
  *  Returns EMBFORMAT_OBJECTONLY if the format type only contains object data.
  *  Returns EMBFORMAT_STCHANDOBJ if the format type contains both stitch and object data. */
