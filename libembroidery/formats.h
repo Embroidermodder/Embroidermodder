@@ -80,20 +80,19 @@ extern "C" {
 #define EMBFORMAT_STCHANDOBJ 3 /* binary operation: 1+2=3 */
 #define EMBFORMAT_OBJECTONLY 2
 /* unassigned slot feature BIT 4,8,16,32,64,128,256,512  */
-#define EMBFORMAT_HASREADER 1024
-#define EMBFORMAT_HASWRITER 2048
-#define EMBFORMAT_HASSUBWRITER 4096
-/* unassigned slot feature  BIT  8192  */
-#define EMBFORMAT_HASSTABLEREADER (16384 | EMBFORMAT_HASREADER)
-#define EMBFORMAT_HASSTABLEWRITER (32768 | EMBFORMAT_HASWRITER)
+#define EMBFORMAT_ALLREADERS 1
+#define EMBFORMAT_ALLWRITERS 2
+#define EMBFORMAT_STABLEREADERS (4 | EMBFORMAT_ALLREADERS)
+#define EMBFORMAT_STABLEWRITERS (8 | EMBFORMAT_ALLWRITERS)
+#define EMBFORMAT_HASSUBWRITER 128
 
 typedef struct EmbFormat_
 {
-    char* ext;
-    unsigned long features;     /* combinations of EMBFORMAT_XXXX above. */
-    char* smallInfo;            /* default decription such "Machine X Embroidery". */
-    char* version;              /* for distinct between version, optional. */
-    struct EmbFormat_* same;    /* similar extension */
+    char* extension;
+    char* description;          /* default decription such "Machine X Embroidery". */
+    char  stability;            /* combinations of 4 defined reader/writer possibilities */
+    char  formatType;           /* stitchOnly, stitchAndObj, ObjectOnly */
+    unsigned short version;     /* for distinct between version, optional. */
     struct EmbFormat_* next;    /* another extension */
 } EmbFormat;
 

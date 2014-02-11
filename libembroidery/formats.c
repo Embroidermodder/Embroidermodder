@@ -7,23 +7,22 @@
 #include <ctype.h>
 #include <stdarg.h>
 
-EmbFormat* embFormat_create(char* key, char* smallInfo, char* version, unsigned long features){
+EmbFormat* embFormat_create(char* key, char* smallInfo, unsigned short version, unsigned short features){
     EmbFormat* heapEmbFormat = (EmbFormat*)malloc(sizeof(EmbFormat));
     if(!heapEmbFormat) {
         embLog_error("formats.c embFormat_create(), unable to allocate memory for heapEmbFormat\n");
         return 0;
     }
-    heapEmbFormat->ext = key;
+    heapEmbFormat->extension = key;
     heapEmbFormat->version = version;
-    heapEmbFormat->features = features;
-    heapEmbFormat->smallInfo = smallInfo;
-    heapEmbFormat->same = NULL;
+    heapEmbFormat->stability = features;
+    heapEmbFormat->description = smallInfo;
     heapEmbFormat->next = NULL;
     return heapEmbFormat;
 }
 
 
-EmbFormat* embFormatList_insert(EmbFormatList* formatList, unsigned long featureFilter[32], char* key, char* smallInfo, char* version, unsigned long formatFeatures){
+EmbFormat* embFormatList_insert(EmbFormatList* formatList, unsigned long featureFilter[32], char* key, char* smallInfo, unsigned short version, unsigned short formatFeatures){
     EmbFormat* heapEmbFormat;
     /* TODO: validate before insert using featured parameter */
     int allowed = 0;
@@ -55,10 +54,9 @@ EmbFormat* embFormatList_insert(EmbFormatList* formatList, unsigned long feature
     return heapEmbFormat;
 }
 
-EmbFormat* embFormat_insert_sub(EmbFormat* format, unsigned long featureFilter[32], char* key, char* smallInfo, char* version, unsigned long formatFeatures){
+/*EmbFormat* embFormat_insert_sub(EmbFormat* format, unsigned long featureFilter[32], char* key, char* smallInfo, char* version, unsigned long formatFeatures){
     EmbFormat* heapEmbFormat;
     EmbFormat* prior;
-    /* TODO: validate before insert using featured parameter */
     int allowed = 0;
     int i;
     unsigned long filter;
@@ -84,16 +82,16 @@ EmbFormat* embFormat_insert_sub(EmbFormat* format, unsigned long featureFilter[3
 
     prior->same = heapEmbFormat;
     return heapEmbFormat;
-}
+} */
 
 
 /* TEMPORARY MACROS SORTCUT OF SUPPORTED FEATURES */
 #define Stitch_Fea  EMBFORMAT_STITCHONLY
 #define Object_Fea  EMBFORMAT_OBJECTONLY
-#define Read_Fea    EMBFORMAT_HASSTABLEREADER
-#define Write_Fea   EMBFORMAT_HASSTABLEWRITER
-#define ReadU_Fea   EMBFORMAT_HASREADER
-#define WriteU_Fea  EMBFORMAT_HASWRITER
+#define Read_Fea    EMBFORMAT_STABLEREADERS
+#define Write_Fea   EMBFORMAT_STABLEWRITERS
+#define ReadU_Fea   EMBFORMAT_ALLREADERS
+#define WriteU_Fea  EMBFORMAT_ALLWRITERS
 #define SubFormat_Fea EMBFORMAT_HASSUBWRITER
 #define noFea       EMBFORMAT_UNSUPPORTED
 
@@ -121,79 +119,79 @@ EmbFormatList* embFormatList_create(unsigned long featureFlag1, ...) {
     }
     va_end(ap);
 
-    aFormat = embFormatList_insert(formatList, filter, ".10o", "Toyota Embroidery",         "*",  Stitch_Fea + ReadU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".100", "Toyota Embroidery",         "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".art", "Bernina Embroidery",        "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".bmc", "Bitmap Cache Embroidery",   "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".bro", "Bits & Volts Embroidery",   "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".cdr", "Corel Draw!",               "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".cnd", "Melco Embroidery",          "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".col", "Embroidery Thread Color",   "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".csd", "Singer Embroidery",         "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".csv", "Comma Separated Values ",   "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".dat", "Barudan Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".dem", "Melco Embroidery",          "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".dsb", "Barudan Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".dst", "Tajima Embroidery",         "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".dsz", "ZSK USA Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".dxf", "Drawing Exchange",          "*",  Object_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".edr", "Embird Embroidery",         "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".emd", "Elna Embroidery",           "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".exp", "Melco Embroidery",          "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".exy", "Eltac Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".eys", "Sierra Expanded Embroidery", "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".fxy", "Fortron Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".10o", "Toyota Embroidery",         1,  Stitch_Fea + ReadU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".100", "Toyota Embroidery",         1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".art", "Bernina Embroidery",        1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".bmc", "Bitmap Cache Embroidery",   1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".bro", "Bits & Volts Embroidery",   1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".cdr", "Corel Draw!",               1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".cnd", "Melco Embroidery",          1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".col", "Embroidery Thread Color",   1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".csd", "Singer Embroidery",         1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".csv", "Comma Separated Values ",   1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".dat", "Barudan Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".dem", "Melco Embroidery",          1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".dsb", "Barudan Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".dst", "Tajima Embroidery",         1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".dsz", "ZSK USA Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".dxf", "Drawing Exchange",          1,  Object_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".edr", "Embird Embroidery",         1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".emd", "Elna Embroidery",           1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".exp", "Melco Embroidery",          1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".exy", "Eltac Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".eys", "Sierra Expanded Embroidery", 1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".fxy", "Fortron Embroidery",        1,  Stitch_Fea + ReadU_Fea );
 
-    aFormat = embFormatList_insert(formatList, filter, ".gnc", "Great Notions Embroidery",  "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".gt" , "Gold Thread Embroidery",    "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".hus", "Husqvarna Viking Embroidery","*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".inb", "Inbro Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".inf", "Embroidery Color",          "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".jef", "Janome Embroidery",         "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".gnc", "Great Notions Embroidery",  1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".gt" , "Gold Thread Embroidery",    1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".hus", "Husqvarna Viking Embroidery",1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".inb", "Inbro Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".inf", "Embroidery Color",          1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".jef", "Janome Embroidery",         1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
 
-    aFormat = embFormatList_insert(formatList, filter, ".ksm", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".kml", "GoogleMap Geospasial",      "*",  Object_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".max", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".mit", "Mitsubishi Embroidery",     "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".new", "Ameco Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".ofm", "Melco Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".odg", "OpenOffice Drawing",        "*",  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".ksm", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".kml", "GoogleMap Geospasial",      1,  Object_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".max", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".mit", "Mitsubishi Embroidery",     1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".new", "Ameco Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".ofm", "Melco Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".odg", "OpenOffice Drawing",        1,  noFea);
 
-    aFormat = embFormatList_insert(formatList, filter, ".pcd", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".pcm", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".pcq", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".pcs", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".pec", "Brother Embroidery",        "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".pel", "Brother Embroidery",        "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".pem", "Brother Embroidery",        "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".pes", "Brother Embroidery",        "*",  Stitch_Fea + Read_Fea + Write_Fea + SubFormat_Fea);
-    aVersion = embFormat_insert_sub(aFormat, filter, ".pes", "Brother Embroidery 001",      "*",  Stitch_Fea + Read_Fea + Write_Fea);
-    aVersion = embFormat_insert_sub(aFormat, filter, ".pes", "Brother Embroidery 006",      "006",Stitch_Fea + Read_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".phb", "Brother Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".phc", "Brother Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".plt", "AutoCAD plot drawing",      "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".png", "Portable Network Graphic",  "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".rgb", "RGB Embroidery",            "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".pcd", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".pcm", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".pcq", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".pcs", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".pec", "Brother Embroidery",        1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".pel", "Brother Embroidery",        1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".pem", "Brother Embroidery",        1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".pes", "Brother Embroidery",        1,  Stitch_Fea + Read_Fea + Write_Fea + SubFormat_Fea);
+    /*aVersion = embFormat_insert_sub(aFormat, filter, ".pes", "Brother Embroidery 001",      1,  Stitch_Fea + Read_Fea + Write_Fea);
+    aVersion = embFormat_insert_sub(aFormat, filter, ".pes", "Brother Embroidery 006",      "006",Stitch_Fea + Read_Fea);*/
+    aFormat = embFormatList_insert(formatList, filter, ".phb", "Brother Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".phc", "Brother Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".plt", "AutoCAD plot drawing",      1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".png", "Portable Network Graphic",  1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".rgb", "RGB Embroidery",            1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
 
-    aFormat = embFormatList_insert(formatList, filter, ".sew", "Janome Embroidery",         "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".shv", "Husqvarna Viking Embroidery", "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".png", "Portable Network Graphic",  "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".sst", "Sunstar Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".stx", "Data Stitch Embroidery",    "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".svg", "Scalable Vector Graphics",  "*",  Object_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".shp", "ESRI Geopartial",           "*",  Object_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".sew", "Janome Embroidery",         1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".shv", "Husqvarna Viking Embroidery", 1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".png", "Portable Network Graphic",  1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".sst", "Sunstar Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".stx", "Data Stitch Embroidery",    1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".svg", "Scalable Vector Graphics",  1,  Object_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".shp", "ESRI Geopartial",           1,  Object_Fea );
 
-    aFormat = embFormatList_insert(formatList, filter, ".t09", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".tap", "Happy Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".thr", "ThredWorks Embroidery",     "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".txt", "Text File ",                "*",  Stitch_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".u00", "Barudan Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".u01", "Barudan Embroidery",        "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".vip", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".vp3", "Pfaff Embroidery",          "*",  Stitch_Fea + ReadU_Fea );
-    aFormat = embFormatList_insert(formatList, filter, ".wmf", "Windows Meta File Clipart", "*",  noFea);
-    aFormat = embFormatList_insert(formatList, filter, ".xxx", "Singer Embroidery",         "*",  Stitch_Fea + ReadU_Fea + WriteU_Fea);
-    aFormat = embFormatList_insert(formatList, filter, ".zsk", "ZSK USA Embroidery",        "*",  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".t09", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".tap", "Happy Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".thr", "ThredWorks Embroidery",     1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".txt", "Text File ",                1,  Stitch_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".u00", "Barudan Embroidery",        1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".u01", "Barudan Embroidery",        1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".vip", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".vp3", "Pfaff Embroidery",          1,  Stitch_Fea + ReadU_Fea );
+    aFormat = embFormatList_insert(formatList, filter, ".wmf", "Windows Meta File Clipart", 1,  noFea);
+    aFormat = embFormatList_insert(formatList, filter, ".xxx", "Singer Embroidery",         1,  Stitch_Fea + ReadU_Fea + WriteU_Fea);
+    aFormat = embFormatList_insert(formatList, filter, ".zsk", "ZSK USA Embroidery",        1,  Stitch_Fea + ReadU_Fea );
 
     return formatList;
 }

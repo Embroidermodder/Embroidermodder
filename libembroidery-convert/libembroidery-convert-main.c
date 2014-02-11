@@ -60,7 +60,7 @@ static const char* const formats[] = {
 ".t09", "U", " ", " Pfaff Embroidery Format                          ",
 ".tap", "U", " ", " Happy Embroidery Format                          ",
 ".thr", "U", "U", " ThredWorks Embroidery Format                     ",
-".txt", " ", "U", " Text File                                        ",
+".txt", " ", "U", " Textension File                                        ",
 ".u00", "U", " ", " Barudan Embroidery Format                        ",
 ".u01", " ", " ", " Barudan Embroidery Format                        ",
 ".vip", "U", " ", " Pfaff Embroidery Format                          ",
@@ -115,34 +115,34 @@ void usage(void)
     }*/
 
 #ifdef STABLE_ONLY
-    formatList = embFormatList_create(EMBFORMAT_HASSTABLEREADER, EMBFORMAT_HASSTABLEWRITER);
+    formatList = embFormatList_create(EMBFORMAT_STABLEREADERS, EMBFORMAT_STABLEWRITERS);
 #else
-    formatList = embFormatList_create(EMBFORMAT_HASREADER, EMBFORMAT_HASWRITER);
+    formatList = embFormatList_create(EMBFORMAT_ALLREADERS, EMBFORMAT_ALLWRITERS);
 #endif
     cur = formatList->firstFormat;
     while (cur != NULL) {
         if(cur->same){
             child = cur->same;
             while (child != NULL) {
-                if((child->features & EMBFORMAT_HASREADER) != 0) {readers+=1; if((child->features & EMBFORMAT_HASSTABLEREADER) == EMBFORMAT_HASSTABLEREADER) hasReader = "S"; else hasReader = "U";}
+                if((child->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((child->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
                 else {hasReader =" ";}
 
-                if((child->features & EMBFORMAT_HASWRITER) != 0) {writers+=1;if((child->features & EMBFORMAT_HASSTABLEWRITER) == EMBFORMAT_HASSTABLEWRITER) {hasWriter = "S";} else hasWriter = "U";}
+                if((child->stability & EMBFORMAT_ALLWRITERS) != 0) {writers+=1;if((child->stability & EMBFORMAT_STABLEWRITERS) == EMBFORMAT_STABLEWRITERS) {hasWriter = "S";} else hasWriter = "U";}
                 else {hasWriter =" ";}
-                /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", child->ext, hasReader, hasWriter, child->smallInfo);*/
-                printf("|  %-4s  | %4s  |   %s   |   %s   |  %-41s |\n", child->ext, child->version, hasReader, hasWriter, child->smallInfo);
+                /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", child->extension, hasReader, hasWriter, child->description);*/
+                printf("|  %-4s  | %4s  |   %s   |   %s   |  %-41s |\n", child->extension, child->version, hasReader, hasWriter, child->description);
                 child = child->same;
             }
 
         }
         else {
-            if((cur->features & EMBFORMAT_HASREADER) != 0) {readers+=1; if((cur->features & EMBFORMAT_HASSTABLEREADER) == EMBFORMAT_HASSTABLEREADER) hasReader = "S"; else hasReader = "U";}
+            if((cur->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((cur->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
             else {hasReader =" ";}
 
-            if((cur->features & EMBFORMAT_HASWRITER) != 0) {writers+=1;if((cur->features & EMBFORMAT_HASSTABLEWRITER) == EMBFORMAT_HASSTABLEWRITER) {hasWriter = "S";} else hasWriter = "U";}
+            if((cur->stability & EMBFORMAT_ALLWRITERS) != 0) {writers+=1;if((cur->stability & EMBFORMAT_STABLEWRITERS) == EMBFORMAT_STABLEWRITERS) {hasWriter = "S";} else hasWriter = "U";}
             else {hasWriter =" ";}
-            /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", cur->ext, hasReader, hasWriter, cur->smallInfo);*/
-            printf("|  %-4s  | %4s  |   %s   |   %s   |  %-41s |\n", cur->ext, cur->version, hasReader, hasWriter, cur->smallInfo);
+            /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", cur->extension, hasReader, hasWriter, cur->description);*/
+            printf("|  %-4s  | %4s  |   %s   |   %s   |  %-41s |\n", cur->extension, cur->version, hasReader, hasWriter, cur->description);
         }
         cur = cur->next;
     }
@@ -165,7 +165,7 @@ void usage(void)
 /*! Developers incorporating libembroidery into another project should use the SHORT_WAY of using libembroidery. It uses
  *  convenience functions and is approximately 20 lines shorter than the long way.
  *
- *  Developers who are interested improving libembroidery or using it to its fullest extent should use the LONG_WAY.
+ *  Developers who are interested improving libembroidery or using it to its fullest extensionent should use the LONG_WAY.
  *  It essentially does the same work the convenience function do.
  *
  *  Both methods are acceptable and it is up to you which to choose. Both will stay here for regression testing.
