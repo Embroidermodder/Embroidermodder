@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 #ifdef ARDUINO
-#include "ino-file.h"
+#include "utility/ino-file.h"
 #else
 
 #include <stdio.h>

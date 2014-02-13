@@ -9,6 +9,10 @@
 #include <ctype.h>
 #include <math.h>
 
+#ifdef ARDUINO
+#include "utility/ino-event.h"
+#endif
+
 /*! Returns a pointer to an EmbPattern. It is created on the heap. The caller is responsible for freeing the allocated memory with embPattern_free(). */
 EmbPattern* embPattern_create(void)
 {
@@ -51,7 +55,6 @@ EmbPattern* embPattern_create(void)
     p->lastX = 0.0;
     p->lastY = 0.0;
 
-    printf("__GNUC__:%d\n", __GNUC__);
     return p;
 }
 
@@ -278,8 +281,11 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     s.yy = y;
     s.flags = flags;
     s.color = p->currentColorIndex;
+#ifdef ARDUINO
+    inoEvent_addStitchAbs(p, s.xx, s.yy, s.flags, s.color);
+#else /* ARDUINO */
     p->lastStitch = embStitchList_add(p->lastStitch, s);
-
+#endif /* ARDUINO */
     p->lastX = s.xx;
     p->lastY = s.yy;
 }
