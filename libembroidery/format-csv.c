@@ -276,7 +276,7 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
 
     /* write header */
     fprintf(file, "\"#\",\"Embroidermodder 2 CSV Embroidery File\"\n");
-    fprintf(file, "\"#\",\"http://embroidermodder.sourceforge.net\"\n");
+    fprintf(file, "\"#\",\"http://embroidermodder.github.io\"\n");
     fprintf(file, "\n");
     fprintf(file, "\"#\",\"General Notes:\"\n");
     fprintf(file, "\"#\",\"This file can be read by Excel or LibreOffice as CSV (Comma Separated Value) or with a text editor.\"\n");

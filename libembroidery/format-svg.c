@@ -3430,7 +3430,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     boundingRect = embPattern_calcBoundingBox(pattern);
     fprintf(file, "<?xml version=\"1.0\"?>\n");
     fprintf(file, "<!-- Embroidermodder 2 SVG Embroidery File -->\n");
-    fprintf(file, "<!-- http://embroidermodder.sourceforge.net -->\n");
+    fprintf(file, "<!-- http://embroidermodder.github.io -->\n");
     fprintf(file, "<svg ");
 
     /* TODO: See the SVG Tiny Version 1.2 Specification Section 7.14.

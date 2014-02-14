@@ -186,7 +186,7 @@ void MainWindow::about()
     QDialog dialog(this);
     ImageWidget img("images/logo-small");
     QLabel text(appName + tr("\n\n") +
-                          tr("http://embroidermodder.sourceforge.net") +
+                          tr("http://embroidermodder.github.io") +
                           tr("\n\n") +
                           tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
                           tr("\n\n") +
