@@ -101,6 +101,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     shiftKeyPressedState = false;
 
     setWindowIcon(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setMinimumSize(800, 480); //Require Minimum WVGA
 
     //create the mdiArea
     QFrame* vbox = new QFrame(this);

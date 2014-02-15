@@ -133,7 +133,7 @@ void usage(void)
            readers, writers);
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|                                                                             |\n");
-    printf("|                   http://embroidermodder.sourceforge.net                    |\n");
+    printf("|                   http://embroidermodder.github.io                          |\n");
     printf("|_____________________________________________________________________________|\n");
     printf("\n");
 }

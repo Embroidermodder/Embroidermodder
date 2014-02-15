@@ -115,7 +115,8 @@ TODO - Reports?
 TODO - Record and Playback Commands
 TODO - Settings option for reversing zoom scrolling direction
 TODO - Qt GUI for libembroidery-convert
-TODO - EPS format?
+TODO - EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
+TODO - optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
 TODO - Realistic Visualization - Bump Mapping/OpenGL/Gradients?
 TODO - Stippling Fill
 TODO - User Designed Custom Fill

@@ -186,7 +186,7 @@ void MainWindow::about()
     QDialog dialog(this);
     ImageWidget img("images/logo-small");
     QLabel text(appName + tr("\n\n") +
-                          tr("http://embroidermodder.sourceforge.net") +
+                          tr("http://embroidermodder.github.io") +
                           tr("\n\n") +
                           tr("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
                           tr("\n\n") +
@@ -377,12 +377,12 @@ void MainWindow::iconResize(int iconSize)
     layerSelector->     setIconSize(QSize(iconSize*4, iconSize));
     colorSelector->     setIconSize(QSize(iconSize,   iconSize));
     linetypeSelector->  setIconSize(QSize(iconSize*4, iconSize));
-    lineweightSelector->setIconSize(QSize(iconSize,   iconSize));
+    lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
     //set the minimum combobox width so the text is always readable
     layerSelector->     setMinimumWidth(iconSize*4);
     colorSelector->     setMinimumWidth(iconSize*2);
     linetypeSelector->  setMinimumWidth(iconSize*4);
-    lineweightSelector->setMinimumWidth(iconSize*2);
+    lineweightSelector->setMinimumWidth(iconSize*4);
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
