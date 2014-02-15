@@ -85,14 +85,11 @@ extern "C" {
 #define EMBFORMAT_STABLEREADERS (4 | EMBFORMAT_ALLREADERS)
 #define EMBFORMAT_STABLEWRITERS (8 | EMBFORMAT_ALLWRITERS)
 #define EMBFORMAT_HASSUBWRITER 128
+#define EMBFORMAT_MAXEXT 3  /* maximum length of extension without dot */
 
 typedef struct EmbFormat_
 {
     char* extension;
-    char* description;          /* default decription such "Machine X Embroidery". */
-    char  stability;            /* combinations of 4 defined reader/writer possibilities */
-    char  formatType;           /* stitchOnly, stitchAndObj, ObjectOnly */
-    unsigned short version;     /* for distinct between version, optional. */
     struct EmbFormat_* next;    /* another extension */
 } EmbFormat;
 
@@ -103,9 +100,9 @@ typedef struct EmbFormatList_
     int formatCount;
 } EmbFormatList;
 
-extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create(unsigned long featureFlag1, ...);
-extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* hash);
-/*extern EMB_PUBLIC EmbFormat* EMB_CALL embFormatList_first(EmbHash* hash);*/
+extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
+extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* formatList);
+extern EMB_PUBLIC int EMB_CALL embFormat_info(const char* fileName, char** extension, char** description, char** reader, char** writer, char* type);
 extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
 
 #ifdef __cplusplus

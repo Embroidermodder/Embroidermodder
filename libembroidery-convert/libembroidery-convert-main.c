@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-/* va_list, va_start, va_copy, va_arg, va_end */
 
 /*static const int formatCount = 59;
 static const char* const formats[] = {
@@ -71,15 +70,15 @@ static const char* const formats[] = {
 
 
 
-/*#define STABLE_ONLY*/
-
 void usage(void)
 {
     EmbFormatList* formatList;
-    EmbFormat* cur;
-    EmbFormat* child;
-    char* hasReader;
-    char* hasWriter;
+    EmbFormat* cur;    
+    char extension;
+    char description;
+    char* readerState;
+    char* writerState;
+    char type;
     int readers = 0;
     int writers = 0;
     printf(" _____________________________________________________________________________ \n");
@@ -114,35 +113,18 @@ void usage(void)
         printf("|  %s  |   %s   |   %s   | %s |\n", formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3]);
     }*/
 
-#ifdef STABLE_ONLY
-    formatList = embFormatList_create(EMBFORMAT_STABLEREADERS, EMBFORMAT_STABLEWRITERS);
-#else
-    formatList = embFormatList_create(EMBFORMAT_ALLREADERS, EMBFORMAT_ALLWRITERS);
-#endif
+
+    formatList = embFormatList_create();
     cur = formatList->firstFormat;
     while (cur != NULL) {
-        if(cur->same){
-            child = cur->same;
-            while (child != NULL) {
-                if((child->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((child->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
-                else {hasReader =" ";}
-
-                if((child->stability & EMBFORMAT_ALLWRITERS) != 0) {writers+=1;if((child->stability & EMBFORMAT_STABLEWRITERS) == EMBFORMAT_STABLEWRITERS) {hasWriter = "S";} else hasWriter = "U";}
-                else {hasWriter =" ";}
-                /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", child->extension, hasReader, hasWriter, child->description);*/
-                printf("|  %-4s  | %4s  |   %s   |   %s   |  %-41s |\n", child->extension, child->version, hasReader, hasWriter, child->description);
-                child = child->same;
-            }
-
-        }
-        else {
-            if((cur->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((cur->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
+        if (embFormat_info(cur->extension, &extension, &description, readerState, writerState, &type)){
+            /*if((cur->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((cur->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
             else {hasReader =" ";}
 
             if((cur->stability & EMBFORMAT_ALLWRITERS) != 0) {writers+=1;if((cur->stability & EMBFORMAT_STABLEWRITERS) == EMBFORMAT_STABLEWRITERS) {hasWriter = "S";} else hasWriter = "U";}
-            else {hasWriter =" ";}
+            else {hasWriter =" ";}*/
             /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", cur->extension, hasReader, hasWriter, cur->description);*/
-            printf("|  %-4s  | %4s  |   %s   |   %s   |  %-41s |\n", cur->extension, cur->version, hasReader, hasWriter, cur->description);
+            printf("|  %-4s  |  %s   |   %s   |  %-41s |\n", extension, readerState, writerState, description);
         }
         cur = cur->next;
     }
