@@ -473,9 +473,9 @@ begin
     @embObjectList_free   := GetProcAddress(DLLHandle,'embObjectList_free');
 {$ENDIF}
 
-    embFormatList_create  := GetProcAddress(DLLHandle,'embFormatList_create');
-    embFormatList_free    := GetProcAddress(DLLHandle,'embFormatList_free');
-    embFormat_info   := GetProcAddress(DLLHandle,'embFormat_info');
+    @embFormatList_create  := GetProcAddress(DLLHandle,'embFormatList_create');
+    @embFormatList_free    := GetProcAddress(DLLHandle,'embFormatList_free');
+    @embFormat_info   := GetProcAddress(DLLHandle,'embFormat_info');
 
   end
   else

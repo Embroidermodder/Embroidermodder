@@ -19,6 +19,18 @@ EmbFormat* embFormat_create(char* key){
     return heapEmbFormat;
 }
 
+void embFormat_free(EmbFormat* pointer)
+{
+    EmbFormat* tempPointer = pointer;
+    EmbFormat* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    pointer = 0;
+}
 EmbFormat* embFormatList_add(EmbFormatList* formatList, char* key){
     EmbFormat* heapEmbFormat;
     /* TODO: validate before insert using featured parameter */
@@ -127,6 +139,9 @@ EmbFormatList* embFormatList_create() {
 }
 
 void embFormatList_free(EmbFormatList* formatList){
+    embFormat_free(formatList->firstFormat);
+    /*formatList->firstFormat = 0;*/
+    formatList->lastFormat = 0;
     free(formatList);
     formatList = 0;
 }

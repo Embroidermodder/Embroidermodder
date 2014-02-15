@@ -1,5 +1,5 @@
 unit libembroidery_formats;
-{see: http://www.swissdelphicenter.ch/torry/showcode.php?id=1133}
+
 interface
 
 uses
@@ -12,14 +12,11 @@ procedure EmbFillWriter(AList: TStrings);
 
 implementation
 
-uses
-  dllExportList;
-
 var
   GReaders : TStrings = nil;
   GWriters : TStrings = nil;
 
-function NameOfExt(ext: string; ColumnU: integer; defaultName: string = ''): string;
+(*function NameOfExt(ext: string; ColumnU: integer; defaultName: string = ''): string;
 var i : integer;
 begin
   result := defaultName;
@@ -37,89 +34,109 @@ begin
       break;
     end;
   end;
-end;
+end;*)
 
-procedure ScanDLL_AssumedReaderOrWriterEXT;
+procedure build_RW;
 var
-  LList : TStrings;
   s,ext,name : string;
   i : integer;
+
+  hformats : PEmbFormatList;
+  curent : PEmbFormat;
+  pext, description: PChar;
+  stateReader, stateWriter : char;
+  formatType : integer;
 begin
+  hformats := embFormatList_create();
+  //embFormatList_free(hformats);
+  //exit;
   GReaders := TStringList.Create;
   GWriters := TStringList.Create;
-  LList := TStringList.Create;
 
+  curent  := hformats.firstFormat;
+  
   try
-    ListDLLExports(emblib, LList);
-    for i := 0 to LList.Count - 1 do
+    while curent <> nil do
     begin
-      s := LList[i];
+      embFormat_info( curent.extension, pext, description, stateReader, stateWriter, formatType );
       //READ
-      if (length(s) <= 7) and(copy(s,1,4) = 'read') then
+      if stateReader <> ' ' then
       begin
-        ext := lowerCase( copy(s, 5, length(s)) );
+        ext := StrPas(pext);
         if GReaders.IndexOfName(ext) < 0 then
         begin
-          {$IFNDEF EMBFORMAT_SUPPORTEDONLY}
+          GReaders.Values[ext] := StrPas(description);
+          (*{$IFNDEF EMBFORMAT_SUPPORTEDONLY}
           GReaders.Values[ext] := NameOfExt(ext,1,'Embroidery Format');
           {$ELSE}
           name := NameOfExt(ext,1);
           if name <> '' then
             GReaders.Values[ext] := name;
-          {$ENDIF}
+          {$ENDIF}*)
         end;
-      end
+      end;
 
       //WRITE
-      else if (length(s) <= 8) and (copy(s,1,5) = 'write') then
+      if stateWriter <> ' ' then
       begin
-        ext := lowerCase( copy(s, 6, length(s)) );
+        ext := StrPas(pext);
         if GWriters.IndexOfName(ext) < 0 then
         begin
-          {$IFNDEF EMBFORMAT_SUPPORTEDONLY}
+          GWriters.Values[ext] := StrPas(description);
+          (*{$IFNDEF EMBFORMAT_SUPPORTEDONLY}
           GWriters.Values[ext] := NameOfExt(ext,2,'Embroidery Format');
           {$ELSE}
           name := NameOfExt(ext,1);
           if name <> '' then
             GWriters.Values[ext] := name;
-          {$ENDIF}
+          {$ENDIF}*)
         end;
 
       end;
-
+      curent := curent^.next;
     end;
   finally
-    LList.Free
+  
+    {curent := nil;
+    pext := nil;
+    description := nil;}
+    embFormatList_free(hformats);
+    hformats := nil;
   end;
+
+    
 end;
 
 procedure EmbFillWriter(AList: TStrings);
 begin
   if not assigned(GReaders) then
-     ScanDLL_AssumedReaderOrWriterEXT;
+     build_RW;
   AList.Assign(GWriters);
 end;
 
 function EmbReadersFilter(): string ;
 var i,j : integer;
   LList : TStrings;
-  all,s : string;
+  pool,allExt,s : string;
 begin
   if not assigned(GReaders) then
-     ScanDLL_AssumedReaderOrWriterEXT;
-  result := '';
-  all := '';
+  begin
+     build_RW;
+  end;
+  
+  pool := '';
+  allExt := '';
   {$IFNDEF EMBSORTEDFILTER}
   for i := 0 to GReaders.Count-1 do
   begin
-    if result <> '' then
-      result := result + '|';
-    result := result + format('%s  (*.%1:s)|*.%1:s',[GReaders.ValueFromIndex[i],GReaders.Names[i] ]);
-    if all <> '' then
-      all := all + ';';
-    all := all + format('*.%s', [GReaders.Names[i]]);
+    if pool <> '' then
+      pool := pool + '|';
+    pool := pool + format('%s  (*.%1:s)|*.%1:s',[GReaders.ValueFromIndex[i],GReaders.Names[i] ]);
+    if allExt <> '' then
+      allExt := allExt + ';';
+    allExt := allExt + format('*.%s', [GReaders.Names[i]]);
   end;
-  result := format('%s  (%1:s)|*.%1:s',['All embroidery format',all ]) +'|'+ result;
+  pool := format('%s  (%1:s)|*.%1:s',['All embroidery format',allExt ]) +'|'+ pool;
 
   {$ELSE}
 
@@ -134,16 +151,16 @@ begin
     TStringList(LList1).Sort;
     for i := 0 to LList1.Count-1 do
     begin
-      if result <> '' then
-        result := result + '|';
-      result := result + LList1[i];
+      if pool <> '' then
+        pool := pool + '|';
+      pool := pool + LList1[i];
     end;
   finally
     LList1.Free;
   end;
 
   {$ENDIF}
-
+  result := pool;
 end;
      
 

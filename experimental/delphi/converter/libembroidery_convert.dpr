@@ -50,10 +50,7 @@ begin
     writeln('| Format | Read  | Write | Description                                        |');
     writeln('|________|_______|_______|____________________________________________________|');
     writeln('|        |       |       |                                                    |');
-    {for i := 0 to formatCount-1 do
-    begin
-        writeln(format('|  %s  |   %s   |   %s   | %s |', [ formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3] ] ));
-    end;}
+ 
     while curent <> nil do
     begin
       embFormat_info( curent.extension, ext, description, stateReader, stateWriter, formatType ); 

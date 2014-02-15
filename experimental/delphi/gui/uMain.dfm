@@ -1,8 +1,8 @@
 object Form1: TForm1
-  Left = -4
-  Top = -4
-  Width = 1374
-  Height = 746
+  Left = 189
+  Top = 201
+  Width = 1013
+  Height = 649
   Caption = 'Embroidery Convert'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,17 +17,17 @@ object Form1: TForm1
   object spl1: TSplitter
     Left = 289
     Top = 49
-    Height = 572
+    Height = 475
   end
   object spl2: TSplitter
     Left = 561
     Top = 49
-    Height = 572
+    Height = 475
   end
   object mmo1: TMemo
     Left = 0
-    Top = 621
-    Width = 1366
+    Top = 524
+    Width = 1005
     Height = 98
     Align = alBottom
     Lines.Strings = (
@@ -37,7 +37,7 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 1366
+    Width = 1005
     Height = 49
     Align = alTop
     BevelOuter = bvNone
@@ -64,7 +64,7 @@ object Form1: TForm1
     Left = 0
     Top = 49
     Width = 289
-    Height = 572
+    Height = 475
     Align = alLeft
     Header.AutoSizeIndex = 0
     Header.Font.Charset = DEFAULT_CHARSET
@@ -82,7 +82,7 @@ object Form1: TForm1
     Left = 292
     Top = 49
     Width = 269
-    Height = 572
+    Height = 475
     Align = alLeft
     Header.AutoSizeIndex = 0
     Header.Font.Charset = DEFAULT_CHARSET
@@ -117,7 +117,7 @@ object Form1: TForm1
     Left = 564
     Top = 49
     Width = 421
-    Height = 572
+    Height = 475
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 4
@@ -139,7 +139,7 @@ object Form1: TForm1
         Height = 57
         Anchors = [akLeft, akTop, akRight]
         Caption = 'Additional directory'
-        Columns = 3
+        Columns = 2
         ItemIndex = 2
         Items.Strings = (
           'Source Filename'
@@ -236,7 +236,7 @@ object Form1: TForm1
       Left = 0
       Top = 265
       Width = 421
-      Height = 307
+      Height = 210
       Align = alClient
       Header.AutoSizeIndex = 0
       Header.Font.Charset = DEFAULT_CHARSET
