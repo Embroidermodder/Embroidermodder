@@ -136,14 +136,14 @@ void embFormatList_free(EmbFormatList* formatList){
  *  output: extension: extension of file
  *  decription: default description of related extension
  *  type: wheter EMBFORMAT_STITCHONLY | EMBFORMAT_OBJECTONLY | EMBFORMAT_STCHANDOBJ */
-int embFormat_info(const char* fileName, char** extension, char** description, char** reader, char** writer, char* type){
+int embFormat_info(const char* fileName, char** extension, char** description, char* reader, char* writer, int* type){
     int i = 0;
     char ending[1 + EMBFORMAT_MAXEXT];
     char c;
-    extension = NULL;
+    /*extension = NULL;
     description = NULL;
     reader = NULL;
-    writer = NULL;
+    writer = NULL;*/
     type = 0;
 
     if(!fileName) { embLog_error("formats.c embFormat_info(), fileName argument is null\n"); return 0; }
@@ -163,11 +163,16 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
     /*strcpy(extension, ending);error */
     *extension = emb_strdup(ending);
 
-    c = ending[i];
+    c = ending[0];
     if(c < 'a') /* 1..._ */
     {
-              if(!strcmp(ending, "10o")) {*description="Toyota Embroidery"; *reader="U"; *writer=" ";  *type=EMBFORMAT_STITCHONLY;}
-         else if(!strcmp(ending, "100")) {*description="Toyota Embroidery"; *reader="U"; *writer=" ";  *type=EMBFORMAT_STITCHONLY;}
+        if(!strcmp(ending, "10o")) {
+            *description="Toyota Embroidery";
+            *reader='U';
+            *type=(int)EMBFORMAT_STITCHONLY;
+            *writer=' ';
+            }
+        /* else if(!strcmp(ending, "100")) {*description="Toyota Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;} */
          else return 0;
 
     }

@@ -74,11 +74,11 @@ void usage(void)
 {
     EmbFormatList* formatList;
     EmbFormat* cur;    
-    char extension;
-    char description;
-    char* readerState;
-    char* writerState;
-    char type;
+    char* extension = NULL;
+    char* description = NULL;
+    char readerState;
+    char writerState;
+    int type;
     int readers = 0;
     int writers = 0;
     printf(" _____________________________________________________________________________ \n");
@@ -117,7 +117,7 @@ void usage(void)
     formatList = embFormatList_create();
     cur = formatList->firstFormat;
     while (cur != NULL) {
-        if (embFormat_info(cur->extension, &extension, &description, readerState, writerState, &type)){
+        if (embFormat_info(cur->extension, &extension, &description, &readerState, &writerState, &type)){
             /*if((cur->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((cur->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
             else {hasReader =" ";}
 
