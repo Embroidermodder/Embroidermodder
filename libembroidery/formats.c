@@ -174,14 +174,12 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
         ending[i] = (char)tolower(ending[i]);
         ++i;
     }
-    /*strcpy(extension, ending);error */
-    *extension = emb_strdup(ending);
 
     c = ending[1];
     if(c < 'a') /* 1..._ */
     {
-             if(!strcmp(ending, ".10o")) {*description="Toyota Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".100")) {*description="Toyota Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+             if(!strcmp(ending, ".10o")) {*extension=".10o"; *description="Toyota Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".100")) {*extension=".100"; *description="Toyota Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
          else return 0;
 
     }
@@ -189,41 +187,41 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
     {
         if(c <= 'f')  /* a...f */
         {
-                 if(!strcmp(ending, ".art")) {*description="Bernina Embroidery";      *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".bmc")) {*description="Bitmap Cache Embroidery"; *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".bro")) {*description="Bits & Volts Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".cnd")) {*description="Melco Embroidery";        *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".col")) {*description="Embroidery Thread Color"; *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".csd")) {*description="Singer Embroidery";       *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".csv")) {*description="Comma Separated Values";  *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".dat")) {*description="Barudan Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".dem")) {*description="Melco Embroidery";        *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".dsb")) {*description="Barudan Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".dst")) {*description="Tajima Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".dsz")) {*description="ZSK USA Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".dxf")) {*description="Drawing Exchange";        *reader=' '; *writer=' ';  *type=EMBFORMAT_OBJECTONLY;}
-            else if(!strcmp(ending, ".edr")) {*description="Embird Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".emd")) {*description="Elna Embroidery";         *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".exp")) {*description="Melco Embroidery";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".exy")) {*description="Eltac Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".eys")) {*description="Sierra Expanded Embroidery"; *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".fxy")) {*description="Fortron Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+                 if(!strcmp(ending, ".art")) {*extension=".art"; *description="Bernina Embroidery";      *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".bmc")) {*extension=".bmc"; *description="Bitmap Cache Embroidery"; *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".bro")) {*extension=".bro"; *description="Bits & Volts Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".cnd")) {*extension=".cnd"; *description="Melco Embroidery";        *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".col")) {*extension=".col"; *description="Embroidery Thread Color"; *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".csd")) {*extension=".csd"; *description="Singer Embroidery";       *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".csv")) {*extension=".csv"; *description="Comma Separated Values";  *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".dat")) {*extension=".dat"; *description="Barudan Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".dem")) {*extension=".dem"; *description="Melco Embroidery";        *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".dsb")) {*extension=".dsb"; *description="Barudan Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".dst")) {*extension=".dst"; *description="Tajima Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".dsz")) {*extension=".dsz"; *description="ZSK USA Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".dxf")) {*extension=".dxf"; *description="Drawing Exchange";        *reader=' '; *writer=' ';  *type=EMBFORMAT_OBJECTONLY;}
+            else if(!strcmp(ending, ".edr")) {*extension=".edr"; *description="Embird Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".emd")) {*extension=".emd"; *description="Elna Embroidery";         *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".exp")) {*extension=".exp"; *description="Melco Embroidery";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".exy")) {*extension=".exy"; *description="Eltac Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".eys")) {*extension=".eys"; *description="Sierra Expanded Embroidery"; *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".fxy")) {*extension=".fxy"; *description="Fortron Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
             else return 0;
 
         }
         else /* g...o */
         {
-                 if(!strcmp(ending, ".gnc")) {*description="Great Notions Embroidery"; *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".gt"))  {*description="Gold Thread Embroidery";   *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".hus")) {*description="Husqvarna Viking Embroidery"; *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".inb")) {*description="Inbro Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".inf")) {*description="Embroidery Color";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".jef")) {*description="Janome Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".ksm")) {*description="Pfaff Embroidery";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".max")) {*description="Pfaff Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".mit")) {*description="Mitsubishi Embroidery";   *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".new")) {*description="Ameco Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-            else if(!strcmp(ending, ".ofm")) {*description="Melco Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+                 if(!strcmp(ending, ".gnc")) {*extension=".gnc"; *description="Great Notions Embroidery"; *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".gt"))  {*extension=".gt";  *description="Gold Thread Embroidery";   *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".hus")) {*extension=".hus"; *description="Husqvarna Viking Embroidery"; *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".inb")) {*extension=".inb"; *description="Inbro Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".inf")) {*extension=".inf"; *description="Embroidery Color";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".jef")) {*extension=".jef"; *description="Janome Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".ksm")) {*extension=".ksm"; *description="Pfaff Embroidery";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".max")) {*extension=".max"; *description="Pfaff Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".mit")) {*extension=".mit"; *description="Mitsubishi Embroidery";   *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".new")) {*extension=".new"; *description="Ameco Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+            else if(!strcmp(ending, ".ofm")) {*extension=".ofm"; *description="Melco Embroidery";        *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
             else return 0;
 
         }
@@ -231,39 +229,39 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
     }
     else if(c <= 's')  /* p...s */
     {
-             if(!strcmp(ending, ".pcd")) {*description="Pfaff Embroidery";            *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pcm")) {*description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pcq")) {*description="Pfaff Embroidery";            *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pcs")) {*description="Pfaff Embroidery";            *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pec")) {*description="Brother Embroidery";          *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pel")) {*description="Brother Embroidery";          *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pem")) {*description="Brother Embroidery";          *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".pes")) {*description="Brother Embroidery";          *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".phb")) {*description="Brother Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".phc")) {*description="Brother Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".plt")) {*description="AutoCAD plot drawing";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".rgb")) {*description="RGB Embroidery";              *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".sew")) {*description="Janome Embroidery";           *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".shv")) {*description="Husqvarna Viking Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".sst")) {*description="Sunstar Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".stx")) {*description="Data Stitch Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".svg")) {*description="Scalable Vector Graphics";    *reader='U'; *writer='U';  *type=EMBFORMAT_OBJECTONLY;}
+             if(!strcmp(ending, ".pcd")) {*extension=".pcd"; *description="Pfaff Embroidery";            *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pcm")) {*extension=".pcm"; *description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pcq")) {*extension=".pcq"; *description="Pfaff Embroidery";            *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pcs")) {*extension=".pcs"; *description="Pfaff Embroidery";            *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pec")) {*extension=".pec"; *description="Brother Embroidery";          *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pel")) {*extension=".pel"; *description="Brother Embroidery";          *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pem")) {*extension=".pem"; *description="Brother Embroidery";          *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".pes")) {*extension=".pes"; *description="Brother Embroidery";          *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".phb")) {*extension=".phb"; *description="Brother Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".phc")) {*extension=".phc"; *description="Brother Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".plt")) {*extension=".plt"; *description="AutoCAD plot drawing";        *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".rgb")) {*extension=".rgb"; *description="RGB Embroidery";              *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".sew")) {*extension=".sew"; *description="Janome Embroidery";           *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".shv")) {*extension=".shv"; *description="Husqvarna Viking Embroidery"; *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".sst")) {*extension=".sst"; *description="Sunstar Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".stx")) {*extension=".stx"; *description="Data Stitch Embroidery";      *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".svg")) {*extension=".svg"; *description="Scalable Vector Graphics";    *reader='U'; *writer='U';  *type=EMBFORMAT_OBJECTONLY;}
         else return 0;
 
     }
     else if(c <= 'z')  /* t..z */
     {
 
-             if(!strcmp(ending, ".t09")) {*description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".tap")) {*description="Happy Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".thr")) {*description="ThredWorks Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STCHANDOBJ;}
-        else if(!strcmp(ending, ".txt")) {*description="Text File";                   *reader=' '; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".u00")) {*description="Barudan Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".u01")) {*description="Barudan Embroidery";          *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".vip")) {*description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".vp3")) {*description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".xxx")) {*description="Singer Embroidery";           *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
-        else if(!strcmp(ending, ".zsk")) {*description="ZSK USA Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+             if(!strcmp(ending, ".t09")) {*extension=".t09"; *description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".tap")) {*extension=".tap"; *description="Happy Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".thr")) {*extension=".thr"; *description="ThredWorks Embroidery";       *reader='U'; *writer='U';  *type=EMBFORMAT_STCHANDOBJ;}
+        else if(!strcmp(ending, ".txt")) {*extension=".txt"; *description="Text File";                   *reader=' '; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".u00")) {*extension=".u00"; *description="Barudan Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".u01")) {*extension=".u01"; *description="Barudan Embroidery";          *reader=' '; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".vip")) {*extension=".vip"; *description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".vp3")) {*extension=".vp3"; *description="Pfaff Embroidery";            *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".xxx")) {*extension=".xxx"; *description="Singer Embroidery";           *reader='U'; *writer='U';  *type=EMBFORMAT_STITCHONLY;}
+        else if(!strcmp(ending, ".zsk")) {*extension=".zsk"; *description="ZSK USA Embroidery";          *reader='U'; *writer=' ';  *type=EMBFORMAT_STITCHONLY;}
         else return 0;
     }
     else
@@ -272,6 +270,7 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
     }
     return 1;
 }
+
 
 /*! Returns EMBFORMAT_STITCHONLY if the format type only contains stitch data.
  *  Returns EMBFORMAT_OBJECTONLY if the format type only contains object data.

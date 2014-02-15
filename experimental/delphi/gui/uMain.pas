@@ -100,7 +100,7 @@ type
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  mmo1.Lines.Add( EmbReadersFilter() );
+  //mmo1.Lines.Add( EmbReadersFilter() );
   FInputFiles := TStringList.Create;
   dlgOpen1.Filter := EmbReadersFilter();
   FillExts();
@@ -125,7 +125,7 @@ begin
   //vtOutExt.RootNodeCount := LExtList.Count;
   for i := 0 to LExtList.Count -1 do
   begin
-    AddNew(vtExts.RootNode, '.'+LExtList.Names[i], LExtList.ValueFromIndex[i]);
+    AddNew(vtExts.RootNode, LExtList.Names[i], LExtList.ValueFromIndex[i]);
   end;
   LExtList.Free;
   vtExts.OnCompareNodes := vtExtsCompareNodes;

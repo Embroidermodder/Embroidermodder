@@ -97,10 +97,10 @@ begin
     end;
   finally
   
-    {curent := nil;
+    curent := nil;
     pext := nil;
-    description := nil;}
-    embFormatList_free(hformats);
+    description := nil;
+    //embFormatList_free(hformats);
     hformats := nil;
   end;
 
@@ -131,12 +131,12 @@ begin
   begin
     if pool <> '' then
       pool := pool + '|';
-    pool := pool + format('%s  (*.%1:s)|*.%1:s',[GReaders.ValueFromIndex[i],GReaders.Names[i] ]);
+    pool := pool + format('%s  (*%1:s)|*%1:s',[GReaders.ValueFromIndex[i],GReaders.Names[i] ]);
     if allExt <> '' then
       allExt := allExt + ';';
-    allExt := allExt + format('*.%s', [GReaders.Names[i]]);
+    allExt := allExt + format('*%s', [GReaders.Names[i]]);
   end;
-  pool := format('%s  (%1:s)|*.%1:s',['All embroidery format',allExt ]) +'|'+ pool;
+  pool := format('%s  (%1:s)|*%1:s',['All embroidery format',allExt ]) +'|'+ pool;
 
   {$ELSE}
 
