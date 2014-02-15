@@ -354,29 +354,32 @@ type
 
   PEmbFormat = ^TEmbFormat;
   TEmbFormat = record
-    ext: PChar;
-    features: Longword ;  // combinations of EMBFORMAT_XXXX above. 
-    smallInfo: PChar;   // default decription such "Machine X Embroidery".
-    nextExt: PChar;     // next format's key
+    extension: PChar;
     next: PEmbFormat;
   end {EmbFormat_};
 
-  PEMBHASH  = type pointer;
+  PEmbFormatList = ^TEmbFormatList;
+  TEmbFormatList = record
+    firstFormat: PEmbFormat;
+    lastFormat: PEmbFormat;
+    formatCount: Integer;
+  end {EmbFormatList_};
 
 const
   EMBFORMAT_UNSUPPORTED = 0;
   EMBFORMAT_STITCHONLY  = 1;
   EMBFORMAT_STCHANDOBJ  = 3; {/* binary operation: 1+2=3*/}
   EMBFORMAT_OBJECTONLY  = 2;
-  EMBFORMAT_HASREADER   = 1024;
-  EMBFORMAT_HASWRITER   = 2048;
-  EMBFORMAT_HASSUBWRITER = 4096;
-  EMBFORMAT_UNSTABLEREADER = 16384;
-  EMBFORMAT_UNSTABLEWRITER = 32768;
+
 var
-  embFormatList_create: function:  PEMBHASH cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
-  embFormatList_free: procedure(hash: PEMBHASH) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
-  embFormatList_first: function(hash: PEMBHASH): PEmbFormat cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormatList_create: function:  PEmbFormatList cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormatList_free: procedure(formatList: PEmbFormatList) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormat_info: function(const fileName: PChar; 
+                           var extension: PChar; 
+                           var description: PChar; 
+                           var reader: Char;
+                           var writer: Char; 
+                           var formatType: Integer): integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
 
 
 var
@@ -472,7 +475,7 @@ begin
 
     embFormatList_create  := GetProcAddress(DLLHandle,'embFormatList_create');
     embFormatList_free    := GetProcAddress(DLLHandle,'embFormatList_free');
-    embFormatList_first   := GetProcAddress(DLLHandle,'embFormatList_first');
+    embFormat_info   := GetProcAddress(DLLHandle,'embFormat_info');
 
   end
   else
