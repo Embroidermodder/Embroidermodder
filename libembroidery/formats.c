@@ -139,11 +139,19 @@ EmbFormatList* embFormatList_create() {
 }
 
 void embFormatList_free(EmbFormatList* formatList){
-    embFormat_free(formatList->firstFormat);
-    /*formatList->firstFormat = 0;*/
+    EmbFormat* tempPointer = formatList->firstFormat;
+    EmbFormat* nextPointer = 0;
+    while(tempPointer)
+    {
+        nextPointer = tempPointer->next;
+        free(tempPointer);
+        tempPointer = nextPointer;
+    }
+    /*embFormat_free(formatList->firstFormat);*/
+    formatList->firstFormat = 0;
     formatList->lastFormat = 0;
     free(formatList);
-    formatList = 0;
+    /*formatList = 0;*/
 }
 
 /*! Returns 1 if the extension of filename is known. otherwise, return 0.
@@ -292,63 +300,63 @@ int embFormat_type(const char* fileName)
     }
 
     /* TODO: This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT_STCHANDOBJ). */
-    if     (!strcmp(ending, "..100")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..10o")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..art")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..bmc")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..bro")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..cnd")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..col")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..csd")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..csv")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..dat")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..dem")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..dsb")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..dst")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..dsz")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..dxf")) return EMBFORMAT_OBJECTONLY;
-    else if(!strcmp(ending, "..edr")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..emd")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..exp")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..exy")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..eys")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..fxy")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..gnc")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..gt"))  return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..hus")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..inb")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..jef")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..ksm")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..max")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..mit")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..new")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..ofm")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pcd")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pcm")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pcq")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pcs")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pec")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pel")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pem")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..pes")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..phb")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..phc")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..rgb")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..sew")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..shv")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..stx")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..sst")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..svg")) return EMBFORMAT_OBJECTONLY;
-    else if(!strcmp(ending, "..t09")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..tap")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..thr")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..txt")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..u00")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..u01")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..vip")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..vp3")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..xxx")) return EMBFORMAT_STITCHONLY;
-    else if(!strcmp(ending, "..zsk")) return EMBFORMAT_STITCHONLY;
+    if     (!strcmp(ending, ".100")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".10o")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".art")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".bmc")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".bro")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".cnd")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".col")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".csd")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".csv")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".dat")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".dem")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".dsb")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".dst")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".dsz")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".dxf")) return EMBFORMAT_OBJECTONLY;
+    else if(!strcmp(ending, ".edr")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".emd")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".exp")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".exy")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".eys")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".fxy")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".gnc")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".gt"))  return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".hus")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".inb")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".jef")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".ksm")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".max")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".mit")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".new")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".ofm")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pcd")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pcm")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pcq")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pcs")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pec")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pel")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pem")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".pes")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".phb")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".phc")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".rgb")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".sew")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".shv")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".stx")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".sst")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".svg")) return EMBFORMAT_OBJECTONLY;
+    else if(!strcmp(ending, ".t09")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".tap")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".thr")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".txt")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".u00")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".u01")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".vip")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".vp3")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".xxx")) return EMBFORMAT_STITCHONLY;
+    else if(!strcmp(ending, ".zsk")) return EMBFORMAT_STITCHONLY;
     else { embLog_error("formats.c embFormat_type(), unsupported file type: %s\n", ending); }
 
     return EMBFORMAT_STITCHONLY;

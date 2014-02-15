@@ -42,30 +42,30 @@ var
   i : integer;
 
   hformats : PEmbFormatList;
-  curent : PEmbFormat;
+  current : PEmbFormat;
   pext, description: PChar;
   stateReader, stateWriter : char;
   formatType : integer;
 begin
   hformats := embFormatList_create();
-  //embFormatList_free(hformats);
-  //exit;
+  current  := hformats.firstFormat;
+  //embFormat_info( current.extension, pext, description, stateReader, stateWriter, formatType );
+  //embFormatList_free(hformats); exit;
   GReaders := TStringList.Create;
   GWriters := TStringList.Create;
 
-  curent  := hformats.firstFormat;
-  
+
   try
-    while curent <> nil do
+    while current <> nil do
     begin
-      embFormat_info( curent.extension, pext, description, stateReader, stateWriter, formatType );
+      embFormat_info( current.extension, pext, description, stateReader, stateWriter, formatType );
       //READ
       if stateReader <> ' ' then
       begin
-        ext := StrPas(pext);
+        ext := string(pext);
         if GReaders.IndexOfName(ext) < 0 then
         begin
-          GReaders.Values[ext] := StrPas(description);
+          GReaders.Values[ext] := string(description);
           (*{$IFNDEF EMBFORMAT_SUPPORTEDONLY}
           GReaders.Values[ext] := NameOfExt(ext,1,'Embroidery Format');
           {$ELSE}
@@ -79,10 +79,10 @@ begin
       //WRITE
       if stateWriter <> ' ' then
       begin
-        ext := StrPas(pext);
+        ext := string(pext);
         if GWriters.IndexOfName(ext) < 0 then
         begin
-          GWriters.Values[ext] := StrPas(description);
+          GWriters.Values[ext] := string(description);
           (*{$IFNDEF EMBFORMAT_SUPPORTEDONLY}
           GWriters.Values[ext] := NameOfExt(ext,2,'Embroidery Format');
           {$ELSE}
@@ -93,15 +93,16 @@ begin
         end;
 
       end;
-      curent := curent^.next;
+      current := current^.next;
     end;
   finally
   
-    curent := nil;
-    pext := nil;
-    description := nil;
-    //embFormatList_free(hformats);
-    hformats := nil;
+    {pext := 'a';
+    description := 'z';
+    stateReader := '0';
+    stateWriter := 'z';
+    embFormatList_free(hformats);}
+    
   end;
 
     
@@ -109,8 +110,9 @@ end;
 
 procedure EmbFillWriter(AList: TStrings);
 begin
-  if not assigned(GReaders) then
+  if not assigned(GWriters) then
      build_RW;
+  if Assigned(GWriters) then
   AList.Assign(GWriters);
 end;
 
@@ -127,6 +129,7 @@ begin
   pool := '';
   allExt := '';
   {$IFNDEF EMBSORTEDFILTER}
+  if assigned(GReaders) then
   for i := 0 to GReaders.Count-1 do
   begin
     if pool <> '' then
