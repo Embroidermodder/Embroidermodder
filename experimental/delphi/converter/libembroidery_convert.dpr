@@ -1,4 +1,4 @@
-program embroidery_converter;
+program libembroidery_convert;
 
 {$IFDEF FPC}
   {$MODE Delphi}
@@ -9,91 +9,32 @@ program embroidery_converter;
 uses
   SysUtils, libembroidery;
 
-const
-  formatCount = 59;
-  formats : array[0..formatCount*4-1] of string = (
-'.10o', 'U', ' ', ' Toyota Embroidery Format                         ',
-'.100', 'U', ' ', ' Toyota Embroidery Format                         ',
-'.art', ' ', ' ', ' Bernina Embroidery Format                        ',
-'.bmc', ' ', ' ', ' Bitmap Cache Embroidery Format                   ',
-'.bro', 'U', ' ', ' Bits & Volts Embroidery Format                   ',
-'.cnd', ' ', ' ', ' Melco Embroidery Format                          ',
-'.col', 'U', 'U', ' Embroidery Thread Color Format                   ',
-'.csd', 'U', ' ', ' Singer Embroidery Format                         ',
-'.csv', 'U', 'U', ' Comma Separated Values                           ',
-'.dat', 'U', ' ', ' Barudan Embroidery Format                        ',
-'.dem', ' ', ' ', ' Melco Embroidery Format                          ',
-'.dsb', 'U', ' ', ' Barudan Embroidery Format                        ',
-'.dst', 'U', 'U', ' Tajima Embroidery Format                         ',
-'.dsz', 'U', ' ', ' ZSK USA Embroidery Format                        ',
-'.dxf', ' ', ' ', ' Drawing Exchange Format                          ',
-'.edr', 'U', 'U', ' Embird Embroidery Format                         ',
-'.emd', 'U', ' ', ' Elna Embroidery Format                           ',
-'.exp', 'U', 'U', ' Melco Embroidery Format                          ',
-'.exy', 'U', ' ', ' Eltac Embroidery Format                          ',
-'.eys', ' ', ' ', ' Sierra Expanded Embroidery Format                ',
-'.fxy', 'U', ' ', ' Fortron Embroidery Format                        ',
-'.gnc', ' ', ' ', ' Great Notions Embroidery Format                  ',
-'.gt ', 'U', ' ', ' Gold Thread Embroidery Format                    ',
-'.hus', 'U', 'U', ' Husqvarna Viking Embroidery Format               ',
-'.inb', 'U', ' ', ' Inbro Embroidery Format                          ',
-'.inf', 'U', 'U', ' Embroidery Color Format                          ',
-'.jef', 'U', 'U', ' Janome Embroidery Format                         ',
-'.ksm', 'U', 'U', ' Pfaff Embroidery Format                          ',
-'.max', 'U', ' ', ' Pfaff Embroidery Format                          ',
-'.mit', 'U', ' ', ' Mitsubishi Embroidery Format                     ',
-'.new', 'U', ' ', ' Ameco Embroidery Format                          ',
-'.ofm', 'U', ' ', ' Melco Embroidery Format                          ',
-'.pcd', 'U', 'U', ' Pfaff Embroidery Format                          ',
-'.pcm', 'U', ' ', ' Pfaff Embroidery Format                          ',
-'.pcq', 'U', 'U', ' Pfaff Embroidery Format                          ',
-'.pcs', 'U', 'U', ' Pfaff Embroidery Format                          ',
-'.pec', 'U', 'U', ' Brother Embroidery Format                        ',
-'.pel', ' ', ' ', ' Brother Embroidery Format                        ',
-'.pem', ' ', ' ', ' Brother Embroidery Format                        ',
-'.pes', 'U', 'U', ' Brother Embroidery Format                        ',
-'.phb', 'U', ' ', ' Brother Embroidery Format                        ',
-'.phc', 'U', ' ', ' Brother Embroidery Format                        ',
-'.plt', 'U', 'U', ' AutoCAD plot drawing                             ',
-'.rgb', 'U', 'U', ' RGB Embroidery Format                            ',
-'.sew', 'U', ' ', ' Janome Embroidery Format                         ',
-'.shv', 'U', ' ', ' Husqvarna Viking Embroidery Format               ',
-'.sst', 'U', ' ', ' Sunstar Embroidery Format                        ',
-'.stx', 'U', ' ', ' Data Stitch Embroidery Format                    ',
-'.svg', 'U', 'U', ' Scalable Vector Graphics                         ',
-'.t09', 'U', ' ', ' Pfaff Embroidery Format                          ',
-'.tap', 'U', ' ', ' Happy Embroidery Format                          ',
-'.thr', 'U', 'U', ' ThredWorks Embroidery Format                     ',
-'.txt', ' ', 'U', ' Text File                                        ',
-'.u00', 'U', ' ', ' Barudan Embroidery Format                        ',
-'.u01', ' ', ' ', ' Barudan Embroidery Format                        ',
-'.vip', 'U', ' ', ' Pfaff Embroidery Format                          ',
-'.vp3', 'U', ' ', ' Pfaff Embroidery Format                          ',
-'.xxx', 'U', 'U', ' Singer Embroidery Format                         ',
-'.zsk', 'U', ' ', ' ZSK USA Embroidery Format                        '
-);
-
-
-
-
 procedure usage();
 var
   i : integer;
+  hformats : PEmbFormatList;
+  curent : PEmbFormat;
+  ext, description: PChar;
+  stateReader, stateWriter : char;
+  formatType : integer;
 begin
-    i := 0;
+  hformats := embFormatList_create();
+  curent  := hformats.firstFormat;
 
+
+    i := 0;
     writeln(' _____________________________________________________________________________ ');
-    writeln('|                ___ _____ ___  ___   __  _ ___  ___ ___   _ _                |');
-    writeln('|               | __|     | _ \| _ \ /  \| |   \| __| _ \ | | |               |');
-    writeln('|               | __| | | | _ <|   /| () | | |) | __|   / |__ |               |');
-    writeln('|               |___|_|_|_|___/|_|\_\\__/|_|___/|___|_|\_\|___|               |');
+    writeln('|          _   _ ___  ___ _____ ___  ___   __  _ ___  ___ ___   _ _           |');
+    writeln('|         | | | | _ \| __|     | _ \| _ \ /  \| |   \| __| _ \ | | |          |');
+    writeln('|         | |_| | _ <| __| | | | _ <|   /| () | | |) | __|   / |__ |          |');
+    writeln('|         |___|_|___/|___|_|_|_|___/|_|\_\\__/|_|___/|___|_|\_\|___|          |');
     writeln('|                    ___  __  ___ _ _    _ ___ ___  _____                     |');
     writeln('|                   / __|/  \|   | | \  / | __| _ \|_   _|                    |');
     writeln('|                  ( (__| () | | | |\ \/ /| __|   /  | |                      |');
     writeln('|                   \___|\__/|_|___| \__/ |___|_|\_\ |_|                      |');
     writeln('|_____________________________________________________________________________|');
     writeln('|                                                                             |');
-    writeln('| Usage: embroidery-convert fileToRead filesToWrite ...                       |');
+    writeln('| Usage: libembroidery_convert fileToRead filesToWrite ...                    |');
     writeln('|_____________________________________________________________________________|');
     writeln('                                                                               ');
     writeln(' _____________________________________________________________________________ ');
@@ -109,15 +50,20 @@ begin
     writeln('| Format | Read  | Write | Description                                        |');
     writeln('|________|_______|_______|____________________________________________________|');
     writeln('|        |       |       |                                                    |');
-    for i := 0 to formatCount-1 do
+ 
+    while curent <> nil do
     begin
-        writeln(format('|  %s  |   %s   |   %s   | %s |', [ formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3] ] ));
+      embFormat_info( curent.extension, ext, description, stateReader, stateWriter, formatType ); 
+      writeln(format('|  %-4s  |   %s   |   %s   |  %-49s |', [ curent^.extension, stateReader, stateWriter, description]) );
+      curent := curent^.next;
     end;
+
     writeln('|________|_______|_______|____________________________________________________|');
     writeln('|                                                                             |');
-    writeln('|                   http://embroidermodder.sourceforge.net                    |');
+    writeln('|                   http://embroidermodder.github.io                          |');
     writeln('|_____________________________________________________________________________|');
     writeln('');
+  embFormatList_free(hformats);
 end;
 
 (* TODO: Add capability for converting multiple files of various types to a single format. Currently, we only convert a single file to multiple formats. *)
@@ -135,7 +81,7 @@ end;
 
 var
   P : PEmbPattern;
-  i, successful : Integer;              
+  i, successful : Integer;
 begin
   { TODO -oUser -cConsole Main : Insert code here }
 
@@ -145,7 +91,6 @@ begin
     if paramcount < 2 then
     begin
         usage();
-        writeln('paramcount=',paramcount);
         exit;
     end;
 

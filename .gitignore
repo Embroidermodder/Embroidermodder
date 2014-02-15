@@ -60,3 +60,30 @@ project-files/qmake/Makefile
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+#########################
+# Built                 #
+#########################
+shared-build*
+libembroidery-shared-build*
+*.user
+Debug
+Release
+*-build-*
+
+#########################
+# Visual Studio         #
+#########################
+*.idb
+*.pdb
+*.ncb
+*.old
+
+#########################
+# Delphi Lazarus        #
+#########################
+*.dcu
+*.ppu
+*.~*
+experimental/delphi/*/*.exe
+experimental/delphi/*/*.dll

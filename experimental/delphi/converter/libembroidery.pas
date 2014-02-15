@@ -352,6 +352,35 @@ type
   end {EmbPattern_};
   PEmbPattern = ^TEmbPattern;
 
+  PEmbFormat = ^TEmbFormat;
+  TEmbFormat = record
+    extension: PChar;
+    next: PEmbFormat;
+  end {EmbFormat_};
+
+  PEmbFormatList = ^TEmbFormatList;
+  TEmbFormatList = record
+    firstFormat: PEmbFormat;
+    lastFormat: PEmbFormat;
+    formatCount: Integer;
+  end {EmbFormatList_};
+
+const
+  EMBFORMAT_UNSUPPORTED = 0;
+  EMBFORMAT_STITCHONLY  = 1;
+  EMBFORMAT_STCHANDOBJ  = 3; {/* binary operation: 1+2=3*/}
+  EMBFORMAT_OBJECTONLY  = 2;
+
+var
+  embFormatList_create: function:  PEmbFormatList cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormatList_free: procedure(formatList: PEmbFormatList) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormat_info: function(const fileName: PChar; 
+                           var extension: PChar; 
+                           var description: PChar; 
+                           var reader: Char;
+                           var writer: Char; 
+                           var formatType: Integer): integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+
 
 var
   embPattern_create:  function(): PEmbPattern cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
@@ -382,10 +411,6 @@ var
   DLLLoaded: Boolean { is DLL (dynamically) loaded already? }
     {$IFDEF WIN32} = False {$ENDIF};
 
-implementation
-
-uses
-  SysUtils;
 const
 {$IFDEF win32}
   emblib = 'libembroidery.dll';
@@ -397,7 +422,11 @@ const
     emblib = 'libembroidery.so';
   {$ENDIF}
 {$ENDIF}
+    
+implementation
 
+uses
+  SysUtils;
 var
   SaveExit: pointer;
   DLLHandle: THandle;
@@ -442,8 +471,11 @@ begin
     @embObjectList_count  := GetProcAddress(DLLHandle,'embObjectList_count');
     @embObjectList_empty  := GetProcAddress(DLLHandle,'embObjectList_empty');
     @embObjectList_free   := GetProcAddress(DLLHandle,'embObjectList_free');
-{$ENDIF}  
+{$ENDIF}
 
+    @embFormatList_create  := GetProcAddress(DLLHandle,'embFormatList_create');
+    @embFormatList_free    := GetProcAddress(DLLHandle,'embFormatList_free');
+    @embFormat_info   := GetProcAddress(DLLHandle,'embFormat_info');
 
   end
   else
