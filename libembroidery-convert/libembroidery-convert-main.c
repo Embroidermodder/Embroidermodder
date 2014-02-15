@@ -104,10 +104,10 @@ void usage(void)
     printf("| 'U' = Yes, but may be unstable.                                             |\n");
     printf("| ' ' = No.                                                                   |\n");
     printf("|_____________________________________________________________________________|\n");
-    printf("|        |       |       |       |                                            |\n");
-    printf("| Format |  Ver. | Read  | Write | Description                                |\n");
-    printf("|________|_______|_______|_______|____________________________________________|\n");
-    printf("|        |       |       |       |                                            |\n");
+    printf("|        |       |       |                                                    |\n");
+    printf("| Format | Read  | Write | Description                                        |\n");
+    printf("|________|_______|_______|____________________________________________________|\n");
+    printf("|        |       |       |                                                    |\n");
     /*for(i = 0; i < formatCount; i++)
     {
         printf("|  %s  |   %s   |   %s   | %s |\n", formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3]);
@@ -118,24 +118,20 @@ void usage(void)
     cur = formatList->firstFormat;
     while (cur != NULL) {
         if (embFormat_info(cur->extension, &extension, &description, &readerState, &writerState, &type)){
-            /*if((cur->stability & EMBFORMAT_ALLREADERS) != 0) {readers+=1; if((cur->stability & EMBFORMAT_STABLEREADERS) == EMBFORMAT_STABLEREADERS) hasReader = "S"; else hasReader = "U";}
-            else {hasReader =" ";}
-
-            if((cur->stability & EMBFORMAT_ALLWRITERS) != 0) {writers+=1;if((cur->stability & EMBFORMAT_STABLEWRITERS) == EMBFORMAT_STABLEWRITERS) {hasWriter = "S";} else hasWriter = "U";}
-            else {hasWriter =" ";}*/
-            /*printf("|  %-4s  |   %s   |   %s   |  %-49s |\n", cur->extension, hasReader, hasWriter, cur->description);*/
-            printf("|  %-4s  |  %s   |   %s   |  %-41s |\n", extension, readerState, writerState, description);
+            readers += readerState != ' '? 1 : 0;
+            writers += writerState != ' '? 1 : 0;
+            printf("|  %-4s  |   %c   |   %c   |  %-49s |\n", extension, readerState, writerState, description);
         }
         cur = cur->next;
     }
     embFormatList_free(formatList);
 
-    printf("|        |       |       |       |                                            |\n");
-    printf("|________|_______|_______|_______|____________________________________________|\n");
-    printf("|                |       |       |                                            |\n");
-    printf("|     Total:     |  %3d  |  %3d  |                                            |\n",
+    printf("|        |       |       |                                                    |\n");
+    printf("|________|_______|_______|____________________________________________________|\n");
+    printf("|        |       |       |                                                    |\n");
+    printf("| Total: |  %3d  |  %3d  |                                                    |\n",
            readers, writers);
-    printf("|________________|_______|_______|____________________________________________|\n");
+    printf("|________|_______|_______|____________________________________________________|\n");
     printf("|                                                                             |\n");
     printf("|                   http://embroidermodder.sourceforge.net                    |\n");
     printf("|_____________________________________________________________________________|\n");
