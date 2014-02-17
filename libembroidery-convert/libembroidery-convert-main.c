@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-static const int formatCount = 59;
+/*static const int formatCount = 59;
 static const char* const formats[] = {
 ".10o", "U", " ", " Toyota Embroidery Format                         ",
 ".100", "U", " ", " Toyota Embroidery Format                         ",
@@ -66,12 +66,19 @@ static const char* const formats[] = {
 ".vp3", "U", " ", " Pfaff Embroidery Format                          ",
 ".xxx", "U", "U", " Singer Embroidery Format                         ",
 ".zsk", "U", " ", " ZSK USA Embroidery Format                        "
-};
+};*/
 
 void usage(void)
 {
-    int i = 0;
-
+    EmbFormatList* formatList;
+    EmbFormat* cur;    
+    char* extension = NULL;
+    char* description = NULL;
+    char readerState;
+    char writerState;
+    int type;
+    int readers = 0;
+    int writers = 0;
     printf(" _____________________________________________________________________________ \n");
     printf("|          _   _ ___  ___ _____ ___  ___   __  _ ___  ___ ___   _ _           |\n");
     printf("|         | | | | _ \\| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ | | |          |\n");
@@ -99,10 +106,29 @@ void usage(void)
     printf("| Format | Read  | Write | Description                                        |\n");
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");
-    for(i = 0; i < formatCount; i++)
+    /*for(i = 0; i < formatCount; i++)
     {
         printf("|  %s  |   %s   |   %s   | %s |\n", formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3]);
+    }*/
+
+
+    formatList = embFormatList_create();
+    cur = formatList->firstFormat;
+    while (cur != NULL) {
+        if (embFormat_info(cur->extension, &extension, &description, &readerState, &writerState, &type)){
+            readers += readerState != ' '? 1 : 0;
+            writers += writerState != ' '? 1 : 0;
+            printf("|  %-4s  |   %c   |   %c   |  %-49s |\n", extension, readerState, writerState, description);
+        }
+        cur = cur->next;
     }
+    embFormatList_free(formatList);
+
+    printf("|        |       |       |                                                    |\n");
+    printf("|________|_______|_______|____________________________________________________|\n");
+    printf("|        |       |       |                                                    |\n");
+    printf("| Total: |  %3d  |  %3d  |                                                    |\n",
+           readers, writers);
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|                                                                             |\n");
     printf("|                   http://embroidermodder.github.io                          |\n");
