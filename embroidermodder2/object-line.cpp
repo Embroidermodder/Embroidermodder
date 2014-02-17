@@ -133,7 +133,9 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     //TODO: This is the initial concept for what realistic rendering be like. It's somewhat decent but needs improvement.
     if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool())
     {
-        painter->setPen(objectColor().darker(150)); //TODO: Improve this for black and dark colors
+        QPen renderPen(QColor(0,0,0,0));
+        renderPen.setWidthF(0);
+        painter->setPen(renderPen);
         QPainterPathStroker stroker;
         stroker.setWidth(0.35);
         stroker.setCapStyle(Qt::RoundCap);

@@ -83,7 +83,9 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
             elemPath.moveTo(elem.x, elem.y);
             elemPath.lineTo(next.x, next.y);
 
-            painter->setPen(objectColor().darker(150)); //TODO: Improve this for black and dark colors
+            QPen renderPen(QColor(0,0,0,0));
+            renderPen.setWidthF(0);
+            painter->setPen(renderPen);
             QPainterPathStroker stroker;
             stroker.setWidth(0.35);
             stroker.setCapStyle(Qt::RoundCap);
