@@ -9,6 +9,7 @@
 #include "object-point.h"
 #include "object-polyline.h"
 #include "object-rect.h"
+#include "object-textsingle.h"
 
 #include "emb-color.h"
 
@@ -377,6 +378,40 @@ void SaveObject::addTextMulti(EmbPattern* pattern, QGraphicsItem* item)
 void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 {
     //TODO: saving polygons, polylines and paths must be stable before we go here.
+
+    //TODO: This needs to work like a path, not a polyline. Improve this
+    TextSingleObject* obj = static_cast<TextSingleObject*>(item);
+    if(obj)
+    {
+        EmbPolylineObject* polyObject = (EmbPolylineObject*) malloc(sizeof(EmbPolylineObject));
+        QColor color = obj->objectColor();
+        polyObject->color = embColor_make(color.red(), color.green(), color.blue());
+        polyObject->lineType = obj->type();
+
+        QTransform transform;
+        transform.rotate(obj->rotation());
+
+        QPainterPath path = transform.map(obj->objectSavePath().simplified());
+        QPointF pos = obj->pos();
+        qreal startX = pos.x();
+        qreal startY = pos.y();
+        EmbPointList* pointList = 0;
+        QPainterPath::Element element;
+        for(int i = 0; i < path.elementCount(); ++i)
+        {
+            element = path.elementAt(i);
+            if(!pointList)
+            {
+                polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
+            }
+            else
+            {
+                pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
+            }
+        }
+
+        embPattern_addPolylineObjectAbs(pattern, polyObject);
+    }
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
