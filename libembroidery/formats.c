@@ -1,6 +1,7 @@
 #include "formats.h"
 #include "emb-logging.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
@@ -27,6 +28,7 @@ void embFormat_free(EmbFormat* pointer)
     }
     pointer = 0;
 }
+
 EmbFormat* embFormatList_add(EmbFormatList* formatList, char* key){
     EmbFormat* heapEmbFormat;
     /* TODO: validate before insert using featured parameter */
@@ -46,20 +48,6 @@ EmbFormat* embFormatList_add(EmbFormatList* formatList, char* key){
     formatList->formatCount += 1;
     return heapEmbFormat;
 }
-
-/* TEMPORARY MACROS SORTCUT OF SUPPORTED FEATURES */
-#define Stitch_Fea  EMBFORMAT_STITCHONLY
-#define Object_Fea  EMBFORMAT_OBJECTONLY
-#define Read_Fea    EMBFORMAT_STABLEREADERS
-#define Write_Fea   EMBFORMAT_STABLEWRITERS
-#define ReadU_Fea   EMBFORMAT_ALLREADERS
-#define WriteU_Fea  EMBFORMAT_ALLWRITERS
-#define SubFormat_Fea EMBFORMAT_HASSUBWRITER
-#define noFea       EMBFORMAT_UNSUPPORTED
-
-
-
-
 
 EmbFormatList* embFormatList_create() {
     EmbFormatList* formatList = (EmbFormatList*)malloc(sizeof(EmbFormatList));
