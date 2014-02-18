@@ -1,71 +1,8 @@
 #ifndef MAINWINDOW_ACTIONS_H
 #define MAINWINDOW_ACTIONS_H
 
-enum FILE_FORMATS {
-FILEFORMAT_NULL,
-FILEFORMAT_100, //Toyota Embroidery Format
-FILEFORMAT_10O, //Toyota Embroidery Format
-FILEFORMAT_ART, //Bernina Embroidery Format
-FILEFORMAT_BMC, //Bitmap Cache Embroidery Format
-FILEFORMAT_BRO, //Bits & Volts Embroidery Format
-FILEFORMAT_CND, //Melco Embroidery Format
-FILEFORMAT_COL, //Embroidery Thread Color Format
-FILEFORMAT_CSD, //Singer Embroidery Format
-FILEFORMAT_CSV, //Comma Separated Values
-FILEFORMAT_DAT, //Barudan Embroidery Format
-FILEFORMAT_DEM, //Melco Embroidery Format
-FILEFORMAT_DSB, //Barudan Embroidery Format
-FILEFORMAT_DST, //Tajima Embroidery Format
-FILEFORMAT_DSZ, //ZSK USA Embroidery Format
-FILEFORMAT_DXF, //Drawing Exchange Format
-FILEFORMAT_EDR, //Embird Embroidery Format
-FILEFORMAT_EMD, //Elna Embroidery Format
-FILEFORMAT_EXP, //Melco Embroidery Format
-FILEFORMAT_EXY, //Eltac Embroidery Format
-FILEFORMAT_EYS, //Sierra Expanded Embroidery Format
-FILEFORMAT_FXY, //Fortron Embroidery Format
-FILEFORMAT_GNC, //Great Notions Embroidery Format
-FILEFORMAT_GT,  //Gold Thread Embroidery Format
-FILEFORMAT_HUS, //Husqvarna Viking Embroidery Format
-FILEFORMAT_INB, //Inbro Embroidery Format
-FILEFORMAT_INF, //Embroidery Color Format
-FILEFORMAT_JEF, //Janome Embroidery Format
-FILEFORMAT_KSM, //Pfaff Embroidery Format
-FILEFORMAT_MAX, //Pfaff Embroidery Format
-FILEFORMAT_MIT, //Mitsubishi Embroidery Format
-FILEFORMAT_NEW, //Ameco Embroidery Format
-FILEFORMAT_OFM, //Melco Embroidery Format
-FILEFORMAT_PCD, //Pfaff Embroidery Format
-FILEFORMAT_PCM, //Pfaff Embroidery Format
-FILEFORMAT_PCQ, //Pfaff Embroidery Format
-FILEFORMAT_PCS, //Pfaff Embroidery Format
-FILEFORMAT_PEC, //Brother Embroidery Format
-FILEFORMAT_PEL, //Brother Embroidery Format
-FILEFORMAT_PEM, //Brother Embroidery Format
-FILEFORMAT_PES, //Brother Embroidery Format
-FILEFORMAT_PHB, //Brother Embroidery Format
-FILEFORMAT_PHC, //Brother Embroidery Format
-FILEFORMAT_PLT, //AutoCAD Plot drawing
-FILEFORMAT_RGB, //RGB Embroidery Format
-FILEFORMAT_SEW, //Janome Embroidery Format
-FILEFORMAT_SHV, //Husqvarna Viking Embroidery Format
-FILEFORMAT_SST, //Sunstar Embroidery Format
-FILEFORMAT_STX, //Data Stitch Embroidery Format
-FILEFORMAT_SVG, //Scalable Vector Graphics
-FILEFORMAT_T09, //Pfaff Embroidery Format
-FILEFORMAT_TAP, //Happy Embroidery Format
-FILEFORMAT_THR, //ThredWorks Embroidery Format
-FILEFORMAT_TXT, //Text File
-FILEFORMAT_U00, //Barudan Embroidery Format
-FILEFORMAT_U01, //Barudan Embroidery Format
-FILEFORMAT_VIP, //Pfaff Embroidery Format
-FILEFORMAT_VP3, //Pfaff Embroidery Format
-FILEFORMAT_XXX, //Singer Embroidery Format
-FILEFORMAT_ZSK, //ZSK USA Embroidery Format
-FILEFORMAT_UNKNOWN
-};
-
-enum COMMAND_ACTIONS {
+enum COMMAND_ACTIONS
+{
 
 ACTION_donothing,
 

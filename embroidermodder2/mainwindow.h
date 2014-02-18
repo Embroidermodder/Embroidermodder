@@ -276,6 +276,9 @@ public:
     QHash<QString, QToolBar*>       toolbarHash;
     QHash<QString, QMenu*>          menuHash;
 
+    QString                         formatFilterOpen;
+    QString                         formatFilterSave;
+
     bool                            isCommandActive() { return prompt->isCommandActive(); }
     QString                         activeCommand() { return prompt->activeCommand(); }
 
@@ -313,13 +316,13 @@ public slots:
     void                            readSettings();
     void                            writeSettings();
 
-    static int                      validFileFormat(const QString &fileName);
+    static bool                     validFileFormat(const QString &fileName);
 
 protected:
     virtual void                    resizeEvent(QResizeEvent*);
     void                            closeEvent(QCloseEvent *event);
     QAction*                        getFileSeparator();
-    QString                         fileFormatFilterString();
+    void                            loadFormats();
 
 private:
 
