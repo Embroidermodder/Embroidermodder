@@ -1,8 +1,4 @@
 /*! @file format-dst.h */
-/* .DST (Tajima) embroidery file read/write routines
- * Format comments are thanks to tspilman@dalcoathletic.com who's
- * notes appeared at http://www.wotsit.org under Tajima Format.
- */
 #ifndef FORMAT_DST_H
 #define FORMAT_DST_H
 
