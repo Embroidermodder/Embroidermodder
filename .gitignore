@@ -30,26 +30,20 @@ libembroidery-test/TODO
 libembroidery-test/libembroidery-test
 libembroidery-test/libembroidery-test.exe
 
-
 #########################
 # KDE4 Thumbnailer      #
 #########################
 thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
 
 #########################
-# Project Files         #
-#########################
-project-files/qmake/Makefile
-
-#########################
 # Misc Dev Files        #
 #########################
-*/.moc
-*/.obj
-*/Makefile
-*/_memleak*
-*/callgrind.*
-*/object_script.*
+*.moc
+*.obj
+*Makefile*
+*_memleak*
+*callgrind.*
+*object_script.*
 
 #########################
 # OS generated files    #
