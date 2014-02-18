@@ -44,6 +44,8 @@ thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
 *_memleak*
 *callgrind.*
 *object_script.*
+*.pro.user
+*.pro.user*
 
 #########################
 # OS generated files    #
