@@ -88,6 +88,6 @@ notifications:
   recipients:
     - embroidermodder@gmail.com
   email:
-    on_success: always # TODO: modify 'always' to 'change'
+    on_success: change
     on_failure: always
 
