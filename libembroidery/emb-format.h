@@ -25,7 +25,6 @@ extern EMB_PUBLIC int EMB_CALL embFormatList_count(EmbFormatList* pointer);
 extern EMB_PUBLIC int EMB_CALL embFormatList_empty(EmbFormatList* pointer);
 extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* pointer);
 extern EMB_PUBLIC int EMB_CALL embFormat_info(const char* fileName, char** extension, char** description, char* reader, char* writer, int* type);
-extern EMB_PUBLIC int EMB_CALL embFormat_type(const char* fileName);
 
 #ifdef __cplusplus
 }
