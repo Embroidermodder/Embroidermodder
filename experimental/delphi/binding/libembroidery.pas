@@ -37,49 +37,49 @@ type
     r: Byte;
     g: Byte;
     b: Byte;
-  end {EmbColor_};
+  end {EmbColor};
   
   TEmbPoint = record
     xx: Double;   {= absolute position (not relative) }
     yy: Double;   {= positive is up, units are in mm }
-  end {EmbPoint_};
+  end {EmbPoint};
 
   PEmbPointList = ^TEmbPointList;
   TEmbPointList = record
     point: TEmbPoint;
     next: PEmbPointList;
-  end {EmbPointList_};
+  end {EmbPointList};
 
   TEmbPointObject = record
     point: TEmbPoint;
 	  // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbPointObject_};
+  end {EmbPointObject};
 
   PEmbPointObjectList = ^TEmbPointObjectList;
   TEmbPointObjectList = record
     pointObj: TEmbPointObject;
     next: PEmbPointObjectList;
-  end {EmbPointObjectList_};
+  end {EmbPointObjectList};
 
 
   TEmbSettings = record
     dstJumpsPerTrim: Word;
     home: TEmbPoint;
-  end {EmbSettings_};
+  end {EmbSettings};
 
   TEmbHoop = record
     width: Double;
     height: Double;
-  end {EmbHoop_};
+  end {EmbHoop};
 
   TEmbStitch = record
     flags: Integer;   {= uses codes defined above }
     xx: Double;       {= absolute position (not relative) }
     yy: Double;       {= positive is up, units are in mm }
     color: Integer;
-  end {EmbStitch_};
+  end {EmbStitch};
 
   PEmbStitchList = ^TEmbStitchList;
   TEmbStitchList = record
@@ -92,13 +92,13 @@ type
     color: TEmbColor;
     description: PCHAR;
     catalogNumber: PCHAR;
-  end {EmbThread_};
+  end {EmbThread};
 
   PEmbThreadList = ^TEmbThreadList;
   TEmbThreadList = record
     thread: TEmbThread;
     next: PEmbThreadList;
-  end {EmbThreadList_};
+  end {EmbThreadList};
 
 
   TEmbArc = record
@@ -108,20 +108,20 @@ type
     midY: Double;
     endX: Double;   {= absolute position (not relative) }
     endY: Double;
-  end {EmbArc_};
+  end {EmbArc};
 
   TEmbArcObject = record
     arc: TEmbArc;  {+// Properties*/ }
     lineType: Integer;
     color: TEmbColor;
-  end {EmbArcObject_};
+  end {EmbArcObject};
 
 
   PEmbArcObjectList = ^TEmbArcObjectList;
   TEmbArcObjectList = record
     arcObj: TEmbArcObject;
     next: PEmbArcObjectList;
-  end {EmbArcObjectList_};
+  end {EmbArcObjectList};
 
 
 
@@ -129,7 +129,7 @@ type
     centerX: Double;
     centerY: Double;
     radius: Double;
-  end {EmbCircle_};
+  end {EmbCircle};
 
   TEmbCircleObject = record
     circle: TEmbCircle;
@@ -137,7 +137,7 @@ type
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbCircleObject_};
+  end {EmbCircleObject};
 
   PEmbCircleObjectList = ^TEmbCircleObjectList;
   TEmbCircleObjectList = record
@@ -150,7 +150,7 @@ type
     centerY: Double;
     radiusX: Double;
     radiusY: Double;
-  end {EmbEllipse_};
+  end {EmbEllipse};
 
   TEmbEllipseObject = record
     ellipse: TEmbEllipse;
@@ -158,7 +158,7 @@ type
     //Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbEllipseObject_};
+  end {EmbEllipseObject};
 
   PEmbEllipseObjectList = ^TEmbEllipseObjectList;
   TEmbEllipseObjectList = record
@@ -172,7 +172,7 @@ type
     y1: Double;
     x2: Double;
     y2: Double;
-  end {EmbLine_};
+  end {EmbLine};
 
   TEmbLineObject = record
     line: TEmbLine;
@@ -180,7 +180,7 @@ type
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbLineObject_};
+  end {EmbLineObject};
 
 
   PEmbLineObjectList = ^TEmbLineObjectList;
@@ -196,7 +196,7 @@ type
   TEmbFlagList = record
     flag: Integer;
     next: PEmbFLAGList;
-  end {EmbFlagList_};
+  end {EmbFlagList};
 
   TEmbPathObject = record
     pointList: PEmbPointList;
@@ -204,21 +204,21 @@ type
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbPathObject_};
+  end {EmbPathObject};
   PEmbPathObject = ^TEmbPathObject;
 
   PEmbPathObjectList = ^TEmbPathObjectList;
   TEmbPathObjectList = record
     pathObj: PEmbPathObject;
     next: PEmbPathObjectList;
-  end {EmbPathObjectList_};
+  end {EmbPathObjectList};
 
   TEmbPolygonObject = record
     pointList: PEmbPointList;
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbPolygonObject_};
+  end {EmbPolygonObject};
   PEmbPolygonObject = TEmbPolygonObject;
 
 
@@ -226,7 +226,7 @@ type
   TEmbPolygonObjectList = record
     polygonObj: PEmbPolygonObject;
     next: PEmbPolygonObjectList;
-  end {EmbPolygonObjectList_};
+  end {EmbPolygonObjectList};
 
 
   TEmbPolylineObject = record
@@ -234,14 +234,14 @@ type
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbPolylineObject_};
+  end {EmbPolylineObject};
   PEmbPolylineObject= ^TEmbPolylineObject;
 
   PEmbPolylineObjectList = ^TEmbPolylineObjectList;
   TEmbPolylineObjectList = record
     polylineObj: PEmbPolylineObject;
     next: PEmbPolylineObjectList;
-  end {EmbPolylineObjectList_};
+  end {EmbPolylineObjectList};
 
 
   TEmbRect = record
@@ -249,7 +249,7 @@ type
     left: Double;
     bottom: Double;
     right: Double;
-  end {EmbRect_};
+  end {EmbRect};
 
   TEmbRectObject = record
     rect: TEmbRect;
@@ -258,14 +258,14 @@ type
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbRectObject_};
+  end {EmbRectObject};
 
 
   PEmbRectObjectList = ^TEmbRectObjectList;
   TEmbRectObjectList = record
     rectObj: TEmbRectObject;
     next: PEmbRectObjectList;
-  end {EmbRectObjectList_};
+  end {EmbRectObjectList};
 
 
   TEmbBezier = record
@@ -277,7 +277,7 @@ type
     control2Y: Double;
     endX: Double;
     endY: Double;
-  end {EmbBezier_};
+  end {EmbBezier};
 
   PEmbSplineObject = ^TEmbSplineObject;
   TEmbSplineObject = record
@@ -286,14 +286,14 @@ type
     // Properties
     lineType: Integer;
     color: TEmbColor;
-  end {EmbSplineObject_};
+  end {EmbSplineObject};
 
 { A list of bezier curves is a B-spline }
   PEmbSplineObjectList = ^TEmbSplineObjectList;
   TEmbSplineObjectList = record
     splineObj: TEmbSplineObject;
     next: PEmbSplineObjectList;
-  end {EmbSplineObjectList_};
+  end {EmbSplineObjectList};
 
 {$IFDEF EMBOBJECT}
 type
@@ -315,7 +315,7 @@ type
     {$ENDIF}
     next: PEmbObjectList;
     child: PEmbObjectList;
-  end {EmbObjectList_};
+  end {EmbObjectList};
 {$ENDIF}
 
   TEmbPattern = record
@@ -349,8 +349,30 @@ type
     currentColorIndex: Integer;
     lastX: Double;
     lastY: Double;
-  end {EmbPattern_};
+  end {EmbPattern};
   PEmbPattern = ^TEmbPattern;
+
+  PEmbFormatList = ^TEmbFormatList;
+  TEmbFormatList = record
+    extension: PChar;
+    next: PEmbFormatList;
+  end {EmbFormatList};
+
+const
+  EMBFORMAT_UNSUPPORTED = 0;
+  EMBFORMAT_STITCHONLY  = 1;
+  EMBFORMAT_STCHANDOBJ  = 3; {/* binary operation: 1+2=3*/}
+  EMBFORMAT_OBJECTONLY  = 2;
+
+var
+  embFormatList_create: function:  PEmbFormatList cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormatList_free: procedure(formatList: PEmbFormatList) cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
+  embFormat_info: function(const fileName: PChar; 
+                           var extension: PChar; 
+                           var description: PChar; 
+                           var reader: Char;
+                           var writer: Char; 
+                           var formatType: Integer): integer cdecl  {$IFDEF WIN32} stdcall {$ENDIF};
 
 
 var
@@ -382,10 +404,6 @@ var
   DLLLoaded: Boolean { is DLL (dynamically) loaded already? }
     {$IFDEF WIN32} = False {$ENDIF};
 
-implementation
-
-uses
-  SysUtils;
 const
 {$IFDEF win32}
   emblib = 'libembroidery.dll';
@@ -397,7 +415,11 @@ const
     emblib = 'libembroidery.so';
   {$ENDIF}
 {$ENDIF}
+    
+implementation
 
+uses
+  SysUtils;
 var
   SaveExit: pointer;
   DLLHandle: THandle;
@@ -442,8 +464,11 @@ begin
     @embObjectList_count  := GetProcAddress(DLLHandle,'embObjectList_count');
     @embObjectList_empty  := GetProcAddress(DLLHandle,'embObjectList_empty');
     @embObjectList_free   := GetProcAddress(DLLHandle,'embObjectList_free');
-{$ENDIF}  
+{$ENDIF}
 
+    @embFormatList_create  := GetProcAddress(DLLHandle,'embFormatList_create');
+    @embFormatList_free    := GetProcAddress(DLLHandle,'embFormatList_free');
+    @embFormat_info   := GetProcAddress(DLLHandle,'embFormat_info');
 
   end
   else
