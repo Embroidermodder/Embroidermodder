@@ -14,7 +14,7 @@ EmbFormatList* embFormatList_create()
     EmbFormatList* firstFormat = 0;
 
     EmbFormatList* heapFormatList = (EmbFormatList*)malloc(sizeof(EmbFormatList));
-    if(!heapFormatList) { embLog_error("formats.c embFormatList_create(), cannot allocate memory for heapFormatList\n"); return 0; }
+    if(!heapFormatList) { embLog_error("emb-format.c embFormatList_create(), cannot allocate memory for heapFormatList\n"); return 0; }
     heapFormatList->extension = ".10o";
     heapFormatList->next = 0;
 
@@ -84,9 +84,9 @@ EmbFormatList* embFormatList_create()
 
 EmbFormatList* embFormatList_add(EmbFormatList* pointer, char* data)
 {
-    if(!pointer) { embLog_error("formats.c embFormatList_add(), pointer argument is null\n"); return 0; }
+    if(!pointer) { embLog_error("emb-format.c embFormatList_add(), pointer argument is null\n"); return 0; }
     pointer->next = (EmbFormatList*)malloc(sizeof(EmbFormatList));
-    if(!pointer->next) { embLog_error("formats.c embFormatList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    if(!pointer->next) { embLog_error("emb-format.c embFormatList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
     pointer->extension = data;
     pointer->next = 0;
@@ -136,7 +136,7 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
     char ending[2 + EMBFORMAT_MAXEXT];
     char c;
 
-    if(!fileName) { embLog_error("formats.c embFormat_info(), fileName argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("emb-format.c embFormat_info(), fileName argument is null\n"); return 0; }
 
     if(strlen(fileName) == 0) return 0;
     if(strrchr(fileName, '.'))
@@ -249,7 +249,7 @@ int embFormat_type(const char* fileName)
     int i = 0;
     char ending[5];
 
-    if(!fileName) { embLog_error("formats.c embFormat_type(), fileName argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("emb-format.c embFormat_type(), fileName argument is null\n"); return 0; }
 
     if(strlen(fileName) == 0) return 0;
     strcpy(ending, strrchr(fileName, '.'));
@@ -318,7 +318,7 @@ int embFormat_type(const char* fileName)
     else if(!strcmp(ending, ".vp3")) return EMBFORMAT_STITCHONLY;
     else if(!strcmp(ending, ".xxx")) return EMBFORMAT_STITCHONLY;
     else if(!strcmp(ending, ".zsk")) return EMBFORMAT_STITCHONLY;
-    else { embLog_error("formats.c embFormat_type(), unsupported file type: %s\n", ending); }
+    else { embLog_error("emb-format.c embFormat_type(), unsupported file type: %s\n", ending); }
 
     return EMBFORMAT_STITCHONLY;
 }
