@@ -31,6 +31,8 @@ begin
     writeln('|                   / __|/  \|   | | \  / | __| _ \|_   _|                    |');
     writeln('|                  ( (__| () | | | |\ \/ /| __|   /  | |                      |');
     writeln('|                   \___|\__/|_|___| \__/ |___|_|\_\ |_|                      |');
+    writeln('|                                                                             |');
+    writeln('|                       * Delphi/FreePascal Version *                         |');
     writeln('|_____________________________________________________________________________|');
     writeln('|                                                                             |');
     writeln('| Usage: libembroidery_convert fileToRead filesToWrite ...                    |');
