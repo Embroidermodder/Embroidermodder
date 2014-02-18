@@ -272,7 +272,7 @@ public:
     void setSettingsTextStyleStrikeOut(bool newValue)                  { settings_text_style_strikeout           = newValue; }
     void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
 
-    QHash<int, QAction*>            actionDict;
+    QHash<int, QAction*>            actionHash;
     QHash<QString, QToolBar*>       toolbarHash;
     QHash<QString, QMenu*>          menuHash;
 

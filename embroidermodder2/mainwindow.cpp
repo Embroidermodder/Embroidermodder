@@ -240,7 +240,7 @@ MainWindow::~MainWindow()
 
 QAction* MainWindow::getAction(int actionEnum)
 {
-    return actionDict.value(actionEnum);
+    return actionHash.value(actionEnum);
 }
 
 void MainWindow::recentMenuAboutToShow()
@@ -281,14 +281,14 @@ void MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionDict.value(ACTION_windowclose));
-    windowMenu->addAction(actionDict.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash.value(ACTION_windowclose));
+    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionDict.value(ACTION_windowcascade));
-    windowMenu->addAction(actionDict.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
+    windowMenu->addAction(actionHash.value(ACTION_windowtile));
     windowMenu->addSeparator();
-    windowMenu->addAction(actionDict.value(ACTION_windownext));
-    windowMenu->addAction(actionDict.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash.value(ACTION_windownext));
+    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -559,9 +559,9 @@ void MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionDict.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionDict.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionDict.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
 
     if(numOfDocs)
     {

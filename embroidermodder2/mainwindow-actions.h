@@ -94,7 +94,6 @@ ACTION_help,
 ACTION_changelog,
 ACTION_tipoftheday,
 ACTION_about,
-ACTION_aboutQt,
 // Icons
 ACTION_icon16,
 ACTION_icon24,
@@ -148,8 +147,8 @@ ACTION_pandown,
 ACTION_day,
 ACTION_night,
 
-ACTION_spellcheck,
-ACTION_quickselect,
+//TODO: ACTION_spellcheck,
+//TODO: ACTION_quickselect,
 
 ACTION_null
 };

@@ -1099,11 +1099,20 @@ void View::setCornerButton()
     {
         QPushButton* cornerButton = new QPushButton(this);
         cornerButton->setFlat(true);
-        QAction* act = mainWin->actionDict.value(num);
-        cornerButton->setIcon(act->icon());
-        connect(cornerButton, SIGNAL(clicked()), this, SLOT(cornerButtonClicked()));
-        setCornerWidget(cornerButton);
-        cornerButton->setCursor(Qt::ArrowCursor);
+        QAction* act = mainWin->actionHash.value(num);
+        //NOTE: Prevent crashing if the action is NULL.
+        if(!act)
+        {
+            QMessageBox::information(this, tr("Corner Widget Error"), tr("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
+            setCornerWidget(0);
+        }
+        else
+        {
+            cornerButton->setIcon(act->icon());
+            connect(cornerButton, SIGNAL(clicked()), this, SLOT(cornerButtonClicked()));
+            setCornerWidget(cornerButton);
+            cornerButton->setCursor(Qt::ArrowCursor);
+        }
     }
     else
     {
@@ -1114,7 +1123,7 @@ void View::setCornerButton()
 void View::cornerButtonClicked()
 {
     qDebug("Corner Button Clicked.");
-    mainWin->actionDict.value(mainWin->getSettingsDisplayScrollBarWidgetNum())->trigger();
+    mainWin->actionHash.value(mainWin->getSettingsDisplayScrollBarWidgetNum())->trigger();
 }
 
 void View::zoomIn()
@@ -1764,9 +1773,9 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     }
 
     menu.addSeparator();
-    menu.addAction(mainWin->actionDict.value(ACTION_cut));
-    menu.addAction(mainWin->actionDict.value(ACTION_copy));
-    menu.addAction(mainWin->actionDict.value(ACTION_paste));
+    menu.addAction(mainWin->actionHash.value(ACTION_cut));
+    menu.addAction(mainWin->actionHash.value(ACTION_copy));
+    menu.addAction(mainWin->actionHash.value(ACTION_paste));
     menu.addSeparator();
 
     if(!selectionEmpty)
