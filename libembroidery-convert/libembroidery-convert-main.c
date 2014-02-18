@@ -85,9 +85,12 @@ void usage(void)
 
 int main(int argc, const char* argv[])
 {
-#ifdef SHORT_WAY
     EmbPattern* p = 0;
     int successful = 0, i = 0;
+    char* unusedStr = 0;
+    char unusedChar;
+    int formatType;
+#ifdef SHORT_WAY
     if(argc < 3)
     {
         usage();
@@ -105,9 +108,11 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    if(embFormat_type(argv[1]) == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
+    embFormat_info(argv[1], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+    if(formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
     {
-        if(embFormat_type(argv[2]) == EMBFORMAT_STITCHONLY)
+        embFormat_info(argv[2], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+        if(formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(p);
     }
 
@@ -122,9 +127,9 @@ int main(int argc, const char* argv[])
     embPattern_free(p);
     return 0;
 #else /* LONG_WAY */
-    EmbPattern* p = 0;
+
     EmbReaderWriter* reader = 0, *writer = 0;
-    int successful = 0, i = 0;
+
     if(argc < 3)
     {
         usage();
@@ -153,9 +158,11 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    if(embFormat_type(argv[1]) == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
+    embFormat_info(argv[1], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+    if(formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
     {
-        if(embFormat_type(argv[2]) == EMBFORMAT_STITCHONLY)
+        embFormat_info(argv[2], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+        if(formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(p);
     }
 
