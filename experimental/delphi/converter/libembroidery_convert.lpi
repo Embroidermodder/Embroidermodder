@@ -36,7 +36,7 @@
     </RunParams>
     <Units Count="1">
       <Unit0>
-        <Filename Value="embroidery_converter.dpr"/>
+        <Filename Value="libembroidery_convert.dpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
     </Units>
