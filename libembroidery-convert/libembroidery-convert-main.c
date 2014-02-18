@@ -60,7 +60,6 @@ void usage(void)
     embFormatList_free(formatList);
     formatList = 0;
 
-    printf("|        |       |       |                                                    |\n");
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");
     printf("| Total: |  %3d  |  %3d  |                                                    |\n", numReaders, numWriters);
