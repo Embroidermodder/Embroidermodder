@@ -1,6 +1,6 @@
 #include "emb-reader-writer.h"
 #include "emb-logging.h"
-#include "formats.h"
+#include "emb-format.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -70,15 +70,15 @@ static const char* const formats[] = {
 
 void usage(void)
 {
-    EmbFormatList* formatList;
-    EmbFormat* cur;    
-    char* extension = NULL;
-    char* description = NULL;
+    EmbFormatList* formatList = 0;
+    EmbFormatList* curFormat = 0;
+    char* extension = 0;
+    char* description = 0;
     char readerState;
     char writerState;
     int type;
-    int readers = 0;
-    int writers = 0;
+    int numReaders = 0;
+    int numWriters = 0;
     printf(" _____________________________________________________________________________ \n");
     printf("|          _   _ ___  ___ _____ ___  ___   __  _ ___  ___ ___   _ _           |\n");
     printf("|         | | | | _ \\| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ | | |          |\n");
@@ -106,29 +106,27 @@ void usage(void)
     printf("| Format | Read  | Write | Description                                        |\n");
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");
-    /*for(i = 0; i < formatCount; i++)
-    {
-        printf("|  %s  |   %s   |   %s   | %s |\n", formats[i*4], formats[i*4+1], formats[i*4+2], formats[i*4+3]);
-    }*/
-
 
     formatList = embFormatList_create();
-    cur = formatList->firstFormat;
-    while (cur != NULL) {
-        if (embFormat_info(cur->extension, &extension, &description, &readerState, &writerState, &type)){
-            readers += readerState != ' '? 1 : 0;
-            writers += writerState != ' '? 1 : 0;
+    if(!formatList) { embLog_error("libembroidery-convert-main.c usage(), cannot allocate memory for formatList\n"); return; }
+    curFormat = formatList;
+    while(curFormat)
+    {
+        if(embFormat_info(curFormat->extension, &extension, &description, &readerState, &writerState, &type))
+        {
+            numReaders += readerState != ' '? 1 : 0;
+            numWriters += writerState != ' '? 1 : 0;
             printf("|  %-4s  |   %c   |   %c   |  %-49s |\n", extension, readerState, writerState, description);
         }
-        cur = cur->next;
+        curFormat = curFormat->next;
     }
     embFormatList_free(formatList);
+    formatList = 0;
 
     printf("|        |       |       |                                                    |\n");
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");
-    printf("| Total: |  %3d  |  %3d  |                                                    |\n",
-           readers, writers);
+    printf("| Total: |  %3d  |  %3d  |                                                    |\n", numReaders, numWriters);
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|                                                                             |\n");
     printf("|                   http://embroidermodder.github.io                          |\n");

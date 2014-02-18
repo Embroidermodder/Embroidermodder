@@ -34,6 +34,7 @@ SOURCES += \
 ../libembroidery/emb-ellipse.c \
 ../libembroidery/emb-file.c \
 ../libembroidery/emb-flag.c \
+../libembroidery/emb-format.c \
 ../libembroidery/emb-hash.c \
 ../libembroidery/emb-hoop.c \
 ../libembroidery/emb-layer.c \
@@ -57,7 +58,6 @@ SOURCES += \
 ../libembroidery/helpers-binary.c \
 ../libembroidery/helpers-misc.c \
 ../libembroidery/thread-color.c \
-../libembroidery/formats.c \
 ../libembroidery/format-10o.c \
 ../libembroidery/format-100.c \
 ../libembroidery/format-art.c \
@@ -134,6 +134,7 @@ HEADERS += \
 ../libembroidery/emb-ellipse.h \
 ../libembroidery/emb-file.h \
 ../libembroidery/emb-flag.h \
+../libembroidery/emb-format.h \
 ../libembroidery/emb-hash.h \
 ../libembroidery/emb-hoop.h \
 ../libembroidery/emb-layer.h \
