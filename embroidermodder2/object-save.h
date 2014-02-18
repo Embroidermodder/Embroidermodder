@@ -50,9 +50,7 @@ public:
     void addTextSingle   (EmbPattern* pattern, QGraphicsItem* item);
 
 private:
-    bool isStitchOnlyFormat(const QString& fileName);
-
-    QGraphicsScene* scene;
+    QGraphicsScene* gscene;
 };
 
 #endif

@@ -15,6 +15,8 @@
 
 #include "preview-dialog.h"
 
+#include "emb-format.h"
+
 #include <stdlib.h>
 
 #include <QDebug>
@@ -102,6 +104,8 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     setWindowIcon(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
+
+    loadFormats();
 
     //create the mdiArea
     QFrame* vbox = new QFrame(this);
@@ -365,12 +369,12 @@ void MainWindow::openfile(bool recent, const QString& recentFile)
     else if(!preview)
     {
         //TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
-        files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, fileFormatFilterString());
+        files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
     else if(preview)
     {
-        PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, fileFormatFilterString());
+        PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
         //TODO: set openDialog->selectNameFilter(const QString& filter) from settings_opensave_open_format
         connect(openDialog, SIGNAL(filesSelected(const QStringList&)), this, SLOT(openFilesSelected(const QStringList&)));
         openDialog->exec();
@@ -387,8 +391,7 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
     {
         for(int i = 0; i < filesToOpen.count(); i++)
         {
-            int fileFormat = validFileFormat(filesToOpen[i]);
-            if(fileFormat == FILEFORMAT_NULL)
+            if(!validFileFormat(filesToOpen[i]))
                 continue;
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
@@ -471,7 +474,7 @@ void MainWindow::saveasfile()
 
     QString file;
     openFilesPath = settings_opensave_recent_directory;
-    file = QFileDialog::getSaveFileName(this, tr("Save"), openFilesPath, fileFormatFilterString()); //TODO: set selectedFilter from settings_opensave_save_format
+    file = QFileDialog::getSaveFileName(this, tr("Save"), openFilesPath, formatFilterSave);
 
     win->saveFile(file);
 
@@ -665,135 +668,64 @@ void MainWindow::hideUnimplemented()
     qDebug("MainWindow::hideUnimplemented()");
 }
 
-int MainWindow::validFileFormat(const QString& fileName)
+bool MainWindow::validFileFormat(const QString& fileName)
 {
-    int type = FILEFORMAT_NULL;
-    if     (fileName.toUpper().endsWith(".100")) type = FILEFORMAT_100;
-    else if(fileName.toUpper().endsWith(".10O")) type = FILEFORMAT_10O;
-    else if(fileName.toUpper().endsWith(".ART")) type = FILEFORMAT_ART;
-    else if(fileName.toUpper().endsWith(".BMC")) type = FILEFORMAT_BMC;
-    else if(fileName.toUpper().endsWith(".BRO")) type = FILEFORMAT_BRO;
-    else if(fileName.toUpper().endsWith(".CND")) type = FILEFORMAT_CND;
-    else if(fileName.toUpper().endsWith(".COL")) type = FILEFORMAT_COL;
-    else if(fileName.toUpper().endsWith(".CSD")) type = FILEFORMAT_CSD;
-    else if(fileName.toUpper().endsWith(".CSV")) type = FILEFORMAT_CSV;
-    else if(fileName.toUpper().endsWith(".DAT")) type = FILEFORMAT_DAT;
-    else if(fileName.toUpper().endsWith(".DEM")) type = FILEFORMAT_DEM;
-    else if(fileName.toUpper().endsWith(".DSB")) type = FILEFORMAT_DSB;
-    else if(fileName.toUpper().endsWith(".DST")) type = FILEFORMAT_DST;
-    else if(fileName.toUpper().endsWith(".DSZ")) type = FILEFORMAT_DSZ;
-    else if(fileName.toUpper().endsWith(".DXF")) type = FILEFORMAT_DXF;
-    else if(fileName.toUpper().endsWith(".EDR")) type = FILEFORMAT_EDR;
-    else if(fileName.toUpper().endsWith(".EMD")) type = FILEFORMAT_EMD;
-    else if(fileName.toUpper().endsWith(".EXP")) type = FILEFORMAT_EXP;
-    else if(fileName.toUpper().endsWith(".EXY")) type = FILEFORMAT_EXY;
-    else if(fileName.toUpper().endsWith(".EYS")) type = FILEFORMAT_EYS;
-    else if(fileName.toUpper().endsWith(".FXY")) type = FILEFORMAT_FXY;
-    else if(fileName.toUpper().endsWith(".GNC")) type = FILEFORMAT_GNC;
-    else if(fileName.toUpper().endsWith(".GT"))  type = FILEFORMAT_GT;
-    else if(fileName.toUpper().endsWith(".HUS")) type = FILEFORMAT_HUS;
-    else if(fileName.toUpper().endsWith(".INB")) type = FILEFORMAT_INB;
-    else if(fileName.toUpper().endsWith(".INF")) type = FILEFORMAT_INF;
-    else if(fileName.toUpper().endsWith(".JEF")) type = FILEFORMAT_JEF;
-    else if(fileName.toUpper().endsWith(".KSM")) type = FILEFORMAT_KSM;
-    else if(fileName.toUpper().endsWith(".MAX")) type = FILEFORMAT_MAX;
-    else if(fileName.toUpper().endsWith(".MIT")) type = FILEFORMAT_MIT;
-    else if(fileName.toUpper().endsWith(".NEW")) type = FILEFORMAT_NEW;
-    else if(fileName.toUpper().endsWith(".OFM")) type = FILEFORMAT_OFM;
-    else if(fileName.toUpper().endsWith(".PCD")) type = FILEFORMAT_PCD;
-    else if(fileName.toUpper().endsWith(".PCM")) type = FILEFORMAT_PCM;
-    else if(fileName.toUpper().endsWith(".PCQ")) type = FILEFORMAT_PCQ;
-    else if(fileName.toUpper().endsWith(".PCS")) type = FILEFORMAT_PCS;
-    else if(fileName.toUpper().endsWith(".PEC")) type = FILEFORMAT_PEC;
-    else if(fileName.toUpper().endsWith(".PEL")) type = FILEFORMAT_PEL;
-    else if(fileName.toUpper().endsWith(".PEM")) type = FILEFORMAT_PEM;
-    else if(fileName.toUpper().endsWith(".PES")) type = FILEFORMAT_PES;
-    else if(fileName.toUpper().endsWith(".PHB")) type = FILEFORMAT_PHB;
-    else if(fileName.toUpper().endsWith(".PHC")) type = FILEFORMAT_PHC;
-    else if(fileName.toUpper().endsWith(".PLT")) type = FILEFORMAT_PLT;
-    else if(fileName.toUpper().endsWith(".RGB")) type = FILEFORMAT_RGB;
-    else if(fileName.toUpper().endsWith(".SEW")) type = FILEFORMAT_SEW;
-    else if(fileName.toUpper().endsWith(".SHV")) type = FILEFORMAT_SHV;
-    else if(fileName.toUpper().endsWith(".STX")) type = FILEFORMAT_STX;
-    else if(fileName.toUpper().endsWith(".SST")) type = FILEFORMAT_SST;
-    else if(fileName.toUpper().endsWith(".SVG")) type = FILEFORMAT_SVG;
-    else if(fileName.toUpper().endsWith(".T09")) type = FILEFORMAT_T09;
-    else if(fileName.toUpper().endsWith(".TAP")) type = FILEFORMAT_TAP;
-    else if(fileName.toUpper().endsWith(".THR")) type = FILEFORMAT_THR;
-    else if(fileName.toUpper().endsWith(".TXT")) type = FILEFORMAT_TXT;
-    else if(fileName.toUpper().endsWith(".U00")) type = FILEFORMAT_U00;
-    else if(fileName.toUpper().endsWith(".U01")) type = FILEFORMAT_U01;
-    else if(fileName.toUpper().endsWith(".VIP")) type = FILEFORMAT_VIP;
-    else if(fileName.toUpper().endsWith(".VP3")) type = FILEFORMAT_VP3;
-    else if(fileName.toUpper().endsWith(".XXX")) type = FILEFORMAT_XXX;
-    else if(fileName.toUpper().endsWith(".ZSK")) type = FILEFORMAT_ZSK;
-    return type;
+    char* unusedStr = 0;
+    char unusedChar;
+    int unusedInt;
+    if(embFormat_info(qPrintable(fileName), &unusedStr, &unusedStr, &unusedChar, &unusedChar, &unusedInt))
+        return true;
+    return false;
 }
 
-QString MainWindow::fileFormatFilterString()
+void MainWindow::loadFormats()
 {
-    QString supported = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.inf *.jef *.ksm *.max *.mit *.new *.ofm *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.plt *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
-    QString all = "All Files (*);;"   \
-    "100 (*.100);;"     \
-    "10o (*.10o);;"     \
-    "ART (*.art);;"     \
-    "BMC (*.bmc);;"     \
-    "BRO (*.bro);;"     \
-    "CND (*.cnd);;"     \
-    "COL (*.col);;"     \
-    "CSD (*.csd);;"     \
-    "CSV (*.csv);;"     \
-    "DAT (*.dat);;"     \
-    "DEM (*.dem);;"     \
-    "DSB (*.dsb);;"     \
-    "DST (*.dst);;"     \
-    "DSZ (*.dsz);;"     \
-    "DXF (*.dxf);;"     \
-    "EDR (*.edr);;"     \
-    "EMD (*.emd);;"     \
-    "EXP (*.exp);;"     \
-    "EXY (*.exy);;"     \
-    "EYS (*.eys);;"     \
-    "FXY (*.fxy);;"     \
-    "GNC (*.gnc);;"     \
-    "GT (*.gt);;"       \
-    "HUS (*.hus);;"     \
-    "INB (*.inb);;"     \
-    "INF (*.inf);;"     \
-    "JEF (*.jef);;"     \
-    "KSM (*.ksm);;"     \
-    "MAX (*.max);;"     \
-    "MIT (*.mit);;"     \
-    "NEW (*.new);;"     \
-    "OFM (*.ofm);;"     \
-    "PCD (*.pcd);;"     \
-    "PCM (*.pcm);;"     \
-    "PCQ (*.pcq);;"     \
-    "PCS (*.pcs);;"     \
-    "PEC (*.pec);;"     \
-    "PEL (*.pel);;"     \
-    "PEM (*.pem);;"     \
-    "PES (*.pes);;"     \
-    "PHB (*.phb);;"     \
-    "PHC (*.phc);;"     \
-    "PLT (*.plt);;"     \
-    "RGB (*.rgb);;"     \
-    "SEW (*.sew);;"     \
-    "SHV (*.shv);;"     \
-    "SST (*.sst);;"     \
-    "STX (*.stx);;"     \
-    "SVG (*.svg);;"     \
-    "T09 (*.t09);;"     \
-    "TAP (*.tap);;"     \
-    "THR (*.thr);;"     \
-    "TXT (*.txt);;"     \
-    "U00 (*.u00);;"     \
-    "U01 (*.u01);;"     \
-    "VIP (*.vip);;"     \
-    "VP3 (*.vp3);;"     \
-    "XXX (*.xxx);;"     \
-    "ZSK (*.zsk);;";
+    char stable, unstable;
+    QString supportedReaders  = "All Supported Files (";
+    QString individualReaders = "All Files (*);;";
+    QString supportedWriters  = "All Supported Files (";
+    QString individualWriters = "All Files (*);;";
+    QString supportedStr;
+    QString individualStr;
 
+    //TODO: Stable Only (Settings Option)
+    //stable = 'S'; unstable = 'S';
+
+    //Stable + Unstable
+    stable = 'S'; unstable = 'U';
+
+    char* extension = 0;
+    char* description = 0;
+    char readerState;
+    char writerState;
+    int type;
+
+    EmbFormatList* curFormat = 0;
+    EmbFormatList* formatList = embFormatList_create();
+    if(!formatList) { QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery.")); return; }
+    curFormat = formatList;
+    while(curFormat)
+    {
+        if(embFormat_info(curFormat->extension, &extension, &description, &readerState, &writerState, &type))
+        {
+            supportedStr = "*" + QString(extension).toUpper() + " ";
+            individualStr = QString(extension).toUpper().replace(".", "") + " - " + description + " (*" + extension + ");;";
+            if(readerState == stable || readerState == unstable) { supportedReaders.append(supportedStr); individualReaders.append(individualStr); }
+            if(writerState == stable || writerState == unstable) { supportedWriters.append(supportedStr); individualWriters.append(individualStr); }
+        }
+        curFormat = curFormat->next;
+    }
+    embFormatList_free(formatList);
+    formatList = 0;
+
+    supportedReaders.append(");;");
+    supportedWriters.append(");;");
+
+    formatFilterOpen = supportedReaders + individualReaders;
+    formatFilterSave = supportedWriters + individualWriters;
+
+    //TODO: Fixup custom filter
+    /*
     QString custom = getSettingsCustomFilter();
     if(custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
@@ -803,6 +735,7 @@ QString MainWindow::fileFormatFilterString()
         custom = "Custom Filter(" + custom + ");;";
 
     return tr(qPrintable(custom + supported + all));
+    */
 }
 
 void MainWindow::closeToolBar(QAction* action)

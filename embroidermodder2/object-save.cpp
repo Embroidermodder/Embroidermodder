@@ -12,6 +12,7 @@
 #include "object-textsingle.h"
 
 #include "emb-color.h"
+#include "emb-format.h"
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
@@ -19,76 +20,12 @@
 SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(parent)
 {
     qDebug("SaveObject Constructor()");
-    scene = theScene;
+    gscene = theScene;
 }
 
 SaveObject::~SaveObject()
 {
     qDebug("SaveObject Destructor()");
-}
-
-bool SaveObject::isStitchOnlyFormat(const QString& fileName)
-{
-    //TODO: This list needs reviewed in case some stitch formats also can contain object data.
-    if     (fileName.toUpper().endsWith(".100")) return true;
-    else if(fileName.toUpper().endsWith(".10O")) return true;
-    else if(fileName.toUpper().endsWith(".ART")) return true;
-    else if(fileName.toUpper().endsWith(".BMC")) return true;
-    else if(fileName.toUpper().endsWith(".BRO")) return true;
-    else if(fileName.toUpper().endsWith(".CND")) return true;
-    else if(fileName.toUpper().endsWith(".COL")) return true;
-    else if(fileName.toUpper().endsWith(".CSD")) return true;
-    else if(fileName.toUpper().endsWith(".CSV")) return true;
-    else if(fileName.toUpper().endsWith(".DAT")) return true;
-    else if(fileName.toUpper().endsWith(".DEM")) return true;
-    else if(fileName.toUpper().endsWith(".DSB")) return true;
-    else if(fileName.toUpper().endsWith(".DST")) return true;
-    else if(fileName.toUpper().endsWith(".DSZ")) return true;
-    else if(fileName.toUpper().endsWith(".DXF")) return false;
-    else if(fileName.toUpper().endsWith(".EDR")) return true;
-    else if(fileName.toUpper().endsWith(".EMD")) return true;
-    else if(fileName.toUpper().endsWith(".EXP")) return true;
-    else if(fileName.toUpper().endsWith(".EXY")) return true;
-    else if(fileName.toUpper().endsWith(".EYS")) return true;
-    else if(fileName.toUpper().endsWith(".FXY")) return true;
-    else if(fileName.toUpper().endsWith(".GNC")) return true;
-    else if(fileName.toUpper().endsWith(".GT"))  return true;
-    else if(fileName.toUpper().endsWith(".HUS")) return true;
-    else if(fileName.toUpper().endsWith(".INB")) return true;
-    else if(fileName.toUpper().endsWith(".JEF")) return true;
-    else if(fileName.toUpper().endsWith(".KSM")) return true;
-    else if(fileName.toUpper().endsWith(".MAX")) return true;
-    else if(fileName.toUpper().endsWith(".MIT")) return true;
-    else if(fileName.toUpper().endsWith(".NEW")) return true;
-    else if(fileName.toUpper().endsWith(".OFM")) return true;
-    else if(fileName.toUpper().endsWith(".PCD")) return true;
-    else if(fileName.toUpper().endsWith(".PCM")) return true;
-    else if(fileName.toUpper().endsWith(".PCQ")) return true;
-    else if(fileName.toUpper().endsWith(".PCS")) return true;
-    else if(fileName.toUpper().endsWith(".PEC")) return true;
-    else if(fileName.toUpper().endsWith(".PEL")) return true;
-    else if(fileName.toUpper().endsWith(".PEM")) return true;
-    else if(fileName.toUpper().endsWith(".PES")) return true;
-    else if(fileName.toUpper().endsWith(".PHB")) return true;
-    else if(fileName.toUpper().endsWith(".PHC")) return true;
-    else if(fileName.toUpper().endsWith(".RGB")) return true;
-    else if(fileName.toUpper().endsWith(".SEW")) return true;
-    else if(fileName.toUpper().endsWith(".SHV")) return true;
-    else if(fileName.toUpper().endsWith(".STX")) return true;
-    else if(fileName.toUpper().endsWith(".SST")) return true;
-    else if(fileName.toUpper().endsWith(".SVG")) return false;
-    else if(fileName.toUpper().endsWith(".T09")) return true;
-    else if(fileName.toUpper().endsWith(".TAP")) return true;
-    else if(fileName.toUpper().endsWith(".THR")) return true;
-    else if(fileName.toUpper().endsWith(".TXT")) return true;
-    else if(fileName.toUpper().endsWith(".U00")) return true;
-    else if(fileName.toUpper().endsWith(".U01")) return true;
-    else if(fileName.toUpper().endsWith(".VIP")) return true;
-    else if(fileName.toUpper().endsWith(".VP3")) return true;
-    else if(fileName.toUpper().endsWith(".XXX")) return true;
-    else if(fileName.toUpper().endsWith(".ZSK")) return true;
-
-    return false;
 }
 
 bool SaveObject::save(const QString &fileName)
@@ -103,10 +40,17 @@ bool SaveObject::save(const QString &fileName)
      *       to take into account the color of the thread, as we do not want
      *       to try to hide dark colored stitches beneath light colored fills.
      */
-    bool stitchOnly = isStitchOnlyFormat(fileName);
 
     bool writeSuccessful = false;
     int i;
+
+    char* unusedStr = 0;
+    char unusedChar;
+    int formatType;
+    if(!embFormat_info(qPrintable(fileName), &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType))
+        return false;
+    if(formatType == EMBFORMAT_UNSUPPORTED)
+        return false;
 
     EmbPattern* pattern = 0;
     EmbReaderWriter* writer = 0;
@@ -119,7 +63,7 @@ bool SaveObject::save(const QString &fileName)
     if(!writer) { qDebug("Unsupported write file type: %s", qPrintable(fileName)); }
     else
     {
-        foreach(QGraphicsItem* item, scene->items())
+        foreach(QGraphicsItem* item, gscene->items())
         {
             int objType = item->data(OBJ_TYPE).toInt();
 
@@ -151,7 +95,8 @@ bool SaveObject::save(const QString &fileName)
             else if(objType == OBJ_TYPE_TEXTSINGLE)   { addTextSingle(pattern, item);   }
         }
 
-        if(stitchOnly)
+        //TODO: handle EMBFORMAT_STCHANDOBJ also
+        if(formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(pattern); //TODO: handle all objects like this
 
         writeSuccessful = writer->writer(pattern, qPrintable(fileName));

@@ -1,3 +1,8 @@
+/* .DST (Tajima) embroidery file read/write routines
+ * Format comments are thanks to tspilman@dalcoathletic.com who's
+ * notes appeared at http://www.wotsit.org under Tajima Format.
+ */
+
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>

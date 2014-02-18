@@ -549,6 +549,7 @@ QWidget* Settings_Dialog::createTabOpenSave()
 
     //Custom Filter
     QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
+    groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
 
     dialog_opensave_custom_filter = mainWin->getSettingsCustomFilter();
 
