@@ -20,6 +20,7 @@ typedef struct EmbFormatList_
 } EmbFormatList;
 
 extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
+extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_createSorted();
 extern EMB_PRIVATE EmbFormatList* EMB_CALL embFormatList_add(EmbFormatList* pointer, char* data);
 extern EMB_PUBLIC int EMB_CALL embFormatList_count(EmbFormatList* pointer);
 extern EMB_PUBLIC int EMB_CALL embFormatList_empty(EmbFormatList* pointer);
