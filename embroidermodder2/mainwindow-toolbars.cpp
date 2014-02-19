@@ -208,6 +208,7 @@ void MainWindow::createPropertiesToolbar()
     lineweightSelector->addItem(QIcon("icons/" + icontheme + "/" + "lineweight22" + ".png"), "1.10 mm", 1.10);
     lineweightSelector->addItem(QIcon("icons/" + icontheme + "/" + "lineweight23" + ".png"), "1.15 mm", 1.15);
     lineweightSelector->addItem(QIcon("icons/" + icontheme + "/" + "lineweight24" + ".png"), "1.20 mm", 1.20);
+    lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
     toolbarProperties->addWidget(lineweightSelector);
     connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
 
