@@ -107,6 +107,8 @@ void MainWindow::createHelpToolbar()
     toolbarHelp->addAction(actionHash.value(ACTION_changelog));
     toolbarHelp->addSeparator();
     toolbarHelp->addAction(actionHash.value(ACTION_about));
+    toolbarHelp->addSeparator();
+    toolbarHelp->addAction(actionHash.value(ACTION_whatsthis));
 
     connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }

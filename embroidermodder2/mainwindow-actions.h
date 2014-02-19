@@ -31,6 +31,7 @@ ACTION_help,
 ACTION_changelog,
 ACTION_tipoftheday,
 ACTION_about,
+ACTION_whatsthis,
 // Icons
 ACTION_icon16,
 ACTION_icon24,
