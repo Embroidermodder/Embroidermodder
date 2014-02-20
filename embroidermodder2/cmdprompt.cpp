@@ -1,5 +1,6 @@
 #include "cmdprompt.h"
 #include <QApplication>
+#include <QClipboard>
 #include <QString>
 #include <QAction>
 #include <QMenu>
@@ -629,6 +630,7 @@ void CmdPromptInput::applyFormatting()
 
 void CmdPromptInput::updateCurrentText(const QString& txt)
 {
+    int cursorPos = cursorPosition();
     if(!txt.startsWith(prefix))
     {
         if(txt.length() < prefix.length())
@@ -644,6 +646,7 @@ void CmdPromptInput::updateCurrentText(const QString& txt)
         curText = txt;
         this->setText(curText);
     }
+    setCursorPosition(cursorPos);
 
     applyFormatting();
 }
@@ -661,11 +664,33 @@ void CmdPromptInput::checkChangedText(const QString& txt)
     updateCurrentText(txt);
 }
 
+void CmdPromptInput::copyClip()
+{
+    QString copyText = curText.remove(0, prefix.length());
+    qApp->clipboard()->setText(copyText);
+}
+
+void CmdPromptInput::pasteClip()
+{
+    paste();
+}
+
 void CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu(this);
+
+    QAction* copyAction = new QAction("&Copy", this);
+    copyAction->setStatusTip("Copies the command prompt text to the clipboard.");
+    connect(copyAction, SIGNAL(triggered()), this, SLOT(copyClip()));
+    menu.addAction(copyAction);
+
+    QAction* pasteAction = new QAction("&Paste", this);
+    pasteAction->setStatusTip("Inserts the clipboard's text into the command prompt at the cursor position.");
+    connect(pasteAction, SIGNAL(triggered()), this, SLOT(pasteClip()));
+    menu.addAction(pasteAction);
+
     menu.addSeparator();
-    //TODO: Extra stuff
+    //TODO: emit Settings signal
     menu.exec(event->globalPos());
 }
 
@@ -727,6 +752,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
                 break;
             case Qt::Key_Delete:
                 pressedKey->accept();
+                del();
                 emit deletePressed();
                 return true;
                 break;

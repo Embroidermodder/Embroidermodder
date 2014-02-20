@@ -86,6 +86,9 @@ public slots:
     void checkEditedText(const QString& txt);
     void checkChangedText(const QString& txt);
     void checkCursorPosition(int oldpos, int newpos);
+private slots:
+    void copyClip();
+    void pasteClip();
 private:
     QHash<QString, QString>*  aliasHash;
 
