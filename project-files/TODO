@@ -20,6 +20,8 @@ TODO - Reading DXF
 TODO - Writing DXF
 DONE - Up and Down keys cycle thru commands in the command prompt
 TODO - Amount of Thread & Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
+TODO - Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
+TODO - embroidermodder2.ico 16 x 16 looks horrible
 
 //====================
 //Stuff for 2.0 alpha4:

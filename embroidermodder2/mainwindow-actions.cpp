@@ -99,8 +99,8 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
     // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
-    // Make custom whats this context help popup with more descriptive help than just 
-    // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup 
+    // Make custom whats this context help popup with more descriptive help than just
+    // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
     // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
     ACTION->setWhatsThis(statusTip);
     // TODO: Finish All Commands ... <.<
@@ -129,7 +129,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     else if(icon == "changelog")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(changelog()));
     else if(icon == "tipoftheday")                connect(ACTION, SIGNAL(triggered()), this, SLOT(tipOfTheDay()));
     else if(icon == "about")                      connect(ACTION, SIGNAL(triggered()), this, SLOT(about()));
-    else if(icon == "aboutQt")                    connect(ACTION, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    else if(icon == "whatsthis")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(whatsThisContextHelp()));
 
     else if(icon == "icon16")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon16()));
     else if(icon == "icon24")                     connect(ACTION, SIGNAL(triggered()), this, SLOT(icon24()));
