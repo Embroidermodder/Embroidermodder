@@ -552,6 +552,7 @@ public slots:
     void help();
     void changelog();
     void about();
+    void whatsThisContextHelp();
 
     void cut();
     void copy();

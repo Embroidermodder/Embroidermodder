@@ -33,6 +33,7 @@ void MainWindow::createAllActions()
     actionHash.insert(ACTION_changelog,   createAction("changelog",   tr("&Changelog"),        tr("Describes new features in this product.")));
     actionHash.insert(ACTION_tipoftheday, createAction("tipoftheday", tr("&Tip Of The Day"),   tr("Displays a dialog with useful tips")));
     actionHash.insert(ACTION_about,       createAction("about",       tr("&About ") + appName, tr("Displays information about this product.")));
+    actionHash.insert(ACTION_whatsthis,   createAction("whatsthis",   tr("&What's This?"),     tr("What's This? Context Help!")));
 
     actionHash.insert(ACTION_undo, createAction("undo", tr("&Undo"),  tr("Reverses the most recent action.")));
     actionHash.insert(ACTION_redo, createAction("redo", tr("&Redo"),  tr("Reverses the effects of the previous undo action.")));
@@ -97,6 +98,11 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     QAction *ACTION = new QAction(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
+    // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
+    // Make custom whats this context help popup with more descriptive help than just 
+    // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup 
+    // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+    ACTION->setWhatsThis(statusTip);
     // TODO: Finish All Commands ... <.<
 
     if     (icon == "donothing")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(doNothing()));
