@@ -76,6 +76,16 @@ embEllipseObjectList_count	KEYWORD2
 embEllipseObjectList_empty	KEYWORD2
 
 ####################
+# emb-format.h
+####################
+embFormatList_create	KEYWORD2
+embFormatList_add	KEYWORD2
+embFormatList_count	KEYWORD2
+embFormatList_empty	KEYWORD2
+embFormatList_free	KEYWORD2
+embFormat_info	KEYWORD2
+
+####################
 # emb-line.h
 ####################
 
