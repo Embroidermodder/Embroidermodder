@@ -75,6 +75,8 @@ signals:
     void shiftPressed();
     void shiftReleased();
 
+    void showSettings();
+
     void stopBlinking();
 
 public slots:
@@ -252,6 +254,8 @@ signals:
 
     void shiftPressed();
     void shiftReleased();
+
+    void showSettings();
 
     void historyAppended(const QString& txt);
 

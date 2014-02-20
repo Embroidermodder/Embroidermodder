@@ -272,6 +272,11 @@ void MainWindow::writeSettings()
     settings.setValue("Text/StyleOverline",                        settings_text_style_overline);
 }
 
+void MainWindow::settingsPrompt()
+{
+    settingsDialog("Prompt");
+}
+
 void MainWindow::settingsDialog(const QString& showTab)
 {
     Settings_Dialog dialog(this, showTab, this);

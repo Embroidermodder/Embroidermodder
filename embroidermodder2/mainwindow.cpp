@@ -167,6 +167,8 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
             connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
 
+            connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
+
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor

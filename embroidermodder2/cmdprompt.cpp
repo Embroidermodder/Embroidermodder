@@ -92,6 +92,8 @@ CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
     connect(promptInput, SIGNAL(shiftPressed()),     this, SIGNAL(shiftPressed()));
     connect(promptInput, SIGNAL(shiftReleased()),    this, SIGNAL(shiftReleased()));
 
+    connect(promptInput, SIGNAL(showSettings()),     this, SIGNAL(showSettings()));
+
     connect(promptHistory, SIGNAL(historyAppended(const QString&)), this, SIGNAL(historyAppended(const QString&)));
 }
 
@@ -690,7 +692,12 @@ void CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
     menu.addAction(pasteAction);
 
     menu.addSeparator();
-    //TODO: emit Settings signal
+
+    QAction* settingsAction = new QAction("&Settings...", this);
+    settingsAction->setStatusTip("Opens settings for the command prompt.");
+    connect(settingsAction, SIGNAL(triggered()), this, SIGNAL(showSettings()));
+    menu.addAction(settingsAction);
+
     menu.exec(event->globalPos());
 }
 

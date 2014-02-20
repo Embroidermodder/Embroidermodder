@@ -312,6 +312,8 @@ public slots:
     void                            updatePickAddMode(bool val);
     void                            pickAddModeToggled();
 
+    void                            settingsPrompt();
+
     void                            settingsDialog(const QString& showTab = QString());
     void                            readSettings();
     void                            writeSettings();
