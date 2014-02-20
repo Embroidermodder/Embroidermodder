@@ -34,6 +34,7 @@
 #include <QMdiArea>
 #include <QGraphicsScene>
 #include <QComboBox>
+#include <QWhatsThis>
 
 void MainWindow::stub_implement(QString txt)
 {
@@ -216,6 +217,12 @@ void MainWindow::about()
     dialog.setLayout(&layout);
     dialog.exec();
     QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::whatsThisContextHelp()
+{
+    qDebug("whatsThisContextHelp()");
+    QWhatsThis::enterWhatsThisMode();
 }
 
 void MainWindow::print()

@@ -119,6 +119,8 @@ void MainWindow::createHelpMenu()
     helpMenu->addAction(actionHash.value(ACTION_tipoftheday));
     helpMenu->addSeparator();
     helpMenu->addAction(actionHash.value(ACTION_about));
+    helpMenu->addSeparator();
+    helpMenu->addAction(actionHash.value(ACTION_whatsthis));
     helpMenu->setTearOffEnabled(true);
 }
 
