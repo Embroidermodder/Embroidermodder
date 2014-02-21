@@ -44,7 +44,8 @@ void usage(void)
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|        |       |       |                                                    |\n");
 
-    formatList = embFormatList_create();
+    /* formatList = embFormatList_create(); */
+    formatList = embFormatList_createSorted();
     if(!formatList) { embLog_error("libembroidery-convert-main.c usage(), cannot allocate memory for formatList\n"); return; }
     curFormat = formatList;
     while(curFormat)
