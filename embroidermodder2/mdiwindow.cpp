@@ -91,6 +91,8 @@ bool MDIWindow::loadFile(const QString &fileName)
 {
     qDebug("MDIWindow loadFile()");
 
+    QRgb tmpColor = getCurrentColor();
+
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly | QFile::Text))
     {
@@ -223,64 +225,57 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curPolygonObjList)
             {
                 QPainterPath polygonPath;
+                bool firstPoint = false;
+                qreal startX = 0, startY = 0;
+                qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolygonObjList->polygonObj->pointList;
                 EmbColor thisColor = curPolygonObjList->polygonObj->color;
-                if(curPointList)
-                {
-                    EmbPoint pp = curPointList->point;
-                    polygonPath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                    curPointList = curPointList->next;
-                }
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
-                    polygonPath.lineTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    x = embPoint_x(pp);
+                    y = -embPoint_y(pp); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                    if(firstPoint) { polygonPath.lineTo(x,y); }
+                    else           { polygonPath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
+
                     curPointList = curPointList->next;
                 }
 
-                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                loadPen.setWidthF(0.35);
-                loadPen.setCapStyle(Qt::RoundCap);
-                loadPen.setJoinStyle(Qt::RoundJoin);
-
-                PolygonObject* obj = new PolygonObject(0,0, polygonPath, loadPen.color().rgb());
-                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
-                gscene->addItem(obj);
+                polygonPath.translate(-startX, -startY);
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
 
                 curPolygonObjList = curPolygonObjList->next;
             }
         }
-        /* TODO: polyline testing. Appears to work somewhat but many files get stuck in endless loop in the stitch to conversion function.
-                 Also, polylines should be broken at TRIM and JUMP. Polylines should only contain NORMAL stitches. */
+        /* NOTE: Polylines should only contain NORMAL stitches. */
         if(p->polylineObjList)
         {
             EmbPolylineObjectList* curPolylineObjList = p->polylineObjList;
             while(curPolylineObjList)
             {
                 QPainterPath polylinePath;
+                bool firstPoint = false;
+                qreal startX = 0, startY = 0;
+                qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolylineObjList->polylineObj->pointList;
                 EmbColor thisColor = curPolylineObjList->polylineObj->color;
-                if(curPointList)
-                {
-                    EmbPoint pp = curPointList->point;
-                    polylinePath.moveTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                    curPointList = curPointList->next;
-                }
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
-                    polylinePath.lineTo(embPoint_x(pp), -embPoint_y(pp)); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    x = embPoint_x(pp);
+                    y = -embPoint_y(pp); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                    if(firstPoint) { polylinePath.lineTo(x,y); }
+                    else           { polylinePath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
+
                     curPointList = curPointList->next;
                 }
 
-                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                loadPen.setWidthF(0.35);
-                loadPen.setCapStyle(Qt::RoundCap);
-                loadPen.setJoinStyle(Qt::RoundJoin);
-
-                PolylineObject* obj = new PolylineObject(0,0, polylinePath, loadPen.color().rgb());
-                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
-                gscene->addItem(obj);
+                polylinePath.translate(-startX, -startY);
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                mainWin->nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
 
                 curPolylineObjList = curPolylineObjList->next;
             }
@@ -291,48 +286,11 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curRectObj)
             {
                 EmbRect r = curRectObj->rectObj.rect;
+                EmbColor thisColor = curRectObj->rectObj.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddRectangle(embRect_x(r), embRect_y(r), embRect_width(r), embRect_height(r), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curRectObj = curRectObj->next;
-            }
-        }
-        if(p->stitchList)
-        {
-            int previousColor = p->stitchList->stitch.color;
-
-            EmbStitchList* curStitchItem = p->stitchList;
-            while(curStitchItem)
-            {
-                EmbStitch tempStitch = curStitchItem->stitch;
-                curStitchItem = curStitchItem->next;
-                if((tempStitch.flags & STOP) || (tempStitch.flags & END))
-                {
-                    if(!path.isEmpty())
-                    {
-                        EmbColor thisColor = embThreadList_getAt(p->threadList, previousColor).color;
-                        QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
-                        loadPen.setWidthF(0.35);
-                        loadPen.setCapStyle(Qt::RoundCap);
-                        loadPen.setJoinStyle(Qt::RoundJoin);
-
-                        PolylineObject* obj = new PolylineObject(0,0, path, loadPen.color().rgb());
-                        obj->setObjectRubberMode(OBJ_RUBBER_OFF);
-                        gscene->addItem(obj);
-
-                        previousColor = tempStitch.color;
-                        path = QPainterPath();
-                    }
-                    path.moveTo(tempStitch.xx, -tempStitch.yy); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                }
-                else if((tempStitch.flags & JUMP) || (tempStitch.flags & TRIM))
-                {
-                    //TODO: No objects should have moveTo in their path, so stop it here and add it to a BlockObject
-                    path.moveTo(tempStitch.xx, -tempStitch.yy); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                }
-                else
-                {
-                    path.lineTo(tempStitch.xx, -tempStitch.yy); //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-                }
             }
         }
 
@@ -354,6 +312,11 @@ bool MDIWindow::loadFile(const QString &fileName)
         QMessageBox::warning(this, tr("Error reading pattern"), tr("Cannot read pattern"));
     }
     embPattern_free(p);
+
+    //Clear the undo stack so it is not possible to undo past this point.
+    gview->getUndoStack()->clear();
+
+    setCurrentColor(tmpColor);
 
     return true;
 }

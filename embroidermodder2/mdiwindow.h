@@ -44,6 +44,10 @@ public:
     QRgb                       getCurrentColor() { return curColor; }
     QString                    getCurrentLineType() { return curLineType; }
     QString                    getCurrentLineWeight() { return curLineWeight; }
+    void                       setCurrentLayer(const QString& layer) { curLayer = layer; }
+    void                       setCurrentColor(const QRgb& color) { curColor = color; }
+    void                       setCurrentLineType(const QString& lineType) { curLineType = lineType; }
+    void                       setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
     void                       designDetails();
     bool                       loadFile(const QString &fileName);
     bool                       saveFile(const QString &fileName);
