@@ -225,7 +225,7 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
     {
              if(!strcmp(ending, ".t09")) { *extension = ".t09"; *description = "Pfaff Embroidery Format";      *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".tap")) { *extension = ".tap"; *description = "Happy Embroidery Format";      *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
-        else if(!strcmp(ending, ".thr")) { *extension = ".thr"; *description = "ThredWorks Embroidery Format"; *reader = 'U'; *writer = 'U'; *type = EMBFORMAT_STCHANDOBJ; }
+        else if(!strcmp(ending, ".thr")) { *extension = ".thr"; *description = "ThredWorks Embroidery Format"; *reader = 'U'; *writer = 'U'; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".txt")) { *extension = ".txt"; *description = "Text File";                    *reader = ' '; *writer = 'U'; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".u00")) { *extension = ".u00"; *description = "Barudan Embroidery Format";    *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".u01")) { *extension = ".u01"; *description = "Barudan Embroidery Format";    *reader = ' '; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
