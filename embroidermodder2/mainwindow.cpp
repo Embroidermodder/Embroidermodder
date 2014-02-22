@@ -332,9 +332,9 @@ MainWindow* MainWindow::getApplication()
     return mainWin;
 }
 
-void MainWindow::newfile()
+void MainWindow::newFile()
 {
-    qDebug("MainWindow::newfile()");
+    qDebug("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
     MDIWindow* mdiWin = new MDIWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);

@@ -1100,6 +1100,11 @@ void MainWindow::nativeEndCommand()
     prompt->endCommand();
 }
 
+void MainWindow::nativeNewFile()
+{
+    newFile();
+}
+
 void MainWindow::nativeExit()
 {
     exit();

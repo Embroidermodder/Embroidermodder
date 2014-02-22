@@ -131,6 +131,14 @@ QScriptValue javaEndCommand(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaNewFile(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("newFile() requires zero arguments");
+
+    mainWin()->nativeNewFile();
+    return QScriptValue();
+}
+
 QScriptValue javaExit(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("exit() requires zero arguments");
