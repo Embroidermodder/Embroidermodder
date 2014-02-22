@@ -147,6 +147,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curCircleObj)
             {
                 EmbCircle c = curCircleObj->circleObj.circle;
+                EmbColor thisColor = curCircleObj->circleObj.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
                 curCircleObj = curCircleObj->next;
@@ -158,6 +160,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curEllipseObj)
             {
                 EmbEllipse e = curEllipseObj->ellipseObj.ellipse;
+                EmbColor thisColor = curEllipseObj->ellipseObj.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddEllipse(embEllipse_centerX(e), embEllipse_centerY(e), embEllipse_width(e), embEllipse_height(e), 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
                 curEllipseObj = curEllipseObj->next;
@@ -169,6 +173,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curLineObj)
             {
                 EmbLine li = curLineObj->lineObj.line;
+                EmbColor thisColor = curLineObj->lineObj.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddLine(embLine_x1(li), embLine_y1(li), embLine_x2(li), embLine_y2(li), 0, OBJ_RUBBER_OFF); //TODO: rotation
                 curLineObj = curLineObj->next;
@@ -214,6 +220,8 @@ bool MDIWindow::loadFile(const QString &fileName)
             while(curPointObj)
             {
                 EmbPoint po = curPointObj->pointObj.point;
+                EmbColor thisColor = curPointObj->pointObj.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddPoint(embPoint_x(po), embPoint_y(po));
                 curPointObj = curPointObj->next;
@@ -230,6 +238,7 @@ bool MDIWindow::loadFile(const QString &fileName)
                 qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolygonObjList->polygonObj->pointList;
                 EmbColor thisColor = curPolygonObjList->polygonObj->color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
@@ -243,7 +252,6 @@ bool MDIWindow::loadFile(const QString &fileName)
                 }
 
                 polygonPath.translate(-startX, -startY);
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 mainWin->nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
 
                 curPolygonObjList = curPolygonObjList->next;
@@ -261,6 +269,7 @@ bool MDIWindow::loadFile(const QString &fileName)
                 qreal x = 0, y = 0;
                 EmbPointList* curPointList = curPolylineObjList->polylineObj->pointList;
                 EmbColor thisColor = curPolylineObjList->polylineObj->color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 while(curPointList)
                 {
                     EmbPoint pp = curPointList->point;
@@ -274,7 +283,6 @@ bool MDIWindow::loadFile(const QString &fileName)
                 }
 
                 polylinePath.translate(-startX, -startY);
-                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 mainWin->nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
 
                 curPolylineObjList = curPolylineObjList->next;
