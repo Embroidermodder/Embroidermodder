@@ -20,7 +20,7 @@ function main()
     //rotateSelected(0,0,90);
     
     //Polyline & Polygon Testing
-    /*
+    
     var offsetX = 0.0;
     var offsetY = 0.0;
     
@@ -64,7 +64,7 @@ function main()
     polygonArray.push(4.0 + offsetX);
     polygonArray.push(1.0 + offsetY);
     addPolygon(polygonArray);
-    */
+    
 
     endCommand();
 }
