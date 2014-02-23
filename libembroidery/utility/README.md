@@ -33,6 +33,10 @@ can be used in any way the sketch creator desires, it is required that
 any sketch using libembroidery must implement event handlers. See
 the ino-event source and header files for more information.
 
+There is also an excellent article by Bill Earl on the
+Adafruit Learning System which covers these topics in more depth:
+http://learn.adafruit.com/memories-of-an-arduino?view=all
+
 Special Notes
 -------------
 
