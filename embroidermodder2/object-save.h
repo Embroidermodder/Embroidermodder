@@ -4,6 +4,7 @@
 #include "emb-reader-writer.h"
 
 #include <QObject>
+#include <QPainterPath>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsItem;
@@ -51,6 +52,9 @@ public:
 
 private:
     QGraphicsScene* gscene;
+    int formatType;
+
+    void toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight);
 };
 
 #endif

@@ -21,6 +21,7 @@ SaveObject::SaveObject(QGraphicsScene* theScene, QObject* parent) : QObject(pare
 {
     qDebug("SaveObject Constructor()");
     gscene = theScene;
+    formatType = EMBFORMAT_UNSUPPORTED;
 }
 
 SaveObject::~SaveObject()
@@ -46,7 +47,7 @@ bool SaveObject::save(const QString &fileName)
 
     char* unusedStr = 0;
     char unusedChar;
-    int formatType;
+
     if(!embFormat_info(qPrintable(fileName), &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType))
         return false;
     if(formatType == EMBFORMAT_UNSUPPORTED)
@@ -122,7 +123,17 @@ void SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
     CircleObject* obj = static_cast<CircleObject*>(item);
     if(obj)
     {
-        embPattern_addCircleObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectRadius());
+        if(formatType == EMBFORMAT_STITCHONLY)
+        {
+            QPainterPath path;
+            path.addEllipse(QPointF(0,0), obj->objectRadius(), obj->objectRadius());
+            path = path.simplified();
+            toPolyline(pattern, obj->objectCenter(), path, "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        }
+        else
+        {
+            embPattern_addCircleObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectRadius());
+        }
     }
 }
 
@@ -163,8 +174,18 @@ void SaveObject::addEllipse(EmbPattern* pattern, QGraphicsItem* item)
     EllipseObject* obj = static_cast<EllipseObject*>(item);
     if(obj)
     {
-        //TODO: ellipse rotation
-        embPattern_addEllipseObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectWidth()/2.0, (double)obj->objectHeight()/2.0);
+        if(formatType == EMBFORMAT_STITCHONLY)
+        {
+            QPainterPath path;
+            path.addEllipse(QPointF(0,0), obj->objectWidth()/2.0, obj->objectHeight()/2.0);
+            path = path.simplified();
+            toPolyline(pattern, obj->objectCenter(), path, "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        }
+        else
+        {
+            //TODO: ellipse rotation
+            embPattern_addEllipseObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectWidth()/2.0, (double)obj->objectHeight()/2.0);
+        }
     }
 }
 
@@ -193,7 +214,16 @@ void SaveObject::addLine(EmbPattern* pattern, QGraphicsItem* item)
     LineObject* obj = static_cast<LineObject*>(item);
     if(obj)
     {
-        embPattern_addLineObjectAbs(pattern, (double)obj->objectX1(), (double)obj->objectY1(), (double)obj->objectX2(), (double)obj->objectY2());
+        if(formatType == EMBFORMAT_STITCHONLY)
+        {
+            QPainterPath path;
+            path.lineTo(obj->objectDeltaX(), obj->objectDeltaY());
+            toPolyline(pattern, obj->objectEndPoint1(), path, "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        }
+        else
+        {
+            embPattern_addLineObjectAbs(pattern, (double)obj->objectX1(), (double)obj->objectY1(), (double)obj->objectX2(), (double)obj->objectY2());
+        }
     }
 }
 
@@ -250,7 +280,16 @@ void SaveObject::addPoint(EmbPattern* pattern, QGraphicsItem* item)
     PointObject* obj = static_cast<PointObject*>(item);
     if(obj)
     {
-        embPattern_addPointObjectAbs(pattern, (double)obj->objectX(), (double)obj->objectY());
+        if(formatType == EMBFORMAT_STITCHONLY)
+        {
+            QPainterPath path;
+            path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+            toPolyline(pattern, obj->objectPos(), path, "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        }
+        else
+        {
+            embPattern_addPointObjectAbs(pattern, (double)obj->objectX(), (double)obj->objectY());
+        }
     }
 }
 
@@ -263,31 +302,7 @@ void SaveObject::addPolyline(EmbPattern* pattern, QGraphicsItem* item)
     PolylineObject* obj = static_cast<PolylineObject*>(item);
     if(obj)
     {
-        EmbPolylineObject* polyObject = (EmbPolylineObject*) malloc(sizeof(EmbPolylineObject));
-        QColor color = obj->objectColor();
-        polyObject->color = embColor_make(color.red(), color.green(), color.blue());
-        polyObject->lineType = obj->type();
-
-        QPainterPath path = obj->objectSavePath();
-        QPointF pos = obj->pos();
-        qreal startX = pos.x();
-        qreal startY = pos.y();
-        EmbPointList* pointList = 0;
-        QPainterPath::Element element;
-        for(int i = 0; i < path.elementCount(); ++i)
-        {
-            element = path.elementAt(i);
-            if(!pointList)
-            {
-                polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
-            }
-            else
-            {
-                pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
-            }
-        }
-
-        embPattern_addPolylineObjectAbs(pattern, polyObject);
+        toPolyline(pattern, obj->pos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
     }
 }
 
@@ -300,9 +315,19 @@ void SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
     RectObject* obj = static_cast<RectObject*>(item);
     if(obj)
     {
-        //TODO: Review this at some point
-        QPointF topLeft = obj->objectTopLeft();
-        embPattern_addRectObjectAbs(pattern, (double)topLeft.x(), (double)topLeft.y(), (double)obj->objectWidth(), (double)obj->objectHeight());
+        if(formatType == EMBFORMAT_STITCHONLY)
+        {
+            //TODO: This needs work
+            QPainterPath path;
+            path.addRect(obj->objectTopLeft().x(), obj->objectTopLeft().y(), obj->objectWidth(), obj->objectHeight());
+            toPolyline(pattern, obj->objectTopLeft(), path, "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+        }
+        else
+        {
+            //TODO: Review this at some point
+            QPointF topLeft = obj->objectTopLeft();
+            embPattern_addRectObjectAbs(pattern, (double)topLeft.x(), (double)topLeft.y(), (double)obj->objectWidth(), (double)obj->objectHeight());
+        }
     }
 }
 
@@ -328,35 +353,46 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
     TextSingleObject* obj = static_cast<TextSingleObject*>(item);
     if(obj)
     {
-        EmbPolylineObject* polyObject = (EmbPolylineObject*) malloc(sizeof(EmbPolylineObject));
-        QColor color = obj->objectColor();
-        polyObject->color = embColor_make(color.red(), color.green(), color.blue());
-        polyObject->lineType = obj->type();
-
-        QTransform transform;
-        transform.rotate(obj->rotation());
-
-        QPainterPath path = transform.map(obj->objectSavePath().simplified());
-        QPointF pos = obj->pos();
-        qreal startX = pos.x();
-        qreal startY = pos.y();
-        EmbPointList* pointList = 0;
-        QPainterPath::Element element;
-        for(int i = 0; i < path.elementCount(); ++i)
+        if(formatType == EMBFORMAT_STITCHONLY)
         {
-            element = path.elementAt(i);
-            if(!pointList)
-            {
-                polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
-            }
-            else
-            {
-                pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
-            }
+            QTransform transform;
+            transform.rotate(obj->rotation());
+            QPainterPath path = transform.map(obj->objectSavePath().simplified());
+            toPolyline(pattern, obj->objectPos(), path, "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
+        else
+        {
 
-        embPattern_addPolylineObjectAbs(pattern, polyObject);
+        }
     }
+}
+
+//NOTE: This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
+void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
+{
+    EmbPolylineObject* polyObject = (EmbPolylineObject*) malloc(sizeof(EmbPolylineObject));
+    if(!polyObject) {  } //TODO: error
+    polyObject->color = embColor_make(color.red(), color.green(), color.blue());
+    //polyObject->lineType = obj->type(); //TODO: This is wrong! type() is not lineType!
+
+    qreal startX = objPos.x();
+    qreal startY = objPos.y();
+    EmbPointList* pointList = 0;
+    QPainterPath::Element element;
+    for(int i = 0; i < objPath.elementCount(); ++i)
+    {
+        element = objPath.elementAt(i);
+        if(!pointList)
+        {
+            polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
+        }
+        else
+        {
+            pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
+        }
+    }
+
+    embPattern_addPolylineObjectAbs(pattern, polyObject);
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
