@@ -144,3 +144,9 @@ TODO - Fix thread-color files
 TODO - Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
 TODO - inotool.org - seems like the logical solution for Nightly/CI builds
 TODO - Smoothieboard experiments
+
+//====================
+//libembroidery-tests:
+//====================
+TODO - looping test that reads 10 times while running valgrind. See embPattern_loadExternalColorFile() Arduino leak note for more info.
+

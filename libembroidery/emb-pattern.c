@@ -820,6 +820,10 @@ void embPattern_center(EmbPattern* p)
 /*TODO: Description needed. */
 void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName)
 {
+#ifdef ARDUINO
+    return; /* TODO ARDUINO: This function leaks memory. While it isn't crucial to running the machine, it would be nice use this function, so fix it up. */
+#endif /* ARDUINO */
+
     char hasRead = 0;
     EmbReaderWriter* colorFile = 0;
     const char* dotPos = strrchr(fileName, '.');
