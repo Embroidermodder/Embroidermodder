@@ -61,7 +61,7 @@ void MdiArea::setBackgroundColor(const QColor& color)
 
 void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
-    mainWin->openfile();
+    mainWin->openFile();
 }
 
 void MdiArea::paintEvent(QPaintEvent* /*e*/)

@@ -1105,6 +1105,11 @@ void MainWindow::nativeNewFile()
     newFile();
 }
 
+void MainWindow::nativeOpenFile()
+{
+    openFile();
+}
+
 void MainWindow::nativeExit()
 {
     exit();

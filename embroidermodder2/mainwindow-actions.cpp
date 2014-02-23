@@ -107,7 +107,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
 
     if     (icon == "donothing")                  connect(ACTION, SIGNAL(triggered()), this, SLOT(doNothing()));
     else if(icon == "new")                      { ACTION->setShortcut(QKeySequence::New);      connect(ACTION, SIGNAL(triggered()), this, SLOT(newFile()));         }
-    else if(icon == "open")                     { ACTION->setShortcut(QKeySequence::Open);     connect(ACTION, SIGNAL(triggered()), this, SLOT(openfile()));        }
+    else if(icon == "open")                     { ACTION->setShortcut(QKeySequence::Open);     connect(ACTION, SIGNAL(triggered()), this, SLOT(openFile()));        }
     else if(icon == "save")                     { ACTION->setShortcut(QKeySequence::Save);     connect(ACTION, SIGNAL(triggered()), this, SLOT(savefile()));        }
     else if(icon == "saveas")                   { ACTION->setShortcut(QKeySequence::SaveAs);   connect(ACTION, SIGNAL(triggered()), this, SLOT(saveasfile()));      }
     else if(icon == "print")                    { ACTION->setShortcut(QKeySequence::Print);    connect(ACTION, SIGNAL(triggered()), this, SLOT(print()));           }

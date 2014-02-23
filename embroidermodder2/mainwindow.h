@@ -537,7 +537,7 @@ public slots:
     void runCommandPrompt(const QString& cmd, const QString& str);
 
     void newFile();
-    void openfile(bool recent = false, const QString& recentFile = "");
+    void openFile(bool recent = false, const QString& recentFile = "");
     void openFilesSelected(const QStringList&);
     void openrecentfile();
     void savefile();
@@ -669,6 +669,7 @@ public:
     void nativeDisableMoveRapidFire   ();
 
     void nativeNewFile                ();
+    void nativeOpenFile               ();
 
     void nativeExit                   ();
     void nativeHelp                   ();

@@ -16,6 +16,7 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValInitCommand = engine->newFunction(javaInitCommand); engine->globalObject().setProperty("initCommand", scriptValInitCommand);
     QScriptValue scriptValEndCommand = engine->newFunction(javaEndCommand); engine->globalObject().setProperty("endCommand", scriptValEndCommand);
     QScriptValue scriptValNewFile = engine->newFunction(javaNewFile); engine->globalObject().setProperty("newFile", scriptValNewFile);
+    QScriptValue scriptValOpenFile = engine->newFunction(javaOpenFile); engine->globalObject().setProperty("openFile", scriptValOpenFile);
     QScriptValue scriptValExit = engine->newFunction(javaExit); engine->globalObject().setProperty("exit", scriptValExit);
     QScriptValue scriptValHelp = engine->newFunction(javaHelp); engine->globalObject().setProperty("help", scriptValHelp);
     QScriptValue scriptValAbout = engine->newFunction(javaAbout); engine->globalObject().setProperty("about", scriptValAbout);

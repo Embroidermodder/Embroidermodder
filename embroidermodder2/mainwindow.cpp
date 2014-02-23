@@ -352,9 +352,9 @@ void MainWindow::newFile()
     }
 }
 
-void MainWindow::openfile(bool recent, const QString& recentFile)
+void MainWindow::openFile(bool recent, const QString& recentFile)
 {
-    qDebug("MainWindow::openfile()");
+    qDebug("MainWindow::openFile()");
 
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
@@ -455,7 +455,7 @@ void MainWindow::openrecentfile()
     QAction* recentSender = qobject_cast<QAction*>(sender());
     if(recentSender)
     {
-        openfile(true, recentSender->data().toString());
+        openFile(true, recentSender->data().toString());
     }
 }
 
