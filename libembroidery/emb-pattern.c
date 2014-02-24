@@ -192,9 +192,15 @@ void embPattern_copyPolylinesToStitchList(EmbPattern* p)
     polyList = p->polylineObjList;
     while(polyList)
     {
-        EmbPolylineObject* currentPoly = polyList->polylineObj;
-        EmbPointList* currentPointList = currentPoly->pointList;
+        EmbPolylineObject* currentPoly = 0;
+        EmbPointList* currentPointList = 0;
         EmbThread thread;
+
+        currentPoly = polyList->polylineObj;
+        if(!currentPoly) { embLog_error("emb-pattern.c embPattern_copyPolylinesToStitchList(), currentPoly is null\n"); return; }
+        currentPointList = currentPoly->pointList;
+        if(!currentPointList) { embLog_error("emb-pattern.c embPattern_copyPolylinesToStitchList(), currentPointList is null\n"); return; }
+
         thread.catalogNumber = 0;
         thread.color = currentPoly->color;
         thread.description = 0;
