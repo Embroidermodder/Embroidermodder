@@ -226,8 +226,6 @@ int readDst(EmbPattern* pattern, const char* fileName)
     char var[3];   /* temporary storage variable name */
     char val[512]; /* temporary storage variable value */
     int valpos;
-    char prevJump = 0;
-    char thisJump = 0;
     unsigned char b[3];
     char header[512 + 1];
     FILE* file = 0;
@@ -380,14 +378,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
         {
             break;
         }
-        thisJump = flags & JUMP;
-        if(prevJump)
-        {
-            flags |= JUMP;
-        }
-
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, flags, 1);
-        prevJump = thisJump;
     }
     fclose(file);
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
