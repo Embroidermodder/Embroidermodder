@@ -10,7 +10,7 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more information, see [our website](http://www.embroidermodder.github.io).
+For more information, see [our website](http://embroidermodder.github.io).
 
 Dependencies
 ------------
