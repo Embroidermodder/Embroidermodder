@@ -1,7 +1,7 @@
 #include "format-dsb.h"
-#include "helpers-misc.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
+#include "helpers-misc.h"
 #include <stdlib.h>
 #include <math.h>
 
@@ -9,13 +9,13 @@
  *  Returns \c true if successful, otherwise returns \c false. */
 int readDsb(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-dsb.c readDsb(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dsb.c readDsb(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName,"rb");
-    if(file==0)
+    file = embFile_open(fileName,"rb");
+    if(!file)
     {
         embLog_error("format-dsb.c readDsb(), cannot open %s for reading\n", fileName);
         return 0;
@@ -24,24 +24,24 @@ int readDsb(EmbPattern* pattern, const char* fileName)
     embPattern_loadExternalColorFile(pattern, fileName);
     /*TODO: READ 512 BYTE HEADER INTO header[] */
     /*
-    for(i=0;i<512;i++)
+    for(i = 0; i < 512; i++)
     {
-        header[i]=fgetc(file);
+        header[i] = embFile_getc(file);
     }
     */
-    fseek(file, 0x200, SEEK_SET);
+    embFile_seek(file, 0x200, SEEK_SET);
     while(1)
     {
         int x, y;
         unsigned char ctrl;
         int stitchType = NORMAL;
 
-        ctrl =(unsigned char)fgetc(file);
-        if(feof(file)) break;
-        y = fgetc(file);
-        if(feof(file)) break;
-        x = fgetc(file);
-        if(feof(file)) break;
+        ctrl =(unsigned char)embFile_getc(file);
+        if(embFile_eof(file)) break;
+        y = embFile_getc(file);
+        if(embFile_eof(file)) break;
+        x = embFile_getc(file);
+        if(embFile_eof(file)) break;
         if(ctrl & 0x01) stitchType = TRIM;
         if(ctrl & 0x20) x = -x;
         if(ctrl & 0x40) y = -y;
@@ -58,7 +58,7 @@ int readDsb(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 
