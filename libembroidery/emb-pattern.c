@@ -257,6 +257,13 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 
     if(flags & END)
     {
+        /* Prevent unnecessary multiple END stitches */
+        if(p->lastStitch->stitch.flags & END)
+        {
+            embLog_error("emb-pattern.c embPattern_addStitchAbs(), found multiple END stitches\n");
+            return;
+        }
+
         embPattern_fixColorCount(p);
 
         /* HideStitchesOverLength(127); TODO: fix or remove this */
