@@ -1,27 +1,27 @@
 #include "format-zsk.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readZsk(EmbPattern* pattern, const char* fileName)
 {
     int b[3];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-zsk.c readZsk(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-zsk.c readZsk(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-zsk.c readZsk(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 512, SEEK_SET);
+    embFile_seek(file, 512, SEEK_SET);
 
-    while(fread(b, 1, 3, file) == 3)
+    while(embFile_read(b, 1, 3, file) == 3)
     {
         if((b[2] & 25) == 0)
         {
@@ -36,7 +36,7 @@ int readZsk(EmbPattern* pattern, const char* fileName)
             embPattern_addStitchRel(pattern, b[1] / 10.0, b[0] / 10.0, STOP, 1);
         }
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
