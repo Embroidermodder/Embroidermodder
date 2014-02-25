@@ -1,18 +1,17 @@
 #include "format-dsz.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readDsz(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-dsz.c readDsz(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dsz.c readDsz(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName,"rb");
+    file = embFile_open(fileName,"rb");
     if(!file)
     {
         embLog_error("format-dsz.c readDsz(), cannot open %s for reading\n", fileName);
@@ -21,19 +20,19 @@ int readDsz(EmbPattern* pattern, const char* fileName)
 
     embPattern_loadExternalColorFile(pattern, fileName);
 
-    fseek(file, 0x200, SEEK_SET);
+    embFile_seek(file, 0x200, SEEK_SET);
     while(1)
     {
         int x, y;
         unsigned char ctrl;
         int stitchType = NORMAL;
 
-        y = fgetc(file);
-        if(feof(file)) break;
-        x = fgetc(file);
-        if(feof(file)) break;
-        ctrl = (unsigned char)fgetc(file);
-        if(feof(file)) break;
+        y = embFile_getc(file);
+        if(embFile_eof(file)) break;
+        x = embFile_getc(file);
+        if(embFile_eof(file)) break;
+        ctrl = (unsigned char)embFile_getc(file);
+        if(embFile_eof(file)) break;
         if(ctrl & 0x01) stitchType = TRIM;
         if(ctrl & 0x20) y = -y;
         if(ctrl & 0x40) x = -x;
@@ -50,7 +49,7 @@ int readDsz(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, x  / 10.0, y  / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
