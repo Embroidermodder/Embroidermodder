@@ -70,4 +70,9 @@ long inoFile_tell(InoFile* stream)
     return 0;//TODO: ftell(stream->file);
 }
 
+int inoFile_printf(InoFile* stream, const char* msg)
+{
+    return stream->file.print(msg);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

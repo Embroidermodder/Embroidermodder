@@ -25,6 +25,8 @@ extern EMB_PUBLIC int EMB_CALL embFile_getc(EmbFile* stream);
 extern EMB_PUBLIC int EMB_CALL embFile_seek(EmbFile* stream, long offset, int origin);
 extern EMB_PUBLIC long EMB_CALL embFile_tell(EmbFile* stream);
 
+extern EMB_PUBLIC int EMB_CALL embFile_printf(EmbFile* stream, const char* format, ...);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

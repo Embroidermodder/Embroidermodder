@@ -1,4 +1,5 @@
 #include "emb-file.h"
+#include <stdarg.h>
 #include <stdlib.h>
 
 EmbFile* embFile_open(const char* fileName, const char* mode)
@@ -69,6 +70,25 @@ long embFile_tell(EmbFile* stream)
 #else
     return ftell(stream->file);
 #endif
+}
+
+int embFile_printf(EmbFile* stream, const char* format, ...)
+{
+#ifdef ARDUINO /* ARDUINO */
+    char buff[256];
+    va_list args;
+    va_start(args, format);
+    vsprintf(buff, format, args);
+    va_end(args);
+    return inoFile_printf(stream, buff);
+#else /* ARDUINO */
+    int retVal;
+    va_list args;
+    va_start(args, format);
+    retVal = vfprintf(stream->file, format, args);
+    va_end(args);
+    return retVal;
+#endif /* ARDUINO */
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

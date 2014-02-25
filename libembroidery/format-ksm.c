@@ -10,6 +10,7 @@ static void ksmEncode(unsigned char* b, char dx, char dy, int flags)
         embLog_error("format-ksm.c ksmEncode(), b argument is null\n");
         return;
     }
+    /* TODO: How to encode JUMP stitches? JUMP must be handled. Also check this for the EXP format since it appears to be similar */
     if(flags == TRIM)
     {
         b[0] = 128;
