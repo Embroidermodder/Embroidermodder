@@ -1,4 +1,5 @@
 #include "format-tap.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include <stdio.h>
 
@@ -24,12 +25,12 @@ static int decodeRecordFlags(unsigned char b2)
 int readTap(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b[3];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-tap.c readTap(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-tap.c readTap(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-tap.c readTap(), cannot open %s for reading\n", fileName);
@@ -38,7 +39,7 @@ int readTap(EmbPattern* pattern, const char* fileName)
 
     embPattern_loadExternalColorFile(pattern, fileName);
 
-    while(fread(b, 1, 3, file) == 3)
+    while(embFile_read(b, 1, 3, file) == 3)
     {
         int flags;
         int x = 0;
@@ -88,7 +89,7 @@ int readTap(EmbPattern* pattern, const char* fileName)
         if(flags == END)
             break;
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
