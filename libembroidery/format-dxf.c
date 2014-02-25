@@ -344,13 +344,13 @@ int readDxf(EmbPattern* pattern, const char* fileName)
     {
         buff = readLine(file);
         /*printf("%s\n", buff);*/
-        if((!strcmp(buff, "HEADER"))   ||
-           (!strcmp(buff, "CLASSES"))  ||
-           (!strcmp(buff, "TABLES"))   ||
-           (!strcmp(buff, "BLOCKS"))   ||
-           (!strcmp(buff, "ENTITIES")) ||
-           (!strcmp(buff, "OBJECTS"))  ||
-           (!strcmp(buff, "THUMBNAILIMAGE")))
+        if( (!strcmp(buff, "HEADER"))   ||
+            (!strcmp(buff, "CLASSES"))  ||
+            (!strcmp(buff, "TABLES"))   ||
+            (!strcmp(buff, "BLOCKS"))   ||
+            (!strcmp(buff, "ENTITIES")) ||
+            (!strcmp(buff, "OBJECTS"))  ||
+            (!strcmp(buff, "THUMBNAILIMAGE")))
         {
             section = buff;
             printf("SECTION:%s\n", buff);
@@ -360,7 +360,12 @@ int readDxf(EmbPattern* pattern, const char* fileName)
             section = "";
             printf("ENDSEC:%s\n", buff);
         }
-        if((!strcmp(buff, "LWPOLYLINE")) || (!strcmp(buff, "CIRCLE")))
+        if( (!strcmp(buff, "ARC"))        ||
+            (!strcmp(buff, "CIRCLE"))     ||
+            (!strcmp(buff, "ELLIPSE"))    ||
+            (!strcmp(buff, "LINE"))       ||
+            (!strcmp(buff, "LWPOLYLINE")) ||
+            (!strcmp(buff, "POINT")))
         {
             entityType = buff;
         }
@@ -379,8 +384,7 @@ int readDxf(EmbPattern* pattern, const char* fileName)
                 if((!strcmp(dxfVersion, DXF_VERSION_R10))
                 || (!strcmp(dxfVersion, DXF_VERSION_R11))
                 || (!strcmp(dxfVersion, DXF_VERSION_R12))
-                || (!strcmp(dxfVersion, DXF_VERSION_R13))
-                || (!strcmp(dxfVersion, DXF_VERSION_R14)))
+                || (!strcmp(dxfVersion, DXF_VERSION_R13)))
                     return 0;
             }
         }

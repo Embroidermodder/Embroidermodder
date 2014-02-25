@@ -41,20 +41,20 @@ int readBro(EmbPattern* pattern, const char* fileName)
         stitchType = NORMAL;
         b1 = binaryReadByte(file);
         b2 = binaryReadByte(file);
-        if (b1 == -128)
+        if(b1 == -128)
         {
             unsigned char bCode = binaryReadByte(file);
             b1 = binaryReadInt16(file);
             b2 = binaryReadInt16(file);
-            if (bCode == 2)
+            if(bCode == 2)
             {
                 stitchType = STOP;
             }
-            else if (bCode == 3)
+            else if(bCode == 3)
             {
                 stitchType = TRIM;
             }
-            else if (bCode == 0x7E)
+            else if(bCode == 0x7E)
             {
                 embPattern_addStitchRel(pattern, 0, 0, END, 1);
                 break;
@@ -63,6 +63,11 @@ int readBro(EmbPattern* pattern, const char* fileName)
         embPattern_addStitchRel(pattern, b1 / 10.0, b2 / 10.0, stitchType, 1);
     }
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -72,6 +77,19 @@ int writeBro(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-bro.c writeBro(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-bro.c writeBro(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-bro.c writeBro(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeBro */
 }
 

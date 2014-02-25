@@ -36,8 +36,12 @@ int readZsk(EmbPattern* pattern, const char* fileName)
             embPattern_addStitchRel(pattern, b[1] / 10.0, b[0] / 10.0, STOP, 1);
         }
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -47,6 +51,19 @@ int writeZsk(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-zsk.c writeZsk(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-zsk.c writeZsk(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-zsk.c writeZsk(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeZsk */
 }
 

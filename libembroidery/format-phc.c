@@ -47,9 +47,12 @@ int readPhc(EmbPattern* pattern, const char* fileName)
     fseek(file, bytesInSection3 + 0x12, SEEK_CUR);
 
     readPecStitches(pattern, file);
-
-    embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     embPattern_flipVertical(pattern);
     return 1; /*TODO: finish ReadPhc */
 }
@@ -60,6 +63,19 @@ int writePhc(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-phc.c writePhc(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-phc.c writePhc(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-phc.c writePhc(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writePhc */
 }
 

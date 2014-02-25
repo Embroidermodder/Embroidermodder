@@ -9,10 +9,6 @@
 #include <math.h>
 #include <limits.h>
 
-/*****************************************
- * EmbReaderWriter Functions
- ****************************************/
-
 /*TODO: 'husDecode' is defined but not used. Either remove it or use it. */
 /*
 static short husDecode(unsigned char a1, unsigned char a2)
@@ -95,10 +91,10 @@ static unsigned char husEncodeStitchType(int st)
 int readHus(EmbPattern* pattern, const char* fileName)
 {
     int fileLength;
-    int magicCode,numberOfStitches,numberOfColors;
-    int postitiveXHoopSize,postitiveYHoopSize,negativeXHoopSize,negativeYHoopSize;
+    int magicCode, numberOfStitches, numberOfColors;
+    int postitiveXHoopSize, postitiveYHoopSize, negativeXHoopSize, negativeYHoopSize;
 
-    int attributeOffset,xOffset,yOffset;
+    int attributeOffset, xOffset, yOffset;
     unsigned char* attributeData = 0;
     unsigned char* attributeDataDecompressed = 0;
 
@@ -171,7 +167,6 @@ int readHus(EmbPattern* pattern, const char* fileName)
                                 husDecodeByte(yDecompressed[i]) / 10.0,
                                 husDecodeStitchType(attributeDataDecompressed[i]), 1);
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     if(stringVal) { free(stringVal); stringVal = 0; }
     if(xData) { free(xData); xData = 0; }
@@ -182,6 +177,11 @@ int readHus(EmbPattern* pattern, const char* fileName)
     if(attributeDataDecompressed) { free(attributeDataDecompressed); attributeDataDecompressed = 0; }
 
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -207,6 +207,16 @@ int writeHus(EmbPattern* pattern, const char* fileName)
 
     if(!pattern) { embLog_error("format-hus.c writeHus(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-hus.c writeHus(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-hus.c writeHus(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = fopen(fileName, "wb");
     if(!file)

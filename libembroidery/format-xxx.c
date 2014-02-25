@@ -117,8 +117,12 @@ int readXxx(EmbPattern* pattern, const char* fileName)
             embPattern_changeColor(pattern, pattern->currentColorIndex - 1);
         }
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -195,13 +199,25 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-xxx.c writeXxx(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-xxx.c writeXxx(), fileName argument is null\n"); return 0; }
 
-    embPattern_correctForMaxStitchLength(pattern, 124, 127);
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-xxx.c writeXxx(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     file = fopen(fileName, "wb");
     if(!file)
     {
         embLog_error("format-xxx.c writeXxx(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
+    embPattern_correctForMaxStitchLength(pattern, 124, 127);
+
     for(i = 0; i < 0x17; i++)
     {
         binaryWriteByte(file, 0x00);

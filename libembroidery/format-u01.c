@@ -1,5 +1,5 @@
 #include "format-u01.h"
-#include "helpers-unused.h"
+#include "emb-logging.h"
 #include <stdio.h>
 
 /* TODO: AFAIK this is a duplicate of U00. Review for differences and merge files and handle accordingly. */
@@ -46,9 +46,12 @@ int readU01(EmbPattern* pattern, const char* fileName)
         if(negativeY) dy = (char) -dy;
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
-
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -56,8 +59,15 @@ int readU01(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeU01(EmbPattern* pattern, const char* fileName)
 {
-    emb_unused(pattern); /*TODO: finish writeU01 */
-    emb_unused(fileName); /*TODO: finish writeU01 */
+    if(!pattern) { embLog_error("format-u01.c writeU01(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-u01.c writeU01(), fileName argument is null\n"); return 0; }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeU01 */
 }
 

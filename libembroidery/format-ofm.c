@@ -12,6 +12,9 @@ static char* ofmReadLibrary(FILE* file)
     char* libraryName = 0;
     /* FF FE FF */
     unsigned char leadin[3];
+
+    if(!file) { embLog_error("format-ofm.c ofmReadLibrary(), file argument is null\n"); return 0; }
+
     binaryReadBytes(file, leadin, 3);
     stringLength = binaryReadByte(file);
     libraryName = (char*)malloc(sizeof(char) * stringLength * 2);
@@ -24,6 +27,9 @@ static int ofmReadClass(FILE* file)
 {
     int len;
     char* s = 0;
+
+    if(!file) { embLog_error("format-ofm.c ofmReadClass(), file argument is null\n"); return 0; }
+
     binaryReadInt16(file);
     len = binaryReadInt16(file);
 
@@ -47,6 +53,9 @@ static void ofmReadBlockHeader(FILE* file)
     short unknown1 = binaryReadInt16(file);
     short unknown2 = (short)binaryReadInt32(file);
     int unknown3 = binaryReadInt32(file);
+
+    if(!file) { embLog_error("format-ofm.c ofmReadBlockHeader(), file argument is null\n"); return; }
+
     /* int v = binaryReadBytes(3); TODO: review */
     binaryReadInt16(file);
     binaryReadByte(file);
@@ -69,6 +78,9 @@ static void ofmReadBlockHeader(FILE* file)
 
 static void ofmReadColorChange(FILE* file, EmbPattern* pattern)
 {
+    if(!file) { embLog_error("format-ofm.c ofmReadColorChange(), file argument is null\n"); return; }
+    if(!pattern) { embLog_error("format-ofm.c ofmReadColorChange(), pattern argument is null\n"); return; }
+
     ofmReadBlockHeader(file);
     embPattern_addStitchRel(pattern, 0.0, 0.0, STOP, 1);
 }
@@ -78,6 +90,10 @@ static void ofmReadThreads(FILE* file, EmbPattern* p)
     int i, numberOfColors, stringLen, numberOfLibraries;
     char* primaryLibraryName = 0;
     char* expandedString = 0;
+
+    if(!file) { embLog_error("format-ofm.c ofmReadThreads(), file argument is null\n"); return; }
+    if(!p) { embLog_error("format-ofm.c ofmReadThreads(), p argument is null\n"); return; }
+
     /* FF FE FF 00 */
     binaryReadInt32(file);
 
@@ -138,6 +154,9 @@ static double ofmDecode(unsigned char b1, unsigned char b2)
 static void ofmReadExpanded(FILE* file, EmbPattern* p)
 {
     int i, numberOfStitches = 0;
+
+    if(!file) { embLog_error("format-ofm.c ofmReadExpanded(), file argument is null\n"); return; }
+    if(!p) { embLog_error("format-ofm.c ofmReadExpanded(), p argument is null\n"); return; }
 
     ofmReadBlockHeader(file);
     numberOfStitches = binaryReadInt32(file);
@@ -212,7 +231,11 @@ int readOfm(EmbPattern* pattern, const char* fileName)
             ofmReadClass(file);
         }
     }
-    embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -222,6 +245,19 @@ int writeOfm(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-ofm.c writeOfm(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-ofm.c writeOfm(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-ofm.c writeOfm(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeOfm */
 }
 

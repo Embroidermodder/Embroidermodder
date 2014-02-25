@@ -16,7 +16,9 @@ static double pcsDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 static void pcsEncode(FILE* file, int dx, int dy, int flags)
 {
     unsigned char flagsToWrite = 0;
+
     if(!file) { embLog_error("format-pcs.c pcsEncode(), file argument is null\n"); return; }
+
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(dx & 0xFF));
     binaryWriteByte(file, (unsigned char)((dx >> 8) & 0xFF));
@@ -136,6 +138,16 @@ int writePcs(EmbPattern* pattern, const char* fileName)
 
     if(!pattern) { embLog_error("format-pcs.c writePcs(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-pcs.c writePcs(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-pcs.c writePcs(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = fopen(fileName, "wb");
     if(!file)

@@ -22,6 +22,16 @@ int writeTxt(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-txt.c writeTxt(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-txt.c writeTxt(), fileName argument is null\n"); return 0; }
 
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-txt.c writeTxt(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     file = fopen(fileName, "w");
     if(!file)
     {

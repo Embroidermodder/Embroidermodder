@@ -15,8 +15,10 @@ static double pcqDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 
 static void pcqEncode(FILE* file, int dx, int dy, int flags)
 {
-    /* TODO: pointer safety */
     unsigned char flagsToWrite = 0;
+
+    if(!file) { embLog_error("format-pcq.c pcqEncode(), file argument is null\n"); return; }
+
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(dx & 0xFF));
     binaryWriteByte(file, (unsigned char)((dx >> 8) & 0xFF));
@@ -106,8 +108,12 @@ int readPcq(EmbPattern* pattern, const char* fileName)
         dy = pcqDecode(b[5], b[6], b[7]);
         embPattern_addStitchAbs(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -124,6 +130,16 @@ int writePcq(EmbPattern* pattern, const char* fileName)
 
     if(!pattern) { embLog_error("format-pcq.c writePcq(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-pcq.c writePcq(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-pcq.c writePcq(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = fopen(fileName, "wb");
     if(!file)

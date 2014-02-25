@@ -217,11 +217,22 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     int i = 0;
     unsigned char* attributeCompressed = 0, *xCompressed = 0, *yCompressed = 0, *decodedColors = 0, *encodedColors = 0;
     unsigned char prevByte = 0;
-    EmbThreadList *colorPointer;
+    EmbThreadList* colorPointer = 0;
     FILE* file = 0;
 
     if(!pattern) { embLog_error("format-vip.c writeVip(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vip.c writeVip(), fileName argument is null\n"); return 0; }
+
+    stitchCount = embStitchList_count(pattern->stitchList);
+    if(!stitchCount)
+    {
+        embLog_error("format-vip.c writeVip(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = fopen(fileName, "wb");
     if(file == 0)
@@ -230,7 +241,6 @@ int writeVip(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    stitchCount = embStitchList_count(pattern->stitchList);
     minColors = embThreadList_count(pattern->threadList);
     decodedColors = (unsigned char*)malloc(minColors << 2);
     if(!decodedColors) return 0;
@@ -291,7 +301,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
 
         colorPointer = pattern->threadList;
 
-        for (i = 0; i < minColors; i++)
+        for(i = 0; i < minColors; i++)
         {
             int byteChunk = i << 2;
             EmbColor currentColor = colorPointer->thread.color;
@@ -302,13 +312,13 @@ int writeVip(EmbPattern* pattern, const char* fileName)
             colorPointer = colorPointer->next;
         }
 
-        for (i = 0; i < minColors << 2; ++i)
+        for(i = 0; i < minColors << 2; ++i)
         {
             unsigned char tmpByte = (unsigned char) (decodedColors[i] ^ vipDecodingTable[i]);
             prevByte = (unsigned char) (tmpByte ^ prevByte);
             binaryWriteByte(file, prevByte);
         }
-        for (i = 0; i <= minColors; i++)
+        for(i = 0; i <= minColors; i++)
         {
             binaryWriteInt(file, 1);
         }

@@ -6,7 +6,7 @@
 
 #define HOOP_126X110 0
 #define	HOOP_110X110 1
-#define	HOOP_50X50 2
+#define	HOOP_50X50   2
 #define	HOOP_140X200 3
 #define HOOP_230X200 4
 
@@ -20,6 +20,8 @@ static int jefGetHoopSize(int width, int height)
 
 static void jefSetHoopFromId(EmbPattern* pattern, int hoopCode)
 {
+    if(!pattern) { embLog_error("format-jef.c jefSetHoopFromId(), pattern argument is null\n"); return; }
+
     switch(hoopCode)
     {
         case HOOP_126X110:
@@ -148,14 +150,21 @@ int readJef(EmbPattern* pattern, const char* fileName)
         stitchCount++;
     }
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
 static void jefEncode(FILE* file, float x, float y, int stitchType)
 {
-    /* TODO: pointer safety */
     unsigned char dx = (char)(x * 10.0f);
     unsigned char dy = (char)(y * 10.0f);
+
+    if(!file) { embLog_error("format-jef.c jefEncode(), file argument is null\n"); return; }
+
     if(stitchType == TRIM)
     {
         binaryWriteByte(file, 0x80);
@@ -197,6 +206,16 @@ int writeJef(EmbPattern* pattern, const char* fileName)
 
     if(!pattern) { embLog_error("format-jef.c writeJef(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-jef.c writeJef(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-jef.c writeJef(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = fopen(fileName, "wb");
     if(!file)

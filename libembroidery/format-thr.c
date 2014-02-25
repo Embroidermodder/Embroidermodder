@@ -128,8 +128,12 @@ int readThr(EmbPattern* pattern, const char* fileName)
     /*  64 bytes of rgbx(4 bytes) colors (16 custom colors) */
     /*  16 bytes of thread size (ascii representation ie. '4') */
 
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -137,7 +141,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeThr(EmbPattern* pattern, const char* fileName)
 {
-    int i, stitchLength;
+    int i, stitchCount;
     unsigned char version = 0;
     ThredHeader header;
     ThredExtension extension;
@@ -149,6 +153,17 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-thr.c writeThr(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-thr.c writeThr(), fileName argument is null\n"); return 0; }
 
+    stitchCount = embStitchList_count(pattern->stitchList);
+    if(!stitchCount)
+    {
+        embLog_error("format-thr.c writeThr(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     file = fopen(fileName, "wb");
     if(!file)
     {
@@ -156,15 +171,14 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    stitchLength = embStitchList_count(pattern->stitchList);
     memset(&header, 0, sizeof(ThredHeader));
     header.sigVersion = 0x746872 | (version << 24);
-    header.length = stitchLength * 12 + 16;
+    header.length = stitchCount * 12 + 16;
     if(version == 1 || version == 2)
     {
         header.length = header.length + sizeof(ThredHeader);
     }
-    header.numStiches = (unsigned short)stitchLength; /* number of stitches in design */
+    header.numStiches = (unsigned short)stitchCount; /* number of stitches in design */
     header.hoopSize = 5;
 
     binaryWriteUInt(file, header.sigVersion);
@@ -205,7 +219,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         binaryWriteUInt(file, NOTFRM | (pointer->stitch.color & 0x0F));
         pointer = pointer->next;
         i++;
-        if(i >= stitchLength) break;
+        if(i >= stitchCount) break;
     }
     binaryWriteBytes(file, bitmapName, 16);
     /* background color */

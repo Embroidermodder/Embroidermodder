@@ -4,9 +4,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 
-/*
-Pfaff MAX embroidery file format
-*/
+/* Pfaff MAX embroidery file format */
 
 static double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 {
@@ -21,6 +19,7 @@ static double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
 static void maxEncode(FILE* file, int x, int y)
 {
     if(!file) { embLog_error("format-max.c maxEncode(), file argument is null\n"); return; }
+
     binaryWriteByte(file, (unsigned char)0);
     binaryWriteByte(file, (unsigned char)(x & 0xFF));
     binaryWriteByte(file, (unsigned char)((x >> 8) & 0xFF));
@@ -67,9 +66,14 @@ int readMax(EmbPattern* pattern, const char* fileName)
         dy = maxDecode(b[4], b[5], b[6]);
         embPattern_addStitchAbs(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
-	embPattern_flipVertical(pattern);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    embPattern_flipVertical(pattern);
+
     return 1;
 }
 
@@ -97,6 +101,16 @@ int writeMax(EmbPattern* pattern, const char* fileName)
 
     if(!pattern) { embLog_error("format-max.c writeMax(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-max.c writeMax(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-max.c writeMax(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = fopen(fileName, "wb");
     if(!file)

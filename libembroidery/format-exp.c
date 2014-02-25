@@ -11,8 +11,13 @@ static char expDecode(unsigned char a1)
     return (a1 > 0x80) ? ((-~a1) - 1) : a1;
 }
 
-static void expEncode(unsigned char *b, char dx, char dy, int flags)
+static void expEncode(unsigned char* b, char dx, char dy, int flags)
 {
+    if(!b)
+    {
+        embLog_error("format-exp.c expEncode(), b argument is null\n");
+        return;
+    }
     if(flags == TRIM)
     {
         b[0] = 128;
@@ -106,8 +111,12 @@ int readExp(EmbPattern* pattern, const char* fileName)
         dy = expDecode(b1);
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
     embFile_close(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 
@@ -128,6 +137,16 @@ return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
 
     if(!pattern) { embLog_error("format-exp.c writeExp(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-exp.c writeExp(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-exp.c writeExp(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     file = embFile_open(fileName, "wb");
     if(!file)

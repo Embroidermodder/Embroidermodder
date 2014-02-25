@@ -57,7 +57,11 @@ int readPes(EmbPattern* pattern, const char* fileName)
 
     fseek(file, pecstart + 532, SEEK_SET);
     readPecStitches(pattern, file);
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     embPattern_flipVertical(pattern);
     fclose(file);
     return 1;
@@ -236,6 +240,10 @@ int writePes(EmbPattern* pattern, const char* fileName)
         embLog_error("format-pes.c writePes(), pattern contains no stitches\n");
         return 0;
     }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
     embPattern_scale(pattern, 10.0);

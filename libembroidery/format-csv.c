@@ -267,6 +267,10 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     file = fopen(fileName, "w");
     if(!file)
     {
@@ -312,7 +316,7 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
     i = 1;
     while(tList)
     {
-        fprintf(file, "\"$\",\"%d\",\"%d\",\"%d\",\"%d\",\"%s\",\"%s\"\n", i,
+        fprintf(file, "\"$\",\"%d\",\"%d\",\"%d\",\"%d\",\"%s\",\"%s\"\n", i, /* TODO: fix segfault that backtraces here when libembroidery-convert from dst to csv. */
                 (int)tList->thread.color.r,
                 (int)tList->thread.color.g,
                 (int)tList->thread.color.b,

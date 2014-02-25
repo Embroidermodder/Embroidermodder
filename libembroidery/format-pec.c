@@ -1,13 +1,18 @@
+#include "format-pec.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include "format-pec.h"
 
 void readPecStitches(EmbPattern* pattern, FILE* file)
 {
     int stitchNumber = 0;
+
+    if(!pattern) { embLog_error("format-pec.c readPecStitches(), pattern argument is null\n"); return; }
+    if(!file) { embLog_error("format-pec.c readPecStitches(), file argument is null\n"); return; }
+
     while(!feof(file))
     {
         int val1 = (int)binaryReadUInt8(file);
@@ -70,6 +75,9 @@ static void pecEncodeJump(FILE* file, int x, int types)
 {
     int outputVal = abs(x) & 0x7FF;
     unsigned int orPart = 0x80;
+
+    if(!file) { embLog_error("format-pec.c pecEncodeJump(), file argument is null\n"); return; }
+
     if(types & TRIM)
     {
         orPart |= 0x20;
@@ -90,6 +98,7 @@ static void pecEncodeJump(FILE* file, int x, int types)
 
 static void pecEncodeStop(FILE* file, unsigned char val)
 {
+    if(!file) { embLog_error("format-pec.c pecEncodeStop(), file argument is null\n"); return; }
     binaryWriteByte(file, 0xFE);
     binaryWriteByte(file, 0xB0);
     binaryWriteByte(file, val);
@@ -102,11 +111,18 @@ int readPec(EmbPattern* pattern, const char* fileName)
     unsigned int graphicsOffset;
     unsigned char colorChanges;
     int i;
-    FILE* file = fopen(fileName, "rb");
+    FILE* file = 0;
+
+    if(!pattern) { embLog_error("format-pec.c readPec(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-pec.c readPec(), fileName argument is null\n"); return 0; }
+
+    file = fopen(fileName, "rb");
     if(!file)
     {
+        embLog_error("format-pec.c readPec(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     fseek(file, 0x38, SEEK_SET);
     colorChanges = (unsigned char)binaryReadByte(file);
     for(i = 0; i <= colorChanges; i++)
@@ -149,7 +165,12 @@ static void PecEncode(FILE* file, EmbPattern* p)
     double thisX = 0.0;
     double thisY = 0.0;
     unsigned char stopCode = 2;
-    EmbStitchList* list = p->stitchList;
+    EmbStitchList* list = 0;
+
+    if(!file) { embLog_error("format-pec.c PecEncode(), file argument is null\n"); return; }
+    if(!p) { embLog_error("format-pec.c PecEncode(), p argument is null\n"); return; }
+
+    list = p->stitchList;
     while(list)
     {
         int deltaX, deltaY;
@@ -199,6 +220,9 @@ static void clearImage(unsigned char image[][48])
 static void writeImage(FILE *file, unsigned char image[][48])
 {
     int i, j;
+
+    if(!file) { embLog_error("format-pec.c writeImage(), file argument is null\n"); return; }
+
     for(i = 0; i < 38; i++)
     {
         for(j = 0; j < 6; j++)
@@ -220,7 +244,7 @@ static void writeImage(FILE *file, unsigned char image[][48])
 
 void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
 {
-    EmbStitchList *tempStitches;
+    EmbStitchList* tempStitches = 0;
     EmbRect bounds;
     unsigned char image[38][48];
     int i, flen, currentThreadCount, graphicsOffsetLocation, graphicsOffsetValue, height, width;
@@ -228,8 +252,12 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     const char* forwardSlashPos = strrchr(fileName, '/');
     const char* backSlashPos = strrchr(fileName, '\\');
     const char* dotPos = strrchr(fileName, '.');
-    const char* start;
-    start = 0;
+    const char* start = 0;
+
+    if(!pattern) { embLog_error("format-pec.c writePecStitches(), pattern argument is null\n"); return; }
+    if(!file) { embLog_error("format-pec.c writePecStitches(), file argument is null\n"); return; }
+    if(!fileName) { embLog_error("format-pec.c writePecStitches(), fileName argument is null\n"); return; }
+
     if(forwardSlashPos)
     {
         start = forwardSlashPos + 1;
@@ -357,12 +385,26 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writePec(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = fopen(fileName, "wb");
-    if(!file)
+    FILE* file = 0;
+
+    if(!embStitchList_count(pattern->stitchList))
     {
+        embLog_error("format-pec.c writePec(), pattern contains no stitches\n");
         return 0;
     }
-    embPattern_flipVertical(pattern);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    file = fopen(fileName, "wb");
+    if(!file)
+    {
+        embLog_error("format-pec.c writePec(), cannot open %s for writing\n", fileName);
+        return 0;
+    }
+
+    embPattern_flipVertical(pattern); /* TODO: There needs to be a matching flipVertical() call after the write to ensure multiple writes from the same pattern work properly */
     embPattern_fixColorCount(pattern);
     embPattern_correctForMaxStitchLength(pattern,12.7, 204.7);
     embPattern_scale(pattern, 10.0);

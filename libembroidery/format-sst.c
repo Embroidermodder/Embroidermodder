@@ -48,10 +48,11 @@ int readSst(EmbPattern* pattern, const char* fileName)
             b1 = -b1;
         embPattern_addStitchRel(pattern, b1 / 10.0, b2 / 10.0, stitchType, 1);
     }
+
+    /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
-    {
-        embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
-    }
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1; /*TODO: finish readSst */
 }
 
@@ -61,6 +62,19 @@ int writeSst(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-sst.c writeSst(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-sst.c writeSst(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-sst.c writeSst(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeSst */
 }
 

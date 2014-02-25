@@ -32,22 +32,21 @@ int readDsb(EmbPattern* pattern, const char* fileName)
     fseek(file, 0x200, SEEK_SET);
     while(1)
     {
-        int stitchType = NORMAL;
         int x, y;
-        unsigned char ctrl =(unsigned char)fgetc(file);
+        unsigned char ctrl;
+        int stitchType = NORMAL;
+
+        ctrl =(unsigned char)fgetc(file);
         if(feof(file)) break;
         y = fgetc(file);
         if(feof(file)) break;
         x = fgetc(file);
         if(feof(file)) break;
-        if(ctrl & 0x20)
-            x = -x;
-        if(ctrl & 0x40)
-            y = -y;
-        if(ctrl & 0x01)
-            stitchType = TRIM;
-        /* ctrl & 0x02 - Speed change? */
-        /* ctrl & 0x04 - Clutch? */
+        if(ctrl & 0x01) stitchType = TRIM;
+        if(ctrl & 0x20) x = -x;
+        if(ctrl & 0x40) y = -y;
+        /* ctrl & 0x02 - Speed change? */ /* TODO: review this line */
+        /* ctrl & 0x04 - Clutch? */       /* TODO: review this line */
         if((ctrl & 0x05) == 0x05)
         {
             stitchType = STOP;
@@ -69,6 +68,19 @@ int writeDsb(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-dsb.c writeDsb(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dsb.c writeDsb(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-dsb.c writeDsb(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeDsb */
 }
 

@@ -3,13 +3,13 @@
  * notes appeared at http://www.wotsit.org under Tajima Format.
  */
 
+#include "format-dst.h"
+#include "emb-logging.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
-#include "format-dst.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include "emb-logging.h"
 
 static int decode_record_flags(unsigned char b2)
 {
@@ -161,7 +161,7 @@ static void set_dst_variable(EmbPattern* pattern, char* var, char* val)
 
     for(i = 0; i <= (unsigned int)strlen(var); i++)
     {
-        /* upcase var */
+        /* uppercase the var */
         if(var[i] >= 'a' && var[i] <= 'z')
         {
             var[i] += 'A' - 'a';
@@ -381,7 +381,11 @@ int readDst(EmbPattern* pattern, const char* fileName)
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, flags, 1);
     }
     fclose(file);
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     /* combineJumpStitches(pattern, 5); */
     return 1;
 }
@@ -402,12 +406,23 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-dst.c writeDst(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dst.c writeDst(), fileName argument is null\n"); return 0; }
 
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-dst.c writeDst(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     file = fopen(fileName, "wb");
     if(!file)
     {
         embLog_error("format-dst.c writeDst(), cannot open %s for writing\n", fileName);
         return 0;
     }
+
     embPattern_correctForMaxStitchLength(pattern, 12.1, 12.1);
 
     xx = yy = 0;

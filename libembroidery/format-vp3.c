@@ -222,9 +222,14 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         }
         if(i + 1 < numberOfColors) embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
     }
-    embPattern_addStitchRel(pattern, 0, 0, END, 1);
-    embPattern_flipVertical(pattern);
     fclose(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    embPattern_flipVertical(pattern);
+
     return 1;
 }
 
@@ -234,6 +239,15 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vp3.c writeVp3(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-vp3.c writeVp3(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeVp3 */
 }
 

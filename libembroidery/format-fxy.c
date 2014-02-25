@@ -1,6 +1,6 @@
 #include "format-fxy.h"
-#include "helpers-binary.h"
 #include "emb-logging.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
@@ -18,16 +18,17 @@ int readFxy(EmbPattern* pattern, const char* fileName)
         embLog_error("format-fxy.c readFxy(), cannot open %s for reading\n", fileName);
         return 0;
     }
-    embPattern_loadExternalColorFile(pattern, fileName);
 
-    fseek(file, 0x100, SEEK_SET);
+    embPattern_loadExternalColorFile(pattern, fileName);
+    fseek(file, 0x100, SEEK_SET); /* TODO: review for combining code. This line appears to be the only difference from the GT format. */
 
     while(1)
     {
         int stitchType = NORMAL;
-        int b1 = binaryReadByte(file);
-        int b2 = binaryReadByte(file);
+        int b1 = (int)binaryReadByte(file);
+        int b2 = (int)binaryReadByte(file);
         unsigned char commandByte = binaryReadByte(file);
+
         if(commandByte == 0x91)
         {
             embPattern_addStitchRel(pattern, 0, 0, END, 1);
@@ -52,6 +53,19 @@ int writeFxy(EmbPattern* pattern, const char* fileName)
 {
     if(!pattern) { embLog_error("format-fxy.c writeFxy(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-fxy.c writeFxy(), fileName argument is null\n"); return 0; }
+
+    if(!embStitchList_count(pattern->stitchList))
+    {
+        embLog_error("format-fxy.c writeFxy(), pattern contains no stitches\n");
+        return 0;
+    }
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
+    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+
     return 0; /*TODO: finish writeFxy */
 }
 
