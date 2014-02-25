@@ -4,6 +4,7 @@
  */
 
 #include "format-dst.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
@@ -228,7 +229,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     int valpos;
     unsigned char b[3];
     char header[512 + 1];
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i;
     int flags; /* for converting stitches from file encoding */
 
@@ -286,7 +287,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-dst.c readDst(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dst.c readDst(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-dst.c readDst(), cannot open %s for reading\n", fileName);
@@ -297,7 +298,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     /* READ 512 BYTE HEADER INTO header[] */
     for(i = 0; i < 512; i++)
     {
-        header[i] = (char)fgetc(file);
+        header[i] = (char)embFile_getc(file);
     }
 
     /*TODO:It would probably be a good idea to validate file before accepting it. */
@@ -329,7 +330,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
         }
     }
 
-    while(fread(b, 1, 3, file) == 3)
+    while(embFile_read(b, 1, 3, file) == 3)
     {
         int x = 0;
         int y = 0;
@@ -380,7 +381,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -395,7 +396,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
 int writeDst(EmbPattern* pattern, const char* fileName)
 {
     EmbRect boundingRect;
-    FILE* file = 0;
+    FILE* file = 0; /* TODO: change writeDst() to use EmbFile */
     int xx, yy, dx, dy, flags;
     int i;
     int co = 1, st = 0;
