@@ -1,10 +1,10 @@
-#include <stdio.h>
-#include "emb-stitch.h"
 #include "format-exp.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
 #include "emb-file.h"
 #include "emb-logging.h"
+#include "emb-stitch.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
+#include <stdio.h>
 
 static char expDecode(unsigned char a1)
 {

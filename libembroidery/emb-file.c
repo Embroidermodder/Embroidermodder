@@ -54,6 +54,15 @@ int embFile_getc(EmbFile* stream)
 #endif
 }
 
+size_t embFile_read(void* ptr, size_t size, size_t nmemb, EmbFile* stream)
+{
+#ifdef ARDUINO
+    return 0; /* ARDUINO TODO: SD File read() doesn't appear to return the same way as fread(). This will need work. */
+#else
+    return fread(ptr, size, nmemb, stream->file);
+#endif
+}
+
 int embFile_seek(EmbFile* stream, long offset, int origin)
 {
 #ifdef ARDUINO

@@ -1,6 +1,7 @@
 #include "format-ksm.h"
-#include "helpers-binary.h"
+#include "emb-file.h"
 #include "emb-logging.h"
+#include "helpers-binary.h"
 #include <stdio.h>
 
 static void ksmEncode(unsigned char* b, char dx, char dy, int flags)
@@ -38,21 +39,21 @@ int readKsm(EmbPattern* pattern, const char* fileName)
 {
     int prevStitchType = NORMAL;
     char b[3];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-ksm.c readKsm(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-ksm.c readKsm(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-ksm.c readKsm(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x200, SEEK_SET);
+    embFile_seek(file, 0x200, SEEK_SET);
 
-    while(fread(b, 1, 3, file) == 3)
+    while(embFile_read(b, 1, 3, file) == 3)
     {
         int flags = NORMAL;
 
@@ -71,7 +72,7 @@ int readKsm(EmbPattern* pattern, const char* fileName)
             b[0] = -b[0];
         embPattern_addStitchRel(pattern, b[1] / 10.0, b[0] / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -84,7 +85,7 @@ int readKsm(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeKsm(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    FILE* file = 0; /* TODO: change writeKsm() to use EmbFile */
     EmbStitchList* pointer = 0;
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;
