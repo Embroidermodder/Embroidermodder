@@ -6,8 +6,11 @@
 
 static unsigned char* vp3ReadString(FILE* file)
 {
-    int stringLength = binaryReadInt16BE(file);
-    unsigned char* charString = (unsigned char*)malloc(stringLength);
+    int stringLength = 0;
+    unsigned char* charString = 0;
+    if(!file) { embLog_error("format-vp3.c vp3ReadString(), file argument is null\n"); return 0; }
+    stringLength = binaryReadInt16BE(file);
+    charString = (unsigned char*)malloc(stringLength);
     if(!charString) { embLog_error("format-vp3.c vp3ReadString(), cannot allocate memory for charString\n"); return 0; }
     binaryReadBytes(file, charString, stringLength);
     return charString;
@@ -58,6 +61,9 @@ typedef struct _vp3Hoop
 static vp3Hoop vp3ReadHoopSection(FILE* file)
 {
     vp3Hoop hoop;
+
+    if(!file) { embLog_error("format-vp3.c vp3ReadHoopSection(), file argument is null\n"); return hoop; }
+
     hoop.right = binaryReadInt32BE(file);
     hoop.bottom = binaryReadInt32BE(file);
     hoop.left = binaryReadInt32BE(file);

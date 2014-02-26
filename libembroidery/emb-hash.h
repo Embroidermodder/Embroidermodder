@@ -12,7 +12,7 @@ extern "C" {
 
 typedef HashTable EmbHash;
 
-extern EMB_PUBLIC EmbHash* EMB_CALL embHash_create();
+extern EMB_PUBLIC EmbHash* EMB_CALL embHash_create(void);
 extern EMB_PUBLIC void EMB_CALL embHash_free(EmbHash* hash);
 
 extern EMB_PUBLIC int EMB_CALL embHash_contains(const EmbHash* hash, const void* key);

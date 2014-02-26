@@ -2,7 +2,7 @@
 
 /* This file contains wrapper functions around Keith Pomakis' HashTable Library */
 
-EmbHash* embHash_create() { return HashTableCreate(1); }
+EmbHash* embHash_create(void) { return HashTableCreate(1); }
 void embHash_free(EmbHash* hash) { HashTableDestroy(hash); hash = 0; }
 
 int embHash_contains(const EmbHash* hash, const void* key) { return HashTableContainsKey(hash, key); }

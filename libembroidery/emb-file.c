@@ -7,7 +7,7 @@ EmbFile* embFile_open(const char* fileName, const char* mode)
 #ifdef ARDUINO
     return inoFile_open(fileName, mode);
 #else
-    EmbFile* eFile;
+    EmbFile* eFile = 0;
     FILE* oFile = fopen(fileName, mode);
     if(!oFile)
         return 0;
