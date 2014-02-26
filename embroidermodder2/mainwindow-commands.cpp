@@ -228,8 +228,8 @@ void MainWindow::whatsThisContextHelp()
 void MainWindow::print()
 {
     qDebug("print()");
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->print();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        ((MdiWindow*)mdiArea->activeSubWindow())->print();
 }
 
 void MainWindow::tipOfTheDay()
@@ -432,17 +432,17 @@ void MainWindow::icon128()
     iconResize(128);
 }
 
-MDIWindow* MainWindow::activeMdiWindow()
+MdiWindow* MainWindow::activeMdiWindow()
 {
     qDebug("activeMdiWindow()");
-    MDIWindow* win = (MDIWindow*)mdiArea->activeSubWindow();
+    MdiWindow* win = (MdiWindow*)mdiArea->activeSubWindow();
     return win;
 }
 
 View* MainWindow::activeView()
 {
     qDebug("activeView()");
-    MDIWindow* win = (MDIWindow*)mdiArea->activeSubWindow();
+    MdiWindow* win = (MdiWindow*)mdiArea->activeSubWindow();
     if(win)
     {
         View* v = win->getView();
@@ -454,7 +454,7 @@ View* MainWindow::activeView()
 QGraphicsScene* MainWindow::activeScene()
 {
     qDebug("activeScene()");
-    MDIWindow* win = (MDIWindow*)mdiArea->activeSubWindow();
+    MdiWindow* win = (MdiWindow*)mdiArea->activeSubWindow();
     if(win)
     {
         QGraphicsScene* s = win->getScene();
@@ -485,8 +485,8 @@ void MainWindow::updateAllViewScrollBars(bool val)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->showViewScrollBars(val);
+        if((MdiWindow*)windowList.at(i))
+            ((MdiWindow*)windowList.at(i))->showViewScrollBars(val);
     }
 }
 
@@ -495,8 +495,8 @@ void MainWindow::updateAllViewCrossHairColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewCrossHairColor(color);
+        if((MdiWindow*)windowList.at(i))
+            ((MdiWindow*)windowList.at(i))->setViewCrossHairColor(color);
     }
 }
 
@@ -505,8 +505,8 @@ void MainWindow::updateAllViewBackgroundColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewBackgroundColor(color);
+        if((MdiWindow*)windowList.at(i))
+            ((MdiWindow*)windowList.at(i))->setViewBackgroundColor(color);
     }
 }
 
@@ -515,8 +515,8 @@ void MainWindow::updateAllViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colo
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+        if((MdiWindow*)windowList.at(i))
+            ((MdiWindow*)windowList.at(i))->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
     }
 }
 
@@ -525,8 +525,8 @@ void MainWindow::updateAllViewGridColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewGridColor(color);
+        if((MdiWindow*)windowList.at(i))
+            ((MdiWindow*)windowList.at(i))->setViewGridColor(color);
     }
 }
 
@@ -535,8 +535,8 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
-        if((MDIWindow*)windowList.at(i))
-            ((MDIWindow*)windowList.at(i))->setViewRulerColor(color);
+        if((MdiWindow*)windowList.at(i))
+            ((MdiWindow*)windowList.at(i))->setViewRulerColor(color);
     }
 }
 
@@ -767,8 +767,8 @@ void MainWindow::colorSelectorIndexChanged(int index)
     else
         QMessageBox::warning(this, tr("Color Selector Pointer Error"), tr("<b>An error has occured while changing colors.</b>"));
 
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->currentColorChanged(newColor);
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        ((MdiWindow*)mdiArea->activeSubWindow())->currentColorChanged(newColor);
 }
 
 void MainWindow::linetypeSelectorIndexChanged(int index)
@@ -883,29 +883,29 @@ void MainWindow::setTextOverline(bool val)
 
 QString MainWindow::getCurrentLayer()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentLayer();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        return ((MdiWindow*)mdiArea->activeSubWindow())->getCurrentLayer();
     return "0";
 }
 
 QRgb MainWindow::getCurrentColor()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentColor();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        return ((MdiWindow*)mdiArea->activeSubWindow())->getCurrentColor();
     return 0; //TODO: return color ByLayer
 }
 
 QString MainWindow::getCurrentLineType()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentLineType();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        return ((MdiWindow*)mdiArea->activeSubWindow())->getCurrentLineType();
     return "ByLayer";
 }
 
 QString MainWindow::getCurrentLineWeight()
 {
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        return ((MDIWindow*)mdiArea->activeSubWindow())->getCurrentLineWeight();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        return ((MdiWindow*)mdiArea->activeSubWindow())->getCurrentLineWeight();
     return "ByLayer";
 }
 
@@ -913,8 +913,8 @@ void MainWindow::deletePressed()
 {
     qDebug("deletePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->deletePressed();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        ((MdiWindow*)mdiArea->activeSubWindow())->deletePressed();
     QApplication::restoreOverrideCursor();
 }
 
@@ -922,8 +922,8 @@ void MainWindow::escapePressed()
 {
     qDebug("escapePressed()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    if((MDIWindow*)mdiArea->activeSubWindow())
-        ((MDIWindow*)mdiArea->activeSubWindow())->escapePressed();
+    if((MdiWindow*)mdiArea->activeSubWindow())
+        ((MdiWindow*)mdiArea->activeSubWindow())->escapePressed();
     QApplication::restoreOverrideCursor();
 
     nativeEndCommand();
@@ -971,25 +971,25 @@ void MainWindow::disableMoveRapidFire()
 
 void MainWindow::promptHistoryAppended(const QString& txt)
 {
-    MDIWindow* mdiWin = activeMdiWindow();
+    MdiWindow* mdiWin = activeMdiWindow();
     if(mdiWin) mdiWin->promptHistoryAppended(txt);
 }
 
 void MainWindow::logPromptInput(const QString& txt)
 {
-    MDIWindow* mdiWin = activeMdiWindow();
+    MdiWindow* mdiWin = activeMdiWindow();
     if(mdiWin) mdiWin->logPromptInput(txt);
 }
 
 void MainWindow::promptInputPrevious()
 {
-    MDIWindow* mdiWin = activeMdiWindow();
+    MdiWindow* mdiWin = activeMdiWindow();
     if(mdiWin) mdiWin->promptInputPrevious();
 }
 
 void MainWindow::promptInputNext()
 {
-    MDIWindow* mdiWin = activeMdiWindow();
+    MdiWindow* mdiWin = activeMdiWindow();
     if(mdiWin) mdiWin->promptInputNext();
 }
 

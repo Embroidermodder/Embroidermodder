@@ -14,7 +14,7 @@
 #include "cmdprompt.h"
 
 class MdiArea;
-class MDIWindow;
+class MdiWindow;
 class View;
 class StatusBar;
 class StatusBarButton;
@@ -44,7 +44,7 @@ public:
 
     MdiArea*                        getMdiArea();
     MainWindow*                     getApplication();
-    MDIWindow*                      activeMdiWindow();
+    MdiWindow*                      activeMdiWindow();
     View*                           activeView();
     QGraphicsScene*                 activeScene();
     QUndoStack*                     activeUndoStack();
@@ -295,7 +295,7 @@ public slots:
     void                            disableMoveRapidFire();
 
     void                            onCloseWindow();
-    virtual void                    onCloseMdiWin(MDIWindow*);
+    virtual void                    onCloseMdiWin(MdiWindow*);
 
     void                            recentMenuAboutToShow();
 
@@ -445,7 +445,7 @@ private:
     int                             numOfDocs;
     int                             docIndex;
 
-    QList<MDIWindow*>               listMdiWin;
+    QList<MdiWindow*>               listMdiWin;
     QMdiSubWindow*                  findMdiWindow(const QString &fileName);
     QString                         openFilesPath;
 

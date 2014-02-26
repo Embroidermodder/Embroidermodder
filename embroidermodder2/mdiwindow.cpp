@@ -27,7 +27,7 @@
 
 #include "emb-reader-writer.h"
 
-MDIWindow::MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
+MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
     mainWin = mw;
     mdiArea = parent;
@@ -78,20 +78,20 @@ MDIWindow::MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     onWindowActivated();
 }
 
-MDIWindow::~MDIWindow()
+MdiWindow::~MdiWindow()
 {
-    qDebug("MDIWindow Destructor()");
+    qDebug("MdiWindow Destructor()");
 }
 
-bool MDIWindow::saveFile(const QString &fileName)
+bool MdiWindow::saveFile(const QString &fileName)
 {
     SaveObject saveObj(gscene, this);
     return saveObj.save(fileName);
 }
 
-bool MDIWindow::loadFile(const QString &fileName)
+bool MdiWindow::loadFile(const QString &fileName)
 {
-    qDebug("MDIWindow loadFile()");
+    qDebug("MdiWindow loadFile()");
 
     QRgb tmpColor = getCurrentColor();
 
@@ -333,7 +333,7 @@ bool MDIWindow::loadFile(const QString &fileName)
     return fileWasLoaded;
 }
 
-void MDIWindow::print()
+void MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
     if(dialog.exec() == QDialog::Accepted)
@@ -363,7 +363,7 @@ void MDIWindow::print()
 //TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
 //TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
 //NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
-void MDIWindow::saveBMC()
+void MdiWindow::saveBMC()
 {
     //TODO: figure out how to center the image, right now it just plops it to the left side.
     QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
@@ -389,32 +389,32 @@ void MDIWindow::saveBMC()
     img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
 }
 
-void MDIWindow::setCurrentFile(const QString &fileName)
+void MdiWindow::setCurrentFile(const QString &fileName)
 {
     curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
 }
 
-QString MDIWindow::getShortCurrentFile()
+QString MdiWindow::getShortCurrentFile()
 {
     return QFileInfo(curFile).fileName();
 }
 
-QString MDIWindow::fileExtension(const QString& fileName)
+QString MdiWindow::fileExtension(const QString& fileName)
 {
     return QFileInfo(fileName).suffix().toLower();
 }
 
-void MDIWindow::closeEvent(QCloseEvent* /*e*/)
+void MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
-    qDebug("MDIWindow closeEvent()");
+    qDebug("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
-void MDIWindow::onWindowActivated()
+void MdiWindow::onWindowActivated()
 {
-    qDebug("MDIWindow onWindowActivated()");
+    qDebug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
     mainWin->setUndoCleanIcon(fileWasLoaded);
     mainWin->statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
@@ -428,98 +428,98 @@ void MDIWindow::onWindowActivated()
     mainWin->prompt->setHistory(promptHistory);
 }
 
-QSize MDIWindow::sizeHint() const
+QSize MdiWindow::sizeHint() const
 {
-    qDebug("MDIWindow sizeHint()");
+    qDebug("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
-void MDIWindow::currentLayerChanged(const QString& layer)
+void MdiWindow::currentLayerChanged(const QString& layer)
 {
     curLayer = layer;
 }
 
-void MDIWindow::currentColorChanged(const QRgb& color)
+void MdiWindow::currentColorChanged(const QRgb& color)
 {
     curColor = color;
 }
 
-void MDIWindow::currentLinetypeChanged(const QString& type)
+void MdiWindow::currentLinetypeChanged(const QString& type)
 {
     curLineType = type;
 }
 
-void MDIWindow::currentLineweightChanged(const QString& weight)
+void MdiWindow::currentLineweightChanged(const QString& weight)
 {
     curLineWeight = weight;
 }
 
-void MDIWindow::updateColorLinetypeLineweight()
+void MdiWindow::updateColorLinetypeLineweight()
 {
 }
 
-void MDIWindow::deletePressed()
+void MdiWindow::deletePressed()
 {
     gview->deletePressed();
 }
 
-void MDIWindow::escapePressed()
+void MdiWindow::escapePressed()
 {
     gview->escapePressed();
 }
 
-void MDIWindow::showViewScrollBars(bool val)
+void MdiWindow::showViewScrollBars(bool val)
 {
     gview->showScrollBars(val);
 }
 
-void MDIWindow::setViewCrossHairColor(QRgb color)
+void MdiWindow::setViewCrossHairColor(QRgb color)
 {
     gview->setCrossHairColor(color);
 }
 
-void MDIWindow::setViewBackgroundColor(QRgb color)
+void MdiWindow::setViewBackgroundColor(QRgb color)
 {
     gview->setBackgroundColor(color);
 }
 
-void MDIWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+void MdiWindow::setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
 {
     gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
 }
 
-void MDIWindow::setViewGridColor(QRgb color)
+void MdiWindow::setViewGridColor(QRgb color)
 {
     gview->setGridColor(color);
 }
 
-void MDIWindow::setViewRulerColor(QRgb color)
+void MdiWindow::setViewRulerColor(QRgb color)
 {
     gview->setRulerColor(color);
 }
 
-void MDIWindow::promptHistoryAppended(const QString& txt)
+void MdiWindow::promptHistoryAppended(const QString& txt)
 {
     promptHistory.append("<br/>" + txt);
 }
 
-void MDIWindow::logPromptInput(const QString& txt)
+void MdiWindow::logPromptInput(const QString& txt)
 {
     promptInputList << txt;
     promptInputNum = promptInputList.size();
 }
 
-void MDIWindow::promptInputPrevious()
+void MdiWindow::promptInputPrevious()
 {
     promptInputPrevNext(true);
 }
 
-void MDIWindow::promptInputNext()
+void MdiWindow::promptInputNext()
 {
     promptInputPrevNext(false);
 }
 
-void MDIWindow::promptInputPrevNext(bool prev)
+void MdiWindow::promptInputPrevNext(bool prev)
 {
     if(promptInputList.isEmpty())
     {

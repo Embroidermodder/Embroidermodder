@@ -337,8 +337,8 @@ void MainWindow::newFile()
     qDebug("MainWindow::newFile()");
     docIndex++;
     numOfDocs++;
-    MDIWindow* mdiWin = new MDIWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
-    connect(mdiWin, SIGNAL(sendCloseMdiWin(MDIWindow*)), this, SLOT(onCloseMdiWin(MDIWindow*)));
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
     updateMenuToolbarStatusbar();
@@ -405,8 +405,8 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
 
             //The docIndex doesn't need increased as it is only used for unnamed files
             numOfDocs++;
-            MDIWindow* mdiWin = new MDIWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
-            connect(mdiWin, SIGNAL(sendCloseMdiWin(MDIWindow*)), this, SLOT(onCloseMdiWin(MDIWindow*)));
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             //Make sure the toolbars/etc... are shown before doing their zoomExtents
@@ -468,11 +468,11 @@ void MainWindow::saveasfile()
 {
     qDebug("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
-    MDIWindow* win;
-    if(!qobject_cast<MDIWindow*>(mdiArea->activeSubWindow()))
+    MdiWindow* win;
+    if(!qobject_cast<MdiWindow*>(mdiArea->activeSubWindow()))
         return;
 
-    win = qobject_cast<MDIWindow*>(mdiArea->activeSubWindow());
+    win = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
 
     QString file;
     openFilesPath = settings_opensave_recent_directory;
@@ -489,7 +489,7 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
 
     foreach(QMdiSubWindow* window, mdiArea->subWindowList())
     {
-        MDIWindow* mdiWin = qobject_cast<MDIWindow*>(window);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
         if(mdiWin)
         {
             if(mdiWin->getCurrentFile() == canonicalFilePath)
@@ -511,14 +511,14 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
-    MDIWindow* win = qobject_cast<MDIWindow*>(mdiArea->activeSubWindow());
+    MdiWindow* win = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if(win)
     {
         onCloseMdiWin(win);
     }
 }
 
-void MainWindow::onCloseMdiWin(MDIWindow* theMdiWin)
+void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
     qDebug("MainWindow::onCloseMdiWin()");
     numOfDocs--;
@@ -534,7 +534,7 @@ void MainWindow::onCloseMdiWin(MDIWindow* theMdiWin)
 
     if(keepMaximized)
     {
-        MDIWindow* win = qobject_cast<MDIWindow*>(mdiArea->activeSubWindow());
+        MdiWindow* win = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
         if(win) { win->showMaximized(); }
     }
 }
@@ -542,7 +542,7 @@ void MainWindow::onCloseMdiWin(MDIWindow* theMdiWin)
 void MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
     qDebug("MainWindow::onWindowActivated()");
-    MDIWindow* win = qobject_cast<MDIWindow*>(w);
+    MdiWindow* win = qobject_cast<MdiWindow*>(w);
     if(win)
         win->onWindowActivated();
 }

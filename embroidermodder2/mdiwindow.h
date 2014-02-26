@@ -27,13 +27,13 @@ class QGraphicsScene;
 class QGraphicsView;
 QT_END_NAMESPACE
 
-class MDIWindow: public QMdiSubWindow
+class MdiWindow: public QMdiSubWindow
 {
     Q_OBJECT
 
 public:
-    MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
-    ~MDIWindow();
+    MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags);
+    ~MdiWindow();
 
     virtual QSize              sizeHint() const;
     QString                    getCurrentFile()   { return curFile; }
@@ -52,7 +52,7 @@ public:
     bool                       loadFile(const QString &fileName);
     bool                       saveFile(const QString &fileName);
 signals:
-    void                       sendCloseMdiWin(MDIWindow*);
+    void                       sendCloseMdiWin(MdiWindow*);
 
 public slots:
     void                       closeEvent(QCloseEvent* e);
