@@ -35,6 +35,8 @@ int readEdr(EmbPattern* pattern, const char* fileName)
         t.color.r = binaryReadByte(file);
         t.color.g = binaryReadByte(file);
         t.color.b = binaryReadByte(file);
+        t.catalogNumber = "";
+        t.description = "";
         binaryReadByte(file);
         embPattern_addThread(pattern, t);
     }

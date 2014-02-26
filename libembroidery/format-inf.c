@@ -42,6 +42,8 @@ int readInf(EmbPattern* pattern, const char* fileName)
         t.color.r = binaryReadByte(file);
         t.color.g = binaryReadByte(file);
         t.color.b = binaryReadByte(file);
+        t.catalogNumber = "";
+        t.description = "";
         embPattern_addThread(pattern, t);
         binaryReadUInt16(file);
         binaryReadString(file, colorType, 50);

@@ -43,11 +43,11 @@ int readCol(EmbPattern* pattern, const char* fileName)
         {
             break;
         }
-        t.catalogNumber = "";
-        t.description = "";
         t.color.r = (unsigned char)red;
         t.color.g = (unsigned char)green;
         t.color.b = (unsigned char)blue;
+        t.catalogNumber = "";
+        t.description = "";
         embPattern_addThread(pattern, t);
     }
     fclose(file);
