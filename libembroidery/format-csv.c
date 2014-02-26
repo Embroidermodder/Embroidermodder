@@ -116,7 +116,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
                     }
                     else
                     {
-                        /* TODO: error. premature newline */
+                        embLog_error("format-csv.c readCsv(), premature newline\n");
                         return 0;
                     }
                     break;
@@ -125,7 +125,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
             {
                 size *= 2;
                 buff = (char*)realloc(buff,size);
-                if(!buff) { /*TODO: error */ return 0; }
+                if(!buff) { embLog_error("format-csv.c readCsv(), cannot re-allocate memory for buff\n"); return 0; }
             }
 
             if(process)
@@ -269,7 +269,10 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
+    {
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
+        stitchCount++;
+    }
 
     file = fopen(fileName, "w");
     if(!file)

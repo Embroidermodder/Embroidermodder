@@ -162,7 +162,10 @@ int writeThr(EmbPattern* pattern, const char* fileName)
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
+    {
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
+        stitchCount++;
+    }
 
     file = fopen(fileName, "wb");
     if(!file)
