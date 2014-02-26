@@ -18,6 +18,7 @@ EmbFlagList* embFlagList_create(EmbFlag data)
 EmbFlagList* embFlagList_add(EmbFlagList* pointer, EmbFlag data)
 {
     if(!pointer) { embLog_error("emb-flag.c embFlagList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-flag.c embFlagList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbFlagList*)malloc(sizeof(EmbFlagList));
     if(!pointer->next) { embLog_error("emb-flag.c embFlagList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

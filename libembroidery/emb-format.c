@@ -85,6 +85,7 @@ EmbFormatList* embFormatList_create()
 EmbFormatList* embFormatList_add(EmbFormatList* pointer, char* data)
 {
     if(!pointer) { embLog_error("emb-format.c embFormatList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-format.c embFormatList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbFormatList*)malloc(sizeof(EmbFormatList));
     if(!pointer->next) { embLog_error("emb-format.c embFormatList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

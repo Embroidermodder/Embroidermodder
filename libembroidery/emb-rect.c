@@ -109,6 +109,7 @@ EmbRectObjectList* embRectObjectList_create(EmbRectObject data)
 EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data)
 {
     if(!pointer) { embLog_error("emb-rect.c embRectObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbRectObjectList*)malloc(sizeof(EmbRectObjectList));
     if(!pointer->next) { embLog_error("emb-rect.c embRectObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

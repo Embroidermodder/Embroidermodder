@@ -41,6 +41,7 @@ EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data)
 EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data)
 {
     if(!pointer) { embLog_error("emb-polygon.c embPolygonObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-polygon.c embPolygonObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
     if(!pointer->next) { embLog_error("emb-polygon.c embPolygonObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

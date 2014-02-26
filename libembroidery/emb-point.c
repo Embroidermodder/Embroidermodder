@@ -42,6 +42,7 @@ EmbPointList* embPointList_create(double x, double y)
 EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data)
 {
     if(!pointer) { embLog_error("emb-point.c embPointList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-point.c embPointList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPointList*)malloc(sizeof(EmbPointList));
     if(!pointer->next) { embLog_error("emb-point.c embPointList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
@@ -121,6 +122,7 @@ EmbPointObjectList* embPointObjectList_create(EmbPointObject data)
 EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data)
 {
     if(!pointer) { embLog_error("emb-point.c embPointObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPointObjectList*)malloc(sizeof(EmbPointObjectList));
     if(!pointer->next) { embLog_error("emb-point.c embPointObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

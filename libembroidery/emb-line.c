@@ -70,6 +70,7 @@ EmbLineObjectList* embLineObjectList_create(EmbLineObject data)
 EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data)
 {
     if(!pointer) { embLog_error("emb-line.c embLineObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbLineObjectList*)malloc(sizeof(EmbLineObjectList));
     if(!pointer->next) { embLog_error("emb-line.c embLineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

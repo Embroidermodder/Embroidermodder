@@ -41,6 +41,7 @@ EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
 {
     if(!pointer) { embLog_error("emb-polyline.c embPolylineObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-polyline.c embPolylineObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
     if(!pointer->next) { embLog_error("emb-polyline.c embPolylineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

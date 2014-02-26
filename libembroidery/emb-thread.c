@@ -92,6 +92,7 @@ EmbThreadList* embThreadList_create(EmbThread data)
 EmbThreadList* embThreadList_add(EmbThreadList* pointer, EmbThread data)
 {
     if(!pointer) { embLog_error("emb-thread.c embThreadList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-thread.c embThreadList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbThreadList*)malloc(sizeof(EmbThreadList));
     if(!pointer->next) { embLog_error("emb-thread.c embThreadList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

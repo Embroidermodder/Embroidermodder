@@ -15,6 +15,7 @@ EmbStitchList* embStitchList_create(EmbStitch data)
 EmbStitchList* embStitchList_add(EmbStitchList* pointer, EmbStitch data)
 {
     if(!pointer) { embLog_error("emb-stitch.c embStitchList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-stitch.c embStitchList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbStitchList*)malloc(sizeof(EmbStitchList));
     if(!pointer->next) { embLog_error("emb-stitch.c embStitchList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

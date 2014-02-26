@@ -44,6 +44,7 @@ EmbPathObjectList* embPathObjectList_create(EmbPathObject* data)
 EmbPathObjectList* embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data)
 {
     if(!pointer) { embLog_error("emb-path.c embPathObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-path.c embPathObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPathObjectList*)malloc(sizeof(EmbPathObjectList));
     if(!pointer->next) { embLog_error("emb-path.c embPathObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;

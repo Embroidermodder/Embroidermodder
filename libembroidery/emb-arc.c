@@ -32,6 +32,7 @@ EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, do
 EmbArcObjectList* embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data)
 {
     if(!pointer) { embLog_error("emb-arc.c embArcObjectList_add(), pointer argument is null\n"); return 0; }
+    if(pointer->next) { embLog_error("emb-arc.c embArcObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbArcObjectList*)malloc(sizeof(EmbArcObjectList));
     if(!pointer->next) { embLog_error("emb-arc.c embArcObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }
     pointer = pointer->next;
