@@ -468,18 +468,15 @@ void MainWindow::saveasfile()
 {
     qDebug("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
-    MdiWindow* win;
-    if(!qobject_cast<MdiWindow*>(mdiArea->activeSubWindow()))
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(!mdiWin)
         return;
-
-    win = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
 
     QString file;
     openFilesPath = settings_opensave_recent_directory;
     file = QFileDialog::getSaveFileName(this, tr("Save"), openFilesPath, formatFilterSave);
 
-    win->saveFile(file);
-
+    mdiWin->saveFile(file);
 }
 
 QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
@@ -487,14 +484,14 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
     QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
-    foreach(QMdiSubWindow* window, mdiArea->subWindowList())
+    foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList())
     {
-        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if(mdiWin)
         {
             if(mdiWin->getCurrentFile() == canonicalFilePath)
             {
-                return window;
+                return subWindow;
             }
         }
     }
@@ -511,10 +508,10 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
-    MdiWindow* win = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(win)
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if(mdiWin)
     {
-        onCloseMdiWin(win);
+        onCloseMdiWin(mdiWin);
     }
 }
 
@@ -534,17 +531,16 @@ void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 
     if(keepMaximized)
     {
-        MdiWindow* win = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if(win) { win->showMaximized(); }
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+        if(mdiWin) { mdiWin->showMaximized(); }
     }
 }
 
 void MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
     qDebug("MainWindow::onWindowActivated()");
-    MdiWindow* win = qobject_cast<MdiWindow*>(w);
-    if(win)
-        win->onWindowActivated();
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
+    if(mdiWin) { mdiWin->onWindowActivated(); }
 }
 
 void MainWindow::resizeEvent(QResizeEvent* e)
