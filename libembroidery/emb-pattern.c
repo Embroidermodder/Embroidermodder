@@ -130,53 +130,57 @@ void embPattern_fixColorCount(EmbPattern* p)
 /*! Copies all of the EmbStitchList data to EmbPolylineObjectList data for pattern (\a p). */
 void embPattern_copyStitchListToPolylines(EmbPattern* p)
 {
-    EmbStitchList* stitches = 0;
-    EmbPolylineObjectList* currentList = 0;
+    EmbStitchList* stList = 0;
 
     if(!p) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), p argument is null\n"); return; }
-    stitches = p->stitchList;
-    while(stitches)
+    stList = p->stitchList;
+    while(stList)
     {
-        EmbPointList* currentPointList = 0;
-        EmbPolylineObject* currentPolyline = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-        if(!currentPolyline) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), cannot allocate memory for currentPolyline\n"); return; }
-        currentPolyline->pointList = 0;
-        currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
-        currentPolyline->color = embThreadList_getAt(p->threadList, stitches->stitch.color).color;
-
-        while(stitches)
+        EmbPointList* pointList = 0;
+        EmbPointList* lastPoint = 0;
+        EmbColor color;
+        while(stList)
         {
-            if(stitches->stitch.flags & (STOP | TRIM))
+            if(stList->stitch.flags & (STOP | TRIM))
             {
                 break;
             }
-            if(!(stitches->stitch.flags & JUMP))
+            if(!(stList->stitch.flags & JUMP))
             {
-                if(!currentPointList)
+                if(!pointList)
                 {
-                    currentPointList = embPointList_create(stitches->stitch.xx, stitches->stitch.yy);
-                    currentPolyline->pointList = currentPointList;
+                    pointList = lastPoint = embPointList_create(stList->stitch.xx, stList->stitch.yy);
+                    color = embThreadList_getAt(p->threadList, stList->stitch.color).color;
                 }
                 else
                 {
-                    currentPointList = embPointList_add(currentPointList, embPoint_make(stitches->stitch.xx, stitches->stitch.yy));
+                    lastPoint = embPointList_add(lastPoint, embPoint_make(stList->stitch.xx, stList->stitch.yy));
                 }
             }
-            stitches = stitches->next;
+            stList = stList->next;
         }
-        currentPointList = 0;
-        if(!currentList)
+
+        /* NOTE: Ensure empty polylines are not created. This is critical. */
+        if(pointList)
         {
-            currentList = embPolylineObjectList_create(currentPolyline);
-            p->polylineObjList = currentList;
+            EmbPolylineObject* currentPolyline = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+            if(!currentPolyline) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), cannot allocate memory for currentPolyline\n"); return; }
+            currentPolyline->pointList = pointList;
+            currentPolyline->color = color;
+            currentPolyline->lineType = 1; /* TODO: Determine what the correct value should be */
+
+            if(embPolylineObjectList_empty(p->polylineObjList))
+            {
+                p->polylineObjList = p->lastPolylineObj = embPolylineObjectList_create(currentPolyline);
+            }
+            else
+            {
+                p->lastPolylineObj = embPolylineObjectList_add(p->lastPolylineObj, currentPolyline);
+            }
         }
-        else
+        if(stList)
         {
-            currentList = embPolylineObjectList_add(currentList, currentPolyline);
-        }
-        if(stitches && stitches->next)
-        {
-            stitches = stitches->next;
+            stList = stList->next;
         }
     }
 }
@@ -257,6 +261,8 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
 
     if(flags & END)
     {
+        if(embStitchList_empty(p->stitchList))
+            return;
         /* Prevent unnecessary multiple END stitches */
         if(p->lastStitch->stitch.flags & END)
         {
@@ -269,11 +275,12 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
         /* HideStitchesOverLength(127); TODO: fix or remove this */
     }
 
-    if((flags & STOP) && embStitchList_empty(p->stitchList))
-        return;
-    if((flags & STOP) && isAutoColorIndex)
+    if(flags & STOP)
     {
-        p->currentColorIndex++;
+        if(embStitchList_empty(p->stitchList))
+            return;
+        if(isAutoColorIndex)
+            p->currentColorIndex++;
     }
 
     /* NOTE: If the stitchList is empty, we will create it before adding stitches to it. The first coordinate will be the HOME position. */
