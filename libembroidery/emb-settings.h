@@ -17,8 +17,8 @@ typedef struct EmbSettings_
 
 extern EMB_PUBLIC EmbSettings EMB_CALL embSettings_init(void);
 
-extern EMB_PUBLIC EmbPoint EMB_CALL embSettings_home(EmbSettings settings);
-extern EMB_PUBLIC void EMB_CALL embSettings_setHome(EmbSettings settings, EmbPoint point);
+extern EMB_PUBLIC EmbPoint EMB_CALL embSettings_home(EmbSettings* settings);
+extern EMB_PUBLIC void EMB_CALL embSettings_setHome(EmbSettings* settings, EmbPoint point);
 
 #ifdef __cplusplus
 }

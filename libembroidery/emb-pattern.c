@@ -283,7 +283,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
     if(embStitchList_empty(p->stitchList))
     {
         /* NOTE: Always HOME the machine before starting any stitching */
-        EmbPoint home = embSettings_home(p->settings);
+        EmbPoint home = embSettings_home(&(p->settings));
         EmbStitch h;
         h.xx = home.xx;
         h.yy = home.yy;
@@ -319,7 +319,7 @@ void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int
     else
     {
         /* NOTE: The stitchList is empty, so add it to the HOME position. The embStitchList_create function will ensure the first coordinate is at the HOME position. */
-        EmbPoint home = embSettings_home(p->settings);
+        EmbPoint home = embSettings_home(&(p->settings));
         x = home.xx + dx;
         y = home.yy + dy;
     }

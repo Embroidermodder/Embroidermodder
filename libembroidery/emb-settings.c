@@ -10,15 +10,15 @@ EmbSettings embSettings_init(void)
 }
 
 /*! Returns the home position stored in (\a settings) as an EmbPoint (\a point). */
-EmbPoint embSettings_home(EmbSettings settings)
+EmbPoint embSettings_home(EmbSettings* settings)
 {
-    return settings.home;
+    return settings->home;
 }
 
 /*! Sets the home position stored in (\a settings) to EmbPoint (\a point). You will rarely ever need to use this. */
-void embSettings_setHome(EmbSettings settings, EmbPoint point)
+void embSettings_setHome(EmbSettings* settings, EmbPoint point)
 {
-    settings.home = point;
+    settings->home = point;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
