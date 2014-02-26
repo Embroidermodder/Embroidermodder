@@ -4,6 +4,7 @@
 #include "helpers-binary.h"
 #include <stdlib.h>
 
+/* TODO: This function is unused. Use it or remove it.
 static short pecDecodeNormal(unsigned char inputByte)
 {
     if(inputByte < 0x40)
@@ -12,7 +13,9 @@ static short pecDecodeNormal(unsigned char inputByte)
     }
     return (inputByte - 0x80);
 }
+*/
 
+/* TODO: This function is unused. Use it or remove it.
 static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
 {
     unsigned n1 = (unsigned char) (byte1 & 0x0F);
@@ -27,6 +30,7 @@ static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
         return returnValue;
     }
 }
+*/
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
