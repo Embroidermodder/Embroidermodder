@@ -28,7 +28,7 @@ int readPhb(EmbPattern* pattern, const char* fileName)
 
     for(i = 0; i < colorCount; i++)
     {
-        EmbThread t = pecThreads[binaryReadByte(file)];
+        EmbThread t = pecThreads[(int)binaryReadByte(file)];
         embPattern_addThread(pattern, t);
     }
 
