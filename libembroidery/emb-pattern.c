@@ -293,8 +293,7 @@ void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int i
         h.yy = home.yy;
         h.flags = JUMP;
         h.color = p->currentColorIndex;
-        p->stitchList = embStitchList_create(h);
-        p->lastStitch = p->stitchList;
+        p->stitchList = p->lastStitch = embStitchList_create(h);
     }
 
     s.xx = x;
@@ -935,15 +934,13 @@ void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r
     EmbCircleObject circleObj = embCircleObject_make(cx, cy, r);
 
     if(!p) { embLog_error("emb-pattern.c embPattern_addCircleObjectAbs(), p argument is null\n"); return; }
-    if(!(p->circleObjList))
+    if(embCircleObjectList_empty(p->circleObjList))
     {
-        p->circleObjList = embCircleObjectList_create(circleObj);
-        p->lastCircleObj = p->circleObjList;
+        p->circleObjList = p->lastCircleObj = embCircleObjectList_create(circleObj);
     }
     else
     {
-        embCircleObjectList_add(p->lastCircleObj, circleObj);
-        p->lastCircleObj = p->lastCircleObj->next;
+        p->lastCircleObj = embCircleObjectList_add(p->lastCircleObj, circleObj);
     }
 }
 
@@ -953,15 +950,13 @@ void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double 
     EmbEllipseObject ellipseObj = embEllipseObject_make(cx, cy, rx, ry);
 
     if(!p) { embLog_error("emb-pattern.c embPattern_addEllipseObjectAbs(), p argument is null\n"); return; }
-    if(!(p->ellipseObjList))
+    if(embEllipseObjectList_empty(p->ellipseObjList))
     {
-        p->ellipseObjList = embEllipseObjectList_create(ellipseObj);
-        p->lastEllipseObj = p->ellipseObjList;
+        p->ellipseObjList = p->lastEllipseObj = embEllipseObjectList_create(ellipseObj);
     }
     else
     {
-        embEllipseObjectList_add(p->lastEllipseObj, ellipseObj);
-        p->lastEllipseObj = p->lastEllipseObj->next;
+        p->lastEllipseObj = embEllipseObjectList_add(p->lastEllipseObj, ellipseObj);
     }
 }
 
@@ -971,15 +966,13 @@ void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2,
     EmbLineObject lineObj = embLineObject_make(x1, y1, x2, y2);
 
     if(!p) { embLog_error("emb-pattern.c embPattern_addLineObjectAbs(), p argument is null\n"); return; }
-    if(!(p->lineObjList))
+    if(embLineObjectList_empty(p->lineObjList))
     {
-        p->lineObjList = embLineObjectList_create(lineObj);
-        p->lastLineObj = p->lineObjList;
+        p->lineObjList = p->lastLineObj = embLineObjectList_create(lineObj);
     }
     else
     {
-        embLineObjectList_add(p->lastLineObj, lineObj);
-        p->lastLineObj = p->lastLineObj->next;
+        p->lastLineObj = embLineObjectList_add(p->lastLineObj, lineObj);
     }
 }
 
@@ -988,15 +981,13 @@ void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj)
     if(!p) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), obj argument is null\n"); return; }
 
-    if(!(p->pathObjList))
+    if(embPathObjectList_empty(p->pathObjList))
     {
-        p->pathObjList = embPathObjectList_create(obj);
-        p->lastPathObj = p->pathObjList;
+        p->pathObjList = p->lastPathObj = embPathObjectList_create(obj);
     }
     else
     {
-        embPathObjectList_add(p->lastPathObj, obj);
-        p->lastPathObj = p->lastPathObj->next;
+        p->lastPathObj = embPathObjectList_add(p->lastPathObj, obj);
     }
 }
 
@@ -1006,15 +997,13 @@ void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y)
     EmbPointObject pointObj = embPointObject_make(x, y);
 
     if(!p) { embLog_error("emb-pattern.c embPattern_addPointObjectAbs(), p argument is null\n"); return; }
-    if(!(p->pointObjList))
+    if(embPointObjectList_empty(p->pointObjList))
     {
-        p->pointObjList = embPointObjectList_create(pointObj);
-        p->lastPointObj = p->pointObjList;
+        p->pointObjList = p->lastPointObj = embPointObjectList_create(pointObj);
     }
     else
     {
-        embPointObjectList_add(p->lastPointObj, pointObj);
-        p->lastPointObj = p->lastPointObj->next;
+        p->lastPointObj = embPointObjectList_add(p->lastPointObj, pointObj);
     }
 }
 
@@ -1023,15 +1012,13 @@ void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj)
     if(!p) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), obj argument is null\n"); return; }
 
-    if(!(p->polygonObjList))
+    if(embPolygonObjectList_empty(p->polygonObjList))
     {
-        p->polygonObjList = embPolygonObjectList_create(obj);
-        p->lastPolygonObj = p->polygonObjList;
+        p->polygonObjList = p->lastPolygonObj = embPolygonObjectList_create(obj);
     }
     else
     {
-        embPolygonObjectList_add(p->lastPolygonObj, obj);
-        p->lastPolygonObj = p->lastPolygonObj->next;
+        p->lastPolygonObj = embPolygonObjectList_add(p->lastPolygonObj, obj);
     }
 }
 
@@ -1040,15 +1027,13 @@ void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
     if(!p) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), obj argument is null\n"); return; }
 
-    if(!(p->polylineObjList))
+    if(embPolylineObjectList_empty(p->polylineObjList))
     {
-        p->polylineObjList = embPolylineObjectList_create(obj);
-        p->lastPolylineObj = p->polylineObjList;
+        p->polylineObjList = p->lastPolylineObj = embPolylineObjectList_create(obj);
     }
     else
     {
-        embPolylineObjectList_add(p->lastPolylineObj, obj);
-        p->lastPolylineObj = p->lastPolylineObj->next;
+        p->lastPolylineObj = embPolylineObjectList_add(p->lastPolylineObj, obj);
     }
 }
 
@@ -1058,15 +1043,13 @@ void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, do
     EmbRectObject rectObj = embRectObject_make(x, y, w, h);
 
     if(!p) { embLog_error("emb-pattern.c embPattern_addRectObjectAbs(), p argument is null\n"); return; }
-    if(!(p->rectObjList))
+    if(embRectObjectList_empty(p->rectObjList))
     {
-        p->rectObjList = embRectObjectList_create(rectObj);
-        p->lastRectObj = p->rectObjList;
+        p->rectObjList = p->lastRectObj = embRectObjectList_create(rectObj);
     }
     else
     {
-        embRectObjectList_add(p->lastRectObj, rectObj);
-        p->lastRectObj = p->lastRectObj->next;
+        p->lastRectObj = embRectObjectList_add(p->lastRectObj, rectObj);
     }
 }
 
