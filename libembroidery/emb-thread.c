@@ -1,4 +1,5 @@
 #include "emb-thread.h"
+#include "emb-logging.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -79,19 +80,24 @@ EmbThread embThread_getRandom(void)
     return c;
 }
 
-void embThreadList_add(EmbThreadList* pointer, EmbThread data)
+EmbThreadList* embThreadList_create(EmbThread data)
 {
-    /* TODO: pointer safety */
-    EmbThreadList* tempPointer = pointer;
-    while(tempPointer->next)
-    {
-        tempPointer = tempPointer->next;
-    }
-    tempPointer->next = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-    /* TODO: malloc fail error */
-    tempPointer = tempPointer->next;
-    tempPointer->thread = data;
-    tempPointer->next = (EmbThreadList*)NULL;
+    EmbThreadList* heapThreadList = (EmbThreadList*)malloc(sizeof(EmbThreadList));
+    if(!heapThreadList) { embLog_error("emb-thread.c embThreadList_create(), cannot allocate memory for heapThreadList\n"); return 0; }
+    heapThreadList->thread = data;
+    heapThreadList->next = 0;
+    return heapThreadList;
+}
+
+EmbThreadList* embThreadList_add(EmbThreadList* pointer, EmbThread data)
+{
+    if(!pointer) { embLog_error("emb-thread.c embThreadList_add(), pointer argument is null\n"); return 0; }
+    pointer->next = (EmbThreadList*)malloc(sizeof(EmbThreadList));
+    if(!pointer->next) { embLog_error("emb-thread.c embThreadList_add(), cannot allocate memory for pointer->next\n"); return 0; }
+    pointer = pointer->next;
+    pointer->thread = data;
+    pointer->next = 0;
+    return pointer;
 }
 
 EmbThread embThreadList_getAt(EmbThreadList* pointer, int num)
@@ -122,7 +128,9 @@ int embThreadList_count(EmbThreadList* pointer)
 
 int embThreadList_empty(EmbThreadList* pointer)
 {
-    return pointer == NULL;
+    if(pointer == 0)
+        return 1;
+    return 0;
 }
 
 void embThreadList_free(EmbThreadList* pointer)

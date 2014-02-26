@@ -28,7 +28,8 @@ extern EMB_PUBLIC int EMB_CALL embThread_findNearestColor(EmbColor color, EmbThr
 extern EMB_PUBLIC int EMB_CALL embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
 extern EMB_PUBLIC EmbThread EMB_CALL embThread_getRandom(void);
 
-extern EMB_PUBLIC void EMB_CALL embThreadList_add(EmbThreadList* pointer, EmbThread data);
+extern EMB_PUBLIC EmbThreadList* EMB_CALL embThreadList_create(EmbThread data);
+extern EMB_PUBLIC EmbThreadList* EMB_CALL embThreadList_add(EmbThreadList* pointer, EmbThread data);
 extern EMB_PUBLIC int EMB_CALL embThreadList_count(EmbThreadList* pointer);
 extern EMB_PUBLIC int EMB_CALL embThreadList_empty(EmbThreadList* pointer);
 extern EMB_PUBLIC void EMB_CALL embThreadList_free(EmbThreadList* pointer);

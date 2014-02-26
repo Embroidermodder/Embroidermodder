@@ -82,17 +82,13 @@ void embPattern_hideStitchesOverLength(EmbPattern* p, int length)
 int embPattern_addThread(EmbPattern* p, EmbThread thread)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_addThread(), p argument is null\n"); return 0; }
-    if(!(p->threadList))
+    if(embThreadList_empty(p->threadList))
     {
-        EmbThreadList* t = (EmbThreadList*)malloc(sizeof(EmbThreadList));
-        if(!t) { embLog_error("emb-pattern.c embPattern_addThread(), unable to allocate memory for t\n"); return 0; }
-        t->thread = thread;
-        t->next = 0;
-        p->threadList = t;
+        p->threadList = p->lastThread = embThreadList_create(thread);
     }
     else
     {
-        embThreadList_add(p->threadList, thread);
+        p->lastThread = embThreadList_add(p->lastThread, thread);
     }
     return 1;
 }
