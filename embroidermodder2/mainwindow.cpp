@@ -474,7 +474,7 @@ void MainWindow::saveasfile()
 
     QString file;
     openFilesPath = settings_opensave_recent_directory;
-    file = QFileDialog::getSaveFileName(this, tr("Save"), openFilesPath, formatFilterSave);
+    file = QFileDialog::getSaveFileName(this, tr("Save As"), openFilesPath, formatFilterSave);
 
     mdiWin->saveFile(file);
 }
