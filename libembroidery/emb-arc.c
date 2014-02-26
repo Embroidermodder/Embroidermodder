@@ -54,7 +54,7 @@ int embArcObjectList_count(EmbArcObjectList* pointer)
 
 int embArcObjectList_empty(EmbArcObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

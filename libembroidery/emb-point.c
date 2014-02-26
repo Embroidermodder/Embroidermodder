@@ -64,7 +64,7 @@ int embPointList_count(EmbPointList* pointer)
 
 int embPointList_empty(EmbPointList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }
@@ -143,7 +143,7 @@ int embPointObjectList_count(EmbPointObjectList* pointer)
 
 int embPointObjectList_empty(EmbPointObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

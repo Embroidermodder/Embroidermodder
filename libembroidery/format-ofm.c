@@ -123,14 +123,14 @@ static void ofmReadThreads(FILE* file, EmbPattern* p)
         colorNameLength = binaryReadByte(file);
         colorName = (char*)malloc(colorNameLength * 2);
         if(!colorName) { embLog_error("format-ofm.c ofmReadThreads(), unable to allocate memory for colorName\n"); return; }
-        binaryReadBytes(file, (unsigned char *)colorName, colorNameLength*2);
+        binaryReadBytes(file, (unsigned char*)colorName, colorNameLength*2);
         binaryReadInt16(file);
      /* itoa(colorNumber, colorNumberText, 10); TODO: never use itoa, it's non-standard, use sprintf: http://stackoverflow.com/questions/5242524/converting-int-to-string-in-c */
-        thread.catalogNumber = colorNumberText;
-        thread.description = colorName;
         thread.color.r = (unsigned char)r;
         thread.color.g = (unsigned char)g;
         thread.color.b = (unsigned char)b;
+        thread.catalogNumber = colorNumberText;
+        thread.description = colorName;
         embPattern_addThread(p, thread);
     }
     binaryReadInt16(file);

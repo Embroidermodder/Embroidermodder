@@ -131,7 +131,7 @@ int embRectObjectList_count(EmbRectObjectList* pointer)
 
 int embRectObjectList_empty(EmbRectObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

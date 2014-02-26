@@ -107,7 +107,7 @@ int embFormatList_count(EmbFormatList* pointer)
 
 int embFormatList_empty(EmbFormatList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

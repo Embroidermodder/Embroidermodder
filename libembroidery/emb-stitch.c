@@ -49,7 +49,7 @@ int embStitchList_count(EmbStitchList* pointer)
 
 int embStitchList_empty(EmbStitchList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

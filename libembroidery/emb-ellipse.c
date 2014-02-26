@@ -111,7 +111,7 @@ int embEllipseObjectList_count(EmbEllipseObjectList* pointer)
 
 int embEllipseObjectList_empty(EmbEllipseObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

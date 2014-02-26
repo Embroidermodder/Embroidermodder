@@ -92,7 +92,7 @@ int embLineObjectList_count(EmbLineObjectList* pointer)
 
 int embLineObjectList_empty(EmbLineObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

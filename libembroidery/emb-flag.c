@@ -40,7 +40,7 @@ int embFlagList_count(EmbFlagList* pointer)
 
 int embFlagList_empty(EmbFlagList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

@@ -63,7 +63,7 @@ int embPolylineObjectList_count(EmbPolylineObjectList* pointer)
 
 int embPolylineObjectList_empty(EmbPolylineObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

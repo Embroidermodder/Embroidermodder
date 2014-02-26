@@ -66,7 +66,7 @@ int embPathObjectList_count(EmbPathObjectList* pointer)
 
 int embPathObjectList_empty(EmbPathObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }

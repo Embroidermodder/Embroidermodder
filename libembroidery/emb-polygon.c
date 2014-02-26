@@ -63,7 +63,7 @@ int embPolygonObjectList_count(EmbPolygonObjectList* pointer)
 
 int embPolygonObjectList_empty(EmbPolygonObjectList* pointer)
 {
-    if(pointer == 0)
+    if(!pointer)
         return 1;
     return 0;
 }
