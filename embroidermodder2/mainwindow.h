@@ -49,6 +49,8 @@ public:
     QGraphicsScene*                 activeScene();
     QUndoStack*                     activeUndoStack();
 
+    void                            setUndoCleanIcon(bool opened);
+
     virtual void                    updateMenuToolbarStatusbar();
 
     MainWindow*     mainWin;

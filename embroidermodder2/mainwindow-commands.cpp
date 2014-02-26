@@ -475,6 +475,11 @@ QUndoStack* MainWindow::activeUndoStack()
     return 0;
 }
 
+void MainWindow::setUndoCleanIcon(bool opened)
+{
+    dockUndoEdit->updateCleanIcon(opened);
+}
+
 void MainWindow::updateAllViewScrollBars(bool val)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();

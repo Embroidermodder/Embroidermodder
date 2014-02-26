@@ -30,6 +30,8 @@ public slots:
     void undo();
     void redo();
 
+    void updateCleanIcon(bool opened);
+
 private:
     QWidget*    focusWidget;
 

@@ -90,6 +90,8 @@ private:
     QGraphicsScene*            gscene;
     View*                      gview;
 
+    bool                       fileWasLoaded;
+
     QString promptHistory;
     QList<QString> promptInputList;
     int promptInputNum;

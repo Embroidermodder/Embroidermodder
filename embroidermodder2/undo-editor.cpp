@@ -14,8 +14,7 @@ UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWi
 
     undoGroup = new QUndoGroup(this);
     undoView = new QUndoView(undoGroup, this);
-    undoView->setEmptyLabel(tr("New"));
-    undoView->setCleanIcon(QIcon(iconDir + "/" + "new" + ".png")); //TODO: new.png for new drawings, open.png for opened drawings, save.png for saved/cleared drawings?
+    updateCleanIcon(false);
 
     setWidget(undoView);
     setWindowTitle(tr("History"));
@@ -27,6 +26,20 @@ UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWi
 
 UndoEditor::~UndoEditor()
 {
+}
+
+void UndoEditor::updateCleanIcon(bool opened)
+{
+    if(opened)
+    {
+        undoView->setEmptyLabel(tr("Open"));
+        undoView->setCleanIcon(QIcon(iconDir + "/" + "open" + ".png"));
+    }
+    else
+    {
+        undoView->setEmptyLabel(tr("New"));
+        undoView->setCleanIcon(QIcon(iconDir + "/" + "new" + ".png"));
+    }
 }
 
 void UndoEditor::addStack(QUndoStack* stack)

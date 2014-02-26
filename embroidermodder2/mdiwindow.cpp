@@ -34,6 +34,8 @@ MDIWindow::MDIWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
 
     myIndex = theIndex;
 
+    fileWasLoaded = false;
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     QString aName;
@@ -326,7 +328,9 @@ bool MDIWindow::loadFile(const QString &fileName)
 
     setCurrentColor(tmpColor);
 
-    return true;
+    fileWasLoaded = true;
+    mainWin->setUndoCleanIcon(fileWasLoaded);
+    return fileWasLoaded;
 }
 
 void MDIWindow::print()
@@ -412,6 +416,7 @@ void MDIWindow::onWindowActivated()
 {
     qDebug("MDIWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
+    mainWin->setUndoCleanIcon(fileWasLoaded);
     mainWin->statusbar->statusBarSnapButton->setChecked(gscene->property(ENABLE_SNAP).toBool());
     mainWin->statusbar->statusBarGridButton->setChecked(gscene->property(ENABLE_GRID).toBool());
     mainWin->statusbar->statusBarRulerButton->setChecked(gscene->property(ENABLE_RULER).toBool());
