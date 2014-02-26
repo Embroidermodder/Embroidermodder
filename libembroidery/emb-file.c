@@ -28,57 +28,57 @@ int embFile_close(EmbFile* stream)
 {
 #ifdef ARDUINO
     return inoFile_close(stream);
-#else
+#else /* ARDUINO */
     int retVal = fclose(stream->file);
     free(stream);
     stream = 0;
     return retVal;
-#endif
+#endif /* ARDUINO */
 }
 
 int embFile_eof(EmbFile* stream)
 {
 #ifdef ARDUINO
     return inoFile_eof(stream);
-#else
+#else /* ARDUINO */
     return feof(stream->file);
-#endif
+#endif /* ARDUINO */
 }
 
 int embFile_getc(EmbFile* stream)
 {
 #ifdef ARDUINO
     return inoFile_getc(stream);
-#else
+#else /* ARDUINO */
     return fgetc(stream->file);
-#endif
+#endif /* ARDUINO */
 }
 
 size_t embFile_read(void* ptr, size_t size, size_t nmemb, EmbFile* stream)
 {
 #ifdef ARDUINO
     return 0; /* ARDUINO TODO: SD File read() doesn't appear to return the same way as fread(). This will need work. */
-#else
+#else /* ARDUINO */
     return fread(ptr, size, nmemb, stream->file);
-#endif
+#endif /* ARDUINO */
 }
 
 int embFile_seek(EmbFile* stream, long offset, int origin)
 {
 #ifdef ARDUINO
     return inoFile_seek(stream, offset, origin);
-#else
+#else /* ARDUINO */
     return fseek(stream->file, offset, origin);
-#endif
+#endif /* ARDUINO */
 }
 
 long embFile_tell(EmbFile* stream)
 {
 #ifdef ARDUINO
     return inoFile_tell(stream);
-#else
+#else /* ARDUINO */
     return ftell(stream->file);
-#endif
+#endif /* ARDUINO */
 }
 
 int embFile_printf(EmbFile* stream, const char* format, ...)

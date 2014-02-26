@@ -25,10 +25,12 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     }
 
     embPattern_loadExternalColorFile(pattern, fileName);
+    /* TODO: replace all scanf code */
     while(fscanf(file, "%s", input) >= 0)
     {
         if(startsWith("PD", input))
         {
+            /* TODO: replace all scanf code */
             if(sscanf(input, "PD%lf,%lf;", &x, &y) < 2)
             {
                 break;
@@ -37,6 +39,7 @@ int readPlt(EmbPattern* pattern, const char* fileName)
         }
         else if(startsWith("PU", input))
         {
+            /* TODO: replace all scanf code */
             if(sscanf(input, "PU%lf,%lf;", &x, &y) < 2)
             {
                 break;

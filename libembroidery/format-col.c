@@ -24,7 +24,8 @@ int readCol(EmbPattern* pattern, const char* fileName)
     pattern->threadList = 0;
     pattern->lastThread = 0;
 
-    if(fscanf(file, "%d\r", &numberOfColors) < 1)
+    /* TODO: replace all scanf code */
+    if(fscanf(file, "%d\r", &numberOfColors) < 1) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
     {
         /* TODO: log error */
         return 0;
@@ -34,12 +35,14 @@ int readCol(EmbPattern* pattern, const char* fileName)
         int num, blue, green, red;
         EmbThread t;
         char line[30];
-        if(fscanf(file, "%s\r", line) < 1)
+        /* TODO: replace all scanf code */
+        if(fscanf(file, "%s\r", line) < 1) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
         {
             /* TODO: log error */
             return 0;
         }
-        if(sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red) != 4)
+        /* TODO: replace all scanf code */
+        if(sscanf(line,"%d,%d,%d,%d\n\r", &num, &blue, &green, &red) != 4) /* TODO: needs to work cross-platform - Win: \r\n Mac: \r Linux: \n */
         {
             break;
         }
@@ -72,14 +75,14 @@ int writeCol(EmbPattern* pattern, const char* fileName)
         return 0;
     }
     colorCount = embThreadList_count(pattern->threadList);
-    fprintf(file, "%d\n\r", colorCount);
+    fprintf(file, "%d\n\r", colorCount); /* TODO: needs to be \r\n */
     colors = pattern->threadList;
     i = 0;
     while(colors)
     {
         EmbColor c;
         c = colors->thread.color;
-        fprintf(file, "%d,%d,%d,%d\n\r", i, (int)c.r, (int)c.g, (int)c.b);
+        fprintf(file, "%d,%d,%d,%d\n\r", i, (int)c.r, (int)c.g, (int)c.b); /* TODO: needs to be \r\n */
         i++;
         colors = colors->next;
     }

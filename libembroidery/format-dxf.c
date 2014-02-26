@@ -295,6 +295,7 @@ static const unsigned char _dxfColorTable[][3] = {
 char* readLine(FILE* file)
 {
     char str[255];
+    /* TODO: replace all scanf code */
     fscanf(file, "%s", str);
     return lTrim(str, ' ');
 }
