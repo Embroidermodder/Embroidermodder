@@ -127,8 +127,16 @@ void embPattern_fixColorCount(EmbPattern* p)
 void embPattern_copyStitchListToPolylines(EmbPattern* p)
 {
     EmbStitchList* stList = 0;
+    int breakAtFlags;
 
     if(!p) { embLog_error("emb-pattern.c embPattern_copyStitchListToPolylines(), p argument is null\n"); return; }
+
+#ifdef EMB_DEBUG_JUMP
+    breakAtFlags = (STOP | TRIM);
+#else /* EMB_DEBUG_JUMP */
+    breakAtFlags = (STOP | JUMP | TRIM);
+#endif /* EMB_DEBUG_JUMP */
+
     stList = p->stitchList;
     while(stList)
     {
@@ -137,7 +145,7 @@ void embPattern_copyStitchListToPolylines(EmbPattern* p)
         EmbColor color;
         while(stList)
         {
-            if(stList->stitch.flags & (STOP | TRIM))
+            if(stList->stitch.flags & breakAtFlags)
             {
                 break;
             }
