@@ -13,6 +13,8 @@ public:
     enum { Type = OBJ_TYPE_ELLIPSE };
     virtual int type() const { return Type; }
 
+    QPainterPath objectSavePath() const;
+
     QPointF objectCenter()        const { return scenePos(); }
     qreal   objectCenterX()       const { return scenePos().x(); }
     qreal   objectCenterY()       const { return scenePos().y(); }

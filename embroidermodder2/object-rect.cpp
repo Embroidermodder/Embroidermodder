@@ -232,4 +232,21 @@ void RectObject::gripEdit(const QPointF& before, const QPointF& after)
     else if(before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
 }
 
+QPainterPath RectObject::objectSavePath() const
+{
+    QPainterPath path;
+    QRectF r = rect();
+    path.moveTo(r.bottomLeft());
+    path.lineTo(r.bottomRight());
+    path.lineTo(r.topRight());
+    path.lineTo(r.topLeft());
+    path.lineTo(r.bottomLeft());
+
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(path);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

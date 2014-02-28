@@ -13,7 +13,8 @@ public:
     enum { Type = OBJ_TYPE_TEXTSINGLE };
     virtual int type() const { return Type; }
 
-    QPainterPath objectSavePath() const { return objTextPath; }
+    QList<QPainterPath> objectSavePathList() const { return subPathList(); }
+    QList<QPainterPath> subPathList() const;
 
     QString objectText()           const { return objText; }
     QString objectTextFont()       const { return objTextFont; }

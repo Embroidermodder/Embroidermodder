@@ -255,4 +255,15 @@ void PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
     gripIndex = -1;
 }
 
+QPainterPath PolygonObject::objectSavePath() const
+{
+    QPainterPath closedPath = normalPath;
+    closedPath.closeSubpath();
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(closedPath);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

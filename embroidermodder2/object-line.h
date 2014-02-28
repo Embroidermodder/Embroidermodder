@@ -13,6 +13,8 @@ public:
     enum { Type = OBJ_TYPE_LINE };
     virtual int type() const { return Type; }
 
+    QPainterPath objectSavePath() const;
+
     QPointF objectEndPoint1() const { return scenePos(); }
     QPointF objectEndPoint2() const;
     QPointF objectMidPoint()  const;

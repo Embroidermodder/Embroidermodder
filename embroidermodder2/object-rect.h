@@ -13,6 +13,8 @@ public:
     enum { Type = OBJ_TYPE_RECTANGLE };
     virtual int type() const { return Type; }
 
+    QPainterPath objectSavePath() const;
+
     QPointF objectTopLeft()     const;
     QPointF objectTopRight()    const;
     QPointF objectBottomLeft()  const;

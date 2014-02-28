@@ -13,7 +13,7 @@ public:
     enum { Type = OBJ_TYPE_POLYGON };
     virtual int type() const { return Type; }
 
-    QPainterPath objectSavePath() const { return normalPath; }
+    QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
     qreal   objectX()   const { return scenePos().x(); }

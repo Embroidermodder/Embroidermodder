@@ -102,4 +102,11 @@ void PointObject::gripEdit(const QPointF& before, const QPointF& after)
     if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
+QPainterPath PointObject::objectSavePath() const
+{
+    QPainterPath path;
+    path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
+    return path;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

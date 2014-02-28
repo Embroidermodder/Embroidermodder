@@ -250,4 +250,18 @@ void CircleObject::gripEdit(const QPointF& before, const QPointF& after)
     else                         { setObjectRadius(QLineF(objectCenter(), after).length()); }
 }
 
+QPainterPath CircleObject::objectSavePath() const
+{
+    QPainterPath path;
+    QRectF r = rect();
+    path.arcMoveTo(r, 0);
+    path.arcTo(r, 0, 360);
+
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(path);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

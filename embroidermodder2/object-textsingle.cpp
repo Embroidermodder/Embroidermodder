@@ -299,4 +299,58 @@ void TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
     if(before == scenePos()) { QPointF delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
+QList<QPainterPath> TextSingleObject::subPathList() const
+{
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+
+    QList<QPainterPath> pathList;
+
+    QPainterPath path = objTextPath;
+
+    QPainterPath::Element element;
+    QList<int> pathMoves;
+    int numMoves = 0;
+
+    for(int i = 0; i < path.elementCount(); i++)
+    {
+        element = path.elementAt(i);
+        if(element.isMoveTo())
+        {
+            pathMoves << i;
+            numMoves++;
+        }
+    }
+
+    pathMoves << path.elementCount();
+
+    for(int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
+    {
+        QPainterPath subPath;
+        for(int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
+        {
+            element = path.elementAt(i);
+            if(element.isMoveTo())
+            {
+                subPath.moveTo(element.x, element.y);
+            }
+            else if(element.isLineTo())
+            {
+                subPath.lineTo(element.x, element.y);
+            }
+            else if(element.isCurveTo())
+            {
+                subPath.cubicTo(path.elementAt(i  ).x, path.elementAt(i  ).y,  //control point 1
+                                path.elementAt(i+1).x, path.elementAt(i+1).y,  //control point 2
+                                path.elementAt(i+2).x, path.elementAt(i+2).y); //end point
+            }
+        }
+        pathList.append(trans.map(subPath));
+    }
+
+    return pathList;
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

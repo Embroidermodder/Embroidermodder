@@ -13,6 +13,8 @@ public:
     enum { Type = OBJ_TYPE_POINT };
     virtual int type() const { return Type; }
 
+    QPainterPath objectSavePath() const;
+
     QPointF objectPos() const { return scenePos(); }
     qreal   objectX()   const { return scenePos().x(); }
     qreal   objectY()   const { return scenePos().y(); }

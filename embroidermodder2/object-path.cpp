@@ -102,4 +102,13 @@ void PathObject::gripEdit(const QPointF& before, const QPointF& after)
     //TODO: gripEdit() for PathObject
 }
 
+QPainterPath PathObject::objectSavePath() const
+{
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(normalPath);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

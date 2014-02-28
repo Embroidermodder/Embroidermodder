@@ -234,4 +234,13 @@ void PolylineObject::gripEdit(const QPointF& before, const QPointF& after)
     gripIndex = -1;
 }
 
+QPainterPath PolylineObject::objectSavePath() const
+{
+    qreal s = scale();
+    QTransform trans;
+    trans.rotate(rotation());
+    trans.scale(s,s);
+    return trans.map(normalPath);
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
