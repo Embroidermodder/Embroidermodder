@@ -58,6 +58,7 @@ protected:
     inline qreal pi() const { return (qAtan(1.0)*4.0); }
     inline qreal radians(qreal degree) const { return (degree*pi()/180.0); }
     inline qreal degrees(qreal radian) const { return (radian*180.0/pi()); }
+    void realRender(QPainter* painter, const QPainterPath& renderPath);
 private:
     QPen objPen;
     QPen lwtPen;

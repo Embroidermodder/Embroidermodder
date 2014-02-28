@@ -110,4 +110,50 @@ void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const 
     }
 }
 
+void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
+{
+    QColor color1 = objectColor();       //lighter color
+    QColor color2  = color1.darker(150); //darker color
+
+    //If we have a dark color, lighten it
+    int darkness = color1.lightness();
+    int threshold = 32; //TODO: This number may need adjusted or maybe just add it to settings.
+    if(darkness < threshold)
+    {
+        color2 = color1;
+        if(!darkness) { color1 = QColor(threshold, threshold, threshold); } //lighter() does not affect pure black
+        else          { color1 = color2.lighter(100 + threshold); }
+    }
+
+    int count = renderPath.elementCount();
+    for(int i = 0; i < count-1; ++i)
+    {
+        QPainterPath::Element elem = renderPath.elementAt(i);
+        QPainterPath::Element next = renderPath.elementAt(i+1);
+
+        if(next.isMoveTo()) continue;
+
+        QPainterPath elemPath;
+        elemPath.moveTo(elem.x, elem.y);
+        elemPath.lineTo(next.x, next.y);
+
+        QPen renderPen(QColor(0,0,0,0));
+        renderPen.setWidthF(0);
+        painter->setPen(renderPen);
+        QPainterPathStroker stroker;
+        stroker.setWidth(0.35);
+        stroker.setCapStyle(Qt::RoundCap);
+        stroker.setJoinStyle(Qt::RoundJoin);
+        QPainterPath realPath = stroker.createStroke(elemPath);
+        painter->drawPath(realPath);
+
+        QLinearGradient grad(elemPath.pointAtPercent(0.5), elemPath.pointAtPercent(0.0));
+        grad.setColorAt(0, color1);
+        grad.setColorAt(1, color2);
+        grad.setSpread(QGradient::ReflectSpread);
+
+        painter->fillPath(realPath, QBrush(grad));
+    }
+}
+
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
