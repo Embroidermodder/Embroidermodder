@@ -16,7 +16,7 @@ PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseOb
     qDebug("PolygonObject Constructor()");
     if(obj)
     {
-        init(obj->objectX(), obj->objectY(), obj->objectPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
@@ -256,6 +256,11 @@ void PolygonObject::gripEdit(const QPointF& before, const QPointF& after)
     normalPath.setElementPositionAt(gripIndex, a.x(), a.y());
     updatePath(normalPath);
     gripIndex = -1;
+}
+
+QPainterPath PolygonObject::objectCopyPath() const
+{
+    return normalPath;
 }
 
 QPainterPath PolygonObject::objectSavePath() const

@@ -16,7 +16,7 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(pare
     qDebug("PathObject Constructor()");
     if(obj)
     {
-        init(obj->objectX(), obj->objectY(), obj->objectPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        init(obj->objectX(), obj->objectY(), obj->objectCopyPath(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
@@ -100,6 +100,11 @@ QList<QPointF> PathObject::allGripPoints()
 void PathObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for PathObject
+}
+
+QPainterPath PathObject::objectCopyPath() const
+{
+    return normalPath;
 }
 
 QPainterPath PathObject::objectSavePath() const
