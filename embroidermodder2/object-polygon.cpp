@@ -68,10 +68,13 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    painter->drawPath(normalPath);
-    QPainterPath::Element zero = normalPath.elementAt(0);
-    QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
-    painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
+    if(normalPath.elementCount())
+    {
+        painter->drawPath(normalPath);
+        QPainterPath::Element zero = normalPath.elementAt(0);
+        QPainterPath::Element last = normalPath.elementAt(normalPath.elementCount()-1);
+        painter->drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y));
+    }
 }
 
 void PolygonObject::updateRubber(QPainter* painter)
