@@ -34,6 +34,12 @@ QScriptValue javaMessageBox             (QScriptContext* context, QScriptEngine*
 QScriptValue javaIsInt                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaUndo                   (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaRedo                   (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIcon16                 (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIcon24                 (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIcon32                 (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIcon48                 (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIcon64                 (QScriptContext* context, QScriptEngine* engine);
+QScriptValue javaIcon128                (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanLeft                (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanRight               (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaPanUp                  (QScriptContext* context, QScriptEngine* engine);

@@ -32,6 +32,12 @@ void MainWindow::javaInitNatives(QScriptEngine* engine)
     QScriptValue scriptValIsInt = engine->newFunction(javaIsInt); engine->globalObject().setProperty("isInt", scriptValIsInt);
     QScriptValue scriptValUndo = engine->newFunction(javaUndo); engine->globalObject().setProperty("undo", scriptValUndo);
     QScriptValue scriptValRedo = engine->newFunction(javaRedo); engine->globalObject().setProperty("redo", scriptValRedo);
+    QScriptValue scriptValIcon16 = engine->newFunction(javaIcon16); engine->globalObject().setProperty("icon16", scriptValIcon16);
+    QScriptValue scriptValIcon24 = engine->newFunction(javaIcon24); engine->globalObject().setProperty("icon24", scriptValIcon24);
+    QScriptValue scriptValIcon32 = engine->newFunction(javaIcon32); engine->globalObject().setProperty("icon32", scriptValIcon32);
+    QScriptValue scriptValIcon48 = engine->newFunction(javaIcon48); engine->globalObject().setProperty("icon48", scriptValIcon48);
+    QScriptValue scriptValIcon64 = engine->newFunction(javaIcon64); engine->globalObject().setProperty("icon64", scriptValIcon64);
+    QScriptValue scriptValIcon128 = engine->newFunction(javaIcon128); engine->globalObject().setProperty("icon128", scriptValIcon128);
     QScriptValue scriptValPanLeft = engine->newFunction(javaPanLeft); engine->globalObject().setProperty("panLeft", scriptValPanLeft);
     QScriptValue scriptValPanRight = engine->newFunction(javaPanRight); engine->globalObject().setProperty("panRight", scriptValPanRight);
     QScriptValue scriptValPanUp = engine->newFunction(javaPanUp); engine->globalObject().setProperty("panUp", scriptValPanUp);

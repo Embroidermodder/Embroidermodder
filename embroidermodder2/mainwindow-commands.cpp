@@ -1190,6 +1190,36 @@ void MainWindow::nativeRedo()
     redo();
 }
 
+void MainWindow::nativeIcon16()
+{
+    icon16();
+}
+
+void MainWindow::nativeIcon24()
+{
+    icon24();
+}
+
+void MainWindow::nativeIcon32()
+{
+    icon32();
+}
+
+void MainWindow::nativeIcon48()
+{
+    icon48();
+}
+
+void MainWindow::nativeIcon64()
+{
+    icon64();
+}
+
+void MainWindow::nativeIcon128()
+{
+    icon128();
+}
+
 void MainWindow::nativePanLeft()
 {
     panLeft();

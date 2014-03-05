@@ -691,6 +691,13 @@ public:
     void nativeUndo                   ();
     void nativeRedo                   ();
 
+    void nativeIcon16                 ();
+    void nativeIcon24                 ();
+    void nativeIcon32                 ();
+    void nativeIcon48                 ();
+    void nativeIcon64                 ();
+    void nativeIcon128                ();
+
     void nativePanLeft                ();
     void nativePanRight               ();
     void nativePanUp                  ();

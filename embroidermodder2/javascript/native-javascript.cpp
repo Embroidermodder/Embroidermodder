@@ -282,6 +282,54 @@ QScriptValue javaRedo(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue();
 }
 
+QScriptValue javaIcon16(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("icon16() requires zero arguments");
+
+    mainWin()->nativeIcon16();
+    return QScriptValue();
+}
+
+QScriptValue javaIcon24(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("icon24() requires zero arguments");
+
+    mainWin()->nativeIcon24();
+    return QScriptValue();
+}
+
+QScriptValue javaIcon32(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("icon32() requires zero arguments");
+
+    mainWin()->nativeIcon32();
+    return QScriptValue();
+}
+
+QScriptValue javaIcon48(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("icon48() requires zero arguments");
+
+    mainWin()->nativeIcon48();
+    return QScriptValue();
+}
+
+QScriptValue javaIcon64(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("icon64() requires zero arguments");
+
+    mainWin()->nativeIcon64();
+    return QScriptValue();
+}
+
+QScriptValue javaIcon128(QScriptContext* context, QScriptEngine* /*engine*/)
+{
+    if(context->argumentCount() != 0) return context->throwError("icon128() requires zero arguments");
+
+    mainWin()->nativeIcon128();
+    return QScriptValue();
+}
+
 QScriptValue javaPanLeft(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 0) return context->throwError("panLeft() requires zero arguments");
