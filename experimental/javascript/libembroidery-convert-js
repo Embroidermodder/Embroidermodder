@@ -1,0 +1,2 @@
+#!/bin/sh
+nodejs libembroidery-convert.js

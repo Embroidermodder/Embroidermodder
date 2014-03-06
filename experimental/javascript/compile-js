@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#Remove old files if they exist
+rm -rf temp
+#Create dir for new files
+mkdir temp
+#Copy all needed files into the temp directory
+cp ../../libcgeometry/*.c temp
+cp ../../libcgeometry/*.h temp
+cp ../../libembroidery/*.c temp
+cp ../../libembroidery/*.h temp
+cp ../../libembroidery-convert/libembroidery-convert-main.c temp
+#Remove any junk files
+rm temp/emb-outline.*
+#Run Emscripten C Compiler
+emcc -o libembroidery-convert.js temp/*.c
+#Remove temp files
+rm -rf temp

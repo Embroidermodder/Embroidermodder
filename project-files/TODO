@@ -141,6 +141,7 @@ TODO - Minimum stitch length option. (Many machines also have this option too)
 TODO - Add 'Design Details' functionality to libembroidery-convert
 TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
 TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+TODO - emscripten/javascript port of libembroidery
 
 //====================
 //Stuff for Arduino:
