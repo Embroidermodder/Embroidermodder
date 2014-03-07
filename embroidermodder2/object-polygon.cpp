@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
+#include <QMessageBox>
 
 PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -198,6 +199,9 @@ void PolygonObject::vulcanize()
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
+
+    if(!normalPath.elementCount())
+        QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
 }
 
 // Returns the closest snap point to the mouse point

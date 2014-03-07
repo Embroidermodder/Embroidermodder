@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
+#include <QMessageBox>
 
 PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -82,6 +83,9 @@ void PathObject::vulcanize()
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
+
+    if(!normalPath.elementCount())
+        QMessageBox::critical(0, QObject::tr("Empty Path Error"), QObject::tr("The path added contains no points. The command that created this object has flawed logic."));
 }
 
 // Returns the closest snap point to the mouse point

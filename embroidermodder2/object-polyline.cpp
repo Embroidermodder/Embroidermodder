@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
+#include <QMessageBox>
 
 PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
@@ -143,6 +144,9 @@ void PolylineObject::vulcanize()
     updateRubber();
 
     setObjectRubberMode(OBJ_RUBBER_OFF);
+
+    if(!normalPath.elementCount())
+        QMessageBox::critical(0, QObject::tr("Empty Polyline Error"), QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
 }
 
 // Returns the closest snap point to the mouse point
