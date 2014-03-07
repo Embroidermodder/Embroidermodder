@@ -366,8 +366,11 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 //NOTE: This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
 {
+    //TODO: add embPolylineObject_create(EmbPointList* pointList, EmbColor color, int lineType) to libembroidery
+    //TODO: then refactor the code below to use the function instead.
     EmbPolylineObject* polyObject = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
     if(!polyObject) {  } //TODO: error
+    polyObject->pointList = 0;
     polyObject->color = embColor_make(color.red(), color.green(), color.blue());
     //polyObject->lineType = obj->type(); //TODO: This is wrong! type() is not lineType!
 

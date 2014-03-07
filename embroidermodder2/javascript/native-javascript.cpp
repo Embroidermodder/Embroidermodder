@@ -785,6 +785,7 @@ QScriptValue javaAddRubber(QScriptContext* context, QScriptEngine* /*engine*/)
     else if(objType == "IMAGE")        {} //TODO: handle this type
     else if(objType == "INFINITELINE") {} //TODO: handle this type
     else if(objType == "LINE")         { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if(objType == "PATH")         {} //TODO: handle this type
     else if(objType == "POINT")        {} //TODO: handle this type
     else if(objType == "POLYGON")      { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if(objType == "POLYLINE")     { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }

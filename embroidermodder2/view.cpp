@@ -216,7 +216,7 @@ void View::disableMoveRapidFire()
 
 bool View::allowRubber()
 {
-    if(!rubberRoomList.size())
+    //if(!rubberRoomList.size()) //TODO: this check should be removed later
         return true;
     return false;
 }
