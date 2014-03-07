@@ -984,6 +984,7 @@ void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), obj argument is null\n"); return; }
+    if(embPointList_empty(obj->pointList)) { embLog_error("emb-pattern.c embPattern_addPathObjectAbs(), obj->pointList is empty\n"); return; }
 
     if(embPathObjectList_empty(p->pathObjList))
     {
@@ -1015,6 +1016,7 @@ void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), obj argument is null\n"); return; }
+    if(embPointList_empty(obj->pointList)) { embLog_error("emb-pattern.c embPattern_addPolygonObjectAbs(), obj->pointList is empty\n"); return; }
 
     if(embPolygonObjectList_empty(p->polygonObjList))
     {
@@ -1030,6 +1032,7 @@ void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj)
 {
     if(!p) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), p argument is null\n"); return; }
     if(!obj) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), obj argument is null\n"); return; }
+    if(embPointList_empty(obj->pointList)) { embLog_error("emb-pattern.c embPattern_addPolylineObjectAbs(), obj->pointList is empty\n"); return; }
 
     if(embPolylineObjectList_empty(p->polylineObjList))
     {
