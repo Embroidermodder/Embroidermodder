@@ -6,11 +6,13 @@
 /* EmbPolygonObject                              */
 /**************************************************/
 
-EmbPolygonObject* embPolygonObject_create(EmbPointList* points, EmbColor color, int lineType)
+EmbPolygonObject* embPolygonObject_create(EmbPointList* pointList, EmbColor color, int lineType)
 {
-    EmbPolygonObject* heapPolygonObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
+    EmbPolygonObject* heapPolygonObj = 0;
+    if(!pointList) { embLog_error("emb-polygon.c embPolygonObject_create(), pointList argument is null\n"); return 0; }
+    heapPolygonObj = (EmbPolygonObject*)malloc(sizeof(EmbPolygonObject));
     if(!heapPolygonObj) { embLog_error("emb-polygon.c embPolygonObject_create(), cannot allocate memory for heapPolygonObj\n"); return 0; }
-    heapPolygonObj->pointList = points;
+    heapPolygonObj->pointList = pointList;
     /* TODO: layer */
     heapPolygonObj->color = color;
     heapPolygonObj->lineType = lineType;
@@ -31,7 +33,9 @@ void embPolygonObject_free(EmbPolygonObject* pointer)
 
 EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data)
 {
-    EmbPolygonObjectList* heapPolygonObjList = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
+    EmbPolygonObjectList* heapPolygonObjList = 0;
+    if(!data) { embLog_error("emb-polygon.c embPolygonObjectList_create(), data argument is null\n"); return 0; }
+    heapPolygonObjList = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
     if(!heapPolygonObjList) { embLog_error("emb-polygon.c embPolygonObjectList_create(), cannot allocate memory for heapPolygonObjList\n"); return 0; }
     heapPolygonObjList->polygonObj = data;
     heapPolygonObjList->next = 0;
@@ -41,6 +45,7 @@ EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data)
 EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data)
 {
     if(!pointer) { embLog_error("emb-polygon.c embPolygonObjectList_add(), pointer argument is null\n"); return 0; }
+    if(!data) { embLog_error("emb-polygon.c embPolygonObjectList_add(), data argument is null\n"); return 0; }
     if(pointer->next) { embLog_error("emb-polygon.c embPolygonObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPolygonObjectList*)malloc(sizeof(EmbPolygonObjectList));
     if(!pointer->next) { embLog_error("emb-polygon.c embPolygonObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }

@@ -6,12 +6,15 @@
 /* EmbPathObject                                  */
 /**************************************************/
 
-EmbPathObject* embPathObject_create(EmbPointList* points, EmbFlagList* flags, EmbColor color, int lineType)
+EmbPathObject* embPathObject_create(EmbPointList* pointList, EmbFlagList* flagList, EmbColor color, int lineType)
 {
-    EmbPathObject* heapPathObj = (EmbPathObject*)malloc(sizeof(EmbPathObject));
+    EmbPathObject* heapPathObj = 0;
+    if(!pointList) { embLog_error("emb-path.c embPathObject_create(), pointList argument is null\n"); return 0; }
+    if(!flagList) { embLog_error("emb-path.c embPathObject_create(), flagList argument is null\n"); return 0; }
+    heapPathObj = (EmbPathObject*)malloc(sizeof(EmbPathObject));
     if(!heapPathObj) { embLog_error("emb-path.c embPathObject_create(), cannot allocate memory for heapPathObj\n"); return 0; }
-    heapPathObj->pointList = points;
-    heapPathObj->flagList = flags;
+    heapPathObj->pointList = pointList;
+    heapPathObj->flagList = flagList;
     /* TODO: layer */
     heapPathObj->color = color;
     heapPathObj->lineType = lineType;
@@ -34,7 +37,9 @@ void embPathObject_free(EmbPathObject* pointer)
 
 EmbPathObjectList* embPathObjectList_create(EmbPathObject* data)
 {
-    EmbPathObjectList* heapPathObjList = (EmbPathObjectList*)malloc(sizeof(EmbPathObjectList));
+    EmbPathObjectList* heapPathObjList = 0;
+    if(!data) { embLog_error("emb-path.c embPathObjectList_create(), data argument is null\n"); return 0; }
+    heapPathObjList = (EmbPathObjectList*)malloc(sizeof(EmbPathObjectList));
     if(!heapPathObjList) { embLog_error("emb-path.c embPathObjectList_create(), cannot allocate memory for heapPathObjList\n"); return 0; }
     heapPathObjList->pathObj = data;
     heapPathObjList->next = 0;
@@ -44,6 +49,7 @@ EmbPathObjectList* embPathObjectList_create(EmbPathObject* data)
 EmbPathObjectList* embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data)
 {
     if(!pointer) { embLog_error("emb-path.c embPathObjectList_add(), pointer argument is null\n"); return 0; }
+    if(!data) { embLog_error("emb-path.c embPathObjectList_add(), data argument is null\n"); return 0; }
     if(pointer->next) { embLog_error("emb-path.c embPathObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPathObjectList*)malloc(sizeof(EmbPathObjectList));
     if(!pointer->next) { embLog_error("emb-path.c embPathObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }

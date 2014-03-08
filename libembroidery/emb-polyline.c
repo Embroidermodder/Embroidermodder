@@ -6,11 +6,13 @@
 /* EmbPolylineObject                              */
 /**************************************************/
 
-EmbPolylineObject* embPolylineObject_create(EmbPointList* points, EmbColor color, int lineType)
+EmbPolylineObject* embPolylineObject_create(EmbPointList* pointList, EmbColor color, int lineType)
 {
-    EmbPolylineObject* heapPolylineObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
+    EmbPolylineObject* heapPolylineObj = 0;
+    if(!pointList) { embLog_error("emb-polyline.c embPolylineObject_create(), pointList argument is null\n"); return 0; }
+    heapPolylineObj = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
     if(!heapPolylineObj) { embLog_error("emb-polyline.c embPolylineObject_create(), cannot allocate memory for heapPolylineObj\n"); return 0; }
-    heapPolylineObj->pointList = points;
+    heapPolylineObj->pointList = pointList;
     /* TODO: layer */
     heapPolylineObj->color = color;
     heapPolylineObj->lineType = lineType;
@@ -31,7 +33,9 @@ void embPolylineObject_free(EmbPolylineObject* pointer)
 
 EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 {
-    EmbPolylineObjectList* heapPolylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
+    EmbPolylineObjectList* heapPolylineObjList = 0;
+    if(!data) { embLog_error("emb-polyline.c embPolylineObjectList_create(), data argument is null\n"); return 0; }
+    heapPolylineObjList = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
     if(!heapPolylineObjList) { embLog_error("emb-polyline.c embPolylineObjectList_create(), cannot allocate memory for heapPolylineObjList\n"); return 0; }
     heapPolylineObjList->polylineObj = data;
     heapPolylineObjList->next = 0;
@@ -41,6 +45,7 @@ EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data)
 EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data)
 {
     if(!pointer) { embLog_error("emb-polyline.c embPolylineObjectList_add(), pointer argument is null\n"); return 0; }
+    if(!data) { embLog_error("emb-polyline.c embPolylineObjectList_add(), data argument is null\n"); return 0; }
     if(pointer->next) { embLog_error("emb-polyline.c embPolylineObjectList_add(), pointer->next should be null\n"); return 0; }
     pointer->next = (EmbPolylineObjectList*)malloc(sizeof(EmbPolylineObjectList));
     if(!pointer->next) { embLog_error("emb-polyline.c embPolylineObjectList_add(), cannot allocate memory for pointer->next\n"); return 0; }

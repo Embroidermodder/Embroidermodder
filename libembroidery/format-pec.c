@@ -160,15 +160,15 @@ int readPec(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-static void PecEncode(FILE* file, EmbPattern* p)
+static void pecEncode(FILE* file, EmbPattern* p)
 {
     double thisX = 0.0;
     double thisY = 0.0;
     unsigned char stopCode = 2;
     EmbStitchList* list = 0;
 
-    if(!file) { embLog_error("format-pec.c PecEncode(), file argument is null\n"); return; }
-    if(!p) { embLog_error("format-pec.c PecEncode(), p argument is null\n"); return; }
+    if(!file) { embLog_error("format-pec.c pecEncode(), file argument is null\n"); return; }
+    if(!p) { embLog_error("format-pec.c pecEncode(), p argument is null\n"); return; }
 
     list = p->stitchList;
     while(list)
@@ -335,7 +335,7 @@ void writePecStitches(EmbPattern* pattern, FILE* file, const char* fileName)
     binaryWriteUShortBE(file, (unsigned short)(0x9000 | -roundDouble(bounds.left)));
     binaryWriteUShortBE(file, (unsigned short)(0x9000 | -roundDouble(bounds.top)));
 
-    PecEncode(file, pattern);
+    pecEncode(file, pattern);
     graphicsOffsetValue = ftell(file) - graphicsOffsetLocation + 2;
     fseek(file, graphicsOffsetLocation, SEEK_SET);
 

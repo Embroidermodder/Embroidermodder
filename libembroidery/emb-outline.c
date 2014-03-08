@@ -262,7 +262,7 @@ double _distanceTolerance;
 /* Removes all collinear points on the polygon. */
 Vertices CollinearSimplify(Vertices vertices, float collinearityTolerance)
 {
-    //We can't simplify polygons under 3 vertices
+    /* We can't simplify polygons under 3 vertices */
     if (vertices.Count < 3)
         return vertices;
 
@@ -277,7 +277,7 @@ Vertices CollinearSimplify(Vertices vertices, float collinearityTolerance)
         Vector2 current = vertices[i];
         Vector2 next = vertices[nextId];
 
-        //If they collinear, continue
+        /* If they collinear, continue */
         if (MathUtils.Collinear(ref prev, ref current, ref next, collinearityTolerance))
             continue;
 
@@ -391,7 +391,7 @@ double DistancePointLine(EmbPoint p, EmbPoint a, EmbPoint b)
     return Math.Abs(s) * Math.Sqrt(((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y)));
 }
 
-//From physics2d.net
+/* From physics2d.net */
 public static Vertices ReduceByArea(Vertices vertices, float areaTolerance)
 {
     if (vertices.Count <= 3)
@@ -441,12 +441,12 @@ public static Vertices ReduceByArea(Vertices vertices, float areaTolerance)
 public static void MergeParallelEdges(Vertices vertices, float tolerance)
 {
     if (vertices.Count <= 3)
-        return; //Can't do anything useful here to a triangle
+        return; /* Can't do anything useful here to a triangle */
 
     var mergeMe = new bool[vertices.Count];
     int newNVertices = vertices.Count;
 
-    //Gather points to process
+    /* Gather points to process */
     for (int i = 0; i < vertices.Count; ++i)
     {
         int lower = (i == 0) ? (vertices.Count - 1) : (i - 1);
@@ -462,7 +462,7 @@ public static void MergeParallelEdges(Vertices vertices, float tolerance)
 
         if (!(norm0 > 0.0f && norm1 > 0.0f) && newNVertices > 3)
         {
-            //Merge identical points
+            /* Merge identical points */
             mergeMe[i] = true;
             --newNVertices;
         }
@@ -488,7 +488,7 @@ public static void MergeParallelEdges(Vertices vertices, float tolerance)
 
     int currIndex = 0;
 
-    //Copy the vertices to a new list and clear the old
+    /* Copy the vertices to a new list and clear the old */
     var oldVertices = new Vertices(vertices);
     vertices.Clear();
 
@@ -505,7 +505,7 @@ public static void MergeParallelEdges(Vertices vertices, float tolerance)
 /* Reduces the polygon by distance. */
 Vertices ReduceByDistance(Vertices vertices, float distance)
 {
-    //We can't simplify polygons under 3 vertices
+    /* We can't simplify polygons under 3 vertices */
     if (vertices.Count < 3)
         return vertices;
 
@@ -520,7 +520,7 @@ Vertices ReduceByDistance(Vertices vertices, float distance)
         Vector2 current = vertices[i];
         Vector2 next = vertices[nextId];
 
-        //If they are closer than the distance, continue
+        /* If they are closer than the distance, continue */
         if ((next - current).LengthSquared() <= distance)
             continue;
 
@@ -533,7 +533,7 @@ Vertices ReduceByDistance(Vertices vertices, float distance)
 /* Reduces the polygon by removing the Nth vertex in the vertices list. */
 Vertices ReduceByNth(Vertices vertices, int nth)
 {
-    //We can't simplify polygons under 3 vertices
+    /* We can't simplify polygons under 3 vertices */
     if (vertices.Count < 3)
         return vertices;
 

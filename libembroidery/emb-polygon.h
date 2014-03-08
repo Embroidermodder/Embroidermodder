@@ -19,7 +19,7 @@ typedef struct EmbPolygonObject_
     EmbColor color;
 } EmbPolygonObject;
 
-extern EMB_PUBLIC EmbPolygonObject* EMB_CALL embPolygonObject_create(EmbPointList* points, EmbColor color, int lineType);
+extern EMB_PUBLIC EmbPolygonObject* EMB_CALL embPolygonObject_create(EmbPointList* pointList, EmbColor color, int lineType);
 extern EMB_PUBLIC void EMB_CALL embPolygonObject_free(EmbPolygonObject* pointer);
 
 typedef struct EmbPolygonObjectList_

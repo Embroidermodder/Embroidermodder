@@ -19,7 +19,7 @@ typedef struct EmbPolylineObject_
     EmbColor color;
 } EmbPolylineObject;
 
-extern EMB_PUBLIC EmbPolylineObject* EMB_CALL embPolylineObject_create(EmbPointList* points, EmbColor color, int lineType);
+extern EMB_PUBLIC EmbPolylineObject* EMB_CALL embPolylineObject_create(EmbPointList* pointList, EmbColor color, int lineType);
 extern EMB_PUBLIC void EMB_CALL embPolylineObject_free(EmbPolylineObject* pointer);
 
 typedef struct EmbPolylineObjectList_
