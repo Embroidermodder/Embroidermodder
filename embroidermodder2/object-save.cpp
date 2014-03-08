@@ -317,7 +317,7 @@ void SaveObject::addRectangle(EmbPattern* pattern, QGraphicsItem* item)
     {
         if(formatType == EMBFORMAT_STITCHONLY)
         {
-            toPolyline(pattern, obj->objectBottomLeft(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
+            toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
         }
         else
         {

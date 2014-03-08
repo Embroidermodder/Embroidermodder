@@ -15,6 +15,8 @@ public:
 
     QPainterPath objectSavePath() const;
 
+    QPointF objectPos() const { return scenePos(); }
+
     QPointF objectTopLeft()     const;
     QPointF objectTopRight()    const;
     QPointF objectBottomLeft()  const;
