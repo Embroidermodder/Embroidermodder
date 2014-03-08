@@ -105,6 +105,8 @@ bool SaveObject::save(const QString &fileName)
         if(!writeSuccessful) { qDebug("Writing file %s was unsuccessful", qPrintable(fileName)); }
     }
 
+    //TODO: check the embLog for errors and if any exist, report them.
+
     free(writer);
     embPattern_free(pattern);
 
@@ -366,31 +368,25 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 //NOTE: This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
 {
-    //TODO: add embPolylineObject_create(EmbPointList* pointList, EmbColor color, int lineType) to libembroidery
-    //TODO: then refactor the code below to use the function instead.
-    EmbPolylineObject* polyObject = (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));
-    if(!polyObject) {  } //TODO: error
-    polyObject->pointList = 0;
-    polyObject->color = embColor_make(color.red(), color.green(), color.blue());
-    //polyObject->lineType = obj->type(); //TODO: This is wrong! type() is not lineType!
-
     qreal startX = objPos.x();
     qreal startY = objPos.y();
     EmbPointList* pointList = 0;
+    EmbPointList* lastPoint = 0;
     QPainterPath::Element element;
     for(int i = 0; i < objPath.elementCount(); ++i)
     {
         element = objPath.elementAt(i);
         if(!pointList)
         {
-            polyObject->pointList = pointList = embPointList_create(element.x + startX, -(element.y + startY));
+            pointList = lastPoint = embPointList_create(element.x + startX, -(element.y + startY));
         }
         else
         {
-            pointList = embPointList_add(pointList, embPoint_make(element.x + startX, -(element.y + startY)));
+            lastPoint = embPointList_add(lastPoint, embPoint_make(element.x + startX, -(element.y + startY)));
         }
     }
 
+    EmbPolylineObject* polyObject = embPolylineObject_create(pointList, embColor_make(color.red(), color.green(), color.blue()), 1); //TODO: proper lineType
     embPattern_addPolylineObjectAbs(pattern, polyObject);
 }
 
