@@ -79,6 +79,7 @@ TODO - press release
 //====================
 //Stuff for 2.x/Ideas:
 //====================
+TODO - libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
 TODO - libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
 TODO - Cut/Copy - Allow Post-selection
 TODO - CAD Command: Array
