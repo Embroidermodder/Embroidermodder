@@ -256,12 +256,23 @@ void View::clearRubberRoom()
         BaseObject* base = static_cast<BaseObject*>(item);
         if(base)
         {
-            if((base->type() == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
-               (base->type() == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
-               (base->type() == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
+            int type = base->type();
+            if((type == OBJ_TYPE_PATH     && spareRubberList.contains(SPARE_RUBBER_PATH))     ||
+               (type == OBJ_TYPE_POLYGON  && spareRubberList.contains(SPARE_RUBBER_POLYGON))  ||
+               (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
                (spareRubberList.contains(base->objectID())))
             {
-                vulcanizeObject(base);
+                if(!base->objectPath().elementCount())
+                {
+                    QMessageBox::critical(this, tr("Empty Rubber Object Error"),
+                                          tr("The rubber object added contains no points. "
+                                          "The command that created this object has flawed logic. "
+                                          "The object will be deleted."));
+                    gscene->removeItem(item);
+                    delete item;
+                }
+                else
+                    vulcanizeObject(base);
             }
             else
             {
