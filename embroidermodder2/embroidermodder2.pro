@@ -254,25 +254,52 @@ win32 {
 
 # TODO: review this for Qt5.2 or greater
 win32 {
-#Qt5 Deployment
-# embroidermodder2.exe
-# D3DCompiler_##.dll
-# icudt##.dll
-# icuin##.dll
-# icuuc##.dll
-# libEGL.dll
-# libgcc_s_sjlj-#.dll
-# libGLESv2.dll
-# libstdc++-6.dll
-# libwinpthread-#.dll
-# Qt5Core.dll
-# Qt5Gui.dll
-# Qt5OpenGL.dll
-# Qt5PrintSupport.dll
-# Qt5Script.dll
-# Qt5ScriptTools.dll
-# Qt5Widgets.dll
-# platforms/qwindows.dll
+###########################################################################################
+# Qt5 Shared Deployment - Native Compile ( i686-w64-mingw32 )                             #
+###########################################################################################
+# embroidermodder2.exe   #                                                                #
+# D3DCompiler_43.dll     # /path/to/Qt/Qt5.2.0/Tools/QtCreator/bin                        #
+# libEGL.dll             # /path/to/Qt/Qt5.2.0/Tools/QtCreator/bin                        #
+# libGLESv2.dll          # /path/to/Qt/Qt5.2.0/Tools/QtCreator/bin                        #
+# libgcc_s_sjlj-1.dll    #                                                                # TODO: Confirm this isn't needed anymore since we use: -static-libgcc
+# icudt##.dll            # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# icuin##.dll            # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# icuuc##.dll            # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# libstdc++-6.dll        # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       # TODO: Confirm this isn't needed anymore since we use: -static-libstdc++
+# libwinpthread-1.dll    # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5Core.dll            # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5Gui.dll             # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5OpenGL.dll          # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5PrintSupport.dll    # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5Script.dll          # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5ScriptTools.dll     # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# Qt5Widgets.dll         # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/bin                       #
+# platforms/qwindows.dll # /path/to/Qt/Qt5.2.0/5.2.0/mingw48_32/plugins/platforms         #
+###########################################################################################
+
+###########################################################################################
+# Qt5 Shared Deployment - MXE Cross Compile ( i686-w64-mingw32 )                          #
+###########################################################################################
+# embroidermodder2.exe   #                                                                #
+# icudt##.dll            # /path/to/mxe/usr/i686-w64-mingw32.shared/lib                   #
+# icuin##.dll            # /path/to/mxe/usr/i686-w64-mingw32.shared/lib                   #
+# icuuc##.dll            # /path/to/mxe/usr/i686-w64-mingw32.shared/lib                   #
+# libgcc_s_sjlj-1.dll    # /path/to/mxe/usr/lib/gcc/i686-w64-mingw32.shared/4.8.2         # TODO: This shouldn't be needed since we use: -static-libgcc
+# libstdc++-6.dll        # /path/to/mxe/usr/lib/gcc/i686-w64-mingw32.shared/4.8.2         # TODO: This shouldn't be needed since we use: -static-libstdc++
+# Qt5Core.dll            # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# Qt5Gui.dll             # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# Qt5OpenGL.dll          # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# Qt5PrintSupport.dll    # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# Qt5Script.dll          # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# Qt5ScriptTools.dll     # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# Qt5Widgets.dll         # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/bin               #
+# platforms/qwindows.dll # /path/to/mxe/usr/i686-w64-mingw32.shared/qt5/plugins/platforms #
+# libbz2.dll             # /path/to/mxe/usr/i686-w64-mingw32.shared/bin                   #
+# libfreetype-6.dll      # /path/to/mxe/usr/i686-w64-mingw32.shared/bin                   #
+# libpcre16-0.dll        # /path/to/mxe/usr/i686-w64-mingw32.shared/bin                   #
+# libpng16-16.dll        # /path/to/mxe/usr/i686-w64-mingw32.shared/bin                   #
+# zlib1.dll              # /path/to/mxe/usr/i686-w64-mingw32.shared/bin                   #
+###########################################################################################
 }
 
 #TODO: Linux/Unix: make installer
@@ -300,3 +327,5 @@ QMAKE_EXTRA_TARGETS += installer
 #QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-but-set-variable
 #QMAKE_CXXFLAGS_WARN_ON += -Wno-unused-variable
 #QMAKE_CXXFLAGS_WARN_ON += -Wno-unknown-pragmas
+
+QMAKE_DISTCLEAN += object_script.*
