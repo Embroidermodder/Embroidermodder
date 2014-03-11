@@ -54,14 +54,15 @@ after_success:
     - echo "Nightly Build" >> ${README_FILE}
     - echo "------------------------------" >> ${README_FILE}
     - echo "" >> ${README_FILE}
-    - echo "* Nightly Build Date = ${NIGHTLY_DATE}" >> ${README_FILE}
-    - echo "* Nightly Build Number = ${NIGHTLY_BUILD_NUMBER}" >> ${README_FILE}
-    - echo "* Nightly Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
+    - echo "* Embroidermodder Nightly Build Date = ${NIGHTLY_DATE}" >> ${README_FILE}
+    - echo "* Embroidermodder Nightly Build Number = ${NIGHTLY_BUILD_NUMBER}" >> ${README_FILE}
+    - echo "* Embroidermodder Nightly Hash = [${NIGHTLY_HASH}](https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH})" >> ${README_FILE}
+    - echo "* Travis Build ID = [${TRAVIS_BUILD_ID}](https://travis-ci.org/Embroidermodder/Embroidermodder/builds/${TRAVIS_BUILD_ID})" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     - echo "You must have these packages installed on your machine to be able to run these applications." >> ${README_FILE}
-    - echo "```" >> ${README_FILE}
+    - echo "\`\`\`" >> ${README_FILE}
     - echo "sudo apt-get install qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind" >> ${README_FILE}
-    - echo "```" >> ${README_FILE}
+    - echo "\`\`\`" >> ${README_FILE}
     - echo "" >> ${README_FILE}
     - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
