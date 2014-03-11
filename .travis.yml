@@ -58,6 +58,11 @@ after_success:
     - echo "* Nightly Build Number = ${NIGHTLY_BUILD_NUMBER}" >> ${README_FILE}
     - echo "* Nightly Hash = ${NIGHTLY_HASH}" >> ${README_FILE}
     - echo "" >> ${README_FILE}
+    - echo "You must have these packages installed on your machine to be able to run these applications." >> ${README_FILE}
+    - echo "```" >> ${README_FILE}
+    - echo "sudo apt-get install qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind" >> ${README_FILE}
+    - echo "```" >> ${README_FILE}
+    - echo "" >> ${README_FILE}
     - echo "This is a development build for ${PLATFORM} and may be unstable or even unusable." >> ${README_FILE}
     - echo "USE AT YOUR OWN RISK AND HAVE FUN!" >> ${README_FILE}
     - echo "" >> ${README_FILE}
