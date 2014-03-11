@@ -706,10 +706,23 @@ void MainWindow::loadFormats()
     {
         if(embFormat_info(curFormat->extension, &extension, &description, &readerState, &writerState, &type))
         {
-            supportedStr = "*" + QString(extension).toUpper() + " ";
-            individualStr = QString(extension).toUpper().replace(".", "") + " - " + description + " (*" + extension + ");;";
-            if(readerState == stable || readerState == unstable) { supportedReaders.append(supportedStr); individualReaders.append(individualStr); }
-            if(writerState == stable || writerState == unstable) { supportedWriters.append(supportedStr); individualWriters.append(individualStr); }
+            QString upperExt = QString(extension).toUpper();
+            supportedStr = "*" + upperExt + " ";
+            individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
+            if(readerState == stable || readerState == unstable)
+            {
+                //Exclude color file formats from open dialogs
+                if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
+                {
+                    supportedReaders.append(supportedStr);
+                    individualReaders.append(individualStr);
+                }
+            }
+            if(writerState == stable || writerState == unstable)
+            {
+                supportedWriters.append(supportedStr);
+                individualWriters.append(individualStr);
+            }
         }
         curFormat = curFormat->next;
     }
