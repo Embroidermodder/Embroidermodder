@@ -29,7 +29,7 @@ function main()
     global.x2       = NaN;
     global.y2       = NaN;
     global.mode = global.mode_NUM_POINTS;
-    setPromptPrefix(qsTr("Enter number of star points") + " <" + global.numPoints.toString() + ">: ");
+    setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
 //NOTE: click() is run only for left clicks.
@@ -120,7 +120,7 @@ function prompt(str)
             if(isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
                 alert(qsTr("Requires an integer between 3 and 1024."));
-                setPromptPrefix(qsTr("Enter number of star points") + " <" + global.numPoints.toString() + ">: ");
+                setPromptPrefix(qsTr("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
             }
             else
             {
