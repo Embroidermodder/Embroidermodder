@@ -5,8 +5,6 @@ embroidermodder2/TODO
 embroidermodder2/settings.ini
 embroidermodder2/prompt.log
 embroidermodder2/embroidermodder2
-embroidermodder2/embroidermodder2.exe
-embroidermodder2/embroidermodder2.app
 embroidermodder2/doxygen
 
 #########################
@@ -21,19 +19,12 @@ libembroidery/lib
 #########################
 libembroidery-convert/TODO
 libembroidery-convert/libembroidery-convert
-libembroidery-convert/libembroidery-convert.exe
 
 #########################
 # libembroidery-test    #
 #########################
 libembroidery-test/TODO
 libembroidery-test/libembroidery-test
-libembroidery-test/libembroidery-test.exe
-
-#########################
-# KDE4 Thumbnailer      #
-#########################
-thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
 
 #########################
 # Misc Dev Files        #
@@ -45,6 +36,26 @@ thumbnailer-kde4/libembroidery-thumbnailer-kde4.so
 *callgrind.*
 *object_script.*
 *.pro.user*
+moc_*.cpp
+qrc_*.cpp
+*-build-*
+
+#########################
+# Libraries             #
+#########################
+*.lib
+*.a
+*.dll
+*.so
+*.so.*
+*.dylib
+
+#########################
+# Executables           #
+#########################
+*.exe
+*.out
+*.app
 
 #########################
 # OS generated files    #
