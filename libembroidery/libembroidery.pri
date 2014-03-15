@@ -220,3 +220,11 @@ HEADERS += \
 ../libembroidery/format-xxx.h \
 ../libembroidery/format-zsk.h \
 
+# TODO: merge the computational geometry code into libembroidery structs
+SOURCES += \
+../libembroidery/geom-arc.c \
+../libembroidery/geom-line.c \
+
+HEADERS += \
+../libembroidery/geom-arc.h \
+../libembroidery/geom-line.h \

@@ -34,8 +34,6 @@ $$PWD \
 SOURCES += libembroidery-convert-main.c
 
 include( ../libembroidery/libembroidery.pri )
-include( ../libcgeometry/libcgeometry.pri )
-
 
 #Install Linux/Unix
 unix:!macx {

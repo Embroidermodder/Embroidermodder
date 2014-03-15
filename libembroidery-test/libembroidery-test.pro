@@ -17,5 +17,4 @@ $$PWD \
 SOURCES += libembroidery-test-main.c
 
 include( ../libembroidery/libembroidery.pri )
-include( ../libcgeometry/libcgeometry.pri )
 

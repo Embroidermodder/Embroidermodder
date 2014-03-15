@@ -16,7 +16,6 @@ HEADERS   = libembroidery-thumbnailer-kde4.h
 SOURCES   = libembroidery-thumbnailer-kde4.cpp
 
 include( ../libembroidery/libembroidery.pri )
-include( ../libcgeometry/libcgeometry.pri )
 
 unix {
 QMAKE_STRIP    = echo                       #Suppress strip errors "File format not recognized"

@@ -5,8 +5,6 @@ rm -rf temp
 #Create dir for new files
 mkdir temp
 #Copy all needed files into the temp directory
-cp ../../libcgeometry/*.c temp
-cp ../../libcgeometry/*.h temp
 cp ../../libembroidery/*.c temp
 cp ../../libembroidery/*.h temp
 cp ../../libembroidery-convert/libembroidery-convert-main.c temp

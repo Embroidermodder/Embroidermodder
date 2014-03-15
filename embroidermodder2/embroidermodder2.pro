@@ -146,7 +146,6 @@ native-scripting.h \
 javascript/native-javascript.h \
 
 include( ../libembroidery/libembroidery.pri )
-include( ../libcgeometry/libcgeometry.pri )
 
 #Linux/Unix: make install
 unix:!macx {
