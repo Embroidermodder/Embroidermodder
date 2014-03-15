@@ -2,6 +2,8 @@
 #ifndef EMB_FILE_H
 #define EMB_FILE_H
 
+#include <stdio.h>
+
 #include "api-start.h"
 #ifdef __cplusplus
 extern "C" {
@@ -10,8 +12,6 @@ extern "C" {
 #ifdef ARDUINO
 #include "utility/ino-file.h"
 #else
-
-#include <stdio.h>
 typedef struct EmbFile_
 {
     FILE* file;
