@@ -27,9 +27,9 @@ script:
     - git remote rm origin
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/travis-${PLATFORM}.git
     - git fetch origin
-    - git checkout -b master origin/master
+    - git checkout master
     - git commit --allow-empty -m "https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH}"
-    - git push origin ${PLATFORM} &>/dev/null
+    - git push origin master &>/dev/null
     # osx64
     - PLATFORM=osx64
     - cd ~
@@ -38,10 +38,9 @@ script:
     - git remote rm origin
     - git remote add origin https://Embroidermodder-Travis:${NIGHTLY_TOKEN}@github.com/Embroidermodder/travis-${PLATFORM}.git
     - git fetch origin
-    - git checkout -b master origin/master
+    - git checkout master
     - git commit --allow-empty -m "https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH}"
-    - git push origin ${PLATFORM} &>/dev/null
-
+    - git push origin master &>/dev/null
 
 env:
   global:
