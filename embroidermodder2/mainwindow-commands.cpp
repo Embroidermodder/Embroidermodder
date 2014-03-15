@@ -341,25 +341,37 @@ void MainWindow::changelog()
 void MainWindow::undo()
 {
     qDebug("undo()");
+    QString prefix = prompt->getPrefix();
     if(dockUndoEdit->canUndo())
     {
-        prompt->appendHistory("Undo " + dockUndoEdit->undoText());
+        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+        prompt->appendHistory(QString());
         dockUndoEdit->undo();
+        prompt->setPrefix(prefix);
     }
     else
-        prompt->appendHistory("Nothing to undo");
+    {
+        prompt->alert("Nothing to undo");
+        prompt->setPrefix(prefix);
+    }
 }
 
 void MainWindow::redo()
 {
     qDebug("redo()");
+    QString prefix = prompt->getPrefix();
     if(dockUndoEdit->canRedo())
     {
-        prompt->appendHistory("Redo " + dockUndoEdit->redoText());
+        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+        prompt->appendHistory(QString());
         dockUndoEdit->redo();
+        prompt->setPrefix(prefix);
     }
     else
-        prompt->appendHistory("Nothing to redo");
+    {
+        prompt->alert("Nothing to redo");
+        prompt->setPrefix(prefix);
+    }
 }
 
 bool MainWindow::isShiftPressed()
