@@ -36,7 +36,8 @@ int readZsk(EmbPattern* pattern, const char* fileName)
         embFile_seek(file, 0x48, SEEK_CUR);
         colorNumber = binaryReadUInt8(file->file);
     }
-    embFile_seek(file, 0x31, SEEK_CUR);
+    embFile_seek(file, 0x2B, SEEK_CUR);
+
     while(embFile_read(b, 1, 3, file) == 3)
     {
         stitchType = NORMAL;
@@ -47,8 +48,18 @@ int readZsk(EmbPattern* pattern, const char* fileName)
         if(b[0] & 0x02)
             stitchType = JUMP;
         if(b[0] & 0x20) /* May need to break out if passed last color and attempting STOP */
-            stitchType = STOP;
-        embPattern_addStitchRel(pattern, b[1] / 10.0, b[2] / 10.0, stitchType, 1);
+        {
+            colorNumber = b[1];
+            if(colorNumber == 0)
+            {
+                 colorNumber = b[2];
+            }
+            stitchType = STOP; /* Still needs work to determine if correct color is being used.*/
+            embPattern_changeColor(pattern, colorNumber - 1);
+            b[1] = 0;
+            b[2] = 0;
+        }
+        embPattern_addStitchRel(pattern, b[1] / 10.0, b[2] / 10.0, stitchType, 0);
     }
     embFile_close(file);
 
