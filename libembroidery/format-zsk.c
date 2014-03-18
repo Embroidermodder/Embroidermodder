@@ -1,4 +1,6 @@
 #include "format-zsk.h"
+#include "helpers-binary.h"
+#include "helpers-misc.h"
 #include "emb-file.h"
 #include "emb-logging.h"
 
@@ -6,9 +8,10 @@
  *  Returns \c true if successful, otherwise returns \c false. */
 int readZsk(EmbPattern* pattern, const char* fileName)
 {
-    int b[3];
+    char b[3];
     EmbFile* file = 0;
-
+    int stitchType;
+    unsigned char colorNumber;
     if(!pattern) { embLog_error("format-zsk.c readZsk(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-zsk.c readZsk(), fileName argument is null\n"); return 0; }
 
@@ -19,22 +22,33 @@ int readZsk(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    embFile_seek(file, 512, SEEK_SET);
-
+    embFile_seek(file, 0x230, SEEK_SET);
+    colorNumber = binaryReadUInt8(file->file);
+    while(colorNumber != 0)
+    {
+        EmbThread t;
+        t.color.r = binaryReadUInt8(file->file);
+        t.color.g = binaryReadUInt8(file->file);
+        t.color.b = binaryReadUInt8(file->file);
+        t.catalogNumber = "";
+        t.description = "";
+        embPattern_addThread(pattern, t);
+        embFile_seek(file, 0x48, SEEK_CUR);
+        colorNumber = binaryReadUInt8(file->file);
+    }
+    embFile_seek(file, 0x31, SEEK_CUR);
     while(embFile_read(b, 1, 3, file) == 3)
     {
-        if((b[2] & 25) == 0)
-        {
-            if(b[2] & 0x40)
-                b[1] = -b[1];
-            if(b[2] & 0x20)
-                b[0] = -b[0];
-            embPattern_addStitchRel(pattern, b[1] / 10.0, b[0] / 10.0, NORMAL, 1);
-        }
-        else
-        {
-            embPattern_addStitchRel(pattern, b[1] / 10.0, b[0] / 10.0, STOP, 1);
-        }
+        stitchType = NORMAL;
+        if(b[0] & 0x4)
+            b[2] = -b[2];
+        if(b[0] & 0x8)
+            b[1] = -b[1];
+        if(b[0] & 0x02)
+            stitchType = JUMP;
+        if(b[0] & 0x20) /* May need to break out if passed last color and attempting STOP */
+            stitchType = STOP;
+        embPattern_addStitchRel(pattern, b[1] / 10.0, b[2] / 10.0, stitchType, 1);
     }
     embFile_close(file);
 
