@@ -211,6 +211,15 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeFxy;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
+    else if(!strcmp(ending, ".gc"))
+    {
+        #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
+        return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
+        #else /* ARDUINO TODO: This is temporary. Remove when complete. */
+        rw->reader = readGc;
+        rw->writer = writeGc;
+        #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
+    }
     else if(!strcmp(ending, ".gnc"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */

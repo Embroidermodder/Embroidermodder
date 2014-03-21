@@ -79,6 +79,7 @@ SOURCES += \
 ../libembroidery/format-exy.c \
 ../libembroidery/format-eys.c \
 ../libembroidery/format-fxy.c \
+../libembroidery/format-gc.c  \
 ../libembroidery/format-gnc.c \
 ../libembroidery/format-gt.c  \
 ../libembroidery/format-hus.c \
@@ -181,6 +182,7 @@ HEADERS += \
 ../libembroidery/format-exy.h \
 ../libembroidery/format-eys.h \
 ../libembroidery/format-fxy.h \
+../libembroidery/format-gc.h  \
 ../libembroidery/format-gnc.h \
 ../libembroidery/format-gt.h  \
 ../libembroidery/format-hus.h \

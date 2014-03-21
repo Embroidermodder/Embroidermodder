@@ -28,6 +28,7 @@
 #include "format-exy.h"
 #include "format-eys.h"
 #include "format-fxy.h"
+#include "format-gc.h"
 #include "format-gnc.h"
 #include "format-gt.h"
 #include "format-hus.h"

@@ -40,6 +40,7 @@ EmbFormatList* embFormatList_create()
     heapFormatList = embFormatList_add(heapFormatList, ".exy");
     heapFormatList = embFormatList_add(heapFormatList, ".eys");
     heapFormatList = embFormatList_add(heapFormatList, ".fxy");
+    heapFormatList = embFormatList_add(heapFormatList, ".gc");
     heapFormatList = embFormatList_add(heapFormatList, ".gnc");
     heapFormatList = embFormatList_add(heapFormatList, ".gt");
     heapFormatList = embFormatList_add(heapFormatList, ".hus");
@@ -187,7 +188,8 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
         }
         else /* g...o */
         {
-                 if(!strcmp(ending, ".gnc")) { *extension = ".gnc"; *description = "Great Notions Embroidery Format";    *reader = ' '; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
+                 if(!strcmp(ending, ".gc"))  { *extension = ".gc";  *description = "Smoothie G-Code Format";             *reader = ' '; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
+            else if(!strcmp(ending, ".gnc")) { *extension = ".gnc"; *description = "Great Notions Embroidery Format";    *reader = ' '; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
             else if(!strcmp(ending, ".gt"))  { *extension = ".gt";  *description = "Gold Thread Embroidery Format";      *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
             else if(!strcmp(ending, ".hus")) { *extension = ".hus"; *description = "Husqvarna Viking Embroidery Format"; *reader = 'U'; *writer = 'U'; *type = EMBFORMAT_STITCHONLY; }
             else if(!strcmp(ending, ".inb")) { *extension = ".inb"; *description = "Inbro Embroidery Format";            *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
