@@ -236,6 +236,8 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
+    embPattern_flip(pattern, 1, 1);
+
     return 1;
 }
 
