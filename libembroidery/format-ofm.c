@@ -169,6 +169,10 @@ static void ofmReadExpanded(FILE* file, EmbPattern* p)
         {
             embPattern_addStitchAbs(p, ofmDecode(stitch[1], stitch[2]) / 10.0, ofmDecode(stitch[3], stitch[4]) / 10.0, i == 0 ? JUMP : NORMAL, 1);
         }
+        else if(stitch[0] == 32)
+        {
+            embPattern_addStitchAbs(p, ofmDecode(stitch[1], stitch[2]) / 10.0, ofmDecode(stitch[3], stitch[4]) / 10.0, i == 0 ? TRIM : NORMAL, 1);
+        }
     }
 }
 
