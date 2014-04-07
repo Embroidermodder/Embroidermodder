@@ -29,6 +29,12 @@ The Qt, KDE and Valgrind build dependencies can be installed easily by opening a
 ```
 sudo apt-get install git build-essential qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind
 ```
+
+Fedora repository packages:
+The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+```
+sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
+```
 Building
 --------
 
@@ -49,6 +55,9 @@ qmake && make -j2
 ```
 qmake && make -j4
 ```
+
+When building for Fedora:
+Substitute qmake-qt4 for qmake.
 
 When building for Windows:
 If you are using Qt/Mingw, substitute mingw32-make for make.

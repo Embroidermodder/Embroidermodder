@@ -27,7 +27,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
 
 !msvc {
     !macx { #TODO: better clang support
-        QMAKE_LFLAGS += -static-libgcc -static-libstdc++
+        #QMAKE_LFLAGS += -static-libgcc -static-libstdc++ #TODO: Only static link when targeting Windows and building with MinGW (natively or cross-compile)
     }
 }
 

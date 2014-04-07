@@ -17,7 +17,7 @@ deploy {
 
 !msvc {
     !macx { #TODO: better clang support
-        QMAKE_LFLAGS += -static-libgcc
+        #QMAKE_LFLAGS += -static-libgcc #TODO: Only static link when targeting Windows and building with MinGW (natively or cross-compile)
     }
 }
 

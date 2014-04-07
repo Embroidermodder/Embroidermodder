@@ -12,6 +12,8 @@ MOC_DIR = .moc
 
 INCLUDEPATH += $$PWD
 
+unix:INCLUDEPATH += "/usr/include/kde4" #Fedora
+
 HEADERS   = libembroidery-thumbnailer-kde4.h
 SOURCES   = libembroidery-thumbnailer-kde4.cpp
 
