@@ -44,7 +44,7 @@ script:
 
 env:
   global:
-    - secure: "X6MHmWJqMYh/wo/gstjYtpFf5A/nMNfjODscifQW9gqIEeFd+nrhjL6vtFwlsEAq36MnKijDDQT5tfCgE+yNKC0aT/AyDmKgpd3HMrgHi675mRIFZsXIQzHoIQx9/nHDgGrJPHHY1Jw1k/k43qJputcxBVJG3kpWoO8aieOOfuA="
+    - secure: "ays1SwXHQ6+4rLCQKxY6xZ3elWkU4Bw51d3DqOfbcIObmpoKQ2ztq7M4JsHyXKOwk9O9QsBD/bunf/MAJrdk+fS866qfw9pxu9/Sh9EeAq4bB2gHbL7G4hxpvG++ioQ32W5Gu1kEgOOk+3NzUQ6t5erNkhADyJ+E6b1Z7q7i+W4="
 
 notifications:
   recipients:
