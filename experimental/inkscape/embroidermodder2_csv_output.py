@@ -132,11 +132,17 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
         self.csv_append_comment(embroidermodder2_csv_comments.comment_header)
         self.csv_append_thread()
 
-        path = '//svg:path'
-        for node in self.document.getroot().xpath(path, namespaces=inkex.NSS):
-            d = node.get('d')
-            p = cubicsuperpath.parsePath(d)
-            self.csv_path_to_stitches(p)
+        ## path = '//svg:path'
+        ## for node in self.document.getroot().xpath(path, namespaces=inkex.NSS):
+        ##     d = node.get('d')
+        ##     p = cubicsuperpath.parsePath(d)
+        ##     self.csv_path_to_stitches(p)
+        # Optimized generator from commented code above.
+        localMeth = self.csv_path_to_stitches
+        localInkscapeFunc = cubicsuperpath.parsePath
+        [localMeth(localInkscapeFunc(node.get('d')))
+            for node in self.document.getroot().xpath('//svg:path', 
+                                                      namespaces=inkex.NSS)]
 
 
 if __name__ == '__main__': #pragma: no cover
