@@ -78,6 +78,7 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
             "\",\"" +
             str(y) +
             "\"\n"
+            )
 
     def csv_append_trim(self, x, y):
         """"""
