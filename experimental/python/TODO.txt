@@ -1,0 +1,80 @@
+ _______   ____   _____    ____
+|__   __| / __ \ |  __ \  / __ \
+   | |   | |  | || |  | || |  | |
+   | |   | |  | || |  | || |  | |
+   | |   | |__| || |__| || |__| |
+   |_|    \____/ |_____/  \____/
+
+ wxPython/PySide/PyQT GUIs TODO List
+
+"""
+C++ 2 Py Porting Notes:
+ 000.
+     'this' almost always clearly translates to 'self' in python.
+ 001.
+     Swapping the .s and ->s between PythonQt and C++Qt pretty much ubiquitously works.
+     C++ Qt
+     obj->method
+     vs.
+     Python Qt
+     obj.method
+ 002.
+     C++ Qt
+     connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
+     vs.
+     Python Qt
+     obj.signalDef.connet(obj.slotDef)
+"""
+ # Developer Search Tags/Comments. Generally commented in upper, but some are upper/lower/mixed depending on what it is.
+ # Search Tags are recommended 4 chars uppercased.
+ 001. TODO, littered here, there and everywhere.
+ 002. FIXME, usually with a TODO. Needs better understanding or help from the C++ side of things.
+ 003. REMOVEME, Temporary line to prevent syntax errors. Inside a TODO/FIXME section.
+ 004. TOWRITE, Docstrings needing doc
+ 005. BUG, BUGG, BUGZ, Something that acts/behaves strangely and needs review or fixing.
+ 006. NOTE, Important to developers mainly. Note may be platform specific, or inside a Docstring/etc.
+ 007. WIPZ, Work-In-Progress. Yes, the ending 'z' is a search engine thing and really does help pinpoint stuff better than any other method I have ever come across.
+ 008. PORT, missing from many TODO's, but is there to keep the c++ devs sanity when looking at this and scratching their head as to why something may be there...
+
+ # Modules for shared globals/infos/etc.
+ 001. Menu ShortHelp, LongHelp Strings to Global Shared Strings Module. Figure out shared i18n translation macro for PySide/PyQt so both GUIs can share the same coding style. Ex: _(u'')
+ 002. Default Mono Font FaceNames/Sizes to Global Shared Fonts Module
+ 003. IconPaths to Module/Embed the Resources??? PyEmbeddedImage/app_rc/ect.
+ 004. wxPy Read Options from Ini.
+ 005.
+
+ # Dialogs/Frames/Panels/Widgets
+ 001. PySide/PyQt About Dialog
+ 002. Both GUIs Settings Dialog
+ 003. Both GUIs Details Dialog
+ 004. Both GUIs Tip Of The Day Dialog with tips.txt.
+ 005. wxPython GUI Properties Panel
+ 006. Both GUIs The CAD Design Panel Class. This will be the hardest to port as it is the nuts & bolts of the app.
+ 007. wxPython GUI Custom StatusBar
+ 008. wxPython AUI - ToolBars & DockPanes
+ 009.
+ 010. (Sub)Class everything out so it is easiest to maintain and customize/tweak.
+ 011. Mixins???
+
+ # MDIArea
+ 001. Ctrl+Tab Window Switcher(z-order and sorted options)
+ 002. Custom Right Click Context with Embroidermodder document specific options, MDIArea Options, and General MDI Options.
+ 003. Draggable Order Tabs. Is this possible with PySide/PyQt?
+ 004.
+
+ # Documentation. ReST
+ 001. Every class/method/function should have documentation.
+ 002. Doing this on the python side of things(Readability Counts) helps the C++ side get documented
+      while developers can focus on coding, not documenting for the majority of their time.
+      The documentation should be written from a users easy to understand perspective,
+      but still have the technical explanation stuff for more advanced users/developers.
+      This means *YOU READING THIS* can help out with the documentation effort.
+
+ # Optimization/EndResult/Nearer2Completion
+ 001. When GUIs are near completion, Optimize and create intelligent loops that generate everything from the globals &
+       remove brunt of the GUI startup code.
+ 002. Less Dots/Generators Loops where can be done easily.
+ 003. Both GUIs PyInstaller Build/Packaging Scripts
+ 004. ReSTify all the Docstrings for Sphinx Documentation Generation.
+ 005. ??? Remove wx2.8 Code and support only wx.3.0 Classic and Phoenix or just Phoenix and remove all backwards compatible code.
+ 006.
