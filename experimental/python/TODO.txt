@@ -25,6 +25,7 @@ C++ 2 Py Porting Notes:
      Python Qt
      obj.signalDef.connet(obj.slotDef)
 """
+
  # Developer Search Tags/Comments. Generally commented in upper, but some are upper/lower/mixed depending on what it is.
  # Search Tags are recommended 4 chars uppercased.
  001. TODO, littered here, there and everywhere.
@@ -78,3 +79,59 @@ C++ 2 Py Porting Notes:
  004. ReSTify all the Docstrings for Sphinx Documentation Generation.
  005. ??? Remove wx2.8 Code and support only wx.3.0 Classic and Phoenix or just Phoenix and remove all backwards compatible code.
  006.
+
+ # Community discussion
+ 000. Don't be afraid to submit a request for something to be done.
+      Global TODO list. or maybe emb-community-repo.
+        while some ideas are a bit fancy, at least we will note them.
+        ... so don't worry, we keep a personal list of user's requests too...
+            ... even tho sometimes we ourselves think
+                they may be silly or unneeded or way-out-of-our-league or skill-level.
+                  The fact is...  ...is that it will live on until it gets some attention by someone someday.
+            Whether a Idea is accepted or maybe as a mixin or plugin,
+            in many cases has to do alot with the community accepting it,
+            so therefore it is in your best interest(as a Idea person/Scientist),
+            to either promote your idea or to help write some starter code
+            and submit it as a proof-of-concept, just as I have(the python GUI).
+ 001. FunctionMethod/Class Naming conventions standards for coding guidelines
+      between the C++ version and the python version(s).
+
+       A lot of this stuff is recognised better from python(because it is readable),
+       but is overall discussed better as a community as not everyone uses the same language,
+       but naming conventions can be a standard. Work together on bettering it.
+       Ex: dir(object)
+         if I print out the object (something) at the moment...
+             it would probably spit out something hard for a "real" human to
+             parse mentally according to dictionary standards.
+             ...Even a real dictionary(the 'Book' doesn't do it this way...)
+
+             Ex:
+              Un-sorted
+               file_menu
+               edit_menu
+               help_menu
+              vs.
+               edit_menu
+               file_menu
+               help_menu
+
+            ... which would be better conventionNamed as
+
+              clearly category-sorted ByUPPERorLowerCase
+               menu_Edit
+               menu_File
+               menu_Help
+
+               ... in a sorted list, which BTW is what your
+                   output/auto-completion will probably spit out.
+                   nuff, said.
+                   Mentally every time the list pops up,
+                   this leaves a subconscious mark in the user's mind,
+                   this should teach the user how the code is structured
+                   subconscious also. Think subliminal messages.
+ 002. What is the next step for python users?
+       A. Besides getting a fully working GUI up and running,
+          we want python bindings.
+       B. def ImplementTheCoolestFuncEverInTenMin():
+              # Yes, do please!
+
