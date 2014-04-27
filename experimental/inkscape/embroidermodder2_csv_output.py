@@ -34,6 +34,15 @@ import simpletransform
 import embroidermodder2_csv_comments
 
 
+#-Globals----------------------------------------------------------------------
+# _protected globals against dummies who will likely write quick hacks
+# that involve "from module import *"
+_COMMENT_HEADER = embroidermodder2_csv_comments.comment_header
+_COMMENT_VARIABLES = embroidermodder2_csv_comments.comment_variables
+_COMMENT_THREADS = embroidermodder2_csv_comments.comment_threads
+_COMMENT_STITCHES = embroidermodder2_csv_comments.comment_stitches
+
+
 class Embroidermodder2_CSV_Output(inkex.Effect):
     """"""
     def __init__(self):
@@ -43,12 +52,15 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
         self.flatness = float(0.1)
 
     def output(self):
-        """print the output string."""
+        """Method override for inkex.Effect class.
+
+        print the output string.
+        """
         print(self.outStr)
 
     def csv_append_comment(self, strng):
         """"""
-        self.outStr = self.outStr + strng
+        self.outStr = self.outStr + str(strng)
 
     def csv_append_thread(self):
         """"""
@@ -69,7 +81,14 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
             )
 
     def csv_append_jump(self, x, y):
-        """"""
+        """
+        Append JUMP string manipulation onto the output string.
+
+        ExampleAppend: "*","JUMP","x","y"
+
+        :param `x`: int or float
+        :param `y`: int or float
+        """
         self.outStr = self.outStr + str(
             "\"*\",\"" +
             "JUMP" +
@@ -81,7 +100,14 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
             )
 
     def csv_append_trim(self, x, y):
-        """"""
+        """
+        Append TRIM string manipulation onto the output string.
+
+        ExampleAppend: "*","TRIM","x","y"
+
+        :param `x`: int or float
+        :param `y`: int or float
+        """
         self.outStr = self.outStr + str(
             "\"*\",\"" +
             "TRIM" +
@@ -93,7 +119,14 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
             )
 
     def csv_append_stitch(self, x, y):
-        """"""
+        """
+        Append STITCH string manipulation onto the output string.
+
+        ExampleAppend: "*","STITCH","x","y"
+
+        :param `x`: int or float
+        :param `y`: int or float
+        """
         self.outStr = self.outStr + str(
             "\"*\",\"" +
             "STITCH" +
@@ -105,7 +138,14 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
             )
 
     def csv_append_end(self, x, y):
-        """"""
+        """
+        Append END string manipulation onto the output string.
+
+        ExampleAppend: "*","END","x","y"
+
+        :param `x`: int or float
+        :param `y`: int or float
+        """
         self.outStr = self.outStr + str(
             "\"*\",\"" +
             "END" +
@@ -129,8 +169,8 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
                 self.csv_append_stitch(s[0][0], s[0][1])
 
     def effect(self):
-        """"""
-        self.csv_append_comment(embroidermodder2_csv_comments.comment_header)
+        """Method override for inkex.Effect class."""
+        self.csv_append_comment(_COMMENT_HEADER)
         self.csv_append_thread()
 
         ## path = '//svg:path'
@@ -142,18 +182,20 @@ class Embroidermodder2_CSV_Output(inkex.Effect):
         localMeth = self.csv_path_to_stitches
         localInkscapeFunc = cubicsuperpath.parsePath
         [localMeth(localInkscapeFunc(node.get('d')))
-            for node in self.document.getroot().xpath('//svg:path', 
+            for node in self.document.getroot().xpath('//svg:path',
                                                       namespaces=inkex.NSS)]
 
 
 if __name__ == '__main__': #pragma: no cover
     # print out a basic run header.
-    print('')
-    runningFromMainStr = 'Embroidermodder2_CSV_Output' + ' ' + str(__version__)
-    print(runningFromMainStr)
-    print('=' * len(runningFromMainStr))
+    ## print('')
+    ## runningFromMainStr = 'Embroidermodder2_CSV_Output' + ' ' + str(__version__)
+    ## print(runningFromMainStr)
+    ## print('=' * len(runningFromMainStr))
+
     # Ok, lets run the program!
     e = Embroidermodder2_CSV_Output()
     e.affect()
+
     # ... and add an extra empty line for readability between multiple runs.
-    print('')
+    ## print('')
