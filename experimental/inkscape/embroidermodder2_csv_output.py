@@ -11,7 +11,7 @@ NOTE:
     or open it in Embroidermodder 2 for further editing.
 """
 
-__version__ = 0.0.1
+#__version__ = 0.0.1 #TODO: Fix this, it causes error in Inkscape
 __authors__ = ['Jonathan Greig']
 
 # TODO List:
