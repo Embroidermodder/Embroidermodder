@@ -1,19 +1,19 @@
 #include "format-sst.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readSst(EmbPattern* pattern, const char* fileName)
 {
     int fileLength;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-sst.c readSst(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-sst.c readSst(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-sst.c readSst(), cannot open %s for reading\n", fileName);
@@ -21,10 +21,10 @@ int readSst(EmbPattern* pattern, const char* fileName)
     }
 
     embPattern_loadExternalColorFile(pattern, fileName);
-    fseek(file, 0, SEEK_END);
-    fileLength = ftell(file);
-    fseek(file, 0xA0, SEEK_SET); /* skip the all zero header */
-    while(ftell(file) < fileLength)
+    embFile_seek(file, 0, SEEK_END);
+    fileLength = embFile_tell(file);
+    embFile_seek(file, 0xA0, SEEK_SET); /* skip the all zero header */
+    while(embFile_tell(file) < fileLength)
     {
         int stitchType = NORMAL;
 
@@ -48,6 +48,8 @@ int readSst(EmbPattern* pattern, const char* fileName)
             b1 = -b1;
         embPattern_addStitchRel(pattern, b1 / 10.0, b2 / 10.0, stitchType, 1);
     }
+
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

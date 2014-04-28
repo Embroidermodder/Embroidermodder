@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void parseDirectoryEntryName(FILE* file, bcf_directory_entry* dir)
+static void parseDirectoryEntryName(EmbFile* file, bcf_directory_entry* dir)
 {
     int i;
     unsigned short unicodechar;
@@ -20,7 +20,7 @@ static void parseDirectoryEntryName(FILE* file, bcf_directory_entry* dir)
     }
 }
 
-static void readCLSID(FILE* file, bcf_directory_entry* dir)
+static void readCLSID(EmbFile* file, bcf_directory_entry* dir)
 {
     int i;
     unsigned char scratch;
@@ -41,7 +41,7 @@ bcf_directory* CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntr
     return dir;
 }
 
-EmbTime parseTime(FILE* file)
+EmbTime parseTime(EmbFile* file)
 {
     EmbTime returnVal;
     unsigned int ft_low, ft_high;
@@ -52,7 +52,7 @@ EmbTime parseTime(FILE* file)
     return returnVal;
 }
 
-bcf_directory_entry* CompoundFileDirectoryEntry(FILE* file)
+bcf_directory_entry* CompoundFileDirectoryEntry(EmbFile* file)
 {
     bcf_directory_entry* dir = (bcf_directory_entry*)malloc(sizeof(bcf_directory_entry));
     if(!dir) { embLog_error("compound-file-directory.c CompoundFileDirectoryEntry(), cannot allocate memory for dir\n"); } /* TODO: avoid crashing. null pointer will be accessed */
@@ -82,7 +82,7 @@ bcf_directory_entry* CompoundFileDirectoryEntry(FILE* file)
     return dir;
 }
 
-void readNextSector(FILE* file, bcf_directory* dir)
+void readNextSector(EmbFile* file, bcf_directory* dir)
 {
     unsigned int i;
     for(i = 0; i < dir->maxNumberOfDirectoryEntries; ++i)

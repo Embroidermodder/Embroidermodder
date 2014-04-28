@@ -1,27 +1,27 @@
 #include "format-t09.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readT09(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b[3];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-t09.c readT09(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-t09.c readT09(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-t09.c readT09(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x0C, SEEK_SET);
+    embFile_seek(file, 0x0C, SEEK_SET);
 
-    while(fread(b, 1, 3, file) == 3)
+    while(embFile_read(b, 1, 3, file) == 3)
     {
         int stitchType = NORMAL;
         int b1 = b[0];
@@ -32,13 +32,13 @@ int readT09(EmbPattern* pattern, const char* fileName)
             embPattern_addStitchRel(pattern, 0, 0, END, 1);
             break;
         }
-        if (commandByte & 0x10) stitchType = STOP;
-        if (commandByte & 0x20) b1 = -b1;
-        if (commandByte & 0x40) b2 = -b2;
+        if(commandByte & 0x10) stitchType = STOP;
+        if(commandByte & 0x20) b1 = -b1;
+        if(commandByte & 0x40) b2 = -b2;
 
         embPattern_addStitchRel(pattern, b2 / 10.0, b1 / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

@@ -23,8 +23,11 @@ extern EMB_PUBLIC int EMB_CALL embFile_close(EmbFile* stream);
 extern EMB_PUBLIC int EMB_CALL embFile_eof(EmbFile* stream);
 extern EMB_PUBLIC int EMB_CALL embFile_getc(EmbFile* stream);
 extern EMB_PUBLIC size_t EMB_CALL embFile_read(void* ptr, size_t size, size_t nmemb, EmbFile* stream);
+extern EMB_PUBLIC size_t EMB_CALL embFile_write(const void* ptr, size_t size, size_t nmemb, EmbFile* stream);
 extern EMB_PUBLIC int EMB_CALL embFile_seek(EmbFile* stream, long offset, int origin);
 extern EMB_PUBLIC long EMB_CALL embFile_tell(EmbFile* stream);
+extern EMB_PUBLIC EmbFile* EMB_CALL embFile_tmpfile(void);
+extern EMB_PUBLIC int EMB_CALL embFile_putc(int ch, EmbFile* stream);
 
 extern EMB_PUBLIC int EMB_CALL embFile_printf(EmbFile* stream, const char* format, ...);
 

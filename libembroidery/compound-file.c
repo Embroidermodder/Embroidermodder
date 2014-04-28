@@ -30,18 +30,18 @@ static int haveExtraDIFATSectors(bcf_file* file)
     return (int)(numberOfEntriesInDifatSector(file->difat) > 0);
 }
 
-static int seekToOffset(FILE* file, const unsigned int offset)
+static int seekToOffset(EmbFile* file, const unsigned int offset)
 {
-    return fseek(file, offset, SEEK_SET);
+    return embFile_seek(file, offset, SEEK_SET);
 }
 
-static int seekToSector(bcf_file* bcfFile, FILE* file, const unsigned int sector)
+static int seekToSector(bcf_file* bcfFile, EmbFile* file, const unsigned int sector)
 {
     unsigned int offset = sector * sectorSize(bcfFile) + sectorSize(bcfFile);
     return seekToOffset(file, offset);
 }
 
-static void parseDIFATSectors(FILE* file, bcf_file* bcfFile)
+static void parseDIFATSectors(EmbFile* file, bcf_file* bcfFile)
 {
     unsigned int numberOfDifatEntriesStillToRead = bcfFile->header.numberOfFATSectors - NumberOfDifatEntriesInHeader;
     unsigned int difatSectorNumber = bcfFile->header.firstDifatSectorLocation;
@@ -53,7 +53,7 @@ static void parseDIFATSectors(FILE* file, bcf_file* bcfFile)
     }
 }
 
-int bcfFile_read(FILE* file, bcf_file* bcfFile)
+int bcfFile_read(EmbFile* file, bcf_file* bcfFile)
 {
     unsigned int i, numberOfDirectoryEntriesPerSector, directorySectorToReadFrom;
 
@@ -91,11 +91,11 @@ int bcfFile_read(FILE* file, bcf_file* bcfFile)
     return 1;
 }
 
-FILE* GetFile(bcf_file* bcfFile, FILE* file, char* fileToFind)
+EmbFile* GetFile(bcf_file* bcfFile, EmbFile* file, char* fileToFind)
 {
     int filesize, sectorSize, currentSector, sizeToWrite, currentSize, totalSectors, i;
     char* input = 0;
-    FILE* fileOut = tmpfile();
+    EmbFile* fileOut = embFile_tmpfile();
     bcf_directory_entry* pointer = bcfFile->directory->dirEntries;
     while(pointer)
     {
@@ -118,8 +118,8 @@ FILE* GetFile(bcf_file* bcfFile, FILE* file, char* fileToFind)
         {
             sizeToWrite = sectorSize;
         }
-        fread(input, 1, sizeToWrite, file);
-        fwrite(input, 1, sizeToWrite, fileOut);
+        embFile_read(input, 1, sizeToWrite, file);
+        embFile_write(input, 1, sizeToWrite, fileOut);
         currentSize += sizeToWrite;
         currentSector = bcfFile->fat->fatEntries[currentSector];
     }

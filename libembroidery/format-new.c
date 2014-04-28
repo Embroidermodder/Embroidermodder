@@ -1,7 +1,7 @@
 #include "format-new.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 static int decodeNewStitch(unsigned char value)
 {
@@ -14,12 +14,12 @@ int readNew(EmbPattern* pattern, const char* fileName)
 {
     unsigned int stitchCount;
     unsigned char data[3];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-new.c readNew(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-new.c readNew(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-new.c readNew(), cannot open %s for reading\n", fileName);
@@ -65,6 +65,8 @@ int readNew(EmbPattern* pattern, const char* fileName)
         }*/
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, flag, 1);
     }
+
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

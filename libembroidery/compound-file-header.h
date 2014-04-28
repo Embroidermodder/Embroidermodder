@@ -2,7 +2,7 @@
 #ifndef COMPOUND_FILE_HEADER_H
 #define COMPOUND_FILE_HEADER_H
 
-#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
+#include "emb-file.h"
 
 #include "api-start.h"
 #ifdef __cplusplus
@@ -31,7 +31,7 @@ typedef struct _bcf_file_header
     unsigned int   numberOfDifatSectors;
 } bcf_file_header;
 
-extern EMB_PRIVATE bcf_file_header EMB_CALL bcfFileHeader_read(FILE* file);
+extern EMB_PRIVATE bcf_file_header EMB_CALL bcfFileHeader_read(EmbFile* file);
 extern EMB_PRIVATE int EMB_CALL bcfFileHeader_isValid(bcf_file_header header);
 
 #ifdef __cplusplus

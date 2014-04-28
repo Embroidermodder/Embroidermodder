@@ -1,5 +1,6 @@
 #include "format-max.h"
 #include "format-pcd.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
@@ -16,7 +17,7 @@ static double maxDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-static void maxEncode(FILE* file, int x, int y)
+static void maxEncode(EmbFile* file, int x, int y)
 {
     if(!file) { embLog_error("format-max.c maxEncode(), file argument is null\n"); return; }
 
@@ -40,33 +41,33 @@ int readMax(EmbPattern* pattern, const char* fileName)
     double dx = 0, dy = 0;
     int flags = 0;
     int stitchCount;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-max.c readMax(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-max.c readMax(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-max.c readMax(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0xD5, SEEK_SET);
+    embFile_seek(file, 0xD5, SEEK_SET);
     stitchCount = binaryReadUInt32(file);
 
     /* READ STITCH RECORDS */
     for(i = 0; i < stitchCount; i++)
     {
         flags = NORMAL;
-        if(fread(b, 1, 8, file) != 8)
+        if(embFile_read(b, 1, 8, file) != 8)
             break;
 
         dx = maxDecode(b[0], b[1], b[2]);
         dy = maxDecode(b[4], b[5], b[6]);
         embPattern_addStitchAbs(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -81,7 +82,7 @@ int readMax(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeMax(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     EmbStitchList* pointer = 0;
     char header[] = {
         0x56,0x43,0x53,0x4D,0xFC,0x03,0x00,0x00,0x01,0x00,0x00,0x00,0x01,0x00,0x00,0x00,
@@ -112,7 +113,7 @@ int writeMax(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-max.c writeMax(), cannot open %s for writing\n", fileName);
@@ -126,7 +127,7 @@ int writeMax(EmbPattern* pattern, const char* fileName)
         maxEncode(file, roundDouble(pointer->stitch.xx * 10.0), roundDouble(pointer->stitch.yy * 10.0));
         pointer = pointer->next;
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

@@ -1,8 +1,7 @@
 #include "format-csv.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 static char* csvStitchFlagToStr(int flags)
@@ -56,7 +55,7 @@ static int csvStrToStitchFlag(const char* str)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readCsv(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int numColorChanges = 0;
     int size = 1024;
     int pos = 0;
@@ -77,7 +76,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
     buff = (char*)malloc(size);
     if(!buff) { embLog_error("format-csv.c readCsv(), unable to allocate memory for buff\n"); return 0; }
 
-    file = fopen(fileName,"r");
+    file = embFile_open(fileName,"r");
     if(!file)
     {
         embLog_error("format-csv.c readCsv(), cannot open %s for reading\n", fileName);
@@ -88,7 +87,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
         pos = 0;
         do
         {
-            c = fgetc(file);
+            c = embFile_getc(file);
             switch(c)
             {
                 case '"':
@@ -223,7 +222,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
             }
         }
         while(c != EOF);
-        fclose(file);
+        embFile_close(file);
     }
 
     /* if not enough colors defined, fill in random colors */
@@ -242,7 +241,7 @@ int readCsv(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeCsv(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     EmbStitchList* sList = 0;
     EmbThreadList* tList = 0;
     EmbRect boundingRect;
@@ -274,7 +273,7 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
         stitchCount++;
     }
 
-    file = fopen(fileName, "w");
+    file = embFile_open(fileName, "w");
     if(!file)
     {
         embLog_error("format-csv.c writeCsv(), cannot open %s for writing\n", fileName);
@@ -282,44 +281,44 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
     }
 
     /* write header */
-    fprintf(file, "\"#\",\"Embroidermodder 2 CSV Embroidery File\"\n");
-    fprintf(file, "\"#\",\"http://embroidermodder.github.io\"\n");
-    fprintf(file, "\n");
-    fprintf(file, "\"#\",\"General Notes:\"\n");
-    fprintf(file, "\"#\",\"This file can be read by Excel or LibreOffice as CSV (Comma Separated Value) or with a text editor.\"\n");
-    fprintf(file, "\"#\",\"Lines beginning with # are comments.\"\n");
-    fprintf(file, "\"#\",\"Lines beginning with > are variables: [VAR_NAME], [VAR_VALUE]\"\n");
-    fprintf(file, "\"#\",\"Lines beginning with $ are threads: [THREAD_NUMBER], [RED], [GREEN], [BLUE], [DESCRIPTION], [CATALOG_NUMBER]\"\n");
-    fprintf(file, "\"#\",\"Lines beginning with * are stitch entries: [STITCH_TYPE], [X], [Y]\"\n");
-    fprintf(file, "\n");
-    fprintf(file, "\"#\",\"Stitch Entry Notes:\"\n");
-    fprintf(file, "\"#\",\"STITCH instructs the machine to move to the position [X][Y] and then make a stitch.\"\n");
-    fprintf(file, "\"#\",\"JUMP instructs the machine to move to the position [X][Y] without making a stitch.\"\n");
-    fprintf(file, "\"#\",\"TRIM instructs the machine to cut the thread before moving to the position [X][Y] without making a stitch.\"\n");
-    fprintf(file, "\"#\",\"COLOR instructs the machine to stop temporarily so that the user can change to a different color thread before resuming.\"\n");
-    fprintf(file, "\"#\",\"END instructs the machine that the design is completed and there are no further instructions.\"\n");
-    fprintf(file, "\"#\",\"UNKNOWN encompasses instructions that may not be supported currently.\"\n");
-    fprintf(file, "\"#\",\"[X] and [Y] are absolute coordinates in millimeters (mm).\"\n");
-    fprintf(file, "\n");
+    embFile_printf(file, "\"#\",\"Embroidermodder 2 CSV Embroidery File\"\n");
+    embFile_printf(file, "\"#\",\"http://embroidermodder.github.io\"\n");
+    embFile_printf(file, "\n");
+    embFile_printf(file, "\"#\",\"General Notes:\"\n");
+    embFile_printf(file, "\"#\",\"This file can be read by Excel or LibreOffice as CSV (Comma Separated Value) or with a text editor.\"\n");
+    embFile_printf(file, "\"#\",\"Lines beginning with # are comments.\"\n");
+    embFile_printf(file, "\"#\",\"Lines beginning with > are variables: [VAR_NAME], [VAR_VALUE]\"\n");
+    embFile_printf(file, "\"#\",\"Lines beginning with $ are threads: [THREAD_NUMBER], [RED], [GREEN], [BLUE], [DESCRIPTION], [CATALOG_NUMBER]\"\n");
+    embFile_printf(file, "\"#\",\"Lines beginning with * are stitch entries: [STITCH_TYPE], [X], [Y]\"\n");
+    embFile_printf(file, "\n");
+    embFile_printf(file, "\"#\",\"Stitch Entry Notes:\"\n");
+    embFile_printf(file, "\"#\",\"STITCH instructs the machine to move to the position [X][Y] and then make a stitch.\"\n");
+    embFile_printf(file, "\"#\",\"JUMP instructs the machine to move to the position [X][Y] without making a stitch.\"\n");
+    embFile_printf(file, "\"#\",\"TRIM instructs the machine to cut the thread before moving to the position [X][Y] without making a stitch.\"\n");
+    embFile_printf(file, "\"#\",\"COLOR instructs the machine to stop temporarily so that the user can change to a different color thread before resuming.\"\n");
+    embFile_printf(file, "\"#\",\"END instructs the machine that the design is completed and there are no further instructions.\"\n");
+    embFile_printf(file, "\"#\",\"UNKNOWN encompasses instructions that may not be supported currently.\"\n");
+    embFile_printf(file, "\"#\",\"[X] and [Y] are absolute coordinates in millimeters (mm).\"\n");
+    embFile_printf(file, "\n");
 
     /* write variables */
-    fprintf(file,"\"#\",\"[VAR_NAME]\",\"[VAR_VALUE]\"\n");
-    fprintf(file, "\">\",\"STITCH_COUNT:\",\"%u\"\n",   (unsigned int)stitchCount);
-    fprintf(file, "\">\",\"THREAD_COUNT:\",\"%u\"\n",   (unsigned int)threadCount);
-    fprintf(file, "\">\",\"EXTENTS_LEFT:\",\"%f\"\n",   boundingRect.left);
-    fprintf(file, "\">\",\"EXTENTS_TOP:\",\"%f\"\n",    boundingRect.top);
-    fprintf(file, "\">\",\"EXTENTS_RIGHT:\",\"%f\"\n",  boundingRect.right);
-    fprintf(file, "\">\",\"EXTENTS_BOTTOM:\",\"%f\"\n", boundingRect.bottom);
-    fprintf(file, "\">\",\"EXTENTS_WIDTH:\",\"%f\"\n",  embRect_width(boundingRect));
-    fprintf(file, "\">\",\"EXTENTS_HEIGHT:\",\"%f\"\n", embRect_height(boundingRect));
-    fprintf(file,"\n");
+    embFile_printf(file,"\"#\",\"[VAR_NAME]\",\"[VAR_VALUE]\"\n");
+    embFile_printf(file, "\">\",\"STITCH_COUNT:\",\"%u\"\n",   (unsigned int)stitchCount);
+    embFile_printf(file, "\">\",\"THREAD_COUNT:\",\"%u\"\n",   (unsigned int)threadCount);
+    embFile_printf(file, "\">\",\"EXTENTS_LEFT:\",\"%f\"\n",   boundingRect.left);
+    embFile_printf(file, "\">\",\"EXTENTS_TOP:\",\"%f\"\n",    boundingRect.top);
+    embFile_printf(file, "\">\",\"EXTENTS_RIGHT:\",\"%f\"\n",  boundingRect.right);
+    embFile_printf(file, "\">\",\"EXTENTS_BOTTOM:\",\"%f\"\n", boundingRect.bottom);
+    embFile_printf(file, "\">\",\"EXTENTS_WIDTH:\",\"%f\"\n",  embRect_width(boundingRect));
+    embFile_printf(file, "\">\",\"EXTENTS_HEIGHT:\",\"%f\"\n", embRect_height(boundingRect));
+    embFile_printf(file,"\n");
 
     /* write colors */
-    fprintf(file, "\"#\",\"[THREAD_NUMBER]\",\"[RED]\",\"[GREEN]\",\"[BLUE]\",\"[DESCRIPTION]\",\"[CATALOG_NUMBER]\"\n");
+    embFile_printf(file, "\"#\",\"[THREAD_NUMBER]\",\"[RED]\",\"[GREEN]\",\"[BLUE]\",\"[DESCRIPTION]\",\"[CATALOG_NUMBER]\"\n");
     i = 1;
     while(tList)
     {
-        fprintf(file, "\"$\",\"%d\",\"%d\",\"%d\",\"%d\",\"%s\",\"%s\"\n", i, /* TODO: fix segfault that backtraces here when libembroidery-convert from dst to csv. */
+        embFile_printf(file, "\"$\",\"%d\",\"%d\",\"%d\",\"%d\",\"%s\",\"%s\"\n", i, /* TODO: fix segfault that backtraces here when libembroidery-convert from dst to csv. */
                 (int)tList->thread.color.r,
                 (int)tList->thread.color.g,
                 (int)tList->thread.color.b,
@@ -328,18 +327,18 @@ int writeCsv(EmbPattern* pattern, const char* fileName)
         i++;
         tList = tList->next;
     }
-    fprintf(file, "\n");
+    embFile_printf(file, "\n");
 
     /* write stitches */
-    fprintf(file, "\"#\",\"[STITCH_TYPE]\",\"[X]\",\"[Y]\"\n");
+    embFile_printf(file, "\"#\",\"[STITCH_TYPE]\",\"[X]\",\"[Y]\"\n");
     while(sList)
     {
         EmbStitch s = sList->stitch;
-        fprintf(file, "\"*\",\"%s\",\"%f\",\"%f\"\n", csvStitchFlagToStr(s.flags), s.xx, s.yy);
+        embFile_printf(file, "\"*\",\"%s\",\"%f\",\"%f\"\n", csvStitchFlagToStr(s.flags), s.xx, s.yy);
         sList = sList->next;
     }
 
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

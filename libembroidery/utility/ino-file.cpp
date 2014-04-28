@@ -70,6 +70,20 @@ long inoFile_tell(InoFile* stream)
     return 0;//TODO: ftell(stream->file);
 }
 
+InoFile* inoFile_tmpfile(void)
+{
+    Serial.println(F("inoFile_tmpfile"));
+
+    return 0; //TODO: finish inoFile_tmpfile()
+}
+
+int inoFile_putc(int ch, InoFile* stream)
+{
+    Serial.println(F("inoFile_putc"));
+
+    return 0; //TODO: finish inoFile_putc()
+}
+
 int inoFile_printf(InoFile* stream, const char* msg)
 {
     return stream->file.print(msg);

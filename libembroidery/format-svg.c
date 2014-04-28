@@ -1,10 +1,10 @@
-#include <stdio.h>
+#include "format-svg.h"
+#include "emb-file.h"
+#include "emb-logging.h"
+#include "helpers-misc.h"
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
-#include "format-svg.h"
-#include "helpers-misc.h"
-#include "emb-logging.h"
 
 EmbColor svgColorToEmbColor(char* colorString)
 {
@@ -3244,7 +3244,7 @@ void svgProcess(int c, const char* buff)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readSvg(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int size = 1024;
     int pos;
     int c = 0;
@@ -3275,13 +3275,13 @@ int readSvg(EmbPattern* pattern, const char* fileName)
     /* Pre-flip incase of multiple reads on the same pattern */
     embPattern_flipVertical(pattern);
 
-    file = fopen(fileName, "r");
+    file = embFile_open(fileName, "r");
     if(file)
     {
         pos = 0;
         do
         {
-            c = fgetc(file);
+            c = embFile_getc(file);
             switch(c)
             {
                 case '<':
@@ -3321,7 +3321,7 @@ int readSvg(EmbPattern* pattern, const char* fileName)
             }
         }
         while(c != EOF);
-        fclose(file);
+        embFile_close(file);
     }
     free(buff);
     buff = 0;
@@ -3392,7 +3392,7 @@ int readSvg(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeSvg(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     EmbRect boundingRect;
     EmbStitchList* stList;
     EmbCircleObjectList* cObjList = 0;
@@ -3417,7 +3417,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-svg.c writeSvg(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-svg.c writeSvg(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "w");
+    file = embFile_open(fileName, "w");
     if(!file)
     {
         embLog_error("format-svg.c writeSvg(), cannot open %s for writing\n", fileName);
@@ -3428,24 +3428,24 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
     embPattern_flipVertical(pattern);
 
     boundingRect = embPattern_calcBoundingBox(pattern);
-    fprintf(file, "<?xml version=\"1.0\"?>\n");
-    fprintf(file, "<!-- Embroidermodder 2 SVG Embroidery File -->\n");
-    fprintf(file, "<!-- http://embroidermodder.github.io -->\n");
-    fprintf(file, "<svg ");
+    embFile_printf(file, "<?xml version=\"1.0\"?>\n");
+    embFile_printf(file, "<!-- Embroidermodder 2 SVG Embroidery File -->\n");
+    embFile_printf(file, "<!-- http://embroidermodder.github.io -->\n");
+    embFile_printf(file, "<svg ");
 
     /* TODO: See the SVG Tiny Version 1.2 Specification Section 7.14.
     *       Until all of the formats and API is stable, the width, height and viewBox attributes need to be left unspecified.
     *       If the attribute values are incorrect, some applications wont open it at all.
-    fprintf(file, "viewBox=\"%f %f %f %f\" ",
+    embFile_printf(file, "viewBox=\"%f %f %f %f\" ",
             boundingRect.left,
             boundingRect.top,
             embRect_width(boundingRect),
             embRect_height(boundingRect)); */
 
-    fprintf(file, "xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\">");
+    embFile_printf(file, "xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\">");
 
     /*TODO: Low Priority Optimization:
-    *      Using %g in fprintf just doesn't work good enough at trimming trailing zeroes.
+    *      Using %g in embFile_printf just doesn't work good enough at trimming trailing zeroes.
     *      It's precision refers to significant digits, not decimal places (which is what we want).
     *      We need to roll our own function for trimming trailing zeroes to keep
     *      the precision as high as possible if needed, but help reduce file size also. */
@@ -3462,7 +3462,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         circle = cObjList->circleObj.circle;
         color = cObjList->circleObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<circle stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" r=\"%f\" />",
+        embFile_printf(file, "\n<circle stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" r=\"%f\" />",
                         color.r,
                         color.g,
                         color.b,
@@ -3479,7 +3479,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         ellipse = eObjList->ellipseObj.ellipse;
         color = eObjList->ellipseObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<ellipse stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" />",
+        embFile_printf(file, "\n<ellipse stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" cx=\"%f\" cy=\"%f\" rx=\"%f\" ry=\"%f\" />",
                         color.r,
                         color.g,
                         color.b,
@@ -3497,7 +3497,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         line = liObjList->lineObj.line;
         color = liObjList->lineObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<line stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+        embFile_printf(file, "\n<line stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                         color.r,
                         color.g,
                         color.b,
@@ -3518,7 +3518,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         * Section 9.5 The 'line' element
         * Section C.6 'path' element implementation notes */
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<line stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+        embFile_printf(file, "\n<line stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                         color.r,
                         color.g,
                         color.b,
@@ -3538,7 +3538,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         {
             color = pogObjList->polygonObj->color;
             /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-            fprintf(file, "\n<polygon stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
+            embFile_printf(file, "\n<polygon stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
                     color.r,
                     color.g,
                     color.b,
@@ -3547,10 +3547,10 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
             pogPointList = pogPointList->next;
             while(pogPointList)
             {
-                fprintf(file, " %s,%s", emb_optOut(pogPointList->point.xx, tmpX), emb_optOut(pogPointList->point.yy, tmpY));
+                embFile_printf(file, " %s,%s", emb_optOut(pogPointList->point.xx, tmpX), emb_optOut(pogPointList->point.yy, tmpY));
                 pogPointList = pogPointList->next;
             }
-            fprintf(file, "\"/>");
+            embFile_printf(file, "\"/>");
         }
         pogObjList = pogObjList->next;
     }
@@ -3564,7 +3564,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         {
             color = polObjList->polylineObj->color;
             /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-            fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
+            embFile_printf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
                     color.r,
                     color.g,
                     color.b,
@@ -3573,10 +3573,10 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
             polPointList = polPointList->next;
             while(polPointList)
             {
-                fprintf(file, " %s,%s", emb_optOut(polPointList->point.xx, tmpX), emb_optOut(polPointList->point.yy, tmpY));
+                embFile_printf(file, " %s,%s", emb_optOut(polPointList->point.xx, tmpX), emb_optOut(polPointList->point.yy, tmpY));
                 polPointList = polPointList->next;
             }
-            fprintf(file, "\"/>");
+            embFile_printf(file, "\"/>");
         }
         polObjList = polObjList->next;
     }
@@ -3588,7 +3588,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
         rect = rObjList->rectObj.rect;
         color = rObjList->rectObj.color;
         /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-        fprintf(file, "\n<rect stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" />",
+        embFile_printf(file, "\n<rect stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" x=\"%f\" y=\"%f\" width=\"%f\" height=\"%f\" />",
                         color.r,
                         color.g,
                         color.b,
@@ -3611,7 +3611,7 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
                     isNormal = 1;
                     color = embThreadList_getAt(pattern->threadList, stList->stitch.color).color;
                     /* TODO: use proper thread width for stoke-width rather than just 0.2 */
-                    fprintf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
+                    embFile_printf(file, "\n<polyline stroke-linejoin=\"round\" stroke-linecap=\"round\" stroke-width=\"0.2\" stroke=\"#%02x%02x%02x\" fill=\"none\" points=\"%s,%s",
                                 color.r,
                                 color.g,
                                 color.b,
@@ -3620,19 +3620,19 @@ int writeSvg(EmbPattern* pattern, const char* fileName)
             }
             else if(stList->stitch.flags == NORMAL && isNormal)
             {
-                fprintf(file, " %s,%s", emb_optOut(stList->stitch.xx, tmpX), emb_optOut(stList->stitch.yy, tmpY));
+                embFile_printf(file, " %s,%s", emb_optOut(stList->stitch.xx, tmpX), emb_optOut(stList->stitch.yy, tmpY));
             }
             else if(stList->stitch.flags != NORMAL && isNormal)
             {
                 isNormal = 0;
-                fprintf(file, "\"/>");
+                embFile_printf(file, "\"/>");
             }
 
             stList = stList->next;
         }
     }
-    fprintf(file, "\n</svg>\n");
-    fclose(file);
+    embFile_printf(file, "\n</svg>\n");
+    embFile_close(file);
 
     /* Reset the pattern so future writes(regardless of format) are not flipped */
     embPattern_flipVertical(pattern);

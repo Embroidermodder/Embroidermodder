@@ -1,7 +1,7 @@
 #include "format-u00.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
@@ -11,12 +11,12 @@ int readU00(EmbPattern* pattern, const char* fileName)
     char dx = 0, dy = 0;
     int flags = NORMAL;
     char endOfStream = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-u00.c readU00(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-u00.c readU00(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-u00.c readU00(), cannot open %s for reading\n", fileName);
@@ -24,7 +24,7 @@ int readU00(EmbPattern* pattern, const char* fileName)
     }
 
     /* 16 3byte RGB's start @ 0x08 followed by 14 bytes between 0 and 15 with index of color for each color change */
-    fseek(file, 0x08, SEEK_SET);
+    embFile_seek(file, 0x08, SEEK_SET);
 
     for(i = 0; i < 16; i++)
     {
@@ -35,7 +35,7 @@ int readU00(EmbPattern* pattern, const char* fileName)
         embPattern_addThread(pattern, t);
     }
 
-    fseek(file, 0x100, SEEK_SET);
+    embFile_seek(file, 0x100, SEEK_SET);
     for(i = 0; !endOfStream; i++)
     {
         char negativeX , negativeY;
@@ -68,7 +68,7 @@ int readU00(EmbPattern* pattern, const char* fileName)
         if(negativeY) dy = (char) -dy;
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

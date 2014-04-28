@@ -1,8 +1,8 @@
 #include "format-phb.h"
 #include "format-pec.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
@@ -10,20 +10,20 @@ int readPhb(EmbPattern* pattern, const char* fileName)
 {
     unsigned int fileOffset;
     short colorCount;
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i;
 
     if(!pattern) { embLog_error("format-phb.c readPhb(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-phb.c readPhb(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-phb.c readPhb(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x71, SEEK_SET);
+    embFile_seek(file, 0x71, SEEK_SET);
     colorCount = binaryReadInt16(file);
 
     for(i = 0; i < colorCount; i++)
@@ -33,17 +33,17 @@ int readPhb(EmbPattern* pattern, const char* fileName)
     }
 
     /* TODO: check that file begins with #PHB */
-    fseek(file, 0x54, SEEK_SET);
+    embFile_seek(file, 0x54, SEEK_SET);
     fileOffset = 0x52;
     fileOffset += binaryReadUInt32(file);
 
-    fseek(file, fileOffset, SEEK_SET);
+    embFile_seek(file, fileOffset, SEEK_SET);
     fileOffset += binaryReadUInt32(file) + 2;
 
-    fseek(file, fileOffset, SEEK_SET);
+    embFile_seek(file, fileOffset, SEEK_SET);
     fileOffset += binaryReadUInt32(file);
 
-    fseek(file, fileOffset + 14, SEEK_SET); /* 28 */
+    embFile_seek(file, fileOffset + 14, SEEK_SET); /* 28 */
 
     colorCount = (short)binaryReadByte(file);
     for(i = 0; i< colorCount; i++)
@@ -61,7 +61,7 @@ int readPhb(EmbPattern* pattern, const char* fileName)
     binaryReadInt16(file);
     binaryReadInt16(file);
     readPecStitches(pattern, file);
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

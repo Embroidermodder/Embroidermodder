@@ -1,12 +1,12 @@
 #include "format-ofm.h"
 #include "compound-file.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-static char* ofmReadLibrary(FILE* file)
+static char* ofmReadLibrary(EmbFile* file)
 {
     int stringLength = 0;
     char* libraryName = 0;
@@ -23,7 +23,7 @@ static char* ofmReadLibrary(FILE* file)
     return libraryName;
 }
 
-static int ofmReadClass(FILE* file)
+static int ofmReadClass(EmbFile* file)
 {
     int len;
     char* s = 0;
@@ -44,7 +44,7 @@ static int ofmReadClass(FILE* file)
     return 0;
 }
 
-static void ofmReadBlockHeader(FILE* file)
+static void ofmReadBlockHeader(EmbFile* file)
 {
     int val1, val2, val3, val4, val5, val6, val7, val8, val9, val10;
     unsigned char len;
@@ -76,7 +76,7 @@ static void ofmReadBlockHeader(FILE* file)
     short1 = binaryReadInt16(file); /*  0 */
 }
 
-static void ofmReadColorChange(FILE* file, EmbPattern* pattern)
+static void ofmReadColorChange(EmbFile* file, EmbPattern* pattern)
 {
     if(!file) { embLog_error("format-ofm.c ofmReadColorChange(), file argument is null\n"); return; }
     if(!pattern) { embLog_error("format-ofm.c ofmReadColorChange(), pattern argument is null\n"); return; }
@@ -85,7 +85,7 @@ static void ofmReadColorChange(FILE* file, EmbPattern* pattern)
     embPattern_addStitchRel(pattern, 0.0, 0.0, STOP, 1);
 }
 
-static void ofmReadThreads(FILE* file, EmbPattern* p)
+static void ofmReadThreads(EmbFile* file, EmbPattern* p)
 {
     int i, numberOfColors, stringLen, numberOfLibraries;
     char* primaryLibraryName = 0;
@@ -151,7 +151,7 @@ static double ofmDecode(unsigned char b1, unsigned char b2)
     return val;
 }
 
-static void ofmReadExpanded(FILE* file, EmbPattern* p)
+static void ofmReadExpanded(EmbFile* file, EmbPattern* p)
 {
     int i, numberOfStitches = 0;
 
@@ -183,14 +183,14 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     int unknownCount = 0;
     int key = 0, classNameLength;
     char* s = 0;
-    FILE* fileCompound = 0;
-    FILE* file = 0;
+    EmbFile* fileCompound = 0;
+    EmbFile* file = 0;
     bcf_file* bcfFile = 0;
 
     if(!pattern) { embLog_error("format-ofm.c readOfm(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-ofm.c readOfm(), fileName argument is null\n"); return 0; }
 
-    fileCompound = fopen(fileName, "rb");
+    fileCompound = embFile_open(fileName, "rb");
     if(!fileCompound)
     {
         embLog_error("format-ofm.c readOfm(), cannot open %s for reading\n", fileName);
@@ -203,9 +203,9 @@ int readOfm(EmbPattern* pattern, const char* fileName)
     file = GetFile(bcfFile, fileCompound, "EdsIV Object");
     bcf_file_free(bcfFile);
     bcfFile = 0;
-    fseek(file, 0x1C6, SEEK_SET);
+    embFile_seek(file, 0x1C6, SEEK_SET);
     ofmReadThreads(file, pattern);
-    fseek(file, 0x110, SEEK_CUR);
+    embFile_seek(file, 0x110, SEEK_CUR);
     binaryReadInt32(file);
     classNameLength = binaryReadInt16(file);
     s = (char*)malloc(sizeof(char) * classNameLength);
@@ -235,6 +235,9 @@ int readOfm(EmbPattern* pattern, const char* fileName)
             ofmReadClass(file);
         }
     }
+
+    embFile_close(fileCompound);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

@@ -1,13 +1,13 @@
 #include "format-inb.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readInb(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     unsigned char fileDescription[8];
     unsigned char nullVal;
     int stitchCount;
@@ -32,7 +32,7 @@ int readInb(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-inb.c readInb(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-inb.c readInb(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-inb.c readInb(), cannot open %s for reading\n", fileName);
@@ -40,8 +40,8 @@ int readInb(EmbPattern* pattern, const char* fileName)
     }
 
     embPattern_loadExternalColorFile(pattern, fileName);
-    fseek(file, 0, SEEK_END);
-    fileLength = ftell(file);
+    embFile_seek(file, 0, SEEK_END);
+    fileLength = embFile_tell(file);
     binaryReadBytes(file, fileDescription, 8);
     nullVal = binaryReadByte(file);
     binaryReadInt16(file);
@@ -59,7 +59,7 @@ int readInb(EmbPattern* pattern, const char* fileName)
     right = binaryReadInt16(file);
     top = binaryReadInt16(file);
     bottom = binaryReadInt16(file);
-    fseek(file, 0x2000, SEEK_SET);
+    embFile_seek(file, 0x2000, SEEK_SET);
     /* Calculate stitch count since header has been seen to be blank */
     stitchCount = (int)((fileLength - 0x2000) / 3);
     for(i = 0; i < stitchCount; i++)
@@ -79,7 +79,7 @@ int readInb(EmbPattern* pattern, const char* fileName)
             stitch = TRIM;
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, stitch, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

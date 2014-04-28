@@ -1,18 +1,18 @@
 #include "format-gt.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readGt(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-gt.c readGt(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-gt.c readGt(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-gt.c readGt(), cannot open %s for reading\n", fileName);
@@ -20,7 +20,7 @@ int readGt(EmbPattern* pattern, const char* fileName)
     }
 
     embPattern_loadExternalColorFile(pattern, fileName);
-    fseek(file, 0x200, SEEK_SET); /* TODO: review for combining code. This line appears to be the only difference from the FXY format. */
+    embFile_seek(file, 0x200, SEEK_SET); /* TODO: review for combining code. This line appears to be the only difference from the FXY format. */
 
     while(1)
     {
@@ -44,6 +44,12 @@ int readGt(EmbPattern* pattern, const char* fileName)
             b2 = -b2;
         embPattern_addStitchRel(pattern, b2 / 10.0, b1 / 10.0, stitchType, 1);
     }
+    embFile_close(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 

@@ -1,10 +1,10 @@
 #include "format-sew.h"
 #include "format-jef.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include <math.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 static char sewDecode(unsigned char inputByte)
 {
@@ -15,7 +15,7 @@ static char sewDecode(unsigned char inputByte)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readSew(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i;
     int fileLength;
     char dx = 0, dy = 0;
@@ -26,16 +26,16 @@ int readSew(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-sew.c readSew(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-sew.c readSew(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-sew.c readSew(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x00, SEEK_END);
-    fileLength = ftell(file);
-    fseek(file, 0x00, SEEK_SET);
+    embFile_seek(file, 0x00, SEEK_END);
+    fileLength = embFile_tell(file);
+    embFile_seek(file, 0x00, SEEK_SET);
     numberOfColors = binaryReadByte(file);
     numberOfColors += (binaryReadByte(file) << 8);
 
@@ -43,9 +43,9 @@ int readSew(EmbPattern* pattern, const char* fileName)
     {
         embPattern_addThread(pattern, jefThreads[binaryReadInt16(file)]);
     }
-    fseek(file, 0x1D78, SEEK_SET);
+    embFile_seek(file, 0x1D78, SEEK_SET);
 
-    for(i = 0; ftell(file) < fileLength; i++)
+    for(i = 0; embFile_tell(file) < fileLength; i++)
     {
         unsigned char b0 = binaryReadByte(file);
         unsigned char b1 = binaryReadByte(file);
@@ -86,8 +86,8 @@ int readSew(EmbPattern* pattern, const char* fileName)
 
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    printf("current position: %ld\n", ftell(file));
-    fclose(file);
+    printf("current position: %ld\n", embFile_tell(file));
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

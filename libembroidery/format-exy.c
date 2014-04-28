@@ -1,6 +1,6 @@
 #include "format-exy.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 
 static int exyDecodeFlags(unsigned char b2)
 {
@@ -21,12 +21,12 @@ static int exyDecodeFlags(unsigned char b2)
 int readExy(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b[3];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-exy.c readExy(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-exy.c readExy(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-exy.c readExy(), cannot open %s for reading\n", fileName);
@@ -35,9 +35,9 @@ int readExy(EmbPattern* pattern, const char* fileName)
 
     embPattern_loadExternalColorFile(pattern, fileName);
 
-    fseek(file, 0x100, SEEK_SET);
+    embFile_seek(file, 0x100, SEEK_SET);
 
-    while(fread(b, 1, 3, file) == 3)
+    while(embFile_read(b, 1, 3, file) == 3)
     {
         int flags;
         int x = 0;
@@ -90,7 +90,12 @@ int readExy(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
+
+    /* Check for an END stitch and add one if it is not present */
+    if(pattern->lastStitch->stitch.flags != END)
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+
     return 1;
 }
 

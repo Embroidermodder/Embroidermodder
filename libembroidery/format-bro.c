@@ -1,5 +1,6 @@
 #include "format-bro.h"
 #include "helpers-binary.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
@@ -10,12 +11,12 @@ int readBro(EmbPattern* pattern, const char* fileName)
     short unknown1, unknown2, unknown3, unknown4, moreBytesToEnd;
     char name[8];
     int stitchType;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-bro.c readBro(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-bro.c readBro(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName,"rb");
+    file = embFile_open(fileName,"rb");
     if(!file)
     {
         embLog_error("format-bro.c readBro(), cannot open %s for reading\n", fileName);
@@ -27,13 +28,13 @@ int readBro(EmbPattern* pattern, const char* fileName)
     x55 = binaryReadByte(file);
     unknown1 = binaryReadInt16(file);
 
-    fread(name, 1, 8, file);
+    embFile_read(name, 1, 8, file);
     unknown2 = binaryReadInt16(file);
     unknown3 = binaryReadInt16(file);
     unknown4 = binaryReadInt16(file);
     moreBytesToEnd = binaryReadInt16(file);
 
-    fseek(file, 0x100, SEEK_SET);
+    embFile_seek(file, 0x100, SEEK_SET);
 
     while(1)
     {
@@ -62,7 +63,7 @@ int readBro(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, b1 / 10.0, b2 / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

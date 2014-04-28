@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 
-bcf_file_header bcfFileHeader_read(FILE *file)
+bcf_file_header bcfFileHeader_read(EmbFile* file)
 {
     bcf_file_header header;
     binaryReadBytes(file, header.signature, 8);

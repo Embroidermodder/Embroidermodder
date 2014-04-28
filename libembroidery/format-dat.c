@@ -1,4 +1,5 @@
 #include "format-dat.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 
@@ -7,12 +8,12 @@
 int readDat(EmbPattern* pattern, const char* fileName)
 {
     int fileLength, stitchesRemaining;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-dat.c readDat(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-dat.c readDat(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-dat.c readDat(), cannot open %s for reading\n", fileName);
@@ -20,13 +21,13 @@ int readDat(EmbPattern* pattern, const char* fileName)
     }
 
     embPattern_loadExternalColorFile(pattern, fileName);
-    fseek(file, 0x00, SEEK_END);
-    fileLength = ftell(file);
-    fseek(file, 0x02, SEEK_SET);
+    embFile_seek(file, 0x00, SEEK_END);
+    fileLength = embFile_tell(file);
+    embFile_seek(file, 0x02, SEEK_SET);
     stitchesRemaining = binaryReadUInt16(file);
-    fseek(file, 0x100, SEEK_SET);
+    embFile_seek(file, 0x100, SEEK_SET);
 
-    while(ftell(file)< fileLength)
+    while(embFile_tell(file) < fileLength)
     {
         int b1 = (int)binaryReadUInt8(file);
         int b2 = (int)binaryReadUInt8(file);
@@ -55,7 +56,7 @@ int readDat(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, b1 / 10.0, b2 / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

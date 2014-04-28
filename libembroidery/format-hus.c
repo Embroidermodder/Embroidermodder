@@ -1,9 +1,9 @@
 #include "format-hus.h"
 #include "emb-compress.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -105,21 +105,21 @@ int readHus(EmbPattern* pattern, const char* fileName)
     unsigned char* yDecompressed = 0;
     unsigned char* stringVal = 0;
     int unknown, i = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-hus.c readHus(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-hus.c readHus(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-hus.c readHus(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x00, SEEK_END);
-    fileLength = ftell(file);
-    fseek(file, 0x00, SEEK_SET);
+    embFile_seek(file, 0x00, SEEK_END);
+    fileLength = embFile_tell(file);
+    embFile_seek(file, 0x00, SEEK_SET);
 
     magicCode = binaryReadInt32(file);
     numberOfStitches = binaryReadInt32(file);
@@ -176,7 +176,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
     if(attributeData) { free(attributeData); attributeData = 0; }
     if(attributeDataDecompressed) { free(attributeDataDecompressed); attributeDataDecompressed = 0; }
 
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -203,7 +203,7 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     int flags = 0;
     int i = 0;
     unsigned char* attributeCompressed = 0, *xCompressed = 0, *yCompressed = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-hus.c writeHus(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-hus.c writeHus(), fileName argument is null\n"); return 0; }
@@ -221,8 +221,8 @@ int writeHus(EmbPattern* pattern, const char* fileName)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
         stitchCount++;
     }
-    
-    file = fopen(fileName, "wb");
+
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-hus.c writeHus(), cannot open %s for writing\n", fileName);
@@ -293,7 +293,7 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     free(attributeValues); attributeValues = 0;
     free(attributeCompressed); attributeCompressed = 0;
 
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

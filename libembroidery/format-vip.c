@@ -2,8 +2,8 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 #include "emb-compress.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 static int vipDecodeByte(unsigned char b)
@@ -68,21 +68,21 @@ int readVip(EmbPattern* pattern, const char* fileName)
     unsigned char *attributeData = 0, *decodedColors = 0, *attributeDataDecompressed = 0;
     unsigned char *xData = 0, *xDecompressed = 0, *yData = 0, *yDecompressed = 0;
     VipHeader header;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-vip.c readVip(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vip.c readVip(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
-    if(file == 0)
+    file = embFile_open(fileName, "rb");
+    if(!file)
     {
         embLog_error("format-vip.c readVip(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x0, SEEK_END);
-    fileLength = ftell(file);
-    fseek(file, 0x00, SEEK_SET);
+    embFile_seek(file, 0x0, SEEK_END);
+    fileLength = embFile_tell(file);
+    embFile_seek(file, 0x00, SEEK_SET);
     header.magicCode = binaryReadInt32(file);
     header.numberOfStitches = binaryReadInt32(file);
     header.numberOfColors = binaryReadInt32(file);
@@ -124,19 +124,19 @@ int readVip(EmbPattern* pattern, const char* fileName)
         /* printf("%d\n", decodedColors[startIndex + 3]); */
         embPattern_addThread(pattern, thread);
     }
-    fseek(file, header.attributeOffset, SEEK_SET);
+    embFile_seek(file, header.attributeOffset, SEEK_SET);
     attributeData = (unsigned char*)malloc(header.xOffset - header.attributeOffset);
     if(!attributeData) { embLog_error("format-vip.c readVip(), cannot allocate memory for attributeData\n"); return 0; }
     binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset);
     attributeDataDecompressed = vipDecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
 
-    fseek(file, header.xOffset, SEEK_SET);
+    embFile_seek(file, header.xOffset, SEEK_SET);
     xData = (unsigned char*)malloc(header.yOffset - header.xOffset);
     if(!xData) { embLog_error("format-vip.c readVip(), cannot allocate memory for xData\n"); return 0; }
     binaryReadBytes(file, xData, header.yOffset - header.xOffset);
     xDecompressed = vipDecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
 
-    fseek(file, header.yOffset, SEEK_SET);
+    embFile_seek(file, header.yOffset, SEEK_SET);
     yData = (unsigned char*)malloc(fileLength - header.yOffset);
     if(!yData) { embLog_error("format-vip.c readVip(), cannot allocate memory for yData\n"); return 0; }
     binaryReadBytes(file, yData, fileLength - header.yOffset);
@@ -151,7 +151,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
     }
     embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    fclose(file);
+    embFile_close(file);
 
     free(attributeData);             attributeData = 0;
     free(xData);                     xData = 0;
@@ -218,7 +218,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     unsigned char* attributeCompressed = 0, *xCompressed = 0, *yCompressed = 0, *decodedColors = 0, *encodedColors = 0;
     unsigned char prevByte = 0;
     EmbThreadList* colorPointer = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-vip.c writeVip(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vip.c writeVip(), fileName argument is null\n"); return 0; }
@@ -237,7 +237,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
         stitchCount++;
     }
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(file == 0)
     {
         embLog_error("format-vip.c writeVip(), cannot open %s for writing\n", fileName);
@@ -343,7 +343,7 @@ int writeVip(EmbPattern* pattern, const char* fileName)
     if(decodedColors) { free(decodedColors); decodedColors = 0; }
     if(encodedColors) { free(encodedColors); encodedColors = 0; }
 
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

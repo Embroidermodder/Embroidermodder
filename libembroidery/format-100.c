@@ -1,12 +1,12 @@
 #include "format-100.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int read100(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int x,y;
     int stitchType;
     unsigned char b[4];
@@ -14,14 +14,14 @@ int read100(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-100.c read100(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-100.c read100(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName,"rb");
+    file = embFile_open(fileName,"rb");
     if(!file)
     {
         embLog_error("format-100.c read100(), cannot open %s for reading\n", fileName);
         return 0;
     }
     embPattern_loadExternalColorFile(pattern, fileName);
-    while(fread(b, 1, 4, file) == 4)
+    while(embFile_read(b, 1, 4, file) == 4)
     {
         stitchType = NORMAL;
         x = (b[2] > 0x80) ? -(b[2] - 0x80) : b[2];
@@ -31,7 +31,7 @@ int read100(EmbPattern* pattern, const char* fileName)
         if(b[0] == 0x1F) stitchType = END;
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

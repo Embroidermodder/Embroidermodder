@@ -1,6 +1,6 @@
 #include "format-u01.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 
 /* TODO: AFAIK this is a duplicate of U00. Review for differences and merge files and handle accordingly. */
 
@@ -11,15 +11,17 @@ int readU01(EmbPattern* pattern, const char* fileName)
     int fileLength, negativeX = 0, negativeY = 0, flags = NORMAL;
     char dx, dy;
     unsigned char data[3];
-    FILE* file = fopen(fileName, "rb");
+    EmbFile* file = 0;
+
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         return 0;
     }
-    fseek(file, 0, SEEK_END);
-    fileLength = ftell(file);
-    fseek(file, 0x100, SEEK_SET);
-    while(fread(data, 1, 3, file) == 3)
+    embFile_seek(file, 0, SEEK_END);
+    fileLength = embFile_tell(file);
+    embFile_seek(file, 0x100, SEEK_SET);
+    while(embFile_read(data, 1, 3, file) == 3)
     {
         if(data[0] == 0xF8 || data[0] == 0x87 || data[0] == 0x91)
         {
@@ -46,7 +48,7 @@ int readU01(EmbPattern* pattern, const char* fileName)
         if(negativeY) dy = (char) -dy;
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

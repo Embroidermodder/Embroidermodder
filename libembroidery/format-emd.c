@@ -1,4 +1,5 @@
 #include "format-emd.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 
@@ -18,12 +19,12 @@ int readEmd(EmbPattern* pattern, const char* fileName)
     unsigned char jemd0[6];
     int width, height, colors;
     int i;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-emd.c readEmd(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-emd.c readEmd(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-emd.c readEmd(), cannot open %s for reading\n", fileName);
@@ -37,7 +38,7 @@ int readEmd(EmbPattern* pattern, const char* fileName)
     height = binaryReadInt16(file);
     colors = binaryReadInt16(file);
 
-    fseek(file, 0x30, SEEK_SET);
+    embFile_seek(file, 0x30, SEEK_SET);
 
     for(i = 0; !endOfStream; i++)
     {
@@ -72,7 +73,7 @@ int readEmd(EmbPattern* pattern, const char* fileName)
             dy = emdDecode(b1);
             embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

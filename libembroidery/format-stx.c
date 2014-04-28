@@ -2,6 +2,7 @@
 #include "helpers-binary.h"
 #include "helpers-misc.h"
 #include "helpers-unused.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +25,7 @@ typedef struct StxThread_
     EmbColor StxColor;
 } StxThread;
 
-static int stxReadThread(StxThread* thread, FILE* file)
+static int stxReadThread(StxThread* thread, EmbFile* file)
 {
     /* TODO: pointer safety */
     int j, colorNameLength, sectionNameLength;
@@ -105,12 +106,12 @@ int readStx(EmbPattern* pattern, const char* fileName)
 
     int vala1, vala2, vala3, vala4, vala5, vala6;
     int bottom,top;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-stx.c readStx(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-stx.c readStx(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-stx.c readStx(), cannot open %s for reading\n", fileName);
@@ -222,7 +223,7 @@ int readStx(EmbPattern* pattern, const char* fileName)
             i++;
         }
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

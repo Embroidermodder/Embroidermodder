@@ -1,5 +1,6 @@
 #include "format-pes.h"
 #include "format-pec.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include <stdlib.h>
@@ -37,41 +38,43 @@ static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
 int readPes(EmbPattern* pattern, const char* fileName)
 {
     int pecstart, numColors, x;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-pes.c readPes(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-pes.c readPes(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-pes.c readPes(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 8, SEEK_SET);
+    embFile_seek(file, 8, SEEK_SET);
     pecstart = binaryReadInt32(file);
 
-    fseek(file, pecstart + 48, SEEK_SET);
-    numColors = fgetc(file) + 1;
+    embFile_seek(file, pecstart + 48, SEEK_SET);
+    numColors = embFile_getc(file) + 1;
     for(x = 0; x < numColors; x++)
     {
-        embPattern_addThread(pattern, pecThreads[(unsigned char) fgetc(file)]);
+        embPattern_addThread(pattern, pecThreads[(unsigned char) embFile_getc(file)]);
     }
 
-    fseek(file, pecstart + 532, SEEK_SET);
+    embFile_seek(file, pecstart + 532, SEEK_SET);
     readPecStitches(pattern, file);
+
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     embPattern_flipVertical(pattern);
-    fclose(file);
+
     return 1;
 }
 
-static void pesWriteSewSegSection(EmbPattern* pattern, FILE* file)
+static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
 {
     /* TODO: pointer safety */
     EmbStitchList* pointer = 0;
@@ -180,7 +183,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, FILE* file)
     }
 }
 
-static void pesWriteEmbOneSection(EmbPattern* pattern, FILE* file)
+static void pesWriteEmbOneSection(EmbPattern* pattern, EmbFile* file)
 {
     /* TODO: pointer safety */
     int i;
@@ -227,12 +230,12 @@ static void pesWriteEmbOneSection(EmbPattern* pattern, FILE* file)
 int writePes(EmbPattern* pattern, const char* fileName)
 {
     int pecLocation;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-pes.c writePes(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-pes.c writePes(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-pes.c writePes(), cannot open %s for writing\n", fileName);
@@ -266,14 +269,14 @@ int writePes(EmbPattern* pattern, const char* fileName)
     pesWriteEmbOneSection(pattern, file);
     pesWriteSewSegSection(pattern, file);
 
-    pecLocation = ftell(file);
-    fseek(file, 0x08, SEEK_SET);
+    pecLocation = embFile_tell(file);
+    embFile_seek(file, 0x08, SEEK_SET);
     binaryWriteByte(file, (unsigned char)(pecLocation & 0xFF));
     binaryWriteByte(file, (unsigned char)(pecLocation >> 8) & 0xFF);
     binaryWriteByte(file, (unsigned char)(pecLocation >> 16) & 0xFF);
-    fseek(file, 0x00, SEEK_END);
+    embFile_seek(file, 0x00, SEEK_END);
     writePecStitches(pattern, file, fileName);
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

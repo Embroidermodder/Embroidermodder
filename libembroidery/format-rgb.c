@@ -1,7 +1,7 @@
 #include "format-rgb.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
@@ -9,25 +9,25 @@
 int readRgb(EmbPattern* pattern, const char* fileName)
 {
     int i, numberOfColors;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-rgb.c readRgb(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-rgb.c readRgb(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         /* NOTE: The .rgb format is an optional color file. Do not log an error if the file does not exist */
         return 0;
     }
-    fseek(file, 0x00, SEEK_END);
-    numberOfColors = ftell(file) / 4;
+    embFile_seek(file, 0x00, SEEK_END);
+    numberOfColors = embFile_tell(file) / 4;
 
     embThreadList_free(pattern->threadList);
     pattern->threadList = 0;
     pattern->lastThread = 0;
 
-    fseek(file, 0x00, SEEK_SET);
+    embFile_seek(file, 0x00, SEEK_SET);
     for(i = 0; i < numberOfColors; i++)
     {
         EmbThread t;
@@ -39,7 +39,7 @@ int readRgb(EmbPattern* pattern, const char* fileName)
         binaryReadByte(file);
         embPattern_addThread(pattern, t);
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 
@@ -48,12 +48,12 @@ int readRgb(EmbPattern* pattern, const char* fileName)
 int writeRgb(EmbPattern* pattern, const char* fileName)
 {
     EmbThreadList* colors = pattern->threadList;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-rgb.c writeRgb(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-rgb.c writeRgb(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-rgb.c writeRgb(), cannot open %s for writing\n", fileName);
@@ -69,7 +69,7 @@ int writeRgb(EmbPattern* pattern, const char* fileName)
         binaryWriteByte(file, 0);
         colors = colors->next;
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

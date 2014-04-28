@@ -63,6 +63,15 @@ size_t embFile_read(void* ptr, size_t size, size_t nmemb, EmbFile* stream)
 #endif /* ARDUINO */
 }
 
+size_t embFile_write(const void* ptr, size_t size, size_t nmemb, EmbFile* stream)
+{
+#ifdef ARDUINO
+    return 0; /* ARDUINO TODO: Implement inoFile_write. */
+#else /* ARDUINO */
+    return fwrite(ptr, size, nmemb, stream->file);
+#endif /* ARDUINO */
+}
+
 int embFile_seek(EmbFile* stream, long offset, int origin)
 {
 #ifdef ARDUINO
@@ -78,6 +87,37 @@ long embFile_tell(EmbFile* stream)
     return inoFile_tell(stream);
 #else /* ARDUINO */
     return ftell(stream->file);
+#endif /* ARDUINO */
+}
+
+EmbFile* embFile_tmpfile(void)
+{
+#ifdef ARDUINO
+    return inoFile_tmpfile();
+#else
+    EmbFile* eFile = 0;
+    FILE* tFile = tmpfile();
+    if(!tFile)
+        return 0;
+
+    eFile = (EmbFile*)malloc(sizeof(EmbFile));
+    if(!eFile)
+    {
+        fclose(tFile);
+        return 0;
+    }
+
+    eFile->file = tFile;
+    return eFile;
+#endif
+}
+
+int embFile_putc(int ch, EmbFile* stream)
+{
+#ifdef ARDUINO
+    return inoFile_putc(ch, stream);
+#else /* ARDUINO */
+    return fputc(ch, stream->file);
 #endif /* ARDUINO */
 }
 

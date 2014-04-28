@@ -2,7 +2,7 @@
 #ifndef FORMAT_PEC_H
 #define FORMAT_PEC_H
 
-#include <stdio.h>
+#include "emb-file.h"
 #include "emb-pattern.h"
 
 #include "api-start.h"
@@ -12,8 +12,8 @@ extern "C" {
 
 extern EMB_PRIVATE int EMB_CALL readPec(EmbPattern* pattern, const char* fileName);
 extern EMB_PRIVATE int EMB_CALL writePec(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE void EMB_CALL readPecStitches(EmbPattern* pattern, FILE* file);
-extern EMB_PRIVATE void EMB_CALL writePecStitches(EmbPattern* pattern, FILE* file, const char* filename);
+extern EMB_PRIVATE void EMB_CALL readPecStitches(EmbPattern* pattern, EmbFile* file);
+extern EMB_PRIVATE void EMB_CALL writePecStitches(EmbPattern* pattern, EmbFile* file, const char* filename);
 
 static const int pecThreadCount = 65;
 static const EmbThread pecThreads[] = {{{0, 0, 0}, "Unknown", ""},

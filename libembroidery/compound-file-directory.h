@@ -3,7 +3,7 @@
 #define COMPOUND_FILE_DIRECTORY_H
 
 #include "emb-time.h"
-#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
+#include "emb-file.h"
 
 #include "api-start.h"
 #ifdef __cplusplus
@@ -37,9 +37,9 @@ typedef struct _bcf_directory
 
 } bcf_directory;
 
-extern EMB_PRIVATE bcf_directory_entry* EMB_CALL CompoundFileDirectoryEntry(FILE* file);
+extern EMB_PRIVATE bcf_directory_entry* EMB_CALL CompoundFileDirectoryEntry(EmbFile* file);
 extern EMB_PRIVATE bcf_directory* EMB_CALL CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries);
-extern EMB_PRIVATE void EMB_CALL readNextSector(FILE* file, bcf_directory* dir);
+extern EMB_PRIVATE void EMB_CALL readNextSector(EmbFile* file, bcf_directory* dir);
 extern EMB_PRIVATE void EMB_CALL bcf_directory_free(bcf_directory* dir);
 
 #ifdef __cplusplus

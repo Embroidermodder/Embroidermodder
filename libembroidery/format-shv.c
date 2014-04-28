@@ -1,8 +1,8 @@
 #include "format-shv.h"
 #include "format-jef.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 #include <string.h>
 
 static char shvDecode(unsigned char inputByte)
@@ -27,7 +27,7 @@ static short shvDecodeShort(unsigned short inputByte)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readShv(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i;
     char inJump = 0;
     unsigned char fileNameLength, designWidth, designHeight;
@@ -43,16 +43,16 @@ int readShv(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-shv.c readShv(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-shv.c readShv(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-shv.c readShv(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, strlen(headerText), SEEK_SET);
+    embFile_seek(file, strlen(headerText), SEEK_SET);
     fileNameLength = binaryReadUInt8(file);
-    fseek(file, fileNameLength, SEEK_CUR);
+    embFile_seek(file, fileNameLength, SEEK_CUR);
     designWidth = binaryReadUInt8(file);
     designHeight = binaryReadUInt8(file);
     halfDesignWidth = binaryReadUInt8(file);
@@ -60,9 +60,9 @@ int readShv(EmbPattern* pattern, const char* fileName)
     halfDesignWidth2 = binaryReadUInt8(file);
     halfDesignHeight2 = binaryReadUInt8(file);
     if((designHeight % 2) == 1)
-        fseek(file, ((designHeight + 1)*designWidth)/2, SEEK_CUR);
+        embFile_seek(file, ((designHeight + 1)*designWidth)/2, SEEK_CUR);
     else
-        fseek(file, (designHeight*designWidth)/2, SEEK_CUR);
+        embFile_seek(file, (designHeight*designWidth)/2, SEEK_CUR);
 
     numberOfColors = binaryReadUInt8(file);
     magicCode = binaryReadUInt16(file);
@@ -84,11 +84,11 @@ int readShv(EmbPattern* pattern, const char* fileName)
         binaryReadUInt16(file);
         colorNumber = binaryReadUInt8(file);
         embPattern_addThread(pattern, jefThreads[colorNumber]);
-        fseek(file, 9, SEEK_CUR);
+        embFile_seek(file, 9, SEEK_CUR);
     }
 
-    fseek(file, -2, SEEK_CUR);
-    for(i = 0; !feof(file); i++)
+    embFile_seek(file, -2, SEEK_CUR);
+    for(i = 0; !embFile_eof(file); i++)
     {
         unsigned char b0, b1;
         int flags;
@@ -129,7 +129,7 @@ int readShv(EmbPattern* pattern, const char* fileName)
         dy = shvDecode(b1);
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

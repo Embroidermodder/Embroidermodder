@@ -1,17 +1,17 @@
 #include "format-10o.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int read10o(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-10o.c read10o(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-10o.c read10o(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName,"rb");
+    file = embFile_open(fileName,"rb");
     if(!file)
     {
         embLog_error("format-10o.c read10o(), cannot open %s for reading\n", fileName);
@@ -24,14 +24,14 @@ int read10o(EmbPattern* pattern, const char* fileName)
     {
         int x, y;
         int stitchType = NORMAL;
-        unsigned char ctrl = (unsigned char)fgetc(file);
-        if(feof(file))
+        unsigned char ctrl = (unsigned char)embFile_getc(file);
+        if(embFile_eof(file))
             break;
-        y = fgetc(file);
-        if(feof(file))
+        y = embFile_getc(file);
+        if(embFile_eof(file))
             break;
-        x = fgetc(file);
-        if(feof(file))
+        x = embFile_getc(file);
+        if(embFile_eof(file))
             break;
         if(ctrl & 0x20)
             x = -x;
@@ -50,7 +50,7 @@ int read10o(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, stitchType, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

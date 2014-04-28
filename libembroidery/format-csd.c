@@ -1,8 +1,8 @@
 #include "format-csd.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 #define CsdSubMaskSize  479
@@ -104,13 +104,13 @@ int readCsd(EmbPattern* pattern, const char* fileName)
     int colorChange = -1;
     int flags;
     char endOfStream = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
     unsigned char colorOrder[14];
 
     if(!pattern) { embLog_error("format-csd.c readCsd(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-csd.c readCsd(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-csd.c readCsd(), cannot open %s for reading\n", fileName);
@@ -131,30 +131,30 @@ int readCsd(EmbPattern* pattern, const char* fileName)
     {
         BuildDecryptionTable(identifier[0]);
     }
-    fseek(file, 8, SEEK_SET);
+    embFile_seek(file, 8, SEEK_SET);
     for(i = 0; i < 16; i++)
     {
         EmbThread thread;
-        thread.color.r = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
-        thread.color.g = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
-        thread.color.b = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
+        thread.color.r = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
+        thread.color.g = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
+        thread.color.b = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
         thread.catalogNumber = "";
         thread.description = "";
         embPattern_addThread(pattern, thread);
     }
-    unknown1 = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
-    unknown2 = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
+    unknown1 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
+    unknown2 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
 
     for(i = 0; i < 14; i++)
     {
-        colorOrder[i] = (unsigned char) DecodeCsdByte(ftell(file), binaryReadByte(file), type);
+        colorOrder[i] = (unsigned char) DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
     }
     for(i = 0; !endOfStream; i++)
     {
         char negativeX, negativeY;
-        unsigned char b0 = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
-        unsigned char b1 = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
-        unsigned char b2 = DecodeCsdByte(ftell(file), binaryReadByte(file), type);
+        unsigned char b0 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
+        unsigned char b1 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
+        unsigned char b2 = DecodeCsdByte(embFile_tell(file), binaryReadByte(file), type);
 
         if(b0 == 0xF8 || b0 == 0x87 || b0 == 0x91)
         {
@@ -184,7 +184,7 @@ int readCsd(EmbPattern* pattern, const char* fileName)
         if(flags == STOP) embPattern_addStitchRel(pattern, 0, 0, flags, 1);
         else embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

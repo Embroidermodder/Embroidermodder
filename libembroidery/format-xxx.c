@@ -1,8 +1,8 @@
 #include "format-xxx.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -17,7 +17,7 @@ static char xxxDecodeByte(unsigned char inputByte)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readXxx(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     unsigned char b0, b1;
     int dx = 0, dy = 0;
     int flags;
@@ -32,18 +32,18 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-xxx.c readXxx(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-xxx.c readXxx(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-xxx.c readXxx(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
-    fseek(file, 0x27, SEEK_SET);
+    embFile_seek(file, 0x27, SEEK_SET);
     numberOfColors = binaryReadInt16(file);
-    fseek(file, 0xFC, SEEK_SET);
+    embFile_seek(file, 0xFC, SEEK_SET);
     paletteOffset = binaryReadInt32(file);
-    fseek(file, paletteOffset + 6, SEEK_SET);
+    embFile_seek(file, paletteOffset + 6, SEEK_SET);
 
     for(i = 0; i < numberOfColors; i++)
     {
@@ -54,9 +54,9 @@ int readXxx(EmbPattern* pattern, const char* fileName)
         thread.color.b = binaryReadByte(file);
         embPattern_addThread(pattern, thread);
     }
-    fseek(file, 0x100, SEEK_SET);
+    embFile_seek(file, 0x100, SEEK_SET);
 
-    for(i = 0; !endOfStream && ftell(file) < paletteOffset; i++)
+    for(i = 0; !endOfStream && embFile_tell(file) < paletteOffset; i++)
     {
         flags = NORMAL;
         if(thisStitchJump) flags = TRIM;
@@ -117,7 +117,7 @@ int readXxx(EmbPattern* pattern, const char* fileName)
             embPattern_changeColor(pattern, pattern->currentColorIndex - 1);
         }
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -126,13 +126,13 @@ int readXxx(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-static void xxxEncodeStop(FILE* file, EmbStitch s)
+static void xxxEncodeStop(EmbFile* file, EmbStitch s)
 {
     binaryWriteByte(file, (unsigned char)0x7F);
     binaryWriteByte(file, (unsigned char)(s.color + 8));
 }
 
-static void xxxEncodeStitch(FILE* file, double deltaX, double deltaY, int flags)
+static void xxxEncodeStitch(EmbFile* file, double deltaX, double deltaY, int flags)
 {
     if((flags & (JUMP | TRIM)) && (fabs(deltaX) > 124 || fabs(deltaY) > 124))
     {
@@ -148,7 +148,7 @@ static void xxxEncodeStitch(FILE* file, double deltaX, double deltaY, int flags)
     }
 }
 
-static void xxxEncodeDesign(FILE* file, EmbPattern* p)
+static void xxxEncodeDesign(EmbFile* file, EmbPattern* p)
 {
     double thisX = 0.0f;
     double thisY = 0.0f;
@@ -189,7 +189,7 @@ static void xxxEncodeDesign(FILE* file, EmbPattern* p)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeXxx(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i;
     EmbRect rect;
     int endOfStitches;
@@ -209,7 +209,7 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-xxx.c writeXxx(), cannot open %s for writing\n", fileName);
@@ -246,13 +246,13 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
 
     xxxEncodeDesign(file, pattern);
 
-    endOfStitches = ftell(file);
+    endOfStitches = embFile_tell(file);
 
-    fseek(file, 0xFC, SEEK_SET);
+    embFile_seek(file, 0xFC, SEEK_SET);
 
     binaryWriteUInt(file, endOfStitches);
 
-    fseek(file, 0, SEEK_END);
+    embFile_seek(file, 0, SEEK_END);
 
     binaryWriteByte(file, 0x7F); /* is this really correct? */
     binaryWriteByte(file, 0x7F);
@@ -276,7 +276,7 @@ int writeXxx(EmbPattern* pattern, const char* fileName)
     }
     binaryWriteByte(file, 0x00);
     binaryWriteByte(file, 0x01);
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

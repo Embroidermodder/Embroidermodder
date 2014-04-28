@@ -7,7 +7,7 @@
 static const unsigned int sizeOfDifatEntry = 4;
 static const unsigned int sizeOfChainingEntryAtEndOfDifatSector = 4;
 
-bcf_file_difat *bcf_difat_create(FILE *file, unsigned int fatSectors, const unsigned int sectorSize)
+bcf_file_difat* bcf_difat_create(EmbFile* file, unsigned int fatSectors, const unsigned int sectorSize)
 {
     unsigned int i;
     bcf_file_difat* difat = 0;
@@ -44,7 +44,7 @@ unsigned int numberOfEntriesInDifatSector(bcf_file_difat* fat)
     return (fat->sectorSize - sizeOfChainingEntryAtEndOfDifatSector ) / sizeOfDifatEntry;
 }
 
-unsigned int readFullSector(FILE* file, bcf_file_difat* bcfFile, unsigned int* numberOfDifatEntriesStillToRead)
+unsigned int readFullSector(EmbFile* file, bcf_file_difat* bcfFile, unsigned int* numberOfDifatEntriesStillToRead)
 {
     unsigned int i;
     unsigned int sectorRef;

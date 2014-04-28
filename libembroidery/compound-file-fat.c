@@ -15,7 +15,7 @@ bcf_file_fat* bcfFileFat_create(const unsigned int sectorSize)
     return fat;
 }
 
-void loadFatFromSector(bcf_file_fat* fat, FILE* file)
+void loadFatFromSector(bcf_file_fat* fat, EmbFile* file)
 {
     unsigned int i;
     unsigned int currentNumberOfFatEntries = fat->fatEntryCount;

@@ -23,18 +23,18 @@ int readZsk(EmbPattern* pattern, const char* fileName)
     }
 
     embFile_seek(file, 0x230, SEEK_SET);
-    colorNumber = binaryReadUInt8(file->file);
+    colorNumber = binaryReadUInt8(file);
     while(colorNumber != 0)
     {
         EmbThread t;
-        t.color.r = binaryReadUInt8(file->file);
-        t.color.g = binaryReadUInt8(file->file);
-        t.color.b = binaryReadUInt8(file->file);
+        t.color.r = binaryReadUInt8(file);
+        t.color.g = binaryReadUInt8(file);
+        t.color.b = binaryReadUInt8(file);
         t.catalogNumber = "";
         t.description = "";
         embPattern_addThread(pattern, t);
         embFile_seek(file, 0x48, SEEK_CUR);
-        colorNumber = binaryReadUInt8(file->file);
+        colorNumber = binaryReadUInt8(file);
     }
     embFile_seek(file, 0x2E, SEEK_CUR);
 

@@ -1,7 +1,7 @@
 #include "format-inf.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -11,12 +11,12 @@ int readInf(EmbPattern* pattern, const char* fileName)
 {
     int numberOfColors;
     int i;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-inf.c readInf(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-inf.c readInf(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         /* NOTE: The .inf format is an optional color file. Do not log an error if the file does not exist */
@@ -49,7 +49,7 @@ int readInf(EmbPattern* pattern, const char* fileName)
         binaryReadString(file, colorType, 50);
         binaryReadString(file, colorDescription, 50);
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 
@@ -59,12 +59,12 @@ int writeInf(EmbPattern* pattern, const char* fileName)
 {
     EmbThreadList* pointer = 0;
     int i = 1, bytesRemaining;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-inf.c writeInf(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-inf.c writeInf(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-inf.c writeInf(), cannot open %s for writing\n", fileName);
@@ -90,16 +90,16 @@ int writeInf(EmbPattern* pattern, const char* fileName)
         binaryWriteByte(file, c.b);
         binaryWriteUShortBE(file, (unsigned short)i); /* needle number */
         binaryWriteBytes(file, "RGB\0", 4);
-        fprintf(file, buffer);
+        embFile_printf(file, buffer);
         binaryWriteByte(file, 0);
         pointer = pointer->next;
         i++;
     }
-    fseek(file, -8, SEEK_END);
-    bytesRemaining = ftell(file);
-    fseek(file, 8, SEEK_SET);
+    embFile_seek(file, -8, SEEK_END);
+    bytesRemaining = embFile_tell(file);
+    embFile_seek(file, 8, SEEK_SET);
     binaryWriteUIntBE(file, bytesRemaining);
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

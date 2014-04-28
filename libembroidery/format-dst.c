@@ -86,7 +86,7 @@ static unsigned char setbit(int pos)
 }
 */
 
-static void encode_record(FILE* file, int x, int y, int flags)
+static void encode_record(EmbFile* file, int x, int y, int flags)
 {
     char b0, b1, b2;
     b0 = b1 = b2 = 0;
@@ -396,7 +396,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
 int writeDst(EmbPattern* pattern, const char* fileName)
 {
     EmbRect boundingRect;
-    FILE* file = 0; /* TODO: change writeDst() to use EmbFile */
+    EmbFile* file = 0; /* TODO: change writeDst() to use EmbFile */
     int xx, yy, dx, dy, flags;
     int i;
     int co = 1, st = 0;
@@ -417,7 +417,7 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-dst.c writeDst(), cannot open %s for writing\n", fileName);
@@ -434,25 +434,25 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     flags = NORMAL;
     boundingRect = embPattern_calcBoundingBox(pattern);
     /* TODO: review the code below
-    if (pattern->get_variable("design_name") != NULL)
+    if(pattern->get_variable("design_name") != NULL)
     {
     char *la = stralloccopy(pattern->get_variable("design_name"));
-    if (strlen(la)>16) la[16]='\0';
+    if(strlen(la)>16) la[16]='\0';
 
-    fprintf(file,"LA:%-16s\x0d",la);
-    free (la);
+    embFile_printf(file,"LA:%-16s\x0d",la);
+    free(la);
     }
     else
     {
     */
-    fprintf(file, "LA:%-16s\x0d", "Untitled");
+    embFile_printf(file, "LA:%-16s\x0d", "Untitled");
     /*} */
-    fprintf(file, "ST:%7d\x0d", st);
-    fprintf(file, "CO:%3d\x0d", co - 1); /* number of color changes, not number of colors! */
-    fprintf(file, "+X:%5d\x0d", (int)(boundingRect.right * 10.0));
-    fprintf(file, "-X:%5d\x0d", (int)(fabs(boundingRect.left) * 10.0));
-    fprintf(file, "+Y:%5d\x0d", (int)(boundingRect.bottom * 10.0));
-    fprintf(file, "-Y:%5d\x0d", (int)(fabs(boundingRect.top) * 10.0));
+    embFile_printf(file, "ST:%7d\x0d", st);
+    embFile_printf(file, "CO:%3d\x0d", co - 1); /* number of color changes, not number of colors! */
+    embFile_printf(file, "+X:%5d\x0d", (int)(boundingRect.right * 10.0));
+    embFile_printf(file, "-X:%5d\x0d", (int)(fabs(boundingRect.left) * 10.0));
+    embFile_printf(file, "+Y:%5d\x0d", (int)(boundingRect.bottom * 10.0));
+    embFile_printf(file, "-Y:%5d\x0d", (int)(fabs(boundingRect.top) * 10.0));
 
 
     ax = ay = mx = my = 0;
@@ -469,17 +469,17 @@ int writeDst(EmbPattern* pattern, const char* fileName)
         /* pd is not valid, so fill in a default consisting of "******" */
         pd = "******";
     };
-    fprintf(file, "AX:+%5d\x0d", ax);
-    fprintf(file, "AY:+%5d\x0d", ay);
-    fprintf(file, "MX:+%5d\x0d", mx);
-    fprintf(file, "MY:+%5d\x0d", my);
-    fprintf(file, "PD:%6s\x0d", pd);
+    embFile_printf(file, "AX:+%5d\x0d", ax);
+    embFile_printf(file, "AY:+%5d\x0d", ay);
+    embFile_printf(file, "MX:+%5d\x0d", mx);
+    embFile_printf(file, "MY:+%5d\x0d", my);
+    embFile_printf(file, "PD:%6s\x0d", pd);
     binaryWriteByte(file, 0x1a); /* 0x1a is the code for end of section. */
 
     /* pad out header to proper length */
     for(i = 125; i < 512; i++)
     {
-        fprintf(file, " ");
+        embFile_printf(file, " ");
     }
 
     /* write stitches */
@@ -498,7 +498,7 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     }
     binaryWriteByte(file, 0xA1); /* finish file with a terminator character */
     binaryWriteShort(file, 0);
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

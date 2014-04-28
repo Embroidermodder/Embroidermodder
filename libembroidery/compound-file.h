@@ -6,7 +6,7 @@
 #include "compound-file-directory.h"
 #include "compound-file-fat.h"
 #include "compound-file-header.h"
-#include <stdio.h> /* TODO: replace this with "emb-file.h" when FILE is ported to EmbFile */
+#include "emb-file.h"
 
 #include "api-start.h"
 #ifdef __cplusplus
@@ -21,8 +21,8 @@ typedef struct _bcf_file
     bcf_directory* directory; /*! The directory for the CompoundFile */
 } bcf_file;
 
-extern EMB_PRIVATE int EMB_CALL bcfFile_read(FILE* file, bcf_file* bcfFile);
-extern EMB_PRIVATE FILE* EMB_CALL GetFile(bcf_file* bcfFile, FILE* file, char* fileToFind);
+extern EMB_PRIVATE int EMB_CALL bcfFile_read(EmbFile* file, bcf_file* bcfFile);
+extern EMB_PRIVATE EmbFile* EMB_CALL GetFile(bcf_file* bcfFile, EmbFile* file, char* fileToFind);
 extern EMB_PRIVATE void EMB_CALL bcf_file_free(bcf_file* bcfFile);
 
 #ifdef __cplusplus

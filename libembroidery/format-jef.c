@@ -1,4 +1,5 @@
 #include "format-jef.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "emb-time.h"
 #include "helpers-binary.h"
@@ -65,12 +66,12 @@ int readJef(EmbPattern* pattern, const char* fileName)
     int stitchCount;
     char date[8], time[8];
     char dx, dy;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-jef.c readJef(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-jef.c readJef(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-jef.c readJef(), cannot open %s for reading\n", fileName);
@@ -116,7 +117,7 @@ int readJef(EmbPattern* pattern, const char* fileName)
     {
         embPattern_addThread(pattern, jefThreads[binaryReadInt32(file) % 79]);
     }
-    fseek(file, stitchOffset, SEEK_SET);
+    embFile_seek(file, stitchOffset, SEEK_SET);
     stitchCount = 0;
     while(stitchCount < numberOfStitchs + 100)
     {
@@ -149,7 +150,7 @@ int readJef(EmbPattern* pattern, const char* fileName)
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
         stitchCount++;
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -158,7 +159,7 @@ int readJef(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-static void jefEncode(FILE* file, float x, float y, int stitchType)
+static void jefEncode(EmbFile* file, float x, float y, int stitchType)
 {
     unsigned char dx = (char)(x * 10.0f);
     unsigned char dy = (char)(y * 10.0f);
@@ -197,7 +198,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
 {
     int colorlistSize, minColors, designWidth, designHeight, i;
     EmbRect boundingRect;
-    FILE* file = 0;
+    EmbFile* file = 0;
     EmbTime time;
     EmbThreadList* threadPointer = 0;
     EmbStitch c;
@@ -217,7 +218,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-jef.c writeJef(), cannot open %s for writing\n", fileName);
@@ -233,7 +234,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
 
     embTime_initNow(&time);
 
-    fprintf(file, "%04d%02d%02d%02d%02d%02d", (int)(time.year + 1900),
+    embFile_printf(file, "%04d%02d%02d%02d%02d%02d", (int)(time.year + 1900),
             (int)(time.month + 1), (int)(time.day), (int)(time.hour),
             (int)(time.minute), (int)(time.second));
     binaryWriteByte(file, 0x00);
@@ -324,7 +325,7 @@ int writeJef(EmbPattern* pattern, const char* fileName)
         prevY = c.yy;
         pointer = pointer->next;
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

@@ -1,10 +1,10 @@
 #include "format-vp3.h"
 #include "helpers-binary.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include <stdlib.h>
-#include <stdio.h>
 
-static unsigned char* vp3ReadString(FILE* file)
+static unsigned char* vp3ReadString(EmbFile* file)
 {
     int stringLength = 0;
     unsigned char* charString = 0;
@@ -58,7 +58,7 @@ typedef struct _vp3Hoop
     int height;
 } vp3Hoop;
 
-static vp3Hoop vp3ReadHoopSection(FILE* file)
+static vp3Hoop vp3ReadHoopSection(EmbFile* file)
 {
     vp3Hoop hoop;
 
@@ -111,12 +111,12 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     int hoopConfigurationOffset;
     unsigned char* unknownString2 = 0;
     int i;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-vp3.c readVp3(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vp3.c readVp3(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-vp3.c readVp3(), cannot open %s for reading\n", fileName);
@@ -131,7 +131,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     someByte = binaryReadByte(file);
     bytesRemainingInFile = binaryReadInt32(file);
     unknownByteString = vp3ReadString(file);
-    hoopConfigurationOffset =(int) ftell(file);
+    hoopConfigurationOffset = (int)embFile_tell(file);
 
     vp3ReadHoopSection(file);
 
@@ -162,7 +162,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     unknownString3 = vp3ReadString(file);
 
     numberOfColors = binaryReadInt16BE(file);
-    colorSectionOffset = (int) ftell(file);
+    colorSectionOffset = (int)embFile_tell(file);
 
     for(i = 0; i < numberOfColors; i++)
     {
@@ -172,9 +172,9 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         unsigned char* str1, *str2, *str3;
         int unknownThreadString, numberOfBytesInColor;
 
-        fseek(file, 0x03 + colorSectionOffset, SEEK_SET);
+        embFile_seek(file, 0x03 + colorSectionOffset, SEEK_SET);
         colorSectionOffset = binaryReadInt32BE(file);
-        colorSectionOffset += ftell(file);
+        colorSectionOffset += embFile_tell(file);
         unknownX = binaryReadInt32BE(file);
         unknownY = binaryReadInt32BE(file);
         /* TODO: review commented section below
@@ -187,7 +187,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         t.color.g = binaryReadByte(file);
         t.color.b = binaryReadByte(file);
         embPattern_addThread(pattern, t);
-        fseek(file, 6*tableSize - 1, SEEK_CUR);
+        embFile_seek(file, 6*tableSize - 1, SEEK_CUR);
 
         str1 = vp3ReadString(file);
         str2 = vp3ReadString(file);
@@ -197,10 +197,10 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         unknownY2 = binaryReadInt32BE(file);
         /*fs.Seek(0x02, SeekOrigin.Current); */
         unknownThreadString = binaryReadInt16BE(file);
-        fseek(file, unknownThreadString, SEEK_CUR);
+        embFile_seek(file, unknownThreadString, SEEK_CUR);
         numberOfBytesInColor = binaryReadInt32BE(file);
-        fseek(file, 0x3, SEEK_CUR);
-        while(ftell(file) < colorSectionOffset - 1)
+        embFile_seek(file, 0x3, SEEK_CUR);
+        while(embFile_tell(file) < colorSectionOffset - 1)
         {
             int x = vp3Decode(binaryReadByte(file));
             int y = vp3Decode(binaryReadByte(file));
@@ -228,7 +228,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         }
         if(i + 1 < numberOfColors) embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

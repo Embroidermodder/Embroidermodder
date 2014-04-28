@@ -1,4 +1,5 @@
 #include "format-pcd.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include "helpers-misc.h"
@@ -13,7 +14,7 @@ static double pcdDecode(unsigned char a1, unsigned char a2, unsigned char a3)
     return res;
 }
 
-static void pcdEncode(FILE* file, int dx, int dy, int flags)
+static void pcdEncode(EmbFile* file, int dx, int dy, int flags)
 {
     unsigned char flagsToWrite = 0;
 
@@ -50,17 +51,18 @@ int readPcd(EmbPattern* pattern, const char* fileName)
     int flags = 0, st = 0;
     unsigned char version, hoopSize;
     unsigned short colorCount;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-pcd.c readPcd(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-pcd.c readPcd(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-pcd.c readPcd(), cannot open %s for reading\n", fileName);
         return 0;
     }
+
     version = binaryReadByte(file);
     hoopSize = binaryReadByte(file);  /* 0 for PCD, 1 for PCQ (MAXI), 2 for PCS with small hoop(80x80), */
                                       /* and 3 for PCS with large hoop (115x120) */
@@ -69,9 +71,9 @@ int readPcd(EmbPattern* pattern, const char* fileName)
     for(i = 0; i < colorCount; i++)
     {
         EmbThread t;
-        t.color.r = (unsigned char)fgetc(file);
-        t.color.g = (unsigned char)fgetc(file);
-        t.color.b = (unsigned char)fgetc(file);
+        t.color.r = (unsigned char)embFile_getc(file);
+        t.color.g = (unsigned char)embFile_getc(file);
+        t.color.b = (unsigned char)embFile_getc(file);
         t.catalogNumber = "";
         t.description = "";
         if(t.color.r || t.color.g || t.color.b)
@@ -79,7 +81,7 @@ int readPcd(EmbPattern* pattern, const char* fileName)
             allZeroColor = 0;
         }
         embPattern_addThread(pattern, t);
-        fgetc(file);
+        embFile_getc(file);
     }
     if(allZeroColor)
         embPattern_loadExternalColorFile(pattern, fileName);
@@ -88,7 +90,7 @@ int readPcd(EmbPattern* pattern, const char* fileName)
     for(i = 0; i < st; i++)
     {
         flags = NORMAL;
-        if(fread(b, 1, 9, file) != 9)
+        if(embFile_read(b, 1, 9, file) != 9)
             break;
 
         if(b[8] & 0x01)
@@ -107,7 +109,7 @@ int readPcd(EmbPattern* pattern, const char* fileName)
         dy = pcdDecode(b[5], b[6], b[7]);
         embPattern_addStitchAbs(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -122,7 +124,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
 {
     EmbStitchList* pointer = 0;
     EmbThreadList* threadPointer = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
     int i;
     unsigned char colorCount;
     double xx = 0.0, yy = 0.0;
@@ -140,7 +142,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-pcd.c writePcd(), cannot open %s for writing\n", fileName);
@@ -149,7 +151,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
 
     binaryWriteByte(file, (unsigned char)'2');
     binaryWriteByte(file, 3); /* TODO: select hoop size defaulting to Large PCS hoop */
-    colorCount = (unsigned char) embThreadList_count(pattern->threadList);
+    colorCount = (unsigned char)embThreadList_count(pattern->threadList);
     binaryWriteUShort(file, (unsigned short)colorCount);
     threadPointer = pattern->threadList;
     i = 0;
@@ -178,7 +180,7 @@ int writePcd(EmbPattern* pattern, const char* fileName)
         pcdEncode(file, roundDouble(pointer->stitch.xx * 10.0), roundDouble(pointer->stitch.yy * 10.0), pointer->stitch.flags);
         pointer = pointer->next;
     }
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 

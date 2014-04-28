@@ -1,7 +1,7 @@
 #include "format-mit.h"
+#include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 static int mitDecodeStitch(unsigned char value)
 {
@@ -15,12 +15,12 @@ static int mitDecodeStitch(unsigned char value)
 int readMit(EmbPattern* pattern, const char* fileName)
 {
     unsigned char data[2];
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-mit.c readMit(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-mit.c readMit(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-mit.c readMit(), cannot open %s for reading\n", fileName);
@@ -33,6 +33,8 @@ int readMit(EmbPattern* pattern, const char* fileName)
     {
         embPattern_addStitchRel(pattern, mitDecodeStitch(data[0]) / 10.0, mitDecodeStitch(data[1]) / 10.0, NORMAL, 1);
     }
+
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)

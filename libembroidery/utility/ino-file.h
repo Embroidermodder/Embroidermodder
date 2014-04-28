@@ -15,6 +15,8 @@ int inoFile_eof(InoFile* stream);
 int inoFile_getc(InoFile* stream);
 int inoFile_seek(InoFile* stream, long offset, int origin);
 long inoFile_tell(InoFile* stream);
+InoFile* inoFile_tmpfile(void);
+int inoFile_putc(int ch, InoFile* stream);
 
 int inoFile_printf(InoFile* stream, const char* msg);
 

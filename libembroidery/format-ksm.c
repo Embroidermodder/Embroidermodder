@@ -2,7 +2,6 @@
 #include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
-#include <stdio.h>
 
 static void ksmEncode(unsigned char* b, char dx, char dy, int flags)
 {
@@ -85,7 +84,7 @@ int readKsm(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeKsm(EmbPattern* pattern, const char* fileName)
 {
-    FILE* file = 0; /* TODO: change writeKsm() to use EmbFile */
+    EmbFile* file = 0; /* TODO: change writeKsm() to use EmbFile */
     EmbStitchList* pointer = 0;
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;
@@ -105,7 +104,7 @@ int writeKsm(EmbPattern* pattern, const char* fileName)
     if(pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-ksm.c writeKsm(), cannot open %s for writing\n", fileName);
@@ -126,11 +125,11 @@ int writeKsm(EmbPattern* pattern, const char* fileName)
         yy = pointer->stitch.yy;
         flags = pointer->stitch.flags;
         ksmEncode(b, (char)(dx * 10.0), (char)(dy * 10.0), flags);
-        fprintf(file, "%c%c", b[0], b[1]);
+        embFile_printf(file, "%c%c", b[0], b[1]);
         pointer = pointer->next;
     }
-    fprintf(file, "\x1a");
-    fclose(file);
+    embFile_printf(file, "\x1a");
+    embFile_close(file);
     return 1;
 }
 

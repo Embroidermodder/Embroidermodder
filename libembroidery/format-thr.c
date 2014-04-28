@@ -1,7 +1,7 @@
 #include "format-thr.h"
 #include "helpers-binary.h"
+#include "emb-file.h"
 #include "emb-logging.h"
-#include <stdio.h>
 #include <string.h>
 
 #define NOTFRM 0x00080000
@@ -51,12 +51,12 @@ int readThr(EmbPattern* pattern, const char* fileName)
     unsigned char r, g, b;
     int currentColor;
     int i;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-thr.c readThr(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-thr.c readThr(), fileName argument is null\n"); return 0; }
 
-    file = fopen(fileName, "rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-thr.c readThr(), cannot open %s for reading\n", fileName);
@@ -84,7 +84,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
                 break;
             case 1:
             case 2:
-                fseek(file, 144, SEEK_CUR); /* skip the file header extension */
+                embFile_seek(file, 144, SEEK_CUR); /* skip the file header extension */
                 break;
             default:
                 return 0; /* unsuported version */
@@ -107,7 +107,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
         }
         embPattern_addStitchAbs(pattern, x, y, type, 0);
     }
-    fseek(file, 16, SEEK_CUR); /* skip bitmap name (16 chars) */
+    embFile_seek(file, 16, SEEK_CUR); /* skip bitmap name (16 chars) */
 
     r = binaryReadByte(file);
     g = binaryReadByte(file);
@@ -128,7 +128,7 @@ int readThr(EmbPattern* pattern, const char* fileName)
     /*  64 bytes of rgbx(4 bytes) colors (16 custom colors) */
     /*  16 bytes of thread size (ascii representation ie. '4') */
 
-    fclose(file);
+    embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
     if(pattern->lastStitch->stitch.flags != END)
@@ -148,7 +148,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
     char bitmapName[16];
     EmbStitchList* pointer = 0;
     EmbThreadList* colorpointer = 0;
-    FILE* file = 0;
+    EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-thr.c writeThr(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-thr.c writeThr(), fileName argument is null\n"); return 0; }
@@ -167,7 +167,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         stitchCount++;
     }
 
-    file = fopen(fileName, "wb");
+    file = embFile_open(fileName, "wb");
     if(!file)
     {
         embLog_error("format-thr.c writeThr(), cannot open %s for writing\n", fileName);
@@ -275,7 +275,7 @@ int writeThr(EmbPattern* pattern, const char* fileName)
         binaryWriteByte(file, '4');
     }
 
-    fclose(file);
+    embFile_close(file);
     return 1;
 }
 
