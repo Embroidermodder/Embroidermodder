@@ -1,4 +1,5 @@
-comment_header = '''"#","Embroidermodder 2 CSV Embroidery File - Generated with the Embroidermodder 2 CSV Output Inkscape Extension"
+comment_header = '''\
+"#","Embroidermodder 2 CSV Embroidery File - Generated with the Embroidermodder 2 CSV Output Inkscape Extension"
 "#","http://embroidermodder.github.io"
 
 "#","General Notes:"
@@ -19,10 +20,12 @@ comment_header = '''"#","Embroidermodder 2 CSV Embroidery File - Generated with 
 
 '''
 
-comment_variables = '''"#","[VAR_NAME]","[VAR_VALUE]"
+comment_variables = '''\
+"#","[VAR_NAME]","[VAR_VALUE]"
 '''
 
-comment_threads = '''"#","[THREAD_NUMBER]","[RED]","[GREEN]","[BLUE]","[DESCRIPTION]","[CATALOG_NUMBER]"
+comment_threads = '''\
+"#","[THREAD_NUMBER]","[RED]","[GREEN]","[BLUE]","[DESCRIPTION]","[CATALOG_NUMBER]"
 '''
 
 comment_stitches = '''"#","[STITCH_TYPE]","[X]","[Y]"
