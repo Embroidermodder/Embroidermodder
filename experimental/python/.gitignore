@@ -1,0 +1,18 @@
+#########################
+# Executables
+*.exe
+*.dll
+
+#########################
+# Python
+*.pyc
+*.pyd
+*.pyo
+
+#########################
+# Junk files
+Thumbs.db
+
+#########################
+# Generated Settings Ini
+embroidermodder2\settings-py.ini
