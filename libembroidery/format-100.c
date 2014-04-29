@@ -7,14 +7,14 @@
 int read100(EmbPattern* pattern, const char* fileName)
 {
     EmbFile* file = 0;
-    int x,y;
+    int x, y;
     int stitchType;
     unsigned char b[4];
 
     if(!pattern) { embLog_error("format-100.c read100(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-100.c read100(), fileName argument is null\n"); return 0; }
 
-    file = embFile_open(fileName,"rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-100.c read100(), cannot open %s for reading\n", fileName);

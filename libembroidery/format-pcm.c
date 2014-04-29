@@ -18,7 +18,7 @@ static double pcmDecode(unsigned char a1, unsigned char a2, unsigned char a3)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readPcm(EmbPattern* pattern, const char* fileName)
 {
-    int i;
+    int i = 0;
     unsigned char b[9];
     double dx = 0, dy = 0;
     int flags = 0, st = 0;

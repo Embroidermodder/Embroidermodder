@@ -165,9 +165,9 @@ void binaryWriteUInt(EmbFile* file, unsigned int data)
 
 void binaryWriteUIntBE(EmbFile* file, unsigned int data)
 {
-	embFile_putc((data >> 24) & 0xFF, file);
-	embFile_putc((data >> 16) & 0xFF, file);
-	embFile_putc((data >> 8) & 0xFF, file);
+    embFile_putc((data >> 24) & 0xFF, file);
+    embFile_putc((data >> 16) & 0xFF, file);
+    embFile_putc((data >> 8) & 0xFF, file);
     embFile_putc(data & 0xFF, file);
 }
 

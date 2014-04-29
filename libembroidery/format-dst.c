@@ -230,7 +230,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
     unsigned char b[3];
     char header[512 + 1];
     EmbFile* file = 0;
-    int i;
+    int i = 0;
     int flags; /* for converting stitches from file encoding */
 
     /*
@@ -468,7 +468,7 @@ int writeDst(EmbPattern* pattern, const char* fileName)
     {
         /* pd is not valid, so fill in a default consisting of "******" */
         pd = "******";
-    };
+    }
     embFile_printf(file, "AX:+%5d\x0d", ax);
     embFile_printf(file, "AY:+%5d\x0d", ay);
     embFile_printf(file, "MX:+%5d\x0d", mx);

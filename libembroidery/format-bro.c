@@ -16,7 +16,7 @@ int readBro(EmbPattern* pattern, const char* fileName)
     if(!pattern) { embLog_error("format-bro.c readBro(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-bro.c readBro(), fileName argument is null\n"); return 0; }
 
-    file = embFile_open(fileName,"rb");
+    file = embFile_open(fileName, "rb");
     if(!file)
     {
         embLog_error("format-bro.c readBro(), cannot open %s for reading\n", fileName);
@@ -26,12 +26,12 @@ int readBro(EmbPattern* pattern, const char* fileName)
     embPattern_loadExternalColorFile(pattern, fileName);
 
     x55 = binaryReadByte(file);
-    unknown1 = binaryReadInt16(file);
+    unknown1 = binaryReadInt16(file); /* TODO: determine what this unknown data is */
 
     embFile_read(name, 1, 8, file);
-    unknown2 = binaryReadInt16(file);
-    unknown3 = binaryReadInt16(file);
-    unknown4 = binaryReadInt16(file);
+    unknown2 = binaryReadInt16(file); /* TODO: determine what this unknown data is */
+    unknown3 = binaryReadInt16(file); /* TODO: determine what this unknown data is */
+    unknown4 = binaryReadInt16(file); /* TODO: determine what this unknown data is */
     moreBytesToEnd = binaryReadInt16(file);
 
     embFile_seek(file, 0x100, SEEK_SET);

@@ -45,7 +45,7 @@ static void pcsEncode(EmbFile* file, int dx, int dy, int flags)
 int readPcs(EmbPattern* pattern, const char* fileName)
 {
     char allZeroColor = 1;
-    int i;
+    int i = 0;
     unsigned char b[9];
     double dx = 0, dy = 0;
     int flags = 0, st = 0;
@@ -137,8 +137,8 @@ int writePcs(EmbPattern* pattern, const char* fileName)
     EmbStitchList* pointer = 0;
     EmbThreadList* threadPointer = 0;
     EmbFile* file = 0;
-    int i;
-    unsigned char colorCount;
+    int i = 0;
+    unsigned char colorCount = 0;
     double xx = 0.0, yy = 0.0;
 
     if(!pattern) { embLog_error("format-pcs.c writePcs(), pattern argument is null\n"); return 0; }

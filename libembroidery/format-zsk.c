@@ -57,7 +57,7 @@ int readZsk(EmbPattern* pattern, const char* fileName)
             {
                 if(b[2] != 0)
                     colorNumber = b[2];
-                stitchType = STOP; /* need to determine what b[1] is used for.*/
+                stitchType = STOP; /* TODO: need to determine what b[1] is used for.*/
                 embPattern_changeColor(pattern, colorNumber - 1);
 
             }

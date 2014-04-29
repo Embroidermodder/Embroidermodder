@@ -88,7 +88,7 @@ int writeKsm(EmbPattern* pattern, const char* fileName)
     EmbStitchList* pointer = 0;
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;
-    int i;
+    int i = 0;
     unsigned char b[4];
 
     if(!pattern) { embLog_error("format-ksm.c writeKsm(), pattern argument is null\n"); return 0; }

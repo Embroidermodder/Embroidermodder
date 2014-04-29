@@ -36,7 +36,7 @@ static void maxEncode(EmbFile* file, int x, int y)
  *  Returns \c true if successful, otherwise returns \c false. */
 int readMax(EmbPattern* pattern, const char* fileName)
 {
-    int i;
+    int i = 0;
     unsigned char b[8];
     double dx = 0, dy = 0;
     int flags = 0;

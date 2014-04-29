@@ -45,12 +45,12 @@ static void pcdEncode(EmbFile* file, int dx, int dy, int flags)
 int readPcd(EmbPattern* pattern, const char* fileName)
 {
     char allZeroColor = 1;
-    int i;
+    int i = 0;
     unsigned char b[9];
     double dx = 0, dy = 0;
     int flags = 0, st = 0;
     unsigned char version, hoopSize;
-    unsigned short colorCount;
+    unsigned short colorCount = 0;
     EmbFile* file = 0;
 
     if(!pattern) { embLog_error("format-pcd.c readPcd(), pattern argument is null\n"); return 0; }

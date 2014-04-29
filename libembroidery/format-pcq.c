@@ -45,7 +45,7 @@ static void pcqEncode(EmbFile* file, int dx, int dy, int flags)
 int readPcq(EmbPattern* pattern, const char* fileName)
 {
     char allZeroColor = 1;
-    int i;
+    int i = 0;
     unsigned char b[9];
     double dx = 0, dy = 0;
     int flags = 0, st = 0;
