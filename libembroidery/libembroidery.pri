@@ -17,7 +17,7 @@ QMAKE_CFLAGS_WARN_ON += -Werror=implicit-function-declaration
 #QMAKE_CFLAGS_WARN_ON += -Werror
 
 #Uncomment lines below to hide various warnings
-#QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter 
+#QMAKE_CFLAGS_WARN_ON += -Wno-unused-parameter
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-but-set-variable
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-variable
 
