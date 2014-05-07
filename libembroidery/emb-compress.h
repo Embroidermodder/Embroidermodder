@@ -17,8 +17,6 @@ extern EMB_PRIVATE int EMB_CALL husCompress(unsigned char* _266, unsigned long _
  ****************************************/
 #define _132 (CHAR_BIT*sizeof(unsigned short))
 #define _133 (16)
-/*TODO: Why is _134 unused? */
-#define _134 ('\0')
 #define _135 (3)
 #define _136 (16384)
 #define _137 (14)
