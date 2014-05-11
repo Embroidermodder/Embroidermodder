@@ -111,8 +111,6 @@ div.document {
 }
 
 div.sphinxsidebar {
-    /* background-color: rgb(230,230,230); */
-    /* background-image: url(../images/sphinxdocs/sphinxtile_black.png); */
     background-image: url(../images/sphinxdocs/texture-spirals.png);
     background-color: #000000;
     margin-left: 0;
@@ -129,7 +127,7 @@ div.sphinxsidebar {
 }
 
 div.related {
-    background-image: url('../images/sphinxdocs/texture-spirals.png');
+    background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     font-size: 1em;
@@ -186,19 +184,46 @@ div.related ul li.reltitle {
 }
 
 div.related ul li a:hover {
-    color: #3CA8E7;
+    color: #3CA8E7; 
 }
 
 div.sphinxsidebar h3 {
-  color: rgb(0,102,204);
+  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+  padding: 1px 5px 1px 5px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #0C6AB0;
+  text-shadow:
+     -1px -1px 0 #55C4E6,  
+      1px -1px 0 #55C4E6,
+     -1px  1px 0 #55C4E6,
+      1px  1px 0 #55C4E6;
 }
 
 div.sphinxsidebar h3 a {
-  color: rgb(0,102,204);
+  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+  padding: 1px 5px 1px 5px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #0C6AB0;
+  text-shadow:
+     -1px -1px 0 #55C4E6,  
+      1px -1px 0 #55C4E6,
+     -1px  1px 0 #55C4E6,
+      1px  1px 0 #55C4E6;
 }
 
 div.sphinxsidebar h4 {
-  color: rgb(0,82,194);
+  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+  padding: 1px 5px 1px 5px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #0C6AB0;
+  text-shadow:
+     -1px -1px 0 #55C4E6,  
+      1px -1px 0 #55C4E6,
+     -1px  1px 0 #55C4E6,
+      1px  1px 0 #55C4E6;
 }
 
 div.sphinxsidebar p {
@@ -206,7 +231,9 @@ div.sphinxsidebar p {
 }
 
 div.sphinxsidebar a {
-  color: #355f7c;
+  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+  padding: 1px 5px 1px 5px;
+  color: #55C4E6;
 }
 
 div.sphinxsidebar ul.want-points {
