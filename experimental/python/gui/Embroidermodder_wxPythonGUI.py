@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
+Embroidermodder_wxPythonGUI.py
+==============================
+
 Embroidermodder v2.0 wxPython GUI
 """
 

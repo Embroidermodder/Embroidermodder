@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Embroidermodder_PySide_PyQt_GUI.py
+==================================
+
+"""
+
 #-Imports.----------------------------------------------------------------------
 #--Python Imports.
 import os

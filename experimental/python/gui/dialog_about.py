@@ -3,6 +3,8 @@
 
 __doc__ = """
 Embroidermodder Version 2.0
+===========================
+
 (Python GUI preview v0.0.0.1
 Limitations-Nonfuctional for embroidery.
 View only functions as a basic TextEditor)

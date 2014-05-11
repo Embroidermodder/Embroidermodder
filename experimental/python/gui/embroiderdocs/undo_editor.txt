@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: undo_editor
+   :members:
+   :undoc-members:

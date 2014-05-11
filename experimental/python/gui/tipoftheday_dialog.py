@@ -3,6 +3,7 @@
 
 """
 tipoftheday_dialog.py
+=====================
 
 This module houses the code for the Tip Of The Day Dialog.
 

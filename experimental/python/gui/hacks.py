@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+hacks.py
+========
+
+TOWRITE
+
+"""
+
 def ForceRepaint(widget):
     """
     Force an immediate full paint refresh/update.

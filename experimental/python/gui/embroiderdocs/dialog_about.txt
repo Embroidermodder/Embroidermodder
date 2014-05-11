@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: dialog_about
+   :members:
+   :undoc-members:

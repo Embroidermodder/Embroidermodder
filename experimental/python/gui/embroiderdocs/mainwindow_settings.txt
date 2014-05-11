@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: mainwindow_settings
+   :members:
+   :undoc-members:

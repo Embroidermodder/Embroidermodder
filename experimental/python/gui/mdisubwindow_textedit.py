@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+mdisubwindow_textedit.py
+========================
+
+TOWRITE
+"""
+
 #-Imports.----------------------------------------------------------------------
 
 #--Python Imports.

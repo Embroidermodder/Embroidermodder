@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: tipoftheday_dialog
+   :members:
+   :undoc-members:
