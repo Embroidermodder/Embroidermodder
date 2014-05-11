@@ -54,6 +54,11 @@ def initGlobals(MainWin):
 
 
 class MDISubWindow_TextEdit(QTextEdit):
+    """
+    Text Editor MDISubwindow for Embroidermodder.
+
+    Subclass of `QTextEdit`_
+    """
     documentCount = 1
     def __init__(self, parent=None, filePath=''):
         """Default class constructor."""
@@ -135,6 +140,7 @@ class MDISubWindow_TextEdit(QTextEdit):
 
 
     def CreateActions(self):
+        """"""
         self.action_Edit_Undo = QAction(QIcon(gIconDir + os.sep + 'undo.png'),
                 self.tr('&Undo'), self,
                 shortcut=UndoShortcut, # QKeySequence.Undo
@@ -279,7 +285,7 @@ class MDISubWindow_TextEdit(QTextEdit):
         """
         Handles the ``contextMenuEvent`` event for :class:`MDISubWindow_TextEdit`.
 
-        :param `event`: a `QContextMenuEvent` event to be processed.
+        :param `event`: A `QContextMenuEvent`_ event to be processed.
         """
         menu = QMenu(self)
         menu.addAction(self.action_Edit_Undo)
@@ -351,7 +357,11 @@ class MDISubWindow_TextEdit(QTextEdit):
         print('OnNight')
 
     def wheelEvent(self, event):
-        """"""
+        """
+        Handles the ``wheelEvent`` event for :class:`MDISubWindow_TextEdit`.
+
+        :param `event`: A `QWheelEvent`_ to be processed.
+        """
         evtDelta = event.delta()
         evtModifiers = event.modifiers()
         evtAltDown = evtModifiers & Qt.AltModifier
@@ -409,7 +419,11 @@ class MDISubWindow_TextEdit(QTextEdit):
         self.fileExt = os.path.splitext(self.fileName)[1]
 
     def closeEvent(self, event):
-        """"""
+        """
+        Handles the ``closeEvent`` event for :class:`MDISubWindow_TextEdit`.
+
+        :param `event`: A `QCloseEvent`_ to be processed.
+        """
         if self.AskToSaveBeforeClosing():
             # self.DoWriteSettings()
             event.accept()

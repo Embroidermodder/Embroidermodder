@@ -46,6 +46,8 @@ gOsSep = os.sep
 class Settings_Dialog(QDialog):
     """
     Settings dialog for Embroidermodder.
+    
+    Subclass of `QDialog`_
     """
     def __init__(self, mw, showTab, parent):
         """
@@ -60,7 +62,7 @@ class Settings_Dialog(QDialog):
          "QuickTrack", "LineWeight", "Selection"
         :type `showTab`: QString
         :param `parent`: parent widget instance of this QDialog.
-        :type `parent`: QWidget
+        :type `parent`: `QWidget`_
         """
         super(Settings_Dialog, self).__init__(parent)
 
@@ -1817,7 +1819,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `comboBox`: TOWRITE
-        :type `comboBox`: QComboBox
+        :type `comboBox`: `QComboBox`_
         """
 
         iconTheme = self.mainWin.getSettingsGeneralIconTheme() # QString
@@ -1966,7 +1968,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_general_mdi_bg_color = color.rgb()
         self.mainWin.gMDIArea.setBackgroundColor(QColor(preview_general_mdi_bg_color))
@@ -2107,7 +2109,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_display_crosshair_color = color.rgb()
         self.mainWin.updateAllViewCrossHairColors(preview_display_crosshair_color)
@@ -2138,7 +2140,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_display_bg_color = color.rgb()
         self.mainWin.updateAllViewBackgroundColors(preview_display_bg_color)
@@ -2177,7 +2179,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_display_selectbox_left_color = color.rgb()
         self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
@@ -2220,7 +2222,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_display_selectbox_left_fill = color.rgb()
         self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
@@ -2263,7 +2265,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_display_selectbox_right_color = color.rgb()
         self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
@@ -2306,7 +2308,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_display_selectbox_right_fill = color.rgb()
         self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
@@ -2355,7 +2357,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_prompt_text_color = color.rgb()
         self.mainWin.prompt.setPromptTextColor(QColor(preview_prompt_text_color))
@@ -2386,7 +2388,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_prompt_bg_color = color.rgb()
         self.mainWin.prompt.setPromptBackgroundColor(QColor(preview_prompt_bg_color))
@@ -2555,7 +2557,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_grid_color = color.rgb()
         self.mainWin.updateAllViewGridColors(preview_grid_color)
@@ -2830,7 +2832,7 @@ class Settings_Dialog(QDialog):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         preview_ruler_color = color.rgb()
         self.mainWin.updateAllViewRulerColors(preview_ruler_color)

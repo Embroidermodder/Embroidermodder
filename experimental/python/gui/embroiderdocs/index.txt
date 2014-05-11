@@ -3,8 +3,28 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. include:: headings.inc
+
 Welcome to Embroidermodder 2's documentation!
 =============================================
+
+|app| Say something nice here...
+
+|
+
+Prerequisites
+-------------
+
+Like any other complex piece of software, Embroidermodder 2 requires other software in order to function properly.
+
+* `Python <http://www.python.org/>`_
+* `wxPython <http://www.wxpython.org/>`_
+* `PySide <http://qt-project.org/wiki/Category:LanguageBindings::PySide::Downloads>`_
+* `PyQt <http://www.riverbankcomputing.co.uk/software/pyqt/download>`_
+
+|
+
+-------------------------------------------------------------------------------
 
 Contents:
 
@@ -31,16 +51,6 @@ Contents:
    undo_editor
 
 
-Prerequisites
--------------
-
-Like any other complex piece of software, Embroidermodder 2 requires other software in order to function properly.
-
-* `Python <http://www.python.org/>`_
-* `wxPython <http://www.wxpython.org/>`_
-* `PySide <http://qt-project.org/wiki/Category:LanguageBindings::PySide::Downloads>`_
-* `PyQt <http://www.riverbankcomputing.co.uk/software/pyqt/download>`_
-
 |
 
 Indices and tables
@@ -50,3 +60,10 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+|
+
+------------------------------------------------------------------------------
+
+|Embroidermodder_Screenshot|
+
+|

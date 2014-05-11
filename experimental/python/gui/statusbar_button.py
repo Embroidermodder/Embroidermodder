@@ -23,7 +23,11 @@ except ImportError:
 
 
 class StatusBarButton(QToolButton):
-    """A QToolButton GUI element to be injected into a QStatusBar."""
+    """
+    A `QToolButton`_ GUI element to be injected into a `QStatusBar`_.
+
+    Subclass of `QToolButton`_
+    """
     def __init__(self, buttonText, mw, statbar, parent=None):
         """
         Default class constructor.
@@ -31,11 +35,11 @@ class StatusBarButton(QToolButton):
         :param `buttonText`: the text for the button label.
         :type `buttonText`: QString
         :param `mw`: The application's MainWindow instance.
-        :type `mw`: QMainWindow
+        :type `mw`: `QMainWindow`_
         :param `statbar`: The parent statusbar instance of this button.
-        :type `statbar`: QStatusBar
+        :type `statbar`: `QStatusBar`_
         :param `parent`: parent widget instance of this QToolButton.
-        :type `parent`: QWidget
+        :type `parent`: `QWidget`_
         """
         super(StatusBarButton, self).__init__(parent)
 
@@ -70,7 +74,7 @@ class StatusBarButton(QToolButton):
         """
         Handles the ``contextMenuEvent`` event for :class:`StatusBarButton`.
 
-        :param `event`: a `QContextMenuEvent` event to be processed.
+        :param `event`: A `QContextMenuEvent`_ to be processed.
         """
         QApplication.setOverrideCursor(Qt.ArrowCursor)
         menu = QMenu(self)
