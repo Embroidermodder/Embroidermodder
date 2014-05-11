@@ -15,7 +15,7 @@ div.body p, div.body dd, div.body li {
   line-height: 125%;
 }
 
-ul.simple { 
+ul.simple {
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
@@ -52,22 +52,22 @@ div.quotebar {
 }
 
 /**
- * Hide dummy toctrees 
+ * Hide dummy toctrees
  */
 
-ul { 
+ul {
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
-ul li { 
+ul li {
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
-ul li a.reference { 
+ul li a.reference {
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
@@ -77,20 +77,20 @@ ul li a.reference {
 /**
  * Make high-level subsections easier to distinguish from top-level ones
  */
-div.body h3 { 
+div.body h3 {
   background-color: transparent;
 }
 
-div.body h4 { 
+div.body h4 {
   border: none;
   background-color: transparent;
 }
 
-/** 
+/**
  * Scipy colors
  */
 
-body { 
+body {
   background-color: rgb(230,230,230);
 }
 
@@ -102,7 +102,7 @@ div.headerimage-noshow {
     display:none;
 }
 
-div.document { 
+div.document {
   background-color: rgb(230,230,230);
   position: relative;
   margin-left: 240px;
@@ -123,7 +123,7 @@ div.sphinxsidebar {
     z-index: 1;
     left: 0;
     top: 50px;
-    bottom: 0;  
+    bottom: 0;
 }
 
 div.related {
@@ -184,7 +184,7 @@ div.related ul li.reltitle {
 }
 
 div.related ul li a:hover {
-    color: #3CA8E7; 
+    color: #3CA8E7;
 }
 
 div.sphinxsidebar h3 {
@@ -194,7 +194,7 @@ div.sphinxsidebar h3 {
   font-weight: bold;
   color: #0C6AB0;
   text-shadow:
-     -1px -1px 0 #55C4E6,  
+     -1px -1px 0 #55C4E6,
       1px -1px 0 #55C4E6,
      -1px  1px 0 #55C4E6,
       1px  1px 0 #55C4E6;
@@ -207,7 +207,7 @@ div.sphinxsidebar h3 a {
   font-weight: bold;
   color: #0C6AB0;
   text-shadow:
-     -1px -1px 0 #55C4E6,  
+     -1px -1px 0 #55C4E6,
       1px -1px 0 #55C4E6,
      -1px  1px 0 #55C4E6,
       1px  1px 0 #55C4E6;
@@ -220,7 +220,7 @@ div.sphinxsidebar h4 {
   font-weight: bold;
   color: #0C6AB0;
   text-shadow:
-     -1px -1px 0 #55C4E6,  
+     -1px -1px 0 #55C4E6,
       1px -1px 0 #55C4E6,
      -1px  1px 0 #55C4E6,
       1px  1px 0 #55C4E6;
@@ -255,7 +255,7 @@ div.footer {
     float:left;
     text-align:center;
 }
-    
+
 .floatcenter {
     position:relative;
         float:none;
@@ -278,8 +278,8 @@ div.headerfix :target {
   margin-top: -{{ 30 }};
 }
 
-/** 
- * Extra admonitions 
+/**
+ * Extra admonitions
  */
 
 div.return {
@@ -296,18 +296,18 @@ div.availability {
   border: 1px solid #adff2f;
 }
 
-div.plot-output { 
+div.plot-output {
   clear-after: both;
 }
 
-div.plot-output .figure { 
+div.plot-output .figure {
   float: center;
   text-align: center;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-div.plot-output .caption { 
+div.plot-output .caption {
   margin-top: 2;
   padding-top: 0;
 }
@@ -316,11 +316,11 @@ div.plot-output p.admonition-title {
   display: none;
 }
 
-div.plot-output:after { 
-  content: ""; 
-  display: block; 
-  height: 0; 
-  clear: both; 
+div.plot-output:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
 }
 
 .doctodo {
@@ -375,7 +375,7 @@ div.admonition {
     text-align: justify;
     background-image: url('../images/sphinxdocs/todo.png');
     background-repeat: no-repeat;
-    background-position: 5px 5px;  
+    background-position: 5px 5px;
     padding-left: 33px;
 }
 
@@ -389,7 +389,7 @@ div.seealso {
     text-align: justify;
     background-image: url('../images/sphinxdocs/seealso.png');
     background-repeat: no-repeat;
-    background-position: 5px 5px;  
+    background-position: 5px 5px;
     padding-left: 33px;
 }
 
@@ -403,7 +403,7 @@ div.warning {
     text-align: justify;
     background-image: url('../images/sphinxdocs/warning.png');
     background-repeat: no-repeat;
-    background-position: 5px 5px;  
+    background-position: 5px 5px;
     padding-left: 33px;
 }
 
@@ -417,7 +417,7 @@ div.todo {
     text-align: justify;
     background-image: url('../images/sphinxdocs/todo.png');
     background-repeat: no-repeat;
-    background-position: 5px 5px;  
+    background-position: 5px 5px;
     padding-left: 33px;
 }
 
@@ -462,7 +462,7 @@ div.note {
     text-align: justify;
     background-image: url('../images/sphinxdocs/info.png');
     background-repeat: no-repeat;
-    background-position: 5px 5px;  
+    background-position: 5px 5px;
     padding-left: 33px;
 }
 
@@ -476,7 +476,7 @@ div.availability {
     text-align: justify;
     background-image: url('../images/sphinxdocs/available.png');
     background-repeat: no-repeat;
-    background-position: 5px 5px;  
+    background-position: 5px 5px;
     padding-left: 33px;
 }
 
@@ -508,12 +508,12 @@ table.field-list th {
   padding-left: 5px;
 }
 
-table.field-list { 
+table.field-list {
   border-collapse: separate;
   border-spacing: 10px;
 }
 
-/** 
+/**
  * Styling for footnotes
  */
 

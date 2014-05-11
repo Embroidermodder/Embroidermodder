@@ -31,9 +31,9 @@ sys.path.insert(0, os.path.abspath('..'))
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.todo', 
+    'sphinx.ext.todo',
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary', 
+    'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
     'availability'
     ]
@@ -206,44 +206,44 @@ html_show_copyright = True
 htmlhelp_basename = 'Embroidermodder2doc'
 
 
-# This value selects what content will be inserted into the main body of an autoclass directive. 
+# This value selects what content will be inserted into the main body of an autoclass directive.
 # "class"
-#     Only the class’ docstring is inserted. This is the default. 
+#     Only the class’ docstring is inserted. This is the default.
 #     You can still document __init__ as a separate method using automethod or the members option to autoclass.
 # "both"
 #     Both the class’ and the __init__ method’s docstring are concatenated and inserted.
 # "init"
-#     Only the __init__ method’s docstring is inserted. 
+#     Only the __init__ method’s docstring is inserted.
 autoclass_content = 'both'
 
-# This value selects if automatically documented members 
-# are sorted alphabetical (value 'alphabetical'), 
-# by member type (value 'groupwise') or 
+# This value selects if automatically documented members
+# are sorted alphabetical (value 'alphabetical'),
+# by member type (value 'groupwise') or
 # by source order (value 'bysource'). The default is alphabetical.
 # Note that for source order, the module must be a Python module with the source code available.
 autodoc_member_order = 'bysource'
 
-# This value is a list of autodoc directive flags that should be automatically 
-# applied to all autodoc directives. 
-# The supported flags are 'members', 'undoc-members', 'private-members', 
+# This value is a list of autodoc directive flags that should be automatically
+# applied to all autodoc directives.
+# The supported flags are 'members', 'undoc-members', 'private-members',
 #                         'special-members', 'inherited-members' and 'show-inheritance'.
-# If you set one of these flags in this config value, you can use a negated form, 
-# 'no-flag', in an autodoc directive, to disable it once. 
-# For example, if autodoc_default_flags is set to ['members', 'undoc-members'], 
+# If you set one of these flags in this config value, you can use a negated form,
+# 'no-flag', in an autodoc directive, to disable it once.
+# For example, if autodoc_default_flags is set to ['members', 'undoc-members'],
 # and you write a directive like this:
-# 
+#
 # .. automodule:: foo
 #    :no-undoc-members:
-# 
+#
 # the directive will be interpreted as if only :members: was given.
 ## autodoc_default_flags = []
 
-# Functions imported from C modules cannot be introspected, and therefore the 
-# signature for such functions cannot be automatically determined. 
+# Functions imported from C modules cannot be introspected, and therefore the
+# signature for such functions cannot be automatically determined.
 # However, it is an often-used convention to put the signature into the first line of the function’s docstring.
-# 
-# If this boolean value is set to True (which is the default), autodoc will look at 
-# the first line of the docstring for functions and methods, and if it looks like 
+#
+# If this boolean value is set to True (which is the default), autodoc will look at
+# the first line of the docstring for functions and methods, and if it looks like
 # a signature, use the line as the signature and remove it from the docstring content.
 ## autodoc_docstring_signature = True
 
