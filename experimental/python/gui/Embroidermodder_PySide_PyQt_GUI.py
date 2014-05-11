@@ -86,14 +86,17 @@ try:
 except:
     gFileDir = os.path.dirname(os.path.abspath(sys.argv[0]))
 
-## print(gAppDir)
-## print(os.path.basename(gAppDir))
-if os.path.basename(gFileDir) == 'python':
-    # From experimental/python dir
-    gAppDir = os.path.abspath(gFileDir + os.sep + '..' + os.sep + '..' + os.sep + 'embroidermodder2')
+## print(gFileDir)
+## print(os.path.dirname(gFileDir))
+if os.path.basename(os.path.dirname(gFileDir)) == 'python':
+    # From experimental/python/gui dir
+    gAppDir = os.path.abspath(gFileDir + os.sep + '..' + os.sep + '..' + os.sep + '..' + os.sep + 'embroidermodder2')
 elif os.path.basename(gFileDir) == 'embroidermodder2':
     # From embroidermodder2 dir
     gAppDir = gFileDir
+## print(gAppDir)
+## print(os.path.basename(gAppDir))
+
 
 gImgDir = gAppDir + os.sep + 'images'
 gIconDir = gAppDir + os.sep + 'icons' + os.sep + 'default'
