@@ -41,7 +41,7 @@ static unsigned char* vipDecompressData(unsigned char* input, int compressedInpu
     return decompressedData;
 }
 
-typedef struct _VipHeader
+typedef struct VipHeader_
 {
     int magicCode;
     int numberOfStitches;
@@ -100,7 +100,7 @@ int readVip(EmbPattern* pattern, const char* fileName)
         if(!stringVal) { embLog_error("format-vip.c readVip(), cannot allocate memory for stringVal\n"); return 0; }
      */
 
-    binaryReadBytes(file, header.stringVal, 8);
+    binaryReadBytes(file, header.stringVal, 8); /* TODO: check return value */
 
     header.unknown = binaryReadInt16(file);
 
@@ -127,19 +127,19 @@ int readVip(EmbPattern* pattern, const char* fileName)
     embFile_seek(file, header.attributeOffset, SEEK_SET);
     attributeData = (unsigned char*)malloc(header.xOffset - header.attributeOffset);
     if(!attributeData) { embLog_error("format-vip.c readVip(), cannot allocate memory for attributeData\n"); return 0; }
-    binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset);
+    binaryReadBytes(file, attributeData, header.xOffset - header.attributeOffset); /* TODO: check return value */
     attributeDataDecompressed = vipDecompressData(attributeData, header.xOffset - header.attributeOffset, header.numberOfStitches);
 
     embFile_seek(file, header.xOffset, SEEK_SET);
     xData = (unsigned char*)malloc(header.yOffset - header.xOffset);
     if(!xData) { embLog_error("format-vip.c readVip(), cannot allocate memory for xData\n"); return 0; }
-    binaryReadBytes(file, xData, header.yOffset - header.xOffset);
+    binaryReadBytes(file, xData, header.yOffset - header.xOffset); /* TODO: check return value */
     xDecompressed = vipDecompressData(xData, header.yOffset - header.xOffset, header.numberOfStitches);
 
     embFile_seek(file, header.yOffset, SEEK_SET);
     yData = (unsigned char*)malloc(fileLength - header.yOffset);
     if(!yData) { embLog_error("format-vip.c readVip(), cannot allocate memory for yData\n"); return 0; }
-    binaryReadBytes(file, yData, fileLength - header.yOffset);
+    binaryReadBytes(file, yData, fileLength - header.yOffset); /* TODO: check return value */
     yDecompressed = vipDecompressData(yData, fileLength - header.yOffset, header.numberOfStitches);
 
     for(i = 0; i < header.numberOfStitches; i++)

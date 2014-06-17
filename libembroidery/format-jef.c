@@ -81,8 +81,8 @@ int readJef(EmbPattern* pattern, const char* fileName)
     stitchOffset = binaryReadInt32(file);
     formatFlags = binaryReadInt32(file); /* TODO: find out what this means */
 
-    binaryReadBytes(file, (unsigned char*) date, 8);
-    binaryReadBytes(file, (unsigned char*) time, 8);
+    binaryReadBytes(file, (unsigned char*) date, 8); /* TODO: check return value */
+    binaryReadBytes(file, (unsigned char*) time, 8); /* TODO: check return value */
     numberOfColors = binaryReadInt32(file);
     numberOfStitchs = binaryReadInt32(file);
     hoopSize = binaryReadInt32(file);
@@ -180,7 +180,7 @@ static void jefEncode(EmbFile* file, float x, float y, int stitchType)
         binaryWriteByte(file, dx);
         binaryWriteByte(file, dy);
     }
-    else if (stitchType == END)
+    else if(stitchType == END)
     {
         binaryWriteByte(file, 0x80);
         binaryWriteByte(file, 0x10);

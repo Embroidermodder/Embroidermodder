@@ -12,7 +12,7 @@ static unsigned char* vp3ReadString(EmbFile* file)
     stringLength = binaryReadInt16BE(file);
     charString = (unsigned char*)malloc(stringLength);
     if(!charString) { embLog_error("format-vp3.c vp3ReadString(), cannot allocate memory for charString\n"); return 0; }
-    binaryReadBytes(file, charString, stringLength);
+    binaryReadBytes(file, charString, stringLength); /* TODO: check return value */
     return charString;
 }
 
@@ -123,7 +123,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    binaryReadBytes(file, magicString, 5); /* %vsm% */
+    binaryReadBytes(file, magicString, 5); /* %vsm% */ /* TODO: check return value */
 
     some = binaryReadByte(file); /* 0 */
     someString = vp3ReadString(file);
@@ -157,7 +157,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     v17 = binaryReadByte(file);
     v18 = binaryReadByte(file);
 
-    binaryReadBytes(file, magicCode, 6); /* 0x78 0x78 0x55 0x55 0x01 0x00 */
+    binaryReadBytes(file, magicCode, 6); /* 0x78 0x78 0x55 0x55 0x01 0x00 */ /* TODO: check return value */
 
     unknownString3 = vp3ReadString(file);
 

@@ -9,42 +9,46 @@
 
 typedef struct SubDescriptor_
 {
-    int SomeNum;
-    int SomeInt;
-    int SomeOtherInt;
-    char* ColorCode;
-    char* ColorName;
+    int someNum;      /* TODO: better variable naming */
+    int someInt;      /* TODO: better variable naming */
+    int someOtherInt; /* TODO: better variable naming */
+    char* colorCode;
+    char* colorName;
 } SubDescriptor;
 
 typedef struct StxThread_
 {
-    char* ColorCode;
-    char* ColorName;
-    char* SectionName;
-    SubDescriptor* SubDescriptors;
-    EmbColor StxColor;
+    char* colorCode;
+    char* colorName;
+    char* sectionName;
+    SubDescriptor* subDescriptors;
+    EmbColor stxColor;
 } StxThread;
 
 static int stxReadThread(StxThread* thread, EmbFile* file)
 {
-    /* TODO: pointer safety */
     int j, colorNameLength, sectionNameLength;
-    int somethingsomething, somethingsomething2, somethingelse, numberOfOtherDescriptors;
+    int somethingSomething, somethingSomething2, somethingElse, numberOfOtherDescriptors; /* TODO: determine what these represent */
+    int codeLength = 0;
+    char* codeBuff = 0;
     char* codeNameBuff = 0;
     char* sectionNameBuff = 0;
     EmbColor col;
-    unsigned char whatIsthis;
+    unsigned char whatIsthis; /* TODO: determine what this represents */
 
-    int codeLength = binaryReadUInt8(file);
-    char* codeBuff = (char*)malloc(codeLength);
+    if(!thread) { embLog_error("format-stx.c stxReadThread(), thread argument is null\n"); return 0; }
+    if(!file) { embLog_error("format-stx.c stxReadThread(), file argument is null\n"); return 0; }
+
+    codeLength = binaryReadUInt8(file);
+    codeBuff = (char*)malloc(codeLength);
     if(!codeBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for codeBuff\n"); return 0; }
-    binaryReadBytes(file, (unsigned char*)codeBuff, codeLength);
-    thread->ColorCode = codeBuff;
+    binaryReadBytes(file, (unsigned char*)codeBuff, codeLength); /* TODO: check return value */
+    thread->colorCode = codeBuff;
     colorNameLength = binaryReadUInt8(file);
     codeNameBuff = (char*)malloc(colorNameLength);
     if(!codeNameBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for codeNameBuff\n"); return 0; }
-    binaryReadBytes(file, (unsigned char*)codeNameBuff, colorNameLength);
-    thread->ColorName = codeNameBuff;
+    binaryReadBytes(file, (unsigned char*)codeNameBuff, colorNameLength); /* TODO: check return value */
+    thread->colorName = codeNameBuff;
 
     col.r = binaryReadUInt8(file);
     col.b = binaryReadUInt8(file);
@@ -55,37 +59,37 @@ static int stxReadThread(StxThread* thread, EmbFile* file)
     sectionNameLength = binaryReadUInt8(file);
     sectionNameBuff = (char*)malloc(sectionNameLength);
     if(!sectionNameBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for sectionNameBuff\n"); return 0; }
-    binaryReadBytes(file, (unsigned char*)sectionNameBuff, sectionNameLength);
-    thread->SectionName = sectionNameBuff;
+    binaryReadBytes(file, (unsigned char*)sectionNameBuff, sectionNameLength); /* TODO: check return value */
+    thread->sectionName = sectionNameBuff;
 
-    somethingsomething = binaryReadInt32(file);
-    somethingsomething2 = binaryReadInt32(file);
-    somethingelse = binaryReadInt32(file);
+    somethingSomething = binaryReadInt32(file);
+    somethingSomething2 = binaryReadInt32(file);
+    somethingElse = binaryReadInt32(file);
     numberOfOtherDescriptors = binaryReadInt16(file);
 
-    thread->SubDescriptors = (SubDescriptor*)malloc(sizeof(SubDescriptor) * numberOfOtherDescriptors);
-    if(!thread->SubDescriptors) return 0;
+    thread->subDescriptors = (SubDescriptor*)malloc(sizeof(SubDescriptor) * numberOfOtherDescriptors);
+    if(!thread->subDescriptors) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for thread->subDescriptors\n"); return 0; }
     for(j = 0; j < numberOfOtherDescriptors; j++)
     {
         SubDescriptor sd;
         char* subCodeBuff, *subColorNameBuff;
-        int subcodeLength, subcolorNameLength;
+        int subCodeLength, subColorNameLength;
 
-        sd.SomeNum = binaryReadInt16(file);
-        /* Debug.Assert(sd.SomeNum == 1); */
-        sd.SomeInt = binaryReadInt32(file);
-        subcodeLength = binaryReadUInt8(file);
-        subCodeBuff = (char*)malloc(subcodeLength);
+        sd.someNum = binaryReadInt16(file);
+        /* Debug.Assert(sd.someNum == 1); TODO: review */
+        sd.someInt = binaryReadInt32(file);
+        subCodeLength = binaryReadUInt8(file);
+        subCodeBuff = (char*)malloc(subCodeLength);
         if(!subCodeBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for subCodeBuff\n"); return 0; }
-        binaryReadBytes(file, (unsigned char*)subCodeBuff, subcodeLength);
-        sd.ColorCode = subCodeBuff;
-        subcolorNameLength = binaryReadUInt8(file);
-        subColorNameBuff = (char*)malloc(subcolorNameLength);
+        binaryReadBytes(file, (unsigned char*)subCodeBuff, subCodeLength); /* TODO: check return value */
+        sd.colorCode = subCodeBuff;
+        subColorNameLength = binaryReadUInt8(file);
+        subColorNameBuff = (char*)malloc(subColorNameLength);
         if(!subColorNameBuff) { embLog_error("format-stx.c stxReadThread(), unable to allocate memory for subColorNameBuff\n"); return 0; }
-        binaryReadBytes(file, (unsigned char*)subColorNameBuff, subcolorNameLength);
-        sd.ColorName = subColorNameBuff;
-        sd.SomeOtherInt = binaryReadInt32(file);
-        thread->SubDescriptors[j] = sd;
+        binaryReadBytes(file, (unsigned char*)subColorNameBuff, subColorNameLength); /* TODO: check return value */
+        sd.colorName = subColorNameBuff;
+        sd.someOtherInt = binaryReadInt32(file);
+        thread->subDescriptors[j] = sd;
     }
     return 1;
 }
@@ -118,7 +122,7 @@ int readStx(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    binaryReadBytes(file, headerBytes, 7);
+    binaryReadBytes(file, headerBytes, 7); /* TODO: check return value */
     header = (char*)headerBytes;
 
     memcpy(filetype, &header[0], 3);
@@ -141,9 +145,9 @@ int readStx(EmbPattern* pattern, const char* fileName)
 
     gif = (unsigned char*)malloc(imageLength);
     if(!gif) { embLog_error("format-stx.c readStx(), unable to allocate memory for gif\n"); return 0; }
-    binaryReadBytes(file, gif, imageLength);
-    /*Stream s2 = new MemoryStream(gif); */
-    /*Image = new Bitmap(s2); */
+    binaryReadBytes(file, gif, imageLength); /* TODO: check return value */
+    /*Stream s2 = new MemoryStream(gif); TODO: review */
+    /*Image = new Bitmap(s2); TODO: review */
 
     threadCount = binaryReadInt16(file);
     stxThreads = (StxThread*)malloc(sizeof(StxThread) * threadCount);
@@ -154,11 +158,11 @@ int readStx(EmbPattern* pattern, const char* fileName)
         StxThread st;
         stxReadThread(&st, file);
 
-        t.color.r = st.StxColor.r;
-        t.color.g = st.StxColor.g;
-        t.color.b = st.StxColor.b;
-        t.description = st.ColorName;
-        t.catalogNumber = st.ColorCode;
+        t.color.r = st.stxColor.r;
+        t.color.g = st.stxColor.g;
+        t.color.b = st.stxColor.b;
+        t.description = st.colorName;
+        t.catalogNumber = st.colorCode;
         embPattern_addThread(pattern, t);
         stxThreads[i] = st;
     }
@@ -187,19 +191,19 @@ int readStx(EmbPattern* pattern, const char* fileName)
     binaryReadInt32(file); /* 0 */
     binaryReadInt32(file); /* 0 */
 
-    /* br.BaseStream.Position = stitchDataOffset; */
+    /* br.BaseStream.Position = stitchDataOffset; TODO: review */
     for(i = 1; i < stitchCount; )
     {
         char b0 = binaryReadByte(file);
         char b1 = binaryReadByte(file);
         if(b0 == -128)
         {
-            switch (b1)
+            switch(b1)
             {
                 case 1:
                     b0 = binaryReadByte(file);
                     b1 = binaryReadByte(file);
-                    /*embPattern_addStitchRel(b0, b1, STOP);*/
+                    /*embPattern_addStitchRel(b0, b1, STOP); TODO: review */
 
                     i++;
                     break;
@@ -210,10 +214,10 @@ int readStx(EmbPattern* pattern, const char* fileName)
                     i++;
                     break;
                 case -94:
-                    /* NOTE: Is this a syncronize */
+                    /* TODO: Is this a syncronize? If so document it in the comments. */
                     break;
                 default:
-                    /*Debugger.Break(); */
+                    /*Debugger.Break(); TODO: review */
                     break;
             }
         }

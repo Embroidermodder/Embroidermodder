@@ -136,7 +136,7 @@ int readHus(EmbPattern* pattern, const char* fileName)
 
     stringVal = (unsigned char*)malloc(sizeof(unsigned char)*8);
     if(!stringVal) { embLog_error("format-hus.c readHus(), cannot allocate memory for stringVal\n"); return 0; }
-    binaryReadBytes(file, stringVal, 8);
+    binaryReadBytes(file, stringVal, 8); /* TODO: check return value */
 
     unknown = binaryReadInt16(file);
     for(i = 0; i < numberOfColors; i++)
@@ -147,17 +147,17 @@ int readHus(EmbPattern* pattern, const char* fileName)
 
     attributeData = (unsigned char*)malloc(sizeof(unsigned char)*(xOffset - attributeOffset + 1));
     if(!attributeData) { embLog_error("format-hus.c readHus(), cannot allocate memory for attributeData\n"); return 0; }
-    binaryReadBytes(file, attributeData, xOffset - attributeOffset);
+    binaryReadBytes(file, attributeData, xOffset - attributeOffset); /* TODO: check return value */
     attributeDataDecompressed = husDecompressData(attributeData, xOffset - attributeOffset, numberOfStitches + 1);
 
     xData = (unsigned char*)malloc(sizeof(unsigned char)*(yOffset - xOffset + 1));
     if(!xData) { embLog_error("format-hus.c readHus(), cannot allocate memory for xData\n"); return 0; }
-    binaryReadBytes(file, xData, yOffset - xOffset);
+    binaryReadBytes(file, xData, yOffset - xOffset); /* TODO: check return value */
     xDecompressed = husDecompressData(xData, yOffset - xOffset, numberOfStitches);
 
     yData = (unsigned char*)malloc(sizeof(unsigned char)*(fileLength - yOffset + 1));
     if(!yData) { embLog_error("format-hus.c readHus(), cannot allocate memory for yData\n"); return 0; }
-    binaryReadBytes(file, yData, fileLength - yOffset);
+    binaryReadBytes(file, yData, fileLength - yOffset); /* TODO: check return value */
     yDecompressed = husDecompressData(yData, fileLength - yOffset, numberOfStitches);
 
     for(i = 0; i < numberOfStitches; i++)

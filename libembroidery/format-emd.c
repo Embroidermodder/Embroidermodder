@@ -5,7 +5,7 @@
 
 static char emdDecode(unsigned char inputByte)
 {
-    return (inputByte >= 0x80) ? ((-~inputByte) - 1) : inputByte;
+    return (inputByte >= 0x80) ? ((-~inputByte) - 1) : inputByte; /* TODO: eliminate ternary return statement */
 }
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
@@ -16,7 +16,7 @@ int readEmd(EmbPattern* pattern, const char* fileName)
     char dx = 0, dy = 0;
     int flags = NORMAL;
     char endOfStream = 0;
-    unsigned char jemd0[6];
+    unsigned char jemd0[6]; /* TODO: more descriptive name */
     int width, height, colors;
     int i;
     EmbFile* file = 0;
@@ -33,7 +33,7 @@ int readEmd(EmbPattern* pattern, const char* fileName)
 
     embPattern_loadExternalColorFile(pattern, fileName);
 
-    binaryReadBytes(file, jemd0, 6);
+    binaryReadBytes(file, jemd0, 6); /* TODO: check return value */
     width = binaryReadInt16(file);
     height = binaryReadInt16(file);
     colors = binaryReadInt16(file);

@@ -91,7 +91,7 @@ static void encode_record(EmbFile* file, int x, int y, int flags)
     char b0, b1, b2;
     b0 = b1 = b2 = 0;
 
-    /* cannot encode values >+121 or < -121. */
+    /* cannot encode values > +121 or < -121. */
     if(x > 121 || x < -121) embLog_error("format-dst.c encode_record(), x is not in valid range [-121,121] , x = %d\n", x);
     if(y > 121 || y < -121) embLog_error("format-dst.c encode_record(), y is not in valid range [-121,121] , y = %d\n", y);
 
@@ -312,7 +312,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
             var[1] = header[i - 1];
             var[2] = '\0';
             valpos = i + 1;
-            for (i++; i < 512; i++)
+            for(i++; i < 512; i++)
             {
                 /* don't accept : without CR because there's a bug below: i-valpos must be > 0 which is not the case if the : is before the third character. */
                 if(header[i] == 13/*||header[i]==':'*/) /* 0x0d = carriage return */
@@ -396,7 +396,7 @@ int readDst(EmbPattern* pattern, const char* fileName)
 int writeDst(EmbPattern* pattern, const char* fileName)
 {
     EmbRect boundingRect;
-    EmbFile* file = 0; /* TODO: change writeDst() to use EmbFile */
+    EmbFile* file = 0;
     int xx, yy, dx, dy, flags;
     int i;
     int co = 1, st = 0;

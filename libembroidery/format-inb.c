@@ -18,7 +18,7 @@ int readInb(EmbPattern* pattern, const char* fileName)
     short unknown2;
     short imageWidth;
     short imageHeight;
-    unsigned char bytesUnknown[300];
+    unsigned char bytesUnknown[300]; /* TODO: determine what this represents */
     short nullbyte;
     short left;
     short right;
@@ -42,7 +42,7 @@ int readInb(EmbPattern* pattern, const char* fileName)
     embPattern_loadExternalColorFile(pattern, fileName);
     embFile_seek(file, 0, SEEK_END);
     fileLength = embFile_tell(file);
-    binaryReadBytes(file, fileDescription, 8);
+    binaryReadBytes(file, fileDescription, 8); /* TODO: check return value */
     nullVal = binaryReadByte(file);
     binaryReadInt16(file);
     stitchCount = binaryReadInt32(file);
@@ -53,7 +53,7 @@ int readInb(EmbPattern* pattern, const char* fileName)
     unknown2 = binaryReadInt16(file);
     imageWidth = binaryReadInt16(file);
     imageHeight = binaryReadInt16(file);
-    binaryReadBytes(file, bytesUnknown, 300);
+    binaryReadBytes(file, bytesUnknown, 300); /* TODO: check return value */
     nullbyte = binaryReadInt16(file);
     left = binaryReadInt16(file);
     right = binaryReadInt16(file);

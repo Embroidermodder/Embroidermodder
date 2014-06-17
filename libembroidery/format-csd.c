@@ -117,7 +117,7 @@ int readCsd(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    binaryReadBytes(file, identifier, 8);
+    binaryReadBytes(file, identifier, 8); /* TODO: check return value */
 
     if(identifier[0] != 0x7C && identifier[2] != 0xC3)
     {
