@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
+__doc__ = """
+Embroidermodder_wxPythonGUI.py
+==============================
+
 Embroidermodder v2.0 wxPython GUI
+
 """
 
 #-Imports.----------------------------------------------------------------------
@@ -38,9 +42,9 @@ except:
 
 ## print(gAppDir)
 ## print(os.path.basename(gAppDir))
-if os.path.basename(gFileDir) == 'python':
-    # From experimental/python dir
-    gAppDir = gFileDir + os.sep + '..' + os.sep + '..' + os.sep + 'embroidermodder2'
+if os.path.basename(os.path.dirname(gFileDir)) == 'python':
+    # From experimental/python/gui dir
+    gAppDir = gFileDir + os.sep + '..' + os.sep + '..' + os.sep + '..' + os.sep + 'embroidermodder2'
 elif os.path.basename(gFileDir) == 'embroidermodder2':
     # From embroidermodder2 dir
     gAppDir = gFileDir

@@ -1,0 +1,13 @@
+#########################
+# Python
+*.pyc
+*.pyd
+*.pyo
+
+#########################
+# Junk files
+Thumbs.db
+
+#########################
+# Generated Html Build
+_build

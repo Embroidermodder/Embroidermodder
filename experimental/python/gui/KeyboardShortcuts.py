@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+keyboardshortcuts.py
+====================
+
 Keyboard Shortcuts for Embroidermodder.
 """
 #---FileMenu---

@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Embroidermodder_PySide_PyQt_GUI.py
+==================================
+
+"""
+
 #-Imports.----------------------------------------------------------------------
 #--Python Imports.
 import os
@@ -112,6 +118,8 @@ pythonVersion = 'Python %d.%d.%d-%s'%(major, minor, micro, release)
 class MDIArea(QMdiArea):
     """
     Multiple Document Interface(MDI) Area for Embroidermodder.
+
+    Subclass of `QMdiArea`_
     """
     def __init__(self):
         """Default class constructor."""
@@ -232,7 +240,7 @@ class MDIArea(QMdiArea):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         if not color.isValid():
             self.bgColor = background().color()
@@ -244,6 +252,11 @@ class MDIArea(QMdiArea):
 
     # Other defs----------------------------------------------------------------
     def dragEnterEvent(self, event):
+        """
+        Handles the ``dragEnterEvent`` event for :class:`MDIArea`.
+
+        :param `event`: a `QDragEnterEvent`_ to be processed.
+        """
         print('event.mimeData().hasText()  = %s' % event.mimeData().hasText())
         print('event.mimeData().hasHtml()  = %s' % event.mimeData().hasHtml())
         print('event.mimeData().hasUrls()  = %s' % event.mimeData().hasUrls())
@@ -262,6 +275,11 @@ class MDIArea(QMdiArea):
             event.ignore()
 
     def dropEvent(self, event):
+        """
+        Handles the ``dropEvent`` event for :class:`MDIArea`.
+
+        :param `event`: a `QDropEvent`_ to be processed.
+        """
         print(event.mimeData().text())
         # self.setText(event.mimeData().text())
 
@@ -269,7 +287,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``paintEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QPaintEvent` event to be processed.
+        :param `event`: a `QPaintEvent`_ to be processed.
         """
         vport = self.viewport()
         rect = vport.rect()
@@ -309,7 +327,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``mouseDoubleClickEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         print(event.button())
         evtBtn = event.button()
@@ -328,7 +346,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``mousePressEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         # print(event.button())
         evtBtn = event.button()
@@ -350,7 +368,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``mouseMoveEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         # Dragging while MouseButton is down.
         print("QMdiArea mouseMoveEvent")
@@ -359,7 +377,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``mouseReleaseEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         print("QMdiArea mouseReleaseEvent")
 
@@ -367,7 +385,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``moveEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QMoveEvent` event to be processed.
+        :param `event`: A `QMoveEvent`_ to be processed.
         """
         # Dragging while MouseButton is down.
         print("QMdiArea moveEvent")
@@ -376,7 +394,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``contextMenuEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QContextMenuEvent` event to be processed.
+        :param `event`: A `QContextMenuEvent`_ to be processed.
         """
 
         if not len(self.subWindowList()): # Nothing is open.
@@ -403,7 +421,7 @@ class MDIArea(QMdiArea):
 
         :param `brush`: By default, it is a the Embroidermodder Spirals Theme Pixmap,
          but can be any brush (e.g., colors, gradients or pixmaps).
-        :type `brush`: QtGui.QBrush
+        :type `brush`: `QBrush`_
         """
         if not brush:
             self.backgroundBrush = QBrush(QPixmap(gSpiralsImgPath))

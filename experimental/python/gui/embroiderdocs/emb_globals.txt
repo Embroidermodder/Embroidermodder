@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: emb_globals
+   :members:
+   :undoc-members:

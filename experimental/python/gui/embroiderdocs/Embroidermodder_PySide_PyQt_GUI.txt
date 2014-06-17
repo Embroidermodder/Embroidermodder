@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: Embroidermodder_PySide_PyQt_GUI
+   :members:
+   :undoc-members:

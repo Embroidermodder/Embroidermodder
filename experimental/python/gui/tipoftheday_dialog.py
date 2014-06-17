@@ -3,6 +3,7 @@
 
 """
 tipoftheday_dialog.py
+=====================
 
 This module houses the code for the Tip Of The Day Dialog.
 
@@ -61,6 +62,8 @@ except ImportError:
 class LightSwitchWidget(QLabel):
     """
     A image widget.
+
+    Subclass of `QLabel`_
     """
     def __init__(self, imgDir, mw, parent):
         """
@@ -108,7 +111,11 @@ class LightSwitchWidget(QLabel):
 
     def mousePressEvent(self, event):
         """
+        Handles the ``mousePressEvent`` event for :class:`LightSwitchWidget`.
+
         Flipping the lightswitch On/Off.
+
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         if event.button() == Qt.LeftButton:
             if self.isOn:
@@ -144,6 +151,8 @@ class LightSwitchWidget(QLabel):
 class ImageWidget(QLabel):
     """
     A image widget.
+
+    Subclass of `QLabel`_
     """
     def __init__(self, imgDir, iconDir, parent):
         """
@@ -171,7 +180,7 @@ class ImageWidget(QLabel):
         """
         Handles the ``paintEvent`` event for :class:`ImageWidget`.
 
-        :param `event`: a `QPaintEvent` event to be processed.
+        :param `event`: a `QPaintEvent`_ event to be processed.
         """
         painter = QPainter(self)
         painter.drawPixmap(0, 0, self.pixmap)
@@ -182,6 +191,8 @@ class ImageWidget(QLabel):
 class TipOfTheDayDialog(QWizard):
     """
     Tip Of The Day Dialog Class
+    
+    Subclass of `QWizard`_
     """
     def __init__(self, parent):
         super(TipOfTheDayDialog, self).__init__(parent)

@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+mainwindow_settings.py
+======================
+
+"""
+
 #-Imports.----------------------------------------------------------------------
 
 #--Python Imports.

@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: KeyboardShortcuts
+   :members:
+   :undoc-members:

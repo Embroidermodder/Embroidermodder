@@ -1,0 +1,5 @@
+.. include:: headings.inc
+
+.. automodule:: embdetails_dialog
+   :members:
+   :undoc-members:

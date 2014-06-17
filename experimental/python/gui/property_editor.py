@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
+property_editor.py
+==================
+
 """
 
 #-Imports.----------------------------------------------------------------------
@@ -39,7 +42,9 @@ from object_data import *
 
 class PropertyEditor(QDockWidget):
     """
-    About Dialog for Embroidermodder.
+    Property Editor Dock Widget for Embroidermodder.
+
+    Subclass of `QDockWidget`_
     """
     def __init__(self, iconDirectory, pickAddMode, widgetToFocus,
                  title, parent, flags=Qt.WindowFlags):
@@ -51,9 +56,9 @@ class PropertyEditor(QDockWidget):
         :param `pickAddMode`: TOWRITE
         :type `pickAddMode`: bool
         :param `widgetToFocus`: TOWRITE
-        :type `widgetToFocus`: QWidget
+        :type `widgetToFocus`: `QWidget`_
         :param `parent`: TOWRITE
-        :type `parent`: QWidget
+        :type `parent`: `QWidget`_
         :param `flags`: TOWRITE
         :type `flags`: Qt.WindowFlags
         """
@@ -228,9 +233,9 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `obj`: TOWRITE
-        :type `obj`: QObject
+        :type `obj`: `QObject`_
         :param `event`: TOWRITE
-        :type `event`: QEvent
+        :type `event`: `QEvent`_
         """
         if event.type() == QEvent.KeyPress:
 
@@ -586,7 +591,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `lineEdit`: TOWRITE
-        :type `lineEdit`: QLineEdit
+        :type `lineEdit`: `QLineEdit`_
         :param `strng`: TOWRITE
         :type `strng`: QString
         """
@@ -603,7 +608,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `lineEdit`: TOWRITE
-        :type `lineEdit`: QLineEdit
+        :type `lineEdit`: `QLineEdit`_
         :param `num`: TOWRITE
         :type `num`: qreal
         :param `useAnglePrecision`: TOWRITE
@@ -635,7 +640,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `fontComboBox`: TOWRITE
-        :type `fontComboBox`: QFontComboBox
+        :type `fontComboBox`: `QFontComboBox`_
         :param `strng`: TOWRITE
         :type `strng`: QString
         """
@@ -658,7 +663,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `comboBox`: TOWRITE
-        :type `comboBox`: QComboBox
+        :type `comboBox`: `QComboBox`_
         :param `strng`: TOWRITE
         :type `strng`: QString
         :param `strList`: TOWRITE
@@ -686,7 +691,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `comboBox`: TOWRITE
-        :type `comboBox`: QComboBox
+        :type `comboBox`: `QComboBox`_
         :param `val`: TOWRITE
         :type `val`: bool
         :param `yesOrNoText`: TOWRITE
@@ -1691,7 +1696,7 @@ class PropertyEditor(QDockWidget):
 
     def createComboBox(self, disable):
         """
-        Create and return a QComboBox GUI element.
+        Create and return a `QComboBox`_ GUI element.
 
         :param `disable`: Whether to initially disable the QComboBox state.
         :type `disable`: bool
@@ -1702,7 +1707,7 @@ class PropertyEditor(QDockWidget):
 
     def createFontComboBox(self, disable):
         """
-        Create and return a QFontComboBox GUI element.
+        Create and return a `QFontComboBox`_ GUI element.
 
         :param `disable`: Whether to initially disable the QFontComboBox state.
         :type `disable`: bool
@@ -1716,7 +1721,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `fieldObj`: TOWRITE
-        :type `fieldObj`: QObject
+        :type `fieldObj`: `QObject`_
         :param `name`: TOWRITE
         :type `name`: QString
         :param `value`: TOWRITE
@@ -1737,7 +1742,7 @@ class PropertyEditor(QDockWidget):
         TOWRITE
 
         :param `fieldObj`: TOWRITE
-        :type `fieldObj`: QObject
+        :type `fieldObj`: `QObject`_
         """
         #TODO# static bool blockSignals = False
         if blockSignals:

@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+emb_globals.py
+==============
+
+TOWRITE
+"""
+
 EMBROIDERBLUE1 = '#0C6AB0' # (12, 106, 176)
 EMBROIDERBLUE2 = '#55C4E6' # (85, 196, 230)
 

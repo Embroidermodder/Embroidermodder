@@ -3,6 +3,7 @@
 
 """
 statusbar.py
+============
 
 TOWRITE
 """
@@ -25,13 +26,17 @@ from statusbar_button import StatusBarButton
 
 
 class StatusBar(QStatusBar):
-    """StatusBar GUI element for Embroidermodder application."""
+    """
+    StatusBar GUI element for Embroidermodder application.
+    
+    Subclass of `QStatusBar`_
+    """
     def __init__(self, parent=None):
         """
         Default class constructor.
 
         :param `parent`: parent widget instance of this QStatusBar.
-        :type `parent`: QWidget
+        :type `parent`: `QWidget`_
         """
         super(StatusBar, self).__init__(parent)
 
