@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-mainwindow_settings.py
-======================
+=======================================
+|module_summary| mainwindow_settings.py
+=======================================
 
+TOWRITE
 """
 
 #-Imports.----------------------------------------------------------------------
@@ -34,7 +36,7 @@ except ImportError:
 
 
 def DoReadSettings(self): # void MainWindow::
-
+    """"""
     qDebug("Reading Settings...")
     theSettingsIniPath = self.gAppDir + os.sep + "settings-py.ini"
 

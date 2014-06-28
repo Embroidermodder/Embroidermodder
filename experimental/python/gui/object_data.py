@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 
 """
-object_data.py
-==============
+===============================
+|module_summary| object_data.py
+===============================
 
 TOWRITE
 """
 
-OBJ_TYPE_NULL         =      0  
+OBJ_TYPE_NULL         =      0
 """:NOTE: Allow this enum to evaluate false"""
 OBJ_TYPE_BASE         = 100000
 """:NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast()"""

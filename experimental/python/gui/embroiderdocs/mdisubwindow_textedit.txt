@@ -3,3 +3,11 @@
 .. automodule:: mdisubwindow_textedit
    :members:
    :undoc-members:
+   :private-members:
+   :special-members:
+   :show-inheritance:
+   :member-order:
+   :platform:
+   :synopsis:
+   :deprecated:
+   :exclude-members: __module__, staticMetaObject

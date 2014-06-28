@@ -2,10 +2,21 @@
 # -*- coding: utf-8 -*-
 
 """
-statusbar_button.py
-===================
+====================================
+|module_summary| statusbar_button.py
+====================================
 
 TOWRITE
+
+
+Classes summary:
+================
+
+============================ ============================
+:class:`~StatusBarButton`    A `QToolButton`_ GUI element to be injected into a `QStatusBar`_.
+============================ ============================
+
+---------------------------------------------------------
 """
 
 #-Imports.---------------------------------------------------------------------
@@ -24,9 +35,12 @@ except ImportError:
 
 class StatusBarButton(QToolButton):
     """
+    Subclass of `QToolButton`_
+
     A `QToolButton`_ GUI element to be injected into a `QStatusBar`_.
 
-    Subclass of `QToolButton`_
+    .. sphinx_generate_methods_summary::
+       StatusBarButton
     """
     def __init__(self, buttonText, mw, statbar, parent=None):
         """
@@ -38,7 +52,7 @@ class StatusBarButton(QToolButton):
         :type `mw`: `QMainWindow`_
         :param `statbar`: The parent statusbar instance of this button.
         :type `statbar`: `QStatusBar`_
-        :param `parent`: parent widget instance of this QToolButton.
+        :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
         super(StatusBarButton, self).__init__(parent)
@@ -147,27 +161,35 @@ class StatusBarButton(QToolButton):
         self.statusbar.clearMessage()
 
     def settingsSnap(self):
+        """"""
         self.mainWin.settingsDialog("Snap")
 
     def settingsGrid(self):
+        """"""
         self.mainWin.settingsDialog("Grid/Ruler")
 
     def settingsRuler(self):
+        """"""
         self.mainWin.settingsDialog("Grid/Ruler")
 
     def settingsOrtho(self):
+        """"""
         self.mainWin.settingsDialog("Ortho/Polar")
 
     def settingsPolar(self):
+        """"""
         self.mainWin.settingsDialog("Ortho/Polar")
 
     def settingsQSnap(self):
+        """"""
         self.mainWin.settingsDialog("QuickSnap")
 
     def settingsQTrack(self):
+        """"""
         self.mainWin.settingsDialog("QuickTrack")
 
     def settingsLwt(self):
+        """"""
         self.mainWin.settingsDialog("LineWeight")
 
     def toggleSnap(self, on):
@@ -267,6 +289,7 @@ class StatusBarButton(QToolButton):
             gview.toggleLwt(on)
 
     def enableLwt(self):
+        """"""
         qDebug("StatusBarButton enableLwt()")
         gview = self.mainWin.activeView()
         if gview:
@@ -274,6 +297,7 @@ class StatusBarButton(QToolButton):
                 gview.toggleLwt(True)
 
     def disableLwt(self):
+        """"""
         qDebug("StatusBarButton disableLwt()")
         gview = self.mainWin.activeView()
         if gview:
@@ -281,12 +305,14 @@ class StatusBarButton(QToolButton):
                 gview.toggleLwt(False)
 
     def enableReal(self):
+        """"""
         qDebug("StatusBarButton enableReal()")
         gview = self.mainWin.activeView()
         if gview:
             gview.toggleReal(True)
 
     def disableReal(self):
+        """"""
         qDebug("StatusBarButton disableReal()")
         gview = self.mainWin.activeView()
         if gview:

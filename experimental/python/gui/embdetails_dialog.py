@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-embdetails_dialog.py
-====================
+=====================================
+|module_summary| embdetails_dialog.py
+=====================================
 
 TOWRITE
 """
@@ -44,16 +45,21 @@ except ImportError:
 
 class EmbDetailsDialog(QDialog):
     """
+    Subclass of `QDialog`_
+
     Class implementing the Details dialog.
+
+    .. sphinx_generate_methods_summary::
+       EmbDetailsDialog
     """
     def __init__(self, theScene, parent):
         """
         Default class constructor.
 
         :param `theScene`: TOWRITE
-        :type `theScene`: QGraphicsScene
-        :param `parent`: parent widget instance of this dialog.
-        :type `parent`: QWidget
+        :type `theScene`: `QGraphicsScene`_
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
         """
         super(EmbDetailsDialog, self).__init__(parent)
 
@@ -99,7 +105,7 @@ class EmbDetailsDialog(QDialog):
         TOWRITE
 
         :return: TOWRITE
-        :rtype: QScrollArea
+        :rtype: `QScrollArea`_
         """
         widget = QWidget(self)
 

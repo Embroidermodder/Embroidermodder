@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-undo_editor.py
-==============
+===============================
+|module_summary| undo_editor.py
+===============================
 
 TOWRITE
 """
@@ -38,6 +39,14 @@ except ImportError:
 
 
 class UndoEditor(QDockWidget):
+    """
+    Subclass of `QDockWidget`_
+
+    TOWRITE
+
+    .. sphinx_generate_methods_summary::
+       UndoEditor
+    """
     def __init__(self, iconDirectory, widgetToFocus, parent=None,
                  flags=Qt.WindowFlags()):
         """
@@ -46,9 +55,9 @@ class UndoEditor(QDockWidget):
         :param `iconDirectory`: TOWRITE
         :type `iconDirectory`: QString
         :param `widgetToFocus`: TOWRITE
-        :type `widgetToFocus`: QWidget
-        :param `parent`: TOWRITE
-        :type `parent`: QWidget
+        :type `widgetToFocus`: `QWidget`_
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
         :param `flags`: TOWRITE
         :type `flags`: Qt.WindowFlags
         """
@@ -76,7 +85,7 @@ class UndoEditor(QDockWidget):
         TOWRITE
 
         :param `stack`: TOWRITE
-        :type `stack`: QUndoStack
+        :type `stack`: `QUndoStack`_
         """
         self.undoGroup.addStack(stack)
 

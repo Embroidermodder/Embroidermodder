@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-emb_globals.py
-==============
+===============================
+|module_summary| emb_globals.py
+===============================
 
 TOWRITE
 """

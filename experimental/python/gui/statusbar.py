@@ -2,10 +2,21 @@
 # -*- coding: utf-8 -*-
 
 """
-statusbar.py
-============
+=============================
+|module_summary| statusbar.py
+=============================
 
 TOWRITE
+
+
+Classes summary:
+================
+
+============================ ============================
+:class:`~StatusBar`          StatusBar GUI element for Embroidermodder application.
+============================ ============================
+
+---------------------------------------------------------
 """
 
 #-Imports.---------------------------------------------------------------------
@@ -27,15 +38,18 @@ from statusbar_button import StatusBarButton
 
 class StatusBar(QStatusBar):
     """
-    StatusBar GUI element for Embroidermodder application.
-    
     Subclass of `QStatusBar`_
+
+    StatusBar GUI element for Embroidermodder application.
+
+    .. sphinx_generate_methods_summary::
+       StatusBar
     """
     def __init__(self, parent=None):
         """
         Default class constructor.
 
-        :param `parent`: parent widget instance of this QStatusBar.
+        :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
         super(StatusBar, self).__init__(parent)

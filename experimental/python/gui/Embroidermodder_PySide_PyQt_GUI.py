@@ -2,9 +2,21 @@
 # -*- coding: utf-8 -*-
 
 """
-Embroidermodder_PySide_PyQt_GUI.py
-==================================
+===================================================
+|module_summary| Embroidermodder_PySide_PyQt_GUI.py
+===================================================
 
+TOWRITE
+
+Classes summary:
+================
+
+==================================== ============================
+:class:`~MDIArea`                    TOWRITE
+:class:`~EmbroidermodderMainWindow`  TOWRITE
+==================================== ============================
+
+-----------------------------------------------------------------
 """
 
 #-Imports.----------------------------------------------------------------------
@@ -117,9 +129,12 @@ pythonVersion = 'Python %d.%d.%d-%s'%(major, minor, micro, release)
 
 class MDIArea(QMdiArea):
     """
+    Subclass of `QMdiArea`_
+
     Multiple Document Interface(MDI) Area for Embroidermodder.
 
-    Subclass of `QMdiArea`_
+    .. sphinx_generate_methods_summary::
+       MDIArea
     """
     def __init__(self):
         """Default class constructor."""
@@ -255,7 +270,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``dragEnterEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QDragEnterEvent`_ to be processed.
+        :param `event`: A `QDragEnterEvent`_ to be processed.
         """
         print('event.mimeData().hasText()  = %s' % event.mimeData().hasText())
         print('event.mimeData().hasHtml()  = %s' % event.mimeData().hasHtml())
@@ -278,7 +293,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``dropEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QDropEvent`_ to be processed.
+        :param `event`: A `QDropEvent`_ to be processed.
         """
         print(event.mimeData().text())
         # self.setText(event.mimeData().text())
@@ -287,7 +302,7 @@ class MDIArea(QMdiArea):
         """
         Handles the ``paintEvent`` event for :class:`MDIArea`.
 
-        :param `event`: a `QPaintEvent`_ to be processed.
+        :param `event`: A `QPaintEvent`_ to be processed.
         """
         vport = self.viewport()
         rect = vport.rect()
@@ -479,7 +494,14 @@ class MDIArea(QMdiArea):
 
 
 class EmbroidermodderMainWindow(QMainWindow):
-    """Main Frame Window for Embroidermodder application."""
+    """
+    Subclass of `QMainWindow`_
+
+    Main Frame Window for Embroidermodder application.
+
+    .. sphinx_generate_methods_summary::
+       EmbroidermodderMainWindow
+    """
     def __init__(self):
         """Default class constructor."""
         super(EmbroidermodderMainWindow, self).__init__()
@@ -563,27 +585,32 @@ class EmbroidermodderMainWindow(QMainWindow):
     #     self.gMDIArea.setViewMode(QMdiArea.TabbedView)
     #     self.DoOpenFilePath('TODO.txt')
 
-    def OnTest01(self):
+    def ___test01(self):
+        """"""
         # Set Individual ToolBar Size
         self.gToolBar_Help.setIconSize(QSize(16, 16))
-        print('OnTest01')
+        print('___test01')
 
-    def OnTest02(self):
+    def ___test02(self):
+        """"""
         # self.gMenu_Help.setIconSize(QSize(32, 32))
         print('self.sender().text() = %s' % self.sender().text())
         print('self.sender().parentWidget() = %s' % self.sender().parentWidget())
         print('self.sender().objectName() = %s' % self.sender().objectName())
-        print('OnTest02')
+        print('___test02')
 
-    def OnTest03(self):
+    def ___test03(self):
+        """"""
         self.gMDIArea.DoSetBackground(QBrush(Qt.cyan))
         ForceRepaint(self.gMDIArea)
-        print('OnTest03')
+        print('___test03')
 
-    def OnTest04(self):
-        print('OnTest04')
+    def ___test04(self):
+        """"""
+        print('___test04')
 
-    def OnTest05(self):
+    def ___test05(self):
+        """"""
         # editor.showSystemMenu()
         # print(Qt.WindowStaysOnTopHint in self.windowFlags())
         windowFlags = self.windowFlags()
@@ -591,6 +618,7 @@ class EmbroidermodderMainWindow(QMainWindow):
 
         print(self.windowFlags())
         print(flag_type)
+
 
         if flag_type == Qt.Window:
             text = "QtCore.Qt.Window"
@@ -640,9 +668,14 @@ class EmbroidermodderMainWindow(QMainWindow):
 
         # self.GetActiveMDISubWindow().parent().showShaded()
         # print(self.sender())
-        print('OnTest05')
+        print('___test05')
 
     def OnTODO(self):
+        """
+        :todo: testing ``:todo:``
+
+        .. TODO:: testing ``.. TODO::``
+        """
         print('OnTODO')
         print('self.sender().text() = %s' % self.sender().text())
         print('self.sender().parentWidget() = %s' % self.sender().parentWidget())
@@ -699,21 +732,25 @@ class EmbroidermodderMainWindow(QMainWindow):
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
 
     def DoCascadeMdiWindows(self):
-        """"""
+        """Set the `MDIArea` view mode to cascade SubWindowView."""
         # self.gMDIArea.setViewMode(QMdiArea.SubWindowView)
         self.gMDIArea.cascadeSubWindows()
 
     def DoTileMdiWindows(self):
-        """"""
+        """Set the `MDIArea` view mode to tiled SubWindowView."""
         # self.gMDIArea.setViewMode(QMdiArea.SubWindowView)
         self.gMDIArea.tileSubWindows()
 
     def DoTabMdiWindows(self):
-        """"""
+        """Set the `MDIArea` view mode to TabbedView."""
         self.gMDIArea.setViewMode(QMdiArea.TabbedView)
 
     def closeEvent(self, event):
-        """"""
+        """
+        Handles the ``closeEvent`` for :class:`EmbroidermodderMainWindow`.
+
+        :param `event`: A `QCloseEvent`_ to be processed.
+        """
         # self.gMDIArea.closeAllSubWindows()
 
         self.isEmbroidermodderMainWindowClosing = True
@@ -778,19 +815,19 @@ class EmbroidermodderMainWindow(QMainWindow):
         print('OnPrint')
 
     def OnWindowClose(self):
-        """"""
+        """Close the active `MDIArea` SubWindow."""
         self.gMDIArea.closeActiveSubWindow()
 
     def OnWindowCloseAll(self):
-        """"""
+        """Close all the `MDIArea` SubWindows."""
         self.gMDIArea.closeAllSubWindows()
 
     def OnWindowNext(self):
-        """"""
+        """Activate the next `MDIArea` SubWindow."""
         self.gMDIArea.activateNextSubWindow()
 
     def OnWindowPrevious(self):
-        """"""
+        """Activate the previous `MDIArea` SubWindow."""
         self.gMDIArea.activatePreviousSubWindow()
 
     def OnDetails(self):
@@ -813,9 +850,7 @@ class EmbroidermodderMainWindow(QMainWindow):
         print('OnNight')
 
     def OnToggleFullscreenMode(self):
-        """
-        Toggle Fullscreen Mode On/Off.
-        """
+        """Toggle fullscreen mode On/Off."""
         if not self.isFullScreen():
             self.showFullScreen()
             self.action_View_Fullscreen.setIcon(QIcon(gIconDir + os.sep + 'check.png'))
@@ -829,21 +864,23 @@ class EmbroidermodderMainWindow(QMainWindow):
         ##     self.showFullScreen()
 
     def OnToggleMaximize(self):
-        """"""
+        """Toggle maximizing the main window."""
         if not self.isMaximized():
             self.showMaximized()
         else:
             self.showNormal()
 
     def OnToggleMinimize(self):
-        """"""
+        """Toggle minimizing the main window."""
         if not self.isMinimized():
             self.showMinimized()
         else:
             self.showNormal()
 
     def OnToggleStaysOnTopFlag(self):
-        """"""
+        """
+        Toggle the ``Qt.WindowStaysOnTopHint`` flag on/off.
+        """
         windowFlags = self.windowFlags()
         # flag_type = (windowFlags & Qt.WindowType_Mask)
 
@@ -857,67 +894,79 @@ class EmbroidermodderMainWindow(QMainWindow):
         self.show() # For some odd reason, changing the flags makes the window hide, so show it again.
 
     def OnChangelog(self):
-        """"""
+        """
+        Show the Changelog.
+
+        .. TODO:: Empty
+        """
         print('OnChangelog')
 
     def OnTipOfTheDay(self):
-        """"""
+        """Show the :class:`TipOfTheDayDialog`"""
         dialog = TipOfTheDayDialog(self)
         dialog.show()
 
-        print('OnTipOfTheDay')
-
     def OnHelp(self):
-        """"""
+        """Open up the help files in the default browser."""
         localUrl = 'file:///'
         localPath = gAppDir + os.sep + 'help' + os.sep + 'doc-index.html'
         webbrowser.open_new_tab(localUrl + localPath)
 
     def OnWhatsThisContextHelp(self):
-        """"""
+        """Enter context sensitive help mode."""
         # QWhatsThis.createAction()
         QWhatsThis.enterWhatsThisMode()
 
     def OnSetToolbarIconSize16(self):
-        """"""
+        """Set all the toolbars icon sizes to 16px."""
         print(self.sender().text())
         print(self.sender().parentWidget())
         print(self.sender().actionGroup())
         [tb.setIconSize(QSize(16, 16)) for tb in self._allToolBars]
         self.undoToolButton.setIconSize(QSize(16, 16))
         self.redoToolButton.setIconSize(QSize(16, 16))
+
     def OnSetToolbarIconSize24(self):
-        """"""
+        """Set all the toolbars icon sizes to 24px."""
         [tb.setIconSize(QSize(24, 24)) for tb in self._allToolBars]
         self.undoToolButton.setIconSize(QSize(24, 24))
         self.redoToolButton.setIconSize(QSize(24, 24))
+
     def OnSetToolbarIconSize32(self):
-        """"""
+        """Set all the toolbars icon sizes to 32px."""
         [tb.setIconSize(QSize(32, 32)) for tb in self._allToolBars]
         self.undoToolButton.setIconSize(QSize(32, 32))
         self.redoToolButton.setIconSize(QSize(32, 32))
+
     def OnSetToolbarIconSize48(self):
-        """"""
+        """Set all the toolbars icon sizes to 48px."""
         [tb.setIconSize(QSize(48, 48)) for tb in self._allToolBars]
         self.undoToolButton.setIconSize(QSize(48, 48))
         self.redoToolButton.setIconSize(QSize(48, 48))
+
     def OnSetToolbarIconSize64(self):
-        """"""
+        """Set all the toolbars icon sizes to 64px."""
         [tb.setIconSize(QSize(64, 64)) for tb in self._allToolBars]
         self.undoToolButton.setIconSize(QSize(64, 64))
         self.redoToolButton.setIconSize(QSize(64, 64))
+
     def OnSetToolbarIconSize128(self):
-        """"""
+        """Set all the toolbars icon sizes to 128px."""
         [tb.setIconSize(QSize(128, 128)) for tb in self._allToolBars]
         self.undoToolButton.setIconSize(QSize(128, 128))
         self.redoToolButton.setIconSize(QSize(128, 128))
 
     def SetStatusText(self, msg):
-        """"""
+        """
+        Set the StatusBar text message.
+
+        :param `msg`: The message text to display in the statusbar field.
+        :type `msg`: str
+        """
         self.gStatusBar.showMessage(msg)
 
     def CreateActions(self):
-        """"""
+        """Create the main Actions."""
         self.action_File_New = QAction(QIcon(gIconDir + os.sep + 'new.png'),
                 '&New', self,
                 shortcut=NewShortcut, # QKeySequence.New
@@ -1412,29 +1461,29 @@ class EmbroidermodderMainWindow(QMainWindow):
 
 
         self.action_TEST01 = QAction(QIcon(gIconDir + os.sep + 'pyscript.png'),
-                '&OnTest01', self,
+                '&___test01', self,
                 shortcut=LayerPreviousShortcut,
-                statusTip='OnTest01',
+                statusTip='___test01',
                 hovered=self.OnHovered,
-                triggered=self.OnTest01)
+                triggered=self.___test01)
         self.action_TEST02 = QAction(QIcon(gIconDir + os.sep + 'spoolofthread.png'),
-                '&OnTest02', self,
+                '&___test02', self,
                 shortcut=LayerPreviousShortcut,
-                statusTip='OnTest02',
+                statusTip='___test02',
                 hovered=self.OnHovered,
-                triggered=self.OnTest02)
+                triggered=self.___test02)
         self.action_TEST03 = QAction(QIcon(gIconDir + os.sep + 'pyscript.png'),
-                '&OnTest03', self,
+                '&___test03', self,
                 shortcut=LayerPreviousShortcut,
-                statusTip='OnTest03',
+                statusTip='___test03',
                 hovered=self.OnHovered,
-                triggered=self.OnTest03)
+                triggered=self.___test03)
         self.action_TEST04 = QAction(QIcon(gIconDir + os.sep + 'pyscript.png'),
-                '&OnTest04', self,
+                '&___test04', self,
                 shortcut=LayerPreviousShortcut,
-                statusTip='OnTest04',
+                statusTip='___test04',
                 hovered=self.OnHovered,
-                triggered=self.OnTest04)
+                triggered=self.___test04)
 
         self.actionGroup_ToolBarIconSize = QActionGroup(self)
         for i in (16, 24, 32, 48, 64, 128):
@@ -1454,7 +1503,7 @@ self.actionGroup_ToolBarIconSize.addAction(self.action_Icon%d)
         # self.textEdit.copyAvailable.connect(self.action_Edit_Copy.setEnabled)
 
     def CreateMenus(self):
-        """"""
+        """Create the MenuBar and Top Level Menus."""
         self.gMenuBar = gMenuBar = self.menuBar()
 
         self.gMenu_File = gMenu_File = QMenu('&File')
@@ -1575,7 +1624,6 @@ self.actionGroup_ToolBarIconSize.addAction(self.action_Icon%d)
         gMenu_Window.addAction(self.action_Window_Previous)
         gMenu_Window.addSeparator()
 
-
         self.gMenu_Help = gMenu_Help = QMenu('&Help')
         gMenu_Help.setTearOffEnabled(True)
         gMenu_Help.addAction(self.action_Help_Help)
@@ -1616,14 +1664,14 @@ self.actionGroup_ToolBarIconSize.addAction(self.action_Icon%d)
         """
         Add menus to the MenuBar.
 
-        :param `menus`: A list of menu instances.
-        :type `menus`: tuple or list
+        :param `menus`: A sequence of menu instances.
+        :type `menus`: iterable
         """
         # Add the Menus to the MenuBar
         [self.gMenuBar.addMenu(menu) for menu in menus]
 
     def CreateToolBars(self):
-        """"""
+        """Create the ToolBars."""
         self.gToolBar_File = gToolBar_File = QToolBar('File')
         gToolBar_File.addAction(self.action_File_New)
         gToolBar_File.addAction(self.action_File_Open)
@@ -1831,7 +1879,7 @@ gToolBar_Icon.addAction(self.action_Icon%d)
         self.DoHideAllToolBars()
 
     def CreateToolbar_Layer(self):
-        """"""
+        """Create the "Layer" ToolBar."""
         self.gToolBar_Layer = gToolBar_Layer = QToolBar('Layer')
 
         gToolBar_Layer.setObjectName("toolbarLayer")
@@ -1863,7 +1911,7 @@ gToolBar_Icon.addAction(self.action_Icon%d)
         #TODO# connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)))
 
     def CreateToolbar_Properties(self):
-        """"""
+        """Create the "Properties" ToolBar."""
         self.gToolBar_Properties = gToolBar_Properties = QToolBar('Properties')
         gToolBar_Properties.setObjectName("toolbarProperties")
 
@@ -1933,7 +1981,7 @@ gToolBar_Icon.addAction(self.action_Icon%d)
         #TODO# connect(toolbarProperties, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)))
 
     def CreateToolbar_Text(self):
-        """"""
+        """Create the "Text" ToolBar."""
         self.gToolBar_Text = gToolBar_Text = QToolBar('Text')
 
         gToolBar_Text.setObjectName("toolbarText")
@@ -1972,7 +2020,7 @@ gToolBar_Icon.addAction(self.action_Icon%d)
         #TODO# connect(toolbarText, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)))
 
     def CreateToolbar_Prompt(self):
-        """"""
+        """Create the "Prompt" ToolBar."""
         self.gToolBar_Prompt = gToolBar_Prompt = QToolBar('Prompt')
 
         prompt = CmdPrompt(self)
@@ -1983,25 +2031,21 @@ gToolBar_Icon.addAction(self.action_Icon%d)
 
 
     def DoHideAllToolBars(self):
-        """"""
+        """Hide all the ToolBars."""
         [toolBar.hide() for toolBar in self._allToolBars]
 
     def ShowAllToolBars(self):
-        """"""
+        """Show all the ToolBars."""
         [toolBar.show() for toolBar in self._allToolBars]
 
     def CreateStatusBar(self):
-        """"""
-        # self.gStatusBar = StatusBar(self, self)
+        """Create the StatusBar"""
         self.gStatusBar = StatusBar(self)
         self.setStatusBar(self.gStatusBar)
         self.gStatusBar.hide()
 
-        # self.gStatusBar = self.statusBar()
-        # self.gStatusBar.showMessage('Welcome to Embroidermodder v2.0 build/rev #-----')
-
     def CreateDockWindows(self):
-        """"""
+        """Create the DockWindows."""
         self.gDockWindow_Properties = gDockWindow_Properties = PropertyEditor(
             iconDirectory=gIconDir, pickAddMode=False, widgetToFocus=None, title=self.tr('Properties'), parent=self)
         # self.gDockWindow_Properties = gDockWindow_Properties = QDockWidget("Properties", self)
@@ -2029,11 +2073,11 @@ gToolBar_Icon.addAction(self.action_Icon%d)
         self.DoHideAllDockWindows()
 
     def DoHideAllDockWindows(self):
-        """"""
+        """Hide all the DockWindows."""
         [dockWindow.hide() for dockWindow in self._allDockWindows]
 
     def ShowAllDockWindows(self):
-        """"""
+        """Show all the DockWindows."""
         [dockWindow.show() for dockWindow in self._allDockWindows]
 
     # def DoReadSettings(self):
@@ -2054,7 +2098,12 @@ gToolBar_Icon.addAction(self.action_Icon%d)
     #     settings.setValue('size', self.size())
 
     def OnShowSettingsDialog(self, showTab=None):
-        """"""
+        """
+        Show the `Settings_Dialog`.
+
+        :param `showTab`: The tab page to show when the dialog opens. Default is "General".
+        :type `showTab`: str
+        """
         openingTab = showTab or 'General'
         dialog = Settings_Dialog(self, openingTab, self)
         dialog.show()
@@ -2236,24 +2285,7 @@ gToolBar_Icon.addAction(self.action_Icon%d)
     def getSettingsSelectionPickBoxSize(self): #TODO
         return True
 
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
-    # def (self): #TODO
-        # return True
+
 
 ################################################################################
 ################################################################################
@@ -2273,8 +2305,6 @@ gToolBar_Icon.addAction(self.action_Icon%d)
 ##         self.setCompletionMode(QCompleter.PopupCompletion)
 ##         self.setCaseSensitivity(Qt.CaseInsensitive)
 ##         # self.setCompleter(self.completer)
-
-
 
 
 if __name__ == '__main__':

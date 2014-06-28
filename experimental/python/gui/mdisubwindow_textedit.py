@@ -2,10 +2,20 @@
 # -*- coding: utf-8 -*-
 
 """
-mdisubwindow_textedit.py
-========================
+=========================================
+|module_summary| mdisubwindow_textedit.py
+=========================================
 
 TOWRITE
+
+Classes summary:
+================
+
+================================ ============================
+:class:`~MDISubWindow_TextEdit`  TOWRITE
+================================ ============================
+
+-------------------------------------------------------------
 """
 
 #-Imports.----------------------------------------------------------------------
@@ -43,6 +53,7 @@ from emb_globals import *
 
 
 def initGlobals(MainWin):
+    """"""
     global gMainWin
     gMainWin = MainWin
 
@@ -55,13 +66,23 @@ def initGlobals(MainWin):
 
 class MDISubWindow_TextEdit(QTextEdit):
     """
+    Subclass of `QTextEdit`_
+
     Text Editor MDISubwindow for Embroidermodder.
 
-    Subclass of `QTextEdit`_
+    .. sphinx_generate_methods_summary::
+       MDISubWindow_TextEdit
     """
     documentCount = 1
     def __init__(self, parent=None, filePath=''):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        :param `filePath`: Filepath to open in the text editor.
+        :type `filePath`: str
+        """
         super(MDISubWindow_TextEdit, self).__init__(parent)
 
         print(filePath)
@@ -285,7 +306,7 @@ class MDISubWindow_TextEdit(QTextEdit):
         """
         Handles the ``contextMenuEvent`` event for :class:`MDISubWindow_TextEdit`.
 
-        :param `event`: A `QContextMenuEvent`_ event to be processed.
+        :param `event`: A `QContextMenuEvent`_ to be processed.
         """
         menu = QMenu(self)
         menu.addAction(self.action_Edit_Undo)

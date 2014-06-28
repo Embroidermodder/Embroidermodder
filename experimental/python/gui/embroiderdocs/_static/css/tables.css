@@ -1,26 +1,26 @@
 
 .pretty-table {
-	font-family: verdana,arial,sans-serif;
-	color:#333333;
-	border-width: 1px;
-	border-color: #999999;
-	border-collapse: collapse;
+    font-family: verdana,arial,sans-serif;
+    color:#333333;
+    border-width: 1px;
+    border-color: #999999;
+    border-collapse: collapse;
 }
 .pretty-table th {
-	background:#b5cfd2 url('../images/sphinxdocs/cell-blue.jpg');
-	border-width: 1px;
-	padding: 8px;
-      vertical-align: middle;
-	border-style: solid;
-	border-color: #999999;
+    background:#b5cfd2 url('../images/sphinxdocs/cell-blue.jpg');
+    border-width: 1px;
+    padding: 8px;
+    vertical-align: middle;
+    border-style: solid;
+    border-color: #999999;
 }
 .pretty-table td {
-	background:#dcddc0 url('../images/sphinxdocs/cell-grey.jpg');
-	border-width: 1px;
-	padding: 3px;
-      vertical-align: middle;
-	border-style: solid;
-	border-color: #999999;
+    background:#dcddc0 url('../images/sphinxdocs/cell-grey.jpg');
+    border-width: 1px;
+    padding: 3px;
+    vertical-align: middle;
+    border-style: solid;
+    border-color: #999999;
 }
 
 .pretty-table caption

@@ -2,10 +2,24 @@
 # -*- coding: utf-8 -*-
 
 """
-cmdprompt.py
-============
+=============================
+|module_summary| cmdprompt.py
+=============================
 
 TOWRITE
+
+Classes summary:
+================
+
+============================== ============================
+:class:`~CmdPrompt`            TOWRITE
+:class:`~CmdPromptSplitter`    TOWRITE
+:class:`~CmdPromptHandle`      TOWRITE
+:class:`~CmdPromptHistory`     TOWRITE
+:class:`~CmdPromptInput`       TOWRITE
+============================== ============================
+
+-----------------------------------------------------------------
 """
 
 ## TODO List:
@@ -54,10 +68,20 @@ except ImportError:
 
 class CmdPrompt(QWidget):
     """
+    Subclass of `QWidget`_
+
     CmdPrompt for Embroidermodder.
+
+    .. sphinx_generate_methods_summary::
+       CmdPrompt
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPrompt, self).__init__(parent)
 
         qDebug("CmdPrompt Constructor")
@@ -217,7 +241,7 @@ class CmdPrompt(QWidget):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         self.styleHash.insert("color", color.name())
         self.styleHash.insert("selection-background-color", color.name())
@@ -228,7 +252,7 @@ class CmdPrompt(QWidget):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         self.styleHash.insert("background-color", color.name())
         self.styleHash.insert("selection-color", color.name())
@@ -309,10 +333,20 @@ class CmdPrompt(QWidget):
 
 class CmdPromptSplitter(QSplitter):
     """
+    Subclass of `QSplitter`_
+
     CmdPromptSplitter for :class:`CmdPrompt`.
+
+    .. sphinx_generate_methods_summary::
+       CmdPromptSplitter
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptSplitter, self).__init__(parent)
 
         qDebug("CmdPromptSplitter Constructor")
@@ -330,10 +364,20 @@ class CmdPromptSplitter(QSplitter):
 
 class CmdPromptHandle(QSplitterHandle):
     """
+    Subclass of `QSplitterHandle`_
+
     CmdPromptHandle for :class:`CmdPrompt`.
+
+    .. sphinx_generate_methods_summary::
+       CmdPromptHandle
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptHandle, self).__init__(parent)
 
         qDebug("CmdPromptHandle Constructor")
@@ -348,7 +392,7 @@ class CmdPromptHandle(QSplitterHandle):
         """
         Handles the ``mousePressEvent`` event for :class:`CmdPromptHandle`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         pressY = event.globalY()
         #TODO# emit handlePressed(pressY)
@@ -357,7 +401,7 @@ class CmdPromptHandle(QSplitterHandle):
         """
         Handles the ``mouseReleaseEvent`` event for :class:`CmdPromptHandle`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         releaseY = event.globalY()
         #TODO# emit handleReleased(releaseY)
@@ -366,7 +410,7 @@ class CmdPromptHandle(QSplitterHandle):
         """
         Handles the ``mouseMoveEvent`` event for :class:`CmdPromptHandle`.
 
-        :param `event`: a `QMouseEvent` event to be processed.
+        :param `event`: A `QMouseEvent`_ to be processed.
         """
         moveY = event.globalY()
         dY = moveY - pressY
@@ -375,10 +419,20 @@ class CmdPromptHandle(QSplitterHandle):
 
 class CmdPromptHistory(QTextBrowser):
     """
+    Subclass of `QTextBrowser`_
+
     CmdPromptHistory for :class:`CmdPrompt`.
+
+    .. sphinx_generate_methods_summary::
+       CmdPromptHistory
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptHistory, self).__init__(parent)
 
         qDebug("CmdPromptHistory Constructor")
@@ -478,7 +532,7 @@ class CmdPromptHistory(QTextBrowser):
         """
         Handles the ``contextMenuEvent`` event for :class:`CmdPromptHistory`.
 
-        :param `event`: a `QContextMenuEvent` event to be processed.
+        :param `event`: A `QContextMenuEvent`_ to be processed.
         """
 
         menu = self.createStandardContextMenu()
@@ -491,10 +545,20 @@ class CmdPromptHistory(QTextBrowser):
 
 class CmdPromptInput(QLineEdit):
     """
+    Subclass of `QLineEdit`_
+
     CmdPromptInput for :class:`CmdPrompt`.
+
+    .. sphinx_generate_methods_summary::
+       CmdPromptInput
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptInput, self).__init__(parent)
 
         qDebug("CmdPromptInput Constructor")
@@ -632,7 +696,7 @@ class CmdPromptInput(QLineEdit):
 
     def checkSelection(self):
         """
-        Handle the `selectionChanged` SIGNAL for :class:`CmdPromptInput`.
+        Handles the ``selectionChanged`` SIGNAL for :class:`CmdPromptInput`.
         """
         qDebug("CmdPromptInput::checkSelection")
         if self.hasSelectedText():
@@ -793,7 +857,7 @@ class CmdPromptInput(QLineEdit):
 
     def checkEditedText(self, txt):
         """
-        Handle the `textEdited` SIGNAL for :class:`CmdPromptInput`.
+        Handles the ``textEdited`` SIGNAL for :class:`CmdPromptInput`.
 
         :param `txt`: TOWRITE
         :type `txt`: QString
@@ -805,7 +869,7 @@ class CmdPromptInput(QLineEdit):
 
     def checkChangedText(self, txt):
         """
-        Handle the `textChanged` SIGNAL for :class:`CmdPromptInput`.
+        Handles the ``textChanged`` SIGNAL for :class:`CmdPromptInput`.
 
         :param `txt`: TOWRITE
         :type `txt`: QString
@@ -816,7 +880,7 @@ class CmdPromptInput(QLineEdit):
         """
         Handles the ``contextMenuEvent`` event for :class:`CmdPromptInput`.
 
-        :param `event`: a `QContextMenuEvent` event to be processed.
+        :param `event`: A `QContextMenuEvent`_ to be processed.
         """
         menu = QMenu(self)
         menu.addSeparator()
@@ -829,9 +893,9 @@ class CmdPromptInput(QLineEdit):
         TOWRITE
 
         :param `obj`: TOWRITE
-        :type `obj`: QObject
+        :type `obj`: `QObject`_
         :param `event`: TOWRITE
-        :type `event`: QEvent
+        :type `event`: `QEvent`_
         """
         if (event.type() == QEvent.KeyPress):
             print('event.type() == QEvent.KeyPress')

@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-hacks.py
-========
+=========================
+|module_summary| hacks.py
+=========================
 
 TOWRITE
 
