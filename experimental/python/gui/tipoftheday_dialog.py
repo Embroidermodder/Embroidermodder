@@ -83,10 +83,12 @@ class LightSwitchWidget(QLabel):
         """
         Default class constructor.
 
-        :param `imgDir`: the applications image directory.
-        :type `imgDir`: str path
-        :param `iconDir`: the applications icon directory.
-        :type `iconDir`: str path
+        :param `imgDir`: The applications image directory path.
+        :type `imgDir`: str
+        :param `mw`: The applications main window instance.
+        :type `mw`: `QMainWindow`_
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
         """
         super(LightSwitchWidget, self).__init__(parent)
 
@@ -175,10 +177,12 @@ class ImageWidget(QLabel):
         """
         Default class constructor.
 
-        :param `imgDir`: the applications image directory.
-        :type `imgDir`: str path
-        :param `iconDir`: the applications icon directory.
-        :type `iconDir`: str path
+        :param `imgDir`: The applications image directory path.
+        :type `imgDir`: str
+        :param `iconDir`: The applications icon directory path.
+        :type `iconDir`: str
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
         """
         super(ImageWidget, self).__init__(parent)
 
@@ -216,7 +220,12 @@ class TipOfTheDayDialog(QWizard):
     """
     def __init__(self, parent):
         super(TipOfTheDayDialog, self).__init__(parent)
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
 
         ## qDebug("TipOfTheDayDialog constructor")
 

@@ -52,7 +52,7 @@ class StatusBarButton(QToolButton):
         :type `mw`: `QMainWindow`_
         :param `statbar`: The parent statusbar instance of this button.
         :type `statbar`: `QStatusBar`_
-        :param `parent`: parent widget instance of this QToolButton.
+        :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
         super(StatusBarButton, self).__init__(parent)

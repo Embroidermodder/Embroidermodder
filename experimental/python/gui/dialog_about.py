@@ -80,7 +80,12 @@ class AboutDialog(QDialog):
        AboutDialog
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(AboutDialog, self).__init__(parent)
 
         p = self.palette()
@@ -265,6 +270,12 @@ class EmbroidermodderLogo(QLabel):
        EmbroidermodderLogo
     """
     def __init__(self, parent):
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(EmbroidermodderLogo, self).__init__(parent)
 
         self.pixmap = QPixmap(parent.gImgDir + os.sep + 'logo_embroidermodder_2_0.png')

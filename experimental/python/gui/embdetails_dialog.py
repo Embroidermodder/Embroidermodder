@@ -57,9 +57,9 @@ class EmbDetailsDialog(QDialog):
         Default class constructor.
 
         :param `theScene`: TOWRITE
-        :type `theScene`: QGraphicsScene
-        :param `parent`: parent widget instance of this dialog.
-        :type `parent`: QWidget
+        :type `theScene`: `QGraphicsScene`_
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
         """
         super(EmbDetailsDialog, self).__init__(parent)
 
@@ -105,7 +105,7 @@ class EmbDetailsDialog(QDialog):
         TOWRITE
 
         :return: TOWRITE
-        :rtype: QScrollArea
+        :rtype: `QScrollArea`_
         """
         widget = QWidget(self)
 

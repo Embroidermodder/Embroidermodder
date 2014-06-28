@@ -71,7 +71,7 @@ class PropertyEditor(QDockWidget):
         :type `pickAddMode`: bool
         :param `widgetToFocus`: TOWRITE
         :type `widgetToFocus`: `QWidget`_
-        :param `parent`: TOWRITE
+        :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         :param `flags`: TOWRITE
         :type `flags`: Qt.WindowFlags

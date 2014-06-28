@@ -76,7 +76,12 @@ class CmdPrompt(QWidget):
        CmdPrompt
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPrompt, self).__init__(parent)
 
         qDebug("CmdPrompt Constructor")
@@ -236,7 +241,7 @@ class CmdPrompt(QWidget):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         self.styleHash.insert("color", color.name())
         self.styleHash.insert("selection-background-color", color.name())
@@ -247,7 +252,7 @@ class CmdPrompt(QWidget):
         TOWRITE
 
         :param `color`: TOWRITE
-        :type `color`: QColor
+        :type `color`: `QColor`_
         """
         self.styleHash.insert("background-color", color.name())
         self.styleHash.insert("selection-color", color.name())
@@ -336,7 +341,12 @@ class CmdPromptSplitter(QSplitter):
        CmdPromptSplitter
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptSplitter, self).__init__(parent)
 
         qDebug("CmdPromptSplitter Constructor")
@@ -362,7 +372,12 @@ class CmdPromptHandle(QSplitterHandle):
        CmdPromptHandle
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptHandle, self).__init__(parent)
 
         qDebug("CmdPromptHandle Constructor")
@@ -412,7 +427,12 @@ class CmdPromptHistory(QTextBrowser):
        CmdPromptHistory
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptHistory, self).__init__(parent)
 
         qDebug("CmdPromptHistory Constructor")
@@ -533,7 +553,12 @@ class CmdPromptInput(QLineEdit):
        CmdPromptInput
     """
     def __init__(self, parent=None):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        """
         super(CmdPromptInput, self).__init__(parent)
 
         qDebug("CmdPromptInput Constructor")
@@ -868,9 +893,9 @@ class CmdPromptInput(QLineEdit):
         TOWRITE
 
         :param `obj`: TOWRITE
-        :type `obj`: QObject
+        :type `obj`: `QObject`_
         :param `event`: TOWRITE
-        :type `event`: QEvent
+        :type `event`: `QEvent`_
         """
         if (event.type() == QEvent.KeyPress):
             print('event.type() == QEvent.KeyPress')

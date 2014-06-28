@@ -75,7 +75,14 @@ class MDISubWindow_TextEdit(QTextEdit):
     """
     documentCount = 1
     def __init__(self, parent=None, filePath=''):
-        """Default class constructor."""
+        """
+        Default class constructor.
+
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
+        :param `filePath`: Filepath to open in the text editor.
+        :type `filePath`: str
+        """
         super(MDISubWindow_TextEdit, self).__init__(parent)
 
         print(filePath)

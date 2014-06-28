@@ -55,9 +55,9 @@ class UndoEditor(QDockWidget):
         :param `iconDirectory`: TOWRITE
         :type `iconDirectory`: QString
         :param `widgetToFocus`: TOWRITE
-        :type `widgetToFocus`: QWidget
-        :param `parent`: TOWRITE
-        :type `parent`: QWidget
+        :type `widgetToFocus`: `QWidget`_
+        :param `parent`: Pointer to a parent widget instance.
+        :type `parent`: `QWidget`_
         :param `flags`: TOWRITE
         :type `flags`: Qt.WindowFlags
         """
@@ -85,7 +85,7 @@ class UndoEditor(QDockWidget):
         TOWRITE
 
         :param `stack`: TOWRITE
-        :type `stack`: QUndoStack
+        :type `stack`: `QUndoStack`_
         """
         self.undoGroup.addStack(stack)
 

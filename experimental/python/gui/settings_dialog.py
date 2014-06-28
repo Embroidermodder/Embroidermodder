@@ -66,14 +66,14 @@ class Settings_Dialog(QDialog):
         Default class constructor.
 
         :param `mw`: The application's MainWindow instance.
-        :type ``: QMainWindow
+        :type `mw`: `QMainWindow`_
         :param `showTab`: The tab to open the dialog up on when opening.
          Can be one of these strings:
          "General", "Files/Paths", "Display", "Prompt", "Open/Save",
          "Printing", "Snap", "Grid/Ruler", "Ortho/Polar", "QuickSnap",
          "QuickTrack", "LineWeight", "Selection"
         :type `showTab`: QString
-        :param `parent`: parent widget instance of this QDialog.
+        :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
         super(Settings_Dialog, self).__init__(parent)

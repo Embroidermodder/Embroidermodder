@@ -49,7 +49,7 @@ class StatusBar(QStatusBar):
         """
         Default class constructor.
 
-        :param `parent`: parent widget instance of this QStatusBar.
+        :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
         super(StatusBar, self).__init__(parent)
