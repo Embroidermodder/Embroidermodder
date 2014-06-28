@@ -12,7 +12,7 @@ img {
  */
 
 div.body p, div.body dd, div.body li {
-  line-height: 125%;
+    line-height: 125%;
 }
 
 ul.simple {
@@ -32,8 +32,6 @@ td.field-body > blockquote {
 div.highlight > pre {
     padding: 2px 5px 2px 5px;
     font: 100% monospace;
-    /* background-color: #fafafa; */
-    /* color: black; */
 }
 
 /* spacing in see also definition lists */
@@ -56,34 +54,37 @@ div.quotebar {
  */
 
 ul {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
+
 ul li {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
+
 ul li a.reference {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 /**
  * Make high-level subsections easier to distinguish from top-level ones
  */
+
 div.body h3 {
-  background-color: transparent;
+    background-color: transparent;
 }
 
 div.body h4 {
-  border: none;
-  background-color: transparent;
+    border: none;
+    background-color: transparent;
 }
 
 /**
@@ -91,7 +92,7 @@ div.body h4 {
  */
 
 body {
-  background-color: rgb(230,230,230);
+    background-color: rgb(230,230,230);
 }
 
 div.headerimage {
@@ -103,11 +104,11 @@ div.headerimage-noshow {
 }
 
 div.document {
-  background-color: rgb(230,230,230);
-  position: relative;
-  margin-left: 240px;
-  z-index: 0;
-  top: 50px;
+    background-color: rgb(230,230,230);
+    position: relative;
+    margin-left: 240px;
+    z-index: 0;
+    top: 50px;
 }
 
 div.sphinxsidebar {
@@ -127,6 +128,7 @@ div.sphinxsidebar {
 }
 
 div.related {
+    /* Top bar background texture */
     background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
@@ -188,56 +190,56 @@ div.related ul li a:hover {
 }
 
 div.sphinxsidebar h3 {
-  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
-  padding: 1px 5px 1px 5px;
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #0C6AB0;
-  text-shadow:
-     -1px -1px 0 #55C4E6,
-      1px -1px 0 #55C4E6,
-     -1px  1px 0 #55C4E6,
-      1px  1px 0 #55C4E6;
+    background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+    padding: 1px 5px 1px 5px;
+    font-weight: bold;
+    color: #0C6AB0;
+    text-shadow:
+       -1px -1px 0 #55C4E6,
+        1px -1px 0 #55C4E6,
+       -1px  1px 0 #55C4E6,
+        1px  1px 0 #55C4E6;
 }
 
 div.sphinxsidebar h3 a {
-  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
-  padding: 1px 5px 1px 5px;
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #0C6AB0;
-  text-shadow:
-     -1px -1px 0 #55C4E6,
-      1px -1px 0 #55C4E6,
-     -1px  1px 0 #55C4E6,
-      1px  1px 0 #55C4E6;
+    background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+    padding: 1px 5px 1px 5px;
+    font-weight: bold;
+    color: #0C6AB0;
+    text-shadow:
+       -1px -1px 0 #55C4E6,
+        1px -1px 0 #55C4E6,
+       -1px  1px 0 #55C4E6,
+        1px  1px 0 #55C4E6;
 }
 
 div.sphinxsidebar h4 {
-  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
-  padding: 1px 5px 1px 5px;
-  font-size: 1.8em;
-  font-weight: bold;
-  color: #0C6AB0;
-  text-shadow:
-     -1px -1px 0 #55C4E6,
-      1px -1px 0 #55C4E6,
-     -1px  1px 0 #55C4E6,
-      1px  1px 0 #55C4E6;
+    background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
+    padding: 1px 5px 1px 5px;
+    font-weight: bold;
+    color: #0C6AB0;
+    text-shadow:
+       -1px -1px 0 #55C4E6,
+        1px -1px 0 #55C4E6,
+       -1px  1px 0 #55C4E6,
+        1px  1px 0 #55C4E6;
 }
 
 div.sphinxsidebar p {
-  color: black;
+    color: #000000;
 }
 
 div.sphinxsidebar a {
-  background-image: url('../images/sphinxdocs/texture-spirals-canvas.png');
-  padding: 1px 5px 1px 5px;
-  color: #55C4E6;
+    color: #FFFFFF;
+    text-shadow:
+       -1px -1px 0 #000000,
+        1px -1px 0 #000000,
+       -1px  1px 0 #000000,
+        1px  1px 0 #000000;
 }
 
 div.sphinxsidebar ul.want-points {
-  list-style: disc;
+    list-style: disc;
 }
 
 div.footer {
@@ -258,7 +260,7 @@ div.footer {
 
 .floatcenter {
     position:relative;
-        float:none;
+    float:none;
     text-align:center;
 }
 
@@ -269,13 +271,13 @@ div.footer {
 }
 
 div.bodywrapper {
-  margin: 0;
+    margin: 0;
 }
 
 div.headerfix :target {
-  /* compensate fixed header in link anchors */
-  padding-top: {{ 30 }};
-  margin-top: -{{ 30 }};
+    /* compensate fixed header in link anchors */
+    padding-top: {{ 30 }};
+    margin-top: -{{ 30 }};
 }
 
 /**
@@ -283,44 +285,44 @@ div.headerfix :target {
  */
 
 div.return {
-  color: rgb(0,0,255);
+    color: rgb(0,0,255);
 }
 
 div.tip {
-  background-color: #ffffe4;
-  border: 1px solid #ee6;
+    background-color: #ffffe4;
+    border: 1px solid #ee6;
 }
 
 div.availability {
-  background-color: #e8f7c4;
-  border: 1px solid #adff2f;
+    background-color: #e8f7c4;
+    border: 1px solid #adff2f;
 }
 
 div.plot-output {
-  clear-after: both;
+    clear-after: both;
 }
 
 div.plot-output .figure {
-  float: center;
-  text-align: center;
-  margin-bottom: 0;
-  padding-bottom: 0;
+    float: center;
+    text-align: center;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
 div.plot-output .caption {
-  margin-top: 2;
-  padding-top: 0;
+    margin-top: 2;
+    padding-top: 0;
 }
 
 div.plot-output p.admonition-title {
-  display: none;
+    display: none;
 }
 
 div.plot-output:after {
-  content: "";
-  display: block;
-  height: 0;
-  clear: both;
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
 }
 
 .doctodo {
@@ -484,19 +486,18 @@ div.availability {
     background: #e8f7c4;
 }
 
-
- p.admonition-title {
+p.admonition-title {
    margin: 10px 10px 5px 0px;
    font-weight: bold;
 }
 
- .gallery_class table { float: left;
-                  margin: 0 5px 20px 0; }
- .gallery_class table { border-collapse: collapse; }
- .gallery_class table td { padding: 0; }
- .gallery_class table caption { font-size: 80%; }
- .gallery .caption { height: 4em; vertical-align: top; }
- .gallery table { width: 200px; }
+.gallery_class table { float: left;
+                       margin: 0 5px 20px 0; }
+.gallery_class table { border-collapse: collapse; }
+.gallery_class table td { padding: 0; }
+.gallery_class table caption { font-size: 80%; }
+.gallery .caption { height: 4em; vertical-align: top; }
+.gallery table { width: 200px; }
 
 
 /**
@@ -504,13 +505,13 @@ div.availability {
  */
 
 table.field-list th {
-  border-left: 1px solid #aaa !important;
-  padding-left: 5px;
+    border-left: 1px solid #aaa !important;
+    padding-left: 5px;
 }
 
 table.field-list {
-  border-collapse: separate;
-  border-spacing: 10px;
+    border-collapse: separate;
+    border-spacing: 10px;
 }
 
 /**
@@ -518,7 +519,7 @@ table.field-list {
  */
 
 table.footnote td, table.footnote th {
-  border: none;
+    border: none;
 }
 
 pre {
@@ -592,109 +593,109 @@ a tt:hover {
 }
 
 .panel {
-position: fixed;
-top: 60px;
-right: 0;
-display: none;
-background: #000000;
-border:1px solid #111111;
-font-family: 'Calibri', 'Deja Vu Sans', 'Bitstream Vera Sans', 'Trebuchet MS', monospace;
--moz-border-radius-topleft: 20px;
--webkit-border-top-left-radius: 20px;
--moz-border-radius-bottomleft: 20px;
--webkit-border-bottom-left-radius: 20px;
-width: 200px;
-height: auto;
-padding: 20px 30px 30px 30px;
-filter: alpha(opacity=85);
-opacity: .85;
+    position: fixed;
+    top: 60px;
+    right: 0;
+    display: none;
+    background: #000000;
+    border:1px solid #111111;
+    font-family: 'Calibri', 'Deja Vu Sans', 'Bitstream Vera Sans', 'Trebuchet MS', monospace;
+    -moz-border-radius-topleft: 20px;
+    -webkit-border-top-left-radius: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    width: 200px;
+    height: auto;
+    padding: 20px 30px 30px 30px;
+    filter: alpha(opacity=85);
+    opacity: .85;
 }
 
 .panel p{
-margin: 0 0 15px 0;
-padding: 0;
-color: #cccccc;
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #cccccc;
 }
 
 .panel a, .panel a:visited{
-margin: 0;
-padding: 0;
-color: #CA7900;
-text-decoration: none;
-border-bottom: 1px solid #CA7900;
+    margin: 0;
+    padding: 0;
+    color: #CA7900;
+    text-decoration: none;
+    border-bottom: 1px solid #CA7900;
 }
 
 .panel a:hover, .panel a:visited:hover{
-margin: 0;
-padding: 0;
-color: #2491CF;
-text-decoration: none;
-border-bottom: 1px solid #2491CF;
+    margin: 0;
+    padding: 0;
+    color: #2491CF;
+    text-decoration: none;
+    border-bottom: 1px solid #2491CF;
 }
 
 a.trigger{
-position: fixed;
-text-decoration: none;
-top: 80px; right: 0;
-font-size: 20px;
-letter-spacing:-1px;
-font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', 'Trebuchet MS', monospace;
-color:#fff;
-padding: 20px 40px 20px 15px;
-font-weight: 700;
-background:#333333 url('../images/sphinxdocs/plus2.png') 85% 55% no-repeat;
-border:1px solid #444444;
--moz-border-radius-topleft: 20px;
--webkit-border-top-left-radius: 20px;
--moz-border-radius-bottomleft: 20px;
--webkit-border-bottom-left-radius: 20px;
--moz-border-radius-bottomright: 0px;
--webkit-border-bottom-right-radius: 0px;
-display: block;
+    position: fixed;
+    text-decoration: none;
+    top: 80px; right: 0;
+    font-size: 20px;
+    letter-spacing:-1px;
+    font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', 'Trebuchet MS', monospace;
+    color:#fff;
+    padding: 20px 40px 20px 15px;
+    font-weight: 700;
+    background:#333333 url('../images/sphinxdocs/plus2.png') 85% 55% no-repeat;
+    border:1px solid #444444;
+    -moz-border-radius-topleft: 20px;
+    -webkit-border-top-left-radius: 20px;
+    -moz-border-radius-bottomleft: 20px;
+    -webkit-border-bottom-left-radius: 20px;
+    -moz-border-radius-bottomright: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+    display: block;
 }
 
 a.trigger:hover{
-position: fixed;
-text-decoration: none;
-top: 80px; right: 0;
-font-size: 20px;
-letter-spacing:-1px;
-font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', 'Trebuchet MS', monospace;
-color:#fff;
-padding: 20px 40px 20px 20px;
-font-weight: 700;
-background:#222222 url('../images/sphinxdocs/plus2.png') 85% 55% no-repeat;
-border:1px solid #444444;
--moz-border-radius-topright: 20px;
--webkit-border-top-right-radius: 20px;
--moz-border-radius-bottomright: 20px;
--webkit-border-bottom-right-radius: 20px;
--moz-border-radius-bottomleft: 0px;
--webkit-border-bottom-left-radius: 0px;
-display: block;
+    position: fixed;
+    text-decoration: none;
+    top: 80px; right: 0;
+    font-size: 20px;
+    letter-spacing:-1px;
+    font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', 'Trebuchet MS', monospace;
+    color:#fff;
+    padding: 20px 40px 20px 20px;
+    font-weight: 700;
+    background:#222222 url('../images/sphinxdocs/plus2.png') 85% 55% no-repeat;
+    border:1px solid #444444;
+    -moz-border-radius-topright: 20px;
+    -webkit-border-top-right-radius: 20px;
+    -moz-border-radius-bottomright: 20px;
+    -webkit-border-bottom-right-radius: 20px;
+    -moz-border-radius-bottomleft: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    display: block;
 }
 
 a.active.trigger {
-background:#222222 url('../images/sphinxdocs/minus2.png') 85% 55% no-repeat;
+    background:#222222 url('../images/sphinxdocs/minus2.png') 85% 55% no-repeat;
 }
 
 .columns{
-clear: both;
-width: 330px;
-padding: 0 0 20px 0;
-line-height: 22px;
+    clear: both;
+    width: 330px;
+    padding: 0 0 20px 0;
+    line-height: 22px;
 }
 
 .colleft{
-float: left;
-width: 130px;
-line-height: 22px;
+    float: left;
+    width: 130px;
+    line-height: 22px;
 }
 
 .colright{
-float: right;
-width: 130px;
-line-height: 22px;
+    float: right;
+    width: 130px;
+    line-height: 22px;
 }
 
 /**
@@ -730,5 +731,5 @@ tt {
 
 
 .strike {
-  text-decoration: line-through;
+    text-decoration: line-through;
 }

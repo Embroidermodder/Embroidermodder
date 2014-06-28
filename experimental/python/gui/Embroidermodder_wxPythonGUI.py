@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 __doc__ = """
-Embroidermodder_wxPythonGUI.py
-==============================
+===============================================
+|module_summary| Embroidermodder_wxPythonGUI.py
+===============================================
 
 Embroidermodder v2.0 wxPython GUI
 
@@ -313,7 +314,7 @@ class EmbroidermodderPanel(wx.Panel):
         """
         Handles the ``wx.EVT_SIZE`` event for :class:`EmbroidermodderPanel`.
 
-        :param `event`: a `wx.SizeEvent` event to be processed.
+        :param `event`: A `wx.SizeEvent`_ to be processed.
         """
         event.Skip()
         self.Refresh()
@@ -322,7 +323,7 @@ class EmbroidermodderPanel(wx.Panel):
         """
         Handles the ``wx.EVT_ERASE_BACKGROUND`` event for :class:`EmbroidermodderPanel`.
 
-        :param `event`: a `wx.EraseEvent` event to be processed.
+        :param `event`: A `wx.EraseEvent`_ to be processed.
         """
         event.Skip() # essentially pass; Reduce Flicker because we are using a BufferedPaintDC
 
@@ -330,7 +331,7 @@ class EmbroidermodderPanel(wx.Panel):
         """
         Handles the ``wx.EVT_PAINT`` event for :class:`EmbroidermodderPanel`.
 
-        :param `event`: a `wx.PaintEvent` event to be processed.
+        :param `event`: A `wx.PaintEvent`_ to be processed.
         """
         event.Skip()
         cSizeX, cSizeY = self.GetClientSize()
@@ -1056,7 +1057,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Show the Open `wx.FileDialog`.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         print('CWD: %s' % os.getcwd())
 
@@ -1099,7 +1100,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Show the Save `wx.FileDialog`.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         print('CWD: %s' % os.getcwd())
 
@@ -1151,7 +1152,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         The :class:`EmbroidermodderMainWindow` has recieved an `wx.IconizeEvent`.
 
-        :param `event`: an `wx.IconizeEvent` to be processed.
+        :param `event`: an `wx.IconizeEvent`_ to be processed.
         """
         event.Skip()
 
@@ -1160,7 +1161,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         Minimize the :class:`EmbroidermodderMainWindow`.
         This will send an `wx.IconizeEvent` to :class:`EmbroidermodderMainWindow`.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         self.Iconize() #
 
@@ -1168,7 +1169,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         The :class:`EmbroidermodderMainWindow` has recieved an `wx.MaximizeEvent`.
 
-        :param `event`: an `wx.MaximizeEvent` to be processed.
+        :param `event`: an `wx.MaximizeEvent`_ to be processed.
         """
         event.Skip()
 
@@ -1177,7 +1178,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         Maximize the :class:`EmbroidermodderMainWindow`.
         This will send an `wx.MaximizeEvent` to :class:`EmbroidermodderMainWindow`.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         self.Maximize()
 
@@ -1185,7 +1186,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Toggle Fullscreen mode On/Off for the application.
 
-        :param `event`: a `wx.MenuEvent` event to be processed.
+        :param `event`: A `wx.MenuEvent`_ to be processed.
         :param `mode`: one of the wx.FULLSCREEN_* Constants.
             wx.FULLSCREEN_NOMENUBAR
             wx.FULLSCREEN_NOTOOLBAR
@@ -1200,7 +1201,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Open the Embroidermodder Help files up in the default Web Browser.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         webbrowser.open_new_tab('file:///' + gAppDir + os.sep + 'help' + os.sep + 'doc-index.html')
 
@@ -1208,7 +1209,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Send the application into context sensitive help mode.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         wx.ContextHelp(window=self, doNow=True)
 
@@ -1216,7 +1217,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Show the Embroidermodder About Dialog.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         dlg = AboutDialog(self)
         dlg.ShowModal()
@@ -1225,7 +1226,7 @@ class EmbroidermodderMainWindow(wx.Frame):
         """
         Close and Destroy the :class:`EmbroidermodderMainWindow`.
 
-        :param `event`: an `wx.MenuEvent` to be processed.
+        :param `event`: an `wx.MenuEvent`_ to be processed.
         """
         self.Destroy()
 
@@ -1269,9 +1270,9 @@ class CustomStatusBar(wx.StatusBar):
 
     def OnSize(self, event):
         """
-        Handle the `wx.EVT_SIZE` event for :class:`CustomStatusBar`.
+        Handles the ``wx.EVT_SIZE`` event for :class:`CustomStatusBar`.
 
-        :param `event`: a `wx.SizeEvent` event to be processed.
+        :param `event`: A `wx.SizeEvent`_ to be processed.
         """
         self.Reposition()  # for normal size events
 
@@ -1284,9 +1285,9 @@ class CustomStatusBar(wx.StatusBar):
 
     def OnIdle(self, event):
         """
-        Handle the `wx.EVT_IDLE` event for :class:`CustomStatusBar`.
+        Handles the ``wx.EVT_IDLE`` event for :class:`CustomStatusBar`.
 
-        :param `event`: a `wx.IdleEvent` event to be processed.
+        :param `event`: A `wx.IdleEvent`_ to be processed.
         """
         if self.sizeChanged:
             self.Reposition()
@@ -1334,7 +1335,7 @@ class PythonVersionInfosStaticBitmap(wx.StaticBitmap):
         """
         Toggle the visibility of the :class:`PyShellPanel`.
 
-        :param `event`: a `wx.MouseEvent` event to be processed.
+        :param `event`: A `wx.MouseEvent`_ to be processed.
         """
         if gMainWin.pyshellPanel.IsShown():
             gMainWin.pyshellPanel.Hide()
@@ -1419,7 +1420,7 @@ Free under the zlib/libpng license."""
         """
         Handles the ``wx.EVT_INIT_DIALOG`` event for :class:`AboutDialog`.
 
-        :param `event`: a `wx.InitDialogEvent` event to be processed.
+        :param `event`: A `wx.InitDialogEvent`_ to be processed.
         """
         event.Skip()
 
@@ -1427,7 +1428,7 @@ Free under the zlib/libpng license."""
         """
         Handles the ``wx.EVT_CLOSE`` event for :class:`AboutDialog`.
 
-        :param `event`: a `wx.CloseEvent` event to be processed.
+        :param `event`: A `wx.CloseEvent`_ to be processed.
         """
         event.Skip()
         self.Destroy()

@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-embdetails_dialog.py
-====================
+=====================================
+|module_summary| embdetails_dialog.py
+=====================================
 
 TOWRITE
 """
@@ -44,7 +45,12 @@ except ImportError:
 
 class EmbDetailsDialog(QDialog):
     """
+    Subclass of `QDialog`_
+
     Class implementing the Details dialog.
+
+    .. sphinx_generate_methods_summary::
+       EmbDetailsDialog
     """
     def __init__(self, theScene, parent):
         """

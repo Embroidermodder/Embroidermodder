@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-undo_editor.py
-==============
+===============================
+|module_summary| undo_editor.py
+===============================
 
 TOWRITE
 """
@@ -38,6 +39,14 @@ except ImportError:
 
 
 class UndoEditor(QDockWidget):
+    """
+    Subclass of `QDockWidget`_
+
+    TOWRITE
+
+    .. sphinx_generate_methods_summary::
+       UndoEditor
+    """
     def __init__(self, iconDirectory, widgetToFocus, parent=None,
                  flags=Qt.WindowFlags()):
         """

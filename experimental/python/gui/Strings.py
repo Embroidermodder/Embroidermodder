@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-strings.py
-==========
+===========================
+|module_summary| strings.py
+===========================
 
 MenuItem/ToolbarItem ShortHelp/LongHelp/Icon for Embroidermodder.
 """

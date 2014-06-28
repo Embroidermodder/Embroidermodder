@@ -2,11 +2,20 @@
 # -*- coding: utf-8 -*-
 
 """
-settings_dialog.py
-==================
+===================================
+|module_summary| settings_dialog.py
+===================================
 
 TOWRITE
 
+Classes summary:
+================
+
+============================ ============================
+:class:`~Settings_Dialog`    TOWRITE
+============================ ============================
+
+---------------------------------------------------------
 """
 
 #-Imports.---------------------------------------------------------------------
@@ -45,9 +54,12 @@ gOsSep = os.sep
 
 class Settings_Dialog(QDialog):
     """
-    Settings dialog for Embroidermodder.
-    
     Subclass of `QDialog`_
+
+    Settings dialog for Embroidermodder.
+
+    .. sphinx_generate_methods_summary::
+       Settings_Dialog
     """
     def __init__(self, mw, showTab, parent):
         """

@@ -1,7 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-__doc__ = """
+"""
+================================
+|module_summary| dialog_about.py
+================================
+
+Classes summary:
+================
+
+============================== ============================
+:class:`~AboutDialog`          TOWRITE
+:class:`~EmbroidermodderLogo`  TOWRITE
+============================== ============================
+
+-----------------------------------------------------------------
+"""
+
+ABOUT = """
 Embroidermodder Version 2.0
 ===========================
 
@@ -56,7 +72,12 @@ except ImportError:
 
 class AboutDialog(QDialog):
     """
+    Subclass of `QDialog`_
+
     About Dialog for Embroidermodder.
+
+    .. sphinx_generate_methods_summary::
+       AboutDialog
     """
     def __init__(self, parent=None):
         """Default class constructor."""
@@ -89,7 +110,8 @@ visit http://blog.ninapaley.com/"""))
         aboutLbl = QTextBrowser(self)
         aboutLbl.setReadOnly(True)
         aboutLbl.setOpenExternalLinks(True)
-        aboutLbl.setText('<b>%s</b>' % '<br>'.join(__doc__.split('\n')))
+
+        aboutLbl.setText('<b>%s</b>' % '<br>'.join(ABOUT.split('\n')))
         aboutLbl.setWhatsThis(self.tr('This is the AWESOME people that brought Embroidermodder 2 to life.'))
 
         # We want very slight opacity of the white background
@@ -219,7 +241,7 @@ visit http://blog.ninapaley.com/"""))
         """
         Handles the ``paintEvent`` event for :class:`AboutDialog`.
 
-        :param `event`: a `QPaintEvent` event to be processed.
+        :param `event`: A `QPaintEvent`_ to be processed.
         """
         rect = self.rect()
 
@@ -235,7 +257,12 @@ visit http://blog.ninapaley.com/"""))
 
 class EmbroidermodderLogo(QLabel):
     """
+    Subclass of `QLabel`_
+
     The Embroidermodder logo image widget.
+
+    .. sphinx_generate_methods_summary::
+       EmbroidermodderLogo
     """
     def __init__(self, parent):
         super(EmbroidermodderLogo, self).__init__(parent)
@@ -256,7 +283,7 @@ class EmbroidermodderLogo(QLabel):
         """
         Handles the ``paintEvent`` event for :class:`EmbroidermodderLogo`.
 
-        :param `event`: a `QPaintEvent` event to be processed.
+        :param `event`: A `QPaintEvent`_ to be processed.
         """
         painter = QPainter(self)
 
@@ -280,17 +307,19 @@ if __name__ == '__main__':
 
     try:
         gFileDir = os.path.dirname(os.path.abspath(__file__))
-    except:
+    except Exception:
         gFileDir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    ## print('gFileDir = %s' % gFileDir)
 
-    ## print(gAppDir)
-    ## print(os.path.basename(gAppDir))
-    if os.path.basename(gFileDir) == 'python':
-        # From experimental/python dir
-        gAppDir = os.path.abspath(gFileDir + os.sep + '..' + os.sep + '..' + os.sep + 'embroidermodder2')
+    if os.path.basename(gFileDir) == 'gui':
+        # From experimental/python/gui dir
+        gAppDir = os.path.abspath(gFileDir + os.sep + '..' + os.sep + '..' + os.sep + '..' + os.sep + 'embroidermodder2')
+
     elif os.path.basename(gFileDir) == 'embroidermodder2':
         # From embroidermodder2 dir
         gAppDir = gFileDir
+    ## print('gAppDir = %s' % gAppDir)
+    ## print('os.path.basename(gAppDir) = %s' % os.path.basename(gAppDir))
 
     gApp = QApplication(sys.argv)
 

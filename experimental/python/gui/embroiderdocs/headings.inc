@@ -1,8 +1,15 @@
 .. |app| image:: _static/images/sphinxdocs/app.png
 .. |python| image:: _static/images/sphinxdocs/python.png
+.. |methsum| image:: _static/images/sphinxdocs/method_summary.png
+.. |methods_summary| replace:: |methsum| **Methods summary**
 .. |module_summary| image:: _static/images/sphinxdocs/module_summary.png
+.. |__________________________________________________________________________| image:: _static/images/sphinxdocs/gradientline1024.png
 
 .. |Embroidermodder_Screenshot| image:: _static/images/screenies/embroidermodder_screenie.png
+
+.. |br| raw:: html
+
+   <br />
 
 .. .. External Hyperlinks
 
@@ -545,4 +552,80 @@
 .. _QX11EmbedContainer:                       http://pyside.github.io/docs/pyside/PySide/QtGui/QX11EmbedContainer.html
 .. _QX11EmbedWidget:                          http://pyside.github.io/docs/pyside/PySide/QtGui/QX11EmbedWidget.html
 .. _QX11Info:                                 http://pyside.github.io/docs/pyside/PySide/QtGui/QX11Info.html
+
+
+.. .. wxPython Phoenix
+
+
+.. _wx.ActivateEvent:            http://wxpython.org/Phoenix/docs/html/ActivateEvent.html
+.. _wx.BookCtrlEvent:            http://wxpython.org/Phoenix/docs/html/BookCtrlEvent.html
+.. _wx.CalculateLayoutEvent:     http://wxpython.org/Phoenix/docs/html/CalculateLayoutEvent.html
+.. _wx.ChildFocusEvent:          http://wxpython.org/Phoenix/docs/html/ChildFocusEvent.html
+.. _wx.ChoicebookEvent:          http://wxpython.org/Phoenix/docs/html/ChoicebookEvent.html
+.. _wx.ClipboardEvent:           http://wxpython.org/Phoenix/docs/html/ClipboardEvent.html
+.. _wx.ClipboardTextEvent:       http://wxpython.org/Phoenix/docs/html/ClipboardTextEvent.html
+.. _wx.CloseEvent:               http://wxpython.org/Phoenix/docs/html/CloseEvent.html
+.. _wx.CollapsiblePaneEvent:     http://wxpython.org/Phoenix/docs/html/CollapsiblePaneEvent.html
+.. _wx.ColourPickerEvent:        http://wxpython.org/Phoenix/docs/html/ColourPickerEvent.html
+.. _wx.CommandEvent:             http://wxpython.org/Phoenix/docs/html/CommandEvent.html
+.. _wx.ContextMenuEvent:         http://wxpython.org/Phoenix/docs/html/ContextMenuEvent.html
+.. _wx.DateEvent:                http://wxpython.org/Phoenix/docs/html/DateEvent.html
+.. _wx.DisplayChangedEvent:      http://wxpython.org/Phoenix/docs/html/DisplayChangedEvent.html
+.. _wx.DropFilesEvent:           http://wxpython.org/Phoenix/docs/html/DropFilesEvent.html
+.. _wx.EraseEvent:               http://wxpython.org/Phoenix/docs/html/EraseEvent.html
+.. _wx.Event:                    http://wxpython.org/Phoenix/docs/html/Event.html
+.. _wx.FileCtrlEvent:            http://wxpython.org/Phoenix/docs/html/FileCtrlEvent.html
+.. _wx.FileDirPickerEvent:       http://wxpython.org/Phoenix/docs/html/FileDirPickerEvent.html
+.. _wx.FindDialogEvent:          http://wxpython.org/Phoenix/docs/html/FindDialogEvent.html
+.. _wx.FocusEvent:               http://wxpython.org/Phoenix/docs/html/FocusEvent.html
+.. _wx.FontPickerEvent:          http://wxpython.org/Phoenix/docs/html/FontPickerEvent.html
+.. _wx.HelpEvent:                http://wxpython.org/Phoenix/docs/html/HelpEvent.html
+.. _wx.HyperlinkEvent:           http://wxpython.org/Phoenix/docs/html/HyperlinkEvent.html
+.. _wx.IconizeEvent:             http://wxpython.org/Phoenix/docs/html/IconizeEvent.html
+.. _wx.IdleEvent:                http://wxpython.org/Phoenix/docs/html/IdleEvent.html
+.. _wx.InitDialogEvent:          http://wxpython.org/Phoenix/docs/html/InitDialogEvent.html
+.. _wx.JoystickEvent:            http://wxpython.org/Phoenix/docs/html/JoystickEvent.html
+.. _wx.KeyEvent:                 http://wxpython.org/Phoenix/docs/html/KeyEvent.html
+.. _wx.ListEvent:                http://wxpython.org/Phoenix/docs/html/ListEvent.html
+.. _wx.ListbookEvent:            http://wxpython.org/Phoenix/docs/html/ListbookEvent.html
+.. _wx.MaximizeEvent:            http://wxpython.org/Phoenix/docs/html/MaximizeEvent.html
+.. _wx.MenuEvent:                http://wxpython.org/Phoenix/docs/html/MenuEvent.html
+.. _wx.MouseCaptureChangedEvent: http://wxpython.org/Phoenix/docs/html/MouseCaptureChangedEvent.html
+.. _wx.MouseCaptureLostEvent:    http://wxpython.org/Phoenix/docs/html/MouseCaptureLostEvent.html
+.. _wx.MouseEvent:               http://wxpython.org/Phoenix/docs/html/MouseEvent.html
+.. _wx.MoveEvent:                http://wxpython.org/Phoenix/docs/html/MoveEvent.html
+.. _wx.NavigationKeyEvent:       http://wxpython.org/Phoenix/docs/html/NavigationKeyEvent.html
+.. _wx.NcPaintEvent:             http://wxpython.org/Phoenix/docs/html/NcPaintEvent.html
+.. _wx.NotebookEvent:            http://wxpython.org/Phoenix/docs/html/NotebookEvent.html
+.. _wx.NotifyEvent:              http://wxpython.org/Phoenix/docs/html/NotifyEvent.html
+.. _wx.PaintEvent:               http://wxpython.org/Phoenix/docs/html/PaintEvent.html
+.. _wx.PaletteChangedEvent:      http://wxpython.org/Phoenix/docs/html/PaletteChangedEvent.html
+.. _wx.PostEvent:                http://wxpython.org/Phoenix/docs/html/PostEvent.html
+.. _wx.PowerEvent:               http://wxpython.org/Phoenix/docs/html/PowerEvent.html
+.. _wx.ProcessEvent:             http://wxpython.org/Phoenix/docs/html/ProcessEvent.html
+.. _wx.PyCommandEvent:           http://wxpython.org/Phoenix/docs/html/PyCommandEvent.html
+.. _wx.PyEvent:                  http://wxpython.org/Phoenix/docs/html/PyEvent.html
+.. _wx.QueryLayoutInfoEvent:     http://wxpython.org/Phoenix/docs/html/QueryLayoutInfoEvent.html
+.. _wx.QueryNewPaletteEvent:     http://wxpython.org/Phoenix/docs/html/QueryNewPaletteEvent.html
+.. _wx.SashEvent:                http://wxpython.org/Phoenix/docs/html/SashEvent.html
+.. _wx.ScrollEvent:              http://wxpython.org/Phoenix/docs/html/ScrollEvent.html
+.. _wx.ScrollWinEvent:           http://wxpython.org/Phoenix/docs/html/ScrollWinEvent.html
+.. _wx.SetCursorEvent:           http://wxpython.org/Phoenix/docs/html/SetCursorEvent.html
+.. _wx.ShowEvent:                http://wxpython.org/Phoenix/docs/html/ShowEvent.html
+.. _wx.SizeEvent:                http://wxpython.org/Phoenix/docs/html/SizeEvent.html
+.. _wx.SpinDoubleEvent:          http://wxpython.org/Phoenix/docs/html/SpinDoubleEvent.html
+.. _wx.SpinEvent:                http://wxpython.org/Phoenix/docs/html/SpinEvent.html
+.. _wx.SplitterEvent:            http://wxpython.org/Phoenix/docs/html/SplitterEvent.html
+.. _wx.SysColourChangedEvent:    http://wxpython.org/Phoenix/docs/html/SysColourChangedEvent.html
+.. _wx.TaskBarIconEvent:         http://wxpython.org/Phoenix/docs/html/TaskBarIconEvent.html
+.. _wx.TextUrlEvent:             http://wxpython.org/Phoenix/docs/html/TextUrlEvent.html
+.. _wx.ThreadEvent:              http://wxpython.org/Phoenix/docs/html/ThreadEvent.html
+.. _wx.TimerEvent:               http://wxpython.org/Phoenix/docs/html/TimerEvent.html
+.. _wx.ToolbookEvent:            http://wxpython.org/Phoenix/docs/html/ToolbookEvent.html
+.. _wx.TreeEvent:                http://wxpython.org/Phoenix/docs/html/TreeEvent.html
+.. _wx.TreebookEvent:            http://wxpython.org/Phoenix/docs/html/TreebookEvent.html
+.. _wx.UpdateUIEvent:            http://wxpython.org/Phoenix/docs/html/UpdateUIEvent.html
+.. _wx.WindowCreateEvent:        http://wxpython.org/Phoenix/docs/html/WindowCreateEvent.html
+.. _wx.WindowDestroyEvent:       http://wxpython.org/Phoenix/docs/html/WindowDestroyEvent.html
+.. _wx.WindowModalDialogEvent:   http://wxpython.org/Phoenix/docs/html/WindowModalDialogEvent.html
 

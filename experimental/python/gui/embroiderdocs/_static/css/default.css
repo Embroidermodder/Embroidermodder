@@ -126,7 +126,6 @@ a:hover {
 }
 
 div.body p, div.body dd, div.body li {
-    /* background-image: url(../images/sphinxdocs/sphinxtile_white.png); */
     text-align: justify;
     line-height: 130%;
 }
@@ -141,7 +140,6 @@ div.body h6 {
     background-color: #f2f2f2;
     background-image: url(../images/sphinxdocs/sphinxtile_blue.png);
     font-weight: normal;
-    /* color: #20435c; */
     color: #FFD752;
     border-bottom: 1px solid #ccc;
     margin: 20px -20px 10px -20px;
@@ -220,5 +218,5 @@ tt {
 }
 
 th {
-    background-color: #ede;
+    background-color: #b2e7ff;
 }

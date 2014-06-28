@@ -24,7 +24,6 @@
 {% block relbar2 %}{% endblock %}
 
 
-
 {%- macro myrelbar() %}
     <div class="related">
       <h3>{{ _('Navigation') }}</h3>
@@ -67,15 +66,12 @@
 {%- endmacro %}
 
 
-
-
 {% block document %}
   <div class="documentwrapper">
     <div class="body headerfix">
       <div class="headerimage">
       <img src="{{ pathto("_static/images/sphinxdocs/logo-spirals.png", 1) }}" alt="Embroidermodder 2 Logo" />
       </div>
-
       {% block body %} {% endblock %}
       {%- if theme_disqus_comments|tobool %}
       <div id="disqus_thread"></div>

@@ -2,9 +2,20 @@
 # -*- coding: utf-8 -*-
 
 """
-property_editor.py
-==================
+===================================
+|module_summary| property_editor.py
+===================================
 
+TOWRITE
+
+Classes summary:
+================
+
+============================ ============================
+:class:`~PropertyEditor`     TOWRITE
+============================ ============================
+
+---------------------------------------------------------
 """
 
 #-Imports.----------------------------------------------------------------------
@@ -42,9 +53,12 @@ from object_data import *
 
 class PropertyEditor(QDockWidget):
     """
+    Subclass of `QDockWidget`_
+
     Property Editor Dock Widget for Embroidermodder.
 
-    Subclass of `QDockWidget`_
+    .. sphinx_generate_methods_summary::
+       PropertyEditor
     """
     def __init__(self, iconDirectory, pickAddMode, widgetToFocus,
                  title, parent, flags=Qt.WindowFlags):

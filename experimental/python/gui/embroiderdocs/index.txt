@@ -18,9 +18,17 @@ Prerequisites
 Like any other complex piece of software, Embroidermodder 2 requires other software in order to function properly.
 
 * `Python <http://www.python.org/>`_
-* `wxPython <http://www.wxpython.org/>`_
+
+And one of the GUI Toolkits:
+
 * `PySide <http://qt-project.org/wiki/Category:LanguageBindings::PySide::Downloads>`_
 * `PyQt <http://www.riverbankcomputing.co.uk/software/pyqt/download>`_
+* `wxPython <http://www.wxpython.org/>`_
+
+For building the sphinx documentation you will need:
+
+* `Sphinx <http://sphinx-doc.org/>`_
+
 
 |
 
@@ -29,26 +37,28 @@ Like any other complex piece of software, Embroidermodder 2 requires other softw
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 20
+   :titlesonly:
 
    Embroidermodder_PySide_PyQt_GUI
    Embroidermodder_wxPythonGUI
-   mainwindow_settings
+   KeyboardShortcuts
+   Strings
+   cmdprompt
    dialog_about
    emb_globals
    embdetails_dialog
-   cmdprompt
    hacks
-   KeyboardShortcuts
+   mainwindow_settings
    mdisubwindow_textedit
    object_data
    property_editor
    settings_dialog
    statusbar
    statusbar_button
-   Strings
    tipoftheday_dialog
    undo_editor
+   todolist
 
 
 |

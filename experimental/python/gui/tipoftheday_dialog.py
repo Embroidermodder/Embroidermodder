@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-tipoftheday_dialog.py
-=====================
+======================================
+|module_summary| tipoftheday_dialog.py
+======================================
 
 This module houses the code for the Tip Of The Day Dialog.
 
@@ -13,6 +14,16 @@ Features
 2. On opening advances the current tip by 1
 3. Has a fancy lightswitch to turn "Show on startup" functionality On/Off.
 
+Classes summary:
+================
+
+============================ ============================
+:class:`~LightSwitchWidget`  TOWRITE
+:class:`~ImageWidget`        TOWRITE
+:class:`~TipOfTheDayDialog`  TOWRITE
+============================ ============================
+
+---------------------------------------------------------
 """
 
 TIPS_TXT = r"""
@@ -61,9 +72,12 @@ except ImportError:
 
 class LightSwitchWidget(QLabel):
     """
+    Subclass of `QLabel`_
+
     A image widget.
 
-    Subclass of `QLabel`_
+    .. sphinx_generate_methods_summary::
+       LightSwitchWidget
     """
     def __init__(self, imgDir, mw, parent):
         """
@@ -150,9 +164,12 @@ class LightSwitchWidget(QLabel):
 
 class ImageWidget(QLabel):
     """
+    Subclass of `QLabel`_
+
     A image widget.
 
-    Subclass of `QLabel`_
+    .. sphinx_generate_methods_summary::
+       ImageWidget
     """
     def __init__(self, imgDir, iconDir, parent):
         """
@@ -180,7 +197,7 @@ class ImageWidget(QLabel):
         """
         Handles the ``paintEvent`` event for :class:`ImageWidget`.
 
-        :param `event`: a `QPaintEvent`_ event to be processed.
+        :param `event`: A `QPaintEvent`_ to be processed.
         """
         painter = QPainter(self)
         painter.drawPixmap(0, 0, self.pixmap)
@@ -190,9 +207,12 @@ class ImageWidget(QLabel):
 
 class TipOfTheDayDialog(QWizard):
     """
-    Tip Of The Day Dialog Class
-    
     Subclass of `QWizard`_
+
+    Tip Of The Day Dialog Class
+
+    .. sphinx_generate_methods_summary::
+       TipOfTheDayDialog
     """
     def __init__(self, parent):
         super(TipOfTheDayDialog, self).__init__(parent)
@@ -330,6 +350,7 @@ class TipOfTheDayDialog(QWizard):
             self.DoSetWhatsThis()
 
     def DoSetWhatsThis(self):
+        """"""
         huh = (self.tr('Did you know...') + '\n' +
                self.tr('This is tip number:') +
                ' %d' % int(self.mainWin.settings_general_current_tip))
