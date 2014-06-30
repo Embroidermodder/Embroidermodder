@@ -40,7 +40,7 @@ except ImportError:
 #    PYQT4 = True
 
 # Local imports.
-## from imagewidget import ImageWidget
+from imagewidget import ImageWidget
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
@@ -76,6 +76,7 @@ class PreviewDialog(QFileDialog):
 
         # TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
         # TODO: make thumbnail size adjustable thru settings dialog
+        # TODO/PORT: Need access to gIconDir
         imgWidget = ImageWidget("icons/default/nopreview.png", self)
 
         #TODO/PORT# QLayout* lay = layout()
