@@ -36,7 +36,7 @@ try:
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
     PYSIDE = True
     PYQT4 = False
-except ImportError: Q
+except ImportError:
     raise
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
@@ -339,7 +339,7 @@ class LineObject(BaseObject):
         """
         ## QList<QPointF> gripPoints
         ## gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint()
-        gripPoints = list(self.objectEndPoint1(), self.objectEndPoint2(), self.objectMidPoint()) # TODO: Check if this would be right...
+        gripPoints = list(self.objectEndPoint1() + self.objectEndPoint2() + self.objectMidPoint()) # TODO: Check if this would be right...
         return gripPoints
 
     def gripEdit(self, before, after):
