@@ -341,7 +341,7 @@ class CircleObject(BaseObject):
 
         self.setObjectRubberMode(OBJ_RUBBER_OFF)
 
-    def mouseSnapPoint(self, mousePoint)
+    def mouseSnapPoint(self, mousePoint):
         """
         Returns the closest snap point to the mouse point.
 

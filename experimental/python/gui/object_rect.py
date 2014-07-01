@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-================================
-|module_summary| object_image.py
-================================
+===============================
+|module_summary| object_rect.py
+===============================
 
 TOWRITE
 
@@ -13,7 +13,7 @@ Classes summary:
 ================
 
 ============================ ============================
-:class:`~ImageObject`        TOWRITE
+:class:`~RectObject`         TOWRITE
 ============================ ============================
 
 ---------------------------------------------------------
@@ -49,7 +49,7 @@ except ImportError:
 from object_base import BaseObject
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
-#include "object-image.h"
+#include "object-rect.h"
 #include "object-data.h"
 
 #include <QPainter>
@@ -58,7 +58,7 @@ from object_base import BaseObject
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 
 
-class ImageObject(BaseObject):
+class RectObject(BaseObject):
     """
     Subclass of `BaseObject`_
 
@@ -66,7 +66,7 @@ class ImageObject(BaseObject):
 
     """
     def __init__(self, x, y, w, h, rgb, parent):
-        #OVERLOADED IMPL?# ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+        #OVERLOADED IMPL?# RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
 
@@ -83,9 +83,9 @@ class ImageObject(BaseObject):
         :param `parent`: TOWRITE
         :type `parent`: `QGraphicsItem`_
         """
-        super(ImageObject, self).__init__(parent)
+        super(RectObject, self).__init__(parent)
 
-        qDebug("ImageObject Constructor()")
+        qDebug("RectObject Constructor()")
         self.init(x, y, w, h, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -96,7 +96,7 @@ class ImageObject(BaseObject):
 
     def __del__(self):
         """Class destructor."""
-        qDebug("ImageObject Destructor()")
+        qDebug("RectObject Destructor()")
 
     def init(self, x, y, w, h, rgb, lineType):
         """
@@ -115,8 +115,8 @@ class ImageObject(BaseObject):
         :param `lineType`: TOWRITE
         :type `lineType`: Qt.PenStyle
         """
-        self.setData(OBJ_TYPE, type())
-        self.setData(OBJ_NAME, OBJ_NAME_IMAGE)
+        self.setData(OBJ_TYPE, self.type())
+        self.setData(OBJ_NAME, OBJ_NAME_RECTANGLE)
 
         # WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
         # WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -127,7 +127,7 @@ class ImageObject(BaseObject):
         self.setObjectColor(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
-        self.setPen(self.objectPen())
+        self.setPen(objectPen())
 
     def setObjectRect(self, x, y, w, h):
         """
@@ -152,9 +152,9 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
-        cosRot = qCos(rot)         # qreal
-        sinRot = qSin(rot)         # qreal
+        rot = radians(self.rotation())  # qreal
+        cosRot = qCos(rot)              # qreal
+        sinRot = qSin(rot)              # qreal
 
         tl = self.rect().topLeft()  # QPointF
         ptlX = tl.x() * self.scale()             # qreal
@@ -170,9 +170,9 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
-        cosRot = qCos(rot)         # qreal
-        sinRot = qSin(rot)         # qreal
+        rot = radians(self.rotation())  # qreal
+        cosRot = qCos(rot)              # qreal
+        sinRot = qSin(rot)              # qreal
 
         tr = self.rect().topRight()  # QPointF
         ptrX = tr.x() * self.scale()             # qreal
@@ -188,13 +188,13 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
-        cosRot = qCos(rot)         # qreal
-        sinRot = qSin(rot)         # qreal
+        rot = radians(self.rotation())  # qreal
+        cosRot = qCos(rot)              # qreal
+        sinRot = qSin(rot)              # qreal
 
         bl = self.rect().bottomLeft()  # QPointF
-        pblX = bl.x() * scale()                  # qreal
-        pblY = bl.y() * scale()                  # qreal
+        pblX = bl.x() * self.scale()             # qreal
+        pblY = bl.y() * self.scale()             # qreal
         pblXrot = pblX * cosRot - pblY * sinRot  # qreal
         pblYrot = pblX * sinRot + pblY * cosRot  # qreal
 
@@ -206,13 +206,13 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
-        cosRot = qCos(rot)         # qreal
-        sinRot = qSin(rot)         # qreal
+        rot = radians(self.rotation())  # qreal
+        cosRot = qCos(rot)              # qreal
+        sinRot = qSin(rot)              # qreal
 
         br = self.rect().bottomRight()  # QPointF
-        pbrX = br.x() * scale()                  # qreal
-        pbrY = br.y() * scale()                  # qreal
+        pbrX = br.x() * self.scale()             # qreal
+        pbrY = br.y() * self.scale()             # qreal
         pbrXrot = pbrX * cosRot - pbrY * sinRot  # qreal
         pbrYrot = pbrX * sinRot + pbrY * cosRot  # qreal
 
@@ -270,24 +270,47 @@ class ImageObject(BaseObject):
         :type `painter`: `QPainter`_
         """
         rubberMode = self.objectRubberMode()  # int
-        if rubberMode == OBJ_RUBBER_IMAGE:
-            sceneStartPoint = self.objectRubberPoint("IMAGE_START")  # QPointF
-            sceneEndPoint = self.objectRubberPoint("IMAGE_END")      # QPointF
+        if rubberMode == OBJ_RUBBER_RECTANGLE:
+
+            sceneStartPoint = self.objectRubberPoint("RECTANGLE_START")  # QPointF
+            sceneEndPoint = self.objectRubberPoint("RECTANGLE_END")      # QPointF
             x = sceneStartPoint.x()                      # qreal
             y = sceneStartPoint.y()                      # qreal
             w = sceneEndPoint.x() - sceneStartPoint.x()  # qreal
             h = sceneEndPoint.y() - sceneStartPoint.y()  # qreal
-            self.setObjectRect(x,y,w,h)
+            self.setObjectRect(x, y, w, h)
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_GRIP:
-            pass # TODO: updateRubber() gripping for ImageObject
+
+            if painter:
+
+                ### //TODO: Make this work with rotation & scaling
+                ### /*
+                ### QPointF gripPoint = objectRubberPoint("GRIP_POINT");
+                ### QPointF after = objectRubberPoint(QString());
+                ### QPointF delta = after-gripPoint;
+                ### if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
+                ### else if(gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
+                ### else if(gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+                ### else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+                ###
+                ### QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
+                ### drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+                ### */
+
+                gripPoint = self.objectRubberPoint("GRIP_POINT")    # QPointF
+                after = self.objectRubberPoint('')                  # QPointF
+                delta = after-gripPoint                             # QPointF
+
+                rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
+                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
 
     def vulcanize(self):
         """
         TOWRITE
         """
-        qDebug("ImageObject vulcanize()")
+        qDebug("RectObject vulcanize()")
         self.updateRubber()
         self.setObjectRubberMode(OBJ_RUBBER_OFF)
 
@@ -326,7 +349,7 @@ class ImageObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
-        gripPoints = list(self.objectTopLeft() + self.objectTopRight() + self.objectBottomLeft() + self.objectBottomRight())  # TODO: Check if this would be right...
+        gripPoints = list(self.objectTopLeft() + self.objectTopRight() + self.objectBottomLeft() + self.objectBottomRight())  # # TODO: Check if this would be right...
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -337,11 +360,48 @@ class ImageObject(BaseObject):
         :type `before`: `QPointF`_
         :param `after`: TOWRITE
         :type `after`: `QPointF`_
-
-        .. TODO:: gripEdit() for ImageObject
-
         """
-        pass # TODO: gripEdit() for ImageObject
+        delta = QPointF(after-before)
+        if before == self.objectTopLeft():
+            self.setObjectRect(after.x(),
+                               after.y(),
+                               self.objectWidth() - delta.x(),
+                               self.objectHeight() - delta.y())
+        elif before == self.objectTopRight():
+            self.setObjectRect(self.objectTopLeft().x(),
+                               self.objectTopLeft().y() + delta.y(),
+                               self.objectWidth() + delta.x(),
+                               self.objectHeight() - delta.y())
+        elif before == self.objectBottomLeft():
+            self.setObjectRect(self.objectTopLeft().x() + delta.x(),
+                               self.objectTopLeft().y(),
+                               self.objectWidth() - delta.x(),
+                               self.objectHeight() + delta.y())
+        elif before == self.objectBottomRight():
+            self.setObjectRect(self.objectTopLeft().x(),
+                               self.objectTopLeft().y(),
+                               self.objectWidth() + delta.x(),
+                               self.objectHeight() + delta.y())
+
+    def objectSavePath(self):
+        """
+        TOWRITE
+
+        :rtype: `QPainterPath`_
+        """
+        path = QPainterPath()
+        r = self.rect()  # QRectF
+        path.moveTo(r.bottomLeft())
+        path.lineTo(r.bottomRight())
+        path.lineTo(r.topRight())
+        path.lineTo(r.topLeft())
+        path.lineTo(r.bottomLeft())
+
+        s = self.scale()  # qreal
+        trans = QTransform()
+        trans.rotate(self.rotation())
+        trans.scale(s, s)
+        return trans.map(path)
 
 
 # kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
