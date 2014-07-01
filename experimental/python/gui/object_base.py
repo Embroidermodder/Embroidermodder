@@ -29,7 +29,8 @@ try:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QDateTime
-    from PySide.QtGui import QGraphicsScene, QMessageBox, QGraphicsItem, QGraphicsPathItem, QColor, QPen, QBrush, QPainter
+    from PySide.QtGui import (QGraphicsScene, QMessageBox, QGraphicsItem,
+        QGraphicsPathItem, QColor, QPen, QBrush, QPainter, QMessageBox)
     PYSIDE = True
     PYQT4 = False
 except ImportError:
@@ -37,7 +38,8 @@ except ImportError:
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
 #    from PyQt4.QtCore import qDebug, Qt, QDateTime
-#    from PyQt4.QtGui import QGraphicsScene, QMessageBox, QGraphicsItem, QGraphicsPathItem, QColor, QPen, QBrush, QPainter
+#    from PyQt4.QtGui import (QGraphicsScene, QMessageBox, QGraphicsItem,
+#        QGraphicsPathItem, QColor, QPen, QBrush, QPainter, QMessageBox)
 #    PYSIDE = False
 #    PYQT4 = True
 
@@ -128,9 +130,9 @@ class BaseObject(QGraphicsPathItem):
             elif lineWeight == OBJ_LWT_BYBLOCK:
                 lwtPen.setWidthF(0.35)  # TODO: getBlockLineWeight
             else:
-                #TODO/PORT# QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
-                #TODO/PORT#                         QObject::tr("Lineweight: %1")
-                #TODO/PORT#                         .arg(QString().setNum(lineWeight)))
+                QMessageBox.warning(0, QObject.tr("Error - Negative Lineweight"),
+                                       QObject.tr("Lineweight: %1")
+                                       .arg(QString().setNum(lineWeight)))
                 qDebug("Lineweight cannot be negative! Inverting sign.")
                 lwtPen.setWidthF(-lineWeight)
         else:
@@ -219,34 +221,34 @@ class BaseObject(QGraphicsPathItem):
                 color1 = color2.lighter(100 + threshold)
 
         count = renderPath.elementCount()  # int
-        #TODO/PORT# for(int i = 0; i < count-1; ++i);
-        #TODO/PORT#
-        #TODO/PORT#     QPainterPath::Element elem = renderPath.elementAt(i);
-        #TODO/PORT#     QPainterPath::Element next = renderPath.elementAt(i+1);
-        #TODO/PORT#
-        #TODO/PORT#     if next.isMoveTo()):
-        #TODO/PORT#         continue
-        #TODO/PORT#
-        #TODO/PORT#     QPainterPath elemPath
-        #TODO/PORT#     elemPath.moveTo(elem.x, elem.y)
-        #TODO/PORT#     elemPath.lineTo(next.x, next.y)
-        #TODO/PORT#
-        #TODO/PORT#     renderPen = QPen(QColor(0, 0, 0, 0))
-        #TODO/PORT#     renderPen.setWidthF(0)
-        #TODO/PORT#     painter.setPen(renderPen)
-        #TODO/PORT#     stroker = QPainterPathStroker
-        #TODO/PORT#     stroker.setWidth(0.35)
-        #TODO/PORT#     stroker.setCapStyle(Qt.RoundCap)
-        #TODO/PORT#     stroker.setJoinStyle(Qt.RoundJoin)
-        #TODO/PORT#     realPath = stroker.createStroke(elemPath) # QPainterPath
-        #TODO/PORT#     painter.drawPath(realPath)
-        #TODO/PORT#
-        #TODO/PORT#     grad = QLinearGradient(elemPath.pointAtPercent(0.5), elemPath.pointAtPercent(0.0))
-        #TODO/PORT#     grad.setColorAt(0, color1)
-        #TODO/PORT#     grad.setColorAt(1, color2)
-        #TODO/PORT#     grad.setSpread(QGradient.ReflectSpread)
-        #TODO/PORT#
-        #TODO/PORT#     painter.fillPath(realPath, QBrush(grad))
+        for i in range(0, count - 1):  # for(int i = 0; i < count-1; ++i);
+
+            elem = renderPath.elementAt(i)      # QPainterPath::Element
+            next = renderPath.elementAt(i + 1)  # QPainterPath::Element
+
+            if next.isMoveTo()):
+                continue
+
+            elemPath = QPainterPath()
+            elemPath.moveTo(elem.x, elem.y)
+            elemPath.lineTo(next.x, next.y)
+
+            renderPen = QPen(QColor(0, 0, 0, 0))
+            renderPen.setWidthF(0)
+            painter.setPen(renderPen)
+            stroker = QPainterPathStroker()
+            stroker.setWidth(0.35)
+            stroker.setCapStyle(Qt.RoundCap)
+            stroker.setJoinStyle(Qt.RoundJoin)
+            realPath = stroker.createStroke(elemPath)  # QPainterPath
+            painter.drawPath(realPath)
+
+            grad = QLinearGradient(elemPath.pointAtPercent(0.5), elemPath.pointAtPercent(0.0))
+            grad.setColorAt(0, color1)
+            grad.setColorAt(1, color2)
+            grad.setSpread(QGradient.ReflectSpread)
+
+            painter.fillPath(realPath, QBrush(grad))
 
 
 # kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
