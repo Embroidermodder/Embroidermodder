@@ -2531,4 +2531,4 @@ class View(QGraphicsView):
         self.selectBox.setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha)
 
 
-# kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
+# kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

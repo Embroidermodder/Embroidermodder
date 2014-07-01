@@ -123,4 +123,4 @@ class ImageWidget(QWidget):
         painter.drawImage(0, 0, img)
 
 
-# kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
+# kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

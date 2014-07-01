@@ -1484,4 +1484,4 @@ def modeline(indentSize=4, tabSize=4, useTabs=False, trimWhitespace=True,
              longLine=0, bom=False):
     return locals()
 
-# kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
+# kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

@@ -165,4 +165,4 @@ class SelectBox(QRubberBand):
         self.resize(hack + QSize(1, 1))
         self.resize(hack)
 
-# kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
+# kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

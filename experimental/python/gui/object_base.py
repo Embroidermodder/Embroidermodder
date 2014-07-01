@@ -251,4 +251,4 @@ class BaseObject(QGraphicsPathItem):
             painter.fillPath(realPath, QBrush(grad))
 
 
-# kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
+# kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

@@ -175,4 +175,4 @@ class LayerManager(QDialog):
         self.layerModel.setData(self.layerModel.index(0, 7), print_)
 
 
-# kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on;
+# kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;
