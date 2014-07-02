@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-==================================
-|module_summary| object_polygon.py
-==================================
+===================================
+|module_summary| object_polyline.py
+===================================
 
 TOWRITE
 
@@ -13,7 +13,7 @@ Classes summary:
 ================
 
 ============================ ============================
-:class:`~PolygonObject`      TOWRITE
+:class:`~PolylineObject`     TOWRITE
 ============================ ============================
 
 ---------------------------------------------------------
@@ -44,7 +44,7 @@ except ImportError:
 from object_base import BaseObject
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
-#include "object-polygon.h"
+#include "object-polyline.h"
 #include "object-data.h"
 
 #include <QPainter>
@@ -54,7 +54,7 @@ from object_base import BaseObject
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 
 
-class PolygonObject(BaseObject):
+class PolylineObject(BaseObject):
     """
     Subclass of `BaseObject`_
 
@@ -62,7 +62,7 @@ class PolygonObject(BaseObject):
 
     """
     def __init__(self, x, y, w, h, rgb, parent):
-        #OVERLOADED IMPL?# PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+        #OVERLOADED IMPL?# PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
 
@@ -77,9 +77,9 @@ class PolygonObject(BaseObject):
         :param `parent`: TOWRITE
         :type `parent`: `QGraphicsItem`_
         """
-        super(PolygonObject, self).__init__(parent)
+        super(PolylineObject, self).__init__(parent)
 
-        qDebug("PolygonObject Constructor()")
+        qDebug("PolylineObject Constructor()")
         self.init(x, y, p, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -90,7 +90,7 @@ class PolygonObject(BaseObject):
 
     def __del__(self):
         """Class destructor."""
-        qDebug("PolygonObject Destructor()")
+        qDebug("PolylineObject Destructor()")
 
     def init(self, x, y, p, rgb, lineType):
         """
@@ -108,7 +108,7 @@ class PolygonObject(BaseObject):
         :type `lineType`: Qt.PenStyle
         """
         self.setData(OBJ_TYPE, self.type())
-        self.setData(OBJ_NAME, OBJ_NAME_POLYGON)
+        self.setData(OBJ_NAME, OBJ_NAME_POLYLINE)
 
         # WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
         # WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -121,7 +121,7 @@ class PolygonObject(BaseObject):
         self.setObjectColor(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
-        self.setPen(self.objectPen())
+        self.setPen(objectPen())
 
     def updatePath(self, p):
         """
@@ -131,10 +131,8 @@ class PolygonObject(BaseObject):
         :type `p`: `QPainterPath`_
         """
         normalPath = p
-        closedPath = normalPath  # QPainterPath
-        closedPath.closeSubpath()
-        reversePath = closedPath.toReversed()  # QPainterPath
-        reversePath.connectPath(closedPath)
+        reversePath = normalPath.toReversed()  # QPainterPath
+        reversePath.connectPath(normalPath)
         self.setObjectPath(reversePath)
 
     def paint(self, painter, option, widget):
@@ -161,11 +159,10 @@ class PolygonObject(BaseObject):
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
-        if normalPath.elementCount():
-            painter.drawPath(normalPath)
-            zero = normalPath.elementAt(0)  # QPainterPath::Element
-            last = normalPath.elementAt(normalPath.elementCount() - 1)  # QPainterPath::Element
-            painter.drawLine(QPointF(zero.x, zero.y), QPointF(last.x, last.y))
+        painter.drawPath(normalPath)
+
+        if (objScene.property(ENABLE_LWT).toBool() and objScene.property(ENABLE_REAL).toBool()):
+            self.realRender(painter, normalPath)
 
     def updateRubber(self, painter):
         """
@@ -175,12 +172,16 @@ class PolygonObject(BaseObject):
         :type `painter`: `QPainter`_
         """
         rubberMode = self.objectRubberMode()  # int
-        if rubberMode == OBJ_RUBBER_POLYGON:
+        if rubberMode == OBJ_RUBBER_POLYLINE:
 
-            self.setObjectPos(objectRubberPoint("POLYGON_POINT_0"))
+            self.setObjectPos(self.objectRubberPoint("POLYLINE_POINT_0"))
+
+            rubberLine = QLineF(normalPath.currentPosition(), self.mapFromScene(self.objectRubberPoint("")))
+            if painter:
+                self.drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR)
 
             ok = False  # bool
-            numStr = self.objectRubberText("POLYGON_NUM_POINTS")  # QString
+            numStr = self.objectRubberText("POLYLINE_NUM_POINTS")  # QString
             if numStr.isNull():
                 return
             num = numStr.toInt(ok)  # int
@@ -189,79 +190,16 @@ class PolygonObject(BaseObject):
 
             appendStr = ''  # QString
             rubberPath = QPainterPath()
-            rubberPath.moveTo(self.mapFromScene(self.objectRubberPoint("POLYGON_POINT_0")))
-            for i in range(1, num): # for(int i = 1; i <= num; i++)
+            for i in range(1, num):  # for(int i = 1; i <= num; i++)
 
-                appendStr = "POLYGON_POINT_" + '%s' % i  # QString().setNum(i)
+                appendStr = "POLYLINE_POINT_" + "%s" % i  # QString().setNum(i);
                 appendPoint = self.mapFromScene(self.objectRubberPoint(appendStr))  # QPointF
                 rubberPath.lineTo(appendPoint)
 
-            ## rubberPath.lineTo(0,0)
             self.updatePath(rubberPath)
 
             # Ensure the path isn't updated until the number of points is changed again.
-            self.setObjectRubberText("POLYGON_NUM_POINTS", '')
-
-        elif rubberMode == OBJ_RUBBER_POLYGON_INSCRIBE:
-
-            self.setObjectPos(self.objectRubberPoint("POLYGON_CENTER"))
-
-            numSides = self.objectRubberPoint("POLYGON_NUM_SIDES").x()  # quint16
-
-            inscribePoint = self.mapFromScene(self.objectRubberPoint("POLYGON_INSCRIBE_POINT"))  # QPointF
-            inscribeLine = QLineF(QPointF(0, 0), inscribePoint)  # QLineF
-            inscribeAngle = inscribeLine.angle()  # qreal
-            inscribeInc = 360.0 / numSides        # qreal
-
-            if painter:
-                self.drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR)
-
-            inscribePath = QPainterPath()
-            # First Point.
-            inscribePath.moveTo(inscribePoint)
-            # Remaining Points.
-            for i in range(1, numSides): # for(int i = 1; i < numSides; i++)
-
-                inscribeLine.setAngle(inscribeAngle + inscribeInc * i)
-                inscribePath.lineTo(inscribeLine.p2())
-
-            self.updatePath(inscribePath)
-
-        elif rubberMode == OBJ_RUBBER_POLYGON_CIRCUMSCRIBE:
-
-            self.setObjectPos(self.objectRubberPoint("POLYGON_CENTER"))
-
-            numSides = self.objectRubberPoint("POLYGON_NUM_SIDES").x()  # quint16
-
-            circumscribePoint = self.mapFromScene(self.objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"))  # QPointF
-            circumscribeLine = QLineF(QPointF(0, 0), circumscribePoint)  # QLineF
-            circumscribeAngle = circumscribeLine.angle()  # qreal
-            circumscribeInc = 360.0 / numSides            # qreal
-
-            if painter:
-                self.drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR)
-
-            circumscribePath = QPainterPath()
-            # First Point.
-            prev = QLineF(circumscribeLine.p2(), QPointF(0, 0))
-            prev = prev.normalVector()
-            circumscribeLine.setAngle(circumscribeAngle + circumscribeInc)
-            perp = QLineF(circumscribeLine.p2(), QPointF(0, 0))
-            perp = perp.normalVector()
-            iPoint = QPointF()
-            perp.intersect(prev, iPoint)
-            circumscribePath.moveTo(iPoint)
-            # Remaining Points.
-            for i in range(2, numSides): # for(int i = 2; i <= numSides; i++)
-
-                prev = perp
-                circumscribeLine.setAngle(circumscribeAngle + circumscribeInc * i)
-                perp = QLineF(circumscribeLine.p2(), QPointF(0, 0))
-                perp = perp.normalVector()
-                perp.intersect(prev, iPoint)
-                circumscribePath.lineTo(iPoint)
-
-            self.updatePath(circumscribePath)
+            self.setObjectRubberText("POLYLINE_NUM_POINTS", "")
 
         elif rubberMode == OBJ_RUBBER_GRIP:
 
@@ -270,28 +208,30 @@ class PolygonObject(BaseObject):
                 elemCount = normalPath.elementCount()  # int
                 gripPoint = self.objectRubberPoint("GRIP_POINT")  # QPointF
                 if gripIndex == -1:
-                    gripIndex = findIndex(gripPoint)
+                    gripIndex = self.findIndex(gripPoint)
                 if gripIndex == -1:
                     return
 
-                m = 0  # int
-                n = 0  # int
+                if not gripIndex: # First.
 
-                if not gripIndex:
-                    m = elemCount - 1
-                    n = 1
-                elif gripIndex == elemCount - 1:
-                    m = elemCount - 2
-                    n = 0
-                else:
-                    m = gripIndex - 1
-                    n = gripIndex + 1
-                em = normalPath.elementAt(m)  # QPainterPath::Element
-                en = normalPath.elementAt(n)  # QPainterPath::Element
-                emPoint = QPointF(em.x, em.y)  # QPointF
-                enPoint = QPointF(en.x, en.y)  # QPointF
-                painter.drawLine(emPoint, self.mapFromScene(self.objectRubberPoint("")))
-                painter.drawLine(enPoint, self.mapFromScene(self.objectRubberPoint("")))
+                    ef = normalPath.elementAt(1)  # QPainterPath::Element
+                    efPoint = QPointF(ef.x, ef.y)  # QPointF
+                    painter.drawLine(efPoint, self.mapFromScene(self.objectRubberPoint("")))
+
+                elif gripIndex == elemCount - 1: # Last.
+
+                    el = normalPath.elementAt(gripIndex - 1)  # QPainterPath::Element
+                    elPoint = QPointF(el.x, el.y)  # QPointF
+                    painter.drawLine(elPoint, self.mapFromScene(self.objectRubberPoint("")))
+
+                else: # Middle.
+
+                    em = normalPath.elementAt(gripIndex - 1)  # QPainterPath::Element
+                    en = normalPath.elementAt(gripIndex + 1)  # QPainterPath::Element
+                    emPoint = QPointF(em.x, em.y)  # QPointF
+                    enPoint = QPointF(en.x, en.y)  # QPointF
+                    painter.drawLine(emPoint, self.mapFromScene(self.objectRubberPoint("")))
+                    painter.drawLine(enPoint, self.mapFromScene(self.objectRubberPoint("")))
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint("")))
                 self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
@@ -300,13 +240,13 @@ class PolygonObject(BaseObject):
         """
         TOWRITE
         """
-        qDebug("PolygonObject vulcanize()")
+        qDebug("PolylineObject vulcanize()")
         self.updateRubber()
 
         self.setObjectRubberMode(OBJ_RUBBER_OFF)
 
         if not normalPath.elementCount():
-            QMessageBox.critical(0, QObject.tr("Empty Polygon Error"), QObject.tr("The polygon added contains no points. The command that created this object has flawed logic."))
+            QMessageBox.critical(0, QObject.tr("Empty Polyline Error"), QObject.tr("The polyline added contains no points. The command that created this object has flawed logic."))
 
     def mouseSnapPoint(self, mousePoint):
         """
@@ -320,12 +260,13 @@ class PolygonObject(BaseObject):
         closestPoint = self.mapToScene(QPointF(element.x, element.y))  # QPointF
         closestDist = QLineF(mousePoint, closestPoint).length()  # qreal
         elemCount = normalPath.elementCount()  # int
-        for i in range(0, elemCount): # for(int i = 0; i < elemCount; ++i)
+        for i in range(0, elemCount):  # for(int i = 0; i < elemCount; ++i)
 
             element = normalPath.elementAt(i)
             elemPoint = self.mapToScene(element.x, element.y)  # QPointF
             elemDist = QLineF(mousePoint, elemPoint).length()  # qreal
             if elemDist < closestDist:
+
                 closestPoint = elemPoint
                 closestDist = elemDist
 
@@ -360,11 +301,10 @@ class PolygonObject(BaseObject):
         :type `point`: `QPointF`_
         :rtype: int
         """
-        i = 0  # int
         elemCount = normalPath.elementCount()  # int
-        # NOTE: Points here are in item coordinates.
+        # NOTE: Points here are in item coordinates
         itemPoint = self.mapFromScene(point)  # QPointF
-        for i in range(0, elemCount):  # for(i = 0; i < elemCount; i++)
+        for i in range(0, elemCount):  # for(int i = 0; i < elemCount; i++)
 
             e = normalPath.elementAt(i)  # QPainterPath::Element
             elemPoint = QPointF(e.x, e.y)  # QPointF
@@ -404,13 +344,11 @@ class PolygonObject(BaseObject):
 
         :rtype: `QPainterPath`_
         """
-        closedPath = normalPath  # QPainterPath
-        closedPath.closeSubpath()
         s = self.scale()  # qreal
         trans = QTransform()
         trans.rotate(self.rotation())
         trans.scale(s, s)
-        return trans.map(closedPath)
+        return trans.map(normalPath)
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;
