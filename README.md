@@ -95,4 +95,19 @@ Sample Files
 
 Various sample embroidery design files can be found in
 the embroidermodder2/samples folder.
- 
+
+Install/Uninstall
+-----------------
+
+- Linux:
+To install, open a terminal in the
+project-files/qmake subfolder and type:
+```
+sudo make install
+```
+
+To uninstall, open a terminal in the
+project-files/qmake subfolder and type:
+```
+sudo make uninstall
+```
