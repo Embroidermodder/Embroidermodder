@@ -322,7 +322,6 @@ class DimLeaderObject(BaseObject):
         lineStylePath.moveTo(ap0)
         lineStylePath.lineTo(lp0)
 
-
     def paint(self, painter, option, widget):
         """
         TOWRITE
@@ -352,7 +351,6 @@ class DimLeaderObject(BaseObject):
 
         if self.filled:
             painter.fillPath(arrowStylePath, self.objectColor())
-
 
     def updateRubber(self, painter):
         """

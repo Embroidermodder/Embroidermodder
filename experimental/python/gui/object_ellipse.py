@@ -33,7 +33,7 @@ try:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
-    from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
+    from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
     PYSIDE = True
     PYQT4 = False
 except ImportError:
@@ -41,7 +41,7 @@ except ImportError:
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
 #    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
+#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
 #    PYSIDE = False
 #    PYQT4 = True
 
