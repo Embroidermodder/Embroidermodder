@@ -226,7 +226,7 @@ class BaseObject(QGraphicsPathItem):
             elem = renderPath.elementAt(i)      # QPainterPath::Element
             next = renderPath.elementAt(i + 1)  # QPainterPath::Element
 
-            if next.isMoveTo()):
+            if next.isMoveTo():
                 continue
 
             elemPath = QPainterPath()

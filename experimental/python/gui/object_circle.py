@@ -137,7 +137,7 @@ class CircleObject(BaseObject):
         """
         self.setObjectCenter(center.x(), center.y())
 
-    def setObjectCenter(qreal centerX, qreal centerY)
+    def setObjectCenter(self, centerX, centerY):
         """
         TOWRITE
 

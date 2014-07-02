@@ -538,7 +538,7 @@ class ArcObject(BaseObject):
         :type `widget`: `QWidget`_
         """
         objScene = self.scene()  # QGraphicsScene*
-        if not objScene):
+        if not objScene:
             return
 
         paintPen = self.pen()  # QPen

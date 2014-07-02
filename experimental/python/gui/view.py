@@ -145,7 +145,7 @@ class View(QGraphicsView):
 
         if mainWin.getSettingsGridShowOnLoad():
             createGrid(mainWin.getSettingsGridType())
-        else
+        else:
             createGrid("")
 
         self.toggleRuler(mainWin.getSettingsRulerShowOnLoad())
@@ -347,7 +347,7 @@ class View(QGraphicsView):
         self.rubberRoomList.clear()
         self.gscene.update()
 
-    def vulcanizeObject(self, obj)
+    def vulcanizeObject(self, obj):
         """
         TOWRITE
 
@@ -661,7 +661,7 @@ class View(QGraphicsView):
         :type `on`: bool
         """
         qDebug("View toggleGrid()")
-        QApplication::setOverrideCursor(Qt.WaitCursor)
+        QApplication.setOverrideCursor(Qt.WaitCursor)
         if on:
             self.createGrid(mainWin.getSettingsGridType())
         else:
@@ -975,7 +975,7 @@ class View(QGraphicsView):
                     # int xFlow;
                     if willUnderflowInt32(ox, unit):
                         proceed = False
-                    else
+                    else:
                         xFlow = roundToMultiple(False, ox, unit)
                     # int xStart;
                     if willUnderflowInt32(xFlow, unit):
@@ -1331,7 +1331,7 @@ class View(QGraphicsView):
         screenWidth = qApp.desktop().width() # quint32
         if percent > 0 and percent < 100:
             self.crosshairSize = (screenWidth * (percent / 100.0)) / 2
-        else
+        else:
             self.crosshairSize = screenWidth
 
     def setCornerButton(self):
@@ -1503,7 +1503,7 @@ class View(QGraphicsView):
         """
         if event.button() == Qt.LeftButton:
             item = self.gscene.itemAt(self.mapToScene(event.pos()), QTransform()) # QGraphicsItem*
-            if(item)
+            if item:
                 self.mainWin.dockPropEdit.show()
 
     def mousePressEvent(self, event):
@@ -1529,12 +1529,12 @@ class View(QGraphicsView):
                                            self.mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)))  # QList<QGraphicsItem*>
 
             itemsInPickBox = pickList.size() # bool
-            if itemsInPickBox and not selectingActive and not grippingActive)
+            if itemsInPickBox and not selectingActive and not grippingActive:
 
                 itemsAlreadySelected = pickList.at(0).isSelected() # bool
                 if not itemsAlreadySelected:
 
-                    pickList.at(0).setSelected(true)
+                    pickList.at(0).setSelected(True)
 
                 else:
 
@@ -1592,7 +1592,7 @@ class View(QGraphicsView):
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(False)
                         else:
-                            itemList = gscene.items(path, Qt::ContainsItemShape) # QList<QGraphicsItem*>
+                            itemList = gscene.items(path, Qt.ContainsItemShape) # QList<QGraphicsItem*>
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(True)
 
@@ -1771,8 +1771,8 @@ class View(QGraphicsView):
                 py = 0                         # qreal
                 px -= x
                 py -= y
-                qreal rotX = px*cosRot - py*sinRot
-                qreal rotY = px*sinRot + py*cosRot
+                rotX = px * cosRot - py * sinRot  # qreal
+                rotY = px * sinRot + py * cosRot  # qreal
                 rotX += x
                 rotY += y
 
@@ -1906,7 +1906,7 @@ class View(QGraphicsView):
         maxWidth  = corner.x() - origin.x()  # qreal
         maxHeight = corner.y() - origin.y()  # qreal
 
-        qreal zoomOutLimit = 10000000000000.0
+        zoomOutLimit = 10000000000000.0  # qreal
         if qMax(maxWidth, maxHeight) > zoomOutLimit:
             qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit)
             return False
@@ -1945,12 +1945,12 @@ class View(QGraphicsView):
         # Do The zoom
         # qreal s;
         if zoomDir > 0:
-            if not allowZoomIn()
+            if not self.allowZoomIn():
                 return
             s = mainWin.getSettingsDisplayZoomScaleIn()
 
         else:
-            if not allowZoomOut():
+            if not self.allowZoomOut():
                 return
             s = mainWin.getSettingsDisplayZoomScaleOut()
 
@@ -2036,7 +2036,7 @@ class View(QGraphicsView):
             #TODO/PORT# connect(clearAction, SIGNAL(triggered()), this, SLOT(clearSelection()))
             menu.addAction(clearAction)
 
-        menu.exec(event.globalPos())
+        menu.exec_(event.globalPos())
 
     def deletePressed(self):
         """
@@ -2069,7 +2069,7 @@ class View(QGraphicsView):
         self.selectBox.hide()
         if self.grippingActive:
             self.stopGripping(False)
-        else
+        else:
             self.clearSelection()
 
     def startGripping(self, obj):
@@ -2399,7 +2399,7 @@ class View(QGraphicsView):
         # Always clear the selection after a rotate
         self.gscene.clearSelection()
 
-    def mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+    def mirrorSelected(self, x1, y1, x2, y2):
         """
         TOWRITE
 
