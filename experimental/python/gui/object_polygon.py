@@ -56,10 +56,12 @@ from object_base import BaseObject
 
 class PolygonObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PolygonObject
     """
     def __init__(self, x, y, w, h, rgb, parent):
         #OVERLOADED IMPL?# PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)

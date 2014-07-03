@@ -55,10 +55,12 @@ from object_base import BaseObject
 
 class PathObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PathObject
     """
     def __init__(self, x, y, p, rgb, parent):
         #OVERLOADED IMPL?# PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)

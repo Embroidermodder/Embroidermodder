@@ -27,7 +27,7 @@ Classes summary:
 try:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QLineF, QPointF
+    from PySide.QtCore import qDebug, Qt, QLineF, QPointF, QObject
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
     PYSIDE = True
     PYQT4 = False
@@ -73,6 +73,8 @@ class SaveObject(QObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       SaveObject
     """
     def __init__(self, theScene, parent):
         """

@@ -61,10 +61,12 @@ from object_base import BaseObject
 
 class CircleObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       CircleObject
     """
     def __init__(self, centerX, centerY, radius, rgb, parent):
         #OVERLOADED IMPL?# CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)

@@ -732,17 +732,17 @@ class EmbroidermodderMainWindow(QMainWindow):
         self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
 
     def DoCascadeMdiWindows(self):
-        """Set the `MDIArea` view mode to cascade SubWindowView."""
+        """Set the :class:`MDIArea` view mode to cascade SubWindowView."""
         # self.gMDIArea.setViewMode(QMdiArea.SubWindowView)
         self.gMDIArea.cascadeSubWindows()
 
     def DoTileMdiWindows(self):
-        """Set the `MDIArea` view mode to tiled SubWindowView."""
+        """Set the :class:`MDIArea` view mode to tiled SubWindowView."""
         # self.gMDIArea.setViewMode(QMdiArea.SubWindowView)
         self.gMDIArea.tileSubWindows()
 
     def DoTabMdiWindows(self):
-        """Set the `MDIArea` view mode to TabbedView."""
+        """Set the :class:`MDIArea` view mode to TabbedView."""
         self.gMDIArea.setViewMode(QMdiArea.TabbedView)
 
     def closeEvent(self, event):
@@ -815,25 +815,23 @@ class EmbroidermodderMainWindow(QMainWindow):
         print('OnPrint')
 
     def OnWindowClose(self):
-        """Close the active `MDIArea` SubWindow."""
+        """Close the active :class:`MDIArea` SubWindow."""
         self.gMDIArea.closeActiveSubWindow()
 
     def OnWindowCloseAll(self):
-        """Close all the `MDIArea` SubWindows."""
+        """Close all the :class:`MDIArea` SubWindows."""
         self.gMDIArea.closeAllSubWindows()
 
     def OnWindowNext(self):
-        """Activate the next `MDIArea` SubWindow."""
+        """Activate the next :class:`MDIArea` SubWindow."""
         self.gMDIArea.activateNextSubWindow()
 
     def OnWindowPrevious(self):
-        """Activate the previous `MDIArea` SubWindow."""
+        """Activate the previous :class:`MDIArea` SubWindow."""
         self.gMDIArea.activatePreviousSubWindow()
 
     def OnDetails(self):
-        """
-        Show the Embroidermodder Details Dialog.
-        """
+        """Show the Embroidermodder Details Dialog."""
         dialog = EmbDetailsDialog(None, self)
         dialog.show()
 
