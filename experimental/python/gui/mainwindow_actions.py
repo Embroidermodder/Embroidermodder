@@ -16,11 +16,11 @@ These methods are to be imported into the MainWindow class directly.
 #--PySide/PyQt Imports.
 try:
     from PySide.QtCore import qDebug, SIGNAL, SLOT
-    from PySide.QtGui import QApplication, QIcon, QKeySequence
+    from PySide.QtGui import QApplication, QIcon, QKeySequence, QAction
 except ImportError:
     raise
 #    from PyQt4.QtCore import qDebug, SIGNAL, SLOT
-#    from PyQt4.QtGui import QApplication, QIcon, QKeySequence
+#    from PyQt4.QtGui import QApplication, QIcon, QKeySequence, QAction
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
