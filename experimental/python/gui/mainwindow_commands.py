@@ -308,7 +308,7 @@ def tipOfTheDay(self):
 
     imgBanner = ImageWidget("images/did-you-know.png", wizardTipOfTheDay)  # ImageWidget*
 
-    if self.settings_general_current_tip >= len(self.listTipOfTheDay))
+    if self.settings_general_current_tip >= len(self.listTipOfTheDay):
         self.settings_general_current_tip = 0
     labelTipOfTheDay = QLabel(self.listTipOfTheDay[settings_general_current_tip], wizardTipOfTheDay)
     labelTipOfTheDay.setWordWrap(True)
@@ -826,7 +826,7 @@ def panpoint(self):
     TOWRITE
     """
     qDebug("panpoint()")
-    View* gview = activeView()
+    gview = self.activeView()  # View*
     if gview:
         gview.panPoint()
 
@@ -848,7 +848,7 @@ def panRight(self):
     qDebug("panRight()")
     gview = self.activeView()  # View*
     stack = gview.getUndoStack()  # QUndoStack*
-    if gview && stack:
+    if gview and stack:
         cmd = UndoableNavCommand("PanRight", gview, 0)  # UndoableNavCommand*
         stack.push(cmd)
 
@@ -1021,7 +1021,7 @@ def textUnderline(self):
     """
     return self.getSettingsTextStyleUnderline()
 
-def textStrikeOut(self)
+def textStrikeOut(self):
     """
     TOWRITE
 
@@ -1515,7 +1515,7 @@ def nativePlatformString(self):
     """
     return self.platformString()
 
-def nativeMessageBox(self, type, const QString& title, const QString& text)
+def nativeMessageBox(self, type, title, text):
     """
     Construct and show a message box. `QMessageBox`_ wrapper.
 
@@ -2696,7 +2696,7 @@ def nativeRotateSelected(self, x, y, rot):
     if gview:
         gview.rotateSelected(x, -y, -rot)
 
-void MainWindow::nativeMirrorSelected(self, x1, y1, x2, y2):
+def nativeMirrorSelected(self, x1, y1, x2, y2):
     """
     TOWRITE
 
