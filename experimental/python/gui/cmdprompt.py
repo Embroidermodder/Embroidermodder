@@ -46,10 +46,11 @@ try:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     # Only import what we need into the global namespace
-    from PySide.QtCore import qDebug, QFile, QTextStream, QTimer, Qt
-    from PySide.QtGui import QAction, QApplication, QFont, QFrame, QIcon, \
-        QKeySequence, QLineEdit, QMenu, QSplitter, QSplitterHandle, \
-        QTextBrowser, QVBoxLayout, QWidget
+    from PySide.QtCore import qDebug, QFile, QTextStream, QTimer, Qt, SIGNAL, SLOT, QIODevice, QEvent, QObject
+    from PySide.QtGui import (QAction, QApplication, QFont, QFrame, QIcon,
+        QKeySequence, QLineEdit, QMenu, QSplitter, QSplitterHandle,
+        QTextBrowser, QVBoxLayout, QWidget, QTextCursor,
+        QKeyEvent)
     PYSIDE = True
     PYQT4 = False
 except ImportError:
@@ -57,10 +58,11 @@ except ImportError:
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
 #    # Only import what we need into the global namespace
-#    from PyQt4.QtCore import qDebug, QFile, QTextStream, QTimer, Qt
-#    from PyQt4.QtGui import QAction, QApplication, QFont, QFrame, QIcon, \
-#        QKeySequence, QLineEdit, QMenu, QSplitter, QSplitterHandle, \
-#        QTextBrowser, QVBoxLayout, QWidget
+#    from PyQt4.QtCore import qDebug, QFile, QTextStream, QTimer, Qt, SIGNAL, SLOT, QIODevice, QEvent, QObject
+#    from PyQt4.QtGui import (QAction, QApplication, QFont, QFrame, QIcon,
+#        QKeySequence, QLineEdit, QMenu, QSplitter, QSplitterHandle,
+#        QTextBrowser, QVBoxLayout, QWidget, QTextCursor,
+#        QKeyEvent)
 #    PYSIDE = False
 #    PYQT4 = True
 
@@ -88,7 +90,7 @@ class CmdPrompt(QWidget):
         self.setObjectName("Command Prompt")
 
         self.promptInput = promptInput = CmdPromptInput(self)
-        self.promptHistory = CmdPromptHistory()
+        self.promptHistory = promptHistory = CmdPromptHistory()
         self.promptDivider = QFrame(self)
         promptVBoxLayout = QVBoxLayout(self)
 
@@ -112,14 +114,14 @@ class CmdPrompt(QWidget):
 
         self.setLayout(promptVBoxLayout)
 
-        #TODO# self.styleHash = QHash<QString, QString>()
-        #TODO# self.styleHash.insert("color",                      "#000000") # Match -------|
-        #TODO# self.styleHash.insert("background-color",           "#FFFFFF") #              |
-        #TODO# self.styleHash.insert("selection-color",            "#FFFFFF") #              |
-        #TODO# self.styleHash.insert("selection-background-color", "#000000") # Match -------|
-        #TODO# self.styleHash.insert("font-family",              "Monospace")
-        #TODO# self.styleHash.insert("font-style",                  "normal")
-        #TODO# self.styleHash.insert("font-size",                     "12px")
+        self.styleHash = {}  # QHash<QString, QString>()
+        self.styleHash["color"] =                      "#000000" # Match -------|
+        self.styleHash["background-color"] =           "#FFFFFF" #              |
+        self.styleHash["selection-color"] =            "#FFFFFF" #              |
+        self.styleHash["selection-background-color"] = "#000000" # Match -------|
+        self.styleHash["font-family"] =              "Monospace"
+        self.styleHash["font-style"] =                  "normal"
+        self.styleHash["font-size"] =                     "12px"
 
         # self.updateStyle()
 
@@ -136,36 +138,36 @@ class CmdPrompt(QWidget):
         #TODO# connect(this, SIGNAL(appendTheHistory(const QString&, int)), promptHistory, SLOT(appendHistory(const QString&, int)));
 
         # For use outside of command prompt
-        #TODO# connect(promptInput, SIGNAL(startCommand(const QString&)), this, SIGNAL(startCommand(const QString&)));
-        #TODO# connect(promptInput, SIGNAL(runCommand(const QString&, const QString&)), this, SIGNAL(runCommand(const QString&, const QString&)));
-        #TODO# connect(promptInput, SIGNAL(deletePressed()),    this, SIGNAL(deletePressed()));
-        #TODO# connect(promptInput, SIGNAL(tabPressed()),       this, SIGNAL(tabPressed()));
-        #TODO# connect(promptInput, SIGNAL(escapePressed()),    this, SIGNAL(escapePressed()));
-        #TODO# connect(promptInput, SIGNAL(upPressed()),        this, SIGNAL(upPressed()));
-        #TODO# connect(promptInput, SIGNAL(downPressed()),      this, SIGNAL(downPressed()));
-        #TODO# connect(promptInput, SIGNAL(F1Pressed()),        this, SIGNAL(F1Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F2Pressed()),        this, SIGNAL(F2Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F3Pressed()),        this, SIGNAL(F3Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F4Pressed()),        this, SIGNAL(F4Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F5Pressed()),        this, SIGNAL(F5Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F6Pressed()),        this, SIGNAL(F6Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F7Pressed()),        this, SIGNAL(F7Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F8Pressed()),        this, SIGNAL(F8Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F9Pressed()),        this, SIGNAL(F9Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F10Pressed()),       this, SIGNAL(F10Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F11Pressed()),       this, SIGNAL(F11Pressed()));
-        #TODO# connect(promptInput, SIGNAL(F12Pressed()),       this, SIGNAL(F12Pressed()));
-        #TODO# connect(promptInput, SIGNAL(cutPressed()),       this, SIGNAL(cutPressed()));
-        #TODO# connect(promptInput, SIGNAL(copyPressed()),      this, SIGNAL(copyPressed()));
-        #TODO# connect(promptInput, SIGNAL(pastePressed()),     this, SIGNAL(pastePressed()));
-        #TODO# connect(promptInput, SIGNAL(selectAllPressed()), this, SIGNAL(selectAllPressed()));
-        #TODO# connect(promptInput, SIGNAL(undoPressed()),      this, SIGNAL(undoPressed()));
-        #TODO# connect(promptInput, SIGNAL(redoPressed()),      this, SIGNAL(redoPressed()));
-        #TODO#
-        #TODO# connect(promptInput, SIGNAL(shiftPressed()),     this, SIGNAL(shiftPressed()));
-        #TODO# connect(promptInput, SIGNAL(shiftReleased()),    this, SIGNAL(shiftReleased()));
-        #TODO#
-        #TODO# connect(promptHistory, SIGNAL(historyAppended(const QString&)), this, SIGNAL(historyAppended(const QString&)));
+        self.connect(promptInput, SIGNAL("startCommand(QString)"), self, SIGNAL("startCommand(QString)"))
+        self.connect(promptInput, SIGNAL("runCommand(QString, QString)"), self, SIGNAL("runCommand(QString, QString)"))
+        self.connect(promptInput, SIGNAL("deletePressed()"),    self, SIGNAL("deletePressed()"))
+        self.connect(promptInput, SIGNAL("tabPressed()"),       self, SIGNAL("tabPressed()"))
+        self.connect(promptInput, SIGNAL("escapePressed()"),    self, SIGNAL("escapePressed()"))
+        self.connect(promptInput, SIGNAL("upPressed()"),        self, SIGNAL("upPressed()"))
+        self.connect(promptInput, SIGNAL("downPressed()"),      self, SIGNAL("downPressed()"))
+        self.connect(promptInput, SIGNAL("F1Pressed()"),        self, SIGNAL("F1Pressed()"))
+        self.connect(promptInput, SIGNAL("F2Pressed()"),        self, SIGNAL("F2Pressed()"))
+        self.connect(promptInput, SIGNAL("F3Pressed()"),        self, SIGNAL("F3Pressed()"))
+        self.connect(promptInput, SIGNAL("F4Pressed()"),        self, SIGNAL("F4Pressed()"))
+        self.connect(promptInput, SIGNAL("F5Pressed()"),        self, SIGNAL("F5Pressed()"))
+        self.connect(promptInput, SIGNAL("F6Pressed()"),        self, SIGNAL("F6Pressed()"))
+        self.connect(promptInput, SIGNAL("F7Pressed()"),        self, SIGNAL("F7Pressed()"))
+        self.connect(promptInput, SIGNAL("F8Pressed()"),        self, SIGNAL("F8Pressed()"))
+        self.connect(promptInput, SIGNAL("F9Pressed()"),        self, SIGNAL("F9Pressed()"))
+        self.connect(promptInput, SIGNAL("F10Pressed()"),       self, SIGNAL("F10Pressed()"))
+        self.connect(promptInput, SIGNAL("F11Pressed()"),       self, SIGNAL("F11Pressed()"))
+        self.connect(promptInput, SIGNAL("F12Pressed()"),       self, SIGNAL("F12Pressed()"))
+        self.connect(promptInput, SIGNAL("cutPressed()"),       self, SIGNAL("cutPressed()"))
+        self.connect(promptInput, SIGNAL("copyPressed()"),      self, SIGNAL("copyPressed()"))
+        self.connect(promptInput, SIGNAL("pastePressed()"),     self, SIGNAL("pastePressed()"))
+        self.connect(promptInput, SIGNAL("selectAllPressed()"), self, SIGNAL("selectAllPressed()"))
+        self.connect(promptInput, SIGNAL("undoPressed()"),      self, SIGNAL("undoPressed()"))
+        self.connect(promptInput, SIGNAL("redoPressed()"),      self, SIGNAL("redoPressed()"))
+
+        self.connect(promptInput, SIGNAL("shiftPressed()"),     self, SIGNAL("shiftPressed()"))
+        self.connect(promptInput, SIGNAL("shiftReleased()"),    self, SIGNAL("shiftReleased()"))
+
+        self.connect(promptHistory, SIGNAL("historyAppended(QString)"), self, SIGNAL("historyAppended(QString)"))
 
     def floatingChanged(self, isFloating): #TODO
         """
@@ -174,7 +176,7 @@ class CmdPrompt(QWidget):
         :param `isFloating`: TOWRITE
         :type `isFloating`: bool
         """
-        qDebug("CmdPrompt floatingChanged(%d)", isFloating)
+        qDebug("CmdPrompt floatingChanged(%d)" % isFloating)
         if isFloating:
             self.promptSplitter.hide()
         else:
@@ -197,9 +199,9 @@ class CmdPrompt(QWidget):
         # TODO: save during input in case of crash
         output = QTextStream(file)
         if html:
-            output << promptHistory.toHtml()
+            output << self.promptHistory.toHtml()
         else:
-            output << promptHistory.toPlainText()
+            output << self.promptHistory.toPlainText()
 
     def alert(self, txt):
         """
@@ -243,8 +245,8 @@ class CmdPrompt(QWidget):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        self.styleHash.insert("color", color.name())
-        self.styleHash.insert("selection-background-color", color.name())
+        self.styleHash["color"] = color.name()
+        self.styleHash["selection-background-color"] = color.name()
         self.updateStyle()
 
     def setPromptBackgroundColor(self, color):
@@ -254,8 +256,8 @@ class CmdPrompt(QWidget):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        self.styleHash.insert("background-color", color.name())
-        self.styleHash.insert("selection-color", color.name())
+        self.styleHash["background-color"] = color.name()
+        self.styleHash["selection-color"] = color.name()
         self.updateStyle()
 
     def setPromptFontFamily(self, family):
@@ -265,7 +267,7 @@ class CmdPrompt(QWidget):
         :param `family`: TOWRITE
         :type `family`: QString
         """
-        self.styleHash.insert("font-family", family)
+        self.styleHash["font-family"] = family
         self.updateStyle()
 
     def setPromptFontStyle(self, style):
@@ -275,7 +277,7 @@ class CmdPrompt(QWidget):
         :param `style`: TOWRITE
         :type `style`: QString
         """
-        self.styleHash.insert("font-style", style)
+        self.styleHash["font-style"] = style
         self.updateStyle()
 
     def setPromptFontSize(self, size):
@@ -285,7 +287,7 @@ class CmdPrompt(QWidget):
         :param `size`: TOWRITE
         :type `size`: int
         """
-        self.styleHash.insert("font-size", QString().setNum(size).append("px"))
+        self.styleHash["font-size"] = "%spx" % size  # QString().setNum(size).append("px"))
         self.updateStyle()
 
     def updateStyle(self): # TODO
@@ -329,6 +331,147 @@ class CmdPrompt(QWidget):
         self.promptInput.prefix = txt
         self.promptInput.curText = txt
         self.promptInput.setText(txt)
+
+
+    # cmdprompt.hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+    def getHistory(self):
+        """
+        TOWRITE
+
+        :rtype: QString
+        """
+        return self.promptHistory.toHtml()
+
+    def getPrefix(self):
+        """
+        TOWRITE
+
+        :rtype: QString
+        """
+        return self.promptInput.prefix
+
+    def getCurrentText(self):
+        """
+        TOWRITE
+
+        :rtype: QString
+        """
+        return self.promptInput.curText
+
+    def setCurrentText(self, txt):
+        """
+        TOWRITE
+
+        :param `txt`: TOWRITE
+        :type `txt`: QString
+        """
+        self.promptInput.curText = self.promptInput.prefix + txt
+        self.promptInput.setText(self.promptInput.curText)
+
+    def setHistory(self, txt):
+        """
+        TOWRITE
+
+        :param `txt`: TOWRITE
+        :type `txt`: QString
+        """
+        self.promptHistory.setHtml(txt)
+        self.promptHistory.moveCursor(QTextCursor.End, QTextCursor.MoveAnchor)
+
+    def startResizingTheHistory(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: int
+        """
+        self.promptHistory.startResizeHistory(y)
+
+    def stopResizingTheHistory(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: int
+        """
+        self.promptHistory.stopResizeHistory(y)
+
+    def resizeTheHistory(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: int
+        """
+        self.promptHistory.resizeHistory(y)
+
+    def addCommand(self, alias, cmd):
+        """
+        TOWRITE
+
+        :param `alias`: TOWRITE
+        :type `alias`: QString
+        :param `alias`: TOWRITE
+        :type `alias`: QString
+        """
+        self.promptInput.addCommand(alias, cmd)
+
+    def endCommand(self):
+        """
+        TOWRITE
+        """
+        self.promptInput.endCommand()
+
+    def isCommandActive(self):
+        """
+        TOWRITE
+
+        :rtype: bool
+        """
+        return self.promptInput.cmdActive
+
+    def activeCommand(self):
+        """
+        TOWRITE
+
+        :rtype: QString
+        """
+        return self.promptInput.curCmd
+
+    def lastCommand(self):
+        """
+        TOWRITE
+
+        :rtype: QString
+        """
+        return self.promptInput.lastCmd
+
+    def processInput(self):
+        """
+        TOWRITE
+        """
+        self.promptInput.processInput()
+
+    def enableRapidFire(self):
+        """
+        TOWRITE
+        """
+        self.promptInput.rapidFireEnabled = True
+
+    def disableRapidFire(self):
+        """
+        TOWRITE
+        """
+        self.promptInput.rapidFireEnabled = False
+
+    def isRapidFireEnabled(self):
+        """
+        TOWRITE
+
+        :rtype: bool
+        """
+        return self.promptInput.rapidFireEnabled
 
 
 class CmdPromptSplitter(QSplitter):
@@ -589,7 +732,7 @@ class CmdPromptInput(QLineEdit):
 
         #TODO# self.aliasHash = new QHash<QString, QString>
 
-        # self.installEventFilter(self)
+        self.installEventFilter(self)
         self.setFocus(Qt.OtherFocusReason)
 
         #TODO# self.applyFormatting()
@@ -635,10 +778,10 @@ class CmdPromptInput(QLineEdit):
         """
         qDebug("CmdPromptInput::processInput")
 
-        updateCurrentText(curText)
+        self.updateCurrentText(self.curText)
 
-        #TODO# QString cmdtxt(curText)
-        cmdtxt.replace(0, prefix.length(), "")
+        cmdtxt = self.curText  # QString
+        cmdtxt.replace(0, self.prefix.length(), "")
         if not self.rapidFireEnabled:
             cmdtxt = cmdtxt.toLower()
 
@@ -773,7 +916,7 @@ class CmdPromptInput(QLineEdit):
 
             rangeStart = -1
             rangeStop = -1
-            for FIXME in range(FIXME): #TODO/PORT/FIXME# for (int i = stop; i >= start; i--)
+            for i in reversed(range(stop, start)): #TODO/PORT/FIXME# for (int i = stop; i >= start; i--)
 
                 if (self.prefix.at(i) == ']'):
 
@@ -839,19 +982,19 @@ class CmdPromptInput(QLineEdit):
         ###     print('\a')
         ###     return
 
-        if (not txt.startsWith(self.prefix)):
+        if (not txt.startswith(self.prefix)):
 
-            if (txt.length() < self.prefix.length()):
+            if (len(txt) < self.prefix.length()):
                 self.setText(self.prefix)
-            elif (txt.length() != self.prefix.length()):
+            elif (len(txt) != self.prefix.length()):
                 self.setText(self.prefix + txt)
             else:
-                self.setText(curText)
+                self.setText(self.curText)
 
         else:
             # input is okay so update curText.
-            curText = txt
-            self.setText(curText)
+            selfcurText = txt
+            self.setText(selfcurText)
 
         self.applyFormatting()
 
@@ -905,134 +1048,137 @@ class CmdPromptInput(QLineEdit):
     #            #TODO# emit stopBlinking()
 
             ## QKeyEvent* pressedKey = (QKeyEvent*)event
-            pressedKey = QKeyEvent(event)
+            pressedKey = event  # QKeyEvent
             # NOTE: These shortcuts need to be caught since QLineEdit uses them
             if (pressedKey.matches(QKeySequence.Cut)):
                 pressedKey.accept()
-                # emit copyPressed()
+                self.copyPressed.emit()
+                print('CUT')
                 self.cut()
                 return True
             elif (pressedKey.matches(QKeySequence.Copy)):
                 pressedKey.accept()
-                # emit copyPressed()
+                self.copyPressed.emit()
                 return True
             elif(pressedKey.matches(QKeySequence.Paste)):
                 pressedKey.accept()
-                # emit pastePressed()
+                self.pastePressed.emit()
                 self.paste()
                 return True
             elif(pressedKey.matches(QKeySequence.SelectAll)):
                 pressedKey.accept()
-                # emit selectAllPressed()
+                self.selectAllPressed.emit()
                 self.selectAll()
                 return True
             elif(pressedKey.matches(QKeySequence.Undo)):
                 pressedKey.accept()
-                # emit undoPressed()
+                self.undoPressed.emit()
                 self.undo()
                 return True
             elif (pressedKey.matches(QKeySequence.Redo)):
                 pressedKey.accept()
-                # emit redoPressed()
+                self.redoPressed.emit()
                 self.redo()
                 return True
 
             key = pressedKey.key()
+            print('key = %s' % key)
             if key in (Qt.Key_Enter, Qt.Key_Return, Qt.Key_Space):
             # switch(key)
 
-                # pressedKey.accept()
+                pressedKey.accept()
                 # self.processInput(QChar(key))
-                # self.processInput(key)
-                print(self.text()[len(self.defaultPrefix):])
-                exec(u'%s' % (self.text()[len(self.defaultPrefix):]))
+                self.processInput(key)
+
+                ## print(self.text()[len(self.defaultPrefix):])
+                ## exec(u'%s' % (self.text()[len(self.defaultPrefix):]))
                 return True
-            # elif key == Qt.Key_Backspace:
+            elif key == Qt.Key_Backspace:
                 # print('Qt.Key_Backspace')
-                # pressedKey.ignore()
-                # return True
+                pressedKey.ignore()
+                return True
             elif key == Qt.Key_Delete:
                 print('Qt.Key_Delete')
-                # pressedKey.accept()
-                # emit deletePressed()
+                pressedKey.accept()
+                self.deletePressed.emit()
                 return True
             elif key == Qt.Key_Tab:
-                # pressedKey.accept()
-                # emit tabPressed()
+                pressedKey.accept()
+                self.tabPressed.emit()
                 return True
             elif key == Qt.Key_Escape:
-                # pressedKey.accept()
+                pressedKey.accept()
                 self.prefix = self.defaultPrefix
                 self.clear()
-                # emit appendHistory(curText + tr("*Cancel*"), prefix.length())
-                # emit escapePressed()
+                # emit appendHistory(self.curText + tr("*Cancel*"), prefix.length())
+                self.escapePressed.emit()
                 return True
             elif key == Qt.Key_Up:
-                # pressedKey.accept()
-                # emit upPressed()
+                pressedKey.accept()
+                self.upPressed.emit()
                 return True
             elif key == Qt.Key_Down:
-                # pressedKey.accept()
-                # emit downPressed()
+                pressedKey.accept()
+                self.downPressed.emit()
                 return True
             elif key == Qt.Key_F1:
-                # pressedKey.accept()
-                # emit F1Pressed()
+                pressedKey.accept()
+                self.F1Pressed.emit()
                 return True
             elif key == Qt.Key_F2:
-                # pressedKey.accept()
-                # emit F2Pressed()
+                pressedKey.accept()
+                self.F2Pressed.emit()
                 return True
             elif key == Qt.Key_F3:
-                # pressedKey.accept()
-                # emit F3Pressed()
+                pressedKey.accept()
+                self.F3Pressed.emit()
                 return True
             elif key == Qt.Key_F4:
-                # pressedKey.accept()
-                # emit F4Pressed()
+                pressedKey.accept()
+                self.F4Pressed.emit()
                 return True
             elif key == Qt.Key_F5:
-                # pressedKey.accept()
-                # emit F5Pressed()
+                pressedKey.accept()
+                self.F5Pressed.emit()
                 return True
             elif key == Qt.Key_F6:
-                # pressedKey.accept()
-                # emit F6Pressed()
+                pressedKey.accept()
+                self.F6Pressed.emit()
                 return True
             elif key == Qt.Key_F7:
-                # pressedKey.accept()
-                # emit F7Pressed()
+                pressedKey.accept()
+                self.F7Pressed.emit()
                 return True
             elif key == Qt.Key_F8:
-                # pressedKey.accept()
-                # emit F8Pressed()
+                pressedKey.accept()
+                self.F8Pressed.emit()
                 return True
             elif key == Qt.Key_F9:
-                # pressedKey.accept()
-                # emit F9Pressed()
+                pressedKey.accept()
+                self.F9Pressed.emit()
                 return True
             elif key == Qt.Key_F10:
-                # pressedKey.accept()
-                # emit F10Pressed()
+                pressedKey.accept()
+                self.F10Pressed.emit()
                 return True
             elif key == Qt.Key_F11:
-                # pressedKey.accept()
-                # emit F11Pressed()
+                pressedKey.accept()
+                self.F11Pressed.emit()
                 return True
             elif key == Qt.Key_F12:
-                # pressedKey.accept()
-                # emit F12Pressed()
+                pressedKey.accept()
+                self.F12Pressed.emit()
                 return True
             elif key == Qt.Key_Shift:
                 pressedKey.ignore() # we don't want to eat it, we just want to keep track of it
-                # emit shiftPressed()
+                self.shiftPressed.emit()
             else:
                 pressedKey.ignore()
 
         if (event.type() == QEvent.KeyRelease):
 
             # QKeyEvent* releasedKey = (QKeyEvent*)event
-            releasedKey = QKeyEvent(event)
+            releasedKey = event  # QKeyEvent
             key = releasedKey.key()
             if key == Qt.Key_Shift:
                 releasedKey.ignore() # we don't want to eat it, we just want to keep track of it

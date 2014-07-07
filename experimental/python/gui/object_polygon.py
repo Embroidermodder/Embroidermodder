@@ -157,7 +157,7 @@ class PolygonObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
@@ -214,7 +214,7 @@ class PolygonObject(BaseObject):
             inscribeInc = 360.0 / numSides        # qreal
 
             if painter:
-                self.drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR")
 
             inscribePath = QPainterPath()
             # First Point.
@@ -239,7 +239,7 @@ class PolygonObject(BaseObject):
             circumscribeInc = 360.0 / numSides            # qreal
 
             if painter:
-                self.drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR")
 
             circumscribePath = QPainterPath()
             # First Point.
@@ -294,7 +294,7 @@ class PolygonObject(BaseObject):
                 painter.drawLine(enPoint, self.mapFromScene(self.objectRubberPoint("")))
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint("")))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """

@@ -151,7 +151,7 @@ class BaseObject(QGraphicsPathItem):
 
         gscene = scene()  # QGraphicsScene* gscene = scene()
         if gscene:
-            return scene().property(SCENE_QSNAP_POINT).toPointF()
+            return scene().property("SCENE_QSNAP_POINT").toPointF()
         return QPointF()
 
     def objectRubberText(self, key):

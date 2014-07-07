@@ -93,52 +93,44 @@ class StatusBarButton(QToolButton):
         QApplication.setOverrideCursor(Qt.ArrowCursor)
         menu = QMenu(self)
         objName = self.objectName()
-        themeDir = gIconDir + os.sep + '..' + os.sep + self.mainWin.getSettingsGeneralIconTheme() + os.sep
+        themeDir = self.mainWin.gIconDir + os.sep + self.mainWin.getSettingsGeneralIconTheme() + os.sep
         s = "&Settings..."
         if objName == "StatusBarButtonSNAP":
-
             settingsSnapAction = QAction(QIcon(themeDir + "gridsnapsettings.png"), s, menu)
             settingsSnapAction.triggered.connect(self.settingsSnap)
             menu.addAction(settingsSnapAction)
 
         elif objName == "StatusBarButtonGRID":
-
             settingsGridAction = QAction(QIcon(themeDir + "gridsettings.png"), s, menu)
             settingsGridAction.triggered.connect(self.settingsGrid)
             menu.addAction(settingsGridAction)
 
         elif objName == "StatusBarButtonRULER":
-
             settingsRulerAction = QAction(QIcon(themeDir + "rulersettings.png"), s, menu)
             settingsRulerAction.triggered.connect(self.settingsRuler)
             menu.addAction(settingsRulerAction)
 
         elif objName == "StatusBarButtonORTHO":
-
             settingsOrthoAction = QAction(QIcon(themeDir + "orthosettings.png"), s, menu)
             settingsOrthoAction.triggered.connect(self.settingsOrtho)
             menu.addAction(settingsOrthoAction)
 
         elif objName == "StatusBarButtonPOLAR":
-
             settingsPolarAction = QAction(QIcon(themeDir + "polarsettings.png"), s, menu)
             settingsPolarAction.triggered.connect(self.settingsPolar)
             menu.addAction(settingsPolarAction)
 
         elif objName == "StatusBarButtonQSNAP":
-
             settingsQSnapAction = QAction(QIcon(themeDir + "qsnapsettings.png"), s, menu)
             settingsQSnapAction.triggered.connect(self.settingsQSnap)
             menu.addAction(settingsQSnapAction)
 
         elif objName == "StatusBarButtonQTRACK":
-
             settingsQTrackAction = QAction(QIcon(themeDir + "qtracksettings.png"), s, menu)
             settingsQTrackAction.triggered.connect(self.settingsQTrack)
             menu.addAction(settingsQTrackAction)
 
         elif objName == "StatusBarButtonLWT":
-
             gview = self.mainWin.activeView()
             if gview:
 
@@ -161,35 +153,51 @@ class StatusBarButton(QToolButton):
         self.statusbar.clearMessage()
 
     def settingsSnap(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Snap" notebook tab page.
+        """
         self.mainWin.settingsDialog("Snap")
 
     def settingsGrid(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Grid/Ruler" notebook tab page.
+        """
         self.mainWin.settingsDialog("Grid/Ruler")
 
     def settingsRuler(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Grid/Ruler" notebook tab page.
+        """
         self.mainWin.settingsDialog("Grid/Ruler")
 
     def settingsOrtho(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Ortho/Polar" notebook tab page.
+        """
         self.mainWin.settingsDialog("Ortho/Polar")
 
     def settingsPolar(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Ortho/Polar" notebook tab page.
+        """
         self.mainWin.settingsDialog("Ortho/Polar")
 
     def settingsQSnap(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "QuickSnap" notebook tab page.
+        """
         self.mainWin.settingsDialog("QuickSnap")
 
     def settingsQTrack(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "QuickTrack" notebook tab page.
+        """
         self.mainWin.settingsDialog("QuickTrack")
 
     def settingsLwt(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "LineWeight" notebook tab page.
+        """
         self.mainWin.settingsDialog("LineWeight")
 
     def toggleSnap(self, on):
@@ -272,7 +280,7 @@ class StatusBarButton(QToolButton):
         :type `on`: bool
         """
         qDebug("StatusBarButton toggleQTrack()")
-        gview = mainWin.activeView()
+        gview = self.mainWin.activeView()
         if gview:
             gview.toggleQTrack(on)
 

@@ -204,8 +204,8 @@ class Settings_Dialog(QDialog):
 
         checkBoxMdiBGUseLogo = QCheckBox(self.tr("Use Logo"), groupBoxMdiBG)
         self.dialog_general_mdi_bg_use_logo = self.mainWin.getSettingsGeneralMdiBGUseLogo()
-        preview_general_mdi_bg_use_logo = self.dialog_general_mdi_bg_use_logo
-        checkBoxMdiBGUseLogo.setChecked(preview_general_mdi_bg_use_logo)
+        self.preview_general_mdi_bg_use_logo = self.dialog_general_mdi_bg_use_logo
+        checkBoxMdiBGUseLogo.setChecked(self.preview_general_mdi_bg_use_logo)
         checkBoxMdiBGUseLogo.stateChanged[int].connect(self.checkBoxGeneralMdiBGUseLogoStateChanged)
 
         buttonMdiBGLogo = QPushButton(self.tr("Choose"), groupBoxMdiBG)
@@ -217,8 +217,8 @@ class Settings_Dialog(QDialog):
 
         checkBoxMdiBGUseTexture = QCheckBox(self.tr("Use Texture"), groupBoxMdiBG)
         self.dialog_general_mdi_bg_use_texture = self.mainWin.getSettingsGeneralMdiBGUseTexture()
-        preview_general_mdi_bg_use_texture = self.dialog_general_mdi_bg_use_texture
-        checkBoxMdiBGUseTexture.setChecked(preview_general_mdi_bg_use_texture)
+        self.preview_general_mdi_bg_use_texture = self.dialog_general_mdi_bg_use_texture
+        checkBoxMdiBGUseTexture.setChecked(self.preview_general_mdi_bg_use_texture)
         checkBoxMdiBGUseTexture.stateChanged[int].connect(self.checkBoxGeneralMdiBGUseTextureStateChanged)
 
         buttonMdiBGTexture = QPushButton(self.tr("Choose"), groupBoxMdiBG)
@@ -230,20 +230,20 @@ class Settings_Dialog(QDialog):
 
         checkBoxMdiBGUseColor = QCheckBox(self.tr("Use Color"), groupBoxMdiBG)
         self.dialog_general_mdi_bg_use_color = self.mainWin.getSettingsGeneralMdiBGUseColor()
-        preview_general_mdi_bg_use_color = self.dialog_general_mdi_bg_use_color
-        checkBoxMdiBGUseColor.setChecked(preview_general_mdi_bg_use_color)
-        checkBoxMdiBGUseColor.stateChanged[int].connect(self.checkBoxGeneralMdiBGUseColorStateChanged)
+        self.preview_general_mdi_bg_use_color = self.dialog_general_mdi_bg_use_color
+        checkBoxMdiBGUseColor.setChecked(self.preview_general_mdi_bg_use_color)
+        self.connect(checkBoxMdiBGUseColor, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxGeneralMdiBGUseColorStateChanged(int)"))
 
         buttonMdiBGColor = QPushButton(self.tr("Choose"), groupBoxMdiBG)
         buttonMdiBGColor.setEnabled(self.dialog_general_mdi_bg_use_color)
         self.dialog_general_mdi_bg_color  = self.mainWin.getSettingsGeneralMdiBGColor()
-        preview_general_mdi_bg_color = self.dialog_general_mdi_bg_color
+        self.preview_general_mdi_bg_color = self.dialog_general_mdi_bg_color
         self.accept_general_mdi_bg_color  = self.dialog_general_mdi_bg_color
         mdiBGPix = QPixmap(16, 16)
-        mdiBGPix.fill(QColor(preview_general_mdi_bg_color))
+        mdiBGPix.fill(QColor(self.preview_general_mdi_bg_color))
         buttonMdiBGColor.setIcon(QIcon(mdiBGPix))
-        buttonMdiBGColor.clicked.connect(self.chooseGeneralMdiBackgroundColor)
-        checkBoxMdiBGUseColor.toggled[bool].connect(buttonMdiBGColor.setEnabled)
+        self.connect(buttonMdiBGColor, SIGNAL("clicked()"), self, SLOT("chooseGeneralMdiBackgroundColor()"))
+        self.connect(checkBoxMdiBGUseColor, SIGNAL("toggled(bool)"), buttonMdiBGColor, SLOT("setEnabled(bool)"))
 
         gridLayoutMdiBG = QGridLayout(widget)
         gridLayoutMdiBG.addWidget(checkBoxMdiBGUseLogo,    0, 0, Qt.AlignLeft)
@@ -358,9 +358,9 @@ class Settings_Dialog(QDialog):
 
         checkBoxShowScrollBars = QCheckBox(self.tr("Show ScrollBars"), groupBoxScrollBars)
         self.dialog_display_show_scrollbars = self.mainWin.getSettingsDisplayShowScrollBars()
-        preview_display_show_scrollbars = self.dialog_display_show_scrollbars
-        checkBoxShowScrollBars.setChecked(preview_display_show_scrollbars)
-        #TODO# connect(checkBoxShowScrollBars, SIGNAL(stateChanged(int)), self, SLOT(checkBoxShowScrollBarsStateChanged(int)))
+        self.preview_display_show_scrollbars = self.dialog_display_show_scrollbars
+        checkBoxShowScrollBars.setChecked(self.preview_display_show_scrollbars)
+        self.connect(checkBoxShowScrollBars, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxShowScrollBarsStateChanged(int)"))
 
         labelScrollBarWidget = QLabel(self.tr("Perform action when clicking corner widget"), groupBoxScrollBars)
         comboBoxScrollBarWidget = QComboBox(groupBoxScrollBars)
@@ -372,7 +372,7 @@ class Settings_Dialog(QDialog):
         #TODO#         comboBoxScrollBarWidget.addItem(action.icon(), action.text().replace("&", ""))
 
         comboBoxScrollBarWidget.setCurrentIndex(self.dialog_display_scrollbar_widget_num)
-        #TODO# connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), self, SLOT(comboBoxScrollBarWidgetCurrentIndexChanged(int)))
+        self.connect(comboBoxScrollBarWidget, SIGNAL("currentIndexChanged(int)"), self, SLOT("comboBoxScrollBarWidgetCurrentIndexChanged(int)"))
 
         vboxLayoutScrollBars = QVBoxLayout(groupBoxScrollBars)
         vboxLayoutScrollBars.addWidget(checkBoxShowScrollBars)
@@ -391,7 +391,7 @@ class Settings_Dialog(QDialog):
         crosshairPix = QPixmap(16, 16)
         crosshairPix.fill(QColor(preview_display_crosshair_color))
         buttonCrossHairColor.setIcon(QIcon(crosshairPix))
-        #TODO# connect(buttonCrossHairColor, SIGNAL(clicked()), self, SLOT(chooseDisplayCrossHairColor()))
+        self.connect(buttonCrossHairColor, SIGNAL("clicked()"), self, SLOT("chooseDisplayCrossHairColor()"))
 
         labelBGColor = QLabel(self.tr("Background Color"), groupBoxColor)
         buttonBGColor = QPushButton(self.tr("Choose"), groupBoxColor)
@@ -401,7 +401,7 @@ class Settings_Dialog(QDialog):
         bgPix = QPixmap(16, 16)
         bgPix.fill(QColor(preview_display_bg_color))
         buttonBGColor.setIcon(QIcon(bgPix))
-        #TODO# connect(buttonBGColor, SIGNAL(clicked()), self, SLOT(chooseDisplayBackgroundColor()))
+        self.connect(buttonBGColor, SIGNAL("clicked()"), self, SLOT("chooseDisplayBackgroundColor()"))
 
         labelSelectBoxLeftColor = QLabel(self.tr("Selection Box Color (Crossing)"), groupBoxColor)
         buttonSelectBoxLeftColor = QPushButton(self.tr("Choose"), groupBoxColor)
@@ -411,7 +411,7 @@ class Settings_Dialog(QDialog):
         sBoxLCPix = QPixmap(16, 16)
         sBoxLCPix.fill(QColor(preview_display_selectbox_left_color))
         buttonSelectBoxLeftColor.setIcon(QIcon(sBoxLCPix))
-        #TODO# connect(buttonSelectBoxLeftColor, SIGNAL(clicked()), self, SLOT(chooseDisplaySelectBoxLeftColor()))
+        self.connect(buttonSelectBoxLeftColor, SIGNAL("clicked()"), self, SLOT("chooseDisplaySelectBoxLeftColor()"))
 
         labelSelectBoxLeftFill = QLabel(self.tr("Selection Box Fill (Crossing)"), groupBoxColor)
         buttonSelectBoxLeftFill = QPushButton(self.tr("Choose"), groupBoxColor)
@@ -421,7 +421,7 @@ class Settings_Dialog(QDialog):
         sBoxLFPix = QPixmap(16, 16)
         sBoxLFPix.fill(QColor(preview_display_selectbox_left_fill))
         buttonSelectBoxLeftFill.setIcon(QIcon(sBoxLFPix))
-        #TODO# connect(buttonSelectBoxLeftFill, SIGNAL(clicked()), self, SLOT(chooseDisplaySelectBoxLeftFill()))
+        self.connect(buttonSelectBoxLeftFill, SIGNAL("clicked()"), self, SLOT("chooseDisplaySelectBoxLeftFill()"))
 
         labelSelectBoxRightColor = QLabel(self.tr("Selection Box Color (Window)"), groupBoxColor)
         buttonSelectBoxRightColor = QPushButton(self.tr("Choose"), groupBoxColor)
@@ -431,7 +431,7 @@ class Settings_Dialog(QDialog):
         sBoxRCPix = QPixmap(16,16)
         sBoxRCPix.fill(QColor(preview_display_selectbox_right_color))
         buttonSelectBoxRightColor.setIcon(QIcon(sBoxRCPix))
-        #TODO# connect(buttonSelectBoxRightColor, SIGNAL(clicked()), self, SLOT(chooseDisplaySelectBoxRightColor()))
+        self.connect(buttonSelectBoxRightColor, SIGNAL("clicked()"), self, SLOT("chooseDisplaySelectBoxRightColor()"))
 
         labelSelectBoxRightFill = QLabel(self.tr("Selection Box Fill (Window)"), groupBoxColor)
         buttonSelectBoxRightFill = QPushButton(self.tr("Choose"), groupBoxColor)
@@ -441,15 +441,15 @@ class Settings_Dialog(QDialog):
         sBoxRFPix = QPixmap(16, 16)
         sBoxRFPix.fill(QColor(preview_display_selectbox_right_fill))
         buttonSelectBoxRightFill.setIcon(QIcon(sBoxRFPix))
-        #TODO# connect(buttonSelectBoxRightFill, SIGNAL(clicked()), self, SLOT(chooseDisplaySelectBoxRightFill()))
+        self.connect(buttonSelectBoxRightFill, SIGNAL("clicked()"), self, SLOT("chooseDisplaySelectBoxRightFill()"))
 
         labelSelectBoxAlpha = QLabel(self.tr("Selection Box Fill Alpha"), groupBoxColor)
         spinBoxSelectBoxAlpha = QSpinBox(groupBoxColor)
         spinBoxSelectBoxAlpha.setRange(0, 255)
         self.dialog_display_selectbox_alpha = self.mainWin.getSettingsDisplaySelectBoxAlpha()
-        preview_display_selectbox_alpha = self.dialog_display_selectbox_alpha
-        spinBoxSelectBoxAlpha.setValue(preview_display_selectbox_alpha)
-        #TODO# connect(spinBoxSelectBoxAlpha, SIGNAL(valueChanged(int)), self, SLOT(spinBoxDisplaySelectBoxAlphaValueChanged(int)))
+        self.preview_display_selectbox_alpha = self.dialog_display_selectbox_alpha
+        spinBoxSelectBoxAlpha.setValue(self.preview_display_selectbox_alpha)
+        self.connect(spinBoxSelectBoxAlpha, SIGNAL("valueChanged(int)"), self, SLOT("spinBoxDisplaySelectBoxAlphaValueChanged(int)"))
 
         gridLayoutColor = QGridLayout(widget)
         gridLayoutColor.addWidget(labelCrossHairColor,       0, 0, Qt.AlignLeft)
@@ -527,7 +527,7 @@ class Settings_Dialog(QDialog):
         pix = QPixmap(16, 16)
         pix.fill(QColor(preview_prompt_text_color))
         buttonTextColor.setIcon(QIcon(pix))
-        #TODO# connect(buttonTextColor, SIGNAL(clicked()), self, SLOT(choosePromptTextColor()))
+        self.connect(buttonTextColor, SIGNAL("clicked()"), self, SLOT("choosePromptTextColor()"))
 
         labelBGColor = QLabel(self.tr("Background Color"), groupBoxColor)
         buttonBGColor = QPushButton(self.tr("Choose"), groupBoxColor)
@@ -537,7 +537,7 @@ class Settings_Dialog(QDialog):
         pixx = QPixmap(16, 16)
         pixx.fill(QColor(preview_prompt_bg_color))
         buttonBGColor.setIcon(QIcon(pixx))
-        #TODO# connect(buttonBGColor, SIGNAL(clicked()), self, SLOT(choosePromptBackgroundColor()))
+        self.connect(buttonBGColor, SIGNAL("clicked()"), self, SLOT("choosePromptBackgroundColor()"))
 
         gridLayoutColor = QGridLayout(widget)
         gridLayoutColor.addWidget(labelTextColor,  0, 0, Qt.AlignLeft)
@@ -553,22 +553,22 @@ class Settings_Dialog(QDialog):
         labelFontFamily = QLabel(self.tr("Font Family"), groupBoxFont)
         comboBoxFontFamily = QFontComboBox(groupBoxFont)
         self.dialog_prompt_font_family = self.mainWin.getSettingsPromptFontFamily()
-        preview_prompt_font_family = self.dialog_prompt_font_family
-        comboBoxFontFamily.setCurrentFont(QFont(preview_prompt_font_family))
-        #TODO# connect(comboBoxFontFamily, SIGNAL(currentIndexChanged(const QString&)), self, SLOT(comboBoxPromptFontFamilyCurrentIndexChanged(const QString&)))
+        self.preview_prompt_font_family = self.dialog_prompt_font_family
+        comboBoxFontFamily.setCurrentFont(QFont(self.preview_prompt_font_family))
+        self.connect(comboBoxFontFamily, SIGNAL("currentIndexChanged(QString)"), self, SLOT("comboBoxPromptFontFamilyCurrentIndexChanged(QString)"))
         labelFontStyle = QLabel(self.tr("Font Style"), groupBoxFont)
         comboBoxFontStyle = QComboBox(groupBoxFont)
         comboBoxFontStyle.addItem("Normal")
         comboBoxFontStyle.addItem("Italic")
-        #TODO# comboBoxFontStyle.setEditText(preview_prompt_font_style)
-        #TODO# connect(comboBoxFontStyle, SIGNAL(currentIndexChanged(const QString&)), self, SLOT(comboBoxPromptFontStyleCurrentIndexChanged(const QString&)))
+        #TODO# comboBoxFontStyle.setEditText(self.preview_prompt_font_style)
+        self.connect(comboBoxFontStyle, SIGNAL("currentIndexChanged(QString)"), self, SLOT("comboBoxPromptFontStyleCurrentIndexChanged(QString)"))
         labelFontSize = QLabel(self.tr("Font Size"), groupBoxFont)
         spinBoxFontSize = QSpinBox(groupBoxFont)
         spinBoxFontSize.setRange(4, 64)
         self.dialog_prompt_font_size = self.mainWin.getSettingsPromptFontSize()
-        preview_prompt_font_size = self.dialog_prompt_font_size
-        spinBoxFontSize.setValue(preview_prompt_font_size)
-        #TODO# connect(spinBoxFontSize, SIGNAL(valueChanged(int)), self, SLOT(spinBoxPromptFontSizeValueChanged(int)))
+        self.preview_prompt_font_size = self.dialog_prompt_font_size
+        spinBoxFontSize.setValue(self.preview_prompt_font_size)
+        self.connect(spinBoxFontSize, SIGNAL("valueChanged(int)"), self, SLOT("spinBoxPromptFontSizeValueChanged(int)"))
 
         gridLayoutFont = QGridLayout(groupBoxFont)
         gridLayoutFont.addWidget(labelFontFamily,    0, 0, Qt.AlignLeft)
@@ -585,12 +585,12 @@ class Settings_Dialog(QDialog):
         checkBoxPromptSaveHistory = QCheckBox(self.tr("Save History"), groupBoxHistory)
         self.dialog_prompt_save_history = self.mainWin.getSettingsPromptSaveHistory()
         checkBoxPromptSaveHistory.setChecked(self.dialog_prompt_save_history)
-        #TODO# connect(checkBoxPromptSaveHistory, SIGNAL(stateChanged(int)), self, SLOT(checkBoxPromptSaveHistoryStateChanged(int)))
+        self.connect(checkBoxPromptSaveHistory, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxPromptSaveHistoryStateChanged(int)"))
 
         checkBoxPromptSaveHistoryAsHtml = QCheckBox(self.tr("Save As HTML"), groupBoxHistory)
         self.dialog_prompt_save_history_as_html = self.mainWin.getSettingsPromptSaveHistoryAsHtml()
         checkBoxPromptSaveHistoryAsHtml.setChecked(self.dialog_prompt_save_history_as_html)
-        #TODO# connect(checkBoxPromptSaveHistoryAsHtml, SIGNAL(stateChanged(int)), self, SLOT(checkBoxPromptSaveHistoryAsHtmlStateChanged(int)))
+        self.connect(checkBoxPromptSaveHistoryAsHtml, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxPromptSaveHistoryAsHtmlStateChanged(int)"))
 
         vboxLayoutHistory = QVBoxLayout(groupBoxHistory)
         vboxLayoutHistory.addWidget(checkBoxPromptSaveHistory)
@@ -611,7 +611,6 @@ class Settings_Dialog(QDialog):
         return scrollArea
 
 
-
     # TODO: finish open/save options
     def createTabOpenSave(self):
         """TOWRITE"""
@@ -625,215 +624,215 @@ class Settings_Dialog(QDialog):
 
         checkBoxCustomFilter100 = QCheckBox("100", groupBoxCustomFilter)
         checkBoxCustomFilter100.setChecked("*.100" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilter100, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilter100, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilter10o = QCheckBox("10o", groupBoxCustomFilter)
         checkBoxCustomFilter10o.setChecked("*.10o" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilter10o, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilter10o, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterART = QCheckBox("ART", groupBoxCustomFilter)
         checkBoxCustomFilterART.setChecked("*.ART" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterART, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterART, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterBMC = QCheckBox("BMC", groupBoxCustomFilter)
         checkBoxCustomFilterBMC.setChecked("*.BMC" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterBMC, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterBMC, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterBRO = QCheckBox("BRO", groupBoxCustomFilter)
         checkBoxCustomFilterBRO.setChecked("*.BRO" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterBRO, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterBRO, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterCND = QCheckBox("CND", groupBoxCustomFilter)
         checkBoxCustomFilterCND.setChecked("*.CND" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterCND, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterCND, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterCOL = QCheckBox("COL", groupBoxCustomFilter)
         checkBoxCustomFilterCOL.setChecked("*.COL" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterCOL, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterCOL, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterCSD = QCheckBox("CSD", groupBoxCustomFilter)
         checkBoxCustomFilterCSD.setChecked("*.CSD" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterCSD, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterCSD, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterCSV = QCheckBox("CSV", groupBoxCustomFilter)
         checkBoxCustomFilterCSV.setChecked("*.CSV" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterCSV, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterCSV, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterDAT = QCheckBox("DAT", groupBoxCustomFilter)
         checkBoxCustomFilterDAT.setChecked("*.DAT" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterDAT, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterDAT, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterDEM = QCheckBox("DEM", groupBoxCustomFilter)
         checkBoxCustomFilterDEM.setChecked("*.DEM" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterDEM, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterDEM, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterDSB = QCheckBox("DSB", groupBoxCustomFilter)
         checkBoxCustomFilterDSB.setChecked("*.DSB" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterDSB, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterDSB, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterDST = QCheckBox("DST", groupBoxCustomFilter)
         checkBoxCustomFilterDST.setChecked("*.DST" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterDST, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterDST, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterDSZ = QCheckBox("DSZ", groupBoxCustomFilter)
         checkBoxCustomFilterDSZ.setChecked("*.DSZ" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterDSZ, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterDSZ, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterDXF = QCheckBox("DXF", groupBoxCustomFilter)
         checkBoxCustomFilterDXF.setChecked("*.DXF" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterDXF, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterDXF, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterEDR = QCheckBox("EDR", groupBoxCustomFilter)
         checkBoxCustomFilterEDR.setChecked("*.EDR" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterEDR, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterEDR, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterEMD = QCheckBox("EMD", groupBoxCustomFilter)
         checkBoxCustomFilterEMD.setChecked("*.EMD" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterEMD, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterEMD, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterEXP = QCheckBox("EXP", groupBoxCustomFilter)
         checkBoxCustomFilterEXP.setChecked("*.EXP" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterEXP, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterEXP, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterEXY = QCheckBox("EXY", groupBoxCustomFilter)
         checkBoxCustomFilterEXY.setChecked("*.EXY" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterEXY, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterEXY, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterEYS = QCheckBox("EYS", groupBoxCustomFilter)
         checkBoxCustomFilterEYS.setChecked("*.EYS" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterEYS, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterEYS, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterFXY = QCheckBox("FXY", groupBoxCustomFilter)
         checkBoxCustomFilterFXY.setChecked("*.FXY" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterFXY, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterFXY, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterGNC = QCheckBox("GNC", groupBoxCustomFilter)
         checkBoxCustomFilterGNC.setChecked("*.GNC" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterGNC, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterGNC, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterGT = QCheckBox("GT", groupBoxCustomFilter)
         checkBoxCustomFilterGT.setChecked("*.GT" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterGT, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterGT, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterHUS = QCheckBox("HUS", groupBoxCustomFilter)
         checkBoxCustomFilterHUS.setChecked("*.HUS" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterHUS, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterHUS, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterINB = QCheckBox("INB", groupBoxCustomFilter)
         checkBoxCustomFilterINB.setChecked("*.INB" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterINB, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterINB, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterJEF = QCheckBox("JEF", groupBoxCustomFilter)
         checkBoxCustomFilterJEF.setChecked("*.JEF" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterJEF, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterJEF, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterKSM = QCheckBox("KSM", groupBoxCustomFilter)
         checkBoxCustomFilterKSM.setChecked("*.KSM" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterKSM, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterKSM, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPCD = QCheckBox("PCD", groupBoxCustomFilter)
         checkBoxCustomFilterPCD.setChecked("*.PCD" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPCD, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPCD, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPCM = QCheckBox("PCM", groupBoxCustomFilter)
         checkBoxCustomFilterPCM.setChecked("*.PCM" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPCM, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPCM, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPCQ = QCheckBox("PCQ", groupBoxCustomFilter)
         checkBoxCustomFilterPCQ.setChecked("*.PCQ" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPCQ, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPCQ, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPCS = QCheckBox("PCS", groupBoxCustomFilter)
         checkBoxCustomFilterPCS.setChecked("*.PCS" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPCS, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPCS, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPEC = QCheckBox("PEC", groupBoxCustomFilter)
         checkBoxCustomFilterPEC.setChecked("*.PEC" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPEC, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPEC, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPEL = QCheckBox("PEL", groupBoxCustomFilter)
         checkBoxCustomFilterPEL.setChecked("*.PEL" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPEL, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPEL, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPEM = QCheckBox("PEM", groupBoxCustomFilter)
         checkBoxCustomFilterPEM.setChecked("*.PEM" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPEM, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPEM, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPES = QCheckBox("PES", groupBoxCustomFilter)
         checkBoxCustomFilterPES.setChecked("*.PES" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPES, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPES, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPHB = QCheckBox("PHB", groupBoxCustomFilter)
         checkBoxCustomFilterPHB.setChecked("*.PHB" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPHB, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPHB, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterPHC = QCheckBox("PHC", groupBoxCustomFilter)
         checkBoxCustomFilterPHC.setChecked("*.PHC" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterPHC, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterPHC, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterRGB = QCheckBox("RGB", groupBoxCustomFilter)
         checkBoxCustomFilterRGB.setChecked("*.RGB" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterRGB, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterRGB, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterSEW = QCheckBox("SEW", groupBoxCustomFilter)
         checkBoxCustomFilterSEW.setChecked("*.SEW" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterSEW, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterSEW, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterSHV = QCheckBox("SHV", groupBoxCustomFilter)
         checkBoxCustomFilterSHV.setChecked("*.SHV" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterSHV, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterSHV, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterSST = QCheckBox("SST", groupBoxCustomFilter)
         checkBoxCustomFilterSST.setChecked("*.SST" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterSST, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterSST, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterSTX = QCheckBox("STX", groupBoxCustomFilter)
         checkBoxCustomFilterSTX.setChecked("*.STX" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterSTX, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterSTX, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterSVG = QCheckBox("SVG", groupBoxCustomFilter)
         checkBoxCustomFilterSVG.setChecked("*.SVG" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterSVG, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterSVG, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterT09 = QCheckBox("T09", groupBoxCustomFilter)
         checkBoxCustomFilterT09.setChecked("*.T09" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterT09, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterT09, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterTAP = QCheckBox("TAP", groupBoxCustomFilter)
         checkBoxCustomFilterTAP.setChecked("*.TAP" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterTAP, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterTAP, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterTHR = QCheckBox("THR", groupBoxCustomFilter)
         checkBoxCustomFilterTHR.setChecked("*.THR" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterTHR, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterTHR, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterTXT = QCheckBox("TXT", groupBoxCustomFilter)
         checkBoxCustomFilterTXT.setChecked("*.TXT" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterTXT, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterTXT, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterU00 = QCheckBox("U00", groupBoxCustomFilter)
         checkBoxCustomFilterU00.setChecked("*.U00" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterU00, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterU00, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterU01 = QCheckBox("U01", groupBoxCustomFilter)
         checkBoxCustomFilterU01.setChecked("*.U01" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterU01, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterU01, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterVIP = QCheckBox("VIP", groupBoxCustomFilter)
         checkBoxCustomFilterVIP.setChecked("*.VIP" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterVIP, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterVIP, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterVP3 = QCheckBox("VP3", groupBoxCustomFilter)
         checkBoxCustomFilterVP3.setChecked("*.VP3" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterVP3, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterVP3, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterXXX = QCheckBox("XXX", groupBoxCustomFilter)
         checkBoxCustomFilterXXX.setChecked("*.XXX" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterXXX, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterXXX, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         checkBoxCustomFilterZSK = QCheckBox("ZSK", groupBoxCustomFilter)
         checkBoxCustomFilterZSK.setChecked("*.ZSK" in self.dialog_opensave_custom_filter)
-        #TODO# connect(checkBoxCustomFilterZSK, SIGNAL(stateChanged(int)), self, SLOT(checkBoxCustomFilterStateChanged(int)))
+        self.connect(checkBoxCustomFilterZSK, SIGNAL("stateChanged(int)"), self, SLOT("checkBoxCustomFilterStateChanged(int)"))
 
         buttonCustomFilterSelectAll = QPushButton(self.tr("Select All"), groupBoxCustomFilter)
         #TODO# connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), self, SLOT(buttonCustomFilterSelectAllClicked()))
@@ -1024,7 +1023,7 @@ class Settings_Dialog(QDialog):
         spinBoxRecentMaxFiles.setRange(0, 10)
         self.dialog_opensave_recent_max_files = self.mainWin.getSettingsRecentMaxFiles()
         spinBoxRecentMaxFiles.setValue(self.dialog_opensave_recent_max_files)
-        #TODO# connect(spinBoxRecentMaxFiles, SIGNAL(valueChanged(int)), self, SLOT(spinBoxRecentMaxFilesValueChanged(int)))
+        self.connect(spinBoxRecentMaxFiles, SIGNAL("valueChanged(int)"), self, SLOT("spinBoxRecentMaxFilesValueChanged(int)"))
 
         frameRecent = QFrame(groupBoxOpening)
         gridLayoutRecent = QGridLayout(frameRecent)
@@ -1687,21 +1686,21 @@ class Settings_Dialog(QDialog):
 
         checkBoxShowLwt = QCheckBox(self.tr("Show LineWeight"), groupBoxLwtMisc)
         if s:
-            self.dialog_lwt_show_lwt = s.property(ENABLE_LWT).toBool()
+            self.dialog_lwt_show_lwt = s.property(ENABLE_LWT)  # .toBool()
         else:
             self.dialog_lwt_show_lwt = self.mainWin.getSettingsLwtShowLwt()
-        preview_lwt_show_lwt = self.dialog_lwt_show_lwt
-        checkBoxShowLwt.setChecked(preview_lwt_show_lwt)
+        self.preview_lwt_show_lwt = self.dialog_lwt_show_lwt
+        checkBoxShowLwt.setChecked(self.preview_lwt_show_lwt)
         #TODO# connect(checkBoxShowLwt, SIGNAL(stateChanged(int)), self, SLOT(checkBoxLwtShowLwtStateChanged(int)))
 
         checkBoxRealRender = QCheckBox(self.tr("RealRender"), groupBoxLwtMisc)
         checkBoxRealRender.setObjectName("checkBoxRealRender")
         if s:
-            self.dialog_lwt_real_render = s.property(ENABLE_REAL).toBool()
+            self.dialog_lwt_real_render = s.property(ENABLE_REAL)  # .toBool()
         else:
             self.dialog_lwt_real_render = self.mainWin.getSettingsLwtRealRender()
-        preview_lwt_real_render = self.dialog_lwt_real_render
-        checkBoxRealRender.setChecked(preview_lwt_real_render)
+        self.preview_lwt_real_render = self.dialog_lwt_real_render
+        checkBoxRealRender.setChecked(self.preview_lwt_real_render)
         #TODO# connect(checkBoxRealRender, SIGNAL(stateChanged(int)), self, SLOT(checkBoxLwtRealRenderStateChanged(int)))
         checkBoxRealRender.setEnabled(self.dialog_lwt_show_lwt)
 
@@ -1825,7 +1824,6 @@ class Settings_Dialog(QDialog):
         scrollArea.setWidget(widget)
         return scrollArea
 
-
     def addColorsToComboBox(self, comboBox):
         """
         TOWRITE
@@ -1833,9 +1831,8 @@ class Settings_Dialog(QDialog):
         :param `comboBox`: TOWRITE
         :type `comboBox`: `QComboBox`_
         """
-
         iconTheme = self.mainWin.getSettingsGeneralIconTheme() # QString
-        iconDir = self.mainWin.gAppDir + gOsSep + 'icons'
+        iconDir = self.mainWin.gIconDir
         comboBox.addItem(QIcon(iconDir + gOsSep + iconTheme + gOsSep + "colorred" + ".png"),     self.tr("Red"),     qRgb(255,  0,  0))
         comboBox.addItem(QIcon(iconDir + gOsSep + iconTheme + gOsSep + "coloryellow" + ".png"),  self.tr("Yellow"),  qRgb(255,255,  0))
         comboBox.addItem(QIcon(iconDir + gOsSep + iconTheme + gOsSep + "colorgreen" + ".png"),   self.tr("Green"),   qRgb(  0,255,  0))
@@ -1852,7 +1849,6 @@ class Settings_Dialog(QDialog):
         :param `lang`: TOWRITE
         :type `lang`: QString
         """
-
         self.dialog_general_language = lang.lower() #TODO# What to do with this?
         print('self.dialog_general_language = %s' % self.dialog_general_language)
 
@@ -1891,8 +1887,8 @@ class Settings_Dialog(QDialog):
         :param `checked`: TOWRITE
         :type `checked`: int
         """
-        preview_general_mdi_bg_use_logo = checked
-        self.mainWin.gMDIArea.useBackgroundLogo(checked)
+        self.preview_general_mdi_bg_use_logo = checked
+        self.mainWin.mdiArea.useBackgroundLogo(checked)
 
     def chooseGeneralMdiBackgroundLogo(self):
         """TOWRITE"""
@@ -1911,7 +1907,7 @@ class Settings_Dialog(QDialog):
                 self.accept_general_mdi_bg_logo = selectedImage
 
             # Update immediately so it can be previewed
-            self.mainWin.gMDIArea.setBackgroundLogo(self.accept_general_mdi_bg_logo)
+            self.mainWin.mdiArea.setBackgroundLogo(self.accept_general_mdi_bg_logo)
 
     def checkBoxGeneralMdiBGUseTextureStateChanged(self, checked):
         """
@@ -1920,9 +1916,8 @@ class Settings_Dialog(QDialog):
         :param `checked`: TOWRITE
         :type `checked`: int
         """
-        preview_general_mdi_bg_use_texture = checked
-        self.mainWin.gMDIArea.useBackgroundTexture(checked)
-
+        self.preview_general_mdi_bg_use_texture = checked
+        self.mainWin.mdiArea.useBackgroundTexture(checked)
 
     def chooseGeneralMdiBackgroundTexture(self):
         """TOWRITE"""
@@ -1936,12 +1931,12 @@ class Settings_Dialog(QDialog):
             selectedImage = '' # QString
             selectedImage = QFileDialog.getOpenFileName(self, self.tr("Open File"),
                                     picsLoc, self.tr("Images (*.bmp *.png *.jpg)"))
-
-            if not selectedImage.isNull():
-                self.accept_general_mdi_bg_texture = selectedImage
+            # print('selectedImage', selectedImage)
+            if selectedImage: # .isNull():
+                self.accept_general_mdi_bg_texture = selectedImage[0]
 
             # Update immediately so it can be previewed.
-            self.mainWin.gMDIArea.setBackgroundTexture(self.accept_general_mdi_bg_texture)
+            self.mainWin.mdiArea.setBackgroundTexture(self.accept_general_mdi_bg_texture)
 
     def checkBoxGeneralMdiBGUseColorStateChanged(self, checked):
         """
@@ -1950,30 +1945,26 @@ class Settings_Dialog(QDialog):
         :param `checked`: TOWRITE
         :type `checked`: int
         """
-        preview_general_mdi_bg_use_color = checked
-        self.mainWin.gMDIArea.useBackgroundColor(checked)
+        self.preview_general_mdi_bg_use_color = checked
+        self.mainWin.mdiArea.useBackgroundColor(checked)
 
     def chooseGeneralMdiBackgroundColor(self):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender());
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_general_mdi_bg_color), self)
             colorDialog.currentColorChanged.connect(self.currentGeneralMdiBackgroundColorChanged) # (const QColor&)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_general_mdi_bg_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_general_mdi_bg_color))
                 button.setIcon(QIcon(pix))
-                self.mainWin.gMDIArea.setBackgroundColor(QColor(self.accept_general_mdi_bg_color))
+                self.mainWin.mdiArea.setBackgroundColor(QColor(self.accept_general_mdi_bg_color))
 
             else:
-
-                self.mainWin.gMDIArea.setBackgroundColor(QColor(self.dialog_general_mdi_bg_color))
-
+                self.mainWin.mdiArea.setBackgroundColor(QColor(self.dialog_general_mdi_bg_color))
 
     def currentGeneralMdiBackgroundColorChanged(self, color):
         """
@@ -1982,8 +1973,8 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_general_mdi_bg_color = color.rgb()
-        self.mainWin.gMDIArea.setBackgroundColor(QColor(preview_general_mdi_bg_color))
+        self.preview_general_mdi_bg_color = color.rgb()
+        self.mainWin.mdiArea.setBackgroundColor(QColor(self.preview_general_mdi_bg_color))
 
     def checkBoxTipOfTheDayStateChanged(self, checked):
         """
@@ -2055,8 +2046,8 @@ class Settings_Dialog(QDialog):
         :param `checked`: TOWRITE
         :type `checked`: int
         """
-        preview_display_show_scrollbars = checked
-        self.mainWin.updateAllViewScrollBars(preview_display_show_scrollbars)
+        self.preview_display_show_scrollbars = checked
+        self.mainWin.updateAllViewScrollBars(self.preview_display_show_scrollbars)
 
     def comboBoxScrollBarWidgetCurrentIndexChanged(self, index):
         """
@@ -2099,13 +2090,11 @@ class Settings_Dialog(QDialog):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender());
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_display_crosshair_color), self)
             colorDialog.currentColorChanged.connect(self.currentDisplayCrossHairColorChanged)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_display_crosshair_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_display_crosshair_color))
@@ -2113,7 +2102,6 @@ class Settings_Dialog(QDialog):
                 self.mainWin.updateAllViewCrossHairColors(self.accept_display_crosshair_color)
 
             else:
-
                 self.mainWin.updateAllViewCrossHairColors(self.dialog_display_crosshair_color)
 
     def currentDisplayCrossHairColorChanged(self, color):
@@ -2130,13 +2118,11 @@ class Settings_Dialog(QDialog):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender())
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_display_bg_color), self)
             colorDialog.currentColorChanged.connect(self.currentDisplayBackgroundColorChanged)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_display_bg_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_display_bg_color))
@@ -2144,7 +2130,6 @@ class Settings_Dialog(QDialog):
                 self.mainWin.updateAllViewBackgroundColors(self.accept_display_bg_color)
 
             else:
-
                 self.mainWin.updateAllViewBackgroundColors(self.dialog_display_bg_color)
 
     def currentDisplayBackgroundColorChanged(self, color):
@@ -2154,20 +2139,18 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_display_bg_color = color.rgb()
-        self.mainWin.updateAllViewBackgroundColors(preview_display_bg_color)
+        self.preview_display_bg_color = color.rgb()
+        self.mainWin.updateAllViewBackgroundColors(self.preview_display_bg_color)
 
     def chooseDisplaySelectBoxLeftColor(self):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender())
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_display_selectbox_left_color), self)
             colorDialog.currentColorChanged.connect(self.currentDisplaySelectBoxLeftColorChanged)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_display_selectbox_left_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_display_selectbox_left_color))
@@ -2176,15 +2159,14 @@ class Settings_Dialog(QDialog):
                                                           self.accept_display_selectbox_left_fill,
                                                           self.accept_display_selectbox_right_color,
                                                           self.accept_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
             else:
-
                 self.mainWin.updateAllViewSelectBoxColors(self.dialog_display_selectbox_left_color,
                                                           self.dialog_display_selectbox_left_fill,
                                                           self.dialog_display_selectbox_right_color,
                                                           self.dialog_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
     def currentDisplaySelectBoxLeftColorChanged(self, color):
         """
@@ -2193,12 +2175,12 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_display_selectbox_left_color = color.rgb()
-        self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
-                                                  preview_display_selectbox_left_fill,
-                                                  preview_display_selectbox_right_color,
-                                                  preview_display_selectbox_right_fill,
-                                                  preview_display_selectbox_alpha)
+        self.preview_display_selectbox_left_color = color.rgb()
+        self.mainWin.updateAllViewSelectBoxColors(self.preview_display_selectbox_left_color,
+                                                  self.preview_display_selectbox_left_fill,
+                                                  self.preview_display_selectbox_right_color,
+                                                  self.preview_display_selectbox_right_fill,
+                                                  self.preview_display_selectbox_alpha)
 
     def chooseDisplaySelectBoxLeftFill(self):
         """TOWRITE"""
@@ -2210,7 +2192,6 @@ class Settings_Dialog(QDialog):
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_display_selectbox_left_fill = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_display_selectbox_left_fill))
@@ -2219,15 +2200,14 @@ class Settings_Dialog(QDialog):
                                                           self.accept_display_selectbox_left_fill,
                                                           self.accept_display_selectbox_right_color,
                                                           self.accept_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
             else:
-
                 self.mainWin.updateAllViewSelectBoxColors(self.dialog_display_selectbox_left_color,
                                                           self.dialog_display_selectbox_left_fill,
                                                           self.dialog_display_selectbox_right_color,
                                                           self.dialog_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
     def currentDisplaySelectBoxLeftFillChanged(self, color):
         """
@@ -2236,24 +2216,22 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_display_selectbox_left_fill = color.rgb()
-        self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
-                                                  preview_display_selectbox_left_fill,
-                                                  preview_display_selectbox_right_color,
-                                                  preview_display_selectbox_right_fill,
-                                                  preview_display_selectbox_alpha)
+        self.preview_display_selectbox_left_fill = color.rgb()
+        self.mainWin.updateAllViewSelectBoxColors(self.preview_display_selectbox_left_color,
+                                                  self.preview_display_selectbox_left_fill,
+                                                  self.preview_display_selectbox_right_color,
+                                                  self.preview_display_selectbox_right_fill,
+                                                  self.preview_display_selectbox_alpha)
 
     def chooseDisplaySelectBoxRightColor(self):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender())
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_display_selectbox_right_color), self)
             colorDialog.currentColorChanged.connect(self.currentDisplaySelectBoxRightColorChanged)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_display_selectbox_right_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_display_selectbox_right_color))
@@ -2262,15 +2240,14 @@ class Settings_Dialog(QDialog):
                                                           self.accept_display_selectbox_left_fill,
                                                           self.accept_display_selectbox_right_color,
                                                           self.accept_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
             else:
-
                 self.mainWin.updateAllViewSelectBoxColors(self.dialog_display_selectbox_left_color,
                                                           self.dialog_display_selectbox_left_fill,
                                                           self.dialog_display_selectbox_right_color,
                                                           self.dialog_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
     def currentDisplaySelectBoxRightColorChanged(self, color):
         """
@@ -2279,24 +2256,22 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_display_selectbox_right_color = color.rgb()
-        self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
-                                                  preview_display_selectbox_left_fill,
-                                                  preview_display_selectbox_right_color,
-                                                  preview_display_selectbox_right_fill,
-                                                  preview_display_selectbox_alpha)
+        self.preview_display_selectbox_right_color = color.rgb()
+        self.mainWin.updateAllViewSelectBoxColors(self.preview_display_selectbox_left_color,
+                                                  self.preview_display_selectbox_left_fill,
+                                                  self.preview_display_selectbox_right_color,
+                                                  self.preview_display_selectbox_right_fill,
+                                                  self.preview_display_selectbox_alpha)
 
     def chooseDisplaySelectBoxRightFill(self):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender())
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_display_selectbox_right_fill), self)
             colorDialog.currentColorChanged.connect(self.currentDisplaySelectBoxRightFillChanged)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_display_selectbox_right_fill = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_display_selectbox_right_fill))
@@ -2305,15 +2280,14 @@ class Settings_Dialog(QDialog):
                                                           self.accept_display_selectbox_left_fill,
                                                           self.accept_display_selectbox_right_color,
                                                           self.accept_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
             else:
-
                 self.mainWin.updateAllViewSelectBoxColors(self.dialog_display_selectbox_left_color,
                                                           self.dialog_display_selectbox_left_fill,
                                                           self.dialog_display_selectbox_right_color,
                                                           self.dialog_display_selectbox_right_fill,
-                                                          preview_display_selectbox_alpha)
+                                                          self.preview_display_selectbox_alpha)
 
     def currentDisplaySelectBoxRightFillChanged(self, color):
         """
@@ -2322,12 +2296,12 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_display_selectbox_right_fill = color.rgb()
-        self.mainWin.updateAllViewSelectBoxColors(preview_display_selectbox_left_color,
-                                                  preview_display_selectbox_left_fill,
-                                                  preview_display_selectbox_right_color,
-                                                  preview_display_selectbox_right_fill,
-                                                  preview_display_selectbox_alpha)
+        self.preview_display_selectbox_right_fill = color.rgb()
+        self.mainWin.updateAllViewSelectBoxColors(self.preview_display_selectbox_left_color,
+                                                  self.preview_display_selectbox_left_fill,
+                                                  self.preview_display_selectbox_right_color,
+                                                  self.preview_display_selectbox_right_fill,
+                                                  self.preview_display_selectbox_alpha)
 
     def spinBoxDisplaySelectBoxAlphaValueChanged(self, value):
         """
@@ -2336,12 +2310,12 @@ class Settings_Dialog(QDialog):
         :param `value`: TOWRITE
         :type `value`: int
         """
-        preview_display_selectbox_alpha = value
+        self.preview_display_selectbox_alpha = value
         self.mainWin.updateAllViewSelectBoxColors(self.accept_display_selectbox_left_color,
                                                   self.accept_display_selectbox_left_fill,
                                                   self.accept_display_selectbox_right_color,
                                                   self.accept_display_selectbox_right_fill,
-                                                  preview_display_selectbox_alpha)
+                                                  self.preview_display_selectbox_alpha)
 
     def choosePromptTextColor(self):
         """TOWRITE"""
@@ -2353,7 +2327,6 @@ class Settings_Dialog(QDialog):
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_prompt_text_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_prompt_text_color))
@@ -2361,7 +2334,6 @@ class Settings_Dialog(QDialog):
                 self.mainWin.prompt.setPromptTextColor(QColor(self.accept_prompt_text_color))
 
             else:
-
                 self.mainWin.prompt.setPromptTextColor(QColor(self.dialog_prompt_text_color))
 
     def currentPromptTextColorChanged(self, color):
@@ -2371,20 +2343,18 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_prompt_text_color = color.rgb()
-        self.mainWin.prompt.setPromptTextColor(QColor(preview_prompt_text_color))
+        self.preview_prompt_text_color = color.rgb()
+        self.mainWin.prompt.setPromptTextColor(QColor(self.preview_prompt_text_color))
 
     def choosePromptBackgroundColor(self):
         """TOWRITE"""
         button = self.sender() # QPushButton* button = qobject_cast<QPushButton*>(sender())
         if button:
-
             colorDialog = QColorDialog(QColor(self.accept_prompt_bg_color), self)
             colorDialog.currentColorChanged.connect(self.currentPromptBackgroundColorChanged)
             colorDialog.exec_()
 
             if colorDialog.result() == QDialog.Accepted:
-
                 self.accept_prompt_bg_color = colorDialog.selectedColor().rgb()
                 pix = QPixmap(16, 16)
                 pix.fill(QColor(self.accept_prompt_bg_color))
@@ -2392,7 +2362,6 @@ class Settings_Dialog(QDialog):
                 self.mainWin.prompt.setPromptBackgroundColor(QColor(self.accept_prompt_bg_color))
 
             else:
-
                 self.mainWin.prompt.setPromptBackgroundColor(QColor(self.dialog_prompt_bg_color))
 
     def currentPromptBackgroundColorChanged(self, color):
@@ -2402,8 +2371,8 @@ class Settings_Dialog(QDialog):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        preview_prompt_bg_color = color.rgb()
-        self.mainWin.prompt.setPromptBackgroundColor(QColor(preview_prompt_bg_color))
+        self.preview_prompt_bg_color = color.rgb()
+        self.mainWin.prompt.setPromptBackgroundColor(QColor(self.preview_prompt_bg_color))
 
     def comboBoxPromptFontFamilyCurrentIndexChanged(self, family):
         """
@@ -2412,8 +2381,8 @@ class Settings_Dialog(QDialog):
         :param `family`: TOWRITE
         :type `family`: QString
         """
-        preview_prompt_font_family = family
-        self.mainWin.prompt.setPromptFontFamily(preview_prompt_font_family)
+        self.preview_prompt_font_family = family
+        self.mainWin.prompt.setPromptFontFamily(self.preview_prompt_font_family)
 
     def comboBoxPromptFontStyleCurrentIndexChanged(self, style):
         """
@@ -2422,8 +2391,8 @@ class Settings_Dialog(QDialog):
         :param `style`: TOWRITE
         :type `style`: QString
         """
-        preview_prompt_font_style = style
-        self.mainWin.prompt.setPromptFontStyle(preview_prompt_font_style)
+        self.preview_prompt_font_style = style
+        self.mainWin.prompt.setPromptFontStyle(self.preview_prompt_font_style)
 
     def spinBoxPromptFontSizeValueChanged(self, value):
         """
@@ -2432,8 +2401,8 @@ class Settings_Dialog(QDialog):
         :param `value`: TOWRITE
         :type `value`: int
         """
-        preview_prompt_font_size = value
-        self.mainWin.prompt.setPromptFontSize(preview_prompt_font_size)
+        self.preview_prompt_font_size = value
+        self.mainWin.prompt.setPromptFontSize(self.preview_prompt_font_size)
 
     def checkBoxPromptSaveHistoryStateChanged(self, checked):
         """
@@ -3038,13 +3007,13 @@ class Settings_Dialog(QDialog):
         :param `checked`: TOWRITE
         :type `checked`: int
         """
-        preview_lwt_show_lwt = checked
-        if preview_lwt_show_lwt:
+        self.preview_lwt_show_lwt = checked
+        if self.preview_lwt_show_lwt:
             self.mainWin.statusbar.statusBarLwtButton.enableLwt()
         else:
             self.mainWin.statusbar.statusBarLwtButton.disableLwt()
 
-        senderObj = sender() # QObject*
+        senderObj = self.sender() # QObject*
         if senderObj:
 
             parent = senderObj.parent() # QObject*
@@ -3061,8 +3030,8 @@ class Settings_Dialog(QDialog):
         :param `checked`: TOWRITE
         :type `checked`: int
         """
-        preview_lwt_real_render = checked
-        if preview_lwt_real_render:
+        self.preview_lwt_real_render = checked
+        if self.preview_lwt_real_render:
             self.mainWin.statusbar.statusBarLwtButton.enableReal()
         else:
             self.mainWin.statusbar.statusBarLwtButton.disableReal()
@@ -3155,32 +3124,32 @@ class Settings_Dialog(QDialog):
     def acceptChanges(self):
         """TOWRITE"""
 
-        self.dialog_general_mdi_bg_use_logo = preview_general_mdi_bg_use_logo
-        self.dialog_general_mdi_bg_use_texture = preview_general_mdi_bg_use_texture
-        self.dialog_general_mdi_bg_use_color = preview_general_mdi_bg_use_color
+        self.dialog_general_mdi_bg_use_logo = self.preview_general_mdi_bg_use_logo
+        self.dialog_general_mdi_bg_use_texture = self.preview_general_mdi_bg_use_texture
+        self.dialog_general_mdi_bg_use_color = self.preview_general_mdi_bg_use_color
         self.dialog_general_mdi_bg_logo = self.accept_general_mdi_bg_logo
         self.dialog_general_mdi_bg_texture = self.accept_general_mdi_bg_texture
         self.dialog_general_mdi_bg_color = self.accept_general_mdi_bg_color
-        self.dialog_display_show_scrollbars = preview_display_show_scrollbars
+        self.dialog_display_show_scrollbars = self.preview_display_show_scrollbars
         self.dialog_display_crosshair_color = self.accept_display_crosshair_color
         self.dialog_display_bg_color = self.accept_display_bg_color
         self.dialog_display_selectbox_left_color = self.accept_display_selectbox_left_color
         self.dialog_display_selectbox_left_fill = self.accept_display_selectbox_left_fill
         self.dialog_display_selectbox_right_color = self.accept_display_selectbox_right_color
         self.dialog_display_selectbox_right_fill = self.accept_display_selectbox_right_fill
-        self.dialog_display_selectbox_alpha = preview_display_selectbox_alpha
+        self.dialog_display_selectbox_alpha = self.preview_display_selectbox_alpha
         self.dialog_prompt_text_color = self.accept_prompt_text_color
         self.dialog_prompt_bg_color = self.accept_prompt_bg_color
-        self.dialog_prompt_font_family = preview_prompt_font_family
-        self.dialog_prompt_font_style = preview_prompt_font_style
-        self.dialog_prompt_font_size = preview_prompt_font_size
+        self.dialog_prompt_font_family = self.preview_prompt_font_family
+        #TODO/PORT# self.dialog_prompt_font_style = self.preview_prompt_font_style
+        self.dialog_prompt_font_size = self.preview_prompt_font_size
         if self.dialog_grid_color_match_crosshair:
             self.dialog_grid_color = self.accept_display_crosshair_color
         else:
             self.dialog_grid_color = self.accept_grid_color
         self.dialog_ruler_color = self.accept_ruler_color
-        self.dialog_lwt_show_lwt = preview_lwt_show_lwt
-        self.dialog_lwt_real_render = preview_lwt_real_render
+        self.dialog_lwt_show_lwt = self.preview_lwt_show_lwt
+        self.dialog_lwt_real_render = self.preview_lwt_real_render
 
         self.mainWin.setSettingsGeneralLanguage(self.dialog_general_language)
         self.mainWin.setSettingsGeneralIconTheme(self.dialog_general_icon_theme)
@@ -3193,12 +3162,12 @@ class Settings_Dialog(QDialog):
         self.mainWin.setSettingsGeneralMdiBGColor(self.dialog_general_mdi_bg_color)
         self.mainWin.setSettingsGeneralTipOfTheDay(self.dialog_general_tip_of_the_day)
         # TODO: self.mainWin.setSettingsGeneralSystemHelpBrowser(self.dialog_general_system_help_browser)
-        self.mainWin.setSettingsDisplayUseOpenGL(self.dialog_display_use_opengl)
-        self.mainWin.setSettingsDisplayRenderHintAA(self.dialog_display_renderhint_aa)
-        self.mainWin.setSettingsDisplayRenderHintTextAA(self.dialog_display_renderhint_text_aa)
-        self.mainWin.setSettingsDisplayRenderHintSmoothPix(self.dialog_display_renderhint_smooth_pix)
-        self.mainWin.setSettingsDisplayRenderHintHighAA(self.dialog_display_renderhint_high_aa)
-        self.mainWin.setSettingsDisplayRenderHintNonCosmetic(self.dialog_display_renderhint_noncosmetic)
+        #TODO/PORT# self.mainWin.setSettingsDisplayUseOpenGL(self.dialog_display_use_opengl)
+        #TODO/PORT# self.mainWin.setSettingsDisplayRenderHintAA(self.dialog_display_renderhint_aa)
+        #TODO/PORT# self.mainWin.setSettingsDisplayRenderHintTextAA(self.dialog_display_renderhint_text_aa)
+        #TODO/PORT# self.mainWin.setSettingsDisplayRenderHintSmoothPix(self.dialog_display_renderhint_smooth_pix)
+        #TODO/PORT# self.mainWin.setSettingsDisplayRenderHintHighAA(self.dialog_display_renderhint_high_aa)
+        #TODO/PORT# self.mainWin.setSettingsDisplayRenderHintNonCosmetic(self.dialog_display_renderhint_noncosmetic)
         self.mainWin.setSettingsDisplayShowScrollBars(self.dialog_display_show_scrollbars)
         self.mainWin.setSettingsDisplayScrollBarWidgetNum(self.dialog_display_scrollbar_widget_num)
         self.mainWin.setSettingsDisplayCrossHairColor(self.dialog_display_crosshair_color)
@@ -3215,7 +3184,7 @@ class Settings_Dialog(QDialog):
         self.mainWin.setSettingsPromptTextColor(self.dialog_prompt_text_color)
         self.mainWin.setSettingsPromptBGColor(self.dialog_prompt_bg_color)
         self.mainWin.setSettingsPromptFontFamily(self.dialog_prompt_font_family)
-        self.mainWin.setSettingsPromptFontStyle(self.dialog_prompt_font_style)
+        # TODO/PORT# self.mainWin.setSettingsPromptFontStyle(self.dialog_prompt_font_style)
         self.mainWin.setSettingsPromptFontSize(self.dialog_prompt_font_size)
         self.mainWin.setSettingsPromptSaveHistory(self.dialog_prompt_save_history)
         self.mainWin.setSettingsPromptSaveHistoryAsHtml(self.dialog_prompt_save_history_as_html)
@@ -3293,11 +3262,11 @@ class Settings_Dialog(QDialog):
                                                   self.dialog_display_selectbox_right_color,
                                                   self.dialog_display_selectbox_right_fill,
                                                   self.dialog_display_selectbox_alpha)
-        self.mainWin.prompt.setPromptTextColor(QColor(self.dialog_prompt_text_color))
-        self.mainWin.prompt.setPromptBackgroundColor(QColor(self.dialog_prompt_bg_color))
-        self.mainWin.prompt.setPromptFontFamily(self.dialog_prompt_font_family)
-        self.mainWin.prompt.setPromptFontStyle(self.dialog_prompt_font_style)
-        self.mainWin.prompt.setPromptFontSize(self.dialog_prompt_font_size)
+        #TODO/PORT# self.mainWin.prompt.setPromptTextColor(QColor(self.dialog_prompt_text_color))
+        #TODO/PORT# self.mainWin.prompt.setPromptBackgroundColor(QColor(self.dialog_prompt_bg_color))
+        #TODO/PORT# self.mainWin.prompt.setPromptFontFamily(self.dialog_prompt_font_family)
+        #TODO/PORT# self.mainWin.prompt.setPromptFontStyle(self.dialog_prompt_font_style)
+        #TODO/PORT# self.mainWin.prompt.setPromptFontSize(self.dialog_prompt_font_size)
         self.mainWin.updateAllViewGridColors(self.dialog_grid_color)
         self.mainWin.updateAllViewRulerColors(self.dialog_ruler_color)
         if self.dialog_lwt_show_lwt:
@@ -3318,12 +3287,12 @@ class Settings_Dialog(QDialog):
         # TODO: inform the user if they have changed settings
 
         # Update the view since the user must accept the preview
-        self.mainWin.gMDIArea.useBackgroundLogo(self.dialog_general_mdi_bg_use_logo)
-        self.mainWin.gMDIArea.useBackgroundTexture(self.dialog_general_mdi_bg_use_texture)
-        self.mainWin.gMDIArea.useBackgroundColor(self.dialog_general_mdi_bg_use_color)
-        self.mainWin.gMDIArea.setBackgroundLogo(self.dialog_general_mdi_bg_logo)
-        self.mainWin.gMDIArea.setBackgroundTexture(self.dialog_general_mdi_bg_texture)
-        self.mainWin.gMDIArea.setBackgroundColor(self.dialog_general_mdi_bg_color)
+        self.mainWin.mdiArea.useBackgroundLogo(self.dialog_general_mdi_bg_use_logo)
+        self.mainWin.mdiArea.useBackgroundTexture(self.dialog_general_mdi_bg_use_texture)
+        self.mainWin.mdiArea.useBackgroundColor(self.dialog_general_mdi_bg_use_color)
+        self.mainWin.mdiArea.setBackgroundLogo(self.dialog_general_mdi_bg_logo)
+        self.mainWin.mdiArea.setBackgroundTexture(self.dialog_general_mdi_bg_texture)
+        self.mainWin.mdiArea.setBackgroundColor(self.dialog_general_mdi_bg_color)
         self.mainWin.updateAllViewScrollBars(self.dialog_display_show_scrollbars)
         self.mainWin.updateAllViewCrossHairColors(self.dialog_display_crosshair_color)
         self.mainWin.updateAllViewBackgroundColors(self.dialog_display_bg_color)
@@ -3332,11 +3301,11 @@ class Settings_Dialog(QDialog):
                                                   self.dialog_display_selectbox_right_color,
                                                   self.dialog_display_selectbox_right_fill,
                                                   self.dialog_display_selectbox_alpha)
-        self.mainWin.prompt.setPromptTextColor(QColor(self.dialog_prompt_text_color))
-        self.mainWin.prompt.setPromptBackgroundColor(QColor(self.dialog_prompt_bg_color))
-        self.mainWin.prompt.setPromptFontFamily(self.dialog_prompt_font_family)
-        self.mainWin.prompt.setPromptFontStyle(self.dialog_prompt_font_style)
-        self.mainWin.prompt.setPromptFontSize(self.dialog_prompt_font_size)
+        #TODO/PORT# self.mainWin.prompt.setPromptTextColor(QColor(self.dialog_prompt_text_color))
+        #TODO/PORT# self.mainWin.prompt.setPromptBackgroundColor(QColor(self.dialog_prompt_bg_color))
+        #TODO/PORT# self.mainWin.prompt.setPromptFontFamily(self.dialog_prompt_font_family)
+        #TODO/PORT# self.mainWin.prompt.setPromptFontStyle(self.dialog_prompt_font_style)
+        #TODO/PORT# self.mainWin.prompt.setPromptFontSize(self.dialog_prompt_font_size)
         self.mainWin.updateAllViewGridColors(self.dialog_grid_color)
         self.mainWin.updateAllViewRulerColors(self.dialog_ruler_color)
         if self.dialog_lwt_show_lwt:

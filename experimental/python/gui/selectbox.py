@@ -62,7 +62,7 @@ class SelectBox(QRubberBand):
         :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
-        super(SelectBox, self).__init__(parent)
+        super(SelectBox, self).__init__(s, parent)
 
         # private
         self._leftBrushColor = QColor()
@@ -119,9 +119,9 @@ class SelectBox(QRubberBand):
         self._alpha = newAlpha
 
         self._leftPenColor = colorL  # TODO: allow customization
-        self._leftBrushColor = QColor(fillL.red(), fillL.green(), fillL.blue(), alpha)
+        self._leftBrushColor = QColor(fillL.red(), fillL.green(), fillL.blue(), self._alpha)
         self._rightPenColor = colorR  # TODO: allow customization
-        self._rightBrushColor = QColor(fillR.red(), fillR.green(), fillR.blue(), alpha)
+        self._rightBrushColor = QColor(fillR.red(), fillR.green(), fillR.blue(), self._alpha)
 
         self._leftPen.setColor(self._leftPenColor)
         self._leftPen.setStyle(Qt.DashLine)

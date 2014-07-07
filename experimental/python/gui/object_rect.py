@@ -256,7 +256,7 @@ class RectObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
@@ -296,7 +296,7 @@ class RectObject(BaseObject):
                 ### else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
                 ###
                 ### QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                ### drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+                ### drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
                 ### */
 
                 gripPoint = self.objectRubberPoint("GRIP_POINT")    # QPointF
@@ -304,7 +304,7 @@ class RectObject(BaseObject):
                 delta = after-gripPoint                             # QPointF
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """

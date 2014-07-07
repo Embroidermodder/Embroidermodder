@@ -244,7 +244,7 @@ class CircleObject(BaseObject):
         updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
@@ -270,7 +270,7 @@ class CircleObject(BaseObject):
             radius = sceneLine.length()  # qreal
             self.setObjectRadius(radius)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA:
@@ -285,7 +285,7 @@ class CircleObject(BaseObject):
             diameter = sceneLine.length()  # qreal
             self.setObjectDiameter(diameter)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_CIRCLE_2P:
@@ -330,7 +330,7 @@ class CircleObject(BaseObject):
                     painter.drawEllipse(QPointF(), gripRadius, gripRadius)
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(objectRubberPoint('')))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """

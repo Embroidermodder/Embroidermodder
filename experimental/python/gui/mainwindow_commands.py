@@ -17,15 +17,15 @@ These methods are to be imported into the MainWindow class directly.
 
 #--PySide/PyQt Imports.
 try:
-    from PySide.QtCore import qDebug, qPrintable, Qt
+    from PySide.QtCore import qDebug, Qt, QUrl, QProcess, QSize
     from PySide.QtGui import (QMessageBox, QApplication, QCheckBox, QCursor,
-            QLabel, QDesktopServices, QUrl, QProcess, QDialogButtonBox,
+            QLabel, QDesktopServices, QDialogButtonBox,
             QPushButton, QMdiArea, QGraphicsScene, QComboBox, QWhatsThis)
 except ImportError:
     raise
-    # from PyQt4.QtCore import qDebug, qPrintable, Qt
+    # from PyQt4.QtCore import qDebug, Qt, QUrl, QProcess, QSize
     # from PyQt4.QtGui import (QMessageBox, QApplication, QCheckBox, QCursor,
-    #       QLabel, QDesktopServices, QUrl, QProcess, QDialogButtonBox,
+    #       QLabel, QDesktopServices, QDialogButtonBox,
     #       QPushButton, QMdiArea, QGraphicsScene, QComboBox, QWhatsThis)
 
 
@@ -129,7 +129,7 @@ def copy(self):
     TOWRITE
     """
     qDebug("copy()")
-    self.gview = activeView()  # View*
+    self.gview = self.activeView()  # View*
     if self.gview:
         self.gview.copy()
 
@@ -1994,7 +1994,7 @@ def nativeAddTextSingle(self, strng, x, y, rot, fill, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddInfiniteLine(self, x1, y1, x2, y2, rot):
@@ -2062,7 +2062,7 @@ def nativeAddLine(self, x1, y1, x2, y2, rot, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddTriangle(self, x1, y1, x2, y2, x3, y3, rot, fill):
@@ -2122,7 +2122,7 @@ def nativeAddRectangle(self, x, y, w, h, rot, fill, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddRoundedRectangle(self, x, y, w, h, rad, rot, fill):
@@ -2203,7 +2203,7 @@ def nativeAddCircle(self, centerX, centerY, radius, fill, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddSlot(self, centerX, centerY, diameter, length, rot, fill, rubberMode):
@@ -2270,7 +2270,7 @@ def nativeAddEllipse(self, centerX, centerY, width, height, rot, fill, rubberMod
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddPoint(self, x, y):
@@ -2286,7 +2286,7 @@ def nativeAddPoint(self, x, y):
     stack = gview.getUndoStack()  # QUndoStack*
     if gview and stack:
         obj = PointObject(x, -y, self.getCurrentColor())  # PointObject*
-        cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+        cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
         stack.push(cmd)
 
 def nativeAddRegularPolygon(self, centerX, centerY, sides, mode, rad, rot, fill):
@@ -2337,7 +2337,7 @@ def nativeAddPolygon(self, startX, startY, p, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddPolyline(self, startX, startY, p, rubberMode):
@@ -2367,7 +2367,7 @@ def nativeAddPolyline(self, startX, startY, p, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeAddPath(self, startX, startY, p, rubberMode):
@@ -2470,7 +2470,7 @@ def nativeAddDimLeader(self, x1, y1, x2, y2, rot, rubberMode):
             gscene.update()
 
         else:
-            cmd = UndoableAddCommand(obj.data(OBJ_NAME).toString(), obj, gview, 0)  # UndoableAddCommand*
+            cmd = UndoableAddCommand(obj.data("OBJ_NAME"), obj, gview, 0)  # UndoableAddCommand*
             stack.push(cmd)
 
 def nativeSetCursorShape(self, strng):
@@ -2721,7 +2721,7 @@ def nativeQSnapX(self):
     """
     scene = self.activeScene()  # QGraphicsScene*
     if scene:
-        return scene.property(SCENE_QSNAP_POINT).toPointF().x()
+        return scene.property("SCENE_QSNAP_POINT").toPointF().x()
     return 0.0
 
 def nativeQSnapY(self):
@@ -2732,7 +2732,7 @@ def nativeQSnapY(self):
     """
     scene = self.activeScene()  # QGraphicsScene*
     if scene:
-        return -scene.property(SCENE_QSNAP_POINT).toPointF().y()
+        return -scene.property("SCENE_QSNAP_POINT").toPointF().y()
     return 0.0
 
 def nativeMouseX(self):
@@ -2743,9 +2743,9 @@ def nativeMouseX(self):
     """
     scene = self.activeScene()  # QGraphicsScene*
     if scene:
-        qDebug("mouseX: %.50f", scene.property(SCENE_MOUSE_POINT).toPointF().x())
+        qDebug("mouseX: %.50f", scene.property("SCENE_MOUSE_POINT").toPointF().x())
     if scene:
-        return scene.property(SCENE_MOUSE_POINT).toPointF().x()
+        return scene.property("SCENE_MOUSE_POINT").toPointF().x()
     return 0.0
 
 def nativeMouseY(self):
@@ -2756,9 +2756,9 @@ def nativeMouseY(self):
     """
     scene = self.activeScene()  # QGraphicsScene*
     if scene:
-        qDebug("mouseY: %.50f", -scene.property(SCENE_MOUSE_POINT).toPointF().y())
+        qDebug("mouseY: %.50f", -scene.property("SCENE_MOUSE_POINT").toPointF().y())
     if scene:
-        return -scene.property(SCENE_MOUSE_POINT).toPointF().y()
+        return -scene.property("SCENE_MOUSE_POINT").toPointF().y()
     return 0.0
 
 

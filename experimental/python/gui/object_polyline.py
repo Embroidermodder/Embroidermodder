@@ -155,13 +155,13 @@ class PolylineObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
         painter.drawPath(normalPath)
 
-        if (objScene.property(ENABLE_LWT).toBool() and objScene.property(ENABLE_REAL).toBool()):
+        if (objScene.property(ENABLE_LWT) and objScene.property(ENABLE_REAL)):  # .toBool()
             self.realRender(painter, normalPath)
 
     def updateRubber(self, painter):
@@ -178,7 +178,7 @@ class PolylineObject(BaseObject):
 
             rubberLine = QLineF(normalPath.currentPosition(), self.mapFromScene(self.objectRubberPoint("")))
             if painter:
-                self.drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubberLine, painter, "VIEW_COLOR_CROSSHAIR")
 
             ok = False  # bool
             numStr = self.objectRubberText("POLYLINE_NUM_POINTS")  # QString
@@ -234,7 +234,7 @@ class PolylineObject(BaseObject):
                     painter.drawLine(enPoint, self.mapFromScene(self.objectRubberPoint("")))
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint("")))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """

@@ -45,16 +45,18 @@ class StatusBar(QStatusBar):
     .. sphinx_generate_methods_summary::
        StatusBar
     """
-    def __init__(self, parent=None):
+    def __init__(self, mw, parent=None):
         """
         Default class constructor.
 
+        :param `parent`: Pointer to the applications main window instance.
+        :type `parent`: `QMainWindow`_
         :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
         super(StatusBar, self).__init__(parent)
 
-        mw = parent
+        self.mainWin = mw
 
         self.setObjectName("StatusBar")
 
@@ -80,6 +82,19 @@ class StatusBar(QStatusBar):
         self.addWidget(self.statusBarQSnapButton)
         self.addWidget(self.statusBarQTrackButton)
         self.addWidget(self.statusBarLwtButton)
+        
+    def setMouseCoord(self, x, y):
+        """
+        TOWRITE
+        
+        :param `x`: TOWRITE
+        :type `x`: qreal
+        :param `y`: TOWRITE
+        :type `y`: qreal
+        """
+        #TODO/PORT# Check if this is right.
+        pass
+        
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

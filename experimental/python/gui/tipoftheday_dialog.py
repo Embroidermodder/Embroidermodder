@@ -53,9 +53,9 @@ try:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, SIGNAL, SLOT, QSize
-    from PySide.QtGui import QApplication, QIcon, QImage, QHBoxLayout, \
-        QLabel, QPixmap, QPainter, \
-        QPushButton, QSpacerItem, QVBoxLayout, QWizard, QWizardPage
+    from PySide.QtGui import (QApplication, QIcon, QImage, QHBoxLayout,
+        QLabel, QPixmap, QPainter,
+        QPushButton, QSpacerItem, QVBoxLayout, QWizard, QWizardPage)
     PYSIDE = True
     PYQT4 = False
 except ImportError:
@@ -63,9 +63,9 @@ except ImportError:
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
 #    from PyQt4.QtCore import qDebug, Qt, SIGNAL, SLOT, QSize
-#    from PyQt4.QtGui import QApplication, QIcon, QImage, QHBoxLayout, \
-#        QLabel, QPixmap, QPainter, \
-#        QPushButton, QSpacerItem, QVBoxLayout, QWizard, QWizardPage
+#    from PyQt4.QtGui import (QApplication, QIcon, QImage, QHBoxLayout,
+#        QLabel, QPixmap, QPainter,
+#        QPushButton, QSpacerItem, QVBoxLayout, QWizard, QWizardPage)
 #    PYSIDE = False
 #    PYQT4 = True
 
@@ -191,6 +191,7 @@ class ImageWidget(QLabel):
         self.parent = parent
 
         self.pixmap = QPixmap(imgDir + os.sep + 'did-you-know.png')
+        qDebug('%s' % imgDir + os.sep + 'tipoftheday-2.png')
         self.setPixmap(self.pixmap)
 
         self.lightOnImg = QImage(iconDir + os.sep + 'tipoftheday-2.png')
@@ -336,19 +337,19 @@ class TipOfTheDayDialog(QWizard):
 
             if self.mainWin.settings_general_current_tip > 0:
                 self.mainWin.settings_general_current_tip = int(self.mainWin.settings_general_current_tip) - 1
-                self.mainWin.gSettings.setValue("CurrentTip", str(int(self.mainWin.settings_general_current_tip) - 1))
+                # self.mainWin.gSettings.setValue("CurrentTip", str(int(self.mainWin.settings_general_current_tip) - 1))
             else:
                 self.mainWin.settings_general_current_tip = len(self.tipsList) - 1
-                self.mainWin.gSettings.setValue("CurrentTip", str(len(self.tipsList) - 1))
+                # self.mainWin.gSettings.setValue("CurrentTip", str(len(self.tipsList) - 1))
             self.labelTipOfTheDay.setText(self.tipsList[self.mainWin.settings_general_current_tip])
 
         elif button == QWizard.CustomButton2:
 
             self.mainWin.settings_general_current_tip = int(self.mainWin.settings_general_current_tip) + 1
-            self.mainWin.gSettings.setValue("CurrentTip", str(int(self.mainWin.settings_general_current_tip) + 1))
+            # self.mainWin.gSettings.setValue("CurrentTip", str(int(self.mainWin.settings_general_current_tip) + 1))
             if self.mainWin.settings_general_current_tip >= len(self.tipsList):
                 self.mainWin.settings_general_current_tip = 0
-                self.mainWin.gSettings.setValue("CurrentTip", str(int(0)))
+                # self.mainWin.gSettings.setValue("CurrentTip", str(int(0)))
             self.labelTipOfTheDay.setText(self.tipsList[self.mainWin.settings_general_current_tip])
 
         elif button == QWizard.CustomButton3:

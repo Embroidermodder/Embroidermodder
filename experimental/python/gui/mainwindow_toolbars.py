@@ -16,11 +16,11 @@ These methods are to be imported into the MainWindow class directly.
 #--PySide/PyQt Imports.
 try:
     from PySide.QtCore import qDebug, Qt, SIGNAL, SLOT
-    from PySide.QtGui import QIcon, QFont
+    from PySide.QtGui import qRgb, QIcon, QFont
 except ImportError:
     raise
 #    from PyQt4.QtCore import qDebug, Qt, SIGNAL, SLOT
-#    from PyQt4.QtGui import QIcon, QFont
+#    from PyQt4.QtGui import qRgb, QIcon, QFont
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
@@ -298,24 +298,26 @@ def createTextToolbar(self):
     actionHash = self.actionHash
     prompt = self.prompt
     textSizeSelector = self.textSizeSelector
+    textFontSelector = self.textFontSelector
     qDebug("MainWindow createTextToolbar()")
 
     toolbarText.setObjectName("toolbarText")
 
     toolbarText.addWidget(textFontSelector)
-    textFontSelector.setCurrentFont(QFont(getSettingsTextFont()))
+    textFontSelector.setCurrentFont(QFont(self.getSettingsTextFont()))
     self.connect(textFontSelector, SIGNAL("currentFontChanged(QFont)"), self, SLOT("textFontSelectorCurrentFontChanged(QFont)"))
 
     toolbarText.addAction(actionHash["ACTION_textbold"])
-    actionHash["ACTION_textbold"].setChecked(self.getSettingsTextStyleBold())
+    ## print('DEBUG', self.getSettingsTextStyleBold())
+    #TODO/PORT TypeError# actionHash["ACTION_textbold"].setChecked(self.getSettingsTextStyleBold())
     toolbarText.addAction(actionHash["ACTION_textitalic"])
-    actionHash["ACTION_textitalic"].setChecked(self.getSettingsTextStyleItalic())
+    #TODO/PORT TypeError# actionHash["ACTION_textitalic"].setChecked(self.getSettingsTextStyleItalic())
     toolbarText.addAction(actionHash["ACTION_textunderline"])
-    actionHash["ACTION_textunderline"].setChecked(self.getSettingsTextStyleUnderline())
+    #TODO/PORT TypeError# actionHash["ACTION_textunderline"].setChecked(self.getSettingsTextStyleUnderline())
     toolbarText.addAction(actionHash["ACTION_textstrikeout"])
-    actionHash["ACTION_textstrikeout"].setChecked(self.getSettingsTextStyleStrikeOut())
+    #TODO/PORT TypeError# actionHash["ACTION_textstrikeout"].setChecked(self.getSettingsTextStyleStrikeOut())
     toolbarText.addAction(actionHash["ACTION_textoverline"])
-    actionHash["ACTION_textoverline"].setChecked(self.getSettingsTextStyleOverline())
+    #TODO/PORT TypeError# actionHash["ACTION_textoverline"].setChecked(self.getSettingsTextStyleOverline())
 
     textSizeSelector.setFocusProxy(prompt)
     textSizeSelector.addItem("6 pt",   6)
@@ -332,7 +334,7 @@ def createTextToolbar(self):
     textSizeSelector.addItem("48 pt", 48)
     textSizeSelector.addItem("60 pt", 60)
     textSizeSelector.addItem("72 pt", 72)
-    self.setTextSize(self.getSettingsTextSize())
+    #TODO/PORT# setTextSize(self.getSettingsTextSize())
     toolbarText.addWidget(textSizeSelector)
     self.connect(textSizeSelector, SIGNAL("currentIndexChanged(int)"), self, SLOT("textSizeSelectorIndexChanged(int)"))
 
@@ -359,17 +361,17 @@ def createAllToolbars(self):
     """
     qDebug("MainWindow createAllToolbars()")
 
-    self.createFileToolbar()
-    self.createEditToolbar()
-    self.createViewToolbar()
-    self.createZoomToolbar()
-    self.createPanToolbar()
-    self.createIconToolbar()
-    self.createHelpToolbar()
-    self.createLayerToolbar()
-    self.createPropertiesToolbar()
-    self.createTextToolbar()
-    self.createPromptToolbar()
+    createFileToolbar(self)
+    createEditToolbar(self)
+    createViewToolbar(self)
+    createZoomToolbar(self)
+    createPanToolbar(self)
+    createIconToolbar(self)
+    createHelpToolbar(self)
+    createLayerToolbar(self)
+    createPropertiesToolbar(self)
+    createTextToolbar(self)
+    createPromptToolbar(self)
 
     # Horizontal
     self.toolbarView.setOrientation(Qt.Horizontal)
