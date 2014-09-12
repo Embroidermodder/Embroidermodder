@@ -3,6 +3,7 @@
 #include "emb-file.h"
 #include "emb-logging.h"
 #include <stdlib.h>
+#include <string.h>
 
 static unsigned char* vp3ReadString(EmbFile* file)
 {
@@ -36,9 +37,11 @@ typedef struct _vp3Hoop
     int bottom;
     int left;
     int top;
-    int unknown1;
-    int unknown2;
-    int unknown3;
+    int threadLength;
+    char unknown2;
+    unsigned char numberOfColors;
+    unsigned short unknown3;
+    int unknown4;
     int numberOfBytesRemaining;
 
     int xOffset;
@@ -69,9 +72,11 @@ static vp3Hoop vp3ReadHoopSection(EmbFile* file)
     hoop.left = binaryReadInt32BE(file);
     hoop.top = binaryReadInt32BE(file);
 
-    hoop.unknown1 = binaryReadInt32BE(file);
-    hoop.unknown2 = binaryReadInt32BE(file);
-    hoop.unknown3 = binaryReadInt32BE(file);
+    hoop.threadLength = binaryReadInt32(file); /* yes, it seems this is _not_ big endian */
+    hoop.unknown2 = binaryReadByte(file);
+    hoop.numberOfColors = binaryReadByte(file);
+    hoop.unknown3 = binaryReadInt16BE(file);
+    hoop.unknown4 = binaryReadInt32BE(file);
     hoop.numberOfBytesRemaining = binaryReadInt32BE(file);
 
     hoop.xOffset = binaryReadInt32BE(file);
@@ -98,18 +103,18 @@ int readVp3(EmbPattern* pattern, const char* fileName)
 {
     unsigned char magicString[5];
     unsigned char some;
-    unsigned char* someString = 0;
+    unsigned char* softwareVendorString = 0;
     unsigned char v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15, v16, v17, v18;
-    unsigned char* unknownString3 = 0;
+    unsigned char* anotherSoftwareVendorString = 0;
     int numberOfColors;
     long colorSectionOffset;
     unsigned char magicCode[6];
     short someShort;
     unsigned char someByte;
     int bytesRemainingInFile;
-    unsigned char* unknownByteString = 0;
+    unsigned char* fileCommentString = 0; /* some software writes used settings here */
     int hoopConfigurationOffset;
-    unsigned char* unknownString2 = 0;
+    unsigned char* anotherCommentString = 0;
     int i;
     EmbFile* file = 0;
 
@@ -126,16 +131,16 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     binaryReadBytes(file, magicString, 5); /* %vsm% */ /* TODO: check return value */
 
     some = binaryReadByte(file); /* 0 */
-    someString = vp3ReadString(file);
+    softwareVendorString = vp3ReadString(file);
     someShort = binaryReadInt16(file);
     someByte = binaryReadByte(file);
     bytesRemainingInFile = binaryReadInt32(file);
-    unknownByteString = vp3ReadString(file);
+    fileCommentString = vp3ReadString(file);
     hoopConfigurationOffset = (int)embFile_tell(file);
 
     vp3ReadHoopSection(file);
 
-    unknownString2 = vp3ReadString(file);
+    anotherCommentString = vp3ReadString(file);
 
     /* TODO: review v1 thru v18 variables and use emb_unused() if needed */
     v1 = binaryReadByte(file);
@@ -159,28 +164,30 @@ int readVp3(EmbPattern* pattern, const char* fileName)
 
     binaryReadBytes(file, magicCode, 6); /* 0x78 0x78 0x55 0x55 0x01 0x00 */ /* TODO: check return value */
 
-    unknownString3 = vp3ReadString(file);
+    anotherSoftwareVendorString = vp3ReadString(file);
 
     numberOfColors = binaryReadInt16BE(file);
+    embLog_error("format-vp3.c Number of Colors: %d\n", numberOfColors);
     colorSectionOffset = (int)embFile_tell(file);
 
     for(i = 0; i < numberOfColors; i++)
     {
         EmbThread t;
         char tableSize;
-        int unknownX, unknownY, unknownX2, unknownY2;
-        unsigned char* str1, *str2, *str3;
+        int startX, startY, offsetToNextColorX, offsetToNextColorY;
+        unsigned char* threadColorNumber, *colorName, *threadVendor;
         int unknownThreadString, numberOfBytesInColor;
 
-        embFile_seek(file, 0x03 + colorSectionOffset, SEEK_SET);
+        embFile_seek(file, colorSectionOffset, SEEK_SET);
+        embLog_error("format-vp3.c Color Check Byte #1: 0 == %d\n", binaryReadByte(file));
+        embLog_error("format-vp3.c Color Check Byte #2: 5 == %d\n", binaryReadByte(file));
+        embLog_error("format-vp3.c Color Check Byte #3: 0 == %d\n", binaryReadByte(file));
         colorSectionOffset = binaryReadInt32BE(file);
         colorSectionOffset += embFile_tell(file);
-        unknownX = binaryReadInt32BE(file);
-        unknownY = binaryReadInt32BE(file);
-        /* TODO: review commented section below
-        pattern.embPattern_addStitchAbsolute(-unknownX / 100, -unknownY/ 100, StitchType.Jump, false);
-        fs.Seek(0x08, SeekOrigin.Current);
-        */
+        startX = binaryReadInt32BE(file);
+        startY = binaryReadInt32BE(file);
+        embPattern_addStitchAbs(pattern, startX / 1000, -startY / 1000, JUMP, 0);
+
         tableSize = binaryReadByte(file);
         binaryReadByte(file);
         t.color.r = binaryReadByte(file);
@@ -189,19 +196,21 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         embPattern_addThread(pattern, t);
         embFile_seek(file, 6*tableSize - 1, SEEK_CUR);
 
-        str1 = vp3ReadString(file);
-        str2 = vp3ReadString(file);
-        str3 = vp3ReadString(file);
+        threadColorNumber = vp3ReadString(file);
+        colorName = vp3ReadString(file);
+        threadVendor = vp3ReadString(file);
 
-        unknownX2 = binaryReadInt32BE(file);
-        unknownY2 = binaryReadInt32BE(file);
-        /*fs.Seek(0x02, SeekOrigin.Current); */
+        offsetToNextColorX = binaryReadInt32BE(file);
+        offsetToNextColorY = binaryReadInt32BE(file);
+
         unknownThreadString = binaryReadInt16BE(file);
         embFile_seek(file, unknownThreadString, SEEK_CUR);
         numberOfBytesInColor = binaryReadInt32BE(file);
         embFile_seek(file, 0x3, SEEK_CUR);
         while(embFile_tell(file) < colorSectionOffset - 1)
         {
+            int lastFilePosition = embFile_tell(file);
+
             int x = vp3Decode(binaryReadByte(file));
             int y = vp3Decode(binaryReadByte(file));
             if(x == 0x80)
@@ -225,6 +234,11 @@ int readVp3(EmbPattern* pattern, const char* fileName)
             {
                 embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, NORMAL, 1);
             }
+
+            if(embFile_tell(file) == lastFilePosition) {
+                embLog_error("format-vp3.c could not read stitch block in entirety\n");
+                return 0;
+            }
         }
         if(i + 1 < numberOfColors) embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
     }
@@ -239,10 +253,36 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
+void vp3WriteStringLen(EmbFile *file, const char *str, int len) {
+  binaryWriteUShortBE(file, len);
+  binaryWriteBytes(file, str, len);
+}
+
+void vp3WriteString(EmbFile *file, const char *str) {
+  vp3WriteStringLen(file, str, strlen(str));
+}
+
+void vp3PatchByteCount(EmbFile *file, int offset, int adjustment) {
+  int currentPos = embFile_tell(file);
+  embFile_seek(file, offset, SEEK_SET);
+  embLog_error("Patching byte count: %d\n", currentPos - offset + adjustment);
+  binaryWriteIntBE(file, currentPos - offset + adjustment);
+  embFile_seek(file, currentPos, SEEK_SET);
+}
+
 /*! Writes the data from \a pattern to a file with the given \a fileName.
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeVp3(EmbPattern* pattern, const char* fileName)
 {
+    EmbFile *file = 0;
+    EmbRect bounds;
+    int remainingBytesPos, remainingBytesPos2;
+    int colorSectionStitchBytes;
+    int first = 1;
+    int numberOfColors = 0;
+    EmbColor color;
+    EmbStitchList *mainPointer, *pointer;
+
     if(!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vp3.c writeVp3(), fileName argument is null\n"); return 0; }
 
@@ -252,9 +292,207 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    /* TODO: embFile_open() needs to occur here after the check for no stitches */
+    bounds = embPattern_calcBoundingBox(pattern);
 
-    return 0; /*TODO: finish writeVp3 */
+    file = embFile_open(fileName, "wb");
+    if(!file)
+    {
+        embLog_error("format-vp3.c writePes(), cannot open %s for writing\n", fileName);
+        return 0;
+    }
+
+    embPattern_flipVertical(pattern);
+
+    binaryWriteBytes(file, "%vsm%", 5);
+    binaryWriteByte(file, 0);
+    vp3WriteString(file, "Embroiderymodder");
+    binaryWriteByte(file, 0);
+    binaryWriteByte(file, 2);
+    binaryWriteByte(file, 0);
+
+    remainingBytesPos = embFile_tell(file);
+    binaryWriteInt(file, 0); /* placeholder */
+    vp3WriteString(file, "");
+    binaryWriteIntBE(file, bounds.right * 1000);
+    binaryWriteIntBE(file, bounds.bottom * 1000);
+    binaryWriteIntBE(file, bounds.left * 1000);
+    binaryWriteIntBE(file, bounds.top * 1000);
+    binaryWriteInt(file, 0); /* this would be some (unknown) function of thread length */
+    binaryWriteByte(file, 0);
+
+    numberOfColors = 0;
+
+    mainPointer = pattern->stitchList;
+    while(mainPointer)
+    {
+        int flag;
+        EmbColor newColor;
+
+        pointer = mainPointer;
+        flag = pointer->stitch.flags;
+        newColor = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
+        if(newColor.r != color.r || newColor.g != color.g || newColor.b != color.b)
+        {
+            numberOfColors++;
+            color.r = newColor.r;
+            color.g = newColor.g;
+            color.b = newColor.b;
+        }
+
+        while(pointer && (flag == pointer->stitch.flags))
+        {
+            pointer = pointer->next;
+        }
+        mainPointer = pointer;
+    }
+
+    binaryWriteByte(file, numberOfColors);
+    binaryWriteByte(file, 12);
+    binaryWriteByte(file, 0);
+    binaryWriteByte(file, 1);
+    binaryWriteByte(file, 0);
+    binaryWriteByte(file, 3);
+    binaryWriteByte(file, 0);
+
+    remainingBytesPos2 = embFile_tell(file);
+    binaryWriteInt(file, 0); /* placeholder */
+
+    binaryWriteIntBE(file, 0); /* origin X */
+    binaryWriteIntBE(file, 0); /* origin Y */
+    binaryWriteByte(file, 0);
+    binaryWriteByte(file, 0);
+    binaryWriteByte(file, 0);
+
+    binaryWriteIntBE(file, bounds.right * 1000);
+    binaryWriteIntBE(file, bounds.bottom * 1000);
+    binaryWriteIntBE(file, bounds.left * 1000);
+    binaryWriteIntBE(file, bounds.top * 1000);
+
+    binaryWriteIntBE(file, (bounds.right - bounds.left) * 1000);
+    binaryWriteIntBE(file, (bounds.bottom - bounds.top) * 1000);
+
+    vp3WriteString(file, "");
+    binaryWriteShortBE(file, 25700);
+    binaryWriteIntBE(file, 4096);
+    binaryWriteIntBE(file, 0);
+    binaryWriteIntBE(file, 0);
+    binaryWriteIntBE(file, 4096);
+
+    binaryWriteBytes(file, "xxPP\x01\0", 6);
+    vp3WriteString(file, "");
+    binaryWriteShortBE(file, numberOfColors);
+
+    mainPointer = pattern->stitchList;
+    while(mainPointer)
+    {
+        char colorName[8] = { 0 };
+        double lastX, lastY;
+        int colorSectionLengthPos;
+        EmbStitch s;
+        int flag;
+        int lastColor;
+
+        if(!first)
+            binaryWriteByte(file, 0);
+        binaryWriteByte(file, 0);
+        binaryWriteByte(file, 5);
+        binaryWriteByte(file, 0);
+
+        colorSectionLengthPos = embFile_tell(file);
+        binaryWriteInt(file, 0); /* placeholder */
+
+        pointer = mainPointer;
+        flag = pointer->stitch.flags;
+        color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
+
+        if(first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP) pointer = pointer->next;
+
+        s = pointer->stitch;
+        embLog_error("format-vp3.c DEBUG %d, %lf, %lf\n", s.flags, s.xx, s.yy);
+        binaryWriteIntBE(file, s.xx * 1000);
+        binaryWriteIntBE(file, -s.yy * 1000);
+        pointer = pointer->next;
+
+        first = 0;
+
+        lastX = s.xx;
+        lastY = s.yy;
+        lastColor = s.color;
+
+        binaryWriteByte(file, 1);
+        binaryWriteByte(file, 0);
+
+        binaryWriteByte(file, color.r);
+        binaryWriteByte(file, color.g);
+        binaryWriteByte(file, color.b);
+
+        binaryWriteByte(file, 0);
+        binaryWriteByte(file, 0);
+        binaryWriteByte(file, 0);
+        binaryWriteByte(file, 5);
+        binaryWriteByte(file, 40);
+
+        vp3WriteString(file, "");
+
+        sprintf(colorName, "#%02x%02x%02x", color.b, color.g, color.r);
+
+        vp3WriteString(file, colorName);
+        vp3WriteString(file, "");
+        
+        binaryWriteIntBE(file, 0);
+        binaryWriteIntBE(file, 0);
+
+        vp3WriteStringLen(file, "\0", 1);
+
+        colorSectionStitchBytes = embFile_tell(file);
+        binaryWriteInt(file, 0); /* placeholder */
+
+        binaryWriteByte(file, 10);
+        binaryWriteByte(file, 246);
+        binaryWriteByte(file, 0);
+
+        while(pointer)
+        {
+            int dx, dy;
+
+            EmbStitch s = pointer->stitch;
+            if(s.color != lastColor)
+                break;
+            if(s.flags & END || s.flags & STOP)
+                break;
+            
+            dx = (s.xx - lastX) * 10;
+            dy = (s.yy - lastY) * 10;
+            lastX = lastX + dx / 10.0; /* output is in ints, ensure rounding errors do not sum up */
+            lastY = lastY + dy / 10.0;
+
+            if(dx < -127 || dx > 127 || dy < -127 || dy > 127) {
+                binaryWriteByte(file, 128);
+                binaryWriteByte(file, 1);
+                binaryWriteShortBE(file, dx);
+                binaryWriteShortBE(file, dy);
+                binaryWriteByte(file, 128);
+                binaryWriteByte(file, 2);
+            } else {
+                binaryWriteByte(file, dx);
+                binaryWriteByte(file, dy);
+            }
+
+            pointer = pointer->next;
+        }
+
+        vp3PatchByteCount(file, colorSectionStitchBytes, -4);
+        vp3PatchByteCount(file, colorSectionLengthPos, -3);
+
+        mainPointer = pointer;
+    }
+
+    vp3PatchByteCount(file, remainingBytesPos2, -4);
+    vp3PatchByteCount(file, remainingBytesPos, -4);
+
+    embPattern_flipVertical(pattern);
+
+    return 1;
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

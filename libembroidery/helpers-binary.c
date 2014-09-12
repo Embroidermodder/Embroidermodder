@@ -135,6 +135,12 @@ void binaryWriteShort(EmbFile* file, short data)
     embFile_putc((data >> 8) & 0xFF, file);
 }
 
+void binaryWriteShortBE(EmbFile* file, short data)
+{
+    embFile_putc((data >> 8) & 0xFF, file);
+    embFile_putc(data & 0xFF, file);
+}
+
 void binaryWriteUShort(EmbFile* file, unsigned short data)
 {
     embFile_putc(data & 0xFF, file);
@@ -153,6 +159,14 @@ void binaryWriteInt(EmbFile* file, int data)
     embFile_putc((data >> 8) & 0xFF, file);
     embFile_putc((data >> 16) & 0xFF, file);
     embFile_putc((data >> 24) & 0xFF, file);
+}
+
+void binaryWriteIntBE(EmbFile* file, int data)
+{
+    embFile_putc((data >> 24) & 0xFF, file);
+    embFile_putc((data >> 16) & 0xFF, file);
+    embFile_putc((data >> 8) & 0xFF, file);
+    embFile_putc(data & 0xFF, file);
 }
 
 void binaryWriteUInt(EmbFile* file, unsigned int data)

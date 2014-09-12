@@ -26,9 +26,11 @@ void binaryReadUnicodeString(EmbFile* file, char *buffer, const int stringLength
 void binaryWriteByte(EmbFile* file, unsigned char data);
 void binaryWriteBytes(EmbFile* file, const char* data, int size);
 void binaryWriteShort(EmbFile* file, short data);
+void binaryWriteShortBE(EmbFile* file, short data);
 void binaryWriteUShort(EmbFile* file, unsigned short data);
 void binaryWriteUShortBE(EmbFile* file, unsigned short data);
 void binaryWriteInt(EmbFile* file, int data);
+void binaryWriteIntBE(EmbFile* file, int data);
 void binaryWriteUInt(EmbFile* file, unsigned int data);
 void binaryWriteUIntBE(EmbFile* file, unsigned int data);
 void binaryWriteFloat(EmbFile* file, float data);
