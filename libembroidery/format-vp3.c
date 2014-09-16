@@ -389,7 +389,6 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         double lastX, lastY;
         int colorSectionLengthPos;
         EmbStitch s;
-        int flag;
         int lastColor;
 
         if(!first)
@@ -402,7 +401,6 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         binaryWriteInt(file, 0); /* placeholder */
 
         pointer = mainPointer;
-        flag = pointer->stitch.flags;
         color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
 
         if(first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP) pointer = pointer->next;
