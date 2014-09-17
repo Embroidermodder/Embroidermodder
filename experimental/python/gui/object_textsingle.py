@@ -182,8 +182,8 @@ class TextSingleObject(BaseObject):
         # Backward or Upside Down.
         if objTextBackward or objTextUpsideDown:
 
-            qreal horiz = 1.0
-            qreal vert = 1.0
+            horiz = 1.0  # qreal
+            vert = 1.0   # qreal
             if objTextBackward:
                 horiz = -1.0
             if objTextUpsideDown:

@@ -86,7 +86,7 @@ class DimLeaderObject(BaseObject):
         super(DimLeaderObject, self).__init__(parent)
 
         qDebug("DimLeaderObject Constructor()")
-        self.init(x1, y1, x2, y2, rgb, Qt::SolidLine)  # TODO: getCurrentLineType
+        self.init(x1, y1, x2, y2, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
         #OVERLOADED IMPL?#     init(obj.objectX1(), obj.objectY1(), obj.objectX2(), obj.objectY2(), obj.objectColorRGB(), Qt.SolidLine)  # TODO: getCurrentLineType
@@ -119,7 +119,7 @@ class DimLeaderObject(BaseObject):
         # WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
         # WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
         # WARNING: All movement has to be handled explicitly by us, not by the scene.
-        self.setFlag(QGraphicsItem::ItemIsSelectable, true);
+        self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
         self.curved = False
         self.filled = True

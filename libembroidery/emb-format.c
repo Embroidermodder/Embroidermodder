@@ -233,7 +233,7 @@ int embFormat_info(const char* fileName, char** extension, char** description, c
         else if(!strcmp(ending, ".u00")) { *extension = ".u00"; *description = "Barudan Embroidery Format";    *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".u01")) { *extension = ".u01"; *description = "Barudan Embroidery Format";    *reader = ' '; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".vip")) { *extension = ".vip"; *description = "Pfaff Embroidery Format";      *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
-        else if(!strcmp(ending, ".vp3")) { *extension = ".vp3"; *description = "Pfaff Embroidery Format";      *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
+        else if(!strcmp(ending, ".vp3")) { *extension = ".vp3"; *description = "Pfaff Embroidery Format";      *reader = 'U'; *writer = 'U'; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".xxx")) { *extension = ".xxx"; *description = "Singer Embroidery Format";     *reader = 'U'; *writer = 'U'; *type = EMBFORMAT_STITCHONLY; }
         else if(!strcmp(ending, ".zsk")) { *extension = ".zsk"; *description = "ZSK USA Embroidery Format";    *reader = 'U'; *writer = ' '; *type = EMBFORMAT_STITCHONLY; }
         else return 0;
