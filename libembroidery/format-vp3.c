@@ -235,12 +235,14 @@ int readVp3(EmbPattern* pattern, const char* fileName)
                 embPattern_addStitchRel(pattern, x / 10.0, y / 10.0, NORMAL, 1);
             }
 
-            if(embFile_tell(file) == lastFilePosition) {
+            if(embFile_tell(file) == lastFilePosition)
+            {
                 embLog_error("format-vp3.c could not read stitch block in entirety\n");
                 return 0;
             }
         }
-        if(i + 1 < numberOfColors) embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
+        if(i + 1 < numberOfColors)
+            embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
     }
     embFile_close(file);
 
@@ -253,19 +255,22 @@ int readVp3(EmbPattern* pattern, const char* fileName)
     return 1;
 }
 
-void vp3WriteStringLen(EmbFile *file, const char *str, int len) {
+void vp3WriteStringLen(EmbFile* file, const char* str, int len)
+{
   binaryWriteUShortBE(file, len);
   binaryWriteBytes(file, str, len);
 }
 
-void vp3WriteString(EmbFile *file, const char *str) {
+void vp3WriteString(EmbFile* file, const char* str)
+{
   vp3WriteStringLen(file, str, strlen(str));
 }
 
-void vp3PatchByteCount(EmbFile *file, int offset, int adjustment) {
+void vp3PatchByteCount(EmbFile* file, int offset, int adjustment)
+{
   int currentPos = embFile_tell(file);
   embFile_seek(file, offset, SEEK_SET);
-  embLog_error("Patching byte count: %d\n", currentPos - offset + adjustment);
+  embLog_print("Patching byte count: %d\n", currentPos - offset + adjustment);
   binaryWriteIntBE(file, currentPos - offset + adjustment);
   embFile_seek(file, currentPos, SEEK_SET);
 }
@@ -281,7 +286,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
     int first = 1;
     int numberOfColors = 0;
     EmbColor color;
-    EmbStitchList *mainPointer, *pointer;
+    EmbStitchList *mainPointer = 0, *pointer = 0;
 
     if(!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-vp3.c writeVp3(), fileName argument is null\n"); return 0; }
@@ -297,7 +302,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
     file = embFile_open(fileName, "wb");
     if(!file)
     {
-        embLog_error("format-vp3.c writePes(), cannot open %s for writing\n", fileName);
+        embLog_error("format-vp3.c writeVp3(), cannot open %s for writing\n", fileName);
         return 0;
     }
 
@@ -305,7 +310,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
 
     binaryWriteBytes(file, "%vsm%", 5);
     binaryWriteByte(file, 0);
-    vp3WriteString(file, "Embroiderymodder");
+    vp3WriteString(file, "Embroidermodder");
     binaryWriteByte(file, 0);
     binaryWriteByte(file, 2);
     binaryWriteByte(file, 0);
@@ -403,10 +408,11 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         pointer = mainPointer;
         color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
 
-        if(first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP) pointer = pointer->next;
+        if(first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP)
+            pointer = pointer->next;
 
         s = pointer->stitch;
-        embLog_error("format-vp3.c DEBUG %d, %lf, %lf\n", s.flags, s.xx, s.yy);
+        embLog_print("format-vp3.c DEBUG %d, %lf, %lf\n", s.flags, s.xx, s.yy);
         binaryWriteIntBE(file, s.xx * 1000);
         binaryWriteIntBE(file, -s.yy * 1000);
         pointer = pointer->next;
@@ -436,7 +442,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
 
         vp3WriteString(file, colorName);
         vp3WriteString(file, "");
-        
+
         binaryWriteIntBE(file, 0);
         binaryWriteIntBE(file, 0);
 
@@ -458,20 +464,23 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
                 break;
             if(s.flags & END || s.flags & STOP)
                 break;
-            
+
             dx = (s.xx - lastX) * 10;
             dy = (s.yy - lastY) * 10;
             lastX = lastX + dx / 10.0; /* output is in ints, ensure rounding errors do not sum up */
             lastY = lastY + dy / 10.0;
 
-            if(dx < -127 || dx > 127 || dy < -127 || dy > 127) {
+            if(dx < -127 || dx > 127 || dy < -127 || dy > 127)
+            {
                 binaryWriteByte(file, 128);
                 binaryWriteByte(file, 1);
                 binaryWriteShortBE(file, dx);
                 binaryWriteShortBE(file, dy);
                 binaryWriteByte(file, 128);
                 binaryWriteByte(file, 2);
-            } else {
+            }
+            else
+            {
                 binaryWriteByte(file, dx);
                 binaryWriteByte(file, dy);
             }
