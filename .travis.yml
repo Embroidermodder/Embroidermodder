@@ -19,9 +19,7 @@ before_script:
 
 script:
     # Do only a basic build for pull requests, otherwise build for all platforms
-    - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] && cd project-files/qmake'
-    - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] && qmake'
-    - '[ "${TRAVIS_PULL_REQUEST}" != "false" ] && make'
+    - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && : || cd project-files/qmake && qmake && make'
     # linux64
     - PLATFORM=linux64
     - cd ~
