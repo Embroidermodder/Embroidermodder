@@ -32,7 +32,7 @@ script:
     - git fetch origin
     - git checkout master
     - git commit --allow-empty -m "https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH}"
-    - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && git push origin master &>/dev/null'
+    - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && git push origin master &>/dev/null || echo "" '
     # osx64
     - PLATFORM=osx64
     - cd ~
@@ -43,7 +43,7 @@ script:
     - git fetch origin
     - git checkout master
     - git commit --allow-empty -m "https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH}"
-    - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && git push origin master &>/dev/null'
+    - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && git push origin master &>/dev/null || echo "" '
 
 env:
   global:
