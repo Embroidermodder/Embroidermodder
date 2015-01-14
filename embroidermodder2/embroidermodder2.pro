@@ -236,6 +236,35 @@ INSTALLS += embapp      \
 
 #TODO: Mac OSX: make install
 macx {
+    bundlecommands.path  = "Contents/MacOS"
+    bundlecommands.files = "commands"
+
+    bundlehelp.path  = "Contents/MacOS"
+    bundlehelp.files = "help"
+
+    bundleicons.path  = "Contents/MacOS"
+    bundleicons.files = "icons"
+
+    bundleimages.path  = "Contents/MacOS"
+    bundleimages.files = "images"
+
+    bundlesamples.path  = "Contents/MacOS"
+    bundlesamples.files = "samples"
+
+    bundletrans.path = "Contents/MacOS"
+    bundletrans.files = "translations"
+
+    bundletips.path  = "Contents/MacOS"
+    bundletips.files = "tips.txt"
+
+    QMAKE_BUNDLE_DATA += bundlecommands \
+                         bundlehelp \
+                         bundleicons \
+                         bundleimages \
+                         bundlesamples \
+                         bundletrans \
+                         bundletips \
+
 }
 
 #TODO: Windows: make install
