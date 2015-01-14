@@ -10,7 +10,7 @@ before_install:
     - sudo apt-get update -qq
 
 install:
-    - sudo apt-get install git
+    - [ "${TRAVIS_PULL_REQUEST}" = "false" ] && sudo apt-get install git || sudo apt-get install git qt4-qmake libqt4-opengl-dev kdelibs5-dev valgrind
     - git config --global user.email \<\>
     - git config --global user.name "Embroidermodder-Travis"
 
@@ -19,6 +19,8 @@ before_script:
     - uname -a
 
 script:
+    # Do only a basic build for pull requests, otherwise build for all platforms
+    - [ "${TRAVIS_PULL_REQUEST}" != "false" ] && cd project-files/qmake && qmake && make
     # linux64
     - PLATFORM=linux64
     - cd ~
@@ -29,7 +31,7 @@ script:
     - git fetch origin
     - git checkout master
     - git commit --allow-empty -m "https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH}"
-    - git push origin master &>/dev/null
+    - [ "${TRAVIS_PULL_REQUEST}" = "false" ] && git push origin master &>/dev/null
     # osx64
     - PLATFORM=osx64
     - cd ~
@@ -40,7 +42,7 @@ script:
     - git fetch origin
     - git checkout master
     - git commit --allow-empty -m "https://github.com/Embroidermodder/Embroidermodder/commit/${NIGHTLY_HASH}"
-    - git push origin master &>/dev/null
+    - [ "${TRAVIS_PULL_REQUEST}" = "false" ] && git push origin master &>/dev/null
 
 env:
   global:
