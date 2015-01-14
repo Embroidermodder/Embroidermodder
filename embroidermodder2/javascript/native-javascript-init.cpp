@@ -128,7 +128,8 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
     //      the QScriptEngine would only call the last script evaluated (which happens to be main() in another script).
     //      Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
     //      Do not change this code unless you really know what you are doing. I mean it.
-    QFile file("commands/" + cmdName + "/" + cmdName + ".js");
+    QString appDir = qApp->applicationDirPath();
+    QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
     file.open(QIODevice::ReadOnly);
     QString script(file.readAll());
     file.close();
@@ -233,7 +234,7 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
 
     engine->evaluate(script);
 
-    QSettings settings("commands/" + cmdName + "/" + cmdName + ".ini", QSettings::IniFormat);
+    QSettings settings(appDir + "/commands/" + cmdName + "/" + cmdName + ".ini", QSettings::IniFormat);
     QString menuName    = settings.value("Menu/Name",    "Lost & Found").toString();
     int     menuPos     = settings.value("Menu/Position",             0).toInt();
     QString toolbarName = settings.value("ToolBar/Name", "Lost & Found").toString();

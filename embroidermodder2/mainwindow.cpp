@@ -44,6 +44,27 @@ MainWindow::MainWindow() : QMainWindow(0)
 {
     readSettings();
 
+    QString appDir = qApp->applicationDirPath();
+    //Verify that files/directories needed are actually present.
+    QFileInfo check(appDir + "/commands");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/help");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/icons");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/images");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/samples");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+    check = QFileInfo(appDir + "/translations");
+    if(!check.exists())
+        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
+
     QString lang = getSettingsGeneralLanguage();
     qDebug("language: %s", qPrintable(lang));
     if(lang == "system")
@@ -51,17 +72,17 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //Load translations for the Embroidermodder 2 GUI
     QTranslator translatorEmb;
-    translatorEmb.load("translations/" + lang + "/embroidermodder2_" + lang);
+    translatorEmb.load(appDir + "/translations/" + lang + "/embroidermodder2_" + lang);
     qApp->installTranslator(&translatorEmb);
 
     //Load translations for the commands
     QTranslator translatorCmd;
-    translatorCmd.load("translations/" + lang + "/commands_" + lang);
+    translatorCmd.load(appDir + "/translations/" + lang + "/commands_" + lang);
     qApp->installTranslator(&translatorCmd);
 
     //Load translations provided by Qt - this covers dialog buttons and other common things.
     QTranslator translatorQt;
-    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    translatorQt.load("qt_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)); //TODO: ensure this always loads, ship a copy of this with the app
     qApp->installTranslator(&translatorQt);
 
     //Init
@@ -102,7 +123,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -172,12 +193,12 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor("icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor("icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -193,7 +214,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     javaInitNatives(engine);
 
     //Load all commands in a loop
-    QDir commandDir("commands");
+    QDir commandDir(appDir + "/commands");
     QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     foreach(QString cmdName, cmdList)
     {
@@ -218,7 +239,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     showNormal();
 
     //Load tips from external file
-    QFile tipFile("tips.txt");
+    QFile tipFile(appDir + "/tips.txt");
     if(tipFile.open(QFile::ReadOnly))
     {
         QTextStream stream(&tipFile);

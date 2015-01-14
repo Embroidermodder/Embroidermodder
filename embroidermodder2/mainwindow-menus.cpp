@@ -50,12 +50,13 @@ void MainWindow::createViewMenu()
 {
     qDebug("MainWindow createViewMenu()");
 
+    QString appDir = qApp->applicationDirPath();
     QString icontheme = getSettingsGeneralIconTheme();
 
     menuBar()->addMenu(viewMenu);
     viewMenu->addSeparator();
     viewMenu->addMenu(zoomMenu);
-    zoomMenu->setIcon(QIcon("icons/" + icontheme + "/zoom" + ".png"));
+    zoomMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/zoom" + ".png"));
     zoomMenu->addAction(actionHash.value(ACTION_zoomrealtime));
     zoomMenu->addAction(actionHash.value(ACTION_zoomprevious));
     zoomMenu->addSeparator();
@@ -71,7 +72,7 @@ void MainWindow::createViewMenu()
     zoomMenu->addAction(actionHash.value(ACTION_zoomall));
     zoomMenu->addAction(actionHash.value(ACTION_zoomextents));
     viewMenu->addMenu(panMenu);
-    panMenu->setIcon(QIcon("icons/" + icontheme + "/pan" + ".png"));
+    panMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/pan" + ".png"));
     panMenu->addAction(actionHash.value(ACTION_panrealtime));
     panMenu->addAction(actionHash.value(ACTION_panpoint));
     panMenu->addSeparator();

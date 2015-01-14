@@ -95,7 +95,9 @@ void MainWindow::createAllActions()
 
 QAction *MainWindow::createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted)
 {
-    QAction *ACTION = new QAction(QIcon("icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
+    QString appDir = qApp->applicationDirPath();
+
+    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
     // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
@@ -177,7 +179,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
 
     else if(scripted)
     {
-                                                  ACTION->setIcon(QIcon("commands/" + icon + "/" + icon + ".png"));
+                                                  ACTION->setIcon(QIcon(appDir + "/commands/" + icon + "/" + icon + ".png"));
                                                   connect(ACTION, SIGNAL(triggered()), this, SLOT(runCommand()));
     }
     else

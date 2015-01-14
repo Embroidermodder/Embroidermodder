@@ -181,11 +181,12 @@ void MainWindow::about()
     //TODO: QTabWidget for about dialog
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     qDebug("about()");
+    QString appDir = qApp->applicationDirPath();
     QString appName = QApplication::applicationName();
     QString title = "About " + appName;
 
     QDialog dialog(this);
-    ImageWidget img("images/logo-small");
+    ImageWidget img(appDir + "/images/logo-small");
     QLabel text(appName + tr("\n\n") +
                           tr("http://embroidermodder.github.io") +
                           tr("\n\n") +
@@ -236,6 +237,8 @@ void MainWindow::tipOfTheDay()
 {
     qDebug("tipOfTheDay()");
 
+    QString appDir = qApp->applicationDirPath();
+
     wizardTipOfTheDay = new QWizard(this);
     wizardTipOfTheDay->setAttribute(Qt::WA_DeleteOnClose);
     wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
@@ -243,7 +246,7 @@ void MainWindow::tipOfTheDay()
 
     QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
 
-    ImageWidget* imgBanner = new ImageWidget("images/did-you-know.png", wizardTipOfTheDay);
+    ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
 
     if(settings_general_current_tip >= listTipOfTheDay.size())
         settings_general_current_tip = 0;
