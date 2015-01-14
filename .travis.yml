@@ -1,3 +1,4 @@
+# Travis-CI can't handle fancy shell syntax or some types of one-liners, so keep it simple and don't trust their lint tool to catch many problems.
 language:
     - c
 
