@@ -306,6 +306,8 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
+    /* embPattern_correctForMaxStitchLength(pattern, 128, 128); TODO: This is not exactly correct, see GitHub Issue #60 */
+
     embPattern_flipVertical(pattern);
 
     binaryWriteBytes(file, "%vsm%", 5);
@@ -496,6 +498,8 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
 
     vp3PatchByteCount(file, remainingBytesPos2, -4);
     vp3PatchByteCount(file, remainingBytesPos, -4);
+
+    embFile_close(file);
 
     embPattern_flipVertical(pattern);
 
