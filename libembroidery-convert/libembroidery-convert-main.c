@@ -65,7 +65,7 @@ void usage(void)
     printf("| Total: |  %3d  |  %3d  |                                                    |\n", numReaders, numWriters);
     printf("|________|_______|_______|____________________________________________________|\n");
     printf("|                                                                             |\n");
-    printf("|                   http://embroidermodder.github.io                          |\n");
+    printf("|                         http://embroidermodder.org                          |\n");
     printf("|_____________________________________________________________________________|\n");
     printf("\n");
 }
