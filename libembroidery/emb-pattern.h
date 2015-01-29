@@ -72,6 +72,7 @@ extern EMB_PUBLIC EmbRect EMB_CALL embPattern_calcBoundingBox(EmbPattern* p);
 extern EMB_PUBLIC void EMB_CALL embPattern_flipHorizontal(EmbPattern* p);
 extern EMB_PUBLIC void EMB_CALL embPattern_flipVertical(EmbPattern* p);
 extern EMB_PUBLIC void EMB_CALL embPattern_flip(EmbPattern* p, int horz, int vert);
+extern EMB_PUBLIC void EMB_CALL embPattern_combineJumpStitches(EmbPattern* p);
 extern EMB_PUBLIC void EMB_CALL embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
 extern EMB_PUBLIC void EMB_CALL embPattern_center(EmbPattern* p);
 extern EMB_PUBLIC void EMB_CALL embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
