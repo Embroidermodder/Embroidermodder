@@ -46,11 +46,7 @@ bool SaveObject::save(const QString &fileName)
     bool writeSuccessful = false;
     int i;
 
-    char* unusedStr = 0;
-    char unusedChar;
-
-    if(!embFormat_info(qPrintable(fileName), &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType))
-        return false;
+    formatType = embFormat_typeFromName(qPrintable(fileName));
     if(formatType == EMBFORMAT_UNSUPPORTED)
         return false;
 

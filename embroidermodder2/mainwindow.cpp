@@ -689,10 +689,7 @@ void MainWindow::hideUnimplemented()
 
 bool MainWindow::validFileFormat(const QString& fileName)
 {
-    char* unusedStr = 0;
-    char unusedChar;
-    int unusedInt;
-    if(embFormat_info(qPrintable(fileName), &unusedStr, &unusedStr, &unusedChar, &unusedChar, &unusedInt))
+    if(embFormat_typeFromName(qPrintable(fileName)))
         return true;
     return false;
 }
@@ -713,11 +710,10 @@ void MainWindow::loadFormats()
     //Stable + Unstable
     stable = 'S'; unstable = 'U';
 
-    char* extension = 0;
-    char* description = 0;
+    const char* extension = 0;
+    const char* description = 0;
     char readerState;
     char writerState;
-    int type;
 
     EmbFormatList* curFormat = 0;
     EmbFormatList* formatList = embFormatList_create();
@@ -725,26 +721,29 @@ void MainWindow::loadFormats()
     curFormat = formatList;
     while(curFormat)
     {
-        if(embFormat_info(curFormat->extension, &extension, &description, &readerState, &writerState, &type))
+        extension = embFormat_extension(curFormat);
+        description = embFormat_description(curFormat);
+        readerState = embFormat_readerState(curFormat);
+        writerState = embFormat_writerState(curFormat);
+
+        QString upperExt = QString(extension).toUpper();
+        supportedStr = "*" + upperExt + " ";
+        individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
+        if(readerState == stable || readerState == unstable)
         {
-            QString upperExt = QString(extension).toUpper();
-            supportedStr = "*" + upperExt + " ";
-            individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
-            if(readerState == stable || readerState == unstable)
+            //Exclude color file formats from open dialogs
+            if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
             {
-                //Exclude color file formats from open dialogs
-                if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
-                {
-                    supportedReaders.append(supportedStr);
-                    individualReaders.append(individualStr);
-                }
-            }
-            if(writerState == stable || writerState == unstable)
-            {
-                supportedWriters.append(supportedStr);
-                individualWriters.append(individualStr);
+                supportedReaders.append(supportedStr);
+                individualReaders.append(individualStr);
             }
         }
+        if(writerState == stable || writerState == unstable)
+        {
+            supportedWriters.append(supportedStr);
+            individualWriters.append(individualStr);
+        }
+
         curFormat = curFormat->next;
     }
     embFormatList_free(formatList);

@@ -16,15 +16,30 @@ extern "C" {
 typedef struct EmbFormatList_
 {
     char* extension;
+    char* description;
+    char reader;
+    char writer;
+    int type;
     struct EmbFormatList_* next;
 } EmbFormatList;
 
 extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
-extern EMB_PRIVATE EmbFormatList* EMB_CALL embFormatList_add(EmbFormatList* pointer, char* data);
+extern EMB_PRIVATE EmbFormatList* EMB_CALL embFormatList_add(EmbFormatList* pointer, char* extension, char* description, char reader, char writer, int type);
 extern EMB_PUBLIC int EMB_CALL embFormatList_count(EmbFormatList* pointer);
 extern EMB_PUBLIC int EMB_CALL embFormatList_empty(EmbFormatList* pointer);
 extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* pointer);
-extern EMB_PUBLIC int EMB_CALL embFormat_info(const char* fileName, char** extension, char** description, char* reader, char* writer, int* type);
+
+extern EMB_PUBLIC const char* EMB_CALL embFormat_extension(EmbFormatList* pointer);
+extern EMB_PUBLIC const char* EMB_CALL embFormat_description(EmbFormatList* pointer);
+extern EMB_PUBLIC char EMB_CALL embFormat_readerState(EmbFormatList* pointer);
+extern EMB_PUBLIC char EMB_CALL embFormat_writerState(EmbFormatList* pointer);
+extern EMB_PUBLIC int EMB_CALL embFormat_type(EmbFormatList* pointer);
+
+extern EMB_PUBLIC const char* EMB_CALL embFormat_extensionFromName(const char* fileName);
+extern EMB_PUBLIC const char* EMB_CALL embFormat_descriptionFromName(const char* fileName);
+extern EMB_PUBLIC char EMB_CALL embFormat_readerStateFromName(const char* fileName);
+extern EMB_PUBLIC char EMB_CALL embFormat_writerStateFromName(const char* fileName);
+extern EMB_PUBLIC int EMB_CALL embFormat_typeFromName(const char* fileName);
 
 #ifdef __cplusplus
 }

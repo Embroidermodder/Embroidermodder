@@ -9,11 +9,10 @@ void usage(void)
 {
     EmbFormatList* formatList = 0;
     EmbFormatList* curFormat = 0;
-    char* extension = 0;
-    char* description = 0;
+    const char* extension = 0;
+    const char* description = 0;
     char readerState;
     char writerState;
-    int type;
     int numReaders = 0;
     int numWriters = 0;
     printf(" _____________________________________________________________________________ \n");
@@ -49,12 +48,15 @@ void usage(void)
     curFormat = formatList;
     while(curFormat)
     {
-        if(embFormat_info(curFormat->extension, &extension, &description, &readerState, &writerState, &type))
-        {
-            numReaders += readerState != ' '? 1 : 0;
-            numWriters += writerState != ' '? 1 : 0;
-            printf("|  %-4s  |   %c   |   %c   |  %-49s |\n", extension, readerState, writerState, description);
-        }
+        extension = embFormat_extension(curFormat);
+        description = embFormat_description(curFormat);
+        readerState = embFormat_readerState(curFormat);
+        writerState = embFormat_writerState(curFormat);
+
+        numReaders += readerState != ' '? 1 : 0;
+        numWriters += writerState != ' '? 1 : 0;
+        printf("|  %-4s  |   %c   |   %c   |  %-49s |\n", extension, readerState, writerState, description);
+
         curFormat = curFormat->next;
     }
     embFormatList_free(formatList);
@@ -87,8 +89,6 @@ int main(int argc, const char* argv[])
 {
     EmbPattern* p = 0;
     int successful = 0, i = 0;
-    char* unusedStr = 0;
-    char unusedChar;
     int formatType;
 #ifdef SHORT_WAY
     if(argc < 3)
@@ -108,10 +108,10 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    embFormat_info(argv[1], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+    formatType = embFormat_typeFromName(argv[1]);
     if(formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
     {
-        embFormat_info(argv[2], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+        formatType = embFormat_typeFromName(argv[2]);
         if(formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(p);
     }
@@ -158,10 +158,10 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    embFormat_info(argv[1], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+    formatType = embFormat_typeFromName(argv[1]);
     if(formatType == EMBFORMAT_OBJECTONLY && argc == 3) /* TODO: fix this to work when writing multiple files */
     {
-        embFormat_info(argv[2], &unusedStr, &unusedStr, &unusedChar, &unusedChar, &formatType);
+        formatType = embFormat_typeFromName(argv[2]);
         if(formatType == EMBFORMAT_STITCHONLY)
             embPattern_movePolylinesToStitchList(p);
     }
