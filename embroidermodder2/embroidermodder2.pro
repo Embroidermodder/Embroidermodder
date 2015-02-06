@@ -3,6 +3,8 @@ CONFIG -= debug_and_release
 CONFIG += silent #Comment this out for verbose output
 #CONFIG += deploy #Uncomment this to create a release build or by running this from the terminal: qmake CONFIG+=deploy
 
+DEFINES += BUILD_GIT_HASH=\\\"$$system(git rev-parse HEAD)\\\" #Store the git hash as a string
+
 deploy {
     message("release build")
     CONFIG -= debug

@@ -196,7 +196,12 @@ void MainWindow::about()
                           tr("\n") +
                           tr("User Interface by Jonathan Greig.") +
                           tr("\n\n") +
-                          tr("Free under the zlib/libpng license."));
+                          tr("Free under the zlib/libpng license.")
+                          #if defined(BUILD_GIT_HASH)
+                          + tr("\n\n") +
+                          tr("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
+                          #endif
+                          );
     text.setWordWrap(true);
 
     QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
