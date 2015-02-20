@@ -53,7 +53,7 @@ int readEmd(EmbPattern* pattern, const char* fileName)
                     embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
                     continue;
                 }
-                else if((b1 == 0x80))
+                else if(b1 == 0x80)
                 {
                     b0 = binaryReadUInt8(file);
                     b1 = binaryReadUInt8(file);
