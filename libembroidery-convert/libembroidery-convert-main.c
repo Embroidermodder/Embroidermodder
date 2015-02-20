@@ -24,6 +24,10 @@ void usage(void)
     printf("|                   / __|/  \\|   | | \\  / | __| _ \\|_   _|                    |\n");
     printf("|                  ( (__| () | | | |\\ \\/ /| __|   /  | |                      |\n");
     printf("|                   \\___|\\__/|_|___| \\__/ |___|_|\\_\\ |_|                      |\n");
+#if defined(EMSCRIPTEN)
+    printf("|                                                                             |\n");
+    printf("|                           * Emscripten Version *                            |\n");
+#endif
     printf("|_____________________________________________________________________________|\n");
     printf("|                                                                             |\n");
     printf("| Usage: libembroidery-convert fileToRead filesToWrite ...                    |\n");
