@@ -306,7 +306,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         return 0;
     }
 
-    /* embPattern_correctForMaxStitchLength(pattern, 128, 128); TODO: This is not exactly correct, see GitHub Issue #60 */
+    embPattern_correctForMaxStitchLength(pattern, 3200.0, 3200.0); /* VP3 can encode signed 16bit deltas */
 
     embPattern_flipVertical(pattern);
 
@@ -344,6 +344,10 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
             color.r = newColor.r;
             color.g = newColor.g;
             color.b = newColor.b;
+        }
+        else if(flag & END || flag & STOP)
+        {
+            numberOfColors++;
         }
 
         while(pointer && (flag == pointer->stitch.flags))
@@ -428,6 +432,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         binaryWriteByte(file, 1);
         binaryWriteByte(file, 0);
 
+        embLog_print("format-vp3.c writeVp3(), switching to color (%d, %d, %d)\n", color.r, color.g, color.b);
         binaryWriteByte(file, color.r);
         binaryWriteByte(file, color.g);
         binaryWriteByte(file, color.b);
