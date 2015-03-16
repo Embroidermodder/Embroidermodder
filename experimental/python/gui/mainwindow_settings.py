@@ -304,6 +304,13 @@ def DoWriteSettings(self): # void MainWindow::
     gSettings.setValue("Text/StyleOverline",                        self.settings_text_style_overline)
 
 
+def settingsPrompt(self):
+    """
+    Show the Settings Dialog and open on the "Prompt" tab page.
+    """
+    settingsDialog(self, "Prompt")
+
+
 def settingsDialog(self, showTab): # void MainWindow::
     """
     Show the Settings Dialog.

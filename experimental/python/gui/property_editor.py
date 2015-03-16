@@ -61,7 +61,8 @@ class PropertyEditor(QDockWidget):
        PropertyEditor
     """
     def __init__(self, iconDirectory, pickAddMode, widgetToFocus,
-                 title, parent, flags=Qt.WindowFlags):
+                 # title, parent, flags=Qt.WindowFlags):
+                 parent, flags=Qt.WindowFlags):
         """
         Default class constructor.
 

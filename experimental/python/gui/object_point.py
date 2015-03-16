@@ -136,7 +136,7 @@ class PointObject(BaseObject):
         updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = lineWeightPen()
         painter.setPen(paintPen)
 
@@ -155,7 +155,7 @@ class PointObject(BaseObject):
                 gripPoint = self.objectRubberPoint("GRIP_POINT")  # QPointF
                 if gripPoint == self.scenePos():
                     rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
-                    self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                    self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """

@@ -85,7 +85,7 @@ class MDISubWindow_TextEdit(QTextEdit):
         """
         super(MDISubWindow_TextEdit, self).__init__(parent)
 
-        print(filePath)
+        qDebug(filePath)
         self.filePath = filePath
         self.fileName = os.path.basename(os.path.abspath(filePath))
         self.fileExt = os.path.splitext(self.fileName)[1]

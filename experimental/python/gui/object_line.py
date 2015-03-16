@@ -252,14 +252,14 @@ class LineObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = lineWeightPen()
         painter.setPen(paintPen)
 
         if objectRubberMode() != OBJ_RUBBER_LINE:
             painter.drawLine(self.line())
 
-        if (objScene.property(ENABLE_LWT).toBool() and objScene.property(ENABLE_REAL).toBool()):
+        if (objScene.property(ENABLE_LWT) and objScene.property(ENABLE_REAL)):  # .toBool()
             realRender(painter, path())
 
     def updateRubber(self, painter):
@@ -278,7 +278,7 @@ class LineObject(BaseObject):
             self.setObjectEndPoint1(sceneStartPoint)
             self.setObjectEndPoint2(sceneQSnapPoint)
 
-            self.drawRubberLine(self.line(), painter, VIEW_COLOR_CROSSHAIR)
+            self.drawRubberLine(self.line(), painter, "VIEW_COLOR_CROSSHAIR")
 
         elif rubberMode == OBJ_RUBBER_GRIP:
 
@@ -293,7 +293,7 @@ class LineObject(BaseObject):
                     painter.drawLine(self.line().translated(self.mapFromScene(self.objectRubberPoint('')) - self.mapFromScene(gripPoint)))
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """

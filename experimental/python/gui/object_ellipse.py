@@ -311,7 +311,7 @@ class EllipseObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
@@ -333,7 +333,7 @@ class EllipseObject(BaseObject):
             itemLinePoint2  = self.mapFromScene(sceneLinePoint2)             # QPointF
             itemLine = QLineF(itemLinePoint1, itemLinePoint2)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS:
@@ -367,7 +367,7 @@ class EllipseObject(BaseObject):
             itemAxis2Point2 = self.mapFromScene(sceneAxis2Point2)  # QPointF
             itemLine = QLineF(itemCenterPoint, itemAxis2Point2)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS:
@@ -400,7 +400,7 @@ class EllipseObject(BaseObject):
             itemAxis2Point2 = self.mapFromScene(sceneAxis2Point2)  # QPointF
             itemLine = QLineF(itemCenterPoint, itemAxis2Point2)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_GRIP:
