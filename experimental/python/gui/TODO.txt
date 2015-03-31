@@ -23,7 +23,17 @@ C++ 2 Py Porting Notes:
      connect(settingsSnapAction, SIGNAL(triggered()), this, SLOT(settingsSnap()));
      vs.
      Python Qt
+     self.connect(obj, SIGNAL(triggered()), self, SLOT(slotDef()))
+     or
      obj.signalDef.connet(obj.slotDef)
+ 003.
+     C++ Qt
+     Qt::PenStyle
+     vs.
+     Python Qt
+     Qt.PenStyle
+ 004.
+     Stuff like QString, QList in PySide(isn't there). Just use python stuff respectively: Ex str, list, etc...
 """
 
  # Developer Search Tags/Comments. Generally commented in upper, but some are upper/lower/mixed depending on what it is.
@@ -76,9 +86,8 @@ C++ 2 Py Porting Notes:
        remove brunt of the GUI startup code.
  002. Less Dots/Generators Loops where can be done easily.
  003. Both GUIs PyInstaller Build/Packaging Scripts
- 004. ReSTify all the Docstrings for Sphinx Documentation Generation.
- 005. ??? Remove wx2.8 Code and support only wx.3.0 Classic and Phoenix or just Phoenix and remove all backwards compatible code.
- 006.
+ 004. Remove wx2.8 Code and support only wx.3.0 Classic and Phoenix or just Phoenix and remove all backwards compatible code.
+
 
  # Community discussion
  000. Don't be afraid to submit a request for something to be done.

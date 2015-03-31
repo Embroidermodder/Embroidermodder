@@ -60,10 +60,12 @@ from object_base import BaseObject
 
 class LineObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       LineObject
     """
     def __init__(self, x1, y1, x2, y2, rgb, parent):
         #OVERLOADED IMPL?# LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)

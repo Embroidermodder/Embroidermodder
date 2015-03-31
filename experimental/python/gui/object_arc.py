@@ -61,10 +61,12 @@ from object_base import BaseObject
 
 class ArcObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       ArcObject
     """
     def __init__(self, startX, startY, midX, midY, endX, endY, rgb, parent):
         #OVERLOADED IMPL?# ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)

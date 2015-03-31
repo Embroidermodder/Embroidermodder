@@ -55,10 +55,12 @@ from object_base import BaseObject
 
 class TextSingleObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       TextSingleObject
     """
     def __init__(self, strng, x, y, rgb, parent):
         #OVERLOADED IMPL?# TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)

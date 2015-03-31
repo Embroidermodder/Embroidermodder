@@ -60,10 +60,12 @@ from object_base import BaseObject
 
 class ImageObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       ImageObject
     """
     def __init__(self, x, y, w, h, rgb, parent):
         #OVERLOADED IMPL?# ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)

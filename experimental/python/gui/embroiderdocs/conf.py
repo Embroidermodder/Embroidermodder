@@ -404,6 +404,26 @@ from .tipoftheday_dialog import LightSwitchWidget, ImageWidget, TipOfTheDayDialo
 from .undo_editor import UndoEditor
 from .dialog_about import AboutDialog, EmbroidermodderLogo
 from .cmdprompt import CmdPrompt, CmdPromptSplitter, CmdPromptHandle, CmdPromptHistory, CmdPromptInput
+from .preview_dialog import PreviewDialog
+from .selectbox import SelectBox
+from .view import View
+from .undo_commands import (UndoableAddCommand, UndoableDeleteCommand, UndoableMoveCommand,
+        UndoableRotateCommand, UndoableScaleCommand, UndoableNavCommand,
+        UndoableGripEditCommand, UndoableMirrorCommand)
+from .object_base import BaseObject
+from .object_point import PointObject
+from .object_line import LineObject
+from .object_circle import CircleObject
+from .object_image import ImageObject
+from .object_rect import RectObject
+from .object_ellipse import EllipseObject
+from .object_arc import ArcObject
+from .object_path import PathObject
+from .object_dimleader import DimLeaderObject
+from .object_polygon import PolygonObject
+from .object_polyline import PolylineObject
+from .object_textsingle import TextSingleObject
+from .object_save import SaveObject
 # ONLY allow valid class names! else you will might like the end result.
 AUTHORIZED_ALLOWED_CLASSNAME_EVIL_STRINGS = [
     'EmbroidermodderMainWindow', 'MDIArea',
@@ -417,6 +437,26 @@ AUTHORIZED_ALLOWED_CLASSNAME_EVIL_STRINGS = [
     'UndoEditor',
     'AboutDialog', 'EmbroidermodderLogo',
     'CmdPrompt', 'CmdPromptSplitter', 'CmdPromptHandle', 'CmdPromptHistory', 'CmdPromptInput',
+    'PreviewDialog',
+    'SelectBox',
+    'View',
+    'UndoableAddCommand', 'UndoableDeleteCommand', 'UndoableMoveCommand',
+    'UndoableRotateCommand', 'UndoableScaleCommand', 'UndoableNavCommand',
+    'UndoableGripEditCommand', 'UndoableMirrorCommand',
+    'BaseObject',
+    'PointObject',
+    'LineObject',
+    'CircleObject',
+    'ImageObject',
+    'RectObject',
+    'EllipseObject',
+    'ArcObject',
+    'PathObject',
+    'DimLeaderObject',
+    'PolygonObject',
+    'PolylineObject',
+    'TextSingleObject',
+    'SaveObject',
     ]
 
 
@@ -500,7 +540,9 @@ class SphinxGenerateMethodsSummaryDirective(Directive):
                 if not hasattr(class_, '__init__'):
                     return []  # Probably an empty class. Ex: DebugClass(): pass
             else:
-                longest_string = len(max(newly_defined_methods, key=len))
+                longest_string = len(max(newly_defined_methods, key=len)) 
+                if longest_string < len(':meth:`~__init__`'):
+                    longest_string = len(':meth:`~__init__`')
 
             tableTopBottom = '=' * longest_string
             sphinxIndent = ' ' * 2

@@ -60,10 +60,12 @@ from object_base import BaseObject
 
 class EllipseObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       EllipseObject
     """
     def __init__(self, centerX, centerY, width, height, rgb, parent):
         #OVERLOADED IMPL?# EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)

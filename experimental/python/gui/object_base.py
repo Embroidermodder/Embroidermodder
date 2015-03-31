@@ -61,6 +61,8 @@ class BaseObject(QGraphicsPathItem):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       BaseObject
     """
     def __init__(self, parent=None):
         """
@@ -100,7 +102,7 @@ class BaseObject(QGraphicsPathItem):
         TOWRITE
 
         :param `rgb`: TOWRITE
-        :type `rgb`: `QRgb`_
+        :type `rgb`: QRgb
         """
         objPen.setColor(QColor(rgb))
         lwtPen.setColor(QColor(rgb))

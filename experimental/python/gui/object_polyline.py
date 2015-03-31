@@ -56,10 +56,12 @@ from object_base import BaseObject
 
 class PolylineObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PolylineObject
     """
     def __init__(self, x, y, w, h, rgb, parent):
         #OVERLOADED IMPL?# PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)

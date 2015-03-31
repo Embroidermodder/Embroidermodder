@@ -60,10 +60,12 @@ from object_base import BaseObject
 
 class DimLeaderObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       DimLeaderObject
     """
     def __init__(self, x1, y1, x2, y2, rgb, parent):
         #OVERLOADED IMPL?# DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)

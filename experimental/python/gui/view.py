@@ -26,12 +26,12 @@ Classes summary:
 try:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QDateTime, QLineF, QPoint, QPointF, QRect, QRectF, QSize # QChar, QString
+    from PySide.QtCore import qDebug, Qt, QObject, QDateTime, QLineF, QPoint, QPointF, QRect, QRectF, QSize # QChar, QString
     from PySide.QtGui import (qRgb, QAction, QApplication, QBrush, QColor, QFrame,
-        QGL, QGLFormat, QGLWidget, QGraphicsItem, QGraphicsScene, QGraphicsView,
-        QIcon, QList, QMenu, QMessageBox, QObject, QPainter, QPainterPath,
+        QGraphicsItem, QGraphicsScene, QGraphicsView,
+        QIcon, QMenu, QMessageBox, QPainter, QPainterPath,
         QPen, QPixmap, QPushButton, QRubberBand,
-        QTransform, QUndoStack # , QVector
+        QTransform, QUndoStack, # QGL, QGLFormat, QGLWidget, #, QList, QVector
         )
     PYSIDE = True
     PYQT4 = False
@@ -87,6 +87,8 @@ class View(QGraphicsView):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       View
     """
     def __init__(self, mw, theScene, parent=None):
         """
@@ -209,7 +211,7 @@ class View(QGraphicsView):
 
     def enterEvent(self, event):
         """
-        Handles the ``enterEvent`` event for :class:`MDIArea`.
+        Handles the ``enterEvent`` event for :class:`View`.
 
         :param `event`: A `QEvent`_ to be processed.
         """
@@ -1109,11 +1111,8 @@ class View(QGraphicsView):
                                     lines.append(QLineF(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14))
                                     lines.append(QLineF(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15))
 
-
-
                     painter.drawLines(lines)
                     painter.fillRect(QRectF(ox, oy, rvw, rhh), rulerColor)
-
 
         # ==================================================
         # Draw the crosshair
@@ -1131,7 +1130,6 @@ class View(QGraphicsView):
                                     self.mapToScene(viewMousePoint.x()+crosshairSize, viewMousePoint.y())))
             painter.drawRect(QRectF(self.mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
                                     self.mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)))
-
 
     def willUnderflowInt32(self, a, b):
         """
@@ -1714,7 +1712,7 @@ class View(QGraphicsView):
         # centerOn also updates the scrollbars, which shifts things out of wack o_O
         self.centerOn(centerPoint)
         # Reshift to the new center
-        offset = centerPoint - center()  # QPointF
+        offset = centerPoint - self.center()  # QPointF
         newCenter = centerPoint + offset # QPointF
         self.centerOn(newCenter)
 
@@ -1727,7 +1725,7 @@ class View(QGraphicsView):
         :param `viewPoint`: TOWRITE
         :type `viewPoint`: QPoint
         """
-        viewCenter = center()     # QPointF
+        viewCenter = self.center()     # QPointF
         pointBefore = scenePoint  # QPointF
         # centerOn also updates the scrollbars, which shifts things out of wack o_O
         self.centerOn(viewCenter)
@@ -1764,11 +1762,11 @@ class View(QGraphicsView):
 
                 mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle() # qreal
 
-                rad = radians(rot-mouseAngle)  # qreal
-                cosRot = qCos(rad)             # qreal
-                sinRot = qSin(rad)             # qreal
-                px = 0                         # qreal
-                py = 0                         # qreal
+                rad = radians(rot - mouseAngle)  # qreal
+                cosRot = qCos(rad)               # qreal
+                sinRot = qSin(rad)               # qreal
+                px = 0                           # qreal
+                py = 0                           # qreal
                 px -= x
                 py -= y
                 rotX = px * cosRot - py * sinRot  # qreal
@@ -1784,29 +1782,29 @@ class View(QGraphicsView):
                 y = previewPoint.y()       # qreal
                 scaleFactor = previewData  # qreal
 
-                factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor  # qreal
+                factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length() / scaleFactor  # qreal
 
                 previewObjectItemGroup.setScale(1)
                 previewObjectItemGroup.setPos(0,0)
 
                 if scaleFactor <= 0.0:
                     QMessageBox.critical(self, QObject.tr("ScaleFactor Error"),
-                                        QObject.tr("Hi there. If you are not a developer, report this as a bug. "
-                                        "If you are a developer, your code needs examined, and possibly your head too."))
+                                         QObject.tr("Hi there. If you are not a developer, report this as a bug. "
+                                         "If you are a developer, your code needs examined, and possibly your head too."))
 
                 else:
                     # Calculate the offset
                     oldX = 0  # qreal
                     oldY = 0  # qreal
                     scaleLine = QLineF(x, y, oldX, oldY)
-                    scaleLine.setLength(scaleLine.length()*factor)
-                    newX = scaleLine.x2() # qreal
-                    newY = scaleLine.y2() # qreal
+                    scaleLine.setLength(scaleLine.length() * factor)
+                    newX = scaleLine.x2()  # qreal
+                    newY = scaleLine.y2()  # qreal
 
                     dx = newX - oldX      # qreal
                     dy = newY - oldY      # qreal
 
-                    previewObjectItemGroup.setScale(previewObjectItemGroup.scale()*factor)
+                    previewObjectItemGroup.setScale(previewObjectItemGroup.scale() * factor)
                     previewObjectItemGroup.moveBy(dx, dy)
 
         if pastingActive:
@@ -1883,9 +1881,9 @@ class View(QGraphicsView):
 
         :rtype: bool
         """
-        origin  = self.mapToScene(0, 0)                         # QPointF
-        corner  = self.mapToScene(self.width(), self.height())  # QPointF
-        maxWidth  = corner.x() - origin.x()  # qreal
+        origin = self.mapToScene(0, 0)                         # QPointF
+        corner = self.mapToScene(self.width(), self.height())  # QPointF
+        maxWidth = corner.x() - origin.x()  # qreal
         maxHeight = corner.y() - origin.y()  # qreal
 
         zoomInLimit = 0.0000000001  # qreal
@@ -1901,9 +1899,9 @@ class View(QGraphicsView):
 
         :rtype: bool
         """
-        origin  = self.mapToScene(0, 0)                         # QPointF
-        corner  = self.mapToScene(self.width(), self.height())  # QPointF
-        maxWidth  = corner.x() - origin.x()  # qreal
+        origin = self.mapToScene(0, 0)                         # QPointF
+        corner = self.mapToScene(self.width(), self.height())  # QPointF
+        maxWidth = corner.x() - origin.x()  # qreal
         maxHeight = corner.y() - origin.y()  # qreal
 
         zoomOutLimit = 10000000000000.0  # qreal
@@ -2245,7 +2243,7 @@ class View(QGraphicsView):
                 dimLeaderObj = item # DimLeaderObject* dimLeaderObj = static_cast<DimLeaderObject*>(item);
                 if dimLeaderObj:
                     copyDimLeaderObj = DimLeaderObject(dimLeaderObj) # DimLeaderObject*
-                    copyList.append(copyDimLeaderObj);
+                    copyList.append(copyDimLeaderObj)
 
             elif objType == OBJ_TYPE_DIMLINEAR:
                 pass # TODO: cut/copy linear dimensions
@@ -2260,7 +2258,7 @@ class View(QGraphicsView):
                 elipObj = item # EllipseObject* elipObj = static_cast<EllipseObject*>(item);
                 if elipObj:
                     copyElipObj = EllipseObject(elipObj) # EllipseObject*
-                    copyList.append(copyElipObj);
+                    copyList.append(copyElipObj)
 
             elif objType == OBJ_TYPE_ELLIPSEARC:
                 pass # TODO: cut/copy elliptical arcs

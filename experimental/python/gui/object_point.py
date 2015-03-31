@@ -55,10 +55,12 @@ from object_base import BaseObject
 
 class PointObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PointObject
     """
     def __init__(self, x, y, rgb, parent):
         #OVERLOADED IMPL?# PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)

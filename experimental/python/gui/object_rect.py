@@ -60,10 +60,12 @@ from object_base import BaseObject
 
 class RectObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       RectObject
     """
     def __init__(self, x, y, w, h, rgb, parent):
         #OVERLOADED IMPL?# RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)

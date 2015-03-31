@@ -51,13 +51,31 @@ Contents:
    hacks
    mainwindow_settings
    mdisubwindow_textedit
+   object_arc
+   object_base
+   object_circle
    object_data
+   object_dimleader
+   object_ellipse
+   object_image
+   object_line
+   object_path
+   object_point
+   object_polygon
+   object_polyline
+   object_rect
+   object_save
+   object_textsingle
+   preview_dialog
    property_editor
+   selectbox
    settings_dialog
    statusbar
    statusbar_button
    tipoftheday_dialog
+   undo_commands
    undo_editor
+   view
    todolist
 
 

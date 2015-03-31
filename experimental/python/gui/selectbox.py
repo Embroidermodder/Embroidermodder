@@ -52,6 +52,8 @@ class SelectBox(QRubberBand):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       SelectBox
     """
     def __init__(self, s, parent=None):
         """
@@ -79,7 +81,7 @@ class SelectBox(QRubberBand):
         self._leftPen = QPen()
         self._rightPen = QPen()
 
-        self._boxDir = False  #: TODO: is this initial bool value right?
+        #TODO/PORT/SPHINX# self._boxDir = False  #: TODO: is this initial bool value right?
 
         # Default values
         self.setColors(QColor(Qt.darkGreen), QColor(Qt.green), QColor(Qt.darkBlue), QColor(Qt.blue), 32)
