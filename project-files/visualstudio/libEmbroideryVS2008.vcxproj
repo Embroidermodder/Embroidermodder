@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>libEmbroidery</ProjectName>
+    <ProjectGuid>{BD30C7BD-9230-4ED7-B581-11F14041909D}</ProjectGuid>
+    <RootNamespace>libEmbroidery</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\libgeometry;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBEMBROIDERY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBEMBROIDERY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\libembroidery\compound-file-difat.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file-directory.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file-fat.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file-header.c" />
+    <ClCompile Include="..\..\libembroidery\compound-file.c" />
+    <ClCompile Include="..\..\libembroidery\emb-arc.c" />
+    <ClCompile Include="..\..\libembroidery\emb-circle.c" />
+    <ClCompile Include="..\..\libembroidery\emb-color.c" />
+    <ClCompile Include="..\..\libembroidery\emb-compress.c" />
+    <ClCompile Include="..\..\libembroidery\emb-ellipse.c" />
+    <ClCompile Include="..\..\libembroidery\emb-file.c" />
+    <ClCompile Include="..\..\libembroidery\emb-flag.c" />
+    <ClCompile Include="..\..\libembroidery\emb-hash.c" />
+    <ClCompile Include="..\..\libembroidery\emb-hoop.c" />
+    <ClCompile Include="..\..\libembroidery\emb-layer.c" />
+    <ClCompile Include="..\..\libembroidery\emb-line.c" />
+    <ClCompile Include="..\..\libembroidery\emb-logging.c" />
+    <ClCompile Include="..\..\libembroidery\emb-path.c" />
+    <ClCompile Include="..\..\libembroidery\emb-pattern.c" />
+    <ClCompile Include="..\..\libembroidery\emb-point.c" />
+    <ClCompile Include="..\..\libembroidery\emb-polygon.c" />
+    <ClCompile Include="..\..\libembroidery\emb-polyline.c" />
+    <ClCompile Include="..\..\libembroidery\emb-reader-writer.c" />
+    <ClCompile Include="..\..\libembroidery\emb-rect.c" />
+    <ClCompile Include="..\..\libembroidery\emb-satin-line.c" />
+    <ClCompile Include="..\..\libembroidery\emb-settings.c" />
+    <ClCompile Include="..\..\libembroidery\emb-spline.c" />
+    <ClCompile Include="..\..\libembroidery\emb-stitch.c" />
+    <ClCompile Include="..\..\libembroidery\emb-thread.c" />
+    <ClCompile Include="..\..\libembroidery\emb-time.c" />
+    <ClCompile Include="..\..\libembroidery\emb-vector.c" />
+    <ClCompile Include="..\..\libembroidery\format-100.c" />
+    <ClCompile Include="..\..\libembroidery\format-10o.c" />
+    <ClCompile Include="..\..\libembroidery\format-art.c" />
+    <ClCompile Include="..\..\libembroidery\format-bmc.c" />
+    <ClCompile Include="..\..\libembroidery\format-bro.c" />
+    <ClCompile Include="..\..\libembroidery\format-cnd.c" />
+    <ClCompile Include="..\..\libembroidery\format-col.c" />
+    <ClCompile Include="..\..\libembroidery\format-csd.c" />
+    <ClCompile Include="..\..\libembroidery\format-csv.c" />
+    <ClCompile Include="..\..\libembroidery\format-dat.c" />
+    <ClCompile Include="..\..\libembroidery\format-dem.c" />
+    <ClCompile Include="..\..\libembroidery\format-dsb.c" />
+    <ClCompile Include="..\..\libembroidery\format-dst.c" />
+    <ClCompile Include="..\..\libembroidery\format-dsz.c" />
+    <ClCompile Include="..\..\libembroidery\format-dxf.c" />
+    <ClCompile Include="..\..\libembroidery\format-edr.c" />
+    <ClCompile Include="..\..\libembroidery\format-emd.c" />
+    <ClCompile Include="..\..\libembroidery\format-exp.c" />
+    <ClCompile Include="..\..\libembroidery\format-exy.c" />
+    <ClCompile Include="..\..\libembroidery\format-eys.c" />
+    <ClCompile Include="..\..\libembroidery\format-fxy.c" />
+    <ClCompile Include="..\..\libembroidery\format-gnc.c" />
+    <ClCompile Include="..\..\libembroidery\format-gt.c" />
+    <ClCompile Include="..\..\libembroidery\format-hus.c" />
+    <ClCompile Include="..\..\libembroidery\format-inb.c" />
+    <ClCompile Include="..\..\libembroidery\format-inf.c" />
+    <ClCompile Include="..\..\libembroidery\format-jef.c" />
+    <ClCompile Include="..\..\libembroidery\format-ksm.c" />
+    <ClCompile Include="..\..\libembroidery\format-max.c" />
+    <ClCompile Include="..\..\libembroidery\format-mit.c" />
+    <ClCompile Include="..\..\libembroidery\format-new.c" />
+    <ClCompile Include="..\..\libembroidery\format-ofm.c" />
+    <ClCompile Include="..\..\libembroidery\format-pcd.c" />
+    <ClCompile Include="..\..\libembroidery\format-pcm.c" />
+    <ClCompile Include="..\..\libembroidery\format-pcq.c" />
+    <ClCompile Include="..\..\libembroidery\format-pcs.c" />
+    <ClCompile Include="..\..\libembroidery\format-pec.c" />
+    <ClCompile Include="..\..\libembroidery\format-pel.c" />
+    <ClCompile Include="..\..\libembroidery\format-pem.c" />
+    <ClCompile Include="..\..\libembroidery\format-pes.c" />
+    <ClCompile Include="..\..\libembroidery\format-phb.c" />
+    <ClCompile Include="..\..\libembroidery\format-phc.c" />
+    <ClCompile Include="..\..\libembroidery\format-plt.c" />
+    <ClCompile Include="..\..\libembroidery\format-rgb.c" />
+    <ClCompile Include="..\..\libembroidery\format-sew.c" />
+    <ClCompile Include="..\..\libembroidery\format-shv.c" />
+    <ClCompile Include="..\..\libembroidery\format-sst.c" />
+    <ClCompile Include="..\..\libembroidery\format-stx.c" />
+    <ClCompile Include="..\..\libembroidery\format-svg.c" />
+    <ClCompile Include="..\..\libembroidery\format-t09.c" />
+    <ClCompile Include="..\..\libembroidery\format-tap.c" />
+    <ClCompile Include="..\..\libembroidery\format-thr.c" />
+    <ClCompile Include="..\..\libembroidery\format-txt.c" />
+    <ClCompile Include="..\..\libembroidery\format-u00.c" />
+    <ClCompile Include="..\..\libembroidery\format-u01.c" />
+    <ClCompile Include="..\..\libembroidery\format-vip.c" />
+    <ClCompile Include="..\..\libembroidery\format-vp3.c" />
+    <ClCompile Include="..\..\libembroidery\format-xxx.c" />
+    <ClCompile Include="..\..\libembroidery\format-zsk.c" />
+    <ClCompile Include="..\..\libembroidery\hashtable.c" />
+    <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
+    <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
+    <ClCompile Include="..\..\libembroidery\thread-color.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\libembroidery\compound-file-common.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-difat.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-directory.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-fat.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file-header.h" />
+    <ClInclude Include="..\..\libembroidery\compound-file.h" />
+    <ClInclude Include="..\..\libembroidery\emb-arc.h" />
+    <ClInclude Include="..\..\libembroidery\emb-circle.h" />
+    <ClInclude Include="..\..\libembroidery\emb-color.h" />
+    <ClInclude Include="..\..\libembroidery\emb-compress.h" />
+    <ClInclude Include="..\..\libembroidery\emb-ellipse.h" />
+    <ClInclude Include="..\..\libembroidery\emb-file.h" />
+    <ClInclude Include="..\..\libembroidery\emb-flag.h" />
+    <ClInclude Include="..\..\libembroidery\emb-hash.h" />
+    <ClInclude Include="..\..\libembroidery\emb-hoop.h" />
+    <ClInclude Include="..\..\libembroidery\emb-layer.h" />
+    <ClInclude Include="..\..\libembroidery\emb-line.h" />
+    <ClInclude Include="..\..\libembroidery\emb-logging.h" />
+    <ClInclude Include="..\..\libembroidery\emb-path.h" />
+    <ClInclude Include="..\..\libembroidery\emb-pattern.h" />
+    <ClInclude Include="..\..\libembroidery\emb-point.h" />
+    <ClInclude Include="..\..\libembroidery\emb-polygon.h" />
+    <ClInclude Include="..\..\libembroidery\emb-polyline.h" />
+    <ClInclude Include="..\..\libembroidery\emb-reader-writer.h" />
+    <ClInclude Include="..\..\libembroidery\emb-rect.h" />
+    <ClInclude Include="..\..\libembroidery\emb-satin-line.h" />
+    <ClInclude Include="..\..\libembroidery\emb-settings.h" />
+    <ClInclude Include="..\..\libembroidery\emb-spline.h" />
+    <ClInclude Include="..\..\libembroidery\emb-stitch.h" />
+    <ClInclude Include="..\..\libembroidery\emb-thread.h" />
+    <ClInclude Include="..\..\libembroidery\emb-time.h" />
+    <ClInclude Include="..\..\libembroidery\emb-vector.h" />
+    <ClInclude Include="..\..\libembroidery\format-100.h" />
+    <ClInclude Include="..\..\libembroidery\format-10o.h" />
+    <ClInclude Include="..\..\libembroidery\format-art.h" />
+    <ClInclude Include="..\..\libembroidery\format-bmc.h" />
+    <ClInclude Include="..\..\libembroidery\format-bro.h" />
+    <ClInclude Include="..\..\libembroidery\format-cnd.h" />
+    <ClInclude Include="..\..\libembroidery\format-col.h" />
+    <ClInclude Include="..\..\libembroidery\format-csd.h" />
+    <ClInclude Include="..\..\libembroidery\format-csv.h" />
+    <ClInclude Include="..\..\libembroidery\format-dat.h" />
+    <ClInclude Include="..\..\libembroidery\format-dem.h" />
+    <ClInclude Include="..\..\libembroidery\format-dsb.h" />
+    <ClInclude Include="..\..\libembroidery\format-dst.h" />
+    <ClInclude Include="..\..\libembroidery\format-dsz.h" />
+    <ClInclude Include="..\..\libembroidery\format-dxf.h" />
+    <ClInclude Include="..\..\libembroidery\format-edr.h" />
+    <ClInclude Include="..\..\libembroidery\format-emd.h" />
+    <ClInclude Include="..\..\libembroidery\format-exp.h" />
+    <ClInclude Include="..\..\libembroidery\format-exy.h" />
+    <ClInclude Include="..\..\libembroidery\format-eys.h" />
+    <ClInclude Include="..\..\libembroidery\format-fxy.h" />
+    <ClInclude Include="..\..\libembroidery\format-gnc.h" />
+    <ClInclude Include="..\..\libembroidery\format-gt.h" />
+    <ClInclude Include="..\..\libembroidery\format-hus.h" />
+    <ClInclude Include="..\..\libembroidery\format-inb.h" />
+    <ClInclude Include="..\..\libembroidery\format-inf.h" />
+    <ClInclude Include="..\..\libembroidery\format-jef.h" />
+    <ClInclude Include="..\..\libembroidery\format-ksm.h" />
+    <ClInclude Include="..\..\libembroidery\format-max.h" />
+    <ClInclude Include="..\..\libembroidery\format-mit.h" />
+    <ClInclude Include="..\..\libembroidery\format-new.h" />
+    <ClInclude Include="..\..\libembroidery\format-ofm.h" />
+    <ClInclude Include="..\..\libembroidery\format-pcd.h" />
+    <ClInclude Include="..\..\libembroidery\format-pcm.h" />
+    <ClInclude Include="..\..\libembroidery\format-pcq.h" />
+    <ClInclude Include="..\..\libembroidery\format-pcs.h" />
+    <ClInclude Include="..\..\libembroidery\format-pec.h" />
+    <ClInclude Include="..\..\libembroidery\format-pel.h" />
+    <ClInclude Include="..\..\libembroidery\format-pem.h" />
+    <ClInclude Include="..\..\libembroidery\format-pes.h" />
+    <ClInclude Include="..\..\libembroidery\format-phb.h" />
+    <ClInclude Include="..\..\libembroidery\format-phc.h" />
+    <ClInclude Include="..\..\libembroidery\format-plt.h" />
+    <ClInclude Include="..\..\libembroidery\format-rgb.h" />
+    <ClInclude Include="..\..\libembroidery\format-sew.h" />
+    <ClInclude Include="..\..\libembroidery\format-shv.h" />
+    <ClInclude Include="..\..\libembroidery\format-sst.h" />
+    <ClInclude Include="..\..\libembroidery\format-stx.h" />
+    <ClInclude Include="..\..\libembroidery\format-svg.h" />
+    <ClInclude Include="..\..\libembroidery\format-t09.h" />
+    <ClInclude Include="..\..\libembroidery\format-tap.h" />
+    <ClInclude Include="..\..\libembroidery\format-thr.h" />
+    <ClInclude Include="..\..\libembroidery\format-txt.h" />
+    <ClInclude Include="..\..\libembroidery\format-u00.h" />
+    <ClInclude Include="..\..\libembroidery\format-u01.h" />
+    <ClInclude Include="..\..\libembroidery\format-vip.h" />
+    <ClInclude Include="..\..\libembroidery\format-vp3.h" />
+    <ClInclude Include="..\..\libembroidery\format-xxx.h" />
+    <ClInclude Include="..\..\libembroidery\format-zsk.h" />
+    <ClInclude Include="..\..\libembroidery\formats.h" />
+    <ClInclude Include="..\..\libembroidery\hashtable.h" />
+    <ClInclude Include="..\..\libembroidery\helpers-binary.h" />
+    <ClInclude Include="..\..\libembroidery\helpers-misc.h" />
+    <ClInclude Include="..\..\libembroidery\helpers-unused.h" />
+    <ClInclude Include="..\..\libembroidery\thread-color.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
