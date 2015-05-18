@@ -414,15 +414,39 @@ class RectObject(BaseObject):
         return trans.map(path)
 
     def objectPos(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.scenePos()
 
     def objectWidth(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().width() * self.scale()
 
     def objectHeight(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().height() * self.scale()
 
     def objectArea(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return qAbs(self.objectWidth() * self.objectHeight())
 
 

@@ -355,12 +355,30 @@ class ImageObject(BaseObject):
         pass # TODO: gripEdit() for ImageObject
 
     def objectWidth(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().width() * self.scale()
 
     def objectHeight(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().height() * self.scale()
 
     def objectArea(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return qAbs(self.objectWidth() * self.objectHeight())
 
 

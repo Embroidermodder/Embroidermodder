@@ -422,32 +422,77 @@ class PolygonObject(BaseObject):
         return trans.map(closedPath)
 
     def objectPos(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.scenePos()
 
     def objectX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().x()
 
     def objectY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().y()
 
     # pythonic setObjectPos overload
     @signature(QPointF)
     def setObjectPosFromPoint(self, point):
+        """
+        TOWRITE
+
+        :param `point`: TOWRITE
+        :type `point`: `QPointF`_
+        """
         self.setPos(point.x(), point.y())
 
     # pythonic setObjectPos overload
     @signature(float, float)
     def setObjectPosFromXY(self, x, y):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        :param y`: TOWRITE
+        :type `y`: float
+        """
         self.setPos(x, y)
 
     @overloaded(setObjectPosFromPoint, setObjectPosFromXY)
     def setObjectPos(self, *args):
+        """ TOWRITE """
         pass
 
     def setObjectX(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
         self.setObjectPos(x, self.objectY())
 
     def setObjectY(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
         self.setObjectPos(self.objectX(), y)
 
 

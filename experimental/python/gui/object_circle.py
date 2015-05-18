@@ -438,36 +438,102 @@ class CircleObject(BaseObject):
         return trans.map(path)
 
     def objectCenter(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.scenePos()
 
     def objectCenterX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().x()
 
     def objectCenterY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().y()
 
     def objectRadius(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().width() / 2.0 * self.scale()
 
     def objectDiameter(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().width() * self.scale()
 
     def objectArea(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return pi * self.objectRadius() * self.objectRadius()
 
     def objectCircumference(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return pi * self.objectDiameter()
 
     def objectQuadrant0(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.objectCenter() + QPointF(self.objectRadius(), 0)
 
     def objectQuadrant90(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.objectCenter() + QPointF(0, -self.objectRadius())
 
     def objectQuadrant180(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.objectCenter() + QPointF(-self.objectRadius(), 0)
 
     def objectQuadrant270(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.objectCenter() + QPointF(0, self.objectRadius())
 
 

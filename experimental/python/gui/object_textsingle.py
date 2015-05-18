@@ -532,68 +532,185 @@ class TextSingleObject(BaseObject):
         return pathList
 
     def objectSavePathList(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: list[`QPainterPath`_]
+        """
         return self.subPathList()
 
     def objectText(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: str
+        """
         return self.objText
 
     def objectTextFont(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: str
+        """
         return self.objTextFont
 
     def objectTextJustify(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: str
+        """
         return self.objTextJustify
 
     def objectTextSize(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.objTextSize
 
     def objectTextBold(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextBold
 
     def objectTextItalic(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextItalic
 
     def objectTextUnderline(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextUnderline
 
     def objectTextStrikeOut(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextStrikeOut
 
     def objectTextOverline(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextOverline
 
     def objectTextBackward(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextBackward
 
     def objectTextUpsideDown(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
         return self.objTextUpsideDown
 
     def objectPos(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.scenePos()
 
     def objectX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().x()
 
     def objectY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().y()
 
     # pythonic setObjectPos overload
     @signature(QPointF)
     def setObjectPosFromPoint(self, point):
+        """
+        TOWRITE
+
+        :param `point`: TOWRITE
+        :type `point`: `QPointF`_
+        """
         self.setPos(point.x(), point.y())
 
     # pythonic setObjectPos overload
     @signature(float, float)
     def setObjectPosFromXY(self, x, y):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        :param y`: TOWRITE
+        :type `y`: float
+        """
         self.setPos(x, y)
 
     @overloaded(setObjectPosFromPoint, setObjectPosFromXY)
     def setObjectPos(self, *args):
+        """ TOWRITE """
         pass
 
     def setObjectX(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
         self.setObjectPos(x, self.objectY())
 
     def setObjectY(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
         self.setObjectPos(self.objectX(), y)
 
 

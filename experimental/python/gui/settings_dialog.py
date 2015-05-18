@@ -3534,6 +3534,7 @@ class Settings_Dialog(QDialog):
 
     @Slot()
     def rejectChanges(self):
+        """ TOWRITE """
 
         # TODO: inform the user if they have changed settings
 

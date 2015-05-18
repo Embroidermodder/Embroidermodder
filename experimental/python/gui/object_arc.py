@@ -687,15 +687,39 @@ class ArcObject(BaseObject):
         pass # TODO: gripEdit() for ArcObject
 
     def objectCenter(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.scenePos()
 
     def objectCenterX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().x()
 
     def objectCenterY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().y()
     
     def objectRadius(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().width() / 2.0 * self.scale()
 
 

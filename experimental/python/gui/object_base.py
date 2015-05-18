@@ -100,6 +100,12 @@ class BaseObject(QGraphicsPathItem):
         qDebug("BaseObject Destructor()")
 
     def type(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: int
+        """
         return self.Type
 
     def setObjectColor(self, color):
@@ -267,35 +273,95 @@ class BaseObject(QGraphicsPathItem):
             painter.fillPath(realPath, QBrush(grad))
 
     def objectID(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: int
+        """
         return self.objID
 
     def objectPen(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPen`_
+        """
         return self.objPen
 
     def objectColor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QColor`_
+        """
         return self.objPen.color()
 
     def objectColorRGB(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: int
+        """
         return self.objPen.color().rgb()
 
     def objectLineType(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: Qt.PenStyle
+        """
         return self.objPen.style()
 
     def objectLineWeight(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.lwtPen.widthF()
 
     def objectPath(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPainterPath`_
+        """
         return self.path()
 
     def objectRubberMode(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: int
+        """
         return self.objRubberMode
 
     def rect(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QRectF`_
+        """
         return self.path().boundingRect()
 
     # pythonic setRect overload
     @signature(QPointF)
     def setRectFromRect(self, r):
+        """
+        TOWRITE
+
+        :param `r`: TOWRITE
+        :type `r`: QPointF
+        """
         p = QPainterPath()
         p.addRect(r)
         self.setPath(p)
@@ -303,20 +369,45 @@ class BaseObject(QGraphicsPathItem):
     # pythonic setRect overload
     @signature(float, float, float, float)
     def setRectFromXYWH(self, x, y, w, h):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: qreal
+        :param `y`: TOWRITE
+        :type `y`: qreal
+        :param `w`: TOWRITE
+        :type `w`: qreal
+        :param `h`: TOWRITE
+        :type `h`: qreal
+        """
         p = QPainterPath()
         p.addRect(x, y, w, h)
         self.setPath(p)
 
     @overloaded(setRectFromRect, setRectFromXYWH)
     def setRect(self, *args):
+        """ TOWRITE """
         pass
 
     def line(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QLineF`_
+        """
         return self.objLine
 
     # pythonic setLine overload
     @signature(QPointF)
     def setLineFromLine(self, li):
+        """
+        TOWRITE
+
+        :param `li`: TOWRITE
+        :type `li`: QPointF
+        """
         p = QPainterPath()
         p.moveTo(li.p1())
         p.lineTo(li.p2())
@@ -326,6 +417,18 @@ class BaseObject(QGraphicsPathItem):
     # pythonic setLine overload
     @signature(float, float, float, float)
     def setLineFromXXYY(self, x1, y1, x2, y2):
+        """
+        TOWRITE
+
+        :param `x1`: TOWRITE
+        :type `x1`: qreal
+        :param `y1`: TOWRITE
+        :type `y1`: qreal
+        :param `x2`: TOWRITE
+        :type `x2`: qreal
+        :param `y2`: TOWRITE
+        :type `y2`: qreal
+        """
         p = QPainterPath()
         p.moveTo(x1, y1)
         p.lineTo(x2, y2)
@@ -334,36 +437,100 @@ class BaseObject(QGraphicsPathItem):
 
     @overloaded(setLineFromLine, setLineFromXXYY)
     def setLine(self, *args):
+        """ TOWRITE """
         pass
 
     def setObjectPath(self, p):
+        """
+        TOWRITE
+
+        :param `p`: TOWRITE
+        :type `p`: `QPainterPath`_
+        """
         self.setPath(p)
 
     def setObjectRubberMode(self, mode):
+        """
+        TOWRITE
+
+        :param `mode`: TOWRITE
+        :type `mode`: int
+        """
         self.objRubberMode = mode
 
     def setObjectRubberPoint(self, key, point):
+        """
+        TOWRITE
+
+        :param `key`: TOWRITE
+        :type `key`: str
+        :param `point`: TOWRITE
+        :type `point`: `QPointF`_
+        """
         self.objRubberPoints[key] = point  # .insert(key, point)
 
     def setObjectRubberText(self, key, txt):
+        """
+        TOWRITE
+
+        :param `key`: TOWRITE
+        :type `key`: str
+        :param `txt`: TOWRITE
+        :type `txt`: str
+        """
         self.objRubberTexts[key] = txt  # .insert(key, txt)
 
     def shape(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPainterPath`_
+        """
         return self.path()
 
     def vulcanize(self):
+        """ TOWRITE """
         raise NotImplementedError
 
     def mouseSnapPoint(self, mousePoint):
+        """
+        TOWRITE
+
+        :param `mousePoint`: TOWRITE
+        :type `mousePoint`: `QPointF`_
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         raise NotImplementedError
 
     def allGripPoints(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: list[`QPointF`_]
+        """
         raise NotImplementedError
 
     def gripEdit(self, before, after):
+        """
+        TOWRITE
+
+        :param `before`: TOWRITE
+        :type `before`: `QPointF`_
+        :param `after`: TOWRITE
+        :type `after`: `QPointF`_
+        """
         raise NotImplementedError
 
     def lineWeightPen(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPen`_
+        """
         return self.lwtPen
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

@@ -511,30 +511,84 @@ class EllipseObject(BaseObject):
         return trans.map(path)
 
     def objectCenter(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
         return self.scenePos()
 
     def objectCenterX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().x()
 
     def objectCenterY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.scenePos().y()
 
     def objectRadiusMajor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return qMax(self.rect().width(), self.rect().height()) / 2.0 * self.scale()
 
     def objectRadiusMinor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return qMin(self.rect().width(), self.rect().height()) / 2.0 * self.scale()
 
-    def objectDiameterMajor(self): 
+    def objectDiameterMajor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """ 
         return qMax(self.rect().width(), self.rect().height()) * self.scale()
 
-    def objectDiameterMinor(self): 
+    def objectDiameterMinor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """ 
         return qMin(self.rect().width(), self.rect().height()) * self.scale()
 
     def objectWidth(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().width() * self.scale()
 
     def objectHeight(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.rect().height() * self.scale()
 
 

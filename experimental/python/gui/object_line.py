@@ -397,36 +397,102 @@ class LineObject(BaseObject):
         return path
 
     def objectX1(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.objectEndPoint1().x()
 
     def objectY1(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.objectEndPoint1().y()
 
     def objectX2(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.objectEndPoint2().x()
 
     def objectY2(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.objectEndPoint2().y()
 
     def objectDeltaX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return (self.objectX2() - self.objectX1())
 
     def objectDeltaY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return (self.objectY2() - self.objectY1())
 
     def objectLength(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
         return self.line().length() * self.scale()
 
     def setObjectX1(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
         self.setObjectEndPoint1(x, self.objectY1())
 
     def setObjectY1(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
         self.setObjectEndPoint1(self.objectX1(), y)
 
     def setObjectX2(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
         self.setObjectEndPoint2(x, self.objectY2())
 
     def setObjectY2(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
         self.setObjectEndPoint2(self.objectX2(), y)
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

@@ -21,9 +21,21 @@ _mainWin = 0
 # NOTE: Wrapping a Native Function
 # NOTE: It is currently not possible to wrap member functions; i.e., methods of a C++ class that require a this object.
 def initMainWinPointer(mw):
+    """
+    TOWRITE
+
+    :param `mw`: TOWRITE
+    :type `mw`: `MainWindow`_
+    """
     global _mainWin
     _mainWin = mw
 
 
 def mainWin():
+    """
+    TOWRITE
+
+    :return: TOWRITE
+    :rtype: `MainWindow`_
+    """
     return _mainWin

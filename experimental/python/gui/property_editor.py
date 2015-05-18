@@ -1979,6 +1979,7 @@ class PropertyEditor(QDockWidget):
 
     @Slot()
     def togglePickAddMode(self):
+        """ TOWRITE """
         self.pickAddModeToggled.emit()
 
     # Signals ----------------------------------------------------------------

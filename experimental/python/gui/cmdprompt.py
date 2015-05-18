@@ -753,11 +753,23 @@ class CmdPromptHistory(QTextBrowser):
         self.moveCursor(QTextCursor.End, QTextCursor.MoveAnchor)
 
     @Slot(int)
-    def startResizeHistory(self, y):  #TODO/PORT/FIXME# int /*y*/
+    def startResizeHistory(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: int
+        """  #TODO/PORT/FIXME# int /*y*/
         self.tmpHeight = self.height()
 
     @Slot(int)
-    def stopResizeHistory(self, y):  #TODO/PORT/FIXME# int /*y*/
+    def stopResizeHistory(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: int
+        """  #TODO/PORT/FIXME# int /*y*/
         self.tmpHeight = self.height()
 
     @Slot(int)
@@ -1279,11 +1291,13 @@ class CmdPromptInput(QLineEdit):
 
     @Slot()
     def copyClip(self):
+        """ TOWRITE """
         copyText = self.curText[len(self.prefix):]
         qApp.clipboard().setText(copyText)
 
     @Slot()
     def pasteClip(self):
+        """ TOWRITE """
         self.paste()
 
     # Signals ----------------------------------------------------------------

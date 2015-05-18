@@ -589,7 +589,8 @@ def readSettings(self): # void MainWindow::
     self.resize(size.width(), size.height())
 
 
-def writeSettings(self): # void MainWindow::
+def writeSettings(self):
+    """ TOWRITE """ # void MainWindow::
 
     qDebug("Writing Settings...")
     ## settings = QSettings("settings-py.ini", QSettings.IniFormat)
