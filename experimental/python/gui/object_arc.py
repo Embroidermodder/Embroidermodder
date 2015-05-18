@@ -26,27 +26,29 @@ Classes summary:
 #--Python Imports.
 from math import sin as qSin
 from math import cos as qCos
-from math import radians
+from math import radians, degrees, asin
+qMin = min
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QLineF, QPointF
+    from PySide.QtCore import qDebug, Qt, QLineF, QPointF, QRectF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF, QRectF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_TYPE, OBJ_NAME, OBJ_TYPE_ARC, OBJ_NAME_ARC,
+    ENABLE_LWT, OBJ_RUBBER_OFF)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-arc.h"
@@ -66,7 +68,10 @@ class ArcObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, startX, startY, midX, midY, endX, endY, rgb, parent):
+
+    Type = OBJ_TYPE_ARC
+
+    def __init__(self, startX, startY, midX, midY, endX, endY, rgb, parent=None):
         #OVERLOADED IMPL?# ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -91,6 +96,11 @@ class ArcObject(BaseObject):
         super(ArcObject, self).__init__(parent)
 
         qDebug("ArcObject Constructor()")
+
+        self.arcStartPoint = QPointF()
+        self.arcMidPoint = QPointF()
+        self.arcEndPoint = QPointF()
+
         self.init(startX, startY, midX, midY, endX, endY, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -133,7 +143,7 @@ class ArcObject(BaseObject):
 
         self.calculateArcData(startX, startY, midX, midY, endX, endY)
 
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
         self.setPen(self.objectPen())
@@ -162,9 +172,9 @@ class ArcObject(BaseObject):
         #TODO/PORT#              endX,    endY,
         #TODO/PORT#              &centerX, &centerY);
 
-        arcStartPoint = QPointF(startX - centerX, startY - centerY)
-        arcMidPoint   = QPointF(midX   - centerX, midY   - centerY)
-        arcEndPoint   = QPointF(endX   - centerX, endY   - centerY)
+        self.arcStartPoint = QPointF(startX - centerX, startY - centerY)
+        self.arcMidPoint   = QPointF(midX   - centerX, midY   - centerY)
+        self.arcEndPoint   = QPointF(endX   - centerX, endY   - centerY)
 
         self.setPos(centerX, centerY)
 
@@ -187,7 +197,9 @@ class ArcObject(BaseObject):
         arcRect.moveCenter(QPointF(0, 0))
         self.setRect(arcRect)
 
-    def setObjectCenter(self, point):
+    # pythonic setObjectCenter overload
+    @signature(QPointF)
+    def setObjectCenterFromPoint(self, point):
         """
         TOWRITE
 
@@ -196,7 +208,9 @@ class ArcObject(BaseObject):
         """
         self.setObjectCenter(point.x(), point.y())
 
-    def setObjectCenter(self, pointX, pointY):
+    # pythonic setObjectCenter overload
+    @signature(float, float)
+    def setObjectCenterFromXY(self, pointX, pointY):
         """
         TOWRITE
 
@@ -206,6 +220,11 @@ class ArcObject(BaseObject):
         :type `pointY`: qreal
         """
         self.setPos(pointX, pointY)
+
+    @overloaded(setObjectCenterFromPoint, setObjectCenterFromXY)
+    def setObjectCenter(self, *args):
+        """ TOWRITE """
+        pass
 
     def setObjectCenterX(self, pointX):
         """
@@ -245,9 +264,9 @@ class ArcObject(BaseObject):
         startLine.setLength(rad)
         midLine.setLength(rad)
         endLine.setLength(rad)
-        arcStartPoint = startLine.p2()
-        arcMidPoint = midLine.p2()
-        arcEndPoint = endLine.p2()
+        self.arcStartPoint  = arcStartPoint = startLine.p2()
+        self.arcMidPoint = arcMidPoint = midLine.p2()
+        self.arcEndPoint = arcEndPoint = endLine.p2()
 
         self.calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y())
 
@@ -269,7 +288,9 @@ class ArcObject(BaseObject):
         """
         pass # TODO: ArcObject setObjectEndAngle
 
-    def setObjectStartPoint(self, point):
+    # pythonic setObjectStartPoint overload
+    @signature(QPointF)
+    def setObjectStartPointFromPoint(self, point):
         """
         TOWRITE
 
@@ -278,7 +299,9 @@ class ArcObject(BaseObject):
         """
         self.setObjectStartPoint(point.x(), point.y())
 
-    def setObjectStartPoint(self, pointX, pointY):
+    # pythonic setObjectStartPoint overload
+    @signature(float, float)
+    def setObjectStartPointFromXY(self, pointX, pointY):
         """
         TOWRITE
 
@@ -287,9 +310,19 @@ class ArcObject(BaseObject):
         :param `pointY`: TOWRITE
         :type `pointY`: qreal
         """
+        arcMidPoint = self.arcMidPoint
+        arcEndPoint = self.arcEndPoint
+
         self.calculateArcData(pointX, pointY, arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y())
 
-    def setObjectMidPoint(self, point):
+    @overloaded(setObjectStartPointFromPoint, setObjectStartPointFromXY)
+    def setObjectStartPoint(self, *args):
+        """ TOWRITE """
+        pass
+
+    # pythonic setObjectMidPoint overload
+    @signature(QPointF)
+    def setObjectMidPointFromPoint(self, point):
         """
         TOWRITE
 
@@ -298,7 +331,9 @@ class ArcObject(BaseObject):
         """
         self.setObjectMidPoint(point.x(), point.y())
 
-    def setObjectMidPoint(self, pointX, pointY):
+    # pythonic setObjectMidPoint overload
+    @signature(float, float)
+    def setObjectMidPointFromXY(self, pointX, pointY):
         """
         TOWRITE
 
@@ -307,18 +342,30 @@ class ArcObject(BaseObject):
         :param `pointY`: TOWRITE
         :type `pointY`: qreal
         """
+        arcStartPoint = self.arcStartPoint
+        arcEndPoint = self.arcEndPoint
+
         self.calculateArcData(arcStartPoint.x(), arcStartPoint.y(), pointX, pointY, arcEndPoint.x(), arcEndPoint.y())
 
-    def setObjectEndPoint(self, point):
+    @overloaded(setObjectMidPointFromPoint, setObjectMidPointFromXY)
+    def setObjectMidPoint(self, *args):
+        """ TOWRITE """
+        pass
+
+    # pythonic setObjectEndPoint overload
+    @signature(QPointF)
+    def setObjectEndPointFromPoint(self, point):
         """
         TOWRITE
 
         :param `point`: TOWRITE
         :type `point`: `QPointF`_
         """
-        setObjectEndPoint(point.x(), point.y());
+        self.setObjectEndPoint(point.x(), point.y())
 
-    def setObjectEndPoint(self, pointX, pointY):
+    # pythonic setObjectEndPoint overload
+    @signature(float, float)
+    def setObjectEndPointFromXY(self, pointX, pointY):
         """
         TOWRITE
 
@@ -327,7 +374,15 @@ class ArcObject(BaseObject):
         :param `pointY`: TOWRITE
         :type `pointY`: qreal
         """
+        arcStartPoint = self.arcStartPoint
+        arcMidPoint = self.arcMidPoint
+
         self.calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), pointX, pointY)
+
+    @overloaded(setObjectEndPointFromPoint, setObjectEndPointFromXY)
+    def setObjectEndPoint(self, *args):
+        """ TOWRITE """
+        pass
 
     def objectStartAngle(self):
         """
@@ -361,13 +416,13 @@ class ArcObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(self.rotation())        # qreal
-        cosRot = qCos(rot)                    # qreal
-        sinRot = qSin(rot)                    # qreal
-        x = arcStartPoint.x() * self.scale()  # qreal
-        y = arcStartPoint.y() * self.scale()  # qreal
-        rotX = x * cosRot - y*sinRot          # qreal
-        rotY = x * sinRot + y*cosRot          # qreal
+        rot = radians(self.rotation())             # qreal
+        cosRot = qCos(rot)                         # qreal
+        sinRot = qSin(rot)                         # qreal
+        x = self.arcStartPoint.x() * self.scale()  # qreal
+        y = self.arcStartPoint.y() * self.scale()  # qreal
+        rotX = x * cosRot - y*sinRot               # qreal
+        rotY = x * sinRot + y*cosRot               # qreal
 
         return (self.scenePos() + QPointF(rotX, rotY))
 
@@ -385,7 +440,7 @@ class ArcObject(BaseObject):
 
         :rtype: qreal
         """
-        return self.objectStartPoint().y();
+        return self.objectStartPoint().y()
 
     def objectMidPoint(self):
         """
@@ -393,13 +448,13 @@ class ArcObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(self.rotation())      # qreal
-        cosRot = qCos(rot)                  # qreal
-        sinRot = qSin(rot)                  # qreal
-        x = arcMidPoint.x() * self.scale()  # qreal
-        y = arcMidPoint.y() * self.scale()  # qreal
-        rotX = x * cosRot - y * sinRot      # qreal
-        rotY = x * sinRot + y * cosRot      # qreal
+        rot = radians(self.rotation())           # qreal
+        cosRot = qCos(rot)                       # qreal
+        sinRot = qSin(rot)                       # qreal
+        x = self.arcMidPoint.x() * self.scale()  # qreal
+        y = self.arcMidPoint.y() * self.scale()  # qreal
+        rotX = x * cosRot - y * sinRot           # qreal
+        rotY = x * sinRot + y * cosRot           # qreal
 
         return (self.scenePos() + QPointF(rotX, rotY))
 
@@ -425,13 +480,13 @@ class ArcObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(self.rotation())      # qreal
-        cosRot = qCos(rot)                  # qreal
-        sinRot = qSin(rot)                  # qreal
-        x = arcEndPoint.x() * self.scale()  # qreal
-        y = arcEndPoint.y() * self.scale()  # qreal
-        rotX = x * cosRot - y * sinRot      # qreal
-        rotY = x * sinRot + y * cosRot      # qreal
+        rot = radians(self.rotation())           # qreal
+        cosRot = qCos(rot)                       # qreal
+        sinRot = qSin(rot)                       # qreal
+        x = self.arcEndPoint.x() * self.scale()  # qreal
+        y = self.arcEndPoint.y() * self.scale()  # qreal
+        rotX = x * cosRot - y * sinRot           # qreal
+        rotY = x * sinRot + y * cosRot           # qreal
 
         return (self.scenePos() + QPointF(rotX, rotY))
 
@@ -523,7 +578,7 @@ class ArcObject(BaseObject):
         path.arcMoveTo(self.rect(), startAngle)
         path.arcTo(self.rect(), startAngle, spanAngle)
         # NOTE: Reverse the path so that the inside area isn't considered part of the arc
-        path.arcTo(self.rect(), startAngle + spanAngle, -spanAngle);
+        path.arcTo(self.rect(), startAngle + spanAngle, -spanAngle)
         self.setObjectPath(path)
 
     def paint(self, painter, option, widget):
@@ -546,7 +601,7 @@ class ArcObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
@@ -560,16 +615,16 @@ class ArcObject(BaseObject):
         paintRect = QRectF(-rad, -rad, rad * 2.0, rad * 2.0)
         painter.drawArc(paintRect, startAngle, spanAngle)
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
         :param `painter`: TOWRITE
         :type `painter`: `QPainter`_
         """
-        pass # TODO: Arc Rubber Modes
-
-        pass # TODO: updateRubber() gripping for ArcObject
+        # TODO: Arc Rubber Modes
+        # TODO: updateRubber() gripping for ArcObject
+        pass
 
     def vulcanize(self):
         """
@@ -630,6 +685,18 @@ class ArcObject(BaseObject):
 
         """
         pass # TODO: gripEdit() for ArcObject
+
+    def objectCenter(self):
+        return self.scenePos()
+
+    def objectCenterX(self):
+        return self.scenePos().x()
+
+    def objectCenterY(self):
+        return self.scenePos().y()
+    
+    def objectRadius(self):
+        return self.rect().width() / 2.0 * self.scale()
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

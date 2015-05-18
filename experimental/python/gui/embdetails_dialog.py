@@ -24,23 +24,23 @@ TOWRITE
 ## import os
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, SIGNAL, SLOT, QRect
+    from PySide.QtCore import qDebug, Qt, SIGNAL, SLOT, QRectF
     from PySide.QtGui import QApplication, QDialog, QGridLayout, QLabel, \
         QDialogButtonBox, QGroupBox, QScrollArea, QVBoxLayout, QWidget
     PYSIDE = True
     PYQT4 = False
-except ImportError:
-    raise
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, SIGNAL, SLOT, QRect
-#    from PyQt4.QtGui import QApplication, QDialog, QGridLayout, QLabel, \
-#        QDialogButtonBox, QGroupBox, QScrollArea, QVBoxLayout, QWidget
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt, SIGNAL, SLOT, QRectF
+    from PyQt4.QtGui import QApplication, QDialog, QGridLayout, QLabel, \
+        QDialogButtonBox, QGroupBox, QScrollArea, QVBoxLayout, QWidget
 
 
 class EmbDetailsDialog(QDialog):
@@ -52,7 +52,7 @@ class EmbDetailsDialog(QDialog):
     .. sphinx_generate_methods_summary::
        EmbDetailsDialog
     """
-    def __init__(self, theScene, parent):
+    def __init__(self, theScene, parent=None):
         """
         Default class constructor.
 
@@ -66,20 +66,28 @@ class EmbDetailsDialog(QDialog):
         self.setMinimumSize(750, 550)
 
         self.getInfo()
-        mainWidget = self.createMainWidget()
+        self.mainWidget = self.createMainWidget()
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
-        buttonBox.accepted.connect(self.accept)
+        self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok)
+        self.buttonBox.accepted.connect(self.accept)
 
         vboxLayoutMain = QVBoxLayout(self)
-        vboxLayoutMain.addWidget(mainWidget)
-        vboxLayoutMain.addWidget(buttonBox)
+        vboxLayoutMain.addWidget(self.mainWidget)
+        vboxLayoutMain.addWidget(self.buttonBox)
         self.setLayout(vboxLayoutMain)
 
         self.setWindowTitle(self.tr("Embroidery Design Details"))
 
         QApplication.setOverrideCursor(Qt.ArrowCursor)
 
+        self.stitchesTotal = int()
+        self.stitchesReal = int()
+        self.stitchesJump = int()
+        self.stitchesTrim = int()
+        self.colorTotal = int
+        self.colorChanges = int()
+
+        self.boundingRect = QRectF()
 
     def __del__(self):
         """Class destructor"""
@@ -97,7 +105,6 @@ class EmbDetailsDialog(QDialog):
         self.colorTotal    = 1 # TODO: embThreadList_count(pattern->threadList, TOTAL)
         self.colorChanges  = 0 # TODO: embThreadList_count(pattern->threadList, CHANGES)
 
-        self.boundingRect = QRect() #TODO/FIXME#
         self.boundingRect.setRect(0, 0, 50, 100) # TODO: embPattern_calcBoundingBox(pattern)
 
     def createMainWidget(self):

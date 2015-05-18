@@ -27,26 +27,28 @@ Classes summary:
 from math import sin as qSin
 from math import cos as qCos
 from math import radians
+qMin = min
+qAbs = abs
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
 
 #--Local Imports.
 from object_base import BaseObject
+from object_data import (OBJ_TYPE, OBJ_TYPE_RECTANGLE, OBJ_NAME, ENABLE_LWT,
+    OBJ_NAME_RECTANGLE, OBJ_RUBBER_RECTANGLE, OBJ_RUBBER_GRIP, OBJ_RUBBER_OFF)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-rect.h"
@@ -65,7 +67,10 @@ class RectObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, x, y, w, h, rgb, parent):
+
+    Type = OBJ_TYPE_RECTANGLE
+
+    def __init__(self, x, y, w, h, rgb, parent=None):
         #OVERLOADED IMPL?# RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -124,10 +129,10 @@ class RectObject(BaseObject):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
         self.setObjectRect(x, y, w, h)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
-        self.setPen(objectPen())
+        self.setPen(self.objectPen())
 
     def setObjectRect(self, x, y, w, h):
         """
@@ -256,13 +261,13 @@ class RectObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
         painter.drawRect(self.rect())
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -296,7 +301,7 @@ class RectObject(BaseObject):
                 ### else if(gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
                 ###
                 ### QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                ### drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+                ### drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
                 ### */
 
                 gripPoint = self.objectRubberPoint("GRIP_POINT")    # QPointF
@@ -304,7 +309,7 @@ class RectObject(BaseObject):
                 delta = after-gripPoint                             # QPointF
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """
@@ -349,7 +354,12 @@ class RectObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
-        gripPoints = list(self.objectTopLeft() + self.objectTopRight() + self.objectBottomLeft() + self.objectBottomRight())  # # TODO: Check if this would be right...
+        gripPoints = [
+            self.objectTopLeft(),
+            self.objectTopRight(),
+            self.objectBottomLeft(),
+            self.objectBottomRight(),
+            ]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -402,6 +412,18 @@ class RectObject(BaseObject):
         trans.rotate(self.rotation())
         trans.scale(s, s)
         return trans.map(path)
+
+    def objectPos(self):
+        return self.scenePos()
+
+    def objectWidth(self):
+        return self.rect().width() * self.scale()
+
+    def objectHeight(self):
+        return self.rect().height() * self.scale()
+
+    def objectArea(self):
+        return qAbs(self.objectWidth() * self.objectHeight())
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

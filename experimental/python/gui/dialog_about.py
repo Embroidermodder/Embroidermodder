@@ -45,7 +45,7 @@ Free under the zlib/libpng license.
 import os
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     # Only import what we need into the global namespace
@@ -54,20 +54,18 @@ try:
         QBoxLayout, QSpacerItem, QDialogButtonBox, QPushButton, QDialog, \
         QTabWidget, QTextEdit, QTextBrowser, QHBoxLayout, QVBoxLayout, \
         QPixmap, QLabel, QGraphicsOpacityEffect
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
 #    # Only import what we need into the global namespace
-#    from PyQt4.QtCore import qDebug, Qt
-#    from PyQt4.QtGui import QApplication, QPalette, QBrush, QIcon, QPainter, \
-#        QBoxLayout, QSpacerItem, QDialogButtonBox, QPushButton, QDialog, \
-#        QTabWidget, QTextEdit, QTextBrowser, QHBoxLayout, QVBoxLayout, \
-#        QPixmap, QLabel
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt
+    from PyQt4.QtGui import QApplication, QPalette, QBrush, QIcon, QPainter, \
+        QBoxLayout, QSpacerItem, QDialogButtonBox, QPushButton, QDialog, \
+        QTabWidget, QTextEdit, QTextBrowser, QHBoxLayout, QVBoxLayout, \
+        QPixmap, QLabel, QGraphicsOpacityEffect
 
 
 class AboutDialog(QDialog):

@@ -22,27 +22,29 @@ Classes summary:
 import os
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     # Only import what we need into the global namespace
-    from PySide.QtCore import qDebug, Qt, QEvent, QObject, QSignalMapper, QSize, QPointF
+    from PySide.QtCore import qDebug, Qt, QEvent, QObject, QSignalMapper, \
+        QSize, QPointF, Slot, Signal, SLOT, SIGNAL
     from PySide.QtGui import QApplication, QComboBox, QDockWidget, QFontComboBox, QFormLayout, \
             QGroupBox, QHBoxLayout, QIcon, QIntValidator, QDoubleValidator, QKeyEvent, QLineEdit, \
-            QScrollArea, QToolButton, QVBoxLayout, QWidget
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    # Only import what we need into the global namespace
-#    from PyQt4.QtCore import qDebug, Qt, QEvent, QObject, QSignalMapper, QSize, QPointF
-#    from PyQt4.QtGui import QApplication, QComboBox, QDockWidget, QFontComboBox, QFormLayout, \
-#            QGroupBox, QHBoxLayout, QIcon, QIntValidator, QDoubleValidator, QKeyEvent, QLineEdit, \
-#            QScrollArea, QToolButton, QVBoxLayout, QWidget
-#    PYSIDE = False
-#    PYQT4 = True
+            QScrollArea, QToolButton, QVBoxLayout, QWidget, QFont
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    # Only import what we need into the global namespace
+    from PyQt4.QtCore import qDebug, Qt, QEvent, QObject, QSignalMapper, \
+        QSize, QPointF, SLOT, SIGNAL
+    from PyQt4.QtCore import pyqtSignal as Signal
+    from PyQt4.QtCore import pyqtSlot as Slot
+    from PyQt4.QtGui import QApplication, QComboBox, QDockWidget, QFontComboBox, QFormLayout, \
+            QGroupBox, QHBoxLayout, QIcon, QIntValidator, QDoubleValidator, QKeyEvent, QLineEdit, \
+            QScrollArea, QToolButton, QVBoxLayout, QWidget, QFont
 
 #--Local Imports.
 from object_data import *
@@ -60,8 +62,9 @@ class PropertyEditor(QDockWidget):
     .. sphinx_generate_methods_summary::
        PropertyEditor
     """
-    def __init__(self, iconDirectory, pickAddMode, widgetToFocus,
-                 title, parent, flags=Qt.WindowFlags):
+    def __init__(self, iconDirectory="", pickAddMode=True, widgetToFocus=None,
+                 # title, parent, flags=Qt.WindowFlags):
+                 parent=None, flags=Qt.WindowFlags):
         """
         Default class constructor.
 
@@ -158,7 +161,7 @@ class PropertyEditor(QDockWidget):
 
         self.hideAllGroups()
 
-        # connect(signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(fieldEdited(QObject*)))
+        self.connect(self.signalMapper, SIGNAL("mapped(QObject*)"), self, SLOT("fieldEdited(QObject*)"))
 
         self.focusWidget = widgetToFocus
         self.installEventFilter(self)
@@ -259,7 +262,7 @@ class PropertyEditor(QDockWidget):
             if key == Qt.Key_Escape:
                 if self.focusWidget:
                     self.focusWidget.setFocus(Qt.OtherFocusReason)
-                return true
+                return True
             else:
                 pressedKey.ignore()
 
@@ -290,316 +293,6 @@ class PropertyEditor(QDockWidget):
         self.toolButtonPickAdd.clicked.connect(self.togglePickAddMode)
         return self.toolButtonPickAdd
 
-    def updatePickAddModeButton(self, pickAddMode):
-        """
-        TOWRITE
-
-        :param `pickAddMode`: TOWRITE
-        :type `pickAddMode`: bool
-        """
-        pickAdd = pickAddMode
-        if pickAdd:
-            self.toolButtonPickAdd.setIcon(QIcon(self.iconDir + os.sep + "pickadd.png"))
-            self.toolButtonPickAdd.setIconSize(QSize(self.iconSize, self.iconSize))
-            self.toolButtonPickAdd.setText("PickAdd")
-            self.toolButtonPickAdd.setToolTip("PickAdd Mode - Add to current selection.\nClick to switch to PickNew Mode.")
-            self.toolButtonPickAdd.setToolButtonStyle(Qt.ToolButtonIconOnly)
-        else:
-            self.toolButtonPickAdd.setIcon(QIcon(self.iconDir + os.sep + "picknew.png"))
-            self.toolButtonPickAdd.setIconSize(QSize(self.iconSize, self.iconSize))
-            self.toolButtonPickAdd.setText("PickNew")
-            self.toolButtonPickAdd.setToolTip("PickNew Mode - Replace current selection.\nClick to switch to PickAdd Mode.")
-            self.toolButtonPickAdd.setToolButtonStyle(Qt.ToolButtonIconOnly)
-
-    def togglePickAddMode(self):
-        pass #TODO/TEMP/PORT/REMOVEME#
-        # emit pickAddModeToggled()
-
-    def setSelectedItems(self, itemList):
-        """
-        TOWRITE
-
-        :param `itemList`: TOWRITE
-        :type `itemList`: QList<QGraphicsItem*>
-        """
-        pass #TODO/TEMP/PORT/REMOVEME#
-
-        self.selectedItemList = itemList
-        # # Hide all the groups initially, then decide which ones to show
-        # hideAllGroups()
-        # comboBoxSelected->clear()
-        #
-        # if itemList.isEmpty():
-        #
-        #     comboBoxSelected->addItem(tr("No Selection"))
-        #     return
-        #
-        # QSet<int> typeSet
-        #
-        # numAll = itemList.size()
-        # numArc        = 0
-        # numBlock      = 0
-        # numCircle     = 0
-        # numDimAlign   = 0
-        # numDimAngular = 0
-        # numDimArcLen  = 0
-        # numDimDiam    = 0
-        # numDimLeader  = 0
-        # numDimLinear  = 0
-        # numDimOrd     = 0
-        # numDimRadius  = 0
-        # numEllipse    = 0
-        # numImage      = 0
-        # numInfLine    = 0
-        # numLine       = 0
-        # numPath       = 0
-        # numPoint      = 0
-        # numPolygon    = 0
-        # numPolyline   = 0
-        # numRay        = 0
-        # numRect       = 0
-        # numTextMulti  = 0
-        # numTextSingle = 0
-        # numUnknown    = 0
-        #
-        # foreach(QGraphicsItem* item, itemList)
-        #
-        #     if not item:
-        #         continue
-        #
-        #     int objType = item->type()
-        #     typeSet.insert(objType)
-        #
-        #     if   objType == OBJ_TYPE_ARC:          numArc++
-        #     elif objType == OBJ_TYPE_BLOCK:        numBlock++
-        #     elif objType == OBJ_TYPE_CIRCLE:       numCircle++
-        #     elif objType == OBJ_TYPE_DIMALIGNED:   numDimAlign++
-        #     elif objType == OBJ_TYPE_DIMANGULAR:   numDimAngular++
-        #     elif objType == OBJ_TYPE_DIMARCLENGTH: numDimArcLen++
-        #     elif objType == OBJ_TYPE_DIMDIAMETER:  numDimDiam++
-        #     elif objType == OBJ_TYPE_DIMLEADER:    numDimLeader++
-        #     elif objType == OBJ_TYPE_DIMLINEAR:    numDimLinear++
-        #     elif objType == OBJ_TYPE_DIMORDINATE:  numDimOrd++
-        #     elif objType == OBJ_TYPE_DIMRADIUS:    numDimRadius++
-        #     elif objType == OBJ_TYPE_ELLIPSE:      numEllipse++
-        #     elif objType == OBJ_TYPE_IMAGE:        numImage++
-        #     elif objType == OBJ_TYPE_INFINITELINE: numInfLine++
-        #     elif objType == OBJ_TYPE_LINE:         numLine++
-        #     elif objType == OBJ_TYPE_PATH:         numPath++
-        #     elif objType == OBJ_TYPE_POINT:        numPoint++
-        #     elif objType == OBJ_TYPE_POLYGON:      numPolygon++
-        #     elif objType == OBJ_TYPE_POLYLINE:     numPolyline++
-        #     elif objType == OBJ_TYPE_RAY:          numRay++
-        #     elif objType == OBJ_TYPE_RECTANGLE:    numRect++
-        #     elif objType == OBJ_TYPE_TEXTMULTI:    numTextMulti++
-        #     elif objType == OBJ_TYPE_TEXTSINGLE:   numTextSingle++
-        #     else:                                  numUnknown++
-        #
-        # int numTypes = typeSet.size()
-        #
-        # #==================================================
-        # # Populate the selection comboBox
-        # #==================================================
-        # if numTypes > 1:
-        #
-        #     comboBoxSelected->addItem(tr("Varies") + " (" + QString().setNum(numAll) + ")")
-        #     connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)))
-        #
-        # QString comboBoxStr
-        # foreach(int objType, typeSet)
-        #
-        #     if   objType == OBJ_TYPE_ARC:          comboBoxStr = self.tr("Arc") + " (" + QString().setNum(numArc) + ")"
-        #     elif objType == OBJ_TYPE_BLOCK:        comboBoxStr = self.tr("Block") + " (" + QString().setNum(numBlock) + ")"
-        #     elif objType == OBJ_TYPE_CIRCLE:       comboBoxStr = self.tr("Circle") + " (" + QString().setNum(numCircle) + ")"
-        #     elif objType == OBJ_TYPE_DIMALIGNED:   comboBoxStr = self.tr("Aligned Dimension") + " (" + QString().setNum(numDimAlign) + ")"
-        #     elif objType == OBJ_TYPE_DIMANGULAR:   comboBoxStr = self.tr("Angular Dimension") + " (" + QString().setNum(numDimAngular) + ")"
-        #     elif objType == OBJ_TYPE_DIMARCLENGTH: comboBoxStr = self.tr("Arclength Dimension") + " (" + QString().setNum(numDimArcLen) + ")"
-        #     elif objType == OBJ_TYPE_DIMDIAMETER:  comboBoxStr = self.tr("Diameter Dimension") + " (" + QString().setNum(numDimDiam) + ")"
-        #     elif objType == OBJ_TYPE_DIMLEADER:    comboBoxStr = self.tr("Leader Dimension") + " (" + QString().setNum(numDimLeader) + ")"
-        #     elif objType == OBJ_TYPE_DIMLINEAR:    comboBoxStr = self.tr("Linear Dimension") + " (" + QString().setNum(numDimLinear) + ")"
-        #     elif objType == OBJ_TYPE_DIMORDINATE:  comboBoxStr = self.tr("Ordinate Dimension") + " (" + QString().setNum(numDimOrd) + ")"
-        #     elif objType == OBJ_TYPE_DIMRADIUS:    comboBoxStr = self.tr("Radius Dimension") + " (" + QString().setNum(numDimRadius) + ")"
-        #     elif objType == OBJ_TYPE_ELLIPSE:      comboBoxStr = self.tr("Ellipse") + " (" + QString().setNum(numEllipse) + ")"
-        #     elif objType == OBJ_TYPE_IMAGE:        comboBoxStr = self.tr("Image") + " (" + QString().setNum(numImage) + ")"
-        #     elif objType == OBJ_TYPE_INFINITELINE: comboBoxStr = self.tr("Infinite Line") + " (" + QString().setNum(numInfLine) + ")"
-        #     elif objType == OBJ_TYPE_LINE:         comboBoxStr = self.tr("Line") + " (" + QString().setNum(numLine) + ")"
-        #     elif objType == OBJ_TYPE_PATH:         comboBoxStr = self.tr("Path") + " (" + QString().setNum(numPath) + ")"
-        #     elif objType == OBJ_TYPE_POINT:        comboBoxStr = self.tr("Point") + " (" + QString().setNum(numPoint) + ")"
-        #     elif objType == OBJ_TYPE_POLYGON:      comboBoxStr = self.tr("Polygon") + " (" + QString().setNum(numPolygon) + ")"
-        #     elif objType == OBJ_TYPE_POLYLINE:     comboBoxStr = self.tr("Polyline") + " (" + QString().setNum(numPolyline) + ")"
-        #     elif objType == OBJ_TYPE_RAY:          comboBoxStr = self.tr("Ray") + " (" + QString().setNum(numRay) + ")"
-        #     elif objType == OBJ_TYPE_RECTANGLE:    comboBoxStr = self.tr("Rectangle") + " (" + QString().setNum(numRect) + ")"
-        #     elif objType == OBJ_TYPE_TEXTMULTI:    comboBoxStr = self.tr("Multiline Text") + " (" + QString().setNum(numTextMulti) + ")"
-        #     elif objType == OBJ_TYPE_TEXTSINGLE:   comboBoxStr = self.tr("Text") + " (" + QString().setNum(numTextSingle) + ")"
-        #     else:                                  comboBoxStr = self.tr("Unknown") + " (" + QString().setNum(numUnknown) + ")"
-        #
-        #     comboBoxSelected->addItem(comboBoxStr, objType)
-        #
-        # #==================================================
-        # # Load Data into the fields
-        # #==================================================
-        #
-        # #Clear fields first so if the selected data varies, the comparison is simple
-        # clearAllFields()
-        #
-        # foreach(QGraphicsItem* item, itemList)
-        #
-        #     if not item:
-        #         continue
-        #
-        #     # TODO: load data into the General field
-        #
-        #     int objType = item->type()
-        #     if objType == OBJ_TYPE_ARC:
-        #         ArcObject* obj = static_cast<ArcObject*>(item)
-        #         if obj:
-        #             updateLineEditNumIfVaries(lineEditArcCenterX,    obj->objectCenterX(),       false)
-        #             updateLineEditNumIfVaries(lineEditArcCenterY,   -obj->objectCenterY(),       false)
-        #             updateLineEditNumIfVaries(lineEditArcRadius,     obj->objectRadius(),        false)
-        #             updateLineEditNumIfVaries(lineEditArcStartAngle, obj->objectStartAngle(),     true)
-        #             updateLineEditNumIfVaries(lineEditArcEndAngle,   obj->objectEndAngle(),       true)
-        #             updateLineEditNumIfVaries(lineEditArcStartX,     obj->objectStartX(),        false)
-        #             updateLineEditNumIfVaries(lineEditArcStartY,    -obj->objectStartY(),        false)
-        #             updateLineEditNumIfVaries(lineEditArcEndX,       obj->objectEndX(),          false)
-        #             updateLineEditNumIfVaries(lineEditArcEndY,      -obj->objectEndY(),          false)
-        #             updateLineEditNumIfVaries(lineEditArcArea,       obj->objectArea(),          false)
-        #             updateLineEditNumIfVaries(lineEditArcLength,     obj->objectArcLength(),     false)
-        #             updateLineEditNumIfVaries(lineEditArcChord,      obj->objectChord(),         false)
-        #             updateLineEditNumIfVaries(lineEditArcIncAngle,   obj->objectIncludedAngle(),  true)
-        #             updateComboBoxBoolIfVaries(comboBoxArcClockwise, obj->objectClockwise(),      true)
-        #
-        #     elif objType == OBJ_TYPE_BLOCK:
-        #         # TODO: load block data
-        #
-        #     elif objType == OBJ_TYPE_CIRCLE:
-        #         CircleObject* obj = static_cast<CircleObject*>(item)
-        #         if obj:
-        #             updateLineEditNumIfVaries(lineEditCircleCenterX,       obj->objectCenterX(),       false)
-        #             updateLineEditNumIfVaries(lineEditCircleCenterY,      -obj->objectCenterY(),       false)
-        #             updateLineEditNumIfVaries(lineEditCircleRadius,        obj->objectRadius(),        false)
-        #             updateLineEditNumIfVaries(lineEditCircleDiameter,      obj->objectDiameter(),      false)
-        #             updateLineEditNumIfVaries(lineEditCircleArea,          obj->objectArea(),          false)
-        #             updateLineEditNumIfVaries(lineEditCircleCircumference, obj->objectCircumference(), false)
-        #
-        #     elif objType == OBJ_TYPE_DIMALIGNED:
-        #         # TODO: load aligned dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMANGULAR:
-        #         # TODO: load angular dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMARCLENGTH:
-        #         # TODO: load arclength dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMDIAMETER:
-        #         # TODO: load diameter dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMLEADER:
-        #         # TODO: load leader dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMLINEAR:
-        #         # TODO: load linear dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMORDINATE:
-        #         # TODO: load ordinate dimension data
-        #
-        #     elif objType == OBJ_TYPE_DIMRADIUS:
-        #         # TODO: load radius dimension data
-        #
-        #     elif objType == OBJ_TYPE_ELLIPSE:
-        #         EllipseObject* obj = static_cast<EllipseObject*>(item)
-        #         if obj:
-        #             updateLineEditNumIfVaries(lineEditEllipseCenterX,       obj->objectCenterX(),       false)
-        #             updateLineEditNumIfVaries(lineEditEllipseCenterY,      -obj->objectCenterY(),       false)
-        #             updateLineEditNumIfVaries(lineEditEllipseRadiusMajor,   obj->objectRadiusMajor(),   false)
-        #             updateLineEditNumIfVaries(lineEditEllipseRadiusMinor,   obj->objectRadiusMinor(),   false)
-        #             updateLineEditNumIfVaries(lineEditEllipseDiameterMajor, obj->objectDiameterMajor(), false)
-        #             updateLineEditNumIfVaries(lineEditEllipseDiameterMinor, obj->objectDiameterMinor(), false)
-        #
-        #     elif objType == OBJ_TYPE_IMAGE:
-        #         # TODO: load image data
-        #
-        #     elif objType == OBJ_TYPE_INFINITELINE:
-        #         # TODO: load infinite line data
-        #
-        #     elif objType == OBJ_TYPE_LINE:
-        #         LineObject* obj = static_cast<LineObject*>(item)
-        #         if obj:
-        #             updateLineEditNumIfVaries(lineEditLineStartX,  obj->objectX1(),     false)
-        #             updateLineEditNumIfVaries(lineEditLineStartY, -obj->objectY1(),     false)
-        #             updateLineEditNumIfVaries(lineEditLineEndX,    obj->objectX2(),     false)
-        #             updateLineEditNumIfVaries(lineEditLineEndY,   -obj->objectY2(),     false)
-        #             updateLineEditNumIfVaries(lineEditLineDeltaX,  obj->objectDeltaX(), false)
-        #             updateLineEditNumIfVaries(lineEditLineDeltaY, -obj->objectDeltaY(), false)
-        #             updateLineEditNumIfVaries(lineEditLineAngle,   obj->objectAngle(),   true)
-        #             updateLineEditNumIfVaries(lineEditLineLength,  obj->objectLength(), false)
-        #
-        #     elif objType == OBJ_TYPE_PATH:
-        #         # TODO: load path data
-        #
-        #     elif objType == OBJ_TYPE_POINT:
-        #         PointObject* obj = static_cast<PointObject*>(item)
-        #         if obj:
-        #             updateLineEditNumIfVaries(lineEditPointX,  obj->objectX(), false)
-        #             updateLineEditNumIfVaries(lineEditPointY, -obj->objectY(), false)
-        #
-        #     elif objType == OBJ_TYPE_POLYGON:
-        #         # TODO: load polygon data
-        #
-        #     elif objType == OBJ_TYPE_POLYLINE:
-        #         # TODO: load polyline data
-        #
-        #     elif objType == OBJ_TYPE_RAY:
-        #         # TODO: load ray data
-        #
-        #     elif objType == OBJ_TYPE_RECTANGLE:
-        #         RectObject* obj = static_cast<RectObject*>(item)
-        #         if obj:
-        #             QPointF corn1 = obj->objectTopLeft()
-        #             QPointF corn2 = obj->objectTopRight()
-        #             QPointF corn3 = obj->objectBottomLeft()
-        #             QPointF corn4 = obj->objectBottomRight()
-        #
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner1X,  corn1.x(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner1Y, -corn1.y(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner2X,  corn2.x(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner2Y, -corn2.y(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner3X,  corn3.x(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner3Y, -corn3.y(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner4X,  corn4.x(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleCorner4Y, -corn4.y(),           false)
-        #             updateLineEditNumIfVaries(lineEditRectangleWidth,     obj->objectWidth(),  false)
-        #             updateLineEditNumIfVaries(lineEditRectangleHeight,   -obj->objectHeight(), false)
-        #             updateLineEditNumIfVaries(lineEditRectangleArea,      obj->objectArea(),   false)
-        #
-        #     elif objType == OBJ_TYPE_TEXTMULTI:
-        #         # TODO: load multiline text data
-        #
-        #     elif objType == OBJ_TYPE_TEXTSINGLE:
-        #         TextSingleObject* obj = static_cast<TextSingleObject*>(item)
-        #         if obj:
-        #
-        #             updateLineEditStrIfVaries(lineEditTextSingleContents,    obj->objectText())
-        #             updateFontComboBoxStrIfVaries(comboBoxTextSingleFont,    obj->objectTextFont())
-        #             updateComboBoxStrIfVaries(comboBoxTextSingleJustify,     obj->objectTextJustify(), obj->objectTextJustifyList())
-        #             updateLineEditNumIfVaries(lineEditTextSingleHeight,      obj->objectTextSize(),      false)
-        #             updateLineEditNumIfVaries(lineEditTextSingleRotation,   -obj->rotation(),             true)
-        #             updateLineEditNumIfVaries(lineEditTextSingleX,           obj->objectX(),             false)
-        #             updateLineEditNumIfVaries(lineEditTextSingleY,          -obj->objectY(),             false)
-        #             updateComboBoxBoolIfVaries(comboBoxTextSingleBackward,   obj->objectTextBackward(),   true)
-        #             updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->objectTextUpsideDown(), true)
-        #
-        #
-        #
-        #
-        # #==================================================
-        # # Only show fields if all objects are the same type
-        # #==================================================
-        # if (numTypes == 1):
-        #
-        #     foreach(int objType, typeSet)
-        #
-        #         showGroups(objType)
-
     def updateLineEditStrIfVaries(self, lineEdit, strng):
         """
         TOWRITE
@@ -609,10 +302,11 @@ class PropertyEditor(QDockWidget):
         :param `strng`: TOWRITE
         :type `strng`: QString
         """
-        fieldOldText = lineEdit.text()
-        fieldNewText = strng
+        fieldVariesText = self.fieldVariesText
+        fieldOldText = self.fieldVariesText = lineEdit.text()
+        fieldNewText = self.fieldVariesText = strng
 
-        if fieldOldText.isEmpty():
+        if not fieldOldText:
             lineEdit.setText(fieldNewText)
         elif fieldOldText != fieldNewText:
             lineEdit.setText(fieldVariesText)
@@ -630,12 +324,13 @@ class PropertyEditor(QDockWidget):
         """
         precision = 0
         if useAnglePrecision:
-            precision = precisionAngle
+            precision = self.precisionAngle
         else:
-            precision = precisionLength
+            precision = self.precisionLength
 
-        fieldOldText = lineEdit.text()
-        fieldNewText.setNum(num, 'f', precision)
+        fieldVariesText = self.fieldVariesText
+        fieldOldText = self.fieldOldText = lineEdit.text()
+        fieldNewText = self.fieldNewText = str(round(num, precision))
 
         # Prevent negative zero :D
         negativeZero = "-0."
@@ -644,7 +339,7 @@ class PropertyEditor(QDockWidget):
         if fieldNewText == negativeZero:
             fieldNewText = negativeZero.replace("-", "")
 
-        if fieldOldText.isEmpty():
+        if not fieldOldText:
             lineEdit.setText(fieldNewText)
         elif fieldOldText != fieldNewText:
             lineEdit.setText(fieldVariesText)
@@ -658,18 +353,17 @@ class PropertyEditor(QDockWidget):
         :param `strng`: TOWRITE
         :type `strng`: QString
         """
-        fieldOldText = fontComboBox.property("FontFamily").toString()
-        fieldNewText = strng
+        fieldVariesText = self.fieldVariesText
+        fieldOldText = self.fieldOldText = fontComboBox.property("FontFamily")  # .toString()
+        fieldNewText = self.fieldNewText = strng
         # qDebug("old: %d %s, new: %d %s", oldIndex, fontComboBox.currentText(), newIndex, strng)
-        if fieldOldText.isEmpty():
-
+        if not fieldOldText:
             fontComboBox.setCurrentFont(QFont(fieldNewText))
             fontComboBox.setProperty("FontFamily", fieldNewText)
-
         elif fieldOldText != fieldNewText:
-
-            if fontComboBox.findText(fieldVariesText) == -1: #Prevent multiple entries
+            if fontComboBox.findText(fieldVariesText) == -1:  # Prevent multiple entries
                 fontComboBox.addItem(fieldVariesText)
+
             fontComboBox.setCurrentIndex(fontComboBox.findText(fieldVariesText))
 
     def updateComboBoxStrIfVaries(self, comboBox, strng, strList):
@@ -683,21 +377,19 @@ class PropertyEditor(QDockWidget):
         :param `strList`: TOWRITE
         :type `strList`: QStringList
         """
-        fieldOldText = comboBox.currentText()
-        fieldNewText = strng
+        fieldVariesText = self.fieldVariesText
+        fieldOldText = self.fieldOldText = comboBox.currentText()
+        fieldNewText = self.fieldNewText = strng
 
-        if fieldOldText.isEmpty():
-
+        if not fieldOldText:
             for s in strList:
-
                 comboBox.addItem(s, s)
 
             comboBox.setCurrentIndex(comboBox.findText(fieldNewText))
-
         elif fieldOldText != fieldNewText:
-
             if comboBox.findText(fieldVariesText) == -1: # Prevent multiple entries
                 comboBox.addItem(fieldVariesText)
+
             comboBox.setCurrentIndex(comboBox.findText(fieldVariesText))
 
     def updateComboBoxBoolIfVaries(self, comboBox, val, yesOrNoText):
@@ -711,287 +403,38 @@ class PropertyEditor(QDockWidget):
         :param `yesOrNoText`: TOWRITE
         :type `yesOrNoText`: bool
         """
-        fieldOldText = comboBox.currentText()
+        fieldYesText = self.fieldYesText
+        fieldNoText = self.fieldNoText
+        fieldOnText = self.fieldOnText
+        fieldOffText = self.fieldOffText
+        fieldVariesText = self.fieldVariesText
+        fieldOldText = self.fieldOldText = comboBox.currentText()
+
         if yesOrNoText:
-
             if val:
-                fieldNewText = fieldYesText
+                fieldNewText = self.fieldNewText = fieldYesText
             else:
-                fieldNewText = fieldNoText
-
+                fieldNewText = self.fieldNewText = fieldNoText
         else:
-
             if val:
-                fieldNewText = fieldOnText
+                fieldNewText = self.fieldNewText = fieldOnText
             else:
-                fieldNewText = fieldOffText
+                fieldNewText = self.fieldNewText = fieldOffText
 
-
-        if fieldOldText.isEmpty():
-
+        if not fieldOldText:
             if yesOrNoText:
-
                 comboBox.addItem(fieldYesText, True)
                 comboBox.addItem(fieldNoText, False)
-
             else:
-
                 comboBox.addItem(fieldOnText, True)
                 comboBox.addItem(fieldOffText, False)
 
             comboBox.setCurrentIndex(comboBox.findText(fieldNewText))
-
         elif fieldOldText != fieldNewText:
-
             if comboBox.findText(fieldVariesText) == -1: # Prevent multiple entries
                 comboBox.addItem(fieldVariesText)
+
             comboBox.setCurrentIndex(comboBox.findText(fieldVariesText))
-
-    def showGroups(self, objType):
-        """
-        TOWRITE
-
-        :param `objType`: TOWRITE
-        :type `objType`: int
-        """
-        if objType == OBJ_TYPE_ARC:
-            groupBoxGeometryArc.show()
-            groupBoxMiscArc.show()
-        elif objType == OBJ_TYPE_BLOCK:
-            groupBoxGeometryBlock.show()
-        elif objType == OBJ_TYPE_CIRCLE:
-            groupBoxGeometryCircle.show()
-        elif objType == OBJ_TYPE_DIMALIGNED:
-            groupBoxGeometryDimAligned.show()
-        elif objType == OBJ_TYPE_DIMANGULAR:
-            groupBoxGeometryDimAngular.show()
-        elif objType == OBJ_TYPE_DIMARCLENGTH:
-            groupBoxGeometryDimArcLength.show()
-        elif objType == OBJ_TYPE_DIMDIAMETER:
-            groupBoxGeometryDimDiameter.show()
-        elif objType == OBJ_TYPE_DIMLEADER:
-            groupBoxGeometryDimLeader.show()
-        elif objType == OBJ_TYPE_DIMLINEAR:
-            groupBoxGeometryDimLinear.show()
-        elif objType == OBJ_TYPE_DIMORDINATE:
-            groupBoxGeometryDimOrdinate.show()
-        elif objType == OBJ_TYPE_DIMRADIUS:
-            groupBoxGeometryDimRadius.show()
-        elif objType == OBJ_TYPE_ELLIPSE:
-            groupBoxGeometryEllipse.show()
-        elif objType == OBJ_TYPE_IMAGE:
-            groupBoxGeometryImage.show()
-            groupBoxMiscImage.show()
-        elif objType == OBJ_TYPE_INFINITELINE:
-            groupBoxGeometryInfiniteLine.show()
-        elif objType == OBJ_TYPE_LINE:
-            groupBoxGeometryLine.show()
-        elif objType == OBJ_TYPE_PATH:
-            groupBoxGeometryPath.show()
-            groupBoxMiscPath.show()
-        elif objType == OBJ_TYPE_POINT:
-            groupBoxGeometryPoint.show()
-        elif objType == OBJ_TYPE_POLYGON:
-            groupBoxGeometryPolygon.show()
-        elif objType == OBJ_TYPE_POLYLINE:
-            groupBoxGeometryPolyline.show()
-            groupBoxMiscPolyline.show()
-        elif objType == OBJ_TYPE_RAY:
-            groupBoxGeometryRay.show()
-        elif objType == OBJ_TYPE_RECTANGLE:
-            groupBoxGeometryRectangle.show()
-        elif objType == OBJ_TYPE_TEXTMULTI:
-            groupBoxGeometryTextMulti.show()
-        elif objType == OBJ_TYPE_TEXTSINGLE:
-            groupBoxTextTextSingle.show()
-            groupBoxGeometryTextSingle.show()
-            groupBoxMiscTextSingle.show()
-
-    def showOneType(self, index):
-        """
-        TOWRITE
-
-        :param `index`: TOWRITE
-        :type `index`: int
-        """
-        self.hideAllGroups()
-        self.showGroups(self.comboBoxSelected.itemData(index).toInt())
-
-    def hideAllGroups(self):
-        """TOWRITE"""
-        # NOTE: General group will never be hidden
-        self.groupBoxGeometryArc.hide()
-        self.groupBoxMiscArc.hide()
-        self.groupBoxGeometryBlock.hide()
-        self.groupBoxGeometryCircle.hide()
-        self.groupBoxGeometryDimAligned.hide()
-        self.groupBoxGeometryDimAngular.hide()
-        self.groupBoxGeometryDimArcLength.hide()
-        self.groupBoxGeometryDimDiameter.hide()
-        self.groupBoxGeometryDimLeader.hide()
-        self.groupBoxGeometryDimLinear.hide()
-        self.groupBoxGeometryDimOrdinate.hide()
-        self.groupBoxGeometryDimRadius.hide()
-        self.groupBoxGeometryEllipse.hide()
-        self.groupBoxGeometryImage.hide()
-        self.groupBoxMiscImage.hide()
-        self.groupBoxGeometryInfiniteLine.hide()
-        self.groupBoxGeometryLine.hide()
-        self.groupBoxGeometryPath.hide()
-        self.groupBoxMiscPath.hide()
-        self.groupBoxGeometryPoint.hide()
-        self.groupBoxGeometryPolygon.hide()
-        self.groupBoxGeometryPolyline.hide()
-        self.groupBoxMiscPolyline.hide()
-        self.groupBoxGeometryRay.hide()
-        self.groupBoxGeometryRectangle.hide()
-        self.groupBoxGeometryTextMulti.hide()
-        self.groupBoxTextTextSingle.hide()
-        self.groupBoxGeometryTextSingle.hide()
-        self.groupBoxMiscTextSingle.hide()
-
-    def clearAllFields(self):
-        """TOWRITE"""
-        # General
-        self.comboBoxGeneralLayer.clear()
-        self.comboBoxGeneralColor.clear()
-        self.comboBoxGeneralLineType.clear()
-        self.comboBoxGeneralLineWeight.clear()
-
-        # Arc
-        self.lineEditArcCenterX.clear()
-        self.lineEditArcCenterY.clear()
-        self.lineEditArcRadius.clear()
-        self.lineEditArcStartAngle.clear()
-        self.lineEditArcEndAngle.clear()
-        self.lineEditArcStartX.clear()
-        self.lineEditArcStartY.clear()
-        self.lineEditArcEndX.clear()
-        self.lineEditArcEndY.clear()
-        self.lineEditArcArea.clear()
-        self.lineEditArcLength.clear()
-        self.lineEditArcChord.clear()
-        self.lineEditArcIncAngle.clear()
-        self.comboBoxArcClockwise.clear()
-
-        # Block
-        self.lineEditBlockX.clear()
-        self.lineEditBlockY.clear()
-
-        # Circle
-        self.lineEditCircleCenterX.clear()
-        self.lineEditCircleCenterY.clear()
-        self.lineEditCircleRadius.clear()
-        self.lineEditCircleDiameter.clear()
-        self.lineEditCircleArea.clear()
-        self.lineEditCircleCircumference.clear()
-
-        # TODO: DimAligned
-        # TODO: DimAngular
-        # TODO: DimArcLength
-        # TODO: DimDiameter
-        # TODO: DimLeader
-        # TODO: DimLinear
-        # TODO: DimOrdinate
-        # TODO: DimRadius
-
-        # Ellipse
-        self.lineEditEllipseCenterX.clear()
-        self.lineEditEllipseCenterY.clear()
-        self.lineEditEllipseRadiusMajor.clear()
-        self.lineEditEllipseRadiusMinor.clear()
-        self.lineEditEllipseDiameterMajor.clear()
-        self.lineEditEllipseDiameterMinor.clear()
-
-        # Image
-        self.lineEditImageX.clear()
-        self.lineEditImageY.clear()
-        self.lineEditImageWidth.clear()
-        self.lineEditImageHeight.clear()
-
-        # Infinite Line
-        self.lineEditInfiniteLineX1.clear()
-        self.lineEditInfiniteLineY1.clear()
-        self.lineEditInfiniteLineX2.clear()
-        self.lineEditInfiniteLineY2.clear()
-        self.lineEditInfiniteLineVectorX.clear()
-        self.lineEditInfiniteLineVectorY.clear()
-
-        # Line
-        self.lineEditLineStartX.clear()
-        self.lineEditLineStartY.clear()
-        self.lineEditLineEndX.clear()
-        self.lineEditLineEndY.clear()
-        self.lineEditLineDeltaX.clear()
-        self.lineEditLineDeltaY.clear()
-        self.lineEditLineAngle.clear()
-        self.lineEditLineLength.clear()
-
-        # Path
-        self.comboBoxPathVertexNum.clear()
-        self.lineEditPathVertexX.clear()
-        self.lineEditPathVertexY.clear()
-        self.lineEditPathArea.clear()
-        self.lineEditPathLength.clear()
-        self.comboBoxPathClosed.clear()
-
-        # Point
-        self.lineEditPointX.clear()
-        self.lineEditPointY.clear()
-
-        # Polygon
-        self.lineEditPolygonCenterX.clear()
-        self.lineEditPolygonCenterY.clear()
-        self.lineEditPolygonRadiusVertex.clear()
-        self.lineEditPolygonRadiusSide.clear()
-        self.lineEditPolygonDiameterVertex.clear()
-        self.lineEditPolygonDiameterSide.clear()
-        self.lineEditPolygonInteriorAngle.clear()
-
-        # Polyline
-        self.comboBoxPolylineVertexNum.clear()
-        self.lineEditPolylineVertexX.clear()
-        self.lineEditPolylineVertexY.clear()
-        self.lineEditPolylineArea.clear()
-        self.lineEditPolylineLength.clear()
-        self.comboBoxPolylineClosed.clear()
-
-        # Ray
-        self.lineEditRayX1.clear()
-        self.lineEditRayY1.clear()
-        self.lineEditRayX2.clear()
-        self.lineEditRayY2.clear()
-        self.lineEditRayVectorX.clear()
-        self.lineEditRayVectorY.clear()
-
-        # Rectangle
-        self.lineEditRectangleCorner1X.clear()
-        self.lineEditRectangleCorner1Y.clear()
-        self.lineEditRectangleCorner2X.clear()
-        self.lineEditRectangleCorner2Y.clear()
-        self.lineEditRectangleCorner3X.clear()
-        self.lineEditRectangleCorner3Y.clear()
-        self.lineEditRectangleCorner4X.clear()
-        self.lineEditRectangleCorner4Y.clear()
-        self.lineEditRectangleWidth.clear()
-        self.lineEditRectangleHeight.clear()
-        self.lineEditRectangleArea.clear()
-
-        # Text Multi
-        self.lineEditTextMultiX.clear()
-        self.lineEditTextMultiY.clear()
-
-        # Text Single
-        self.lineEditTextSingleContents.clear()
-        self.comboBoxTextSingleFont.removeItem(comboBoxTextSingleFont.findText(fieldVariesText)) #NOTE: Do not clear comboBoxTextSingleFont
-        self.comboBoxTextSingleFont.setProperty("FontFamily", "")
-        self.comboBoxTextSingleJustify.clear()
-        self.lineEditTextSingleHeight.clear()
-        self.lineEditTextSingleRotation.clear()
-        self.lineEditTextSingleX.clear()
-        self.lineEditTextSingleY.clear()
-        self.comboBoxTextSingleBackward.clear()
-        self.comboBoxTextSingleUpsideDown.clear()
 
     def createGroupBoxGeneral(self):
         """TOWRITE"""
@@ -1691,7 +1134,7 @@ class PropertyEditor(QDockWidget):
         tb.setStyleSheet("border:none")
         return tb
 
-    def createLineEdit(self, validatorType, readOnly):
+    def createLineEdit(self, validatorType="", readOnly=False):
         """
         Create and return a QLineEdit GUI element.
 
@@ -1751,6 +1194,317 @@ class PropertyEditor(QDockWidget):
 
         self.signalMapper.setMapping(fieldObj, fieldObj)
 
+    # Slots ------------------------------------------------------------------
+
+    @Slot(list)
+    def setSelectedItems(self, itemList):
+        """
+        TOWRITE
+
+        :param `itemList`: TOWRITE
+        :type `itemList`: QList<QGraphicsItem*>
+        """
+        #TODO/PORT#
+
+        self.selectedItemList = itemList
+        # # Hide all the groups initially, then decide which ones to show
+        # hideAllGroups()
+        # comboBoxSelected->clear()
+        #
+        # if itemList.isEmpty():
+        #
+        #     comboBoxSelected->addItem(tr("No Selection"))
+        #     return
+        #
+        # QSet<int> typeSet
+        #
+        # numAll = itemList.size()
+        # numArc        = 0
+        # numBlock      = 0
+        # numCircle     = 0
+        # numDimAlign   = 0
+        # numDimAngular = 0
+        # numDimArcLen  = 0
+        # numDimDiam    = 0
+        # numDimLeader  = 0
+        # numDimLinear  = 0
+        # numDimOrd     = 0
+        # numDimRadius  = 0
+        # numEllipse    = 0
+        # numImage      = 0
+        # numInfLine    = 0
+        # numLine       = 0
+        # numPath       = 0
+        # numPoint      = 0
+        # numPolygon    = 0
+        # numPolyline   = 0
+        # numRay        = 0
+        # numRect       = 0
+        # numTextMulti  = 0
+        # numTextSingle = 0
+        # numUnknown    = 0
+        #
+        # foreach(QGraphicsItem* item, itemList)
+        #
+        #     if not item:
+        #         continue
+        #
+        #     int objType = item->type()
+        #     typeSet.insert(objType)
+        #
+        #     if   objType == OBJ_TYPE_ARC:          numArc++
+        #     elif objType == OBJ_TYPE_BLOCK:        numBlock++
+        #     elif objType == OBJ_TYPE_CIRCLE:       numCircle++
+        #     elif objType == OBJ_TYPE_DIMALIGNED:   numDimAlign++
+        #     elif objType == OBJ_TYPE_DIMANGULAR:   numDimAngular++
+        #     elif objType == OBJ_TYPE_DIMARCLENGTH: numDimArcLen++
+        #     elif objType == OBJ_TYPE_DIMDIAMETER:  numDimDiam++
+        #     elif objType == OBJ_TYPE_DIMLEADER:    numDimLeader++
+        #     elif objType == OBJ_TYPE_DIMLINEAR:    numDimLinear++
+        #     elif objType == OBJ_TYPE_DIMORDINATE:  numDimOrd++
+        #     elif objType == OBJ_TYPE_DIMRADIUS:    numDimRadius++
+        #     elif objType == OBJ_TYPE_ELLIPSE:      numEllipse++
+        #     elif objType == OBJ_TYPE_IMAGE:        numImage++
+        #     elif objType == OBJ_TYPE_INFINITELINE: numInfLine++
+        #     elif objType == OBJ_TYPE_LINE:         numLine++
+        #     elif objType == OBJ_TYPE_PATH:         numPath++
+        #     elif objType == OBJ_TYPE_POINT:        numPoint++
+        #     elif objType == OBJ_TYPE_POLYGON:      numPolygon++
+        #     elif objType == OBJ_TYPE_POLYLINE:     numPolyline++
+        #     elif objType == OBJ_TYPE_RAY:          numRay++
+        #     elif objType == OBJ_TYPE_RECTANGLE:    numRect++
+        #     elif objType == OBJ_TYPE_TEXTMULTI:    numTextMulti++
+        #     elif objType == OBJ_TYPE_TEXTSINGLE:   numTextSingle++
+        #     else:                                  numUnknown++
+        #
+        # int numTypes = typeSet.size()
+        #
+        # #==================================================
+        # # Populate the selection comboBox
+        # #==================================================
+        # if numTypes > 1:
+        #
+        #     comboBoxSelected->addItem(tr("Varies") + " (" + QString().setNum(numAll) + ")")
+        #     connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)))
+        #
+        # QString comboBoxStr
+        # foreach(int objType, typeSet)
+        #
+        #     if   objType == OBJ_TYPE_ARC:          comboBoxStr = self.tr("Arc") + " (" + QString().setNum(numArc) + ")"
+        #     elif objType == OBJ_TYPE_BLOCK:        comboBoxStr = self.tr("Block") + " (" + QString().setNum(numBlock) + ")"
+        #     elif objType == OBJ_TYPE_CIRCLE:       comboBoxStr = self.tr("Circle") + " (" + QString().setNum(numCircle) + ")"
+        #     elif objType == OBJ_TYPE_DIMALIGNED:   comboBoxStr = self.tr("Aligned Dimension") + " (" + QString().setNum(numDimAlign) + ")"
+        #     elif objType == OBJ_TYPE_DIMANGULAR:   comboBoxStr = self.tr("Angular Dimension") + " (" + QString().setNum(numDimAngular) + ")"
+        #     elif objType == OBJ_TYPE_DIMARCLENGTH: comboBoxStr = self.tr("Arclength Dimension") + " (" + QString().setNum(numDimArcLen) + ")"
+        #     elif objType == OBJ_TYPE_DIMDIAMETER:  comboBoxStr = self.tr("Diameter Dimension") + " (" + QString().setNum(numDimDiam) + ")"
+        #     elif objType == OBJ_TYPE_DIMLEADER:    comboBoxStr = self.tr("Leader Dimension") + " (" + QString().setNum(numDimLeader) + ")"
+        #     elif objType == OBJ_TYPE_DIMLINEAR:    comboBoxStr = self.tr("Linear Dimension") + " (" + QString().setNum(numDimLinear) + ")"
+        #     elif objType == OBJ_TYPE_DIMORDINATE:  comboBoxStr = self.tr("Ordinate Dimension") + " (" + QString().setNum(numDimOrd) + ")"
+        #     elif objType == OBJ_TYPE_DIMRADIUS:    comboBoxStr = self.tr("Radius Dimension") + " (" + QString().setNum(numDimRadius) + ")"
+        #     elif objType == OBJ_TYPE_ELLIPSE:      comboBoxStr = self.tr("Ellipse") + " (" + QString().setNum(numEllipse) + ")"
+        #     elif objType == OBJ_TYPE_IMAGE:        comboBoxStr = self.tr("Image") + " (" + QString().setNum(numImage) + ")"
+        #     elif objType == OBJ_TYPE_INFINITELINE: comboBoxStr = self.tr("Infinite Line") + " (" + QString().setNum(numInfLine) + ")"
+        #     elif objType == OBJ_TYPE_LINE:         comboBoxStr = self.tr("Line") + " (" + QString().setNum(numLine) + ")"
+        #     elif objType == OBJ_TYPE_PATH:         comboBoxStr = self.tr("Path") + " (" + QString().setNum(numPath) + ")"
+        #     elif objType == OBJ_TYPE_POINT:        comboBoxStr = self.tr("Point") + " (" + QString().setNum(numPoint) + ")"
+        #     elif objType == OBJ_TYPE_POLYGON:      comboBoxStr = self.tr("Polygon") + " (" + QString().setNum(numPolygon) + ")"
+        #     elif objType == OBJ_TYPE_POLYLINE:     comboBoxStr = self.tr("Polyline") + " (" + QString().setNum(numPolyline) + ")"
+        #     elif objType == OBJ_TYPE_RAY:          comboBoxStr = self.tr("Ray") + " (" + QString().setNum(numRay) + ")"
+        #     elif objType == OBJ_TYPE_RECTANGLE:    comboBoxStr = self.tr("Rectangle") + " (" + QString().setNum(numRect) + ")"
+        #     elif objType == OBJ_TYPE_TEXTMULTI:    comboBoxStr = self.tr("Multiline Text") + " (" + QString().setNum(numTextMulti) + ")"
+        #     elif objType == OBJ_TYPE_TEXTSINGLE:   comboBoxStr = self.tr("Text") + " (" + QString().setNum(numTextSingle) + ")"
+        #     else:                                  comboBoxStr = self.tr("Unknown") + " (" + QString().setNum(numUnknown) + ")"
+        #
+        #     comboBoxSelected->addItem(comboBoxStr, objType)
+        #
+        # #==================================================
+        # # Load Data into the fields
+        # #==================================================
+        #
+        # #Clear fields first so if the selected data varies, the comparison is simple
+        # clearAllFields()
+        #
+        # foreach(QGraphicsItem* item, itemList)
+        #
+        #     if not item:
+        #         continue
+        #
+        #     # TODO: load data into the General field
+        #
+        #     int objType = item->type()
+        #     if objType == OBJ_TYPE_ARC:
+        #         ArcObject* obj = static_cast<ArcObject*>(item)
+        #         if obj:
+        #             updateLineEditNumIfVaries(lineEditArcCenterX,    obj->objectCenterX(),       false)
+        #             updateLineEditNumIfVaries(lineEditArcCenterY,   -obj->objectCenterY(),       false)
+        #             updateLineEditNumIfVaries(lineEditArcRadius,     obj->objectRadius(),        false)
+        #             updateLineEditNumIfVaries(lineEditArcStartAngle, obj->objectStartAngle(),     true)
+        #             updateLineEditNumIfVaries(lineEditArcEndAngle,   obj->objectEndAngle(),       true)
+        #             updateLineEditNumIfVaries(lineEditArcStartX,     obj->objectStartX(),        false)
+        #             updateLineEditNumIfVaries(lineEditArcStartY,    -obj->objectStartY(),        false)
+        #             updateLineEditNumIfVaries(lineEditArcEndX,       obj->objectEndX(),          false)
+        #             updateLineEditNumIfVaries(lineEditArcEndY,      -obj->objectEndY(),          false)
+        #             updateLineEditNumIfVaries(lineEditArcArea,       obj->objectArea(),          false)
+        #             updateLineEditNumIfVaries(lineEditArcLength,     obj->objectArcLength(),     false)
+        #             updateLineEditNumIfVaries(lineEditArcChord,      obj->objectChord(),         false)
+        #             updateLineEditNumIfVaries(lineEditArcIncAngle,   obj->objectIncludedAngle(),  true)
+        #             updateComboBoxBoolIfVaries(comboBoxArcClockwise, obj->objectClockwise(),      true)
+        #
+        #     elif objType == OBJ_TYPE_BLOCK:
+        #         # TODO: load block data
+        #
+        #     elif objType == OBJ_TYPE_CIRCLE:
+        #         CircleObject* obj = static_cast<CircleObject*>(item)
+        #         if obj:
+        #             updateLineEditNumIfVaries(lineEditCircleCenterX,       obj->objectCenterX(),       false)
+        #             updateLineEditNumIfVaries(lineEditCircleCenterY,      -obj->objectCenterY(),       false)
+        #             updateLineEditNumIfVaries(lineEditCircleRadius,        obj->objectRadius(),        false)
+        #             updateLineEditNumIfVaries(lineEditCircleDiameter,      obj->objectDiameter(),      false)
+        #             updateLineEditNumIfVaries(lineEditCircleArea,          obj->objectArea(),          false)
+        #             updateLineEditNumIfVaries(lineEditCircleCircumference, obj->objectCircumference(), false)
+        #
+        #     elif objType == OBJ_TYPE_DIMALIGNED:
+        #         # TODO: load aligned dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMANGULAR:
+        #         # TODO: load angular dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMARCLENGTH:
+        #         # TODO: load arclength dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMDIAMETER:
+        #         # TODO: load diameter dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMLEADER:
+        #         # TODO: load leader dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMLINEAR:
+        #         # TODO: load linear dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMORDINATE:
+        #         # TODO: load ordinate dimension data
+        #
+        #     elif objType == OBJ_TYPE_DIMRADIUS:
+        #         # TODO: load radius dimension data
+        #
+        #     elif objType == OBJ_TYPE_ELLIPSE:
+        #         EllipseObject* obj = static_cast<EllipseObject*>(item)
+        #         if obj:
+        #             updateLineEditNumIfVaries(lineEditEllipseCenterX,       obj->objectCenterX(),       false)
+        #             updateLineEditNumIfVaries(lineEditEllipseCenterY,      -obj->objectCenterY(),       false)
+        #             updateLineEditNumIfVaries(lineEditEllipseRadiusMajor,   obj->objectRadiusMajor(),   false)
+        #             updateLineEditNumIfVaries(lineEditEllipseRadiusMinor,   obj->objectRadiusMinor(),   false)
+        #             updateLineEditNumIfVaries(lineEditEllipseDiameterMajor, obj->objectDiameterMajor(), false)
+        #             updateLineEditNumIfVaries(lineEditEllipseDiameterMinor, obj->objectDiameterMinor(), false)
+        #
+        #     elif objType == OBJ_TYPE_IMAGE:
+        #         # TODO: load image data
+        #
+        #     elif objType == OBJ_TYPE_INFINITELINE:
+        #         # TODO: load infinite line data
+        #
+        #     elif objType == OBJ_TYPE_LINE:
+        #         LineObject* obj = static_cast<LineObject*>(item)
+        #         if obj:
+        #             updateLineEditNumIfVaries(lineEditLineStartX,  obj->objectX1(),     false)
+        #             updateLineEditNumIfVaries(lineEditLineStartY, -obj->objectY1(),     false)
+        #             updateLineEditNumIfVaries(lineEditLineEndX,    obj->objectX2(),     false)
+        #             updateLineEditNumIfVaries(lineEditLineEndY,   -obj->objectY2(),     false)
+        #             updateLineEditNumIfVaries(lineEditLineDeltaX,  obj->objectDeltaX(), false)
+        #             updateLineEditNumIfVaries(lineEditLineDeltaY, -obj->objectDeltaY(), false)
+        #             updateLineEditNumIfVaries(lineEditLineAngle,   obj->objectAngle(),   true)
+        #             updateLineEditNumIfVaries(lineEditLineLength,  obj->objectLength(), false)
+        #
+        #     elif objType == OBJ_TYPE_PATH:
+        #         # TODO: load path data
+        #
+        #     elif objType == OBJ_TYPE_POINT:
+        #         PointObject* obj = static_cast<PointObject*>(item)
+        #         if obj:
+        #             updateLineEditNumIfVaries(lineEditPointX,  obj->objectX(), false)
+        #             updateLineEditNumIfVaries(lineEditPointY, -obj->objectY(), false)
+        #
+        #     elif objType == OBJ_TYPE_POLYGON:
+        #         # TODO: load polygon data
+        #
+        #     elif objType == OBJ_TYPE_POLYLINE:
+        #         # TODO: load polyline data
+        #
+        #     elif objType == OBJ_TYPE_RAY:
+        #         # TODO: load ray data
+        #
+        #     elif objType == OBJ_TYPE_RECTANGLE:
+        #         RectObject* obj = static_cast<RectObject*>(item)
+        #         if obj:
+        #             QPointF corn1 = obj->objectTopLeft()
+        #             QPointF corn2 = obj->objectTopRight()
+        #             QPointF corn3 = obj->objectBottomLeft()
+        #             QPointF corn4 = obj->objectBottomRight()
+        #
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner1X,  corn1.x(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner1Y, -corn1.y(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner2X,  corn2.x(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner2Y, -corn2.y(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner3X,  corn3.x(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner3Y, -corn3.y(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner4X,  corn4.x(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleCorner4Y, -corn4.y(),           false)
+        #             updateLineEditNumIfVaries(lineEditRectangleWidth,     obj->objectWidth(),  false)
+        #             updateLineEditNumIfVaries(lineEditRectangleHeight,   -obj->objectHeight(), false)
+        #             updateLineEditNumIfVaries(lineEditRectangleArea,      obj->objectArea(),   false)
+        #
+        #     elif objType == OBJ_TYPE_TEXTMULTI:
+        #         # TODO: load multiline text data
+        #
+        #     elif objType == OBJ_TYPE_TEXTSINGLE:
+        #         TextSingleObject* obj = static_cast<TextSingleObject*>(item)
+        #         if obj:
+        #
+        #             updateLineEditStrIfVaries(lineEditTextSingleContents,    obj->objectText())
+        #             updateFontComboBoxStrIfVaries(comboBoxTextSingleFont,    obj->objectTextFont())
+        #             updateComboBoxStrIfVaries(comboBoxTextSingleJustify,     obj->objectTextJustify(), obj->objectTextJustifyList())
+        #             updateLineEditNumIfVaries(lineEditTextSingleHeight,      obj->objectTextSize(),      false)
+        #             updateLineEditNumIfVaries(lineEditTextSingleRotation,   -obj->rotation(),             true)
+        #             updateLineEditNumIfVaries(lineEditTextSingleX,           obj->objectX(),             false)
+        #             updateLineEditNumIfVaries(lineEditTextSingleY,          -obj->objectY(),             false)
+        #             updateComboBoxBoolIfVaries(comboBoxTextSingleBackward,   obj->objectTextBackward(),   true)
+        #             updateComboBoxBoolIfVaries(comboBoxTextSingleUpsideDown, obj->objectTextUpsideDown(), true)
+        #
+        #
+        #
+        #
+        # #==================================================
+        # # Only show fields if all objects are the same type
+        # #==================================================
+        # if (numTypes == 1):
+        #
+        #     foreach(int objType, typeSet)
+        #
+        #         showGroups(objType)
+
+    @Slot(bool)
+    def updatePickAddModeButton(self, pickAddMode):
+        """
+        TOWRITE
+
+        :param `pickAddMode`: TOWRITE
+        :type `pickAddMode`: bool
+        """
+        pickAdd = pickAddMode
+        if pickAdd:
+            self.toolButtonPickAdd.setIcon(QIcon(self.iconDir + os.sep + "pickadd.png"))
+            self.toolButtonPickAdd.setIconSize(QSize(self.iconSize, self.iconSize))
+            self.toolButtonPickAdd.setText("PickAdd")
+            self.toolButtonPickAdd.setToolTip("PickAdd Mode - Add to current selection.\nClick to switch to PickNew Mode.")
+            self.toolButtonPickAdd.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        else:
+            self.toolButtonPickAdd.setIcon(QIcon(self.iconDir + os.sep + "picknew.png"))
+            self.toolButtonPickAdd.setIconSize(QSize(self.iconSize, self.iconSize))
+            self.toolButtonPickAdd.setText("PickNew")
+            self.toolButtonPickAdd.setToolTip("PickNew Mode - Replace current selection.\nClick to switch to PickAdd Mode.")
+            self.toolButtonPickAdd.setToolButtonStyle(Qt.ToolButtonIconOnly)
+
+    @Slot(QObject)
     def fieldEdited(self, fieldObj):
         """
         TOWRITE
@@ -1759,12 +1513,13 @@ class PropertyEditor(QDockWidget):
         :type `fieldObj`: `QObject`_
         """
         #TODO# static bool blockSignals = False
+        blockSignals = False
         if blockSignals:
             return
 
         qDebug("==========Field was Edited==========")
         objName = fieldObj.objectName() # QString
-        objType = fieldObj.property(objName).toInt() # int
+        objType = fieldObj.property(objName)  # .toInt() # int
 
         for item in self.selectedItemList: # item = QGraphicsItem
 
@@ -1775,53 +1530,53 @@ class PropertyEditor(QDockWidget):
 
             if objType == OBJ_TYPE_ARC:
                 if objName == "lineEditArcCenterX":
-                    tempArcObj = None #TODO# static_cast<ArcObject*>(item)
+                    tempArcObj = item  # static_cast<ArcObject*>(item)
                     if tempArcObj:
-                        tempArcObj.setObjectCenterX(lineEditArcCenterX.text().toDouble())
+                        tempArcObj.setObjectCenterX(float(self.lineEditArcCenterX.text()))  # .toDouble())
                 if objName == "lineEditArcCenterY":
-                    tempArcObj = None #TODO# static_cast<ArcObject*>(item)
+                    tempArcObj = item  # static_cast<ArcObject*>(item)
                     if tempArcObj:
-                        tempArcObj.setObjectCenterY(-lineEditArcCenterY.text().toDouble())
+                        tempArcObj.setObjectCenterY(-float(self.lineEditArcCenterY.text()))  # .toDouble())
                 if objName == "lineEditArcRadius":
-                    tempArcObj = None #TODO# static_cast<ArcObject*>(item)
+                    tempArcObj = item  # static_cast<ArcObject*>(item)
                     if tempArcObj:
-                        tempArcObj.setObjectRadius(lineEditArcRadius.text().toDouble())
+                        tempArcObj.setObjectRadius(float(self.lineEditArcRadius.text()))  # .toDouble())
                 if objName == "lineEditArcStartAngle":
-                    tempArcObj = None #TODO# static_cast<ArcObject*>(item)
+                    tempArcObj = item  # static_cast<ArcObject*>(item)
                     if tempArcObj:
-                        tempArcObj.setObjectStartAngle(lineEditArcStartAngle.text().toDouble())
+                        tempArcObj.setObjectStartAngle(float(self.lineEditArcStartAngle.text()))  # .toDouble())
                 if objName == "lineEditArcEndAngle":
-                    tempArcObj = None #TODO# static_cast<ArcObject*>(item)
+                    tempArcObj = item  # static_cast<ArcObject*>(item)
                     if tempArcObj:
-                        tempArcObj.setObjectEndAngle(lineEditArcEndAngle.text().toDouble())
+                        tempArcObj.setObjectEndAngle(float(self.lineEditArcEndAngle.text()))  # .toDouble())
                 break
             elif objType == OBJ_TYPE_BLOCK: # TODO: field editing
                 break
             elif objType == OBJ_TYPE_CIRCLE:
                 if objName == "lineEditCircleCenterX":
-                    tempCircleObj = None #TODO# static_cast<CircleObject*>(item)
+                    tempCircleObj = item  # static_cast<CircleObject*>(item)
                     if tempCircleObj:
-                        tempCircleObj.setObjectCenterX(lineEditCircleCenterX.text().toDouble())
+                        tempCircleObj.setObjectCenterX(float(self.lineEditCircleCenterX.text()))  # .toDouble())
                 if objName == "lineEditCircleCenterY":
-                    tempCircleObj = None #TODO# static_cast<CircleObject*>(item)
+                    tempCircleObj = item  # static_cast<CircleObject*>(item)
                     if tempCircleObj:
-                        tempCircleObj.setObjectCenterY(-lineEditCircleCenterY.text().toDouble())
+                        tempCircleObj.setObjectCenterY(-float(self.lineEditCircleCenterY.text()))  # .toDouble())
                 if objName == "lineEditCircleRadius":
-                    tempCircleObj = None #TODO# static_cast<CircleObject*>(item)
+                    tempCircleObj = item  # static_cast<CircleObject*>(item)
                     if tempCircleObj:
-                        tempCircleObj.setObjectRadius(lineEditCircleRadius.text().toDouble())
+                        tempCircleObj.setObjectRadius(float(self.lineEditCircleRadius.text()))  # .toDouble())
                 if objName == "lineEditCircleDiameter":
-                    tempCircleObj = None #TODO# static_cast<CircleObject*>(item)
+                    tempCircleObj = item  # static_cast<CircleObject*>(item)
                     if tempCircleObj:
-                        tempCircleObj.setObjectDiameter(lineEditCircleDiameter.text().toDouble())
+                        tempCircleObj.setObjectDiameter(float(self.lineEditCircleDiameter.text()))  # .toDouble())
                 if objName == "lineEditCircleArea":
-                    tempCircleObj = None #TODO# static_cast<CircleObject*>(item)
+                    tempCircleObj = item  # static_cast<CircleObject*>(item)
                     if tempCircleObj:
-                        tempCircleObj.setObjectArea(lineEditCircleArea.text().toDouble())
+                        tempCircleObj.setObjectArea(float(self.lineEditCircleArea.text()))  # .toDouble())
                 if objName == "lineEditCircleCircumference":
-                    tempCircleObj = None #TODO# static_cast<CircleObject*>(item)
+                    tempCircleObj = item  # static_cast<CircleObject*>(item)
                     if tempCircleObj:
-                        tempCircleObj.setObjectCircumference(lineEditCircleCircumference.text().toDouble())
+                        tempCircleObj.setObjectCircumference(float(self.lineEditCircleCircumference.text()))  # .toDouble())
                 break
             elif objType == OBJ_TYPE_DIMALIGNED: # TODO: field editing
                 break
@@ -1841,29 +1596,29 @@ class PropertyEditor(QDockWidget):
                 break
             elif objType == OBJ_TYPE_ELLIPSE:
                 if objName == "lineEditEllipseCenterX":
-                    tempEllipseObj = None #TODO# static_cast<EllipseObject*>(item)
+                    tempEllipseObj = item  # static_cast<EllipseObject*>(item)
                     if tempEllipseObj:
-                        tempEllipseObj.setObjectCenterX(lineEditEllipseCenterX.text().toDouble())
+                        tempEllipseObj.setObjectCenterX(float(self.lineEditEllipseCenterX.text()))  # .toDouble())
                 if objName == "lineEditEllipseCenterY":
-                    tempEllipseObj = None #TODO# static_cast<EllipseObject*>(item)
+                    tempEllipseObj = item  # static_cast<EllipseObject*>(item)
                     if tempEllipseObj:
-                        tempEllipseObj.setObjectCenterY(-lineEditEllipseCenterY.text().toDouble())
+                        tempEllipseObj.setObjectCenterY(-float(self.lineEditEllipseCenterY.text()))  # .toDouble())
                 if objName == "lineEditEllipseRadiusMajor":
-                    tempEllipseObj = None #TODO# static_cast<EllipseObject*>(item)
+                    tempEllipseObj = item  # static_cast<EllipseObject*>(item)
                     if tempEllipseObj:
-                        tempEllipseObj.setObjectRadiusMajor(lineEditEllipseRadiusMajor.text().toDouble())
+                        tempEllipseObj.setObjectRadiusMajor(float(self.lineEditEllipseRadiusMajor.text()))  # .toDouble())
                 if objName == "lineEditEllipseRadiusMinor":
-                    tempEllipseObj = None #TODO# static_cast<EllipseObject*>(item)
+                    tempEllipseObj = item  # static_cast<EllipseObject*>(item)
                     if tempEllipseObj:
-                        tempEllipseObj.setObjectRadiusMinor(lineEditEllipseRadiusMinor.text().toDouble())
+                        tempEllipseObj.setObjectRadiusMinor(float(self.lineEditEllipseRadiusMinor.text()))  # .toDouble())
                 if objName == "lineEditEllipseDiameterMajor":
-                    tempEllipseObj = None #TODO# static_cast<EllipseObject*>(item)
+                    tempEllipseObj = item  # static_cast<EllipseObject*>(item)
                     if tempEllipseObj:
-                        tempEllipseObj.setObjectDiameterMajor(lineEditEllipseDiameterMajor.text().toDouble())
+                        tempEllipseObj.setObjectDiameterMajor(float(self.lineEditEllipseDiameterMajor.text()))  # .toDouble())
                 if objName == "lineEditEllipseDiameterMinor":
-                    tempEllipseObj = None #TODO# static_cast<EllipseObject*>(item)
+                    tempEllipseObj = item  # static_cast<EllipseObject*>(item)
                     if tempEllipseObj:
-                        tempEllipseObj.setObjectDiameterMinor(lineEditEllipseDiameterMinor.text().toDouble())
+                        tempEllipseObj.setObjectDiameterMinor(float(self.lineEditEllipseDiameterMinor.text()))  # .toDouble())
                 break
             elif objType == OBJ_TYPE_IMAGE: # TODO: field editing
                 break
@@ -1871,33 +1626,33 @@ class PropertyEditor(QDockWidget):
                 break
             elif objType == OBJ_TYPE_LINE:
                 if objName == "lineEditLineStartX":
-                    tempLineObj = None #TODO# static_cast<LineObject*>(item)
+                    tempLineObj = item  # static_cast<LineObject*>(item)
                     if tempLineObj:
-                        tempLineObj.setObjectX1(lineEditLineStartX.text().toDouble())
+                        tempLineObj.setObjectX1(float(self.lineEditLineStartX.text()))  # .toDouble())
                 if objName == "lineEditLineStartY":
-                    tempLineObj = None #TODO# static_cast<LineObject*>(item)
+                    tempLineObj = item  # static_cast<LineObject*>(item)
                     if tempLineObj:
-                        tempLineObj.setObjectY1(-lineEditLineStartY.text().toDouble())
+                        tempLineObj.setObjectY1(-float(self.lineEditLineStartY.text()))  # .toDouble())
                 if objName == "lineEditLineEndX":
-                    tempLineObj = None #TODO# static_cast<LineObject*>(item)
+                    tempLineObj = item  # static_cast<LineObject*>(item)
                     if tempLineObj:
-                        tempLineObj.setObjectX2(lineEditLineEndX.text().toDouble())
+                        tempLineObj.setObjectX2(float(self.lineEditLineEndX.text()))  # .toDouble())
                 if objName == "lineEditLineEndY":
-                    tempLineObj = None #TODO# static_cast<LineObject*>(item)
+                    tempLineObj = item  # static_cast<LineObject*>(item)
                     if tempLineObj:
-                        tempLineObj.setObjectY2(-lineEditLineEndY.text().toDouble())
+                        tempLineObj.setObjectY2(-float(self.lineEditLineEndY.text()))  # .toDouble())
                 break
             elif objType == OBJ_TYPE_PATH: # TODO: field editing
                 break
             elif objType == OBJ_TYPE_POINT:
                 if objName == "lineEditPointX":
-                    tempPointObj = None #TODO# static_cast<PointObject*>(item)
+                    tempPointObj = item  # static_cast<PointObject*>(item)
                     if tempPointObj:
-                        tempPointObj.setObjectX(lineEditPointX.text().toDouble())
+                        tempPointObj.setObjectX(float(self.lineEditPointX.text()))  # .toDouble())
                 if objName == "lineEditPointY":
-                    tempPointObj = None #TODO# static_cast<PointObject*>(item)
+                    tempPointObj = item  # static_cast<PointObject*>(item)
                     if tempPointObj:
-                        tempPointObj.setObjectY(-lineEditPointY.text().toDouble())
+                        tempPointObj.setObjectY(-float(self.lineEditPointY.text()))  # .toDouble())
                 break
             elif objType == OBJ_TYPE_POLYGON: # TODO: field editing
                 break
@@ -1911,49 +1666,49 @@ class PropertyEditor(QDockWidget):
                 break
             elif objType == OBJ_TYPE_TEXTSINGLE: # TODO: field editing
                 if objName == "lineEditTextSingleContents":
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectText(lineEditTextSingleContents.text())
+                        tempTextSingleObj.setObjectText(self.lineEditTextSingleContents.text())
                 if objName == "comboBoxTextSingleFont":
-                    if comboBoxTextSingleFont.currentText() == fieldVariesText:
+                    if self.comboBoxTextSingleFont.currentText() == self.fieldVariesText:
                         break
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectTextFont(comboBoxTextSingleFont.currentFont().family())
+                        tempTextSingleObj.setObjectTextFont(self.comboBoxTextSingleFont.currentFont().family())
                 if objName == "comboBoxTextSingleJustify":
-                    if comboBoxTextSingleJustify.currentText() == fieldVariesText:
+                    if self.comboBoxTextSingleJustify.currentText() == self.fieldVariesText:
                         break
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectTextJustify(comboBoxTextSingleJustify.itemData(comboBoxTextSingleJustify.currentIndex()).toString())
+                        tempTextSingleObj.setObjectTextJustify(str(self.comboBoxTextSingleJustify.itemData(self.comboBoxTextSingleJustify.currentIndex())))  # .toString())
                 if objName == "lineEditTextSingleHeight":
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectTextSize(lineEditTextSingleHeight.text().toDouble())
+                        tempTextSingleObj.setObjectTextSize(float(self.lineEditTextSingleHeight.text()))  # .toDouble())
                 if objName == "lineEditTextSingleRotation":
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setRotation(-lineEditTextSingleRotation.text().toDouble())
+                        tempTextSingleObj.setRotation(-float(self.lineEditTextSingleRotation.text()))  # .toDouble())
                 if objName == "lineEditTextSingleX":
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectX(lineEditTextSingleX.text().toDouble())
+                        tempTextSingleObj.setObjectX(float(self.lineEditTextSingleX.text()))  # .toDouble())
                 if objName == "lineEditTextSingleY":
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectY(lineEditTextSingleY.text().toDouble())
+                        tempTextSingleObj.setObjectY(float(self.lineEditTextSingleY.text()))  # .toDouble())
                 if objName == "comboBoxTextSingleBackward":
-                    if comboBoxTextSingleBackward.currentText() == fieldVariesText:
+                    if self.comboBoxTextSingleBackward.currentText() == self.fieldVariesText:
                         break
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectTextBackward(comboBoxTextSingleBackward.itemData(comboBoxTextSingleBackward.currentIndex()).toBool())
+                        tempTextSingleObj.setObjectTextBackward(bool(self.comboBoxTextSingleBackward.itemData(self.comboBoxTextSingleBackward.currentIndex())))  # .toBool())
                 if objName == "comboBoxTextSingleUpsideDown":
-                    if comboBoxTextSingleUpsideDown.currentText() == fieldVariesText:
+                    if self.comboBoxTextSingleUpsideDown.currentText() == self.fieldVariesText:
                         break
-                    tempTextSingleObj = None #TODO# static_cast<TextSingleObject*>(item)
+                    tempTextSingleObj = item  # static_cast<TextSingleObject*>(item)
                     if tempTextSingleObj:
-                        tempTextSingleObj.setObjectTextUpsideDown(comboBoxTextSingleUpsideDown.itemData(comboBoxTextSingleUpsideDown.currentIndex()).toBool())
+                        tempTextSingleObj.setObjectTextUpsideDown(bool(self.comboBoxTextSingleUpsideDown.itemData(self.comboBoxTextSingleUpsideDown.currentIndex())))  # .toBool())
                 break
             else:
                 break
@@ -1972,5 +1727,262 @@ class PropertyEditor(QDockWidget):
 
         blockSignals = False
 
+    @Slot(int)
+    def showGroups(self, objType):
+        """
+        TOWRITE
+
+        :param `objType`: TOWRITE
+        :type `objType`: int
+        """
+        if objType == OBJ_TYPE_ARC:
+            self.groupBoxGeometryArc.show()
+            self.groupBoxMiscArc.show()
+        elif objType == OBJ_TYPE_BLOCK:
+            self.groupBoxGeometryBlock.show()
+        elif objType == OBJ_TYPE_CIRCLE:
+            self.groupBoxGeometryCircle.show()
+        elif objType == OBJ_TYPE_DIMALIGNED:
+            self.groupBoxGeometryDimAligned.show()
+        elif objType == OBJ_TYPE_DIMANGULAR:
+            self.groupBoxGeometryDimAngular.show()
+        elif objType == OBJ_TYPE_DIMARCLENGTH:
+            self.groupBoxGeometryDimArcLength.show()
+        elif objType == OBJ_TYPE_DIMDIAMETER:
+            self.groupBoxGeometryDimDiameter.show()
+        elif objType == OBJ_TYPE_DIMLEADER:
+            self.groupBoxGeometryDimLeader.show()
+        elif objType == OBJ_TYPE_DIMLINEAR:
+            self.groupBoxGeometryDimLinear.show()
+        elif objType == OBJ_TYPE_DIMORDINATE:
+            self.groupBoxGeometryDimOrdinate.show()
+        elif objType == OBJ_TYPE_DIMRADIUS:
+            self.groupBoxGeometryDimRadius.show()
+        elif objType == OBJ_TYPE_ELLIPSE:
+            self.groupBoxGeometryEllipse.show()
+        elif objType == OBJ_TYPE_IMAGE:
+            self.groupBoxGeometryImage.show()
+            self.groupBoxMiscImage.show()
+        elif objType == OBJ_TYPE_INFINITELINE:
+            self.groupBoxGeometryInfiniteLine.show()
+        elif objType == OBJ_TYPE_LINE:
+            self.groupBoxGeometryLine.show()
+        elif objType == OBJ_TYPE_PATH:
+            self.groupBoxGeometryPath.show()
+            self.groupBoxMiscPath.show()
+        elif objType == OBJ_TYPE_POINT:
+            self.groupBoxGeometryPoint.show()
+        elif objType == OBJ_TYPE_POLYGON:
+            self.groupBoxGeometryPolygon.show()
+        elif objType == OBJ_TYPE_POLYLINE:
+            self.groupBoxGeometryPolyline.show()
+            self.groupBoxMiscPolyline.show()
+        elif objType == OBJ_TYPE_RAY:
+            self.groupBoxGeometryRay.show()
+        elif objType == OBJ_TYPE_RECTANGLE:
+            self.groupBoxGeometryRectangle.show()
+        elif objType == OBJ_TYPE_TEXTMULTI:
+            self.groupBoxGeometryTextMulti.show()
+        elif objType == OBJ_TYPE_TEXTSINGLE:
+            self.groupBoxTextTextSingle.show()
+            self.groupBoxGeometryTextSingle.show()
+            self.groupBoxMiscTextSingle.show()
+
+    @Slot(int)
+    def showOneType(self, index):
+        """
+        TOWRITE
+
+        :param `index`: TOWRITE
+        :type `index`: int
+        """
+        self.hideAllGroups()
+        self.showGroups(int(self.comboBoxSelected.itemData(index)))  # .toInt())
+
+    @Slot()
+    def hideAllGroups(self):
+        """TOWRITE"""
+        # NOTE: General group will never be hidden
+        self.groupBoxGeometryArc.hide()
+        self.groupBoxMiscArc.hide()
+        self.groupBoxGeometryBlock.hide()
+        self.groupBoxGeometryCircle.hide()
+        self.groupBoxGeometryDimAligned.hide()
+        self.groupBoxGeometryDimAngular.hide()
+        self.groupBoxGeometryDimArcLength.hide()
+        self.groupBoxGeometryDimDiameter.hide()
+        self.groupBoxGeometryDimLeader.hide()
+        self.groupBoxGeometryDimLinear.hide()
+        self.groupBoxGeometryDimOrdinate.hide()
+        self.groupBoxGeometryDimRadius.hide()
+        self.groupBoxGeometryEllipse.hide()
+        self.groupBoxGeometryImage.hide()
+        self.groupBoxMiscImage.hide()
+        self.groupBoxGeometryInfiniteLine.hide()
+        self.groupBoxGeometryLine.hide()
+        self.groupBoxGeometryPath.hide()
+        self.groupBoxMiscPath.hide()
+        self.groupBoxGeometryPoint.hide()
+        self.groupBoxGeometryPolygon.hide()
+        self.groupBoxGeometryPolyline.hide()
+        self.groupBoxMiscPolyline.hide()
+        self.groupBoxGeometryRay.hide()
+        self.groupBoxGeometryRectangle.hide()
+        self.groupBoxGeometryTextMulti.hide()
+        self.groupBoxTextTextSingle.hide()
+        self.groupBoxGeometryTextSingle.hide()
+        self.groupBoxMiscTextSingle.hide()
+
+    @Slot()
+    def clearAllFields(self):
+        """TOWRITE"""
+        # General
+        self.comboBoxGeneralLayer.clear()
+        self.comboBoxGeneralColor.clear()
+        self.comboBoxGeneralLineType.clear()
+        self.comboBoxGeneralLineWeight.clear()
+
+        # Arc
+        self.lineEditArcCenterX.clear()
+        self.lineEditArcCenterY.clear()
+        self.lineEditArcRadius.clear()
+        self.lineEditArcStartAngle.clear()
+        self.lineEditArcEndAngle.clear()
+        self.lineEditArcStartX.clear()
+        self.lineEditArcStartY.clear()
+        self.lineEditArcEndX.clear()
+        self.lineEditArcEndY.clear()
+        self.lineEditArcArea.clear()
+        self.lineEditArcLength.clear()
+        self.lineEditArcChord.clear()
+        self.lineEditArcIncAngle.clear()
+        self.comboBoxArcClockwise.clear()
+
+        # Block
+        self.lineEditBlockX.clear()
+        self.lineEditBlockY.clear()
+
+        # Circle
+        self.lineEditCircleCenterX.clear()
+        self.lineEditCircleCenterY.clear()
+        self.lineEditCircleRadius.clear()
+        self.lineEditCircleDiameter.clear()
+        self.lineEditCircleArea.clear()
+        self.lineEditCircleCircumference.clear()
+
+        # TODO: DimAligned
+        # TODO: DimAngular
+        # TODO: DimArcLength
+        # TODO: DimDiameter
+        # TODO: DimLeader
+        # TODO: DimLinear
+        # TODO: DimOrdinate
+        # TODO: DimRadius
+
+        # Ellipse
+        self.lineEditEllipseCenterX.clear()
+        self.lineEditEllipseCenterY.clear()
+        self.lineEditEllipseRadiusMajor.clear()
+        self.lineEditEllipseRadiusMinor.clear()
+        self.lineEditEllipseDiameterMajor.clear()
+        self.lineEditEllipseDiameterMinor.clear()
+
+        # Image
+        self.lineEditImageX.clear()
+        self.lineEditImageY.clear()
+        self.lineEditImageWidth.clear()
+        self.lineEditImageHeight.clear()
+
+        # Infinite Line
+        self.lineEditInfiniteLineX1.clear()
+        self.lineEditInfiniteLineY1.clear()
+        self.lineEditInfiniteLineX2.clear()
+        self.lineEditInfiniteLineY2.clear()
+        self.lineEditInfiniteLineVectorX.clear()
+        self.lineEditInfiniteLineVectorY.clear()
+
+        # Line
+        self.lineEditLineStartX.clear()
+        self.lineEditLineStartY.clear()
+        self.lineEditLineEndX.clear()
+        self.lineEditLineEndY.clear()
+        self.lineEditLineDeltaX.clear()
+        self.lineEditLineDeltaY.clear()
+        self.lineEditLineAngle.clear()
+        self.lineEditLineLength.clear()
+
+        # Path
+        self.comboBoxPathVertexNum.clear()
+        self.lineEditPathVertexX.clear()
+        self.lineEditPathVertexY.clear()
+        self.lineEditPathArea.clear()
+        self.lineEditPathLength.clear()
+        self.comboBoxPathClosed.clear()
+
+        # Point
+        self.lineEditPointX.clear()
+        self.lineEditPointY.clear()
+
+        # Polygon
+        self.lineEditPolygonCenterX.clear()
+        self.lineEditPolygonCenterY.clear()
+        self.lineEditPolygonRadiusVertex.clear()
+        self.lineEditPolygonRadiusSide.clear()
+        self.lineEditPolygonDiameterVertex.clear()
+        self.lineEditPolygonDiameterSide.clear()
+        self.lineEditPolygonInteriorAngle.clear()
+
+        # Polyline
+        self.comboBoxPolylineVertexNum.clear()
+        self.lineEditPolylineVertexX.clear()
+        self.lineEditPolylineVertexY.clear()
+        self.lineEditPolylineArea.clear()
+        self.lineEditPolylineLength.clear()
+        self.comboBoxPolylineClosed.clear()
+
+        # Ray
+        self.lineEditRayX1.clear()
+        self.lineEditRayY1.clear()
+        self.lineEditRayX2.clear()
+        self.lineEditRayY2.clear()
+        self.lineEditRayVectorX.clear()
+        self.lineEditRayVectorY.clear()
+
+        # Rectangle
+        self.lineEditRectangleCorner1X.clear()
+        self.lineEditRectangleCorner1Y.clear()
+        self.lineEditRectangleCorner2X.clear()
+        self.lineEditRectangleCorner2Y.clear()
+        self.lineEditRectangleCorner3X.clear()
+        self.lineEditRectangleCorner3Y.clear()
+        self.lineEditRectangleCorner4X.clear()
+        self.lineEditRectangleCorner4Y.clear()
+        self.lineEditRectangleWidth.clear()
+        self.lineEditRectangleHeight.clear()
+        self.lineEditRectangleArea.clear()
+
+        # Text Multi
+        self.lineEditTextMultiX.clear()
+        self.lineEditTextMultiY.clear()
+
+        # Text Single
+        self.lineEditTextSingleContents.clear()
+        self.comboBoxTextSingleFont.removeItem(self.comboBoxTextSingleFont.findText(self.fieldVariesText)) #NOTE: Do not clear comboBoxTextSingleFont
+        self.comboBoxTextSingleFont.setProperty("FontFamily", "")
+        self.comboBoxTextSingleJustify.clear()
+        self.lineEditTextSingleHeight.clear()
+        self.lineEditTextSingleRotation.clear()
+        self.lineEditTextSingleX.clear()
+        self.lineEditTextSingleY.clear()
+        self.comboBoxTextSingleBackward.clear()
+        self.comboBoxTextSingleUpsideDown.clear()
+
+    @Slot()
+    def togglePickAddMode(self):
+        self.pickAddModeToggled.emit()
+
+    # Signals ----------------------------------------------------------------
+
+    pickAddModeToggled = Signal()
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

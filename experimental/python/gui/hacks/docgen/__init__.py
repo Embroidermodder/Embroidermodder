@@ -1,0 +1,5 @@
+__author__ = "سليمان السهمي (Soolayman Sahmi)"
+__email__ = "sahmi.soulaimane@gmail.com"
+__copyright__ = "Copyright 2015 Soolayman Sahmi"
+__license__ = "LGPL"
+__version__ = "1.0"

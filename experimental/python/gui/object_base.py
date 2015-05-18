@@ -25,24 +25,27 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QDateTime
+    from PySide.QtCore import qDebug, Qt, QDateTime, QPointF, QLineF, QObject, QRectF
     from PySide.QtGui import (QGraphicsScene, QMessageBox, QGraphicsItem,
-        QGraphicsPathItem, QColor, QPen, QBrush, QPainter, QMessageBox)
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+        QGraphicsPathItem, QColor, QPen, QBrush, QPainter, QMessageBox,
+        QPainterPath, QPainterPathStroker, QLinearGradient, QGradient)
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QDateTime
-#    from PyQt4.QtGui import (QGraphicsScene, QMessageBox, QGraphicsItem,
-#        QGraphicsPathItem, QColor, QPen, QBrush, QPainter, QMessageBox)
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt, QDateTime, QPointF, QLineF, QObject, QRectF
+    from PyQt4.QtGui import (QGraphicsScene, QMessageBox, QGraphicsItem,
+        QGraphicsPathItem, QColor, QPen, QBrush, QPainter, QMessageBox,
+        QPainterPath, QPainterPathStroker, QLinearGradient, QGradient)
 
+#--Local Imports.
+from hacks import overloaded, signature
+from object_data import OBJ_TYPE_BASE, OBJ_LWT_BYLAYER, OBJ_LWT_BYBLOCK, OBJ_RUBBER_GRIP
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-base.h"
@@ -62,6 +65,9 @@ class BaseObject(QGraphicsPathItem):
     TOWRITE
 
     """
+
+    Type = OBJ_TYPE_BASE
+
     def __init__(self, parent=None):
         """
         Default class constructor.
@@ -73,17 +79,28 @@ class BaseObject(QGraphicsPathItem):
 
         qDebug("BaseObject Constructor()")
 
-        objPen.setCapStyle(Qt.RoundCap)
-        objPen.setJoinStyle(Qt.RoundJoin)
-        lwtPen.setCapStyle(Qt.RoundCap)
-        lwtPen.setJoinStyle(Qt.RoundJoin)
+        self.objPen = QPen()        # QPen objPen;
+        self.lwtPen = QPen()        # QPen lwtPen;
+        self.objLine = QLineF()     # QLineF objLine;
+        self.objRubberMode = int()  # int objRubberMode;
+        self.objRubberPoints = {}   # QHash<QString, QPointF> objRubberPoints;
+        self.objRubberTexts = {}    # QHash<QString, QString> objRubberTexts;
+        self.objID = int()          # qint64 objID;
 
-        objID = QDateTime.currentMSecsSinceEpoch()
+        self.objPen.setCapStyle(Qt.RoundCap)
+        self.objPen.setJoinStyle(Qt.RoundJoin)
+        self.lwtPen.setCapStyle(Qt.RoundCap)
+        self.lwtPen.setJoinStyle(Qt.RoundJoin)
+
+        self.objID = QDateTime.currentMSecsSinceEpoch()
 
 
     def __del__(self):
         """Class destructor."""
         qDebug("BaseObject Destructor()")
+
+    def type(self):
+        return self.Type
 
     def setObjectColor(self, color):
         """
@@ -92,8 +109,8 @@ class BaseObject(QGraphicsPathItem):
         :param `color`: TOWRITE
         :type `color`: `QColor`_
         """
-        objPen.setColor(color)
-        lwtPen.setColor(color)
+        self.objPen.setColor(color)
+        self.lwtPen.setColor(color)
 
     def setObjectColorRGB(self, rgb):
         """
@@ -102,8 +119,8 @@ class BaseObject(QGraphicsPathItem):
         :param `rgb`: TOWRITE
         :type `rgb`: `QRgb`_
         """
-        objPen.setColor(QColor(rgb))
-        lwtPen.setColor(QColor(rgb))
+        self.objPen.setColor(QColor(rgb))
+        self.lwtPen.setColor(QColor(rgb))
 
     def setObjectLineType(self, lineType):
         """
@@ -112,8 +129,8 @@ class BaseObject(QGraphicsPathItem):
         :param `rgb`: TOWRITE
         :type `rgb`: Qt.PenStyle
         """
-        objPen.setStyle(lineType)
-        lwtPen.setStyle(lineType)
+        self.objPen.setStyle(lineType)
+        self.lwtPen.setStyle(lineType)
 
     def setObjectLineWeight(self, lineWeight):
         """
@@ -122,21 +139,20 @@ class BaseObject(QGraphicsPathItem):
         :param `lineWeight`: TOWRITE
         :type `lineWeight`: qreal
         """
-        objPen.setWidthF(0)  # NOTE: The objPen will always be cosmetic
+        self.objPen.setWidthF(0)  # NOTE: The objPen will always be cosmetic
 
         if lineWeight < 0:
             if lineWeight == OBJ_LWT_BYLAYER:
-                lwtPen.setWidthF(0.35)  # TODO: getLayerLineWeight
+                self.lwtPen.setWidthF(0.35)  # TODO: getLayerLineWeight
             elif lineWeight == OBJ_LWT_BYBLOCK:
-                lwtPen.setWidthF(0.35)  # TODO: getBlockLineWeight
+                self.lwtPen.setWidthF(0.35)  # TODO: getBlockLineWeight
             else:
                 QMessageBox.warning(0, QObject.tr("Error - Negative Lineweight"),
-                                       QObject.tr("Lineweight: %1")
-                                       .arg(QString().setNum(lineWeight)))
+                                       QObject.tr("Lineweight: %f" % lineWeight))
                 qDebug("Lineweight cannot be negative! Inverting sign.")
-                lwtPen.setWidthF(-lineWeight)
+                self.lwtPen.setWidthF(-lineWeight)
         else:
-            lwtPen.setWidthF(lineWeight)
+            self.lwtPen.setWidthF(lineWeight)
 
     def objectRubberPoint(self, key):
         """
@@ -146,12 +162,12 @@ class BaseObject(QGraphicsPathItem):
         :type `key`: QString
         :rtype: `QPointF`_
         """
-        if objRubberPoints.contains(key):
-            return objRubberPoints.value(key)
+        if key in self.objRubberPoints:       # if(objRubberTexts.contains(key))
+            return self.objRubberPoints[key]  #     return objRubberTexts.value(key);
 
-        gscene = scene()  # QGraphicsScene* gscene = scene()
+        gscene = self.scene()  # QGraphicsScene* gscene = scene()
         if gscene:
-            return scene().property(SCENE_QSNAP_POINT).toPointF()
+            return self.scene().property("SCENE_QSNAP_POINT")  # .toPointF()
         return QPointF()
 
     def objectRubberText(self, key):
@@ -162,9 +178,9 @@ class BaseObject(QGraphicsPathItem):
         :type `key`: QString
         :rtype: QString
         """
-        if objRubberTexts.contains(key):
-            return objRubberTexts.value(key)
-        return ''  # QString()
+        if key in self.objRubberTexts:       # if(objRubberTexts.contains(key))
+            return self.objRubberTexts[key]  #     return objRubberTexts.value(key);
+        return ""  # QString()
 
     def boundingRect(self):
         """
@@ -173,11 +189,11 @@ class BaseObject(QGraphicsPathItem):
         :rtype: `QRectF`_
         """
         # If gripped, force this object to be drawn even if it is offscreen
-        if objectRubberMode() == OBJ_RUBBER_GRIP:
-            return scene().sceneRect()
-        return path().boundingRect()
+        if self.objectRubberMode() == OBJ_RUBBER_GRIP:
+            return self.scene().sceneRect()
+        return self.path().boundingRect()
 
-    def drawRubberLine(self, rubLine, painter, colorFromScene):
+    def drawRubberLine(self, rubLine, painter=None, colorFromScene=''):
         """
         TOWRITE
 
@@ -186,17 +202,17 @@ class BaseObject(QGraphicsPathItem):
         :param `painter`: TOWRITE
         :type `painter`: `QPainter`_
         :param `colorFromScene`: TOWRITE
-        :type `colorFromScene`: char
+        :type `colorFromScene`: str
         """
         if painter:
-            objScene = scene()  # QGraphicsScene* objScene = scene();
+            objScene = self.scene()  # QGraphicsScene* objScene = scene();
             if not objScene:
                 return
-            colorPen = objPen  # QPen colorPen = objPen
-            colorPen.setColor(QColor(objScene.property(colorFromScene).toUInt()))
+            colorPen = self.objPen  # QPen colorPen = objPen
+            colorPen.setColor(QColor(objScene.property(colorFromScene)))  # .toUInt()))
             painter.setPen(colorPen)
             painter.drawLine(rubLine)
-            painter.setPen(objPen)
+            painter.setPen(self.objPen)
 
     def realRender(self, painter, renderPath):  # TODO/PORT: Still needs work.
         """
@@ -207,7 +223,7 @@ class BaseObject(QGraphicsPathItem):
         :param `renderPath`: TOWRITE
         :type `renderPath`: `QPainterPath`_
         """
-        color1 = objectColor()       #QColor  # lighter color
+        color1 = self.objectColor()  #QColor  # lighter color
         color2 = color1.darker(150)  #QColor  # darker color
 
         # If we have a dark color, lighten it
@@ -250,5 +266,104 @@ class BaseObject(QGraphicsPathItem):
 
             painter.fillPath(realPath, QBrush(grad))
 
+    def objectID(self):
+        return self.objID
+
+    def objectPen(self):
+        return self.objPen
+
+    def objectColor(self):
+        return self.objPen.color()
+
+    def objectColorRGB(self):
+        return self.objPen.color().rgb()
+
+    def objectLineType(self):
+        return self.objPen.style()
+
+    def objectLineWeight(self):
+        return self.lwtPen.widthF()
+
+    def objectPath(self):
+        return self.path()
+
+    def objectRubberMode(self):
+        return self.objRubberMode
+
+    def rect(self):
+        return self.path().boundingRect()
+
+    # pythonic setRect overload
+    @signature(QPointF)
+    def setRectFromRect(self, r):
+        p = QPainterPath()
+        p.addRect(r)
+        self.setPath(p)
+
+    # pythonic setRect overload
+    @signature(float, float, float, float)
+    def setRectFromXYWH(self, x, y, w, h):
+        p = QPainterPath()
+        p.addRect(x, y, w, h)
+        self.setPath(p)
+
+    @overloaded(setRectFromRect, setRectFromXYWH)
+    def setRect(self, *args):
+        pass
+
+    def line(self):
+        return self.objLine
+
+    # pythonic setLine overload
+    @signature(QPointF)
+    def setLineFromLine(self, li):
+        p = QPainterPath()
+        p.moveTo(li.p1())
+        p.lineTo(li.p2())
+        self.setPath(p)
+        self.objLine = li
+
+    # pythonic setLine overload
+    @signature(float, float, float, float)
+    def setLineFromXXYY(self, x1, y1, x2, y2):
+        p = QPainterPath()
+        p.moveTo(x1, y1)
+        p.lineTo(x2, y2)
+        self.setPath(p)
+        self.objLine.setLine(x1, y1, x2, y2)
+
+    @overloaded(setLineFromLine, setLineFromXXYY)
+    def setLine(self, *args):
+        pass
+
+    def setObjectPath(self, p):
+        self.setPath(p)
+
+    def setObjectRubberMode(self, mode):
+        self.objRubberMode = mode
+
+    def setObjectRubberPoint(self, key, point):
+        self.objRubberPoints[key] = point  # .insert(key, point)
+
+    def setObjectRubberText(self, key, txt):
+        self.objRubberTexts[key] = txt  # .insert(key, txt)
+
+    def shape(self):
+        return self.path()
+
+    def vulcanize(self):
+        raise NotImplementedError
+
+    def mouseSnapPoint(self, mousePoint):
+        raise NotImplementedError
+
+    def allGripPoints(self):
+        raise NotImplementedError
+
+    def gripEdit(self, before, after):
+        raise NotImplementedError
+
+    def lineWeightPen(self):
+        return self.lwtPen
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

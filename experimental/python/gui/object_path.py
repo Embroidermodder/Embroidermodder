@@ -20,28 +20,30 @@ Classes summary:
 
 |
 
+.. TODO:: make paths similar to polylines. Review and implement any missing functions/members.
 """
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QLineF, QPointF
+    from PySide.QtCore import qDebug, Qt, QLineF, QPointF, QObject
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QMessageBox, QTransform
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QMessageBox, QTransform
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF, QObject
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QMessageBox, QTransform
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_TYPE, OBJ_NAME, OBJ_NAME_PATH, ENABLE_LWT,
+    OBJ_RUBBER_OFF)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-point.h"
@@ -60,7 +62,7 @@ class PathObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, x, y, p, rgb, parent):
+    def __init__(self, x, y, p, rgb, parent=None):
         #OVERLOADED IMPL?# PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -79,6 +81,9 @@ class PathObject(BaseObject):
         super(PathObject, self).__init__(parent)
 
         qDebug("PathObject Constructor()")
+
+        self.normalPath = QPainterPath()
+
         self.init(x, y, p, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -116,7 +121,7 @@ class PathObject(BaseObject):
 
         self.updatePath(p)
         self.setObjectPos(x, y)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
         self.setPen(self.objectPen())
@@ -153,22 +158,22 @@ class PathObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
         painter.drawPath(self.objectPath())
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
         :param `painter`: TOWRITE
         :type `painter`: `QPainter`_
         """
-        pass # TODO: Path Rubber Modes
-
-        pass # TODO: updateRubber() gripping for PathObject
+        # TODO: Path Rubber Modes
+        # TODO: updateRubber() gripping for PathObject
+        pass
 
     def vulcanize(self):
         """
@@ -179,7 +184,7 @@ class PathObject(BaseObject):
 
         self.setObjectRubberMode(OBJ_RUBBER_OFF)
 
-        if not normalPath.elementCount():
+        if not self.normalPath.elementCount():
             QMessageBox.critical(0, QObject.tr("Empty Path Error"), QObject.tr("The path added contains no points. The command that created this object has flawed logic."))
 
     def mouseSnapPoint(self, mousePoint):
@@ -200,7 +205,7 @@ class PathObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << scenePos()  # TODO: loop thru all path Elements and return their points
-        gripPoints = list(self.scenePos())  # TODO: Check if this would be right...
+        gripPoints = [self.scenePos()]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -223,7 +228,7 @@ class PathObject(BaseObject):
 
         :rtype: `QPainterPath`_
         """
-        return normalPath
+        return self.normalPath
 
     def objectSavePath(self):
         """
@@ -235,7 +240,37 @@ class PathObject(BaseObject):
         trans = QTransform()
         trans.rotate(self.rotation())
         trans.scale(s, s)
-        return trans.map(normalPath)
+        return trans.map(self.normalPath)
+
+    def objectPos(self):
+        return self.scenePos()
+
+    def objectX(self):
+        return self.scenePos().x()
+
+    def objectY(self):
+        return self.scenePos().y()
+
+    # pythonic setObjectPos overload
+    @signature(QPointF)
+    def setObjectPosFromPoint(self, point):
+        self.setPos(point.x(), point.y())
+
+    # pythonic setObjectPos overload
+    @signature(float, float)
+    def setObjectPosFromXY(self, x, y):
+        self.setPos(x, y)
+
+    @overloaded(setObjectPosFromPoint, setObjectPosFromXY)
+    def setObjectPos(self, *args):
+        pass
+
+    def setObjectX(self, x):
+        self.setObjectPos(x, self.objectY())
+
+    def setObjectY(self, y):
+        self.setObjectPos(self.objectX(), y)
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;
+    
