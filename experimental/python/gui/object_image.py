@@ -27,26 +27,29 @@ Classes summary:
 from math import sin as qSin
 from math import cos as qCos
 from math import radians
+qAbs = abs
+qMin = min
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
 
 #--Local Imports.
 from object_base import BaseObject
+from object_data import (OBJ_TYPE, OBJ_TYPE_IMAGE, OBJ_NAME, OBJ_NAME_IMAGE,
+    OBJ_RUBBER_OFF, OBJ_RUBBER_GRIP, OBJ_RUBBER_IMAGE, ENABLE_LWT)
+
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-image.h"
@@ -65,7 +68,10 @@ class ImageObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, x, y, w, h, rgb, parent):
+
+    Type = OBJ_TYPE_IMAGE
+
+    def __init__(self, x, y, w, h, rgb, parent=None):
         #OVERLOADED IMPL?# ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -115,7 +121,7 @@ class ImageObject(BaseObject):
         :param `lineType`: TOWRITE
         :type `lineType`: Qt.PenStyle
         """
-        self.setData(OBJ_TYPE, type())
+        self.setData(OBJ_TYPE, self.type())
         self.setData(OBJ_NAME, OBJ_NAME_IMAGE)
 
         # WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
@@ -124,7 +130,7 @@ class ImageObject(BaseObject):
         self.setFlag(QGraphicsItem.ItemIsSelectable, True)
 
         self.setObjectRect(x, y, w, h)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
         self.setPen(self.objectPen())
@@ -152,7 +158,7 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
+        rot = radians(self.rotation())  # qreal
         cosRot = qCos(rot)         # qreal
         sinRot = qSin(rot)         # qreal
 
@@ -170,7 +176,7 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
+        rot = radians(self.rotation())  # qreal
         cosRot = qCos(rot)         # qreal
         sinRot = qSin(rot)         # qreal
 
@@ -188,13 +194,13 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
+        rot = radians(self.rotation())  # qreal
         cosRot = qCos(rot)         # qreal
         sinRot = qSin(rot)         # qreal
 
         bl = self.rect().bottomLeft()  # QPointF
-        pblX = bl.x() * scale()                  # qreal
-        pblY = bl.y() * scale()                  # qreal
+        pblX = bl.x() * self.scale()                  # qreal
+        pblY = bl.y() * self.scale()                  # qreal
         pblXrot = pblX * cosRot - pblY * sinRot  # qreal
         pblYrot = pblX * sinRot + pblY * cosRot  # qreal
 
@@ -206,13 +212,13 @@ class ImageObject(BaseObject):
 
         :rtype: `QPointF`_
         """
-        rot = radians(rotation())  # qreal
+        rot = radians(self.rotation())  # qreal
         cosRot = qCos(rot)         # qreal
         sinRot = qSin(rot)         # qreal
 
         br = self.rect().bottomRight()  # QPointF
-        pbrX = br.x() * scale()                  # qreal
-        pbrY = br.y() * scale()                  # qreal
+        pbrX = br.x() * self.scale()                  # qreal
+        pbrY = br.y() * self.scale()                  # qreal
         pbrXrot = pbrX * cosRot - pbrY * sinRot  # qreal
         pbrYrot = pbrX * sinRot + pbrY * cosRot  # qreal
 
@@ -256,13 +262,13 @@ class ImageObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
         painter.drawRect(self.rect())
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -326,7 +332,12 @@ class ImageObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
-        gripPoints = list(self.objectTopLeft() + self.objectTopRight() + self.objectBottomLeft() + self.objectBottomRight())  # TODO: Check if this would be right...
+        gripPoints = [
+            self.objectTopLeft(),
+            self.objectTopRight(),
+            self.objectBottomLeft(),
+            self.objectBottomRight(),
+            ]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -342,6 +353,33 @@ class ImageObject(BaseObject):
 
         """
         pass # TODO: gripEdit() for ImageObject
+
+    def objectWidth(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.rect().width() * self.scale()
+
+    def objectHeight(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.rect().height() * self.scale()
+
+    def objectArea(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return qAbs(self.objectWidth() * self.objectHeight())
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

@@ -27,26 +27,29 @@ Classes summary:
 from math import sin as qSin
 from math import cos as qCos
 from math import radians
+qMin = min
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QLineF, QPointF
+    from PySide.QtCore import qDebug, Qt, QLineF, QPointF, QRectF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF, QRectF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_RUBBER_OFF, OBJ_RUBBER_GRIP,
+    OBJ_RUBBER_DIMLEADER_LINE, ENABLE_LWT, OBJ_TYPE, OBJ_NAME,
+    OBJ_NAME_DIMLEADER, OBJ_TYPE_DIMLEADER)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-dimleader.h"
@@ -58,6 +61,24 @@ from object_base import BaseObject
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 
 
+# enum ArrowStyle
+# {
+NoArrow = 0  # NOTE: Allow this enum to evaluate false
+Open = 1
+Closed = 2
+Dot = 3
+Box = 4
+Tick = 5
+# };
+
+# enum lineStyle
+# {
+NoLine = 0  # NOTE: Allow this enum to evaluate false
+Flared = 1
+Fletching = 2
+# };
+
+
 class DimLeaderObject(BaseObject):
     """
     Subclass of `BaseObject`_
@@ -65,7 +86,10 @@ class DimLeaderObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, x1, y1, x2, y2, rgb, parent):
+
+    Type = OBJ_TYPE_DIMLEADER
+
+    def __init__(self, x1, y1, x2, y2, rgb, parent=None):
         #OVERLOADED IMPL?# DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -86,6 +110,16 @@ class DimLeaderObject(BaseObject):
         super(DimLeaderObject, self).__init__(parent)
 
         qDebug("DimLeaderObject Constructor()")
+
+        self.curved = bool()
+        self.filled = bool()
+        self.lineStylePath = QPainterPath()
+        self.arrowStylePath = QPainterPath()
+        self.arrowStyleAngle = float()   # qreal
+        self.arrowStyleLength = float()  # qreal
+        self.lineStyleAngle = float()    # qreal
+        self.lineStyleLength = float()   # qreal
+
         self.init(x1, y1, x2, y2, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -125,12 +159,14 @@ class DimLeaderObject(BaseObject):
         self.filled = True
         self.setObjectEndPoint1(x1, y1)
         self.setObjectEndPoint2(x2, y2)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
-        self.setPen(objectPen())
+        self.setPen(self.objectPen())
 
-    def setObjectEndPoint1(self, endPt1):
+    # pythonic setObjectEndPoint1 overload
+    @signature(QPointF)
+    def setObjectEndPoint1FromPoint(self, endPt1):
         """
         TOWRITE
 
@@ -139,7 +175,9 @@ class DimLeaderObject(BaseObject):
         """
         self.setObjectEndPoint1(endPt1.x(), endPt1.y())
 
-    def setObjectEndPoint1(self, x1, y1):
+    # pythonic setObjectEndPoint1 overload
+    @signature(float, float)
+    def setObjectEndPoint1FromXY(self, x1, y1):
         """
         TOWRITE
 
@@ -158,7 +196,14 @@ class DimLeaderObject(BaseObject):
         self.setPos(x1, y1)
         self.updateLeader()
 
-    def setObjectEndPoint2(self, endPt2):
+    @overloaded(setObjectEndPoint1FromPoint, setObjectEndPoint1FromXY)
+    def setObjectEndPoint1(self, *args):
+        """ TOWRITE """
+        pass
+
+    # pythonic setObjectEndPoint2 overload
+    @signature(QPointF)
+    def setObjectEndPoint2FromPoint(self, endPt2):
         """
         TOWRITE
 
@@ -167,7 +212,9 @@ class DimLeaderObject(BaseObject):
         """
         self.setObjectEndPoint2(endPt2.x(), endPt2.y())
 
-    def setObjectEndPoint2(self, x2, y2):
+    # pythonic setObjectEndPoint2 overload
+    @signature(float, float)
+    def setObjectEndPoint2FromXY(self, x2, y2):
         """
         TOWRITE
 
@@ -185,6 +232,11 @@ class DimLeaderObject(BaseObject):
         self.setLine(0, 0, dx, dy)
         self.setPos(x1, y1)
         self.updateLeader()
+
+    @overloaded(setObjectEndPoint2FromPoint, setObjectEndPoint2FromXY)
+    def setObjectEndPoint2(self, *args):
+        """ TOWRITE """
+        pass
 
     def objectEndPoint1(self):
         """
@@ -249,8 +301,8 @@ class DimLeaderObject(BaseObject):
         arrowStyle = Closed     # int # TODO: Make this customizable
         arrowStyleAngle = 15.0  # qreal # TODO: Make this customizable
         arrowStyleLength = 1.0  # qreal # TODO: Make this customizable
-        lineStyleAngle = 45.0   # qreal # TODO: Make this customizable
-        lineStyleLength = 1.0   # qreal # TODO: Make this customizable
+        self.lineStyleAngle = 45.0   # qreal # TODO: Make this customizable
+        self.lineStyleLength = 1.0   # qreal # TODO: Make this customizable
 
         lyne = self.line()  # QLineF
         angle = lyne.angle()  # qreal
@@ -264,10 +316,10 @@ class DimLeaderObject(BaseObject):
         lyne2 = QLineF(ap0, lp0)
         lyne1.setAngle(angle + arrowStyleAngle)
         lyne2.setAngle(angle - arrowStyleAngle)
-        ap1 = QPointF()
-        ap2 = QPointF()
-        lynePerp.intersect(lyne1, ap1)
-        lynePerp.intersect(lyne2, ap2)
+        # ap1 = QPointF()
+        # ap2 = QPointF()
+        _, ap1 = lynePerp.intersect(lyne1)
+        _, ap2 = lynePerp.intersect(lyne2)
 
         # Math Diagram
         #                  .(ap1)                     .(lp1)
@@ -312,7 +364,7 @@ class DimLeaderObject(BaseObject):
         elif arrowStyle == Box:
             arrowStylePath = QPainterPath()
             side = QLineF(ap1, ap2).length()  # qreal
-            ar0 = QRectF(0, 0, side, side);
+            ar0 = QRectF(0, 0, side, side)
             ar0.moveCenter(ap0)
             arrowStylePath.addRect(ar0)
         elif arrowStyle == Tick:
@@ -342,17 +394,17 @@ class DimLeaderObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
-        painter.drawPath(lineStylePath)
-        painter.drawPath(arrowStylePath)
+        painter.drawPath(self.lineStylePath)
+        painter.drawPath(self.arrowStylePath)
 
         if self.filled:
-            painter.fillPath(arrowStylePath, self.objectColor())
+            painter.fillPath(self.arrowStylePath, self.objectColor())
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -374,9 +426,9 @@ class DimLeaderObject(BaseObject):
                 gripPoint = self.objectRubberPoint("GRIP_POINT")  # QPointF
                 if   gripPoint == self.objectEndPoint1():
                     painter.drawLine(self.line().p2(), self.mapFromScene(self.objectRubberPoint('')))
-                elif gripPoint == objectEndPoint2():
+                elif gripPoint == self.objectEndPoint2():
                     painter.drawLine(self.line().p1(), self.mapFromScene(self.objectRubberPoint('')))
-                elif gripPoint == objectMidPoint():
+                elif gripPoint == self.objectMidPoint():
                     painter.drawLine(self.line().translated(self.mapFromScene(self.objectRubberPoint('')) - self.mapFromScene(gripPoint)))
 
     def vulcanize(self):
@@ -422,9 +474,9 @@ class DimLeaderObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << objectEndPoint1() << objectEndPoint2();
-        gripPoints = list(self.objectEndPoint1() + self.objectEndPoint2())  # TODO: Check if this would be right...
+        gripPoints = [self.objectEndPoint1(), self.objectEndPoint2()]
         if self.curved:
-            gripPoints == self.objectMidPoint()  # TODO: Check if this would be right...
+            gripPoints.append(self.objectMidPoint())
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -436,13 +488,111 @@ class DimLeaderObject(BaseObject):
         :param `after`: TOWRITE
         :type `after`: `QPointF`_
         """
-        if   before == objectEndPoint1():
+        if   before == self.objectEndPoint1():
             self.setObjectEndPoint1(after)
-        elif before == objectEndPoint2():
+        elif before == self.objectEndPoint2():
             self.setObjectEndPoint2(after)
-        elif before == objectMidPoint():
+        elif before == self.objectMidPoint():
             delta = QPointF(after-before)
             self.moveBy(delta.x(), delta.y())
 
+    def objectX1(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint1().x()
+
+    def objectY1(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint1().y()
+
+    def objectX2(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint2().x()
+
+    def objectY2(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint2().y()
+
+    def objectDeltaX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return (self.objectX2() - self.objectX1())
+
+    def objectDeltaY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return (self.objectY2() - self.objectY1())
+
+    def objectLength(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.line().length()
+
+    def setObjectX1(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
+        self.setObjectEndPoint1(x, self.objectY1())
+
+    def setObjectY1(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
+        self.setObjectEndPoint1(self.objectX1(), y)
+
+    def setObjectX2(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
+        self.setObjectEndPoint2(x, self.objectY2())
+
+    def setObjectY2(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
+        self.setObjectEndPoint2(self.objectX2(), y)
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

@@ -23,27 +23,20 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import Qt, QSize
     from PySide.QtGui import (qRgb, QApplication, QIcon, QImage, QVBoxLayout,
         QPixmap, QDialog, QColor, QStandardItemModel, QSortFilterProxyModel,
-        QTreeView
-        )
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+        QTreeView)
+elif PYQT4:
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import Qt, QSize
-#    from PyQt4.QtGui import (qRgb, QApplication, QIcon, QImage, QVBoxLayout,
-#         QPixmap, QDialog, QColor, QStandardItemModel, QSortFilterProxyModel,
-#         QTreeView
-#         )
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import Qt, QSize
+    from PyQt4.QtGui import (qRgb, QApplication, QIcon, QImage, QVBoxLayout,
+        QPixmap, QDialog, QColor, QStandardItemModel, QSortFilterProxyModel,
+        QTreeView)
 
 
 #include <QtGui>

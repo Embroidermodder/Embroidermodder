@@ -35,21 +35,19 @@ from math import cos as qCos
 from math import radians
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import QLineF, QObject
     from PySide.QtGui import QMessageBox, QUndoCommand
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import QLineF, QObject
-#    from PyQt4.QtGui import QMessageBox, QUndoCommand
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import QLineF, QObject
+    from PyQt4.QtGui import QMessageBox, QUndoCommand
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
@@ -69,7 +67,7 @@ class UndoableAddCommand(QUndoCommand):
     Add
 
     """
-    def __init__(self, text, obj, v, parent):
+    def __init__(self, text, obj, v, parent=None):
         """
         Default class constructor.
 
@@ -111,7 +109,7 @@ class UndoableDeleteCommand(QUndoCommand):
     Delete
 
     """
-    def __init__(self, text, obj, v, parent):
+    def __init__(self, text, obj, v, parent=None):
         """
         Default class constructor.
 
@@ -153,7 +151,7 @@ class UndoableMoveCommand(QUndoCommand):
     Move
 
     """
-    def __init__(self, deltaX, deltaY, text, obj, v, parent):
+    def __init__(self, deltaX, deltaY, text, obj, v, parent=None):
         """
         Default class constructor.
 
@@ -201,7 +199,7 @@ class UndoableRotateCommand(QUndoCommand):
     Rotate
 
     """
-    def __init__(self, pivotPointX, pivotPointY, rotAngle, text, obj, v, parent):
+    def __init__(self, pivotPointX, pivotPointY, rotAngle, text, obj, v, parent=None):
         """
         Default class constructor.
 
@@ -278,7 +276,7 @@ class UndoableScaleCommand(QUndoCommand):
     Scale
 
     """
-    def __init__(self, x, y, scaleFactor, text, obj, v, parent):
+    def __init__(self, x, y, scaleFactor, text, obj, v, parent=None):
         """
         Default class constructor.
 
@@ -349,7 +347,7 @@ class UndoableNavCommand(QUndoCommand):
     Navigation
 
     """
-    def __init__(self, type, v, parent):
+    def __init__(self, type, v, parent=None):
         """
         Default class constructor.
 
@@ -364,11 +362,12 @@ class UndoableNavCommand(QUndoCommand):
 
         self.gview = v
         self.navType = type
-        self.setText(QObject.tr("Navigation"))
+        self.setText(v.tr("Navigation"))
         self.done = False
         self.fromTransform = self.gview.transform()
         self.fromCenter = self.gview.center()
-
+        self.toTransform = None
+        self.toCenter = None
 
     def mergeWith(self, newest):
         """
@@ -379,7 +378,7 @@ class UndoableNavCommand(QUndoCommand):
         :rtype: bool
         """
         if newest.id() != self.id(): # make sure other is also an UndoableNavCommand
-             return False
+            return False
 
         cmd = newest # const UndoableNavCommand* cmd = static_cast<const UndoableNavCommand*>(newest);
         self.toTransform = cmd.toTransform
@@ -406,8 +405,9 @@ class UndoableNavCommand(QUndoCommand):
         TOWRITE
         """
         if not self.done:
-            if   navType == "ZoomInToPoint":  self.gview.zoomToPoint(gview.scene().property(VIEW_MOUSE_POINT).toPoint(), +1)
-            elif navType == "ZoomOutToPoint": self.gview.zoomToPoint(gview.scene().property(VIEW_MOUSE_POINT).toPoint(), -1)
+            navType = self.navType
+            if   navType == "ZoomInToPoint":  self.gview.zoomToPoint(self.gview.scene().property("VIEW_MOUSE_POINT"), +1)  # .toPoint()
+            elif navType == "ZoomOutToPoint": self.gview.zoomToPoint(self.gview.scene().property("VIEW_MOUSE_POINT"), -1)  # .toPoint()
             elif navType == "ZoomExtents":    self.gview.zoomExtents()
             elif navType == "ZoomSelected":   self.gview.zoomSelected()
             elif navType == "PanStart":       pass  # { /* Do Nothing. We are just recording the spot where the pan started. */  }
@@ -433,7 +433,7 @@ class UndoableGripEditCommand(QUndoCommand):
     Grip Edit
 
     """
-    def __init__(self, beforePoint, afterPoint, text, obj, v, parent):
+    def __init__(self, beforePoint, afterPoint, text, obj, v, parent=None):
         """
         Default class constructor.
 
@@ -481,7 +481,7 @@ class UndoableMirrorCommand(QUndoCommand):
     Mirror
 
     """
-    def __init__(self, x1, y1, x2, y2, text, obj, v, parent):
+    def __init__(self, x1, y1, x2, y2, text, obj, v, parent=None):
         """
         Default class constructor.
 

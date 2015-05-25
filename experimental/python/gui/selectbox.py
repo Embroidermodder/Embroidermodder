@@ -23,21 +23,20 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QSize
+    from PySide.QtCore import qDebug, Qt, QSize, Slot
     from PySide.QtGui import QRubberBand, QColor, QPen, QBrush, QPainter
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QSize
-#    from PyQt4.QtGui import QRubberBand, QColor, QPen, QBrush, QPainter
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QSize
+    from PyQt4.QtCore import pyqtSlot as Slot
+    from PyQt4.QtGui import QRubberBand, QColor, QPen, QBrush, QPainter
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
@@ -62,7 +61,7 @@ class SelectBox(QRubberBand):
         :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """
-        super(SelectBox, self).__init__(parent)
+        super(SelectBox, self).__init__(s, parent)
 
         # private
         self._leftBrushColor = QColor()
@@ -83,64 +82,6 @@ class SelectBox(QRubberBand):
 
         # Default values
         self.setColors(QColor(Qt.darkGreen), QColor(Qt.green), QColor(Qt.darkBlue), QColor(Qt.blue), 32)
-
-
-    def setDirection(self, dir):
-        """
-        TOWRITE
-
-        :param `dir`: TOWRITE
-        :type `dir`: int
-        """
-        if not dir:
-            self._dirPen = self._leftPen
-            self._dirBrush = self._leftBrush
-        else:
-            self._dirPen = self._rightPen
-            self._dirBrush = self._rightBrush
-        self._boxDir = dir
-
-    def setColors(self, colorL, fillL, colorR, fillR, newAlpha):
-        """
-        TOWRITE
-
-        :param `colorL`: TOWRITE
-        :type `colorL`: `QColor`_
-        :param `fillL`: TOWRITE
-        :type `fillL`: `QColor`_
-        :param `colorR`: TOWRITE
-        :type `colorR`: `QColor`_
-        :param `fillR`: TOWRITE
-        :type `fillR`: `QColor`_
-        :param `newAlpha`: TOWRITE
-        :type `newAlpha`: int
-        """
-        qDebug("SelectBox setColors()")
-        self._alpha = newAlpha
-
-        self._leftPenColor = colorL  # TODO: allow customization
-        self._leftBrushColor = QColor(fillL.red(), fillL.green(), fillL.blue(), alpha)
-        self._rightPenColor = colorR  # TODO: allow customization
-        self._rightBrushColor = QColor(fillR.red(), fillR.green(), fillR.blue(), alpha)
-
-        self._leftPen.setColor(self._leftPenColor)
-        self._leftPen.setStyle(Qt.DashLine)
-        self._leftBrush.setStyle(Qt.SolidPattern)
-        self._leftBrush.setColor(self._leftBrushColor)
-
-        self._rightPen.setColor(self._rightPenColor)
-        self._rightPen.setStyle(Qt.SolidLine)
-        self._rightBrush.setStyle(Qt.SolidPattern)
-        self._rightBrush.setColor(self._rightBrushColor)
-
-        if not self._boxDir:
-            self._dirPen = self._leftPen
-            self._dirBrush = self._leftBrush
-        else:
-            self._dirPen = self._rightPen
-            self._dirBrush = self._rightBrush
-
-        self.forceRepaint()
 
     def paintEvent(self, event):
         """
@@ -164,5 +105,66 @@ class SelectBox(QRubberBand):
         hack = self.size()  # QSize
         self.resize(hack + QSize(1, 1))
         self.resize(hack)
+
+    # Slots ------------------------------------------------------------------
+
+    @Slot(int)
+    def setDirection(self, dir):
+        """
+        TOWRITE
+
+        :param `dir`: TOWRITE
+        :type `dir`: int
+        """
+        if not dir:
+            self._dirPen = self._leftPen
+            self._dirBrush = self._leftBrush
+        else:
+            self._dirPen = self._rightPen
+            self._dirBrush = self._rightBrush
+        self._boxDir = dir
+
+    @Slot(QColor, QColor, QColor, QColor, int)
+    def setColors(self, colorL, fillL, colorR, fillR, newAlpha):
+        """
+        TOWRITE
+
+        :param `colorL`: TOWRITE
+        :type `colorL`: `QColor`_
+        :param `fillL`: TOWRITE
+        :type `fillL`: `QColor`_
+        :param `colorR`: TOWRITE
+        :type `colorR`: `QColor`_
+        :param `fillR`: TOWRITE
+        :type `fillR`: `QColor`_
+        :param `newAlpha`: TOWRITE
+        :type `newAlpha`: int
+        """
+        qDebug("SelectBox setColors()")
+        self._alpha = newAlpha
+
+        self._leftPenColor = colorL  # TODO: allow customization
+        self._leftBrushColor = QColor(fillL.red(), fillL.green(), fillL.blue(), self._alpha)
+        self._rightPenColor = colorR  # TODO: allow customization
+        self._rightBrushColor = QColor(fillR.red(), fillR.green(), fillR.blue(), self._alpha)
+
+        self._leftPen.setColor(self._leftPenColor)
+        self._leftPen.setStyle(Qt.DashLine)
+        self._leftBrush.setStyle(Qt.SolidPattern)
+        self._leftBrush.setColor(self._leftBrushColor)
+
+        self._rightPen.setColor(self._rightPenColor)
+        self._rightPen.setStyle(Qt.SolidLine)
+        self._rightBrush.setStyle(Qt.SolidPattern)
+        self._rightBrush.setColor(self._rightBrushColor)
+
+        if not self._boxDir:
+            self._dirPen = self._leftPen
+            self._dirBrush = self._leftBrush
+        else:
+            self._dirPen = self._rightPen
+            self._dirBrush = self._rightBrush
+
+        self.forceRepaint()
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

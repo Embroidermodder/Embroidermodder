@@ -12,7 +12,7 @@ TOWRITE
 EMBROIDERBLUE1 = '#0C6AB0' # (12, 106, 176)
 EMBROIDERBLUE2 = '#55C4E6' # (85, 196, 230)
 
-WILDCARD_SUPPORTED = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.inf *.jef *.ksm *.max *.mit *.new *.ofm *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.plt *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;";
+WILDCARD_SUPPORTED = "All Supported Files (*.100 *.10o *.art *.bmc *.bro *.cnd *.col *.csd *.csv *.dem *.dsb *.dst *.dsz *.dxf *.edr *.emd *.exp *.exy *.eys *.fxy *.gnc *.gt *.hus *.inb *.inf *.jef *.ksm *.max *.mit *.new *.ofm *.pcd *.pcm *.pcs *.pec *.pel *.pem *.pes *.phb *.phc *.plt *.rgb *.sew *.sst *.stx *.svg *.t09 *.tap *.thr *.u00 *.u01 *.vip *.vp3 *.xxx *.zsk);;"
 WILDCARD_ALL = "All Files (*);;"   \
     "100 (*.100);;"     \
     "10o (*.10o);;"     \
@@ -72,6 +72,6 @@ WILDCARD_ALL = "All Files (*);;"   \
     "VIP (*.vip);;"     \
     "VP3 (*.vp3);;"     \
     "XXX (*.xxx);;"     \
-    "ZSK (*.zsk);;"
+    "ZSK (*.zsk);;"     \
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

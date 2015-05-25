@@ -24,13 +24,16 @@ Classes summary:
 import os
 
 #--PySide/PyQt Imports.
-try:
-    from PySide.QtCore import qDebug, Qt
+if PYSIDE:
+    from PySide.QtCore import qDebug, Qt, Slot
     from PySide.QtGui import QApplication, QAction, QIcon, QMenu, QToolButton
-except ImportError:
-    raise
-    # from PyQt4.QtCore import qDebug, Qt, QApplication
-    # from PyQt4.QtGui import QApplication, QAction, QIcon, QMenu, QToolButton
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    from PyQt4.QtCore import qDebug, Qt
+    from PyQt4.QtCore import pyqtSlot as Slot
+    from PyQt4.QtGui import QApplication, QAction, QIcon, QMenu, QToolButton
 
 
 class StatusBarButton(QToolButton):
@@ -93,52 +96,44 @@ class StatusBarButton(QToolButton):
         QApplication.setOverrideCursor(Qt.ArrowCursor)
         menu = QMenu(self)
         objName = self.objectName()
-        themeDir = gIconDir + os.sep + '..' + os.sep + self.mainWin.getSettingsGeneralIconTheme() + os.sep
+        themeDir = self.mainWin.gIconDir + os.sep + self.mainWin.getSettingsGeneralIconTheme() + os.sep
         s = "&Settings..."
         if objName == "StatusBarButtonSNAP":
-
             settingsSnapAction = QAction(QIcon(themeDir + "gridsnapsettings.png"), s, menu)
             settingsSnapAction.triggered.connect(self.settingsSnap)
             menu.addAction(settingsSnapAction)
 
         elif objName == "StatusBarButtonGRID":
-
             settingsGridAction = QAction(QIcon(themeDir + "gridsettings.png"), s, menu)
             settingsGridAction.triggered.connect(self.settingsGrid)
             menu.addAction(settingsGridAction)
 
         elif objName == "StatusBarButtonRULER":
-
             settingsRulerAction = QAction(QIcon(themeDir + "rulersettings.png"), s, menu)
             settingsRulerAction.triggered.connect(self.settingsRuler)
             menu.addAction(settingsRulerAction)
 
         elif objName == "StatusBarButtonORTHO":
-
             settingsOrthoAction = QAction(QIcon(themeDir + "orthosettings.png"), s, menu)
             settingsOrthoAction.triggered.connect(self.settingsOrtho)
             menu.addAction(settingsOrthoAction)
 
         elif objName == "StatusBarButtonPOLAR":
-
             settingsPolarAction = QAction(QIcon(themeDir + "polarsettings.png"), s, menu)
             settingsPolarAction.triggered.connect(self.settingsPolar)
             menu.addAction(settingsPolarAction)
 
         elif objName == "StatusBarButtonQSNAP":
-
             settingsQSnapAction = QAction(QIcon(themeDir + "qsnapsettings.png"), s, menu)
             settingsQSnapAction.triggered.connect(self.settingsQSnap)
             menu.addAction(settingsQSnapAction)
 
         elif objName == "StatusBarButtonQTRACK":
-
             settingsQTrackAction = QAction(QIcon(themeDir + "qtracksettings.png"), s, menu)
             settingsQTrackAction.triggered.connect(self.settingsQTrack)
             menu.addAction(settingsQTrackAction)
 
         elif objName == "StatusBarButtonLWT":
-
             gview = self.mainWin.activeView()
             if gview:
 
@@ -160,38 +155,65 @@ class StatusBarButton(QToolButton):
         QApplication.restoreOverrideCursor()
         self.statusbar.clearMessage()
 
+    # Slots ------------------------------------------------------------------
+
+    @Slot()
     def settingsSnap(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Snap" notebook tab page.
+        """
         self.mainWin.settingsDialog("Snap")
 
+    @Slot()
     def settingsGrid(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Grid/Ruler" notebook tab page.
+        """
         self.mainWin.settingsDialog("Grid/Ruler")
 
+    @Slot()
     def settingsRuler(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Grid/Ruler" notebook tab page.
+        """
         self.mainWin.settingsDialog("Grid/Ruler")
 
+    @Slot()
     def settingsOrtho(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Ortho/Polar" notebook tab page.
+        """
         self.mainWin.settingsDialog("Ortho/Polar")
 
+    @Slot()
     def settingsPolar(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "Ortho/Polar" notebook tab page.
+        """
         self.mainWin.settingsDialog("Ortho/Polar")
 
+    @Slot()
     def settingsQSnap(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "QuickSnap" notebook tab page.
+        """
         self.mainWin.settingsDialog("QuickSnap")
 
+    @Slot()
     def settingsQTrack(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "QuickTrack" notebook tab page.
+        """
         self.mainWin.settingsDialog("QuickTrack")
 
+    @Slot()
     def settingsLwt(self):
-        """"""
+        """
+        Open the `Settings_Dialog` on the "LineWeight" notebook tab page.
+        """
         self.mainWin.settingsDialog("LineWeight")
 
+    @Slot(bool)
     def toggleSnap(self, on):
         """
         TOWRITE
@@ -204,6 +226,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleSnap(on)
 
+    @Slot(bool)
     def toggleGrid(self, on):
         """
         TOWRITE
@@ -216,6 +239,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleGrid(on)
 
+    @Slot(bool)
     def toggleRuler(self, on):
         """
         TOWRITE
@@ -228,6 +252,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleRuler(on)
 
+    @Slot(bool)
     def toggleOrtho(self, on):
         """
         TOWRITE
@@ -240,6 +265,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleOrtho(on)
 
+    @Slot(bool)
     def togglePolar(self, on):
         """
         TOWRITE
@@ -252,6 +278,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.togglePolar(on)
 
+    @Slot(bool)
     def toggleQSnap(self, on):
         """
         TOWRITE
@@ -264,6 +291,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleQSnap(on)
 
+    @Slot(bool)
     def toggleQTrack(self, on):
         """
         TOWRITE
@@ -272,10 +300,11 @@ class StatusBarButton(QToolButton):
         :type `on`: bool
         """
         qDebug("StatusBarButton toggleQTrack()")
-        gview = mainWin.activeView()
+        gview = self.mainWin.activeView()
         if gview:
             gview.toggleQTrack(on)
 
+    @Slot(bool)
     def toggleLwt(self, on):
         """
         TOWRITE
@@ -288,6 +317,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleLwt(on)
 
+    @Slot()
     def enableLwt(self):
         """"""
         qDebug("StatusBarButton enableLwt()")
@@ -296,6 +326,7 @@ class StatusBarButton(QToolButton):
             if not gview.isLwtEnabled():
                 gview.toggleLwt(True)
 
+    @Slot()
     def disableLwt(self):
         """"""
         qDebug("StatusBarButton disableLwt()")
@@ -304,6 +335,7 @@ class StatusBarButton(QToolButton):
             if gview.isLwtEnabled():
                 gview.toggleLwt(False)
 
+    @Slot()
     def enableReal(self):
         """"""
         qDebug("StatusBarButton enableReal()")
@@ -311,6 +343,7 @@ class StatusBarButton(QToolButton):
         if gview:
             gview.toggleReal(True)
 
+    @Slot()
     def disableReal(self):
         """"""
         qDebug("StatusBarButton disableReal()")

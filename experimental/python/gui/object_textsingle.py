@@ -24,24 +24,25 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_TYPE, OBJ_TYPE_TEXTSINGLE, OBJ_NAME, ENABLE_LWT,
+    OBJ_NAME_TEXTSINGLE, OBJ_RUBBER_OFF, OBJ_RUBBER_GRIP, OBJ_RUBBER_TEXTSINGLE)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-textsingle.h"
@@ -60,7 +61,10 @@ class TextSingleObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, strng, x, y, rgb, parent):
+
+    Type = OBJ_TYPE_TEXTSINGLE
+
+    def __init__(self, strng, x, y, rgb, parent=None):
         #OVERLOADED IMPL?# TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -79,6 +83,20 @@ class TextSingleObject(BaseObject):
         super(TextSingleObject, self).__init__(parent)
 
         qDebug("TextSingleObject Constructor()")
+
+        self.objText = str()
+        self.objTextFont = str()
+        self.objTextJustify = str()
+        self.objTextSize = float() # qreal
+        self.objTextBold = bool()
+        self.objTextItalic = bool()
+        self.objTextUnderline = bool()
+        self.objTextStrikeOut = bool()
+        self.objTextOverline = bool()
+        self.objTextBackward = bool()
+        self.objTextUpsideDown = bool()
+        self.objTextPath = QPainterPath()
+
         self.init(str, x, y, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -123,7 +141,7 @@ class TextSingleObject(BaseObject):
 
         self.setObjectText(strng)
         self.setObjectPos(x, y)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
         self.setPen(self.objectPen())
@@ -149,44 +167,44 @@ class TextSingleObject(BaseObject):
         :param `strng`: TOWRITE
         :type `strng`: QString
         """
-        objText = strng
+        self.objText = strng
         textPath = QPainterPath()
         font = QFont()
-        font.setFamily(objTextFont)
-        font.setPointSizeF(objTextSize)
-        font.setBold(objTextBold)
-        font.setItalic(objTextItalic)
-        font.setUnderline(objTextUnderline)
-        font.setStrikeOut(objTextStrikeOut)
-        font.setOverline(objTextOverline)
-        textPath.addText(0, 0, font, strng)
+        font.setFamily(self.objTextFont)
+        font.setPointSizeF(self.objTextSize)
+        font.setBold(self.objTextBold)
+        font.setItalic(self.objTextItalic)
+        font.setUnderline(self.objTextUnderline)
+        font.setStrikeOut(self.objTextStrikeOut)
+        font.setOverline(self.objTextOverline)
+        textPath.addText(0., 0., font, strng)
 
         # Translate the path based on the justification.
         jRect = textPath.boundingRect()  # QRectF
-        if   objTextJustify == "Left":          textPath.translate(-jRect.left(), 0)
-        elif objTextJustify == "Center":        textPath.translate(-jRect.center().x(), 0)
-        elif objTextJustify == "Right":         textPath.translate(-jRect.right(), 0)
-        elif objTextJustify == "Aligned":       pass # TODO: TextSingleObject Aligned Justification
-        elif objTextJustify == "Middle":        textPath.translate(-jRect.center())
-        elif objTextJustify == "Fit":           pass # TODO: TextSingleObject Fit Justification
-        elif objTextJustify == "Top Left":      textPath.translate(-jRect.topLeft())
-        elif objTextJustify == "Top Center":    textPath.translate(-jRect.center().x(), -jRect.top())
-        elif objTextJustify == "Top Right":     textPath.translate(-jRect.topRight())
-        elif objTextJustify == "Middle Left":   textPath.translate(-jRect.left(), -jRect.top()/2.0)
-        elif objTextJustify == "Middle Center": textPath.translate(-jRect.center().x(), -jRect.top()/2.0)
-        elif objTextJustify == "Middle Right":  textPath.translate(-jRect.right(), -jRect.top()/2.0)
-        elif objTextJustify == "Bottom Left":   textPath.translate(-jRect.bottomLeft())
-        elif objTextJustify == "Bottom Center": textPath.translate(-jRect.center().x(), -jRect.bottom())
-        elif objTextJustify == "Bottom Right":  textPath.translate(-jRect.bottomRight())
+        if   self.objTextJustify == "Left":          textPath.translate(-jRect.left(), 0)
+        elif self.objTextJustify == "Center":        textPath.translate(-jRect.center().x(), 0)
+        elif self.objTextJustify == "Right":         textPath.translate(-jRect.right(), 0)
+        elif self.objTextJustify == "Aligned":       pass # TODO: TextSingleObject Aligned Justification
+        elif self.objTextJustify == "Middle":        textPath.translate(-jRect.center())
+        elif self.objTextJustify == "Fit":           pass # TODO: TextSingleObject Fit Justification
+        elif self.objTextJustify == "Top Left":      textPath.translate(-jRect.topLeft())
+        elif self.objTextJustify == "Top Center":    textPath.translate(-jRect.center().x(), -jRect.top())
+        elif self.objTextJustify == "Top Right":     textPath.translate(-jRect.topRight())
+        elif self.objTextJustify == "Middle Left":   textPath.translate(-jRect.left(), -jRect.top()/2.0)
+        elif self.objTextJustify == "Middle Center": textPath.translate(-jRect.center().x(), -jRect.top()/2.0)
+        elif self.objTextJustify == "Middle Right":  textPath.translate(-jRect.right(), -jRect.top()/2.0)
+        elif self.objTextJustify == "Bottom Left":   textPath.translate(-jRect.bottomLeft())
+        elif self.objTextJustify == "Bottom Center": textPath.translate(-jRect.center().x(), -jRect.bottom())
+        elif self.objTextJustify == "Bottom Right":  textPath.translate(-jRect.bottomRight())
 
         # Backward or Upside Down.
-        if objTextBackward or objTextUpsideDown:
+        if self.objTextBackward or self.objTextUpsideDown:
 
             horiz = 1.0  # qreal
             vert = 1.0   # qreal
-            if objTextBackward:
+            if self.objTextBackward:
                 horiz = -1.0
-            if objTextUpsideDown:
+            if self.objTextUpsideDown:
                 vert = -1.0
 
             flippedPath = QPainterPath()
@@ -199,10 +217,10 @@ class TextSingleObject(BaseObject):
 
                 element = textPath.elementAt(i)
                 if element.isMoveTo():
-                    flippedPath.moveTo(horiz * element.x, vert * element.y);
+                    flippedPath.moveTo(horiz * element.x, vert * element.y)
 
                 elif element.isLineTo():
-                    flippedPath.lineTo(horiz * element.x, vert * element.y);
+                    flippedPath.lineTo(horiz * element.x, vert * element.y)
 
                 elif element.isCurveTo():
                                                     # start point P1 is not needed
@@ -383,13 +401,13 @@ class TextSingleObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
-        painter.drawPath(objTextPath)
+        painter.drawPath(self.objTextPath)
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -417,7 +435,7 @@ class TextSingleObject(BaseObject):
                     painter.drawPath(self.objectPath().translated(self.mapFromScene(self.objectRubberPoint("")) - self.mapFromScene(gripPoint)))
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint("")))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """
@@ -445,7 +463,7 @@ class TextSingleObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << scenePos();
-        gripPoints = list(self.scenePos())  # TODO: Check if this would be right...
+        gripPoints = [self.scenePos()]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -474,7 +492,7 @@ class TextSingleObject(BaseObject):
 
         ## QList<QPainterPath> pathList;
         pathList = []
-        path = objTextPath  # QPainterPath
+        path = self.objTextPath  # QPainterPath
 
         element = QPainterPath.Element
         pathMoves = []  # QList<int>
@@ -486,14 +504,16 @@ class TextSingleObject(BaseObject):
             if element.isMoveTo():
 
                 pathMoves.append(i)  # pathMoves << i;
-                numMoves += 1 # numMoves++;
+                numMoves += 1  # numMoves++;
 
         pathMoves.append(path.elementCount())  # pathMoves << path.elementCount();
 
-        for p in range(0, pathMoves.size() - 1 and numMoves):  #  for(int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
+        for p in range(0, len(pathMoves) - 1):  #  for(int p = 0; p < pathMoves.size()-1 && p < numMoves; p++)
+            if not (p < numMoves):
+                break
 
             subPath = QPainterPath()
-            for i in range(pathMoves.value(p), pathMoves.value(p + 1)):  # for(int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
+            for i in range(pathMoves[p], pathMoves[p + 1]):  # for(int i = pathMoves.value(p); i < pathMoves.value(p+1); i++)
 
                 element = path.elementAt(i)
                 if element.isMoveTo():
@@ -510,6 +530,188 @@ class TextSingleObject(BaseObject):
             pathList.append(trans.map(subPath))
 
         return pathList
+
+    def objectSavePathList(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: list[`QPainterPath`_]
+        """
+        return self.subPathList()
+
+    def objectText(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: str
+        """
+        return self.objText
+
+    def objectTextFont(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: str
+        """
+        return self.objTextFont
+
+    def objectTextJustify(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: str
+        """
+        return self.objTextJustify
+
+    def objectTextSize(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objTextSize
+
+    def objectTextBold(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextBold
+
+    def objectTextItalic(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextItalic
+
+    def objectTextUnderline(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextUnderline
+
+    def objectTextStrikeOut(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextStrikeOut
+
+    def objectTextOverline(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextOverline
+
+    def objectTextBackward(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextBackward
+
+    def objectTextUpsideDown(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: bool
+        """
+        return self.objTextUpsideDown
+
+    def objectPos(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
+        return self.scenePos()
+
+    def objectX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.scenePos().x()
+
+    def objectY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.scenePos().y()
+
+    # pythonic setObjectPos overload
+    @signature(QPointF)
+    def setObjectPosFromPoint(self, point):
+        """
+        TOWRITE
+
+        :param `point`: TOWRITE
+        :type `point`: `QPointF`_
+        """
+        self.setPos(point.x(), point.y())
+
+    # pythonic setObjectPos overload
+    @signature(float, float)
+    def setObjectPosFromXY(self, x, y):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        :param y`: TOWRITE
+        :type `y`: float
+        """
+        self.setPos(x, y)
+
+    @overloaded(setObjectPosFromPoint, setObjectPosFromXY)
+    def setObjectPos(self, *args):
+        """ TOWRITE """
+        pass
+
+    def setObjectX(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
+        self.setObjectPos(x, self.objectY())
+
+    def setObjectY(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
+        self.setObjectPos(self.objectX(), y)
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

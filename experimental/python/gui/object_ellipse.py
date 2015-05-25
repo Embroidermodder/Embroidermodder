@@ -27,26 +27,31 @@ Classes summary:
 from math import sin as qSin
 from math import cos as qCos
 from math import radians
+qMin = min
+qMax = max
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_NAME, OBJ_NAME_ELLIPSE, OBJ_TYPE, OBJ_TYPE_ELLIPSE,
+    OBJ_RUBBER_GRIP, OBJ_RUBBER_ELLIPSE_LINE, ENABLE_LWT, OBJ_RUBBER_OFF,
+    OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
+    OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-ellipse.h"
@@ -65,7 +70,10 @@ class EllipseObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, centerX, centerY, width, height, rgb, parent):
+
+    Type = OBJ_TYPE_ELLIPSE
+
+    def __init__(self, centerX, centerY, width, height, rgb, parent=None):
         #OVERLOADED IMPL?# EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -124,10 +132,10 @@ class EllipseObject(BaseObject):
 
         self.setObjectSize(width, height)
         self.setObjectCenter(centerX, centerY)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
-        self.setPen(objectPen())
+        self.setPen(self.objectPen())
         self.updatePath()
 
     def setObjectSize(self, width, height):
@@ -145,7 +153,9 @@ class EllipseObject(BaseObject):
         elRect.moveCenter(QPointF(0, 0))
         self.setRect(elRect)
 
-    def setObjectCenter(self, center):
+    # pythonic setObjectCenter overload
+    @signature(QPointF)
+    def setObjectCenterFromPoint(self, center):
         """
         TOWRITE
 
@@ -154,7 +164,9 @@ class EllipseObject(BaseObject):
         """
         self.setObjectCenter(center.x(), center.y())
 
-    def setObjectCenter(self, centerX, centerY):
+    # pythonic setObjectCenter overload
+    @signature(float, float)
+    def setObjectCenterFromXY(self, centerX, centerY):
         """
         TOWRITE
 
@@ -164,6 +176,11 @@ class EllipseObject(BaseObject):
         :type `centerY`: qreal
         """
         self.setPos(centerX, centerY)
+
+    @overloaded(setObjectCenterFromPoint, setObjectCenterFromXY)
+    def setObjectCenter(self, *args):
+        """ TOWRITE """
+        pass
 
     def setObjectCenterX(self, centerX):
         """
@@ -311,13 +328,13 @@ class EllipseObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
+        if objScene.property(ENABLE_LWT):  # .toBool()
             paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
         painter.drawEllipse(self.rect())
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -333,7 +350,7 @@ class EllipseObject(BaseObject):
             itemLinePoint2  = self.mapFromScene(sceneLinePoint2)             # QPointF
             itemLine = QLineF(itemLinePoint1, itemLinePoint2)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS:
@@ -355,8 +372,8 @@ class EllipseObject(BaseObject):
             dx = px - x1  # qreal
             dy = py - y1  # qreal
             norm.translate(dx, dy)
-            iPoint = QPointF()
-            norm.intersect(line, iPoint)
+            # iPoint = QPointF()
+            _, iPoint = norm.intersect(line)
             ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length() * 2.0  # qreal
 
             self.setObjectCenter(sceneCenterPoint)
@@ -367,7 +384,7 @@ class EllipseObject(BaseObject):
             itemAxis2Point2 = self.mapFromScene(sceneAxis2Point2)  # QPointF
             itemLine = QLineF(itemCenterPoint, itemAxis2Point2)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS:
@@ -388,8 +405,8 @@ class EllipseObject(BaseObject):
             dx = px - x1  # qreal
             dy = py - y1  # qreal
             norm.translate(dx, dy)
-            iPoint = QPointF()
-            norm.intersect(line, iPoint)
+            # iPoint = QPointF()
+            _, iPoint = norm.intersect(line)
             ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length() * 2.0  # qreal
 
             self.setObjectCenter(sceneCenterPoint)
@@ -400,7 +417,7 @@ class EllipseObject(BaseObject):
             itemAxis2Point2 = self.mapFromScene(sceneAxis2Point2)  # QPointF
             itemLine = QLineF(itemCenterPoint, itemAxis2Point2)
             if painter:
-                self.drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR")
             self.updatePath()
 
         elif rubberMode == OBJ_RUBBER_GRIP:
@@ -453,7 +470,13 @@ class EllipseObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
-        gripPoints = list(self.objectCenter() + self.objectQuadrant0() + self.objectQuadrant90() + self.objectQuadrant180() + self.objectQuadrant270())  # TODO: Check if this would be right...
+        gripPoints = [
+            self.objectCenter(),
+            self.objectQuadrant0(),
+            self.objectQuadrant90(),
+            self.objectQuadrant180(),
+            self.objectQuadrant270(),
+            ]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -486,6 +509,87 @@ class EllipseObject(BaseObject):
         trans.rotate(self.rotation())
         trans.scale(s, s)
         return trans.map(path)
+
+    def objectCenter(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
+        return self.scenePos()
+
+    def objectCenterX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.scenePos().x()
+
+    def objectCenterY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.scenePos().y()
+
+    def objectRadiusMajor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return qMax(self.rect().width(), self.rect().height()) / 2.0 * self.scale()
+
+    def objectRadiusMinor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return qMin(self.rect().width(), self.rect().height()) / 2.0 * self.scale()
+
+    def objectDiameterMajor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """ 
+        return qMax(self.rect().width(), self.rect().height()) * self.scale()
+
+    def objectDiameterMinor(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """ 
+        return qMin(self.rect().width(), self.rect().height()) * self.scale()
+
+    def objectWidth(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.rect().width() * self.scale()
+
+    def objectHeight(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.rect().height() * self.scale()
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

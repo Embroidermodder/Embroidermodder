@@ -24,27 +24,27 @@ Classes summary:
 import os
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     # Only import what we need into the global namespace
     from PySide.QtCore import qDebug, Qt, QTextStream, QFile
     from PySide.QtGui import QApplication, QAbstractSlider, QAction, QBrush, QColor, \
         QFileDialog, QFont, QIcon, QKeySequence, QMenu, QMessageBox, \
-        QPalette, QPixmap, QPrinter, QPrintDialog, QTextEdit, QTextOption, QToolButton, QToolTip
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+        QPalette, QPixmap, QPrinter, QPrintDialog, QTextEdit, QTextOption, \
+        QToolButton, QToolTip, QDialog
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
 #    # Only import what we need into the global namespace
-#    from PyQt4.QtCore import qDebug, Qt, QTextStream, QFile
-#    from PyQt4.QtGui import QApplication, QAbstractSlider, QAction, QBrush, QColor, \
-#        QFileDialog, QFont, QIcon, QKeySequence, QMenu, QMessageBox, \
-#        QPalette, QPixmap, QPrinter, QPrintDialog, QTextEdit, QTextOption, QToolButton, QToolTip
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug, Qt, QTextStream, QFile
+    from PyQt4.QtGui import QApplication, QAbstractSlider, QAction, QBrush, QColor, \
+        QFileDialog, QFont, QIcon, QKeySequence, QMenu, QMessageBox, \
+        QPalette, QPixmap, QPrinter, QPrintDialog, QTextEdit, QTextOption, \
+        QToolButton, QToolTip, QDialog
 
 
 #--Local Imports.
@@ -85,7 +85,7 @@ class MDISubWindow_TextEdit(QTextEdit):
         """
         super(MDISubWindow_TextEdit, self).__init__(parent)
 
-        print(filePath)
+        qDebug(filePath)
         self.filePath = filePath
         self.fileName = os.path.basename(os.path.abspath(filePath))
         self.fileExt = os.path.splitext(self.fileName)[1]
