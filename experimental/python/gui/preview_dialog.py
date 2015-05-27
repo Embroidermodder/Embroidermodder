@@ -23,21 +23,19 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug
     from PySide.QtGui import QFileDialog, QGridLayout, QLayout
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug
-#    from PyQt4.QtGui import QFileDialog, QGridLayout, QLayout
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug
+    from PyQt4.QtGui import QFileDialog, QGridLayout, QLayout
 
 # Local imports.
 from imagewidget import ImageWidget
@@ -57,7 +55,7 @@ class PreviewDialog(QFileDialog):
     Subclass of `QFileDialog`_
 
     """
-    def __init__(self, parent, caption, dir, filter):
+    def __init__(self, parent=None, caption="", dir="", filter=""):
         """
         Default class constructor.
 
@@ -79,10 +77,10 @@ class PreviewDialog(QFileDialog):
         # TODO/PORT: Need access to gIconDir
         imgWidget = ImageWidget("icons/default/nopreview.png", self)
 
-        #TODO/PORT# QLayout* lay = layout()
-        #TODO/PORT# if(qobject_cast<QGridLayout*>(lay))
-        #TODO/PORT#     QGridLayout* grid = qobject_cast<QGridLayout*>(lay);
-        #TODO/PORT#     grid->addWidget(imgWidget, 0, grid->columnCount(), grid->rowCount(), 1)
+        lay = self.layout()
+        if isinstance(lay, QGridLayout):  # if(qobject_cast<QGridLayout*>(lay))
+            grid = lay  # QGridLayout* grid = qobject_cast<QGridLayout*>(lay);
+            grid.addWidget(imgWidget, 0, grid.columnCount(), grid.rowCount(), 1)
 
         self.setModal(True)
         self.setOption(QFileDialog.DontUseNativeDialog)

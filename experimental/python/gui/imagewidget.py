@@ -23,21 +23,19 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug
     from PySide.QtGui import QImage, QPainter, QWidget
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
 #    ## from PyQt4 import QtCore, QtGui
 #    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug
-#    from PyQt4.QtGui import QImage, QPainter, QWidget
-#    PYSIDE = False
-#    PYQT4 = True
+    from PyQt4.QtCore import qDebug
+    from PyQt4.QtGui import QImage, QPainter, QWidget
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
@@ -51,7 +49,7 @@ class ImageWidget(QWidget):
     Subclass of `QWidget`_
 
     """
-    def __init__(self, filename, parent):
+    def __init__(self, filename, parent=None):
         """
         Default class constructor.
 

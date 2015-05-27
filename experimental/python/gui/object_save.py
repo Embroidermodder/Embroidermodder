@@ -23,26 +23,34 @@ Classes summary:
 """
 
 #-Imports.---------------------------------------------------------------------
+#--Python Imports
+qPrintable = str
+
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QLineF, QPointF
+    from PySide.QtCore import qDebug, Qt, QLineF, QPointF, QObject
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF, QObject
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QTransform, QFont
 
 #--Local Imports.
 from object_data import *
 from object_base import BaseObject
+
+#--libembroidery Imports.
+from libembroidery import (embFormat_typeFromName, embPattern_create,
+    embReaderWriter_getByFileName, embPattern_movePolylinesToStitchList,
+    embPattern_addCircleObjectAbs, embPattern_addEllipseObjectAbs,
+    embPattern_addLineObjectAbs, embPattern_addPointObjectAbs, embColor_make,
+    embPattern_addRectObjectAbs, embPointList_create, embPointList_add,
+    embPoint_make, embPolylineObject_create, embPattern_addPolylineObjectAbs,
+    EMBFORMAT_UNSUPPORTED, EMBFORMAT_STITCHONLY)
+
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-save.h"
@@ -74,7 +82,7 @@ class SaveObject(QObject):
     TOWRITE
 
     """
-    def __init__(self, theScene, parent):
+    def __init__(self, theScene, parent=None):
         """
         Default class constructor.
 
@@ -102,7 +110,7 @@ class SaveObject(QObject):
         :type `fileName`: QString
         :rtype: bool
         """
-        qDebug("SaveObject save(%s)", qPrintable(fileName))
+        qDebug("SaveObject save(%s)" % qPrintable(fileName))
 
         # TODO: Before saving to a stitch only format, Embroidermodder needs
         #       to calculate the optimal path to minimize jump stitches. Also
@@ -115,16 +123,12 @@ class SaveObject(QObject):
         writeSuccessful = False  # bool
         #TODO/PORT# int i
 
-        #TODO/PORT# char* unusedStr = 0
-        #TODO/PORT# char unusedChar
-
-        if not embFormat_info(qPrintable(fileName), unusedStr, unusedStr, unusedChar, unusedChar, self.formatType):
-            return False
+        self.formatType = embFormat_typeFromName(qPrintable(fileName))
         if self.formatType == EMBFORMAT_UNSUPPORTED:
             return False
 
-        pattern = 0  # EmbPattern*
-        writer = 0   # EmbReaderWriter*
+        ## pattern = 0  # EmbPattern*
+        ## writer = 0   # EmbReaderWriter*
 
         pattern = embPattern_create()
         if not pattern:
@@ -133,7 +137,7 @@ class SaveObject(QObject):
         # Write.
         writer = embReaderWriter_getByFileName(qPrintable(fileName))
         if not writer:
-            qDebug("Unsupported write file type: %s", qPrintable(fileName))
+            qDebug("Unsupported write file type: %s" % qPrintable(fileName))
         else:
 
             for item in self.gscene.items():  # foreach(QGraphicsItem* item, gscene->items())
@@ -169,17 +173,17 @@ class SaveObject(QObject):
 
 
             # TODO: handle EMBFORMAT_STCHANDOBJ also
-            if formatType == EMBFORMAT_STITCHONLY:
+            if self.formatType == EMBFORMAT_STITCHONLY:
                 embPattern_movePolylinesToStitchList(pattern)  # TODO: handle all objects like this
 
             writeSuccessful = writer.writer(pattern, qPrintable(fileName))
             if not writeSuccessful:
-                qDebug("Writing file %s was unsuccessful", qPrintable(fileName))
+                qDebug("Writing file %s was unsuccessful" % qPrintable(fileName))
 
         # TODO: check the embLog for errors and if any exist, report them.
 
-        free(writer)
-        embPattern_free(pattern)
+        ## free(writer)              #TODO/REMOVE# not needed in python
+        ## embPattern_free(pattern)  #TODO/REMOVE# not needed in python
 
         return writeSuccessful
 

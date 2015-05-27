@@ -22,34 +22,55 @@ Classes summary:
 """
 
 #-Imports.---------------------------------------------------------------------
+#--Python Imports.
+import os
+from random import random as qrand
+qAbs = abs
+
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
-    from PySide.QtCore import qDebug, Qt, QDateTime, QLineF, QPoint, QPointF, QRect, QRectF, QSize # QChar, QString
+    from PySide import QtOpenGL
+    from PySide.QtOpenGL import QGL, QGLFormat, QGLWidget
+    from PySide.QtCore import (qDebug, Qt, QDateTime, QLineF, QPoint, QPointF, 
+        QRect, QRectF, QSize, QObject, SIGNAL, SLOT, Slot) # QChar, QString
     from PySide.QtGui import (qRgb, QAction, QApplication, QBrush, QColor, QFrame,
-        QGL, QGLFormat, QGLWidget, QGraphicsItem, QGraphicsScene, QGraphicsView,
-        QIcon, QList, QMenu, QMessageBox, QObject, QPainter, QPainterPath,
-        QPen, QPixmap, QPushButton, QRubberBand,
-        QTransform, QUndoStack # , QVector
+        QGraphicsItem, QGraphicsScene, QGraphicsView,
+        QIcon, QMenu, QMessageBox, QPainter, QPainterPath,
+        QPen, QPixmap, QPushButton, QRubberBand, QGraphicsItemGroup,
+        QTransform, QUndoStack # , QVector, QList
         )
-    PYSIDE = True
-    PYQT4 = False
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4 import QtOpenGL
+    from PyQt4.QtOpenGL import QGL, QGLFormat, QGLWidget
+    from PyQt4.QtCore import (qDebug, Qt, QDateTime, QLineF, QPoint, QPointF, 
+        QRect, QRectF, QSize, QObject, SIGNAL, SLOT) # QChar, QString
+    from PyQt4.QtCore import pyqtSlot as Slot
+    from PyQt4.QtGui import (qRgb, QAction, QApplication, QBrush, QColor, QFrame,
+        QGraphicsItem, QGraphicsScene, QGraphicsView,
+        QIcon, QMenu, QMessageBox, QPainter, QPainterPath,
+        QPen, QPixmap, QPushButton, QRubberBand,
+        QTransform, QUndoStack # , QVector, QList
+        )
 
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QDateTime, QLineF, QPoint, QPointF, QRect, QRectF, QSize # QChar, QString
-#    from PyQt4.QtGui import (qRgb, QAction, QApplication, QBrush, QColor, QFrame,
-#        QGL, QGLFormat, QGLWidget, QGraphicsItem, QGraphicsScene, QGraphicsView,
-#        QIcon, QList, QMenu, QMessageBox, QObject, QPainter, QPainterPath,
-#        QPen, QPixmap, QPushButton, QRubberBand,
-#        QTransform, QUndoStack # , QVector
-#        )
-#    PYSIDE = False
-#    PYQT4 = True
 
+#--Local Imports.
+from selectbox import SelectBox
+from undo_commands import (UndoableAddCommand,
+                           UndoableDeleteCommand,
+                           UndoableMoveCommand,
+                           UndoableRotateCommand,
+                           UndoableScaleCommand,
+                           UndoableNavCommand,
+                           UndoableGripEditCommand,
+                           UndoableMirrorCommand)
+from object_data import *
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "view.h"
@@ -81,6 +102,11 @@ except ImportError:
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 
 
+#-Globals.---------------------------------------------------------------------
+qMin = min
+qMax = max
+
+
 class View(QGraphicsView):
     """
     Subclass of `QGraphicsView`_
@@ -102,11 +128,81 @@ class View(QGraphicsView):
         super(View, self).__init__(theScene, parent)
 
         global mainWin
-        self.mainWin = mainWin = mw
+        # Start hhhhhhhhhhhhhhhhhhhhhh
+        self.hashDeletedObjects =     dict()          # QHash<qint64, QGraphicsItem*>
 
+        self.spareRubberList =        list()          # QList<qint64>
+
+        self.gridColor =              QColor()        # QColor
+        self.gridPath =               QPainterPath()  # QPainterPath
+        self.originPath =             QPainterPath()  # QPainterPath
+
+        self.rulerMetric =            bool()          # bool
+        self.rulerColor =             QColor()        # QColor
+        self.rulerPixelSize =         int()           # quint8
+
+        self.previewObjectList =      list()          # QList<QGraphicsItem*>
+        self.previewObjectItemGroup = None            # QGraphicsItemGroup*
+        self.previewPoint =           QPointF()       # QPointF
+        self.previewData =            float()         # qreal  
+        self.previewMode =            int()           # int    
+
+        self.cutCopyMousePoint =      QPointF()       # QPointF
+        self.pasteObjectItemGroup =   None            # QGraphicsItemGroup*
+        self.pasteDelta =             QPointF()       # QPointF
+
+        self.rubberRoomList =         list()          # QList<QGraphicsItem*>
+
+        self.grippingActive =         bool()          # bool
+        self.rapidMoveActive =        bool()          # bool
+        self.previewActive =          bool()          # bool
+        self.pastingActive =          bool()          # bool
+        self.movingActive =           bool()          # bool
+        self.selectingActive =        bool()          # bool
+        self.zoomWindowActive =       bool()          # bool
+        self.panningRealTimeActive =  bool()          # bool
+        self.panningPointActive =     bool()          # bool
+        self.panningActive =          bool()          # bool
+        self.qSnapActive =            bool()          # bool
+        self.qSnapToggle =            bool()          # bool
+
+        self.gripBaseObj =            None            # BaseObject*
+        self.tempBaseObj =            None            # BaseObject*
+
+        self.mainWin =                None            # MainWindow*
+        self.gscene =                 None            # QGraphicsScene*
+        self.undoStack =              None            # QUndoStack*
+
+        self.selectBox =              None            # SelectBox*
+        self.scenePressPoint =        QPointF()       # QPointF
+        self.pressPoint =             QPoint()        # QPoint
+        self.sceneMovePoint =         QPointF()       # QPointF
+        self.movePoint =              QPoint()        # QPoint
+        self.sceneReleasePoint =      QPointF()       # QPointF
+        self.releasePoint =           QPoint()        # QPoint
+        self.sceneGripPoint =         QPointF()       # QPointF
+
+        self.viewMousePoint =         QPoint()        # QPoint 
+        self.sceneMousePoint =        QPointF()       # QPointF
+        self.qsnapLocatorColor =      int()           # QRgb
+        self.qsnapLocatorSize =       int()           # quint8
+        self.qsnapApertureSize =      int()           # quint8
+        self.gripColorCool =          int()           # QRgb
+        self.gripColorHot =           int()           # QRgb
+        self.gripSize =               int()           # quint8
+        self.pickBoxSize =            int()           # quint8
+        self.crosshairColor =         int()           # QRgb
+        self.crosshairSize =          int()           # quint32
+
+        self.panDistance =            int()           # int
+        self.panStartX =              int()           # int
+        self.panStartY =              int()           # int
+        # End hhhhhhhhhhhhhhhhhhhhhh
+
+        self.mainWin = mainWin = mw
         self.gscene = gscene = theScene
 
-        #TODO/PORT# setFrameShape(QFrame.NoFrame)
+        self.setFrameShape(QFrame.NoFrame)
 
         # NOTE: This has to be done before setting mouse tracking.
         # TODO: Review OpenGL for Qt5 later
@@ -117,11 +213,11 @@ class View(QGraphicsView):
         # }
 
         # TODO: Review RenderHints later
-        # setRenderHint(QPainter::Antialiasing,            mainWin->getSettingsDisplayRenderHintAA());
-        # setRenderHint(QPainter::TextAntialiasing,        mainWin->getSettingsDisplayRenderHintTextAA());
-        # setRenderHint(QPainter::SmoothPixmapTransform,   mainWin->getSettingsDisplayRenderHintSmoothPix());
-        # setRenderHint(QPainter::HighQualityAntialiasing, mainWin->getSettingsDisplayRenderHintHighAA());
-        # setRenderHint(QPainter::NonCosmeticDefaultPen,   mainWin->getSettingsDisplayRenderHintNonCosmetic());
+        # setRenderHint(QPainter.Antialiasing,            mainWin.getSettingsDisplayRenderHintAA())
+        # setRenderHint(QPainter.TextAntialiasing,        mainWin.getSettingsDisplayRenderHintTextAA())
+        # setRenderHint(QPainter.SmoothPixmapTransform,   mainWin.getSettingsDisplayRenderHintSmoothPix())
+        # setRenderHint(QPainter.HighQualityAntialiasing, mainWin.getSettingsDisplayRenderHintHighAA())
+        # setRenderHint(QPainter.NonCosmeticDefaultPen,   mainWin.getSettingsDisplayRenderHintNonCosmetic())
 
         # NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
         # NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -144,16 +240,16 @@ class View(QGraphicsView):
         self.setGridColor(mainWin.getSettingsGridColor())
 
         if mainWin.getSettingsGridShowOnLoad():
-            createGrid(mainWin.getSettingsGridType())
+            self.createGrid(mainWin.getSettingsGridType())
         else:
-            createGrid("")
+            self.createGrid("")
 
         self.toggleRuler(mainWin.getSettingsRulerShowOnLoad())
         self.toggleReal(True)  # TODO: load this from file, else settings with default being True
 
         self.grippingActive = False
         self.rapidMoveActive = False
-        self.previewMode = PREVIEW_MODE_NULL
+        self.previewMode = "PREVIEW_MODE_NULL"
         self.previewData = 0
         self.previewObjectItemGroup = 0
         self.pasteObjectItemGroup = 0
@@ -188,24 +284,25 @@ class View(QGraphicsView):
         self.undoStack = undoStack = QUndoStack(self)
         mainWin.dockUndoEdit.addStack(undoStack)
 
-        self.installEventFilter()
+        self.installEventFilter(self)
 
         self.setMouseTracking(True)
         self.setBackgroundColor(mainWin.getSettingsDisplayBGColor())
         # TODO: wrap this with a setBackgroundPixmap() function: setBackgroundBrush(QPixmap("images/canvas.png"))
 
-        #TODO/PORT# connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()))
+        self.connect(gscene, SIGNAL("selectionChanged()"), self, SLOT("selectionChanged()"))
 
 
     def __del__(self):
         """Class destructor."""
-        # Prevent memory leaks by deleting any objects that were removed from the scene
-        qDeleteAll(hashDeletedObjects.begin(), hashDeletedObjects.end())
-        hashDeletedObjects.clear()
-
-        # Prevent memory leaks by deleting any unused instances
-        qDeleteAll(previewObjectList.begin(), previewObjectList.end())
-        previewObjectList.clear()
+        pass
+        #TODO/PORT# # Prevent memory leaks by deleting any objects that were removed from the scene
+        #TODO/PORT# qDeleteAll(hashDeletedObjects.begin(), hashDeletedObjects.end())
+        #TODO/PORT# hashDeletedObjects.clear()
+        #TODO/PORT#
+        #TODO/PORT# # Prevent memory leaks by deleting any unused instances
+        #TODO/PORT# qDeleteAll(previewObjectList.begin(), previewObjectList.end())
+        #TODO/PORT# previewObjectList.clear()
 
     def enterEvent(self, event):
         """
@@ -213,7 +310,7 @@ class View(QGraphicsView):
 
         :param `event`: A `QEvent`_ to be processed.
         """
-        #TODO/PORT# QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
+        mdiWin = self.parent()  # QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
         if mdiWin:
             self.mainWin.getMdiArea().setActiveSubWindow(mdiWin)
 
@@ -226,7 +323,10 @@ class View(QGraphicsView):
         """
         self.gscene.addItem(obj)
         self.gscene.update()
-        hashDeletedObjects.remove(obj.objectID())
+        try:
+            del self.hashDeletedObjects[obj.objectID()]
+        except KeyError:
+            pass
 
     def deleteObject(self, obj):
         """
@@ -239,113 +339,7 @@ class View(QGraphicsView):
         obj.setSelected(False)
         self.gscene.removeItem(obj)
         self.gscene.update()
-        hashDeletedObjects.insert(obj.objectID(), obj)
-
-    def previewOn(self, clone, mode, x, y, data):
-        """
-        TOWRITE
-
-        :param `clone`: TOWRITE
-        :type `clone`: int
-        :param `mode`: TOWRITE
-        :type `mode`: int
-        :param `x`: TOWRITE
-        :type `x`: qreal
-        :param `y`: TOWRITE
-        :type `y`: qreal
-        :param `data`: TOWRITE
-        :type `data`: qreal
-        """
-        qDebug("View previewOn()")
-        self.previewOff()  # Free the old objects before creating new ones
-
-        self.previewMode = mode
-
-        # Create new objects and add them to the scene in an item group.
-        if clone == PREVIEW_CLONE_SELECTED:
-            previewObjectList = createObjectList(self.gscene.selectedItems())
-        elif clone == PREVIEW_CLONE_RUBBER:
-            previewObjectList = createObjectList(self.rubberRoomList)
-        else:
-            return
-        self.previewObjectItemGroup = self.gscene.createItemGroup(previewObjectList)
-
-        if (previewMode == PREVIEW_MODE_MOVE or
-                previewMode == PREVIEW_MODE_ROTATE or
-                previewMode == PREVIEW_MODE_SCALE):
-
-            self.previewPoint = QPointF(x, y)  # NOTE: Move: basePt; Rotate: basePt;   Scale: basePt;
-            self.previewData = data            # NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
-            self.previewActive = True
-        else:
-            self.previewMode = PREVIEW_MODE_NULL
-            self.previewPoint = QPointF()
-            self.previewData = 0
-            self.previewActive = False
-
-        self.gscene.update()
-
-    def previewOff(self):
-        """
-        TOWRITE
-        """
-        # Prevent memory leaks by deleting any unused instances
-        qDeleteAll(previewObjectList.begin(), previewObjectList.end())
-        previewObjectList.clear()
-
-        if previewObjectItemGroup:
-            self.gscene.removeItem(previewObjectItemGroup)
-            del self.previewObjectItemGroup
-            self.previewObjectItemGroup = 0
-
-        self.previewActive = False
-
-        self.gscene.update()
-
-    def enableMoveRapidFire(self):
-        """
-        TOWRITE
-        """
-        self.rapidMoveActive = True
-
-    def disableMoveRapidFire(self):
-        """
-        TOWRITE
-        """
-        self.rapidMoveActive = False
-
-    def allowRubber(self):
-        """
-        TOWRITE
-
-        :rtype: bool
-        """
-        if not self.rubberRoomList.size():  # TODO: this check should be removed later
-            return True
-        return False
-
-    def addToRubberRoom(self, item):
-        """
-        TOWRITE
-
-        :param `item`: TOWRITE
-        :type `item`: `QGraphicsItem`_
-        """
-        self.rubberRoomList.append(item)
-        item.show()
-        self.gscene.update()
-
-    def vulcanizeRubberRoom(self):
-        """
-        TOWRITE
-        """
-        for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
-            #TODO/PORT# BaseObject* base = static_cast<BaseObject*>(item);
-            if base:
-                vulcanizeObject(base)
-
-        self.rubberRoomList.clear()
-        self.gscene.update()
+        self.hashDeletedObjects[obj.objectID()] = obj
 
     def vulcanizeObject(self, obj):
         """
@@ -359,154 +353,9 @@ class View(QGraphicsView):
         self.gscene.removeItem(obj)  # Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
         obj.vulcanize()
 
-        #TODO/PORT# UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, this, 0);
+        cmd = UndoableAddCommand(obj.data(OBJ_NAME), obj, self, None)
         if cmd:
             self.undoStack.push(cmd)
-
-    def clearRubberRoom(self):
-        """
-        TOWRITE
-        """
-        for item in self.rubberRoomList:  # foreach(QGraphicsItem* item, rubberRoomList)
-
-            base = item # BaseObject* base = static_cast<BaseObject*>(item);
-            if base:
-
-                type = base.type() # int
-                if ((type == OBJ_TYPE_PATH     and spareRubberList.contains(SPARE_RUBBER_PATH))     or
-                    (type == OBJ_TYPE_POLYGON  and spareRubberList.contains(SPARE_RUBBER_POLYGON))  or
-                    (type == OBJ_TYPE_POLYLINE and spareRubberList.contains(SPARE_RUBBER_POLYLINE)) or
-                    (spareRubberList.contains(base.objectID()))):
-
-                    if not base.objectPath().elementCount():
-
-                        QMessageBox.critical(self, self.tr("Empty Rubber Object Error"),
-                                              self.tr("The rubber object added contains no points. "
-                                              "The command that created this object has flawed logic. "
-                                              "The object will be deleted."))
-                        self.gscene.removeItem(item)
-                        del item
-
-                    else:
-                        self.vulcanizeObject(base)
-
-                else:
-                    self.gscene.removeItem(item)
-                    del item
-
-        self.rubberRoomList.clear()
-        self.spareRubberList.clear()
-        self.gscene.update()
-
-    def spareRubber(self, id):
-        """
-        TOWRITE
-
-        :param `id`: TOWRITE
-        :type `id`: qint64
-        """
-        self.spareRubberList.append(id)
-
-    def setRubberMode(self, mode):
-        """
-        TOWRITE
-
-        :param `mode`: TOWRITE
-        :type `mode`: int
-        """
-        ## for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
-        ##     base = item # BaseObject* base = static_cast<BaseObject*>(item);
-        ##     if base:
-        ##         base.setObjectRubberMode(mode)
-        # Optimized as a python list comprehension generator.
-        [item.setObjectRubberMode(mode)
-            for item in self.rubberRoomList if item]
-
-        self.gscene.update()
-
-    def setRubberPoint(self, key, point):
-        """
-        TOWRITE
-
-        :param `key`: TOWRITE
-        :type `key`: QString
-        :param `point`: TOWRITE
-        :type `point`: `QPointF`_
-        """
-        ## for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
-        ##     base = item # BaseObject* base = static_cast<BaseObject*>(item);
-        ##     if base:
-        ##         base.setObjectRubberPoint(key, point)
-        # Optimized as a python list comprehension generator.
-        [item.setObjectRubberPoint(key, point)
-            for item in self.rubberRoomList if item]
-
-        self.gscene.update()
-
-    def setRubberText(self, key, txt):
-        """
-        TOWRITE
-
-        :param `key`: TOWRITE
-        :type `key`: QString
-        :param `txt`: TOWRITE
-        :type `txt`: QString
-        """
-        ## for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
-        ##     base = item # BaseObject* base = static_cast<BaseObject*>(item);
-        ##     if base:
-        ##         base.setObjectRubberText(key, txt)
-        # Optimized as a python list comprehension generator.
-        [item.setObjectRubberText(key, txt)
-            for item in self.rubberRoomList if item]
-
-        self.gscene.update()
-
-    def setGridColor(self, color):
-        """
-        TOWRITE
-
-        :param `color`: TOWRITE
-        :type `color`: QRgb
-        """
-        gridColor = QColor(color)
-        self.gscene.setProperty(VIEW_COLOR_GRID, color)
-        if self.gscene:
-            self.gscene.update()
-
-    def setRulerColor(self, color):
-        """
-        TOWRITE
-
-        :param `color`: TOWRITE
-        :type `color`: QRgb
-        """
-        self.rulerColor = QColor(color)
-        self.gscene.update()
-
-    def createGrid(self, gridType):
-        """
-        TOWRITE
-
-        :param `gridType`: TOWRITE
-        :type `gridType`: QString
-        """
-        if gridType == "Rectangular":
-            self.createGridRect()
-            self.gscene.setProperty(ENABLE_GRID, True)
-        elif gridType == "Circular":
-            self.createGridPolar()
-            self.gscene.setProperty(ENABLE_GRID, True)
-        elif gridType == "Isometric":
-            self.createGridIso()
-            self.gscene.setProperty(ENABLE_GRID, True)
-        else:
-            self.gridPath = QPainterPath()
-            self.gscene.setProperty(ENABLE_GRID, False)
-
-        self.createOrigin()
-
-        self.gscene.update()
 
     def createOrigin(self): #TODO: Make Origin Customizable
         """
@@ -537,16 +386,16 @@ class View(QGraphicsView):
 
         gr = QRectF(0, 0, mainWin.getSettingsGridSizeX(), -mainWin.getSettingsGridSizeY())
         # Ensure the loop will work correctly with negative numbers
-        x1 = qMin(gr.left(), gr.right()) # qreal
-        y1 = qMin(gr.top(), gr.bottom()) # qreal
-        x2 = qMax(gr.left(), gr.right()) # qreal
-        y2 = qMax(gr.top(), gr.bottom()) # qreal
+        x1 = qMin(gr.left(), gr.right())  # qreal
+        y1 = qMin(gr.top(), gr.bottom())  # qreal
+        x2 = qMax(gr.left(), gr.right())  # qreal
+        y2 = qMax(gr.top(), gr.bottom())  # qreal
 
         gridPath = QPainterPath()
         gridPath.addRect(gr)
 
-        for gx in range(x1, x2, xSpacing): # for(qreal gx = x1; gx < x2; gx += xSpacing)
-            for gy in range(y1, y2, ySpacing): # for(qreal gy = y1; gy < y2; gy += ySpacing)
+        for gx in range(int(x1), int(x2), int(xSpacing)): # for(qreal gx = x1; gx < x2; gx += xSpacing)
+            for gy in range(int(y1), int(y2), int(ySpacing)): # for(qreal gy = y1; gy < y2; gy += ySpacing)
                 gridPath.moveTo(x1, gy)
                 gridPath.lineTo(x2, gy)
                 gridPath.moveTo(gx, y1)
@@ -577,9 +426,9 @@ class View(QGraphicsView):
         rad = mainWin.getSettingsGridSizeRadius()  # qreal
 
         gridPath = QPainterPath()
-        gridPath.addEllipse(QPointF(0,0), rad, rad);
+        gridPath.addEllipse(QPointF(0,0), rad, rad)
         for r in range(0, rad, radSpacing): # for(qreal r = 0; r < rad; r += radSpacing)
-            gridPath.addEllipse(QPointF(0,0), r, r);
+            gridPath.addEllipse(QPointF(0,0), r, r)
 
         for ang in range(0, 360, angSpacing): # for(qreal ang = 0; ang < 360; ang += angSpacing)
             gridPath.moveTo(0, 0)
@@ -639,150 +488,6 @@ class View(QGraphicsView):
             gridPath.translate(0, -by)
             gridPath.translate(cx, cy)
 
-    def toggleSnap(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleSnap()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        # TODO: finish this
-        self.gscene.setProperty(ENABLE_SNAP, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def toggleGrid(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleGrid()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        if on:
-            self.createGrid(mainWin.getSettingsGridType())
-        else:
-            self.createGrid("")
-        QApplication.restoreOverrideCursor()
-
-    def toggleRuler(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        mainWin = self.mainWin
-        qDebug("View toggleRuler()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.gscene.setProperty(ENABLE_RULER, on)
-        self.rulerMetric = mainWin.getSettingsRulerMetric()
-        self.rulerColor = QColor(mainWin.getSettingsRulerColor())
-        self.rulerPixelSize = mainWin.getSettingsRulerPixelSize()
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def toggleOrtho(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleOrtho()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        # TODO: finish this
-        self.gscene.setProperty(ENABLE_ORTHO, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def togglePolar(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View togglePolar()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        # TODO: finish this
-        self.gscene.setProperty(ENABLE_POLAR, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def toggleQSnap(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleQSnap()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.qSnapToggle = on
-        self.gscene.setProperty(ENABLE_QSNAP, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def toggleQTrack(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleQTrack()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        # TODO: finish this
-        self.gscene.setProperty(ENABLE_QTRACK, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def toggleLwt(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleLwt()");
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.gscene.setProperty(ENABLE_LWT, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def toggleReal(self, on):
-        """
-        TOWRITE
-
-        :param `on`: TOWRITE
-        :type `on`: bool
-        """
-        qDebug("View toggleReal()")
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        self.gscene.setProperty(ENABLE_REAL, on)
-        self.gscene.update()
-        QApplication.restoreOverrideCursor()
-
-    def isLwtEnabled(self):
-        """
-        TOWRITE
-
-        :rtype: bool
-        """
-        return self.gscene.property(ENABLE_LWT).toBool()
-
-    def isRealEnabled(self):
-        """
-        TOWRITE
-
-        :rtype: bool
-        """
-        return self.gscene.property(ENABLE_REAL).toBool()
-
     def drawBackground(self, painter, rect):
         """
         TOWRITE
@@ -792,9 +497,9 @@ class View(QGraphicsView):
         :param `rect`: TOWRITE
         :type `rect`: `QRectF`_
         """
-        painter.fillRect(rect, backgroundBrush())  #TODO/PORT# backgroundBrush?
+        painter.fillRect(rect, self.backgroundBrush())  #TODO/PORT# backgroundBrush?
 
-        if self.gscene.property(ENABLE_GRID).toBool() and rect.intersects(self.gridPath.controlPointRect()):
+        if self.gscene.property(ENABLE_GRID) and rect.intersects(self.gridPath.controlPointRect()):
             gridPen = QPen(self.gridColor)
             gridPen.setJoinStyle(Qt.MiterJoin)
             gridPen.setCosmetic(True)
@@ -811,9 +516,6 @@ class View(QGraphicsView):
         :type `painter`: `QPainter`_
         :param `rect`: TOWRITE
         :type `rect`: `QRectF`_
-
-        .. TODO:: port this def into python.
-
         """
         # ==================================================
         # Draw grip points for all selected objects
@@ -824,11 +526,11 @@ class View(QGraphicsView):
         gripPen.setJoinStyle(Qt.MiterJoin)
         gripPen.setCosmetic(True)
         painter.setPen(gripPen)
-        gripOffset = QPoint(gripSize, gripSize)
+        gripOffset = QPoint(self.gripSize, self.gripSize)
 
-        selectedGripPoints = QList() # QList<QPointF> selectedGripPoints
-        selectedItemList = gscene.selectedItems() # QList<QGraphicsItem*>
-        if selectedItemList.size() <= 100:
+        selectedGripPoints = [] # QList() # QList<QPointF> selectedGripPoints
+        selectedItemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
+        if len(selectedItemList) <= 100:
             for item in selectedItemList: # foreach(QGraphicsItem* item, selectedItemList)
                 if item.type() >= OBJ_TYPE_BASE:
                     tempBaseObj = item # tempBaseObj = static_cast<BaseObject*>(item);
@@ -836,10 +538,10 @@ class View(QGraphicsView):
                         selectedGripPoints = tempBaseObj.allGripPoints()
 
                     for ssp in selectedGripPoints: # foreach(QPointF ssp, selectedGripPoints)
-                        p1 = mapFromScene(ssp) - gripOffset  # QPoint
-                        q1 = mapFromScene(ssp) + gripOffset  # QPoint
+                        p1 = self.mapFromScene(ssp) - gripOffset  # QPoint
+                        q1 = self.mapFromScene(ssp) + gripOffset  # QPoint
 
-                        if ssp == sceneGripPoint:
+                        if ssp == self.sceneGripPoint:
                             painter.fillRect(QRectF(self.mapToScene(p1), self.mapToScene(q1)), QColor.fromRgb(self.gripColorHot))
                         else:
                             painter.drawRect(QRectF(self.mapToScene(p1), self.mapToScene(q1)))
@@ -848,47 +550,47 @@ class View(QGraphicsView):
         # Draw the closest qsnap point
         # ==================================================
 
-        if not selectingActive: # TODO: and findClosestSnapPoint == True
+        if not self.selectingActive: # TODO: and findClosestSnapPoint == True
 
-            qsnapPen = QPen(QColor.fromRgb(qsnapLocatorColor))
+            qsnapPen = QPen(QColor.fromRgb(self.qsnapLocatorColor))
             qsnapPen.setWidth(2)
             qsnapPen.setJoinStyle(Qt.MiterJoin)
             qsnapPen.setCosmetic(True)
             painter.setPen(qsnapPen)
-            qsnapOffset = QPoint(qsnapLocatorSize, qsnapLocatorSize)
+            qsnapOffset = QPoint(self.qsnapLocatorSize, self.qsnapLocatorSize)
 
-            apertureSnapPoints = QList # QList<QPointF> apertureSnapPoints;
-            apertureItemList = items(viewMousePoint.x()-qsnapApertureSize,
-                                     viewMousePoint.y()-qsnapApertureSize,
-                                     qsnapApertureSize*2,
-                                     qsnapApertureSize*2)  # QList<QGraphicsItem *>
+            apertureSnapPoints = []  # QList # QList<QPointF> apertureSnapPoints;
+            apertureItemList = self.gscene.items(self.viewMousePoint.x() - self.qsnapApertureSize,  #TODO/PORT# WildEdit items to self.gscene.items  Is this right?
+                                     self.viewMousePoint.y() - self.qsnapApertureSize,
+                                     self.qsnapApertureSize * 2,
+                                     self.qsnapApertureSize * 2)  # QList<QGraphicsItem *>
             for item in apertureItemList: # foreach(QGraphicsItem* item, apertureItemList)
 
                 if item.type() >= OBJ_TYPE_BASE:
 
                     tempBaseObj = item # tempBaseObj = static_cast<BaseObject*>(item);
                     if tempBaseObj:
-                        apertureSnapPoints << tempBaseObj.mouseSnapPoint(sceneMousePoint)
+                        apertureSnapPoints.append(tempBaseObj.mouseSnapPoint(self.sceneMousePoint))
 
             # TODO: Check for intersection snap points and add them to the list
             for asp in apertureSnapPoints: # foreach(QPointF asp, apertureSnapPoints)
-                p1 = mapFromScene(asp) - qsnapOffset  # QPoint
-                q1 = mapFromScene(asp) + qsnapOffset  # QPoint
+                p1 = self.mapFromScene(asp) - qsnapOffset  # QPoint
+                q1 = self.mapFromScene(asp) + qsnapOffset  # QPoint
                 painter.drawRect(QRectF(self.mapToScene(p1), self.mapToScene(q1)))
 
         # ==================================================
         # Draw horizontal and vertical rulers
         # ==================================================
 
-        if self.gscene.property(ENABLE_RULER).toBool():
+        if self.gscene.property(ENABLE_RULER):  # .toBool()
 
             proceed = True # bool
 
-            vw = width()   # int # View Width
-            vh = height()  # int # View Height
+            vw = self.width()   # int # View Width
+            vh = self.height()  # int # View Height
             origin = self.mapToScene(0, 0)                   #QPointF
-            rulerHoriz = self.mapToScene(vw, rulerPixelSize) #QPointF
-            rulerVert  = self.mapToScene(rulerPixelSize, vh) #QPointF
+            rulerHoriz = self.mapToScene(vw, self.rulerPixelSize) #QPointF
+            rulerVert  = self.mapToScene(self.rulerPixelSize, vh) #QPointF
 
             ox = origin.x()        # qreal
             oy = origin.y()        # qreal
@@ -911,21 +613,21 @@ class View(QGraphicsView):
 
             if proceed:
 
-                distance = self.mapToScene(rulerPixelSize*3, 0).x() - ox  # int
-                distStr = QString().setNum(distance)  # QString
-                distStrSize = distStr.size()  # int
-                msd = distStr.at(0).digitValue()  # int # Most Significant Digit
+                distance = self.mapToScene(self.rulerPixelSize * 3, 0).x() - ox  # int
+                distStr = '%d' % distance  # QString().setNum(distance)  # QString
+                distStrSize = len(distStr)  # distStr.size()  # int
+                msd = int(distStr[0])  # distStr.at(0).digitValue()  # int # Most Significant Digit
 
                 if msd != -1:
 
-                    #TODO/PORT# msd++
+                    msd += 1 # msd++
                     if msd == 10:
 
                         msd = 1
-                        distStr.resize(distStrSize+1)
+                        distStr.resize(distStrSize + 1)
                         #TODO/PORT# distStrSize++
 
-                    distStr.replace(0, 1, QString().setNum(msd))
+                    distStr.replace(0, 1, '%d' % msd)  # distStr.replace(0, 1, QString().setNum(msd))
 
                     for i in range(1, distStrSize): # for(int i = 1; i < distStrSize; ++i)
                         distStr.replace(i, 1, '0')
@@ -933,7 +635,7 @@ class View(QGraphicsView):
                     unit = distStr.toInt() # int
                     #TODO/PORT# fraction # qreal
                     feet = True  # bool
-                    if rulerMetric:
+                    if self.rulerMetric:
 
                         if unit < 10:
                             unit = 10
@@ -943,24 +645,24 @@ class View(QGraphicsView):
                         if unit <= 1:
                             unit = 1
                             feet = False
-                            #TODO/PORT# fraction = (qreal)(unit/16)
+                            fraction = unit / 16 #TODO/PORT/REVIEW# fraction = (qreal)(unit/16)
 
                         else:
                             unit = roundToMultiple(True, unit, 12)
-                            fraction = unit/12
+                            fraction = unit / 12
 
                     little  = 0.20                                  # qreal
                     medium = 0.40                                   # qreal
                     rhTextOffset = self.mapToScene(3, 0).x() - ox   # qreal
                     rvTextOffset = self.mapToScene(0, 3).y() - oy   # qreal
-                    textHeight = rhh*medium                         # qreal
+                    textHeight = rhh * medium                       # qreal
 
                     lines = QVector()  # QVector<QLineF> lines
                     lines.append(QLineF(ox, rhy, rhx, rhy))
                     lines.append(QLineF(rvx, oy, rvx, rvy))
 
-                    mx = sceneMousePoint.x()  # qreal
-                    my = sceneMousePoint.y()  # qreal
+                    mx = self.sceneMousePoint.x()  # qreal
+                    my = self.sceneMousePoint.y()  # qreal
                     lines.append(QLineF(mx, rhy, mx, oy))
                     lines.append(QLineF(rvx, my, ox, my))
 
@@ -994,144 +696,126 @@ class View(QGraphicsView):
                         yStart = yFlow - unit
 
                     if proceed:
-
                         for x in range(xStart, rhx, unit): # for(int x = xStart; x < rhx; x += unit)
 
-                            transform.translate(x+rhTextOffset, rhy-rhh/2)
+                            transform.translate(x + rhTextOffset, rhy - rhh / 2)
                             rulerTextPath = QPainterPath() # QPainterPath rulerTextPath;
-                            if rulerMetric:
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x), textHeight))
+                            if self.rulerMetric:
+                                rulerTextPath = transform.map(createRulerTextPath(0, 0, "%d" % x, textHeight))  # QString().setNum(x)
 
                             else:
                                 if feet:
-                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x/12).append('\''), textHeight))
+                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, "%d'" % (x / 12), textHeight))  # QString().setNum(x / 12).append('\'')
                                 else:
-                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(x).append('\"'), textHeight))
+                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, '%d"' % x, textHeight))  # QString().setNum(x).append('\"')
 
                             transform.reset()
                             painter.drawPath(rulerTextPath)
 
                             lines.append(QLineF(x, rhy, x, oy))
-                            if rulerMetric:
-
+                            if self.rulerMetric:
                                 lines.append(QLineF(x, rhy, x, oy))
-                                lines.append(QLineF(x+fraction  , rhy, x+fraction,   rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*5, rhy, x+fraction*5, rhy-rhh*medium))  # Half
-                                lines.append(QLineF(x+fraction*6, rhy, x+fraction*6, rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*7, rhy, x+fraction*7, rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*8, rhy, x+fraction*8, rhy-rhh*little))
-                                lines.append(QLineF(x+fraction*9, rhy, x+fraction*9, rhy-rhh*little))
+                                lines.append(QLineF(x + fraction    , rhy, x + fraction    , rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 2, rhy, x + fraction * 2, rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 3, rhy, x + fraction * 3, rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 4, rhy, x + fraction * 4, rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 5, rhy, x + fraction * 5, rhy - rhh * medium))  # Half
+                                lines.append(QLineF(x + fraction * 6, rhy, x + fraction * 6, rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 7, rhy, x + fraction * 7, rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 8, rhy, x + fraction * 8, rhy - rhh * little))
+                                lines.append(QLineF(x + fraction * 9, rhy, x + fraction * 9, rhy - rhh * little))
 
                             else:
-
                                 if feet:
-
                                     for i in range(0, 12): # for(int i = 0; i < 12; ++i)
-
-                                        lines.append(QLineF(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium))
+                                        lines.append(QLineF(x + fraction * i, rhy, x + fraction * i, rhy - rhh * medium))
 
                                 else:
-
-                                    lines.append(QLineF(x+fraction   , rhy, x+fraction,    rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium))  # Quarter
-                                    lines.append(QLineF(x+fraction* 5, rhy, x+fraction* 5, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction* 6, rhy, x+fraction* 6, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction* 7, rhy, x+fraction* 7, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction* 8, rhy, x+fraction* 8, rhy-rhh*medium))  # Half
-                                    lines.append(QLineF(x+fraction* 9, rhy, x+fraction* 9, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction*10, rhy, x+fraction*10, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction*11, rhy, x+fraction*11, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction*12, rhy, x+fraction*12, rhy-rhh*medium))  # Quarter
-                                    lines.append(QLineF(x+fraction*13, rhy, x+fraction*13, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction*14, rhy, x+fraction*14, rhy-rhh*little))
-                                    lines.append(QLineF(x+fraction*15, rhy, x+fraction*15, rhy-rhh*little))
+                                    lines.append(QLineF(x + fraction     , rhy, x + fraction     , rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction *  2, rhy, x + fraction *  2, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction *  3, rhy, x + fraction *  3, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction *  4, rhy, x + fraction *  4, rhy - rhh * medium))  # Quarter
+                                    lines.append(QLineF(x + fraction *  5, rhy, x + fraction *  5, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction *  6, rhy, x + fraction *  6, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction *  7, rhy, x + fraction *  7, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction *  8, rhy, x + fraction *  8, rhy - rhh * medium))  # Half
+                                    lines.append(QLineF(x + fraction *  9, rhy, x + fraction *  9, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction * 10, rhy, x + fraction * 10, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction * 11, rhy, x + fraction * 11, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction * 12, rhy, x + fraction * 12, rhy - rhh * medium))  # Quarter
+                                    lines.append(QLineF(x + fraction * 13, rhy, x + fraction * 13, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction * 14, rhy, x + fraction * 14, rhy - rhh * little))
+                                    lines.append(QLineF(x + fraction * 15, rhy, x + fraction * 15, rhy - rhh * little))
 
                         for y in range(yStart, rvy, unit):# for(int y = yStart; y < rvy; y += unit)
-
-                            transform.translate(rvx-rvw/2, y-rvTextOffset)
+                            transform.translate(rvx - rvw / 2, y - rvTextOffset)
                             transform.rotate(-90)
                             rulerTextPath = QPainterPath() # QPainterPath rulerTextPath;
-                            if rulerMetric:
-
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y), textHeight))
+                            if self.rulerMetric:
+                                rulerTextPath = transform.map(createRulerTextPath(0, 0, "%d" % -y, textHeight))  # QString().setNum(-y)
 
                             else:
-
                                 if feet:
-                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y/12).append('\''), textHeight))
+                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, "%d'" % (-y / 12), textHeight))  # QString().setNum(-y / 12).append('\'')
                                 else:
-                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, QString().setNum(-y).append('\"'), textHeight))
+                                    rulerTextPath = transform.map(createRulerTextPath(0, 0, '%d"' % -y, textHeight))  # QString().setNum(-y).append('\"')
 
                             transform.reset()
                             painter.drawPath(rulerTextPath)
 
                             lines.append(QLineF(rvx, y, ox, y))
-                            if rulerMetric:
-
-                                lines.append(QLineF(rvx, y+fraction  , rvx-rvw*little, y+fraction))
-                                lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2))
-                                lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3))
-                                lines.append(QLineF(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4))
-                                lines.append(QLineF(rvx, y+fraction*5, rvx-rvw*medium, y+fraction*5))  # Half
-                                lines.append(QLineF(rvx, y+fraction*6, rvx-rvw*little, y+fraction*6))
-                                lines.append(QLineF(rvx, y+fraction*7, rvx-rvw*little, y+fraction*7))
-                                lines.append(QLineF(rvx, y+fraction*8, rvx-rvw*little, y+fraction*8))
-                                lines.append(QLineF(rvx, y+fraction*9, rvx-rvw*little, y+fraction*9))
+                            if self.rulerMetric:
+                                lines.append(QLineF(rvx, y + fraction    , rvx - rvw * little, y + fraction))
+                                lines.append(QLineF(rvx, y + fraction * 2, rvx - rvw * little, y + fraction * 2))
+                                lines.append(QLineF(rvx, y + fraction * 3, rvx - rvw * little, y + fraction * 3))
+                                lines.append(QLineF(rvx, y + fraction * 4, rvx - rvw * little, y + fraction * 4))
+                                lines.append(QLineF(rvx, y + fraction * 5, rvx - rvw * medium, y + fraction * 5))  # Half
+                                lines.append(QLineF(rvx, y + fraction * 6, rvx - rvw * little, y + fraction * 6))
+                                lines.append(QLineF(rvx, y + fraction * 7, rvx - rvw * little, y + fraction * 7))
+                                lines.append(QLineF(rvx, y + fraction * 8, rvx - rvw * little, y + fraction * 8))
+                                lines.append(QLineF(rvx, y + fraction * 9, rvx - rvw * little, y + fraction * 9))
 
                             else:
-
                                 if feet:
-
                                     for i in range(0, 12): # for(int i = 0; i < 12; ++i)
-
-                                        lines.append(QLineF(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i))
+                                        lines.append(QLineF(rvx, y + fraction * i, rvx - rvw * medium, y + fraction * i))
 
                                 else:
-
-                                    lines.append(QLineF(rvx, y+fraction   , rvx-rvw*little, y+fraction))
-                                    lines.append(QLineF(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2))
-                                    lines.append(QLineF(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3))
-                                    lines.append(QLineF(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4))  # Quarter
-                                    lines.append(QLineF(rvx, y+fraction* 5, rvx-rvw*little, y+fraction* 5))
-                                    lines.append(QLineF(rvx, y+fraction* 6, rvx-rvw*little, y+fraction* 6))
-                                    lines.append(QLineF(rvx, y+fraction* 7, rvx-rvw*little, y+fraction* 7))
-                                    lines.append(QLineF(rvx, y+fraction* 8, rvx-rvw*medium, y+fraction* 8))  # Half
-                                    lines.append(QLineF(rvx, y+fraction* 9, rvx-rvw*little, y+fraction* 9))
-                                    lines.append(QLineF(rvx, y+fraction*10, rvx-rvw*little, y+fraction*10))
-                                    lines.append(QLineF(rvx, y+fraction*11, rvx-rvw*little, y+fraction*11))
-                                    lines.append(QLineF(rvx, y+fraction*12, rvx-rvw*medium, y+fraction*12))  # Quarter
-                                    lines.append(QLineF(rvx, y+fraction*13, rvx-rvw*little, y+fraction*13))
-                                    lines.append(QLineF(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14))
-                                    lines.append(QLineF(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15))
-
-
+                                    lines.append(QLineF(rvx, y + fraction     , rvx - rvw * little, y + fraction))
+                                    lines.append(QLineF(rvx, y + fraction *  2, rvx - rvw * little, y + fraction *  2))
+                                    lines.append(QLineF(rvx, y + fraction *  3, rvx - rvw * little, y + fraction *  3))
+                                    lines.append(QLineF(rvx, y + fraction *  4, rvx - rvw * medium, y + fraction *  4))  # Quarter
+                                    lines.append(QLineF(rvx, y + fraction *  5, rvx - rvw * little, y + fraction *  5))
+                                    lines.append(QLineF(rvx, y + fraction *  6, rvx - rvw * little, y + fraction *  6))
+                                    lines.append(QLineF(rvx, y + fraction *  7, rvx - rvw * little, y + fraction *  7))
+                                    lines.append(QLineF(rvx, y + fraction *  8, rvx - rvw * medium, y + fraction *  8))  # Half
+                                    lines.append(QLineF(rvx, y + fraction *  9, rvx - rvw * little, y + fraction *  9))
+                                    lines.append(QLineF(rvx, y + fraction * 10, rvx - rvw * little, y + fraction * 10))
+                                    lines.append(QLineF(rvx, y + fraction * 11, rvx - rvw * little, y + fraction * 11))
+                                    lines.append(QLineF(rvx, y + fraction * 12, rvx - rvw * medium, y + fraction * 12))  # Quarter
+                                    lines.append(QLineF(rvx, y + fraction * 13, rvx - rvw * little, y + fraction * 13))
+                                    lines.append(QLineF(rvx, y + fraction * 14, rvx - rvw * little, y + fraction * 14))
+                                    lines.append(QLineF(rvx, y + fraction * 15, rvx - rvw * little, y + fraction * 15))
 
                     painter.drawLines(lines)
-                    painter.fillRect(QRectF(ox, oy, rvw, rhh), rulerColor)
+                    painter.fillRect(QRectF(ox, oy, rvw, rhh), self.rulerColor)
 
 
         # ==================================================
         # Draw the crosshair
         # ==================================================
 
-        if not selectingActive:
-
+        if not self.selectingActive:
             #painter.setBrush(Qt.NoBrush)
             crosshairPen = QPen(QColor.fromRgb(self.crosshairColor))
             crosshairPen.setCosmetic(True)
             painter.setPen(crosshairPen)
-            painter.drawLine(QLineF(self.mapToScene(viewMousePoint.x(), viewMousePoint.y()-crosshairSize),
-                                    self.mapToScene(viewMousePoint.x(), viewMousePoint.y()+crosshairSize)))
-            painter.drawLine(QLineF(self.mapToScene(viewMousePoint.x()-crosshairSize, viewMousePoint.y()),
-                                    self.mapToScene(viewMousePoint.x()+crosshairSize, viewMousePoint.y())))
-            painter.drawRect(QRectF(self.mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                                    self.mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)))
-
+            painter.drawLine(QLineF(self.mapToScene(self.viewMousePoint.x(), self.viewMousePoint.y() - self.crosshairSize),
+                                    self.mapToScene(self.viewMousePoint.x(), self.viewMousePoint.y() + self.crosshairSize)))
+            painter.drawLine(QLineF(self.mapToScene(self.viewMousePoint.x() - self.crosshairSize, self.viewMousePoint.y()),
+                                    self.mapToScene(self.viewMousePoint.x() + self.crosshairSize, self.viewMousePoint.y())))
+            painter.drawRect(QRectF(self.mapToScene(self.viewMousePoint.x() - self.pickBoxSize, self.viewMousePoint.y() - self.pickBoxSize),
+                                    self.mapToScene(self.viewMousePoint.x() + self.pickBoxSize, self.viewMousePoint.y() + self.pickBoxSize)))
 
     def willUnderflowInt32(self, a, b):
         """
@@ -1194,32 +878,31 @@ class View(QGraphicsView):
 
         strLen = len(strng) # int len = strng.length()
         for i in range(0, strLen): # for(int i = 0; i < len; ++i)
+            if strng[i] == '1':
+                path.moveTo(x + 0.05 * xScale, y - 0.00 * yScale)
+                path.lineTo(x + 0.45 * xScale, y - 0.00 * yScale)
+                path.moveTo(x + 0.00 * xScale, y - 0.75 * yScale)
+                path.lineTo(x + 0.25 * xScale, y - 1.00 * yScale)
+                path.lineTo(x + 0.25 * xScale, y - 0.00 * yScale)
 
-            if (strng[i] == QChar('1')):
-                path.moveTo(x+0.05*xScale, y-0.00*yScale)
-                path.lineTo(x+0.45*xScale, y-0.00*yScale)
-                path.moveTo(x+0.00*xScale, y-0.75*yScale)
-                path.lineTo(x+0.25*xScale, y-1.00*yScale)
-                path.lineTo(x+0.25*xScale, y-0.00*yScale)
+            elif strng[i] == '2':
+                path.moveTo(x + 0.00 * xScale, y - 0.75 * yScale)
+                path.arcTo(x + 0.00 * xScale, y - 1.00 * yScale, 0.50 * xScale, 0.50 * yScale, 180.00, -216.87)
+                path.lineTo(x + 0.00 * xScale, y - 0.00 * yScale)
+                path.lineTo(x + 0.50 * xScale, y - 0.00 * yScale)
 
-            elif (strng[i] == QChar('2')):
-                path.moveTo(x+0.00*xScale, y-0.75*yScale)
-                path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -216.87)
-                path.lineTo(x+0.00*xScale, y-0.00*yScale)
-                path.lineTo(x+0.50*xScale, y-0.00*yScale)
-
-            elif (strng[i] == QChar('3')):
+            elif strng[i] == '3':
                 path.arcMoveTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00)
                 path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 195.00, 255.00)
                 path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 270.00, 255.00)
 
-            elif (strng[i] == QChar('4')):
+            elif strng[i] == '4':
                 path.moveTo(x+0.50*xScale, y-0.00*yScale)
                 path.lineTo(x+0.50*xScale, y-1.00*yScale)
                 path.lineTo(x+0.00*xScale, y-0.50*yScale)
                 path.lineTo(x+0.50*xScale, y-0.50*yScale)
 
-            elif (strng[i] == QChar('5')):
+            elif strng[i] == '5':
                 path.moveTo(x+0.50*xScale, y-1.00*yScale)
                 path.lineTo(x+0.00*xScale, y-1.00*yScale)
                 path.lineTo(x+0.00*xScale, y-0.50*yScale)
@@ -1227,29 +910,29 @@ class View(QGraphicsView):
                 path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 90.00, -180.00)
                 path.lineTo(x+0.00*xScale, y-0.00*yScale)
 
-            elif (strng[i] == QChar('6')):
+            elif strng[i] == '6':
                 path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale)
                 path.moveTo(x+0.00*xScale, y-0.25*yScale)
                 path.lineTo(x+0.00*xScale, y-0.75*yScale)
                 path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale, 180.00, -140.00)
 
-            elif (strng[i] == QChar('7')):
+            elif strng[i] == '7':
                 path.moveTo(x+0.00*xScale, y-1.00*yScale)
                 path.lineTo(x+0.50*xScale, y-1.00*yScale)
                 path.lineTo(x+0.25*xScale, y-0.25*yScale)
                 path.lineTo(x+0.25*xScale, y-0.00*yScale)
 
-            elif (strng[i] == QChar('8')):
+            elif strng[i] == '8':
                 path.addEllipse(QPointF(x+0.25*xScale, y-0.25*yScale), 0.25*xScale, 0.25*yScale)
                 path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale)
 
-            elif (strng[i] == QChar('9')):
+            elif strng[i] == '9':
                 path.addEllipse(QPointF(x+0.25*xScale, y-0.75*yScale), 0.25*xScale, 0.25*yScale)
                 path.moveTo(x+0.50*xScale, y-0.75*yScale)
                 path.lineTo(x+0.50*xScale, y-0.25*yScale)
                 path.arcTo(x+0.00*xScale, y-0.50*yScale, 0.50*xScale, 0.50*yScale, 0.00, -140.00)
 
-            elif (strng[i] == QChar('0')):
+            elif strng[i] == '0':
                 #path.addEllipse(QPointF(x+0.25*xScale, y-0.50*yScale), 0.25*xScale, 0.50*yScale)
 
                 path.moveTo(x+0.00*xScale, y-0.75*yScale)
@@ -1258,15 +941,15 @@ class View(QGraphicsView):
                 path.lineTo(x+0.50*xScale, y-0.75*yScale)
                 path.arcTo(x+0.00*xScale, y-1.00*yScale, 0.50*xScale, 0.50*yScale,   0.00, 180.00)
 
-            elif (strng[i] == QChar('-')):
+            elif strng[i] == '-':
                 path.moveTo(x+0.00*xScale, y-0.50*yScale)
                 path.lineTo(x+0.50*xScale, y-0.50*yScale)
 
-            elif (strng[i] == QChar('\'')):
+            elif strng[i] == '\'':
                 path.moveTo(x+0.25*xScale, y-1.00*yScale)
                 path.lineTo(x+0.25*xScale, y-0.75*yScale)
 
-            elif (strng[i] == QChar('\"')):
+            elif strng[i] == '\"':
                 path.moveTo(x+0.10*xScale, y-1.00*yScale)
                 path.lineTo(x+0.10*xScale, y-0.75*yScale)
                 path.moveTo(x+0.40*xScale, y-1.00*yScale)
@@ -1312,188 +995,12 @@ class View(QGraphicsView):
         :param `y`: TOWRITE
         :type `y`: int
         """
-        viewMousePoint = QPoint(x, y)
-        sceneMousePoint = self.mapToScene(viewMousePoint)
-        self.gscene.setProperty(SCENE_QSNAP_POINT, sceneMousePoint) # TODO: if qsnap functionality is enabled, use it rather than the mouse point
-        self.gscene.setProperty(SCENE_MOUSE_POINT, sceneMousePoint)
-        self.gscene.setProperty(VIEW_MOUSE_POINT, viewMousePoint)
-        self.mainWin.statusbar.setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y())
-
-    def setCrossHairSize(self, percent):
-        """
-        TOWRITE
-
-        :param `percent`: TOWRITE
-        :type `percent`: quint8
-        """
-        # NOTE: crosshairSize is in pixels and is a percentage of your screen width
-        # NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
-        screenWidth = qApp.desktop().width() # quint32
-        if percent > 0 and percent < 100:
-            self.crosshairSize = (screenWidth * (percent / 100.0)) / 2
-        else:
-            self.crosshairSize = screenWidth
-
-    def setCornerButton(self):
-        """
-        TOWRITE
-        """
-        num = mainWin.getSettingsDisplayScrollBarWidgetNum() # int
-        if num:
-
-            cornerButton = QPushButton(self)
-            cornerButton.setFlat(True)
-            act = self.mainWin.actionHash.value(num) # QAction*
-            # NOTE: Prevent crashing if the action is NULL.
-            if not act:
-                QMessageBox.information(self, self.tr("Corner Widget Error"), self.tr("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."))
-                self.setCornerWidget(0)
-            else:
-                cornerButton.setIcon(act.icon())
-                #TODO/PORT# connect(cornerButton, SIGNAL(clicked()), this, SLOT(cornerButtonClicked()))
-                self.setCornerWidget(cornerButton)
-                cornerButton.setCursor(Qt.ArrowCursor)
-
-        else:
-            self.setCornerWidget(0)
-
-    def cornerButtonClicked(self):
-        """
-        TOWRITE
-        """
-        qDebug("Corner Button Clicked.")
-        self.mainWin.actionHash.value(self.mainWin.getSettingsDisplayScrollBarWidgetNum()).trigger()
-
-    def zoomIn(self):
-        """
-        TOWRITE
-        """
-        qDebug("View zoomIn()")
-        if not allowZoomIn():
-            return
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        cntr = self.mapToScene(QPoint(width() / 2, height() / 2)) # QPointF
-        s = self.mainWin.getSettingsDisplayZoomScaleIn() # qreal
-        self.scale(s, s)
-
-        self.centerOn(cntr)
-        QApplication.restoreOverrideCursor()
-
-    def zoomOut(self):
-        """
-        TOWRITE
-        """
-        qDebug("View zoomOut()")
-        if not allowZoomOut():
-            return
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        cntr = self.mapToScene(QPoint(width() / 2, height() / 2)) # QPointF
-        s = self.mainWin.getSettingsDisplayZoomScaleOut() # qreal
-        self.scale(s, s)
-
-        self.centerOn(cntr)
-        QApplication.restoreOverrideCursor()
-
-    def zoomWindow(self):
-        """
-        TOWRITE
-        """
-        self.zoomWindowActive = True
-        self.selectingActive = False
-        self.clearSelection()
-
-    def zoomSelected(self):
-        """
-        TOWRITE
-        """
-        QApplication.setOverrideCursor(Qt.WaitCursor);
-        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
-        selectedRectPath = QPainterPath()
-        for item in itemList: # foreach(QGraphicsItem* item, itemList)
-
-            selectedRectPath.addPolygon(item.self.mapToScene(item.boundingRect()))
-
-        selectedRect = selectedRectPath.boundingRect() # QRectF
-        if selectedRect.isNull():
-
-            QMessageBox.information(self, self.tr("ZoomSelected Preselect"), self.tr("Preselect objects before invoking the zoomSelected command."))
-            # TODO: Support Post selection of objects
-
-        self.fitInView(selectedRect, Qt.KeepAspectRatio)
-        QApplication.restoreOverrideCursor()
-
-    def zoomExtents(self):
-        """
-        TOWRITE
-        """
-        QApplication.setOverrideCursor(Qt.WaitCursor)
-        extents = self.gscene.itemsBoundingRect()  # QRectF
-        if extents.isNull():
-            extents.setWidth(self.mainWin.getSettingsGridSizeX())
-            extents.setHeight(self.mainWin.getSettingsGridSizeY())
-            extents.moveCenter(QPointF(0,0))
-
-        self.fitInView(extents, Qt.KeepAspectRatio)
-        QApplication.restoreOverrideCursor()
-
-    def panRealTime(self):
-        """
-        TOWRITE
-        """
-        self.panningRealTimeActive = True
-
-    def panPoint(self):
-        """
-        TOWRITE
-        """
-        self.panningPointActive = True
-
-    def panLeft(self):
-        """
-        TOWRITE
-        """
-        self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + self.panDistance)
-        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
-        self.gscene.update()
-
-    def panRight(self):
-        """
-        TOWRITE
-        """
-        self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - self.panDistance)
-        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
-        self.gscene.update()
-
-    def panUp(self):
-        """
-        TOWRITE
-        """
-        self.verticalScrollBar().setValue(self.verticalScrollBar().value() + self.panDistance)
-        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
-        self.gscene.update()
-
-    def panDown(self):
-        """
-        TOWRITE
-        """
-        self.verticalScrollBar().setValue(self.verticalScrollBar().value() - self.panDistance)
-        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
-        self.gscene.update()
-
-    def selectAll(self):
-        """
-        TOWRITE
-        """
-        allPath = QPainterPath()
-        allPath.addRect(self.gscene.sceneRect())
-        self.gscene.setSelectionArea(allPath, Qt.IntersectsItemShape, self.transform())
-
-    def selectionChanged(self):
-        """
-        TOWRITE
-        """
-        if self.mainWin.dockPropEdit.isVisible():
-            self.mainWin.dockPropEdit.setSelectedItems(self.gscene.selectedItems())
+        self.viewMousePoint = QPoint(x, y)
+        self.sceneMousePoint = self.mapToScene(self.viewMousePoint)
+        self.gscene.setProperty("SCENE_QSNAP_POINT", self.sceneMousePoint) # TODO: if qsnap functionality is enabled, use it rather than the mouse point
+        self.gscene.setProperty("SCENE_MOUSE_POINT", self.sceneMousePoint)
+        self.gscene.setProperty("VIEW_MOUSE_POINT", self.viewMousePoint)
+        self.mainWin.statusbar.setMouseCoord(self.sceneMousePoint.x(), -self.sceneMousePoint.y())
 
     def mouseDoubleClickEvent(self, event):
         """
@@ -1525,69 +1032,65 @@ class View(QGraphicsView):
                 return
 
             path = QPainterPath()
-            pickList = gscene.items(QRectF(self.mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                                           self.mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)))  # QList<QGraphicsItem*>
+            pickList = gscene.items(QRectF(self.mapToScene(self.viewMousePoint.x() - self.pickBoxSize, self.viewMousePoint.y() - self.pickBoxSize),
+                                           self.mapToScene(self.viewMousePoint.x() + self.pickBoxSize, self.viewMousePoint.y() + self.pickBoxSize)))  # QList<QGraphicsItem*>
 
-            itemsInPickBox = pickList.size() # bool
-            if itemsInPickBox and not selectingActive and not grippingActive:
+            itemsInPickBox = bool(len(pickList))  # pickList.size() # bool
+            if itemsInPickBox and not self.selectingActive and not self.grippingActive:
 
-                itemsAlreadySelected = pickList.at(0).isSelected() # bool
+                itemsAlreadySelected = pickList[0].isSelected() # bool
                 if not itemsAlreadySelected:
-
-                    pickList.at(0).setSelected(True)
+                    pickList[0].setSelected(True)
 
                 else:
-
                     foundGrip = False
-                    base = pickList.at(0)  # BaseObject* base = static_cast<BaseObject*>(pickList.at(0)); # TODO: Allow multiple objects to be gripped at once
+                    base = pickList[0]  # BaseObject* base = static_cast<BaseObject*>(pickList.at(0)); # TODO: Allow multiple objects to be gripped at once
                     if not base:
                         return
 
-                    qsnapOffset = QPoint(qsnapLocatorSize, qsnapLocatorSize)
-                    gripPoint = base.mouseSnapPoint(sceneMousePoint) # QPointF
+                    qsnapOffset = QPoint(self.qsnapLocatorSize, self.qsnapLocatorSize)
+                    gripPoint = base.mouseSnapPoint(self.sceneMousePoint) # QPointF
                     p1 = self.mapFromScene(gripPoint) - qsnapOffset # QPoint
                     q1 = self.mapFromScene(gripPoint) + qsnapOffset # QPoint
                     gripRect = QRectF(self.mapToScene(p1), self.mapToScene(q1)) # QRectF
-                    pickRect = QRectF(self.mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
-                                      self.mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)) # QRectF
+                    pickRect = QRectF(self.mapToScene(self.viewMousePoint.x() - self.pickBoxSize, self.viewMousePoint.y() - self.pickBoxSize),
+                                      self.mapToScene(self.viewMousePoint.x() + self.pickBoxSize, self.viewMousePoint.y() + self.pickBoxSize)) # QRectF
                     if gripRect.intersects(pickRect):
                         foundGrip = True
 
                     # If the pick point is within the item's grip box, start gripping
                     if foundGrip:
-                        startGripping(base)
+                        self.startGripping(base)
 
                     else: # start moving
-                        movingActive = True
+                        self.movingActive = True
                         pressPoint = event.pos()
-                        scenePressPoint = self.mapToScene(pressPoint)
+                        self.scenePressPoint = self.mapToScene(pressPoint)
 
-            elif grippingActive:
-                stopGripping(True)
+            elif self.grippingActive:
+                self.stopGripping(True)
 
-            elif not selectingActive:
-                selectingActive = True
+            elif not self.selectingActive:
+                self.selectingActive = True
                 pressPoint = event.pos()
-                scenePressPoint = self.mapToScene(pressPoint)
+                self.scenePressPoint = self.mapToScene(pressPoint)
 
-                if not selectBox:
-                    selectBox = SelectBox(QRubberBand.Rectangle, self)
-                selectBox.setGeometry(QRect(pressPoint, pressPoint))
-                selectBox.show()
+                if not self.selectBox:
+                    self.selectBox = SelectBox(QRubberBand.Rectangle, self)
+                self.selectBox.setGeometry(QRect(pressPoint, pressPoint))
+                self.selectBox.show()
 
             else:
-                selectingActive = False
-                selectBox.hide()
+                self.selectingActive = False
+                self.selectBox.hide()
                 releasePoint = event.pos()
-                sceneReleasePoint = self.mapToScene(releasePoint)
+                self.sceneReleasePoint = self.mapToScene(releasePoint)
 
                 # Start SelectBox Code
-                path.addPolygon(self.mapToScene(selectBox.geometry()))
-                if sceneReleasePoint.x() > scenePressPoint.x():
+                path.addPolygon(self.mapToScene(self.selectBox.geometry()))
+                if self.sceneReleasePoint.x() > self.scenePressPoint.x():
                     if mainWin.getSettingsSelectionModePickAdd():
-
                         if mainWin.isShiftPressed():
-
                             itemList = gscene.items(path, Qt.ContainsItemShape) # QList<QGraphicsItem*>
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(False)
@@ -1598,78 +1101,72 @@ class View(QGraphicsView):
 
                     else:
                         if mainWin.isShiftPressed():
-
                             itemList = gscene.items(path, Qt.ContainsItemShape) # QList<QGraphicsItem*>
                             if not itemList.size():
-                                clearSelection()
+                                self.clearSelection()
                             else:
                                 for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                     item.setSelected(not item.isSelected())  # Toggle selected
-
                         else:
-                            clearSelection()
+                            self.clearSelection()
                             itemList = gscene.items(path, Qt.ContainsItemShape) # QList<QGraphicsItem*>
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(True)
 
                 else:
                     if mainWin.getSettingsSelectionModePickAdd():
-
                         if mainWin.isShiftPressed():
                             itemList = gscene.items(path, Qt.IntersectsItemShape) # QList<QGraphicsItem*>
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(False)
-
                         else:
                             itemList = gscene.items(path, Qt.IntersectsItemShape) # QList<QGraphicsItem*>
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(True)
-
                     else:
                         if self.mainWin.isShiftPressed():
                             itemList = gscene.items(path, Qt.IntersectsItemShape) # QList<QGraphicsItem*>
                             if not itemList.size():
-                                clearSelection()
+                                self.clearSelection()
                             else:
                                 for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                     item.setSelected(not item.isSelected()) # Toggle selected
-
                         else:
-                            clearSelection();
+                            self.clearSelection()
                             itemList = gscene.items(path, Qt.IntersectsItemShape) # QList<QGraphicsItem*>
                             for item in itemList: # foreach(QGraphicsItem* item, itemList)
                                 item.setSelected(True)
 
                 # End SelectBox Code
 
-            if pastingActive:
-                itemList = pasteObjectItemGroup.childItems() # QList<QGraphicsItem*>
-                gscene.destroyItemGroup(pasteObjectItemGroup)
+            if self.pastingActive:
+                itemList = self.pasteObjectItemGroup.childItems() # QList<QGraphicsItem*>
+                gscene.destroyItemGroup(self.pasteObjectItemGroup)
                 for item in itemList: # foreach(QGraphicsItem* item, itemList)
                     gscene.removeItem(item) # Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
 
-                undoStack.beginMacro("Paste")
+                self.undoStack.beginMacro("Paste")
                 for item in itemList: # foreach(QGraphicsItem* item, itemList)
                     base = item #cpp# BaseObject* base = static_cast<BaseObject*>(item);
                     if base:
-                        #TODO/PORT# UndoableAddCommand* cmd = new UndoableAddCommand(base->data(OBJ_NAME).toString(), base, this, 0);
+                        cmd = UndoableAddCommand(base.data("OBJ_NAME"), base, self, None)
                         if cmd:
-                            undoStack.push(cmd)
+                            self.undoStack.push(cmd)
 
-                undoStack.endMacro()
+                self.undoStack.endMacro()
 
-                pastingActive = False
-                selectingActive = False
+                self.pastingActive = False
+                self.selectingActive = False
 
-            if zoomWindowActive:
+            if self.zoomWindowActive:
                 self.fitInView(path.boundingRect(), Qt.KeepAspectRatio)
-                clearSelection()
+                self.clearSelection()
 
         if event.button() == Qt.MidButton:
-            panStart(event.pos())
+            self.panStart(event.pos())
             # The Undo command will record the spot where the pan started.
-            #TODO/PORT# UndoableNavCommand* cmd = new UndoableNavCommand("PanStart", this, 0)
-            undoStack.push(cmd)
+            cmd = UndoableNavCommand("PanStart", self, None)
+            self.undoStack.push(cmd)
             event.accept()
 
         self.gscene.update()
@@ -1699,10 +1196,10 @@ class View(QGraphicsView):
         sceneRect = QRectF(self.gscene.sceneRect())
         newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height()) # QRectF
         if (not sceneRect.contains(newRect.topLeft()) or not sceneRect.contains(newRect.bottomRight())):
-            self.gscene.setSceneRect(self.sceneRect.adjusted(-viewRect.width(),
-                                                             -viewRect.height(),
-                                                             viewRect.width(),
-                                                             viewRect.height()))
+            self.gscene.setSceneRect(sceneRect.adjusted(-viewRect.width(),
+                                                        -viewRect.height(),
+                                                        viewRect.width(),
+                                                        viewRect.height()))
 
     def centerAt(self, centerPoint):
         """
@@ -1714,7 +1211,7 @@ class View(QGraphicsView):
         # centerOn also updates the scrollbars, which shifts things out of wack o_O
         self.centerOn(centerPoint)
         # Reshift to the new center
-        offset = centerPoint - center()  # QPointF
+        offset = centerPoint - self.center()  # QPointF
         newCenter = centerPoint + offset # QPointF
         self.centerOn(newCenter)
 
@@ -1727,7 +1224,7 @@ class View(QGraphicsView):
         :param `viewPoint`: TOWRITE
         :type `viewPoint`: QPoint
         """
-        viewCenter = center()     # QPointF
+        viewCenter = self.center()     # QPointF
         pointBefore = scenePoint  # QPointF
         # centerOn also updates the scrollbars, which shifts things out of wack o_O
         self.centerOn(viewCenter)
@@ -1745,30 +1242,30 @@ class View(QGraphicsView):
         """
         self.updateMouseCoords(event.x(), event.y())
         movePoint = event.pos()
-        sceneMovePoint = self.mapToScene(movePoint)
+        self.sceneMovePoint = self.mapToScene(movePoint)
 
         mainWin = self.mainWin
         if mainWin.isCommandActive():
-            if rapidMoveActive:
-                mainWin.runCommandMove(mainWin.activeCommand(), sceneMovePoint.x(), sceneMovePoint.y())
+            if self.rapidMoveActive:
+                mainWin.runCommandMove(mainWin.activeCommand(), self.sceneMovePoint.x(), self.sceneMovePoint.y())
 
-        if previewActive:
+        if self.previewActive:
+            previewMode = self.previewMode
+            if previewMode == "PREVIEW_MODE_MOVE":
+                self.previewObjectItemGroup.setPos(self.sceneMousePoint - self.previewPoint)
 
-            if previewMode == PREVIEW_MODE_MOVE:
-                previewObjectItemGroup.setPos(sceneMousePoint - previewPoint)
+            elif previewMode == "PREVIEW_MODE_ROTATE":
+                x = self.previewPoint.x()  # qreal
+                y = self.previewPoint.y()  # qreal
+                rot = self.previewData     # qreal
 
-            elif previewMode == PREVIEW_MODE_ROTATE:
-                x = previewPoint.x()  # qreal
-                y = previewPoint.y()  # qreal
-                rot = previewData     # qreal
+                mouseAngle = QLineF(x, y, self.sceneMousePoint.x(), self.sceneMousePoint.y()).angle() # qreal
 
-                mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle() # qreal
-
-                rad = radians(rot-mouseAngle)  # qreal
-                cosRot = qCos(rad)             # qreal
-                sinRot = qSin(rad)             # qreal
-                px = 0                         # qreal
-                py = 0                         # qreal
+                rad = radians(rot - mouseAngle)  # qreal
+                cosRot = qCos(rad)               # qreal
+                sinRot = qSin(rad)               # qreal
+                px = 0                           # qreal
+                py = 0                           # qreal
                 px -= x
                 py -= y
                 rotX = px * cosRot - py * sinRot  # qreal
@@ -1776,23 +1273,23 @@ class View(QGraphicsView):
                 rotX += x
                 rotY += y
 
-                previewObjectItemGroup.setPos(rotX, rotY)
-                previewObjectItemGroup.setRotation(rot-mouseAngle)
+                self.previewObjectItemGroup.setPos(rotX, rotY)
+                self.previewObjectItemGroup.setRotation(rot-mouseAngle)
 
-            elif previewMode == PREVIEW_MODE_SCALE:
-                x = previewPoint.x()       # qreal
-                y = previewPoint.y()       # qreal
-                scaleFactor = previewData  # qreal
+            elif previewMode == "PREVIEW_MODE_SCALE":
+                x = self.previewPoint.x()            # qreal
+                y = self.previewPoint.y()            # qreal
+                scaleFactor = self.previewData  # qreal
 
-                factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor  # qreal
+                factor = QLineF(x, y, self.sceneMousePoint.x(), self.sceneMousePoint.y()).length() / scaleFactor  # qreal
 
-                previewObjectItemGroup.setScale(1)
-                previewObjectItemGroup.setPos(0,0)
+                self.previewObjectItemGroup.setScale(1)
+                self.previewObjectItemGroup.setPos(0, 0)
 
                 if scaleFactor <= 0.0:
-                    QMessageBox.critical(self, QObject.tr("ScaleFactor Error"),
-                                        QObject.tr("Hi there. If you are not a developer, report this as a bug. "
-                                        "If you are a developer, your code needs examined, and possibly your head too."))
+                    QMessageBox.critical(self, self.tr("ScaleFactor Error"),
+                                         self.tr("Hi there. If you are not a developer, report this as a bug. "
+                                         "If you are a developer, your code needs examined, and possibly your head too."))
 
                 else:
                     # Calculate the offset
@@ -1806,30 +1303,30 @@ class View(QGraphicsView):
                     dx = newX - oldX      # qreal
                     dy = newY - oldY      # qreal
 
-                    previewObjectItemGroup.setScale(previewObjectItemGroup.scale()*factor)
-                    previewObjectItemGroup.moveBy(dx, dy)
+                    self.previewObjectItemGroup.setScale(self.previewObjectItemGroup.scale() * factor)
+                    self.previewObjectItemGroup.moveBy(dx, dy)
 
-        if pastingActive:
-            pasteObjectItemGroup.setPos(sceneMousePoint - pasteDelta);
+        if self.pastingActive:
+            self.pasteObjectItemGroup.setPos(self.sceneMousePoint - self.pasteDelta)
 
-        if movingActive:
+        if self.movingActive:
             # Ensure that the preview is only shown if the mouse has moved.
-            if not previewActive:
-                previewOn(PREVIEW_CLONE_SELECTED, PREVIEW_MODE_MOVE, scenePressPoint.x(), scenePressPoint.y(), 0)
+            if not self.previewActive:
+                self.previewOn("PREVIEW_CLONE_SELECTED", "PREVIEW_MODE_MOVE", self.scenePressPoint.x(), self.scenePressPoint.y(), 0)
 
-        if selectingActive:
-            if sceneMovePoint.x() >= scenePressPoint.x():
-                selectBox.setDirection(1)
+        if self.selectingActive:
+            if self.sceneMovePoint.x() >= self.scenePressPoint.x():
+                self.selectBox.setDirection(1)
             else:
-                selectBox.setDirection(0)
-            selectBox.setGeometry(QRect(self.mapFromScene(scenePressPoint), event.pos()).normalized())
+                self.selectBox.setDirection(0)
+            self.selectBox.setGeometry(QRect(self.mapFromScene(self.scenePressPoint), event.pos()).normalized())
             event.accept()
 
-        if panningActive:
-            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - (event.x() - panStartX))
-            self.verticalScrollBar().setValue(self.verticalScrollBar().value() - (event.y() - panStartY))
-            panStartX = event.x()
-            panStartY = event.y()
+        if self.panningActive:
+            self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - (event.x() - self.panStartX))
+            self.verticalScrollBar().setValue(self.verticalScrollBar().value() - (event.y() - self.panStartY))
+            self.panStartX = event.x()
+            self.panStartY = event.y()
             event.accept()
 
         self.gscene.update()
@@ -1840,42 +1337,37 @@ class View(QGraphicsView):
 
         :param `event`: A `QMouseEvent`_ to be processed.
         """
-        updateMouseCoords(event.x(), event.y())
+        self.updateMouseCoords(event.x(), event.y())
         if event.button() == Qt.LeftButton:
-
-            if movingActive:
-
+            if self.movingActive:
                 self.previewOff()
-                dx = sceneMousePoint.x() - scenePressPoint.x() # qreal
-                dy = sceneMousePoint.y() - scenePressPoint.y() # qreal
+                dx = self.sceneMousePoint.x() - self.scenePressPoint.x() # qreal
+                dy = self.sceneMousePoint.y() - self.scenePressPoint.y() # qreal
                 # Ensure that moving only happens if the mouse has moved.
                 if dx or dy:
-                    moveSelected(dx, dy)
-                movingActive = False
+                    self.moveSelected(dx, dy)
+                self.movingActive = False
 
             event.accept()
 
         if event.button() == Qt.MidButton:
-
-            panningActive = False
+            self.panningActive = False
             # The Undo command will record the spot where the pan completed.
-            #TODO/PORT# UndoableNavCommand* cmd = new UndoableNavCommand("PanStop", this, 0)
-            undoStack.push(cmd)
+            cmd = UndoableNavCommand("PanStop", self, None)
+            self.undoStack.push(cmd)
             event.accept()
 
         if event.button() == Qt.XButton1:
-
             qDebug("XButton1")
-            mainWin.undo()  # TODO: Make this customizable
+            self.mainWin.undo()  # TODO: Make this customizable
             event.accept()
 
         if event.button() == Qt.XButton2:
-
             qDebug("XButton2")
-            mainWin.redo()  # TODO: Make this customizable
+            self.mainWin.redo()  # TODO: Make this customizable
             event.accept()
 
-        gscene.update()
+        self.gscene.update()
 
     def allowZoomIn(self):
         """
@@ -1890,7 +1382,7 @@ class View(QGraphicsView):
 
         zoomInLimit = 0.0000000001  # qreal
         if qMin(maxWidth, maxHeight) < zoomInLimit:
-            qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit)
+            qDebug("ZoomIn limit reached. (limit=%.10f)" % zoomInLimit)
             return False
 
         return True
@@ -1908,7 +1400,7 @@ class View(QGraphicsView):
 
         zoomOutLimit = 10000000000000.0  # qreal
         if qMax(maxWidth, maxHeight) > zoomOutLimit:
-            qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit)
+            qDebug("ZoomOut limit reached. (limit=%.1f)" % zoomOutLimit)
             return False
 
         return True
@@ -1924,12 +1416,11 @@ class View(QGraphicsView):
 
         self.updateMouseCoords(mousePoint.x(), mousePoint.y())
         if zoomDir > 0:
-            #TODO/PORT# UndoableNavCommand* cmd = new UndoableNavCommand("ZoomInToPoint", this, 0)
-            undoStack.push(cmd)
-
+            cmd = UndoableNavCommand("ZoomInToPoint", self, None)
+            self.undoStack.push(cmd)
         else:
-            #TODO/PORT# UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", this, 0)
-            undoStack.push(cmd)
+            cmd = UndoableNavCommand("ZoomOutToPoint", self, None)
+            self.undoStack.push(cmd)
 
     def zoomToPoint(self, mousePoint, zoomDir):
         """
@@ -1960,11 +1451,11 @@ class View(QGraphicsView):
         self.alignScenePointWithViewPoint(pointBeforeScale, mousePoint)
 
         self.updateMouseCoords(mousePoint.x(), mousePoint.y())
-        if pastingActive:
-            pasteObjectItemGroup.setPos(sceneMousePoint - pasteDelta)
+        if self.pastingActive:
+            self.pasteObjectItemGroup.setPos(self.sceneMousePoint - self.pasteDelta)
 
-        if selectingActive:
-            selectBox.setGeometry(QRect(mapFromScene(scenePressPoint), mousePoint).normalized())
+        if self.selectingActive:
+            self.selectBox.setGeometry(QRect(self.mapFromScene(self.scenePressPoint), mousePoint).normalized())
 
         self.gscene.update()
 
@@ -1974,103 +1465,69 @@ class View(QGraphicsView):
 
         :param `event`: A `QContextMenuEvent`_ to be processed.
         """
-        iconTheme = mainWin.getSettingsGeneralIconTheme() # QString
+        iconTheme = self.mainWin.getSettingsGeneralIconTheme() # QString
 
         menu = QMenu()
-        itemList = gscene.selectedItems() # QList<QGraphicsItem*>
-        selectionEmpty = itemList.isEmpty() # bool
+        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
+        selectionEmpty = bool(len(itemList)) # itemList.isEmpty() # bool
 
-        for i in range(0, itemList.size()): # for(int i = 0; i < itemList.size(); i++)
-            if itemList.at(i).data(OBJ_TYPE) != OBJ_TYPE_NULL:
+        for i in range(0, len(itemList)): # for(int i = 0; i < itemList.size(); i++)
+            if itemList[i].data(OBJ_TYPE) != OBJ_TYPE_NULL:
                 selectionEmpty = False
                 break
 
-        if pastingActive:
+        if self.pastingActive:
             return
 
         if not mainWin.prompt.isCommandActive():
             lastCmd = mainWin.prompt.lastCommand() # QString
-            repeatAction = QAction(QIcon("icons/" + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, self)
+            repeatAction = QAction(QIcon(mainWin.gIconDir + os.sep + iconTheme + "/" + lastCmd + ".png"), "Repeat " + lastCmd, self)
             repeatAction.setStatusTip("Repeats the previously issued command.")
-            #TODO/PORT# connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()))
+            self.connect(repeatAction, SIGNAL("triggered()"), self, SLOT("repeatAction()"))
             menu.addAction(repeatAction)
 
-        if zoomWindowActive:
+        if self.zoomWindowActive:
             cancelZoomWinAction = QAction("&Cancel (ZoomWindow)", self)
             cancelZoomWinAction.setStatusTip("Cancels the ZoomWindow Command.")
-            #TODO/PORT# connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
-            menu.addAction(cancelZoomWinAction);
+            self.connect(cancelZoomWinAction, SIGNAL("triggered()"), self, SLOT("escapePressed()"))
+            menu.addAction(cancelZoomWinAction)
 
         menu.addSeparator()
-        menu.addAction(mainWin.actionHash.value(ACTION_cut))
-        menu.addAction(mainWin.actionHash.value(ACTION_copy))
-        menu.addAction(mainWin.actionHash.value(ACTION_paste))
+        menu.addAction(mainWin.actionHash["ACTION_cut"])
+        menu.addAction(mainWin.actionHash["ACTION_copy"])
+        menu.addAction(mainWin.actionHash["ACTION_paste"])
         menu.addSeparator()
 
         if not selectionEmpty:
 
-            deleteAction = QAction(QIcon("icons/" + iconTheme + "/" + "erase" + ".png"), "D&elete", self)
+            deleteAction = QAction(QIcon(mainWin.gIconDir + os.sep + iconTheme + os.sep + "erase.png"), "D&elete", self)
             deleteAction.setStatusTip("Removes objects from a drawing.")
-            #TODO/PORT# connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()))
+            self.connect(deleteAction, SIGNAL("triggered()"), self, SLOT("deleteSelected()"))
             menu.addAction(deleteAction)
 
-            moveAction = QAction(QIcon("icons/" + iconTheme + "/" + "move" + ".png"), "&Move", self)
+            moveAction = QAction(QIcon(mainWin.gIconDir + os.sep + iconTheme + os.sep + "move.png"), "&Move", self)
             moveAction.setStatusTip("Displaces objects a specified distance in a specified direction.")
-            #TODO/PORT# connect(moveAction, SIGNAL(triggered()), this, SLOT(moveAction()))
+            self.connect(moveAction, SIGNAL("triggered()"), self, SLOT("moveAction()"))
             menu.addAction(moveAction)
 
-            scaleAction = QAction(QIcon("icons/" + iconTheme + "/" + "scale" + ".png"), "Sca&le", self)
+            scaleAction = QAction(QIcon(mainWin.gIconDir + os.sep + iconTheme + os.sep + "scale.png"), "Sca&le", self)
             scaleAction.setStatusTip("Enlarges or reduces objects proportionally in the X, Y, and Z directions.")
-            #TODO/PORT# connect(scaleAction, SIGNAL(triggered()), this, SLOT(scaleAction()))
+            self.connect(scaleAction, SIGNAL("triggered()"), self, SLOT("scaleAction()"))
             menu.addAction(scaleAction)
 
-            rotateAction = QAction(QIcon("icons/" + iconTheme + "/" + "rotate" + ".png"), "R&otate", self)
+            rotateAction = QAction(QIcon(mainWin.gIconDir + os.sep + iconTheme + os.sep + "rotate.png"), "R&otate", self)
             rotateAction.setStatusTip("Rotates objects about a base point.")
-            #TODO/PORT# connect(rotateAction, SIGNAL(triggered()), this, SLOT(rotateAction()))
+            self.connect(rotateAction, SIGNAL("triggered()"), self, SLOT("rotateAction()"))
             menu.addAction(rotateAction)
 
             menu.addSeparator()
 
             clearAction = QAction("Cle&ar Selection", self)
             clearAction.setStatusTip("Removes all objects from the selection set.")
-            #TODO/PORT# connect(clearAction, SIGNAL(triggered()), this, SLOT(clearSelection()))
+            self.connect(clearAction, SIGNAL("triggered()"), self, SLOT("clearSelection()"))
             menu.addAction(clearAction)
 
         menu.exec_(event.globalPos())
-
-    def deletePressed(self):
-        """
-        TOWRITE
-        """
-        qDebug("View deletePressed()")
-        if self.pastingActive:
-            self.gscene.removeItem(self.pasteObjectItemGroup)
-            del pasteObjectItemGroup;
-
-        self.pastingActive = False
-        self.zoomWindowActive = False
-        self.selectingActive = False
-        self.selectBox.hide()
-        self.stopGripping(False)
-        self.deleteSelected()
-
-    def escapePressed(self):
-        """
-        TOWRITE
-        """
-        qDebug("View escapePressed()")
-        if self.pastingActive:
-            self.gscene.removeItem(self.pasteObjectItemGroup)
-            del pasteObjectItemGroup
-
-        self.pastingActive = False
-        self.zoomWindowActive = False
-        self.selectingActive = False
-        self.selectBox.hide()
-        if self.grippingActive:
-            self.stopGripping(False)
-        else:
-            self.clearSelection()
 
     def startGripping(self, obj):
         """
@@ -2087,7 +1544,7 @@ class View(QGraphicsView):
         self.gripBaseObj.setObjectRubberPoint("GRIP_POINT", self.sceneGripPoint)
         self.gripBaseObj.setObjectRubberMode(OBJ_RUBBER_GRIP)
 
-    def stopGripping(self, accept):
+    def stopGripping(self, accept=False):
         """
         TOWRITE
 
@@ -2100,69 +1557,15 @@ class View(QGraphicsView):
             self.gripBaseObj.vulcanize()
             if accept:
 
-                #TODO/PORT# UndoableGripEditCommand* cmd = new UndoableGripEditCommand(sceneGripPoint, sceneMousePoint, tr("Grip Edit ") + gripBaseObj->data(OBJ_NAME).toString(), gripBaseObj, this, 0);
+                cmd = UndoableGripEditCommand(self.sceneGripPoint, self.sceneMousePoint, self.tr("Grip Edit ") + self.gripBaseObj.data(OBJ_NAME), self.gripBaseObj, self, None)
                 if cmd:
-                    undoStack.push(cmd)
+                    self.undoStack.push(cmd)
                 self.selectionChanged()  # Update the Property Editor
 
             self.gripBaseObj = 0
 
         # Move the sceneGripPoint to a place where it will never be hot
         self.sceneGripPoint = self.sceneRect().topLeft()
-
-    def clearSelection(self):
-        """
-        TOWRITE
-        """
-        self.gscene.clearSelection()
-
-    def deleteSelected(self):
-        """
-        TOWRITE
-        """
-        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
-        numSelected = itemList.size() # int
-        if numSelected > 1:
-            undoStack.beginMacro("Delete " + QString().setNum(itemList.size()))
-
-        for i in range(0, itemList.size()): # for(int i = 0; i < itemList.size(); i++)
-
-            if itemList.at(i).data(OBJ_TYPE) != OBJ_TYPE_NULL:
-
-                base = itemList.at(i) # BaseObject* base = static_cast<BaseObject*>(itemList.at(i));
-                if base:
-
-                    #TODO/PORT# UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-                    if cmd:
-                        undoStack.push(cmd)
-
-        if numSelected > 1:
-            undoStack.endMacro()
-
-    def cut(self):
-        """
-        TOWRITE
-        """
-        if self.gscene.selectedItems().isEmpty():
-
-            QMessageBox.information(self, self.tr("Cut Preselect"), self.tr("Preselect objects before invoking the cut command."))
-            return # TODO: Prompt to select objects if nothing is preselected
-
-        self.undoStack.beginMacro("Cut")
-        self.copySelected()
-        self.deleteSelected()
-        self.undoStack.endMacro()
-
-    def copy(self):
-        """
-        TOWRITE
-        """
-        if gscene.selectedItems().isEmpty():
-            QMessageBox.information(self, self.tr("Copy Preselect"), self.tr("Preselect objects before invoking the copy command."))
-            return # TODO: Prompt to select objects if nothing is preselected
-
-        self.copySelected()
-        self.clearSelection()
 
     def copySelected(self):
         """
@@ -2171,48 +1574,32 @@ class View(QGraphicsView):
         selectedList = self.gscene.selectedItems() # QList<QGraphicsItem*>
 
         # Prevent memory leaks by deleting any unpasted instances
-        qDeleteAll(mainWin.cutCopyObjectList.begin(), mainWin.cutCopyObjectList.end())
-        mainWin.cutCopyObjectList.clear()
+        ##qDeleteAll(self.mainWin.cutCopyObjectList.begin(), self.mainWin.cutCopyObjectList.end())
+        self.mainWin.cutCopyObjectList = []  # .clear()
 
         # Create new objects but do not add them to the scene just yet.
         # By creating them now, ensures that pasting will still work
         # if the original objects are deleted before the paste occurs.
-        mainWin.cutCopyObjectList = createObjectList(selectedList)
+        self.mainWin.cutCopyObjectList = self.createObjectList(selectedList)
 
-    def paste(self):
-        """
-        TOWRITE
-        """
-        if self.pastingActive:
-            self.gscene.removeItem(self.pasteObjectItemGroup)
-            del pasteObjectItemGroup
-
-        self.pasteObjectItemGroup = self.gscene.createItemGroup(mainWin.cutCopyObjectList)
-        self.pasteDelta = self.pasteObjectItemGroup.boundingRect().bottomLeft()
-        self.pasteObjectItemGroup.setPos(self.sceneMousePoint - self.pasteDelta)
-        self.pastingActive = True
-
-        # Re-create the list in case of multiple pastes
-        mainWin.cutCopyObjectList = self.createObjectList(mainWin.cutCopyObjectList)
-
-    def createObjectList(self, list):
+    def createObjectList(self, list_):
         """
         TOWRITE
 
-        :param `list`: TOWRITE
-        :type `list`: QList<QGraphicsItem*>
+        :param `list_`: TOWRITE
+        :type `list_`: QList<QGraphicsItem*>
         :rtype: QList<QGraphicsItem*>
         """
 
-        copyList = QList # QList<QGraphicsItem*> copyList;
+        copyList = [] # QList<QGraphicsItem*> copyList;
 
-        for i in range(0, list.size()): # for(int i = 0; i < list.size(); i++)
+        for i in range(0, len(list_)): # for(int i = 0; i < list.size(); i++)
 
-            item = list.at(i) # QGraphicsItem*
+            item = list_[i] # QGraphicsItem*
             if not item:
                 continue
 
-            objType = item.data(OBJ_TYPE).toInt()  # int
+            objType = item.data(OBJ_TYPE)  # .toInt()  # int
 
             if objType == OBJ_TYPE_ARC:
                 arcObj = item # ArcObject* arcObj = static_cast<ArcObject*>(item);
@@ -2245,7 +1632,7 @@ class View(QGraphicsView):
                 dimLeaderObj = item # DimLeaderObject* dimLeaderObj = static_cast<DimLeaderObject*>(item);
                 if dimLeaderObj:
                     copyDimLeaderObj = DimLeaderObject(dimLeaderObj) # DimLeaderObject*
-                    copyList.append(copyDimLeaderObj);
+                    copyList.append(copyDimLeaderObj)
 
             elif objType == OBJ_TYPE_DIMLINEAR:
                 pass # TODO: cut/copy linear dimensions
@@ -2260,7 +1647,7 @@ class View(QGraphicsView):
                 elipObj = item # EllipseObject* elipObj = static_cast<EllipseObject*>(item);
                 if elipObj:
                     copyElipObj = EllipseObject(elipObj) # EllipseObject*
-                    copyList.append(copyElipObj);
+                    copyList.append(copyElipObj)
 
             elif objType == OBJ_TYPE_ELLIPSEARC:
                 pass # TODO: cut/copy elliptical arcs
@@ -2318,22 +1705,198 @@ class View(QGraphicsView):
 
         return copyList
 
-    def repeatAction(self):
+
+    # view.hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+
+    def center(self):
+        """
+        TOWRITE
+
+        :rtype: `QPointF`_
+        """
+        return self.mapToScene(self.rect().center())
+
+    def getUndoStack(self):
+        """
+        TOWRITE
+
+        :rtype: `QUndoStack`_
+        """
+        return self.undoStack
+
+    # Slots ------------------------------------------------------------------
+
+    @Slot()
+    def zoomIn(self):
         """
         TOWRITE
         """
-        mainWin.prompt.endCommand()
-        mainWin.prompt.setCurrentText(mainWin.prompt.lastCommand())
-        mainWin.prompt.processInput()
+        qDebug("View zoomIn()")
+        if not self.allowZoomIn():
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        cntr = self.mapToScene(QPoint(self.width() / 2, self.height() / 2)) # QPointF
+        s = self.mainWin.getSettingsDisplayZoomScaleIn() # qreal
+        self.scale(s, s)
 
-    def moveAction(self):
+        self.centerOn(cntr)
+        QApplication.restoreOverrideCursor()
+
+    @Slot()
+    def zoomOut(self):
         """
         TOWRITE
         """
-        mainWin.prompt.endCommand()
-        mainWin.prompt.setCurrentText("move")
-        mainWin.prompt.processInput()
+        qDebug("View zoomOut()")
+        if not self.allowZoomOut():
+            return
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        cntr = self.mapToScene(QPoint(self.width() / 2, self.height() / 2)) # QPointF
+        s = self.mainWin.getSettingsDisplayZoomScaleOut() # qreal
+        self.scale(s, s)
 
+        self.centerOn(cntr)
+        QApplication.restoreOverrideCursor()
+
+    @Slot()
+    def zoomWindow(self):
+        """
+        TOWRITE
+        """
+        self.zoomWindowActive = True
+        self.selectingActive = False
+        self.clearSelection()
+
+    @Slot()
+    def zoomSelected(self):
+        """
+        TOWRITE
+        """
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
+        selectedRectPath = QPainterPath()
+        for item in itemList: # foreach(QGraphicsItem* item, itemList)
+            selectedRectPath.addPolygon(item.self.mapToScene(item.boundingRect()))
+
+        selectedRect = selectedRectPath.boundingRect() # QRectF
+        if selectedRect.isNull():
+            QMessageBox.information(self, self.tr("ZoomSelected Preselect"), self.tr("Preselect objects before invoking the zoomSelected command."))
+            # TODO: Support Post selection of objects
+
+        self.fitInView(selectedRect, Qt.KeepAspectRatio)
+        QApplication.restoreOverrideCursor()
+
+    @Slot()
+    def zoomExtents(self):
+        """
+        TOWRITE
+        """
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        extents = self.gscene.itemsBoundingRect()  # QRectF
+        if extents.isNull():
+            extents.setWidth(self.mainWin.getSettingsGridSizeX())
+            extents.setHeight(self.mainWin.getSettingsGridSizeY())
+            extents.moveCenter(QPointF(0,0))
+
+        self.fitInView(extents, Qt.KeepAspectRatio)
+        QApplication.restoreOverrideCursor()
+
+    @Slot()
+    def panRealTime(self):
+        """
+        TOWRITE
+        """
+        self.panningRealTimeActive = True
+
+    @Slot()
+    def panPoint(self):
+        """
+        TOWRITE
+        """
+        self.panningPointActive = True
+
+    @Slot()
+    def panLeft(self):
+        """
+        TOWRITE
+        """
+        self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() + self.panDistance)
+        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
+        self.gscene.update()
+
+    @Slot()
+    def panRight(self):
+        """
+        TOWRITE
+        """
+        self.horizontalScrollBar().setValue(self.horizontalScrollBar().value() - self.panDistance)
+        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
+        self.gscene.update()
+
+    @Slot()
+    def panUp(self):
+        """
+        TOWRITE
+        """
+        self.verticalScrollBar().setValue(self.verticalScrollBar().value() + self.panDistance)
+        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
+        self.gscene.update()
+
+    @Slot()
+    def panDown(self):
+        """
+        TOWRITE
+        """
+        self.verticalScrollBar().setValue(self.verticalScrollBar().value() - self.panDistance)
+        self.updateMouseCoords(self.viewMousePoint.x(), self.viewMousePoint.y())
+        self.gscene.update()
+
+    @Slot()
+    def selectAll(self):
+        """
+        TOWRITE
+        """
+        allPath = QPainterPath()
+        allPath.addRect(self.gscene.sceneRect())
+        self.gscene.setSelectionArea(allPath, Qt.IntersectsItemShape, self.transform())
+
+    @Slot()
+    def selectionChanged(self):
+        """
+        TOWRITE
+        """
+        if self.mainWin.dockPropEdit.isVisible():
+            self.mainWin.dockPropEdit.setSelectedItems(self.gscene.selectedItems())
+
+    @Slot()
+    def clearSelection(self):
+        """
+        TOWRITE
+        """
+        self.gscene.clearSelection()
+
+    @Slot()
+    def deleteSelected(self):
+        """
+        TOWRITE
+        """
+        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
+        numSelected = len(itemList)  # itemList.size() # int
+        if numSelected > 1:
+            self.undoStack.beginMacro("Delete " + "%d" % len(itemList))  # QString().setNum(itemList.size())
+
+        for i in range(0, len(itemList)): # for(int i = 0; i < itemList.size(); i++)
+            if itemList[i].data(OBJ_TYPE) != OBJ_TYPE_NULL:
+                base = itemList[i] # BaseObject* base = static_cast<BaseObject*>(itemList.at(i));
+                if base:
+                    cmd = UndoableDeleteCommand(self.tr("Delete 1 ") + base.data(OBJ_NAME), base, self, None)
+                    if cmd:
+                        self.undoStack.push(cmd)
+
+        if numSelected > 1:
+            self.undoStack.endMacro()
+
+    @Slot(float, float)
     def moveSelected(self, dx, dy):
         """
         TOWRITE
@@ -2344,24 +1907,124 @@ class View(QGraphicsView):
         :type `dy`: qreal
         """
         itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
-        numSelected = itemList.size() # int
+        numSelected = len(itemList)  # itemList.size() # int
         if numSelected > 1:
-            undoStack.beginMacro("Move " + QString().setNum(itemList.size()))
+            self.undoStack.beginMacro("Move " + "%d" % len(itemList))  # QString().setNum(itemList.size())
 
         for item in itemList: # foreach(QGraphicsItem* item, itemList)
-
             base = item # BaseObject* base = static_cast<BaseObject*>(item);
             if base:
-                #TODO/PORT# UndoableMoveCommand* cmd = new UndoableMoveCommand(dx, dy, tr("Move 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+                cmd = UndoableMoveCommand(dx, dy, self.tr("Move 1 ") + base.data("OBJ_NAME"), base, self, None)
                 if cmd:
-                    undoStack.push(cmd)
+                    self.undoStack.push(cmd)
 
         if numSelected > 1:
-            undoStack.endMacro()
+            self.undoStack.endMacro()
 
         # Always clear the selection after a move
         self.gscene.clearSelection()
 
+    @Slot()
+    def cut(self):
+        """
+        TOWRITE
+        """
+        if not len(self.gscene.selectedItems()):  # .isEmpty()
+            QMessageBox.information(self, self.tr("Cut Preselect"), self.tr("Preselect objects before invoking the cut command."))
+            return # TODO: Prompt to select objects if nothing is preselected
+
+        self.undoStack.beginMacro("Cut")
+        self.copySelected()
+        self.deleteSelected()
+        self.undoStack.endMacro()
+
+    @Slot()
+    def copy(self):
+        """
+        TOWRITE
+        """
+        if not len(self.gscene.selectedItems()):  # .isEmpty()
+            QMessageBox.information(self, self.tr("Copy Preselect"), self.tr("Preselect objects before invoking the copy command."))
+            return # TODO: Prompt to select objects if nothing is preselected
+
+        self.copySelected()
+        self.clearSelection()
+
+    @Slot()
+    def paste(self):
+        """
+        TOWRITE
+        """
+        if self.pastingActive:
+            self.gscene.removeItem(self.pasteObjectItemGroup)
+            del self.pasteObjectItemGroup
+
+        self.pasteObjectItemGroup = self.gscene.createItemGroup(self.mainWin.cutCopyObjectList)
+        self.pasteDelta = self.pasteObjectItemGroup.boundingRect().bottomLeft()
+        self.pasteObjectItemGroup.setPos(self.sceneMousePoint - self.pasteDelta)
+        self.pastingActive = True
+
+        # Re-create the list in case of multiple pastes
+        self.mainWin.cutCopyObjectList = self.createObjectList(self.mainWin.cutCopyObjectList)
+
+    @Slot()
+    def repeatAction(self):
+        """
+        TOWRITE
+        """
+        mainWin.prompt.endCommand()
+        mainWin.prompt.setCurrentText(mainWin.prompt.lastCommand())
+        mainWin.prompt.processInput()
+
+    @Slot()
+    def moveAction(self):
+        """
+        TOWRITE
+        """
+        mainWin.prompt.endCommand()
+        mainWin.prompt.setCurrentText("move")
+        mainWin.prompt.processInput()
+
+    @Slot()
+    def scaleAction(self):
+        """
+        TOWRITE
+        """
+        mainWin.prompt.endCommand()
+        mainWin.prompt.setCurrentText("scale")
+        mainWin.prompt.processInput()
+
+    @Slot(float, float, float)
+    def scaleSelected(self, x, y, factor):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: qreal
+        :param `y`: TOWRITE
+        :type `y`: qreal
+        :param `factor`: TOWRITE
+        :type `factor`: qreal
+        """
+        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
+        numSelected = len(itemList)  # itemList.size() # int
+        if numSelected > 1:
+            self.undoStack.beginMacro("Scale " + "%d" % len(itemList))  # QString().setNum(itemList.size())
+
+        for item in itemList: # foreach(QGraphicsItem* item, itemList)
+            base = item # BaseObject* base = static_cast<BaseObject*>(item);
+            if base:
+                cmd = UndoableScaleCommand(x, y, factor, self.tr("Scale 1 ") + base.data("OBJ_NAME"), base, self, None)
+                if cmd:
+                    self.undoStack.push(cmd)
+
+        if numSelected > 1:
+            self.undoStack.endMacro()
+
+        # Always clear the selection after a scale
+        self.gscene.clearSelection()
+
+    @Slot()
     def rotateAction(self):
         """
         TOWRITE
@@ -2370,6 +2033,7 @@ class View(QGraphicsView):
         mainWin.prompt.setCurrentText("rotate")
         mainWin.prompt.processInput()
 
+    @Slot(float, float, float)
     def rotateSelected(self, x, y, rot):
         """
         TOWRITE
@@ -2382,23 +2046,24 @@ class View(QGraphicsView):
         :type `rot`: qreal
         """
         itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
-        numSelected = itemList.size() # int
+        numSelected = len(itemList)  # itemList.size() # int
         if numSelected > 1:
-            undoStack.beginMacro("Rotate " + QString().setNum(itemList.size()))
+            self.undoStack.beginMacro("Rotate " + "%d" % len(itemList))  # QString().setNum(itemList.size())
 
         for item in itemList: # foreach(QGraphicsItem* item, itemList)
             base = item # BaseObject* base = static_cast<BaseObject*>(item);
             if base:
-                #TODO/PORT# UndoableRotateCommand* cmd = new UndoableRotateCommand(x, y, rot, tr("Rotate 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+                cmd = UndoableRotateCommand(x, y, rot, self.tr("Rotate 1 ") + base.data("OBJ_NAME"), base, self, None)
                 if cmd:
-                    undoStack.push(cmd)
+                    self.undoStack.push(cmd)
 
         if numSelected > 1:
-            undoStack.endMacro()
+            self.undoStack.endMacro()
 
         # Always clear the selection after a rotate
         self.gscene.clearSelection()
 
+    @Slot(float, float, float, float)
     def mirrorSelected(self, x1, y1, x2, y2):
         """
         TOWRITE
@@ -2413,68 +2078,77 @@ class View(QGraphicsView):
         :type `y2`: qreal
         """
         itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
-        numSelected = itemList.size() # int
+        numSelected = len(itemList)  # itemList.size() # int
         if numSelected > 1:
-            undoStack.beginMacro("Mirror " + QString().setNum(itemList.size()))
+            self.undoStack.beginMacro("Mirror " + "%d" % len(itemList))  # QString().setNum(itemList.size())
 
         for item in itemList: # foreach(QGraphicsItem* item, itemList)
             base = item # BaseObject* base = static_cast<BaseObject*>(item);
             if base:
-                #TODO/PORT# UndoableMirrorCommand* cmd = new UndoableMirrorCommand(x1, y1, x2, y2, tr("Mirror 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
+                cmd = UndoableMirrorCommand(x1, y1, x2, y2, self.tr("Mirror 1 ") + base.data("OBJ_NAME"), base, self, None)
                 if cmd:
-                    undoStack.push(cmd)
+                    self.undoStack.push(cmd)
 
         if numSelected > 1:
-            undoStack.endMacro()
+            self.undoStack.endMacro()
 
         # Always clear the selection after a mirror
         self.gscene.clearSelection()
 
-    def scaleAction(self):
-        """
-        TOWRITE
-        """
-        mainWin.prompt.endCommand()
-        mainWin.prompt.setCurrentText("scale")
-        mainWin.prompt.processInput()
-
-    def scaleSelected(self, x, y, factor):
-        """
-        TOWRITE
-
-        :param `x`: TOWRITE
-        :type `x`: qreal
-        :param `y`: TOWRITE
-        :type `y`: qreal
-        :param `factor`: TOWRITE
-        :type `factor`: qreal
-        """
-        itemList = self.gscene.selectedItems() # QList<QGraphicsItem*>
-        numSelected = itemList.size() # int
-        if numSelected > 1:
-            undoStack.beginMacro("Scale " + QString().setNum(itemList.size()))
-
-        for item in itemList: # foreach(QGraphicsItem* item, itemList)
-            base = item # BaseObject* base = static_cast<BaseObject*>(item);
-            if base:
-                #TODO/PORT# UndoableScaleCommand* cmd = new UndoableScaleCommand(x, y, factor, tr("Scale 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
-                if cmd:
-                    undoStack.push(cmd)
-
-        if numSelected > 1:
-            undoStack.endMacro()
-
-        # Always clear the selection after a scale
-        self.gscene.clearSelection()
-
+    @Slot()
     def numSelected(self):
         """
         TOWRITE
 
         :rtype: int
         """
-        return self.gscene.selectedItems().size()
+        return len(self.gscene.selectedItems())  # .size()
 
+    @Slot()
+    def deletePressed(self):
+        """
+        TOWRITE
+        """
+        qDebug("View deletePressed()")
+        if self.pastingActive:
+            self.gscene.removeItem(self.pasteObjectItemGroup)
+            del self.pasteObjectItemGroup
+
+        self.pastingActive = False
+        self.zoomWindowActive = False
+        self.selectingActive = False
+        self.selectBox.hide()
+        self.stopGripping(False)
+        self.deleteSelected()
+
+    @Slot()
+    def escapePressed(self):
+        """
+        TOWRITE
+        """
+        qDebug("View escapePressed()")
+        if self.pastingActive:
+            self.gscene.removeItem(self.pasteObjectItemGroup)
+            del self.pasteObjectItemGroup
+
+        self.pastingActive = False
+        self.zoomWindowActive = False
+        self.selectingActive = False
+        self.selectBox.hide()
+        if self.grippingActive:
+            self.stopGripping(False)
+        else:
+            self.clearSelection()
+
+    @Slot()
+    def cornerButtonClicked(self):
+        """
+        TOWRITE
+        """
+        qDebug("Corner Button Clicked.")
+        self.mainWin.actionHash.value(self.mainWin.getSettingsDisplayScrollBarWidgetNum()).trigger()
+
+    @Slot(bool)
     def showScrollBars(self, val):
         """
         TOWRITE
@@ -2489,6 +2163,29 @@ class View(QGraphicsView):
             self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
             self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
+    @Slot()
+    def setCornerButton(self):
+        """
+        TOWRITE
+        """
+        num = mainWin.getSettingsDisplayScrollBarWidgetNum() # int
+        if num:
+            cornerButton = QPushButton(self)
+            cornerButton.setFlat(True)
+            act = self.mainWin.actionHash[num] # QAction*
+            # NOTE: Prevent crashing if the action is NULL.
+            if not act:
+                QMessageBox.information(self, self.tr("Corner Widget Error"), self.tr("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."))
+                pass #TODO/PORT# self.setCornerWidget(0)
+            else:
+                cornerButton.setIcon(act.icon())
+                self.connect(cornerButton, SIGNAL("clicked()"), self, SLOT("cornerButtonClicked()"))
+                self.setCornerWidget(cornerButton)
+                cornerButton.setCursor(Qt.ArrowCursor)
+        else:
+            pass #TODO/PORT# self.setCornerWidget(0)
+
+    @Slot(int)  ## @Slot(QRgb)
     def setCrossHairColor(self, color):
         """
         TOWRITE
@@ -2497,10 +2194,27 @@ class View(QGraphicsView):
         :type `color`: QRgb
         """
         self.crosshairColor = color
-        self.gscene.setProperty(VIEW_COLOR_CROSSHAIR, color)
+        self.gscene.setProperty("VIEW_COLOR_CROSSHAIR", color)
         if self.gscene:
             self.gscene.update()
 
+    @Slot(int)
+    def setCrossHairSize(self, percent):
+        """
+        TOWRITE
+
+        :param `percent`: TOWRITE
+        :type `percent`: quint8
+        """
+        # NOTE: crosshairSize is in pixels and is a percentage of your screen width
+        # NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
+        screenWidth = QApplication.desktop().width() # quint32
+        if percent > 0 and percent < 100:
+            self.crosshairSize = (screenWidth * (percent / 100.0)) / 2
+        else:
+            self.crosshairSize = screenWidth
+
+    @Slot(int)  ## @Slot(QRgb)
     def setBackgroundColor(self, color):
         """
         TOWRITE
@@ -2509,10 +2223,11 @@ class View(QGraphicsView):
         :type `color`: QRgb
         """
         self.setBackgroundBrush(QColor(color))
-        self.gscene.setProperty(VIEW_COLOR_BACKGROUND, color)
+        self.gscene.setProperty("VIEW_COLOR_BACKGROUND", color)
         if self.gscene:
             self.gscene.update()
 
+    @Slot(int, int, int, int, int)  ## @Slot(QRgb, QRgb, QRgb, QRgb, int)
     def setSelectBoxColors(self, colorL, fillL, colorR, fillR, alpha):
         """
         TOWRITE
@@ -2529,6 +2244,432 @@ class View(QGraphicsView):
         :type `alpha`: int
         """
         self.selectBox.setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha)
+
+    @Slot(bool)
+    def toggleSnap(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleSnap()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        # TODO: finish this
+        self.gscene.setProperty(ENABLE_SNAP, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleGrid(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleGrid()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        if on:
+            self.createGrid(self.mainWin.getSettingsGridType())
+        else:
+            self.createGrid("")
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleRuler(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        mainWin = self.mainWin
+        qDebug("View toggleRuler()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.gscene.setProperty(ENABLE_RULER, on)
+        self.rulerMetric = mainWin.getSettingsRulerMetric()
+        self.rulerColor = QColor(mainWin.getSettingsRulerColor())
+        self.rulerPixelSize = mainWin.getSettingsRulerPixelSize()
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleOrtho(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleOrtho()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        # TODO: finish this
+        self.gscene.setProperty(ENABLE_ORTHO, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def togglePolar(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View togglePolar()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        # TODO: finish this
+        self.gscene.setProperty(ENABLE_POLAR, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleQSnap(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleQSnap()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.qSnapToggle = on
+        self.gscene.setProperty(ENABLE_QSNAP, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleQTrack(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleQTrack()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        # TODO: finish this
+        self.gscene.setProperty(ENABLE_QTRACK, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleLwt(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleLwt()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.gscene.setProperty(ENABLE_LWT, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def toggleReal(self, on):
+        """
+        TOWRITE
+
+        :param `on`: TOWRITE
+        :type `on`: bool
+        """
+        qDebug("View toggleReal()")
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.gscene.setProperty(ENABLE_REAL, on)
+        self.gscene.update()
+        QApplication.restoreOverrideCursor()
+
+    @Slot(bool)
+    def isLwtEnabled(self):
+        """
+        TOWRITE
+
+        :rtype: bool
+        """
+        return self.gscene.property(ENABLE_LWT)  # .toBool()
+
+    @Slot(bool)
+    def isRealEnabled(self):
+        """
+        TOWRITE
+
+        :rtype: bool
+        """
+        return self.gscene.property(ENABLE_REAL)  # .toBool()
+
+    @Slot(int)  ## @Slot(QRgb)
+    def setGridColor(self, color):
+        """
+        TOWRITE
+
+        :param `color`: TOWRITE
+        :type `color`: QRgb
+        """
+        gridColor = QColor(color)
+        self.gscene.setProperty("VIEW_COLOR_GRID", color)
+        if self.gscene:
+            self.gscene.update()
+
+    @Slot(str)
+    def createGrid(self, gridType):
+        """
+        TOWRITE
+
+        :param `gridType`: TOWRITE
+        :type `gridType`: QString
+        """
+        if gridType == "Rectangular":
+            self.createGridRect()
+            self.gscene.setProperty(ENABLE_GRID, True)
+        elif gridType == "Circular":
+            self.createGridPolar()
+            self.gscene.setProperty(ENABLE_GRID, True)
+        elif gridType == "Isometric":
+            self.createGridIso()
+            self.gscene.setProperty(ENABLE_GRID, True)
+        else:
+            self.gridPath = QPainterPath()
+            self.gscene.setProperty(ENABLE_GRID, False)
+
+        self.createOrigin()
+
+        self.gscene.update()
+
+    @Slot(int)  ## @Slot(QRgb)
+    def setRulerColor(self, color):
+        """
+        TOWRITE
+
+        :param `color`: TOWRITE
+        :type `color`: QRgb
+        """
+        self.rulerColor = QColor(color)
+        self.gscene.update()
+
+    @Slot(int, int, float, float, float)
+    def previewOn(self, clone, mode, x, y, data):
+        """
+        TOWRITE
+
+        :param `clone`: TOWRITE
+        :type `clone`: int
+        :param `mode`: TOWRITE
+        :type `mode`: int
+        :param `x`: TOWRITE
+        :type `x`: qreal
+        :param `y`: TOWRITE
+        :type `y`: qreal
+        :param `data`: TOWRITE
+        :type `data`: qreal
+        """
+        qDebug("View previewOn()")
+        self.previewOff()  # Free the old objects before creating new ones
+
+        self.previewMode = mode
+
+        # Create new objects and add them to the scene in an item group.
+        if clone == PREVIEW_CLONE_SELECTED:
+            self.previewObjectList = self.createObjectList(self.gscene.selectedItems())
+        elif clone == PREVIEW_CLONE_RUBBER:
+            self.previewObjectList = self.createObjectList(self.rubberRoomList)
+        else:
+            return
+        self.previewObjectItemGroup = self.gscene.createItemGroup(self.previewObjectList)
+
+        if (previewMode == PREVIEW_MODE_MOVE or
+                previewMode == PREVIEW_MODE_ROTATE or
+                previewMode == PREVIEW_MODE_SCALE):
+
+            self.previewPoint = QPointF(x, y)  # NOTE: Move: basePt; Rotate: basePt;   Scale: basePt;
+            self.previewData = data            # NOTE: Move: unused; Rotate: refAngle; Scale: refFactor;
+            self.previewActive = True
+        else:
+            self.previewMode = PREVIEW_MODE_NULL
+            self.previewPoint = QPointF()
+            self.previewData = 0
+            self.previewActive = False
+
+        self.gscene.update()
+
+    @Slot()
+    def previewOff(self):
+        """
+        TOWRITE
+        """
+        # Prevent memory leaks by deleting any unused instances
+        #TODO/PORT# Check if this is the right way of deleting.
+        for obj in self.previewObjectList: del obj   # qDeleteAll(previewObjectList.begin(), previewObjectList.end())
+        self.previewObjectList = []                  # previewObjectList.clear()
+
+        if self.previewObjectItemGroup:
+            self.gscene.removeItem(self.previewObjectItemGroup)
+            del self.previewObjectItemGroup
+            self.previewObjectItemGroup = 0
+
+        self.previewActive = False
+
+        self.gscene.update()
+
+    @Slot()
+    def enableMoveRapidFire(self):
+        """
+        TOWRITE
+        """
+        self.rapidMoveActive = True
+
+    @Slot()
+    def disableMoveRapidFire(self):
+        """
+        TOWRITE
+        """
+        self.rapidMoveActive = False
+
+    @Slot()
+    def allowRubber(self):
+        """
+        TOWRITE
+
+        :rtype: bool
+        """
+        if not self.rubberRoomList:  # TODO: this check should be removed later
+            return True
+        return False
+
+    @Slot(QGraphicsItem)
+    def addToRubberRoom(self, item):
+        """
+        TOWRITE
+
+        :param `item`: TOWRITE
+        :type `item`: `QGraphicsItem`_
+        """
+        self.rubberRoomList.append(item)
+        item.show()
+        self.gscene.update()
+
+    @Slot()
+    def vulcanizeRubberRoom(self):
+        """
+        TOWRITE
+        """
+        for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
+            #TODO/PORT# BaseObject* base = static_cast<BaseObject*>(item);
+            base = item
+            if base:
+                self.vulcanizeObject(base)
+
+        self.rubberRoomList = []  #.clear()
+        self.gscene.update()
+
+    @Slot()
+    def clearRubberRoom(self):
+        """
+        TOWRITE
+        """
+        spareRubberList = self.spareRubberList
+        for item in self.rubberRoomList:  # foreach(QGraphicsItem* item, rubberRoomList)
+
+            base = item # BaseObject* base = static_cast<BaseObject*>(item);
+            if base:
+
+                type = base.type() # int
+                if ((type == OBJ_TYPE_PATH     and SPARE_RUBBER_PATH in spareRubberList)     or
+                    (type == OBJ_TYPE_POLYGON  and SPARE_RUBBER_POLYGON in spareRubberList)  or
+                    (type == OBJ_TYPE_POLYLINE and SPARE_RUBBER_POLYLINE in spareRubberList) or
+                    (base.objectID() in spareRubberList)):
+
+                    if not base.objectPath().elementCount():
+
+                        QMessageBox.critical(self, self.tr("Empty Rubber Object Error"),
+                                              self.tr("The rubber object added contains no points. "
+                                              "The command that created this object has flawed logic. "
+                                              "The object will be deleted."))
+                        self.gscene.removeItem(item)
+                        del item
+
+                    else:
+                        self.vulcanizeObject(base)
+
+                else:
+                    self.gscene.removeItem(item)
+                    del item
+
+        self.rubberRoomList = []  #.clear()
+        self.spareRubberList = []  # .clear()
+        self.gscene.update()
+
+    @Slot(int)
+    def spareRubber(self, id):
+        """
+        TOWRITE
+
+        :param `id`: TOWRITE
+        :type `id`: qint64
+        """
+        self.spareRubberList.append(id)
+
+    @Slot(int)
+    def setRubberMode(self, mode):
+        """
+        TOWRITE
+
+        :param `mode`: TOWRITE
+        :type `mode`: int
+        """
+        ## for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
+        ##     base = item # BaseObject* base = static_cast<BaseObject*>(item);
+        ##     if base:
+        ##         base.setObjectRubberMode(mode)
+        # Optimized as a python list comprehension generator.
+        [item.setObjectRubberMode(mode)
+            for item in self.rubberRoomList if item]
+
+        self.gscene.update()
+
+    @Slot(str, QPointF)  ## @Slot(QString, QPointF)
+    def setRubberPoint(self, key, point):
+        """
+        TOWRITE
+
+        :param `key`: TOWRITE
+        :type `key`: QString
+        :param `point`: TOWRITE
+        :type `point`: `QPointF`_
+        """
+        ## for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
+        ##     base = item # BaseObject* base = static_cast<BaseObject*>(item);
+        ##     if base:
+        ##         base.setObjectRubberPoint(key, point)
+        # Optimized as a python list comprehension generator.
+        [item.setObjectRubberPoint(key, point)
+            for item in self.rubberRoomList if item]
+
+        self.gscene.update()
+
+    @Slot(str, str)  ## @Slot(QString, QString)
+    def setRubberText(self, key, txt):
+        """
+        TOWRITE
+
+        :param `key`: TOWRITE
+        :type `key`: QString
+        :param `txt`: TOWRITE
+        :type `txt`: QString
+        """
+        ## for item in self.rubberRoomList: # foreach(QGraphicsItem* item, rubberRoomList)
+        ##     base = item # BaseObject* base = static_cast<BaseObject*>(item);
+        ##     if base:
+        ##         base.setObjectRubberText(key, txt)
+        # Optimized as a python list comprehension generator.
+        [item.setObjectRubberText(key, txt)
+            for item in self.rubberRoomList if item]
+
+        self.gscene.update()
+
+
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

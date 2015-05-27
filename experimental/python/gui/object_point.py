@@ -24,24 +24,25 @@ Classes summary:
 
 #-Imports.---------------------------------------------------------------------
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_TYPE_POINT, OBJ_TYPE, OBJ_NAME, OBJ_NAME_POINT,
+    ENABLE_LWT, OBJ_RUBBER_GRIP, OBJ_RUBBER_OFF)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-point.h"
@@ -60,7 +61,10 @@ class PointObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, x, y, rgb, parent):
+
+    Type = OBJ_TYPE_POINT
+
+    def __init__(self, x, y, rgb, parent=None):
         #OVERLOADED IMPL?# PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -76,7 +80,7 @@ class PointObject(BaseObject):
         """
         super(PointObject, self).__init__(parent)
 
-        qDebug("PointObject Constructor()");
+        qDebug("PointObject Constructor()")
         self.init(x, y, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -101,7 +105,7 @@ class PointObject(BaseObject):
         :param `lineType`: TOWRITE
         :type `lineType`: Qt.PenStyle
         """
-        self.setData(OBJ_TYPE, type())
+        self.setData(OBJ_TYPE, self.type())
         self.setData(OBJ_NAME, OBJ_NAME_POINT)
 
         # WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
@@ -111,10 +115,10 @@ class PointObject(BaseObject):
 
         self.setRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002)
         self.setObjectPos(x, y)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
-        self.setPen(objectPen())
+        self.setPen(self.objectPen())
 
     def paint(self, painter, option, widget):
         """
@@ -133,16 +137,16 @@ class PointObject(BaseObject):
 
         paintPen = self.pen()  # QPen
         painter.setPen(paintPen)
-        updateRubber(painter)
+        self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
-            paintPen = lineWeightPen()
+        if objScene.property(ENABLE_LWT):  # .toBool()
+            paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
         painter.drawPoint(0, 0)
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -155,7 +159,7 @@ class PointObject(BaseObject):
                 gripPoint = self.objectRubberPoint("GRIP_POINT")  # QPointF
                 if gripPoint == self.scenePos():
                     rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
-                    self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                    self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """
@@ -184,7 +188,7 @@ class PointObject(BaseObject):
         """
         ## QList<QPointF> gripPoints;
         ## gripPoints << scenePos()
-        gripPoints = list(self.scenePos())  # TODO: Check if this would be right...
+        gripPoints = [self.scenePos()]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -209,6 +213,80 @@ class PointObject(BaseObject):
         path = QPainterPath()
         path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002)
         return path
+
+    def objectPos(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: `QPointF`_
+        """
+        return self.scenePos()
+
+    def objectX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.scenePos().x()
+
+    def objectY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.scenePos().y()
+
+    # pythonic setObjectPos overload
+    @signature(QPointF)
+    def setObjectPosFromPoint(self, point):
+        """
+        TOWRITE
+
+        :param `point`: TOWRITE
+        :type `point`: `QPointF`_
+        """
+        self.setPos(point.x(), point.y())
+
+    # pythonic setObjectPos overload
+    @signature(float, float)
+    def setObjectPosFromXY(self, x, y):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        :param y`: TOWRITE
+        :type `y`: float
+        """
+        self.setPos(x, y)
+
+    @overloaded(setObjectPosFromPoint, setObjectPosFromXY)
+    def setObjectPos(self, *args):
+        """ TOWRITE """
+        pass
+
+    def setObjectX(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
+        self.setObjectPos(x, self.objectY())
+
+    def setObjectY(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
+        self.setObjectPos(self.objectX(), y)
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;

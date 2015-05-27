@@ -236,7 +236,6 @@ class MDIArea(QMdiArea):
         :type `fileName`: QString
         """
         self.bgLogo.load(fileName)
-
         ForceRepaint(self)
 
     def setBackgroundTexture(self, fileName):
@@ -247,7 +246,6 @@ class MDIArea(QMdiArea):
         :type `fileName`: QString
         """
         self.bgTexture.load(fileName)
-
         ForceRepaint(self)
 
     def setBackgroundColor(self, color):
@@ -261,7 +259,6 @@ class MDIArea(QMdiArea):
             self.bgColor = background().color()
         else:
             self.bgColor = color
-
         ForceRepaint(self)
 
 
@@ -363,21 +360,21 @@ class MDIArea(QMdiArea):
 
         :param `event`: A `QMouseEvent`_ to be processed.
         """
-        # print(event.button())
+        # qDebug(event.button())
         evtBtn = event.button()
         if evtBtn == Qt.LeftButton: # return 1
-            print('LeftClick')
+            qDebug('LeftClick')
         elif evtBtn == Qt.RightButton: # return 2
-            print('RightClick')
+            qDebug('RightClick')
         elif evtBtn == Qt.MiddleButton: # return 4
-            print('MiddleClick')
+            qDebug('MiddleClick')
         elif evtBtn == Qt.XButton1: # Aux1 return 8
             self.activatePreviousSubWindow()
-            print('Aux1Click')
+            qDebug('Aux1Click')
         elif evtBtn == Qt.XButton2: # Aux2 return 16
             self.activateNextSubWindow()
-            print('Aux2Click')
-        print("QMdiArea mousePressEvent")
+            qDebug('Aux2Click')
+        qDebug("QMdiArea mousePressEvent")
 
     def mouseMoveEvent(self, event):
         """
@@ -386,7 +383,7 @@ class MDIArea(QMdiArea):
         :param `event`: A `QMouseEvent`_ to be processed.
         """
         # Dragging while MouseButton is down.
-        print("QMdiArea mouseMoveEvent")
+        qDebug("QMdiArea mouseMoveEvent")
 
     def mouseReleaseEvent(self, event):
         """
@@ -394,7 +391,7 @@ class MDIArea(QMdiArea):
 
         :param `event`: A `QMouseEvent`_ to be processed.
         """
-        print("QMdiArea mouseReleaseEvent")
+        qDebug("QMdiArea mouseReleaseEvent")
 
     def moveEvent(self, event):
         """
@@ -403,7 +400,7 @@ class MDIArea(QMdiArea):
         :param `event`: A `QMoveEvent`_ to be processed.
         """
         # Dragging while MouseButton is down.
-        print("QMdiArea moveEvent")
+        qDebug("QMdiArea moveEvent")
 
     def contextMenuEvent(self, event):
         """
@@ -428,7 +425,7 @@ class MDIArea(QMdiArea):
             gMainWin.gMenu_File.popup(self.mapToGlobal(event.pos()))
 
         event.accept()
-        print("QMdiArea contextMenuEvent")
+        qDebug("QMdiArea contextMenuEvent")
 
     def DoSetBackground(self, brush=None):
         """
@@ -704,7 +701,7 @@ class EmbroidermodderMainWindow(QMainWindow):
         #TODO# self.gDockWindow_History.setFocusProxy(activeSubWindow)
         #TODO# self.gDockWindow_History.undoView.setFocusProxy(activeSubWindow)
         # print('self.activeMdiChild().filePath = %s' % self.GetActiveMDISubWindow().filePath)
-        print('DoMenuUpdates')
+        qDebug('DoMenuUpdates')
 
     def GetActiveMDISubWindow(self):
         """"""
@@ -717,7 +714,7 @@ class EmbroidermodderMainWindow(QMainWindow):
         """"""
         if window:
             self.gMDIArea.setActiveSubWindow(window)
-        print('DoSetActiveSubWindow')
+        qDebug('DoSetActiveSubWindow')
 
     def CenterOnScreen(self): # wxPython MethodName
         """
@@ -2040,14 +2037,15 @@ gToolBar_Icon.addAction(self.action_Icon%d)
 
     def CreateStatusBar(self):
         """Create the StatusBar"""
-        self.gStatusBar = StatusBar(self)
+        self.gStatusBar = StatusBar(self, self)
         self.setStatusBar(self.gStatusBar)
         self.gStatusBar.hide()
 
     def CreateDockWindows(self):
         """Create the DockWindows."""
         self.gDockWindow_Properties = gDockWindow_Properties = PropertyEditor(
-            iconDirectory=gIconDir, pickAddMode=False, widgetToFocus=None, title=self.tr('Properties'), parent=self)
+            # iconDirectory=gIconDir, pickAddMode=False, widgetToFocus=None, title=self.tr('Properties'), parent=self)
+            iconDirectory=gIconDir, pickAddMode=False, widgetToFocus=None, parent=self)
         # self.gDockWindow_Properties = gDockWindow_Properties = QDockWidget("Properties", self)
         # gDockWindow_Properties.setAllowedAreas(Qt.LeftDockWidgetArea | Qt.RightDockWidgetArea)
         # self.propertiesList = QListWidget(gDockWindow_Properties)

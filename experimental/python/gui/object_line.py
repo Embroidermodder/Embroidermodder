@@ -27,26 +27,28 @@ Classes summary:
 from math import sin as qSin
 from math import cos as qCos
 from math import radians
+qMin = min
 
 #--PySide/PyQt Imports.
-try:
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF
     from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-    PYSIDE = True
-    PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
-#    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    import sip
+    sip.setapi('QString', 2)
+    sip.setapi('QVariant', 2)
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF
+    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle
 
 #--Local Imports.
+from hacks import overloaded, signature
 from object_base import BaseObject
+from object_data import (OBJ_TYPE_LINE, OBJ_TYPE, OBJ_NAME, OBJ_NAME_LINE,
+    OBJ_RUBBER_OFF, OBJ_RUBBER_GRIP, OBJ_RUBBER_LINE, ENABLE_LWT, ENABLE_REAL)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "object-line.h"
@@ -65,7 +67,10 @@ class LineObject(BaseObject):
     TOWRITE
 
     """
-    def __init__(self, x1, y1, x2, y2, rgb, parent):
+
+    Type = OBJ_TYPE_LINE
+
+    def __init__(self, x1, y1, x2, y2, rgb, parent=None):
         #OVERLOADED IMPL?# LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
         """
         Default class constructor.
@@ -85,7 +90,7 @@ class LineObject(BaseObject):
         """
         super(LineObject, self).__init__(parent)
 
-        qDebug("LineObject Constructor()");
+        qDebug("LineObject Constructor()")
         self.init(x1, y1, x2, y2, rgb, Qt.SolidLine)  # TODO: getCurrentLineType
 
         #OVERLOADED IMPL?# if obj:
@@ -113,7 +118,7 @@ class LineObject(BaseObject):
         :param `lineType`: TOWRITE
         :type `lineType`: Qt.PenStyle
         """
-        self.setData(OBJ_TYPE, type())
+        self.setData(OBJ_TYPE, self.type())
         self.setData(OBJ_NAME, OBJ_NAME_LINE)
 
         # WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
@@ -123,12 +128,14 @@ class LineObject(BaseObject):
 
         self.setObjectEndPoint1(x1, y1)
         self.setObjectEndPoint2(x2, y2)
-        self.setObjectColor(rgb)
+        self.setObjectColorRGB(rgb)
         self.setObjectLineType(lineType)
         self.setObjectLineWeight(0.35)  # TODO: pass in proper lineweight
         self.setPen(self.objectPen())
 
-    def setObjectEndPoint1(self, endPt1):
+    # pythonic setObjectEndPoint1 overload
+    @signature(QPointF)
+    def setObjectEndPoint1FromPoint(self, endPt1):
         """
         TOWRITE
 
@@ -137,7 +144,9 @@ class LineObject(BaseObject):
         """
         self.setObjectEndPoint1(endPt1.x(), endPt1.y())
 
-    def setObjectEndPoint1(self, x1, y1):
+    # pythonic setObjectEndPoint1 overload
+    @signature(float, float)
+    def setObjectEndPoint1FromXY(self, x1, y1):
         """
         TOWRITE
 
@@ -156,7 +165,14 @@ class LineObject(BaseObject):
         self.setLine(0, 0, dx, dy)
         self.setPos(x1, y1)
 
-    def setObjectEndPoint2(self, endPt2):
+    @overloaded(setObjectEndPoint1FromPoint, setObjectEndPoint1FromXY)
+    def setObjectEndPoint1(self, *args):
+        """ TOWRITE """
+        pass
+
+    # pythonic setObjectEndPoint2 overload
+    @signature(QPointF)
+    def setObjectEndPoint2FromPoint(self, endPt2):
         """
         TOWRITE
 
@@ -165,7 +181,9 @@ class LineObject(BaseObject):
         """
         self.setObjectEndPoint2(endPt2.x(), endPt2.y())
 
-    def setObjectEndPoint2(self, x2, y2):
+    # pythonic setObjectEndPoint2 overload
+    @signature(float, float)
+    def setObjectEndPoint2FromXY(self, x2, y2):
         """
         TOWRITE
 
@@ -184,6 +202,11 @@ class LineObject(BaseObject):
         self.setLine(0, 0, dx, dy)
         self.setPos(x1, y1)
 
+    @overloaded(setObjectEndPoint2FromPoint, setObjectEndPoint2FromXY)
+    def setObjectEndPoint2(self, *args):
+        """ TOWRITE """
+        pass
+
     def objectEndPoint2(self):
         """
         TOWRITE
@@ -191,11 +214,11 @@ class LineObject(BaseObject):
         :rtype: `QPointF`_
         """
         lyne = self.line()  # QLineF
-        rot = radians(rotation())             # qreal
+        rot = radians(self.rotation())        # qreal
         cosRot = qCos(rot)                    # qreal
         sinRot = qSin(rot)                    # qreal
-        x2 = lyne.x2() * scale()              # qreal
-        y2 = lyne.y2() * scale()              # qreal
+        x2 = lyne.x2() * self.scale()         # qreal
+        y2 = lyne.y2() * self.scale()         # qreal
         rotEnd2X = x2 * cosRot - y2 * sinRot  # qreal
         rotEnd2Y = x2 * sinRot + y2 * cosRot  # qreal
 
@@ -209,11 +232,11 @@ class LineObject(BaseObject):
         """
         lyne = self.line()  # QLineF
         mp = lyne.pointAt(0.5)  # QPointF
-        rot = radians(rotation())            # qreal
+        rot = radians(self.rotation())       # qreal
         cosRot = qCos(rot)                   # qreal
         sinRot = qSin(rot)                   # qreal
-        mx = mp.x() * scale()                # qreal
-        my = mp.y() * scale()                # qreal
+        mx = mp.x() * self.scale()           # qreal
+        my = mp.y() * self.scale()           # qreal
         rotMidX = mx * cosRot - my * sinRot  # qreal
         rotMidY = mx * sinRot + my * cosRot  # qreal
 
@@ -252,17 +275,17 @@ class LineObject(BaseObject):
         self.updateRubber(painter)
         if option.state & QStyle.State_Selected:
             paintPen.setStyle(Qt.DashLine)
-        if objScene.property(ENABLE_LWT).toBool():
-            paintPen = lineWeightPen()
+        if objScene.property(ENABLE_LWT):  # .toBool()
+            paintPen = self.lineWeightPen()
         painter.setPen(paintPen)
 
-        if objectRubberMode() != OBJ_RUBBER_LINE:
+        if self.objectRubberMode() != OBJ_RUBBER_LINE:
             painter.drawLine(self.line())
 
-        if (objScene.property(ENABLE_LWT).toBool() and objScene.property(ENABLE_REAL).toBool()):
-            realRender(painter, path())
+        if (objScene.property(ENABLE_LWT) and objScene.property(ENABLE_REAL)):  # .toBool()
+            self.realRender(painter, self.path())
 
-    def updateRubber(self, painter):
+    def updateRubber(self, painter=None):
         """
         TOWRITE
 
@@ -278,7 +301,7 @@ class LineObject(BaseObject):
             self.setObjectEndPoint1(sceneStartPoint)
             self.setObjectEndPoint2(sceneQSnapPoint)
 
-            self.drawRubberLine(self.line(), painter, VIEW_COLOR_CROSSHAIR)
+            self.drawRubberLine(self.line(), painter, "VIEW_COLOR_CROSSHAIR")
 
         elif rubberMode == OBJ_RUBBER_GRIP:
 
@@ -287,13 +310,13 @@ class LineObject(BaseObject):
                 gripPoint = self.objectRubberPoint("GRIP_POINT")  # QPointF
                 if gripPoint == self.objectEndPoint1():
                     painter.drawLine(self.line().p2(), self.mapFromScene(self.objectRubberPoint('')))
-                elif gripPoint == objectEndPoint2():
+                elif gripPoint == self.objectEndPoint2():
                     painter.drawLine(self.line().p1(), self.mapFromScene(self.objectRubberPoint('')))
-                elif gripPoint == objectMidPoint():
+                elif gripPoint == self.objectMidPoint():
                     painter.drawLine(self.line().translated(self.mapFromScene(self.objectRubberPoint('')) - self.mapFromScene(gripPoint)))
 
                 rubLine = QLineF(self.mapFromScene(gripPoint), self.mapFromScene(self.objectRubberPoint('')))
-                self.drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR)
+                self.drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR")
 
     def vulcanize(self):
         """
@@ -339,7 +362,11 @@ class LineObject(BaseObject):
         """
         ## QList<QPointF> gripPoints
         ## gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint()
-        gripPoints = list(self.objectEndPoint1() + self.objectEndPoint2() + self.objectMidPoint()) # TODO: Check if this would be right...
+        gripPoints = [
+            self.objectEndPoint1(),
+            self.objectEndPoint2(),
+            self.objectMidPoint(),
+            ]
         return gripPoints
 
     def gripEdit(self, before, after):
@@ -369,5 +396,103 @@ class LineObject(BaseObject):
         path.lineTo(self.objectDeltaX(), self.objectDeltaY())
         return path
 
+    def objectX1(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint1().x()
+
+    def objectY1(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint1().y()
+
+    def objectX2(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint2().x()
+
+    def objectY2(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.objectEndPoint2().y()
+
+    def objectDeltaX(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return (self.objectX2() - self.objectX1())
+
+    def objectDeltaY(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return (self.objectY2() - self.objectY1())
+
+    def objectLength(self):
+        """
+        TOWRITE
+
+        :return: TOWRITE
+        :rtype: float
+        """
+        return self.line().length() * self.scale()
+
+    def setObjectX1(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
+        self.setObjectEndPoint1(x, self.objectY1())
+
+    def setObjectY1(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
+        self.setObjectEndPoint1(self.objectX1(), y)
+
+    def setObjectX2(self, x):
+        """
+        TOWRITE
+
+        :param `x`: TOWRITE
+        :type `x`: float
+        """
+        self.setObjectEndPoint2(x, self.objectY2())
+
+    def setObjectY2(self, y):
+        """
+        TOWRITE
+
+        :param `y`: TOWRITE
+        :type `y`: float
+        """
+        self.setObjectEndPoint2(self.objectX2(), y)
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;
