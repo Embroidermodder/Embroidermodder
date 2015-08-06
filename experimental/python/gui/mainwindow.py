@@ -122,8 +122,9 @@ from object_dimleader import DimLeaderObject
 from native_scripting import initMainWinPointer
 
 #--libembroidery Imports.
-from libembroidery import embFormat_typeFromName, embFormatList_create, embFormatList_free, \
-    embFormat_extension, embFormat_description, embFormat_readerState, embFormat_writerState
+if not 'BUILDING_SPHINX_DOCS' in __builtins__:  # TEMP # Avoid sphinx docs error if bindings are not built yet.
+    from libembroidery import embFormat_typeFromName, embFormatList_create, embFormatList_free, \
+        embFormat_extension, embFormat_description, embFormat_readerState, embFormat_writerState
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "mainwindow.h"
@@ -190,6 +191,8 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
 
     Main Frame Window for Embroidermodder application.
 
+    .. sphinx_generate_methods_summary::
+       MainWindow
     """
     def __init__(self):
         """Default class constructor."""

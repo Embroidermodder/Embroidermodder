@@ -43,13 +43,14 @@ from object_data import *
 from object_base import BaseObject
 
 #--libembroidery Imports.
-from libembroidery import (embFormat_typeFromName, embPattern_create,
-    embReaderWriter_getByFileName, embPattern_movePolylinesToStitchList,
-    embPattern_addCircleObjectAbs, embPattern_addEllipseObjectAbs,
-    embPattern_addLineObjectAbs, embPattern_addPointObjectAbs, embColor_make,
-    embPattern_addRectObjectAbs, embPointList_create, embPointList_add,
-    embPoint_make, embPolylineObject_create, embPattern_addPolylineObjectAbs,
-    EMBFORMAT_UNSUPPORTED, EMBFORMAT_STITCHONLY)
+if not 'BUILDING_SPHINX_DOCS' in __builtins__:  # TEMP # Avoid sphinx docs error if bindings are not built yet.
+    from libembroidery import (embFormat_typeFromName, embPattern_create,
+        embReaderWriter_getByFileName, embPattern_movePolylinesToStitchList,
+        embPattern_addCircleObjectAbs, embPattern_addEllipseObjectAbs,
+        embPattern_addLineObjectAbs, embPattern_addPointObjectAbs, embColor_make,
+        embPattern_addRectObjectAbs, embPointList_create, embPointList_add,
+        embPoint_make, embPolylineObject_create, embPattern_addPolylineObjectAbs,
+        EMBFORMAT_UNSUPPORTED, EMBFORMAT_STITCHONLY)
 
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++

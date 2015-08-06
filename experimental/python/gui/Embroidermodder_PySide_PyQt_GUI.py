@@ -82,7 +82,7 @@ except ImportError:
 from emb_globals import *
 from KeyboardShortcuts import *
 
-from mainwindow_settings import DoReadSettings, DoWriteSettings, settingsDialog
+from mainwindow_settings import readSettings, writeSettings, settingsDialog
 
 import mdisubwindow_textedit
 from mdisubwindow_textedit import MDISubWindow_TextEdit
@@ -510,7 +510,7 @@ class EmbroidermodderMainWindow(QMainWindow):
         self.gIconDir = gIconDir
         self.gImgDir = gImgDir
 
-        DoReadSettings(self)
+        readSettings(self)
 
         mdisubwindow_textedit.initGlobals(self)
 
@@ -758,7 +758,7 @@ class EmbroidermodderMainWindow(QMainWindow):
                 return
 
         event.accept()
-        DoWriteSettings(self)
+        writeSettings(self)
 
     def OnNewFile(self):
         """"""

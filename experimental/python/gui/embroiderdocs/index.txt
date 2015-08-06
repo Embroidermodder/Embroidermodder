@@ -49,7 +49,10 @@ Contents:
    emb_globals
    embdetails_dialog
    hacks
+   mainwindow
    mainwindow_settings
+   mdiwindow
+   mdiarea
    mdisubwindow_textedit
    layer_manager
    object_arc

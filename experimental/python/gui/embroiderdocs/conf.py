@@ -23,6 +23,25 @@ sys.path.append(os.path.abspath('.'))
 sys.path.append('..')
 sys.path.insert(0, os.path.abspath('..'))
 
+# -- Builtin globals ------------------------------------------------------
+# Add these in here also so sphinx doesn't error out when one is found.
+if sys.version_info[0] == 2:
+    import __builtin__ as builtins
+else:
+    import builtins
+defaultBindings = "pyside"
+bindings = defaultBindings
+# make global to all modules
+if bindings == "pyside":
+    builtins.PYSIDE = True
+    builtins.PYQT4 = False
+elif bindings == "pyqt4":
+    builtins.PYSIDE = False
+    builtins.PYQT4 = True
+
+# Used only for avoiding sphinx docs build errors.
+builtins.BUILDING_SPHINX_DOCS = True
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -394,6 +413,9 @@ from docutils import nodes, statemachine
 
 # ONLY import the classes we will generate method_summary for.
 from .Embroidermodder_PySide_PyQt_GUI import EmbroidermodderMainWindow, MDIArea
+from .mainwindow import MainWindow
+from .mdiarea import MdiArea
+from .mdiwindow import MdiWindow
 from .embdetails_dialog import EmbDetailsDialog
 from .mdisubwindow_textedit import MDISubWindow_TextEdit
 from .property_editor import PropertyEditor
@@ -427,7 +449,12 @@ from .object_save import SaveObject
 from .layer_manager import LayerManager
 # ONLY allow valid class names! else you will might like the end result.
 AUTHORIZED_ALLOWED_CLASSNAME_EVIL_STRINGS = [
-    'EmbroidermodderMainWindow', 'MDIArea',
+    'EmbroidermodderMainWindow', 
+    'MDIArea',
+
+    'MainWindow', 
+    'MdiArea',
+    'MdiWindow',
     'EmbDetailsDialog',
     'MDISubWindow_TextEdit',
     'PropertyEditor',

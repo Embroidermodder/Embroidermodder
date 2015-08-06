@@ -57,7 +57,7 @@ from object_data import (OBJ_TYPE, OBJ_NAME, OBJ_NAME_PATH, ENABLE_LWT,
 
 class PathObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

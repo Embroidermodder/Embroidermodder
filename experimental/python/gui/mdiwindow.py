@@ -51,12 +51,13 @@ from object_data import OBJ_RUBBER_OFF, ENABLE_SNAP, ENABLE_GRID, ENABLE_RULER, 
     ENABLE_ORTHO, ENABLE_POLAR, ENABLE_QSNAP, ENABLE_QTRACK, ENABLE_LWT
 
 #--libembroidery Imports.
-from libembroidery import (embPattern_create, embReaderWriter_getByFileName,
-    embStitchList_count, embCircle_centerX, embCircle_centerY,
-    embCircle_radius, embEllipse_centerY, embRect_width, embEllipse_width,
-    embEllipse_height, embLine_x1, embLine_y1, embLine_x2, embLine_y2,
-    embPoint_x, embPoint_y, embRect_x, embRect_y, embRect_height, 
-    embEllipse_centerX, embPattern_moveStitchListToPolylines)
+if not 'BUILDING_SPHINX_DOCS' in __builtins__:  # TEMP # Avoid sphinx docs error if bindings are not built yet.
+    from libembroidery import (embPattern_create, embReaderWriter_getByFileName,
+        embStitchList_count, embCircle_centerX, embCircle_centerY,
+        embCircle_radius, embEllipse_centerY, embRect_width, embEllipse_width,
+        embEllipse_height, embLine_x1, embLine_y1, embLine_x2, embLine_y2,
+        embPoint_x, embPoint_y, embRect_x, embRect_y, embRect_height, 
+        embEllipse_centerX, embPattern_moveStitchListToPolylines)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include <QMdiSubWindow>
@@ -77,6 +78,9 @@ class MdiWindow(QMdiSubWindow):
     Subclass of `QMdiSubWindow`_
 
     TOWRITE
+
+    .. sphinx_generate_methods_summary::
+       MdiWindow
     """
     def __init__(self, theIndex, mw, parent=None, wflags=Qt.WindowFlags):
         """

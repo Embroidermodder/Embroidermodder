@@ -65,7 +65,7 @@ from object_data import (OBJ_NAME, OBJ_NAME_ELLIPSE, OBJ_TYPE, OBJ_TYPE_ELLIPSE,
 
 class EllipseObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

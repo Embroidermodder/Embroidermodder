@@ -56,7 +56,7 @@ from object_data import (OBJ_TYPE_POINT, OBJ_TYPE, OBJ_NAME, OBJ_NAME_POINT,
 
 class PointObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

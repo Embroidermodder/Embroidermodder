@@ -62,7 +62,7 @@ from object_data import (OBJ_TYPE_LINE, OBJ_TYPE, OBJ_NAME, OBJ_NAME_LINE,
 
 class LineObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

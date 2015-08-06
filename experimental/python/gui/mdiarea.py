@@ -45,6 +45,9 @@ class MdiArea(QMdiArea):  # MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : 
     Subclass of `QMdiArea`_
 
     TOWRITE
+
+    .. sphinx_generate_methods_summary::
+       MdiArea
     """
 
     def __init__(self, mw, parent=None):

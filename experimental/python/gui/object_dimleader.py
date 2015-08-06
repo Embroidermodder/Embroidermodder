@@ -81,7 +81,7 @@ Fletching = 2
 
 class DimLeaderObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

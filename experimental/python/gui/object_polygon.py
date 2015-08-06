@@ -57,7 +57,7 @@ from object_data import (OBJ_TYPE_POLYGON, OBJ_TYPE, OBJ_NAME, OBJ_NAME_POLYGON,
 
 class PolygonObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

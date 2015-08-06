@@ -63,7 +63,7 @@ from object_data import (OBJ_TYPE, OBJ_TYPE_IMAGE, OBJ_NAME, OBJ_NAME_IMAGE,
 
 class ImageObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

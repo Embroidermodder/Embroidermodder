@@ -58,7 +58,7 @@ from object_data import (OBJ_TYPE, OBJ_TYPE_POLYLINE, OBJ_NAME, ENABLE_LWT,
 
 class PolylineObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 
