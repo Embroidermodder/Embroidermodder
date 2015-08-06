@@ -38,11 +38,23 @@ elif sys.version_info[0] == 3:
 ##     sip.setapi('QVariant', 2)
 
 #--PySide/PyQt Imports.
-try:
+if sys.version_info[0] == 2:
+    import __builtin__ as builtins
+else:
+    import builtins
+defaultBindings = "pyside"
+bindings = defaultBindings
+# make global to all modules
+if bindings == "pyside":
+    builtins.PYSIDE = True
+    builtins.PYQT4 = False
+elif bindings == "pyqt4":
+    builtins.PYSIDE = False
+    builtins.PYQT4 = True
+if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     # Only import what we need into the global namespace
-    ## import causeIntentionalError
     from PySide.QtCore import __version_info__ as QtCore__version_info__
     from PySide.QtCore import __version__ as QtCore__version__
     from PySide.QtCore import qDebug, QFile, QFileInfo, QPoint, QPointF, QSettings, QSize, \
@@ -57,25 +69,23 @@ try:
         QKeyEvent, QUndoGroup, QUndoStack, QUndoView, QTextCharFormat, QTextLayout, QCompleter
     PYSIDE = True
     PYQT4 = False
-except ImportError:
-    raise
-#    ## from PyQt4 import QtCore, QtGui
-#    # or... Improve performace with less dots...
-#    # Only import what we need into the global namespace
-#    from PyQt4.QtCore import QT_VERSION_STR as QtCore_QT_VERSION_STR
-#    from PyQt4.QtCore import QT_VERSION as QtCore_QT_VERSION
-#    from PyQt4.QtCore import qDebug, QFile, QFileInfo, QPoint, QPointF, QSettings, QSize, \
-#        QTextStream, SIGNAL, QSignalMapper, QTimer, QTranslator, QIODevice, QEvent, QObject, Qt
-#    from PyQt4.QtGui import qRgb, QAbstractSlider, QAction, QActionGroup, QApplication, QBitmap, QBrush, \
-#        QColor, QComboBox, QDialog, QDockWidget, QFileDialog, \
-#        QFont, QFontComboBox, QFrame, QGradient, QLinearGradient, QHBoxLayout, QIcon, QKeySequence, QLabel, \
-#        QLineEdit, QListWidget, QMainWindow, QMdiArea, QMdiSubWindow, QMenu, QMessageBox, \
-#        QPainter, QPixmap, QPrintDialog, QSplitter, QSplitterHandle, \
-#        QTabWidget, QTextBrowser, QTextEdit, QTextOption, QToolBar, QToolButton, \
-#        QStatusBar, QVBoxLayout, QWidget, QWidgetAction, QWhatsThis, \
-#        QKeyEvent, QUndoGroup, QUndoStack, QUndoView, QTextCharFormat, QTextLayout, QCompleter
-#    PYSIDE = False
-#    PYQT4 = True
+elif PYQT4:
+    ## from PyQt4 import QtCore, QtGui
+    # or... Improve performace with less dots...
+    # Only import what we need into the global namespace
+    from PyQt4.QtCore import QT_VERSION_STR as QtCore_QT_VERSION_STR
+    from PyQt4.QtCore import QT_VERSION as QtCore_QT_VERSION
+    from PyQt4.QtCore import qDebug, QFile, QFileInfo, QPoint, QPointF, QSettings, QSize, \
+        QTextStream, SIGNAL, QSignalMapper, QTimer, QTranslator, QIODevice, QEvent, QObject, Qt
+    from PyQt4.QtGui import qRgb, QAbstractSlider, QAction, QActionGroup, QApplication, QBitmap, QBrush, \
+        QColor, QComboBox, QDialog, QDockWidget, QFileDialog, \
+        QFont, QFontComboBox, QFrame, QGradient, QLinearGradient, QHBoxLayout, QIcon, QKeySequence, QLabel, \
+        QLineEdit, QListWidget, QMainWindow, QMdiArea, QMdiSubWindow, QMenu, QMessageBox, \
+        QPainter, QPixmap, QPrintDialog, QSplitter, QSplitterHandle, \
+        QTabWidget, QTextBrowser, QTextEdit, QTextOption, QToolBar, QToolButton, \
+        QStatusBar, QVBoxLayout, QWidget, QWidgetAction, QWhatsThis, \
+        QKeyEvent, QUndoGroup, QUndoStack, QUndoView, QTextCharFormat, QTextLayout, QCompleter
+
 
 
 #--Local Imports.
