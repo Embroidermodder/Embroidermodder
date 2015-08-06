@@ -8,7 +8,7 @@
 
 TOWRITE
 
-These methods are to be imported into the MainWindow class directly.
+These methods are to be imported into the `MainWindow` class directly.
 
 """
 
@@ -21,15 +21,15 @@ qFabs = abs
 
 #--PySide/PyQt Imports.
 if PYSIDE:
-    from PySide.QtCore import qDebug, Qt, QUrl, QProcess, QSize, QPointF, \
-        QLineF, Slot
+    from PySide.QtCore import (qDebug, Qt, QUrl, QProcess, QSize, QPointF,
+        QLineF, Slot)
     from PySide.QtGui import (QMessageBox, QApplication, QCheckBox, QCursor,
             QLabel, QDesktopServices, QDialogButtonBox, qRgb, QFont,
             QPushButton, QMdiArea, QGraphicsScene, QComboBox, QWhatsThis,
             QWizard)
 elif PYQT4:
-    from PyQt4.QtCore import qDebug, Qt, QUrl, QProcess, QSize, QPointF, \
-        QLineF
+    from PyQt4.QtCore import (qDebug, Qt, QUrl, QProcess, QSize, QPointF,
+        QLineF)
     from PyQt4.QtCore import pyqtSlot as Slot
     from PyQt4.QtGui import (QMessageBox, QApplication, QCheckBox, QCursor,
             QLabel, QDesktopServices, QDialogButtonBox, qRgb, QFont,
@@ -108,7 +108,7 @@ def stub_implement(self, txt):
     :param `txt`: TOWRITE
     :type `txt`: QString
     """
-    qDebug("TODO: %s", qPrintable(txt))
+    qDebug("TODO: %s" % qPrintable(txt))
 
 @Slot()
 def stub_testing(self):
@@ -255,7 +255,7 @@ def platformString(self):
     #elif defined(Q_OS_WINCE)
     os = "Windows CE"
     #endif
-    qDebug("Platform: %s", qPrintable(os))
+    qDebug("Platform: %s" % qPrintable(os))
     return os
 
 @Slot()

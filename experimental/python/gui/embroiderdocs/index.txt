@@ -50,10 +50,17 @@ Contents:
    embdetails_dialog
    hacks
    mainwindow
+   mainwindow_actions
+   mainwindow_menus
+   mainwindow_toolbars
+   mainwindow_commands
    mainwindow_settings
    mdiwindow
    mdiarea
    mdisubwindow_textedit
+   native_javascript
+   native_javascript_include
+   native_javascript_init
    layer_manager
    object_arc
    object_base
