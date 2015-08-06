@@ -47,6 +47,10 @@ class LayerManager(QDialog):
     """
     Subclass of `QDialog`_
 
+    TOWRITE
+
+    .. sphinx_generate_methods_summary::
+       LayerManager
     """
     def __init__(self, mw, parent=None):
         """
