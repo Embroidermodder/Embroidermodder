@@ -66,6 +66,8 @@ class UndoableAddCommand(QUndoCommand):
 
     Add
 
+    .. sphinx_generate_methods_summary::
+       UndoableAddCommand
     """
     def __init__(self, text, obj, v, parent=None):
         """
@@ -108,6 +110,8 @@ class UndoableDeleteCommand(QUndoCommand):
 
     Delete
 
+    .. sphinx_generate_methods_summary::
+       UndoableDeleteCommand
     """
     def __init__(self, text, obj, v, parent=None):
         """
@@ -150,6 +154,8 @@ class UndoableMoveCommand(QUndoCommand):
 
     Move
 
+    .. sphinx_generate_methods_summary::
+       UndoableMoveCommand
     """
     def __init__(self, deltaX, deltaY, text, obj, v, parent=None):
         """
@@ -198,6 +204,8 @@ class UndoableRotateCommand(QUndoCommand):
 
     Rotate
 
+    .. sphinx_generate_methods_summary::
+       UndoableRotateCommand
     """
     def __init__(self, pivotPointX, pivotPointY, rotAngle, text, obj, v, parent=None):
         """
@@ -275,6 +283,8 @@ class UndoableScaleCommand(QUndoCommand):
 
     Scale
 
+    .. sphinx_generate_methods_summary::
+       UndoableScaleCommand
     """
     def __init__(self, x, y, scaleFactor, text, obj, v, parent=None):
         """
@@ -346,6 +356,8 @@ class UndoableNavCommand(QUndoCommand):
 
     Navigation
 
+    .. sphinx_generate_methods_summary::
+       UndoableNavCommand
     """
     def __init__(self, type, v, parent=None):
         """
@@ -432,6 +444,8 @@ class UndoableGripEditCommand(QUndoCommand):
 
     Grip Edit
 
+    .. sphinx_generate_methods_summary::
+       UndoableGripEditCommand
     """
     def __init__(self, beforePoint, afterPoint, text, obj, v, parent=None):
         """
@@ -480,6 +494,8 @@ class UndoableMirrorCommand(QUndoCommand):
 
     Mirror
 
+    .. sphinx_generate_methods_summary::
+       UndoableMirrorCommand
     """
     def __init__(self, x1, y1, x2, y2, text, obj, v, parent=None):
         """

@@ -66,6 +66,8 @@ class RectObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       RectObject
     """
 
     Type = OBJ_TYPE_RECTANGLE

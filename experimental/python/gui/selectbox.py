@@ -51,6 +51,8 @@ class SelectBox(QRubberBand):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       SelectBox
     """
     def __init__(self, s, parent=None):
         """

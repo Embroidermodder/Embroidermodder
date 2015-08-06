@@ -71,6 +71,8 @@ class CircleObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       CircleObject
     """
 
     Type = OBJ_TYPE_CIRCLE

@@ -54,6 +54,10 @@ class PreviewDialog(QFileDialog):
     """
     Subclass of `QFileDialog`_
 
+    TOWRITE
+
+    .. sphinx_generate_methods_summary::
+       PreviewDialog
     """
     def __init__(self, parent=None, caption="", dir="", filter=""):
         """

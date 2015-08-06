@@ -61,6 +61,8 @@ class PathObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PathObject
     """
     def __init__(self, x, y, p, rgb, parent=None):
         #OVERLOADED IMPL?# PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)

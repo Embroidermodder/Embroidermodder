@@ -61,6 +61,8 @@ class PolygonObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PolygonObject
     """
 
     Type = OBJ_TYPE_POLYGON

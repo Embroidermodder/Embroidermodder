@@ -64,6 +64,8 @@ class BaseObject(QGraphicsPathItem):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       BaseObject
     """
 
     Type = OBJ_TYPE_BASE

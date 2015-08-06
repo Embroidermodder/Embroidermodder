@@ -60,6 +60,8 @@ class PointObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PointObject
     """
 
     Type = OBJ_TYPE_POINT
