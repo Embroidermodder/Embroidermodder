@@ -67,7 +67,7 @@ from object_data import (OBJ_TYPE_CIRCLE, OBJ_NAME, OBJ_NAME_CIRCLE, OBJ_TYPE,
 
 class CircleObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

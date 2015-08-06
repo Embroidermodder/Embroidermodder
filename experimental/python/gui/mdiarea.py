@@ -55,7 +55,7 @@ class MdiArea(QMdiArea):  # MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : 
         Default class constructor.
 
         :param `mw`: Pointer to a application main window instance.
-        :type `mw`: `MainWindow`_
+        :type `mw`: :class:`MainWindow`
         :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QWidget`_
         """

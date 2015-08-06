@@ -104,9 +104,9 @@ OBJ_LTYPE_HIDDEN   = 3   #:
 OBJ_LTYPE_PHANTOM  = 4   #:
 OBJ_LTYPE_ZIGZAG   = 5   #:
 # Embroidery Stitchtypes
-OBJ_LTYPE_RUNNING  = 6   #: __________
-OBJ_LTYPE_SATIN    = 7   #: vvvvvvvvvv
-OBJ_LTYPE_FISHBONE = 8   #: >>>>>>>>>>
+OBJ_LTYPE_RUNNING  = 6   #: | __________
+OBJ_LTYPE_SATIN    = 7   #: | vvvvvvvvvv
+OBJ_LTYPE_FISHBONE = 8   #: | >>>>>>>>>>
 # };
 
 # enum OBJ_LWT_VALUES {

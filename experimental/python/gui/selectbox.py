@@ -80,7 +80,7 @@ class SelectBox(QRubberBand):
         self._leftPen = QPen()
         self._rightPen = QPen()
 
-        self._boxDir = False  #: TODO: is this initial bool value right?
+        self._boxDir = False  # TODO # is this initial bool value right?
 
         # Default values
         self.setColors(QColor(Qt.darkGreen), QColor(Qt.green), QColor(Qt.darkBlue), QColor(Qt.blue), 32)

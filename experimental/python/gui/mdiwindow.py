@@ -89,7 +89,7 @@ class MdiWindow(QMdiSubWindow):
         :param `theIndex`: TOWRITE
         :type `theIndex`: int
         :param `mw`: Pointer to the applications main window instance.
-        :type `mw`: `MainWindow`_
+        :type `mw`: :class:`MainWindow`
         :param `parent`: Pointer to a parent widget instance.
         :type `parent`: `QMdiArea`_
         :param `wflags`: TOWRITE

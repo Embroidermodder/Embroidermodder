@@ -63,7 +63,7 @@ from object_data import (OBJ_TYPE, OBJ_NAME, OBJ_TYPE_ARC, OBJ_NAME_ARC,
 
 class ArcObject(BaseObject):
     """
-    Subclass of `BaseObject`_
+    Subclass of `BaseObject`
 
     TOWRITE
 

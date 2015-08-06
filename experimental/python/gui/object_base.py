@@ -125,7 +125,7 @@ class BaseObject(QGraphicsPathItem):
         TOWRITE
 
         :param `rgb`: TOWRITE
-        :type `rgb`: `QRgb`_
+        :type `rgb`: QRgb
         """
         self.objPen.setColor(QColor(rgb))
         self.lwtPen.setColor(QColor(rgb))
