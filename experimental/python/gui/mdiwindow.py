@@ -26,8 +26,8 @@ qPrintable = str
 
 #--PySide/PyQt Imports.
 if PYSIDE:
-    from PySide.QtCore import qDebug, Qt, QFile, QSize, QRectF, \
-        QFileInfo, Slot, Signal
+    from PySide.QtCore import (qDebug, Qt, QFile, QSize, QRectF,
+        QFileInfo, Slot, Signal)
     from PySide.QtGui import (QMdiSubWindow, QGraphicsScene, QGraphicsItem,
         QApplication, QBrush, QColor, QDialog, QPainterPath, QPen, QImage,
         QIcon, QMessageBox, QPrinter, QPrintDialog, QPainter, qRgb)
@@ -47,8 +47,8 @@ elif PYQT4:
 from view import View
 from object_path import PathObject
 from object_save import SaveObject
-from object_data import OBJ_RUBBER_OFF, ENABLE_SNAP, ENABLE_GRID, ENABLE_RULER, \
-    ENABLE_ORTHO, ENABLE_POLAR, ENABLE_QSNAP, ENABLE_QTRACK, ENABLE_LWT
+from object_data import (OBJ_RUBBER_OFF, ENABLE_SNAP, ENABLE_GRID, ENABLE_RULER,
+    ENABLE_ORTHO, ENABLE_POLAR, ENABLE_QSNAP, ENABLE_QTRACK, ENABLE_LWT)
 
 #--libembroidery Imports.
 if not 'BUILDING_SPHINX_DOCS' in __builtins__:  # TEMP # Avoid sphinx docs error if bindings are not built yet.
@@ -56,7 +56,7 @@ if not 'BUILDING_SPHINX_DOCS' in __builtins__:  # TEMP # Avoid sphinx docs error
         embStitchList_count, embCircle_centerX, embCircle_centerY,
         embCircle_radius, embEllipse_centerY, embRect_width, embEllipse_width,
         embEllipse_height, embLine_x1, embLine_y1, embLine_x2, embLine_y2,
-        embPoint_x, embPoint_y, embRect_x, embRect_y, embRect_height, 
+        embPoint_x, embPoint_y, embRect_x, embRect_y, embRect_height,
         embEllipse_centerX, embPattern_moveStitchListToPolylines)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++

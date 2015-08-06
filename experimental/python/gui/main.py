@@ -34,8 +34,8 @@ else:
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 
 
-_appName_ = "Embroidermodder"  # const char* 
-_appVer_  = "v2.0 alpha"  # const char* 
+_appName_ = "Embroidermodder"  # const char*
+_appVer_  = "v2.0 alpha"  # const char*
 exitApp = False  # bool
 defaultBindings = "pyside"
 
@@ -154,7 +154,7 @@ def main(argv):
     app.setApplicationName(_appName_)
     app.setApplicationVersion(_appVer_)
 
-    mainWin = MainWindow()  # MainWindow* 
+    mainWin = MainWindow()  # MainWindow*
 
     QObject.connect(app, SIGNAL("lastWindowClosed()"), mainWin, SLOT("quit()"))
 

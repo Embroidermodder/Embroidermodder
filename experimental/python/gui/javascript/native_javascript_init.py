@@ -52,8 +52,8 @@ except:
 
 if os.path.basename(os.path.dirname(os.path.dirname(gFileDir))) == 'python':
     # From experimental/python/gui dir
-    gAppDir = os.path.abspath(gFileDir + os.sep + '..' + os.sep + '..' + 
-                              os.sep + '..' + os.sep + '..' + os.sep + 
+    gAppDir = os.path.abspath(gFileDir + os.sep + '..' + os.sep + '..' +
+                              os.sep + '..' + os.sep + '..' + os.sep +
                               'embroidermodder2')
 elif os.path.basename(os.path.dirname(gFileDir)) == 'embroidermodder2':
     # From embroidermodder2 dir

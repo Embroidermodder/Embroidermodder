@@ -240,7 +240,7 @@ class MdiArea(QMdiArea):  # MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : 
             # painter.fillRect(rect, self.backgroundBrush)
             bgBrush = QBrush(self.bgTexture)
             painter.fillRect(rect, bgBrush)
-            
+
 
         # Overlay the logo last
         if self.useLogo:

@@ -123,8 +123,8 @@ from native_scripting import initMainWinPointer
 
 #--libembroidery Imports.
 if not 'BUILDING_SPHINX_DOCS' in __builtins__:  # TEMP # Avoid sphinx docs error if bindings are not built yet.
-    from libembroidery import embFormat_typeFromName, embFormatList_create, embFormatList_free, \
-        embFormat_extension, embFormat_description, embFormat_readerState, embFormat_writerState
+    from libembroidery import (embFormat_typeFromName, embFormatList_create, embFormatList_free,
+        embFormat_extension, embFormat_description, embFormat_readerState, embFormat_writerState)
 
 # C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++C++
 #include "mainwindow.h"
@@ -1036,7 +1036,7 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
 
         extension = ""    # const char*
         description = ""  # const char*
-        readerState = ""  # char   
+        readerState = ""  # char
         writerState = ""  # char
 
         curFormat = None                     # EmbFormatList*
@@ -1065,18 +1065,18 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
             if writerState == stable or writerState == unstable:
                 supportedWriters += supportedStr
                 individualWriters += individualStr
-    
+
             curFormat = curFormat.next
 
         embFormatList_free(formatList)
         formatList = None
-    
+
         supportedReaders += ");;"
         supportedWriters += ");;"
-    
+
         self.formatFilterOpen = supportedReaders + individualReaders
         self.formatFilterSave = supportedWriters + individualWriters
-    
+
         # TODO: Fixup custom filter
         # /*
         # QString custom = getSettingsCustomFilter();
@@ -1086,7 +1086,7 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
         #     custom = ""; //This will hide it
         # else
         #     custom = "Custom Filter(" + custom + ");;";
-    
+
         # return tr(qPrintable(custom + supported + all));
         # */
 
@@ -1144,7 +1144,7 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
     # def setUndoCleanIcon(self, opened):
     #     """
     #     TOWRITE
-    # 
+    #
     #     :param `opened`: TOWRITE
     #     :type `opened`: bool
     #     """
@@ -1384,8 +1384,8 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
     # -- mainwindow_settings.py ----------------------------------------------
     ##########################################################################
 
-    from mainwindow_settings import readSettings, writeSettings, \
-        settingsPrompt, settingsDialog
+    from mainwindow_settings import (readSettings, writeSettings,
+        settingsPrompt, settingsDialog)
 
     ##########################################################################
     # -- mainwindow_actions.py -----------------------------------------------
@@ -1397,80 +1397,80 @@ class MainWindow(QMainWindow):  # MainWindow::MainWindow() : QMainWindow(0)
     # -- mainwindow_menus.py -------------------------------------------------
     ##########################################################################
 
-    from mainwindow_menus import createFileMenu, createEditMenu, \
-        createViewMenu, createSettingsMenu, createWindowMenu, createHelpMenu, \
-        createAllMenus
+    from mainwindow_menus import (createFileMenu, createEditMenu,
+        createViewMenu, createSettingsMenu, createWindowMenu, createHelpMenu,
+        createAllMenus)
 
     ##########################################################################
     # -- mainwindow_toolbars.py ----------------------------------------------
     ##########################################################################
 
-    from mainwindow_toolbars import createFileToolbar, createEditToolbar, \
-        createViewToolbar, createZoomToolbar, createPanToolbar, \
-        createIconToolbar, createHelpToolbar, createLayerToolbar, \
-        createPropertiesToolbar, createTextToolbar, createPromptToolbar, \
-        createAllToolbars
+    from mainwindow_toolbars import (createFileToolbar, createEditToolbar,
+        createViewToolbar, createZoomToolbar, createPanToolbar,
+        createIconToolbar, createHelpToolbar, createLayerToolbar,
+        createPropertiesToolbar, createTextToolbar, createPromptToolbar,
+        createAllToolbars)
 
     ##########################################################################
     # -- mainwindow_commands.py ----------------------------------------------
     ##########################################################################
 
-    from mainwindow_commands import stub_implement, stub_testing, exit, \
-        quit, checkForUpdates, cut, copy, paste, selectAll, platformString, \
-        designDetails, about, whatsThisContextHelp, print_, tipOfTheDay, \
-        checkBoxTipOfTheDayStateChanged, buttonTipOfTheDayClicked, help, \
-        changelog, undo, redo, isShiftPressed, setShiftPressed, \
-        setShiftReleased, iconResize, icon16, icon24, icon32, icon48, icon64, \
-        icon128, activeMdiWindow, activeView, activeScene, activeUndoStack, \
-        setUndoCleanIcon, updateAllViewScrollBars, updateAllViewCrossHairColors, \
-        updateAllViewBackgroundColors, updateAllViewSelectBoxColors, \
-        updateAllViewGridColors, updateAllViewRulerColors, updatePickAddMode, \
-        pickAddModeToggled, makeLayerActive, layerManager, layerPrevious, \
-        zoomRealtime, zoomPrevious, zoomWindow, zoomDynamic, zoomScale, \
-        zoomCenter, zoomIn, zoomOut, zoomSelected, zoomAll, zoomExtents, \
-        panrealtime, panpoint, panLeft, panRight, panUp, panDown, dayVision, \
-        nightVision, doNothing, layerSelectorIndexChanged, colorSelectorIndexChanged, \
-        linetypeSelectorIndexChanged, lineweightSelectorIndexChanged, \
-        textFontSelectorCurrentFontChanged, textSizeSelectorIndexChanged, \
-        textFont, textSize, textAngle, textBold, textItalic, textUnderline, \
-        textStrikeOut, textOverline, setTextFont, setTextSize, setTextAngle, \
-        setTextBold, setTextItalic, setTextUnderline, setTextStrikeOut, \
-        setTextOverline, getCurrentLayer, getCurrentColor, getCurrentLineType, \
-        getCurrentLineWeight, deletePressed, escapePressed, toggleGrid, \
-        toggleRuler, toggleLwt, enablePromptRapidFire, disablePromptRapidFire, \
-        enableMoveRapidFire, disableMoveRapidFire, promptHistoryAppended, \
-        logPromptInput, promptInputPrevious, promptInputNext, runCommand, \
-        runCommandMain, runCommandClick, runCommandMove, runCommandContext, \
-        runCommandPrompt, nativeAlert, nativeBlinkPrompt, nativeSetPromptPrefix, \
-        nativeAppendPromptHistory, nativeEnablePromptRapidFire, \
-        nativeDisablePromptRapidFire, nativeEnableMoveRapidFire, \
-        nativeDisableMoveRapidFire, nativeInitCommand, nativeEndCommand, \
-        nativeNewFile, nativeOpenFile, nativeExit, nativeHelp, nativeAbout, \
-        nativeTipOfTheDay, nativeWindowCascade, nativeWindowTile, nativeWindowClose, \
-        nativeWindowCloseAll, nativeWindowNext, nativeWindowPrevious, \
-        nativePlatformString, nativeMessageBox, nativeUndo, nativeRedo, \
-        nativeIcon16, nativeIcon24, nativeIcon32, nativeIcon48, nativeIcon64, \
-        nativeIcon128, nativePanLeft, nativePanRight, nativePanUp, nativePanDown, \
-        nativeZoomIn, nativeZoomOut, nativeZoomExtents, nativePrintArea, nativeDayVision, \
-        nativeNightVision, nativeSetBackgroundColor, nativeSetCrossHairColor, \
-        nativeSetGridColor, nativeTextFont, nativeTextSize, nativeTextAngle, \
-        nativeTextBold, nativeTextItalic, nativeTextUnderline, nativeTextStrikeOut, \
-        nativeTextOverline, nativeSetTextFont, nativeSetTextSize, nativeSetTextAngle, \
-        nativeSetTextBold, nativeSetTextItalic, nativeSetTextUnderline, \
-        nativeSetTextStrikeOut, nativeSetTextOverline, nativePreviewOn, nativePreviewOff, \
-        nativeVulcanize, nativeClearRubber, nativeAllowRubber, nativeSpareRubber, \
-        nativeSetRubberMode, nativeSetRubberPoint, nativeSetRubberText, nativeAddTextMulti, \
-        nativeAddTextSingle, nativeAddInfiniteLine, nativeAddRay, nativeAddLine, \
-        nativeAddTriangle, nativeAddRectangle, nativeAddRoundedRectangle, nativeAddArc, \
-        nativeAddCircle, nativeAddSlot, nativeAddEllipse, nativeAddPoint, \
-        nativeAddRegularPolygon, nativeAddPolygon, nativeAddPolyline, nativeAddPath, \
-        nativeAddHorizontalDimension, nativeAddVerticalDimension, nativeAddImage, \
-        nativeAddDimLeader, nativeSetCursorShape, nativeCalculateAngle, \
-        nativeCalculateDistance, nativePerpendicularDistance, nativeNumSelected, \
-        nativeSelectAll, nativeAddToSelection, nativeClearSelection, \
-        nativeDeleteSelected, nativeCutSelected, nativeCopySelected, nativePasteSelected, \
-        nativeMoveSelected, nativeScaleSelected, nativeRotateSelected, \
-        nativeMirrorSelected, nativeQSnapX, nativeQSnapY, nativeMouseX, nativeMouseY
+    from mainwindow_commands import (stub_implement, stub_testing, exit,
+        quit, checkForUpdates, cut, copy, paste, selectAll, platformString,
+        designDetails, about, whatsThisContextHelp, print_, tipOfTheDay,
+        checkBoxTipOfTheDayStateChanged, buttonTipOfTheDayClicked, help,
+        changelog, undo, redo, isShiftPressed, setShiftPressed,
+        setShiftReleased, iconResize, icon16, icon24, icon32, icon48, icon64,
+        icon128, activeMdiWindow, activeView, activeScene, activeUndoStack,
+        setUndoCleanIcon, updateAllViewScrollBars, updateAllViewCrossHairColors,
+        updateAllViewBackgroundColors, updateAllViewSelectBoxColors,
+        updateAllViewGridColors, updateAllViewRulerColors, updatePickAddMode,
+        pickAddModeToggled, makeLayerActive, layerManager, layerPrevious,
+        zoomRealtime, zoomPrevious, zoomWindow, zoomDynamic, zoomScale,
+        zoomCenter, zoomIn, zoomOut, zoomSelected, zoomAll, zoomExtents,
+        panrealtime, panpoint, panLeft, panRight, panUp, panDown, dayVision,
+        nightVision, doNothing, layerSelectorIndexChanged, colorSelectorIndexChanged,
+        linetypeSelectorIndexChanged, lineweightSelectorIndexChanged,
+        textFontSelectorCurrentFontChanged, textSizeSelectorIndexChanged,
+        textFont, textSize, textAngle, textBold, textItalic, textUnderline,
+        textStrikeOut, textOverline, setTextFont, setTextSize, setTextAngle,
+        setTextBold, setTextItalic, setTextUnderline, setTextStrikeOut,
+        setTextOverline, getCurrentLayer, getCurrentColor, getCurrentLineType,
+        getCurrentLineWeight, deletePressed, escapePressed, toggleGrid,
+        toggleRuler, toggleLwt, enablePromptRapidFire, disablePromptRapidFire,
+        enableMoveRapidFire, disableMoveRapidFire, promptHistoryAppended,
+        logPromptInput, promptInputPrevious, promptInputNext, runCommand,
+        runCommandMain, runCommandClick, runCommandMove, runCommandContext,
+        runCommandPrompt, nativeAlert, nativeBlinkPrompt, nativeSetPromptPrefix,
+        nativeAppendPromptHistory, nativeEnablePromptRapidFire,
+        nativeDisablePromptRapidFire, nativeEnableMoveRapidFire,
+        nativeDisableMoveRapidFire, nativeInitCommand, nativeEndCommand,
+        nativeNewFile, nativeOpenFile, nativeExit, nativeHelp, nativeAbout,
+        nativeTipOfTheDay, nativeWindowCascade, nativeWindowTile, nativeWindowClose,
+        nativeWindowCloseAll, nativeWindowNext, nativeWindowPrevious,
+        nativePlatformString, nativeMessageBox, nativeUndo, nativeRedo,
+        nativeIcon16, nativeIcon24, nativeIcon32, nativeIcon48, nativeIcon64,
+        nativeIcon128, nativePanLeft, nativePanRight, nativePanUp, nativePanDown,
+        nativeZoomIn, nativeZoomOut, nativeZoomExtents, nativePrintArea, nativeDayVision,
+        nativeNightVision, nativeSetBackgroundColor, nativeSetCrossHairColor,
+        nativeSetGridColor, nativeTextFont, nativeTextSize, nativeTextAngle,
+        nativeTextBold, nativeTextItalic, nativeTextUnderline, nativeTextStrikeOut,
+        nativeTextOverline, nativeSetTextFont, nativeSetTextSize, nativeSetTextAngle,
+        nativeSetTextBold, nativeSetTextItalic, nativeSetTextUnderline,
+        nativeSetTextStrikeOut, nativeSetTextOverline, nativePreviewOn, nativePreviewOff,
+        nativeVulcanize, nativeClearRubber, nativeAllowRubber, nativeSpareRubber,
+        nativeSetRubberMode, nativeSetRubberPoint, nativeSetRubberText, nativeAddTextMulti,
+        nativeAddTextSingle, nativeAddInfiniteLine, nativeAddRay, nativeAddLine,
+        nativeAddTriangle, nativeAddRectangle, nativeAddRoundedRectangle, nativeAddArc,
+        nativeAddCircle, nativeAddSlot, nativeAddEllipse, nativeAddPoint,
+        nativeAddRegularPolygon, nativeAddPolygon, nativeAddPolyline, nativeAddPath,
+        nativeAddHorizontalDimension, nativeAddVerticalDimension, nativeAddImage,
+        nativeAddDimLeader, nativeSetCursorShape, nativeCalculateAngle,
+        nativeCalculateDistance, nativePerpendicularDistance, nativeNumSelected,
+        nativeSelectAll, nativeAddToSelection, nativeClearSelection,
+        nativeDeleteSelected, nativeCutSelected, nativeCopySelected, nativePasteSelected,
+        nativeMoveSelected, nativeScaleSelected, nativeRotateSelected,
+        nativeMirrorSelected, nativeQSnapX, nativeQSnapY, nativeMouseX, nativeMouseY)
 
     ##########################################################################
     # -- native_javascript_init.py -------------------------------------------

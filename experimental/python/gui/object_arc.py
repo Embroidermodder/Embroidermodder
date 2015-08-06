@@ -714,7 +714,7 @@ class ArcObject(BaseObject):
         :rtype: float
         """
         return self.scenePos().y()
-    
+
     def objectRadius(self):
         """
         TOWRITE

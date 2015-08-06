@@ -449,10 +449,10 @@ from .object_save import SaveObject
 from .layer_manager import LayerManager
 # ONLY allow valid class names! else you will might like the end result.
 AUTHORIZED_ALLOWED_CLASSNAME_EVIL_STRINGS = [
-    'EmbroidermodderMainWindow', 
+    'EmbroidermodderMainWindow',
     'MDIArea',
 
-    'MainWindow', 
+    'MainWindow',
     'MdiArea',
     'MdiWindow',
     'EmbDetailsDialog',

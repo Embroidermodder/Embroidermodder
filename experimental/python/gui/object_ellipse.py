@@ -563,7 +563,7 @@ class EllipseObject(BaseObject):
 
         :return: TOWRITE
         :rtype: float
-        """ 
+        """
         return qMax(self.rect().width(), self.rect().height()) * self.scale()
 
     def objectDiameterMinor(self):
@@ -572,7 +572,7 @@ class EllipseObject(BaseObject):
 
         :return: TOWRITE
         :rtype: float
-        """ 
+        """
         return qMin(self.rect().width(), self.rect().height()) * self.scale()
 
     def objectWidth(self):

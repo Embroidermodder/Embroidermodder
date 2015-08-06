@@ -29,7 +29,8 @@ if PYSIDE:
     ## from PySide import QtCore, QtGui
     # or... Improve performace with less dots...
     from PySide.QtCore import qDebug, Qt, QLineF, QPointF, QObject
-    from PySide.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QMessageBox, QTransform
+    from PySide.QtGui import (QGraphicsItem, QPainter, QPainterPath, QStyle,
+        QMessageBox, QTransform)
 elif PYQT4:
     import sip
     sip.setapi('QString', 2)
@@ -37,7 +38,8 @@ elif PYQT4:
     ## from PyQt4 import QtCore, QtGui
     # or... Improve performace with less dots...
     from PyQt4.QtCore import qDebug, Qt, QLineF, QPointF, QObject
-    from PyQt4.QtGui import QGraphicsItem, QPainter, QPainterPath, QStyle, QMessageBox, QTransform
+    from PyQt4.QtGui import (QGraphicsItem, QPainter, QPainterPath, QStyle,
+        QMessageBox, QTransform)
 
 #--Local Imports.
 from hacks import overloaded, signature
@@ -320,4 +322,3 @@ class PathObject(BaseObject):
 
 
 # kate: bom off; indent-mode python; indent-width 4; replace-trailing-space-save on;
-    
