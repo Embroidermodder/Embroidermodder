@@ -69,6 +69,8 @@ class EllipseObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       EllipseObject
     """
 
     Type = OBJ_TYPE_ELLIPSE

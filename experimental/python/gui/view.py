@@ -113,6 +113,8 @@ class View(QGraphicsView):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       View
     """
     def __init__(self, mw, theScene, parent=None):
         """
@@ -306,7 +308,7 @@ class View(QGraphicsView):
 
     def enterEvent(self, event):
         """
-        Handles the ``enterEvent`` event for :class:`MDIArea`.
+        Handles the ``enterEvent`` event for :class:`View`.
 
         :param `event`: A `QEvent`_ to be processed.
         """

@@ -67,6 +67,8 @@ class ImageObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       ImageObject
     """
 
     Type = OBJ_TYPE_IMAGE

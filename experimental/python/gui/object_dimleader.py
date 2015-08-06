@@ -85,6 +85,8 @@ class DimLeaderObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       DimLeaderObject
     """
 
     Type = OBJ_TYPE_DIMLEADER

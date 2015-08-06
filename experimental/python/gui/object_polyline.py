@@ -62,6 +62,8 @@ class PolylineObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       PolylineObject
     """
 
     Type = OBJ_TYPE_POLYLINE

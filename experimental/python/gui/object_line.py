@@ -66,6 +66,8 @@ class LineObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       LineObject
     """
 
     Type = OBJ_TYPE_LINE

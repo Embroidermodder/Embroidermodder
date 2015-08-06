@@ -81,6 +81,8 @@ class SaveObject(QObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       SaveObject
     """
     def __init__(self, theScene, parent=None):
         """

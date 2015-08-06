@@ -60,6 +60,8 @@ class TextSingleObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       TextSingleObject
     """
 
     Type = OBJ_TYPE_TEXTSINGLE

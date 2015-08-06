@@ -67,6 +67,8 @@ class ArcObject(BaseObject):
 
     TOWRITE
 
+    .. sphinx_generate_methods_summary::
+       ArcObject
     """
 
     Type = OBJ_TYPE_ARC
