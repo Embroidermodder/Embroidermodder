@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\libcgeometry"
+				AdditionalIncludeDirectories="..\..\libgeometry"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBEMBROIDERY_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -536,15 +536,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\libcgeometry\geom-arc.c"
+				RelativePath="..\..\libgeometry\geom-arc.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\libcgeometry\geom-circle.c"
+				RelativePath="..\..\libgeometry\geom-circle.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\libcgeometry\geom-line.c"
+				RelativePath="..\..\libgeometry\geom-line.c"
 				>
 			</File>
 			<File
@@ -938,15 +938,15 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\libcgeometry\geom-arc.h"
+				RelativePath="..\..\libgeometry\geom-arc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\libcgeometry\geom-circle.h"
+				RelativePath="..\..\libgeometry\geom-circle.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\libcgeometry\geom-line.h"
+				RelativePath="..\..\libgeometry\geom-line.h"
 				>
 			</File>
 			<File
