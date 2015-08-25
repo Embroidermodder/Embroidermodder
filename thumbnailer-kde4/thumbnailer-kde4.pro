@@ -7,6 +7,11 @@ CONFIG += silent #Comment this out for verbose output
 
 TARGET = embroidery-thumbnailer-kde4
 
+#Qt5
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += printsupport widgets
+}
+
 OBJECTS_DIR = .obj
 MOC_DIR = .moc
 
