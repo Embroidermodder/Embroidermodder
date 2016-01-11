@@ -101,6 +101,7 @@ object-polygon.cpp \
 object-polyline.cpp \
 object-rect.cpp \
 object-textsingle.cpp \
+    application.cpp
 
 HEADERS += \
 mainwindow.h \
@@ -135,6 +136,7 @@ object-polygon.h \
 object-polyline.h \
 object-rect.h \
 object-textsingle.h \
+    application.h
 
 #SCRIPTING
 SOURCES += \
@@ -267,6 +269,8 @@ macx {
                          bundletrans \
                          bundletips \
 
+    QMAKE_INFO_PLIST = Info.plist
+    OTHER_FILES += Info.plist
 }
 
 #TODO: Windows: make install
@@ -359,3 +363,6 @@ QMAKE_EXTRA_TARGETS += installer
 #QMAKE_CXXFLAGS_WARN_ON += -Wno-unknown-pragmas
 
 QMAKE_DISTCLEAN += object_script.*
+
+DISTFILES += \
+    Info.plist

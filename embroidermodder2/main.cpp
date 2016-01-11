@@ -1,5 +1,5 @@
+#include "application.h"
 #include "mainwindow.h"
-#include <QApplication>
 
 const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
@@ -36,7 +36,7 @@ static void version()
 
 int main(int argc, char* argv[])
 {
-    QApplication app(argc, argv);
+    Application app(argc, argv);
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
 
@@ -61,6 +61,7 @@ int main(int argc, char* argv[])
         return 1;
 
     MainWindow* mainWin = new MainWindow();
+    app.setMainWin(mainWin);
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
 
