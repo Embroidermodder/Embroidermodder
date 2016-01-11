@@ -66,6 +66,6 @@
 	<key>CFBundleExecutable</key>
 	<string>embroidermodder2</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.turbozen.embroidermodder2</string>
+	<string>org.embroidermodder.embroidermodder2</string>
 </dict>
 </plist>
