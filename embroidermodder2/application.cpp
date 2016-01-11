@@ -1,10 +1,12 @@
 #include "application.h"
 #include "mainwindow.h"
 
-Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL) {
+Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+{
 }
 
-bool Application::event(QEvent *event) {
+bool Application::event(QEvent *event)
+{
     switch (event->type()) {
     case QEvent::FileOpen:
         if (_mainWin) {
