@@ -2,13 +2,36 @@
 #include "settings-dialog.h"
 
 #include <QDebug>
+#include <QtGlobal>
 #include <QSettings>
+
+namespace {
+
+// Note: on Unix we include the trailing separator. For Windows compatibility we omit it.
+QString SettingsDir() {
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+  QString homePath = QDir::homePath();
+  return homePath + "/.embroidermodder2/";
+#else
+  return "";
+#endif
+}
+
+QString SettingsPath() {
+  QString settingsPath = SettingsDir() + "settings.ini";
+  return settingsPath;
+}
+
+}
 
 void MainWindow::readSettings()
 {
     qDebug("Reading Settings...");
+    // This file needs to be read from the users home directory to ensure it is writable
+    QString settingsPath = SettingsPath();
+    QString settingsDir = SettingsDir();
     QString appDir = qApp->applicationDirPath();
-    QSettings settings(appDir + "/settings.ini", QSettings::IniFormat); //TODO: This file needs to be read from the users home directory to ensure it is writable
+    QSettings settings(settingsPath, QSettings::IniFormat);
     QPoint pos = settings.value("Window/Position", QPoint(0, 0)).toPoint();
     QSize size = settings.value("Window/Size", QSize(800, 600)).toSize();
 
@@ -60,7 +83,7 @@ void MainWindow::readSettings()
     settings_prompt_font_size               = settings.value("Prompt/FontSize",                                  12).toInt();
     settings_prompt_save_history            = settings.value("Prompt/SaveHistory",                             true).toBool();
     settings_prompt_save_history_as_html    = settings.value("Prompt/SaveHistoryAsHtml",                      false).toBool();
-    settings_prompt_save_history_filename   = settings.value("Prompt/SaveHistoryFilename",    appDir + "prompt.log").toString(); //TODO: This file needs to be read from the users home directory to ensure it is writable
+    settings_prompt_save_history_filename   = settings.value("Prompt/SaveHistoryFilename",    settingsDir + "prompt.log").toString();
     //OpenSave
     settings_opensave_custom_filter         = settings.value("OpenSave/CustomFilter",                   "supported").toString();
     settings_opensave_open_format           = settings.value("OpenSave/OpenFormat",                           "*.*").toString();
@@ -146,8 +169,9 @@ void MainWindow::readSettings()
 void MainWindow::writeSettings()
 {
     qDebug("Writing Settings...");
-    QString appDir = qApp->applicationDirPath();
-    QSettings settings(appDir + "/settings.ini", QSettings::IniFormat); //TODO: This file needs to be read from the users home directory to ensure it is writable
+    QString settingsPath = SettingsPath();
+    // This file needs to be read from the users home directory to ensure it is writable
+    QSettings settings(settingsPath, QSettings::IniFormat);
     QString tmp;
     settings.setValue("Window/Position", pos());
     settings.setValue("Window/Size", size());
