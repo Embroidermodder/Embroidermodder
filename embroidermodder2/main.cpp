@@ -36,7 +36,11 @@ static void version()
 
 int main(int argc, char* argv[])
 {
+#if defined(Q_OS_MAC)
     Application app(argc, argv);
+#else
+    QApplication app(argc, argv);
+#endif
     app.setApplicationName(_appName_);
     app.setApplicationVersion(_appVer_);
 
@@ -61,7 +65,9 @@ int main(int argc, char* argv[])
         return 1;
 
     MainWindow* mainWin = new MainWindow();
+#if defined(Q_OS_MAC)
     app.setMainWin(mainWin);
+#endif
 
     QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
 
