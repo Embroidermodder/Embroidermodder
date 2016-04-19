@@ -66,6 +66,12 @@ You may need to add the directory where those executables are located to your sy
 It is recommended that when targeting Windows, that you should omit the -j switch completely,
 otherwise build errors may occur unless you are building an individual pro file.
 
+On non-KDE environments you might want to omit `thumbnailer-kde4` building. Follow these steps **before** running `qmake && make`:
+
+1. go to `/project-files/qmake/` directory;
+2. open `everything.pro` file;
+3. comment/erase `../../thumbnailer-kde4 \` line in it.
+
 Help Files
 ------------
 The help files for Embroidermodder 2 are a git submodule, which means that
