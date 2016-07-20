@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -14,18 +14,19 @@
     <ProjectGuid>{6A3DDF09-228A-46EE-8DB1-1DA8760FCB1F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>libembroidery</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -42,6 +43,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -92,7 +94,12 @@
     <ClCompile Include="..\..\libembroidery\emb-compress.c" />
     <ClCompile Include="..\..\libembroidery\emb-ellipse.c" />
     <ClCompile Include="..\..\libembroidery\emb-file.c" />
+    <ClCompile Include="..\..\libembroidery\emb-flag.c" />
+    <ClCompile Include="..\..\libembroidery\emb-format.c" />
+    <ClCompile Include="..\..\libembroidery\emb-hash.c" />
     <ClCompile Include="..\..\libembroidery\emb-line.c" />
+    <ClCompile Include="..\..\libembroidery\emb-logging.c" />
+    <ClCompile Include="..\..\libembroidery\emb-path.c" />
     <ClCompile Include="..\..\libembroidery\emb-satin-line.c" />
     <ClCompile Include="..\..\libembroidery\emb-settings.c" />
     <ClCompile Include="..\..\libembroidery\emb-pattern.c" />
@@ -127,6 +134,7 @@
     <ClCompile Include="..\..\libembroidery\format-exy.c" />
     <ClCompile Include="..\..\libembroidery\format-eys.c" />
     <ClCompile Include="..\..\libembroidery\format-fxy.c" />
+    <ClCompile Include="..\..\libembroidery\format-gc.c" />
     <ClCompile Include="..\..\libembroidery\format-gnc.c" />
     <ClCompile Include="..\..\libembroidery\format-gt.c" />
     <ClCompile Include="..\..\libembroidery\format-hus.c" />
@@ -165,9 +173,12 @@
     <ClCompile Include="..\..\libembroidery\format-vp3.c" />
     <ClCompile Include="..\..\libembroidery\format-xxx.c" />
     <ClCompile Include="..\..\libembroidery\format-zsk.c" />
+    <ClCompile Include="..\..\libembroidery\geom-arc.c" />
+    <ClCompile Include="..\..\libembroidery\geom-circle.c" />
+    <ClCompile Include="..\..\libembroidery\geom-line.c" />
+    <ClCompile Include="..\..\libembroidery\hashtable.c" />
     <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
     <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
-    <ClCompile Include="..\..\libembroidery\libembroidery-main.c" />
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
   </ItemGroup>
   <ItemGroup>
@@ -183,7 +194,12 @@
     <ClInclude Include="..\..\libembroidery\emb-compress.h" />
     <ClInclude Include="..\..\libembroidery\emb-ellipse.h" />
     <ClInclude Include="..\..\libembroidery\emb-file.h" />
+    <ClInclude Include="..\..\libembroidery\emb-flag.h" />
+    <ClInclude Include="..\..\libembroidery\emb-format.h" />
+    <ClInclude Include="..\..\libembroidery\emb-hash.h" />
     <ClInclude Include="..\..\libembroidery\emb-line.h" />
+    <ClInclude Include="..\..\libembroidery\emb-logging.h" />
+    <ClInclude Include="..\..\libembroidery\emb-path.h" />
     <ClInclude Include="..\..\libembroidery\emb-satin-line.h" />
     <ClInclude Include="..\..\libembroidery\emb-settings.h" />
     <ClInclude Include="..\..\libembroidery\emb-pattern.h" />
@@ -257,6 +273,10 @@
     <ClInclude Include="..\..\libembroidery\format-xxx.h" />
     <ClInclude Include="..\..\libembroidery\format-zsk.h" />
     <ClInclude Include="..\..\libembroidery\formats.h" />
+    <ClInclude Include="..\..\libembroidery\geom-arc.h" />
+    <ClInclude Include="..\..\libembroidery\geom-circle.h" />
+    <ClInclude Include="..\..\libembroidery\geom-line.h" />
+    <ClInclude Include="..\..\libembroidery\hashtable.h" />
     <ClInclude Include="..\..\libembroidery\helpers-binary.h" />
     <ClInclude Include="..\..\libembroidery\helpers-misc.h" />
     <ClInclude Include="..\..\libembroidery\thread-color.h" />
