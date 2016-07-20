@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,13 +19,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+    <_ProjectFileVersion>14.0.25123.0</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
@@ -141,6 +141,7 @@
     <ClCompile Include="..\..\libembroidery\format-exy.c" />
     <ClCompile Include="..\..\libembroidery\format-eys.c" />
     <ClCompile Include="..\..\libembroidery\format-fxy.c" />
+    <ClCompile Include="..\..\libembroidery\format-gc.c" />
     <ClCompile Include="..\..\libembroidery\format-gnc.c" />
     <ClCompile Include="..\..\libembroidery\format-gt.c" />
     <ClCompile Include="..\..\libembroidery\format-hus.c" />
@@ -183,6 +184,9 @@
     <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
     <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
+    <ClCompile Include="..\..\libembroidery\geom-arc.c" />
+    <ClCompile Include="..\..\libembroidery\geom-circle.c" />
+    <ClCompile Include="..\..\libembroidery\geom-line.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libembroidery\compound-file-common.h" />
@@ -282,6 +286,9 @@
     <ClInclude Include="..\..\libembroidery\helpers-misc.h" />
     <ClInclude Include="..\..\libembroidery\helpers-unused.h" />
     <ClInclude Include="..\..\libembroidery\thread-color.h" />
+    <ClInclude Include="..\..\libgeometry\geom-arc.h" />
+    <ClInclude Include="..\..\libgeometry\geom-circle.h" />
+    <ClInclude Include="..\..\libgeometry\geom-line.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
