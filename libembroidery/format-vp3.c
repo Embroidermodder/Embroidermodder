@@ -65,7 +65,15 @@ static vp3Hoop vp3ReadHoopSection(EmbFile* file)
 {
     vp3Hoop hoop;
 
-    if(!file) { embLog_error("format-vp3.c vp3ReadHoopSection(), file argument is null\n"); return hoop; }
+    if(!file) 
+	{ 
+		embLog_error("format-vp3.c vp3ReadHoopSection(), file argument is null\n");
+		hoop.bottom = 0;
+		hoop.left = 0;
+		hoop.right = 0;
+		hoop.top = 0;
+		return hoop; 
+	}
 
     hoop.right = binaryReadInt32BE(file);
     hoop.bottom = binaryReadInt32BE(file);

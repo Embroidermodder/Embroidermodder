@@ -156,7 +156,6 @@ int readJef(EmbPattern* pattern, const char* fileName)
             else if((b1 == 2) || (b1 == 4) || b1 == 6)
             {
                 flags = TRIM;
-                //if(b1 == 2) flags = NORMAL;
                 b0 = (unsigned char)embFile_getc(file);
 				if (embFile_eof(file))
 				{

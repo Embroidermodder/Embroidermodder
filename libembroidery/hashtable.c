@@ -657,9 +657,10 @@ unsigned long HashTableStringHashFunction(const void *key) {
     int c;
 
     /* djb2 algorithm */
-    while ((c = *str++) != '\0')
-        hash = hash*33 + c;
-
+	while ((c = *str++) != '\0')
+	{
+		hash = hash * 33 + c;
+	}
     return hash;
 }
 
@@ -673,24 +674,33 @@ static unsigned long pointerHashFunction(const void *pointer) {
 
 static int isProbablePrime(long oddNumber) {
     long i;
-
-    for (i=3; i<51; i+=2)
-        if (oddNumber == i)
-            return 1;
-        else if (oddNumber%i == 0)
-            return 0;
-
+	for (i = 3; i < 51; i += 2)
+	{
+		if (oddNumber == i)
+		{
+			return 1;
+		}
+		else if (oddNumber%i == 0)
+		{
+			return 0;
+		}
+	}
     return 1; /* maybe */
 }
 
 static long calculateIdealNumOfBuckets(HashTable *hashTable) {
-    long idealNumOfBuckets = hashTable->numOfElements / hashTable->idealRatio;
-    if (idealNumOfBuckets < 5)
-        idealNumOfBuckets = 5;
-    else
-        idealNumOfBuckets |= 0x01; /* make it an odd number */
-    while (!isProbablePrime(idealNumOfBuckets))
-        idealNumOfBuckets += 2;
-
+    long idealNumOfBuckets = (long)(hashTable->numOfElements / hashTable->idealRatio);
+	if (idealNumOfBuckets < 5)
+	{
+		idealNumOfBuckets = 5;
+	}
+	else
+	{
+		idealNumOfBuckets |= 0x01; /* make it an odd number */
+	}
+	while (!isProbablePrime(idealNumOfBuckets))
+	{
+		idealNumOfBuckets += 2;
+	}
     return idealNumOfBuckets;
 }

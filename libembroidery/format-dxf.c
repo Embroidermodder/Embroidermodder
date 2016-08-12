@@ -317,7 +317,7 @@ int readDxf(EmbPattern* pattern, const char* fileName)
 
     int eof = 0; /* End Of File */
 
-    double bulge, firstX, firstY, x, y, prevX, prevY;
+    double bulge = 0.0, firstX = 0.0, firstY = 0.0, x = 0.0, y, prevX = 0.0, prevY = 0.0;
     char firstStitch = 1;
     char bulgeFlag = 0;
     int fileLength = 0;
