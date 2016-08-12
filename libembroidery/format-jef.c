@@ -156,7 +156,7 @@ int readJef(EmbPattern* pattern, const char* fileName)
             else if((b1 == 2) || (b1 == 4) || b1 == 6)
             {
                 flags = TRIM;
-                if(b1 == 2) flags = NORMAL;
+                //if(b1 == 2) flags = NORMAL;
                 b0 = (unsigned char)embFile_getc(file);
 				if (embFile_eof(file))
 				{
@@ -168,23 +168,10 @@ int readJef(EmbPattern* pattern, const char* fileName)
 					break;
 				}
             }
-            else if(b1 == 0x80)
+            else if(b1 == 0x10)
             {
-                b0 = (unsigned char)embFile_getc(file);
-				if (embFile_eof(file))
-				{
-					break;
-				}
-                b1 = (unsigned char)embFile_getc(file);
-				if (embFile_eof(file))
-				{
-					break;
-				}
-                /* Seems to be b0=0x07 and b1=0x00
-                 * Maybe used as extension functions */
-                b0 = 0;
-                b1 = 0;
-                flags = TRIM;
+                embPattern_addStitchRel(pattern, 0.0, 0.0, END, 1);
+                break;
             }
         }
         dx = jefDecode(b0);
