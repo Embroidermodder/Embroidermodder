@@ -41,25 +41,36 @@ int readZsk(EmbPattern* pattern, const char* fileName)
     while(embFile_read(b, 1, 3, file) == 3)
     {
         stitchType = NORMAL;
-        if(b[0] & 0x4)
-            b[2] = -b[2];
-        if(b[0] & 0x8)
-            b[1] = -b[1];
-        if(b[0] & 0x02)
-            stitchType = JUMP;
+		if (b[0] & 0x4)
+		{
+			b[2] = -b[2];
+		}
+		if (b[0] & 0x8)
+		{
+			b[1] = -b[1];
+		}
+		if (b[0] & 0x02)
+		{
+			stitchType = JUMP;
+		}
         if(b[0] & 0x20)
         {
-            if(b[1] == 2)
-                stitchType = TRIM;
-            else if(b[1] == -1)
-                break;
+			if (b[1] == 2)
+			{
+				stitchType = TRIM;
+			}
+			else if (b[1] == -1)
+			{
+				break;
+			}
             else
             {
-                if(b[2] != 0)
-                    colorNumber = b[2];
+				if (b[2] != 0)
+				{
+					colorNumber = b[2];
+				}
                 stitchType = STOP; /* TODO: need to determine what b[1] is used for.*/
                 embPattern_changeColor(pattern, colorNumber - 1);
-
             }
             b[1] = 0;
             b[2] = 0;
@@ -69,9 +80,10 @@ int readZsk(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
-        embPattern_addStitchRel(pattern, 0, 0, END, 1);
-
+	if (pattern->lastStitch->stitch.flags != END)
+	{
+		embPattern_addStitchRel(pattern, 0, 0, END, 1);
+	}
     return 1;
 }
 

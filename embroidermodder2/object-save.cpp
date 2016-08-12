@@ -48,7 +48,9 @@ bool SaveObject::save(const QString &fileName)
 
     formatType = embFormat_typeFromName(qPrintable(fileName));
     if(formatType == EMBFORMAT_UNSUPPORTED)
+    {
         return false;
+    }
 
     EmbPattern* pattern = 0;
     EmbReaderWriter* writer = 0;
@@ -61,7 +63,7 @@ bool SaveObject::save(const QString &fileName)
     if(!writer) { qDebug("Unsupported write file type: %s", qPrintable(fileName)); }
     else
     {
-        foreach(QGraphicsItem* item, gscene->items())
+        foreach(QGraphicsItem* item, gscene->items(Qt::AscendingOrder))
         {
             int objType = item->data(OBJ_TYPE).toInt();
 

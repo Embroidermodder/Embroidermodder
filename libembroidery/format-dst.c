@@ -122,7 +122,7 @@ static void encode_record(EmbFile* file, int x, int y, int flags)
 
     if(flags & END)
     {
-        b2 = (char) 0xF3;
+        b2 = (char) -13;
         b0 = b1 = (char) 0;
     }
 

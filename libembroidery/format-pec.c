@@ -82,7 +82,7 @@ static void pecEncodeJump(EmbFile* file, int x, int types)
     {
         orPart |= 0x20;
     }
-    else if(types & JUMP)
+    if(types & JUMP)
     {
         orPart |= 0x10;
     }

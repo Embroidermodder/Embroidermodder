@@ -84,7 +84,7 @@ int readKsm(EmbPattern* pattern, const char* fileName)
  *  Returns \c true if successful, otherwise returns \c false. */
 int writeKsm(EmbPattern* pattern, const char* fileName)
 {
-    EmbFile* file = 0; /* TODO: change writeKsm() to use EmbFile */
+    EmbFile* file = 0;
     EmbStitchList* pointer = 0;
     double xx = 0, yy = 0, dx = 0, dy = 0;
     int flags = 0;

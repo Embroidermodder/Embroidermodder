@@ -5,34 +5,6 @@
 #include "helpers-binary.h"
 #include <stdlib.h>
 
-/* TODO: This function is unused. Use it or remove it.
-static short pecDecodeNormal(unsigned char inputByte)
-{
-    if(inputByte < 0x40)
-    {
-        return inputByte;
-    }
-    return (inputByte - 0x80);
-}
-*/
-
-/* TODO: This function is unused. Use it or remove it.
-static int pecJumpDecode(unsigned char byte1, unsigned char byte2)
-{
-    unsigned n1 = (unsigned char) (byte1 & 0x0F);
-    if(n1 <= 7)
-    {
-        int returnValue = (n1 << 8) + byte2;
-        return returnValue;
-    }
-    else
-    {
-        int returnValue = -(int)((256 - byte2) + ((15 - n1) << 8));
-        return returnValue;
-    }
-}
-*/
-
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readPes(EmbPattern* pattern, const char* fileName)
@@ -113,7 +85,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
         mainPointer = pointer;
     }
 
-    binaryWriteShort(file, blockCount); /* block count */
+    binaryWriteShort(file, (short)blockCount); /* block count */
     binaryWriteUShort(file, 0xFFFF);
     binaryWriteShort(file, 0x00);
 
@@ -132,8 +104,8 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
         newColorCode = embThread_findNearestColorInArray(color, (EmbThread*)pecThreads, pecThreadCount);
         if(newColorCode != colorCode)
         {
-            colorInfo[colorInfoIndex++] = blockCount;
-            colorInfo[colorInfoIndex++] = newColorCode;
+            colorInfo[colorInfoIndex++] = (short)blockCount;
+            colorInfo[colorInfoIndex++] = (short)newColorCode;
             colorCode = newColorCode;
         }
         count = 0;
@@ -151,9 +123,9 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
             stitchType = 0;
         }
 
-        binaryWriteShort(file, stitchType); /* 1 for jump, 0 for normal */
+        binaryWriteShort(file, (short)stitchType); /* 1 for jump, 0 for normal */
         binaryWriteShort(file, (short)colorCode); /* color code */
-        binaryWriteShort(file, count); /* stitches in block */
+        binaryWriteShort(file, (short)count); /* stitches in block */
         pointer = mainPointer;
         while(pointer && (flag == pointer->stitch.flags))
         {
@@ -169,7 +141,7 @@ static void pesWriteSewSegSection(EmbPattern* pattern, EmbFile* file)
         blockCount++;
         mainPointer = pointer;
     }
-    binaryWriteShort(file, colorCount);
+    binaryWriteShort(file, (short)colorCount);
     for(i = 0; i < colorCount; i++)
     {
         binaryWriteShort(file, colorInfo[i * 2]);

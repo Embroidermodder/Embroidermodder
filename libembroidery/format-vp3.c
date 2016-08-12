@@ -285,7 +285,7 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
     int colorSectionStitchBytes;
     int first = 1;
     int numberOfColors = 0;
-    EmbColor color;
+	EmbColor color = embColor_make(0xFE, 0xFE, 0xFE);
     EmbStitchList *mainPointer = 0, *pointer = 0;
 
     if(!pattern) { embLog_error("format-vp3.c writeVp3(), pattern argument is null\n"); return 0; }
@@ -402,8 +402,10 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         EmbStitch s;
         int lastColor;
 
-        if(!first)
-            binaryWriteByte(file, 0);
+		if (!first)
+		{
+			binaryWriteByte(file, 0);
+		}
         binaryWriteByte(file, 0);
         binaryWriteByte(file, 5);
         binaryWriteByte(file, 0);
@@ -414,8 +416,10 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
         pointer = mainPointer;
         color = embThreadList_getAt(pattern->threadList, pointer->stitch.color).color;
 
-        if(first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP)
-            pointer = pointer->next;
+		if (first && pointer->stitch.flags & JUMP && pointer->next->stitch.flags & JUMP)
+		{
+			pointer = pointer->next;
+		}
 
         s = pointer->stitch;
         embLog_print("format-vp3.c DEBUG %d, %lf, %lf\n", s.flags, s.xx, s.yy);
@@ -467,11 +471,14 @@ int writeVp3(EmbPattern* pattern, const char* fileName)
             int dx, dy;
 
             EmbStitch s = pointer->stitch;
-            if(s.color != lastColor)
-                break;
-            if(s.flags & END || s.flags & STOP)
-                break;
-
+			if (s.color != lastColor)
+			{
+				break;
+			}
+			if (s.flags & END || s.flags & STOP)
+			{
+				break;
+			}
             dx = (s.xx - lastX) * 10;
             dy = (s.yy - lastY) * 10;
             lastX = lastX + dx / 10.0; /* output is in ints, ensure rounding errors do not sum up */

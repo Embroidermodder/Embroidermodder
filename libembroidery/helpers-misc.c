@@ -25,7 +25,7 @@ char startsWith(const char* pre, const char* str)
     lenstr = strlen(str);
     if(lenstr < lenpre)
         return 0;
-    result = strncmp(pre, str, lenpre);
+    result = (char)strncmp(pre, str, lenpre);
     if(result == 0)
         return 1;
     return 0;
