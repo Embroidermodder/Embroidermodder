@@ -19,17 +19,24 @@ static void expEncode(unsigned char* b, char dx, char dy, int flags)
         return;
     }
     /* TODO: How to encode JUMP stitches? JUMP must be handled. Also check this for the KSM format since it appears to be similar */
-    if(flags == TRIM)
+      if(flags == STOP)
     {
-        b[0] = 128;
-        b[1] = 2;
+        b[0] = 0x80;
+        b[1] = 1;
         b[2] = dx;
         b[3] = dy;
     }
-    else if(flags == STOP)
+	else if (flags == END)
+	{
+		b[0] = 0x80;
+		b[1] = 0x10;
+		b[2] = 0;
+		b[3] = 0;
+	}
+    else if(flags == TRIM || flags == JUMP)
     {
-        b[0] = 128;
-        b[1] = 1;
+        b[0] = 0x80;
+        b[1] = 2;
         b[2] = dx;
         b[3] = dy;
     }
@@ -166,7 +173,7 @@ return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
         yy = stitches->stitch.yy * 10.0;
         flags = stitches->stitch.flags;
         expEncode(b, (char)roundDouble(dx), (char)roundDouble(dy), flags);
-        if((b[0] == 128) && ((b[1] == 1) || (b[1] == 2) || (b[1] == 4)))
+        if((b[0] == 0x80) && ((b[1] == 1) || (b[1] == 2) || (b[1] == 4) || (b[1] == 0x10)))
         {
             embFile_printf(file, "%c%c%c%c", b[0], b[1], b[2], b[3]);
         }
