@@ -57,6 +57,7 @@
 #include "format-sst.h"
 #include "format-stx.h"
 #include "format-svg.h"
+#include "format-t01.h"
 #include "format-t09.h"
 #include "format-tap.h"
 #include "format-thr.h"

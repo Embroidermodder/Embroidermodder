@@ -419,6 +419,11 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     EmbSplineObjectList* sObjList = 0;
     EmbBezier bezier;
 
+    boundingRect.left = 0;
+    boundingRect.right = 0;
+    boundingRect.top = 0;
+    boundingRect.bottom = 0;
+
     if(!p) { embLog_error("emb-pattern.c embPattern_calcBoundingBox(), p argument is null\n"); return boundingRect; }
 
     /* Calculate the bounding rectangle.  It's needed for smart repainting. */

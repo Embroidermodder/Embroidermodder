@@ -108,6 +108,7 @@ SOURCES += \
 ../libembroidery/format-sst.c \
 ../libembroidery/format-stx.c \
 ../libembroidery/format-svg.c \
+../libembroidery/format-t01.c \
 ../libembroidery/format-t09.c \
 ../libembroidery/format-tap.c \
 ../libembroidery/format-thr.c \
@@ -211,6 +212,7 @@ HEADERS += \
 ../libembroidery/format-sst.h \
 ../libembroidery/format-stx.h \
 ../libembroidery/format-svg.h \
+../libembroidery/format-t01.h \
 ../libembroidery/format-t09.h \
 ../libembroidery/format-tap.h \
 ../libembroidery/format-thr.h \

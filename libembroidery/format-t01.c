@@ -1,4 +1,4 @@
-#include "format-tap.h"
+#include "format-t01.h"
 #include "emb-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
@@ -26,18 +26,18 @@ static int decodeRecordFlags(unsigned char b2)
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
-int readTap(EmbPattern* pattern, const char* fileName)
+int readT01(EmbPattern* pattern, const char* fileName)
 {
     unsigned char b[3];
     EmbFile* file = 0;
 
-    if(!pattern) { embLog_error("format-tap.c readTap(), pattern argument is null\n"); return 0; }
-    if(!fileName) { embLog_error("format-tap.c readTap(), fileName argument is null\n"); return 0; }
+    if(!pattern) { embLog_error("format-t01.c readt01(), pattern argument is null\n"); return 0; }
+    if(!fileName) { embLog_error("format-t01.c readt01(), fileName argument is null\n"); return 0; }
 
     file = embFile_open(fileName, "rb");
     if(!file)
     {
-        embLog_error("format-tap.c readTap(), cannot open %s for reading\n", fileName);
+        embLog_error("format-t01.c readt01(), cannot open %s for reading\n", fileName);
         return 0;
     }
 
@@ -113,8 +113,8 @@ static void encode_record(EmbFile* file, int x, int y, int flags)
 	b0 = b1 = b2 = 0;
 
 	/* cannot encode values > +121 or < -121. */
-	if (x > 121 || x < -121) embLog_error("format-tap.c encode_record(), x is not in valid range [-121,121] , x = %d\n", x);
-	if (y > 121 || y < -121) embLog_error("format-tap.c encode_record(), y is not in valid range [-121,121] , y = %d\n", y);
+	if (x > 121 || x < -121) embLog_error("format-t01.c encode_record(), x is not in valid range [-121,121] , x = %d\n", x);
+	if (y > 121 || y < -121) embLog_error("format-t01.c encode_record(), y is not in valid range [-121,121] , y = %d\n", y);
 
 	if (x >= +41) { b2 += setbit(2); x -= 81; }
 	if (x <= -41) { b2 += setbit(3); x += 81; }
@@ -126,7 +126,7 @@ static void encode_record(EmbFile* file, int x, int y, int flags)
 	if (x <= -2) { b1 += setbit(1); x += 3; }
 	if (x >= +1) { b0 += setbit(0); x -= 1; }
 	if (x <= -1) { b0 += setbit(1); x += 1; }
-	if (x != 0) { embLog_error("format-tap.c encode_record(), x should be zero yet x = %d\n", x); }
+	if (x != 0) { embLog_error("format-dst.c encode_record(), x should be zero yet x = %d\n", x); }
 	if (y >= +41) { b2 += setbit(5); y -= 81; }
 	if (y <= -41) { b2 += setbit(4); y += 81; }
 	if (y >= +14) { b1 += setbit(5); y -= 27; }
@@ -137,7 +137,7 @@ static void encode_record(EmbFile* file, int x, int y, int flags)
 	if (y <= -2) { b1 += setbit(6); y += 3; }
 	if (y >= +1) { b0 += setbit(7); y -= 1; }
 	if (y <= -1) { b0 += setbit(6); y += 1; }
-	if (y != 0) { embLog_error("format-tap.c encode_record(), y should be zero yet y = %d\n", y); }
+	if (y != 0) { embLog_error("format-dst.c encode_record(), y should be zero yet y = %d\n", y); }
 
 	b2 |= (char)3;
 
@@ -163,7 +163,7 @@ static void encode_record(EmbFile* file, int x, int y, int flags)
 
 /*! Writes the data from \a pattern to a file with the given \a fileName.
  *  Returns \c true if successful, otherwise returns \c false. */
-int writeTap(EmbPattern* pattern, const char* fileName)
+int writeT01(EmbPattern* pattern, const char* fileName)
 {
 	EmbRect boundingRect;
 	EmbFile* file = 0;
@@ -174,7 +174,7 @@ int writeTap(EmbPattern* pattern, const char* fileName)
 	
 	if (!embStitchList_count(pattern->stitchList))
 	{
-		embLog_error("format-tap.c writeDst(), pattern contains no stitches\n");
+		embLog_error("format-t01.c writeDst(), pattern contains no stitches\n");
 		return 0;
 	}
 
@@ -185,7 +185,7 @@ int writeTap(EmbPattern* pattern, const char* fileName)
 	file = embFile_open(fileName, "wb");
 	if (!file)
 	{
-		embLog_error("format-tap.c writeDst(), cannot open %s for writing\n", fileName);
+		embLog_error("format-t01.c writet01(), cannot open %s for writing\n", fileName);
 		return 0;
 	}
 

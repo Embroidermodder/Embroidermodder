@@ -472,6 +472,15 @@ EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName)
         rw->writer = writeSvg;
         #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
     }
+    else if(!strcmp(ending, ".t01"))
+    {
+        #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
+        return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
+        #else /* ARDUINO TODO: This is temporary. Remove when complete. */
+        rw->reader = readT01;
+        rw->writer = writeT01;
+        #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
+    }
     else if(!strcmp(ending, ".t09"))
     {
         #ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
