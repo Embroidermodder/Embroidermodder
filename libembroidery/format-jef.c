@@ -137,10 +137,14 @@ int readJef(EmbPattern* pattern, const char* fileName)
         flags = NORMAL;
         b0 = (unsigned char)embFile_getc(file);
         if(embFile_eof(file))
+        {
             break;
+        }
         b1 = (unsigned char)embFile_getc(file);
         if(embFile_eof(file))
+        {
             break;
+        }
         if(b0 == 0x80)
         {
             if(b1 & 1)
@@ -157,15 +161,15 @@ int readJef(EmbPattern* pattern, const char* fileName)
             {
                 flags = TRIM;
                 b0 = (unsigned char)embFile_getc(file);
-				if (embFile_eof(file))
-				{
-					break;
-				}
+                if (embFile_eof(file))
+                {
+                    break;
+                }
                 b1 = (unsigned char)embFile_getc(file);
-				if (embFile_eof(file))
-				{
-					break;
-				}
+                if (embFile_eof(file))
+                {
+                    break;
+                }
             }
             else if(b1 == 0x10)
             {
@@ -180,11 +184,10 @@ int readJef(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-	if (pattern->lastStitch->stitch.flags != END)
-	{
-		embPattern_addStitchRel(pattern, 0, 0, END, 1);
-	}
-
+    if (pattern->lastStitch->stitch.flags != END)
+    {
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+    }
     return 1;
 }
 
@@ -192,7 +195,7 @@ static void jefEncode(unsigned char* b, char dx, char dy, int flags)
 {
     if(!b)
     {
-        embLog_error("format-exp.c expEncode(), b argument is null\n");
+        embLog_error("format-jef.c expEncode(), b argument is null\n");
         return;
     }
     if(flags == STOP)
@@ -202,13 +205,13 @@ static void jefEncode(unsigned char* b, char dx, char dy, int flags)
         b[2] = dx;
         b[3] = dy;
     }
-	else if (flags == END)
-	{
-		b[0] = 0x80;
-		b[1] = 0x10;
-		b[2] = 0;
-		b[3] = 0;
-	}
+    else if (flags == END)
+    {
+        b[0] = 0x80;
+        b[1] = 0x10;
+        b[2] = 0;
+        b[3] = 0;
+    }
     else if(flags == TRIM || flags == JUMP)
     {
         b[0] = 0x80;
@@ -248,10 +251,10 @@ int writeJef(EmbPattern* pattern, const char* fileName)
     }
 
     /* Check for an END stitch and add one if it is not present */
-	if (pattern->lastStitch->stitch.flags != END)
-	{
-		embPattern_addStitchRel(pattern, 0, 0, END, 1);
-	}
+    if (pattern->lastStitch->stitch.flags != END)
+    {
+        embPattern_addStitchRel(pattern, 0, 0, END, 1);
+    }
     file = embFile_open(fileName, "wb");
     if(!file)
     {

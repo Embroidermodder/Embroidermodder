@@ -70,13 +70,13 @@ EmbFormatList* embFormatList_create()
     heapFormatList = embFormatList_add(heapFormatList, ".phc", "Brother Embroidery Format",          'U', ' ', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".plt", "AutoCAD Plot Drawing Format",        'U', 'U', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".rgb", "RGB Embroidery Format",              'U', 'U', EMBFORMAT_STITCHONLY);
-    heapFormatList = embFormatList_add(heapFormatList, ".sew", "Janome Embroidery Format",           'U', ' ', EMBFORMAT_STITCHONLY);
+    heapFormatList = embFormatList_add(heapFormatList, ".sew", "Janome Embroidery Format",           'U', 'U', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".shv", "Husqvarna Viking Embroidery Format", 'U', ' ', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".sst", "Sunstar Embroidery Format",          'U', ' ', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".stx", "Data Stitch Embroidery Format",      'U', ' ', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".svg", "Scalable Vector Graphics",           'U', 'U', EMBFORMAT_OBJECTONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".t09", "Pfaff Embroidery Format",            'U', ' ', EMBFORMAT_STITCHONLY);
-    heapFormatList = embFormatList_add(heapFormatList, ".tap", "Happy Embroidery Format",            'U', ' ', EMBFORMAT_STITCHONLY);
+    heapFormatList = embFormatList_add(heapFormatList, ".tap", "Happy Embroidery Format",            'U', 'U', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".thr", "ThredWorks Embroidery Format",       'U', 'U', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".txt", "Text File",                          ' ', 'U', EMBFORMAT_STITCHONLY);
     heapFormatList = embFormatList_add(heapFormatList, ".u00", "Barudan Embroidery Format",          'U', ' ', EMBFORMAT_STITCHONLY);
@@ -378,10 +378,5 @@ int embFormat_typeFromName(const char* fileName)
 
     return type;
 }
-
-
-
-
-
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -7,10 +7,10 @@
 
 static int decodeRecordFlags(unsigned char b2)
 {
-	if (b2 == 0xF3)
-	{
-		return END;
-	}
+    if (b2 == 0xF3)
+    {
+        return END;
+    }
     switch(b2 & 0xC3)
     {
         case 0x03:
@@ -217,3 +217,4 @@ int writeTap(EmbPattern* pattern, const char* fileName)
 }
 
 /* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+
