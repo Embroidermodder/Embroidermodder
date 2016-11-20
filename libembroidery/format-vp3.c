@@ -19,16 +19,20 @@ static unsigned char* vp3ReadString(EmbFile* file)
 
 static int vp3Decode(unsigned char inputByte)
 {
-    return (inputByte > 0x80) ? -((unsigned char) (~inputByte) + 1) : inputByte;
+    if(inputByte > 0x80)
+    {
+        return (int)-((unsigned char)((~inputByte) + 1));
+    }
+    return ((int)inputByte);
 }
 
-static short vp3DecodeInt16(short input)
+static short vp3DecodeInt16(unsigned short inputByte)
 {
-    if((unsigned short)input > 0x8000)
+    if(inputByte > 0x8000)
     {
-        return -((short) ((~input) + 1));
+        return -((short) ((~inputByte) + 1));
     }
-    return (input);
+    return ((short)inputByte);
 }
 
 typedef struct _vp3Hoop
@@ -194,7 +198,7 @@ int readVp3(EmbPattern* pattern, const char* fileName)
         colorSectionOffset += embFile_tell(file);
         startX = binaryReadInt32BE(file);
         startY = binaryReadInt32BE(file);
-        embPattern_addStitchAbs(pattern, startX / 1000, -startY / 1000, JUMP, 0);
+        embPattern_addStitchAbs(pattern, startX / 1000.0, -startY / 1000.0, JUMP, 1);
 
         tableSize = binaryReadByte(file);
         binaryReadByte(file);
@@ -229,8 +233,8 @@ int readVp3(EmbPattern* pattern, const char* fileName)
                     case 0x03:
                         break;
                     case 0x01:
-                        x = vp3DecodeInt16(binaryReadInt16BE(file));
-                        y = vp3DecodeInt16(binaryReadInt16BE(file));
+                        x = vp3DecodeInt16(binaryReadUInt16BE(file));
+                        y = vp3DecodeInt16(binaryReadUInt16BE(file));
                         binaryReadInt16BE(file);
                         embPattern_addStitchRel(pattern, x/ 10.0, y / 10.0, TRIM, 1);
                         break;

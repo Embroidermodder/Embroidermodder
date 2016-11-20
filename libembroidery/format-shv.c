@@ -39,6 +39,10 @@ int readShv(EmbPattern* pattern, const char* fileName)
     int something;
     short left,top,right,bottom;
     char something2, numberOfSections, something3;
+    int stitchesPerColor[256];
+    int stitchesSinceChange = 0;
+    int currColorIndex = 0;
+    unsigned short sx, sy;
 
     if(!pattern) { embLog_error("format-shv.c readShv(), pattern argument is null\n"); return 0; }
     if(!fileName) { embLog_error("format-shv.c readShv(), fileName argument is null\n"); return 0; }
@@ -60,10 +64,13 @@ int readShv(EmbPattern* pattern, const char* fileName)
     halfDesignWidth2 = binaryReadUInt8(file);
     halfDesignHeight2 = binaryReadUInt8(file);
     if((designHeight % 2) == 1)
+    {
         embFile_seek(file, ((designHeight + 1)*designWidth)/2, SEEK_CUR);
+    }
     else
+    {
         embFile_seek(file, (designHeight*designWidth)/2, SEEK_CUR);
-
+    }
     numberOfColors = binaryReadUInt8(file);
     magicCode = binaryReadUInt16(file);
     binaryReadByte(file);
@@ -76,35 +83,44 @@ int readShv(EmbPattern* pattern, const char* fileName)
     something2 = binaryReadByte(file);
     numberOfSections = binaryReadUInt8(file);
     something3 = binaryReadByte(file);
-
+        
     for(i = 0; i < numberOfColors; i++)
     {
-        unsigned char colorNumber;
-        binaryReadUInt16(file);
-        binaryReadUInt16(file);
+        unsigned int stitchCount, colorNumber;
+        stitchCount = binaryReadUInt32BE(file);
         colorNumber = binaryReadUInt8(file);
-        embPattern_addThread(pattern, jefThreads[colorNumber]);
-        embFile_seek(file, 9, SEEK_CUR);
+        embPattern_addThread(pattern, shvThreads[colorNumber % 43]);
+        stitchesPerColor[i] = stitchCount;
+	embFile_seek(file, 9, SEEK_CUR);
     }
 
     embFile_seek(file, -2, SEEK_CUR);
+    
     for(i = 0; !embFile_eof(file); i++)
     {
         unsigned char b0, b1;
         int flags;
         if(inJump)
+        {
             flags = JUMP;
+        }
         else
+        {
             flags = NORMAL;
-
+        }
         b0 = binaryReadUInt8(file);
         b1 = binaryReadUInt8(file);
-        if(b0 == 0 && b1 == 0 && i > 0) flags = STOP;
+        if(stitchesSinceChange >= stitchesPerColor[currColorIndex]) 
+        {
+            embPattern_addStitchRel(pattern, 0, 0, STOP, 1);
+            currColorIndex++;
+            stitchesSinceChange = 0; 
+        }
         if(b0 == 0x80)
         {
+            stitchesSinceChange++;
             if(b1 == 3)
             {
-                /*embPattern_addStitchRel(pattern, 0, 0, STOP); TODO: review this */
                 continue;
             }
             else if(b1 == 0x02)
@@ -114,7 +130,7 @@ int readShv(EmbPattern* pattern, const char* fileName)
             }
             else if(b1 == 0x01)
             {
-                unsigned short sx, sy;
+		stitchesSinceChange += 2;
                 sx = binaryReadUInt8(file);
                 sx = (unsigned short)(sx << 8 | binaryReadUInt8(file));
                 sy = binaryReadUInt8(file);
@@ -127,6 +143,7 @@ int readShv(EmbPattern* pattern, const char* fileName)
         }
         dx = shvDecode(b0);
         dy = shvDecode(b1);
+	stitchesSinceChange++;
         embPattern_addStitchRel(pattern, dx / 10.0, dy / 10.0, flags, 1);
     }
     embFile_close(file);
