@@ -11,85 +11,79 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>libEmbroidery</ProjectName>
-    <ProjectGuid>{BD30C7BD-9230-4ED7-B581-11F14041909D}</ProjectGuid>
-    <RootNamespace>libEmbroidery</RootNamespace>
+    <ProjectGuid>{6A3DDF09-228A-46EE-8DB1-1DA8760FCB1F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <RootNamespace>libembroidery</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <_ProjectFileVersion>14.0.25123.0</_ProjectFileVersion>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\libgeometry;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBEMBROIDERY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeader />
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
-      <TargetMachine>MachineX86</TargetMachine>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBEMBROIDERY_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Windows</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <TargetMachine>MachineX86</TargetMachine>
+      <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\libembroidery-convert\libembroidery-convert-main.c" />
     <ClCompile Include="..\..\libembroidery\compound-file-difat.c" />
     <ClCompile Include="..\..\libembroidery\compound-file-directory.c" />
     <ClCompile Include="..\..\libembroidery\compound-file-fat.c" />
@@ -102,20 +96,19 @@
     <ClCompile Include="..\..\libembroidery\emb-ellipse.c" />
     <ClCompile Include="..\..\libembroidery\emb-file.c" />
     <ClCompile Include="..\..\libembroidery\emb-flag.c" />
+    <ClCompile Include="..\..\libembroidery\emb-format.c" />
     <ClCompile Include="..\..\libembroidery\emb-hash.c" />
-    <ClCompile Include="..\..\libembroidery\emb-hoop.c" />
-    <ClCompile Include="..\..\libembroidery\emb-layer.c" />
     <ClCompile Include="..\..\libembroidery\emb-line.c" />
     <ClCompile Include="..\..\libembroidery\emb-logging.c" />
     <ClCompile Include="..\..\libembroidery\emb-path.c" />
+    <ClCompile Include="..\..\libembroidery\emb-satin-line.c" />
+    <ClCompile Include="..\..\libembroidery\emb-settings.c" />
     <ClCompile Include="..\..\libembroidery\emb-pattern.c" />
     <ClCompile Include="..\..\libembroidery\emb-point.c" />
     <ClCompile Include="..\..\libembroidery\emb-polygon.c" />
     <ClCompile Include="..\..\libembroidery\emb-polyline.c" />
     <ClCompile Include="..\..\libembroidery\emb-reader-writer.c" />
     <ClCompile Include="..\..\libembroidery\emb-rect.c" />
-    <ClCompile Include="..\..\libembroidery\emb-satin-line.c" />
-    <ClCompile Include="..\..\libembroidery\emb-settings.c" />
     <ClCompile Include="..\..\libembroidery\emb-spline.c" />
     <ClCompile Include="..\..\libembroidery\emb-stitch.c" />
     <ClCompile Include="..\..\libembroidery\emb-thread.c" />
@@ -182,13 +175,13 @@
     <ClCompile Include="..\..\libembroidery\format-vp3.c" />
     <ClCompile Include="..\..\libembroidery\format-xxx.c" />
     <ClCompile Include="..\..\libembroidery\format-zsk.c" />
+    <ClCompile Include="..\..\libembroidery\geom-arc.c" />
+    <ClCompile Include="..\..\libembroidery\geom-circle.c" />
+    <ClCompile Include="..\..\libembroidery\geom-line.c" />
     <ClCompile Include="..\..\libembroidery\hashtable.c" />
     <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
     <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
-    <ClCompile Include="..\..\libembroidery\geom-arc.c" />
-    <ClCompile Include="..\..\libembroidery\geom-circle.c" />
-    <ClCompile Include="..\..\libembroidery\geom-line.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libembroidery\compound-file-common.h" />
@@ -204,20 +197,19 @@
     <ClInclude Include="..\..\libembroidery\emb-ellipse.h" />
     <ClInclude Include="..\..\libembroidery\emb-file.h" />
     <ClInclude Include="..\..\libembroidery\emb-flag.h" />
+    <ClInclude Include="..\..\libembroidery\emb-format.h" />
     <ClInclude Include="..\..\libembroidery\emb-hash.h" />
-    <ClInclude Include="..\..\libembroidery\emb-hoop.h" />
-    <ClInclude Include="..\..\libembroidery\emb-layer.h" />
     <ClInclude Include="..\..\libembroidery\emb-line.h" />
     <ClInclude Include="..\..\libembroidery\emb-logging.h" />
     <ClInclude Include="..\..\libembroidery\emb-path.h" />
+    <ClInclude Include="..\..\libembroidery\emb-satin-line.h" />
+    <ClInclude Include="..\..\libembroidery\emb-settings.h" />
     <ClInclude Include="..\..\libembroidery\emb-pattern.h" />
     <ClInclude Include="..\..\libembroidery\emb-point.h" />
     <ClInclude Include="..\..\libembroidery\emb-polygon.h" />
     <ClInclude Include="..\..\libembroidery\emb-polyline.h" />
     <ClInclude Include="..\..\libembroidery\emb-reader-writer.h" />
     <ClInclude Include="..\..\libembroidery\emb-rect.h" />
-    <ClInclude Include="..\..\libembroidery\emb-satin-line.h" />
-    <ClInclude Include="..\..\libembroidery\emb-settings.h" />
     <ClInclude Include="..\..\libembroidery\emb-spline.h" />
     <ClInclude Include="..\..\libembroidery\emb-stitch.h" />
     <ClInclude Include="..\..\libembroidery\emb-thread.h" />
@@ -284,14 +276,13 @@
     <ClInclude Include="..\..\libembroidery\format-xxx.h" />
     <ClInclude Include="..\..\libembroidery\format-zsk.h" />
     <ClInclude Include="..\..\libembroidery\formats.h" />
+    <ClInclude Include="..\..\libembroidery\geom-arc.h" />
+    <ClInclude Include="..\..\libembroidery\geom-circle.h" />
+    <ClInclude Include="..\..\libembroidery\geom-line.h" />
     <ClInclude Include="..\..\libembroidery\hashtable.h" />
     <ClInclude Include="..\..\libembroidery\helpers-binary.h" />
     <ClInclude Include="..\..\libembroidery\helpers-misc.h" />
-    <ClInclude Include="..\..\libembroidery\helpers-unused.h" />
     <ClInclude Include="..\..\libembroidery\thread-color.h" />
-    <ClInclude Include="..\..\libgeometry\geom-arc.h" />
-    <ClInclude Include="..\..\libgeometry\geom-circle.h" />
-    <ClInclude Include="..\..\libgeometry\geom-line.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
