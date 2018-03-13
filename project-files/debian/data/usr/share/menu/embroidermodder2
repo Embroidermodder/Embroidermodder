@@ -1,7 +1,0 @@
-?package(embroidermodder2):needs="X11" \
-  section="Applications/Graphics" \
-  hints="Embroidery" \
-  title="EmbroiderModder2" \
-  longtitle="Embroidery modification software" \
-  icon="/usr/share/pixmaps/embroidermodder2.png" \
-  command="/usr/bin/embroidermodder2"
