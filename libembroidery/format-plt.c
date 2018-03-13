@@ -50,7 +50,7 @@ int readPlt(EmbPattern* pattern, const char* fileName)
     fclose(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
+    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;

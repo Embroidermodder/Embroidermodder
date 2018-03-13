@@ -36,7 +36,7 @@ int readBro(EmbPattern* pattern, const char* fileName)
 
     embFile_seek(file, 0x100, SEEK_SET);
 
-    while(1)
+    while(!embFile_eof(file))
     {
         short b1, b2;
         stitchType = NORMAL;
@@ -66,7 +66,7 @@ int readBro(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
+    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;

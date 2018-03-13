@@ -266,7 +266,7 @@ int writeOfm(EmbPattern* pattern, const char* fileName)
     }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
+    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */
