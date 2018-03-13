@@ -71,7 +71,7 @@ int readU00(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
+    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     return 1;
@@ -85,7 +85,7 @@ int writeU00(EmbPattern* pattern, const char* fileName)
     if(!fileName) { embLog_error("format-u00.c writeU00(), fileName argument is null\n"); return 0; }
 
     /* Check for an END stitch and add one if it is not present */
-    if(pattern->lastStitch->stitch.flags != END)
+    if(pattern->lastStitch && pattern->lastStitch->stitch.flags != END)
         embPattern_addStitchRel(pattern, 0, 0, END, 1);
 
     /* TODO: embFile_open() needs to occur here after the check for no stitches */
