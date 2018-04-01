@@ -278,11 +278,14 @@ void writePecStitches(EmbPattern* pattern, EmbFile* file, const char* fileName)
     }
     binaryWriteBytes(file, "LA:", 3);
     flen = (int)(dotPos - start);
-
-    while(start < dotPos)
+    if (flen > 16)
     {
-        binaryWriteByte(file, (unsigned char)*start);
-        start++;
+        flen = 16;
+    }
+
+    for (i = 0; i < flen; i++)
+    {
+        binaryWriteByte(file, (unsigned char)*(start + i));
     }
     for(i = 0; i < (int)(16-flen); i++)
     {
