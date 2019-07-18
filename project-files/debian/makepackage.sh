@@ -8,7 +8,7 @@ cp -r ../../embroidermodder2/{embroidermodder2,commands,help,icons,images,sample
 
 echo "Calculating installed size"
 INSTALL_SIZE=$(du -s --block-size 1024 . | sed "s/\s.*//")
-sed -i "s/Installed-Size: 6000/Installed-Size: $INSTALL_SIZE/" DEBIAN/control
+sed -i "s/Installed-Size: [0-9]*/Installed-Size: $INSTALL_SIZE/" DEBIAN/control
 
 echo "Building .deb file"
 dpkg-deb -b . "$DEB_NAME"
