@@ -21,72 +21,72 @@
     <message>
         <location filename="../../embdetails-dialog.cpp" line="28"/>
         <source>Embroidery Design Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details zum Stickdesign</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="58"/>
         <source>General Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemeine Informationen</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="60"/>
         <source>Total Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtstiche:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="61"/>
         <source>Real Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Echte Stiche:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="62"/>
         <source>Jump Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprungstiche:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="63"/>
         <source>Trim Stitches:</source>
-        <translation type="unfinished"></translation>
+        <translation>Trimmstiche:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="64"/>
         <source>Total Colors:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesamtfarben:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="65"/>
         <source>Color Changes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbwechsel:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="66"/>
         <source>Left:</source>
-        <translation type="unfinished"></translation>
+        <translation>Links:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="67"/>
         <source>Top:</source>
-        <translation type="unfinished"></translation>
+        <translation>Oben:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="68"/>
         <source>Right:</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechts:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="69"/>
         <source>Bottom:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unten:</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="70"/>
         <source>Width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Breite</translation>
     </message>
     <message>
         <location filename="../../embdetails-dialog.cpp" line="71"/>
         <source>Height:</source>
-        <translation type="unfinished"></translation>
+        <translation>Höhe:</translation>
     </message>
 </context>
 <context>
@@ -99,42 +99,42 @@
     <message>
         <location filename="../../layer-manager.cpp" line="27"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="28"/>
         <source>Visible</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichtbar</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="29"/>
         <source>Frozen</source>
-        <translation type="unfinished"></translation>
+        <translation>Fixiert</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="30"/>
         <source>Z Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Z Wert</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="31"/>
         <source>Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Farbe</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="32"/>
         <source>Linetype</source>
-        <translation type="unfinished"></translation>
+        <translation>Linienart</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="33"/>
         <source>Lineweight</source>
-        <translation type="unfinished"></translation>
+        <translation>Strichbreite</translation>
     </message>
     <message>
         <location filename="../../layer-manager.cpp" line="34"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Druck</translation>
     </message>
 </context>
 <context>
@@ -142,24 +142,25 @@
     <message>
         <location filename="../../mdiwindow.cpp" line="91"/>
         <source>Error reading file</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateilesefehler</translation>
     </message>
     <message>
         <location filename="../../mdiwindow.cpp" line="92"/>
         <source>Cannot read file %1:
 %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei nicht lesbar %1:
+%2.</translation>
     </message>
     <message>
         <location filename="../../mdiwindow.cpp" line="127"/>
         <location filename="../../mdiwindow.cpp" line="314"/>
         <source>Error reading pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Lesen des Musters</translation>
     </message>
     <message>
         <location filename="../../mdiwindow.cpp" line="314"/>
         <source>Cannot read pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Muster nicht lesbar</translation>
     </message>
 </context>
 <context>
@@ -167,7 +168,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="11"/>
         <source>&amp;Do Nothing</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nichts bearbeitet</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="11"/>
@@ -207,17 +208,17 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close &amp;All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle &amp;schließen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="16"/>
         <source>Close all the windows.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Fenster schließen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="17"/>
         <source>Ne&amp;xt</source>
-        <translation type="unfinished"></translation>
+        <translation>Weiter</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="17"/>
@@ -227,7 +228,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
         <source>Pre&amp;vious</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zurück</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="18"/>
@@ -242,37 +243,37 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="20"/>
         <source>Create a new file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Datei erstellen.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>&amp;Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Öffnen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="21"/>
         <source>Open an existing file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorhandene Datei öffnen.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Speichern</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="22"/>
         <source>Save the design to disk.</source>
-        <translation type="unfinished"></translation>
+        <translation>Design speichern</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save &amp;As</source>
-        <translation type="unfinished"></translation>
+        <translation>Speichern unter</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="23"/>
         <source>Save the design under a new name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Design speichern unter</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
@@ -282,17 +283,17 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="24"/>
         <source>Print the design.</source>
-        <translation type="unfinished"></translation>
+        <translation>Design drucken</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="25"/>
         <source>&amp;Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="25"/>
         <source>Details of the current design.</source>
-        <translation type="unfinished"></translation>
+        <translation>Details des aktuellen Designs</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
@@ -302,7 +303,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="26"/>
         <source>Exit the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Programm beenden</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="28"/>
@@ -327,7 +328,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfügen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="30"/>
@@ -343,7 +344,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="32"/>
         <source>Displays help.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hilfe anzeigen.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="33"/>
@@ -358,27 +359,27 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="34"/>
         <source>&amp;Tip Of The Day</source>
-        <translation type="unfinished"></translation>
+        <translation>Tip des Tages</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="34"/>
         <source>Displays a dialog with useful tips</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige hilfreiche Tipps</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="35"/>
         <source>&amp;About </source>
-        <translation type="unfinished"></translation>
+        <translation>Über</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="35"/>
         <source>Displays information about this product.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige Informationen dieses Produkts</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rückgängig</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="37"/>
@@ -388,7 +389,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="38"/>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="38"/>
@@ -403,7 +404,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="40"/>
         <source>Sets the toolbar icon size to 16x16.</source>
-        <translation type="unfinished"></translation>
+        <translation>Werzeugleisten Icons auf 16x16.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="41"/>
@@ -413,7 +414,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="41"/>
         <source>Sets the toolbar icon size to 24x24.</source>
-        <translation type="unfinished"></translation>
+        <translation>Werzeugleisten Icons auf 24x24.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="42"/>
@@ -423,7 +424,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="42"/>
         <source>Sets the toolbar icon size to 32x32.</source>
-        <translation type="unfinished"></translation>
+        <translation>Werzeugleisten Icons auf 32x32.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="43"/>
@@ -433,7 +434,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="43"/>
         <source>Sets the toolbar icon size to 48x48.</source>
-        <translation type="unfinished"></translation>
+        <translation>Werzeugleisten Icons auf 48x48.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="44"/>
@@ -443,7 +444,7 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="44"/>
         <source>Sets the toolbar icon size to 64x64.</source>
-        <translation type="unfinished"></translation>
+        <translation>Werzeugleisten Icons auf 64x64.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="45"/>
@@ -453,13 +454,13 @@
     <message>
         <location filename="../../mainwindow-actions.cpp" line="45"/>
         <source>Sets the toolbar icon size to 128x128.</source>
-        <translation type="unfinished"></translation>
+        <translation>Werzeugleisten Icons auf 128x128.</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="47"/>
         <location filename="../../mainwindow.cpp" line="48"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Einstellungen</translation>
     </message>
     <message>
         <location filename="../../mainwindow-actions.cpp" line="47"/>
