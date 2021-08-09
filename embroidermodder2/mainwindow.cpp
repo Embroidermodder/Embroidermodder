@@ -716,15 +716,12 @@ void MainWindow::loadFormats()
     char writerState;
 
     EmbFormatList* curFormat = 0;
-    EmbFormatList* formatList = embFormatList_create();
-    if(!formatList) { QMessageBox::critical(this, tr("Format Loading Error"), tr("Unable to load formats from libembroidery.")); return; }
-    curFormat = formatList;
-    while(curFormat)
+    for(int i=0; i < numberOfFormats; i++)
     {
-        extension = embFormat_extension(curFormat);
-        description = embFormat_description(curFormat);
-        readerState = embFormat_readerState(curFormat);
-        writerState = embFormat_writerState(curFormat);
+        extension = formatTable[i].extension;
+        description = formatTable[i].description;
+        readerState = formatTable[i].reader;
+        writerState = formatTable[i].writer;
 
         QString upperExt = QString(extension).toUpper();
         supportedStr = "*" + upperExt + " ";
@@ -744,10 +741,7 @@ void MainWindow::loadFormats()
             individualWriters.append(individualStr);
         }
 
-        curFormat = curFormat->next;
     }
-    embFormatList_free(formatList);
-    formatList = 0;
 
     supportedReaders.append(");;");
     supportedWriters.append(");;");

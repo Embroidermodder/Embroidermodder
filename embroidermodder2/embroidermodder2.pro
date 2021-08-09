@@ -18,7 +18,6 @@ deploy {
 ICON = embroidermodder2.icns
 
 TARGET = embroidermodder2
-
 QT += opengl
 QT += script scripttools
 

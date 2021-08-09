@@ -24,16 +24,16 @@ Optionally, you may want to add:
 - [KDE](http://www.kde.org) for thumbnailer
 - [Valgrind](http://www.valgrind.org) for debugging
 
-Ubuntu repository packages:
-The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+Ubuntu/debian repository packages:
+The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
 ```
-sudo apt-get install git build-essential qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind qtscript5-dev
+sudo apt-get install git build-essential libgl1-mesa-dev qtcreator qt5-qmake qtbase5-dev qtdeclarative5-dev valgrind
 ```
 
 Fedora repository packages:
-The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
 ```
-sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind qt5-qtscript-devel
+sudo yum install git gdb gcc-c++ qt-devel valgrind qt5-qtscript-devel
 ```
 Building
 --------
