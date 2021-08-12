@@ -1,6 +1,6 @@
 #include "object-circle.h"
 #include "object-data.h"
-#include "geom-arc.h" //TODO: make a geom-circle.h that simply includes arc.h so it's more intuitive
+#include "embroidery.h"
 
 #include <QPainter>
 #include <QStyleOption>
