@@ -25,7 +25,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
-#include "emb-reader-writer.h"
+#include "embroidery.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {
@@ -143,17 +143,14 @@ bool MdiWindow::loadFile(const QString &fileName)
         int stitchCount = embStitchList_count(p->stitchList);
         QPainterPath path;
 
-        if(p->circleObjList)
+        if(p->circles)
         {
-            EmbCircleObjectList* curCircleObj = p->circleObjList;
-            while(curCircleObj)
-            {
-                EmbCircle c = curCircleObj->circleObj.circle;
-                EmbColor thisColor = curCircleObj->circleObj.color;
+            for (int i=0; i<p->circles->count; i++) {
+                EmbCircle c = p->circles->circle[i].circle;
+                EmbColor thisColor = p->circles->circle[i].color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-                mainWin->nativeAddCircle(embCircle_centerX(c), embCircle_centerY(c), embCircle_radius(c), false, OBJ_RUBBER_OFF); //TODO: fill
-                curCircleObj = curCircleObj->next;
+                mainWin->nativeAddCircle(c.centerX, c.centerY, c.radius, false, OBJ_RUBBER_OFF); //TODO: fill
             }
         }
         if(p->ellipseObjList)
