@@ -15,18 +15,18 @@
     <ProjectGuid>{BD30C7BD-9230-4ED7-B581-11F14041909D}</ProjectGuid>
     <RootNamespace>libEmbroidery</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -90,11 +90,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\libembroidery\compound-file-difat.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-directory.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-fat.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-header.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file.c" />
     <ClCompile Include="..\..\libembroidery\emb-arc.c" />
     <ClCompile Include="..\..\libembroidery\emb-circle.c" />
     <ClCompile Include="..\..\libembroidery\emb-color.c" />
@@ -102,6 +97,7 @@
     <ClCompile Include="..\..\libembroidery\emb-ellipse.c" />
     <ClCompile Include="..\..\libembroidery\emb-file.c" />
     <ClCompile Include="..\..\libembroidery\emb-flag.c" />
+    <ClCompile Include="..\..\libembroidery\emb-format.c" />
     <ClCompile Include="..\..\libembroidery\emb-hash.c" />
     <ClCompile Include="..\..\libembroidery\emb-hoop.c" />
     <ClCompile Include="..\..\libembroidery\emb-layer.c" />
@@ -186,17 +182,8 @@
     <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
     <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
-    <ClCompile Include="..\..\libembroidery\geom-arc.c" />
-    <ClCompile Include="..\..\libembroidery\geom-circle.c" />
-    <ClCompile Include="..\..\libembroidery\geom-line.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\libembroidery\compound-file-common.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-difat.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-directory.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-fat.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-header.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file.h" />
     <ClInclude Include="..\..\libembroidery\emb-arc.h" />
     <ClInclude Include="..\..\libembroidery\emb-circle.h" />
     <ClInclude Include="..\..\libembroidery\emb-color.h" />
@@ -204,6 +191,7 @@
     <ClInclude Include="..\..\libembroidery\emb-ellipse.h" />
     <ClInclude Include="..\..\libembroidery\emb-file.h" />
     <ClInclude Include="..\..\libembroidery\emb-flag.h" />
+    <ClInclude Include="..\..\libembroidery\emb-format.h" />
     <ClInclude Include="..\..\libembroidery\emb-hash.h" />
     <ClInclude Include="..\..\libembroidery\emb-hoop.h" />
     <ClInclude Include="..\..\libembroidery\emb-layer.h" />
@@ -289,9 +277,6 @@
     <ClInclude Include="..\..\libembroidery\helpers-misc.h" />
     <ClInclude Include="..\..\libembroidery\helpers-unused.h" />
     <ClInclude Include="..\..\libembroidery\thread-color.h" />
-    <ClInclude Include="..\..\libgeometry\geom-arc.h" />
-    <ClInclude Include="..\..\libgeometry\geom-circle.h" />
-    <ClInclude Include="..\..\libgeometry\geom-line.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -14,19 +14,19 @@
     <ProjectGuid>{6A3DDF09-228A-46EE-8DB1-1DA8760FCB1F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>libembroidery</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -83,12 +83,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\libembroidery-convert\libembroidery-convert-main.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-difat.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-directory.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-fat.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file-header.c" />
-    <ClCompile Include="..\..\libembroidery\compound-file.c" />
     <ClCompile Include="..\..\libembroidery\emb-arc.c" />
     <ClCompile Include="..\..\libembroidery\emb-circle.c" />
     <ClCompile Include="..\..\libembroidery\emb-color.c" />
@@ -175,21 +169,13 @@
     <ClCompile Include="..\..\libembroidery\format-vp3.c" />
     <ClCompile Include="..\..\libembroidery\format-xxx.c" />
     <ClCompile Include="..\..\libembroidery\format-zsk.c" />
-    <ClCompile Include="..\..\libembroidery\geom-arc.c" />
-    <ClCompile Include="..\..\libembroidery\geom-circle.c" />
-    <ClCompile Include="..\..\libembroidery\geom-line.c" />
     <ClCompile Include="..\..\libembroidery\hashtable.c" />
     <ClCompile Include="..\..\libembroidery\helpers-binary.c" />
     <ClCompile Include="..\..\libembroidery\helpers-misc.c" />
+    <ClCompile Include="..\..\libembroidery\libembroidery-convert\libembroidery-convert-main.c" />
     <ClCompile Include="..\..\libembroidery\thread-color.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\libembroidery\compound-file-common.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-difat.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-directory.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-fat.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file-header.h" />
-    <ClInclude Include="..\..\libembroidery\compound-file.h" />
     <ClInclude Include="..\..\libembroidery\emb-arc.h" />
     <ClInclude Include="..\..\libembroidery\emb-circle.h" />
     <ClInclude Include="..\..\libembroidery\emb-color.h" />
@@ -276,9 +262,6 @@
     <ClInclude Include="..\..\libembroidery\format-xxx.h" />
     <ClInclude Include="..\..\libembroidery\format-zsk.h" />
     <ClInclude Include="..\..\libembroidery\formats.h" />
-    <ClInclude Include="..\..\libembroidery\geom-arc.h" />
-    <ClInclude Include="..\..\libembroidery\geom-circle.h" />
-    <ClInclude Include="..\..\libembroidery\geom-line.h" />
     <ClInclude Include="..\..\libembroidery\hashtable.h" />
     <ClInclude Include="..\..\libembroidery\helpers-binary.h" />
     <ClInclude Include="..\..\libembroidery\helpers-misc.h" />
