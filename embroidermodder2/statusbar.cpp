@@ -1,6 +1,4 @@
-#include "mainwindow.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
+#include "embroidermodder.h"
 #include <QLabel>
 
 StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)

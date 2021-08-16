@@ -1,12 +1,4 @@
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
+#include "embroidermodder.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -146,8 +138,8 @@ bool MdiWindow::loadFile(const QString &fileName)
         if(p->circles)
         {
             for (int i=0; i<p->circles->count; i++) {
-                EmbCircle c = p->circles->circle[i];
-                EmbColor thisColor = p->circles->color[i];
+                EmbCircle c = p->circles->circle[i].circle;
+                EmbColor thisColor = p->circles->circle[i].color;
                 setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
                 //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mainWin->nativeAddCircle(c.centerX, c.centerY, c.radius, false, OBJ_RUBBER_OFF); //TODO: fill
@@ -535,4 +527,3 @@ void MdiWindow::promptInputPrevNext(bool prev)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

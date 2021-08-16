@@ -1,5 +1,4 @@
-#include "native-javascript.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 QScriptValue javaDebug(QScriptContext* context, QScriptEngine* /*engine*/)
 {

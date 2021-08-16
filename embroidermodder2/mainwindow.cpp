@@ -1,21 +1,4 @@
-#include "mainwindow.h"
-#include "mainwindow-actions.h"
-
-#include "statusbar.h"
-#include "statusbar-button.h"
-
-#include "view.h"
-#include "cmdprompt.h"
-
-#include "property-editor.h"
-#include "undo-editor.h"
-
-#include "native-scripting.h"
-#include "native-javascript.h"
-
-#include "preview-dialog.h"
-
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <stdlib.h>
 
@@ -812,4 +795,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

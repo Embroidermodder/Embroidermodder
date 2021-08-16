@@ -1,6 +1,4 @@
-#include "object-arc.h"
-#include "object-data.h"
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>

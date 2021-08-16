@@ -1,5 +1,4 @@
-#include "cmdprompt.h"
-#include <QApplication>
+#include "embroidermodder.h"
 #include <QClipboard>
 #include <QString>
 #include <QAction>

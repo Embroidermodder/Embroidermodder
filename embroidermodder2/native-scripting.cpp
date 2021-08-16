@@ -1,4 +1,4 @@
-#include "native-scripting.h"
+#include "embroidermodder.h"
 
 MainWindow* _mainWin = 0;
 
@@ -14,5 +14,3 @@ MainWindow* mainWin()
 {
     return _mainWin;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

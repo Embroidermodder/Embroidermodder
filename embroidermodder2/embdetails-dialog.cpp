@@ -6,8 +6,7 @@
 #include <QScrollArea>
 #include <QApplication>
 #include <QGroupBox>
-#include "embdetails-dialog.h"
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
 {

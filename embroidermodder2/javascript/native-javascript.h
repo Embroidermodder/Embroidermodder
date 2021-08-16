@@ -2,7 +2,7 @@
 #define NATIVE_JAVASCRIPT_H
 
 #include <QtScript>
-#include "native-scripting.h"
+#include "embroidermodder.h"
 
 QScriptValue javaDebug                  (QScriptContext* context, QScriptEngine* engine);
 QScriptValue javaError                  (QScriptContext* context, QScriptEngine* engine);
