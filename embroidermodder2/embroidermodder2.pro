@@ -102,40 +102,7 @@ object-rect.cpp \
 object-textsingle.cpp \
     application.cpp
 
-HEADERS += \
-mainwindow.h \
-mainwindow-actions.h \
-mdiarea.h \
-mdiwindow.h \
-view.h \
-cmdprompt.h \
-embdetails-dialog.h \
-settings-dialog.h \
-preview-dialog.h \
-layer-manager.h \
-selectbox.h \
-statusbar.h \
-statusbar-button.h \
-imagewidget.h \
-property-editor.h \
-undo-editor.h \
-undo-commands.h \
-object-data.h \
-object-save.h \
-object-base.h \
-object-arc.h \
-object-circle.h \
-object-dimleader.h \
-object-ellipse.h \
-object-image.h \
-object-line.h \
-object-path.h \
-object-point.h \
-object-polygon.h \
-object-polyline.h \
-object-rect.h \
-object-textsingle.h \
-    application.h
+HEADERS += embroidermodder.h
 
 #SCRIPTING
 SOURCES += \
@@ -145,7 +112,6 @@ javascript/native-javascript-init.cpp \
 javascript/native-javascript-include.cpp \
 
 HEADERS += \
-native-scripting.h \
 javascript/native-javascript.h \
 
 include( ../libembroidery/libembroidery.pri )

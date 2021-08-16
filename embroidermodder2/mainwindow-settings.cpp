@@ -1,5 +1,4 @@
-#include "mainwindow.h"
-#include "settings-dialog.h"
+#include "embroidermodder.h"
 
 #include <QDebug>
 #include <QtGlobal>

@@ -1,7 +1,5 @@
-#include "object-point.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
-#include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 

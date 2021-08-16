@@ -1,9 +1,6 @@
 #include <QtGui>
 
-#include "settings-dialog.h"
-#include "object-data.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
+#include "embroidermodder.h"
 
 #if QT_VERSION >= 0x050000
 #include <QStandardPaths>

@@ -1,5 +1,4 @@
-#include "preview-dialog.h"
-#include "imagewidget.h"
+#include "embroidermodder.h"
 
 #include <QDebug>
 #include <QGridLayout>

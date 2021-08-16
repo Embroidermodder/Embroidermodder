@@ -3,8 +3,7 @@
 #include <QUndoView>
 #include <QKeyEvent>
 
-#include "undo-editor.h"
-#include "undo-commands.h"
+#include "embroidermodder.h"
 
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent, Qt::WindowFlags flags) : QDockWidget(parent, flags)
 {

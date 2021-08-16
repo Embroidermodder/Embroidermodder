@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "embroidermodder.h"
 #include <QAction>
 #include <QToolBar>
 
