@@ -36,6 +36,7 @@ snowflake/snowflake.js \
 star/star.js \
 syswindows/syswindows.js \
 tipoftheday/tipoftheday.js \
+trebleclef/trebleclef.js \
 undo/undo.js \
 windowcascade/windowcascade.js \
 windowclose/windowclose.js \
