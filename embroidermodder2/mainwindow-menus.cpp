@@ -50,7 +50,7 @@ void MainWindow::createViewMenu()
 {
     qDebug("MainWindow createViewMenu()");
 
-    QString appDir = qApp->applicationDirPath();
+    QString appDir = ":";
     QString icontheme = getSettingsGeneralIconTheme();
 
     menuBar()->addMenu(viewMenu);

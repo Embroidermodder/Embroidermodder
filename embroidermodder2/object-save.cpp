@@ -353,23 +353,21 @@ void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QP
 {
     qreal startX = objPos.x();
     qreal startY = objPos.y();
-    EmbPointList* pointList = 0;
-    EmbPointList* lastPoint = 0;
+    EmbArray* pointList = embArray_create(EMB_POINT);
     QPainterPath::Element element;
     for(int i = 0; i < objPath.elementCount(); ++i)
     {
         element = objPath.elementAt(i);
-        if(!pointList)
-        {
-            pointList = lastPoint = embPointList_create(element.x + startX, -(element.y + startY));
-        }
-        else
-        {
-            lastPoint = embPointList_add(lastPoint, embPoint_make(element.x + startX, -(element.y + startY)));
-        }
+        EmbPointObject a;
+        a.point.x = element.x + startX;
+        a.point.y = -(element.y + startY);
+        embArray_addPoint(pointList, &a);
     }
-
-    EmbPolylineObject* polyObject = embPolylineObject_create(pointList, embColor_make(color.red(), color.green(), color.blue()), 1); //TODO: proper lineType
+    EmbPolylineObject* polyObject;
+    polyObject = (EmbPolylineObject *) malloc(sizeof(EmbPolylineObject));
+    polyObject->pointList = pointList;
+    polyObject->color = embColor_make(color.red(), color.green(), color.blue());
+    polyObject->lineType = 1; //TODO: proper lineType
     embPattern_addPolylineObjectAbs(pattern, polyObject);
 }
 

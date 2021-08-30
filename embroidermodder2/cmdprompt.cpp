@@ -441,7 +441,7 @@ void CmdPromptInput::endCommand()
     clear();
 }
 
-void CmdPromptInput::processInput(const QChar& rapidChar)
+void CmdPromptInput::processInput(const Qt::Key& rapidChar)
 {
     qDebug("CmdPromptInput::processInput");
 
@@ -753,7 +753,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
             case Qt::Key_Return:
             case Qt::Key_Space:
                 pressedKey->accept();
-                processInput(QChar(key));
+                processInput((Qt::Key)key);
                 return true;
                 break;
             case Qt::Key_Delete:

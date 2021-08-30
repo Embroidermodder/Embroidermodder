@@ -45,20 +45,18 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
 
 void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY)
 {
-    double centerX;
-    double centerY;
-    getArcCenter(startX,  startY,
+    EmbArc arc = embArcObject_make(startX,  startY,
                  midX,    midY,
-                 endX,    endY,
-                 &centerX, &centerY);
+                 endX,    endY).arc;
+    EmbVector center;
+    getArcCenter(arc, &center);
+    arcStartPoint = QPointF(startX - center.x, startY - center.y);
+    arcMidPoint   = QPointF(midX   - center.x, midY   - center.y);
+    arcEndPoint   = QPointF(endX   - center.x, endY   - center.y);
 
-    arcStartPoint = QPointF(startX - centerX, startY - centerY);
-    arcMidPoint   = QPointF(midX   - centerX, midY   - centerY);
-    arcEndPoint   = QPointF(endX   - centerX, endY   - centerY);
+    setPos(center.x, center.y);
 
-    setPos(centerX, centerY);
-
-    qreal radius = QLineF(centerX, centerY, midX, midY).length();
+    qreal radius = QLineF(center.x, center.y, midX, midY).length();
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -277,9 +275,12 @@ qreal ArcObject::objectIncludedAngle() const
 
 bool ArcObject::objectClockwise() const
 {
+    EmbArc arc = embArcObject_make(objectStartX(), -objectStartY(), objectMidX(), -objectMidY(), objectEndX(), -objectEndY()).arc;
     //NOTE: Y values are inverted here on purpose
-    if(isArcClockwise(objectStartX(), -objectStartY(), objectMidX(), -objectMidY(), objectEndX(), -objectEndY()))
+    if(isArcClockwise(arc))
+    {
         return true;
+    }
     return false;
 }
 
