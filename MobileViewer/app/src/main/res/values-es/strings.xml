@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Bordado Visualizador</string>
+    <string name="action_open_file">Abrir Archivo</string>
+    <string name="action_tool_pan">Movimiento</string>
+    <string name="action_tool_draw">Dibujar</string>
+    <string name="action_show_statistics">Estatisticas</string>
+    <string name="action_share">Compartir</string>
+    <string name="stitchblock_stitches">"%d puntadas"</string>
+    <string name="external_storage_justification_write">Los archivos no puede ser salvo sin el acceso al almacenamiento</string>
+    <string name="write_permissions_denied">Permisos de escritura denegado</string>
+    <string name="read_permissions_denied">Los permisos de lectura niega</string>
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="error_file_not_found">Error: No se encontró el archivo</string>
+    <string name="error_uri_not_retrieved">Error: URI no recuperado</string>
+    <string name="error_file_read_failed">Error: Archivo Leer falló</string>
+    <string name="file_type_not_supported">Tipo de archivo no soportado.</string>
+    <string name="stitch_block_color">Bloques de la puntada de color</string>
+    <!-- Statistics section -->
+    <string name="number_of_stitches">Total de puntadas: </string>
+    <string name="normal_stitches">  Normal: </string>
+    <string name="jumps">  Saltos: </string>
+    <string name="colors"> Los cambios de color: </string>
+    <string name="size">Tamaño: </string>
+    <string name="total_length">Largo total: </string>
+    <string name="action_load_files">Carga Archivo</string>
+</resources>

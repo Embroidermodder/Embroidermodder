@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Embroidermodder</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="Embroidery Software and Hardware"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="embroidery, stitching, quilting, sewing, cad, drafting, 10o, 100, art, bmc, bro, c, c++, cam, cnc, cnd, csv, dat, dem, dsb, dst, dsz, dxf, edr, emd, exp, exy, eys, fxy, gnc, gt, hus, inb, inf, jef, ksm, max, mit, new, ofm, pcd, pcm, pcq, pcs, pec, pel, pem, pes, phb, phc, plt, rgb, sew, shv, sst, stx, svg, t09, tap, thr, u00, u01, vip, vp3, xxx, zsk" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+<style>
+@font-face {
+    font-family: 'styled-font';
+    src: url("fonts/elemental_end_italic.ttf") format('truetype');
+}
+
+body
+{
+background-color:#000000;
+background-image:url("images/texture-spirals.png");
+min-width:700px;
+margin:0;
+padding:0;
+font-family:sans-serif;
+}
+
+img
+{
+border:0;
+}
+
+a{text-decoration:none;color:#55C4E6;}
+a:link{text-decoration:none;color:#55C4E6;}
+
+li { color:#0C6AB0; } /* bullet color */
+li span { color:#DDDDDD; } /* text color */
+
+table, th, td
+{
+    border: 1px solid black;
+    border-collapse:collapse;
+    padding-left:5px;
+    padding-right:10px;
+}
+
+th
+{
+    color:#0C6AB0;
+    background-color:#000000;
+    text-align:left;
+}
+
+td
+{
+    color:#000000;
+    background-color:#DDDDDD;
+}
+
+#header
+{
+    position:relative;
+    background-color: #000000;
+    top: 0.5em;
+    bottom: 0;
+    left: 2em;
+    right: 0;
+    width: auto;
+    font-size: 18px;
+}
+
+h2 {
+    font-family: 'styled-font', "Emberlike-Caps";
+    font-style: italic;
+    font-size: 20px;
+    color: #0C6AB0;
+}
+
+#footerCenter
+{
+    font-family: 'styled-font', "Emberlike-Caps", serif;
+    font-style: italic;
+    font-size: 20px;
+    color: #0C6AB0;
+    background: black;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 0px;
+    bottom:0px;
+    padding-left: 250px;
+    right: 0px;
+    width: auto;
+    height: 30px;
+}
+
+#menu
+{
+    float:left;
+    position:relative;
+    background-color:#000000;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    margin-right: 3em;
+    width: 200px;
+    color: #0C6AB0;
+    font-family: 'styled-font', "Emberlike-Caps", serif;
+    font-style: italic;
+}
+
+#menu a
+{
+    color:#0C6AB0;
+}
+
+#menuUp:hover
+{
+    color:#2C8AD0;
+}
+
+#menuUp
+{
+    position: relative;
+    top: 35px;
+    bottom: 35px;
+    left: 40px;
+    right: 40px;
+}
+
+#menuSecond
+{
+    position: relative;
+    top: 35px;
+    bottom: 35px;
+    font-size: 14px;
+    left: 60px;
+    right: 40px;
+}
+
+#container
+{
+    position: relative;
+    background-color: #000000;
+    top: 0;
+    bottom: 0;
+    left: 4em;
+    right: 0;
+    width: auto;
+    font-size: 18px;
+}
+
+.contentPanel
+{
+    background-image: url('images/texture-spirals-canvas.png');
+    background-repeat: repeat-xy;
+    color: #DDDDDD;
+    position: relative;
+    margin-left: 14em;
+    padding-bottom: 1.5em;
+}
+
+.contentCenter
+{
+    position: relative;
+    left: 4em;
+    top: 1.5em;
+    bottom: 4em;
+    width: 80%;
+    min-height: 20em;
+    font-size: 14px;
+}
+
+.video
+{
+    position: relative;
+    padding-bottom: 56.25%; /* 16/9 ratio */
+    padding-top: 30px; /* IE6 workaround*/
+    height: 0;
+    overflow: hidden;
+}
+
+.video iframe,
+.video object,
+.video embed
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.img
+{
+    width: 100%;
+    max-height: auto;
+}
+
+.icon
+{
+    padding-top: 5px;
+    width: 32px;
+    height: 32px;
+}
+</style>
+
+</head>
+
+<body>
+    <div id="container">
+    <div id="header"><a href="index.html"><img src="images/header-center.png"></img></a></div>
+        <!-- CONTENT START -->
+        <div id="menu">
+            <a href="index.html"><div id="menuUp">News</div></a>
+            <a href="features.html"><div id="menuUp">Features</div></a>
+            <a href="about.html"><div id="menuUp">About</div></a>
+            <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
+            <a href="documentation.html"><div id="menuUp">Documentation</div></a>
+            <a href="thread-tables.html"><div id="menuUp">Thread Tables</div></a>
+            <a href="donate.html"><div id="menuUp">Donate</div></a>
+            <a href="downloads.html"><div id="menuUp">Downloads</div></a>
+            <a href="contact.html"><div id="menuUp">Contact</div></a>
+        </div>
+        <div class="contentPanel">
+        <div class="contentCenter">
+        <!-- converted markdown goes here -->
+<h1 id="embroidermodder-1.90.0-manual">Embroidermodder 1.90.0 Manual</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol type="1">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#basic-features">Basic Features</a></li>
+<li><a href="#advanced-features">Advanced Features</a></li>
+<li><a href="#other-projects">Other Projects</a></li>
+<li><a href="#References">References</a></li>
+</ol>
+<h2 id="introduction">Introduction</h2>
+<h2 id="basic-features">Basic Features</h2>
+<h3 id="move-a-single-stitch-in-an-existing-pattern">Move a single stitch in an existing pattern</h3>
+<ol type="1">
+<li>In the <code>File</code> menu, click <code>Open...</code>. When the open dialog appears find and select your file by double clicking the name of the file. Alternatively, left click the file once then click the <code>Open</code> button.</li>
+<li></li>
+<li>In the <code>File</code> menu</li>
+</ol>
+<p>TIP: For users who prefer</p>
+<h3 id="convert-one-pattern-to-another-format">Convert one pattern to another format</h3>
+<ol type="1">
+<li>In the <code>File</code> menu, click <code>Open...</code>.</li>
+<li>The</li>
+<li>In the dropdown menu within the save dialog select the</li>
+</ol>
+<h2 id="advanced-features">Advanced Features</h2>
+<h2 id="other-projects">Other Projects</h2>
+<h2 id="references">References</h2>
+<h2 id="planning">Planning</h2>
+<p>To see what’s planned open the <a href="https://github.com/Embroidermodder/Embroidermodder/projects/1">Projects</a> tab which sorts all of the GitHub Issues into columns.</p>
+<h2 id="format-support">Format Support</h2>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 25%" />
+<col style="width: 28%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>FORMAT</th>
+<th>READ</th>
+<th>WRITE</th>
+<th>NOTES</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10o</td>
+<td>YES</td>
+<td></td>
+<td>read (need to fix external color loading) (maybe find out what ctrl</td>
+</tr>
+<tr class="even">
+<td>100</td>
+<td></td>
+<td></td>
+<td>none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x &amp; y (signed char)</td>
+</tr>
+<tr class="odd">
+<td>art</td>
+<td></td>
+<td></td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>bro</td>
+<td>YES</td>
+<td></td>
+<td>read (complete)(maybe figure out detail of header)</td>
+</tr>
+<tr class="odd">
+<td>cnd</td>
+<td></td>
+<td></td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>col</td>
+<td></td>
+<td></td>
+<td>(color file no design) read(final) write(final)</td>
+</tr>
+<tr class="odd">
+<td>csd</td>
+<td>YES</td>
+<td></td>
+<td>read (complete)</td>
+</tr>
+<tr class="even">
+<td>dat</td>
+<td></td>
+<td></td>
+<td>read ()</td>
+</tr>
+<tr class="odd">
+<td>dem</td>
+<td></td>
+<td></td>
+<td>none (looks like just encrypted cnd)</td>
+</tr>
+<tr class="even">
+<td>dsb</td>
+<td>YES</td>
+<td></td>
+<td>read (unknown how well) (stitch data looks same as 10o)</td>
+</tr>
+<tr class="odd">
+<td>dst</td>
+<td>YES</td>
+<td></td>
+<td>read (complete) / write(unknown)</td>
+</tr>
+<tr class="even">
+<td>dsz</td>
+<td>YES</td>
+<td></td>
+<td>read (unknown)</td>
+</tr>
+<tr class="odd">
+<td>dxf</td>
+<td></td>
+<td></td>
+<td>read (Port to C. needs refactored)</td>
+</tr>
+<tr class="even">
+<td>edr</td>
+<td></td>
+<td></td>
+<td>read (C version is broken) / write (complete)</td>
+</tr>
+<tr class="odd">
+<td>emd</td>
+<td></td>
+<td></td>
+<td>read (unknown)</td>
+</tr>
+<tr class="even">
+<td>exp</td>
+<td>YES</td>
+<td></td>
+<td>read (unknown) / write(unknown)</td>
+</tr>
+<tr class="odd">
+<td>exy</td>
+<td>YES</td>
+<td></td>
+<td>read (need to fix external color loading)</td>
+</tr>
+<tr class="even">
+<td>fxy</td>
+<td>YES</td>
+<td></td>
+<td>read (need to fix external color loading)</td>
+</tr>
+<tr class="odd">
+<td>gnc</td>
+<td></td>
+<td></td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>gt</td>
+<td></td>
+<td></td>
+<td>read (need to fix external color loading)</td>
+</tr>
+<tr class="odd">
+<td>hus</td>
+<td>YES</td>
+<td></td>
+<td>read (unknown) / write (C version is broken)</td>
+</tr>
+<tr class="even">
+<td>inb</td>
+<td>YES</td>
+<td></td>
+<td>read (buggy?)</td>
+</tr>
+<tr class="odd">
+<td>jef</td>
+<td>YES</td>
+<td></td>
+<td>write (need to fix the offsets when it is moving to another spot)</td>
+</tr>
+<tr class="even">
+<td>ksm</td>
+<td>YES</td>
+<td></td>
+<td>read (unknown) / write (unknown)</td>
+</tr>
+<tr class="odd">
+<td>pcd</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>pcm</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>pcq</td>
+<td></td>
+<td></td>
+<td>read (Port to C)</td>
+</tr>
+<tr class="even">
+<td>pcs</td>
+<td>BUGGY</td>
+<td></td>
+<td>read (buggy / colors are not correct / after reading, writing any other format is messed up)</td>
+</tr>
+<tr class="odd">
+<td>pec</td>
+<td></td>
+<td></td>
+<td>read / write (without embedded images, sometimes overlooks some stitches leaving a gap)</td>
+</tr>
+<tr class="even">
+<td>pel</td>
+<td></td>
+<td></td>
+<td>none</td>
+</tr>
+<tr class="odd">
+<td>pem</td>
+<td></td>
+<td></td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td>pes</td>
+<td>YES</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>phb</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>phc</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>rgb</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>sew</td>
+<td>YES</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>shv</td>
+<td></td>
+<td></td>
+<td>read (C version is broken)</td>
+</tr>
+<tr class="even">
+<td>sst</td>
+<td></td>
+<td></td>
+<td>none</td>
+</tr>
+<tr class="odd">
+<td>svg</td>
+<td></td>
+<td>YES</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>tap</td>
+<td>YES</td>
+<td></td>
+<td>read (unknown)</td>
+</tr>
+<tr class="odd">
+<td>u01</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>vip</td>
+<td>YES</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>vp3</td>
+<td>YES</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>xxx</td>
+<td>YES</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>zsk</td>
+<td></td>
+<td></td>
+<td>read (complete)</td>
+</tr>
+</tbody>
+</table>
+<p>Support for Singer FHE, CHE (Compucon) formats?</p>
+<h1 id="embroidermodder-project-coding-standards">Embroidermodder Project Coding Standards</h1>
+<p>A basic set of guidelines to use when submitting code.</p>
+<h2 id="naming-conventions">Naming Conventions</h2>
+<p>Name variables and functions intelligently to minimize the need for comments. It should be immediately obvious what information it represents. Short names such as x and y are fine when referring to coordinates. Short names such as i and j are fine when doing loops.</p>
+<p>Variable names should be “camelCase”, starting with a lowercase word followed by uppercase word(s). C++ Class Names should be “CamelCase”, using all uppercase word(s). C Functions that attempt to simulate namespacing, should be “nameSpace_camelCase”.</p>
+<p>All files and directories shall be lowercase and contain no spaces.</p>
+<h2 id="code-style">Code Style</h2>
+<p>Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.</p>
+<h3 id="braces">Braces</h3>
+<p>For functions: please put each brace on a new line.</p>
+<pre><code>void function_definition(int argument)
+{
+
+}</code></pre>
+<p>For control statements: please put the first brace on the same line.</p>
+<pre><code>if (condition) {
+
+}</code></pre>
+<p>Use exceptions sparingly.</p>
+<p>Do not use ternary operator (?:) in place of if/else.</p>
+<p>Do not repeat a variable name that already occurs in an outer scope.</p>
+<h2 id="version-control">Version Control</h2>
+<p>Being an open source project, developers can grab the latest code at any time and attempt to build it themselves. We try our best to ensure that it will build smoothly at any time, although occasionally we do break the build. In these instances, please provide a patch, pull request which fixes the issue or open an issue and notify us of the problem, as we may not be aware of it and we can build fine.</p>
+<p>Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc…</p>
+<h2 id="comments">Comments</h2>
+<p>When writing code, sometimes there are items that we know can be improved, incomplete or need special clarification. In these cases, use the types of comments shown below. They are pretty standard and are highlighted by many editors to make reviewing code easier. We also use shell scripts to parse the code to find all of these occurrences so someone wanting to go on a bug hunt will be able to easily see which areas of the code need more love. Use the same convention as libembroidery.</p>
+<p>libembroidery is written in C and adheres to C89 standards. This means that any C99 or C++ comments will show up as errors when compiling with gcc. In any C code, you must use:</p>
+<pre><code>/* C Style Comments */
+/* TODO: This code clearly needs more work or further review. */
+/* BUG: This code is definitely wrong. It needs fixed. */
+/* HACK: This code shouldn&#39;t be written this way or I don&#39;t feel right about it. There may a better solution */
+/* WARNING: Think twice (or more times) before changing this code. I put this here for a good reason. */
+/* NOTE: This comment is much more important than lesser comments. */</code></pre>
+<h2 id="bibilography">Bibilography</h2>
+</br>
+</br>
+<i>Copyright 2013-2021 The Embroidermodder Team</i>
+</br>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

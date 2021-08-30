@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Embroidermodder</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="Embroidery Software and Hardware"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="embroidery, stitching, quilting, sewing, cad, drafting, 10o, 100, art, bmc, bro, c, c++, cam, cnc, cnd, csv, dat, dem, dsb, dst, dsz, dxf, edr, emd, exp, exy, eys, fxy, gnc, gt, hus, inb, inf, jef, ksm, max, mit, new, ofm, pcd, pcm, pcq, pcs, pec, pel, pem, pes, phb, phc, plt, rgb, sew, shv, sst, stx, svg, t09, tap, thr, u00, u01, vip, vp3, xxx, zsk" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+<style>
+@font-face {
+    font-family: 'styled-font';
+    src: url("fonts/elemental_end_italic.ttf") format('truetype');
+}
+
+body
+{
+background-color:#000000;
+background-image:url("images/texture-spirals.png");
+min-width:700px;
+margin:0;
+padding:0;
+font-family:sans-serif;
+}
+
+img
+{
+border:0;
+}
+
+a{text-decoration:none;color:#55C4E6;}
+a:link{text-decoration:none;color:#55C4E6;}
+
+li { color:#0C6AB0; } /* bullet color */
+li span { color:#DDDDDD; } /* text color */
+
+table, th, td
+{
+    border: 1px solid black;
+    border-collapse:collapse;
+    padding-left:5px;
+    padding-right:10px;
+}
+
+th
+{
+    color:#0C6AB0;
+    background-color:#000000;
+    text-align:left;
+}
+
+td
+{
+    color:#000000;
+    background-color:#DDDDDD;
+}
+
+#header
+{
+    position:relative;
+    background-color: #000000;
+    top: 0.5em;
+    bottom: 0;
+    left: 2em;
+    right: 0;
+    width: auto;
+    font-size: 18px;
+}
+
+h2 {
+    font-family: 'styled-font', "Emberlike-Caps";
+    font-style: italic;
+    font-size: 20px;
+    color: #0C6AB0;
+}
+
+#footerCenter
+{
+    font-family: 'styled-font', "Emberlike-Caps", serif;
+    font-style: italic;
+    font-size: 20px;
+    color: #0C6AB0;
+    background: black;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 0px;
+    bottom:0px;
+    padding-left: 250px;
+    right: 0px;
+    width: auto;
+    height: 30px;
+}
+
+#menu
+{
+    float:left;
+    position:relative;
+    background-color:#000000;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    margin-right: 3em;
+    width: 200px;
+    color: #0C6AB0;
+    font-family: 'styled-font', "Emberlike-Caps", serif;
+    font-style: italic;
+}
+
+#menu a
+{
+    color:#0C6AB0;
+}
+
+#menuUp:hover
+{
+    color:#2C8AD0;
+}
+
+#menuUp
+{
+    position: relative;
+    top: 35px;
+    bottom: 35px;
+    left: 40px;
+    right: 40px;
+}
+
+#menuSecond
+{
+    position: relative;
+    top: 35px;
+    bottom: 35px;
+    font-size: 14px;
+    left: 60px;
+    right: 40px;
+}
+
+#container
+{
+    position: relative;
+    background-color: #000000;
+    top: 0;
+    bottom: 0;
+    left: 4em;
+    right: 0;
+    width: auto;
+    font-size: 18px;
+}
+
+.contentPanel
+{
+    background-image: url('images/texture-spirals-canvas.png');
+    background-repeat: repeat-xy;
+    color: #DDDDDD;
+    position: relative;
+    margin-left: 14em;
+    padding-bottom: 1.5em;
+}
+
+.contentCenter
+{
+    position: relative;
+    left: 4em;
+    top: 1.5em;
+    bottom: 4em;
+    width: 80%;
+    min-height: 20em;
+    font-size: 14px;
+}
+
+.video
+{
+    position: relative;
+    padding-bottom: 56.25%; /* 16/9 ratio */
+    padding-top: 30px; /* IE6 workaround*/
+    height: 0;
+    overflow: hidden;
+}
+
+.video iframe,
+.video object,
+.video embed
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.img
+{
+    width: 100%;
+    max-height: auto;
+}
+
+.icon
+{
+    padding-top: 5px;
+    width: 32px;
+    height: 32px;
+}
+</style>
+
+</head>
+
+<body>
+    <div id="container">
+    <div id="header"><a href="index.html"><img src="images/header-center.png"></img></a></div>
+        <!-- CONTENT START -->
+        <div id="menu">
+            <a href="index.html"><div id="menuUp">News</div></a>
+            <a href="features.html"><div id="menuUp">Features</div></a>
+            <a href="about.html"><div id="menuUp">About</div></a>
+            <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
+            <a href="documentation.html"><div id="menuUp">Documentation</div></a>
+            <a href="thread-tables.html"><div id="menuUp">Thread Tables</div></a>
+            <a href="donate.html"><div id="menuUp">Donate</div></a>
+            <a href="downloads.html"><div id="menuUp">Downloads</div></a>
+            <a href="contact.html"><div id="menuUp">Contact</div></a>
+        </div>
+        <div class="contentPanel">
+        <div class="contentCenter">
+        <!-- converted markdown goes here -->
+<h2 id="open-collective-and-new-plan">Open Collective and New Plan</h2>
+<p>19th of December, 2021</p>
+<p>Hi, welcome to our first update after switching to Open Collective.</p>
+<p>I hope that we can get people excited about open software and hardware for embroidery again. Clearly there was some real talent and effort from Jonathon, Mark and other contributors in making this happen. Hopefully, Josh and I can make these programs a standard fixture of garage workshops by making them easy to install, modify, build and distribute.</p>
+<p>I’ve sketched out a timetable for the development of Embroidermodder, I feel I should share it with everyone:</p>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><em>Date</em></th>
+<th><em>Event</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><em>Dec 2021 - Jan 2022</em></td>
+<td>libembroidery 1.0 features, particularly the basic file format support and fills Bugfixing, Testing, QA for libembroidery</td>
+</tr>
+<tr class="even">
+<td><em>31st of Jan 2022</em></td>
+<td>libembroidery 1.0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version.</td>
+</tr>
+<tr class="odd">
+<td><em>Feb 2022</em></td>
+<td>An overview of what has changed will be written up for the website as a news update Better documentation of libembroidery.</td>
+</tr>
+<tr class="even">
+<td><em>Feb-April 2022</em></td>
+<td>Finish the conversion to new GUI toolkit</td>
+</tr>
+<tr class="odd">
+<td><em>April-May 2022</em></td>
+<td>Finish all the targets in the Design, or assign them to 2.1.</td>
+</tr>
+<tr class="even">
+<td><em>May-June 2022</em></td>
+<td>Stop pushing new features. Bugfixing, Testing, QA for Embroidermodder 2</td>
+</tr>
+<tr class="odd">
+<td><em>Summer Solstice (21st of June) 2022</em></td>
+<td>Embroidermodder 2 is officially released. Distribute NSIS installer, debian package, fedora package, mac bundle and source archives</td>
+</tr>
+<tr class="even">
+<td><em>July 2022</em></td>
+<td>News and Documentation work for Embroidermodder 2</td>
+</tr>
+</tbody>
+</table>
+<p><em>Embroidermodder 2</em> is a zlib licensed software and we endevour to keep it free and well documented. Check out our <a href="https://github.com/Embroidermodder/Embroidermodder">main github page</a> to see.</p>
+<p>Cheers,</p>
+<p>Robin</p>
+<h2 id="our-kickstarter-crowdfunding-campaign-is-live">Our Kickstarter Crowdfunding Campaign is LIVE!</h2>
+<p>March 17, 2014</p>
+<p><a href="https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard"><img class="img" src="images/kickstarter/embroidermodder-kickstarter-launch-1280x720.png" alt="Embroidermodder 2 Kickstarter Campaign" /></a></p>
+<p>We have launched our crowdfunding campaign on Kickstarter! It will be running until Sunday, April 20th. The way Kickstarter operates is that we need to reach our funding goal to receive any funds. There are downloads available for Windows (32-bit), Linux (32 and 64-bit), Mac OS X (64-bit) and Raspberry Pi (Raspbian) on the Kickstarter page. There has been a ton of work done to get to this point and to ensure a timely and stable delivery, this campaign needs to succeed. We really want to shake up the embroidery world and we hope you agree. The link to our campaign is: <a href="https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard">https://www.kickstarter.com/projects/redteam316/embroidermodder-2-for-windows-mac-linux-pi-and-ard</a></p>
+<p>… also check out our shamrockin’ embroidery design created with Embroidermodder 2 using work-in-progress manual satin command!</p>
+<p>Lucky you! <a href="https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst">Download Here.</a></p>
+<p><a href="https://github.com/Embroidermodder/Embroidermodder/raw/master/embroidermodder2/samples/shamrockin.dst"><img class="img" src="images/satin-shamrock.png" alt="A Shamrockin Embroidery Design" /></a></p>
+<p>–Jonathan and Josh</p>
+<p><a href="news0.html#kickstarter-launched">Permanent link to this article</a></p>
+<h2 id="fast-forward">Fast Forward</h2>
+<p>February 13, 2014</p>
+<p>There have been some changes that happened over the past several months:</p>
+<p>The launch of the Kickstarter campaign was delayed but is still going to happen. Unless there are other unforeseen setbacks, the revised plan is to launch our campaign on March 17.</p>
+<p>We have started setup of a nightly build/continuous integration system using Travis-CI. This is important as it will allow quicker bug fixes and increased stability long term. Currently this is only available for 64-bit Linux builds but will eventually include OSX, Windows and Arduino.</p>
+<p>We have also improved the stability and improved the API of our backend library: libembroidery. The API is still changing but we now can produce standalone static and shared versions of libembroidery. Another notable change is that there are now experimental Delphi and Lazarus(FreePascal) bindings in the works for libembroidery, contributed by <a href="https://github.com/x2nie">x2nie</a>.</p>
+Last but not least, I have a demonstration of our libembroidery code embedded on an Arduino. The video below simulates the stitching by drawing it to a 2.8" TFT display (v1) made by <a href="https://adafruit.com">Adafruit</a>. It’s really fast so I slowed it down for the video. Instead of drawing, we could change it to control motors and other hardware to create an open source embroidery machine. This is what the brain of an embroidery machine looks like and it just needs a heart and body. Enjoy the <a href="https://www.youtube.com/watch?v=KqiKfn4lxBk">video</a>!
+<div class="video">
+<iframe src="https://www.youtube.com/embed/KqiKfn4lxBk" frameborder="0" allowfullscreen>
+</iframe>
+</div>
+<p>–Jonathan</p>
+<p><a href="news0.html#demo">Permanent link to this article</a></p>
+<script type="text/javascript">borderDouble();</script>
+<h2 id="crowdfunding-campaign-coming-soon">Crowdfunding Campaign Coming Soon!</h2>
+<p>September 9, 2013</p>
+<p><a href="http://www.kickstarter.com/projects/redteam316/369640335?token=57f7685e"><img class="img" src="images/kickstarter/kickstarter-logo-dark.png" alt="Kickstarter Logo" /></a></p>
+<p>There has been a considerable amount of development time put into Embroidermodder 2 over the past several months. To be able to keep up this momentum, there needs to be at least one full time developer working on it. We are planning on launching a Kickstarter campaign in early October if everything goes according to plan. We also plan to release an alpha version during this timeframe, so there are many good things on the horizon! Successful funding will have a major impact on how soon the final version will be released.</p>
+<p>The preview link to our campaign is <a href="http://www.kickstarter.com/projects/redteam316/369640335?token=57f7685e">here</a>, feel free to leave feedback and spread the word via Twitter, Facebook, email, or word of mouth. Keep an eye out, because it’s coming!</p>
+<p>–Jonathan</p>
+<p><a href="news0.html#kickstarter">Permanent link to this article</a></p>
+<h2 id="new-website">New Website!</h2>
+<p>September 9, 2013</p>
+<p>The Embroidermodder website now has a fresh new look. The content has been updated to reflect the upcoming version, Embroidermodder 2. Check out our <a href="features.html">features page</a> for a summary of what to expect with Embroidermodder 2.</p>
+<p>The background is a tiled image of an actual design that was stitched out during the pre-alpha stage. It was created by Nina Paley and Theodore Gray using Mathematica in conjunction with our software. They have graciously allowed us to use it for the project in whichever way we wish. We thought it looked so good, that it has become the new theme for Embroidermodder 2. To check out some of the more interesting embroidery projects they are working on, <a href="http://blog.ninapaley.com/">look here</a>.</p>
+<p>The old website which was for Embroidermodder 1 has been preserved and can be found <a href="http://embroidermodder.sourceforge.net/embroidermodder1.html">here</a> for anyone interested.</p>
+<p>–Jonathan</p>
+<p><a href="news0.html#new-website">Permanent link to this article</a></p>
+</br>
+</br>
+<i>Copyright 2013-2021 The Embroidermodder Team</i>
+</br>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

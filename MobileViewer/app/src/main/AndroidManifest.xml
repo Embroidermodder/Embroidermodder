@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.embroidermodder.embroideryviewer">
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*" />
+
+                <data android:pathPattern=".*\\.100" />
+                <data android:mimeType="application/x-100" />
+                <data android:pathPattern=".*\\.10o" />
+                <data android:pathPattern=".*\\.10O" />
+                <data android:mimeType="application/x-10o" />
+
+                <data android:pathPattern=".*\\.bro" />
+                <data android:pathPattern=".*\\.BRO" />
+                <data android:mimeType="application/x-bro" />
+
+                <data android:pathPattern=".*\\.col" />
+                <data android:pathPattern=".*\\.COL" />
+                <data android:mimeType="application/x-col" />
+
+                <data android:pathPattern=".*\\.csv" />
+                <data android:pathPattern=".*\\.CSV" />
+                <data android:mimeType="text/csv" />
+
+                <data android:pathPattern=".*\\.dat" />
+                <data android:pathPattern=".*\\.DAT" />
+                <data android:mimeType="application/x-dat" />
+
+                <data android:pathPattern=".*\\.dsb" />
+                <data android:pathPattern=".*\\.DSB" />
+                <data android:mimeType="application/x-dsb" />
+
+                <data android:pathPattern=".*\\.dsz" />
+                <data android:pathPattern=".*\\.DSZ" />
+                <data android:mimeType="application/x-dsz" />
+
+                <data android:pathPattern=".*\\.dst" />
+                <data android:pathPattern=".*\\.DST" />
+                <data android:mimeType="application/x-dst" />
+
+                <data android:pathPattern=".*\\.emd" />
+                <data android:pathPattern=".*\\.EMD" />
+                <data android:mimeType="application/x-emd" />
+
+                <data android:pathPattern=".*\\.emm" />
+                <data android:pathPattern=".*\\.EMM" />
+                <data android:mimeType="application/x-emm" />
+
+                <data android:pathPattern=".*\\.exp" />
+                <data android:pathPattern=".*\\.EXP" />
+                <data android:mimeType="application/x-exp" />
+
+                <data android:pathPattern=".*\\.exy" />
+                <data android:pathPattern=".*\\.EXY" />
+                <data android:mimeType="application/x-exy" />
+
+                <data android:pathPattern=".*\\.fxy" />
+                <data android:pathPattern=".*\\.FXY" />
+                <data android:mimeType="application/x-fxy" />
+
+                <data android:pathPattern=".*\\.gt" />
+                <data android:pathPattern=".*\\.GT" />
+                <data android:mimeType="application/x-gt" />
+
+                <data android:pathPattern=".*\\.inb" />
+                <data android:pathPattern=".*\\.INB" />
+                <data android:mimeType="application/x-inb" />
+
+                <data android:pathPattern=".*\\.inf" />
+                <data android:pathPattern=".*\\.INF" />
+                <data android:mimeType="application/x-inf" />
+
+                <data android:pathPattern=".*\\.jef" />
+                <data android:pathPattern=".*\\.JEF" />
+                <data android:mimeType="application/x-jef" />
+
+                <data android:pathPattern=".*\\.jpx" />
+                <data android:pathPattern=".*\\.JPX" />
+                <data android:mimeType="application/x-jpx" />
+
+                <data android:pathPattern=".*\\.ksm" />
+                <data android:pathPattern=".*\\.KSM" />
+                <data android:mimeType="application/x-ksm" />
+
+                <data android:pathPattern=".*\\.max" />
+                <data android:pathPattern=".*\\.MAX" />
+                <data android:mimeType="application/x-max" />
+
+                <data android:pathPattern=".*\\.mit" />
+                <data android:pathPattern=".*\\.MIT" />
+                <data android:mimeType="application/x-mit" />
+
+                <data android:pathPattern=".*\\.new" />
+                <data android:pathPattern=".*\\.NEW" />
+                <data android:mimeType="application/x-new" />
+
+                <data android:pathPattern=".*\\.pcd" />
+                <data android:pathPattern=".*\\.PCD" />
+                <data android:mimeType="application/x-pcd" />
+
+                <data android:pathPattern=".*\\.pcm" />
+                <data android:pathPattern=".*\\.PCM" />
+                <data android:mimeType="application/x-pcm" />
+
+                <data android:pathPattern=".*\\.pcq" />
+                <data android:pathPattern=".*\\.PCQ" />
+                <data android:mimeType="application/x-pcq" />
+
+                <data android:pathPattern=".*\\.pcs" />
+                <data android:pathPattern=".*\\.PCS" />
+                <data android:mimeType="application/x-pcs" />
+
+                <data android:pathPattern=".*\\.pec" />
+                <data android:pathPattern=".*\\.PEC" />
+                <data android:mimeType="application/x-pec" />
+
+                <data android:pathPattern=".*\\.pes" />
+                <data android:pathPattern=".*\\.PES" />
+                <data android:mimeType="application/x-pes" />
+
+                <data android:pathPattern=".*\\.phb" />
+                <data android:pathPattern=".*\\.PHB" />
+                <data android:mimeType="application/x-phb" />
+
+                <data android:pathPattern=".*\\.phc" />
+                <data android:pathPattern=".*\\.PHC" />
+                <data android:mimeType="application/x-phc" />
+
+                <data android:pathPattern=".*\\.pmv" />
+                <data android:pathPattern=".*\\.PMV" />
+                <data android:mimeType="application/x-pmv" />
+
+                <data android:pathPattern=".*\\.sew" />
+                <data android:pathPattern=".*\\.SEW" />
+                <data android:mimeType="application/x-sew" />
+
+                <data android:pathPattern=".*\\.shv" />
+                <data android:pathPattern=".*\\.SHV" />
+                <data android:mimeType="application/x-shv" />
+
+                <data android:pathPattern=".*\\.stc" />
+                <data android:pathPattern=".*\\.STC" />
+                <data android:mimeType="application/x-stc" />
+
+                <data android:pathPattern=".*\\.stx" />
+                <data android:pathPattern=".*\\.STX" />
+                <data android:mimeType="application/x-stx" />
+
+                <data android:pathPattern=".*\\.svg" />
+                <data android:pathPattern=".*\\.SVG" />
+                <data android:mimeType="image/svg+xml" />
+
+                <data android:pathPattern=".*\\.tap" />
+                <data android:pathPattern=".*\\.TAP" />
+                <data android:mimeType="application/x-tap" />
+
+                <data android:pathPattern=".*\\.tbf" />
+                <data android:pathPattern=".*\\.TBF" />
+                <data android:mimeType="application/x-tbf" />
+
+                <data android:pathPattern=".*\\.u01" />
+                <data android:pathPattern=".*\\.U01" />
+                <data android:mimeType="application/x-u01" />
+
+                <data android:pathPattern=".*\\.vp3" />
+                <data android:pathPattern=".*\\.VP3" />
+                <data android:mimeType="application/x-vp3" />
+
+                <data android:pathPattern=".*\\.XXX" />
+                <data android:pathPattern=".*\\.xxx" />
+                <data android:mimeType="application/x-xxx" />
+
+                <data android:pathPattern=".*\\.zxy" />
+                <data android:pathPattern=".*\\.ZXY" />
+                <data android:mimeType="application/x-zxy" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.100" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.10o" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.10O" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.bro" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.BRO" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.col" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.COL" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.csv" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.CSV" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.dsb" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.DSB" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.dst" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.DST" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.DSZ" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.DSZ" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.emd" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.EMD" />
+
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.emm" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.EMM" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.exp" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.EXP" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.exy" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.EXY" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.fxy" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.FXY" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.gt" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.GT" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.inb" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.INB" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.inf" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.INF" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.jef" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.JEF" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.jpx" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.JPX" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.ksm" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.KSM" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.max" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.MAX" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.mit" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.MIT" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.new" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.NEW" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pcd" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PCD" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pcm" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PCM" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pcq" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PCQ" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pcs" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PCS" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pec" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PEC" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pes" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PES" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.phb" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PHB" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.phc" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PHC" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.pmv" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.PMV" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.sew" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.SEW" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.shv" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.SHV" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.stc" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.STC" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.stx" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.STX" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.svg" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.SVG" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.tap" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.TAP" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.tbf" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.TBF" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.u01" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.U01" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.vp3" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.VP3" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.xxx" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.XXX" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.zxy" />
+                <data
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.ZXY" />
+
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:mimeType="application/octet-stream" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.100" />
+                <data android:pathPattern=".*\\.10o" />
+                <data android:pathPattern=".*\\.10O" />
+                <data android:pathPattern=".*\\.bro" />
+                <data android:pathPattern=".*\\.BRO" />
+                <data android:pathPattern=".*\\.col" />
+                <data android:pathPattern=".*\\.COL" />
+                <data android:pathPattern=".*\\.csv" />
+                <data android:pathPattern=".*\\.CSV" />
+                <data android:pathPattern=".*\\.dat" />
+                <data android:pathPattern=".*\\.DAT" />
+                <data android:pathPattern=".*\\.dsb" />
+                <data android:pathPattern=".*\\.DSB" />
+                <data android:pathPattern=".*\\.dst" />
+                <data android:pathPattern=".*\\.DST" />
+                <data android:pathPattern=".*\\.dsz" />
+                <data android:pathPattern=".*\\.DSZ" />
+                <data android:pathPattern=".*\\.emm" />
+                <data android:pathPattern=".*\\.EMM" />
+                <data android:pathPattern=".*\\.exp" />
+                <data android:pathPattern=".*\\.EXP" />
+                <data android:pathPattern=".*\\.exy" />
+                <data android:pathPattern=".*\\.EXY" />
+                <data android:pathPattern=".*\\.fxy" />
+                <data android:pathPattern=".*\\.FXY" />
+                <data android:pathPattern=".*\\.gt" />
+                <data android:pathPattern=".*\\.GT" />
+                <data android:pathPattern=".*\\.inb" />
+                <data android:pathPattern=".*\\.INB" />
+                <data android:pathPattern=".*\\.inf" />
+                <data android:pathPattern=".*\\.INF" />
+                <data android:pathPattern=".*\\.jef" />
+                <data android:pathPattern=".*\\.JEF" />
+                <data android:pathPattern=".*\\.jpx" />
+                <data android:pathPattern=".*\\.JPX" />
+                <data android:pathPattern=".*\\.ksm" />
+                <data android:pathPattern=".*\\.KSM" />
+                <data android:pathPattern=".*\\.max" />
+                <data android:pathPattern=".*\\.MAX" />
+                <data android:pathPattern=".*\\.mit" />
+                <data android:pathPattern=".*\\.MIT" />
+                <data android:pathPattern=".*\\.new" />
+                <data android:pathPattern=".*\\.NEW" />
+                <data android:pathPattern=".*\\.pcd" />
+                <data android:pathPattern=".*\\.PCD" />
+                <data android:pathPattern=".*\\.pcm" />
+                <data android:pathPattern=".*\\.PCM" />
+                <data android:pathPattern=".*\\.pcq" />
+                <data android:pathPattern=".*\\.PCQ" />
+                <data android:pathPattern=".*\\.pcs" />
+                <data android:pathPattern=".*\\.PCS" />
+                <data android:pathPattern=".*\\.pec" />
+                <data android:pathPattern=".*\\.PEC" />
+                <data android:pathPattern=".*\\.pes" />
+                <data android:pathPattern=".*\\.PES" />
+                <data android:pathPattern=".*\\.phb" />
+                <data android:pathPattern=".*\\.PHB" />
+                <data android:pathPattern=".*\\.phc" />
+                <data android:pathPattern=".*\\.PHC" />
+                <data android:pathPattern=".*\\.sew" />
+                <data android:pathPattern=".*\\.SEW" />
+                <data android:pathPattern=".*\\.shv" />
+                <data android:pathPattern=".*\\.SHV" />
+                <data android:pathPattern=".*\\.stc" />
+                <data android:pathPattern=".*\\.STC" />
+                <data android:pathPattern=".*\\.stx" />
+                <data android:pathPattern=".*\\.STX" />
+                <data android:pathPattern=".*\\.svg" />
+                <data android:pathPattern=".*\\.SVG" />
+                <data android:pathPattern=".*\\.tap" />
+                <data android:pathPattern=".*\\.TAP" />
+                <data android:pathPattern=".*\\.tbf" />
+                <data android:pathPattern=".*\\.TBF" />
+                <data android:pathPattern=".*\\.u01" />
+                <data android:pathPattern=".*\\.U01" />
+                <data android:pathPattern=".*\\.vp3" />
+                <data android:pathPattern=".*\\.VP3" />
+                <data android:pathPattern=".*\\.XXX" />
+                <data android:pathPattern=".*\\.xxx" />
+                <data android:pathPattern=".*\\.zxy" />
+                <data android:pathPattern=".*\\.ZXY" />
+
+            </intent-filter>
+
+        </activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.embroidermodder.embroideryviewer.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+    </application>
+
+</manifest>

@@ -1,0 +1,39 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ master ]
+
+jobs:
+  test-linux64:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run test script on Linux.
+      run: |
+        git clone https://github.com/Embroidermodder/embroidermodder
+        cd embroidermodder
+        ./build.sh --get-dependencies
+        ./build.sh --build
+  test-macOS:
+    runs-on: macOS-latest
+    
+    steps:
+    - name: Run test script on macOS.
+      run: |
+        git clone https://github.com/Embroidermodder/embroidermodder
+        cd embroidermodder
+        ./build.sh --get-dependencies
+        ./build.sh --build
+  test-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Run test script on Windows.
+      run: |
+        git clone https://github.com/Embroidermodder/embroidermodder
+        cd embroidermodder
+        .\build.bat

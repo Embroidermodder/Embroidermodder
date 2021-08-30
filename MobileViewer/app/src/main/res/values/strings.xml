@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">Embroidermodder</string>
+    <string name="action_open_file">Open File</string>
+    <string name="action_share">Share</string>
+    <string name="action_folders">Folders</string>
+
+    <string name="action_load_files">Load Files</string>
+    <string name="action_tool_pan">Pan</string>
+    <string name="action_tool_draw">Draw</string>
+
+    <!-- Write permissions section -->
+    <string name="external_storage_justification_write">Files cannot be saved without access to storage</string>
+    <string name="external_storage_justification_read">Files cannot be loaded without access to storage</string>
+    <string name="write_permissions_denied">Write permissions Denied</string>
+    <string name="read_permissions_denied">Read permissions Denied</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Error message section -->
+    <string name="error_file_not_found">Error: File not found.</string>
+    <string name="error_uri_not_retrieved">Error: URI not retrieved.</string>
+    <string name="error_file_read_failed">Error: File read failed.</string>
+    <string name="file_type_not_supported">File type not supported.</string>
+    <string name="stitch_block_color">Stitch block color</string>
+
+    <!-- Statistics section -->
+    <string name="action_show_statistics">Statistics</string>
+    <string name="stitchblock_stitches">"%d Stitches"</string>
+    <string name="number_of_stitches">Number of stitch entries:</string>
+    <string name="normal_stitches">  Normal:        </string>
+    <string name="jumps">  Jumps:         </string>
+    <string name="colors">  Color changes: </string>
+    <string name="size">Size: </string>
+    <string name="total_length">Total length: </string>
+
+    <string name="send_file_to">Send File To…</string>
+
+    <!-- Formats section -->
+    <string name="format_exp" translatable="false">.exp</string>
+    <string name="format_xxx" translatable="false">.xxx</string>
+    <string name="format_jef" translatable="false">.jef</string>
+    <string name="format_dst" translatable="false">.dst</string>
+    <string name="format_svg" translatable="false">.svg</string>
+    <string name="format_pcs" translatable="false">.pcs</string>
+    <string name="format_sew" translatable="false">.sew</string>
+    <string name="format_vp3" translatable="false">.vp3</string>
+    <string name="format_pes" translatable="false">.pes</string>
+    <string name="format_pec" translatable="false">.pec</string>
+    <string name="format_shv" translatable="false">.shv</string>
+    <string name="format_hus" translatable="false">.hus</string>
+    <string name="format_ksm" translatable="false">.ksm</string>
+    <string name="format_csv" translatable="false">.csv</string>
+    <string name="format_emm" translatable="false">.emm</string>
+    <string name="format_u01" translatable="false">.u01</string>
+
+
+
+</resources>

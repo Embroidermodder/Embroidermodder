@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Embroidermodder</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="Embroidery Software and Hardware"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="keywords" content="embroidery, stitching, quilting, sewing, cad, drafting, 10o, 100, art, bmc, bro, c, c++, cam, cnc, cnd, csv, dat, dem, dsb, dst, dsz, dxf, edr, emd, exp, exy, eys, fxy, gnc, gt, hus, inb, inf, jef, ksm, max, mit, new, ofm, pcd, pcm, pcq, pcs, pec, pel, pem, pes, phb, phc, plt, rgb, sew, shv, sst, stx, svg, t09, tap, thr, u00, u01, vip, vp3, xxx, zsk" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+<style>
+@font-face {
+    font-family: 'styled-font';
+    src: url("fonts/elemental_end_italic.ttf") format('truetype');
+}
+
+body
+{
+background-color:#000000;
+background-image:url("images/texture-spirals.png");
+min-width:700px;
+margin:0;
+padding:0;
+font-family:sans-serif;
+}
+
+img
+{
+border:0;
+}
+
+a{text-decoration:none;color:#55C4E6;}
+a:link{text-decoration:none;color:#55C4E6;}
+
+li { color:#0C6AB0; } /* bullet color */
+li span { color:#DDDDDD; } /* text color */
+
+table, th, td
+{
+    border: 1px solid black;
+    border-collapse:collapse;
+    padding-left:5px;
+    padding-right:10px;
+}
+
+th
+{
+    color:#0C6AB0;
+    background-color:#000000;
+    text-align:left;
+}
+
+td
+{
+    color:#000000;
+    background-color:#DDDDDD;
+}
+
+#header
+{
+    position:relative;
+    background-color: #000000;
+    top: 0.5em;
+    bottom: 0;
+    left: 2em;
+    right: 0;
+    width: auto;
+    font-size: 18px;
+}
+
+h2 {
+    font-family: 'styled-font', "Emberlike-Caps";
+    font-style: italic;
+    font-size: 20px;
+    color: #0C6AB0;
+}
+
+#footerCenter
+{
+    font-family: 'styled-font', "Emberlike-Caps", serif;
+    font-style: italic;
+    font-size: 20px;
+    color: #0C6AB0;
+    background: black;
+    background-repeat: no-repeat;
+    position: relative;
+    top: 0px;
+    bottom:0px;
+    padding-left: 250px;
+    right: 0px;
+    width: auto;
+    height: 30px;
+}
+
+#menu
+{
+    float:left;
+    position:relative;
+    background-color:#000000;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    margin-right: 3em;
+    width: 200px;
+    color: #0C6AB0;
+    font-family: 'styled-font', "Emberlike-Caps", serif;
+    font-style: italic;
+}
+
+#menu a
+{
+    color:#0C6AB0;
+}
+
+#menuUp:hover
+{
+    color:#2C8AD0;
+}
+
+#menuUp
+{
+    position: relative;
+    top: 35px;
+    bottom: 35px;
+    left: 40px;
+    right: 40px;
+}
+
+#menuSecond
+{
+    position: relative;
+    top: 35px;
+    bottom: 35px;
+    font-size: 14px;
+    left: 60px;
+    right: 40px;
+}
+
+#container
+{
+    position: relative;
+    background-color: #000000;
+    top: 0;
+    bottom: 0;
+    left: 4em;
+    right: 0;
+    width: auto;
+    font-size: 18px;
+}
+
+.contentPanel
+{
+    background-image: url('images/texture-spirals-canvas.png');
+    background-repeat: repeat-xy;
+    color: #DDDDDD;
+    position: relative;
+    margin-left: 14em;
+    padding-bottom: 1.5em;
+}
+
+.contentCenter
+{
+    position: relative;
+    left: 4em;
+    top: 1.5em;
+    bottom: 4em;
+    width: 80%;
+    min-height: 20em;
+    font-size: 14px;
+}
+
+.video
+{
+    position: relative;
+    padding-bottom: 56.25%; /* 16/9 ratio */
+    padding-top: 30px; /* IE6 workaround*/
+    height: 0;
+    overflow: hidden;
+}
+
+.video iframe,
+.video object,
+.video embed
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.img
+{
+    width: 100%;
+    max-height: auto;
+}
+
+.icon
+{
+    padding-top: 5px;
+    width: 32px;
+    height: 32px;
+}
+</style>
+
+</head>
+
+<body>
+    <div id="container">
+    <div id="header"><a href="index.html"><img src="images/header-center.png"></img></a></div>
+        <!-- CONTENT START -->
+        <div id="menu">
+            <a href="index.html"><div id="menuUp">News</div></a>
+            <a href="features.html"><div id="menuUp">Features</div></a>
+            <a href="about.html"><div id="menuUp">About</div></a>
+            <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
+            <a href="documentation.html"><div id="menuUp">Documentation</div></a>
+            <a href="thread-tables.html"><div id="menuUp">Thread Tables</div></a>
+            <a href="donate.html"><div id="menuUp">Donate</div></a>
+            <a href="downloads.html"><div id="menuUp">Downloads</div></a>
+            <a href="contact.html"><div id="menuUp">Contact</div></a>
+        </div>
+        <div class="contentPanel">
+        <div class="contentCenter">
+        <!-- converted markdown goes here -->
+<h2 id="features">Features</h2>
+<p>Embroidermodder 2 has many advanced features that enable you to create awesome designs quicker, tweak existing designs to perfection, and can be fully customized to fit your workflow.</p>
+<p>A summary of these features:</p>
+<ul>
+<li><a href="#anchorCrossPlatform">Cross Platform</a></li>
+<li><a href="#anchorRealRender">Realistic rendering</a></li>
+<li><a href="#anchorGridRuler">Various grid types and auto-adjusting rulers</a></li>
+<li><a href="#anchorMultiMeasure">Many measurement tools</a></li>
+<li><a href="#anchorText">Add text to any design</a></li>
+<li><a href="#anchorFormats">Supports many formats</a></li>
+<li><a href="#anchorBatch">Batch Conversion</a></li>
+<li><a href="#anchorScriptingAPI">Scripting API</a></li>
+</ul>
+<h2 id="cross-platform">Cross Platform</h2>
+<p><a name="anchorCrossPlatform"></a></p>
+<p>If you use multiple operating systems, it’s important to choose software that works on all of them.</p>
+<p>Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let’s not forget the <a href="http://www.raspberrypi.org">Raspberry Pi</a>.</p>
+<p><a href="images/features-platforms-1.png"><img class="img" src="images/features-platforms-1.png"></a></p>
+<h2 id="realistic-rendering">Realistic Rendering</h2>
+<p><a name="anchorRealRender"></a></p>
+<p>It is important to be able to visualize what a design will look like when stitched and our pseudo “3D” realistic rendering helps achieve this.</p>
+<p>Realistic rendering sample #1:</p>
+<p><a href="images/features-realrender-1.png"><img class="img" src="images/features-realrender-1.png"></a></p>
+<p>Realistic rendering sample #2:</p>
+<p><a href="images/features-realrender-2.png"><img class="img" src="images/features-realrender-2.png"></a></p>
+<p>Realistic rendering sample #3:</p>
+<p><a href="images/features-realrender-3.png"><img class="img" src="images/features-realrender-3.png"></a></p>
+<p><a name="anchorGridRuler"></a>Various grid types and auto-adjusting rulers</p>
+<p>Making use of the automatically adjusting ruler in conjunction with the grid will ensure your design is properly sized and fits within your embroidery hoop area.</p>
+<p>Use rectangular, circular or isometric grids to construct your masterpiece!</p>
+<p>Multiple grids and rulers in action: <a href="images/features-grid-ruler-1.png"><img class="img" src="images/features-grid-ruler-1.png"></a></p>
+<h2 id="many-measurement-tools">Many measurement tools</h2>
+<p><a name="anchorMultiMeasure"></a></p>
+<p>Taking measurements is a critical part of creating great designs. Whether you are designing mission critical embroidered space suits for NASA or some other far out design for your next meet-up, you will have precise measurement tools at your command to make it happen. You can locate individual points or find distances between any 2 points anywhere in the design!</p>
+<p>Take quick and accurate measurements:</p>
+<p><a href="images/features-measure-1.png"><img class="img" src="images/features-measure-1.png"></a></p>
+<h2 id="add-text-to-any-design">Add text to any design</h2>
+<a name="anchorText"></a>
+<div class="content-filler">
+<p>Need to make company apparel for all of your employees with individual names on them? No sweat. Just simply add text to your existing design or create one from scratch, quickly and easily. Didn’t get it the right size or made a typo? No problem. Just select the text and update it with the property editor.</p>
+<p>Add text and adjust its properties quickly: <a href="images/features-text-1.png"><img class="img" src="images/features-text-1.png"></a></p>
+<h2 id="supports-many-formats">Supports many formats</h2>
+<p><a name="anchorFormats"></a></p>
+<p>Embroidery machines all accept different formats. There are so many formats available that it can sometimes be confusing whether a design will work with your machine.</p>
+<p>Embroidermodder 2 supports a wide variety of embroidery formats as well as several vector formats, such as SVG and DXF. This allows you to worry less about which designs you can use.</p>
+<h2 id="batch-conversion">Batch Conversion</h2>
+<p><a name="anchorBatch"></a></p>
+<p>Need to send a client several different formats? Just use libembroidery-convert, our command line utility which supports batch file conversion.</p>
+<p>There are a multitude of formats to choose from: <a href="images/features-formats-1.png"><img class="img" src="images/features-formats-1.png"></a></p>
+<h2 id="scripting-api">Scripting API</h2>
+<p><a name="anchorScriptingAPI"></a></p>
+<p>If you’ve got programming skills and there is a feature that isn’t currently available that you absolutely cannot live without, you have the capability to create your own custom commands for Embroidermodder 2. We provide an QtScript API which exposes various application functionality so that it is possible to extend the application without requiring a new release. If you have created a command that you think is worth including in the next release, just <a href="contact.html">contact us</a> and we will review it for functionality, bugs, and finally inclusion.</p>
+<p>An Embroidermodder 2 command excerpt:</p>
+<p><a href="images/features-scripting-1.png"><img class="img" src="images/features-scripting-1.png"></a></p>
+</br>
+</br>
+<i>Copyright 2013-2021 The Embroidermodder Team</i>
+</br>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
