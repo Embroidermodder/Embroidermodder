@@ -149,7 +149,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         QLineF perp(circumscribeLine.p2(), QPointF(0,0));
         perp = perp.normalVector();
         QPointF iPoint;
-        perp.intersect(prev, &iPoint);
+        perp.intersects(prev, &iPoint);
         circumscribePath.moveTo(iPoint);
         //Remaining Points
         for(int i = 2; i <= numSides; i++)
@@ -158,7 +158,7 @@ void PolygonObject::updateRubber(QPainter* painter)
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
             perp = QLineF(circumscribeLine.p2(), QPointF(0,0));
             perp = perp.normalVector();
-            perp.intersect(prev, &iPoint);
+            perp.intersects(prev, &iPoint);
             circumscribePath.lineTo(iPoint);
         }
         updatePath(circumscribePath);

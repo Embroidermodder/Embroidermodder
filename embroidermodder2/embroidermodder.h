@@ -1,13 +1,14 @@
 #ifndef EMBROIDERMODDER_H
 #define EMBROIDERMODDER_H
 
+extern "C" {
 #include "embroidery.h"
+}
 
 #include <QList>
 #include <QHash>
 #include <QDir>
-#include <QtScript>
-#include <QtScriptTools>
+#include <QJSEngine>
 #include <QFileDialog>
 #include <QMdiArea>
 #include <QPixmap>
@@ -244,7 +245,7 @@ signals:
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
     void endCommand();
-    void processInput(const QChar& rapidChar = QChar());
+    void processInput(const Qt::Key& rapidChar = Qt::Key_yen);
     void checkSelection();
     void updateCurrentText(const QString& txt);
     void checkEditedText(const QString& txt);
@@ -1313,9 +1314,9 @@ public slots:
     void doNothing();
 
 private:
-    QScriptEngine*         engine;
+    QJSEngine*         engine;
     QScriptEngineDebugger* debugger;
-    void                   javaInitNatives(QScriptEngine* engine);
+    void                   javaInitNatives(QJSEngine* engine);
     void                   javaLoadCommand(const QString& cmdName);
 
 public:
@@ -2365,7 +2366,7 @@ class PropertyEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    PropertyEditor(const QString& iconDirectory = QString(), bool pickAddMode = true, QWidget* widgetToFocus = 0, QWidget* parent = 0, Qt::WindowFlags flags = Qt::Widget);
     ~PropertyEditor();
 
 protected:
@@ -3366,7 +3367,7 @@ class UndoEditor : public QDockWidget
     Q_OBJECT
 
 public:
-    UndoEditor(const QString& iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    UndoEditor(const QString& iconDirectory = QString(), QWidget* widgetToFocus = 0, QWidget* parent = 0, Qt::WindowFlags flags = Qt::Widget);
     ~UndoEditor();
 
     void addStack(QUndoStack* stack);

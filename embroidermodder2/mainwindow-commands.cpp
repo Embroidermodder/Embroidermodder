@@ -1759,7 +1759,7 @@ qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qrea
     qreal dy = py-y1;
     norm.translate(dx, dy);
     QPointF iPoint;
-    norm.intersect(line, &iPoint);
+    norm.intersects(line, &iPoint);
     return QLineF(px, py, iPoint.x(), iPoint.y()).length();
 }
 

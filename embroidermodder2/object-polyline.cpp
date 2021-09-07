@@ -28,7 +28,7 @@ PolylineObject::~PolylineObject()
 
 void PolylineObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
+    setData(OBJ_TYPE, PolylineObject::Type);
     setData(OBJ_NAME, OBJ_NAME_POLYLINE);
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,

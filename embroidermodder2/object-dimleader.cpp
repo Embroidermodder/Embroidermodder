@@ -143,8 +143,8 @@ void DimLeaderObject::updateLeader()
     lyne2.setAngle(angle - arrowStyleAngle);
     QPointF ap1;
     QPointF ap2;
-    lynePerp.intersect(lyne1, &ap1);
-    lynePerp.intersect(lyne2, &ap2);
+    lynePerp.intersects(lyne1, &ap1);
+    lynePerp.intersects(lyne2, &ap2);
 
     //Math Diagram
     //                 .(ap1)                     .(lp1)

@@ -112,3 +112,7 @@ experimental/python/gui/embroiderdocs/_build
 !experimental/python/gui/embroiderdocs/Makefile
 ## Bindings stuff
 build-swigpython-Desktop_Qt_[0-9]_[0-9]_[0-9]_MinGW_32bit-Debug
+
+CMakeFiles/
+embroidermodder
+embroidermodder_autogen/

@@ -97,7 +97,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
 {
     QString appDir = qApp->applicationDirPath();
 
-    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
+    QAction *ACTION = new QAction(QIcon(":/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this);
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
     // TODO: Set What's This Context Help to statusTip for now so there is some infos there.

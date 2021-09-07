@@ -27,7 +27,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 {
     readSettings();
 
-    QString appDir = qApp->applicationDirPath();
+    QString appDir = ":";
     //Verify that files/directories needed are actually present.
     QFileInfo check(appDir + "/commands");
     if(!check.exists())
@@ -114,7 +114,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //create the mdiArea
     QFrame* vbox = new QFrame(this);
     QVBoxLayout* layout = new QVBoxLayout(vbox);
-    layout->setMargin(0);
+    layout->setContentsMargins(QMargins());
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
     mdiArea->useBackgroundLogo(getSettingsGeneralMdiBGUseLogo());
@@ -190,10 +190,11 @@ MainWindow::MainWindow() : QMainWindow(0)
     //Javascript
     initMainWinPointer(this);
 
-    engine = new QScriptEngine(this);
-    engine->installTranslatorFunctions();
-    debugger = new QScriptEngineDebugger(this);
-    debugger->attachTo(engine);
+    engine = new QJSEngine(this);
+    engine->installExtensions(QJSEngine::AllExtensions);
+    //engine->installTranslatorFunctions();
+    //debugger = new QScriptEngineDebugger(this);
+    //debugger->attachTo(engine);
     javaInitNatives(engine);
 
     //Load all commands in a loop

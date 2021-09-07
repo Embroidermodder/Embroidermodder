@@ -18,8 +18,8 @@ deploy {
 ICON = embroidermodder2.icns
 
 TARGET = embroidermodder2
-QT += opengl
-QT += script scripttools
+QT += openglwidgets
+QT += qml
 
 #Qt5
 greaterThan(QT_MAJOR_VERSION, 4) {
@@ -331,3 +331,6 @@ QMAKE_DISTCLEAN += object_script.*
 
 DISTFILES += \
     Info.plist
+
+RESOURCES += \
+    images.qrc
