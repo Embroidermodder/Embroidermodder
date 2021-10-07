@@ -101,7 +101,7 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
     // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
-    // Make custom whats this context help popup with more descriptive help than just
+    // Make custom What's This Context Help popup with more descriptive help than just
     // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
     // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
     ACTION->setWhatsThis(statusTip);

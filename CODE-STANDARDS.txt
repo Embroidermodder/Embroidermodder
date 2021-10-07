@@ -56,7 +56,7 @@ When writing code, sometimes there are items that we know can be improved,
 incomplete or need special clarification. In these cases, use the types of
 comments shown below. They are pretty standard and are highlighted by many editors to
 make reviewing code easier. We also use shell scripts to parse the code to find
-all of these occurances so someone wanting to go on a bug hunt will be able to
+all of these occurrences so someone wanting to go on a bug hunt will be able to
 easily see which areas of the code need more love.
 
 //C++ Style Comments

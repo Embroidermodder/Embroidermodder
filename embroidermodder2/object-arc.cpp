@@ -263,7 +263,7 @@ qreal ArcObject::objectIncludedAngle() const
 {
     qreal chord = objectChord();
     qreal rad = objectRadius();
-    if(chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
+    if(chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existent circles
 
     //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
     //      If the quotient is out of that range, then the result of asin() will be NaN.

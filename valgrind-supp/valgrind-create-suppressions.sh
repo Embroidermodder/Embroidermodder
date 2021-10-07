@@ -18,7 +18,7 @@
 # The checksum is used as an index in a different array. If an item with that index already exists the suppression must be a duplicate and is discarded.
  
 BEGIN { suppression=0; md5sum = "md5sum" }
-  # If the line begins with '{', it's the start of a supression; so set the var and initialise things
+  # If the line begins with '{', it's the start of a suppression; so set the var and initialise things
   /^{/  {
            suppression=1;  i=0; next 
         }
@@ -31,7 +31,7 @@ BEGIN { suppression=0; md5sum = "md5sum" }
              delete supparray     # We don't want subsequent suppressions to append to it!
            }
      }
-  # Otherwise, it's a normal line. If we're inside a supression, store it, and pipe it to md5sum. Otherwise it's cruft, so ignore it
+  # Otherwise, it's a normal line. If we're inside a suppression, store it, and pipe it to md5sum. Otherwise it's cruft, so ignore it
      { if (suppression)
          { 
             supparray[++i] = $0
