@@ -10,31 +10,32 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="shortcut icon" type="image/png" href="favicon.png" />
 <style>
-@font-face {
-    font-family: 'styled-font';
-    src: url("fonts/elemental_end_italic.ttf") format('truetype');
-}
-
 body
 {
-background-color:#000000;
-background-image:url("images/texture-spirals.png");
-min-width:700px;
-margin:0;
-padding:0;
-font-family:sans-serif;
+    background-color: #FFFFFF;
+    background-image: url("images/texture-spirals.png");
+    min-width: 700px;
+    margin: 0;
+    padding: 0;
+    font-family: serif;
 }
 
 img
 {
-border:0;
+    border: 0;
 }
 
-a{text-decoration:none;color:#55C4E6;}
-a:link{text-decoration:none;color:#55C4E6;}
+a
+{
+    text-decoration: none;
+    color: #55C4E6;
+}
 
-li { color:#0C6AB0; } /* bullet color */
-li span { color:#DDDDDD; } /* text color */
+a:link
+{
+    text-decoration: none;
+    color: #55C4E6;
+}
 
 table, th, td
 {
@@ -57,118 +58,124 @@ td
     background-color:#DDDDDD;
 }
 
-#header
-{
-    position:relative;
-    background-color: #000000;
-    top: 0.5em;
-    bottom: 0;
-    left: 2em;
-    right: 0;
-    width: auto;
-    font-size: 18px;
+@media all and (min-width: 1000px) {
+    #menu {
+        float: top;
+        position: relative;
+        background-color: #000000;
+        left: 0;
+        top: 0;
+        padding-bottom: 1em;
+        padding-left: 8em;
+        color: #0C6AB0;
+        font-family: serif;
+        font-style: italic;
+    }
+    
+    #menu a {
+        color: #0C6AB0;
+    }
+
+    #menuUp {
+        position: relative;
+        float: left;
+        top: 0;
+        bottom: 35px;
+        padding-right: 40px;
+        padding-right: 1.5em;
+    }
+
+    #menuUp:hover {
+        color:#2C8AD0;
+    }
+
+    #container {
+        position: relative;
+        background-color: #000000;
+        top: 4em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .contentPanel {
+        background-color: #FFFFFF;
+        color: #001537;
+        position: relative;
+        padding-left: 8em;
+        padding-right: 16em;
+        padding-bottom: 3em;
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 1.5em;
+        bottom: 0;
+        min-height: 20em;
+        font-size: 16px;
+        line-height: 1.8;
+    }
 }
 
-h2 {
-    font-family: 'styled-font', "Emberlike-Caps";
-    font-style: italic;
-    font-size: 20px;
-    color: #0C6AB0;
-}
+@media all and (max-width: 1000px) {
+    #menu {
+        float: top;
+        position: relative;
+        background-color: #000000;
+        left: 0;
+        top: 0;
+        padding-bottom: 1em;
+        padding-left: 3em;
+        color: #0C6AB0;
+        font-family: serif;
+        font-style: italic;
+    }
+    
+    #menu a {
+        color: #0C6AB0;
+    }
 
-#footerCenter
-{
-    font-family: 'styled-font', "Emberlike-Caps", serif;
-    font-style: italic;
-    font-size: 20px;
-    color: #0C6AB0;
-    background: black;
-    background-repeat: no-repeat;
-    position: relative;
-    top: 0px;
-    bottom:0px;
-    padding-left: 250px;
-    right: 0px;
-    width: auto;
-    height: 30px;
-}
+    #menuUp {
+        position: relative;
+        float: left;
+        top: 0;
+        bottom: 35px;
+        padding-right: 40px;
+        padding-right: 1.5em;
+    }
 
-#menu
-{
-    float:left;
-    position:relative;
-    background-color:#000000;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    height: 100%;
-    margin-right: 3em;
-    width: 200px;
-    color: #0C6AB0;
-    font-family: 'styled-font', "Emberlike-Caps", serif;
-    font-style: italic;
-}
+    #menuUp:hover {
+        color:#2C8AD0;
+    }
 
-#menu a
-{
-    color:#0C6AB0;
-}
+    #container {
+        position: relative;
+        background-color: #000000;
+        top: 4em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        font-size: 16px;
+    }
 
-#menuUp:hover
-{
-    color:#2C8AD0;
-}
-
-#menuUp
-{
-    position: relative;
-    top: 35px;
-    bottom: 35px;
-    left: 40px;
-    right: 40px;
-}
-
-#menuSecond
-{
-    position: relative;
-    top: 35px;
-    bottom: 35px;
-    font-size: 14px;
-    left: 60px;
-    right: 40px;
-}
-
-#container
-{
-    position: relative;
-    background-color: #000000;
-    top: 0;
-    bottom: 0;
-    left: 4em;
-    right: 0;
-    width: auto;
-    font-size: 18px;
-}
-
-.contentPanel
-{
-    background-image: url('images/texture-spirals-canvas.png');
-    background-repeat: repeat-xy;
-    color: #DDDDDD;
-    position: relative;
-    margin-left: 14em;
-    padding-bottom: 1.5em;
-}
-
-.contentCenter
-{
-    position: relative;
-    left: 4em;
-    top: 1.5em;
-    bottom: 4em;
-    width: 80%;
-    min-height: 20em;
-    font-size: 14px;
+    .contentPanel {
+        background-color: #FFFFFF;
+        color: #001537;
+        position: relative;
+        padding-left: 3em;
+        padding-right: 3em;
+        padding-bottom: 3em;
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 1.5em;
+        bottom: 0;
+        min-height: 20em;
+        font-size: 14px;
+        line-height: 1.8;
+    }
 }
 
 .video
@@ -187,13 +194,13 @@ h2 {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
 }
 
 .img
 {
-    width: 100%;
+    width: 80%;
     max-height: auto;
 }
 
@@ -209,106 +216,47 @@ h2 {
 
 <body>
     <div id="container">
-    <div id="header"><a href="index.html"><img src="images/header-center.png"></img></a></div>
-        <!-- CONTENT START -->
-        <div id="menu">
-            <a href="index.html"><div id="menuUp">News</div></a>
-            <a href="features.html"><div id="menuUp">Features</div></a>
-            <a href="about.html"><div id="menuUp">About</div></a>
-            <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
-            <a href="documentation.html"><div id="menuUp">Documentation</div></a>
-            <a href="thread-tables.html"><div id="menuUp">Thread Tables</div></a>
-            <a href="donate.html"><div id="menuUp">Donate</div></a>
-            <a href="downloads.html"><div id="menuUp">Downloads</div></a>
-            <a href="contact.html"><div id="menuUp">Contact</div></a>
-        </div>
-        <div class="contentPanel">
-        <div class="contentCenter">
-        <!-- converted markdown goes here -->
-<h1 id="libembroidery-v0.1-manual">Libembroidery v0.1 Manual</h1>
+    <!-- CONTENT START -->
+    <div id="menu">
+        <br>
+        <a href="index.html"><img src="images/header-center.png"></img></a>
+        <br>
+        <a href="index.html"><div id="menuUp">News</div></a>
+        <a href="about.html"><div id="menuUp">About</div></a>
+        <a href="documentation.html"><div id="menuUp">Documentation</div></a>
+        <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
+        <a href="downloads.html"><div id="menuUp">Downloads</div></a>
+        <a href="contact.html"><div id="menuUp">Contact</div></a>
+    </div>
+    <div class="contentPanel">
+    <br>
+    <!-- converted markdown goes here -->
+<h1 id="libembroidery-v1.0-alpha-manual">Libembroidery v1.0-alpha Manual</h1>
+<h2 id="what-is-libembroidery">What is libembroidery?</h2>
+<p>libembroidery is a low-level library for reading, writing, and altering digital embroidery files in C.</p>
+<p>libembroidery is the underlying library that is used by <a href="http://embroidermodder.org">Embroidermodder 2</a> and is developed by <a href="#the-embroidermodder-team">The Embroidermodder Team</a>. It handles over 45 different embroidery specific formats as well as several non-embroidery specific vector formats.</p>
+<p>It also includes a CLI called <code>embroider</code> that allows for better automation of changes to embroidery files and will be more up-to date than the Embroidermodder 2 GUI.</p>
+<p>If you want to find a simple fix to contribute see the <em>Development</em> section of the manual.</p>
+<p>https://embroidermodder.org</p>
+<p>Copyright (c) 2013-2022 The EmbroiderModder Team</p>
 <h2 id="table-of-contents">Table of Contents</h2>
 <ul>
-<li><a href="#abstract">Abstract</a></li>
-<li><a href="#the-embroidermodder-team">The Embroidermodder Team</a>
-<ul>
-<li><a href="#credits">Credits</a></li>
-</ul></li>
-<li><a href="#introduction">Introduction</a>
-<ul>
-<li><a href="#build">Build</a></li>
+<li><a href="#what-is-libembroidery">What is libembroidery?</a></li>
+<li><a href="#table-of-contents">Table of Contents</a></li>
 <li><a href="#license">License</a></li>
+<li><a href="#the-embroidermodder-team">The Embroidermodder Team</a></li>
+<li><a href="#build">Build</a>
+<ul>
+<li><a href="#debug">Debug</a></li>
 </ul></li>
+<li><a href="#usage">Usage</a></li>
 <li><a href="#coding-standards">Coding Standards</a>
 <ul>
 <li><a href="#naming-conventions">Naming Conventions</a></li>
 <li><a href="#braces">Braces</a></li>
 <li><a href="#comments">Comments</a></li>
 </ul></li>
-<li><a href="#wrapper-functions">Wrapper Functions</a></li>
-<li><a href="#formats">Formats</a>
-<ul>
-<li><a href="100_format.md">Toyota Embroidery Format (.100)</a></li>
-<li><a href="10o_format.md">Toyota Embroidery Format (.10o)</a></li>
-<li><a href="art_format.md">Bernina Embroidery Format (.art)</a></li>
-<li><a href="bmc_format.md">Bitmap Cache Embroidery Format (.bmc)</a></li>
-<li><a href="bro_format.md">Bits and Volts Embroidery Format (.bro)</a></li>
-<li><a href="cnd_format.md">Melco Embroidery Format (.cnd)</a></li>
-<li><a href="col_format.md">Embroidery Thread Color Format (.col)</a></li>
-<li><a href="csd_format.md">Singer Embroidery Format (.csd)</a></li>
-<li><a href="csv_format.md">Comma Separated Values (.csv)</a></li>
-<li><a href="dat_format.md">Barudan Embroidery Format (.dat)</a></li>
-<li><a href="dem_format.md">Melco Embroidery Format (.dem)</a></li>
-<li><a href="dsb_format.md">Barudan Embroidery Format (.dsb)</a></li>
-<li><a href="dst_format.md">Tajima Embroidery Format (.dst)</a></li>
-<li><a href="dsz_format.md">ZSK USA Embroidery Format (.dsz)</a></li>
-<li><a href="dxf_format.md">Drawing Exchange Format (.dxf)</a></li>
-<li><a href="edr_format.md">Embird Embroidery Format (.edr)</a></li>
-<li><a href="emd_format.md">Elna Embroidery Format (.emd)</a></li>
-<li><a href="exp_format.md">Melco Embroidery Format (.exp)</a></li>
-<li><a href="exy_format.md">Eltac Embroidery Format (.exy)</a></li>
-<li><a href="eys_format.md">Sierra Expanded Embroidery Format (.eys)</a></li>
-<li><a href="fxy_format.md">Fortron Embroidery Format (.fxy)</a></li>
-<li><a href="fxy_format.md">Smoothie G-Code Embroidery Format (.fxy)</a></li>
-<li><a href="gnc_format.md">Great Notions Embroidery Format (.gnc)</a></li>
-<li><a href="gt_format.md">Gold Thread Embroidery Format (.gt)</a></li>
-<li><a href="hus_format.md">Husqvarna Viking Embroidery Format (.hus)</a></li>
-<li><a href="inb_format.md">Inbro Embroidery Format (.inb)</a></li>
-<li><a href="inf_format.md">Embroidery Color Format (.inf)</a></li>
-<li><a href="jef_format.md">Janome Embroidery Format (.jef)</a></li>
-<li><a href="ksm_format.md">Pfaff Embroidery Format (.ksm)</a></li>
-<li><a href="max_format.md">Pfaff Embroidery Format (.max)</a></li>
-<li><a href="mit_format.md">Mitsubishi Embroidery Format (.mit)</a></li>
-<li><a href="new_format.md">Ameco Embroidery Format (.new)</a></li>
-<li><a href="ofm_format.md">Melco Embroidery Format (.ofm)</a></li>
-<li><a href="pcd_format.md">Pfaff Embroidery Format (.pcd)</a></li>
-<li><a href="pcm_format.md">Pfaff Embroidery Format (.pcm)</a></li>
-<li><a href="pcq_format.md">Pfaff Embroidery Format (.pcq)</a></li>
-<li><a href="pcs_format.md">Pfaff Embroidery Format (.pcs)</a></li>
-<li><a href="pec_format.md">Brother Embroidery Format (.pec)</a></li>
-<li><a href="pel_format.md">Brother Embroidery Format (.pel)</a></li>
-<li><a href="pem_format.md">Brother Embroidery Format (.pem)</a></li>
-<li><a href="pes_format.md">Brother Embroidery Format (.pes)</a></li>
-<li><a href="phb_format.md">Brother Embroidery Format (.phb)</a></li>
-<li><a href="phc_format.md">Brother Embroidery Format (.phc)</a></li>
-<li><a href="plt_format.md">AutoCAD Embroidery Format (.plt)</a></li>
-<li><a href="rgb_format.md">RGB Embroidery Format (.rgb)</a></li>
-<li><a href="sew_format.md">Janome Embroidery Format (.sew)</a></li>
-<li><a href="shv_format.md">Husqvarna Viking Embroidery Format (.shv)</a></li>
-<li><a href="sst_format.md">Sunstar Embroidery Format (.sst)</a></li>
-<li><a href="stx_format.md">Data Stitch Embroidery Format (.stx)</a></li>
-<li><a href="svg_format.md">Scalable Vector Graphics (.svg)</a></li>
-<li><a href="t01_format.md">Pfaff Embroidery Format (.t01)</a></li>
-<li><a href="t09_format.md">Pfaff Embroidery Format (.t09)</a></li>
-<li><a href="tap_format.md">Happy Embroidery Format (.tap)</a></li>
-<li><a href="thr_format.md">ThredWorks Embroidery Format (.thr)</a></li>
-<li><a href="txt_format.md">Text File (.txt)</a></li>
-<li><a href="u00_format.md">Barudan Embroidery Format (.u00)</a></li>
-<li><a href="u01_format.md">Barudan Embroidery Format (.u01)</a></li>
-<li><a href="vip_format.md">Pfaff Embroidery Format (.vip)</a></li>
-<li><a href="vp3_format.md">Pfaff Embroidery Format (.vp3)</a></li>
-<li><a href="#singer_embroidery_format_(.xxx)">Singer Embroidery Format (.xxx)</a></li>
-<li><a href="#zsk_usa_embroidery_format_(.zsk)">ZSK USA Embroidery Format (.zsk)</a></li>
-</ul></li>
+<li><a href="#formats">Formats</a></li>
 <li><a href="#features">Features</a>
 <ul>
 <li><a href="#bindings">Bindings</a></li>
@@ -331,29 +279,30 @@ h2 {
 <li>Avoiding the use of libm</li>
 </ul></li>
 <li><a href="#bibliography">Bibliography</a></li>
-<li><a href="#gnu-free-documentation-license">GNU Free Documentation License</a></li>
 </ul>
-<h2 id="what-is-libembroidery">What is libembroidery ?</h2>
-<p>libembroidery is the underlying library that is used by <a href="http://embroidermodder.github.io">Embroidermodder 2</a> and is developed by the Embroidermodder team. It handles over 45 different embroidery specific formats as well as several non-embroidery specific vector formats.</p>
-<p>It also includes a CLI called <code>embroider</code> that allows for better automation of changes to embroidery files and will be more up-to date than the Embroidermodder 2 GUI.</p>
-<p>Finally there are some shell tools in <code>embtools.sh/embtools.bat</code> to help with calls to ImageMagick and other programs that can help produce new embroidery machine files.</p>
-<p>Libembroidery is distributed under the permissive zlib licence, see the LICENSE file.</p>
-<p>If you want to find a simple fix to contribute see the <em>To Do</em> section of the manual.</p>
+<h3 id="license">License</h3>
+<p>Libembroidery is distributed under the permissive zlib licence, see the LICENCE file. Libembroidery consists of roughly 16k source lines of code in C: <code>embroidery.c</code>, <code>embroidery.h</code>, <code>thread-color.c</code> and <code>formats.c</code>. There are 3 supporting files: the <code>LICENCE</code>, this <code>README</code> and a build file (<code>CMakeLists.txt</code>). The licence covers these 7 files.</p>
+<h3 id="the-embroidermodder-project">The Embroidermodder Project</h3>
+<p>The <em>Embroidermodder 2</em> project is a collection of small software utilities for manipulating, converting and creating embroidery files in all major embroidery machine formats. The program <em>Embroidermodder 2</em> itself is a larger graphical user interface (GUI) which is at the heart of the project.</p>
+<p>This manual, the website (<code>embroidermodder.org</code>), mobile embroidery format viewers and tools (<code>iMobileViewer</code>, <code>MobileViewer</code>), the core library of functions (<code>libembroidery</code>) and CLI (<code>embroider</code>) are all tools to make the standard user experience of working with an embroidery machine better without expensive software which is locked to specific manufacturers and formats. But ultimately we hope that the core <em>Embroidermodder 2</em> is a practical, ever-present tool in larger workshops, small cottage industry workshops and personal hobbyist’s bedrooms.</p>
+<p>Embroidermodder 2 is licensed under the zlib license and we aim to keep all of our tools open source and free of charge. If you would like to support the project check out our Open Collective group. If you would like to help, please join us on GitHub. This document is written as developer training as well helping new users (see the last sections) so this is the place to learn how to start changing the code.</p>
+<h3 id="the-embroidermodder-team">The Embroidermodder Team</h3>
+<p>The Embroidermodder Team is the collection of people who’ve submitted patches, artwork and documentation to our three projects. The team was established by Jonathan Greig and Josh Varga. For a full list of members please see the <a href="https://github.com/Embroidermodder/Embroidermodder">Embroidermodder github page</a> where it is actively maintained.</p>
 <h2 id="build">Build</h2>
 <p>libembroidery and EmbroiderModder 2 use CMake builds so if you are building the project to use as a library we recommend you run:</p>
-<h4 id="linux-or-macos">Linux or MacOS</h4>
 <pre><code>git clone https://github.com/Embroidermodder/libembroidery
 cd libembroidery
-./embtools.sh build</code></pre>
-<h4 id="windows-or-any-system-without-bash">Windows (or any system without Bash)</h4>
-<p>(IN DEVELOPMENT)</p>
-<pre><code>git clone https://github.com/Embroidermodder/libembroidery
-cd libembroidery
-embtools.bat build</code></pre>
-<p>These builds both the static and shared versions of the library as well as the command line program <code>embroider</code>.</p>
+cmake .
+cmake --build .
+cmake --install .</code></pre>
+<p>This builds both the static and shared versions of the library as well as the command line program <code>embroider</code>.</p>
+<h3 id="debug">Debug</h3>
+<p>If you wish to help with development, <a href="https://embroidermodder.org/libembroidery_debugger.sh">run this debug script</a> and send us the error log. Note: this is maintained outside of the repository because it gives us a oneliner for new systems with a stable URL:</p>
+<pre><code>curl https://embroidermodder.org/libembroidery_debugger.sh | sh</code></pre>
+<p>While we will attempt to maintain good results from this script as part of normal development it should be the first point of failure on any system we haven’t tested or format we understand less.</p>
 <h2 id="usage">Usage</h2>
-<p>For basic use, we recommend you build as above then run:</p>
-<pre><code>./embroider</code></pre>
+<p>For basic use, we recommend you build as above, then run without arguments:</p>
+<pre><code>$ embroider</code></pre>
 <p>which will print out this advice on how to use these tools without digging straight into the rest of this manual.</p>
 <pre><code>EMBROIDER
     A command line program for machine embroidery.
@@ -401,64 +350,54 @@ Graphics:
 Quality Assurance:
     -test       Run the test suite.</code></pre>
 <p>For each of the flags described here we will go into greater detail in this manual.</p>
-<h2 id="abstract">Abstract</h2>
-<p>The <em>Embroidermodder 2</em> project is a collection of small software utilities for manipulating, converting and creating embroidery files in all major embroidery machine formats. The program <em>Embroidermodder 2</em> itself is a larger graphical user interface (GUI) which is at the heart of the project.</p>
-<p>This manual, the website (<code>embroidermodder.org</code>), mobile embroidery format viewers and tools (<code>iMobileViewer</code>, <code>MobileViewer</code>), the core library of functions (<code>libembroidery</code>) and CLI (<code>embroider</code>) are all tools to make the standard user experience of working with an embroidery machine better without expensive software which is locked to specific manufacturers and formats. But ultimately we hope that the core <em>Embroidermodder 2</em> is a practical, ever-present tool in larger workshops, small cottage industry workshops and personal hobbyist’s bedrooms.</p>
-<p>Embroidermodder 2 is licensed under the zlib license and we aim to keep all of our tools open source and free of charge. If you would like to support the project check out our Open Collective group. If you would like to help, please join us on GitHub. This document is written as developer training as well helping new users (see the last sections) so this is the place to learn how to start changing the code.</p>
-<p>Copyright (c) 2013-2021 The EmbroiderModder Team</p>
-<p>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.3 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled “GNU Free Documentation License”.</p>
-<p>The code is licenced under the terms of the zlib license and will be quoted in this document.</p>
-<h2 id="the-embroidermodder-team">The Embroidermodder Team</h2>
-<p>Credits for Embroidermodder 2, libembroidery and all other related code</p>
-<p>Please note that this file in not in alphabetical order. If you have contributed and wish to be added to this list, create a new credit section and increment the number. Fill it in with your information and submit it to us.</p>
-<p>Here is a summary of the values used:</p>
-<ul>
-<li>Name: The full name of the contributor starting with first name.</li>
-<li>GitHub: The GitHub account name of the contributor (in parentheses).</li>
-<li>CoreDeveloper: This is reserved for long term contributors.</li>
-<li>Documentation: If you have contributed changes to README files or help files, set this to true.</li>
-<li>Artwork: If you have contributed artwork or related changes, set this to true</li>
-<li>BugFixes: If you have contributed bug fixes or added new features, set this to true.</li>
-<li>Translation: If you have provided language translations, set this to true.</li>
-<li>Designs: If you have contributed an embroidery design sample, set this to true.</li>
-<li>Bindings: If you have contributed programming language bindings for libembroidery, set this to true.</li>
-<li>Commands: If you have contributed a command for Embroidermodder 2, set this to true.</li>
-</ul>
-<h3 id="credits">Credits</h3>
+<h3 id="to-flag">To Flag</h3>
+<h3 id="circle-flag">Circle Flag</h3>
+<h3 id="ellipse-flag">Ellipse Flag</h3>
+<h3 id="line-flag">Line Flag</h3>
+<h3 id="polyline-flag">Polyline Flag</h3>
+<h3 id="polygon-flag">Polygon Flag</h3>
+<h3 id="satin-flag">Satin Flag</h3>
+<h3 id="stitch-flag">Stitch Flag</h3>
+<h3 id="section"></h3>
+<h3 id="basic-test-suite">Basic Test Suite</h3>
+<p>The flag <code>--test</code> runs the tests that take the least time and have the most utility. If you’re submitting a patch for review, please run:</p>
+<pre><code>$ embroider --test | tail -n 1</code></pre>
+<p>You’ll be presented with an overall PASS or FAIL for your build, if your build fails you can try and trace the error with:</p>
+<pre><code>$ valgrind embroider --verbose --test</code></pre>
+<p>or</p>
+<pre><code>$ gdb --args embroider --verbose --test</code></pre>
+<p>depending on your preferred debugging approach. Passing this test will be required for us to accept your patch.</p>
+<h3 id="full-test-suite">Full Test Suite</h3>
+<p>The flag <code>--full-test-suite</code> runs all the tests that have been written. Since this results in a lot of output the details are both to stdout and to a text file called <code>test_matrix.txt</code>.</p>
+<p>Patches that strictly improve the results in the <code>test_matrix.txt</code> over the current version will likely be accepted and it’ll be a good place to go digging for contributions. (Note: strictly improve means that the testing result for each test is as good a result, if not better. Sacrificing one critera for another would require some design work before we would consider it.)</p>
+<h2 id="ideas">Ideas</h2>
+<h4 id="rendering-system">Rendering system</h4>
+<p>There are two forms of render that will be produced.</p>
 <ol type="1">
-<li>Jonathan Greig (<code>redteam316</code>) CoreDeveloper, Artwork, Documentation, Designs, Commands</li>
-<li>Josh Varga (<code>JoshVarga</code>) CoreDeveloper</li>
-<li>Jens Diemer (<code>jedie</code>) Documentation</li>
-<li>Kim Howard (<code>turbokim</code>) BugFixes</li>
-<li>Martin Schneider (<code>craftoid</code>) Documentation</li>
-<li>Edward Greig (<code>Metallicow</code>) Artwork, BugFixes, Commands</li>
-<li>Sonia Entzinger Translation</li>
-<li>SushiTee (<code>SushiTee</code>) BugFixes</li>
-<li>Vathonie Lufh (<code>x2nie</code>) BugFixes, Bindings</li>
-<li>Nina Paley Designs</li>
-<li>Theodore Gray Designs</li>
-<li>Jens-Wolfhard Schicke-Uffmann (<code>Drahflow</code>) BugFixes</li>
-<li>Emmett Lauren Garlitz - Some Little Sandy Rd, Elkview, West by GOD Virginia ()</li>
-<li>Robin Swift (<code>robin-swift</code>) CoreDeveloper, Documentation</li>
+<li>A raster format as ppm so we can have a pixel for pixel output (for example extracting the embedded images in some formats).</li>
+<li>The SVG format that will be fairly similar to InkStitch’s format.</li>
 </ol>
-<h2 id="introduction">Introduction</h2>
-<p>libembroidery aims to be a low-level library for reading, writing, and programmatically manipulating digital embroidery files, available to in many different programming languages.</p>
-<p>Currently, libembroidery is the underlying library that is used by <a href="http://embroidermodder.github.io">Embroidermodder 2</a> and is developed by the Embroidermodder team. It handles over 45 different embroidery specific formats as well as several non-embroidery specific vector formats.</p>
-<p>It also includes a CLI called <code>embroider</code> that allows for better automation of changes to embroidery files and will be more up-to date than the Embroidermodder 2 GUI.</p>
-<h3 id="build-1">Build</h3>
-<p>libembroidery and EmbroiderModder 2 use CMake builds so if you are building the project to use as a library we recommend:</p>
-<h4 id="generic-system-with-bash">Generic System with Bash</h4>
-<pre><code>git clone https://github.com/Embroidermodder/libembroidery
-cd libembroidery
-embtools.sh build</code></pre>
-<h4 id="windows">Windows</h4>
-<pre><code>git clone https://github.com/Embroidermodder/libembroidery
-cd libembroidery
-embtools.bat build</code></pre>
-<p>This builds both the static and shared versions of the library as well as the command line program <code>embroider</code>.</p>
-<h3 id="license">License</h3>
-<p>Libembroidery is distributed under the permissive zlib licence, see the LICENSE file.</p>
-<p>This documentation (that is, just this file) is distributed under the terms of the GNU Free Documentation License v1.3, see <a href=""></a>.</p>
+<p>We have an EmbImage struct to store the raster format.</p>
+<pre><code>$ embroider test01.csv --render</code></pre>
+<p>currently creates a blank image. Previously the Hilbert curve test managed to create a correctly rendered version.</p>
+<h4 id="binary-download">Binary download</h4>
+<p>We need a current <code>embroider</code> command line program download, so people can update without building.</p>
+<h4 id="identify-the-meaning-of-these-todo-items">Identify the meaning of these TODO items</h4>
+<ul>
+<li>Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug #179</li>
+<li>Lego Mindstorms NXT/EV3 ports and/or commands</li>
+</ul>
+<h4 id="progress-chart">Progress Chart</h4>
+<p>The chart of successful from-to conversions (previously a separate issue) is something that should appear in the README.</p>
+<h4 id="tactile-art-and-braille-support">Tactile art and braille support</h4>
+<p>One application I’d like to leave a reminder here for is automating embroidery for blind and partially sighted people.</p>
+<p>There are many limitations to making braille (cost, poor support, lack of widespread adoption in the sighted world) and as such there is a strong DIY culture around it.</p>
+<p>There are blind internet users who can also run terminal applications using a refreshable braille display, so in theory we could support an application like this for them:</p>
+<pre><code>$ embroider --braille &quot;Hello, world!&quot; hello.dst</code></pre>
+<p>which would produce braille that would read “Hello, world!” as an embroidery design.</p>
+<p>Another option is tactile fills that use the same fill algorithms but are designed better to facilitate tactile art.</p>
+<p>I think the way forward on this is to call up the RNIB business advice line and ask for assistance once we have a working model. That way they can get us in contact with experts to review how legible the output is and usable the software is for the intended audience.</p>
+<p>This is less important than getting better machine support but given the high social impact I think it should be a priority.</p>
 <h2 id="coding-standards">Coding Standards</h2>
 <p>A basic set of guidelines to use when submitting code.</p>
 <h3 id="naming-conventions">Naming Conventions</h3>
@@ -483,177 +422,744 @@ embtools.bat build</code></pre>
 <pre><code>if (condition) {
 
 }</code></pre>
-<p>Use exceptions sparingly.</p>
 <p>Do not use ternary operator (?:) in place of if/else.</p>
 <p>Do not repeat a variable name that already occurs in an outer scope.</p>
 <h3 id="comments">Comments</h3>
 <p>When writing code, sometimes there are items that we know can be improved, incomplete or need special clarification. In these cases, use the types of comments shown below. They are pretty standard and are highlighted by many editors to make reviewing code easier. We also use shell scripts to parse the code to find all of these occurrences so someone wanting to go on a bug hunt will be able to easily see which areas of the code need more love.</p>
-<p>libembroidery is written in C and adheres to C89 standards. This means that any C99 or C++ comments will show up as errors when compiling with gcc. In any C code, you must use:</p>
-<pre><code>/* C Style Comments */
-/* TODO: This code clearly needs more work or further review. */
-/* BUG: This code is definitely wrong. It needs fixed. */
-/* HACK: This code shouldn&#39;t be written this way or I don&#39;t feel right about it. There may a better solution */
-/* WARNING: Think twice (or more times) before changing this code. I put this here for a good reason. */
-/* NOTE: This comment is much more important than lesser comments. */</code></pre>
-<p>We advise you also use these style of comments in C++ code in Embroidermodder 2 as well for consistency.</p>
-<h2 id="wrapper-functions">Wrapper Functions</h2>
-<p>.</p>
+<p>libembroidery is written in C and adheres to C89 standards. This means that any C99 or C++ comments will show up as errors when compiling with gcc.</p>
 <h2 id="formats">Formats</h2>
+<h3 id="overview">Overview</h3>
+<h4 id="readwrite-support-levels">Read/Write Support Levels</h4>
+<p>The table of read/write format support levels uses the status levels described here:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>None (0)</td>
+<td>Either the format produces no output, reporting an error. Or it produces a Tajima dst file as an alternative.</td>
+</tr>
+<tr class="even">
+<td>Poor (1)</td>
+<td>A file somewhat similar to our examples is produced. We don’t know how well it runs on machines in practice as we don’t have any user reports or personal tests.</td>
+</tr>
+<tr class="odd">
+<td>Basic (2)</td>
+<td>Simple files in this format run well on machines that use this format.</td>
+</tr>
+<tr class="even">
+<td>Standard (3)</td>
+<td>Files with non-standard features work on machines and we have good documentation on the format.</td>
+</tr>
+<tr class="odd">
+<td>Reliable (4)</td>
+<td>All known features don’t cause crashes. Almost all work as expected.</td>
+</tr>
+<tr class="even">
+<td>Good (5)</td>
+<td>All known features of the format work on machines that use this format. Translations from and to this format preserve all features present in both.</td>
+</tr>
+</tbody>
+</table>
+<p>So all formats can, in principle, have good read and good write support, because it’s defined in relation to files that we have described the formats for.</p>
+<h4 id="test-support-levels">Test Support Levels</h4>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>None (0)</td>
+<td>No tests have been written to test the specifics of the format.</td>
+</tr>
+<tr class="even">
+<td>Basic (1)</td>
+<td>Stitch Lists and/or colors have read/write tests.</td>
+</tr>
+<tr class="odd">
+<td>Thorough (2)</td>
+<td>All features of that format has at least one test.</td>
+</tr>
+<tr class="even">
+<td>Fuzz (2)</td>
+<td>Can test the format for uses of features that we haven’t thought of by feeding in nonsense that is designed to push possibly dangerous weaknesses to reveal themselves.</td>
+</tr>
+<tr class="odd">
+<td>Complete (3)</td>
+<td>Both thorough and fuzz testing is covered.</td>
+</tr>
+</tbody>
+</table>
+<p>So all formats can, in principle, have complete testing support, because it’s defined in relation to files that we have described the formats for.</p>
+<h4 id="documentation-support-levels">Documentation Support Levels</h4>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>None (0)</td>
+<td>We haven’t researched this beyond finding example files.</td>
+</tr>
+<tr class="even">
+<td>Basic (1)</td>
+<td>We have a rough sketch of the size and contents of the header if there is one. We know the basic stitch encoding (if there is one), but not necessarily all stitch features.</td>
+</tr>
+<tr class="odd">
+<td>Standard (2)</td>
+<td>We know some good sources and/or have tested all the features that appear to exist. They mostly work the way we have described.</td>
+</tr>
+<tr class="even">
+<td>Good (3)</td>
+<td>All features that were described somewhere have been covered here or we have thoroughly tested our ideas against other softwares and hardwares and they work as expected.</td>
+</tr>
+<tr class="odd">
+<td>Complete (4)</td>
+<td>There is a known official description and our description covers all the same features.</td>
+</tr>
+</tbody>
+</table>
+<p>Not all formats can have complete documentation because it’s based on what information is publically available. So the total score is reported in the table below based on what level we think is available.</p>
+<h4 id="table-of-format-support-levels">Table of Format Support Levels</h4>
+<table>
+<thead>
+<tr class="header">
+<th><em>Format</em></th>
+<th><em>Read Support</em></th>
+<th><em>Write Support</em></th>
+<th><em>Specialised Tests</em></th>
+<th><em>Documentation</em></th>
+<th><em>Score</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#toyota-embroidery-format-100">Toyota Embroidery Format (.100)</a></td>
+<td>Basic</td>
+<td>Basic</td>
+<td>None</td>
+<td>None</td>
+<td>2/11</td>
+</tr>
+<tr class="even">
+<td><a href="#toyota-embroidery-format-10o">Toyota Embroidery Format (.10o)</a></td>
+<td>Basic</td>
+<td>Basic</td>
+<td>None</td>
+<td>None</td>
+<td>2/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#bernina-embroidery-format-art">Bernina Embroidery Format (.art)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#bitmap-cache-embroidery-format-bmc">Bitmap Cache Embroidery Format (.bmc)</a></td>
+<td>Basic</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>1/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#bits-and-volts-embroidery-format-bro">Bits and Volts Embroidery Format (.bro)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#melco-embroidery-format-cnd">Melco Embroidery Format (.cnd)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#embroidery-thread-color-format-col">Embroidery Thread Color Format (.col)</a></td>
+<td>Basic</td>
+<td>Basic</td>
+<td>None</td>
+<td>Basic</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#singer-embroidery-format-csd">Singer Embroidery Format (.csd)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#comma-seperated-values-csv">Comma Separated Values (.csv)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#barudan-embroidery-format-dat">Barudan Embroidery Format (.dat)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#melco-embroidery-format-dem">Melco Embroidery Format (.dem)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#barudan-embroidery-format-dsb">Barudan Embroidery Format (.dsb)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#tajima-embroidery-format-dst">Tajima Embroidery Format (.dst)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#zsk-usa-embroidery-format-dsz">ZSK USA Embroidery Format (.dsz)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#drawing-exchange-format-dxf">Drawing Exchange Format (.dxf)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#embird-embroidery-format-edr">Embird Embroidery Format (.edr)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#elna-embroidery-format-emd">Elna Embroidery Format (.emd)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#melco-embroidery-format-exp">Melco Embroidery Format (.exp)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#eltac-embroidery-format-exy">Eltac Embroidery Format (.exy)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#sierra-expanded-embroidery-format-eys">Sierra Expanded Embroidery Format (.eys)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#fortran-embroidery-format-fxy">Fortron Embroidery Format (.fxy)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#smoothie-g-code-embroidery-format-gc">Smoothie G-Code Embroidery Format (.gc)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#great-notions-embroidery-format-gnc">Great Notions Embroidery Format (.gnc)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#gold-thread-embroidery-format-gt">Gold Thread Embroidery Format (.gt)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#husqvarna-viking-embroidery-format-hus">Husqvarna Viking Embroidery Format (.hus)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#inbro-embroidery-format-inb">Inbro Embroidery Format (.inb)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#embroidery-color-format-inf">Embroidery Color Format (.inf)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#janome-embroidery-format-jef">Janome Embroidery Format (.jef)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#pfaff-embroidery-format-ksm">Pfaff Embroidery Format (.ksm)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#pfaff-embroidery-format-max">Pfaff Embroidery Format (.max)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#mitsubishi-embroidery-format-mit">Mitsubishi Embroidery Format (.mit)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#ameco-embroidery-format-new">Ameco Embroidery Format (.new)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#melco-embroidery-format-ofm">Melco Embroidery Format (.ofm)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#pfaff-embroidery-format-pcd">Pfaff Embroidery Format (.pcd)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#pfaff-embroidery-format-pcm">Pfaff Embroidery Format (.pcm)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#pfaff-embroidery-format-pcq">Pfaff Embroidery Format (.pcq)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#pfaff-embroidery-format-pcs">Pfaff Embroidery Format (.pcs)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#brother-embroidery-format-pec">Brother Embroidery Format (.pec)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#brother-embroidery-format-pel">Brother Embroidery Format (.pel)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#brother-embroidery-format-pem">Brother Embroidery Format (.pem)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#brother-embroidery-format-pes">Brother Embroidery Format (.pes)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#brother-embroidery-format-phb">Brother Embroidery Format (.phb)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#brother-embroidery-format-phc">Brother Embroidery Format (.phc)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#brother-embroidery-format-plt">AutoCAD Embroidery Format (.plt)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#rgb-embroidery-format-rgb">RGB Embroidery Format (.rgb)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#janome-embroidery-format-sew">Janome Embroidery Format (.sew)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#husqvarna-viking-embroidery-format-shv">Husqvarna Viking Embroidery Format (.shv)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#sunstar-embroidery-format-sst">Sunstar Embroidery Format (.sst)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#data-stitch-embroidery-format-stx">Data Stitch Embroidery Format (.stx)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#scalable-vector-graphics-svg">Scalable Vector Graphics (.svg)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/12</td>
+</tr>
+<tr class="odd">
+<td><a href="#pfaff-embroidery-format-t01">Pfaff Embroidery Format (.t01)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#pfaff-embroidery-format-t09">Pfaff Embroidery Format (.t09)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#happy-embroidery-format-tap">Happy Embroidery Format (.tap)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#thredworks-embroidery-format-thr">ThredWorks Embroidery Format (.thr)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#text_file_txt">Text File (.txt)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#barudan-embroidery-format-u00">Barudan Embroidery Format (.u00)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#barudan-embroidery-format-u01">Barudan Embroidery Format (.u01)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#pfaff-embroidery-format-vip">Pfaff Embroidery Format (.vip)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#pfaff-embroidery-format-vp3">Pfaff Embroidery Format (.vp3)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="even">
+<td><a href="#singer-embroidery-format-xxx">Singer Embroidery Format (.xxx)</a></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+<td>0/11</td>
+</tr>
+<tr class="odd">
+<td><a href="#zsk_usa_embroidery_format_zsk">ZSK USA Embroidery Format (.zsk)</a></td>
+<td>None</td>
+<td></td>
+<td>None</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td><em>Total</em></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>0/671</td>
+</tr>
+</tbody>
+</table>
+<p>For a total of 0% coverage.</p>
 <h3 id="toyota-embroidery-format-.100">Toyota Embroidery Format (.100)</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li>Uses an external color file.</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<p>The Toyota 100 format is a stitch-only format that uses an external color file.</p>
 <p>The stitch encoding is in 4 byte chunks.</p>
-<h2 id="toyota-embroidery-format-.10o">Toyota Embroidery Format (.10o)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li>Uses an external color file.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<h3 id="toyota-embroidery-format-.10o">Toyota Embroidery Format (.10o)</h3>
+<p>The Toyota 10o format is a stitch-only format that uses an external color file.</p>
 <p>The stitch encoding is in 3 byte chunks.</p>
 <h3 id="bernina-embroidery-format-.art">Bernina Embroidery Format (.art)</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<p>We don’t know much about this format. TODO: Find a source. ## Bitmap Cache Embroidery Format (.bmc)</p>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
 <p>We don’t know much about this format. TODO: Find a source.</p>
-<h2 id="bits-and-volts-embroidery-format-.bro">Bits and Volts Embroidery Format (.bro)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li>Uses an external color file.</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<h3 id="bitmap-cache-embroidery-format-.bmc">Bitmap Cache Embroidery Format (.bmc)</h3>
+<p>We don’t know much about this format. TODO: Find a source.</p>
+<h3 id="bits-and-volts-embroidery-format-.bro">Bits and Volts Embroidery Format (.bro)</h3>
+<p>The Bits and Volts bro format is a stitch-only format that uses an external color file.</p>
 <p>The header is 256 bytes. There’s a series of unknown variables in the header.</p>
 <p>The stitch list uses a variable length encoding which is 2 bytes for any stitch</p>
-<h2 id="melco-embroidery-format-.cnd">Melco Embroidery Format (.cnd)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<h3 id="melco-embroidery-format-.cnd">Melco Embroidery Format (.cnd)</h3>
+<p>The Melco cnd format is a stitch-only format.</p>
 <p>We don’t know much about this format. TODO: Find a source.</p>
-<h2 id="embroidery-thread-color-format-.col">Embroidery Thread Color Format (.col)</h2>
+<h3 id="embroidery-thread-color-format-.col">Embroidery Thread Color Format (.col)</h3>
+<p>An external color file format for formats that do not record their own colors.</p>
+<p>It is a human-readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break ‘’.</p>
+<p>Then the rest of the file is a comma seperated value list of all threads with 4 values per line: the index of the thread then the red, green and blue channels of the color in that order.</p>
+<h4 id="example">Example</h4>
+<p>If we had a pattern called “example” with four colors: black, red, magenta and cyan in that order then the file is (with the white space written out):</p>
+<p>example.col</p>
+<pre><code>4\r\n
+0,0,0,0\r\n
+1,255,0,0\r\n
+2,0,255,0\r\n
+3,0,0,255\r\n</code></pre>
+<h3 id="singer-embroidery-format-.csd">Singer Embroidery Format (.csd)</h3>
+<p>Stitch Only Format</p>
+<h3 id="comma-separated-values-.csv">Comma Separated Values (.csv)</h3>
+<p>Comma Seperated Values files aren’t a universal system, here we aim to offer a broad support.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Control Symbol</th>
+<th>Type</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>#</code></td>
+<td>COMMENT</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>&gt;</code></td>
+<td>VARIABLE</td>
+<td>To store records of a pattern’s width, height etc. This means that data stored in the header of say a <code>.dst</code> file is preserved.</td>
+</tr>
+<tr class="odd">
+<td><code>$</code></td>
+<td>THREAD</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>STITCH</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>*</code></td>
+<td>JUMP</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>COLOR</td>
+<td>To change a color: used for trim as well</td>
+</tr>
+<tr class="odd">
+<td><code>*</code></td>
+<td>END</td>
+<td>To end a pattern.</td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>UNKNOWN</td>
+<td>For any feature that we can’t identify.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="barudan-embroidery-format-.dat">Barudan Embroidery Format (.dat)</h3>
+<p>Stitch Only Format</p>
+<h3 id="melco-embroidery-format-.dem">Melco Embroidery Format (.dem)</h3>
+<p>Stitch Only Format</p>
+<h3 id="barudan-embroidery-format-.dsb">Barudan Embroidery Format (.dsb)</h3>
 <ul>
 <li>Stitch Only Format.</li>
 <li><input type="checkbox" disabled="" checked="" />
 Basic Read Support</li>
-<li><input type="checkbox" disabled="" checked="" />
+<li><input type="checkbox" disabled="" />
 Basic Write Support</li>
 <li><input type="checkbox" disabled="" />
 Well Tested Read</li>
 <li><input type="checkbox" disabled="" />
 Well Tested Write</li>
 </ul>
-<h2 id="singer-embroidery-format-.csd">Singer Embroidery Format (.csd)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="comma-separated-values-.csv">Comma Separated Values (.csv)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="barudan-embroidery-format-.dat">Barudan Embroidery Format (.dat)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="melco-embroidery-format-.dem">Melco Embroidery Format (.dem)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="barudan-embroidery-format-.dsb">Barudan Embroidery Format (.dsb)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" checked="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="tajima-embroidery-format-.dst">Tajima Embroidery Format (.dst)}</h2>
-<p></p>
+<h3 id="tajima-embroidery-format-.dst">Tajima Embroidery Format (.dst)</h3>
 <ul>
 <li>Stitch Only Format.</li>
 <li><input type="checkbox" disabled="" checked="" />
@@ -788,583 +1294,109 @@ Well Tested Write</li>
 <li>The max stitch length is the largest sum of <code>1+3+9+27+81=121</code> where the unit length is 0.1mm so 12.1mm.</li>
 <li>The coordinate system is right handed.</li>
 </ol>
-<h3 id="zsk-usa-embroidery-format-.dsz">ZSK USA Embroidery Format (.dsz)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="drawing-exchange-format-.dxf">Drawing Exchange Format (.dxf)}</h3>
-<ul>
-<li>Graphics format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="embird-embroidery-format-.edr">Embird Embroidery Format (.edr)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="elna-embroidery-format-.emd">Elna Embroidery Format (.emd)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="melco-embroidery-format-.exp">Melco Embroidery Format (.exp)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="eltac-embroidery-format-.exy">Eltac Embroidery Format (.exy)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="sierra-expanded-embroidery-format-.eys">Sierra Expanded Embroidery Format (.eys)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<h3 id="zsk-usa-embroidery-format-.dsz">ZSK USA Embroidery Format (.dsz)</h3>
+<p>The ZSK USA dsz format is stitch-only.</p>
+<h3 id="drawing-exchange-format-.dxf">Drawing Exchange Format (.dxf)</h3>
+<p>Graphics format.</p>
+<h3 id="embird-embroidery-format-.edr">Embird Embroidery Format (.edr)</h3>
+<p>Stitch Only Format</p>
+<h3 id="elna-embroidery-format-.emd">Elna Embroidery Format (.emd)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="melco-embroidery-format-.exp">Melco Embroidery Format (.exp)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="eltac-embroidery-format-.exy">Eltac Embroidery Format (.exy)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="sierra-expanded-embroidery-format-.eys">Sierra Expanded Embroidery Format (.eys)</h3>
+<p>Stitch Only Format.</p>
 <p>Smoothie G-Code Embroidery Format (.fxy)?</p>
-<h3 id="fortron-embroidery-format-.fxy">Fortron Embroidery Format (.fxy)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="great-notions-embroidery-format-.gnc">Great Notions Embroidery Format (.gnc)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<h3 id="fortron-embroidery-format-.fxy">Fortron Embroidery Format (.fxy)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="great-notions-embroidery-format-.gnc">Great Notions Embroidery Format (.gnc)</h3>
+<p>Stitch Only Format.</p>
 <h2 id="gold-thread-embroidery-format-.gt">Gold Thread Embroidery Format (.gt)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<p>Stitch Only Format.</p>
 <h3 id="husqvarna-viking-embroidery-format-.hus">Husqvarna Viking Embroidery Format (.hus)</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="inbro-embroidery-format-.inb">Inbro Embroidery Format (.inb)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="embroidery-color-format-.inf">Embroidery Color Format (.inf)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="janome-embroidery-format-.jef">Janome Embroidery Format (.jef)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-professional-design-format-.ksm">Pfaff professional Design format (.ksm)</h2>
-<p><a href="overview.md">Back</a></p>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-embroidery-format-.max">Pfaff Embroidery Format (.max)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="mitsubishi-embroidery-format-.mit">Mitsubishi Embroidery Format (.mit)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="ameco-embroidery-format-.new">Ameco Embroidery Format (.new)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="melco-embroidery-format-.ofm">Melco Embroidery Format (.ofm)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-pcd-file-format">Pfaff PCD File Format</h2>
-<p><a href="overview.md">Back</a></p>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<p>Stitch Only Format.</p>
+<h3 id="inbro-embroidery-format-.inb">Inbro Embroidery Format (.inb)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="embroidery-color-format-.inf">Embroidery Color Format (.inf)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="janome-embroidery-format-.jef">Janome Embroidery Format (.jef)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="pfaff-professional-design-format-.ksm">Pfaff professional Design format (.ksm)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="pfaff-embroidery-format-.max">Pfaff Embroidery Format (.max)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="mitsubishi-embroidery-format-.mit">Mitsubishi Embroidery Format (.mit)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="ameco-embroidery-format-.new">Ameco Embroidery Format (.new)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="melco-embroidery-format-.ofm">Melco Embroidery Format (.ofm)</h3>
+<p>Stitch Only Format.</p>
+<h3 id="pfaff-pcd-file-format">Pfaff PCD File Format</h3>
+<p>Stitch Only Format.</p>
 <p>The format uses a signed 3 byte-length number type.</p>
-<p>See the description here<a href="#5">5</a> for the overview of the format.</p>
-<p>For an example of the format see<a href="#11">11</a>.</p>
-<h3 id="pfaff-embroidery-format-.pcm">Pfaff Embroidery Format (.pcm)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="pfaff-embroidery-format-.pcq">Pfaff Embroidery Format (.pcq)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="pfaff-embroidery-format-.pcs">Pfaff Embroidery Format (.pcs)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write ## Brother Embroidery Format (.pec)</li>
-</ul>
-<p><a href="overview.md">Back</a></p>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="brother-embroidery-format-.pel">Brother Embroidery Format (.pel)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="brother-embroidery-format-.pem">Brother Embroidery Format (.pem)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="brother-embroidery-format-.pes">Brother Embroidery Format (.pes)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<p>See the description here (<a href="#5">5</a>) for the overview of the format.</p>
+<p>For an example of the format see (<a href="#11">11</a>).</p>
+<h3 id="pfaff-embroidery-format-.pcm">Pfaff Embroidery Format (.pcm)</h3>
+<p>The Pfaff pcm format is stitch-only.</p>
+<h3 id="pfaff-embroidery-format-.pcq">Pfaff Embroidery Format (.pcq)</h3>
+<p>The Pfaff pcq format is stitch-only.</p>
+<h3 id="pfaff-embroidery-format-.pcs">Pfaff Embroidery Format (.pcs)</h3>
+<p>The Pfaff pcs format is stitch-only.</p>
+<h3 id="brother-embroidery-format-.pec">Brother Embroidery Format (.pec)</h3>
+<p>The Brother pec format is stitch-only.</p>
+<h3 id="brother-embroidery-format-.pel">Brother Embroidery Format (.pel)</h3>
+<p>The Brother pel format is stitch-only.</p>
+<h3 id="brother-embroidery-format-.pem">Brother Embroidery Format (.pem)</h3>
+<p>The Brother pem format is stitch-only.</p>
+<h3 id="brother-embroidery-format-.pes">Brother Embroidery Format (.pes)</h3>
+<p>The Brother pes format is stitch-only.</p>
 <pre><code>struct PEShdr
 {
 char PESId[8];
 DWORD PECOffset;
 };</code></pre>
-<h2 id="brother-embroidery-format-.phb">Brother Embroidery Format (.phb)</h2>
-<p><a href="overview.md">Back</a></p>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="brother-embroidery-format-.phc">Brother Embroidery Format (.phc)}</h2>
-<p><a href="overview.md">Back</a></p>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="autocad-embroidery-format-.plt">AutoCAD Embroidery Format (.plt)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="rgb-embroidery-format-.rgb">RGB Embroidery Format (.rgb)}</h3>
-<ul>
-<li>Color only format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="janome-embroidery-format-.sew">Janome Embroidery Format (.sew)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="husqvarna-viking-embroidery-format-.shv">Husqvarna Viking Embroidery Format (.shv)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="sunstar-embroidery-format-.sst">Sunstar Embroidery Format (.sst)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="data-stitch-embroidery-format-.stx">Data Stitch Embroidery Format (.stx)}</h3>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h3 id="scalable-vector-graphics-.svg">Scalable Vector Graphics (.svg)}</h3>
-<ul>
-<li>Graphics format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-embroidery-format-.t01">Pfaff Embroidery Format (.t01)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-embroidery-format-.t09">Pfaff Embroidery Format (.t09)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="happy-embroidery-format-.tap">Happy Embroidery Format (.tap)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="thredworks-embroidery-format-.thr">ThredWorks Embroidery Format (.thr)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="text-file-.txt">Text File (.txt)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="barudan-embroidery-format-.u00">Barudan Embroidery Format (.u00)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="barudan-embroidery-format-.u01">Barudan Embroidery Format (.u01)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-embroidery-format-.vip">Pfaff Embroidery Format (.vip)</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="pfaff-embroidery-format-.vp3">Pfaff Embroidery Format (.vp3)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="singer-embroidery-format-.xxx">Singer Embroidery Format (.xxx)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
-<h2 id="zsk-usa-embroidery-format-.zsk">ZSK USA Embroidery Format (.zsk)}</h2>
-<ul>
-<li>Stitch Only Format.</li>
-<li><input type="checkbox" disabled="" />
-Basic Read Support</li>
-<li><input type="checkbox" disabled="" />
-Basic Write Support</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Read</li>
-<li><input type="checkbox" disabled="" />
-Well Tested Write</li>
-</ul>
+<h3 id="brother-embroidery-format-.phb">Brother Embroidery Format (.phb)</h3>
+<p>The Brother phb format is stitch-only.</p>
+<h3 id="brother-embroidery-format-.phc">Brother Embroidery Format (.phc)</h3>
+<p>The Brother phc format is stitch-only.</p>
+<h3 id="autocad-embroidery-format-.plt">AutoCAD Embroidery Format (.plt)</h3>
+<p>The AutoCAD plt format is stitch-only.</p>
+<h3 id="rgb-embroidery-format-.rgb">RGB Embroidery Format (.rgb)</h3>
+<p>The RGB format is a color-only format to act as an external color file for other formats.</p>
+<h3 id="janome-embroidery-format-.sew">Janome Embroidery Format (.sew)</h3>
+<p>The Janome sew format is stitch-only.</p>
+<h3 id="husqvarna-viking-embroidery-format-.shv">Husqvarna Viking Embroidery Format (.shv)</h3>
+<p>The Husqvarna Viking shv format is stitch-only.</p>
+<h3 id="sunstar-embroidery-format-.sst">Sunstar Embroidery Format (.sst)</h3>
+<p>The Sunstar sst format is stitch-only.</p>
+<h3 id="data-stitch-embroidery-format-.stx">Data Stitch Embroidery Format (.stx)</h3>
+<p>The Data Stitch stx format is stitch-only.</p>
+<h3 id="scalable-vector-graphics-.svg">Scalable Vector Graphics (.svg)</h3>
+<p>The scalable vector graphics (SVG) format is a graphics format maintained by …</p>
+<h3 id="pfaff-embroidery-format-.t01">Pfaff Embroidery Format (.t01)</h3>
+<p>The Pfaff t01 format is stitch-only.</p>
+<h3 id="pfaff-embroidery-format-.t09">Pfaff Embroidery Format (.t09)</h3>
+<p>The Pfaff t09 format is stitch-only.</p>
+<h3 id="happy-embroidery-format-.tap">Happy Embroidery Format (.tap)</h3>
+<p>The Happy tap format is stitch-only.</p>
+<h3 id="thredworks-embroidery-format-.thr">ThredWorks Embroidery Format (.thr)</h3>
+<p>The ThreadWorks thr format is stitch-only.</p>
+<h3 id="text-file-.txt">Text File (.txt)</h3>
+<p>The txt format is stitch-only and isn’t associated with a specific company.</p>
+<h3 id="barudan-embroidery-format-.u00">Barudan Embroidery Format (.u00)</h3>
+<p>The Barudan u00 format is stitch-only.</p>
+<h3 id="barudan-embroidery-format-.u01">Barudan Embroidery Format (.u01)</h3>
+<p>The Barudan u01 format is stitch-only.</p>
+<h3 id="pfaff-embroidery-format-.vip">Pfaff Embroidery Format (.vip)</h3>
+<p>The Pfaff vip format is stitch-only.</p>
+<h3 id="pfaff-embroidery-format-.vp3">Pfaff Embroidery Format (.vp3)</h3>
+<p>The Pfaff vp3 format is stitch-only.</p>
+<h3 id="singer-embroidery-format-.xxx">Singer Embroidery Format (.xxx)</h3>
+<p>The Singer xxx format is stitch-only.</p>
+<h3 id="zsk-usa-embroidery-format-.zsk">ZSK USA Embroidery Format (.zsk)</h3>
+<p>The ZSK USA zsk format is stitch-only.</p>
 <h2 id="on-embedded-systems">On Embedded Systems</h2>
 <p>The library is designed to support embedded environments, so it can be used in CNC applications.</p>
 <h3 id="compatible-boards">Compatible Boards</h3>
@@ -1388,35 +1420,11 @@ Well Tested Write</li>
 <h3 id="special-notes">Special Notes</h3>
 <p>Due to historical reasons and to remain compatible with the Arduino 1.0 IDE, this folder must be called ``utility’’. Refer to the arduino build process for more info: https://arduino.github.io/arduino-cli/0.19/sketch-build-process/</p>
 <p>libembroidery relies on the Arduino SD library for reading files. See the ino-file source and header files for more information.</p>
-<h3 id="experimental-projects">Experimental Projects</h3>
-<p>Anything contained within the experimental/ folder is unstable and unsupported. Items in here may eventually be moved elsewhere or may not. If you have an interesting concept or prototype that you would like us to add, contact us and we may add it here.</p>
-<h3 id="dependencies">Dependencies</h3>
-<p>To build additional language bindings for libembroidery from source you will need at least:</p>
-<p>Ubuntu repository packages:</p>
-<pre><code>sudo apt-get install swig python-dev</code></pre>
-<p>Mac</p>
-<pre><code>brew install swig</code></pre>
-<p>An example for building for use in C#</p>
-<pre><code>swig -csharp -o ./csharp/binding/swig_wrap.c -I../ swig.i</code></pre>
 <h2 id="the-assembly-split">The Assembly Split</h2>
-<p>One problem to the problem of supporting both systems with abundant memory (such as a 2010s or later desktop) and with scarce memory (such as embedded systems) is that they don’t share the same assembly language. To deal with this: there will be two equivalent softwares which are hand engineered to be similar but one will be in C and the other in the assembly dialects we support.</p>
+<p>One problem to the problem of supporting both systems with abundant memory (such as a 2010s or later desktop) and with scarce memory (such as embedded systems) is that they don’t share the same assembly language. To deal with this: there will be two equivalent software which are hand engineered to be similar but one will be in C and the other in the assembly dialects we support.</p>
 <p>All assembly will be intended for embedded systems only, since a slightly smaller set of features will be supported. However, we will write a <code>x86</code> version since that can be tested.</p>
 <p>That way the work that has been done to simplify the C code can be applied to the assembly versions.</p>
-<h2 id="utility-functions">Utility Functions</h2>
-<h3 id="avoiding-the-use-of-libc">Avoiding the use of libc</h3>
-<h3 id="avoiding-the-use-of-libm">Avoiding the use of libm</h3>
-<p>The <span class="math inline">cos </span> and <span class="math inline">sin </span> functions are calculated using</p>
-<p>The arctan2 function in the source is calculated using Euler’s series for the inverse tangent:</p>
-<pre><code>\begin{equation}
-\tan^{-1}(x) = \sum_{n=0}^{\infty} \frac{2^{2n}(n!)^{2}}{(2n+1)!} \frac{x^{2n+1}}{(1+x^{2})^{n+1}}
-\end{equation}</code></pre>
-<h1 id="embroidermodder-website">Embroidermodder Website</h1>
-<p>https://embroidermodder.org</p>
-<p>This is the main website and documentation hub for the Embroidermodder project.</p>
-<p>For a list of what we’re currently working on please see <a href="to-do.md">to-do.md</a>.</p>
-<p>For specifics about the embedded systems development see <a href="embdedded.md">embedded.md</a>.</p>
-<p>The documentation is licensed under the terms of the GNU Free Documentation License v1.3 see <a href="LICENSE.md">LICENSE.md</a>.</p>
-<h2 id="build-2">Build</h2>
+<h2 id="build-1">Build</h2>
 <p>To build the documentation run <code>make</code>. This should run no problem on a normal Unix-like environment assuming pandoc is available.</p>
 <ul>
 <li>Pandoc creates the content of the page by converting the markdown to html.</li>
@@ -1428,10 +1436,7 @@ Well Tested Write</li>
 <h3 id="bindings">Bindings</h3>
 <p>Bindings for libembroidery are maintained for the languages we use internally in the project, for other languages we consider that the responsibility of other teams using the library.</p>
 <p>So libembroidery is going to be supported on:</p>
-<pre><code>* x86 systems as assembly (to aid writing assembly for other systems)
-* avr systems as assembly (for arduino)
-* arm systems as assembly (for other embedded systems)
-* C (by default)
+<pre><code>* C (by default)
 * C++ (also by default)
 * Java (for the Android application MobileViewer)
 * Swift (for the iOS application iMobileViewer)</code></pre>
@@ -1439,23 +1444,19 @@ Well Tested Write</li>
 <pre><code>    [DllImport(&quot;libembroidery.so&quot;, EntryPoint=&quot;readCsv&quot;)]</code></pre>
 <p>see this StackOverflow discussion <a href="https://stackoverflow.com/questions/11425202/is-it-possible-to-call-a-c-function-from-c-net">for help</a>.</p>
 <p>For Python you can do the same using <a href="https://www.geeksforgeeks.org/how-to-call-a-c-function-in-python/">ctypes</a>.</p>
-<h2 id="to-flag">To Flag</h2>
-<h2 id="circle-flag">Circle Flag</h2>
-<h2 id="ellipse-flag">Ellipse Flag</h2>
-<h2 id="line-flag">Line Flag</h2>
-<h2 id="polyline-flag">Polyline Flag</h2>
-<h2 id="polygon-flag">Polygon Flag</h2>
-<h2 id="satin-flag">Satin Flag</h2>
-<h2 id="stitch-flag">Stitch Flag</h2>
-<h2 id="test-suite">Test Suite</h2>
-<h1 id="threads">Threads</h1>
+<h2 id="threads">Threads</h2>
 <ul>
-<li><a href="dxf_color_table.md">DXF Color Table</a></li>
-<li><a href="hus_color_table.md">HUS Color Table</a></li>
-<li><a href="jef_color_table.md">JEF Color Table</a></li>
-<li><a href="pcm_color_table.md">PCM Color Table</a></li>
-<li><a href="pec_color_table.md">PEC Color Table</a></li>
+<li><a href="#dxf_color_table">DXF Color Table</a></li>
+<li><a href="#hus_color_table">HUS Color Table</a></li>
+<li><a href="#jef_color_table">JEF Color Table</a></li>
+<li><a href="#pcm_color_table">PCM Color Table</a></li>
+<li><a href="#pec_color_table">PEC Color Table</a></li>
 </ul>
+<h3 id="dxf-color-table">DXF color table</h3>
+<h3 id="hus-color-table">HUS color table</h3>
+<h3 id="jef-color-table">JEF color table</h3>
+<h3 id="pcm-color-table">PCM color table</h3>
+<h3 id="pec-color-table">PEC color table</h3>
 <h2 id="other-supported-thread-brands">Other Supported Thread Brands</h2>
 <p>The thread lists that aren’t preprogrammed into formats but are indexed in the data file for the purpose of conversion or fitting to images/graphics.</p>
 <ul>
@@ -1485,12 +1486,7 @@ Well Tested Write</li>
 </ul>
 <h1 id="development">Development</h1>
 <p>A <em>right-handed coordinate system</em> is one where up is positive and right is positive. Left-handed is up is positive, left is positive. Screens often use down is positive, right is positive, including the OpenGL standard so when switching between graphics formats and stitch formats we need to use a vertical flip (<code>embPattern_flip</code>).</p>
-<p><code>0x20</code> is the space symbol, so when padding either 0 or space is preferred and in the case of space use the literal ’ ’. Use the macros:</p>
-<pre><code>    #define PAD_SPACE(n) \
-        embFile_pad(currentFile, &#39; &#39;, n)
-    #define PAD_ZERO(n) \
-        embFile_pad(currentFile, 0, n)</code></pre>
-<p>to save writing functions that may not inline.</p>
+<p><code>0x20</code> is the space symbol, so when padding either 0 or space is preferred and in the case of space use the literal ’ ’.</p>
 <h3 id="design-philosophy-and-coding-standards">Design Philosophy and Coding Standards</h3>
 <ol type="1">
 <li>No GUI code will be present in <code>libembroidery</code>.</li>
@@ -1502,20 +1498,13 @@ Well Tested Write</li>
 </ol>
 <h3 id="image-fitting">Image Fitting</h3>
 <p>A currently unsolved problem in development that warrants further research is the scenario where a user wants to feed embroider an image that can then be .</p>
-<h3 id="finding-fixes">Finding fixes</h3>
-<p>To find jobs marked within the source code rather than the list above, use:</p>
-<pre><code>    grep &quot;TODO&quot; *.c *.h</code></pre>
-<h3 id="testing">Testing</h3>
-<p>Build <code>embroider</code> then run:</p>
-<pre><code>    ./embroider -test &amp;&gt; report.txt</code></pre>
-<p>If any of the tests return a fail in the summary (see <code>tail report.txt</code>) then it would help the project to send us an issue attaching the file to your message along with a description of the system you ran the program on.</p>
 <h2 id="to-do">To Do</h2>
 <p>We currently need help with:</p>
 <ol type="1">
 <li>Thorough descriptions of each embroidery format.</li>
 <li>Finding resources for each of the branded thread libraries (along with a full citation for documentation).</li>
 <li>Finding resources for each geometric algorithm used (along with a full citation for documentation).</li>
-<li>Completing the full <code>--full-test-suite</code> with no segfaults and at least a clear error message (for example “not implimented yet”).</li>
+<li>Completing the full <code>--full-test-suite</code> with no segfaults and at least a clear error message (for example “not implemented yet”).</li>
 <li>Identifying “best guesses” for filling in missing information when going from, say <code>.csv</code> to a late <code>.pes</code> version. What should the default be when the data doesn’t clarify?</li>
 <li>Improving the written documentation.</li>
 <li>Funding, see the Sponsor button above. We can treat this as “work” and put far more hours in with broad support in small donations from people who want specific features.</li>
@@ -1583,116 +1572,21 @@ Well Tested Write</li>
 </ol>
 <h2 id="bibliography">Bibliography</h2>
 <ol type="1">
-<li>Rudolf <em>Technical Info</em> <a href="http://www.achatina.de/sewing/main/TECHNICL.HTM">http://www.achatina.de/sewing/main/TECHNICL.HTM</a> (Accessed 25 November 2021)</li>
-<li></li>
-<li>Edutech format description,</li>
-<li>KDE Liberty Description\cite{libertyTajima</li>
-<li>The Sewing Witch <em>PCD2FMT</em> <a href="http://www.sewingwitch.com/sewing/bin/pcd2fmt.html">http://www.sewingwitch.com/sewing/bin/pcd2fmt.html</a> (Accessed November 2021)</li>
-<li><a href="http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html">http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html</a></li>
-<li><a href="https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result">https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result</a></li>
-<li>Fritzing <a href="https://github.com/fritzing/fritzing-app">https://github.com/fritzing/fritzing-app</a></li>
-<li>Sahoo, P., Wilkins, C., and Yeager, J., “Threshold selection using Renyi’s entropy”, <em>Pattern Recognition</em>, vol. 30, no. 1, pp. 71–84, 1997. doi:10.1016/S0031-3203(96)00065-9.</li>
-<li><a href="http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php">http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php</a> (Accessed 12 Dec 2021)</li>
-<li>FINDME</li>
+<li><a name="1"></a> Rudolf <em>Technical Info</em> <a href="http://www.achatina.de/sewing/main/TECHNICL.HTM">http://www.achatina.de/sewing/main/TECHNICL.HTM</a> (Accessed 25 November 2021)</li>
+<li><a name="2"></a> fineEmbStudio2021</li>
+<li><a name="3"></a> Edutech format description (eduTechWikiDST)</li>
+<li><a name="4"></a> KDE Liberty Description (libertyTajima)</li>
+<li><a name="5"></a> The Sewing Witch <em>PCD2FMT</em> <a href="http://www.sewingwitch.com/sewing/bin/pcd2fmt.html">http://www.sewingwitch.com/sewing/bin/pcd2fmt.html</a> (Accessed November 2021)</li>
+<li><a name="6"></a> <a href="http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html">http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html</a></li>
+<li><a name="7"></a> <a href="https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result">https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result</a></li>
+<li><a name="8"></a> Fritzing <a href="https://github.com/fritzing/fritzing-app">https://github.com/fritzing/fritzing-app</a></li>
+<li><a name="9"></a> Sahoo, P., Wilkins, C., and Yeager, J., “Threshold selection using Renyi’s entropy”, <em>Pattern Recognition</em>, vol. 30, no. 1, pp. 71–84, 1997. doi:10.1016/S0031-3203(96)00065-9.</li>
+<li><a name="10"></a> <a href="http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php">http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php</a> (Accessed 12 Dec 2021)</li>
+<li><a name="11"></a> FINDME</li>
 </ol>
-<h2 id="appendix">Appendix</h2>
-<h3 id="gnu-free-documentation-license">GNU Free Documentation License</h3>
-<p>Version 1.3, 3 November 2008</p>
-<p>Copyright (C) 2000, 2001, 2002, 2007, 2008 Free Software Foundation, Inc. <a href="https://fsf.org/" class="uri">https://fsf.org/</a></p>
-<p>Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed.</p>
-<h4 id="preamble">0. PREAMBLE</h4>
-<p>The purpose of this License is to make a manual, textbook, or other functional and useful document “free” in the sense of freedom: to assure everyone the effective freedom to copy and redistribute it, with or without modifying it, either commercially or noncommercially. Secondarily, this License preserves for the author and publisher a way to get credit for their work, while not being considered responsible for modifications made by others.</p>
-<p>This License is a kind of “copyleft”, which means that derivative works of the document must themselves be free in the same sense. It complements the GNU General Public License, which is a copyleft license designed for free software.</p>
-<p>We have designed this License in order to use it for manuals for free software, because free software needs free documentation: a free program should come with manuals providing the same freedoms that the software does. But this License is not limited to software manuals; it can be used for any textual work, regardless of subject matter or whether it is published as a printed book. We recommend this License principally for works whose purpose is instruction or reference.</p>
-<h4 id="applicability-and-definitions">1. APPLICABILITY AND DEFINITIONS</h4>
-<p>This License applies to any manual or other work, in any medium, that contains a notice placed by the copyright holder saying it can be distributed under the terms of this License. Such a notice grants a world-wide, royalty-free license, unlimited in duration, to use that work under the conditions stated herein. The “Document”, below, refers to any such manual or work. Any member of the public is a licensee, and is addressed as “you”. You accept the license if you copy, modify or distribute the work in a way requiring permission under copyright law.</p>
-<p>A “Modified Version” of the Document means any work containing the Document or a portion of it, either copied verbatim, or with modifications and/or translated into another language.</p>
-<p>A “Secondary Section” is a named appendix or a front-matter section of the Document that deals exclusively with the relationship of the publishers or authors of the Document to the Document’s overall subject (or to related matters) and contains nothing that could fall directly within that overall subject. (Thus, if the Document is in part a textbook of mathematics, a Secondary Section may not explain any mathematics.) The relationship could be a matter of historical connection with the subject or with related matters, or of legal, commercial, philosophical, ethical or political position regarding them.</p>
-<p>The “Invariant Sections” are certain Secondary Sections whose titles are designated, as being those of Invariant Sections, in the notice that says that the Document is released under this License. If a section does not fit the above definition of Secondary then it is not allowed to be designated as Invariant. The Document may contain zero Invariant Sections. If the Document does not identify any Invariant Sections then there are none.</p>
-<p>The “Cover Texts” are certain short passages of text that are listed, as Front-Cover Texts or Back-Cover Texts, in the notice that says that the Document is released under this License. A Front-Cover Text may be at most 5 words, and a Back-Cover Text may be at most 25 words.</p>
-<p>A “Transparent” copy of the Document means a machine-readable copy, represented in a format whose specification is available to the general public, that is suitable for revising the document straightforwardly with generic text editors or (for images composed of pixels) generic paint programs or (for drawings) some widely available drawing editor, and that is suitable for input to text formatters or for automatic translation to a variety of formats suitable for input to text formatters. A copy made in an otherwise Transparent file format whose markup, or absence of markup, has been arranged to thwart or discourage subsequent modification by readers is not Transparent. An image format is not Transparent if used for any substantial amount of text. A copy that is not “Transparent” is called “Opaque”.</p>
-<p>Examples of suitable formats for Transparent copies include plain ASCII without markup, Texinfo input format, LaTeX input format, SGML or XML using a publicly available DTD, and standard-conforming simple HTML, PostScript or PDF designed for human modification. Examples of transparent image formats include PNG, XCF and JPG. Opaque formats include proprietary formats that can be read and edited only by proprietary word processors, SGML or XML for which the DTD and/or processing tools are not generally available, and the machine-generated HTML, PostScript or PDF produced by some word processors for output purposes only.</p>
-<p>The “Title Page” means, for a printed book, the title page itself, plus such following pages as are needed to hold, legibly, the material this License requires to appear in the title page. For works in formats which do not have any title page as such, “Title Page” means the text near the most prominent appearance of the work’s title, preceding the beginning of the body of the text.</p>
-<p>The “publisher” means any person or entity that distributes copies of the Document to the public.</p>
-<p>A section “Entitled XYZ” means a named subunit of the Document whose title either is precisely XYZ or contains XYZ in parentheses following text that translates XYZ in another language. (Here XYZ stands for a specific section name mentioned below, such as “Acknowledgements”, “Dedications”, “Endorsements”, or “History”.) To “Preserve the Title” of such a section when you modify the Document means that it remains a section “Entitled XYZ” according to this definition.</p>
-<p>The Document may include Warranty Disclaimers next to the notice which states that this License applies to the Document. These Warranty Disclaimers are considered to be included by reference in this License, but only as regards disclaiming warranties: any other implication that these Warranty Disclaimers may have is void and has no effect on the meaning of this License.</p>
-<h4 id="verbatim-copying">2. VERBATIM COPYING</h4>
-<p>You may copy and distribute the Document in any medium, either commercially or noncommercially, provided that this License, the copyright notices, and the license notice saying this License applies to the Document are reproduced in all copies, and that you add no other conditions whatsoever to those of this License. You may not use technical measures to obstruct or control the reading or further copying of the copies you make or distribute. However, you may accept compensation in exchange for copies. If you distribute a large enough number of copies you must also follow the conditions in section 3.</p>
-<p>You may also lend copies, under the same conditions stated above, and you may publicly display copies.</p>
-<h4 id="copying-in-quantity">3. COPYING IN QUANTITY</h4>
-<p>If you publish printed copies (or copies in media that commonly have printed covers) of the Document, numbering more than 100, and the Document’s license notice requires Cover Texts, you must enclose the copies in covers that carry, clearly and legibly, all these Cover Texts: Front-Cover Texts on the front cover, and Back-Cover Texts on the back cover. Both covers must also clearly and legibly identify you as the publisher of these copies. The front cover must present the full title with all words of the title equally prominent and visible. You may add other material on the covers in addition. Copying with changes limited to the covers, as long as they preserve the title of the Document and satisfy these conditions, can be treated as verbatim copying in other respects.</p>
-<p>If the required texts for either cover are too voluminous to fit legibly, you should put the first ones listed (as many as fit reasonably) on the actual cover, and continue the rest onto adjacent pages.</p>
-<p>If you publish or distribute Opaque copies of the Document numbering more than 100, you must either include a machine-readable Transparent copy along with each Opaque copy, or state in or with each Opaque copy a computer-network location from which the general network-using public has access to download using public-standard network protocols a complete Transparent copy of the Document, free of added material. If you use the latter option, you must take reasonably prudent steps, when you begin distribution of Opaque copies in quantity, to ensure that this Transparent copy will remain thus accessible at the stated location until at least one year after the last time you distribute an Opaque copy (directly or through your agents or retailers) of that edition to the public.</p>
-<p>It is requested, but not required, that you contact the authors of the Document well before redistributing any large number of copies, to give them a chance to provide you with an updated version of the Document.</p>
-<h4 id="modifications">4. MODIFICATIONS</h4>
-<p>You may copy and distribute a Modified Version of the Document under the conditions of sections 2 and 3 above, provided that you release the Modified Version under precisely this License, with the Modified Version filling the role of the Document, thus licensing distribution and modification of the Modified Version to whoever possesses a copy of it. In addition, you must do these things in the Modified Version:</p>
-<ul>
-<li>A. Use in the Title Page (and on the covers, if any) a title distinct from that of the Document, and from those of previous versions (which should, if there were any, be listed in the History section of the Document). You may use the same title as a previous version if the original publisher of that version gives permission.</li>
-<li>B. List on the Title Page, as authors, one or more persons or entities responsible for authorship of the modifications in the Modified Version, together with at least five of the principal authors of the Document (all of its principal authors, if it has fewer than five), unless they release you from this requirement.</li>
-<li>C. State on the Title page the name of the publisher of the Modified Version, as the publisher.</li>
-<li>D. Preserve all the copyright notices of the Document.</li>
-<li>E. Add an appropriate copyright notice for your modifications adjacent to the other copyright notices.</li>
-<li>F. Include, immediately after the copyright notices, a license notice giving the public permission to use the Modified Version under the terms of this License, in the form shown in the Addendum below.</li>
-<li>G. Preserve in that license notice the full lists of Invariant Sections and required Cover Texts given in the Document’s license notice.</li>
-<li>H. Include an unaltered copy of this License.</li>
-<li>I. Preserve the section Entitled “History”, Preserve its Title, and add to it an item stating at least the title, year, new authors, and publisher of the Modified Version as given on the Title Page. If there is no section Entitled “History” in the Document, create one stating the title, year, authors, and publisher of the Document as given on its Title Page, then add an item describing the Modified Version as stated in the previous sentence.</li>
-<li>J. Preserve the network location, if any, given in the Document for public access to a Transparent copy of the Document, and likewise the network locations given in the Document for previous versions it was based on. These may be placed in the “History” section. You may omit a network location for a work that was published at least four years before the Document itself, or if the original publisher of the version it refers to gives permission.</li>
-<li>K. For any section Entitled “Acknowledgements” or “Dedications”, Preserve the Title of the section, and preserve in the section all the substance and tone of each of the contributor acknowledgements and/or dedications given therein.</li>
-<li>L. Preserve all the Invariant Sections of the Document, unaltered in their text and in their titles. Section numbers or the equivalent are not considered part of the section titles.</li>
-<li>M. Delete any section Entitled “Endorsements”. Such a section may not be included in the Modified Version.</li>
-<li>N. Do not retitle any existing section to be Entitled “Endorsements” or to conflict in title with any Invariant Section.</li>
-<li>O. Preserve any Warranty Disclaimers.</li>
-</ul>
-<p>If the Modified Version includes new front-matter sections or appendices that qualify as Secondary Sections and contain no material copied from the Document, you may at your option designate some or all of these sections as invariant. To do this, add their titles to the list of Invariant Sections in the Modified Version’s license notice. These titles must be distinct from any other section titles.</p>
-<p>You may add a section Entitled “Endorsements”, provided it contains nothing but endorsements of your Modified Version by various parties—for example, statements of peer review or that the text has been approved by an organization as the authoritative definition of a standard.</p>
-<p>You may add a passage of up to five words as a Front-Cover Text, and a passage of up to 25 words as a Back-Cover Text, to the end of the list of Cover Texts in the Modified Version. Only one passage of Front-Cover Text and one of Back-Cover Text may be added by (or through arrangements made by) any one entity. If the Document already includes a cover text for the same cover, previously added by you or by arrangement made by the same entity you are acting on behalf of, you may not add another; but you may replace the old one, on explicit permission from the previous publisher that added the old one.</p>
-<p>The author(s) and publisher(s) of the Document do not by this License give permission to use their names for publicity for or to assert or imply endorsement of any Modified Version.</p>
-<h4 id="combining-documents">5. COMBINING DOCUMENTS</h4>
-<p>You may combine the Document with other documents released under this License, under the terms defined in section 4 above for modified versions, provided that you include in the combination all of the Invariant Sections of all of the original documents, unmodified, and list them all as Invariant Sections of your combined work in its license notice, and that you preserve all their Warranty Disclaimers.</p>
-<p>The combined work need only contain one copy of this License, and multiple identical Invariant Sections may be replaced with a single copy. If there are multiple Invariant Sections with the same name but different contents, make the title of each such section unique by adding at the end of it, in parentheses, the name of the original author or publisher of that section if known, or else a unique number. Make the same adjustment to the section titles in the list of Invariant Sections in the license notice of the combined work.</p>
-<p>In the combination, you must combine any sections Entitled “History” in the various original documents, forming one section Entitled “History”; likewise combine any sections Entitled “Acknowledgements”, and any sections Entitled “Dedications”. You must delete all sections Entitled “Endorsements”.</p>
-<h4 id="collections-of-documents">6. COLLECTIONS OF DOCUMENTS</h4>
-<p>You may make a collection consisting of the Document and other documents released under this License, and replace the individual copies of this License in the various documents with a single copy that is included in the collection, provided that you follow the rules of this License for verbatim copying of each of the documents in all other respects.</p>
-<p>You may extract a single document from such a collection, and distribute it individually under this License, provided you insert a copy of this License into the extracted document, and follow this License in all other respects regarding verbatim copying of that document.</p>
-<h4 id="aggregation-with-independent-works">7. AGGREGATION WITH INDEPENDENT WORKS</h4>
-<p>A compilation of the Document or its derivatives with other separate and independent documents or works, in or on a volume of a storage or distribution medium, is called an “aggregate” if the copyright resulting from the compilation is not used to limit the legal rights of the compilation’s users beyond what the individual works permit. When the Document is included in an aggregate, this License does not apply to the other works in the aggregate which are not themselves derivative works of the Document.</p>
-<p>If the Cover Text requirement of section 3 is applicable to these copies of the Document, then if the Document is less than one half of the entire aggregate, the Document’s Cover Texts may be placed on covers that bracket the Document within the aggregate, or the electronic equivalent of covers if the Document is in electronic form. Otherwise they must appear on printed covers that bracket the whole aggregate.</p>
-<h4 id="translation">8. TRANSLATION</h4>
-<p>Translation is considered a kind of modification, so you may distribute translations of the Document under the terms of section 4. Replacing Invariant Sections with translations requires special permission from their copyright holders, but you may include translations of some or all Invariant Sections in addition to the original versions of these Invariant Sections. You may include a translation of this License, and all the license notices in the Document, and any Warranty Disclaimers, provided that you also include the original English version of this License and the original versions of those notices and disclaimers. In case of a disagreement between the translation and the original version of this License or a notice or disclaimer, the original version will prevail.</p>
-<p>If a section in the Document is Entitled “Acknowledgements”, “Dedications”, or “History”, the requirement (section 4) to Preserve its Title (section 1) will typically require changing the actual title.</p>
-<h4 id="termination">9. TERMINATION</h4>
-<p>You may not copy, modify, sublicense, or distribute the Document except as expressly provided under this License. Any attempt otherwise to copy, modify, sublicense, or distribute it is void, and will automatically terminate your rights under this License.</p>
-<p>However, if you cease all violation of this License, then your license from a particular copyright holder is reinstated (a) provisionally, unless and until the copyright holder explicitly and finally terminates your license, and (b) permanently, if the copyright holder fails to notify you of the violation by some reasonable means prior to 60 days after the cessation.</p>
-<p>Moreover, your license from a particular copyright holder is reinstated permanently if the copyright holder notifies you of the violation by some reasonable means, this is the first time you have received notice of violation of this License (for any work) from that copyright holder, and you cure the violation prior to 30 days after your receipt of the notice.</p>
-<p>Termination of your rights under this section does not terminate the licenses of parties who have received copies or rights from you under this License. If your rights have been terminated and not permanently reinstated, receipt of a copy of some or all of the same material does not give you any rights to use it.</p>
-<h4 id="future-revisions-of-this-license">10. FUTURE REVISIONS OF THIS LICENSE</h4>
-<p>The Free Software Foundation may publish new, revised versions of the GNU Free Documentation License from time to time. Such new versions will be similar in spirit to the present version, but may differ in detail to address new problems or concerns. See <a href="https://www.gnu.org/licenses/" class="uri">https://www.gnu.org/licenses/</a>.</p>
-<p>Each version of the License is given a distinguishing version number. If the Document specifies that a particular numbered version of this License “or any later version” applies to it, you have the option of following the terms and conditions either of that specified version or of any later version that has been published (not as a draft) by the Free Software Foundation. If the Document does not specify a version number of this License, you may choose any version ever published (not as a draft) by the Free Software Foundation. If the Document specifies that a proxy can decide which future versions of this License can be used, that proxy’s public statement of acceptance of a version permanently authorizes you to choose that version for the Document.</p>
-<h4 id="relicensing">11. RELICENSING</h4>
-<p>“Massive Multiauthor Collaboration Site” (or “MMC Site”) means any World Wide Web server that publishes copyrightable works and also provides prominent facilities for anybody to edit those works. A public wiki that anybody can edit is an example of such a server. A “Massive Multiauthor Collaboration” (or “MMC”) contained in the site means any set of copyrightable works thus published on the MMC site.</p>
-<p>“CC-BY-SA” means the Creative Commons Attribution-Share Alike 3.0 license published by Creative Commons Corporation, a not-for-profit corporation with a principal place of business in San Francisco, California, as well as future copyleft versions of that license published by that same organization.</p>
-<p>“Incorporate” means to publish or republish a Document, in whole or in part, as part of another Document.</p>
-<p>An MMC is “eligible for relicensing” if it is licensed under this License, and if all works that were first published under this License somewhere other than this MMC, and subsequently incorporated in whole or in part into the MMC, (1) had no cover texts or invariant sections, and (2) were thus incorporated prior to November 1, 2008.</p>
-<p>The operator of an MMC Site may republish an MMC contained in the site under CC-BY-SA on the same site at any time before August 1, 2009, provided the MMC is eligible for relicensing.</p>
-<h3 id="addendum-how-to-use-this-license-for-your-documents">ADDENDUM: How to use this License for your documents</h3>
-<p>To use this License in a document you have written, include a copy of the License in the document and put the following copyright and license notices just after the title page:</p>
-<pre><code>    Copyright (C)  YEAR  YOUR NAME.
-    Permission is granted to copy, distribute and/or modify this document
-    under the terms of the GNU Free Documentation License, Version 1.3
-    or any later version published by the Free Software Foundation;
-    with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-    A copy of the license is included in the section entitled &quot;GNU
-    Free Documentation License&quot;.</code></pre>
-<p>If you have Invariant Sections, Front-Cover Texts and Back-Cover Texts, replace the “with … Texts.” line with this:</p>
-<pre><code>    with the Invariant Sections being LIST THEIR TITLES, with the
-    Front-Cover Texts being LIST, and with the Back-Cover Texts being LIST.</code></pre>
-<p>If you have Invariant Sections without Cover Texts, or some other combination of the three, merge those two alternatives to suit the situation.</p>
-<p>If your document contains nontrivial examples of program code, we recommend releasing these examples in parallel under your choice of free software license, such as the GNU General Public License, to permit their use in free software.</p>
-</br>
 </br>
 <i>Copyright 2013-2021 The Embroidermodder Team</i>
 </br>
-        </div>
         </div>
     </div>
 </div>

@@ -10,31 +10,32 @@
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="shortcut icon" type="image/png" href="favicon.png" />
 <style>
-@font-face {
-    font-family: 'styled-font';
-    src: url("fonts/elemental_end_italic.ttf") format('truetype');
-}
-
 body
 {
-background-color:#000000;
-background-image:url("images/texture-spirals.png");
-min-width:700px;
-margin:0;
-padding:0;
-font-family:sans-serif;
+    background-color: #FFFFFF;
+    background-image: url("images/texture-spirals.png");
+    min-width: 700px;
+    margin: 0;
+    padding: 0;
+    font-family: serif;
 }
 
 img
 {
-border:0;
+    border: 0;
 }
 
-a{text-decoration:none;color:#55C4E6;}
-a:link{text-decoration:none;color:#55C4E6;}
+a
+{
+    text-decoration: none;
+    color: #55C4E6;
+}
 
-li { color:#0C6AB0; } /* bullet color */
-li span { color:#DDDDDD; } /* text color */
+a:link
+{
+    text-decoration: none;
+    color: #55C4E6;
+}
 
 table, th, td
 {
@@ -57,118 +58,124 @@ td
     background-color:#DDDDDD;
 }
 
-#header
-{
-    position:relative;
-    background-color: #000000;
-    top: 0.5em;
-    bottom: 0;
-    left: 2em;
-    right: 0;
-    width: auto;
-    font-size: 18px;
+@media all and (min-width: 1000px) {
+    #menu {
+        float: top;
+        position: relative;
+        background-color: #000000;
+        left: 0;
+        top: 0;
+        padding-bottom: 1em;
+        padding-left: 8em;
+        color: #0C6AB0;
+        font-family: serif;
+        font-style: italic;
+    }
+    
+    #menu a {
+        color: #0C6AB0;
+    }
+
+    #menuUp {
+        position: relative;
+        float: left;
+        top: 0;
+        bottom: 35px;
+        padding-right: 40px;
+        padding-right: 1.5em;
+    }
+
+    #menuUp:hover {
+        color:#2C8AD0;
+    }
+
+    #container {
+        position: relative;
+        background-color: #000000;
+        top: 4em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        font-size: 18px;
+    }
+
+    .contentPanel {
+        background-color: #FFFFFF;
+        color: #001537;
+        position: relative;
+        padding-left: 8em;
+        padding-right: 16em;
+        padding-bottom: 3em;
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 1.5em;
+        bottom: 0;
+        min-height: 20em;
+        font-size: 16px;
+        line-height: 1.8;
+    }
 }
 
-h2 {
-    font-family: 'styled-font', "Emberlike-Caps";
-    font-style: italic;
-    font-size: 20px;
-    color: #0C6AB0;
-}
+@media all and (max-width: 1000px) {
+    #menu {
+        float: top;
+        position: relative;
+        background-color: #000000;
+        left: 0;
+        top: 0;
+        padding-bottom: 1em;
+        padding-left: 3em;
+        color: #0C6AB0;
+        font-family: serif;
+        font-style: italic;
+    }
+    
+    #menu a {
+        color: #0C6AB0;
+    }
 
-#footerCenter
-{
-    font-family: 'styled-font', "Emberlike-Caps", serif;
-    font-style: italic;
-    font-size: 20px;
-    color: #0C6AB0;
-    background: black;
-    background-repeat: no-repeat;
-    position: relative;
-    top: 0px;
-    bottom:0px;
-    padding-left: 250px;
-    right: 0px;
-    width: auto;
-    height: 30px;
-}
+    #menuUp {
+        position: relative;
+        float: left;
+        top: 0;
+        bottom: 35px;
+        padding-right: 40px;
+        padding-right: 1.5em;
+    }
 
-#menu
-{
-    float:left;
-    position:relative;
-    background-color:#000000;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    height: 100%;
-    margin-right: 3em;
-    width: 200px;
-    color: #0C6AB0;
-    font-family: 'styled-font', "Emberlike-Caps", serif;
-    font-style: italic;
-}
+    #menuUp:hover {
+        color:#2C8AD0;
+    }
 
-#menu a
-{
-    color:#0C6AB0;
-}
+    #container {
+        position: relative;
+        background-color: #000000;
+        top: 4em;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        font-size: 16px;
+    }
 
-#menuUp:hover
-{
-    color:#2C8AD0;
-}
-
-#menuUp
-{
-    position: relative;
-    top: 35px;
-    bottom: 35px;
-    left: 40px;
-    right: 40px;
-}
-
-#menuSecond
-{
-    position: relative;
-    top: 35px;
-    bottom: 35px;
-    font-size: 14px;
-    left: 60px;
-    right: 40px;
-}
-
-#container
-{
-    position: relative;
-    background-color: #000000;
-    top: 0;
-    bottom: 0;
-    left: 4em;
-    right: 0;
-    width: auto;
-    font-size: 18px;
-}
-
-.contentPanel
-{
-    background-image: url('images/texture-spirals-canvas.png');
-    background-repeat: repeat-xy;
-    color: #DDDDDD;
-    position: relative;
-    margin-left: 14em;
-    padding-bottom: 1.5em;
-}
-
-.contentCenter
-{
-    position: relative;
-    left: 4em;
-    top: 1.5em;
-    bottom: 4em;
-    width: 80%;
-    min-height: 20em;
-    font-size: 14px;
+    .contentPanel {
+        background-color: #FFFFFF;
+        color: #001537;
+        position: relative;
+        padding-left: 3em;
+        padding-right: 3em;
+        padding-bottom: 3em;
+        position: relative;
+        left: 0;
+        right: 0;
+        top: 1.5em;
+        bottom: 0;
+        min-height: 20em;
+        font-size: 14px;
+        line-height: 1.8;
+    }
 }
 
 .video
@@ -187,13 +194,13 @@ h2 {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
 }
 
 .img
 {
-    width: 100%;
+    width: 80%;
     max-height: auto;
 }
 
@@ -209,22 +216,21 @@ h2 {
 
 <body>
     <div id="container">
-    <div id="header"><a href="index.html"><img src="images/header-center.png"></img></a></div>
-        <!-- CONTENT START -->
-        <div id="menu">
-            <a href="index.html"><div id="menuUp">News</div></a>
-            <a href="features.html"><div id="menuUp">Features</div></a>
-            <a href="about.html"><div id="menuUp">About</div></a>
-            <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
-            <a href="documentation.html"><div id="menuUp">Documentation</div></a>
-            <a href="thread-tables.html"><div id="menuUp">Thread Tables</div></a>
-            <a href="donate.html"><div id="menuUp">Donate</div></a>
-            <a href="downloads.html"><div id="menuUp">Downloads</div></a>
-            <a href="contact.html"><div id="menuUp">Contact</div></a>
-        </div>
-        <div class="contentPanel">
-        <div class="contentCenter">
-        <!-- converted markdown goes here -->
+    <!-- CONTENT START -->
+    <div id="menu">
+        <br>
+        <a href="index.html"><img src="images/header-center.png"></img></a>
+        <br>
+        <a href="index.html"><div id="menuUp">News</div></a>
+        <a href="about.html"><div id="menuUp">About</div></a>
+        <a href="documentation.html"><div id="menuUp">Documentation</div></a>
+        <a href="libembroidery.html"><div id="menuUp">Libembroidery</div></a>
+        <a href="downloads.html"><div id="menuUp">Downloads</div></a>
+        <a href="contact.html"><div id="menuUp">Contact</div></a>
+    </div>
+    <div class="contentPanel">
+    <br>
+    <!-- converted markdown goes here -->
 <h3 id="official-release-packages">Official Release Packages</h3>
 <p>Embroidermodder 2.00:<br/> <a href="donate.html">Help us complete version 2 sooner! </a>(Windows, Linux, Mac OS X and Raspberry Pi)<br/></p>
 <p>Embroidermodder 1.70:<br/> <a href="http://sourceforge.net/projects/embroidermodder/files/embroidermodder170/embroidermodder170_exe.zip/download">embroidermodder170_exe.zip</a> (Windows)<br/></p>
@@ -234,10 +240,8 @@ h2 {
 --></p>
 <p>Embroidermodder 1.70:<br/> <a href="http://sourceforge.net/projects/embroidermodder/files/embroidermodder170/embroiderModder170_src.zip/download">embroiderModder170_src.zip</a> (MSVC++)<br/></p>
 </br>
-</br>
 <i>Copyright 2013-2021 The Embroidermodder Team</i>
 </br>
-        </div>
         </div>
     </div>
 </div>

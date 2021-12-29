@@ -1,5 +1,7 @@
 # What is Embroidermodder ?
 
+(UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR VERSION 2)
+
 Embroidermodder is a free machine embroidery application.
 The newest version, Embroidermodder 2 can:
 
@@ -18,62 +20,94 @@ To see what we're focussing on at the moment check this table.
 
 | *Date* | *Event* |
 |----|----|
-| Dec 2021 - Jan 2022 | libembroidery 1.0 work and bugfixing |
-| 31st of Jan 2022 | libembroidery 1.0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version. |
-| Feb 2022 | An overview of what has changed will be written up for the website as a news update, along with better documentation of libembroidery. |
-| Feb-April | Finish the SDL2 conversion |
+| Feb-April | Finish the conversion to Python/Tk |
 | April-May 2022 | Finish all the targets in the Design, or assign them to 2.1. |
-| May-June 2022 | Bugfixing, Testing, QA |
+| May-June 2022 | Bugfixing, Testing, QA. libembroidery 1.0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version. |
 | Summer Solstice (21st of June) 2022 | Embroidermodder 2 is officially released. |
 | July 2022 | News and Documentation work for Embroidermodder 2 |
 
-## Build and Install
+Current PyLint score: -4.68/10.
 
-### Dependencies
+## Install
 
-To build Embroidermodder 2 from source run:
+### Desktop
 
-On most systems:
+On most sytems the command:
 
-    ./build.sh --get-dependencies
+    python3 -m pip install embroidermodder
 
-If you have a more unusual package installer, try:
+will install the most up-to date released version, on Windows this is
 
-    ./build.sh --build-dependencies
+    py -m pip install embroidermodder
 
-On Windows:
+Currently this is the 2.0-alpha, which will have a build code of some kind.
 
-    .\build.bat --build-dependencies
+### Mobile
 
-### SDL2
+These are currently unsupported (see iMobileViewer and Mobileviewer for
+iOS and Android respectively), but after the Desktop version is
+released we'll work on them.
 
-We're working on an SDL2 version of the library that will require no
-non-standard dependencies not included in the source.
+The Mobile version will share some of the UI and all of the backend,
+so development of the Desktop version will help us make both.
 
-On systems where you use `--build-dependencies` the system will
-build and install the libraries if they are not already present
-from the versions in `extern/`. This way a copy of
-the Embroidermodder 2 source code
-on a machine with a build environment can be built without a connection
-to the internet access and insures against SDL2 going out of support.
+## Build
 
-### Building
+To run the development version just use
 
-Assuming you have the above dependancies these commands should build `embroidermodder`
+    python3 setup.py install
 
-    ./build.sh
+or on Windows
 
-or (on Windows)
+    py setup.py install
 
-    .\build.bat
+before using the command line boot
 
-with the install argument it will also install the program to user space
+    embroidermodder
 
-    ./build.sh --install
+If you are on a shared computer, like a university or library machine
+with a login, then remember to use the user-only install:
 
-or (on Windows)
+    python3 setup.py install --user
 
-    .\build.bat --install
+or on Windows
+
+    py setup.py install --user
+
+This may help if you are running tests that require the `embroidermodder`
+command to be in your system `PATH` or you just want to use the
+latest version before it comes out for some particular feature.
+
+## Testing
+
+We're going to implement testing as soon as possible, for now the
+only testing is the `embroider` test suite on the underlying C code.
+
+## Ideas
+
+Some of these were issues, but have been moved here to keep the
+Issues tab tidy.
+
+### Kivy
+
+Once the tkinter interface is up and running we can
+experiment with different frontends to improve the look
+of the application. For example, the MIT licensed KIVY
+would allow us to replace the mobile development in
+Swift and Java with all Python development:
+
+https://kivy.org/#home
+
+### Data/Code Seperation
+
+We can move the data into JSON files and then load
+them using the same system we use for icons.
+
+### SVG Icons
+
+To make the images easier to alter and restyle we could
+switch to svg icons. There's some code in the git history
+to help with this.
 
 ## Documentation
 
@@ -86,23 +120,71 @@ directory) and the printed docs in the three files:
 
 ## Development
 
-Current work:
+If you wish to develop with us you can chat via the contact email
+on the [website](embroidermodder.org) or in the issues tab on the
+[github page](https://github.com/Embroidermodder/Embroidermodder/issues).
+People have been polite and friendly in these conversations and I (Robin)
+have really enjoyed them.
+If we do have any arguments please note we have a
+[Code of Conduct](CODE_OF_CONDUCT.md) so there is a consistent policy to
+enforce when dealing with these arguments.
 
-1. Converting C++ to C throughout.
-    1. All comments to multiline `/* C-style comments */`.
-    2. Replace variables with variables of C or libembroidery type.
-       (QColor to EmbColor, QPointF to EmbVector)
-    3. Reduce the reliance on Qt functions while allowing boot of the
-       program.
-    4. Turn settings into array type, to aid read/write in loops.
-    5. QCheckBoxes into an array to simplify `Settings_Dialog::createTabOpenSave`.
+The first thing you should try is building from source using the [build advice](#build)
+above.
+
+### The Actions System
+
+In order to simplify the development of a GUI that is flexible and
+easy to understand to new developers we have a custom action system that all
+user actions will go via.
+
+The C `action_hash_data` struct will contain: the icon used, the labels for the
+menus and tooltips and the function pointer for that action.
+There will be an accompanying argument for this function call, currently being
+drafted as `action_call`. So when the user makes a function call it should
+contain information like the mouse position, whether special key is pressed
+etc.
+
+So there should be a way of getting the callbacks like:
+
+```
+void spinBoxGridSizeXValueChanged(double);
+void spinBoxGridSizeYValueChanged(double);
+void spinBoxGridSpacingXValueChanged(double);
+void spinBoxGridSpacingYValueChanged(double);
+```
+
+to go through the same system. Also the statusbar buttons with callbacks like:
+
+```
+void toggleSnap(bool on);
+void toggleGrid(bool on);
+```
+
+### Accessibility
+
+Software can be more or less friendly to people with dylexia, partial sightedness,
+reduced mobility and those who don't speak English.
+Embroidermodder 2 has, in its design, the following features to help:
+
+* icons for everything to reduce the amount of reading required
+* the system font is configurable: if you have a dyslexia-friendly font you can load it
+* the interface rescales to help with partial-sightedness
+* the system language is configurable, unfortunately the docs will only be in English but we can try to supply lots of images of the interface to make it easier to understand as a second language
+* buttons are remappable: XBox controllers are known for being good for people with reduced mobility so remapping the buttons to whatever setup you have should help
+
+Note that most of these features will be released with version 2.1, which is planned for around early 2023.
+
+### Current work
+
+1. Converting C++ to Python throughout.
 2. OpenGL Rendering
     1. "Real" rendering to see what the embroidery looks like.
     2. Icons and toolbars.
     3. Menu bar
 3. Libembroidery interfacing:
     1. Get all classes to use the proper libembroidery types within them.
-       So `EllipseObject` has `EmbEllipse` as public data within it.
+       So `Ellipse` has `EmbEllipse` as public data within it.
     2. Move calculations of rotation and scaling into `EmbVector` calls.
 1. Get undo history widget back (BUG).
 2. Switch website to a CMake build.
@@ -134,6 +216,8 @@ Current work:
 28. Layer manager and Layer switcher dock widget
 29. test that all formats read data in correct scale (format details should match other programs).
 30. Custom filter bug -- doesn't save changes in some cases.
+31. Get flake8, pylint and tests to pass.
+32. Sphinx documentation from docstrings or similar.
 
 For more details read on into the Design section.
 
@@ -148,54 +232,58 @@ These are key bits of reasoning behind why the software is built the way it is.
 
 ### CAD command review
 
-1. scale
-2. circle
-3. offset
-4. extend
-5. trim
-6. BreakAtPoint
-7. Break2Points
-8. Fillet
-9. star
-10. singlelinetext
-11. Chamfer
-12. split
-13. area
-14. time
-15. pickadd
-16. zoomfactor
-17. product
-18. program
-19. zoomwindow
-20. divide
-21. find
-22. record
-23. playback
-24. rotate
-25. rgb
-26. move
-27. grid
-28. griphot
-29. gripcolor
-30. gripcool
-31. gripsize
-32. highlight
-33. units
-34. locatepoint
-35. distance
-36. arc
-37. ellipse
-38. array
-39. point
-40. polyline
-41. polygon
-42. rectangle
-43. line
-44. arc (rt)
-45. dolphin
-46. heart
+| ID | Name | Arguments | Description |
+|---|---|---|---|
+| 0 | newfile | none | Create a new EmbPattern with a new tab in the GUI. |
+| 1 | openfile | `char *fname;` | Open an EmbPattern with the supplied filename `fname`. |
+| 2 | savefile | `char *fname;` | Save the current loaded EmbPattern to the supplied filname `fname`. |
+| 1 | scale | selected objects, 1 float | Scale all selected objects by the number supplied, without selection scales the entire design |
+| 2 | circle | mouse co-ords | Adds a circle to the design based on the supplied numbers, converts to stitches on save for stitch only formats. |
+| 3 | offset | mouse co-ords | Shifts the selected objects by the amount given by the mouse co-ordinates. |
+| 4 | extend | | |
+| 5 | trim | | |
+| 6 | BreakAtPoint | | |
+| 7 | Break2Points | | |
+| 8 | Fillet | | |
+| 9 | star | | |
+| 10 | singlelinetext | | |
+| 11 | Chamfer | | |
+| 12 | split | | |
+| 13 | area | | |
+| 14 | time | | |
+| 15 | pickadd | | |
+| 16 | zoomfactor | | |
+| 17 | product | | |
+| 18 | program | | |
+| 19 | zoomwindow | | |
+| 20 | divide | | |
+| 21 | find | | |
+| 22 | record | | |
+| 23 | playback | | |
+| 24 | rotate | | |
+| 25 | rgb | | |
+| 26 | move | | |
+| 27 | grid | | |
+| 28 | griphot | | |
+| 29 | gripcolor | | |
+| 30 | gripcool | | |
+| 31 | gripsize | | |
+| 32 | highlight | | |
+| 33 | units | | |
+| 34 | locatepoint | | |
+| 35 | distance | | |
+| 36 | arc | | |
+| 37 | ellipse | | |
+| 38 | array | | |
+| 39 | point | | |
+| 40 | polyline | | |
+| 41 | polygon | | |
+| 42 | rectangle | | |
+| 43 | line | | |
+| 44 | arc (rt) | | |
+| 45 | dolphin | | |
+| 46 | heart | | |
 
-So, it means weighing up some simplifications.
 
 ### Removed Elements
 
@@ -203,21 +291,12 @@ So I've had a few pieces of web infrastructure fail me recently and
 I think it's worth noting. An issue that affects us is an issue that
 can effect people who use our software.
 
-#### googletests
-
-In development we attempted using googletests. Googletests require a web
-connection to update and they update on each compilation.
-
-gtests are non-essential, testing is for developers not users so we can choose
-our own framework. I think the in-built testing for libembroidery was good and
-I want to re-instate it.
-
 #### Qt and dependencies
 
 Downloading and installing Qt has been a pain for some users
 (46Gb on possibly slow connections).
 
-I'm switching to SDL2 (which is a whole other conversation) which means we
+I'm switching to FreeGLUT 3 (which is a whole other conversation) which means we
 can ship it with the source code package meaning only a basic build
 environment is necessary to build it.
 
@@ -246,32 +325,27 @@ per project.
 
 OpenGL rendering within the application. This will allow for  Realistic Visualization - Bump Mapping/OpenGL/Gradients?
 
-### JSON data Ideas
+This should backend to a C renderer or something.
 
-JSON configuration (Started, see `head -n 50 src/mainwindow.cpp.`)
+### Configuration Data Ideas
 
-Ok this is changing slightly. embroidermodder should boot from the command line regardless of whether it is or is not installed (this helps with testing and running on machines without root). Therefore, it can create an initiation file but it won't rely on its existence to boot: this is what we currently do with settings.ini.
+Ok this is changing slightly. embroidermodder should boot from the command line
+regardless of whether it is or is not installed (this helps with testing and
+running on machines without root). Therefore, it can create an initiation file
+but it won't rely on its existence to boot: this is what we currently do with `settings.ini`.
 
-So:
-
-  1. Port `settings.ini` to `settings.json`.
-  2. Place `settings.json` in `$HOME/.embroidermodder` (or equivalent, see the homedir function in `gui.c`).
-  3. Parse JSON using cJSON (we have the new parseJSON function).
-  4. Better structure for settings data so parse and load JSON is easier and there's less junk in global variables. A structure similar to a Python dict that uses constants like the sketch below.
-
-### Why JSON over ini?
-
-1. We need to hand-write _a_ system because the current system is Qt dependent anyway.
-2. This way we can store more complex data structures in the same system including the layout of the widgets which may be user configured (see Blender and GIMP).
-3. Also it's easier to share information formatted this way between systems because most systems us JSON or XML data: there's better support for converting complex data this way.
+1. Switch colors to be stored as 6 digit hexcodes with a #.
+2. We've got close to a hand implemented ini read/write setup in `settings.c`.
 
 ### Distribution
 
-* Mac Bundle
+When we release the new pip wheel we should also package:
+
 * `.tar.gz` and `.zip` source archive.
-* NSIS installer for Windows
 * Debian package
 * RPM package
+
+Only do this once per minor version number.
 
 ### Scripting Overhaul
 
@@ -292,12 +366,17 @@ Originally Embroidermodder had a terminal widget, this is why we removed it.
 >>
 >> I like the idea of scripting just so people that know how to code could write their own designs without needing to fully build the app. Scripting would be a very advanced feature that most users would be confused by. Libembroidery would be a good fit for advanced features.
 
+Now we are using Python (again, sort of) this would be a lot more natural,
+perhaps we could boot the software without blocking the shell so they can
+interact? TODO: Screenshot a working draft to demonstrate.
+
 ## Perennial Jobs
 
 1. Check for memory leaks
-2. Clear compiler warnings on `-Wall -ansi -pedantic` for C.
-3. 
-
+2. Write new tests for new code.
+3. Get Embroidermodder onto the current version of libembroidery-python.
+4. PEP8 compliance.
+5. Better documentation with more photos/screencaps.
 
 ### Developing for Android
 

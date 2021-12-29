@@ -1,65 +1,13 @@
-##############################################################################
-## This is the project-wide .gitignore file for the Embroidermodder 2 project 
-## source code repository.
-## These file and directory patterns are ignored when commiting changes.
-##
-## Lines starting with a (#) character are comments. 
-## A python lexer with just comment lines highlighting is usually fine for syntax highlighting in 
-## your prefered editor for gitignore files. NOTE: patterns starting with \# are valid(escaped).
-##
-## Additional information on .gitignore files can be found here:
-##   http://git-scm.com/docs/gitignore
-##   https://help.github.com/articles/ignoring-files
-##   http://stackoverflow.com/questions/10274424/best-practice-for-using-multiple-gitignore
-## Additional .gitignore templates can be found here: 
-##   https://github.com/github/gitignore
-##############################################################################
-
+.vscode
+dist
 build
-libembroidery/build
-CMakeFiles/
-embroidermodder
-embroidermodder_autogen/
 
-#########################
-# Misc Dev Files        #
-#########################
-*.moc
-*.obj
-*Makefile*
-*_memleak*
-*callgrind.*
-*object_script.*
-*.pro.user*
-moc_*.cpp
-qrc_*.cpp
-*-build-*
-.qmake.stash
-
-#########################
-# Libraries             #
-#########################
-## Compiled Static libraries
-*.lai
-*.la
-*.lib
-*.a
-## Compiled Dynamic libraries
-*.dll
-*.so
-*.so.*
-*.dylib
-
-#########################
-# Executables           #
-#########################
+# Executables
 *.exe
 *.out
 *.app
 
-#########################
-# OS generated files    #
-#########################
+# OS generated files
 ## Macintosh
 .DS_Store
 .DS_Store?
@@ -70,11 +18,16 @@ ehthumbs.db
 Thumbs.db
 Desktop.ini
 
-#########################
-# Python                #
-#########################
+# Python
 ## Byte-compiled / optimized / DLL files
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Linting files
+.flake8
+.isort.cfg
+.markdownlint.yaml
+.shellcheckrc
+.trunk/
