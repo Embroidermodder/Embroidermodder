@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+# https://docs.pytest.org/en/6.2.x/customize.html
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "test.py"
+]

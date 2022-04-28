@@ -1,6 +1,8 @@
-# What is Embroidermodder ?
+# Embroidermodder 2.0.0 Alpha
 
 (UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR VERSION 2)
+
+![Pylint score button](icons/rating.png).
 
 Embroidermodder is a free machine embroidery application.
 The newest version, Embroidermodder 2 can:
@@ -11,22 +13,53 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more information, see [our website](http://embroidermodder.github.io).
+For more information, see [our website](http://embroidermodder.org).
 
 Embroidermodder 2 is very much a work in progress since we're doing a ground
-up rewrite to an SDL2 GUI. The reasoning for this is detailed in the issues tab.
+up rewrite to an interface in Python using the GUI toolkit Tk.
+The reasoning for this is detailed in the issues tab.
+
+For a more in-depth look at what we are developing read
+the [developer notes](#developers-notes). This discusses recent changes
+in a less formal way than a changelog (since this software is in
+development) and covers what we are about to try.
 
 To see what we're focussing on at the moment check this table.
 
 | *Date* | *Event* |
 |----|----|
-| Feb-April | Finish the conversion to Python/Tk |
-| April-May 2022 | Finish all the targets in the Design, or assign them to 2.1. |
-| May-June 2022 | Bugfixing, Testing, QA. libembroidery 1.0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version. |
-| Summer Solstice (21st of June) 2022 | Embroidermodder 2 is officially released. |
-| July 2022 | News and Documentation work for Embroidermodder 2 |
+| April-June 2022 | Finish the conversion to Python/Tk |
+| July-August 2022 | Finish all the targets in the Design, or assign them to 2.1. |
+| September 2022 | Bugfixing, Testing, QA. libembroidery 1.0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version. |
+| October 2022 | Embroidermodder 2 is officially released. |
 
-Current PyLint score: -4.68/10.
+## Run
+
+To run the development version, without installing, you can simply run these commands from the top directory:
+
+    $ python3 -m pip install libembroidery
+    $ cd src
+    $ python3 -m embroidermodder
+
+or, on Windows:
+
+    > py -m pip install libembroidery
+    > cd src
+    > py -m embroidermodder
+
+From this point on we assume that you have Python installed as `python3` but this same advice applies.
+
+### Run Without Install
+
+If you're using a machine that you don't have to ability to modify
+(like some office workstations) you don't need to install libembroidery for
+basic functioning.
+
+In this mode the code will be able to read and write SVG embroidery files and do all of the necessary
+editing. Should you then wish to convert the result without installing anything then we plan to have
+a version of the convert utility as a part of the [embroidermodder.org](https://embroidermodder.org) site.
+This would be a version of libembroidery compiled and run through emscripten with a simple form for
+putting files in.
 
 ## Install
 
@@ -36,11 +69,10 @@ On most sytems the command:
 
     python3 -m pip install embroidermodder
 
-will install the most up-to date released version, on Windows this is
+will install the most up-to date released version.
 
-    py -m pip install embroidermodder
-
-Currently this is the 2.0-alpha, which will have a build code of some kind.
+Currently this is the 2.0-alpha, which will have a build code of
+some kind.
 
 ### Mobile
 
@@ -55,59 +87,26 @@ so development of the Desktop version will help us make both.
 
 To run the development version just use
 
-    python3 setup.py install
+    $ python3 -m build
+    $ cd dist
+    $ python3 -m pip install embroidermodder-2*whl --force-reinstall
 
-or on Windows
+before using the command line boot (may be currently broken,
+use the next method instead)
 
-    py setup.py install
+    $ embroidermodder
 
-before using the command line boot
+If you are on a shared computer you have some ability to store user data on,
+like a university or library machine with a login, then use:
 
-    embroidermodder
+    $ python3 -m embroidermodder
 
-If you are on a shared computer, like a university or library machine
-with a login, then remember to use the user-only install:
-
-    python3 setup.py install --user
-
-or on Windows
-
-    py setup.py install --user
+when your shell isn't in the `src/` directory (which will boot the local
+version).
 
 This may help if you are running tests that require the `embroidermodder`
 command to be in your system `PATH` or you just want to use the
 latest version before it comes out for some particular feature.
-
-## Testing
-
-We're going to implement testing as soon as possible, for now the
-only testing is the `embroider` test suite on the underlying C code.
-
-## Ideas
-
-Some of these were issues, but have been moved here to keep the
-Issues tab tidy.
-
-### Kivy
-
-Once the tkinter interface is up and running we can
-experiment with different frontends to improve the look
-of the application. For example, the MIT licensed KIVY
-would allow us to replace the mobile development in
-Swift and Java with all Python development:
-
-https://kivy.org/#home
-
-### Data/Code Seperation
-
-We can move the data into JSON files and then load
-them using the same system we use for icons.
-
-### SVG Icons
-
-To make the images easier to alter and restyle we could
-switch to svg icons. There's some code in the git history
-to help with this.
 
 ## Documentation
 
@@ -130,13 +129,169 @@ If we do have any arguments please note we have a
 enforce when dealing with these arguments.
 
 The first thing you should try is building from source using the [build advice](#build)
-above.
+above. Then read some of the [development notes](dev_notes.md) to get the general
+layout of the source code and what we are currently planning.
+
+### Testing
+
+To find unfixed errors run the `qa_tests()` script in `scripts.py`, then
+dig through the output. It's currently not worth reporting the errors, since
+there are so many but if you can fix anything reported here you can submit a PR.
+
+### Tools
+
+We assume you have access to a Bash scripting environment and standard shell tools,
+if you struggle to use any of the scripts intended for developers after reading this
+document then please contact us on the issues tab of our GitHub page.
+
+### Build and Run
+
+To test the changes you've just made, use
+
+    $ ./EM2 dev-run
+
+which will install the local version of the software over your current version
+(which may damage it, so use a docker or similar if you need to) then run it.
+
+## Overall Structure
+
+## Code Optimisations and Simplifications
+
+### Current
+
+What Robin is currently doing.
+
+Getting the code to pass PyLint, that involves getting all source files
+under 1000 lines, renaming all variables to be in `snake_case`.
+
+Changing the seperation of code between EM and libembroidery.
+
+Translating the Qt widget framework to Tk.
+
+### Geometry
+
+The geometry is stored, processed and altered via libembroidery. See the Python specific part of the documentation for libembroidery for this. What the code in Embroidermodder does is make the GUI widgets to change and view this information graphically.
+
+For example if we create a circle with radius 10mm and center at (20mm, 30mm) then fill it with stitches the commands would be
+
+    from libembroidery import Pattern, Circle, Vector, satin
+    circle = Circle(Vector(20, 30), 10)
+    pattern = Pattern()
+    pattern.add_circle(circle, fill=satin)
+    pattern.to_stitches()
+
+but the user would do this through a series of GUI actions:
+
+1. Create new file
+2. Click add circle
+3. Use the Settings dialog to alter the radius and center
+4. Use the fill tool on circle
+5. Select satin from the drop down menu
+
+So EM2 does the job of bridging that gap.
+
+### Settings Dialog
+
+There are many codeblocks for changing out the colors in one go, for example:
+    
+    self.mw.update_all_view_select_box_colors(
+                    self.accept["display_selectbox_left_color"],
+                    self.accept["display_selectbox_left_fill"],
+                    self.accept["display_selectbox_right_color"],
+                    self.accept["display_selectbox_right_fill"],
+                    self.preview["display_selectbox_alpha"])
+
+This could be replaced with a simpler call
+
+    self.mw.update_all_view_select_box_colors(
+                    self.accept["display_selectbox_colors"],
+                    self.preview["display_selectbox_alpha"])
+
+where we require that
+
+    self.accept["display_selectbox_colors"] == {
+        "left_color": "#color",
+        "left_fill": "#color",
+        "right_color": "#color",
+        "right_fill": "#color"
+    }
+
+with #color being some valid hex code.
+
+### Kivy
+
+Once the tkinter interface is up and running we can experiment
+with different frontends to improve the look of the application.
+For example, the MIT licensed KIVY would allow us to replace the 
+mobile development in Swift and Java with all Python development:
+
+https://kivy.org/#home
+
+### Data/Code Seperation
+
+All the "data" is in code files that are within the `config/`
+submodule. So this way we don't have to deal with awkward data
+packaging, it's just available as a single JSON style object
+called `settings` available with this import line:
+
+    from embroidermodder.config import settings
+
+In order to pass PyLint style guides this will be split up and
+formatted into Python code but no processing beyond inlining
+the data into a single dict should be carried out here.
+
+#### The Settings Dictionary
+
+No more than 4 levels of indentation
+
+Only strings, arrays, dicts and integers so matching the JSON standard. Ideally you should be able to copy/paste the data in and out and it would parse as JSON. Currently this fails because we have multi-line strings in Python syntax and inlining.
+
+We may be able to extend the lisp support, which would deal with this. Or we can change multiline strings out for arrays of strings.
+
+#### Lisp Expression Support
+
+In order to safely support user contributed/shared data that can
+define, for example, double to double functions we need a consistent
+processor for these descriptions.
+
+Embroidermodder uses a list processor (a subset of the language
+Lisp which is short for LISt Processor) to accomplish this.
+
+For example the string:
+
+    (+ (* t 2) 5)
+
+is equivalent to the expression:
+
+    2*t + 5
+
+The benefit of not allowing this to simply be a Python expression
+is that it is safe against malicious use, or accidental misuse.
+The program can identify whether the output is of the appropriate
+form and give finitely many calculations before declaring the
+function to have run too long (stopping equations that hang).
+
+To see examples of this see `parser.py` and
+`config/design_primatives.py`.
+
+It's also worth noting that we don't use the simpler reverse Polish
+notation (RPN) approach because:
+
+    1. It's more compact to use Lisp because `a b c + +` for example needs a new `+` sign for each new term as opposed to `(+ a b c)`.
+    2. It's easier to support expressions that are themselves function calls defined by the user (by adding support for `defun` or `lambda`.
+
+#### SVG Icons
+
+To make the images easier to alter and restyle we could
+switch to svg icons. There's some code in the git history
+to help with this.
 
 ### The Actions System
 
 In order to simplify the development of a GUI that is flexible and
 easy to understand to new developers we have a custom action system that all
-user actions will go via.
+user actions will go via an `actuator` that takes a string argument. By using a
+string argument the undo history is just an array of strings.
 
 The C `action_hash_data` struct will contain: the icon used, the labels for the
 menus and tooltips and the function pointer for that action.
@@ -144,22 +299,6 @@ There will be an accompanying argument for this function call, currently being
 drafted as `action_call`. So when the user makes a function call it should
 contain information like the mouse position, whether special key is pressed
 etc.
-
-So there should be a way of getting the callbacks like:
-
-```
-void spinBoxGridSizeXValueChanged(double);
-void spinBoxGridSizeYValueChanged(double);
-void spinBoxGridSpacingXValueChanged(double);
-void spinBoxGridSpacingYValueChanged(double);
-```
-
-to go through the same system. Also the statusbar buttons with callbacks like:
-
-```
-void toggleSnap(bool on);
-void toggleGrid(bool on);
-```
 
 ### Accessibility
 
@@ -323,19 +462,20 @@ per project.
 
 ### OpenGL
 
-OpenGL rendering within the application. This will allow for  Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+OpenGL rendering within the application. This will allow for
+Realistic Visualization - Bump Mapping/OpenGL/Gradients?
 
 This should backend to a C renderer or something.
 
 ### Configuration Data Ideas
 
-Ok this is changing slightly. embroidermodder should boot from the command line
+embroidermodder should boot from the command line
 regardless of whether it is or is not installed (this helps with testing and
 running on machines without root). Therefore, it can create an initiation file
-but it won't rely on its existence to boot: this is what we currently do with `settings.ini`.
+but it won't rely on its existence to boot: `~/.embroidermodder/config.json`.
 
 1. Switch colors to be stored as 6 digit hexcodes with a #.
-2. We've got close to a hand implemented ini read/write setup in `settings.c`.
+2. We've got close to a hand implemented ini read/write setup in `settings.py`.
 
 ### Distribution
 

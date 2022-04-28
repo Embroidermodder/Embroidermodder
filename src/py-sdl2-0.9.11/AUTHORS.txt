@@ -1,0 +1,51 @@
+This software package was created and is maintained and improved by
+
+* Marcus von Appen <marcus@sysfault.org>
+* Austin Hurst
+
+with contributions from
+
+* Steven Johnson
+* Marcel Rodrigues
+* Dan Gillett
+
+Thanks to everyone else for their assistance, support, fixes and improvements:
+
+* Andreas Schiefer
+* Bao "Mantle" Rong
+* Ben Greiner 
+* Bil Bas
+* Dan McCombs
+* David Farler
+* DBLobster
+* DR0ID
+* Fabian Jarrett
+* Filip M. Nowak
+* Franz Schrober
+* Jamie Bliss
+* Joe Polak
+* Jones Romao
+* Jordan F
+* José Ignacio Amelivia Santiago
+* Kenneth Long
+* Linus Heckemann
+* Marcel Rodrigues
+* Max Bareiss
+* mgorny
+* Michael McCandless
+* Mihail Latyshov
+* otus
+* Paul Vallet
+* Piper Thunstrom
+* Radomir Dopieralski
+* Rob Rolls
+* Robert Winkler
+* Roger Flores
+* Simon McVittie
+* smea lum
+* stillinbeta
+* Sven Eckelmann
+* Szymon Zmilczak
+* Todd Rovito
+* William Manire
+* Zack Marvel

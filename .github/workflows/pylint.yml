@@ -19,9 +19,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint libembroidery flake8
         python setup.py install --user
-    - name: Analysing the code with flake8
-      run: |
-        flake8 embroidermodder
+    #- name: Analysing the code with flake8
+    #  run: |
+    #    flake8 embroidermodder
     - name: Analysing the code with pylint
       run: |
         pylint embroidermodder

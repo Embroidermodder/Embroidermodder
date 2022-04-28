@@ -1,0 +1,17 @@
+.cache
+.settings
+.pytest_cache
+**/*.DS_Store
+*project
+*.pyc
+*.pyo
+*~
+*.class
+*.core
+*.egg-info
+MANIFEST
+dlls
+dist
+build
+doc/html
+doc/_build

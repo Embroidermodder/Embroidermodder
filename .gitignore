@@ -1,6 +1,9 @@
 .vscode
+.github
 dist
 build
+rating.txt
+triage.json
 
 # Executables
 *.exe
@@ -24,10 +27,4 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# Linting files
-.flake8
-.isort.cfg
-.markdownlint.yaml
-.shellcheckrc
-.trunk/
+src/embroidermodder.egg-info

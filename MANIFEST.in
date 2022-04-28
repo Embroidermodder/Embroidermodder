@@ -1,1 +1,1 @@
-include embroidermodder/*.json
+include src/embroidermodder/*.json
