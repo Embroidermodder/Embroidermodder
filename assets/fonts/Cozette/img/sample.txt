@@ -1,0 +1,37 @@
+
+$BLUE$┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ $MAGENTA$♡$NC$        $FG$Cozette$NC$        $MAGENTA$♡$BLUE$ ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ $WHITE$A B C D E F G H I J K L M $BLUE$│
+│ $WHITE$N O P Q R S T U V W X Y Z $BLUE$│
+╞═══════════════════════════╡
+│    1 2 3 4 5 6 7 8 9 0    │
+╞═══════════════════════════╡
+│ $WHITE$a b c d e f g h i j k l m $BLUE$│
+│ $WHITE$n o p q r s t u v w x y z $BLUE$│
+├┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┤
+│ $RED$() [] {} <> ? / \ : " ' ;$BLUE$ │
+│ $RED$! @ # $ % ^ & * _ = + - |$BLUE$ │
+│          , . ` ~$BLUE$          │
+╰───────────────────────────╯
+ $YELLOW$  
+  
+   $BLUE$│  $FG$╔═══════════════╗
+   $BLUE$└──$FG$║ $GREEN$✓ ✔ $YELLOW$✕ ✖ $MAGENTA$✗ ✘ $FG$ ║$BLUE$▒
+      $FG$║ $BLUE$       $FG$║$BLUE$▒
+      $FG$╚═══════════════╝$BLUE$▒
+       ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+
+  $GREEN$Pchnąć w tę łódź jeża lub
+      ósm skrzyń fig.
+
+     Eĥoŝanĝo ĉiuĵaŭde.
+
+    Příliš žluťoučký kůň
+     úpěl ďábelské ódy.
+
+    Любя, съешь щипцы, — 
+  вздохнёт мэр, — Кайф жгуч!
+
+           $FG$♠ $MAGENTA$♥ $FG$♣ $MAGENTA$♦

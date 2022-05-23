@@ -1,3 +1,0 @@
-pysdl2-dll
-numpy
-pillow

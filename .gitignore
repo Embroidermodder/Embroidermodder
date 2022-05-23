@@ -1,14 +1,16 @@
 .vscode
 .github
-dist
-build
-rating.txt
-triage.json
 
-# Executables
+# Build
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
 *.exe
 *.out
 *.app
+embroidermodder
+Makefile
 
 # OS generated files
 ## Macintosh
@@ -20,11 +22,3 @@ triage.json
 ehthumbs.db
 Thumbs.db
 Desktop.ini
-
-# Python
-## Byte-compiled / optimized / DLL files
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-src/embroidermodder.egg-info

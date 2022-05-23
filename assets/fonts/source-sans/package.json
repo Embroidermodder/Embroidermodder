@@ -1,0 +1,29 @@
+{
+  "name": "source-sans",
+  "version": "3.46.0",
+  "description": "Source Sans is a set of OpenType fonts that have been designed to work well in user interface (UI) environments.",
+  "keywords": [
+    "font",
+    "sans-serif",
+    "Adobe",
+    "OpenType",
+    "otf",
+    "ttf",
+    "woff",
+    "woff2",
+    "variable"
+  ],
+  "homepage": "https://adobe-fonts.github.io/source-sans",
+  "bugs": {
+    "url": "https://github.com/adobe-fonts/source-sans/issues"
+  },
+  "license": "OFL-1.1",
+  "author": "Paul D. Hunt",
+  "contributors": [
+    "Miguel Sousa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adobe-fonts/source-sans.git#release"
+  }
+}
