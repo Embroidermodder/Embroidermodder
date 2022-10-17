@@ -23,7 +23,14 @@ mkdir build
 cd build
 cmake ..
 cmake --build .
-ln -s `pwd`/../assets assets
+cp -R ../assets assets
+cd ..
+}
+
+function test_pc () {
+cd build
+timeout 10 ./embroidermodder --test &> ../test_result.txt
+cd ..
 }
 
 function mingw_deps () {
@@ -35,6 +42,10 @@ function debian_deps () {
 sudo apt install git clang build-essential \
   libgl1-mesa-dev libglu1-mesa-dev \
   libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+}
+
+function macos_deps () {
+brew install sdl2 sdl2_image sdl2_ttf
 }
 
 function build_em2_android () {
@@ -117,12 +128,20 @@ while [[ $# -gt 0 ]]; do
       mingw_deps
       shift
       ;;
+    macos-deps)
+      mingw_deps
+      shift
+      ;;
     debian-deps)
       debian_deps
       shift
       ;;
     build)
       build_pc
+      shift
+      ;;
+    test)
+      test_pc
       shift
       ;;
     android)

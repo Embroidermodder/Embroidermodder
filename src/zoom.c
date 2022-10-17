@@ -19,8 +19,8 @@
 
 /* .
  */
-pointer
-scm_allow_zoom_in(scheme *sc, pointer args)
+void
+allow_zoom_in(void)
 {
 /*
     origin = map_to_scene(0, 0);
@@ -32,13 +32,12 @@ scm_allow_zoom_in(scheme *sc, pointer args)
         return 0;
     }
     return 1;*/
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_allow_zoom_out(scheme *sc, pointer args)
+void
+allow_zoom_out(void)
 {
 	/*
     origin = map_to_scene(0, 0);
@@ -50,13 +49,12 @@ scm_allow_zoom_out(scheme *sc, pointer args)
         return 0;
 
     return 1; */
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_zoom_in(scheme *sc, pointer args)
+void
+zoom_in(void)
 {
     debug_message("zoom_in()");
     debug_message("View zoom_in()");
@@ -73,13 +71,12 @@ scm_zoom_in(scheme *sc, pointer args)
     center_on(cntr);
     restore_override_cursor();
     */
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_zoom_out(scheme *sc, pointer args)
+void
+zoom_out(void)
 {
     debug_message("zoom_out()");
     debug_message("View zoom_out()");
@@ -95,12 +92,11 @@ scm_zoom_out(scheme *sc, pointer args)
     center_on(cntr);
     restore_override_cursor();
     */
-    return sc->NIL;
 }
 
 /* . */
-pointer
-scm_zoom_selected(scheme *sc, pointer args)
+void
+zoom_selected(void)
 {
     debug_message("zoom_selected()");
 	/*
@@ -120,43 +116,39 @@ scm_zoom_selected(scheme *sc, pointer args)
 
     fit_in_view(selected_rect, "KeepAspectRatio")
     restore_override_cursor() */
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_zoom_scale(scheme *sc, pointer args)
+void
+zoom_scale(void)
 {
     debug_message("zoom_scale()");
     debug_message("Implement zoom_scale.");
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_zoom_center(scheme *sc, pointer args)
+void
+zoom_center(void)
 {
     debug_message("zoom_center()");
     debug_message("Implement zoom_center.");
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_zoom_all(scheme *sc, pointer args)
+void
+zoom_all(void)
 {
     debug_message("zoom_all()");
     debug_message("Implement zoom_all.");
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_zoom_extents(scheme *sc, pointer args)
+void
+zoom_extents(void)
 {
     debug_message("zoom_extents()");
 	/*
@@ -170,27 +162,24 @@ scm_zoom_extents(scheme *sc, pointer args)
     fit_in_view(extents, "KeepAspectRatio")
     restore_override_cursor()
     */
-    return sc->NIL;
 }
 
-pointer
-scm_zoom_real_time(scheme *sc, pointer args)
+void
+zoom_real_time(void)
 {
     debug_message("zoomRealtime()");
     debug_message("Implement zoomRealtime.");
-    return sc->NIL;
 }
 
-pointer
-scm_zoom_previous(scheme *sc, pointer args)
+void
+zoom_previous(void)
 {
     debug_message("zoomPrevious()");
     debug_message("Implement zoomPrevious.");
-    return sc->NIL;
 }
 
-pointer
-scm_zoom_window(scheme *sc, pointer args)
+void
+zoom_window(void)
 {
     debug_message("zoom_window()");
     /*
@@ -203,14 +192,55 @@ scm_zoom_window(scheme *sc, pointer args)
     selecting_active = 0;
     clear_selection();
     */
-    return sc->NIL;
 }
 
-pointer
-scm_zoom_dynamic(scheme *sc, pointer args)
+void
+zoom_dynamic(void)
 {
     debug_message("zoom_dynamic()");
     debug_message("Implement zoom_dynamic.");
-    return sc->NIL;
+}
+
+
+void
+zoom_to_point(EmbVector mouse_point, float zoom_dir)
+{
+    double s;
+    /*
+    point-before-scale(map_to_scene(mouse-point)) */
+
+    /* Do The zoom */
+    s = 1.0;
+    /*
+    if (zoom-dir > 0) {
+        if (!allow-zoom-in()) {
+            return;
+        }
+        s = display-zoom-scale-action-in;
+    }
+    else {
+        if (!allow-zoom-out()) {
+            return;
+        }
+        s = display-zoom-scale-action-out;
+    }
+
+    scale(s, s);
+    align-scene-point-with-view-point(point-before-scale, mouse-point);
+    recalculate-limits();
+    align-scene-point-with-view-point(point-before-scale, mouse-point);
+
+    update-mouse-coords(mouse-point.x, mouse-point.y);
+    if pasting-active:
+        v = scene-mouse-point.subtract(paste-delta);
+        paste-object-item-group.set_pos(v);
+
+    if (selecting-active) {
+        rect = make_rectangle(map-from-scene(scenePressPoint), mousePoint).normalized();
+        select-box.set_geometry(rect);
+    }
+    */
+
+    scene_update();
 }
 

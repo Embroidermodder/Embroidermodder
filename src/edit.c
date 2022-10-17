@@ -17,68 +17,259 @@
 
 #include "em2.h"
 
-pointer
-scm_export(scheme *sc, pointer args)
+extern Window *mainwnd;
+
+
+
+void
+set_selected_items(int *itemList)
+{
+    /*
+    selectedItemList = itemList
+    #Hide all the groups initially, then decide which ones to show
+    hideAllGroups()
+    comboBoxSelected.clear()
+
+    if itemList.isEmpty()
+        comboBoxSelected.addItem(translate("No Selection"))
+        return
+
+    typeSet = {}
+    numAll = itemList.size()
+    numObjects = [0 for i in range(31)]
+    numTypes = 0
+
+    for item in itemList:
+        if (!item:
+            continue
+
+        obj-type = item.type()
+        typeSet.insert(obj-type)
+
+        if obj-type > BASE and obj-type < UNKNOWN:
+            if numObjects[obj-type-BASE] == 0:
+                numTypes += 1
+            numObjects[obj-type-BASE] += 1
+        else {
+            numObjects[UNKNOWN-BASE] += 1
+*/
+    /* Populate the selection comboBox
+     * ==================================================
+     */ /*
+    if numTypes > 1:
+        comboBoxSelected.addItem(translate("Varies") + " (" + "".setNum(numAll) + ")")
+        connect(comboBoxSelected, SIGNAL(currentIndexChanged(int)), this, SLOT(showOneType(int)))
+
+    for (i=0 i<31 i++) {
+        if (numObjects[i] > 0) {
+            combobox-str = translate(obj-names[i])
+            combobox-str += " (" + "".setNum(numObjects[i]) + ")"
+            comboBoxSelected.addItem(combobox-str, BASE+i)
+        }
+    } */
+
+    /* Load Data into the fields
+     * ==================================================
+     * Clear fields first so if the selected data varies,
+     * the comparison is simple.
+     */ /*
+    clear-all-fields()
+
+    for item in itemList:
+        if (!item) {
+            continue;
+        }
+        */
+
+        /* TODO: load data into the General field */
+        /*
+        if (item.type == "Arc") {
+            p = obj.objectCenter();
+            update_edit_num_if_varies("arc-center-x", p.x, 0);
+            update_edit_num_if_varies("arc-center-y", -p.y, 0);
+            update_edit_num_if_varies("arc-radius", obj.objectRadius(), 0);
+            update_edit_num_if_varies("arc-start-angle", obj.objectStartAngle(), 1);
+            update_edit_num_if_varies("arc-end-angle", obj.objectEndAngle(), 1);
+            update_edit_num_if_varies("arc-start-x", obj.objectStartPoint().x, 0);
+            update_edit_num_if_varies("arc-start-y", -obj.objectStartPoint().y, 0);
+            update_edit_num_if_varies("arc-end-x", obj.objectEndPoint().x, 0);
+            update_edit_num_if_varies("arc-end-y", -obj.objectEndPoint().y, 0);
+            update_edit_num_if_varies("arc-area", obj.objectArea(), 0);
+            update_edit_num_if_varies("arc-length", obj.objectArcLength(), 0);
+            update_edit_num_if_varies("arc-chord", obj.objectChord(), 0);
+            update_edit_num_if_varies("arc-inc-angle", obj.objectIncludedAngle(), 1);
+            updateComboBoxintIfVaries("arc-clockwise", obj.objectClockwise(), 1); /* dropdown */ /*
+        }
+
+        if (item.type == "Block") {
+            debug_message("TODO: load block data");
+        }
+
+        if (item.type == "Circle") {
+            p = obj.objectCenter()
+            update_edit_num_if_varies(CIRCLE-CENTER-X], p.x, 0);
+            update_edit_num_if_varies(CIRCLE-CENTER-Y], -p.y, 0);
+            update_edit_num_if_varies(CIRCLE-RADIUS], obj.objectRadius(), 0);
+            update_edit_num_if_varies(CIRCLE-DIAMETER], obj.objectDiameter(), 0);
+            update_edit_num_if_varies(CIRCLE-AREA], obj.objectArea(), 0);
+            update_edit_num_if_varies(CIRCLE-CIRCUMFERENCE], obj.objectCircumference(), 0);
+        }
+
+        if (item.type == "DimAligned") {
+            debug_message("TODO: load aligned dimension data");
+        }
+
+        if (item.type == "DimAngular") {
+            debug_message("TODO: load angular dimension data");
+        }
+
+        if (item.type == "DimArcLength") {
+            debug_message("TODO: load arclength dimension data");
+        }
+
+        if (item.type == DIMDIAMETER) {
+            debug_message("TODO: load diameter dimension data");
+        }
+
+        if (item.type == DIMLEADER) {
+            debug_message("TODO: load leader dimension data");
+        }
+
+        if (item.type == DIMLINEAR) {
+            debug_message("TODO: load linear dimension data");
+        }
+
+        if (item.type == DIMORDINATE) {
+            debug_message("TODO: load ordinate dimension data");
+        }
+
+        if (item.type == "DimRadius") {
+            debug_message("TODO: load radius dimension data");
+        }
+
+        if (item.type == "Ellipse") {
+            p = obj.objectCenter()
+            update_edit_num_if_varies("ellipse-center-x", p.x, 0);
+            update_edit_num_if_varies("ellipse-center-y", -p.y, 0);
+            update_edit_num_if_varies("ellipse-radius-major", obj.objectRadiusMajor(), 0);
+            update_edit_num_if_varies("ellipse-radius-minor", obj.objectRadiusMinor(), 0);
+            update_edit_num_if_varies("ellipse-diameter-major", obj.objectDiameterMajor(), 0);
+            update_edit_num_if_varies("ellipse-diameter-minor", obj.objectDiameterMinor(), 0);
+        }
+
+        if (item.type == "Image") {
+            debug_message("TODO: load image data");
+        }
+
+        if (item.type == "Infinite Line") {
+            debug_message("TODO: load infinite line data");
+        }
+
+        if (item.type == "Line") {
+            update_edit_num_if_varies(LINE-START-X], obj.objectEndPoint1().x, 0);
+            update_edit_num_if_varies(LINE-START-Y], -obj.objectEndPoint1().y, 0);
+            update_edit_num_if_varies(LINE-END-X], obj.objectEndPoint2().x, 0);
+            update_edit_num_if_varies(LINE-END-Y], -obj.objectEndPoint2().y, 0);
+            update_edit_num_if_varies(LINE-DELTA-X], obj.objectDeltaX(), 0);
+            update_edit_num_if_varies(LINE-DELTA-Y], -obj.objectDeltaY(), 0);
+            update_edit_num_if_varies(LINE-ANGLE], obj.objectAngle(), 1);
+            update_edit_num_if_varies(LINE-LENGTH], obj.objectLength(), 0);
+        }
+
+        if (item.type == "Path") {
+            debug_message(".");
+        }
+
+        if (item.type == "Point") {
+            update_edit_num_if_varies(POINT-X], obj.objectX(), 0);
+            update_edit_num_if_varies(POINT-Y], -obj.objectY(), 0);
+        }
+
+        if (item.type == "Polygon") {
+            debug_message(".");
+        }
+
+        if (item.type == "Polyline") {
+            debug_message(".");
+        }
+
+        if (item.type == "Ray") {
+            debug_message(".");
+        }
+
+        if (item.type == RECTANGLE) {
+            corn1 = obj.objectTopLeft();
+            corn2 = obj.objectTopRight();
+            corn3 = obj.objectBottomLeft();
+            corn4 = obj.objectBottomRight();
+
+            update_edit_num_if_varies("rect-corner-x1", corn1.x, 0);
+            update_edit_num_if_varies("rect-corner-y1", -corn1.y, 0);
+            update_edit_num_if_varies("rect-corner-x2", corn2.x, 0);
+            update_edit_num_if_varies("rect-corner-y2", -corn2.y, 0);
+            update_edit_num_if_varies("rect-corner-x3", corn3.x, 0);
+            update_edit_num_if_varies("rect-corner-y3", -corn3.y, 0);
+            update_edit_num_if_varies("rect-corner-x4", corn4.x, 0);
+            update_edit_num_if_varies("rect-corner-y4", -corn4.y, 0);
+            update_edit_num_if_varies("rect-width", obj.objectWidth(), 0);
+            update_edit_num_if_varies("rect-height", -obj.objectHeight(), 0);
+            update_edit_num_if_varies("rect-area", obj.objectArea(), 0);
+        }
+
+        if (item.type == TEXTMULTI) {
+            debug_message(".");
+        }
+
+        if (item.type == TEXTSINGLE) {
+            update-edit-StrIfVaries(edit-TextSingleContents, obj.objText);
+            updatefont-comboboxStrIfVaries(comboBoxTextSingleFont, obj.objTextFont);
+            updateComboBoxStrIfVaries(comboBoxTextSingleJustify, obj.objTextJustify, obj.objectTextJustifyList());
+            update_edit_num_if_varies(edit-TextSingleHeight, obj.obj-text.size, 0);
+            update_edit_num_if_varies(edit-TextSingleRotation, -obj.rotation(), 1);
+            update_edit_num_if_varies(edit-TextSingleX, obj.objectX(), 0);
+            update_edit_num_if_varies(edit-TextSingleY, -obj.objectY(), 0);
+            updateComboBoxintIfVaries(comboBoxTextSingleBackward, obj.obj-text.backward, 1);
+            updateComboBoxintIfVaries(comboBoxTextSingleUpsideDown, obj.obj-text.upsidedown, 1);
+        }
+    }
+    */
+
+    /* Only show fields if all objects are the same type
+     * =================================================
+     */
+    /*
+    if (numTypes == 1) {
+        for (obj-type in typeSet) {
+            showGroups(obj-type);
+        }
+    }
+    */
+}
+
+void
+export_(void)
 {
     debug_message("Export.");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
-pointer
-scm_do_nothing(scheme *sc, pointer args)
+void
+do_nothing(void)
 {
     debug_message("Do nothing.");
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) > 0) {
-        puts("do-nothing ignores arguments passed to it.");
-        return sc->NIL;
-    }
-    return sc->NIL;
-}
-
-pointer
-scm_debug_message(scheme *sc, pointer args)
-{
-    printf("Debug message\n");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    
-    return sc->NIL;
 }
 
 /* Creates a new file using the standard dialog_
  * Adds an mdi_area.
  */
-pointer
-scm_new_file(scheme *sc, pointer args)
+void
+new_file(void)
 {
     debug_message("New File.");
-    int n_patterns = load_int(sc, "n-patterns");
+    int n_patterns = get_int("n-patterns");
     mainwnd->pattern[n_patterns] = embPattern_create();
-    set_int(sc, "n-patterns", n_patterns+1);
-    set_int(sc, "tab-index", load_int(sc, "tab-index")+1);
-    set_int(sc, "n-docs", load_int(sc, "n-docs")+1);
-    if (list_length(sc, args) > 0) {
-        puts("The argument for new-file is unnecessary and ignored.");
-    }
+    set_int("n-patterns", n_patterns+1);
+    set_int("tab-index", get_int("tab-index")+1);
+    set_int("n-docs", get_int("n-docs")+1);
     /*
     mdi_win = mdi_window(doc_index, mdi_area, "SubWindow"); */
     /* connect(mdi_win, SIGNAL(sendClosemdi_win()), self, SLOT(on_close_mdi_win()));
@@ -93,13 +284,12 @@ scm_new_file(scheme *sc, pointer args)
         v.zoom_extents();
     }
     */
-    return sc->NIL;
 }
 
 /* Opens a file using the standard dialog.
  */
-pointer
-scm_open_file(scheme *sc, pointer args)
+void
+open_file(void)
 /*, char *recent[], int recentFiles*/
 {
     debug_message("Open File");
@@ -127,7 +317,6 @@ scm_open_file(scheme *sc, pointer args)
     }
 
     Application_restoreOverrideCursor(); */
-    return sc->NIL;
 }
 
 
@@ -135,116 +324,52 @@ scm_open_file(scheme *sc, pointer args)
  * Instead of closing using exit() this allows us to chain any checks,
  * like the confirmation of the close, to the action.
  */
-pointer
-scm_exit_program(scheme *sc, pointer args)
+void
+exit_program(void)
 {
     debug_message("Closing Embroidermodder 2.0.");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for exit-program is unnecessary and ignored.");
-    }
-    mainwnd->running = 0;
-    return sc->NIL;
+    set_int("running", 0);
 }
 
-pointer
-scm_icon_16(scheme *sc, pointer args)
+void
+icon_16(void)
 {
     debug_message("icon_16()");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
-pointer
-scm_icon_24(scheme *sc, pointer args)
+void
+icon_24(void)
 {
     debug_message("icon_24()");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
-pointer
-scm_icon_32(scheme *sc, pointer args)
+void
+icon_32(void)
 {
     debug_message("icon_32()");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
-pointer
-scm_icon_48(scheme *sc, pointer args)
+void
+icon_48(void)
 {
     debug_message("icon_48()");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
-pointer
-scm_icon_64(scheme *sc, pointer args)
+void
+icon_64(void)
 {
     debug_message("icon_64()");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
-pointer
-scm_icon_128(scheme *sc, pointer args)
+void
+icon_128(void)
 {
     debug_message("icon_128()");
-    pointer arg[2];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    if (list_length(sc, args) < 1) {
-        return sc->NIL;
-    }
-    get_args(args, arg, 1);
-    printf("%s\n", string_value(pair_car(arg[0])));
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
+void
 open_files_selected(char **files, int n_files)
 {
     int doOnce = 1;
@@ -265,7 +390,7 @@ open_files_selected(char **files, int n_files)
 
             /* The docIndex doesn't need increased as it
              * is only used for unnamed files. */
-            int n_docs = load_int(mainwnd->sc, "n-docs");
+            int n_docs = get_int("n-docs");
             
             n_docs++;
             /* mdi_win = mdi_window(doc_index, self, mdi_area, "SubWindow"); */
@@ -312,8 +437,8 @@ open_files_selected(char **files, int n_files)
 
 /* .
  */
-pointer
-scm_open_recent_file(scheme *sc, pointer args)
+void
+open_recent_file(void)
 {
     debug_message("open_recent_file()");
     /* Check to see if this from the recent files list.
@@ -326,8 +451,8 @@ scm_open_recent_file(scheme *sc, pointer args)
 
 
 /* Saves an existing file as a new format using the standard dialog_ */
-pointer
-scm_save_file_as(scheme *sc, pointer args)
+void
+save_file_as(void)
 {
     debug_message("Save file as...");
     /* Need to find the active_sub_window before it loses
@@ -341,7 +466,6 @@ scm_save_file_as(scheme *sc, pointer args)
     file = QFileDialog_getsave_fileName(translate("Save As"), open_filesPath, format_filter_save);
 
     mdi_win.save_file(file); */
-    return sc->NIL;
 }
 
 /* Saves a file using the standard dialog.
@@ -355,25 +479,22 @@ scm_save_file_as(scheme *sc, pointer args)
  *  to take into account the color of the thread, as we do not want
  *  to try to hide dark colored stitches beneath light colored fills.
  */
-pointer
-scm_save_file(scheme *sc, pointer args)
+void
+save_file(void)
 {
     EmbPattern *pattern;
-    int write_successful, format_type;
+    int format_type;
     debug_message("Save file()");
     /* debug_message(current_file_name); */
 
-    write_successful = 0;
-    format_type = emb_identify_format(load_str(sc, "current-file-name"));
+    format_type = emb_identify_format(get_str("current-file-name"));
     if (format_type == EMBFORMAT_UNSUPPORTED) {
         debug_message("The format of the file is not supported.");
-        return sc->NIL;
     }
 
     pattern = embPattern_create();
     if (!pattern) {
         debug_message("Could not allocate memory for embroidery pattern");
-        return sc->NIL;
     }
 
     /*
@@ -603,25 +724,23 @@ scm_save_file(scheme *sc, pointer args)
         debug_message("Writing file %s was unsuccessful" % file_name);
     }
     */
-    return sc->NIL;
 }
 
 /* . */
-pointer
-scm_whats_this(scheme *sc, pointer args)
+void
+whats_this(void)
 {
     debug_message("whats_this()");
     /*
     what_this = 1;
     QWhatsThis_enterWhatsThisMode();
     */
-    return sc->NIL;
 }
 
 /* Call print dialog to print out a render of the embroidery.
  */
-pointer
-scm_print_pattern(scheme *sc, pointer args)
+void
+print_pattern(void)
 {
     debug_message("print()");
     /*
@@ -654,8 +773,8 @@ scm_print_pattern(scheme *sc, pointer args)
  *
  * If no objects are selected an error is returned.
  */
-pointer
-scm_cut(scheme *sc, pointer args)
+void
+cut(void)
 {
     debug_message("cut()");
 
@@ -673,7 +792,6 @@ scm_cut(scheme *sc, pointer args)
 
     copy_selected();
     delete_selected(); */
-    return sc->NIL;
 }
 
 /*
@@ -681,14 +799,10 @@ scm_cut(scheme *sc, pointer args)
  *
  * If no objects are selected an error is returned.
  */
-pointer
-scm_copy(scheme *sc, pointer args)
+void
+copy(void)
 {
     debug_message("copy()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for copy is unnecessary and ignored.");
-    }
-
     /* gview = active_view
     if gview:
         gview.copy(); */
@@ -702,17 +816,13 @@ scm_copy(scheme *sc, pointer args)
 
     copy_selected(window);
     clear_selection(window); */
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_copy_selected(scheme *sc, pointer args)
+void
+copy_selected(void)
 {
-    if (list_length(sc, args) > 0) {
-        puts("The argument for copy-selected is unnecessary and ignored.");
-    }
     /* selectedList = gscene.selected_items(); */
 
     /*  Prevent memory leaks by deleting any unpasted instances. */
@@ -725,20 +835,14 @@ scm_copy_selected(scheme *sc, pointer args)
     if the original objects are deleted before the paste occurs.
     */
     /* cut_copy_object_list = create_object_list(selectedList); */
-    return sc->NIL;
 }
 
 /* Paste whatever objects are on the clipboard.
  */
-pointer
-scm_paste(scheme *sc, pointer args)
+void
+paste(void)
 {
     debug_message("paste()");
-
-    if (list_length(sc, args) > 0) {
-        puts("The argument for paste is unnecessary and ignored.");
-    }
-
     /* 
     gview = active_view;
     if (gview) {
@@ -758,21 +862,16 @@ scm_paste(scheme *sc, pointer args)
 
     /*  Re-create the list in case of multiple pastes. */
     /* cut_copy_object_list = create_object_list(cut_copy_object_list); */
-    return sc->NIL;
 }
 
 /*
  * Reapply the action that is next on the undo_history array,
  * if we are at the top of the array then do nothing.
  */
-pointer
-scm_redo(scheme *sc, pointer args)
+void
+redo(void)
 {
     debug_message("redo()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-
     /*
     gview = active_view;
     if (gview) {
@@ -789,20 +888,16 @@ scm_redo(scheme *sc, pointer args)
         actuator(undo_call);
     }
     */
-    return sc->NIL;
 }
 
 /*
  * Apply the reverse of the action on the current position
  * of the undo_history array.
  */
-pointer
-scm_undo(scheme *sc, pointer args)
+void
+undo(void)
 {
     debug_message("undo()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
     /*
     gview = active_view;
     if (gview) {
@@ -822,67 +917,30 @@ scm_undo(scheme *sc, pointer args)
         actuator(last);
     }
     */
-    return sc->NIL;
 }
 
 /* Uses the undo stack.
  */
-pointer
-scm_repeat(scheme *sc, pointer args)
+void
+repeat(void)
 {
     debug_message(" . ");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
-}
-
-/* Apply 1 to all layer's visibility flags.
- */
-pointer
-scm_show_all_layers(scheme *sc, pointer args)
-{
-    debug_message("showAllLayers()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for show-all-layers is unnecessary and ignored.");
-    }
-    return sc->NIL;
-}
-/* .
- */
-pointer
-scm_design_details(scheme *sc, pointer args)
-{
-    if (list_length(sc, args) > 0) {
-        puts("The argument for design-details is unnecessary and ignored.");
-    }
-
-    return sc->NIL;
-}
-
-
-/* Make layer active.
- */
-pointer
-scm_make_layer_active(scheme *sc, pointer args)
-{
-    debug_message("make_layer_active()");
-    debug_message("Implement makeLayerActive.");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for make-layer-active is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_help(scheme *sc, pointer args)
+void
+design_details(void)
+{
+}
+
+
+/* .
+ */
+void
+help(void)
 {
     debug_message("help()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for help is unnecessary and ignored.");
-    }
     /* 
     #display in a custom widget instead
     #Open the HTML Help in the default browser
@@ -894,7 +952,6 @@ scm_help(scheme *sc, pointer args)
     #arguments = _help/commands.html
     #myProcess = Process();
     #myProcess.start(program, arguments); */
-    return sc->NIL;
 }
 
 /*
@@ -917,13 +974,10 @@ scm_help(scheme *sc, pointer args)
     dialog_setLayout(layout)
     restoreOverrideCursor()
  */
-pointer
-scm_about(scheme *sc, pointer args)
+void
+about(void)
 {
     debug_message("about()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for about is unnecessary and ignored.");
-    }
     /* 
     dialog = tk.Tk();
     dialog_title("About Embroidermodder 2");
@@ -957,78 +1011,13 @@ scm_about(scheme *sc, pointer args)
 
     dialog_mainloop();
     */
-    return sc->NIL;
 }
 
-/* Make all layers not editable.
- */
-pointer
-scm_freeze_all_layers(scheme *sc, pointer args)
-{
-    debug_message("freezeAllLayers()");
-    return sc->NIL;
-}
-
-/* Make layers editable again.
- */
-pointer
-scm_thaw_all_layers(scheme *sc, pointer args)
-{
-    debug_message("thawAllLayers()");
-    return sc->NIL;
-}
-
-/*
- * Make all layers not editable.
- * (What's the difference between freeze and lock?);
- */
-pointer
-lock_all_layers(scheme *sc, pointer args)
-{
-    debug_message("lockAllLayers()");
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-unlock_all_layers(scheme *sc, pointer args)
-{
-    debug_message("unlock_all_layers()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-hide_all_layers(scheme *sc, pointer args)
-{
-    debug_message("hide_all_Layers()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-make_layer_current(scheme *sc, pointer args)
-{
-    debug_message("makeLayerCurrent()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
-}
 
 /* TODO: Make day vision color settings.
  */
-pointer
-day_vision(scheme *sc, pointer args)
+void
+day_vision(void)
 {
     /*
     gview = self->active_view();
@@ -1038,16 +1027,12 @@ day_vision(scheme *sc, pointer args)
         gview->setGridColor("#000000");
         */
     debug_message("day_vision()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* TODO: Make night vision color settings.
  */
-pointer
-night_vision(scheme *sc, pointer args)
+void
+night_vision(void)
 {
 	/*
     gview = self->active_view();
@@ -1057,10 +1042,6 @@ night_vision(scheme *sc, pointer args)
         gview->setGridColor("#FFFFFF");
     */
     debug_message("night_vision()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /*
@@ -1068,43 +1049,32 @@ Display the changelog stored in the config.json data file.
 
 Not currently maintained.
 */
-pointer
-scm_changelog(scheme *sc, pointer args)
+void
+changelog(void)
 {
     debug_message("changelog()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
     /*
     #display in a custom widget instead
     #
     #QUrl changelogURL("help/changelog.html");
     #QDesktopServices_openUrl(changelogURL);
     */
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_settings_dialog(scheme *sc, pointer args)
+void
+settings_dialog(void)
 {
     debug_message("settings_dialog()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* Run the "tip of the day" dialog box.
  */
-pointer
-scm_tip_of_the_day(scheme *sc, pointer args)
+void
+tip_of_the_day(void)
 {
     debug_message("tip_of_the_day()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
     /* 
     appDir = qApp.applicationDirPath();
     wizard_tip_of_the_day = tk.Dialog();
@@ -1153,222 +1123,141 @@ scm_tip_of_the_day(scheme *sc, pointer args)
     wizard_tip_of_the_day.set_window_title("Tip of the Day");
     wizard_tip_of_the_day.set_minimum_size(550, 400);
     wizard_tip_of_the_day.exec(); */
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_check_for_updates(scheme *sc, pointer args)
+void
+check_for_updates(void)
 {
     debug_message("scm_check_for_updates()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_select_all(scheme *sc, pointer args)
+void
+select_all(void)
 {
-    debug_message("scm_select_all()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
+    debug_message("select_all()");
 }
 
-/* .
+/* Open color selector dialog.
  */
-pointer
-scm_color_selector(scheme *sc, pointer args)
+void
+color_selector(void)
 {
-    debug_message("scm_color_selector()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
+    debug_message("color_selector()");
 }
 
-/* .
+/* Change layer action.
  */
-pointer
-scm_line_type_selector(scheme *sc, pointer args)
+void
+layer_selector_action(void)
 {
-    debug_message("scm_line_type_selector()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
+    debug_message("color-selector-action()");
 }
 
-/* .
+/* Open line type selector dialog.
  */
-pointer
-scm_line_weight_selector(scheme *sc, pointer args)
+void
+line_type_selector(void)
 {
-    debug_message("scm_line_weight_selector()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
+    debug_message("line_type_selector()");
 }
 
 /* .
  */
-pointer
-scm_day_vision(scheme *sc, pointer args)
+void
+line_weight_selector(void)
 {
-    debug_message("scm_day_vision()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
+    debug_message("line_weight_selector()");
 }
 
 /* .
  */
-pointer
-scm_night_vision(scheme *sc, pointer args)
-{
-    debug_message("scm_night_vision()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-scm_treble_clef(scheme *sc, pointer args)
+void
+treble_clef(void)
 {
     debug_message("scm_treble_clef()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_path(scheme *sc, pointer args)
+void
+path(void)
 {
     debug_message("scm_path()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_circle(scheme *sc, pointer args)
+void
+circle(void)
 {
     debug_message("scm_circle()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_line(scheme *sc, pointer args)
+void
+line(void)
 {
     debug_message("scm_line()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_distance(scheme *sc, pointer args)
+void
+distance(void)
 {
     debug_message("scm_distance()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_dolphin(scheme *sc, pointer args)
+void
+dolphin(void)
 {
     debug_message("scm_dolphin()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_ellipse(scheme *sc, pointer args)
+void
+ellipse(void)
 {
     debug_message("scm_ellipse()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_delete_object(scheme *sc, pointer args)
+void
+delete_object(void)
 {
     debug_message("scm_delete_object()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_heart(scheme *sc, pointer args)
+void
+heart(void)
 {
     debug_message("scm_heart()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_locate_point(scheme *sc, pointer args)
+void
+locate_point(void)
 {
     debug_message("scm_locate_point()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 
 /* .
  */
-pointer
-scm_move(scheme *sc, pointer args)
+void
+move(void)
 {
     debug_message("scm_locate_point()");
-    if (list_length(sc, args) > 0) {
-        puts("The argument for redo is unnecessary and ignored.");
-    }
-    return sc->NIL;
 }
 

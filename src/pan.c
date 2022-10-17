@@ -17,22 +17,28 @@
 
 #include "em2.h"
 
+/* .
+ */
 void
-pan_real_time_action(void)
+pan_real_time(void)
 {
     debug_message("pan-real-time-action()");
     /* mainwnd->panning_real_time_active = 1; */
 }
 
+/* .
+ */
 void
-pan_point_action(void)
+pan_point(void)
 {
     debug_message("pan-point-action()");
     /* mainwnd->panning_point_active = 1; */
 }
 
+/* .
+ */
 void
-pan_left_action(void)
+pan_left(void)
 {
     debug_message("pan-left-action()");
     /*
@@ -42,8 +48,10 @@ pan_left_action(void)
     */
 }
 
+/* .
+ */
 void
-pan_right_action(void)
+pan_right(void)
 {
     debug_message("pan-right-action()");
     /*
@@ -53,8 +61,10 @@ pan_right_action(void)
     */
 }
 
+/* .
+ */
 void
-pan_up_action(void)
+pan_up(void)
 {
     debug_message("pan-up-action()");
     /*
@@ -64,8 +74,10 @@ pan_up_action(void)
     */
 }
 
+/* .
+ */
 void
-pan_down_action(void)
+pan_down(void)
 {
     debug_message("pan-down-action()");
     /*
@@ -73,120 +85,5 @@ pan_down_action(void)
     update-mouse-coords(view-mouse-point.x(), view-mouse-point.y());
     scene_update();
     */
-}
-
-/* .
- */
-pointer
-scm_pan_real_time(scheme *sc, pointer args)
-{
-    debug_message("scm_pan_real_time()");
-    pointer arg[10];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    
-    get_args(args, arg, 3);
-    if (list_length(sc, args) < 3) {
-        return sc->NIL;
-    }
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-scm_pan_point(scheme *sc, pointer args)
-{
-    debug_message("scm_pan_real_time()");
-    pointer arg[10];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    
-    get_args(args, arg, 3);
-    if (list_length(sc, args) < 3) {
-        return sc->NIL;
-    }
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-scm_pan_left(scheme *sc, pointer args)
-{
-    debug_message("scm_pan_real_time()");
-    pointer arg[10];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    
-    if (list_length(sc, args) < 3) {
-        return sc->NIL;
-    }
-
-    get_args(args, arg, 3);
-
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-scm_pan_right(scheme *sc, pointer args)
-{
-    debug_message("scm_pan_real_time()");
-    pointer arg[10];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    
-    if (list_length(sc, args) < 3) {
-        return sc->NIL;
-    }
-
-    get_args(args, arg, 3);
-
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-scm_pan_up(scheme *sc, pointer args)
-{
-    debug_message("scm_pan_real_time()");
-    pointer arg[10];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    
-    if (list_length(sc, args) < 3) {
-        return sc->NIL;
-    }
-
-    get_args(args, arg, 3);
-
-    return sc->NIL;
-}
-
-/* .
- */
-pointer
-scm_pan_down(scheme *sc, pointer args)
-{
-    debug_message("scm_pan_real_time()");
-    pointer arg[10];
-    if (args == sc->NIL) {
-        return sc->NIL;
-    }
-    
-    if (list_length(sc, args) < 3) {
-        return sc->NIL;
-    }
-
-    get_args(args, arg, 3);
-    return sc->NIL;
 }
 

@@ -11,6 +11,9 @@
  *
  *  Use Python's PEP7 style guide.
  *      https://peps.python.org/pep-0007/
+ *
+ *  Functions that cannot be called through the action system
+ *  and aren't to control the window state.
  */
 
 #include "em2.h"
@@ -25,7 +28,7 @@
 void
 debug_message(char *msg)
 {
-    if (mainwnd->debug_mode) {
+    if (get_int("debug-mode")) {
         printf("%s\n", msg);
     }
 }

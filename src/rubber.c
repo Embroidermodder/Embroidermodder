@@ -14,25 +14,28 @@
 
 #include "em2.h"
 
-#if 0
 /* TODO: This check should be removed later.
  */
 void
-allow-rubber(void)
-    /* return not rubber-room-list.size()
+allow_rubber(void)
+{
+    /* return not rubber-room-list.size(); */
 }
 
 void
-add-to-rubber-room(int item)
+add_to_rubber_room(int item)
+{
+    printf("%d\n", item);
     /*
-    rubber-room-list.append(item)
-    item.show()
-    gscene.update()
+    rubber-room-list.append(item);
+    item.show();
+    gscene.update();
     */
 }
 
 void
-vulcanize-rubber-room(void)
+vulcanize_rubber_room(void)
+{
     /*
     for (base in rubber-room-list) {
         if (base) {
@@ -46,19 +49,22 @@ vulcanize-rubber-room(void)
 }
 
 void
-vulcanize-object(int obj)
-    /*
+vulcanize_object(int obj)
+{
     if (!obj) {
-        return
+        return;
     }
+    /*
     gscene.remove-item(-obj)
     # Prevent Qt Runtime Warning, QGraphicsScene-addItem:
     # item has alreadelta-y been added to self scene.
     obj.vulcanize()
+    */
 }
 
 void
-clear-rubber-room(void)
+clear_rubber_room(void)
+{
     /*
     for (item in rubber-room-list) {
         if (item) {
@@ -99,19 +105,25 @@ clear-rubber-room(void)
 void
 spare_rubber(int id)
 {
+    printf("%d", id);
     /* spare_rubber_list.append(id) */
 }
 
+/* .
+ */
 void
 set_rubber_mode(int mode)
 {
+    printf("%d", mode);
+    /*
     for (item in rubber-room-list) {
         if (item) {
             item.set-object-rubber-mode(mode);
         }
     }
+    */
 
-    gscene.update();
+    scene_update();
 }
 
 /* key (string)
@@ -120,13 +132,16 @@ set_rubber_mode(int mode)
 void
 set_rubber_point(char *key, int point)
 {
+    printf("%s %d", key, point);
+    /*
     for (item in rubber-room-list) {
         if (item) {
             item.set-object-rubber-point(key, point);
         }
     }
+    */
 
-    update-scene();
+    scene_update();
 }
 
 /* key (string)
@@ -135,43 +150,51 @@ set_rubber_point(char *key, int point)
 void
 set_rubber_text(char *key, char *txt)
 {
+    printf("%s %s\n", key, txt);
+    /*
     for (item in rubber-room-list) {
         if (item) {
             item.set-objectRubberText(key, txt);
         }
     }
+    */
 
-    update-scene();
+    scene_update();
 }
 
 void
-start-gripping(int obj)
+start_gripping(int obj)
 {
     if (obj) {
+        /*
         int gripping-active = 1;
         int gripBase-obj = obj;
         sceneGripPoint = gripBase-obj.mouseSnapPoint(scene-mouse-point);
         gripBase-obj.set-object-rubber-point("GRIP-POINT", sceneGripPoint);
         gripBase-obj.set-object-rubber-mode("OBJ-RUBBER-GRIP");
+        */
     }
 }
 
 void
 stop_gripping(int accept)
 {
+    printf("%d", accept);
+    /*
     int gripping-active = 0;
     if (gripBase_obj) {
         gripBase_obj.vulcanize();
         if (accept) {
             selection-changed();
+            */
             /*  Update the Property Editor */
+            /*
         }
 
         gripBase_obj = 0;
     }
+    */
     /* Move the sceneGripPoint to a place where it will never be hot. */
     /* sceneGripPoint = scene-rect().top-left() */
 }
-*/
-#endif
 

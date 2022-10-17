@@ -3,17 +3,60 @@ name: Build and Test
 on: [push]
 
 jobs:
-  build-pc:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
-    - name: build the software
+    - name: build the linux version
       run: |
         git clone https://github.com/Embroidermodder/Embroidermodder
         cd Embroidermodder
-        bash em2.bash build
+        bash em2.bash debian-deps build test
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-linux
+        path: Embroidermodder/build
+    - name: archive testing results
+      uses: actions/upload-artifact@v3
+      with:
+        name: em2-2.0.0-alpha-linux-test-results
+        path: Embroidermodder/test_results.txt
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - name: build the macos version
+      run: |
+        git clone https://github.com/Embroidermodder/Embroidermodder
+        cd Embroidermodder
+        bash em2.bash macos-deps build test
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-macos
+        path: Embroidermodder/build
+    - name: archive testing results
+      uses: actions/upload-artifact@v3
+      with:
+        name: em2-2.0.0-alpha-macos-test-results
+        path: Embroidermodder/test_results.txt
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: build the windows version
+      run: |
+        git clone https://github.com/Embroidermodder/Embroidermodder
+        cd Embroidermodder
+        bash em2.bash mingw-deps build test
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-windows
+        path: Embroidermodder/build
+    - name: archive testing results
+      uses: actions/upload-artifact@v3
+      with:
+        name: em2-2.0.0-alpha-windows-test-results
+        path: Embroidermodder/test_results.txt
   build-android:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +65,11 @@ jobs:
         git clone https://github.com/Embroidermodder/Embroidermodder
         cd Embroidermodder
         ./em2.bash android
+    - name: archive android build
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-android
+        path: build
   build-iOS:
     runs-on: macos-latest
     steps:
@@ -30,3 +78,8 @@ jobs:
         git clone https://github.com/Embroidermodder/Embroidermodder
         cd Embroidermodder
         ./em2.bash ios
+    - name: archive iOS build
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-ios
+        path: build

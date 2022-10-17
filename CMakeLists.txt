@@ -12,14 +12,15 @@ option(SDL_TEST "." OFF)
 option(SDL_AUDIO "." OFF)
 option(BUILD_SDL "." OFF)
 
-add_compile_options(
-	-g
-	-O2
-	-pedantic
-	-Wall
-	-Wextra
-#	-Werror
-)
+option(DEBUG "." OFF)
+
+if (DEBUG)
+# Win32 uses compilers that complain about these flags.
+if (WIN32)
+else (WIN32)
+add_compile_options(-g -O2 -pedantic -Wall -Wextra -Werror)
+endif (WIN32)
+endif (DEBUG)
 
 file(GLOB INTERNAL_SRCS src/*.c src/*.h)
 file(GLOB LIBEMBROIDERY_SRCS extern/libembroidery/src/*.c extern/libembroidery/src/*.h)

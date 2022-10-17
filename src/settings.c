@@ -63,24 +63,31 @@ settings_lwt(void)
 }
 
 void
+toggle(char *key)
+{
+    int value = get_int(key);
+    set_int(key, !value);
+}
+
+void
 toggle_grid(void)
 {
     debug_message("StatusBarButton toggleGrid()");
-    /* mainwnd->show-grid = !mainwnd->show_grid; */
+    toggle("show-grid");
 }
 
 void
 toggle_ruler(void)
 {
     debug_message("StatusBarButton toggleRuler()");
-    mainwnd->show_ruler = !mainwnd->show_ruler;
+    toggle("show-ruler");
 }
 
 void
 toggle_ortho(void)
 {
     debug_message("StatusBarButton toggleOrtho()");
-    mainwnd->show_ortho = !mainwnd->show_ortho;
+    toggle("show-ortho");
 }
 
 void
@@ -101,14 +108,14 @@ void
 toggle_track(void)
 {
     debug_message("StatusBarButton toggleQTrack()");
-    mainwnd->track_mode = !mainwnd->track_mode;
+    toggle("track-mode");
 }
 
 void
 toggle_lwt(void)
 {
     debug_message("StatusBarButton toggleLwt()");
-    mainwnd->show_lwt = !mainwnd->show_lwt;
+    toggle("show-lwt");
 }
 
 /*
@@ -120,7 +127,7 @@ void
 enable_lwt(void)
 {
     debug_message("StatusBarButton enableLwt()");
-    mainwnd->show_lwt = 1;
+    set_int("show-lwt", 1);
 }
 
 /*
@@ -131,7 +138,7 @@ void
 disable_lwt(void)
 {
     debug_message("StatusBarButton disableLwt()");
-    mainwnd->show_lwt = 0;
+    set_int("show-lwt", 0);
 }
 
 /* Turn real rendering on and see the pattern as
@@ -142,7 +149,7 @@ void
 enable_real(void)
 {
     debug_message("StatusBarButton enableReal()");
-    /* mainwnd->real_render = 1; */
+    set_int("real-render", 1);
 }
 
 /*
@@ -153,6 +160,6 @@ void
 disable_real(void)
 {
     debug_message("StatusBarButton disableReal()");
-    /* mainwnd->real_render = 0; */
+    set_int("real-render", 0);
 }
 

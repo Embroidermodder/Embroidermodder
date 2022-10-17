@@ -33,6 +33,28 @@ typedef struct ViewPort_ {
     Ruler horizontal;
 } ViewPort;
 
+/* Should create a label widget under the new system. */
+void
+create_ruler_text_path(EmbVector position, char *str, double height)
+{
+    printf("called with %f %s %f", position.x, str, height);
+    /*
+    int i;
+    path = Path()
+
+    x-scale = height
+    y-scale = height
+    pos = Vector(x, y)
+    scale = Vector(0.01*height, 0.01*height)
+
+    for (i=0 i<strlen(str) i++) {
+        
+        pos[0] = x
+    }
+    return path;
+    */
+}
+
 #if 0
 /* A ruler is a widget drawn using these callbacks.
  */
@@ -300,4 +322,26 @@ draw_rulers(ViewPort *scene)
 }
 
 #endif
+
+void
+set_ruler(int active)
+{
+    debug_message("View toggle-ruler()");
+    printf("%d", active);
+    set_override_cursor("WaitCursor");
+    /*
+    gscene.set_property("ENABLE-RULER", active);
+    ruler-color = get_color("ruler-color");
+    */
+    scene_update();
+    restore_override_cursor();
+}
+
+void
+set_ruler_color(EmbColor color)
+{
+    printf("called with %d", color.r);
+    /* void ruler-color) color); */
+    scene_update();
+}
 

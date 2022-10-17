@@ -17,50 +17,46 @@
 
 #include "em2.h"
 
-pointer
-scm_window_next(scheme *sc, pointer args)
+void
+window_next(void)
 {
     debug_message("window_next()");
-    return sc->NIL;
 }
 
-pointer
-scm_window_previous(scheme *sc, pointer args)
+void
+window_previous(void)
 {
     debug_message("window_previous()");
-    return sc->NIL;
 }
 
 /* Close editor window.
  */
-pointer
-scm_window_close(scheme *sc, pointer args)
+void
+window_close(void)
 {
     debug_message("window_close()");
-    return sc->NIL;
 }
 
 /* Tile editor windows.
  */
-pointer
-scm_window_tile(scheme *sc, pointer args)
+void
+window_tile(void)
 {
     debug_message("window_tile()");
-    return sc->NIL;
 }
 
 /* Close all editor windows.
  */
-pointer
-scm_window_close_all(scheme *sc, pointer args)
+void
+window_close_all(void)
 {
     debug_message("window_close_all()");
 }
 
 /* Cascade editor windows.
  */
-pointer
-scm_window_cascade(scheme *sc, pointer args)
+void
+window_cascade(void)
 {
     debug_message("window_cascade()");
 }

@@ -25,7 +25,7 @@ int
 load_to_buffer(void)
 {
     char buffer[4096];
-    int i, j, k, length;
+    size_t i, j, length;
     FILE *fin;
     fin = fopen(current_fname, "r");
     if (!fin) {
@@ -95,13 +95,16 @@ display_buffer(void)
 {
     int i;
     for (i=0; i<line_n; i++) {
-        char line[110];
+        char line[10012];
+        /*
         SDL_Rect rect;
         rect.x = 2;
         rect.y = 16*i;
         rect.w = 1000;
         rect.h = 16;
+        */
         sprintf(line, "%03d %s", i, text_display[i]);
+        printf("%s\n", line);
         /* render_string(rect, line); */
     }
 }
