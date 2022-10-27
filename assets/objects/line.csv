@@ -1,0 +1,14 @@
+
+"Property GroupBox10"
+"Geometry","system","title"
+"Line","system","groupbox"
+"Start X,user,double"
+"Start Y,user,double"
+"End X,user,double"
+"End Ydouble,user"
+"Delta X,double,system"
+"Delta Y,double,system"
+"Angle X,double,system"
+"Length Ydouble,system"
+"END","system","end"
+

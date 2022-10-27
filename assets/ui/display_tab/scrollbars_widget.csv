@@ -1,0 +1,27 @@
+    groupboxScrollBars = tk.groupbox(translate("ScrollBars"), widget)
+
+    checkboxShowScrollBars = tk.checkbox(translate("Show ScrollBars"), groupboxScrollBars)
+    dialog_display_show-scrollbars = display-show-scrollbars
+    preview.display-show-scrollbars = dialog_display_show-scrollbars
+    checkboxShowScrollBars.set_checked(preview.display-show-scrollbars)
+    connect(checkboxShowScrollBars, SIGNAL(-state_changed(int)), this, SLOT(checkboxShowScrollBars-state_changed(int)))
+
+    labelScrollBarWidget = tk.Label(translate("Perform action when clicking corner widget"), groupboxScrollBars)
+    comboboxScrollBarWidget = tk.combobox(groupboxScrollBars)
+    dialog_display_scrollbar-widget-num = display-scrollbar-widget-num
+    numActions = actionHash.size();
+    for (i=0; i<numActions; i++) {
+        action = actionHash.value(i);
+        if (action) {
+            comboboxScrollBarWidget.add_item(action.icon(), action.text().replace("&", ""));
+        }
+    }
+
+    comboboxScrollBarWidget.set_current_index(dialog_display_scrollbar-widget-num);
+    connect(comboboxScrollBarWidget, SIGNAL(current-index_changed(int)), this, SLOT(comboboxScrollBarWidgetCurrent-index_changed(int)));
+
+    vbox_layout_scrollbars = tk.VBoxLayout(groupboxScrollBars);
+    vbox_layout_scrollbars, add_widget(checkboxShowScrollBars);
+    vbox_layout_scrollbars, add_widget(labelScrollBarWidget);
+    vbox_layout_scrollbars, add_widget(comboboxScrollBarWidget);
+    groupboxScrollBars.setLayout(vbox_layout_scrollbars);

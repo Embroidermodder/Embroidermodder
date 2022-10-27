@@ -1,0 +1,77 @@
+/*
+void
+property-editor-init(self, iconDirectory, pickadd_mode, widgetToFocus, parent, flags)
+{ */
+    /* . */ /*
+    iconDir = iconDirectory;
+    iconSize = 16;
+    propertyEditorButtonStyle = Qt-button-TextBesideIcon */
+    /* TODO: Make customizable. */ /*
+    setMinimumSize(100,100);
+
+    pickAdd = pickadd_mode;
+
+    precisionAngle = 0; */
+    /* TODO: Load this from settings and provide function for updating from settings */ /*
+    precisionLength = 4
+    */ /* TODO: Load this from settings and provide function for updating from settings
+
+    signalMapper = tk.SignalMapper(root)
+
+    field-old-text = ""
+    field-new-text = ""
+    field-varies-text = "*Varies*"
+    fieldYesText = "Yes"
+    fieldNoText = "No"
+    fieldOnText = "On"
+    fieldOffText = "Off"
+
+    widgetMain = tk.Widget(root)
+
+    widgetSelection = tk.Widget(root)
+    hboxLayoutSelection = tk.HBoxLayout(this)
+    hboxLayoutSelection, add_widget(create-comboboxSelected())
+    hboxLayoutSelection, add_widget(createbutton-QSelect())
+    hboxLayoutSelection, add_widget(createbutton_pickadd())
+    widgetSelection.setLayout(hboxLayoutSelection)
+
+    for (i=1; i<UNKNOWN_BASE; i++) {
+        groupbox-geometry[i] = creategroupbox-geometry(i+BASE);
+    }
+
+    scrollProperties = QScrollArea(this);
+    widgetProperties = QWidget(this);
+    vboxLayoutProperties = QVBoxLayout(this);
+    vboxLayoutProperties, add_widget(creategroupboxGeneral());
+    for (i=1; i<UNKNOWN_BASE; i++) {
+        add_widget(vboxLayoutProperties, groupbox-geometry[i+BASE]);
+    }
+
+    vboxLayoutProperties, add_widget(creategroupboxMiscArc());
+    vboxLayoutProperties, add_widget(creategroupboxMiscImage());
+    vboxLayoutProperties, add_widget(creategroupboxMiscPath());
+    vboxLayoutProperties, add_widget(creategroupboxMiscPolyline());
+    vboxLayoutProperties, add_widget(creategroupboxTextTextSingle());
+    vboxLayoutProperties, add_widget(creategroupboxMiscTextSingle());
+    vboxLayoutProperties.addStretch(1);
+    widgetProperties.setLayout(vboxLayoutProperties);
+    scrollProperties.setWidget(widgetProperties);
+    scrollProperties.setWidgetResizable(1);
+
+    vboxLayoutMain = QVBoxLayout(this);
+    vboxLayoutMain, add_widget(widgetSelection);
+    vboxLayoutMain, add_widget(scrollProperties);
+    widgetMain.setLayout(vboxLayoutMain);
+
+    setWidget(widgetMain);
+    setWindowTitle(translate("Properties"));
+    setAllowedAreas(Qt-LeftDockWidgetArea | Qt-RightDockWidgetArea);
+
+    hideAllGroups();
+
+    connect(signalMapper, SIGNAL(mapped()), this, SLOT(fieldEdited()));
+
+    focusWidget = widgetToFocus;
+    this.installEventFilter(this);
+}
+*/

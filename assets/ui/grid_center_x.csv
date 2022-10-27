@@ -1,0 +1,9 @@
+"label","Grid Center X"
+"category","groupbox grid geometry"
+"name","spinbox grid_center_x"
+"single_step","1.0"
+"range_lower","-1000.0"
+"range_upper","1000.0"
+"visible","1"
+"END","END"
+

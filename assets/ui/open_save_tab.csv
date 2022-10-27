@@ -1,0 +1,130 @@
+    int i;
+    /* widget = tk.Widget(this); */
+
+    /* Custom Filter */
+    /*
+    groupboxCustomFilter = tk.groupbox(translate("Custom Filter"), widget);
+    groupboxCustomFilter.enabled = 0);
+    */
+    /* TODO: Fixup custom filter */
+
+    /* buttonCustomFilterSelectAll = PushButton(translate("Select All"), groupboxCustomFilter);
+    connect(buttonCustomFilterSelectAll, SIGNAL(clicked()), this, SLOT(button_custom_filter_select_all_clicked()));
+    buttonCustomFilterClearAll = PushButton("Clear All", groupboxCustomFilter);
+    connect(buttonCustomFilterClearAll, SIGNAL(clicked()), this, SLOT(button_custom_filter_clear_all_clicked()));
+    grid_layout_custom_filter = tk.GridLayout(groupboxCustomFilter); */
+
+    for (i=0; i<numberOfFormats; i++) {
+        /*
+        c = checkbox(formatTable[i].extension, groupboxCustomFilter);
+        c.set_checked(opensave_custom_filter.contains(QString("*") + formatTable[i].extension, tk.t-CaseInsensitive));
+        connect(c, SIGNAL(-state_changed(int)), this, SLOT(checkbox_custom_filter-state_changed(int)));
+        connect(this, SIGNAL(buttonCustomFilterSelectAll(int)), c, SLOT(set_checked(int)));
+        connect(this, SIGNAL(buttonCustomFilterClearAll(int)), c, SLOT(set_checked(int)));
+        add_widget(grid_layout_custom_filter,
+            c, i%10, i/10, ALIGN_LEFT);
+        */
+    }
+
+    /*
+    add_widget(grid_layout_custom_filter,
+        buttonCustomFilterSelectAll, 0, 7, ALIGN_LEFT);
+    add_widget(grid_layout_custom_filter,
+        buttonCustomFilterClearAll, 1, 7, ALIGN_LEFT);
+    grid_layout_custom_filter.setColumnStretch(7,1);
+    setLayout(groupboxCustomFilter,
+        grid_layout_custom_filter);
+
+    if (opensave_custom_filter.contains("supported", tk.t-CaseInsensitive)) {
+        button_custom_filter_select_all_clicked()
+    } */
+
+    /* Opening */
+    /*
+    groupboxOpening = tk.groupbox(translate("File Open"), widget)
+
+    comboboxOpenFormat = tk.combobox(groupboxOpening);
+
+    checkboxOpenThumbnail = tk.checkbox(translate("Preview Thumbnails"), groupboxOpening);
+    checkboxOpenThumbnail.set_checked(0); */
+
+    /* TODO: Add a button to clear the recent history. */
+    /*
+    labelRecentMaxFiles = tk.Label(translate("Number of recently accessed files to show"), groupboxOpening);
+    spinboxRecentMaxFiles = tk.spinbox(groupboxOpening);
+    spinboxRecentMaxFiles.setRange(0, 10);
+    dialog-opensave-recent-max-files = opensave-recent-max-files;
+    spinboxRecentMaxFiles.setValue(dialog-opensave-recent-max-files);
+    connect(spinboxRecentMaxFiles, SIGNAL(_value_changed(int)), this, SLOT(spinboxRecentMaxFiles_value_changed(int)));
+
+    frameRecent = tk.Frame(groupboxOpening);
+    grid_layout_recent = tk.GridLayout(frameRecent);
+    add_widget(grid_layout_recent,
+        labelRecentMaxFiles, 0, 0, "AlignLeft");
+    add_widget(grid_layout_recent,
+        spinboxRecentMaxFiles, 0, 1, ALIGN_RIGHT);
+    frameRecent.setLayout(grid_layout_recent);
+
+    vboxLayoutOpening = tk.VBoxLayout(groupboxOpening);
+    vboxLayoutOpening, add_widget(comboboxOpenFormat);
+    vboxLayoutOpening, add_widget(checkboxOpenThumbnail);
+    vboxLayoutOpening, add_widget(frameRecent);
+    groupboxOpening.setLayout(vboxLayoutOpening);
+
+    */
+    /* Saving */
+    /*
+    groupboxSaving = tk.groupbox(translate("File Save"), widget);
+
+    comboboxSaveFormat = tk.combobox(groupboxSaving);
+
+    checkboxSaveThumbnail = tk.checkbox(translate("Save Thumbnails"), groupboxSaving);
+    checkboxSaveThumbnail.set_checked(0);
+
+    checkboxAutoSave = tk.checkbox(translate("AutoSave"), groupboxSaving);
+    checkboxAutoSave.set_checked(0);
+
+    vboxLayoutSaving = tk.VBoxLayout(groupboxSaving);
+    vboxLayoutSaving, add_widget(comboboxSaveFormat);
+    vboxLayoutSaving, add_widget(checkboxSaveThumbnail);
+    vboxLayoutSaving, add_widget(checkboxAutoSave);
+    groupboxSaving.setLayout(vboxLayoutSaving);
+
+    */
+    /* Trimming */
+    /*
+    groupboxTrim = tk.groupbox(translate("Trimming"), widget);
+
+    labelTrimDstNumJumps = tk.Label(translate("DST Only: Minimum number of jumps to trim"), groupboxTrim);
+    spinboxTrimDstNumJumps = tk.spinbox(groupboxTrim);
+    spinboxTrimDstNumJumps.setRange(1, 20);
+    dialog-opensave-trim-dst-num-jumps = opensave-trim-dst-num-jumps;
+    spinboxTrimDstNumJumps.setValue(dialog-opensave-trim-dst-num-jumps);
+    connect(spinboxTrimDstNumJumps, SIGNAL(_value_changed(int)), this, SLOT(spinboxTrimDstNumJumps_value_changed(int)));
+
+    frameTrimDstNumJumps = tk.Frame(groupboxTrim);
+    gridLayoutTrimDstNumJumps = tk.GridLayout(frameTrimDstNumJumps);
+    gridLayoutTrimDstNumJumps, add_widget(labelTrimDstNumJumps, 0, 0, ALIGN_LEFT);
+    gridLayoutTrimDstNumJumps, add_widget(spinboxTrimDstNumJumps, 0, 1, ALIGN_RIGHT);
+    frameTrimDstNumJumps.setLayout(gridLayoutTrimDstNumJumps);
+
+    vboxLayoutTrim = tk.VBoxLayout(groupboxTrim);
+    vboxLayoutTrim, add_widget(frameTrimDstNumJumps);
+    groupboxTrim.setLayout(vboxLayoutTrim);
+
+    */
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget);
+    vbox_layout_main, add_widget(groupboxCustomFilter);
+    vbox_layout_main, add_widget(groupboxOpening);
+    vbox_layout_main, add_widget(groupboxSaving);
+    vbox_layout_main, add_widget(groupboxTrim);
+    vbox_layout_main.addStretch(1);
+    widget.setLayout(vbox_layout_main);
+
+    scroll_area = tk.scroll_area(this);
+    scroll_area.setWidgetResizable(1);
+    scroll_area.setWidget(widget);
+    return scroll_area;
+    */

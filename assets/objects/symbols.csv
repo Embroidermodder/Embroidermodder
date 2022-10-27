@@ -1,0 +1,8 @@
+"#","Symbols use the SVG path syntax."
+"#",""
+"#","In theory, we could combine the icons and symbols systems,"
+"#","since they could be rendered once and stored as icons in Qt."
+"#","(Or as textures in FreeGLUT.)"
+"#",""
+"#","Also we want to render the patterns themselves using SVG"
+"#","syntax, so it would save on repeated work overall."

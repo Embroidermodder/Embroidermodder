@@ -1,0 +1,9 @@
+"label","Grid Size Y"
+"category","groupbox grid geometry"
+"name","spinbox grid_size_y"
+"single_step","1.0"
+"range_lower","1.0"
+"range_upper","1000.0"
+"visible","1"
+"END","END"
+

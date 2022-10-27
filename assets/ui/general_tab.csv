@@ -1,0 +1,153 @@
+    /* widget = tk.Widget(window); */
+
+    /* Language */
+    /*
+    groupboxLanguage = tk.groupbox(translate("Language"), widget);
+
+    labelLanguage = tk.Label(translate("Language (Requires Restart)"), groupboxLanguage);
+    comboboxLanguage = tk.combobox(groupboxLanguage);
+    to-lower(dialog-general-language, general-language);
+    comboboxLanguage.add_item("Default");
+    comboboxLanguage.add_item("System");
+    comboboxLanguage.insertSeparator(2);
+    trDir = tk.App.applicationDirPath();
+    trDir.cd("translations");
+    for dirName in trDir.entryList(QDir-Dirs | tk.Dir-NoDotAndDotDot)
+        dirName[0] = dirName[0].toUpper();
+        comboboxLanguage.add_item(dirName);
+
+    current = dialog-general-language;
+    current[0] = current[0].toUpper();
+    comboboxLanguage.set_current_index(comboboxLanguage.findText(current));
+    connect(comboboxLanguage, SIGNAL(current-index_changed("")), this, SLOT(comboboxLanguageCurrent-index_changed("")));
+
+    vboxLayoutLanguage = tk.VBoxLayout(groupboxLanguage);
+    vboxLayoutLanguage, add_widget(labelLanguage);
+    vboxLayoutLanguage, add_widget(comboboxLanguage);
+    groupboxLanguage.setLayout(vboxLayoutLanguage); */
+
+    /* Icons */
+    /*
+    groupboxIcon = tk.groupbox(translate("Icons"), widget);
+
+    labelIconTheme = tk.Label(translate("Icon Theme"), groupboxIcon);
+    comboboxIconTheme = tk.combobox(groupboxIcon);
+    dir = tk.App.applicationDirPath();
+    dir.cd("icons");
+    dialog-general-icon-theme = general-icon-theme;
+    for dirName in dir.entryList(QDir-Dirs | tk.Dir-NoDotAndDotDot)
+        comboboxIconTheme.add_item(load-icon(theme-xpm), dirName);
+
+    comboboxIconTheme.set_current_index(comboboxIconTheme.findText(dialog-general-icon-theme));
+    connect(comboboxIconTheme, SIGNAL(current-index_changed("")), this, SLOT(comboboxIconThemeCurrent-index_changed("")));
+
+    labelIconSize = tk.Label(translate("Icon Size"), groupboxIcon);
+    combobox-icon-size = tk.combobox(groupboxIcon);
+    "assets/ui/icon_combobox.csv"
+    loop combobox-icon-size.add_item();
+    dialog-general-icon-size = general-icon-size;
+    combobox-icon-size.set_current_index(combobox-icon-size.findData(dialog-general-icon-size));
+    connect(combobox-icon-size, SIGNAL(current-index_changed(int)), this, SLOT(combobox-icon-sizeCurrent-index_changed(int)));
+
+    vbox_layout_icon = tk.QVBoxLayout(groupboxIcon);
+    add_widget(vbox_layout_icon, labelIconTheme);
+    add_widget(vbox_layout_icon, comboboxIconTheme);
+    add_widget(vbox_layout_icon, labelIconSize);
+    add_widget(vbox_layout_icon, combobox-icon-size);
+    set_layout(groupboxIcon, vbox_layout_icon); */
+
+    /* Mdi Background */
+    /*
+    groupboxMdiBG = tk.groupbox(window, text=translate("Background"));
+
+    checkbox-mdi-bg-use-logo = tk.checkbox(groupboxMdiBG, text=translate("Use Logo"));
+    dialog-general-mdi-bg-use-logo = general-mdi-bg-use-logo;
+    preview_general-mdi-bg-use-logo = dialog-general-mdi-bg-use-logo;
+    checkbox-mdi-bg-use-logo.set_checked(preview_general-mdi-bg-use-logo);
+    connect(checkbox-mdi-bg-use-logo, SIGNAL(-state_changed(int)), this, SLOT(checkboxGeneralMdiBGUseLogo-state_changed(int)));
+
+    button-mdi-bg-logo = tk.Button(groupboxMdiBG, text=translate("Choose"));
+    button-mdi-bg-logo.enabled = dialog-general-mdi-bg-use-logo);
+    dialog-general-mdi-bg-logo = general-mdi-bg-logo;
+    accept_general-mdi-bg-logo = dialog-general-mdi-bg-logo;
+    connect(button-mdi-bg-logo, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundLogo()));
+    connect(checkbox-mdi-bg-use-logo, SIGNAL(toggled(int)), button-mdi-bg-logo, SLOT(.enabled = int)));
+
+    checkbox-mdi-bg-use-texture = tk.checkbox(translate("Use Texture"), groupboxMdiBG);
+    dialog-general-mdi-bg-use-texture = general-mdi-bg-use-texture;
+    preview_general-mdi-bg-use-texture = dialog-general-mdi-bg-use-texture;
+    checkbox-mdi-bg-use-texture.set_checked(preview_general-mdi-bg-use-texture);
+    connect(checkbox-mdi-bg-use-texture, SIGNAL(-state_changed(int)), this, SLOT(checkboxGeneralMdiBGUseTexture-state_changed(int)));
+
+    buttonMdiBGTexture = tk.Button(groupboxMdiBG, text=translate("Choose"))
+    buttonMdiBGTexture.enabled = dialog-general-mdi-bg-use-texture)
+    dialog-general-mdi-bg-texture = general-mdi-bg-texture
+    accept_general-mdi-bg-texture = dialog-general-mdi-bg-texture
+    connect(buttonMdiBGTexture, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundTexture()))
+    connect(checkbox-mdi-bg-use-texture, SIGNAL(toggled(int)), buttonMdiBGTexture, SLOT(.enabled = int)))
+
+    checkboxMdiBGUseColor = tk.checkbox(translate("Use Color"), groupboxMdiBG)
+    dialog-general-mdi-bg-use-color = general-mdi-bg-use-color
+    preview_general-mdi-bg-use-color = dialog-general-mdi-bg-use-color
+    checkboxMdiBGUseColor.set_checked(preview.general-mdi-bg-use-color)
+    connect(checkboxMdiBGUseColor, SIGNAL(-state_changed(int)), this, SLOT(checkboxGeneralMdiBGUseColor-state_changed(int)))
+
+    button_mdi_bg_color = PushButton(translate("Choose"), groupboxMdiBG)
+    button_mdi_bg_color.enabled = dialog-general-mdi-bg-use-color;
+    dialog_general_mdi_bg_color = general-mdi-bg-color;
+    preview_general-mdi-bg-color = dialog_general_mdi_bg_color;
+    accept_general-mdi-bg-color = dialog_general_mdi_bg_color;
+    mdiBGPix = Image(16,16);
+    mdiBGPix.fill(Color(preview.general-mdi-bg-color));
+    button_mdi_bg_color.set_icon(QIcon(mdiBGPix));
+    connect(button_mdi_bg_color, SIGNAL(clicked()), this, SLOT(chooseGeneralMdiBackgroundColor()));
+    connect(checkboxMdiBGUseColor, SIGNAL(toggled(int)), button_mdi_bg_color, SLOT(.enabled = int)));
+
+    gridLayoutMdiBG = GridLayout(w, "assets/ui/background_settings.csv");
+    groupboxMdiBG.setLayout(gridLayoutMdiBG);
+    */
+
+    /* Tips */
+    /*
+    groupboxTips = tk.groupbox(translate("Tips"), widget)
+
+    checkboxTipOfTheDay = tk.checkbox(translate("Show Tip of the Day on startup"), groupboxTips)
+    dialog-general-tip-of-the-day = general-tip-of-the-day
+    checkboxTipOfTheDay.set_checked(dialog-general-tip-of-the-day)
+    connect(checkboxTipOfTheDay, SIGNAL(-state_changed(int)), this, SLOT(checkboxTipOfTheDay-state_changed(int)))
+
+    vboxLayoutTips = tk.VBoxLayout(groupboxTips)
+    vboxLayoutTips, add_widget(checkboxTipOfTheDay)
+    groupboxTips.setLayout(vboxLayoutTips); */
+
+    /* Help Browser */
+    /*
+    groupboxHelpBrowser = tk.groupbox(translate("Help Browser"), widget)
+
+    radio-button-system-help-browser = create_radio_button(translate("System"), groupboxHelpBrowser)
+    set_checked(radio-button-system-help-browser, general-system-help-browser);
+    radio-button-custom-help-browser = create_radio_button(translate("Custom"), groupboxHelpBrowser)
+    radio-button-custom-help-browser.set_checked(!general-system-help-browser)
+    radio-button-custom-help-browser.enabled = 0) TODO: finish this */
+
+    /*
+    vboxLayoutHelpBrowser = tk.VBoxLayout(groupboxHelpBrowser)
+    vboxLayoutHelpBrowser, add_widget(radio-button-system-help-browser)
+    vboxLayoutHelpBrowser, add_widget(radio-button-custom-help-browser)
+    groupboxHelpBrowser.setLayout(vboxLayoutHelpBrowser)
+*/
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget)
+    vbox_layout_main, add_widget(groupboxLanguage)
+    vbox_layout_main, add_widget(groupboxIcon)
+    vbox_layout_main, add_widget(groupboxMdiBG)
+    vbox_layout_main, add_widget(groupboxTips)
+    vbox_layout_main, add_widget(groupboxHelpBrowser)
+    vbox_layout_main.addStretch(1)
+    widget.setLayout(vbox_layout_main)
+
+    scroll_area = tk.scroll_area(this)
+    scroll_area.setWidgetResizable(1)
+    scroll_area.setWidget(widget)
+    return scroll_area */

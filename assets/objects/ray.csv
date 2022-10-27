@@ -1,0 +1,13 @@
+
+
+"geometry-ray-properties)"
+"  (vector"
+"Geometry"
+"Ray"
+"Start X,double,user"
+"Start Y,double,user"
+"2nd X,double,user"
+"2nd Y,double,user"
+"Vector X,double,system"
+"Vector Y,double,system"
+"END","system","end"

@@ -1,0 +1,21 @@
+Image,system,title
+Geometry,system,groupbox
+Position X,user,double
+Position Y,user,double
+Width,user,double
+Height,user,double
+Misc,system,groupbox
+Name,user,string
+Path,user,string
+END,system,end
+
+
+"Property geometry-image-properties"
+"Geometry"
+"Image"
+"Position X,double,user"
+"Position Y,double,user"
+"Width,double,user"
+"Height,double,user"
+"END","system","end"
+

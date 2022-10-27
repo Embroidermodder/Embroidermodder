@@ -1,0 +1,87 @@
+"circle_mode_1P_RAD","0"
+"circle_mode_1P_DIA","1"
+"circle_mode_2P","2"
+"circle_mode_3P","3"
+"circle_mode_TTR","4"
+
+/* Need to tie up with SDL2 */
+#define CTRL_KEY                   0x01
+#define SHIFT_KEY                  0x02
+#define ALT_KEY                    0x04
+#define META_KEY                   0x08
+
+#define F1_KEY                     0x01
+#define F2_KEY                     0x02
+#define F3_KEY                     0x03
+#define F4_KEY                     0x04
+#define F5_KEY                     0x05
+#define F6_KEY                     0x06
+#define F7_KEY                     0x07
+#define F8_KEY                     0x08
+#define F9_KEY                     0x09
+#define F10_KEY                    0x0A
+#define F11_KEY                    0x0B
+#define F12_KEY                    0x0C
+
+/* Keys
+ * ----
+ * TYPE value type - int: See OBJ_TYPE_VALUES
+ * NAME value type - str: See OBJ_NAME_VALUES
+ * LAYER value type - str: "USER", "DEFINED", "STRINGS", etc...
+ * COLOR value type - int: 0-255
+ *      TODO: Use color chart in formats/format-dxf.h for this
+ * LTYPE value type - int: See OBJ_LTYPE_VALUES
+ * LWT value type - int: 0-27
+ * RUBBER value type - int: See OBJ_RUBBER_VALUES
+ */
+#define OBJ_TYPE                      0
+#define OBJ_NAME                      1
+#define OBJ_LAYER                     2
+#define OBJ_COLOR                     3
+#define OBJ_LTYPE                     4
+#define OBJ_LWT                       5
+#define OBJ_RUBBER                    6
+
+#define app_folder                    0
+#define commands_folder               1
+#define help_folder                   2
+#define images_folder                 4
+#define samples_folder                5
+#define translations_folder           6
+#define nFolders                      7
+
+#define PATHS_MOVETO                  0
+#define PATHS_LINETO                  1
+#define PATHS_ARCTO                   2
+#define PATHS_ARCMOVETO               3
+#define PATHS_ELLIPSE                 4
+#define PATHS_END                     5
+
+#define PATH_TYPE_MOVETO              0
+#define PATH_TYPE_LINETO              1
+#define PATH_TYPE_ARCTO               2
+#define PATH_TYPE_ARCMOVETO           3
+#define PATH_TYPE_ELLIPSE             4
+#define PATH_TYPE_END                 5
+
+#define DOLPHIN_MODES_NUM_POINTS      0
+#define DOLPHIN_MODES_XSCALE          1
+#define DOLPHIN_MODES_YSCALE          2
+
+#define ELLIPSE_MODES_MAJORDIAMETER_MINORRADIUS    0
+#define ELLIPSE_MODES_MAJORRADIUS_MINORRADIUS      1
+#define ELLIPSE_MODES_ROTATION                     2
+
+#define TREBLE_CLEF_MODES_NUM_POINTS  0
+#define TREBLE_CLEF_MODES_XSCALE      1
+#define TREBLE_CLEF_MODES_YSCALE      2
+
+/* Polygon modes.
+ */
+#define POLYGON_MODE_NUM_SIDES        0
+#define POLYGON_MODE_CENTER_PT        1
+#define POLYGON_MODE_POLYTYPE         2
+#define POLYGON_MODE_INSCRIBE         3
+#define POLYGON_MODE_CIRCUMSCRIBE     4
+#define POLYGON_MODE_DISTANCE         5
+#define POLYGON_MODE_SIDE_LEN         6

@@ -1,0 +1,9 @@
+"label","Grid Spacing X"
+"category","groupbox grid geometry"
+"name","spinbox grid_spacing_x"
+"single_step","1.0"
+"range_lower","0.001"
+"range_upper","1000.0"
+"visible","1"
+"END","END"
+

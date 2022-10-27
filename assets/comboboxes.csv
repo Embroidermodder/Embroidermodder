@@ -1,0 +1,23 @@
+"ARC-CLOCKWISE"
+"GENERAL-LAYER"
+"GENERAL-COLOR"
+"GENERAL-LINE-TYPE"
+"GENERAL-LINE-WEIGHT"
+"TEXT-SINGLE-FONT"
+"TEXT-SINGLE-JUSTIFY"
+"END"
+
+
+/* Comboboxes
+ * ---------------------------------
+ */
+#define ARC_CLOCKWISE                 0
+#define GENERAL_LAYER                 1
+#define GENERAL_COLOR                 2
+#define GENERAL_LINE_TYPE             3
+#define GENERAL_LINE_WEIGHT           4
+#define TEXT_SINGLE_FONT              5
+#define TEXT_SINGLE_JUSTIFY           6
+#define COMBOBOX_PROPERTY_EDITORS     7
+
+#define PROPERTY_EDITORS ( LINEEDIT_PROPERTY_EDITORS + COMBOBOX_PROPERTY_EDITORS )

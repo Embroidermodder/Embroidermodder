@@ -1,0 +1,18 @@
+
+/* Rendering
+ * TODO: Review OpenGL and Rendering settings for future inclusion
+ */
+     WindowTab *settings_tab_display;
+    settings_tab_display = create_window_tab("Display");
+
+    int load_mode = 0; /* VBOX_LAYOUT */
+    load_widget(settings_tab_display, "assets/ui/display_tab/render_widget.csv");
+    load_widget(settings_tab_display, "assets/ui/display_tab/scrollbars_widget.csv");
+    load_widget(settings_tab_display, "assets/ui/display_tab/grid_colors_widget.csv");
+    load_widget(settings_tab_display, "assets/ui/display_tab/zoom_widget.csv");
+    /*
+    settings_tab_display.stretch = 1;
+    settings_tab_display.resizable = 1;
+    settings_tab_display.scrollable = 1; This may need a scroll area create call.
+    */
+    return settings_tab_display;

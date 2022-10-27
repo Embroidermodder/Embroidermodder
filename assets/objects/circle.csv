@@ -1,0 +1,10 @@
+"Circle","system","title"
+"Geometry","system","groupbox"
+"Center X","user","double"
+"Center Y","user","double"
+"Radius","user","double"
+"Diameter","system","double"
+"Area","system","double"
+"Circumference","system","double"
+"END","system","end"
+

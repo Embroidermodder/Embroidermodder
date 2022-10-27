@@ -1,0 +1,49 @@
+    printf("%d %d\n", mgr->visible, tab);
+    /*
+    layer-model = tk.StandardItemModel(mw, 0, 8)
+
+    layer-model-sorted = tk.SortFilterPoxyModel()
+    layer-model-sorted.setDynamicSortFilter(1)
+    layer-model-sorted.setSourceModel(layer-model)
+
+    treeView = tk.TreeView(mw)
+    treeView.setRootIsDecorated(0)
+    treeView.setAlternatingRowColors(1)
+    treeView.setModel(layer-model-sorted)
+    treeView.setSortingEnabled(1)
+    treeView.sortByColumn(0, "AscendingOrder")
+
+    mainLayout = tk.VBoxLayout()
+    mainLayout, add_widget(treeView)
+    set_layout(mainLayout)
+
+    set_window-title(translate("Layer Manager"))
+    set_minimum-size(750, 550)
+
+    layer-model.set_header-data(0, "horizontal", translate("Name"))
+    layer-model.set_header-data(1, "horizontal", translate("Visible"))
+    layer-model.set_header-data(2, "horizontal", translate("Frozen"))
+    layer-model.set_header-data(3, "horizontal", translate("Z Value"))
+    layer-model.set_header-data(4, "horizontal", translate("Color"))
+    layer-model.set_header-data(5, "horizontal", translate("Linetype"))
+    layer-model.set_header-data(6, "horizontal", translate("Lineweight"))
+    layer-model.set_header-data(7, "horizontal", translate("Print"))
+
+    add-layer("0", 1, 0, 0.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("1", 1, 0, 1.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("2", 1, 0, 2.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("3", 1, 0, 3.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("4", 1, 0, 4.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("5", 1, 0, 5.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("6", 1, 0, 6.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("7", 1, 0, 7.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("8", 1, 0, 8.0, (0, 0, 0), "Continuous", "Default", 1)
+    add-layer("9", 1, 0, 9.0, (0, 0, 0), "Continuous", "Default", 1)
+
+    for i in range(layer-model.count())
+        treeView.resizeColumnToContents(i)
+
+    Application-setOverrideCursor(Qt-ArrowCursor)
+
+    return self
+    */

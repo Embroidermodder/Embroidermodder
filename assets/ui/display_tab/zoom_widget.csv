@@ -1,0 +1,24 @@
+    groupbox_zoom = tk.groupbox(translate("Zoom"), widget);
+
+    label_zoom_scale_action_in = tk.Label(translate("Zoom In Scale"), groupbox_zoom);
+    spinbox_zoom_scale_action_in = tk.Doublespinbox(groupbox_zoom);
+    dialog_display_zoom-scale-action-in = display-zoom-scale-action-in;
+    spinbox_zoom_scale_action_in.setValue(dialog_display_zoom-scale-action-in);
+    spinbox_zoom_scale_action_in.setSingleStep(0.01);
+    spinbox_zoom_scale_action_in.setRange(1.01, 10.00);
+    connect(spinbox_zoom_scale_action_in, SIGNAL(_value_changed(double)), this, SLOT(spinbox_zoom_scale_action_in_value_changed(double)));
+
+    labelzoom-scale-actionOut = tk.Label(translate("Zoom Out Scale"), groupbox_zoom);
+    spinboxzoom-scale-actionOut = tk.Doublespinbox(groupbox_zoom);
+    dialog_display_zoom-scale-action-out = display-zoom-scale-action-out;
+    spinboxzoom-scale-actionOut.setValue(dialog_display_zoom-scale-action-out);
+    spinboxzoom-scale-actionOut.setSingleStep(0.01);
+    spinboxzoom-scale-actionOut.setRange(0.01, 0.99);
+    connect(spinboxzoom-scale-actionOut, SIGNAL(_value_changed(double)), this, SLOT(spinboxzoom-scale-actionOut_value_changed(double)));
+
+    grid_layout_zoom = tk.GridLayout(groupbox_zoom);
+    add_widget(grid_layout_zoom, label_zoom_scale_action_in, 0, 0, ALIGN_LEFT);
+    add_widget(grid_layout_zoom, spinbox_zoom_scale_action_in, 0, 1, ALIGN_RIGHT);
+    add_widget(grid_layout_zoom, labelzoom-scale-actionOut, 1, 0, ALIGN_LEFT);
+    add_widget(grid_layout_zoom, spinboxzoom-scale-actionOut, 1, 1, ALIGN_RIGHT);
+    groupbox_zoom.setLayout(grid_layout_zoom);

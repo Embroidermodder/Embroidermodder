@@ -1,0 +1,321 @@
+/*
+ * This is the heart of the program, we're working on 
+ * replacing the Qt reliance, so these functions
+ * and data represent the eventual core of the program.
+ *
+ * The widget system is created here, but it is built
+ * on top of the SVG system created in libembroidery.
+ * So a widget is an svg drawing, with a position to draw
+ * it in relative to its parent. The widgets
+ * form a tree rooted at the global variable called root.
+ *
+ * TODO: Set What's self Context Help to statusTip for now
+ * so there is some infos there.
+ *
+ * Make custom What's self Context Help popup with more
+ * descriptive help than just the status bar/tip one
+ * liner (short but not real long) with a hyperlink
+ * in the custom popup at the bottom to open full help file
+ * description. Ex: like wxPython AGW's SuperToolTip.
+ */
+void
+main_window_init(void)
+{
+    /* To stop the garbage collector stealing our icons. */
+    /* tkimg = {}
+
+    root = tk.Tk();
+    root.title(title);
+    root.minsize(width, height);
+    build-menu-bar();
+    build-button-grid();
+    undo-history = [];
+    undo-history-position = 0;
+    opensave-recent-list-of-files = [];
+    opensave_custom_filter = "";
+    current-path = "";
+
+    num-docs = 0;
+    tab-index = 0;
+
+    lang = general-language;
+    debug_message("language: %s" % lang);
+    */
+    /* This is a View() instance. */
+    /* canvas = tk.Canvas(root, bg="#FFFFFF",
+                            width=500, height=400)
+    canvas.grid(row=4, column=0, columnspan=20, rowspan=2, sticky="W")
+*/
+    /* Use PropertyEditor
+     * need to make a tk.Entry test
+     */
+   /* property-editor = tk.Label(root, text="Property Editor",
+                                    bg="#FFFFFF")
+    property-editor.grid(row=4, column=21, columnspan=5, sticky="NE")
+
+    undo-history-editor = tk.Label(root, text="Undo History",
+        bg="#FFFFFF");
+    undo-history-editor.grid(row=5, column=21, columnspan=5, 
+        sticky="NE");
+
+    message-bar = tk.Label(root,
+        text=time.strftime("%d %B %Y"),
+        bg="#BBBBBB");
+    message-bar.set_text("test");
+    message-bar.grid(row=6, column=0, columnspan=20, sticky="SW");
+    message-bar-tip = Tooltip(
+        message-bar,
+        "*Message Bar*\nShows current state of the program, useful for bug checking information.");
+
+    for (i=0; i<nFolders; i++) {
+        current-path = application-folder + folders[i];
+        if (!exists(current-path) {
+            critical(translate("Path Error"), translate("Cannot locate: ") + current-path);
+        }
+    }
+
+    if (lang == "system") {
+        lang = QLocale-system().languageToString(QLocale-system().language()).lower();
+    }
+    */
+
+    /* TODO: ensure this always loads, ship a copy of self with the app. */
+    /* qApp.installTranslator(translatorQt) */
+    /*
+ Selectors
+    layer_selector = ComboBox();
+    color-selector = ComboBox();
+    linetype-selector = ComboBox();
+    lineweightSelector = ComboBox();
+    textFontSelector = FontComboBox();
+    text-size-selector = ComboBox();
+
+    (define shift-key-pressed-state 0);
+
+    set_windowIcon(app.png);
+ Require Minimum WVGA
+    set_minimum-size(800, 480);
+
+    load-formats();
+
+ create the mdi_area
+    vbox = Frame(void);
+    layout = VBoxLayout(vbox);
+    layout.setContentsMargins(Margins());
+    vbox.setFrameStyle(Frame-StyledPanel | Frame-Sunken);
+    mdi_area = mdi_area(vbox);
+    mdi_area.useBackgroundLogo(general-mdi-bg-use-logo);
+    mdi_area.useBackgroundTexture(general-mdi-bg-use-texture);
+    mdi_area.useBackgroundColor(general-mdi-bg-use-color);
+    mdi_area.setBackgroundLogo(general-mdi-bg-logo);
+    mdi_area.setBackgroundTexture(general-mdi-bg-texture);
+    mdi_area.setBackgroundColor(Color(general-mdi-bg-color));
+    mdi_area.setViewMode("TabbedView");
+    mdi_area.setHorizontalScrollBarPolicy("ScrollBarAsNeeded");
+    mdi_area.setVerticalScrollBarPolicy("ScrollBarAsNeeded");
+    mdi_area.setActivationOrder("ActivationHistoryOrder");
+    layout, add_widget(mdi_area);
+    setCentralWidget(vbox);
+
+    setDockOptions(QAnimatedDocks | QAllowTabbedDocks | QVerticalTabs);
+ TODO: Load these from settings
+    tabifyDockWidget(dockPropEdit, dockUndoEdit);
+ TODO: load this from settings
+
+    statusbar = StatusBar(root);
+    setStatusBar(statusbar);
+
+    for (i=0 i<action-list.keys(void) i++) {
+        Icon = action-list[i].icon;
+        ACTION = Action(Icon, action-list[i].menu-name, self);
+
+        if (len(action-list[i].shortcut)>0) {
+            ACTION.setShortcut(QKeySequence(action-list[i].shortcut));
+        }
+
+        ACTION.set_status-tip(action-list[i].description);
+        ACTION.set_object_name(action-list[i].abbreviation);
+        ACTION.setWhatsself(action-list[i].description);
+
+        connect(ACTION, SIGNAL(triggered()), self, SLOT(actions()));
+        action-hash.insert(i, ACTION);
+    }
+
+    action-hash.value("window-close").enabled = n-docs > 0);
+    action-hash.value("design-details").enabled = n-docs > 0);
+
+    menu-FILE.add-menu(menu[RECENT-MENU]);
+    */
+    /* Do not allow the Recent Menu to be torn off.
+     * It's a pain in the ass to maintain.
+     */
+    /*
+    menu[RECENT-MENU].set_tear-off-enabled(0);
+
+    debug_message("createWindowMenu()");
+    menu-bar().add-menu(menu-WINDOW);
+    connect(menu-WINDOW, SIGNAL(aboutToShow()), self, SLOT(window-menu-about-to-show()));
+    */
+    /* Do not allow the Window Menu to be torn off.
+     * It's a pain in the ass to maintain.
+     */
+    /*
+    menu-WINDOW.set_tear-off-enabled(0);
+
+    for i in range(N-TOOLBARS) {
+        message = "creating %s\n" % toolbar-label[i];
+        debug_message(message);
+
+        toolbar[i].set_object_name(toolbar-label[i]);
+
+        for (j in toolbars[i]) {
+            if toolbars[i][j] >= 0:
+                toolbar[i].add-action(action-hash.value(toolbars[i][j]));
+            else {
+                toolbar[i].add-separator();
+            }
+        }
+        */
+        /*  connect(toolbar[i], SIGNAL(topLevelChanged(int)), self, SLOT(floating-changed-toolbar(int))); */
+        /*
+    }
+    */
+
+    debug_message("createLayerToolbar()");
+    /*
+    toolbar-LAYER.set_object_name("toolbarLayer");
+    toolbar-LAYER.add-action(action-hash.value("make-layer-current"));
+    toolbar-LAYER.add-action(action-hash.value("layers"));
+    */
+
+    /* TODO: Create layer pixmaps by concatenating several icons. */
+    /*
+    add_item(layer_selector, "linetypebylayer.png", "0");
+    add_item(layer_selector, "linetypebylayer.png", "1");
+    add_item(layer_selector, "linetypebylayer.png", "2");
+    add_item(layer_selector, "linetypebylayer.png", "3");
+    add_item(layer_selector, "linetypebylayer.png", "4");
+    add_item(layer_selector, "linetypebylayer.png", "5");
+    add_item(layer_selector, "linetypebylayer.png", "6");
+    add_item(layer_selector, "linetypebylayer.png", "7");
+    add_item(layer_selector, "linetypebylayer.png", "8");
+    add_item(layer_selector, "linetypebylayer.png", "9");
+    toolbar-LAYER, add_widget(layer_selector);
+    connect(layer_selector, SIGNAL(currentIndexChanged(int)), self, SLOT(layer_selectorIndexChanged(int)));
+
+    toolbar-LAYER.add-action(action-hash.value("layer-previous"));
+
+    connect(toolbar-LAYER, SIGNAL(topLevelChanged(int)), self, SLOT(floating-changed-toolbar(int)));
+
+    debug_message("createPropertiesToolbar()");
+
+    toolbar-PROPERTIES.set_object_name("toolbar-properties");
+
+    color-selector.set_focusProxy(menu-FILE);
+ NOTE: Qt4.7 wont load icons without an extension...
+    color-selector.add_item("colorbylayer.png", "ByLayer");
+    color-selector.add_item("colorbyblock.png", "ByBlock");
+    color-selector.add_item("colorred.png", translate("Red"), (255, 0, 0));
+    color-selector.add_item("coloryellow.png", translate("Yellow"), (255,255, 0));
+    color-selector.add_item("colorgreen.png", translate("Green"), (0, 255, 0));
+    color-selector.add_item("colorcyan.png", translate("Cyan"), (0,255,255));
+    color-selector.add_item("colorblue.png", translate("Blue"), (0, 0,255));
+    color-selector.add_item("colormagenta.png", translate("Magenta"), (255, 0,255));
+    color-selector.add_item("colorwhite.png", translate("White"), (255,255,255));
+    color-selector.add_item("colorother.png", translate("Other..."))
+    toolbar-PROPERTIES, add_widget(color-selector)
+    connect(color-selector, SIGNAL(currentIndexChanged(int)), self, SLOT(color-selectorIndexChanged(int)))
+
+    toolbar-PROPERTIES.add-separator()
+    linetype-selector.set_focusProxy(menu-FILE)
+    linetype-selector.add_item("linetypebylayer.png", "ByLayer")
+    linetype-selector.add_item("linetypebyblock.png", "ByBlock")
+    linetype-selector.add_item("linetypecontinuous.png", "Continuous")
+    linetype-selector.add_item("linetypehidden.png", "Hidden")
+    linetype-selector.add_item("linetypecenter.png", "Center")
+    linetype-selector.add_item("linetypeother.png", "Other...")
+    toolbar-PROPERTIES, add_widget(linetype-selector)
+    connect(linetype-selector, SIGNAL(currentIndexChanged(int)), self, SLOT(linetype-selectorIndexChanged(int)))
+
+    toolbar-PROPERTIES.add-separator()
+    lineweightSelector.set_focusProxy(menu-FILE)
+    */ /* NOTE: Qt4.7 wont load icons without an extension...
+    */ /* TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread-(yarn)#Weight
+    for line in thread-weights:
+        lineweightSelector.add_item(line[0], line[1], line[2])
+    lineweightSelector.setMinimumContentsLength(8)
+    */ /* Prevent dropdown text readability being squish...d.
+    toolbar-PROPERTIES, add_widget(lineweightSelector)
+    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), self, SLOT(lineweightSelectorIndexChanged(int)))
+
+    connect(toolbar-PROPERTIES, SIGNAL(topLevelChanged()), self, SLOT(floating-changed-toolbar()))
+
+    debug_message("createTextToolbar()")
+    toolbar-TEXT.set_object_name("toolbarText")
+    toolbar-TEXT, add_widget(textFontSelector)
+    textFontSelector.setCurrentFont(Font(text-font))
+    connect(textFontSelector, SIGNAL(currentFontChanged()), self, SLOT(textFontSelectorCurrentFontChanged()))
+
+    */ /* TODO: SEGFAULTING FOR SOME REASON
+    toolbar-TEXT.add-action(action-hash.value("text-bold"))
+    action-hash.value("text-bold").set_checked(text-style-bold)
+    toolbar-TEXT.add-action(action-hash.value("text-italic"))
+    action-hash.value("text-italic").set_checked(text-style-italic)
+    toolbar-TEXT.add-action(action-hash.value("text-underline"))
+    action-hash.value("text-underline").set_checked(text-style-underline)
+    toolbar-TEXT.add-action(action-hash.value("text-strikeout"))
+    action-hash.value("text-strikeout").set_checked(text-style-strikeout)
+    toolbar-TEXT.add-action(action-hash.value("text-overline"))
+    action-hash.value("text-overline").set_checked(text-style-overline)
+
+    text-size-selector.set_focusProxy(menu-FILE)
+    sizes = [6, 8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72]
+    for size in sizes:
+        text-size-selector.add_item(str(size)+" pt", size)
+    setTextSize(text-size)
+    toolbar-TEXT, add_widget(text-size-selector)
+    connect(text-size-selector, SIGNAL(currentIndexChanged(int)), self, SLOT(text-size-selectorIndexChanged(int)))
+
+    connect(toolbar-TEXT, SIGNAL(topLevelChanged(int)), self, SLOT(floating-changed-toolbar(int)))
+
+    */ /* Horizontal
+    toolbar-VIEW.set_orientation("Horizontal")
+    toolbar-ZOOM.set_orientation("Horizontal")
+    toolbar-LAYER.set_orientation("Horizontal")
+    toolbar-PROPERTIES.set_orientation("Horizontal")
+    toolbar-TEXT.set_orientation("Horizontal")
+    */ /* Top
+    add-toolbar-break("TopToolBarArea")
+    add-toolbar("TopToolBarArea", toolbar-FILE)
+    add-toolbar("Top toolbar area", toolbar-EDIT)
+    add-toolbar("Top toolbar area", toolbar-HELP)
+    add-toolbar("Top toolbar area", toolbar-ICON)
+    add-toolbar-break("TopToolBarArea")
+    add-toolbar("Top toolbar area", toolbar-ZOOM)
+    add-toolbar("Top toolbar area", toolbar-PAN)
+    add-toolbar("Top toolbar area", toolbar-VIEW)
+    add-toolbar-break("TopToolBarArea")
+    add-toolbar("Top toolbar area", toolbar-LAYER)
+    add-toolbar("Top toolbar area", toolbar-PROPERTIES)
+    add-toolbar-break("TopToolBarArea")
+    add-toolbar("Top toolbar area", toolbar-TEXT)
+
+    */ /* zoomToolBar.setToolButtonStyle("ToolButtonTextOnly")
+
+    icon-resize(get-int(main-window, "general-icon-size"))
+    update-menu-toolbar-statusbar()
+
+    */ /* Show date in statusbar after it has been updated
+    */ /* TODO: Switch to ISO dates.
+
+    date = time.currentDate()
+    datestr = date.toString("MMMM d, yyyy")
+    statusbar.showMessage(datestr)
+
+    showNormal();
+
+    if (general_tip_of_the_day) {
+        tip_of_the_day_action();
+    }
+    */
+}

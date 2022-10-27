@@ -1,0 +1,91 @@
+
+void
+create_tab_quick_snap(void)
+{
+    /*
+    widget = tk.Widget(this);
+
+    */ /* QSnap Locators
+    groupboxQSnapLoc = tk.groupbox(translate("Locators Used"), widget);
+    buttonQSnapSelectAll = PushButton(translate("Select All"), groupboxQSnapLoc);
+    buttonQSnapClearAll = PushButton(translate("Clear All"), groupboxQSnapLoc);
+    gridLayoutQSnap = tk.GridLayout(groupboxQSnapLoc);
+
+    connect(buttonQSnapSelectAll, SIGNAL(clicked()), this, SLOT(button_qsnap_select_all_clicked()));
+    connect(buttonQSnapClearAll, SIGNAL(clicked()), this, SLOT(buttonQSnapClearAllClicked()));
+
+    make-checkbox("Endpoint", tk.snap-endpoint, locator-snaptoendpoint-xpm, checkboxQSnapEndPoint-state-changed, 0, 0);
+    make-checkbox("Midpoint", tk.snap-midpoint, locator-snaptomidpoint-xpm, checkboxQSnapMidPoint-state-changed, 1, 0);
+    make-checkbox("Center", tk.snap-center, locator-snaptocenter-xpm, checkboxQSnapCenter-state-changed, 2, 0);
+    make-checkbox("Node", tk.snap-node, locator-snaptonode-xpm, checkboxQSnapNode-state-changed, 3, 0);
+    make-checkbox("Quadrant", tk.snap-quadrant, locator-snaptoquadrant-xpm, checkboxQSnapQuadrant-state-changed, 4, 0);
+    make-checkbox("Intersection", tk.snap-intersection, locator-snaptointersection-xpm, checkboxQSnapIntersection-state-changed, 5, 0);
+    make-checkbox("Extension", tk.snap-extension, locator-snaptoextension-xpm, checkboxQSnapExtension-state-changed, 6, 0);
+    make-checkbox("Insertion", tk.snap-insertion, locator-snaptoinsert-xpm, checkboxQSnapInsertion-state-changed, 0, 1);
+    make-checkbox("Perpendicular", tk.snap-perpendicular, locator-snaptoperpendicular-xpm, checkboxQSnapPerpendicular-state-changed, 1, 1);
+    make-checkbox("Tangent", tk.snap-tangent, locator-snaptotangent-xpm, checkboxQSnapTangent-state-changed, 2, 1);
+    make-checkbox("Nearest", tk.snap-nearest, locator-snaptonearest-xpm, checkboxQSnapNearest-state-changed, 3, 1);
+    make-checkbox("Apparent Intersection", tk.snap-apparent, locator-snaptoapparentintersection-xpm, checkboxQSnapApparentIntersection-state-changed, 4, 1);
+    make-checkbox("Parallel", tk.snap-parallel, locator-snaptoparallel-xpm, checkboxQSnapParallel-state-changed, 5, 1);
+
+    gridLayoutQSnap, add_widget(buttonQSnapSelectAll, 0, 2, ALIGN_LEFT);
+    gridLayoutQSnap, add_widget(buttonQSnapClearAll, 1, 2, ALIGN_LEFT);
+    gridLayoutQSnap.setColumnStretch(2,1);
+    groupboxQSnapLoc.setLayout(gridLayoutQSnap);
+
+    */ /* QSnap Visual Config
+    groupboxQSnapVisual = tk.groupbox(translate("Visual Configuration"), widget);
+
+    labelQSnapLocColor = tk.Label(translate("Locator Color"), groupboxQSnapVisual);
+    comboboxQSnapLocColor = tk.combobox(groupboxQSnapVisual);
+    addColorsTocombobox(comboboxQSnapLocColor);
+    dialog-qsnap-locator-color = qsnap-locator-color;
+    comboboxQSnapLocColor.set_current_index(comboboxQSnapLocColor.findData(dialog-qsnap-locator-color));
+    connect(comboboxQSnapLocColor, SIGNAL(current-index_changed(int)), this, SLOT(comboboxQSnapLocatorColorCurrent-index_changed(int)));
+
+    labelQSnapLocSize = tk.Label(translate("Locator Size"), groupboxQSnapVisual);
+    sliderQSnapLocSize = tk.Slider(Qt-Horizontal, groupboxQSnapVisual);
+    sliderQSnapLocSize.setRange(1,20);
+    dialog-qsnap-locator-size = qsnap-locator-size;
+    sliderQSnapLocSize.setValue(dialog-qsnap-locator-size);
+    connect(sliderQSnapLocSize, SIGNAL(_value_changed(int)), this, SLOT(sliderQSnapLocatorSize_value_changed(int)));
+
+    vboxLayoutQSnapVisual = tk.VBoxLayout(groupboxQSnapVisual);
+    vboxLayoutQSnapVisual, add_widget(labelQSnapLocColor);
+    vboxLayoutQSnapVisual, add_widget(comboboxQSnapLocColor);
+    vboxLayoutQSnapVisual, add_widget(labelQSnapLocSize);
+    vboxLayoutQSnapVisual, add_widget(sliderQSnapLocSize);
+    groupboxQSnapVisual.setLayout(vboxLayoutQSnapVisual);
+
+    */ /* QSnap Sensitivity Config
+    groupboxQSnapSensitivity = tk.groupbox(translate("Sensitivity"), widget);
+
+    labelQSnapApertureSize = tk.Label(translate("Aperture Size"), groupboxQSnapSensitivity);
+    sliderQSnapApertureSize = tk.Slider(Qt-Horizontal, groupboxQSnapSensitivity);
+    sliderQSnapApertureSize.setRange(1,20);
+    dialog-qsnap-aperture-size = qsnap-aperture-size;
+    sliderQSnapApertureSize.setValue(dialog-qsnap-aperture-size);
+    connect(sliderQSnapApertureSize, SIGNAL(_value_changed(int)), this, SLOT(sliderQSnapApertureSize_value_changed(int)));
+
+    vboxLayoutQSnapSensitivity = tk.VBoxLayout(groupboxQSnapSensitivity);
+    vboxLayoutQSnapSensitivity, add_widget(labelQSnapApertureSize);
+    vboxLayoutQSnapSensitivity, add_widget(sliderQSnapApertureSize);
+    groupboxQSnapSensitivity.setLayout(vboxLayoutQSnapSensitivity);
+    */
+
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget);
+    vbox_layout_main, add_widget(groupboxQSnapLoc);
+    vbox_layout_main, add_widget(groupboxQSnapVisual);
+    vbox_layout_main, add_widget(groupboxQSnapSensitivity);
+    vbox_layout_main.addStretch(1);
+    widget.setLayout(vbox_layout_main);
+
+    scroll_area = tk.scroll_area(this);
+    scroll_area.setWidgetResizable(1);
+    scroll_area.setWidget(widget);
+    return scroll_area;
+    */
+}
+

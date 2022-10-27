@@ -1,0 +1,168 @@
+    /*
+    create_settings_tab(grid_ruler_settings);
+    widget = tk.Widget(this);
+    */
+    /* Grid Color */
+    /*
+    groupboxGridColor = tk.groupbox(translate("Grid Color"), widget);
+
+    labelGridColor = tk.Label(translate("Grid Color"), groupboxGridColor);
+    labelGridColor.setObjectName("labelGridColor");
+    buttonGridColor = PushButton(translate("Choose"), groupboxGridColor);
+    buttonGridColor.setObjectName("buttonGridColor");
+    if (dialog_grid_color_match_crosshair) {
+        dialogGridcolor = display-crosshair-color;
+    }
+    else {
+        dialogGridcolor = grid-color;
+    }
+    preview.grid-color = dialogGridcolor;
+    accept.grid-color = dialogGridcolor;
+    gridPix = Image(16,16);
+    gridPix.fill(Color(preview.grid-color));
+    buttonGridColor.set_icon(QIcon(gridPix));
+    connect(buttonGridColor, SIGNAL(clicked()), this, SLOT(chooseGridColor()));
+
+    labelGridColor.enabled = !dialog_grid_color_match_crosshair);
+    buttonGridColor.enabled = !dialog_grid_color_match_crosshair);
+
+    gridLayoutGridColor = tk.GridLayout(widget);
+    gridLayoutGridColor, add_widget(checkboxGridColorMatchCrossHair, 0, 0, ALIGN_LEFT);
+    gridLayoutGridColor, add_widget(labelGridColor, 1, 0, ALIGN_LEFT);
+    gridLayoutGridColor, add_widget(buttonGridColor, 1, 1, ALIGN_RIGHT);
+    groupboxGridColor.setLayout(gridLayoutGridColor);
+
+    */
+    /* Grid Geometry */
+    /*
+    groupboxGridGeom = tk.groupbox(translate("Grid Geometry"), widget);
+
+    checkboxGridload-from-file = tk.checkbox(translate("Set grid size from opened file"), groupboxGridGeom);
+    dialog_grid_load_from_file = grid-load-from-file;
+    checkboxGridload-from-file.set_checked(dialog_grid_load_from_file);
+    connect(checkboxGridload-from-file, SIGNAL(-state_changed(int)), this, SLOT(checkboxGridload-from-file-state_changed(int)))
+
+    labelGridtype = tk.Label(translate("Grid Type"), groupboxGridGeom);
+    labelGridtype.setObjectName("labelGridtype");
+    combobox_grid_type = tk.combobox(groupboxGridGeom);
+    combobox_grid_type.setObjectName("combobox_grid_type");
+    add_item(combobox_grid_type, "Rectangular");
+    add_item(combobox_grid_type, "Circular");
+    add_item(combobox_grid_type, "Isometric");
+    strcpy(dialogGridtype, grid-type);
+    set_current_index(combobox_grid_type, combobox_grid_type.findText(dialogGridtype));
+    connect(combobox_grid_type, SIGNAL(current-index_changed("")), this, SLOT(combobox_grid_typeCurrent-index_changed("")));
+
+    checkbox_grid_center_on_origin = tk.checkbox(translate("Center the grid on the origin"), groupboxGridGeom);
+    setObjectName(checkbox_grid_center_on_origin,
+        "checkbox_grid_center_on_origin");
+    copy_setting("dialog-grid-center-on-origin", "grid-center-on-origin");
+    set_checked(checkbox_grid_center_on_origin, dialog_grid_center_on_origin);
+    connect(checkbox_grid_center_on_origin, SIGNAL(-state_changed(int)), this, SLOT(checkbox_grid_center_on_origin-state_changed(int)));
+
+    label_grid_center_x = tk.Label(translate("Grid Center X"), groupboxGridGeom);
+    */
+
+
+    grid_center_x_sb = create_spinbox("assets/ui/grid_center_x.csv", grid_center.x);
+    grid_center_y_sb = create_spinbox("assets/ui/grid_center_y.csv", grid_center.y);
+
+    grid_size_x_sb = create_spinbox("assets/ui/grid_size_x.csv", grid_size.x);
+    grid_size_y_sb = create_spinbox("assets/ui/grid_size_y.csv", grid_size.y);
+    grid_size_radius_sb = create_spinbox("assets/ui/grid_size_radius.csv", grid_size_radius);
+    grid_size_angle_sb = create_spinbox("assets/ui/grid_size_angle.csv", grid_size_angle);
+
+    grid_spacing_x_sb = create_spinbox("assets/ui/grid_spacing_x.csv", grid_spacing.x);
+    grid_spacing_y_sb = create_spinbox("assets/ui/grid_spacing_y.csv", grid_spacing.y);
+    grid_size_radius_sb = create_spinbox("assets/ui/grid_spacing_radius.csv", grid_spacing_radius);
+    grid_size_angle_sb = create_spinbox("assets/ui/grid_spacing_angle.csv", grid_spacing_angle);
+
+
+    /*
+    labelGridtype.enabled = !dialog_grid_load_from_file;
+    combobox_grid_type.enabled = !dialog_grid_load_from_file;
+    checkbox_grid_center_on_origin.enabled = !dialog_grid_load_from_file;
+    label_grid_center_x.enabled = !dialog_grid_load_from_file;
+    spinboxGridCenterX.enabled = !dialog_grid_load_from_file;
+    labelGridcenter-y.enabled = !dialog_grid_load_from_file;
+    spinboxGridcenter-y.enabled = !dialog_grid_load_from_file;
+
+    grid_layout_grid_geom = tk.GridLayout(groupboxGridGeom);
+    load_csv(grid_layout_grid_geom, "assets/ui/grid_geometry_settings.csv");
+    groupboxGridGeom.setLayout(grid_layout_grid_geom);
+    */
+
+    /* Ruler Misc */
+    /*
+    groupboxRulerMisc = tk.groupbox(translate("Ruler Misc"), widget);
+
+    checkboxRulerShowOnLoad = tk.checkbox(translate("Initially show ruler when loading a file"), groupboxRulerMisc);
+    dialog-ruler-show-on-load = ruler-show-on-load;
+    checkboxRulerShowOnLoad.set_checked(dialog-ruler-show-on-load);
+    connect(checkboxRulerShowOnLoad, SIGNAL(-state_changed(int)), this, SLOT(checkboxRulerShowOnLoad-state_changed(int)));
+
+    labelRulerMetric = tk.Label(translate("Ruler Units"), groupboxRulerMisc);
+    comboboxRulerMetric = tk.combobox(groupboxRulerMisc);
+    comboboxRulerMetric.add_item("Imperial", 0);
+    comboboxRulerMetric.add_item("Metric", 1);
+    dialog-ruler-metric = ruler-metric;
+    comboboxRulerMetric.set_current_index(comboboxRulerMetric.findData(dialog-ruler-metric));
+    connect(comboboxRulerMetric, SIGNAL(current-index_changed(int)), this, SLOT(comboboxRulerMetricCurrent-index_changed(int)));
+
+    gridLayoutRulerMisc = tk.GridLayout(widget);
+    gridLayoutRulerMisc, add_widget(checkboxRulerShowOnLoad, 0, 0, ALIGN_LEFT);
+    gridLayoutRulerMisc, add_widget(labelRulerMetric, 1, 0, ALIGN_LEFT);
+    gridLayoutRulerMisc, add_widget(comboboxRulerMetric, 1, 1, ALIGN_RIGHT);
+    groupboxRulerMisc.setLayout(gridLayoutRulerMisc);
+
+    */ /* Ruler Color
+    groupboxRulerColor = tk.groupbox(translate("Ruler Color"), widget);
+
+    labelRulerColor = tk.Label(translate("Ruler Color"), groupboxRulerColor);
+    labelRulerColor.setObjectName("labelRulerColor");
+    buttonRulerColor = PushButton(translate("Choose"), groupboxRulerColor);
+    buttonRulerColor.setObjectName("buttonRulerColor");
+    set_color(state, "dialog-ruler-color", ruler_color);
+    set_color(state, "preview.ruler-color", dialog_ruler_color);
+    accept.ruler-color = dialog-ruler-color;
+    rulerPix = Image(16,16);
+    rulerPix.fill(Color(preview.ruler-color));
+    buttonRulerColor.set_icon(QIcon(rulerPix));
+    connect(buttonRulerColor, SIGNAL(clicked()), this, SLOT(chooseRulerColor()));
+
+    gridLayoutRulerColor = tk.GridLayout(widget);
+    gridLayoutRulerColor, add_widget(labelRulerColor, 1, 0, ALIGN_LEFT);
+    gridLayoutRulerColor, add_widget(buttonRulerColor, 1, 1, ALIGN_RIGHT);
+    groupboxRulerColor.setLayout(gridLayoutRulerColor);
+
+    */ /* Ruler Geometry
+    groupboxRulerGeom = tk.groupbox(translate("Ruler Geometry"), widget);
+
+    labelRulerPixelSize = tk.Label(translate("Ruler Pixel Size"), groupboxRulerGeom);
+    labelRulerPixelSize.setObjectName("labelRulerPixelSize");
+    spinboxRulerPixelSize = tk.Doublespinbox(groupboxRulerGeom);
+    spinboxRulerPixelSize.setObjectName("spinboxRulerPixelSize");
+    dialog-ruler-pixel-size = ruler-pixel-size;
+    spinboxRulerPixelSize.setSingleStep(1.000);
+    spinboxRulerPixelSize.setRange(20.000, 100.000);
+    spinboxRulerPixelSize.setValue(dialog-ruler-pixel-size);
+    connect(spinboxRulerPixelSize, SIGNAL(_value_changed(double)), this, SLOT(spinboxRulerPixelSize_value_changed(double)));
+
+    gridLayoutRulerGeom = tk.GridLayout(groupboxRulerGeom);
+    gridLayoutRulerGeom, add_widget(labelRulerPixelSize, 0, 0, ALIGN_LEFT);
+    gridLayoutRulerGeom, add_widget(spinboxRulerPixelSize, 0, 1, ALIGN_RIGHT);
+    groupboxRulerGeom.setLayout(gridLayoutRulerGeom);
+    */
+
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget);
+    "assets/ui/grid_tab_layout.csv"
+    vbox_layout_main.addStretch(1);
+    widget.setLayout(vbox_layout_main);
+
+    scroll_area = tk.scroll_area(this);
+    scroll_area.setWidgetResizable(1);
+    scroll_area.setWidget(widget);
+    return scroll_area;
+    */

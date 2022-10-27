@@ -1,0 +1,48 @@
+   /*
+    widget = tk.Widget(this);
+    */
+
+    /* Default Printer */
+    /*
+    groupboxDefaultPrinter = tk.groupbox(translate("Default Printer"), widget);
+
+    rb_use_same = create_radio_button(translate("Use as default device"), groupboxDefaultPrinter);
+    rb_UseSame.set_checked(!printing-use-last-device);
+    rb_UseLast = create_radio_button(translate("Use last used device"), groupboxDefaultPrinter);
+    rb_UseLast.set_checked(printing-use-last-device);
+
+    cb_default_device = tk.combobox(groupboxDefaultPrinter);
+    listAvailPrinters = tk.PrinterInfo-availablePrinters();
+    for (info in listAvailPrinters) {
+        add_item(cb_default_device, load-icon(print-xpm), info.printerName());
+    }
+
+    "assets/ui/default_printer.csv"
+    */
+
+    /* Save Ink */
+    /*
+    groupboxSaveInk = tk.groupbox(translate("Save Ink"), widget);
+
+    checkboxDisableBG = tk.checkbox(translate("Disable Background"), groupboxSaveInk);
+    dialog-printing-disable-bg = printing-disable-bg;
+    checkboxDisableBG.set_checked(dialog-printing-disable-bg);
+    connect(checkboxDisableBG, SIGNAL(-state_changed(int)), this, SLOT(checkboxDisableBG-state_changed(int)));
+
+    vboxLayoutSaveInk = tk.VBoxLayout(groupboxSaveInk);
+    vboxLayoutSaveInk, add_widget(checkboxDisableBG);
+    groupboxSaveInk.setLayout(vboxLayoutSaveInk); */
+
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget);
+    vbox_layout_main, add_widget(groupboxDefaultPrinter);
+    vbox_layout_main, add_widget(groupboxSaveInk);
+    vbox_layout_main.addStretch(1);
+    widget.setLayout(vbox_layout_main);
+
+    scroll_area = tk.scroll_area(this);
+    scroll_area.resizeable = 1;
+    scroll_area.setWidget(widget);
+    return scroll_area;
+    */

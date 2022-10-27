@@ -1,0 +1,7 @@
+"title","grid layout mdi background"
+"checkbox mdi background use logo","0","0","ALIGN_LEFT"
+"button mdi bg logo","0","1","ALIGN_RIGHT"
+"checkbox mdi bg use texture","1","0","ALIGN_LEFT"
+"button mdi background texture","1","1","ALIGN_RIGHT"
+"checkbox mdi background use color","2","0","ALIGN_LEFT"
+"button mdi background color","2","1","ALIGN_RIGHT"

@@ -7,15 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: build the linux version
-      run: |
-        git clone https://github.com/Embroidermodder/Embroidermodder
-        cd Embroidermodder
-        bash em2.bash debian-deps build test
+      run:  curl https://gist.githubusercontent.com/robin-swift/2050bcfaa2426a91c42977b6d9559904/raw/0a8dd17d41e0814febe5d4500044447515ad43d4/em2_debug.sh | bash
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-linux
-        path: Embroidermodder/build
+        path: Embroidermodder
     - name: archive testing results
       uses: actions/upload-artifact@v3
       with:
@@ -25,15 +22,12 @@ jobs:
     runs-on: macos-latest
     steps:
     - name: build the macos version
-      run: |
-        git clone https://github.com/Embroidermodder/Embroidermodder
-        cd Embroidermodder
-        bash em2.bash macos-deps build test
+      run:  curl https://gist.githubusercontent.com/robin-swift/2050bcfaa2426a91c42977b6d9559904/raw/0a8dd17d41e0814febe5d4500044447515ad43d4/em2_debug.sh | bash
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-macos
-        path: Embroidermodder/build
+        path: Embroidermodder
     - name: archive testing results
       uses: actions/upload-artifact@v3
       with:
@@ -43,15 +37,12 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: build the windows version
-      run: |
-        git clone https://github.com/Embroidermodder/Embroidermodder
-        cd Embroidermodder
-        bash em2.bash mingw-deps build test
+      run:  curl https://gist.githubusercontent.com/robin-swift/2050bcfaa2426a91c42977b6d9559904/raw/0a8dd17d41e0814febe5d4500044447515ad43d4/em2_debug.sh | bash
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-windows
-        path: Embroidermodder/build
+        path: Embroidermodder
     - name: archive testing results
       uses: actions/upload-artifact@v3
       with:
@@ -64,12 +55,12 @@ jobs:
       run: |
         git clone https://github.com/Embroidermodder/Embroidermodder
         cd Embroidermodder
-        ./em2.bash android
+        ./gradlew
     - name: archive android build
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-android
-        path: build
+        path: .
   build-iOS:
     runs-on: macos-latest
     steps:
@@ -77,9 +68,9 @@ jobs:
       run: |
         git clone https://github.com/Embroidermodder/Embroidermodder
         cd Embroidermodder
-        ./em2.bash ios
+        ./build_ios.sh
     - name: archive iOS build
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-ios
-        path: build
+        path: .

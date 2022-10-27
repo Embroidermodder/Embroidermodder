@@ -1,0 +1,10 @@
+"Polyline","system","title"
+"Geometry","system","groupbox"
+"Vertex #","user","int"
+"Vertex X","user","double"
+"Vertex Y","user","double"
+"Area","system","double"
+"Length","system","double"
+"Closed","user","int"
+"END","system","end"
+

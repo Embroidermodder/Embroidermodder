@@ -1,0 +1,64 @@
+
+ Settings Editor
+ _--------------
+
+Setting
+grid_ruler_misc_settings[] = {;
+    ;{"Initially show grid when loading a file",
+        INT_GRID_SHOW_ON_LOAD,
+        "int",
+        0,
+        1,
+        0,
+        0,
+        ALIGN_LEFT
+ ;   },
+  ;  {"Show the origin when the grid is enabled",
+        INT_GRID_SHOW_ORIGIN,
+        "int",
+        0,
+        1,
+        1,
+        0,
+        ALIGN_LEFT
+    },
+    {"END",
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+    )
+);
+
+Setting
+grid_ruler_color_settings[] = {
+    {"Match grid color to crosshair color",
+        INT_GRID_COLOR_MATCH_CROSSHAIR,
+        "int", 0, 1, 0, 0, ALIGN_LEFT
+    },
+    {"END", -1, -1, -1, -1, -1, -1, -1
+    }
+)
+
+    "grid_ruler_boxes)
+SettingBox
+grid_ruler_boxes[] = {
+    (vector
+          "Grid Misc",
+        grid_ruler_misc_settings
+    },
+    (vector
+        "Grid Color",
+        grid_ruler_color_settings
+    )
+)
+
+(define 
+SettingsTab grid_ruler_settings = {
+    "Grid/Ruler",
+    2,
+    grid_ruler_boxes
+) 

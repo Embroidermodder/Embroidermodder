@@ -1,0 +1,40 @@
+    groupboxRender = tk.groupbox(translate("Rendering"), widget)
+
+    checkboxUseOpenGL = tk.checkbox(translate("Use OpenGL"), groupboxRender)
+    int-dialog[INT-DISPLAY-USE-OPENGL] = int-setting[INT-DISPLAY-USE-OPENGL]
+    checkboxUseOpenGL.set_checked(int-dialog[INT-DISPLAY-USE-OPENGL)
+    connect(checkboxUseOpenGL, SIGNAL(-state_changed(int)), this, SLOT(checkboxUseOpenGL-state_changed(int)))
+
+    checkboxRenderHintAA = tk.checkbox(translate("Antialias"), groupboxRender)
+    dialog_display_renderhint-aa = display-render-hint-aa
+    checkboxRenderHintAA.set_checked(dialog_display_renderhint-aa)
+    connect(checkboxRenderHintAA, SIGNAL(-state_changed(int)), this, SLOT(checkboxRenderHintAA-state_changed(int)))
+
+    checkboxRenderHintTextAA = tk.checkbox(translate("Antialias Text"), groupboxRender)
+    dialog_display_renderhint-text-aa = display-render-hint-text-aa
+    checkboxRenderHintTextAA.set_checked(dialog_display_renderhint-text-aa)
+    connect(checkboxRenderHintTextAA, SIGNAL(-state_changed(int)), this, SLOT(checkboxRenderHintTextAA-state_changed(int)))
+
+    checkboxRenderHintSmoothPix = tk.checkbox(translate("Smooth Pixmap"), groupboxRender)
+    dialog_display_renderhint-smooth-pix = display-render-hint-smooth-pix
+    checkboxRenderHintSmoothPix.set_checked(dialog_display_renderhint-smooth-pix)
+    connect(checkboxRenderHintSmoothPix, SIGNAL(-state_changed(int)), this, SLOT(checkboxRenderHintSmoothPix-state_changed(int)))
+
+    checkboxRenderHintHighAA = tk.checkbox(translate("High Quality Antialiasing (OpenGL)"), groupboxRender)
+    dialog_display_renderhint-high-aa = display-render-hint-high-aa
+    checkboxRenderHintHighAA.set_checked(dialog_display_renderhint-high-aa)
+    connect(checkboxRenderHintHighAA, SIGNAL(-state_changed(int)), this, SLOT(checkboxRenderHintHighAA-state_changed(int)))
+
+    checkboxRenderHintNonCosmetic = tk.checkbox(translate("Non Cosmetic"), groupboxRender)
+    dialog_display_renderhint-noncosmetic = display-render-hint-non-cosmetic
+    checkboxRenderHintNonCosmetic.set_checked(dialog_display_renderhint-noncosmetic)
+    connect(checkboxRenderHintNonCosmetic, SIGNAL(-state_changed(int)), this, SLOT(checkboxRenderHintNonCosmetic-state_changed(int)))
+
+    vboxLayoutRender = tk.VBoxLayout(groupboxRender)
+    vboxLayoutRender, add_widget(checkboxUseOpenGL)
+    vboxLayoutRender, add_widget(checkboxRenderHintAA)
+    vboxLayoutRender, add_widget(checkboxRenderHintTextAA)
+    vboxLayoutRender, add_widget(checkboxRenderHintSmoothPix)
+    vboxLayoutRender, add_widget(checkboxRenderHintHighAA)
+    vboxLayoutRender, add_widget(checkboxRenderHintNonCosmetic)
+    groupboxRender.setLayout(vboxLayoutRender) 

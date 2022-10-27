@@ -1,0 +1,15 @@
+Center X,double,user
+Center Y,double,user
+Radius,double,user
+Start Angle,double,user
+End Angle,double,user
+Start X,double,system
+Start Y,double,system
+End X,double,system
+End Y,double,system
+Area,double,system
+Length,double,system
+Chord,double,system
+Included Angle,double,system
+END,END,END
+

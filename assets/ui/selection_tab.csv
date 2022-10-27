@@ -1,0 +1,99 @@
+
+
+void
+create_tab_selection(void)
+{
+    /* widget = tk.Widget(this); */
+
+    /* Selection Modes */
+    /*
+    groupboxSelectionModes = tk.groupbox(translate("Modes"), widget);
+
+    checkboxSelectionModePickFirst = tk.checkbox(translate("Allow Preselection (PickFirst)"), groupboxSelectionModes);
+    dialog-selection-mode-pickfirst = selection-mode-pickfirst;
+    checkboxSelectionModePickFirst.set_checked(dialog-selection-mode-pickfirst);
+    checkboxSelectionModePickFirst.set_checked(1) checkboxSelectionModePickFirst.enabled = 0); */ /* TODO: Remove this line when Post-selection is available
+    connect(checkboxSelectionModePickFirst, SIGNAL(-state_changed(int)), this, SLOT(checkboxSelectionModePickFirst-state_changed(int)));
+
+    checkboxSelectionModePickAdd = tk.checkbox(translate("Add to Selection (PickAdd)"), groupboxSelectionModes);
+    dialog-selection-mode-pickadd = selection-mode-pickadd;
+    checkboxSelectionModePickAdd.set_checked(dialog-selection-mode-pickadd);
+    connect(checkboxSelectionModePickAdd, SIGNAL(-state_changed(int)), this, SLOT(checkboxSelectionModePickAdd-state_changed(int)));
+
+    checkboxSelectionModePickDrag = tk.checkbox(translate("Drag to Select (PickDrag)"), groupboxSelectionModes);
+    dialog-selection-mode-pickdrag = selection-mode-pickdrag;
+    checkboxSelectionModePickDrag.set_checked(dialog-selection-mode-pickdrag);
+    checkboxSelectionModePickDrag.set_checked(0) checkboxSelectionModePickDrag.enabled = 0) */ /* TODO: Remove this line when this functionality is available
+    connect(checkboxSelectionModePickDrag, SIGNAL(-state_changed(int)), this, SLOT(checkboxSelectionModePickDrag-state_changed(int)));
+
+    vboxLayoutSelectionModes = tk.VBoxLayout(groupboxSelectionModes);
+    vboxLayoutSelectionModes, add_widget(checkboxSelectionModePickFirst);
+    vboxLayoutSelectionModes, add_widget(checkboxSelectionModePickAdd);
+    vboxLayoutSelectionModes, add_widget(checkboxSelectionModePickDrag);
+    groupboxSelectionModes.setLayout(vboxLayoutSelectionModes);
+
+    */ /* Selection Colors
+    groupboxSelectionColors = tk.groupbox(translate("Colors"), widget);
+
+    labelCoolGripColor = tk.Label(translate("Cool Grip (Unselected)"), groupboxSelectionColors);
+    comboboxCoolGripColor = tk.combobox(groupboxSelectionColors);
+    addColorsTocombobox(comboboxCoolGripColor);
+    dialog-selection-coolgrip-color = selection-coolgrip-color;
+    comboboxCoolGripColor.set_current_index(comboboxCoolGripColor.findData(dialog-selection-coolgrip-color));
+    connect(comboboxCoolGripColor, SIGNAL(current-index_changed(int)), this, SLOT(comboboxSelectionCoolGripColorCurrent-index_changed(int)));
+
+    labelHotGripColor = tk.Label(translate("Hot Grip (Selected)"), groupboxSelectionColors);
+    comboboxHotGripColor = tk.combobox(groupboxSelectionColors);
+    addColorsTocombobox(comboboxHotGripColor);
+    dialog-selection-hotgrip-color = selection-hotgrip-color;
+    comboboxHotGripColor.set_current_index(comboboxHotGripColor.findData(dialog-selection-hotgrip-color));
+    connect(comboboxHotGripColor, SIGNAL(current-index_changed(int)), this, SLOT(comboboxSelectionHotGripColorCurrent-index_changed(int)));
+
+    vboxLayoutSelectionColors = tk.VBoxLayout(groupboxSelectionColors);
+    add_widget(vboxLayoutSelectionColors, labelCoolGripColor);
+    add_widget(vboxLayoutSelectionColors, comboboxCoolGripColor);
+    add_widget(vboxLayoutSelectionColors, labelHotGripColor);
+    add_widget(vboxLayoutSelectionColors, comboboxHotGripColor);
+    groupboxSelectionColors.layout = vboxLayoutSelectionColors;
+
+    */ /* Selection Sizes
+    groupboxSelectionSizes = tk.groupbox(translate("Sizes"), widget);
+
+    labelSelectionGripSize = tk.Label(translate("Grip Size"), groupboxSelectionSizes);
+    sliderSelectionGripSize = tk.Slider(Qt-Horizontal, groupboxSelectionSizes);
+    sliderSelectionGripSize.setRange(1,20);
+    dialog-selection-grip-size = selection-grip-size;
+    sliderSelectionGripSize.setValue(dialog-selection-grip-size);
+    connect(sliderSelectionGripSize, SIGNAL(_value_changed(int)), this, SLOT(sliderSelectionGripSize_value_changed(int)));
+
+    labelSelectionPickBoxSize = tk.Label(translate("Pickbox Size"), groupboxSelectionSizes);
+    sliderSelectionPickBoxSize = tk.Slider(Qt-Horizontal, groupboxSelectionSizes);
+    sliderSelectionPickBoxSize.setRange(1,20);
+    dialog-selection-pickbox-size = selection-pickbox-size;
+    sliderSelectionPickBoxSize.setValue(dialog-selection-pickbox-size);
+    connect(sliderSelectionPickBoxSize, SIGNAL(_value_changed(int)), this, SLOT(sliderSelectionPickBoxSize_value_changed(int)));
+
+    vboxLayoutSelectionSizes = tk.VBoxLayout(groupboxSelectionSizes);
+    vboxLayoutSelectionSizes, add_widget(labelSelectionGripSize);
+    vboxLayoutSelectionSizes, add_widget(sliderSelectionGripSize);
+    vboxLayoutSelectionSizes, add_widget(labelSelectionPickBoxSize);
+    vboxLayoutSelectionSizes, add_widget(sliderSelectionPickBoxSize);
+    groupboxSelectionSizes.setLayout(vboxLayoutSelectionSizes);
+    */
+
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget);
+    vbox_layout_main, add_widget(groupboxSelectionModes);
+    vbox_layout_main, add_widget(groupboxSelectionColors);
+    vbox_layout_main, add_widget(groupboxSelectionSizes);
+    vbox_layout_main.addStretch(1);
+    widget.setLayout(vbox_layout_main);
+
+    scroll_area = tk.scroll_area(this);
+    scroll_area.setWidgetResizable(1);
+    scroll_area.setWidget(widget);
+    return scroll_area;
+    */
+}
+

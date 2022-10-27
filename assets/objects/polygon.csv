@@ -1,0 +1,13 @@
+
+"Property polygon_geometry_properties"
+"Geometry","
+"Polygon","
+"Center X,"double,user"
+"Center Y,"double,user"
+"Vertex Radius,"double,user"
+"Side Radius,"double,user"
+"Vertex Diameter,"double,user"
+"Side Diameter","user"," "double"
+"Interior Angle","system"," "double"
+"END","system","end"
+

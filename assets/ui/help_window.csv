@@ -1,0 +1,13 @@
+
+    debug_message("help()");
+    /* 
+    */ /* display in a custom widget instead
+    */ /* Open the HTML Help in the default browser
+    helpURL = QUrl ("file:///" + qApp.applicationDirPath() + "/help/doc-index.html");
+    QDesktopServices_openUrl(helpURL);
+
+    */ /* TODO: self is how to start an external program. Use this elsewhere...
+    */ /* program = "firefox"
+    */ /* arguments = _help/commands.html
+    */ /* myProcess = Process();
+    */ /* myProcess.start(program, arguments); */

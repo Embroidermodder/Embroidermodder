@@ -23,29 +23,75 @@ These discuss recent changes, plans and has user and developer guides for all th
 
 To see what we're focussing on right now, see the [Open Collective News](https://opencollective.com/embroidermodder).
 
-## Build and Install
+## Build and Install Advice
+
+This advice is summed up in the [Robin's Gist](https://gist.github.com/robin-swift/2050bcfaa2426a91c42977b6d9559904), so the fast build should be:
+
+     curl https://www.libembroidery.org/scripts/em2_debug.bash | bash
+
+This is stored seperately so we can have a gist URL and make this shortlink for the one-liner.
+
+### Dependencies
+
+In all cases run these commands first to get the recommended version
+of our underlying library libembroidery:
+
+     git submodule init
+     git submodule update
+
+##### Windows, Mac OS and iOS
+
+Note that the Windows and Mac OS versions are built using the system libraries,
+so no dependencies will need to be installed.
+
+Hopefully for iOS, the system libraries will be dealt with by XCode automatically.
+
+##### Unix-like systems with X11
+
+Get the X11 libraries, which on Debian are:
+
+    sudo apt-get update
+    sudo apt-get install libx11-6
+
+##### Android
+
+`gradlew` will get the appropriate build environment as part of the build,
+if needed.
 
 ### Desktop
 
-We assume you have a basic build environment (bash, CMake, git and a C compiler).
-If you do just run:
+#### Build
 
-    $ bash em2.bash build
-    
-Otherwise, on Debian Linux/GNU use:
+From here, we assume you have a basic build environment
+(sh, git, a C compiler and your relevant graphics libraries above).
+To build then use `make`. For systems that lack make for whatever reason
+this one-liner should build the software for X11:
 
-    $ bash em2.bash debian-deps build
-    
-to install the officially supported versions of the libraries and build
-the software (requires sudo) use:
+    gcc -O2 -g -Wall -Iextern/libembroidery/src \
+        extern/libembroidery/src/*.c em2.c -o embroidermodder -lX11 -lm
 
-    $ bash em2.bash debian-deps build install
+On Windows this becomes:
 
-Currently this is the 2.0-alpha, which will have a build code of
-some kind.
+    gcc -O2 -g -Wall -municode -Iextern/libembroidery/src \
+        extern/libembroidery/src/*.c em2.c -o embroidermodder -lGdi32
 
-This helper script also has its own help message that you will get
-if you run `em2.bash` without arguments.
+#### Install
+
+To install the program we recommend this for now on systems using the Unix style filesystem:
+
+    # So we can use relative paths for assets
+    mkdir -p ~/.embroidermodder2
+    cp -r . ~/.embroidermodder2
+
+    # Set an alias so we can try the software.
+    # Long term users will already have this set
+    # in their "".bashrc".
+    alias embroidermodder="cd ~/.embroidermodder2; ./embroidermodder"
+
+On Windows we don't have an install method, but it will be along the lines of
+"paste your git folder into AppData and set up a reference to where it's
+now stored". This is one of the last things that will be fixed before we
+leave the beta phase of development.
 
 #### Windows Specific Advice
 
@@ -59,7 +105,8 @@ this section is to help people who've not got a build environment to start with.
 ```
 $ git clone https://github.com/Embroidermodder/Embroidermodder
 $ cd Embroidermodder
-$ ./em2.bash mingw_deps build
+$ gcc -O2 -g -Wall -municode -Iextern/libembroidery/src \
+    extern/libembroidery/src/*.c em2.c -o embroidermodder -lGdi32
 ```
 
 ### Mobile
@@ -81,6 +128,8 @@ iOS advice: https://www.lazyfoo.net/tutorials/SDL/52_hello_mobile/ios_mac/index.
 Originally I considered Kivy for the Python version, but that means getting the bindings
 to be reliable which is far more work. Instead we will have a seperate Python version of
 libembroidery for other people's projects which is hand translated from the C code.
+
+Currently we are grappling with out to set up gradle and XCode builds.
 
 ## Development
 
@@ -323,6 +372,100 @@ If you've got programming skills and there is a feature that isn't currently ava
 An Embroidermodder 2 command excerpt:
 
 ![lisp scripting](images/features-scripting-1.png)
+
+### Translation of the user interface.
+
+In a given table the left column is the default symbol
+and the right string is the translation. If the translate
+function fails to find a translation it returns the default
+symbol.
+
+So in US English it is an empty table, but in UK English
+only the dialectical differences are present.
+
+Ideally, we should support at least the 6 languages
+spoken at the UN. Quoting www.un.org:
+
+> "There are six official languages of the UN.
+> These are Arabic, Chinese, English, French,
+> Russian and Spanish."
+
+We're adding Hindi, on the grounds that it is one of
+the most commonly spoken languages and at least one
+of the Indian languages should be present.
+
+Written Chinese is generally supported as two different
+symbol sets and we follow that convension.
+
+English is supported as two dialects to ensure that
+the development team is aware of what those differences
+are. The code base is written by a mixture of US and UK
+native English speakers meaning that only the variable
+names are consistently one dialect: US English. As
+for documentation: it is whatever dialect the
+writer prefers (but they should maintain consistency
+within a text block like this one).
+
+Finally, we have "default", which is the dominant language
+of the internals of the software. Practically, this is
+just US English, but in terms of programming history this
+is the "C locale". 
+
+### Old action system notes
+
+```
+/* NO LONGER HOW ACTION SYSTEM WORKS,
+ * MOVE TO DOCS.
+ *
+ * Action: the basic system to encode all user input.
+ *
+ * This typedef gives structure to the data associated with each action
+ * which, in the code, is referred to by the action id (an int from
+ * the define table above).
+ * -----------------------------------------------------------------------------
+ *
+ * DESCRIPTION OF STRUCT CONTENTS
+ *
+ * label
+ * -----
+ *
+ * What is called from Scheme to run the function.
+ * It is always in US English, lowercase,
+ * seperated with hyphens.
+ *
+ * For example: new-file.
+ *
+ * function
+ * --------
+ *
+ * The function pointer, always starts with the prefix scm,
+ * in US English, lowercase, seperated with underscores.
+ *
+ * The words should match those of the label otherwise.
+ *
+ * For example: scm_new_file.
+ *
+ * flags
+ * -----
+ *
+ * The bit based flags all collected into a 32-bit integer.
+ *
+ * | bit(s) | description                                |
+ * |--------|--------------------------------------------|
+ * | 0      | User (0) or system (1) permissions.        |
+ * | 1-3    | The mode of input.                         |
+ * | 4-8    | The object classes that this action        |
+ * |        | can be applied to.                         |
+ * | 9-10   | What menu (if any) should it be present in.|
+ * | 11-12  | What                                       |
+ *
+ * description
+ * -----------
+ *
+ * The string placed in the tooltip describing the action.
+ * -----------------------------------------------------------------------------
+ */
+```
 
 ## Contributing
 
@@ -867,6 +1010,22 @@ Various sample embroidery design files can be found in the embroidermodder2/samp
 ### Design
 
 These are key bits of reasoning behind why the software is built the way it is.
+
+#### Shortcuts
+
+A shortcut can be made up of zero or more modifier keys
+and at least one non-modifier key pressed at once.
+
+To make this list quickly assessable, we can produce
+a list of hashes which are simply the flags ORed together.
+
+The shortcuts are stored in the csv file "shortcuts.csv"
+as a 5-column table with the first 4 columns describing
+the key combination. This is loaded into the shortcuts
+`TABLE`. Each tick the program checks the input state for
+this combination by first translating the key names into
+indices for the key state, then checking for whether all
+of them are set to true.
 
 #### CAD command review
 

@@ -5,11 +5,12 @@ build/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
+.cmake
 *.exe
 *.out
 *.app
+*.o
 embroidermodder
-Makefile
 
 # OS generated files
 ## Macintosh

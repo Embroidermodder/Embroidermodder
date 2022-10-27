@@ -1,0 +1,7 @@
+
+    /* widget = tk.Widget(this)
+
+    scroll_area = tk.scroll_area(this)
+    scroll_area.setWidgetResizable(1)
+    scroll_area.setWidget(widget)
+    return scroll_area */

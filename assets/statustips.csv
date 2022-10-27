@@ -1,0 +1,8 @@
+"cancel-zoom-window-action","Cancels the zoom-window-action Command."
+"move","Displaces objects a specified distance in a specified direction."
+"scale","Enlarges or reduces objects proportionally in the X, Y, and Z directions."
+"delete","Removes objects from a drawing."
+"rotate","Rotates objects about a base point."
+"clear-selection","Removes all objects from the selection set."
+"toolbar-close","Close the this toolbar."
+

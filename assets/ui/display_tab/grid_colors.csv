@@ -1,0 +1,89 @@
+    groupboxColor = tk.groupbox(translate("Colors"), widget);
+
+    labelCrossHairColor = tk.Label(translate("Crosshair Color"), groupboxColor);
+    buttonCrossHairColor = PushButton(translate("Choose"), groupboxColor);
+    dialog_display_crosshair-color = display-crosshair-color;
+    preview.display-crosshair-color = dialog_display_crosshair-color;
+    accept.display-crosshair-color = dialog_display_crosshair-color;
+    crosshairPix = (16,16);
+    crosshairPix.fill(Color(preview.display-crosshair-color));
+    buttonCrossHairColor.set_icon(QIcon(crosshairPix));
+    connect(buttonCrossHairColor, SIGNAL(clicked()), this, SLOT(chooseDisplayCrossHairColor()));
+
+    labelBGColor = tk.Label(translate("Background Color"), groupboxColor);
+    buttonBGColor = PushButton(translate("Choose"), groupboxColor);
+    dialog_display_bg-color = display-bg-color;
+    preview.display-bg-color = dialog_display_bg-color;
+    accept.display-bg-color = dialog_display_bg-color;
+    bgPix = Image(16,16);
+    bgPix.fill(Color(preview.display-bg-color));
+    buttonBGColor.set_icon(QIcon(bgPix));
+    connect(buttonBGColor, SIGNAL(clicked()), this, SLOT(chooseDisplayBackgroundColor()));
+
+    labelSelectBoxLeftColor = tk.Label(translate("Selection Box Color (Crossing)"), groupboxColor);
+    buttonSelectBoxLeftColor = PushButton(translate("Choose"), groupboxColor);
+    dialog_display_selectbox_left-color = display-selectbox-left-color;
+    preview_display-selectbox-left-color = dialog_display_selectbox_left-color;
+    accept_display-selectbox-left-color = dialog_display_selectbox_left-color;
+    sBoxLCPix = Image(16,16);
+    sBoxLCPix.fill(Color(preview_display-selectbox-left-color));
+    buttonSelectBoxLeftColor.set_icon(QIcon(sBoxLCPix));
+    connect(buttonSelectBoxLeftColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftColor()));
+
+    label_select_box_left_fill = tk.Label(translate("Selection Box Fill (Crossing)"), groupboxColor);
+    buttonSelectBoxLeftFill = PushButton(translate("Choose"), groupboxColor);
+    copy_seting("dialog-display_selectbox-left-fill",
+        "display-selectbox-left-fill");
+    copy_seting("preview-display-selectbox-left-fill",
+        "dialog-display-selectbox-left-fill");
+    accept-display-selectbox-left-fill = dialog_display_selectbox_left-fill;
+    sBoxLFPix = Image(16,16);
+    sBoxLFPix.fill(Color(preview_display-selectbox-left-fill));
+    buttonSelectBoxLeftFill.set_icon(QIcon(sBoxLFPix));
+    connect(buttonSelectBoxLeftFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftFill()));
+
+    labelSelectBoxRightColor = tk.Label(translate("Selection Box Color (Window)"), groupboxColor);
+    buttonSelectBoxRightColor = tk.PushButton(translate("Choose"), groupboxColor);
+    dialog_display_selectbox_right-color = display-selectbox-right-color;
+    preview_display-selectbox-right-color = dialog_display_selectbox_right-color;
+    accept_display-selectbox-right-color = dialog_display_selectbox_right-color;
+    sBoxRCPix = Image(16,16);
+    sBoxRCPix.fill(Color(preview_display-selectbox-right-color));
+    buttonSelectBoxRightColor.set_icon(QIcon(sBoxRCPix));
+    connect(buttonSelectBoxRightColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightColor()));
+
+    labelSelectBoxRightFill = tk.Label(translate("Selection Box Fill (Window)"), groupboxColor);
+    buttonSelectBoxRightFill = PushButton(translate("Choose"), groupboxColor);
+    dialog_display_selectbox_right-fill = display-selectbox-right-fill;
+    preview.display-selectbox-right-fill = dialog_display_selectbox_right-fill;
+    accept.display-selectbox-right-fill = dialog_display_selectbox_right-fill;
+    sBoxRFPix = Image(16,16);
+    sBoxRFPix.fill(Color(preview.display-selectbox-right-fill));
+    buttonSelectBoxRightFill.set_icon(QIcon(sBoxRFPix));
+    connect(buttonSelectBoxRightFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightFill()));
+
+    labelSelectBoxAlpha = tk.Label(translate("Selection Box Fill Alpha"), groupboxColor);
+    spinboxSelectBoxAlpha = tk.spinbox(groupboxColor);
+    spinboxSelectBoxAlpha.setRange(0, 255);
+    dialog_display_selectbox_alpha = display-selectbox-alpha;
+    preview.display-selectbox-alpha = dialog_display_selectbox_alpha;
+    spinboxSelectBoxAlpha.setValue(preview.display-selectbox-alpha);
+    connect(spinboxSelectBoxAlpha, SIGNAL(_value_changed(int)), this, SLOT(spinboxDisplaySelectBoxAlpha_value_changed(int)));
+
+    grid_layout_color = tk.GridLayout(widget);
+    add_widget(grid_layout_color, labelCrossHairColor, 0, 0, ALIGN_LEFT);
+    add_widget(grid_layout_color, buttonCrossHairColor, 0, 1, ALIGN_RIGHT);
+    add_widget(grid_layout_color, labelBGColor, 1, 0, ALIGN_LEFT);
+    add_widget(grid_layout_color, buttonBGColor, 1, 1, ALIGN_RIGHT);
+    add_widget(grid_layout_color, labelSelectBoxLeftColor, 2, 0, ALIGN_LEFT);
+    add_widget(grid_layout_color, buttonSelectBoxLeftColor, 2, 1, ALIGN_RIGHT);
+    add_widget(grid_layout_color, label_select_box_left_fill, 3, 0, ALIGN_LEFT);
+    add_widget(grid_layout_color, buttonSelectBoxLeftFill, 3, 1, ALIGN_RIGHT);
+    grid_layout_color, add_widget(labelSelectBoxRightColor, 4, 0, ALIGN_LEFT);
+    grid_layout_color, add_widget(buttonSelectBoxRightColor, 4, 1, ALIGN_RIGHT);
+    grid_layout_color, add_widget(labelSelectBoxRightFill, 5, 0, ALIGN_LEFT);
+    grid_layout_color, add_widget(buttonSelectBoxRightFill, 5, 1, ALIGN_RIGHT);
+    grid_layout_color, add_widget(labelSelectBoxAlpha, 6, 0, ALIGN_LEFT);
+    grid_layout_color, add_widget(spinboxSelectBoxAlpha, 6, 1, ALIGN_RIGHT);
+    groupboxColor.setLayout(grid_layout_color); 
+

@@ -1,0 +1,85 @@
+
+/*
+ * The mode argument determines what locations in the interface the action will
+ * appear in, for example in mode MODE_TOOLBAR, the action appears in the
+ * toolbars, in MODE_TOOLBAR | MODE_"double" it also appears as a lineEdit in
+ * the property editor expecting a double as input.
+ *
+ * LineEdits
+ * TODO: make sure the lineedits array matches
+ * this ordering.
+ * ----------------------------------------------------------------------------
+ */
+#define ARC_CENTER_X                  0
+#define ARC_CENTER_Y                  1
+#define ARC_RADIUS                    2
+#define ARC_START_ANGLE               3
+#define ARC_END_ANGLE                 4
+#define ARC_START_X                   5
+#define ARC_START_Y                   6
+#define ARC_END_X                     7
+#define ARC_END_Y                     8
+#define ARC_AREA                      9
+#define ARC_LENGTH                   10
+#define ARC_CHORD                    11
+#define ARC_INC_ANGLE                12
+#define TEXT_SINGLE_CONTENTS         13
+#define TEXT_SINGLE_HEIGHT           14
+#define TEXT_SINGLE_ROTATION         15
+#define TEXT_SINGLE_X                16
+#define TEXT_SINGLE_Y                17
+#define CIRCLE_CENTER_X              18
+#define CIRCLE_CENTER_Y              19
+#define CIRCLE_RADIUS                20
+#define CIRCLE_DIAMETER              21
+#define CIRCLE_AREA                  22
+#define CIRCLE_CIRCUMFERENCE         23
+#define ELLIPSE_CENTER_X             24
+#define ELLIPSE_CENTER_Y             25
+#define ELLIPSE_RADIUS_MAJOR         26
+#define ELLIPSE_RADIUS_MINOR         27
+#define ELLIPSE_DIAMETER_MAJOR       28
+#define ELLIPSE_DIAMETER_MINOR       29
+#define IMAGE_X                      30
+#define IMAGE_Y                      31
+#define IMAGE_WIDTH                  32
+#define IMAGE_HEIGHT                 33
+#define IMAGE_NAME                   34
+#define IMAGE_PATH                   35
+#define INFINITE_LINE_X1             36
+#define INFINITE_LINE_Y1             37
+#define INFINITE_LINE_X2             38
+#define INFINITE_LINE_Y2             39
+#define INFINITE_LINE_VECTOR_X       40
+#define INFINITE_LINE_VECTOR_Y       41
+#define BLOCK_X                      42
+#define BLOCK_Y                      43
+#define LINE_START_X                 44
+#define LINE_START_Y                 45
+#define LINE_END_X                   46
+#define LINE_END_Y                   47
+#define LINE_DELTA_X                 48
+#define LINE_DELTA_Y                 49
+#define LINE_ANGLE                   50
+#define LINE_LENGTH                  51
+#define POLYGON_CENTER_X             52
+#define POLYGON_CENTER_Y             53
+#define POLYGON_RADIUS_VERTEX        54
+#define POLYGON_RADIUS_SIDE          55
+#define POLYGON_DIAMETER_VERTEX      56
+#define POLYGON_DIAMETER_SIDE        57
+#define POLYGON_INTERIOR_ANGLE       58
+#define RECT_CORNER_X1               59
+#define RECT_CORNER_Y1               60
+#define RECT_CORNER_X2               61
+#define RECT_CORNER_Y2               62
+#define RECT_CORNER_X3               63
+#define RECT_CORNER_Y3               64
+#define RECT_CORNER_X4               65
+#define RECT_CORNER_Y4               66
+#define RECT_HEIGHT                  67
+#define RECT_WIDTH                   68
+#define RECT_AREA                    69
+#define POINT_X                      70
+#define POINT_Y                      71
+#define LINEEDIT_PROPERTY_EDITORS    72

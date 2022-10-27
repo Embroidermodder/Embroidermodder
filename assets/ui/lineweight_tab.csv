@@ -1,0 +1,65 @@
+
+
+/* TODO: finish this */
+void
+create_tab_line_weight(void)
+{
+    /*
+    widget = tk.Widget(this)
+
+ Misc
+    groupboxLwtMisc = tk.groupbox(translate("LineWeight Misc"), widget);
+
+    s = (active-scene);
+
+    checkboxShowLwt = tk.checkbox(translate("Show LineWeight"), groupboxLwtMisc);
+    if s:
+        dialog-lwt-show-lwt = s.property("ENABLE-LWT");
+    else
+        dialog-lwt-show-lwt = lwt-show-lwt;
+
+    preview.lwt-show-lwt = dialog-lwt-show-lwt;
+    checkboxShowLwt.set_checked(preview.lwt-show-lwt);
+    connect(checkboxShowLwt, SIGNAL(-state_changed(int)), this, SLOT(checkboxLwtShowLwt-state_changed(int)));
+
+    checkboxRealRender = tk.checkbox(translate("RealRender"), groupboxLwtMisc);
+    checkboxRealRender.setObjectName("checkboxRealRender");
+    if s:
+        dialog-lwt-real-render = s.property("ENABLE-REAL");
+    else {
+        dialog-lwt-real-render = lwt-real-render;
+
+    preview.lwt-real-render = dialog-lwt-real-render;
+    checkboxRealRender.set_checked(preview.lwt-real-render);
+    connect(checkboxRealRender, SIGNAL(-state_changed(int)), this, SLOT(checkboxLwtRealRender-state_changed(int)));
+    checkboxRealRender.enabled = dialog-lwt-show-lwt);
+
+    labelDefaultLwt = tk.Label(translate("Default weight"), groupboxLwtMisc);
+    labelDefaultLwt.enabled = 0) */ /* TODO: remove later;
+    comboboxDefaultLwt = tk.combobox(groupboxLwtMisc);
+    dialog-lwt-default-lwt = lwt-default-lwt;
+    */ /* TODO: populate the combobox and set the initial value;
+    comboboxDefaultLwt.add_item("".setNum(dialog-lwt-default-lwt, 'F', 2).append(" mm"), dialog-lwt-default-lwt);
+    comboboxDefaultLwt.enabled = 0); */ /* TODO: remove later
+
+    vbox_layout_lwt_misc = tk.VBoxLayout(groupboxLwtMisc);
+    add_widget(vbox_layout_lwt_misc, checkboxShowLwt);
+    add_widget(vbox_layout_lwt_misc, checkboxRealRender);
+    add_widget(vbox_layout_lwt_misc, labelDefaultLwt);
+    add_widget(vbox_layout_lwt_misc, comboboxDefaultLwt);
+    groupboxLwtMisc.setLayout(vbox_layout_lwt_misc);
+    */
+
+    /* Widget Layout */
+    /*
+    vbox_layout_main = tk.VBoxLayout(widget);
+    vbox_layout_main, add_widget(groupboxLwtMisc);
+    vbox_layout_main.addStretch(1);
+    widget.setLayout(vbox_layout_main);
+
+    scroll_area = tk.scroll_area(this);
+    scroll_area.setWidgetResizable(1);
+    scroll_area.setWidget(widget);
+    return scroll_area;
+    */
+}

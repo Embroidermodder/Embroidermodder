@@ -1,0 +1,6 @@
+"groupbox","default printer","vbox"
+"radiobutton","use same","assets/ui/combobox_default_device.csv"
+"combobox","default device","assets/ui/combobox_default_device.csv"
+"radiobutton","use last","assets/ui/radiobutton_use_last.csv"
+"END"
+

@@ -1,0 +1,10 @@
+"Ellipse","system","title"
+"Geometry","system","groupbox"
+"Center X","user","double"
+"Center Y","user","double"
+"Radius Major","user","double"
+"Radius Minor","user","double"
+"Diameter Major","user","double"
+"Diameter Minor","user","double"
+"END","system","end"
+
