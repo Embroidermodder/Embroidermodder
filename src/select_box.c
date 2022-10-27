@@ -82,23 +82,23 @@ select_box_colors(Toolset *tools, char *setting)
     char setting_str[100];
     debug_message("SelectBox colors()");
     sprintf(setting_str, "%s-alpha", setting);
-    tools->alpha = get_float(setting_str);
+    tools->alpha = get_float(mainwnd->state, setting_str);
 
     sprintf(setting_str, "%s-color-left", setting);
-    tools->left_pen.color = get_color(setting_str);
-    tools->left_pen.style = get_int("line-style-dashed");
+    tools->left_pen.color = get_color(mainwnd->state, setting_str);
+    tools->left_pen.style = get_int(mainwnd->state, "line-style-dashed");
 
     sprintf(setting_str, "%s-fill-left", setting);
-    tools->left_brush.color = get_color(setting_str);
-    tools->left_brush.style = get_int("brush-style-solid");
+    tools->left_brush.color = get_color(mainwnd->state, setting_str);
+    tools->left_brush.style = get_int(mainwnd->state, "brush-style-solid");
 
     sprintf(setting_str, "%s-color-right", setting);
-    tools->right_pen.color = get_color(setting_str);
-    tools->right_pen.style = get_int("line-style-solid");
+    tools->right_pen.color = get_color(mainwnd->state, setting_str);
+    tools->right_pen.style = get_int(mainwnd->state, "line-style-solid");
 
     sprintf(setting_str, "%s-fill-right", setting);
-    tools->right_brush.color = get_color(setting_str);
-    tools->right_brush.style = get_int("brush-style-solid");
+    tools->right_brush.color = get_color(mainwnd->state, setting_str);
+    tools->right_brush.style = get_int(mainwnd->state, "brush-style-solid");
 
     /*
     direction(tools->box_dir);

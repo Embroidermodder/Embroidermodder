@@ -17,8 +17,314 @@
 
 #include "em2.h"
 
-extern Window *mainwnd;
+/* .
+ */
+void
+text_italic(void)
+{
+    debug_message("text_italic()");
+    /* text_style_italic = !text_style_italic; */
+}
 
+/* .
+ */
+void
+text_bold(void)
+{
+    debug_message("text_bold()");
+    /* text_style_bold = !text_style_bold; */
+}
+
+/* .
+ */
+void
+text_strikeout(void)
+{
+    debug_message("text_strikeout()");
+    /* text_style.strikeout = !text_style.strikeout; */
+}
+
+/* .
+ */
+void
+text_underline(void)
+{
+    debug_message("text_underline()");
+    /* text_style.underline = !text_style.underline; */
+}
+
+/* .
+ */
+void
+text_overline(void)
+{
+    debug_message("text_overline()");
+    /* text_style.overline = !text_style.overline; */
+}
+
+void
+load_file_action(char *file_name)
+{
+    FILE *file;
+    EmbPattern *p;
+    debug_message("MdiWindow load-file()");
+    /*
+    tmpColor = get-current-color()
+
+    file = open(file_name, "r")
+    if (!file) {
+        warning(translate("Error reading file"),
+                translate("Cannot read file %1:\n%2.")
+                .arg(file_name).arg(file.errorString()))
+        return 0
+    }
+
+    mw.set_override_cursor("WaitCursor");
+
+    ext = fileExtension(file_name);
+    debug_message("ext: %s", qPrintable(ext));
+
+    p = embPattern-create();
+    if (!p) {
+        printf("Could not allocate memory for embroidery pattern\n");
+        exit(1);
+    }
+
+    if (!p.readAuto(file_name)) {
+        debug_message("Reading file was unsuccessful: %s\n", file_name)
+        mw.restore_override_cursor()
+        message = translate("Reading file was unsuccessful: ") + file_name
+        warning(this, translate("Error reading pattern"), message)
+    }
+    else {
+        p.move-stitch-list-to-polylines()
+        # TODO: Test more
+        stitchCount = p.stitch-list.count
+        path = Path()
+
+        if (p.circles) {
+            for i in range(len(p.circles))
+                c = p.circles.circle[i].circle
+                this-color = p.circles.circle[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                # NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mw.nativeAddCircle(c.center.x, c.center.y, c.radius, 0, "RUBBER-OFF")
+                # TODO: fill
+
+        if p.ellipses:
+            for i in range(len(p.ellipses))
+                e = p.ellipses.ellipse[i].ellipse
+                this-color = p.ellipses.ellipse[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                # NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mw.nativeAddEllipse(e.centerX, e.centerY, e.radiusX, e.radiusY, 0, 0, OBJ-RUBBER-OFF)
+                #TODO: rotation and fill
+
+        if p.lines:
+            for i in range(len(p.lines))
+                li = p.lines.line[i].line
+                this-color = p.lines.line[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                # NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mw.nativeAddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, OBJ-RUBBER-OFF)
+                #TODO: rotation
+
+        if p.paths:
+            # TODO: This is unfinished. It needs more work
+            for i in range(p.paths.count)
+                curpoint-list = p.paths.path[i].point-list
+                pathPath = Path()
+                this-color = p.paths.path[i].color
+                if curpoint-list.count > 0:
+                    pp = curpoint-list[0].point.point
+                    pathPath.move-to(pp.x, -pp.y)
+                    #NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                for j in range(curpoint-list.count)
+                    pp = curpoint-list[j].point.point
+                    pathPath.line-to(pp.x, -pp.y)
+                    #NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                loadPen = Pen(qRgb(this-color.r, this-color.g, this-color.b))
+                loadPen.set_widthF(0.35)
+                loadPen.set_cap-style(Qt-RoundCap)
+                loadPen.set_join-style(Qt-RoundJoin)
+
+                obj = Path(0, 0, pathPath, loadPen.color().rgb())
+                item.setObjectRubberMode(OBJ-RUBBER-OFF)
+                mw.activeScene().addItem(obj)
+
+        if p.points:
+            for i in range(p.points.count)
+                po = p.points.point[i].point
+                this-color = p.points.point[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                # NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mw.nativeAddPoint(po.x, po.y)
+
+        if p.polygons:
+            for i in range(p.polygons.count)
+                curpoint-list = p.polygons.polygon[i].point-list
+                polygonPath = Path()
+                firstPo= 0
+                startX = 0
+                startY = 0
+                x = 0
+                y = 0
+                this-color = p.polygons.polygon[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                for j in range(curpoint-list.count)
+                    pp = curpoint-list.point[j].point
+                    x = pp.x
+                    y = -pp.y
+                    #NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                    if first-point:
+                        polygonPath.lineTo(x,y)
+                    else {
+                        polygonPath.move-to(x,y)
+                        firstPo= 1
+                        startX = x
+                        startY = y
+
+                polygonPath.translate(-startX, -startY)
+                mw.nativeAddPolygon(startX, startY, polygonPath, OBJ-RUBBER-OFF)
+
+        # NOTE: Polylines should only contain NORMAL stitches.
+        if p.polylines:
+            for i in range(len(p.polylines))
+                curpoint-list = p.polylines.polyline[i].point-list
+                polylinePath = Path()
+                firstPo = 0
+                startX = 0
+                startY = 0
+                x = 0
+                y = 0
+                this-color = p.polylines.polyline[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                for j in range(curpoint-list.count)
+                    pp = curpoint-list.point[j].point
+                    x = pp.x
+                    y = -pp.y
+                    # NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                    if first-point:
+                        polylinePath.line-to(x,y)
+                    else {
+                        polylinePath.move-to(x,y)
+                        firstPo= 1
+                        startX = x
+                        startY = y
+
+                polylinePath.translate(-startX, -startY)
+                mw.nativeAddPolyline(startX, startY, polylinePath, OBJ-RUBBER-OFF)
+
+        if p.rects:
+            for i in range(len(p.rects))
+                r = p.rects.rect[i].rect
+                this-color = p.rects.rect[i].color
+                set_current-color(qRgb(this-color.r, this-color.g, this-color.b))
+                # NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                mw.nativeAddRectangle(embRect-x(r), embRect-y(r), embRect-width(r), embRect-height(r), 0, 0, OBJ-RUBBER-OFF)
+                # TODO: rotation and fill
+
+        set_current-file(file_name)
+        mw.statusbar.showMessage("File loaded.")
+        stitches = ""
+        stitches.setNum(stitchCount)
+
+        if grid-load-from-file:
+            #TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
+            debug_message(".")
+
+        mw.restore_override_cursor()
+
+    p.free()
+
+    # Clear the undo stack so it is not possible to undo past this point.
+    undo-history-length = 0;
+
+    set_current-color(tmpColor);
+    return 1;
+    */
+}
+
+void
+display_file_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", FILE_MENU);
+}
+
+void
+display_edit_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", EDIT_MENU);
+}
+
+void
+display_view_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", VIEW_MENU);
+}
+
+void
+display_settings_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", SETTINGS_MENU);
+}
+
+void
+display_window_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", WINDOW_MENU);
+}
+
+void
+display_help_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", HELP_MENU);
+}
+
+void
+display_recent_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", RECENT_MENU);
+}
+
+void
+display_zoom_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", ZOOM_MENU);
+}
+
+void
+display_pan_menu(void)
+{
+    set_int(mainwnd->state, "menu-state", PAN_MENU);
+}
+
+void
+line_action(void)
+{
+    debug_message("line-action()");
+}
+
+void
+distance_action(void)
+{
+    debug_message("distance-action()");
+}
+
+void
+dolphin_action(void)
+{
+    debug_message("dolphin-action()");
+}
+
+void
+ellipse_action(void)
+{
+    debug_message("ellipse-action()");
+}
 
 
 void
@@ -265,11 +571,11 @@ void
 new_file(void)
 {
     debug_message("New File.");
-    int n_patterns = get_int("n-patterns");
+    int n_patterns = get_int(mainwnd->state, "n-patterns");
     mainwnd->pattern[n_patterns] = embPattern_create();
-    set_int("n-patterns", n_patterns+1);
-    set_int("tab-index", get_int("tab-index")+1);
-    set_int("n-docs", get_int("n-docs")+1);
+    set_int(mainwnd->state, "n-patterns", n_patterns+1);
+    set_int(mainwnd->state, "tab-index", get_int(mainwnd->state, "tab-index")+1);
+    set_int(mainwnd->state, "n-docs", get_int(mainwnd->state, "n-docs")+1);
     /*
     mdi_win = mdi_window(doc_index, mdi_area, "SubWindow"); */
     /* connect(mdi_win, SIGNAL(sendClosemdi_win()), self, SLOT(on_close_mdi_win()));
@@ -328,7 +634,7 @@ void
 exit_program(void)
 {
     debug_message("Closing Embroidermodder 2.0.");
-    set_int("running", 0);
+    running = 0;
 }
 
 void
@@ -390,7 +696,7 @@ open_files_selected(char **files, int n_files)
 
             /* The docIndex doesn't need increased as it
              * is only used for unnamed files. */
-            int n_docs = get_int("n-docs");
+            int n_docs = get_int(mainwnd->state, "n-docs");
             
             n_docs++;
             /* mdi_win = mdi_window(doc_index, self, mdi_area, "SubWindow"); */
@@ -487,7 +793,7 @@ save_file(void)
     debug_message("Save file()");
     /* debug_message(current_file_name); */
 
-    format_type = emb_identify_format(get_str("current-file-name"));
+    format_type = emb_identify_format(get_str(mainwnd->state, "current-file-name"));
     if (format_type == EMBFORMAT_UNSUPPORTED) {
         debug_message("The format of the file is not supported.");
     }
@@ -1259,5 +1565,497 @@ void
 move(void)
 {
     debug_message("scm_locate_point()");
+}
+
+/* .
+ */
+void
+allow_zoom_in(void)
+{
+/*
+    origin = map_to_scene(0, 0);
+    corner = map_to_scene(width(), height());
+    max_size = corner.subtract(origin);
+
+    if (emb_min(max_size.x, max_size.y) < zoom_in_limit) {
+        debug_message("zoom_in limit reached. (limit=%.10f)" % zoom_in_limit)
+        return 0;
+    }
+    return 1;*/
+}
+
+/* .
+ */
+void
+allow_zoom_out(void)
+{
+	/*
+    origin = map_to_scene(0, 0);
+    corner = map_to_scene(width(), height())
+    max_size = corner.subtract(origin);
+
+    if max(max_size.x, max_size.y) > zoom_out_limit:
+        debug_message("zoom_out limit reached. (limit=%.1f)" % zoom_out_limit);
+        return 0;
+
+    return 1; */
+}
+
+/* .
+ */
+void
+zoom_in(void)
+{
+    debug_message("zoom_in()");
+    debug_message("View zoom_in()");
+	/*
+    if (!allow_zoom_in()) {
+        return;
+    }
+
+    set_override_cursor("Wait Cursor");
+    cntr = map_to_scene(Vector(width()/2, height()/2));
+    s = display_zoom_scale_in;
+    scale(s, s);
+
+    center_on(cntr);
+    restore_override_cursor();
+    */
+}
+
+/* .
+ */
+void
+zoom_out(void)
+{
+    debug_message("zoom_out()");
+    debug_message("View zoom_out()");
+	/*
+    if (!allow_zoom_out()
+        return;
+
+    set_override_cursor("Wait Cursor");
+    cntr = map_to_scene(Vector(width()/2, height()/2));
+    s = display_zoom_scale_out;
+    scale(s, s);
+
+    center_on(cntr);
+    restore_override_cursor();
+    */
+}
+
+/* . */
+void
+zoom_selected(void)
+{
+    debug_message("zoom_selected()");
+	/*
+    set_override_cursor("Wait Cursor");
+    item_list = gscene.selected_items();
+    selected_rect_path = Path();
+    for (item in item_list) {
+        selected_rect_path.add_polygon(item.map_to_scene(item.bounding_rect()));
+    }
+
+    selected_rect = selected_rectPath.bounding_rect()
+    if (selected_rect) {
+        message = translate("Preselect objects before invoking the zoom_selected command.")
+        information(translate("zoom_selected Preselect"), message) */
+        /* TODO: Support Post selection of objects */ /*
+    }
+
+    fit_in_view(selected_rect, "KeepAspectRatio")
+    restore_override_cursor() */
+}
+
+/* .
+ */
+void
+zoom_scale(void)
+{
+    debug_message("zoom_scale()");
+    debug_message("Implement zoom_scale.");
+}
+
+/* .
+ */
+void
+zoom_center(void)
+{
+    debug_message("zoom_center()");
+    debug_message("Implement zoom_center.");
+}
+
+/* .
+ */
+void
+zoom_all(void)
+{
+    debug_message("zoom_all()");
+    debug_message("Implement zoom_all.");
+}
+
+/* .
+ */
+void
+zoom_extents(void)
+{
+    debug_message("zoom_extents()");
+	/*
+    set_override_cursor("WaitCursor")
+    extents = gscene.items_bounding_rect()
+    if extents:
+        extents.set_width(grid_size_x)
+        extents.set_height(grid_size_y)
+        extents.move_center(Vector(0, 0))
+
+    fit_in_view(extents, "KeepAspectRatio")
+    restore_override_cursor()
+    */
+}
+
+void
+zoom_real_time(void)
+{
+    debug_message("zoomRealtime()");
+    debug_message("Implement zoomRealtime.");
+}
+
+void
+zoom_previous(void)
+{
+    debug_message("zoomPrevious()");
+    debug_message("Implement zoomPrevious.");
+}
+
+void
+zoom_window(void)
+{
+    debug_message("zoom_window()");
+    /*
+    gview = active_view();
+    if gview:
+        gview->zoom_window(); */
+
+	/*
+    zoom_window_active = 1;
+    selecting_active = 0;
+    clear_selection();
+    */
+}
+
+void
+zoom_dynamic(void)
+{
+    debug_message("zoom_dynamic()");
+    debug_message("Implement zoom_dynamic.");
+}
+
+
+void
+zoom_to_point(EmbVector mouse_point, float zoom_dir)
+{
+    double s;
+    /*
+    point-before-scale(map_to_scene(mouse-point)) */
+
+    /* Do The zoom */
+    s = 1.0;
+    /*
+    if (zoom-dir > 0) {
+        if (!allow-zoom-in()) {
+            return;
+        }
+        s = display-zoom-scale-action-in;
+    }
+    else {
+        if (!allow-zoom-out()) {
+            return;
+        }
+        s = display-zoom-scale-action-out;
+    }
+
+    scale(s, s);
+    align-scene-point-with-view-point(point-before-scale, mouse-point);
+    recalculate-limits();
+    align-scene-point-with-view-point(point-before-scale, mouse-point);
+
+    update-mouse-coords(mouse-point.x, mouse-point.y);
+    if pasting-active:
+        v = scene-mouse-point.subtract(paste-delta);
+        paste-object-item-group.set_pos(v);
+
+    if (selecting-active) {
+        rect = make_rectangle(map-from-scene(scenePressPoint), mousePoint).normalized();
+        select-box.set_geometry(rect);
+    }
+    */
+
+    scene_update();
+}
+
+/* .
+ */
+void
+pan_real_time(void)
+{
+    debug_message("pan-real-time-action()");
+    /* mainwnd->panning_real_time_active = 1; */
+}
+
+/* .
+ */
+void
+pan_point(void)
+{
+    debug_message("pan-point-action()");
+    /* mainwnd->panning_point_active = 1; */
+}
+
+/* .
+ */
+void
+pan_left(void)
+{
+    debug_message("pan-left-action()");
+    /*
+    horizontal-scroll-bar().set_value(horizontal-scroll-bar().value() + pan-distance);
+    update-mouse-coords(view-mouse-point.x(), view-mouse-point.y());
+    scene_update();
+    */
+}
+
+/* .
+ */
+void
+pan_right(void)
+{
+    debug_message("pan-right-action()");
+    /*
+    horizontal-scroll-bar().set_value(horizontal-scroll-bar().value() - pan-distance);
+    update-mouse-coords(view-mouse-point.x(), view-mouse-point.y());
+    scene_update();
+    */
+}
+
+/* .
+ */
+void
+pan_up(void)
+{
+    debug_message("pan-up-action()");
+    /*
+    vertical-scroll-bar().set_value(vertical-scroll-bar().value() + pan-distance);
+    update-mouse-coords(view-mouse-point.x(), view-mouse-point.y());
+    scene_update();
+    */
+}
+
+/* .
+ */
+void
+pan_down(void)
+{
+    debug_message("pan-down-action()");
+    /*
+    vertical-scroll-bar().set_value(vertical-scroll-bar().value() - pan-distance);
+    update-mouse-coords(view-mouse-point.x(), view-mouse-point.y());
+    scene_update();
+    */
+}
+
+
+void
+window_next(void)
+{
+    debug_message("window_next()");
+}
+
+void
+window_previous(void)
+{
+    debug_message("window_previous()");
+}
+
+/* Close editor window.
+ */
+void
+window_close(void)
+{
+    debug_message("window_close()");
+}
+
+/* Tile editor windows.
+ */
+void
+window_tile(void)
+{
+    debug_message("window_tile()");
+}
+
+/* Close all editor windows.
+ */
+void
+window_close_all(void)
+{
+    debug_message("window_close_all()");
+}
+
+/* Cascade editor windows.
+ */
+void
+window_cascade(void)
+{
+    debug_message("window_cascade()");
+}
+
+
+void
+settings_snap(void)
+{
+    debug_message("snap settings tab");
+}
+
+void
+settings_grid(void)
+{
+    debug_message("grid settings tab");
+}
+
+void
+settings_ruler(void)
+{
+    debug_message("ruler settings tab");
+}
+
+void
+settings_ortho(void)
+{
+    debug_message("settings ortho");
+}
+
+void
+settings_polar(void)
+{
+    debug_message("settings polar");
+}
+
+void
+settings_qsnap(void)
+{
+    debug_message("settings qsnap");
+}
+
+void
+settings_qtrack(void)
+{
+    debug_message("settings qtrack");
+}
+
+void
+settings_lwt(void)
+{
+    debug_message("settings lwt");
+}
+
+void
+toggle(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key)
+{
+    int value = get_int(mainwnd->state, key);
+    set_int(mainwnd->state, key, !value);
+}
+
+void
+toggle_grid(void)
+{
+    debug_message("StatusBarButton toggleGrid()");
+    toggle(mainwnd->state, "show-grid");
+}
+
+void
+toggle_ruler(void)
+{
+    debug_message("StatusBarButton toggleRuler()");
+    toggle(mainwnd->state, "show-ruler");
+}
+
+void
+toggle_ortho(void)
+{
+    debug_message("StatusBarButton toggleOrtho()");
+    toggle(mainwnd->state, "show-ortho");
+}
+
+void
+set_snap(int active)
+{
+    debug_message("View toggle-snap()");
+    printf("%d\n", active);
+    /*
+    set_override_cursor("WaitCursor");
+    #  TODO: finish this.
+    gscene.set-property("ENABLE-SNAP", active);
+    gscene.update();
+    restore-override-cursor();
+    */
+}
+
+void
+toggle_track(void)
+{
+    debug_message("StatusBarButton toggleQTrack()");
+    toggle(mainwnd->state, "track-mode");
+}
+
+void
+toggle_lwt(void)
+{
+    debug_message("StatusBarButton toggleLwt()");
+    toggle(mainwnd->state, "show-lwt");
+}
+
+/*
+ * Switch to rendering all line weights more accurately,
+ * so the effect of different thread weights
+ * can be understood.
+ */
+void
+enable_lwt(void)
+{
+    debug_message("StatusBarButton enableLwt()");
+    set_int(mainwnd->state, "show-lwt", 1);
+}
+
+/*
+ * Switch to rendering all line weights the same,
+ * so the effect of different thread weights can be ignored.
+ */
+void
+disable_lwt(void)
+{
+    debug_message("StatusBarButton disableLwt()");
+    set_int(mainwnd->state, "show-lwt", 0);
+}
+
+/* Turn real rendering on and see the pattern as
+ * an approximation of what the stitched embroidery
+ * will look like.
+ */
+void
+enable_real(void)
+{
+    debug_message("StatusBarButton enableReal()");
+    set_int(mainwnd->state, "real-render", 1);
+}
+
+/*
+ * Turn real rendering off and see the pattern
+ * as collection of geometric primatives.
+ */
+void
+disable_real(void)
+{
+    debug_message("StatusBarButton disableReal()");
+    set_int(mainwnd->state, "real-render", 0);
 }
 

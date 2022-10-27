@@ -18,7 +18,8 @@ if (DEBUG)
 # Win32 uses compilers that complain about these flags.
 if (WIN32)
 else (WIN32)
-add_compile_options(-g -O2 -pedantic -Wall -Wextra -Werror)
+#add_compile_options(-g -O2 -pedantic -Wall -Wextra -Werror)
+add_compile_options(-g -O2 -pedantic)
 endif (WIN32)
 endif (DEBUG)
 

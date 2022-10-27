@@ -20,20 +20,6 @@
 
 #include "em2.h"
 
-#define MAX_SELECTED 10000
-
-int selected_items[MAX_SELECTED];
-int n_selected;
-
-const char *symbols_docstring =
-    "Symbols use the SVG path syntax.\n" \
-    "\n" \
-    "In theory, we could combine the icons and symbols systems,\n" \
-    "since they could be rendered once and stored as icons in Qt.\n" \
-    "(Or as textures in FreeGLUT.)\n" \
-    "\n" \
-    "Also we want to render the patterns themselves using SVG\n" \
-    "syntax, so it would save on repeated work overall.\n";
 
 void
 scene_update(void)
@@ -88,6 +74,18 @@ void
 disableLwt(void)
 {
 
+}
+
+
+EmbVector map_to_scene(double x, double y)
+{
+    char a[100];
+    char *current_scene = get_str(mainwnd->state, "scene");
+    sprintf(a, "%s-offset", current_scene);
+    EmbVector result = get_vector(mainwnd->state, a);
+    result.x = x;
+    result.y = y;
+    return result;
 }
 
 /*
@@ -247,7 +245,7 @@ draw_background(int scene, Painter *painter, SDL_Rect rect)
     a = rect.intersects(grid_path.controlPointRect());
     */
     int a = 1;
-    if (get_int("enable-grid") && a) {
+    if (get_int(mainwnd->state, "enable-grid") && a) {
         EmbColor grid_color;
         grid_color.r = 0;
         grid_color.g = 0;
@@ -279,50 +277,60 @@ char_to_int(char a)
 }
 
 EmbColor
-get_color(char *key)
+get_color(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key)
 {
     EmbColor color;
-    char *s = get_str(key);
+    char *s = get_str(state, key);
     color.r = 16*char_to_int(s[0]) + char_to_int(s[1]);
     color.g = 16*char_to_int(s[2]) + char_to_int(s[3]);
     color.b = 16*char_to_int(s[4]) + char_to_int(s[5]);
     return color;
 }
 
+EmbVector view_mouse_point;
+
 void
 draw_crosshair(Painter *painter)
 {
     /* painter.setBrush("NoBrush"); */
     Pen *crosshair_pen = create_pen();
-    crosshair_pen->color = get_color("crosshair-color");
+    crosshair_pen->color = get_color(mainwnd->state, "crosshair-color");
     crosshair_pen->cosmetic = 1;
     painter->pen = crosshair_pen;
 
+    horizontal_rule(
+        mainwnd,
+        view_mouse_point.x,
+        view_mouse_point.y-get_int(mainwnd->state, "crosshair-size"),
+        view_mouse_point.y+get_int(mainwnd->state, "crosshair-size"),
+        ALWAYS_VISIBLE);
+
+    vertical_rule(
+        mainwnd,
+        view_mouse_point.y,
+        view_mouse_point.x-get_int(mainwnd->state, "crosshair-size"),
+        view_mouse_point.x+get_int(mainwnd->state, "crosshair-size"),
+        ALWAYS_VISIBLE);
+
     /*
-    start = map_to_scene(view_mouse_point.x, view_mouse_point.y-get_int("crosshair-size"))
-    end = map_to_scene(view_mouse_point.x, view_mouse_point.y+get_int("crosshair-size"))
-    painter.draw-line(Line(start, end))
-
-    start = map_to_scene(view_mouse_point.x-settings.crosshair-size, view_mouse_point.y)
-    end = map_to_scene(view_mouse_point.x+settings.crosshair-size, view_mouse_point.y)
-    painter.drawLine(Line(start, end))
-
-    top-left = map_to_scene(view_mouse_point.x-settings.selection-pickbox-size,
-        view_mouse_point.y-settings.selection-pickbox-size)
+    top-left = map_to_scene(
+        view_mouse_point.x-settings.selection-pickbox-size,
+        view_mouse_point.y-settings.selection-pickbox-size);
     bottom-right = map_to_scene(view_mouse_point.x+settings.selection-pickbox-size,
-        view_mouse_point.y+settings.selection-pickbox-size)
-    painter.drawRect(Rect(top-left, bottom-right))
+        view_mouse_point.y+settings.selection-pickbox-size);
+    painter.drawRect(Rect(top-left, bottom-right));
 
     p = QPixmap-grabWindow(winId());
-    p.save(QString("test.bmp"), "bmp"); */
+    p.save(QString("test.bmp"), "bmp");
+    */
 }
 
 /* TODO: and findClosestSnapPoint == 1 */
 void
-draw_closest_qsnap(int view)
+draw_closest_qsnap(Painter *painter)
 {
-    printf("%d\n", view);
-    int qsnap_aperture_size = get_int("qsnap-aperture-size");
+    /* printf("%d\n", view); */
+    int qsnap_aperture_size = get_int(mainwnd->state, "qsnap-aperture-size");
     printf("%d\n", qsnap_aperture_size);
     /*
     qsnap-pen = Pen(Color(qsnapLocator-color));
@@ -360,15 +368,16 @@ draw_closest_qsnap(int view)
 
 /* Draw grip points for all selected objects. */
 void
-draw_foreground(int view, int painter, SDL_Rect rect)
+draw_foreground(int view, Painter *painter, SDL_Rect rect)
 {
-    printf("called with: %d %d %d", view, painter, rect.x);
+    printf("called with: %d %d", view, rect.x);
+    Pen *grip_pen = create_pen();
+    grip_pen->width = 2.0;
+    grip_pen->join_style = MITER_JOIN;
+    grip_pen->cosmetic = 1;
+    /* grip_pen = Pen(rgb=grip-color-cool); */
+    painter->pen = grip_pen;
     /*
-    grip_pen = Pen(rgb=grip-color-cool);
-    set_width(grip_pen, 2);
-    set_join_style(grip_pen, "MiterJoin");
-    set_cosmetic(grip_pen, 1);
-    set_pen(painter, grip_pen);
     grip-offset = Vector(
         selection-grip-size, selection-grip-size
     );
@@ -398,16 +407,16 @@ draw_foreground(int view, int painter, SDL_Rect rect)
             }
         }
     }
+    */
 
-    if (!mainwnd->selecting_active) {
-        draw_closest_qsnap(self);
-        draw_crosshair(self);
+    if (!get_int(mainwnd->state, "selecting_active")) {
+        draw_closest_qsnap(painter);
+        draw_crosshair(painter);
     }
 
-    if (mainwnd->show_ruler) {
+    if (get_int(mainwnd->state, "show-ruler")) {
         draw_rulers();
     }
-    */
 }
 
 /*
@@ -438,7 +447,7 @@ saveBMC(void/* MdiWindow *subwindow */)
 
     painter = QPainter(img)
     targetRect = make_rectangle(0,0,150,150)
-    if (get_int("printing-disable-bg")) { */
+    if (get_int(mainwnd->state, "printing-disable-bg")) { */
         /* TODO: Make BMC background into it's own setting? */ /*
         brush = gscene.backgroundBrush()
         gscene.setBackgroundBrush(Qt-NoBrush)
@@ -477,11 +486,11 @@ create_settings_widget(char *type)
 void
 create_settings_box(int box)
 {
+    int i;
     printf("box: %d\n", box);
     /*
-    int i;
     debug_message(box.title);
-    for (i=0; box.settings[i].type >= 0 i++) {
+    for (i=0; box.settings[i].type >= 0; i++) {
         create_settings_widget(box.settings[i]);
     }
     */
@@ -490,11 +499,11 @@ create_settings_box(int box)
 void
 create_settings_tab(int tab)
 {
+    int i;
     printf("tab: %d\n", tab);
     /*
-    int i;
     debug_message(tab.title);
-    for (i=0 i<tab.n-boxes i++) {
+    for (i=0; i<tab.n-boxes; i++) {
         create_settings_box(tab.box[i]);
     }
     */
@@ -640,7 +649,7 @@ void
 select_all_(void)
 {
     debug_message("select_all()");
-    int gview = get_int("active-view");
+    int gview = get_int(mainwnd->state, "active-view");
     /*
     if (gview) {
         gview.select_all();
@@ -655,7 +664,7 @@ select_all_(void)
 void
 design_details_(void)
 {
-    int scene = get_int("active-scene");
+    int scene = get_int(mainwnd->state, "active-scene");
     if (scene) {
         /*
         dialog = details-dialog-init(scene, self);
@@ -664,24 +673,26 @@ design_details_(void)
     }
 }
 
+int n_tips = 15;
+
 void
 button_tip_of_the_day_clicked(int button)
 {
     debug_message("button-tip-of-the-day-clicked()");
     if (button == 0) {
-        if (get_int("general-current-tip") > 0) {
-            decrement("general-current-tip");
+        if (get_int(mainwnd->state, "general-current-tip") > 0) {
+            decrement(mainwnd->state, "general-current-tip");
         }
         else {
-            set_int("general-current-tip", get_int("n-tips")-1);
+            set_int(mainwnd->state, "general-current-tip", n_tips-1);
         }
         /* setText(tips[general-current-tip]); */
         return;
     }
     if (button == 1) {
-        increment("general-current-tip");
-        if (get_int("general-current-tip") >= get_int("n-tips")) {
-            set_int("general-current-tip", 0);
+        increment(mainwnd->state, "general-current-tip");
+        if (get_int(mainwnd->state, "general-current-tip") >= n_tips) {
+            set_int(mainwnd->state, "general-current-tip", 0);
         }
         /* setText(tips[general-current-tip]); */
         return;
@@ -778,7 +789,7 @@ setCrossHairColor(void)
 void
 alert(char *title, char *message)
 {
-    if (get_int("debug-mode")) {
+    if (debug_mode) {
         FILE *f;
         f = fopen("alert.txt", "a");
         fprintf(f, "%s\n%s\n", title, message);
@@ -1738,7 +1749,7 @@ on_close_mdi_win(void)
 {
     int keep_maximized;
     debug_message("onClosemdi-win()");
-    decrement("n-docs");
+    decrement(mainwnd->state, "n-docs");
     keep_maximized = 0;
     /*
     if (the_mdi_win) {
@@ -1773,12 +1784,12 @@ update_menu_toolbar_statusbar(void)
 {
     debug_message("updateMenuToolbarStatusbar()");
     /*
-    action-enabled[ACTION-PRINT] = n-docs
-    action-enabled[ACTION-WINDOW-CLOSE] = n-docs
-    action-enabled[ACTION-DESIGN-DETAILS] = n-docs
+    action-enabled[ACTION-PRINT] = n-docs;
+    action-enabled[ACTION-WINDOW-CLOSE] = n-docs;
+    action-enabled[ACTION-DESIGN-DETAILS] = n-docs;
     */
 
-    if (get_int("n-docs")) {
+    if (get_int(mainwnd->state, "n-docs")) {
         /*
         #Toolbars
         for key in toolbar.keys() {
@@ -1818,8 +1829,8 @@ update_menu_toolbar_statusbar(void)
         */
     }
     else {
+        int i;
         /*
-        int i
         int toolbars-to-hide[] = {
             TOOLBAR-VIEW,
             TOOLBAR-ZOOM,
@@ -3952,14 +3963,14 @@ comboboxQSnapLocatorColorCurrent_index_changed(int index)
 void
 slider_qsnap_locator_size_value_changed(double value)
 {
-    set_float("dialog-qsnap-locator-size", value);
+    set_float(mainwnd->state, "dialog-qsnap-locator-size", value);
 }
 
 /* . */
 void
 slider_qsnap_aperture_size_value_changed(double value)
 {
-    set_float("dialog-qsnap-aperture-size", value);
+    set_float(mainwnd->state, "dialog-qsnap-aperture-size", value);
 }
 
 void
@@ -3967,7 +3978,7 @@ checkbox_lwt_show_lwt_state_changed(int checked)
 {
     /*
     preview.lwt-show-lwt = checked;
-    if (get_int("preview-lwt-show-lwt")) {
+    if (get_int(mainwnd->state, "preview-lwt-show-lwt")) {
         enable_lwt();
     }
     else {
@@ -3990,8 +4001,8 @@ checkbox_lwt_show_lwt_state_changed(int checked)
 void
 checkbox_lwt_real_render_state_changed(int checked)
 {
-    set_int("preview-lwt-real-render", checked);
-    if (get_int("preview-lwt-real-render")) {
+    set_int(mainwnd->state, "preview-lwt-real-render", checked);
+    if (get_int(mainwnd->state, "preview-lwt-real-render")) {
         enableReal();
     }
     else {
@@ -4067,14 +4078,14 @@ accept_changes(void)
     update-all-viewGridcolors(dialogGridcolor);
     update-all-view-ruler-colors(dialog-ruler-color);
 
-    if (get_int("dialog-lwt-show-lwt")) {
+    if (get_int(mainwnd->state, "dialog-lwt-show-lwt")) {
         enableLwt();
     }
     else {
         disableLwt();
     }
 
-    if (get_int("dialog-lwt-real-render")) {
+    if (get_int(mainwnd->state, "dialog-lwt-real-render")) {
         enableReal();
     }
     else {
@@ -4114,14 +4125,14 @@ reject_changes(void)
     update-all-viewGridcolors(dialogGridcolor);
     update-all-view-ruler-colors(dialog-ruler-color);
 
-    if (get_int("dialog-lwt-show-lwt")) {
+    if (get_int(mainwnd->state, "dialog-lwt-show-lwt")) {
         enable_lwt();
     }
     else {
         disable_lwt();
     }
 
-    if (get_int("dialog-lwt-real-render")) {
+    if (get_int(mainwnd->state, "dialog-lwt-real-render")) {
         enable_real();
     }
     else {
@@ -4143,8 +4154,8 @@ load_image(char *path)
     char image_fname[200];
     FILE *f;
     sprintf(image_fname, "%s%s%s",
-        get_str("application-folder"),
-        get_str("os-seperator"),
+        get_str(mainwnd->state, "application-folder"),
+        get_str(mainwnd->state, "os-seperator"),
         path);
     f = fopen(image_fname, "wb");
     /*
@@ -4518,7 +4529,7 @@ preview_off(void)
     }
     */
 
-    set_int("preview-active", 0);
+    set_int(mainwnd->state, "preview-active", 0);
 
     scene_update();
 }
@@ -4527,14 +4538,14 @@ void
 enable_move_rapid_fire(void)
 {
     debug_message("Enabling rapid move.");
-    set_int("rapid-move-active", 1);
+    set_int(mainwnd->state, "rapid-move-active", 1);
 }
 
 void
 disable_move_rapid_fire(void)
 {
     debug_message("Disabling rapid move.");
-    set_int("rapid-move-active", 0);
+    set_int(mainwnd->state, "rapid-move-active", 0);
 }
 
 void
@@ -4590,13 +4601,13 @@ set_real(int active)
 int
 is_lwt_enabled(void)
 {
-    return get_int("show-lwt");
+    return get_int(mainwnd->state, "show-lwt");
 }
 
 int
 is_real_enabled(void)
 {
-    return get_int("real-render");
+    return get_int(mainwnd->state, "real-render");
 }
 
 void
@@ -4850,7 +4861,7 @@ mouse_press_event(SDL_Event event)
             #End select-box Code
         }
 
-        if (get_int("pasting-active")) {
+        if (get_int(mainwnd->state, "pasting-active")) {
             item_list = paste-object-item-group.childItems();
             gscene.destroy-item-group(paste-object-item-group);
             for (item in item_list) {
@@ -4870,7 +4881,7 @@ mouse_press_event(SDL_Event event)
             selecting-active = 0;
         }
 
-        if (get_int("zoom-window-active")) {
+        if (get_int(mainwnd->state, "zoom-window-active")) {
             fit_in_view(path.bounding-rect(), Qt-KeepAspectRatio);
             clear_selection();
         }
@@ -5020,22 +5031,22 @@ mouse_move_event(SDL_Event event)
                 preview-object-item-group.moveBy(delta-x, delta-y);
     */
 
-    if (get_int("pasting-active")) {
+    if (get_int(mainwnd->state, "pasting-active")) {
         /*
         v = scene-mouse-point.subtract(pasteDelta);
         paste-object-item-group.set_pos(v);
         */
     }
 
-    if (get_int("moving-active")) {
+    if (get_int(mainwnd->state, "moving-active")) {
         /* Ensure that the preview is only shown if the mouse has moved. */
-        if (!get_int("preview-active")) {
+        if (!get_int(mainwnd->state, "preview-active")) {
             /* preview-on("PREVIEW-CLONE-SELECTED", "PREVIEW-MODE-MOVE",
                    scenePressPoint.x, scenePressPoint.y, 0)  */
         }
     }
 
-    if (get_int("selecting-active")) {
+    if (get_int(mainwnd->state, "selecting-active")) {
         /*
         if (scenemove-point.x >= scenePressPoint.x(void)) {
             select-box.setDirection(1);
@@ -5048,7 +5059,7 @@ mouse_move_event(SDL_Event event)
         */
     }
 
-    if (get_int("panning-active")) {
+    if (get_int(mainwnd->state, "panning-active")) {
         /*
         horizontal-scroll-bar().set_value(
             horizontal-scroll-bar().value()
@@ -5144,7 +5155,7 @@ context_menu_event(SDL_Event event)
         */
     }
 
-    if (get_int("pasting-active")) {
+    if (get_int(mainwnd->state, "pasting-active")) {
         return;
     }
 
@@ -5211,16 +5222,16 @@ delete_pressed(void)
     }
     */
     restore_override_cursor();
-    if (get_int("pasting-active")) {
+    if (get_int(mainwnd->state, "pasting-active")) {
         /*
         gscene.remove-item(paste-object-item-group);
         del paste-object-item-group;
         */
     }
 
-    set_int("pasting-active", 0);
-    set_int("zoom-window-active", 0);
-    set_int("selecting-active", 0);
+    set_int(mainwnd->state, "pasting-active", 0);
+    set_int(mainwnd->state, "zoom-window-active", 0);
+    set_int(mainwnd->state, "selecting-active", 0);
     /*
     select-box.hide();
     stop-gripping(0);
@@ -5232,19 +5243,19 @@ void
 escape_pressed(void)
 {
     debug_message("View escape-pressed()");
-    if (get_int("pasting-active")) {
+    if (get_int(mainwnd->state, "pasting-active")) {
         /*
         gscene.remove-item(paste-object-item-group)
         del paste-object-item-group
         */
     }
 
-    set_int("pasting-active", 0);
-    set_int("zoom-window-active", 0);
-    set_int("selecting-active", 0);
+    set_int(mainwnd->state, "pasting-active", 0);
+    set_int(mainwnd->state, "zoom-window-active", 0);
+    set_int(mainwnd->state, "selecting-active", 0);
     /*
     select-box.hide()
-    if (get_int("gripping-active")) {
+    if (get_int(mainwnd->state, "gripping-active")) {
         stop_gripping(0);
     }
     else {
@@ -5260,7 +5271,7 @@ escape_pressed(void)
     */
     restore_override_cursor();
 
-    int gview = get_int("active-view");
+    int gview = get_int(mainwnd->state, "active-view");
     if (gview) {
         /*
         gview.clearRubberRoom();

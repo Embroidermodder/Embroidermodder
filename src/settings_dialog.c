@@ -642,9 +642,9 @@ create_tab_printing(void)
 }
 
 void
-copy_setting(char *to, char *from)
+copy_setting(Window *w, char *to, char *from)
 {
-    set_str(to, get_str(from));
+    set_str(w, to, get_str(w, from));
 }
 
 void

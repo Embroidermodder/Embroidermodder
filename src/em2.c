@@ -16,240 +16,9 @@
 #include "em2.h"
 
 Window *mainwnd;
-extern Action action_list[MAX_ACTIONS];
-
-unsigned char clear_color[] = {50, 50, 50};
-unsigned char toolbar_bg_color[] = {150, 150, 200};
-unsigned char bg_color[] = {100, 150, 210};
-unsigned char menubar_color[] = {200, 200, 250};
-unsigned char white[] = {255, 255, 255};
-
-char *icon_layout[] = {
-    "1", "1", "new",
-    "2", "1", "open",
-    "3", "1", "save",
-    "4", "1", "save-as",
-    "5", "1", "cut",
-    "6", "1", "copy",
-    "7", "1", "paste",
-    "8", "1", "delete",
-    "9", "1", "undo",
-    "10", "1", "redo",
-    /*
-    "11", "1", "check-for-updates",
-    "12", "1", "select-all",
-    */
-    "13", "1", "whats-this",
-    "14", "1", "design-details",
-    "15", "1", "print-pattern",
-    "16", "1", "exit-program",
-
-    "17", "1", "window-close",
-    "18", "1", "window-close-all",
-    "19", "1", "window-cascade",
-    "20", "1", "window-tile",
-    "21", "1", "window-next",
-    "22", "1", "window-previous",
-
-    "1", "2", "help",
-    /*
-    "2", "2", "changelog-dialog",
-    */
-    "3", "2", "tip-of-the-day-dialog",
-    "4", "2", "about-dialog",
-
-    "5", "2", "icon-16",
-    "6", "2", "icon-24",
-    "7", "2", "icon-32",
-    "8", "2", "icon-48",
-    "9", "2", "icon-64",
-    "10", "2", "icon-128",
-
-    "11", "2", "settings-dialog",
-    "12", "2", "make-layer-current",
-
-    "13", "2", "pan-real-time",
-    "14", "2", "pan-point",
-    "15", "2", "pan-left",
-    "16", "2", "pan-right",
-    "17", "2", "pan-up",
-    "18", "2", "pan-down",
-
-    "19", "2", "day",
-    "20", "2", "night",
-
-    "1", "3", "layers",
-    "2", "3", "layer-selector",
-    "3", "3", "layer-previous",
-    "4", "3", "color-selector",
-    "5", "3", "line-type-selector",
-    "6", "3", "line-weight-selector",
-    "7", "3", "hide-all-layers",
-    "8", "3", "show-all-layers",
-    "9", "3", "freeze-all-layers",
-    "10", "3", "thaw-all-layers",
-    "11", "3", "lock-all-layers",
-    "12", "3", "unlock-all-layers",
-
-    "13", "3", "text-bold",
-    "14", "3", "text-italic",
-    "15", "3", "text-underline",
-    "16", "3", "text-strikeout",
-    "17", "3", "text-overline",
-    
-    "18", "3", "zoom-real-time",
-    "19", "3", "zoom-previous",
-    "20", "3", "zoom-window",
-    "21", "3", "zoom-dynamic",
-    "22", "3", "zoom-scale",
-    "23", "3", "zoom-center",
-    "24", "3", "zoom-in",
-    "25", "3", "zoom-out",
-    "26", "3", "zoom-selected",
-    "27", "3", "zoom-all",
-    "28", "3", "zoom-extents",
-
-    "1", "4", "treble-clef",
-    "2", "4", "path",
-    "3", "4", "circle",
-    "4", "4", "line",
-    "5", "4", "distance",
-    "6", "4", "dolphin",
-    "7", "4", "ellipse",
-
-    "8", "4", "heart",
-    "9", "4", "locate-point",
-    "10", "4", "move",
-    /*
-    "11", "4", "export",
-    "12", "4", "heart4",
-    "13", "4", "heart5",
-    "14", "4", "single-line-text",
-    "15", "4", "spell-check",
-    "16", "4", "quick-select"
-    "17", "4", "rectangle",
-    "18", "4", "rgb",
-    "19", "4", "rotate",
-    "20", "4", "sandbox",
-    "21", "4", "quickleader",
-    "22", "4", "snowflake",
-    "23", "4", "star",
-    "24", "4", "platform",
-    "25", "4", "point",
-    "26", "4", "polygon",
-    "27", "4", "polyline",
-    "28", "4", "settings-dialog",
-    "29", "4", "quickleader",
-    "30", "4", "locate-point",
-    "31", "4", "point",
-    */
-    "END", "END", "END"
-};
-
-char *file_labels[] = {
-    "File", "file-menu",
-    "New", "new",
-    "Open", "open",
-    "---", "---",
-    "Save", "save",
-    "Save as...", "save-as",
-    "Export", "export",
-    "---", "---",
-    "Print", "print",
-    "---", "---",
-    "Design Details", "design-details",
-    "---", "---",
-    "Exit", "exit-program",
-    "END", "END"
-};
-
-char *edit_labels[] = {
-    "Edit", "edit-menu",
-    "Undo", "undo",
-    "Redo", "redo",
-    "---", "---",
-    "Cut", "cut",
-    "Copy", "copy",
-    "Paste", "paste",
-    "END", "END"
-};
-
-char *view_labels[] = {
-    "View", "view-menu",
-    "Day", "day-vision",
-    "Night", "night-vision",
-    "---", "---",
-    "Icon 16", "icon-16",
-    "Icon 24", "icon-24",
-    "Icon 32", "icon-32",
-    "Icon 48", "icon-48",
-    "Icon 64", "icon-64",
-    "Icon 128", "icon-128",    
-    "END", "END"
-};
-
-char *settings_labels[] = {
-    "Settings", "settings-menu",
-    "Settings Dialog", "settings-dialog",
-    "END", "END"
-};
-
-char *zoom_labels[] = {
-    "Zoom", "zoom-menu",
-    "Zoom Real Time", "zoom-real-time",
-    "Zoom Previous", "zoom-previous",
-    "---", "---",
-    "Zoom Window", "zoom-window",
-    "Zoom Dynamic", "zoom-dynamic",
-    "Zoom Scale", "zoom-scale",
-    "Zoom Center", "zoom-center",
-    "---", "---",
-    "Zoom In", "zoom-in",
-    "Zoom Out", "zoom-out",
-    "---", "---",
-    "Zoom Selected", "zoom-selected",
-    "Zoom All", "zoom-all",
-    "Zoom Extents", "zoom-extents",
-    "END", "END"
-};
-
-char *pan_labels[] = {
-    "Pan", "pan-menu",
-    "Pan Real Time", "pan-real-time",
-    "Pan Point", "pan-point",
-    "---", "---",
-    "Pan Left", "pan-left",
-    "Pan Right", "pan-right",
-    "Pan Up", "pan-up",
-    "Pan Down", "pan-down",
-    "END", "END"
-};
- 
-char *window_labels[] = {
-    "Window", "window-menu",
-    "Window Cascade", "window-cascade",
-    "END", "END"
-};
-
-char *help_labels[] = {
-    "Help", "help-menu",
-    "Help", "help",
-    "---", "---",
-    "Changelog", "changelog",
-    "---", "---",
-    "Tip of the Day", "tip-of-the-day",
-    "---", "---",
-    "About", "about",
-    "---", "---",
-    "What's This?", "whats-this",
-    "END", "END"
-};
-
-char *recent_labels[] = {
-    "Recent", "recent-menu",
-    "None", "do-nothing",
-    "END", "END"
-};
+Window *settings_dialog_wnd;
+Window *about_dialog_wnd;
+Window *property_editor_wnd;
 
 /*
  * ACTUATOR
@@ -265,7 +34,7 @@ char *recent_labels[] = {
 int
 actuator(char *action)
 {
-    increment("undo-history-position");
+    increment(mainwnd->state, "undo-history-position");
     /*
     if (load_int("undo-history-max")
         <= load_int("undo-history-position")) {
@@ -291,11 +60,14 @@ actuator(char *action)
     return 0;
 }
 
+int running = 1;
+int debug_mode = 0;
+int testing = 0;
+
 /* Function definitions */
 int
 main(int argc, char *argv[])
 {
-    int debug_mode = 0, testing = 0;
     int i;
 
     for (i=1; i<argc; i++) {
@@ -334,7 +106,12 @@ main(int argc, char *argv[])
         return 2;
     }
 
-    create_window();
+    puts("Embroidermodder 2.");
+    puts("Copyright 2013-2022 The Embroidermodder Team");
+    puts("Distributed under the terms of the zlib license.");
+    puts("");
+    mainwnd = create_window(state);
+    menus_init();
 
     /* Open tabs here */
     /*
@@ -350,10 +127,14 @@ main(int argc, char *argv[])
         embPattern_readAuto(pattern[file-1], argv[file]);
     }*/
 
-    set_int("debug-mode", debug_mode);
-    set_int("testing", testing);
-
-    main_loop();
+    /* The main rendering loop. */
+    while (get_int(mainwnd->state, "running")) {
+        process_input(mainwnd);
+        render(mainwnd);
+        SDL_RenderPresent(mainwnd->renderer);
+        /* if other windows are open, update them here */
+        SDL_Delay(50);
+    }
 
     destroy_window(mainwnd);
     SDL_Quit();
@@ -362,31 +143,17 @@ main(int argc, char *argv[])
 }
 
 void
-destroy_window(Window *window)
+destroy_window(Window *w)
 {
-    SDL_DestroyRenderer(window->renderer);
-    SDL_DestroyWindow(window->window);
-    TTF_CloseFont(window->font);
-}
-
-
-/* The main rendering loop.
- */
-void
-main_loop(void)
-{
-    while (get_int("running")) {
-        process_input();
-        render();
-        SDL_RenderPresent(mainwnd->renderer);
-        SDL_Delay(50);
-    }
+    SDL_DestroyRenderer(w->renderer);
+    SDL_DestroyWindow(w->window);
+    TTF_CloseFont(w->font);
 }
 
 /* Process input: main loop step 1.
  */
 void
-process_input()
+process_input(Window *w)
 {
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     int i;
@@ -394,7 +161,7 @@ process_input()
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
-            set_int("running", 0);
+            set_int(w->state, "running", 0);
             continue;
         }
         if (event.type == SDL_TEXTINPUT) {
@@ -411,7 +178,7 @@ process_input()
                     save_from_buffer();
                 }
                 if (state[SDL_SCANCODE_Q]) {
-                    set_int("running", 0);
+                    set_int(w->state, "running", 0);
                 }
                 if (state[SDL_SCANCODE_D]) {
                     /* delete line
@@ -466,11 +233,11 @@ process_input()
             continue;
         }
         if (event.type == SDL_MOUSEBUTTONDOWN) {
-            for (i=0; i<mainwnd->n_widgets; i++) {
-                if (mainwnd->widgets[i].mode != WIDGET_MODE_BACKGROUND)
-                if (click_detection(&(mainwnd->widgets[i]),
+            for (i=0; i<w->n_widgets; i++) {
+                if (w->widgets[i].mode != WIDGET_MODE_BACKGROUND)
+                if (click_detection(&(w->widgets[i]),
                     event.button.x, event.button.y)) {
-                    actuator(mainwnd->widgets[i].command);
+                    actuator(w->widgets[i].command);
                 }
             }
         }
@@ -478,35 +245,38 @@ process_input()
 }
 
 int
-print_all_variables(void)
+print_all_variables(Window *w)
 {
-    ;
+    int i;
+    for (i=0; strcmp(w->state[2*i], "None"); i++) {
+        printf("%s: %s\n", w->state[2*i], w->state[2*i+1]);
+    }
     return 1;
 }
 
 /* Renderer for patterns.
  */
 int
-render(void)
+render(Window *w)
 {
     int i;
-    for (i=0; i<mainwnd->n_widgets; i++) {
-        if (mainwnd->widgets[i].visibility == ALWAYS_VISIBLE
-           || mainwnd->widgets[i].visibility == get_int("menu-state")) {
-            if (mainwnd->widgets[i].mode == WIDGET_MODE_BLOCK) {
-                SDL_RenderCopy(mainwnd->renderer,
-                    mainwnd->widgets[i].texture,
+    for (i=0; i<w->n_widgets; i++) {
+        if (w->widgets[i].visibility == ALWAYS_VISIBLE
+           || w->widgets[i].visibility == get_int(w->state, "menu-state")) {
+            if (w->widgets[i].mode == WIDGET_MODE_BLOCK) {
+                SDL_RenderCopy(w->renderer,
+                    w->widgets[i].texture,
                     NULL,
-                    &mainwnd->widgets[i].rect);
+                    &w->widgets[i].rect);
             }
-            if (mainwnd->widgets[i].mode == WIDGET_MODE_BACKGROUND) {
-                SDL_SetRenderDrawColor(mainwnd->renderer, mainwnd->widgets[i].color[0],
-                mainwnd->widgets[i].color[1], mainwnd->widgets[i].color[2], 255);
-                SDL_RenderFillRect(mainwnd->renderer, &mainwnd->widgets[i].rect);
+            if (w->widgets[i].mode == WIDGET_MODE_BACKGROUND) {
+                SDL_SetRenderDrawColor(w->renderer, w->widgets[i].color[0],
+                w->widgets[i].color[1], w->widgets[i].color[2], 255);
+                SDL_RenderFillRect(w->renderer, &w->widgets[i].rect);
             }
-            if (mainwnd->widgets[i].mode == WIDGET_MODE_TEXT) {
-                SDL_RenderCopy(mainwnd->renderer,
-                    mainwnd->widgets[i].texture, NULL, &mainwnd->widgets[i].rect);
+            if (w->widgets[i].mode == WIDGET_MODE_TEXT) {
+                SDL_RenderCopy(w->renderer,
+                    w->widgets[i].texture, NULL, &w->widgets[i].rect);
             }
         }
     }
@@ -550,34 +320,34 @@ get_args(pointer args, pointer arg[10], int n)
 }
 
 void
-create_widget(SDL_Rect rect, char *command)
+create_widget(Window *w, SDL_Rect rect, char *command)
 {
     char icon_path[2*MAX_STRING_LENGTH];
     SDL_Surface *surface;
-    mainwnd->widgets[mainwnd->n_widgets].rect = rect;
-    mainwnd->widgets[mainwnd->n_widgets].mode = WIDGET_MODE_BLOCK;
-    mainwnd->widgets[mainwnd->n_widgets].visibility = ALWAYS_VISIBLE;
+    w->widgets[w->n_widgets].rect = rect;
+    w->widgets[w->n_widgets].mode = WIDGET_MODE_BLOCK;
+    w->widgets[w->n_widgets].visibility = ALWAYS_VISIBLE;
 
-    strcpy(mainwnd->widgets[mainwnd->n_widgets].command, command);
+    strcpy(w->widgets[w->n_widgets].command, command);
 
-    sprintf(icon_path, "assets/icons/%s.png", mainwnd->widgets[mainwnd->n_widgets].command);
+    sprintf(icon_path, "assets/icons/%s.png", w->widgets[w->n_widgets].command);
     surface = IMG_Load(icon_path);
-    mainwnd->widgets[mainwnd->n_widgets].texture = SDL_CreateTextureFromSurface(mainwnd->renderer, surface);
-    if (!mainwnd->widgets[mainwnd->n_widgets].texture) {
+    w->widgets[w->n_widgets].texture = SDL_CreateTextureFromSurface(w->renderer, surface);
+    if (!w->widgets[w->n_widgets].texture) {
         debug_message("Failed to load texture.");
         debug_message(icon_path);
     }
     SDL_FreeSurface(surface);
 
-    mainwnd->n_widgets++;
+    w->n_widgets++;
 }
 
 int
-get_widget_by_label(char *label)
+get_widget_by_label(Window *w, char *label)
 {
     int i;
-    for (i=0; i<mainwnd->n_widgets; i++) {
-        if (!strcmp(mainwnd->widgets[i].label, label)) {
+    for (i=0; i<w->n_widgets; i++) {
+        if (!strcmp(w->widgets[i].label, label)) {
             return i;
         }
     }
@@ -585,44 +355,54 @@ get_widget_by_label(char *label)
 }
 
 void
-set_visibility(char *label, int visibility)
+set_visibility(Window *w, char *label, int visibility)
 {
     int i;
-    for (i=0; i<mainwnd->n_widgets; i++) {
-        if (!strcmp(mainwnd->widgets[i].label, label)) {
-            mainwnd->widgets[i].visibility = visibility;
+    for (i=0; i<w->n_widgets; i++) {
+        if (!strcmp(w->widgets[i].label, label)) {
+            w->widgets[i].visibility = visibility;
         }
     }
 }
 
+/* Only operates on mainwnd, since other windows are tab based
+ * only.
+ */
 int
 build_menu(char *labels[], int x_offset, int menu)
 {
     int i;
     int y_offset = 5;
-    int menu_width = get_int("menu-width");
-    create_label(x_offset, y_offset,
+    /* Default, before the list is populated. */
+    int menu_width = 100;
+    create_label(mainwnd, x_offset, y_offset,
         labels[0], labels[1], ALWAYS_VISIBLE);
+    int result = x_offset + 10;
+    result += mainwnd->widgets[mainwnd->n_widgets-1].rect.w;
 
-    create_ui_rect(make_rectangle(
-        x_offset, 20, menu_width,
-        (5 * get_int("menu-item-height")) + 5),
+    create_ui_rect(mainwnd, 
+        make_rectangle(
+            x_offset,
+            20,
+            menu_width,
+            (5 * menu_item_height) + 5),
         white, menu);
   
     for (i=1; strcmp(labels[2*i], "END"); i++) {
         if (strcmp(labels[2*i], "---")) {
-            y_offset += get_int("menu-item-height");
-            create_label(x_offset, y_offset,
+            y_offset += menu_item_height;
+            create_label(mainwnd, x_offset, y_offset,
                 labels[2*i], labels[2*i+1], menu);
         }
         else {
             horizontal_rule(
+                mainwnd,
                 x_offset,
-                y_offset+get_int("menu-item-height"),
+                y_offset+menu_item_height,
                 menu_width, menu);
         }
     }
-    return x_offset + 10 + strlen(labels[0])*get_int("char-width");
+    return result;
 }
 
 
@@ -632,72 +412,74 @@ build_menu(char *labels[], int x_offset, int menu)
  * In order to carry the data from file to file all the project
  * scope data is stored in here.
  */
-void
-create_window(void)
+Window *
+create_window(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH])
 {
     int i;
-    puts("Embroidermodder 2.");
-    puts("Copyright 2013-2022 The Embroidermodder Team");
-    puts("Distributed under the terms of the zlib license.");
-    puts("");
+    Window *w = (Window *)malloc(sizeof(Window));
+    w->n_widgets = 0;
+    w->widgets = (widget*)malloc(sizeof(widget)*1000);
 
-    mainwnd = (Window *)malloc(sizeof(Window));
+    init_state(w, state);
 
-    init_state();
-
-    mainwnd->font = TTF_OpenFont(get_str("interface-font"), 16);
-    if (mainwnd->font == NULL) {
+    w->font = TTF_OpenFont(get_str(w->state, "interface-font"), 16);
+    if (w->font == NULL) {
         debug_message("Interface font failed to load.");
     }
 
-    mainwnd->window = SDL_CreateWindow(
-        get_str("title"),
-        get_int("window-offset-x"),
-        get_int("window-offset-y"),
-        get_int("window-width"),
-        get_int("window-height"),
+    w->window = SDL_CreateWindow(
+        get_str(w->state, "title"),
+        get_int(w->state, "window-offset-x"),
+        get_int(w->state, "window-offset-y"),
+        get_int(w->state, "window-width"),
+        get_int(w->state, "window-height"),
         SDL_WINDOW_SHOWN);
-    mainwnd->renderer = SDL_CreateRenderer(
-        mainwnd->window, -1, SDL_RENDERER_ACCELERATED);
-    mainwnd->n_widgets = 0;
-    mainwnd->widgets = (widget*)malloc(sizeof(widget)*1000);
+    w->renderer = SDL_CreateRenderer(
+        w->window, -1, SDL_RENDERER_ACCELERATED);
 
     puts("Initialising user interface...");
     
-    int toolbar_offset = get_int("menubar-height")
-       + get_int("menubar-padding");
-    int toolbar_height = get_int("icon-size")
-       + get_int("toolbar-padding");
+    int toolbar_offset = menubar_height + menubar_padding;
+    int toolbar_height = icon_size + toolbar_padding;
 
     /* Base */   
-    create_ui_rect(make_rectangle(0, 0,
-        get_int("window-width"), get_int("window-height")),
+    create_ui_rect(
+        w,
+        make_rectangle(0, 0,
+            get_int(w->state, "window-width"),
+            get_int(w->state, "window-height")),
         clear_color,
         ALWAYS_VISIBLE);
 
     /* Toolbar background */
-    create_ui_rect(make_rectangle(0, 0, 
-        get_int("window-width"),
-        4*(get_int("toolbar-padding")
-           + toolbar_height) + toolbar_offset),
+    create_ui_rect(
+        w,
+        make_rectangle(0, 0, 
+            get_int(w->state, "window-width"),
+            4*(toolbar_padding + toolbar_height)
+            + toolbar_offset),
         bg_color,
         ALWAYS_VISIBLE);
 
     /* Menubar */
-    create_ui_rect(make_rectangle(0, 0,
-        get_int("window-width"),
-        get_int("menubar-height")),
+    create_ui_rect(
+        w,
+        make_rectangle(0, 0,
+            get_int(w->state, "window-width"),
+            menubar_height),
         menubar_color,
         ALWAYS_VISIBLE);
 
     /* Toolbars */
     for (i=0; i<4; i++) {
-        create_ui_rect(make_rectangle(
-            get_int("toolbar-padding"),
-            i * (get_int("toolbar-padding")
-               + toolbar_height) + toolbar_offset,
-            get_int("toolbar-width"),
-            toolbar_height),
+        create_ui_rect(
+            w,
+            make_rectangle(
+                toolbar_padding,
+                i * (toolbar_padding + toolbar_height)
+                + toolbar_offset,
+                get_int(w->state, "toolbar-width"),
+                toolbar_height),
             toolbar_bg_color,
             ALWAYS_VISIBLE);
     }
@@ -723,52 +505,49 @@ create_window(void)
      * These may change causing us to need to reload the file.
      */
 
-    horizontal_rule(10, 170, 350, ALWAYS_VISIBLE);
-    horizontal_rule(10, 240, 350, ALWAYS_VISIBLE);
-    horizontal_rule(10, 310, 350, ALWAYS_VISIBLE);
-    horizontal_rule(10, 380, 350, ALWAYS_VISIBLE);
-    horizontal_rule(10, 450, 350, ALWAYS_VISIBLE);
-    vertical_rule(10, 150, 300, ALWAYS_VISIBLE);
-    vertical_rule(80, 150, 300, ALWAYS_VISIBLE);
-    vertical_rule(150, 150, 300, ALWAYS_VISIBLE);
-    vertical_rule(220, 150, 300, ALWAYS_VISIBLE);
-    vertical_rule(290, 150, 300, ALWAYS_VISIBLE);
-    vertical_rule(360, 150, 300, ALWAYS_VISIBLE);
+    horizontal_rule(w, 10, 170, 350, ALWAYS_VISIBLE);
+    horizontal_rule(w, 10, 240, 350, ALWAYS_VISIBLE);
+    horizontal_rule(w, 10, 310, 350, ALWAYS_VISIBLE);
+    horizontal_rule(w, 10, 380, 350, ALWAYS_VISIBLE);
+    horizontal_rule(w, 10, 450, 350, ALWAYS_VISIBLE);
+    vertical_rule(w, 10, 150, 300, ALWAYS_VISIBLE);
+    vertical_rule(w, 80, 150, 300, ALWAYS_VISIBLE);
+    vertical_rule(w, 150, 150, 300, ALWAYS_VISIBLE);
+    vertical_rule(w, 220, 150, 300, ALWAYS_VISIBLE);
+    vertical_rule(w, 290, 150, 300, ALWAYS_VISIBLE);
+    vertical_rule(w, 360, 150, 300, ALWAYS_VISIBLE);
 
-    set_int("menu-state", EDIT_MENU);
+    set_int(w->state, "menu-state", EDIT_MENU);
 
     for (i=0; strcmp(icon_layout[3*i], "END"); i++) {
         int x = atoi(icon_layout[3*i]);
         int y = atoi(icon_layout[3*i+1]);
         char *s = icon_layout[3*i+2];
-        create_icon(x, y, s);
+        create_icon(w, x, y, s);
     }
 
-    x_offset = 10;   
-    x_offset = build_menu(file_labels, x_offset, FILE_MENU);
-    x_offset = build_menu(edit_labels, x_offset, EDIT_MENU);
-    x_offset = build_menu(view_labels, x_offset, VIEW_MENU);
-    x_offset = build_menu(settings_labels, x_offset, SETTINGS_MENU);
-    x_offset = build_menu(window_labels, x_offset, WINDOW_MENU);
-    x_offset = build_menu(help_labels, x_offset, HELP_MENU);
-    x_offset = build_menu(recent_labels, x_offset, RECENT_MENU);
-    x_offset = build_menu(zoom_labels, x_offset, ZOOM_MENU);
-    x_offset = build_menu(pan_labels, x_offset, PAN_MENU);
-
     /* Statusbar */
-    create_ui_rect(make_rectangle(
+    create_ui_rect(
+        w,
+        make_rectangle(
         0,
-        get_int("window-height") - get_int("menubar-height"),
-        get_int("window-width"),
-        get_int("menubar-height")),
+        get_int(w->state, "window-height")
+            - menubar_height,
+        get_int(w->state, "window-width"),
+        menubar_height),
         white,
         ALWAYS_VISIBLE);
+
     create_label(
+        w,
         10,
-        get_int("window-height") - get_int("menubar-height"),
-        get_str("statusbar-message"),
+        get_int(w->state, "window-height")
+            - menubar_height,
+        statusbar_message,
         "do_nothing",
         ALWAYS_VISIBLE);
+
+    return w;
 }
 
 
@@ -856,61 +635,65 @@ find_mdi_window(char *file_name)
 void
 menu_widget(char *label, int column, int row, int visibility)
 {
-    int char_width = get_int("char-width");
-    int menu_item_height = get_int("menu-item-height");    
+    int char_width = get_int(mainwnd->state, "char-width");
+    int menu_item_height = get_int(mainwnd->state, "menu-item-height");    
     
 }
 */
 
 void
-create_label(int x, int y, char *label, char *command, int visibility)
+create_label(
+    Window *w,
+    int x, int y,
+    char *label,
+    char *command,
+    int visibility)
 {
     SDL_Rect rect;
     rect.x = x;
     rect.y = y;
-    strcpy(mainwnd->widgets[mainwnd->n_widgets].label, label);
+    strcpy(w->widgets[w->n_widgets].label, label);
 
     SDL_Color color = {0, 0, 0, 255};
-    SDL_Surface *surface = TTF_RenderText_Blended(mainwnd->font,
-        mainwnd->widgets[mainwnd->n_widgets].label, color);
-    strcpy(mainwnd->widgets[mainwnd->n_widgets].command, command);
+    SDL_Surface *surface = TTF_RenderText_Blended(w->font,
+        w->widgets[w->n_widgets].label, color);
+    strcpy(w->widgets[w->n_widgets].command, command);
     rect.w = surface->w;
     rect.h = surface->h;
 
-    mainwnd->widgets[mainwnd->n_widgets].rect = rect;
-    mainwnd->widgets[mainwnd->n_widgets].mode = WIDGET_MODE_TEXT;
-    mainwnd->widgets[mainwnd->n_widgets].visibility = visibility;
+    w->widgets[w->n_widgets].rect = rect;
+    w->widgets[w->n_widgets].mode = WIDGET_MODE_TEXT;
+    w->widgets[w->n_widgets].visibility = visibility;
 
-    mainwnd->widgets[mainwnd->n_widgets].texture = SDL_CreateTextureFromSurface(mainwnd->renderer, surface);
-    if (!mainwnd->widgets[mainwnd->n_widgets].texture) {
+    w->widgets[w->n_widgets].texture = SDL_CreateTextureFromSurface(w->renderer, surface);
+    if (!w->widgets[w->n_widgets].texture) {
         debug_message("Failed to generate ttf label.");
     }
     SDL_FreeSurface(surface);
     /* SDL_FreeTexture(texture); */
 
-    mainwnd->n_widgets++;
+    w->n_widgets++;
 }
 
 void
-create_ui_rect(SDL_Rect rect, unsigned char *color, int visibility)
+create_ui_rect(Window *w,
+    SDL_Rect rect, unsigned char *color, int visibility)
 {
-    mainwnd->widgets[mainwnd->n_widgets].rect = rect;
-    mainwnd->widgets[mainwnd->n_widgets].mode = WIDGET_MODE_BACKGROUND;
-    mainwnd->widgets[mainwnd->n_widgets].color[0] = color[0];
-    mainwnd->widgets[mainwnd->n_widgets].color[1] = color[1];
-    mainwnd->widgets[mainwnd->n_widgets].color[2] = color[2];
-    mainwnd->widgets[mainwnd->n_widgets].visibility = visibility;
-    strcpy(mainwnd->widgets[mainwnd->n_widgets].label, "label");
+    w->widgets[w->n_widgets].rect = rect;
+    w->widgets[w->n_widgets].mode = WIDGET_MODE_BACKGROUND;
+    w->widgets[w->n_widgets].color[0] = color[0];
+    w->widgets[w->n_widgets].color[1] = color[1];
+    w->widgets[w->n_widgets].color[2] = color[2];
+    w->widgets[w->n_widgets].visibility = visibility;
+    strcpy(w->widgets[w->n_widgets].label, "label");
 
-    mainwnd->n_widgets++;
+    w->n_widgets++;
 }
 
 void
-create_icon(int n, int m, char *label)
+create_icon(Window *w, int n, int m, char *label)
 {
-    int menubar_height = get_int("menubar-height");
-    int icon_padding = get_int("icon-padding");
-    int icon_size = get_int("icon-size");
+    int icon_padding = get_int(w->state, "icon-padding");
     int icon_offset_n = n * icon_padding
         + (n-1)*(icon_size + icon_padding);
     int icon_offset_m = m * icon_padding
@@ -922,20 +705,30 @@ create_icon(int n, int m, char *label)
     rect.w = icon_size;
     rect.h = icon_size;
 
-    create_widget(rect, label);
+    create_widget(w, rect, label);
 }
 
 void
-horizontal_rule(int x, int y, int w, int visibility)
+horizontal_rule(
+    Window *w,
+    int x,
+    int y,
+    int width,
+    int visibility)
 {
     unsigned char black[] = {0, 0, 0};
-    create_ui_rect(make_rectangle(x, y, w, 1), black, visibility);
+    create_ui_rect(w, make_rectangle(x, y, width, 1), black, visibility);
 }
 
 void
-vertical_rule(int x, int y, int h, int visibility)
+vertical_rule(
+    Window *w,
+    int x,
+    int y,
+    int h,
+    int visibility)
 {
     unsigned char black[] = {0, 0, 0};
-    create_ui_rect(make_rectangle(x, y, 1, h), black, visibility);
+    create_ui_rect(w, make_rectangle(x, y, 1, h), black, visibility);
 }
 

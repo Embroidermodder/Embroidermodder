@@ -52,6 +52,7 @@
 #define MAX_TOOLBAR_ENTRIES          30
 #define MAX_UNDO_HISTORY           1000
 #define MAX_VARIABLES              5000
+#define MAX_SELECTED              10000
 #define RECENT_FILES                 10
 
 #define WIDGET_MODE_BLOCK             0
@@ -318,6 +319,7 @@ typedef struct Window_ {
     SDL_Window *window;
     SDL_Renderer *renderer;
     TTF_Font *font;
+    char state[2*MAX_VARIABLES][MAX_STRING_LENGTH];
     scheme *sc;
 } Window;
 
@@ -328,19 +330,21 @@ int valid_file_format(char *fname);
 
 SDL_Rect make_rectangle(int x, int y, int w, int h);
 
-void create_window(void);
+Window *create_window(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH]);
 void main_loop(void);
-void destroy_window(Window *);
-void process_input(void);
-int render(void);
+void destroy_window(Window *w);
+void process_input(Window *w);
+int render(Window *w);
 
-void init_state(void);
-char *get_str(char *key);
-int get_int(char *key);
-float get_float(char *key);
-void set_str(char *key, char *value);
-void set_int(char *key, int value);
-void set_float(char *key, float value);
+void init_state(Window *window, char state[2*MAX_VARIABLES][MAX_STRING_LENGTH]);
+char *get_str(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key);
+int get_int(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key);
+float get_float(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key);
+EmbVector get_vector(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key);
+void set_str(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key, char *value);
+void set_int(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key, int value);
+void set_float(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key, float value);
+void set_vector(char dict[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key, EmbVector value);
 
 void debug_message(char *msg);
 char *translate(char *msg);
@@ -367,14 +371,15 @@ void display_recent_menu(void);
 void display_zoom_menu(void);
 void display_pan_menu(void);
 
-void create_widget(SDL_Rect rect, char *action_id);
-void create_label(int x, int y, char *label, char *command, int visibility);
-void create_ui_rect(SDL_Rect rect, unsigned char *color, int visibility);
-void create_icon(int n, int m, char *label);
-int get_widget_by_label(char *label);
-void set_visibility(char *label, int visibility);
-void horizontal_rule(int x, int y, int w, int visibility);
-void vertical_rule(int x, int y, int h, int visibility);
+/* Operate on the window. */
+void create_widget(Window *window, SDL_Rect rect, char *action_id);
+void create_label(Window *window, int x, int y, char *label, char *command, int visibility);
+void create_ui_rect(Window *window, SDL_Rect rect, unsigned char *color, int visibility);
+void create_icon(Window *window, int n, int m, char *label);
+int get_widget_by_label(Window *window, char *label);
+void set_visibility(Window *window, char *label, int visibility);
+void horizontal_rule(Window *window, int x, int y, int w, int visibility);
+void vertical_rule(Window *window, int x, int y, int h, int visibility);
 
 void get_args(pointer args, pointer arg[10], int n);
 
@@ -498,19 +503,70 @@ void exit_program(void);
 void move(void);
 void export_(void);
 
-void decrement(char *key);
-void increment(char *key);
+void decrement(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key);
+void increment(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *key);
 
 void scene_update(void);
 
 void set_override_cursor(char *);
 void restore_override_cursor(void);
 
-EmbColor get_color(char *);
+void menus_init(void);
+
+EmbColor get_color(char state[2*MAX_VARIABLES][MAX_STRING_LENGTH], char *);
 
 Pen *create_pen(void);
 Painter *create_painter(void);
 void destroy_pen(Pen *pen);
 void destroy_painter(Painter *painter);
 
+void draw_rulers();
+
+/* Global Data */
+extern Window *mainwnd;
+extern Window *settings_dialog_wnd;
+extern Window *about_dialog_wnd;
+extern Window *property_editor_wnd;
+
+extern Action action_list[MAX_ACTIONS];
+
+extern char state[2*MAX_VARIABLES][MAX_STRING_LENGTH];
+extern char undo_history[2*MAX_VARIABLES][MAX_STRING_LENGTH];
+
+extern unsigned char clear_color[];
+extern unsigned char toolbar_bg_color[];
+extern unsigned char bg_color[];
+extern unsigned char menubar_color[];
+extern unsigned char white[];
+
+extern char *icon_layout[];
+
+extern char *file_labels[MAX_STRING_LENGTH];
+extern char *edit_labels[MAX_STRING_LENGTH];
+extern char *view_labels[MAX_STRING_LENGTH];
+extern char *settings_labels[MAX_STRING_LENGTH];
+extern char *zoom_labels[MAX_STRING_LENGTH];
+extern char *pan_labels[MAX_STRING_LENGTH];
+extern char *window_labels[MAX_STRING_LENGTH];
+extern char *help_labels[MAX_STRING_LENGTH];
+extern char *recent_labels[MAX_STRING_LENGTH];
+
+extern int selected_items[MAX_SELECTED];
+extern int n_selected;
+
+extern const char *symbols_docstring;
+
+extern char statusbar_message[MAX_STRING_LENGTH];
+
+extern int running;
+extern int testing;
+extern int debug_mode;
+
+extern int toolbar_padding;
+extern int icon_size;
+extern int menu_item_height;
+extern int menubar_height;
+extern int menubar_padding;
+
 #endif
+
