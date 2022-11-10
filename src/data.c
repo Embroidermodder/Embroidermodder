@@ -15,11 +15,19 @@
 
 #include "em2.h"
 
+int char_to_int(char a);
+
 /*  DATA SECTION
  *  The data for configuring Embroidermodder 2,
  *  sets the default values should it not be present
  *  in configuration.
  */
+EmbWindow *windows[MAX_WINDOWS];
+
+TABLE(global_state);
+
+EmbColor white_color = {255, 255, 255};
+
 #if _WIN32
 const char *os_seperator = "\\";
 #else
@@ -54,100 +62,11 @@ TABLE(crash_test_script);
 TABLE(tooltips);
 TABLE(action_list);
 TABLE(settings_state);
-
-TABLE(grid_group_rectangular) = {
-    {"spinbox grid_size_x"},
-    {"spinbox grid_size_y"},
-    {"spinbox grid_spacing_x"},
-    {"spinbox grid_spacing_y"},
-    {"END"}
-};
-TABLE(grid_group_circular) = {
-    {"spinbox grid_size_radius"},
-    {"spinbox grid_size_angle"},
-    {"spinbox grid_spacing_radius"},
-    {"spinbox grid_spacing_angle"},
-    {"END"}
-};
-
-char interface_font[MAX_STRING_LENGTH] =
-    "assets/fonts/source-sans/TTF/SourceSans3-Regular.ttf";
-
-EmbWindow *mainwnd;
-char main_window_title[MAX_STRING_LENGTH] =
-    "Embroidermodder v" VERSION;
-Rect main_window_dimensions = {
-    .x = 100,
-    .y = 100,
-    .h = 480,
-    .w = 640
-};
-
-EmbWindow *settings_dialog_wnd;
-char settings_dialog_title[MAX_STRING_LENGTH] =
-    "Embroidermodder Settings";
-Rect settings_dialog_dimensions = {
-    .x = 200,
-    .y = 200,
-    .h = 600,
-    .w = 300
-};
-
-EmbWindow *about_dialog_wnd;
-char about_dialog_title[MAX_STRING_LENGTH] =
-    "About Embroidermodder 2";
-Rect about_dialog_dimensions = {
-    .x = 200,
-    .y = 200,
-    .h = 600,
-    .w = 300
-};
-
-EmbWindow *property_editor_wnd;
-char property_editor_title[MAX_STRING_LENGTH] =
-    "Embroidermodder Property Editor";
-Rect property_editor_dimensions = {
-    .x = 200,
-    .y = 200,
-    .h = 600,
-    .w = 300
-};
-
-int n_tabs = 0;
-int tab_index = 0;
-
-char *statusbar_labels[MAX_STRING_LENGTH] = {
-    "SNAP",
-    "GRID",
-    "RULER",
-    "ORTHO",
-    "POLAR",
-    "QSNAP",
-    "QTRACK",
-    "LWT",
-    "END"
-};
-
 TABLE(shortcuts);
 
 float max_distance = 1000000.0;
 int general_icon_size = 16;
 
-char text_font[MAX_STRING_LENGTH]
-    = "assets/fonts/source-code-pro/TTF/SourceCodePro-Black.ttf";
-
-/* Spinboxen
-Widget grid_center_x_sb;
-Widget grid_center_y_sb;
-Widget grid_size_x_sb;
-Widget grid_size_y_sb;
-Widget grid_size_radius_sb;
-Widget grid_size_angle_sb;
-Widget grid_spacing_x_sb;
-Widget grid_spacing_y_sb;
-Widget grid_spacing_radius_sb;
-Widget grid_spacing_angle_sb;
- */
 int dialog_grid_load_from_file = 1;
 
 int n_windows = 0;
@@ -172,28 +91,6 @@ EmbColor crosshair_color = {0x00, 0x00, 0x00};
 int color_mode = 0;
 int grid_type = RECTANGULAR_GRID;
 int mdi_window = 0;
-
-char application_folder[MAX_STRING_LENGTH] = "~/.embroidermodder2/";
-
-/*
-QToolBar* toolbar[10]", "0",
-QMenu* menu[10]", "0",
-StatusBarButton* status-bar[8]", "0",
-QToolButton* toolButton[PROPERTY-EDITORS]", "0",
-QLineEdit* lineEdit[LINEEDIT-PROPERTY-EDITORS]", "0",
-QComboBox* comboBox[COMBOBOX-PROPERTY-EDITORS]", "0",
-
-QToolButton* toolButtonArcClockwise
-QComboBox* comboBoxArcClockwise
-
-Qgroup-box* group-boxGeometry[32]
-Qgroup-box* group-boxGeneral
-Qgroup-box* group-boxMiscArc
-Qgroup-box* group-boxMiscPath
-Qgroup-box* group-boxMiscPolyline
-Qgroup-box* group-boxTextTextSingle
-Qgroup-box* group-boxMiscTextSingle
-*/
 
 EmbVector paste_delta = {0.0, 0.0};
 EmbVector scene_press_point = {0.0, 0.0};
@@ -290,11 +187,6 @@ int grid_color_match_crosshair = 1;
 int grid_load_from_file = 1;
 EmbColor grid_color = {0x00, 0x00, 0x00};
 EmbColor preview_grid_color = {0x00, 0x00, 0x00};
-
-const char *the_greig_message =
-    "Hi there. If you are not a developer, report this as a bug." \
-    " If you are a developer, your code needs examined," \
-    " and possibly your head too.";
 
 float symbol_scale = 0.01;
 
@@ -531,6 +423,8 @@ int accept_display_selectbox_alpha;
 void
 load_state(void)
 {
+    load_csv(global_state, "assets/global_state.csv");
+
     load_csv(tips, "assets/tips.csv");
     load_csv(crash_test_script, "assets/crash_test.csv");
 
@@ -542,26 +436,6 @@ load_state(void)
     load_csv(arc_properties, "assets/objects/arc.csv");
     load_csv(circle_properties, "assets/objects/circle.csv");
 }
-
-const char *boot_message_em2 = \
-    " _____________________________________________________________________\n" \
-    "|                                                                     |\n" \
-    "|                    EMBROIDERMODDER 2.0.0-alpha                      |\n" \
-    "|                     http://libembroidery.org                        |\n" \
-    "|---------------------------------------------------------------------|\n" \
-    "|            Copyright 2013-2022 The Embroidermodder Team             |\n" \
-    "|           Distributed under the terms of the zlib license.          |\n" \
-    "|_____________________________________________________________________|\n";
-
-const char *help_message_em2 = \
-    "\n" \
-    "Usage: embroidermodder [options] files ...\n" \
-    "\n" \
-    "Options:\n" \
-    "  -d, --debug      Print lots of debugging information.\n" \
-    "  -h, --help       Print this message and exit.\n" \
-    "  -v, --version    Print the version number of embroidermodder and exit.\n" \
-    "\n";
 
 void
 load_csv(TABLE(table), char *fname)
@@ -657,4 +531,133 @@ load_translations(void)
         load_csv(translation_tables[i], language_labels[i][0]);
     }
 }
+
+EmbColor
+get_color(TABLE(state), char *key)
+{
+    EmbColor color;
+    char *s = get_str(state, key);
+    color.r = 16*char_to_int(s[0]) + char_to_int(s[1]);
+    color.g = 16*char_to_int(s[2]) + char_to_int(s[3]);
+    color.b = 16*char_to_int(s[4]) + char_to_int(s[5]);
+    return color;
+}
+
+int
+char_to_int(char a)
+{
+    if (a >= '0' && a <= '9') {
+        return a-'0';
+    }
+    if (a >= 'A' && a <= 'F') {
+        return a-'A'+10;
+    }
+    if (a >= 'a' && a <= 'f') {
+        return a-'a'+10;
+    }
+    return 0;
+}
+
+char *
+get_str(TABLE(state), char *key)
+{
+    int i;
+    for (i=0; i<MAX_CSV_ROWS; i++) {
+        if (!strcmp(state[i][0], key)) {
+            return state[i][1];
+        }
+    }
+    printf("Failed to find the variable: %s.\n", key);
+    return "None";
+}
+
+int
+get_int(TABLE(state), char *key)
+{
+    return atoi(get_str(state, key));
+}
+
+float
+get_float(TABLE(state), char *key)
+{
+    return atof(get_str(state, key));
+}
+
+EmbVector
+get_vector(TABLE(state), char *key)
+{
+    EmbVector v;
+    char *value = get_str(state, key);
+    v.x = atof(strtok(value, " "));
+    v.y = atof(strtok(value, " "));
+    return v;
+}
+
+int
+load_to_buffer(void)
+{
+    char buffer[4096];
+    size_t i, j, length;
+    FILE *fin;
+    fin = fopen(current_fname, "r");
+    if (!fin) {
+        return 1;
+    }
+    fseek(fin, 0, SEEK_END);
+    length = ftell(fin);
+    fseek(fin, 0, SEEK_SET);
+    if (fread(buffer, 1, length, fin) != length) {
+        fclose(fin);
+        return 1;
+    }
+    fclose(fin);
+
+    for (i=0; i<100; i++) {
+        text_display[i][0][0] = 0;
+    }
+
+    j = 0;
+    for (i=0; i<length; i++) {
+        buffer[j] = buffer[i];
+        if (buffer[i] != '\r') {
+            j++;
+        }
+    }
+    buffer[j] = 0;
+
+    line_n = 0;
+    for (i=0; i<length; i++) {
+        for (j=0; j<100; j++) {
+            if (buffer[i+j] == '\n' || !buffer[i+j]) {
+                break;
+            }
+        }
+        strncpy(text_display[line_n][0], buffer+i, j);
+        text_display[line_n][j][0] = 0;
+        line_n++;
+        i += j;
+    }
+
+    return 0;
+}
+
+
+int
+save_from_buffer(void)
+{
+    int i;
+    FILE *fin;
+    fin = fopen(current_fname, "w");
+    if (!fin) {
+        return 1;
+    }
+    for (i=0; i<line_n; i++) {
+        fprintf(fin, "%s\r\n", text_display[i][0]);
+    }
+
+    fclose(fin);
+
+    return 0;
+}
+
 

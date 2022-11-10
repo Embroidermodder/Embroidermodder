@@ -1,0 +1,8 @@
+
+TABLE(grid_group_rectangular) = {
+    {"spinbox grid_size_x"},
+    {"spinbox grid_size_y"},
+    {"spinbox grid_spacing_x"},
+    {"spinbox grid_spacing_y"},
+    {"END"}
+};

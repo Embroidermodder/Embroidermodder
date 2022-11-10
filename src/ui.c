@@ -15,6 +15,8 @@
 
 #include "em2.h"
 
+int load_window_data(int window_id, char *fname);
+
 /* To make a new windowing system compatible with our
  * widget system create the following functions:
  *
@@ -274,7 +276,7 @@ build_menu(char *fname, int x_offset, int menu)
 
     Rect background = make_rectangle(
         x_offset, 20, menu_width,  (5 * menu_item_height) + 5);
-    create_ui_rect(MAIN_WINDOW, background, white, menu);
+    create_ui_rect(MAIN_WINDOW, background, white_color, menu);
   
     for (i=1; strcmp(labels[i][0], "END"); i++) {
         if (strcmp(labels[i][0], "---")) {
@@ -322,7 +324,7 @@ create_statusbar(void)
             windows[MAIN_WINDOW]->dimension.h - menubar_height,
             windows[MAIN_WINDOW]->dimension.w,
             menubar_height),
-        white,
+        white_color,
         ALWAYS_VISIBLE);
 
     create_label(
@@ -354,19 +356,20 @@ int
 render(int window_id)
 {
     int i;
+    EmbWindow *w = windows[window_id];
     render_clear(window_id, clear_color);
 
     for (i=0; i<w->n_widgets; i++) {
         EmbWidget widget = windows[window_id]->widgets[i];
-        if (widgets.visibility == ALWAYS_VISIBLE
-           || widgets.visibility == menu_state) {
-            if (widgets.mode == WIDGET_MODE_BLOCK) {
+        if (widget.visibility == ALWAYS_VISIBLE
+           || widget.visibility == menu_state) {
+            if (widget.mode == WIDGET_MODE_BLOCK) {
                 render_rect(window_id, widget.color, widget.rect);
             }
-            if (w->widgets[i].mode == WIDGET_MODE_BACKGROUND) {
+            if (widget.mode == WIDGET_MODE_BACKGROUND) {
                 render_rect(window_id, widget.color, widget.rect);
             }
-            if (w->widgets[i].mode == WIDGET_MODE_TEXT) {
+            if (widget.mode == WIDGET_MODE_TEXT) {
                 render_copy(window_id, widget.image);
             }
         }
@@ -374,15 +377,15 @@ render(int window_id)
     return 0;
 }
 
-void
-load_window_data(char *fname)
+int
+load_window_data(int window_id, char *fname)
 {
-    EmbWindow *w = windows[n_windows];
+    EmbWindow *w = windows[window_id];
     w = (EmbWindow *)malloc(sizeof(EmbWindow));
     w->n_widgets = 0;
     w->widgets = (EmbWidget*)malloc(sizeof(EmbWidget)*MAX_WIDGETS);
 
-    FILE *f = fopen(interface_font, "rb");
+    FILE *f = fopen(get_str(global_state, "interface_font"), "rb");
     if (!f) {
         debug_message("Failed to load interface font.");
         return NULL;
@@ -401,9 +404,15 @@ load_window_data(char *fname)
     }
     */
 
-    w->dimension = dimension;
+    load_csv(w->data, fname);
+
+    w->dimension.x = get_int(w->data, "window x");
+    w->dimension.y = get_int(w->data, "window y");
+    w->dimension.w = get_int(w->data, "window w");
+    w->dimension.h = get_int(w->data, "window h");
 
     n_windows++;
+    return 0;
 }
 
 #if EM2_X11
@@ -413,11 +422,11 @@ load_window_data(char *fname)
  * In order to carry the data from file to file all the project
  * scope data is stored in here.
  */
-void
-create_window(char *fname)
+int
+create_window(int window_id, char *fname)
 {
     EmbWindow *w = windows[window_id];
-    load_window_data(fname);
+    load_window_data(window_id, fname);
 
     /* Window compatibility layer. */
     w->display = XOpenDisplay(NULL);
@@ -427,14 +436,19 @@ create_window(char *fname)
     w->window = XCreateSimpleWindow(
         w->display,
         XDefaultRootWindow(w->display),
-        dimension.x, dimension.y, dimension.w, dimension.h,
-        5, black_pixel, white_pixel);
+        get_int(w->data, "window x"),
+        get_int(w->data, "window y"),
+        get_int(w->data, "window w"),
+        get_int(w->data, "window h"),
+        5,
+        black_pixel,
+        white_pixel);
     XSelectInput(w->display, w->window,
         ExposureMask | ButtonPressMask | KeyPressMask);
     /* Make the window actually present to viewer,
      * seems to be something of a gotcha. */
     XMapWindow(w->display, w->window);
-    XStoreName(w->display, w->window, title);
+    XStoreName(w->display, w->window, get_str(w->data, "title"));
 
     w->gc = XCreateGC(w->display, w->window, 0, 0);
     XSetForeground(w->display, w->gc, white_pixel);
@@ -448,6 +462,7 @@ create_window(char *fname)
     create_view(0);
     create_menubar();
     create_statusbar();
+    return 0;
 }
 
 
@@ -495,9 +510,9 @@ destroy_window(int window_id)
 
 #if EM2_ANDROID
 void
-create_window(int window_id)
+create_window(int window_id, char *fname)
 {
-    load_window_data(fname);
+    load_window_data(window_id, fname);
 }
 
 /* Process input: main loop step 1.
@@ -541,9 +556,9 @@ destroy_window(int window_id)
 
 #if EM2_COCOA
 void
-create_window(int window_id)
+create_window(int window_id, char *fname)
 {
-    load_window_data(fname);
+    load_window_data(window_id, fname);
 }
 
 /* Process input: main loop step 1.
@@ -585,10 +600,11 @@ destroy_window(int window_id)
 #endif
 
 #if EM2_WIN32
-void
-create_window(int window_id)
+int
+create_window(int window_id, char *fname)
 {
-    load_window_data(fname);
+    load_window_data(window_id, fname);
+    return 0;
 }
 
 /* Process input: main loop step 1.
@@ -628,10 +644,11 @@ destroy_window(int window_id)
 #endif
 
 #if EM2_IOS
-void
-create_window(int window_id)
+int
+create_window(int window_id, char *fname)
 {
-    load_window_data(fname);
+    load_window_data(window_id, fname);
+    return 0;
 }
 
 /* Process input: main loop step 1.
@@ -674,24 +691,18 @@ destroy_window(int window_id)
 
 
 #if 0
-create_window()
-{
-    w->window[n_windows] = SDL_CreateWindow(
-        title,
-        dimension.x, dimension.y, dimension.w, dimension.h,
-        SDL_WINDOW_SHOWN);
-    w->renderer = SDL_CreateRenderer(
-        w->window, -1, SDL_RENDERER_ACCELERATED);
-
-}
-
 /* Process input: main loop step 1.
  */
-void
+EmbEvent
 process_input(EmbWindow *w)
 {
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    EmbEvent event;
     int i;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    for (i=0; i<MAX_KEYS; i++) {
+        event.state[i] = state[i];
+    }
+
     /* Get keyboard and mouse state. */
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -819,11 +830,11 @@ create_widget(int window_id, Rect rect, char *command)
     strcpy(w->widgets[w->n_widgets].command, command);
 
     sprintf(icon_path, "assets/icons/%s.bmp", w->widgets[w->n_widgets].command);
-#if x11_version
-#elif ANDROID_VERSION
-#elif IOS_VERSION
-#elif __APPLE__
-#elif _WIN32
+#if EM2_X11
+#elif EM2_ANDROID
+#elif EM2_IOS
+#elif EM2_COCOA
+#elif EM2_WIN32
 #else
     SDL_Surface *surface;
     surface = SDL_LoadBMP(icon_path);
@@ -870,7 +881,8 @@ load_image(char *path)
     char image_fname[4*MAX_STRING_LENGTH];
     FILE *f;
     sprintf(image_fname, "%s%s%s",
-        application_folder, os_seperator, path);
+        get_str(global_state, "application_folder"),
+        os_seperator, path);
     f = fopen(image_fname, "wb");
     /*
     icon = icons[path].replace("\n", "");

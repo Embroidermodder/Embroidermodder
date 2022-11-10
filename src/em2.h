@@ -82,8 +82,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #include "stb_image_write.h"
 #else
 #include "libembroidery/src/embroidery.h"
-#include "stb/stb_truetype.h"
-#include "stb/stb_image_write.h"
+#include "libembroidery/src/stb/stb_truetype.h"
+#include "libembroidery/src/stb/stb_image_write.h"
 #endif
 
 /* DEFINES
@@ -488,7 +488,7 @@ typedef struct Toolset_ {
  */
 typedef struct EmbWidget_ {
     Rect rect;
-    Image *texture;
+    Image *image;
     unsigned char color[4];
     char label[MAX_STRING_LENGTH];
     int mode;
@@ -537,8 +537,11 @@ typedef struct EmbWidget_ {
     char **propertybox_properties;
 } EmbWidget;
 
+#define MAX_KEYS                    256
+
 typedef struct EmbEvent_ {
     int type;
+    int state[MAX_KEYS];
 } EmbEvent;
 
 /* This should be managed by libembroidery.
@@ -633,6 +636,7 @@ typedef struct ViewPort_ {
  * so we can make the data part of the window struct.
  */
 typedef struct EmbWindow_ {
+    TABLE(data);
     EmbTab tabs[MAX_PATTERNS];
     int tab_index;
     EmbWidget *widgets;
@@ -672,10 +676,10 @@ int valid_file_format(char *fname);
 
 Rect make_rectangle(int x, int y, int w, int h);
 
-int create_window(Rect rect, char *title);
+int create_window(int window_id, char *title);
 void main_loop(void);
 void destroy_window(int window);
-void process_input(int window);
+EmbEvent process_input(int window);
 int render(int window);
 
 char *get_str(TABLE(state), char *key);
@@ -717,6 +721,7 @@ void vertical_rule(int window, int x, int y, int h, int visibility);
 int build_menu(char *fname, int x_offset, int menu);
 
 int actuator(char *command);
+void wait(int);
 
 /* File Actions */
 void new_file(void);
@@ -840,12 +845,10 @@ extern Rect about_dialog_dimensions;
 extern char property_editor_title[MAX_STRING_LENGTH];
 extern Rect property_editor_dimensions;
 
-extern int n_tabs;
-extern int tab_index;
-
 extern char *statusbar_labels[MAX_STRING_LENGTH];
 
 extern TABLE(shortcuts);
+extern TABLE(global_state);
 
 extern float max_distance;
 extern int general_icon_size;
@@ -984,28 +987,28 @@ extern float lwt_default_lwt;
 extern int preview_lwt_real_render;
 
 extern char current_file_name[MAX_STRING_LENGTH];
-extern int preview_mode = PREVIEW_MODE_OFF;
+extern int preview_mode;
 
 /* Ruler Settings */
 extern int ruler_metric;
 extern int ruler_show_on_load;
-extern int ruler_pixel_size = 30;
+extern int ruler_pixel_size;
 
 /* Grid Settings */
-extern float grid_size_radius = 10.0;
-extern float grid_size_angle = 360.0;
+extern float grid_size_radius;
+extern float grid_size_angle;
 extern int grid_center_on_origin;
-extern EmbVector grid_center = {0.5, 0.5};
-extern EmbVector grid_size = {10.0, 10.0};
-extern EmbVector grid_spacing = {10.0, 10.0};
-extern float grid_spacing_radius = 10.0;
-extern float grid_spacing_angle = 10.0;
+extern EmbVector grid_center;
+extern EmbVector grid_size;
+extern EmbVector grid_spacing;
+extern float grid_spacing_radius;
+extern float grid_spacing_angle;
 extern int grid_show_on_load;
 extern int grid_show_origin;
 extern int grid_color_match_crosshair;
 extern int grid_load_from_file;
-extern EmbColor grid_color = {0x00, 0x00, 0x00};
-extern EmbColor preview_grid_color = {0x00, 0x00, 0x00};
+extern EmbColor grid_color;
+extern EmbColor preview_grid_color;
 
 extern const char *the_greig_message;
 
@@ -1067,7 +1070,7 @@ extern int color_total;
 extern int color_changes;
 
 /* Display Settings */
-extern EmbColor display_crosshair_color = {0x0, 0x0, 0x0};
+extern EmbColor display_crosshair_color;
 extern EmbColor display_bg_color;
 extern EmbColor display_selectbox_left_color;
 extern EmbColor display_selectbox_left_fill;
@@ -1125,7 +1128,7 @@ extern int shift_key_pressed_state;
 extern TABLE(undo_history);
 extern int undo_history_position;
 
-extern int text_cursor[2] = {0, 0};
+extern int text_cursor[2];
 extern TABLE(text_display);
 
 extern char details_label_text[12][MAX_STRING_LENGTH];
@@ -1171,11 +1174,11 @@ extern int menu_state;
 
 extern char statusbar_message[MAX_STRING_LENGTH];
 
-extern EmbColor clear_color = {50, 50, 50};
-extern EmbColor toolbar_bg_color = {150, 150, 200};
-extern EmbColor bg_color = {100, 150, 210};
-extern EmbColor menubar_color = {200, 200, 250};
-extern EmbColor white = {255, 255, 255};
+extern EmbColor clear_color;
+extern EmbColor toolbar_bg_color;
+extern EmbColor bg_color;
+extern EmbColor menubar_color;
+extern EmbColor white_color;
 
 extern int selected_items[MAX_SELECTED];
 extern int n_selected;
@@ -1222,9 +1225,6 @@ extern EmbColor accept_display_selectbox_fill_left;
 extern EmbColor accept_display_selectbox_color_right;
 extern EmbColor accept_display_selectbox_fill_right;
 extern int accept_display_selectbox_alpha;
-
-extern const char *boot_message_em2;
-extern const char *help_message_em2;
 
 void load_state(void);
 void load_csv(TABLE(table), char *fname);

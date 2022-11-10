@@ -1,0 +1,11 @@
+
+
+EmbWindow *about_dialog_wnd;
+char about_dialog_title[MAX_STRING_LENGTH] =
+    "About Embroidermodder 2";
+Rect about_dialog_dimensions = {
+    .x = 200,
+    .y = 200,
+    .h = 600,
+    .w = 300
+};

@@ -17,6 +17,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION 1
 #include "em2.h"
 
+EmbEvent event;
+
 int
 parse_command(int argc, char *argv[])
 {
@@ -27,7 +29,7 @@ parse_command(int argc, char *argv[])
             printf("DEBUG MODE\n");
         }
         if (!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h")) {
-            puts(help_message_em2);
+            puts(get_str(global_state, "help message"));
 			return 0;
         }
         if (!strcmp(argv[i], "--version") || !strcmp(argv[i], "-v")) {
@@ -66,7 +68,9 @@ int WINAPI WinMain(
 {
     const wchar_t CLASS_NAME[] = L"embroidermodder window";
 
-    puts(boot_message_em2);
+    load_csv(global_state, "assets/global_state.csv");
+
+    puts(get_str(global_state, "boot message"));
 
 	WNDCLASS wc = { };
 
@@ -74,8 +78,7 @@ int WINAPI WinMain(
 	wc.hInstance     = hInstance;
 	wc.lpszClassName = CLASS_NAME;
 
-    Rect rect = make_rectangle(100, 100, 640, 480);
-    create_window(rect, main_window_title);
+    create_window(MAIN_WINDOW, main_window_title);
 	if (!windows[MAIN_WINDOW]) {
 		return 0;
     }
@@ -157,37 +160,23 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int
 main(int argc, char *argv[])
 {
-    puts(boot_message_em2);
+    puts(get_str(global_state, "boot message"));
 
     if (!parse_command(argc, argv)) {
 		return 0;
 	}
 
-#if x11_version
-#elif ANDROID_VERSION
-#elif IOS_VERSION
-#else
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        return 0;
-    }
-#endif
-
-    Rect rect = make_rectangle(100, 100, 640, 480);
-
     load_state();
 
-    create_window(rect, main_window_title);
+    create_window(MAIN_WINDOW, "assets/main_window.csv");
 
-#if x11_version
-    XEvent event;
-#endif
     while (running) {
-        process_input(windows[MAIN_WINDOW]);
-        render(windows[MAIN_WINDOW]);
+        event = process_input(MAIN_WINDOW);
+        render(MAIN_WINDOW);
         wait(50);
     }
 
-    destroy_window(windows[MAIN_WINDOW]);
+    destroy_window(MAIN_WINDOW);
     
 #if x11_version
     XCloseDisplay(windows[MAIN_WINDOW]->display);
@@ -309,8 +298,8 @@ read_settings(char *fname)
 
     load_csv(settings_state, fname);
 
-    main_window_dimensions.w = get_int(settings_state, "main_window_width");
-    main_window_dimensions.h = get_int(settings_state, "main_window_height");
+    windows[MAIN_WINDOW]->dimension.w = get_int(settings_state, "main window w");
+    windows[MAIN_WINDOW]->dimension.h = get_int(settings_state, "main window h");
 }
 
 /* Write the current settings to the standard file CSV.
@@ -329,10 +318,11 @@ write_settings(char *fname)
         puts("Failed to write settings: could not open file for writing.");
     }
 
-    set_int(settings_state, "main_window_x", main_window_dimensions.x);
-    set_int(settings_state, "main_window_y", main_window_dimensions.y);
-    set_int(settings_state, "main_window_width", main_window_dimensions.w);
-    set_int(settings_state, "main_window_height", main_window_dimensions.h);
+    EmbWindow *w = windows[MAIN_WINDOW];
+    set_int(settings_state, "main window x", w->dimension.x);
+    set_int(settings_state, "main window y", w->dimension.y);
+    set_int(settings_state, "main window w", w->dimension.w);
+    set_int(settings_state, "main window h", w->dimension.h);
 
     for (i=0; i<MAX_CSV_ROWS; i++) {
         fprintf(f, "%s=%s\r\n",
@@ -375,7 +365,7 @@ find_mdi_window(char *file_name)
 EmbWindow *
 about_dialog_init(void)
 {
-    create_window(make_rectangle(0, 0, 100, 100), "About Embroidermodder");
+    create_window(ABOUT_WINDOW, "About Embroidermodder");
 }
 
 /* The dialog showing details of the pattern including histograms.
@@ -425,10 +415,10 @@ details_dialog_init(void)
     int color_changes = 0;
     EmbRect bounding_rect = embRect_create();
     char *title = translate("Embroidery Design Details");
-    Rect rect = {0, 0, 600, 400};
-    create_window(rect, title);
+    create_window(DETAILS_WINDOW, title);
     int right_column_offset = 100;
     int spacing = 200;
+    EmbWindow *w = windows[MAIN_WINDOW];
 
     /*
     button-box = tk.ButtonBox(dialog, text="QDialogButtonBox-Ok");
@@ -449,7 +439,7 @@ details_dialog_init(void)
     TODO: embPattern-calcBoundingBox(pattern); */
 
     create_labelled_int(DETAILS_WINDOW, right_column_offset, 0*20, spacing,
-        "Total Stitches:", windows[MAIN_WINDOW]->tabs[tab_index].pattern->stitchList->count);
+        "Total Stitches:", w->tabs[w->tab_index].pattern->stitchList->count);
     create_labelled_int(DETAILS_WINDOW, right_column_offset, 1*20, spacing,
         "Real Stitches:", stitches_real);
     create_labelled_int(DETAILS_WINDOW, right_column_offset, 2*20, spacing,
@@ -1757,7 +1747,7 @@ void
 changelog(void)
 {
     debug_message("changelog()");
-    create_window(make_rectangle(0, 0, 600, 400), translate("Changelog"));
+    create_window(CHANGELOG_WINDOW, translate("Changelog"));
 
     create_label(CHANGELOG_WINDOW, 0, 0, "changelog", "do-nothing", ALWAYS_VISIBLE);
     /* display in a custom widget instead
@@ -2016,32 +2006,6 @@ starts_with(char *str, char *start)
     return !strncmp(str, start, strlen(start));
 }
 
-int
-char_to_int(char a)
-{
-    if (a >= '0' && a <= '9') {
-        return a-'0';
-    }
-    if (a >= 'A' && a <= 'F') {
-        return a-'A'+10;
-    }
-    if (a >= 'a' && a <= 'f') {
-        return a-'a'+10;
-    }
-    return 0;
-}
-
-EmbColor
-get_color(TABLE(state), char *key)
-{
-    EmbColor color;
-    char *s = get_str(state, key);
-    color.r = 16*char_to_int(s[0]) + char_to_int(s[1]);
-    color.g = 16*char_to_int(s[2]) + char_to_int(s[3]);
-    color.b = 16*char_to_int(s[4]) + char_to_int(s[5]);
-    return color;
-}
-
 /* Whenever the code happens across a todo call,
  * write it in a log file. */
 void
@@ -2230,108 +2194,6 @@ set_vector(TABLE(state), char *key, EmbVector v)
     char a[100];
     sprintf(a, "%f %f", v.x, v.y);
     set_str(state, key, a);
-}
-
-char *
-get_str(TABLE(state), char *key)
-{
-    int i;
-    for (i=0; i<MAX_CSV_ROWS; i++) {
-        if (!strcmp(state[i][0], key)) {
-            return state[i][1];
-        }
-    }
-    printf("Failed to find the variable: %s.\n", key);
-    return "None";
-}
-
-int
-get_int(TABLE(state), char *key)
-{
-    return atoi(get_str(state, key));
-}
-
-float
-get_float(TABLE(state), char *key)
-{
-    return atof(get_str(state, key));
-}
-
-EmbVector
-get_vector(TABLE(state), char *key)
-{
-    EmbVector v;
-    char *value = get_str(state, key);
-    v.x = atof(strtok(value, " "));
-    v.y = atof(strtok(value, " "));
-    return v;
-}
-
-int
-load_to_buffer(void)
-{
-    char buffer[4096];
-    size_t i, j, length;
-    FILE *fin;
-    fin = fopen(current_fname, "r");
-    if (!fin) {
-        return 1;
-    }
-    fseek(fin, 0, SEEK_END);
-    length = ftell(fin);
-    fseek(fin, 0, SEEK_SET);
-    if (fread(buffer, 1, length, fin) != length) {
-        fclose(fin);
-        return 1;
-    }
-    fclose(fin);
-
-    for (i=0; i<100; i++) {
-        text_display[i][0][0] = 0;
-    }
-
-    j = 0;
-    for (i=0; i<length; i++) {
-        buffer[j] = buffer[i];
-        if (buffer[i] != '\r') {
-            j++;
-        }
-    }
-    buffer[j] = 0;
-
-    line_n = 0;
-    for (i=0; i<length; i++) {
-        for (j=0; j<100; j++) {
-            if (buffer[i+j] == '\n' || !buffer[i+j]) {
-                break;
-            }
-        }
-        strncpy(text_display[line_n][0], buffer+i, j);
-        text_display[line_n][j][0] = 0;
-        line_n++;
-        i += j;
-    }
-
-    return 0;
-}
-
-
-int
-save_from_buffer(void)
-{
-    int i;
-    FILE *fin;
-    fin = fopen(current_fname, "w");
-    if (!fin) {
-        return 1;
-    }
-    for (i=0; i<line_n; i++) {
-        fprintf(fin, "%s\r\n", text_display[i][0]);
-    }
-
-    fclose(fin);
-
-    return 0;
 }
 
 /* We can load any of the CSV files from assets/
@@ -3617,16 +3479,6 @@ toolbar_init(void)
 
 }
 
-/*
- *  Tooltip manager. SDL doesn't support tooltips out of the box.
- *  ------------------------------------------------------------
- *
- *  Example here
- *  https://stackoverflow.com/questions/3221956/how-do-i-display-tooltips-in-tkinter
- *  https://gamedev.stackexchange.com/questions/186482/sdl2-show-a-tooltip-at-the-cursor-that-displays-rgb-of-the-pixel-under-the-cur
- *
- */
-
 void
 scene_update(void)
 {
@@ -3947,6 +3799,7 @@ draw_closest_qsnap(int window_id, Painter *painter)
 void
 draw_foreground(int window_id, int view, Painter *painter, Rect rect)
 {
+    EmbWindow *w = windows[window_id];
     printf("called with: %d %d", view, rect.x);
     Pen *grip_pen = create_pen();
     grip_pen->width = 2.0;
@@ -3986,12 +3839,12 @@ draw_foreground(int window_id, int view, Painter *painter, Rect rect)
     }
     */
 
-    if (!windows[window_id]->selecting_active) {
+    if (!w->selecting_active) {
         draw_closest_qsnap(window_id, painter);
         draw_crosshair(window_id, painter);
     }
 
-    if (windows[window_id]->tabs[tab_index].ruler) {
+    if (w->tabs[w->tab_index].ruler) {
         draw_rulers(window_id, active_scene);
     }
 }
@@ -7372,7 +7225,7 @@ tree_view(void)
 }
 
 /*
- *  To display an embedded image as a widget in SDL2.
+ *  To display an embedded image as a widget.
  */
 void
 image_widget_init(char *filename)

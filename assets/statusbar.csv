@@ -1,0 +1,12 @@
+
+char *statusbar_labels[MAX_STRING_LENGTH] = {
+    "SNAP",
+    "GRID",
+    "RULER",
+    "ORTHO",
+    "POLAR",
+    "QSNAP",
+    "QTRACK",
+    "LWT",
+    "END"
+};

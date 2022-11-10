@@ -1,0 +1,12 @@
+
+
+EmbWindow *property_editor_wnd;
+char property_editor_title[MAX_STRING_LENGTH] =
+    "Embroidermodder Property Editor";
+Rect property_editor_dimensions = {
+    .x = 200,
+    .y = 200,
+    .h = 600,
+    .w = 300
+};
+

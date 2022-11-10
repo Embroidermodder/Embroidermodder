@@ -1,0 +1,22 @@
+
+TABLE(grid_group_circular) = {
+    {"spinbox grid_size_radius"},
+    {"spinbox grid_size_angle"},
+    {"spinbox grid_spacing_radius"},
+    {"spinbox grid_spacing_angle"},
+    {"END"}
+};
+
+Spinboxen:
+
+Widget grid_center_x_sb;
+Widget grid_center_y_sb;
+Widget grid_size_x_sb;
+Widget grid_size_y_sb;
+Widget grid_size_radius_sb;
+Widget grid_size_angle_sb;
+Widget grid_spacing_x_sb;
+Widget grid_spacing_y_sb;
+Widget grid_spacing_radius_sb;
+Widget grid_spacing_angle_sb;
+

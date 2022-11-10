@@ -1,0 +1,18 @@
+
+QToolBar* toolbar[10]", "0",
+QMenu* menu[10]", "0",
+StatusBarButton* status-bar[8]", "0",
+QToolButton* toolButton[PROPERTY-EDITORS]", "0",
+QLineEdit* lineEdit[LINEEDIT-PROPERTY-EDITORS]", "0",
+QComboBox* comboBox[COMBOBOX-PROPERTY-EDITORS]", "0",
+
+QToolButton* toolButtonArcClockwise
+QComboBox* comboBoxArcClockwise
+
+Qgroup-box* group-boxGeometry[32]
+Qgroup-box* group-boxGeneral
+Qgroup-box* group-boxMiscArc
+Qgroup-box* group-boxMiscPath
+Qgroup-box* group-boxMiscPolyline
+Qgroup-box* group-boxTextTextSingle
+Qgroup-box* group-boxMiscTextSingle

@@ -1,0 +1,10 @@
+
+EmbWindow *settings_dialog_wnd;
+char settings_dialog_title[MAX_STRING_LENGTH] =
+    "Embroidermodder Settings";
+Rect settings_dialog_dimensions = {
+    .x = 200,
+    .y = 200,
+    .h = 600,
+    .w = 300
+};
