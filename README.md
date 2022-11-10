@@ -23,13 +23,96 @@ These discuss recent changes, plans and has user and developer guides for all th
 
 To see what we're focussing on right now, see the [Open Collective News](https://opencollective.com/embroidermodder).
 
+## Path to Beta Release
+
+Robin has been working on the development of the post-Qt version of the Embroidermodder 2 alpha for about a year
+now on hobbyists hours and he feels it's getting close to the stage where other developers can take on clearly
+defined challenges. Also the design of the software, which has mostly carried over from the other 3 core developers,
+is also almost ready to be tested in this way. So with that he's making this clear statement of intent:
+
+> *Embroidermodder 2.0.0 beta and regularly updated developer builds will be ready before 2023.*
+> 
+> Robin Swift, writing November 2022
+
+If you would like to get involved before this point the build and install advice is the next section of the manual,
+but I'd advise you read this section first to get used to the scope of the problem.
+
+### Problems to be fixed before the Beta Release
+
+* Tools to find common problems in the source code and suggest fixes to the developers:
+  * A translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.
+
+
+#### Get the Development Build going
+
+> When we switch to releases we recommend using them, unless you're reporting a bug in which case you can check the development build for whether it has been patched. If this applies to you, the current development build is:
+>
+> * [Linux](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005099)
+> * [Mac OS](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005101)
+> * [Windows](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005102)
+
+### Problems to be fixed during Beta and before 2.0.0
+
+### Problesm to be fixed eventually
+
 ## Build and Install Advice
 
-This advice is summed up in the [Robin's Gist](https://gist.github.com/robin-swift/2050bcfaa2426a91c42977b6d9559904), so the fast build should be:
+This advice is summed up [in this script](https://www.libembroidery.org/scripts/em2_debug.bash). The contents of this build script are:
+
+     #!/bin/bash
+
+     function detect_missing_library() {
+         echo "On Debian detects if a library is missing then requests to install it via sudo."
+
+         # Saves us logging in as su if the package is present.
+         if [ `dpkg -s $1 | wc -l` -eq 0 ]; then
+             echo "Attempting to install missing library $1."
+             sudo apt-get update
+             sudo apt-get install libx11-dev
+         fi
+     }
+
+     rm -fr Embroidermodder
+
+     git clone https://github.com/Embroidermodder/Embroidermodder
+     cd Embroidermodder
+     git submodule init
+     git submodule update
+
+     CC=gcc
+     CFLAGS="-O2 -g -Wall -std=c99 -Isrc/libembroidery/src"
+     SRC=src/libembroidery/src/*.c src/*.c
+
+     case "$(uname -s)" in
+     Linux*)
+         detect_missing_library libx11-dev
+         detect_missing_library build-essential
+         detect_missing_library make
+         make
+         ;;
+     Darwin*)
+         make
+         ;;
+     CYGWIN*)
+         $CC $CFLAGS -municode $SRC -o embroidermodder -lGdi32
+         ;;
+     MINGW*)
+         $CC $CFLAGS -municode $SRC -o embroidermodder -lGdi32
+         ;;
+     *)
+         echo "Unrecognised system: building as X11."
+         $CC $CFLAGS $SRC -o embroidermodder -lX11 -lm
+     esac
+
+     timeout 10 ./embroidermodder --test &> test_results.txt
+
+
+
+The fast build should be:
 
      curl https://www.libembroidery.org/scripts/em2_debug.bash | bash
 
-This is stored seperately so we can have a gist URL and make this shortlink for the one-liner.
+This is stored seperately from the repository so we can have a gist URL and make this shortlink for the one-liner. For an explanation of this build and debugger see the rest of this section.
 
 ### Dependencies
 
@@ -145,14 +228,6 @@ enforce when dealing with these arguments.
 The first thing you should try is building from source using the [build advice](#build)
 above. Then read some of the [manual](https://embroidermodder.org/docs/documentation) to get the general
 layout of the source code and what we are currently planning.
-
-### Development Build (ALPHA)
-
-When we switch to releases we recommend using them, unless you're reporting a bug in which case you can check the development build for whether it has been patched. If this applies to you, the current development build is:
-
-* [Linux](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005099)
-* [Mac OS](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005101)
-* [Windows](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005102)
 
 ### Testing
 
