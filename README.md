@@ -23,6 +23,8 @@ These discuss recent changes, plans and has user and developer guides for all th
 
 To see what we're focussing on right now, see the [Open Collective News](https://opencollective.com/embroidermodder).
 
+[The current printer-friendly version of the manual.](https://embroidermodder.org/docs/embroidermodder_manual.pdf)
+
 ## Path to Beta Release
 
 Robin has been working on the development of the post-Qt version of the Embroidermodder 2 alpha for about a year
@@ -267,16 +269,215 @@ machine specifications etc. The history is murky and often very poorly maintaine
 so if you know anything from working in the industry that you can share: it'd be
 appreciated!
 
-+++
-title = "The Embroidermodder 2.0.0-alpha Manual"
-author = "The Embroidermodder Team"
-abbrev = "docs"
-date = "2022-09-19"
-+++
+## Design
 
-[https://embroidermodder.org](https://embroidermodder.org)
+### The GUI Struture
 
-[The current printer-friendly version of the manual.](https://embroidermodder.org/docs/embroidermodder_manual.pdf)
+There are 3 fundamental units to the design:
+
+1. EmbWindow
+2. EmbPanel
+3. EmbWidget
+
+All of them can be configured via CSV tables and we
+welcome all new developers to first try changing CSV entries
+and reloading Embroidermodder to see how each of
+these structures work.
+
+The directory structure 
+
+As for the data structures that support these, see the next section on the "GUI Backend".
+
+### EmbWindow
+
+The struct is defined as:
+
+    typedef struct EmbWindow_ {
+        TABLE(data);
+        EmbPanel panels[MAX_PATTERNS];
+        int tab_index;
+        int tabbed;
+        int n_docs;
+        int screen;
+        int selected[MAX_SELECTED];
+        int n_selected;
+        int menu_state;
+        int running;
+        int undo_history_position;
+        int selecting_active;
+        int zoom_window_active;
+
+        text_properties text_style;
+
+        TABLE(undo_history);
+
+    #if EM2_WIN32
+        HWND hwnd;
+    #endif
+
+    #if EM2_X11
+        Display *display;
+        Window window;
+        GC gc;
+    #endif
+
+        stbtt_fontinfo font;
+        Rect dimension;
+    } EmbWindow;
+
+The purpose of this struct is to abstract out
+the specifics of how operating systems deal with
+window creation. Potentially, to keep the mobile
+and desktop versions more similar this could
+be a datatype with only one instance `main`
+but currently we have multiple stored in an
+pointer array called `windows`.
+
+### EmbPanels
+
+The EmbPanel struct is:
+
+    typedef struct EmbPanel_ {
+        char title[MAX_STRING_LENGTH];
+        char fname[MAX_STRING_LENGTH];
+        EmbWidget *widgets;
+        int n_widgets;
+        EmbPattern *pattern;
+        EMLayer layer[MAX_LAYERS];
+        int n_boxes;
+        int number_mode;
+        int snap;
+        int grid;
+        int ruler;
+        int ortho;
+        int polar;
+        int qsnap;
+        int qtrack;
+        int lwt;
+        int real;
+        Rect area;
+        int closeable;
+        int use_logo;
+        int use_texture;
+        int use_color;
+        int bg_logo;
+        int bg_texture;
+        int bg_color;
+        EmbCircle circle_ghost;
+        EmbRect rect_ghost;
+    } EmbPanel;
+
+The EmbPanels can only be stored in EmbWindows and, in turn,
+only EmbPanels can host EmbWidgets.
+
+For example it can act as a view on a pattern, including:
+ 
+ * the filename of the file that this pattern data was created with.
+ * the pattern data itself.
+ * all of the statusbar toggles.
+ * all of the geometry for the ghosts created by considering
+ * a given geometry action like a rotation.
+ 
+ Or an EmbPanel can be the host for a collection of editor widgets
+ including:
+ 
+ * spinboxes for setting floating point variables
+ * drop down menus for selecting one of a short list of options
+ * checkboxes for boolean values
+ * line edits for string values
+ 
+ All of these are EmbWidgets, but they may be contained in an EmbPanel
+ to make what under Qt would be called a Combobox and then those EmbPanels
+ would lie inside the property editor, which is an EmbPanel inside the
+ main window. The data access for a drop down menu could look like:
+ 
+    EmbWindow *w = windows[MAIN_WINDOW];
+    EmbPanel *p = w->panels[PROPERTY_EDITOR];
+    EmbPanel *combobox = p->panels[p->contents[TEXT_COMBOBOX]];
+    EmbWidget *dropdown = p->widgets[FONT_CHOICE];
+ 
+This means that 
+
+Layer management is only for the data not stored in the pattern,
+so when the user loads the pattern, it is dumped in the base layer
+that we call pattern. If the user wishes to draw something up from
+the base layer into a 
+
+### EmbWidget
+
+The leaf node in our GUI tree is the EmbWidget with the memory structure:
+
+    typedef struct EmbWidget_ {
+        Rect rect;
+        Image *image;
+        unsigned char color[4];
+        char label[MAX_STRING_LENGTH];
+        int mode;
+        char command[MAX_STRING_LENGTH];
+        char visibility;
+        char active;
+
+        /* Spinbox properties */
+        char category[MAX_STRING_LENGTH];
+        char name[MAX_STRING_LENGTH];
+        float single_step;
+        float range_lower;
+        float range_upper;
+        float value;
+        float storage;
+        int enabled;
+        int visible;
+
+        /* For settings this can act as either a settings container or a settings
+        * editor, if it acts as an editor then it also stores the relevant data.
+        *
+        * To tell the difference, when the mode of .
+        *
+        * SettingBox box[MAX_SETTINGS_BOXES];
+        * Setting settings[MAX_SETTINGS_IN_BOX];
+        */
+        char description[MAX_STRING_LENGTH];
+        int index;
+        char type[50];
+        int min;
+        int max;
+        int row;
+        int column;
+        int align;
+
+        /* Properties structs
+        * ------------------
+        * Covers Comboboxes, Line edits, Dropdowns etc.
+        */
+        char property_description[MAX_STRING_LENGTH];
+        unsigned char property_permissions;
+        unsigned char property_data_type;
+
+        char propertybox_title[MAX_STRING_LENGTH];
+        int propertybox_obj_type;
+        char **propertybox_properties;
+    } EmbWidget;
+
+All buttons, shortcuts, menus and regions of the windows should be widgets.
+
+The widgets are stored, accessed and altered via a binary tree where the
+left side is dominant.
+
+The strength of the new GUI relies heavily on this core concept. All the
+FreeGLUT 3 calls will happen at the end of calls to the widgets.
+
+Perhaps the action system should be connected to his somehow?
+
+#### DESCRIPTION OF STRUCT CONTENTS
+
+| name | type | description |
+|---|---|---|
+| `rect` | rectangle | The area that the widget can cover, relative to the `EmbPanel` it is within. |
+| `label` | fixed length string | If the widget is a text box like a menu bar item then it needs this char array to store the string. |
+| `position` | vector | Relative to its parent, where should the widget go (the top left corner's offset from the top left corner). |
+| `mode` | integer | Whether to use label, svg_path, icon approach. |
+
+## Old work that needs to be filed into the above
 
 Copyright © 2013-2022 The Embroidermodder Team.
 
@@ -629,19 +830,54 @@ sew    | YES   |       | |
 shv    |       |       | read (C version is broken)|
 sst    |       |       | none|
 svg    |       | YES   | |
-tap    | YES   |       | read (unknown)|
-u01    |       |       | |
-vip    | YES   |       | |
-vp3    | YES   |       | |
-xxx    | YES   |       | |
-zsk    |       |       | read (complete)
-\end{longtable
+| `tap` | YES   |       | read (unknown)|
+| `u01` |       |       | |
+| `vip` | YES   |       | |
+| `vp3` | YES   |       | |
+| `xxx` | YES   |       | |
+| `zsk` |       |       | read (complete) |
 
 Support for Singer FHE, CHE (Compucon) formats?
 
 ## Embroidermodder Project Coding Standards
 
 A basic set of guidelines to use when submitting code.
+
+Code structure is mre important than style, so
+first we advise you read "Design" and experimenting
+before getting into the specifics of code style.
+
+### Where Code Goes
+
+Anything that deals with the specifics of embroidery file formats, threads, rendering to images, embroidery machinery or command line interfaces should go in `libembroidery` not here.
+
+Should your idea pass this test:
+
+1. A new kind of GUI structure it goes in `src/ui.c`.
+2. If it's something the user can do, make a section of the `actuator` function (which lives in `src/actuator.c`) using the guide "The Actuator's Behaviour".
+3. Potentially variable data that is global goes in `src/data.c`.
+4. If the data will not vary declare it as a compiler definition using the "Compiler definitions" section and put it in `src/em2.h`.
+5. All other C code goes in `src/em2.c`.
+
+### Where Non-compiled Files Go
+
+TODO: Like most user interfaces Embroidermodder is mostly data, so here we will have a list describing
+where each CSV goes.
+
+### Ways in which we break style on purpose
+
+Most style guides advise you to keep functions short. We make a few pointed exceptions to this
+where the overall health and functionality of the
+source code should benefit.
+
+The `actuator` function will always be a mess
+and it should be: we're keeping the total source
+lines of code down by encoding all user action into
+a descrete sequence of strings that are all below
+`MAX_STRING_LENGTH` in length. See the section on
+the actuator (TODO) describing why any other solution
+we could think  here would mean more more code without
+a payoff in speed of execution or clarity.
 
 ### Naming Conventions
 
@@ -763,41 +999,6 @@ To see what we're focussing on at the moment check this table.
 | July-August 2022 | Finish all the targets in the Design, or assign them to 2.1. |
 | September 2022 | Bugfixing, Testing, QA. libembroidery 1.0 will be released, then updates will slow down and the Embroidermodder 2 development version will be fixed to the API of this version. |
 | October 2022 | Embroidermodder 2 is officially released. |
-
-## Build and Install
-
-### Desktop
-
-First you must install the dependencies which aren't compiled into the source:
-
-* `git`
-* `cmake`
-* A C compiler (we recommend `gcc` or `clang`)
-
-on Debian Linux/GNU use:
-
-```
-$ sudo apt install git clang build-essential libsdl2-dev \
-    libsdl2-images-dev libsdl2-ttf-dev
-```
-
-If you can't find a good fit for your system (on Windows use the section below),
-try compiling the included submodules with:
-
-```
-$ bash build_deps.sh
-```
-
-From here, on most sytems the command:
-
-```
-$ bash build.sh
-```
-
-will build the software. Currently this is the 2.0-alpha, which will have a build code of
-some kind.
-
-## Dependencies and Build
 
 ## Plans
 
