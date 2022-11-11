@@ -48,14 +48,14 @@ int load_window_data(int window_id, char *fname);
 #define TEXT_H 24
 
 void
-create_label(int window_id, int x, int y,
+create_label(int window_id, int panel_id, int x, int y,
     char *label, char *command, int visibility)
 {
-    EmbWindow *w = windows[window_id];
+    EmbPanel *panel = windows[window_id]->panels[panel_id];
     Rect rect;
     rect.x = x;
     rect.y = y;
-    strcpy(w->widgets[w->n_widgets].label, label);
+    strcpy([panel->widgets[panel->n_widgets].label, label);
 
     unsigned char bitmap_data[TEXT_H*TEXT_W];
     unsigned char bitmap[TEXT_H][TEXT_W];
@@ -96,10 +96,10 @@ create_label(int window_id, int x, int y,
     for (j=0; j<rect.w; j++) {
         bitmap_data[rect.w*i+j] = 255-bitmap[i][j];
     }
-    strcpy(w->widgets[w->n_widgets].command, command);
-    w->widgets[w->n_widgets].rect = rect;
-    w->widgets[w->n_widgets].mode = WIDGET_MODE_TEXT;
-    w->widgets[w->n_widgets].visibility = visibility;
+    strcpy(w->widgets[panel->n_widgets].command, command);
+    w->widgets[panel->n_widgets].rect = rect;
+    w->widgets[panel->n_widgets].mode = WIDGET_MODE_TEXT;
+    w->widgets[panel->n_widgets].visibility = visibility;
 
     stbi_write_bmp("temp.bmp", rect.w, rect.h, 1, bitmap_data);
 
@@ -116,7 +116,7 @@ create_label(int window_id, int x, int y,
 
 #endif
 
-    w->n_widgets++;
+    panel->n_widgets++;
 }
 
 void
@@ -132,27 +132,27 @@ wait(int milliseconds)
 }
 
 void
-destroy_widget(int window_id, int index)
+destroy_widget(int window_id, int panel_id, int index)
 {
-    EmbWindow *w = windows[window_id];
-    w->widgets[index] = w->widgets[w->n_widgets-1];
-    w->n_widgets--;
+    EmbPanel *panel = windows[window_id]->panels[panel_id];
+    panel->widgets[index] = panel->widgets[panel->n_widgets-1];
+    panel->n_widgets--;
 }
 
 void
-create_ui_rect(int window_id,
+create_ui_rect(int window_id, int panel_id,
     Rect rect, EmbColor color, int visibility)
 {
-    EmbWindow *w = windows[window_id];
-    w->widgets[w->n_widgets].rect = rect;
-    w->widgets[w->n_widgets].mode = WIDGET_MODE_BACKGROUND;
-    w->widgets[w->n_widgets].color[0] = color.r;
-    w->widgets[w->n_widgets].color[1] = color.g;
-    w->widgets[w->n_widgets].color[2] = color.b;
-    w->widgets[w->n_widgets].visibility = visibility;
-    strcpy(w->widgets[w->n_widgets].label, "label");
+    EmbPanel *panel = windows[window_id]->panels[panel_id];
+    panel->widgets[panel->n_widgets].rect = rect;
+    panel->widgets[panel->n_widgets].mode = WIDGET_MODE_BACKGROUND;
+    panel->widgets[panel->n_widgets].color[0] = color.r;
+    panel->widgets[panel->n_widgets].color[1] = color.g;
+    panel->widgets[panel->n_widgets].color[2] = color.b;
+    panel->widgets[panel->n_widgets].visibility = visibility;
+    strcpy(panel->widgets[panel->n_widgets].label, "label");
 
-    w->n_widgets++;
+    panel->n_widgets++;
 }
 
 void
@@ -173,29 +173,31 @@ create_icon(int w, int n, int m, char *label)
 }
 
 void
-horizontal_rule(int window_id, int x, int y, int width, int visibility)
+horizontal_rule(int window_id, int panel_id, int x, int y, int width, int visibility)
 {
-    create_ui_rect(window_id, make_rectangle(x, y, width, 1), black, visibility);
+    Rect rect = make_rectangle(x, y, width, 1);
+    create_ui_rect(window_id, panel_id, rect, black, visibility);
 }
 
 void
-vertical_rule(int window_id, int x, int y, int h, int visibility)
+vertical_rule(int window_id, int panel_id, int x, int y, int h, int visibility)
 {
-    create_ui_rect(window_id, make_rectangle(x, y, 1, h), black, visibility);
+    Rect rect = make_rectangle(x, y, 1, h);
+    create_ui_rect(window_id, panel_id, rect, black, visibility);
 }
 
 void
-create_grid(int window_index)
+create_grid(int window_id, int panel_id)
 {
     Rect line = make_rectangle(10, 170, 1, MAX_SCREEN_SIZE);
     while (line.x < MAX_SCREEN_SIZE) {
-        create_ui_rect(MAIN_WINDOW, line, grid_color, ALWAYS_VISIBLE);
+        create_ui_rect(window_id, panel_id, line, grid_color, ALWAYS_VISIBLE);
         line.x += 70;
     }
 
     line = make_rectangle(10, 170, MAX_SCREEN_SIZE, 1);
     while (line.y < MAX_SCREEN_SIZE) {
-        create_ui_rect(MAIN_WINDOW, line, grid_color, ALWAYS_VISIBLE);
+        create_ui_rect(window_id, panel_id, line, grid_color, ALWAYS_VISIBLE);
         line.y += 70;
     }
 }
@@ -258,18 +260,19 @@ create_toolbars(void)
  * only.
  */
 int
-build_menu(char *fname, int x_offset, int menu)
+build_menu(int window_id, int panel_id, char *fname, int x_offset, int menu)
 {
     int i;
     int y_offset = 5;
     /* Default, before the list is populated. */
     int menu_width = 100;
-    EmbWindow *main = windows[MAIN_WINDOW];
+    EmbWindow *main = windows[window_id];
+    EmbPanel *panel = main->panels[panel_id];
 
     TABLE(labels);
     load_csv(labels, fname);
 
-    create_label(MAIN_WINDOW, x_offset, y_offset,
+    create_label(window_id, panel_id, x_offset, y_offset,
         labels[0][0], labels[0][1], ALWAYS_VISIBLE);
     int result = x_offset + 10;
     result += main->widgets[main->n_widgets-1].rect.w;
@@ -349,18 +352,14 @@ create_view(int window_id)
     create_scrollbars(window_id);
 }
 
-/* Renderer for every widget in the user interface for
- * window with index window_id.
- */
 int
-render(int window_id)
+render_panel(int window_id, int panel_id)
 {
     int i;
-    EmbWindow *w = windows[window_id];
-    render_clear(window_id, clear_color);
+    EmbPanel *panel = windows[window_id]->panels[panel_id];
 
-    for (i=0; i<w->n_widgets; i++) {
-        EmbWidget widget = windows[window_id]->widgets[i];
+    for (i=0; i<panel->n_widgets; i++) {
+        EmbWidget widget = panel->widgets[i];
         if (widget.visibility == ALWAYS_VISIBLE
            || widget.visibility == menu_state) {
             if (widget.mode == WIDGET_MODE_BLOCK) {
@@ -373,6 +372,20 @@ render(int window_id)
                 render_copy(window_id, widget.image);
             }
         }
+    }
+}
+
+/* Renderer for every widget in the user interface for
+ * window with index window_id.
+ */
+int
+render(int window_id)
+{
+    int i;
+    render_clear(window_id, clear_color);
+
+    for (i=0; i<w->n_panels; i++) {
+        render_panel(window_id, panel_id);
     }
     return 0;
 }
@@ -850,23 +863,24 @@ create_widget(int window_id, Rect rect, char *command)
 }
 
 int
-create_spinbox(EmbWindow *w, char *fname, float value)
+create_spinbox(int window_id, int panel_id, char *fname, float value)
 {
+    EmbPanel *panel = windows[window_id]->panels[panel_id];
     TABLE(table);
     load_csv(table, fname);
-    strcpy(w->widgets[w->n_widgets].label, translate(get_str(table, "label")));
-    strcpy(w->widgets[w->n_widgets].category, get_str(table, "category"));
-    strcpy(w->widgets[w->n_widgets].name, get_str(table, "name"));
-    w->widgets[w->n_widgets].single_step = get_float(table, "single_step");
-    w->widgets[w->n_widgets].range_lower = get_float(table, "range_lower");
-    w->widgets[w->n_widgets].range_upper = get_float(table, "range_upper");
-    w->widgets[w->n_widgets].value = value;
-    w->widgets[w->n_widgets].storage = value;
-    w->widgets[w->n_widgets].enabled = !dialog_grid_load_from_file;
-    w->widgets[w->n_widgets].visible = get_int(table, "visible");
-    w->widgets[w->n_widgets].mode = WIDGET_MODE_SPINBOX;
+    strcpy(panel->widgets[w->n_widgets].label, translate(get_str(table, "label")));
+    strcpy(panel->widgets[panel->n_widgets].category, get_str(table, "category"));
+    strcpy(panel->widgets[panel->n_widgets].name, get_str(table, "name"));
+    panel->widgets[panel->n_widgets].single_step = get_float(table, "single_step");
+    panel->widgets[panel->n_widgets].range_lower = get_float(table, "range_lower");
+    panel->widgets[panel->n_widgets].range_upper = get_float(table, "range_upper");
+    panel->widgets[panel->n_widgets].value = value;
+    panel->widgets[panel->n_widgets].storage = value;
+    panel->widgets[panel->n_widgets].enabled = !dialog_grid_load_from_file;
+    panel->widgets[panel->n_widgets].visible = get_int(table, "visible");
+    panel->widgets[panel->n_widgets].mode = WIDGET_MODE_SPINBOX;
 
-    w->n_widgets++;
+    panel->n_widgets++;
     return 0;
 }
 
@@ -894,3 +908,31 @@ load_image(char *path)
     fclose(f);
 }
 
+/* EmbPanels exist to server as window-like areas within the Windows of
+ * the host operating system.
+ *
+ * Tabs in the tabbed interface parts (for example the settings dialog) are 
+ * EmbPanels, but they are EmbPanels that do not have the EXCLUSIVE flag set,
+ * but do have the FILL_SPACE flag set. Therefore they all overlay and it is the
+ * only VISIBLE tab that is interactable.
+ *
+ * EmbPanels need to exist in a tree-like structure as they contain widgets
+ * in a potentially overlapping manner and an EmbPanel can contain other 
+ * EmbPanels.
+ *
+ * An EmbPanel does _not_ have to have any GUI capabilities and instead act
+ * as a standardised container for the "middle" of the GUI tree. So we have:
+ * an array of windows each containing a tree structure of panels each
+ * containing widgets and only these leaf nodes can be rendered. 
+ */
+void
+create_panel(EmbPanel *panel)
+{
+    panel->closeable = 1;
+    panel->use_logo = 0;
+    panel->use_texture = 0;
+    panel->use_color = 0;
+    panel->bg_logo = 0;
+    panel->bg_texture = 0;
+    panel->bg_color = 0;
+}

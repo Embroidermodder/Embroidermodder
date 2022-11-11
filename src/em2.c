@@ -360,7 +360,7 @@ find_mdi_window(char *file_name)
 /*
  *  About Dialog
  */
-EmbWindow *
+void
 about_dialog_init(void)
 {
     create_window(ABOUT_WINDOW, "About Embroidermodder");
@@ -481,6 +481,7 @@ details_dialog_init(void)
     scroll_area.set_widget(widget);
     return scroll_area;
     */
+    return 0;
 }
 
 void
@@ -548,12 +549,6 @@ settings_dialog_init(int showTab)
     */
 }
 
-void
-load_widget(EmbTab *settings_tab_display, char *fname)
-{
-
-}
-
 /* Genericised tab creation: uses "assets/ui/tab_name.csv" as the starting point.
  * it then chain loads the data it needs using load_widget(tab, fname);
  */
@@ -562,6 +557,8 @@ create_window_tab(int window_id, char *fname)
 {
     TABLE(tab_data);
     load_csv(tab_data, fname);
+    EmbWindow *w = windows[window_id];
+    w->tabbed = 1;
     
     return 0;
 }
@@ -2225,13 +2222,11 @@ display_buffer(void)
  *  We don't have a seperate window for the pop-ups like the file
  *  browser for opening or saving a file. Instead, a view will
  *  be created.
+ *
+ *  A view is a kind of EmbPanel, so the mode value makes it act
+ *  as one.
  */
 
-void
-view_init(int view, int the_scene)
-{
-
-}
 
 void
 mdi_window_init(int index, int parent, int wflags)
@@ -2239,7 +2234,7 @@ mdi_window_init(int index, int parent, int wflags)
     printf("%d%d%d", index, parent, wflags);
     /*
     mw = mw
-    EmbTab = parent
+    EmbPanel = parent
     myIndex = index
     fileWasLoaded = 0
 
@@ -2258,40 +2253,28 @@ mdi_window_init(int index, int parent, int wflags)
 }
 
 void
-tab_init(EmbTab *tab)
-{
-    tab->closeable = 1;
-    tab->use_logo = 0;
-    tab->use_texture = 0;
-    tab->use_color = 0;
-    tab->bg_logo = 0;
-    tab->bg_texture = 0;
-    tab->bg_color = 0;
-}
-
-void
-mdi_area_use_background_logo(EmbTab *area, int use)
+mdi_area_use_background_logo(EmbPanel *area, int use)
 {
     area->use_logo = use;
     repaint();
 }
 
 void
-mdi_area_use_background_texture(EmbTab *area, int use)
+mdi_area_use_background_texture(EmbPanel *area, int use)
 {
     area->use_texture = use;
     repaint();
 }
 
 void
-mdi_area_use_background_color(EmbTab *area, int use)
+mdi_area_use_background_color(EmbPanel *area, int use)
 {
     area->use_color = use;
     repaint();
 }
 
 void
-mdi_area_set_background_logo(EmbTab *area, char *file_name)
+mdi_area_set_background_logo(EmbPanel *area, char *file_name)
 {
     printf("%d%s", area->closeable, file_name);
     /* bg_logo.load(file_name); */
@@ -2299,7 +2282,7 @@ mdi_area_set_background_logo(EmbTab *area, char *file_name)
 }
 
 void
-mdi_area_set_background_texture(EmbTab *area, char *file_name)
+mdi_area_set_background_texture(EmbPanel *area, char *file_name)
 {
     printf("%d%s", area->closeable, file_name);
     /* bg_texture.load(file_name); */
@@ -2307,7 +2290,7 @@ mdi_area_set_background_texture(EmbTab *area, char *file_name)
 }
 
 void
-mdi_area_set_background_color(EmbTab *area, EmbColor color)
+mdi_area_set_background_color(EmbPanel *area, EmbColor color)
 {
     printf("%d%d", area->closeable, color.r);
     /*
@@ -2323,7 +2306,7 @@ mdi_area_set_background_color(EmbTab *area, EmbColor color)
 }
 
 void
-mdi_area_mouse_float_click_event(EmbTab *area, EmbEvent e)
+mdi_area_mouse_float_click_event(EmbPanel *area, EmbEvent e)
 {
     printf("%d %d\n", area->closeable, e.type);
     /*
@@ -2332,7 +2315,7 @@ mdi_area_mouse_float_click_event(EmbTab *area, EmbEvent e)
 }
 
 void
-mdi_area_paint_event(EmbTab *area, EmbEvent e)
+mdi_area_paint_event(EmbPanel *area, EmbEvent e)
 {
     printf("%d %d\n", area->closeable, e.type);
     /* vport = viewport()
@@ -2397,7 +2380,7 @@ mdi_area_zoom_extents_actionAllSubWindows(void)
     */
 }
 
-/* HACK: Take that QEmbTab!
+/* HACK: Take that QEmbPanel!
  */
  /*
 void
@@ -3317,7 +3300,7 @@ status_bar_update(int status_bar)
 
 /*
 void status_bar_context_menu_event(
-    EmbTab *status_bar, EmbEvent *event)
+    EmbPanel *status_bar, EmbEvent *event)
 {
     setOverrideCursor(Qt-ArrowCursor)
     menu- = QMenu(this)
@@ -3395,7 +3378,7 @@ void status_bar_context_menu_event(
 /* TODO: set format from settings.
  */
 void
-status_bar_mouse_coord(EmbTab *tab, int x, int y)
+status_bar_mouse_coord(EmbPanel *tab, int x, int y)
 {
     printf("%d %d %d\n", tab->grid, x, y);
     /*
@@ -4385,7 +4368,7 @@ show_scroll_bars(int val)
 }
 
 void
-set_cross_hair_color(EmbTab *area, EmbColor color)
+set_cross_hair_color(EmbPanel *area, EmbColor color)
 {
     printf("%d %d\n", area->closeable, color.r);
     /* crosshair-color = color;
@@ -4395,7 +4378,7 @@ set_cross_hair_color(EmbTab *area, EmbColor color)
 }
 
 void
-set_background_color(EmbTab *area, EmbColor color)
+set_background_color(EmbPanel *area, EmbColor color)
 {
     printf("%d %d\n", area->closeable, color.r);
     /* set_background-brush(Color(color));
@@ -4406,7 +4389,7 @@ set_background_color(EmbTab *area, EmbColor color)
 
 void
 set_select_box_colors(
-    EmbTab *area,
+    EmbPanel *area,
     EmbColor colorL, EmbColor fillL,
     EmbColor colorR, EmbColor fillR,
     float alpha)
@@ -5155,7 +5138,7 @@ class MdiWindow()*/
 
     mwdow*    mw
     QGraphicsScene*    gscene
-    QEmbTab*  EmbTab
+    QEmbPanel*  EmbPanel
     View*  gview
     int fileWasLoaded
 
@@ -7408,7 +7391,7 @@ enter_event(EmbEvent event)
     /*
     mdi-win = mw;
     if (mdi-win) {
-        EmbTab.setActiveSubWindow(mdi-win);
+        EmbPanel.setActiveSubWindow(mdi-win);
     }
     */
 }

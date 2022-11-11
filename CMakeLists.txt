@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 
 project(embroidermodder VERSION 2.0.0 LANGUAGES C)
 
-#set(CMAKE_C_STANDARD 90)
-#set(CMAKE_C_STANDARD_REQUIRED True)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED True)
 
 option( EMBROIDERY_BUILD_SHARED_LIBS "Build shared library." OFF )
 option( EMBROIDERY_BUILD_CLI "Build embroider command line tool." OFF )
@@ -33,7 +33,8 @@ add_executable(embroidermodder
 	src/libembroidery/src/thread-color.c
 	src/em2.c
 	src/actuator.c
-	src/compatibility_layer.c
+	src/ui.c
+	src/data.c
 )
 
 target_include_directories(embroidermodder INTERFACE src/stb src src/libembroidery/src)
@@ -44,17 +45,9 @@ else (WIN32)
 target_link_libraries(embroidermodder PRIVATE X11 m)
 endif (WIN32)
 
-if(EMBROIDERY_BUILD_SHARED_LIBS)
 install(
-    FILES
-        src/embroidery.h
-    DESTINATION /usr/include
-)
-
-# Needs some way of installing the assets folder.
-install(
-    TARGETS
-       embroidermodder
+    TARGETS embroidermodder
     RUNTIME DESTINATION /usr/bin
+	RUNTIME_DEPENDENCIES
+		${CMAKE_CURRENT_SOURCE_DIR}/assets/main_window.csv
 )
-endif()

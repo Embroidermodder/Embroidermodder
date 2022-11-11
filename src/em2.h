@@ -71,7 +71,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE
+#endif
 #include <unistd.h>
 #endif
 
@@ -460,31 +462,6 @@ typedef struct Toolset_ {
 } Toolset;
 
 /* Widget: the basic unit of the GUI.
- *
- * OVERVIEW
- *
- * All buttons, shortcuts, menus and regions of the windows should be widgets.
- *
- * The widgets are stored, accessed and altered via a binary tree where the
- * left side is dominant.
- *
- * The strength of the new GUI relies heavily on this core concept. All the
- * FreeGLUT 3 calls will happen at the end of calls to the widgets.
- *
- * Perhaps the action system should be connected to this somehow?
- *
- * DESCRIPTION OF STRUCT CONTENTS
- *
- * label
- *     If the widget is a text box like a menu bar item
- *     then it needs this char array to store the string.
- *
- * position
- *     Relative to its parent, where should the widget go
- *     (the top left corner's offset from the top left corner).
- *
- * mode
- *     Whether to use label, svg_path, icon approach.
  */
 typedef struct EmbWidget_ {
     Rect rect;
@@ -571,24 +548,14 @@ typedef struct EMLayer_ {
     double line_weight;
 } EMLayer;
 
-/* WindowTab: The per-file data associated with each tab.
+/* EmbPanel: the container format for all widgets.
  *
- * Including:
- *     o the filename of the file that this pattern data was created
- *       with.
- *     o the pattern data itself.
- *     o all of the statusbar toggles.
- *     o all of the geometry for the ghosts created by considering
- *       a given geometry action like a rotation.
- *
- * Layer management is only for the data not stored in the pattern,
- * so when the user loads the pattern, it is dumped in the base layer
- * that we call pattern. If the user wishes to draw something up from
- * the base layer into a 
  */
-typedef struct EmbTab_ {
+typedef struct EmbPanel_ {
     char title[MAX_STRING_LENGTH];
     char fname[MAX_STRING_LENGTH];
+    EmbWidget *widgets;
+    int n_widgets;
     EmbPattern *pattern;
     EMLayer layer[MAX_LAYERS];
     int n_boxes;
@@ -612,7 +579,7 @@ typedef struct EmbTab_ {
     int bg_color;
     EmbCircle circle_ghost;
     EmbRect rect_ghost;
-} EmbTab;
+} EmbPanel;
 
 typedef struct Ruler_ {
     EmbVector position;
@@ -637,10 +604,9 @@ typedef struct ViewPort_ {
  */
 typedef struct EmbWindow_ {
     TABLE(data);
-    EmbTab tabs[MAX_PATTERNS];
+    EmbPanel *panels[MAX_PATTERNS];
     int tab_index;
-    EmbWidget *widgets;
-    int n_widgets;
+    int tabbed;
     int n_docs;
     int screen;
     int selected[MAX_SELECTED];
@@ -704,19 +670,19 @@ int click_detection(EmbWidget *w, int x, int y);
 
 int find_mdi_window(char *file_name);
 
-int load_to_buffer();
-int save_from_buffer();
-void display_buffer();
+int load_to_buffer(void);
+int save_from_buffer(void);
+void display_buffer(void);
 
-/* Operate on the window. */
+/* ui.c function declarations */
 void create_widget(int window, Rect rect, char *action_id);
-void create_label(int window, int x, int y, char *label, char *command, int visibility);
-void create_ui_rect(int window, Rect rect, EmbColor color, int visibility);
-void create_icon(int window, int n, int m, char *label);
+void create_label(int window, int panel, int x, int y, char *label, char *command, int visibility);
+void create_ui_rect(int window, int panel, Rect rect, EmbColor color, int visibility);
+void create_icon(int window, int panel, int n, int m, char *label);
 int get_widget_by_label(int window, char *label);
-void set_visibility(int window, char *label, int visibility);
-void horizontal_rule(int window, int x, int y, int w, int visibility);
-void vertical_rule(int window, int x, int y, int h, int visibility);
+void set_visibility(int window, int panel, char *label, int visibility);
+void horizontal_rule(int window, int panel, int x, int y, int w, int visibility);
+void vertical_rule(int window, int panel, int x, int y, int h, int visibility);
 
 int build_menu(char *fname, int x_offset, int menu);
 
@@ -801,7 +767,6 @@ void repaint(void);
 
 void load_translations(void);
 
-void load_widget(EmbTab *settings_tab_display, char *fname);
 int create_window_tab(int window, char *fname);
 
 void load_csv(TABLE(table), char *fname);

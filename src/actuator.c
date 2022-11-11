@@ -358,44 +358,45 @@ actuator(char *action)
     }
     if (starts_with(action, "enable")) {
         char *arguments = action + strlen("enable") + 1;
+        EmbPanel *panel = windows[MAIN_WINDOW]->panels[windows[MAIN_WINDOW]->tab_index];
         if (starts_with(arguments, "grid")) {
             debug_message("Show grid");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].grid = 1;
+            panel->grid = 1;
             return 0;
         }
         if (starts_with(arguments, "real")) {
             debug_message("Enable real render in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].real = 1;
+            panel->real = 1;
             return 0;
         }
         if (starts_with(arguments, "ruler")) {
             debug_message("Show rulers in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ruler = 1;
+            panel->ruler = 1;
             return 0;
         }
         if (starts_with(arguments, "ortho")) {
             debug_message("Show orthogonal grid in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ortho = 1;
+            panel->ortho = 1;
             return 0;
         }
         if (starts_with(arguments, "qsnap")) {
             debug_message("Activate QSnap mode in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].snap = 1;
+            panel->snap = 1;
             return 0;
         }
         if (starts_with(arguments, "polar")) {
             debug_message("Activate polar grid in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].polar = 1;
+            panel->polar = 1;
             return 0;
         }
         if (starts_with(arguments, "track")) {
             debug_message("Activate QTrack mode in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].qtrack = 1;
+            panel->qtrack = 1;
             return 0;
         }
         if (starts_with(arguments, "lwt")) {
             debug_message("Show Lineweight in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].lwt = 1;
+            panel->lwt = 1;
             return 0;
         }
         return 0;
@@ -403,44 +404,45 @@ actuator(char *action)
 
     if (starts_with(action, "disable")) {
         char *arguments = action + strlen("disable") + 1;
+        EmbPanel *panel = windows[MAIN_WINDOW]->panels[windows[MAIN_WINDOW]->tab_index];
         if (starts_with(arguments, "grid")) {
             debug_message("Hide grid in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].grid = 0;
+            panel->grid = 0;
             return 0;
         }
         if (starts_with(arguments, "real")) {
             debug_message("Disable real render in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].real = 0;
+            panel->real = 0;
             return 0;
         }
         if (starts_with(arguments, "ruler")) {
             debug_message("Hide rulers in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ruler = 0;
+            panel->ruler = 0;
             return 0;
         }
         if (starts_with(arguments, "ortho")) {
             debug_message("Hide orthogonal grid in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ortho = 0;
+            panel->ortho = 0;
             return 0;
         }
         if (starts_with(arguments, "qsnap")) {
             debug_message("Disable qsnap mode in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].snap = 0;
+            panel->snap = 0;
             return 0;
         }
         if (starts_with(arguments, "polar")) {
             debug_message("Disable orthogonal grid in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].polar = 0;
+            panel->polar = 0;
             return 0;
         }
         if (starts_with(arguments, "track")) {
             debug_message("Disable QTrack in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].qtrack = 0;
+            panel->qtrack = 0;
             return 0;
         }
         if (starts_with(arguments, "lwt")) {
             debug_message("Hide lineweight in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].lwt = 0;
+            panel->lwt = 0;
             return 0;
         }
         return 0;
@@ -448,44 +450,45 @@ actuator(char *action)
 
     if (starts_with(action, "toggle")) {
         char *arguments = action + strlen("toggle") + 1;
+        EmbPanel *panel = windows[MAIN_WINDOW]->panels[windows[MAIN_WINDOW]->tab_index];
         if (starts_with(arguments, "grid")) {
             debug_message("Toggle show grid in this tab.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].grid = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].grid;
+            panel->grid = !panel->grid;
             return 0;
         }
         if (starts_with(arguments, "real")) {
             debug_message("Toggle real render.");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].real = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].real;
+            panel->real = !panel->real;
             return 0;
         }
         if (starts_with(arguments, "ruler")) {
             debug_message("toggle show ruler");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ruler = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ruler;
+            panel->ruler = !panel->ruler;
             return 0;
         }
         if (starts_with(arguments, "ortho")) {
             debug_message("StatusBarButton toggleOrtho()");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ortho = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].ortho;
+            panel->ortho = !panel->ortho;
             return 0;
         }
         if (starts_with(arguments, "qsnap")) {
             debug_message("StatusBarButton toggleOrtho()");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].snap = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].snap;
+            panel->snap = !panel->snap;
             return 0;
         }
         if (starts_with(arguments, "polar")) {
             debug_message("StatusBarButton toggleOrtho()");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].polar = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].polar;
+            panel->polar = !panel->polar;
             return 0;
         }
         if (starts_with(arguments, "track")) {
             debug_message("StatusBarButton toggleQTrack()");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].qtrack = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].qtrack;
+            panel->qtrack = !panel->qtrack;
             return 0;
         }
         if (starts_with(arguments, "lwt")) {
             debug_message("StatusBarButton toggleLwt()");
-            windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].lwt = !windows[MAIN_WINDOW]->tabs[windows[MAIN_WINDOW]->tab_index].lwt;
+            panel->lwt = !panel->lwt;
             return 0;
         }
         return 0;
