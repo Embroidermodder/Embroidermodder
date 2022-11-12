@@ -14,30 +14,28 @@
  */
 
 #include "em2.h"
-
-int load_window_data(int window_id, char *fname);
-
+ 
 /* To make a new windowing system compatible with our
  * widget system create the following functions:
  *
- * void create_window(char *fname, char *title);
+ * void create_window(char *fname);
  *     which creates a window with the first available
- *     empty window struct.
+ *     empty window struct, using the data in the CSV file "fname".
  *
- * void process_input(int window_id);
+ * void process_input(EmbWindow *window);
  *     which converts the user input into instructions to the
  *     actuator.
  *
- * void render_clear(int window_id, EmbColor color);
+ * void render_clear(EmbWindow *window, EmbColor color);
  *     which clears the whole window with the given color.
  *
- * void render_copy(int window_id, EmbImage image);
+ * void render_copy(EmbWindow *window, EmbImage image);
  *     which renders an image to the .
  *
- * void render_rect(int window_id, EmbColor color, Rect rect);
+ * void render_rect(EmbWindow *window, EmbColor color, Rect rect);
  *     which renders a rectangle to the .
  *
- * void destroy_window(int window_id);
+ * void destroy_window(EmbWindow *window);
  *     which closes the given window, but the memory
  *     remains allocated, to be garbage collected at the
  *     end of runtime.
@@ -48,14 +46,14 @@ int load_window_data(int window_id, char *fname);
 #define TEXT_H 24
 
 void
-create_label(int window_id, int panel_id, int x, int y,
+create_label(EmbWindow *w, EmbPanel *panel, int position[2],
     char *label, char *command, int visibility)
 {
-    EmbPanel *panel = windows[window_id]->panels[panel_id];
+    EmbWidget *widget = panel->widgets[panel->n_widgets];
     Rect rect;
-    rect.x = x;
-    rect.y = y;
-    strcpy([panel->widgets[panel->n_widgets].label, label);
+    rect.x = position[0];
+    rect.y = position[1];
+    strcpy(widget->label, label);
 
     unsigned char bitmap_data[TEXT_H*TEXT_W];
     unsigned char bitmap[TEXT_H][TEXT_W];
@@ -96,10 +94,10 @@ create_label(int window_id, int panel_id, int x, int y,
     for (j=0; j<rect.w; j++) {
         bitmap_data[rect.w*i+j] = 255-bitmap[i][j];
     }
-    strcpy(w->widgets[panel->n_widgets].command, command);
-    w->widgets[panel->n_widgets].rect = rect;
-    w->widgets[panel->n_widgets].mode = WIDGET_MODE_TEXT;
-    w->widgets[panel->n_widgets].visibility = visibility;
+    strcpy(widget->command, command);
+    widget->rect = rect;
+    widget->mode = WIDGET_MODE_TEXT;
+    widget->visibility = visibility;
 
     stbi_write_bmp("temp.bmp", rect.w, rect.h, 1, bitmap_data);
 
@@ -132,31 +130,30 @@ wait(int milliseconds)
 }
 
 void
-destroy_widget(int window_id, int panel_id, int index)
+destroy_widget(EmbPanel *panel, int index)
 {
-    EmbPanel *panel = windows[window_id]->panels[panel_id];
     panel->widgets[index] = panel->widgets[panel->n_widgets-1];
     panel->n_widgets--;
 }
 
 void
-create_ui_rect(int window_id, int panel_id,
+create_ui_rect(EmbPanel *panel,
     Rect rect, EmbColor color, int visibility)
 {
-    EmbPanel *panel = windows[window_id]->panels[panel_id];
-    panel->widgets[panel->n_widgets].rect = rect;
-    panel->widgets[panel->n_widgets].mode = WIDGET_MODE_BACKGROUND;
-    panel->widgets[panel->n_widgets].color[0] = color.r;
-    panel->widgets[panel->n_widgets].color[1] = color.g;
-    panel->widgets[panel->n_widgets].color[2] = color.b;
-    panel->widgets[panel->n_widgets].visibility = visibility;
-    strcpy(panel->widgets[panel->n_widgets].label, "label");
+    EmbWidget *widget;
+    widget->rect = rect;
+    widget->mode = WIDGET_MODE_BACKGROUND;
+    widget->color[0] = color.r;
+    widget->color[1] = color.g;
+    widget->color[2] = color.b;
+    widget->visibility = visibility;
+    strcpy(widget->label, "label");
 
     panel->n_widgets++;
 }
 
 void
-create_icon(int w, int n, int m, char *label)
+create_icon(EmbWindow *window, int n, int m, char *label)
 {
     int icon_offset_n = n * icon_padding
         + (n-1)*(icon_size + icon_padding);
@@ -169,41 +166,41 @@ create_icon(int w, int n, int m, char *label)
     rect.w = icon_size;
     rect.h = icon_size;
 
-    create_widget(w, rect, label);
+    create_widget(window, panel, rect, label);
 }
 
 void
-horizontal_rule(int window_id, int panel_id, int x, int y, int width, int visibility)
+horizontal_rule(EmbPanel *panel, int position[2], int width, int visibility)
 {
-    Rect rect = make_rectangle(x, y, width, 1);
-    create_ui_rect(window_id, panel_id, rect, black, visibility);
+    Rect rect = make_rectangle(position[0], position[1], width, 1);
+    create_ui_rect(panel, rect, black, visibility);
 }
 
 void
-vertical_rule(int window_id, int panel_id, int x, int y, int h, int visibility)
+vertical_rule(EmbPanel *panel, int position[2], int h, int visibility)
 {
-    Rect rect = make_rectangle(x, y, 1, h);
-    create_ui_rect(window_id, panel_id, rect, black, visibility);
+    Rect rect = make_rectangle(position[0], position[1], 1, h);
+    create_ui_rect(panel, rect, black, visibility);
 }
 
 void
-create_grid(int window_id, int panel_id)
+create_grid(EmbPanel *panel)
 {
     Rect line = make_rectangle(10, 170, 1, MAX_SCREEN_SIZE);
     while (line.x < MAX_SCREEN_SIZE) {
-        create_ui_rect(window_id, panel_id, line, grid_color, ALWAYS_VISIBLE);
+        create_ui_rect(panel, line, grid_color, ALWAYS_VISIBLE);
         line.x += 70;
     }
 
     line = make_rectangle(10, 170, MAX_SCREEN_SIZE, 1);
     while (line.y < MAX_SCREEN_SIZE) {
-        create_ui_rect(window_id, panel_id, line, grid_color, ALWAYS_VISIBLE);
+        create_ui_rect(panel, line, grid_color, ALWAYS_VISIBLE);
         line.y += 70;
     }
 }
 
 void
-create_toolbars(void)
+create_toolbars(EmbWindow *window)
 {
     int i;
     int toolbar_offset = menubar_height + menubar_padding;
@@ -216,26 +213,21 @@ create_toolbars(void)
         printf("%s\n", toolbars[i][0]);
     }
 
-    create_ui_rect(
-        MAIN_WINDOW,
-        make_rectangle(0, 0, 
-            windows[MAIN_WINDOW]->dimension.w,
+    Rect rect = make_rectangle(0, 0, 
+            window->dimension.w,
             4*(toolbar_padding + toolbar_height)
-            + toolbar_offset),
-        bg_color,
-        ALWAYS_VISIBLE);
+            + toolbar_offset);
+    EmbPanel *panel = window->panels[TOOLBAR_PANEL];
+    create_ui_rect(panel, rect, bg_color, ALWAYS_VISIBLE);
 
     for (i=0; i<4; i++) {
-        create_ui_rect(
-            MAIN_WINDOW,
-            make_rectangle(
+        Rect rect = make_rectangle(
                 toolbar_padding,
                 i * (toolbar_padding + toolbar_height)
                     + toolbar_offset,
-                windows[MAIN_WINDOW]->dimension.w - 2*toolbar_padding,
-                toolbar_height),
-            toolbar_bg_color,
-            ALWAYS_VISIBLE);
+                window->dimension.w - 2*toolbar_padding,
+                toolbar_height);
+        create_ui_rect(panel, rect, toolbar_bg_color, ALWAYS_VISIBLE);
     }
 
     for (i=0; strcmp(toolbars[i][0], "END"); i++) {
@@ -260,39 +252,36 @@ create_toolbars(void)
  * only.
  */
 int
-build_menu(int window_id, int panel_id, char *fname, int x_offset, int menu)
+build_menu(EmbPanel *panel, char *fname, int x_offset, int menu)
 {
     int i;
     int y_offset = 5;
     /* Default, before the list is populated. */
     int menu_width = 100;
-    EmbWindow *main = windows[window_id];
-    EmbPanel *panel = main->panels[panel_id];
 
     TABLE(labels);
     load_csv(labels, fname);
 
-    create_label(window_id, panel_id, x_offset, y_offset,
-        labels[0][0], labels[0][1], ALWAYS_VISIBLE);
+    int position[2] = {x_offset, y_offset};
+    create_label(panel, position, labels[0][0], labels[0][1], ALWAYS_VISIBLE);
     int result = x_offset + 10;
     result += main->widgets[main->n_widgets-1].rect.w;
 
     Rect background = make_rectangle(
         x_offset, 20, menu_width,  (5 * menu_item_height) + 5);
-    create_ui_rect(MAIN_WINDOW, background, white_color, menu);
+    create_ui_rect(panel, background, white_color, menu);
   
     for (i=1; strcmp(labels[i][0], "END"); i++) {
         if (strcmp(labels[i][0], "---")) {
-            y_offset += menu_item_height;
-            create_label(MAIN_WINDOW, x_offset, y_offset,
+            position[1] += menu_item_height;
+            create_label(panel, position,
                 labels[i][0], labels[i][1], menu);
         }
         else {
-            horizontal_rule(
-                MAIN_WINDOW,
-                x_offset,
-                y_offset+menu_item_height,
-                menu_width, menu);
+            int pos[2];
+            pos[0] = position[0];
+            pos[1] = position[1]+menu_item_height;
+            horizontal_rule(panel, pos, menu_width, menu);
         }
     }
     return result;
@@ -318,58 +307,53 @@ create_menubar(void)
 }
 
 void
-create_statusbar(void)
+create_statusbar(EmbWindow *w)
 {
-    create_ui_rect(
-        MAIN_WINDOW,
-        make_rectangle(
+    Rect rect = make_rectangle(
             0,
-            windows[MAIN_WINDOW]->dimension.h - menubar_height,
-            windows[MAIN_WINDOW]->dimension.w,
-            menubar_height),
-        white_color,
-        ALWAYS_VISIBLE);
+            w->dimension.h - menubar_height,
+            w->dimension.w,
+            menubar_height);
+    create_ui_rect(MAIN_WINDOW, rect, white_color, ALWAYS_VISIBLE);
 
-    create_label(
-        MAIN_WINDOW,
+    int position[] = {
         10,
-        windows[MAIN_WINDOW]->dimension.h - menubar_height,
-        statusbar_message,
-        "do-nothing",
-        ALWAYS_VISIBLE);
+        w->dimension.h - menubar_height
+    };
+    create_label(MAIN_WINDOW, position, statusbar_message,
+        "do-nothing", ALWAYS_VISIBLE);
 }
 
 void
-create_scrollbars(int scene)
+create_scrollbars(EmbPanel *panel)
 {
-    printf("%d", scene);
+    printf("%d", panel->closeable);
 }
 
 void
-create_view(int window_id)
+create_view(Window *window)
 {
-    create_grid(window_id);
-    create_scrollbars(window_id);
+    create_grid(window);
+    create_scrollbars(window->panels[window->n_panels]);
+    window->n_panels++;
 }
 
 int
-render_panel(int window_id, int panel_id)
+render_panel(EmbWindow *window, EmbPanel *panel)
 {
     int i;
-    EmbPanel *panel = windows[window_id]->panels[panel_id];
-
     for (i=0; i<panel->n_widgets; i++) {
         EmbWidget widget = panel->widgets[i];
         if (widget.visibility == ALWAYS_VISIBLE
            || widget.visibility == menu_state) {
             if (widget.mode == WIDGET_MODE_BLOCK) {
-                render_rect(window_id, widget.color, widget.rect);
+                render_rect(window, panel, widget.color, widget.rect);
             }
             if (widget.mode == WIDGET_MODE_BACKGROUND) {
-                render_rect(window_id, widget.color, widget.rect);
+                render_rect(window, panel, widget.color, widget.rect);
             }
             if (widget.mode == WIDGET_MODE_TEXT) {
-                render_copy(window_id, widget.image);
+                render_copy(window, panel, widget.image);
             }
         }
     }
@@ -379,24 +363,23 @@ render_panel(int window_id, int panel_id)
  * window with index window_id.
  */
 int
-render(int window_id)
+render(EmbWindow *window)
 {
     int i;
-    render_clear(window_id, clear_color);
+    render_clear(window, clear_color);
 
-    for (i=0; i<w->n_panels; i++) {
-        render_panel(window_id, panel_id);
+    for (i=0; i<window->n_panels; i++) {
+        render_panel(window, window->panels[i]);
     }
     return 0;
 }
 
-int
-load_window_data(int window_id, char *fname)
+EmbWindow *
+load_window(char *fname)
 {
-    EmbWindow *w = windows[window_id];
-    w = (EmbWindow *)malloc(sizeof(EmbWindow));
-    w->n_widgets = 0;
-    w->widgets = (EmbWidget*)malloc(sizeof(EmbWidget)*MAX_WIDGETS);
+    EmbWindow *w = (EmbWindow *)malloc(sizeof(EmbWindow));
+    w->n_panels = 0;
+    w->panels = (EmbPanel*)malloc(sizeof(EmbPanel)*MAX_PANELS);
 
     FILE *f = fopen(get_str(global_state, "interface_font"), "rb");
     if (!f) {
@@ -425,7 +408,7 @@ load_window_data(int window_id, char *fname)
     w->dimension.h = get_int(w->data, "window h");
 
     n_windows++;
-    return 0;
+    return w;
 }
 
 #if EM2_X11
@@ -435,11 +418,10 @@ load_window_data(int window_id, char *fname)
  * In order to carry the data from file to file all the project
  * scope data is stored in here.
  */
-int
-create_window(int window_id, char *fname)
+EmbWindow *
+create_window(char *fname)
 {
-    EmbWindow *w = windows[window_id];
-    load_window_data(window_id, fname);
+    EmbWindow *w = load_window_data(fname);
 
     /* Window compatibility layer. */
     w->display = XOpenDisplay(NULL);
@@ -471,48 +453,48 @@ create_window(int window_id, char *fname)
     XMapRaised(w->display, w->window);
 
     puts("Initialising user interface...");
-    create_toolbars();
-    create_view(0);
-    create_menubar();
-    create_statusbar();
-    return 0;
+    create_toolbars(w->panels[w->n_panels]);
+    create_view(w->panels[w->n_panels]);
+    create_menubar(w->panels[w->n_panels]);
+    create_statusbar(w->panels[w->n_panels]);
+    w->n_panels += 4;
+    return w;
 }
 
 
 /* Process input: main loop step 1.
  */
 EmbEvent
-process_input(int window_id)
+process_input(Window *window)
 {
     EmbEvent event;
     XEvent xevent;
-    XNextEvent(windows[MAIN_WINDOW]->display, &xevent);
+    XNextEvent(window->display, &xevent);
     
     return event;
 }
 
 void
-render_copy(int window_id, EmbImage image)
+render_copy(EmbWindow *window, EmbPanel *panel, EmbImage image)
 {
 
 }
 
 void
-render_rect(int window_id, EmbColor color, Rect rect)
+render_rect(EmbWindow *window, EmbPanel *panel, EmbColor color, Rect rect)
 {
 
 }
 
 void
-render_clear(int window_id, EmbColor color)
+render_clear(EmbWindow *window, EmbColor color)
 {
-    XClearWindow(windows[MAIN_WINDOW]->display, windows[MAIN_WINDOW]->window);
+    XClearWindow(window->display, window->window);
 }
 
 void
-destroy_window(int window_id)
+destroy_window(EmbWindow *w)
 {
-    EmbWindow *w = windows[window_id];
     XFreeGC(w->display, w->gc);
     XDestroyWindow(w->display, w->window);
     XCloseDisplay(w->display);
@@ -522,34 +504,36 @@ destroy_window(int window_id)
 #endif
 
 #if EM2_ANDROID
-void
-create_window(int window_id, char *fname)
+EmbWindow *
+create_window(char *fname)
 {
-    load_window_data(window_id, fname);
+    EmbWindow *window = load_window_data(fname);
+
+    return window;
 }
 
 /* Process input: main loop step 1.
  */
 void
-process_input(int window_id)
+process_input(EmbWindow *window)
 {
 
 }
 
 void
-render_copy(int window_id, EmbImage image)
+render_copy(Window *window, EmbImage image)
 {
 
 }
 
 void
-render_rect(int window_id, EmbColor color, Rect rect)
+render_rect(Window *window, EmbColor color, Rect rect)
 {
 
 }
 
 void
-render_clear(int window_id, EmbColor color)
+render_clear(Window *window, EmbColor color)
 {
 
 }
@@ -559,7 +543,7 @@ render_clear(int window_id, EmbColor color)
  * windows into layers of application.
  */
 void
-destroy_window(int window_id)
+destroy_window(Window *window)
 {
     EmbWindow *w = windows[window_id];
     /* Should anything try to access the data after this point */
@@ -568,10 +552,12 @@ destroy_window(int window_id)
 #endif
 
 #if EM2_COCOA
-void
-create_window(int window_id, char *fname)
+EmbWindow *
+create_window(char *fname)
 {
-    load_window_data(window_id, fname);
+    EmbWindow *window = load_window_data(fname);
+
+    return window;
 }
 
 /* Process input: main loop step 1.
@@ -584,19 +570,19 @@ process_input(EmbWindow *w)
 }
 
 void
-render_copy(int window_id, EmbImage image)
+render_copy(Window *window, EmbImage image)
 {
 
 }
 
 void
-render_rect(int window_id, EmbColor color, Rect rect)
+render_rect(Window *window, EmbColor color, Rect rect)
 {
 
 }
 
 void
-render_clear(int window_id, EmbColor color)
+render_clear(Window *window, EmbColor color)
 {
 
 }
@@ -604,7 +590,7 @@ render_clear(int window_id, EmbColor color)
 /* Same as android reasoning.
  */     
 void
-destroy_window(int window_id)
+destroy_window(EmbWindow *window)
 {
     EmbWindow *w = windows[window_id];
     /* Should anything try to access the data after this point */
@@ -614,7 +600,7 @@ destroy_window(int window_id)
 
 #if EM2_WIN32
 int
-create_window(int window_id, char *fname)
+create_window(EmbWindow *window, char *fname)
 {
     load_window_data(window_id, fname);
     return 0;
@@ -630,25 +616,25 @@ process_input(EmbWindow *w)
 }
 
 void
-render_copy(int window_id, EmbImage image)
+render_copy(Window *window, EmbImage image)
 {
 
 }
 
 void
-render_rect(int window_id, EmbColor color, Rect rect)
+render_rect(Window *window, EmbColor color, Rect rect)
 {
 
 }
 
 void
-render_clear(int window_id, EmbColor color)
+render_clear(Window *window, EmbColor color)
 {
 
 }
 
 void
-destroy_window(int window_id)
+destroy_window(Window *window)
 {
     EmbWindow *w = windows[window_id];
     /* Should anything try to access the data after this point */
@@ -658,7 +644,7 @@ destroy_window(int window_id)
 
 #if EM2_IOS
 int
-create_window(int window_id, char *fname)
+create_window(Window *window, char *fname)
 {
     load_window_data(window_id, fname);
     return 0;
@@ -674,19 +660,19 @@ process_input(EmbWindow *w)
 }
 
 void
-render_copy(int window_id, EmbImage image)
+render_copy(Window *window, EmbImage image)
 {
 
 }
 
 void
-render_rect(int window_id, EmbColor color, Rect rect)
+render_rect(Window *window, EmbColor color, Rect rect)
 {
 
 }
 
 void
-render_clear(int window_id, EmbColor color)
+render_clear(Window *window, EmbColor color)
 {
 
 }
@@ -694,7 +680,7 @@ render_clear(int window_id, EmbColor color)
 /* Same as android reasoning.
  */     
 void
-destroy_window(int window_id)
+destroy_window(Window *window)
 {
     EmbWindow *w = windows[window_id];
     /* Should anything try to access the data after this point */
@@ -805,14 +791,14 @@ process_input(EmbWindow *w)
 }
 
 void
-render_copy(int window_id, EmbWidget widget)
+render_copy(Window *window, EmbWidget widget)
 {
     EmbWindow *w = windows[window_id];
     SDL_RenderCopy(w->renderer, widget.texture, NULL, &widget.rect);
 }
 
 void
-render_rect(int window_id, int widget)
+render_rect(Window *window, int widget)
 {
     EmbWindow *w = windows[window_id];
     EmbWidget widget = w->widgets[i];
@@ -822,7 +808,7 @@ render_rect(int window_id, int widget)
 }
 
 void
-render_clear(int window_id, int widget)
+render_clear(Window *window, int widget)
 {
     SDL_SetRenderDrawColor(w->renderer,
         clear_color.r, clear_color.g, clear_color.b,
@@ -832,17 +818,17 @@ render_clear(int window_id, int widget)
 #endif
 
 void
-create_widget(int window_id, Rect rect, char *command)
+create_widget(EmbWindow *window, EmbPanel *panel, Rect rect, char *command)
 {
     char icon_path[2*MAX_STRING_LENGTH];
-    EmbWindow *w = windows[window_id];
-    w->widgets[w->n_widgets].rect = rect;
-    w->widgets[w->n_widgets].mode = WIDGET_MODE_BLOCK;
-    w->widgets[w->n_widgets].visibility = ALWAYS_VISIBLE;
+    EmbWidget *widget = panel->widgets[panel->n_widgets];
+    widget->rect = rect;
+    widget->mode = WIDGET_MODE_BLOCK;
+    widget->visibility = ALWAYS_VISIBLE;
 
-    strcpy(w->widgets[w->n_widgets].command, command);
+    strcpy(widget->command, command);
 
-    sprintf(icon_path, "assets/icons/%s.bmp", w->widgets[w->n_widgets].command);
+    sprintf(icon_path, "assets/icons/%s.bmp", widget->command);
 #if EM2_X11
 #elif EM2_ANDROID
 #elif EM2_IOS
@@ -851,24 +837,50 @@ create_widget(int window_id, Rect rect, char *command)
 #else
     SDL_Surface *surface;
     surface = SDL_LoadBMP(icon_path);
-    w->widgets[w->n_widgets].texture = SDL_CreateTextureFromSurface(w->renderer, surface);
-    if (!w->widgets[w->n_widgets].texture) {
+    widget->texture = SDL_CreateTextureFromSurface(w->renderer, surface);
+    if (!widget->texture) {
         debug_message("Failed to load texture.");
         debug_message(icon_path);
     }
     SDL_FreeSurface(surface);
 #endif
 
-    w->n_widgets++;
+    panel->n_widgets++;
+}
+
+void
+create_int_label(int w, int position[2], int value)
+{
+    char s[MAX_STRING_LENGTH];
+    sprintf(s, "%d", value);
+    int position[] = {x, y};
+    create_label(w, position, s, "do-nothing", ALWAYS_VISIBLE);
+}
+
+void
+create_measurement_label(int w, int position[2], int spacing, char *label, float value)
+{
+    char s[MAX_STRING_LENGTH];
+    create_label(w, position, label, "do-nothing", ALWAYS_VISIBLE);
+    sprintf(s, "%f mm", value);
+    position[1] += spacing;
+    create_label(w, position, s, "do-nothing", ALWAYS_VISIBLE);
+}
+
+void
+create_labelled_int(EmbPanel *panel, int position[2], int spacing, char *label, int value)
+{
+    create_label(panel, position, label, "do-nothing", ALWAYS_VISIBLE);
+    position[1] += spacing;
+    create_int_label(panel, position, value);
 }
 
 int
-create_spinbox(int window_id, int panel_id, char *fname, float value)
+create_spinbox(EmbPanel *panel, char *fname, float value)
 {
-    EmbPanel *panel = windows[window_id]->panels[panel_id];
     TABLE(table);
     load_csv(table, fname);
-    strcpy(panel->widgets[w->n_widgets].label, translate(get_str(table, "label")));
+    strcpy(panel->widgets[panel->n_widgets].label, translate(get_str(table, "label")));
     strcpy(panel->widgets[panel->n_widgets].category, get_str(table, "category"));
     strcpy(panel->widgets[panel->n_widgets].name, get_str(table, "name"));
     panel->widgets[panel->n_widgets].single_step = get_float(table, "single_step");
@@ -890,7 +902,7 @@ create_spinbox(int window_id, int panel_id, char *fname, float value)
  * application folder each time the program boots.
  */
 void
-load_image(char *path)
+load_image(EmbPanel *panel, char *path)
 {
     char image_fname[4*MAX_STRING_LENGTH];
     FILE *f;

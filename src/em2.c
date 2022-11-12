@@ -45,7 +45,7 @@ parse_command(int argc, char *argv[])
 }
 
 void
-open_tabs(void)
+open_panels(void)
 {
     /*
     if (len(filesToOpen) > 0) {
@@ -166,15 +166,15 @@ main(int argc, char *argv[])
 		return 0;
 	}
 
-    create_window(MAIN_WINDOW, "assets/main_window.csv");
+    EmbWindow *main = create_window("assets/main_window.csv");
 
     while (running) {
-        event = process_input(MAIN_WINDOW);
-        render(MAIN_WINDOW);
+        event = process_input(main);
+        render(main);
         wait(50);
     }
 
-    destroy_window(MAIN_WINDOW);
+    destroy_window(main);
     
 #if x11_version
     XCloseDisplay(windows[MAIN_WINDOW]->display);
@@ -207,11 +207,11 @@ make_rectangle(int x, int y, int w, int h)
 }
 
 int
-get_widget_by_label(int window_id, char *label)
+get_widget_by_label(EmbPanel *panel, char *label)
 {
     int i;
-    for (i=0; i<windows[window_id]->n_widgets; i++) {
-        if (!strcmp(windows[window_id]->widgets[i].label, label)) {
+    for (i=0; i<panel->n_widgets; i++) {
+        if (!strcmp(panel->widgets[i]->label, label)) {
             return i;
         }
     }
@@ -219,12 +219,12 @@ get_widget_by_label(int window_id, char *label)
 }
 
 void
-set_visibility(int window_id, char *label, int visibility)
+set_visibility(EmbPanel *panel, char *label, int visibility)
 {
     int i;
-    for (i=0; i<windows[window_id]->n_widgets; i++) {
-        if (!strcmp(windows[window_id]->widgets[i].label, label)) {
-            windows[window_id]->widgets[i].visibility = visibility;
+    for (i=0; i<panel->n_widgets; i++) {
+        if (!strcmp(panel->widgets[i]->label, label)) {
+            panel->widgets[i]->visibility = visibility;
         }
     }
 }
@@ -290,14 +290,14 @@ run_script(TABLE(script))
     resize(size);
  */
 void
-read_settings(char *fname)
+read_settings(EmbWindow *w, char *fname)
 {
     debug_message("Reading settings...");
 
     load_csv(settings_state, fname);
 
-    windows[MAIN_WINDOW]->dimension.w = get_int(settings_state, "main window w");
-    windows[MAIN_WINDOW]->dimension.h = get_int(settings_state, "main window h");
+    w->dimension.w = get_int(settings_state, "main window w");
+    w->dimension.h = get_int(settings_state, "main window h");
 }
 
 /* Write the current settings to the standard file CSV.
@@ -306,7 +306,7 @@ read_settings(char *fname)
  * so only what has changed needs to be written.
  */
 void
-write_settings(char *fname)
+write_settings(EmbWindow *w, char *fname)
 {
     int i;
     debug_message("Writing settings...");
@@ -316,7 +316,6 @@ write_settings(char *fname)
         puts("Failed to write settings: could not open file for writing.");
     }
 
-    EmbWindow *w = windows[MAIN_WINDOW];
     set_int(settings_state, "main window x", w->dimension.x);
     set_int(settings_state, "main window y", w->dimension.y);
     set_int(settings_state, "main window w", w->dimension.w);
@@ -347,7 +346,7 @@ find_mdi_window(char *file_name)
     char *canonical_path;
     canonical_path = canonical_file_path(file_name);
 
-    for (subWindow in mdi_area.sub_window_list(void)) {
+    for (subWindow in panel.sub_window_list(void)) {
         if (subWindow.getCurrentFile() == canonicalFilePath) {
             return subWindow;
         }
@@ -356,14 +355,14 @@ find_mdi_window(char *file_name)
     return 0;
 }
 
-
 /*
  *  About Dialog
  */
-void
+EmbWindow *
 about_dialog_init(void)
 {
-    create_window(ABOUT_WINDOW, "About Embroidermodder");
+    EmbWindow *about = create_window("assets/about_dialog.csv");
+    return about;
 }
 
 /* The dialog showing details of the pattern including histograms.
@@ -374,36 +373,12 @@ details_dialog_free(void)
     restore_override_cursor();
 }
 
-void
-create_int_label(int w, int x, int y, int value)
-{
-    char s[MAX_STRING_LENGTH];
-    sprintf(s, "%d", value);
-    create_label(w, x, y, s, "do-nothing", ALWAYS_VISIBLE);
-}
-
-void
-create_measurement_label(int w, int x, int y, int spacing, char *label, float value)
-{
-    char s[MAX_STRING_LENGTH];
-    create_label(w, x, y, label, "do-nothing", ALWAYS_VISIBLE);
-    sprintf(s, "%f mm", value);
-    create_label(w, x, y+spacing, s, "do-nothing", ALWAYS_VISIBLE);
-}
-
-void
-create_labelled_int(int w, int x, int y, int spacing, char *label, int value)
-{
-    create_label(w, x, y, label, "do-nothing", ALWAYS_VISIBLE);
-    create_int_label(w, x, y+spacing, value);
-}
-
 /* Creates a dialog showing key information about the pattern,
  * ideally this will update as the pattern changes without
  * any key presses or clicks.
  */
-int
-details_dialog_init(void)
+EmbWindow *
+details_dialog_init(EmbWindow *w)
 {
     /* Dialog set minimum size. */
     int stitches_real = 0;
@@ -412,11 +387,9 @@ details_dialog_init(void)
     int color_total = 0;
     int color_changes = 0;
     EmbRect bounding_rect = embRect_create();
-    char *title = translate("Embroidery Design Details");
-    create_window(DETAILS_WINDOW, title);
+    EmbWindow *details_dialog = create_window("assets/design_details.csv");
     int right_column_offset = 100;
     int spacing = 200;
-    EmbWindow *w = windows[MAIN_WINDOW];
 
     /*
     button-box = tk.ButtonBox(dialog, text="QDialogButtonBox-Ok");
@@ -436,30 +409,30 @@ details_dialog_init(void)
     bounding_rect.set_rect(0, 0, 50, 100);
     TODO: embPattern-calcBoundingBox(pattern); */
 
-    create_labelled_int(DETAILS_WINDOW, right_column_offset, 0*20, spacing,
-        "Total Stitches:", w->tabs[w->tab_index].pattern->stitchList->count);
-    create_labelled_int(DETAILS_WINDOW, right_column_offset, 1*20, spacing,
+    create_labelled_int(details_dialog, right_column_offset, 0*20, spacing,
+        "Total Stitches:", w->panels[w->tab_index]->pattern->stitchList->count);
+    create_labelled_int(details_dialog, right_column_offset, 1*20, spacing,
         "Real Stitches:", stitches_real);
-    create_labelled_int(DETAILS_WINDOW, right_column_offset, 2*20, spacing,
+    create_labelled_int(details_dialog, right_column_offset, 2*20, spacing,
         "Jump Stitches:", stitches_jump);
-    create_labelled_int(DETAILS_WINDOW, right_column_offset, 3*20, spacing,
+    create_labelled_int(details_dialog, right_column_offset, 3*20, spacing,
         "Trim Stitches:", stitches_trim);
-    create_labelled_int(DETAILS_WINDOW, right_column_offset, 4*20, spacing,
+    create_labelled_int(details_dialog, right_column_offset, 4*20, spacing,
         "Total Colors:", color_total);
-    create_labelled_int(DETAILS_WINDOW, right_column_offset, 5*20, spacing,
+    create_labelled_int(details_dialog, right_column_offset, 5*20, spacing,
         "Color Changes:", color_changes);
 
-    create_measurement_label(DETAILS_WINDOW, right_column_offset, 6*20, spacing,
+    create_measurement_label(details_dialog, right_column_offset, 6*20, spacing,
         "Left:", bounding_rect.left);
-    create_measurement_label(DETAILS_WINDOW, right_column_offset, 7*20, spacing,
+    create_measurement_label(details_dialog, right_column_offset, 7*20, spacing,
         "Top:", bounding_rect.top);
-    create_measurement_label(DETAILS_WINDOW, right_column_offset, 8*20, spacing,
+    create_measurement_label(details_dialog, right_column_offset, 8*20, spacing,
         "Right:", bounding_rect.right);
-    create_measurement_label(DETAILS_WINDOW, right_column_offset, 9*20, spacing,
+    create_measurement_label(details_dialog, right_column_offset, 9*20, spacing,
         "Bottom:", bounding_rect.bottom);
-    create_measurement_label(DETAILS_WINDOW, right_column_offset, 10*20, spacing,
+    create_measurement_label(details_dialog, right_column_offset, 10*20, spacing,
         "Width:", fabs(bounding_rect.left - bounding_rect.right));
-    create_measurement_label(DETAILS_WINDOW, right_column_offset, 11*20, spacing,
+    create_measurement_label(details_dialog, right_column_offset, 11*20, spacing,
         "Height:", fabs(bounding_rect.top - bounding_rect.bottom));
 
     
@@ -481,13 +454,14 @@ details_dialog_init(void)
     scroll_area.set_widget(widget);
     return scroll_area;
     */
-    return 0;
+    return details_dialog;
 }
 
-void
+EmbWindow *
 create_histogram(void)
 {
     debug_message("TODO: createHistogram");
+    return NULL;
 }
 
 /*
@@ -513,7 +487,7 @@ settings_dialog_init(int showTab)
     tab_widget = tk.tab-widget(window);
     */
 
-    /* TODO: Add icons to tabs */
+    /* TODO: Add icons to panels */
     /*
     create_window_tab(tab_widget, "assets/ui/general_tab.csv", translate("General"));
     create_window_tab(tab_widget, "assets/ui/files_paths_tab.csv", translate("Files/Paths"));
@@ -553,11 +527,10 @@ settings_dialog_init(int showTab)
  * it then chain loads the data it needs using load_widget(tab, fname);
  */
 int
-create_window_tab(int window_id, char *fname)
+create_window_tab(EmbWindow *w, char *fname)
 {
     TABLE(tab_data);
     load_csv(tab_data, fname);
-    EmbWindow *w = windows[window_id];
     w->tabbed = 1;
     
     return 0;
@@ -622,7 +595,7 @@ load_file_action(char *file_name)
     }
     else {
         p.move-stitch-list-to-polylines()
-        */ /* TODO: Test more
+         TODO: Test more
         stitchCount = p.stitch-list.count
         path = Path()
 
@@ -631,30 +604,30 @@ load_file_action(char *file_name)
                 c = p.circles.circle[i].circle
                 this-color = p.circles.circle[i].color
                 set_current-color(this_color)
-                */ /* NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                 NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mw.nativeAddCircle(c.center.x, c.center.y, c.radius, 0, "RUBBER-OFF")
-                */ /* TODO: fill
+                 TODO: fill
 
         if p.ellipses:
             for i in range(len(p.ellipses))
                 e = p.ellipses.ellipse[i].ellipse
                 this-color = p.ellipses.ellipse[i].color
                 set_current-color(this_color)
-                */ /* NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                 NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mw.nativeAddEllipse(e.centerX, e.centerY, e.radiusX, e.radiusY, 0, 0, OBJ-RUBBER-OFF)
-                */ /* TODO: rotation and fill
+                 TODO: rotation and fill
 
         if p.lines:
             for i in range(len(p.lines))
                 li = p.lines.line[i].line
                 this-color = p.lines.line[i].color
                 set_current-color(this_color)
-                */ /* NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                 NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mw.nativeAddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, OBJ-RUBBER-OFF)
-                */ /* TODO: rotation
+                 TODO: rotation
 
         if p.paths:
-            */ /* TODO: This is unfinished. It needs more work
+             TODO: This is unfinished. It needs more work
             for i in range(p.paths.count)
                 curpoint-list = p.paths.path[i].point-list
                 pathPath = Path()
@@ -662,12 +635,12 @@ load_file_action(char *file_name)
                 if curpoint-list.count > 0:
                     pp = curpoint-list[0].point.point
                     pathPath.move-to(pp.x, -pp.y)
-                    */ /* NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                     NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
 
                 for j in range(curpoint-list.count)
                     pp = curpoint-list[j].point.point
                     pathPath.line-to(pp.x, -pp.y)
-                    */ /* NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                     NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
 
                 loadPen = Pen(this_color)
                 loadPen.set_widthF(0.35)
@@ -683,7 +656,7 @@ load_file_action(char *file_name)
                 po = p.points.point[i].point
                 this-color = p.points.point[i].color
                 set_current-color(this_color)
-                */ /* NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                 NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mw.nativeAddPoint(po.x, po.y)
 
         if p.polygons:
@@ -701,7 +674,7 @@ load_file_action(char *file_name)
                     pp = curpoint-list.point[j].point
                     x = pp.x
                     y = -pp.y
-                    */ /* NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                     NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
 
                     if first-point:
                         polygonPath.lineTo(x,y)
@@ -714,7 +687,7 @@ load_file_action(char *file_name)
                 polygonPath.translate(-startX, -startY)
                 mw.nativeAddPolygon(startX, startY, polygonPath, OBJ-RUBBER-OFF)
 
-        */ /* NOTE: Polylines should only contain NORMAL stitches.
+         NOTE: Polylines should only contain NORMAL stitches.
         if p.polylines:
             for i in range(len(p.polylines))
                 curpoint-list = p.polylines.polyline[i].point-list
@@ -730,7 +703,7 @@ load_file_action(char *file_name)
                     pp = curpoint-list.point[j].point
                     x = pp.x
                     y = -pp.y
-                    */ /* NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                     NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
                     if first-point:
                         polylinePath.line-to(x,y)
                     else {
@@ -747,9 +720,9 @@ load_file_action(char *file_name)
                 r = p.rects.rect[i].rect
                 this-color = p.rects.rect[i].color
                 set_current-color(this_color)
-                */ /* NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                 NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
                 mw.nativeAddRectangle(Rect-x(r), Rect-y(r), Rect-width(r), Rect-height(r), 0, 0, OBJ-RUBBER-OFF)
-                */ /* TODO: rotation and fill
+                 TODO: rotation and fill
 
         set_current-file(file_name)
         mw.statusbar.showMessage("File loaded.")
@@ -757,7 +730,7 @@ load_file_action(char *file_name)
         stitches.setNum(stitchCount)
 
         if (grid-load-from-file) {
-            */ /* TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
+             TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
             debug_message(".");
         }
 
@@ -766,7 +739,7 @@ load_file_action(char *file_name)
 
     p.free();
 
-    */ /* Clear the undo stack so it is not possible to undo past this point.
+     Clear the undo stack so it is not possible to undo past this point.
     undo-history-length = 0;
 
     set_current-color(tmpColor);
@@ -805,7 +778,7 @@ set_selected_items(int *itemList)
     printf("%d\n", itemList[0]);
     /*
     selectedItemList = itemList
-    */ /* Hide all the groups initially, then decide which ones to show
+     Hide all the groups initially, then decide which ones to show
     hideAllGroups()
     comboBoxSelected.clear()
 
@@ -880,7 +853,7 @@ set_selected_items(int *itemList)
             update_edit_num_if_varies("arc-length", obj.objectArcLength(), 0);
             update_edit_num_if_varies("arc-chord", obj.objectChord(), 0);
             update_edit_num_if_varies("arc-inc-angle", obj.objectIncludedAngle(), 1);
-            updateComboBoxintIfVaries("arc-clockwise", obj.objectClockwise(), 1); */ /* dropdown */
+            updateComboBoxintIfVaries("arc-clockwise", obj.objectClockwise(), 1);  dropdown */
             /*
         }
 
@@ -1036,20 +1009,19 @@ export_(void)
 }
 
 /* Creates a new file using the standard dialog_
- * Adds an mdi_area.
+ * Adds an panel.
  */
 void
-new_file(void)
+new_file(EmbWindow *w)
 {
     debug_message("New File.");
-    EmbWindow *w = windows[MAIN_WINDOW];
-    w->tabs[n_docs].pattern = embPattern_create();
+    w->panels[n_docs]->pattern = embPattern_create();
     w->tab_index = w->n_docs-1;
     w->n_docs++;
     /*
-    mdi_win = mdi_window(doc_index, mdi_area, "SubWindow"); */
+    mdi_win = mdi_window(doc_index, panel, "SubWindow"); */
     /* connect(mdi_win, SIGNAL(sendClosemdi_win()), self, SLOT(on_close_mdi_win()));
-    connect(mdi_area, SIGNAL(subWindowActivated()), self, SLOT(on_window_activated())); */ /*
+    connect(panel, SIGNAL(subWindowActivated()), self, SLOT(on_window_activated()));
 
     update_menu_toolbar_statusbar();
     window_menu_about_to_show();
@@ -1065,7 +1037,7 @@ new_file(void)
 /* Opens a file using the standard dialog.
  */
 void
-open_file(void)
+open_file(EmbWindow *window)
 /*, char *recent[], int recentFiles*/
 {
     debug_message("Open File");
@@ -1084,19 +1056,19 @@ open_file(void)
     preview = opensave_open_thumbnail
     open_filesPath = opensave_recent_directory
 
-    */ /* Check to see if self from the recent files list
+     Check to see if self from the recent files list
     if (recent) {
         files.append(recentFile);
         open_files_selected(files);
     }
     elif (!preview) { */
-        /* TODO: set get_open_fname's selectedFilter parameter from opensave_open_format */ /*
+        /* TODO: set get_open_fname's selectedFilter parameter from opensave_open_format
         files = FileDialog_get_open_fnames(translate("Open"), open_filesPath, format_filter_open);
         open_files_selected(files);
     elif preview:
         openDialog = PreviewDialog(translate("Open w/Preview"), open_filesPath, format_filter_open);
-        */ /* TODO: set opendialog_selectNameFilter(const String& filter) from opensave_open_format
-        */ /* connect(openDialog, SIGNAL(filesSelected()), self, SLOT(open_files_selected()));
+         TODO: set opendialog_selectNameFilter(const String& filter) from opensave_open_format
+         connect(openDialog, SIGNAL(filesSelected()), self, SLOT(open_files_selected()));
         opendialog_exec();
     } */
 
@@ -1120,7 +1092,7 @@ open_files_selected(char **files, int n_files)
 
             /* existing = find_mdi_window(files[i]); */
             if (existing) {
-                /* mdi_area.setactive_sub_window(existing); */
+                /* panel.setactive_sub_window(existing); */
                 continue;
             }
 
@@ -1128,9 +1100,9 @@ open_files_selected(char **files, int n_files)
              * is only used for unnamed files. */            
             n_docs++;
 
-            /* mdi_win = mdi_window(doc_index, self, mdi_area, "SubWindow"); */
+            /* mdi_win = mdi_window(doc_index, self, panel, "SubWindow"); */
             /* connect(mdi_win, SIGNAL(sendClosemdi_win()), self, SLOT(onClosemdi_win())); */
-            /* connect(mdi_area, SIGNAL(subWindowActivated()), self, SLOT(onWindowActivated())); */
+            /* connect(panel, SIGNAL(subWindowActivated()), self, SLOT(onWindowActivated())); */
 
             /* Make sure the toolbars/etc... are shown before doing their zoom_extents */
             if (doOnce) {
@@ -1143,11 +1115,11 @@ open_files_selected(char **files, int n_files)
                 statusbar.show_message(translate("File(s) loaded"), 2000);
                 mdi_win.show();
                 mdi_win.showMaximized(); */
-                /* Prevent duplicate entries in the recent files list. */ /*
+                /* Prevent duplicate entries in the recent files list. 
                 if (!opensave_recent_list_of_files.contains(filesToOpen[i], CaseInsensitive) {
                     opensave_recent_list_of_files.prepend(filesToOpen[i]);*/
 
-                /* Move the recent file to the top of the list. */ /*
+                /* Move the recent file to the top of the list. 
                 else {
                     opensave_recent_list_of_files.removeAll(filesToOpen[i]);
                     opensave_recent_list_of_files.prepend(filesToOpen[i]);
@@ -1187,7 +1159,7 @@ open_recent_file(void)
 
 /* Saves an existing file as a new format using the standard dialog_ */
 void
-save_file_as(void)
+save_file_as(EmbWindow *window)
 {
     debug_message("Save file as...");
     /* Need to find the active_sub_window before it loses
@@ -1215,7 +1187,7 @@ save_file_as(void)
  *  to try to hide dark colored stitches beneath light colored fills.
  */
 void
-save_file(void)
+save_file(EmbWindow *window)
 {
     int format_type;
     debug_message("Save file()");
@@ -1243,8 +1215,8 @@ save_file(void)
             if (formatType == EMBFORMAT_STITCHONLY) {
                 path = item.objectSavePath();
                 to_polyline(pattern, item.objectCenter(), path.simplified(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER");
-                */ /* TODO: proper layer/line_type/line_weight
-                */ /* TODO: Improve precision, replace simplified
+                 TODO: proper layer/line_type/line_weight
+                 TODO: Improve precision, replace simplified
             }
             else {
                 p = item.objectCenter();
@@ -1284,12 +1256,12 @@ save_file(void)
             break;
 
         case OBJ_TYPE_DIMORDINATE:
-            */ /* addDimOrdinate(pattern, item);
+             addDimOrdinate(pattern, item);
             debug_message(".");
             break;
 
         case OBJ_TYPE_DIMRADIUS":
-            */ /* addDimRadius(pattern, item)
+             addDimRadius(pattern, item)
             debug_message(".");
             break;
 
@@ -1297,10 +1269,10 @@ save_file(void)
             if formatType == EMBFORMAT_STITCHONLY:
                 path = item.objectSavePath()
                 to_polyline(pattern, item.objectCenter(), path.simplified(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-                */ /* TODO: proper layer/line_type/line_weight
-                */ /* TODO: Improve precision, replace simplified
+                 TODO: proper layer/line_type/line_weight
+                 TODO: Improve precision, replace simplified
             else {
-                */ /* TODO: ellipse rotation
+                 TODO: ellipse rotation
                 pattern.add_ellipse_abs(item.objectCenter().x(), item.objectCenter().y(), item.objectWidth()/2.0, item.objectHeight()/2.0)
             break;
 
@@ -1325,20 +1297,20 @@ save_file(void)
             break;
 
         case OBJ_TYPE_INFINITELINE":
-            */ /* addInfiniteLine(pattern, item)
+             addInfiniteLine(pattern, item)
             debug_message(".")
             break;
 
         case OBJ_TYPE_Line":
             if formatType == EMBFORMAT_STITCHONLY:
                 to_polyline(pattern, item.objectEndPoint1(), item.objectSavePath(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-                */ /* TODO: proper layer/line_type/line_weight
+                 TODO: proper layer/line_type/line_weight
             else {
                 embPattern_addLineObjectAbs(pattern, item.objectX1(), item.objectY1(), item.objectX2(), item.objectY2())
 
         elif item.type == "Path":
-            */ /* TODO: Reimplement addPolyline() using the libembroidery C API
-            */ /* 
+             TODO: Reimplement addPolyline() using the libembroidery C API
+             
             debug_message("addPolyline()")
             polyline_item = item
             if polyline_item:
@@ -1362,14 +1334,14 @@ save_file(void)
                         pattern.add_stitch_abs((element.x + startX), -(element.y + startY), NORMAL)
 
                     elif element.is_curve_to()
-                        P1 = path.element_at(i-1) */ /* start point
-                        P2 = path.element_at(i)   */ /* control point
-                        P3 = path.element_at(i+1) */ /* control point
-                        P4 = path.element_at(i+2) */ /* end point
+                        P1 = path.element_at(i-1)  start point
+                        P2 = path.element_at(i)    control point
+                        P3 = path.element_at(i+1)  control point
+                        P4 = path.element_at(i+2)  end point
 
                         pattern.add_stitch_abs(P4.x, -P4.y, NORMAL)
-                        */ /* TODO: This is temporary
-                        */ /* TODO: Curved Polyline segments are always arcs
+                         TODO: This is temporary
+                         TODO: Curved Polyline segments are always arcs
 
                 pattern.AddStitchRel(0, 0, STOP)
                 c = polyline_item.pen().color()
@@ -1379,32 +1351,32 @@ save_file(void)
         case OBJ_TYPE_Point":
             if formatType == "EMBFORMAT_STITCHONLY":
                 to_polyline(pattern, item.objectPos(), item.objectSavePath(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-                */ /* TODO: proper layer/line_type/line_weight
+                 TODO: proper layer/line_type/line_weight
             else {
                 pattern.addPointObjectAbs(item.objectX(), item.objectY())
             break;
 
         case OBJ_TYPE_Polygon":
             to_polyline(pattern, item.objectPos(), item.objectSavePath(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-            */ /* TODO: proper layer/line_type/line_weight
+             TODO: proper layer/line_type/line_weight
             break;
 
         case OBJ_TYPE_Polyline":
             to_polyline(pattern, item.objectPos(), item.objectSavePath(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-            */ /* TODO: proper layer/line_type/line_weight
+             TODO: proper layer/line_type/line_weight
             break;
 
         case OBJ_TYPE_RAY:
-            */ /* addRay(pattern, item)
+             addRay(pattern, item)
             debug_message(".")
             break;
 
         case OBJ_TYPE_RECTANGLE:
             if formatType == "EMBFORMAT_STITCHONLY":
                 to_polyline(pattern, item.objectPos(), item.objectSavePath(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-                */ /* TODO: proper layer/line_type/line_weight
+                 TODO: proper layer/line_type/line_weight
             else {
-                */ /* TODO: Review this at some point
+                 TODO: Review this at some point
                 top_left = item.object_top_left()
                 pattern.add_rect_object_abs(top_left.x, top_left.y, item.object_width(), item.object_height())
             break;
@@ -1414,27 +1386,27 @@ save_file(void)
             break;
 
         case OBJ_TYPE_SPLINE:
-            */ /* TODO: abstract bezier into geom-bezier... cubicBezierMagic(P1, P2, P3, P4, 0.0, 1.0, tPoints)
+             TODO: abstract bezier into geom-bezier... cubicBezierMagic(P1, P2, P3, P4, 0.0, 1.0, tPoints)
             debug_message(".");
             break;
 
         case OBJ_TYPE_TextMulti:
-            */ /* TODO: saving polygons, polylines and paths must be stable before we go here.
+             TODO: saving polygons, polylines and paths must be stable before we go here.
             debug_message(".")
             break;
 
         case OBJ_TYPE_TextSingle:
-            */ /* TODO: saving polygons, polylines and paths must be stable before we go here.
+             TODO: saving polygons, polylines and paths must be stable before we go here.
 
-            */ /* TODO: This needs to work like a path, not a polyline. Improve this
+             TODO: This needs to work like a path, not a polyline. Improve this
             
             if (formatType == EMBFORMAT_STITCHONLY) {
                 path_list = item.objectSavePathList()
                 for (path in path_list) {
                     to_polyline(pattern, item.objectPos(), path.simplified(),
                         "0", item.objectColor(), "CONTINUOUS", "BYLAYER")
-                    */ /* TODO: proper layer/line_type/line_weight
-                    */ /* TODO: Improve precision, replace simplified
+                     TODO: proper layer/line_type/line_weight
+                     TODO: Improve precision, replace simplified
                 }
             }
             break;
@@ -1443,10 +1415,10 @@ save_file(void)
         }
     }
 
-    */ /* TODO: handle EMBFORMAT_STCHANDOBJ also
+     TODO: handle EMBFORMAT_STCHANDOBJ also
     if (formatType == "EMBFORMAT_STITCHONLY") {
         pattern.move_polylines_to_stitch_list()
-        */ /* TODO: handle all objects like this
+         TODO: handle all objects like this
     }
 
     write_successful = embPattern_writeAuto(file_name);
@@ -1474,7 +1446,7 @@ print_pattern(void)
 {
     debug_message("print()");
     /*
-    mdi_win = mdi_area.active_sub_window();
+    mdi_win = panel.active_sub_window();
     if (mdi_win) {
         mdi_win.print();
     }
@@ -1482,16 +1454,16 @@ print_pattern(void)
     if (dialog_exec() == "QDialog_Accepted") {
         painter = QPainter(printer);
         if (printing_disable_bg) {
-            */ /* Save current bg
+             Save current bg
             brush = gview.backgroundBrush();
-            */ /* Save ink by not printing the bg at all
+             Save ink by not printing the bg at all
             gview.setBackgroundBrush(Qt_NoBrush);
-            */ /* Print, fitting the viewport contents into a full page
+             Print, fitting the viewport contents into a full page
             gview.render(painter);
-            */ /* Restore the bg
+             Restore the bg
             gview.setBackgroundBrush(brush);
         else {
-            */ /* Print, fitting the viewport contents into a full page
+             Print, fitting the viewport contents into a full page
             gview.render(painter);
         }
     } */
@@ -1613,7 +1585,7 @@ redo(void)
         print("undo_history_position = %d\n", undo_history_position);
         print("undo_history_length = %d\n", undo_history_length);
         undo_call = undo_history[undo_history_position]
-        */ /* set reverse flag
+         set reverse flag
         undo_call += " -r"
         actuator(undo_call);
     }
@@ -1639,8 +1611,8 @@ undo(void)
         print("undo_history_position = %d\n" % undo_history_position);
         print("undo_history_length = %d\n" % undo_history_length);
 
-        */ /* Create the reverse action from the last action and apply with
-        */ /* the main actuator.
+         Create the reverse action from the last action and apply with
+         the main actuator.
         if last[0] == "donothing":
             debug_message("The last action has no undo candidate.");
 
@@ -1662,7 +1634,7 @@ repeat(void)
 void
 design_details(void)
 {
-    /* "assets/ui/design_details_window.csv" */
+    /* "assets/ui/design_details_dialog.csv" */
 }
 
 
@@ -1702,8 +1674,8 @@ about(void)
     dialog = tk.Tk();
     dialog_title("About Embroidermodder 2");
     dialog_minsize(400, 400);
-    */ /* tk.dialog(_mainWin);
-    */ /* img = tk.ImageWidget(application_folder + "/images/logo-small.png");
+     tk.dialog(_mainWin);
+     img = tk.ImageWidget(application_folder + "/images/logo-small.png");
     text_block = (
         "Embroidermodder " + version + "\n\n" +
         translate("http://embroidermodder.org") +
@@ -1721,7 +1693,7 @@ about(void)
     );
     text = tk.Label(dialog, text=text_block);
     text.grid(row=1, column=1);
-    */ /* text.setWordWrap(1);
+     text.setWordWrap(1);
 
     button = tk.Button(
         dialog,
@@ -1738,19 +1710,21 @@ about(void)
  *
  * Not currently maintained.
  */
-void
+EmbWindow *
 changelog(void)
 {
     debug_message("changelog()");
-    create_window(CHANGELOG_WINDOW, translate("Changelog"));
+    EmbWindow *changelog_window = create_window("assets/changelog_window.csv");
 
-    create_label(CHANGELOG_WINDOW, 0, 0, "changelog", "do-nothing", ALWAYS_VISIBLE);
+    int position[2] = {0, 0};
+    EmbPanel *panel = changelog_window->panels[0];
+    create_label(changelog_window, panel, position, "changelog", "do-nothing", ALWAYS_VISIBLE);
     /* display in a custom widget instead
     
     QUrl changelogURL("help/changelog.html");
     QDesktopServices_openUrl(changelogURL);
     */
-    
+    return changelog_window;
 }
 
 /* .
@@ -1780,7 +1754,7 @@ tip_of_the_day(void)
 
     checkBoxTipOfTheDay = tk.CheckBox(translate("&Show tips on startup"), wizard_tip_of_the_day);
     checkBoxTipOfTheDay.set_checked(general_tip_of_the_day); */
-    /*  connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), self, SLOT(checkBoxTipOfTheDayStateChanged(int))); */ /*
+    /*  connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), self, SLOT(checkBoxTipOfTheDayStateChanged(int))); 
 
     tips = tips
     if tips[general_current_tip] == "":
@@ -1868,7 +1842,7 @@ line_weight_selector(void)
     debug_message("line_weight_selector()");
 }
 
-/* .
+/* Acts on the EmbPanel that is focussed.
  */
 void
 distance(void)
@@ -1876,7 +1850,7 @@ distance(void)
     debug_message("distance()");
 }
 
-/* .
+/* Acts on the EmbPanel that is focussed.
  */
 void
 delete_object(void)
@@ -1884,7 +1858,7 @@ delete_object(void)
     debug_message("delete_object()");
 }
 
-/* .
+/* Acts on the EmbPanel that is focussed.
  */
 void
 locate_point(void)
@@ -1892,18 +1866,18 @@ locate_point(void)
     debug_message("locate_point()");
 }
 
-/* .
+/* Acts on the EmbPanel that is focussed.
  */
 void
 move(void)
 {
-    debug_message("locate_point()");
+    debug_message("move()");
 }
 
 /* .
  */
 int
-allow_zoom_in(void)
+allow_zoom_in(EmbPanel *panel)
 {
     /*
     origin = map_to_scene(0, 0);
@@ -1921,7 +1895,7 @@ allow_zoom_in(void)
 /* .
  */
 int
-allow_zoom_out(void)
+allow_zoom_out(EmbPanel *panel)
 {
     /*
     origin = map_to_scene(0, 0);
@@ -1936,7 +1910,7 @@ allow_zoom_out(void)
 }
 
 void
-zoom_to_point(EmbVector mouse_point, float zoom_dir)
+zoom_to_point(EmbPanel *panel, EmbVector mouse_point, float zoom_dir)
 {
     double s;
     printf("%f %f", mouse_point.x, zoom_dir);
@@ -1976,18 +1950,18 @@ zoom_to_point(EmbVector mouse_point, float zoom_dir)
     }
     */
 
-    scene_update();
+    scene_update(panel);
 }
 
 void
-set_snap(int active)
+set_snap(EmbPanel *panel, int active)
 {
     debug_message("View toggle-snap()");
     printf("%d\n", active);
     set_override_cursor("WaitCursor");
     /*  TODO: finish this. */
     /* gscene.set-property("ENABLE-SNAP", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
@@ -2253,46 +2227,46 @@ mdi_window_init(int index, int parent, int wflags)
 }
 
 void
-mdi_area_use_background_logo(EmbPanel *area, int use)
+panel_use_background_logo(EmbPanel *panel, int use)
 {
-    area->use_logo = use;
-    repaint();
+    panel->use_logo = use;
+    scene_update(panel);
 }
 
 void
-mdi_area_use_background_texture(EmbPanel *area, int use)
+panel_use_background_texture(EmbPanel *panel, int use)
 {
-    area->use_texture = use;
-    repaint();
+    panel->use_texture = use;
+    scene_update(panel);
 }
 
 void
-mdi_area_use_background_color(EmbPanel *area, int use)
+panel_use_background_color(EmbPanel *panel, int use)
 {
-    area->use_color = use;
-    repaint();
+    panel->use_color = use;
+    scene_update(panel);
 }
 
 void
-mdi_area_set_background_logo(EmbPanel *area, char *file_name)
+panel_set_background_logo(EmbPanel *panel, char *file_name)
 {
-    printf("%d%s", area->closeable, file_name);
+    printf("%d%s", panel->closeable, file_name);
     /* bg_logo.load(file_name); */
-    repaint();
+    scene_update(panel);
 }
 
 void
-mdi_area_set_background_texture(EmbPanel *area, char *file_name)
+panel_set_background_texture(EmbPanel *panel, char *file_name)
 {
-    printf("%d%s", area->closeable, file_name);
+    printf("%d%s", panel->closeable, file_name);
     /* bg_texture.load(file_name); */
-    repaint();
+    scene_update(panel);
 }
 
 void
-mdi_area_set_background_color(EmbPanel *area, EmbColor color)
+panel_set_background_color(EmbPanel *panel, EmbColor color)
 {
-    printf("%d%d", area->closeable, color.r);
+    printf("%d%d", panel->closeable, color.r);
     /*
     if (!color.is-valid()) {
         bg-color = background().color()
@@ -2302,26 +2276,26 @@ mdi_area_set_background_color(EmbPanel *area, EmbColor color)
     }
     */
 
-    repaint();
+    scene_update(panel);
 }
 
 void
-mdi_area_mouse_float_click_event(EmbPanel *area, EmbEvent e)
+panel_mouse_float_click_event(EmbPanel *panel, EmbEvent e)
 {
-    printf("%d %d\n", area->closeable, e.type);
+    printf("%d %d\n", panel->closeable, e.type);
     /*
     mw.open-file-action()
     */
 }
 
 void
-mdi_area_paint_event(EmbPanel *area, EmbEvent e)
+panel_paint_event(EmbPanel *panel, EmbEvent e)
 {
-    printf("%d %d\n", area->closeable, e.type);
+    printf("%d %d\n", panel->closeable, e.type);
     /* vport = viewport()
     rect = vport.rect()
 
-    painter = Painter(vport)
+    painter = EmbPainter(vport)
     painter.setRenderHint(QPainter-SmoothPixmapTransform) */
 
     /* Always fill with a solid color first. */
@@ -2348,7 +2322,7 @@ mdi_area_paint_event(EmbPanel *area, EmbEvent e)
 }
 
 void
-mdi_area_cascade(void)
+panel_cascade(void)
 {
     /*
     cascadeSubWindows();
@@ -2357,7 +2331,7 @@ mdi_area_cascade(void)
 }
 
 void
-mdi_area_tile(void)
+panel_tile(void)
 {
     /*
     tileSubWindows();
@@ -2365,7 +2339,7 @@ mdi_area_tile(void)
 }
 
 void
-mdi_area_zoom_extents_actionAllSubWindows(void)
+panel_zoom_extents_actionAllSubWindows(void)
 {
     /*
     for (window in subWindowList()) {
@@ -2380,29 +2354,13 @@ mdi_area_zoom_extents_actionAllSubWindows(void)
     */
 }
 
-/* HACK: Take that QEmbPanel!
- */
- /*
-void
-mdi_area-force-repaint()
-{
-    hack = size()
-    resize(hack + QSize(1,1))
-    resize(hack)
-}
-*/
-
 /*
- *  Menus
+ *  EmbPainter and EmbPen functions for drawing in the window.
  */
-
-/*
- *  Painter and pen functions for drawing in the window.
- */
-Pen *
+EmbPen *
 create_pen(void)
 {
-    Pen *pen = malloc(sizeof(Pen));
+    EmbPen *pen = malloc(sizeof(EmbPen));
     pen->color.r = 0;
     pen->color.g = 0;
     pen->color.b = 0;
@@ -2412,23 +2370,25 @@ create_pen(void)
     return pen;
 }
 
-Painter *
+EmbPainter *
 create_painter(void)
 {
-    Painter *painter = malloc(sizeof(Painter));
+    EmbPainter *painter = malloc(sizeof(EmbPainter));
+    /*
     painter->pen = create_pen();
     painter->path = NULL;
+    */
     return painter;
 }
 
 void
-destroy_pen(Pen *pen)
+destroy_pen(EmbPen *pen)
 {
     free(pen);
 }
 
 void
-destroy_painter(Painter *painter)
+destroy_painter(EmbPainter *painter)
 {
     destroy_pen(painter->pen);
     free(painter);
@@ -2439,7 +2399,7 @@ destroy_painter(Painter *painter)
  *  Extends the widget system.
  */
 void
-draw_line(EmbLine line)
+draw_line(EmbPanel *panel, EmbLine line)
 {
     printf("%f %f %f %f\n",
         line.start.x, line.start.y,
@@ -2449,16 +2409,16 @@ draw_line(EmbLine line)
 /*
  */
 void
-draw_lines(EmbLine *line, int n_lines)
+draw_lines(EmbPanel *panel, EmbLine *line, int n_lines)
 {
     int i;
     for (i=0; i<n_lines; i++) {
-        draw_line(line[i]);
+        draw_line(panel, line[i]);
     }
 }
 
 void
-create_grid_(int gridType)
+create_grid_(EmbPanel *panel, int gridType)
 {
     /*
     EmbPath grid-path;
@@ -2490,18 +2450,18 @@ create_grid_(int gridType)
     origin_scale.x = 1.0;
     origin_scale.y = 1.0; */
     /* self.origin-path.add-list-to-path(origin-string, position, scale); */
-    scene_update();
+    scene_update(panel);
 }
 
 /* TODO: Make Origin Customizable. */
 void
-create_origin(void)
+create_origin(EmbPanel *panel)
 {
-    /* self.origin-path = Path(); */ /*
+    /* self.origin-path = Path(); 
 
     if (grid_show_origin) { */
         /* self.origin-path.addEllipse(Vector(0,0), 0.5, 0.5) */
-        /* TODO: Make Origin Customizable. */ /*
+        /* TODO: Make Origin Customizable. 
         position = [0.0, 0.0];
         scale = [1.0, 1.0];
         self.origin-path.add-list-to-path(origin-string, position, scale)
@@ -2516,7 +2476,7 @@ create_grid_rect(void)
     y_spacing = grid_spacing.y;
 
     gr = Rect(0, 0, gridsize.x, -gridsize.y); */
-    /* Ensure the loop will work correctly with negative numbers. */ /*
+    /* Ensure the loop will work correctly with negative numbers. 
     point1.x = min(gr.left(), gr.right());
     point1.y = min(gr.top(), gr.bottom());
     point2.x = max(gr.left(), gr.right());
@@ -2534,7 +2494,7 @@ create_grid_rect(void)
         }
     } */
 
-    /* Center the Grid */ /*
+    /* Center the Grid 
     grid-rect = grid-path.bounding-rect();
     bx = gridrect.width() / 2.0;
     by = -gridrect.height() / 2.0;
@@ -2612,7 +2572,7 @@ create_grid_iso(void)
 
     /* Center the Grid */
     /* gridrect = grid-path.bounding-rect();*/
-    /* bx is unused */ /*
+    /* bx is unused 
     by = -gridrect.height()/2.0;
     cx = gridcenter.x;
     cy = -gridcenter.y;
@@ -2628,7 +2588,7 @@ create_grid_iso(void)
 }
 
 void
-set_grid(int active)
+set_grid(EmbPanel *panel, int active)
 {
     debug_message("View toggleGrid()");
     printf("%d", active);
@@ -2644,38 +2604,38 @@ set_grid(int active)
 }
 
 void
-set_ortho(int active)
+set_ortho(EmbPanel *panel, int active)
 {
     debug_message("View toggleOrtho()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
-    /* TODO: finish this. */ /*
+    /* TODO: finish this. 
     gscene.set_property("ENABLE-ORTHO", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
 void
-set_polar(int active)
+set_polar(EmbPanel *panel, int active)
 {
     debug_message("View togglePolar()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
-    /* TODO: finish this. */ /*
+    /* TODO: finish this. 
     gscene.set_property("ENABLE-POLAR", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
 void
-set_grid_color(EmbColor color)
+set_grid_color(EmbWindow *window, EmbColor color)
 {
     printf("called with %d", color.r);
     /*
     grid_color = color;
     gscene.set_property("VIEW-COLOR-GRID", color);
     if (gscene) {
-        scene_update();
+        scene_update(panel);
     }
     */
 }
@@ -2689,18 +2649,18 @@ allow_rubber(void)
 }
 
 void
-add_to_rubber_room(int item)
+add_to_rubber_room(EmbPanel *panel, int item)
 {
     printf("%d\n", item);
     /*
     rubber-room-list.append(item);
     item.show();
     */
-    scene_update();
+    scene_update(panel);
 }
 
 void
-vulcanize_rubber_room(void)
+vulcanize_rubber_room(EmbPanel *panel)
 {
     /*
     for (base in rubber-room-list) {
@@ -2711,7 +2671,7 @@ vulcanize_rubber_room(void)
 
     rubber-room-list.clear();
     */
-    scene_update();
+    scene_update(panel);
 }
 
 void
@@ -2722,8 +2682,8 @@ vulcanize_object(int obj)
     }
     /*
     gscene.remove-item(-obj)
-    */ /* Prevent Qt Runtime Warning, QGraphicsScene-addItem:
-    */ /* item has alreadelta-y been added to self scene.
+     Prevent Qt Runtime Warning, QGraphicsScene-addItem:
+     item has alreadelta-y been added to self scene.
     obj.vulcanize()
     */
 }
@@ -2778,7 +2738,7 @@ spare_rubber(int id)
 /* .
  */
 void
-set_rubber_mode(int mode)
+set_rubber_mode(EmbPanel *panel, int mode)
 {
     printf("%d", mode);
     /*
@@ -2789,14 +2749,14 @@ set_rubber_mode(int mode)
     }
     */
 
-    scene_update();
+    scene_update(panel);
 }
 
 /* key (string)
  * point (vector)
  */
 void
-set_rubber_point(char *key, int point)
+set_rubber_point(EmbPanel *panel, char *key, int point)
 {
     printf("%s %d", key, point);
     /*
@@ -2807,14 +2767,14 @@ set_rubber_point(char *key, int point)
     }
     */
 
-    scene_update();
+    scene_update(panel);
 }
 
 /* key (string)
  * txt (string)
  */
 void
-set_rubber_text(char *key, char *txt)
+set_rubber_text(EmbPanel *panel, char *key, char *txt)
 {
     printf("%s %s\n", key, txt);
     /*
@@ -2825,11 +2785,11 @@ set_rubber_text(char *key, char *txt)
     }
     */
 
-    scene_update();
+    scene_update(panel);
 }
 
 void
-start_gripping(int obj)
+start_gripping(EmbPanel *panel, int obj)
 {
     if (obj) {
         /*
@@ -3010,10 +2970,9 @@ vertical_ruler_ticks(EmbLine *ticks, int *n_lines,
  * Draw horizontal and vertical rulers.
  */
 void
-draw_rulers(int w, int scene)
+draw_rulers(EmbPanel *panel)
 {
-    EmbWindow *window = windows[w];
-    printf("%d %d\n", window->n_widgets, scene);
+    printf("%d\n", panel->closeable);
     /*
     vw = self.width()
     vh = self.height()
@@ -3029,14 +2988,14 @@ draw_rulers(int w, int scene)
 ; We will limit the maximum size the ruler can be shown at.
 
     maxSize = -1
-    */ /* Intentional underflow
+     Intentional underflow
     if horizontal-ruler-size.x >= maxSize or vertical-ruler-size.y >= maxSize:
         return
 
     distance = map-to-scene(settings.rulerPixelSize*3, 0).x() - origin.x
     dist-str = str(distance)
     dist-str-size = len(dist-str)
-    msd = int(dist-str[0]) */ /* Most Significant Digit
+    msd = int(dist-str[0])  Most Significant Digit
 
     if msd != -1:
         return
@@ -3167,7 +3126,7 @@ draw_rulers(int w, int scene)
 }
 
 void
-set_ruler(int active)
+set_ruler(EmbPanel *panel, int active)
 {
     debug_message("View toggle-ruler()");
     printf("%d", active);
@@ -3176,16 +3135,16 @@ set_ruler(int active)
     gscene.set_property("ENABLE-RULER", active);
     ruler-color = get_color("ruler-color");
     */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
 void
-set_ruler_color(EmbColor color)
+set_ruler_color(EmbPanel *panel, EmbColor color)
 {
     printf("called with %d", color.r);
     /* void ruler-color) color); */
-    scene_update();
+    scene_update(panel);
 }
 
 /* The layer manager.
@@ -3224,7 +3183,7 @@ layer_manager_add(
     strcpy(mgr->line_type, lineType)
     mgr->line_weight = line_weight */
     /*
-    */ /* const print)
+     const print)
     layer-model.insertRow(0)
     layer-model.set_data(layer-model.index(0, 0), name)
     layer-model.set_data(layer-model.index(0, 1), visible)
@@ -3238,7 +3197,7 @@ layer_manager_add(
 
     layer-model.set_data(layer-model.index(0, 5), lineType)
     layer-model.set_data(layer-model.index(0, 6), lineWeight)
-    */ /* layer-model.set_data(layer-model.index(0, 7), print)
+     layer-model.set_data(layer-model.index(0, 7), print)
     */
     /*
 }
@@ -3267,8 +3226,8 @@ layer_manager_action(void)
 {
     debug_message("layerManager()");
     debug_message("Implement layerManager.");
-    /* */ /* LayerManager layman( self,  self);
-     * */ /* layman.exec(); */
+    /*  LayerManager layman( self,  self);
+     *  layman.exec(); */
 }
 
 void
@@ -3394,14 +3353,14 @@ status_bar_mouse_coord(EmbPanel *tab, int x, int y)
     if (tab->number-mode == SCIENTIFIC) { */
         /* status_bar-mouse-coord.setText("".setNum(x, 'E', 4)
             + ", " + "".setNum(y, 'E', 4))
-        */ /* TODO: use precision from unit settings */ /*
+         TODO: use precision from unit settings 
         return;
     } */
     /* Else decimal */
     /*
      * status_bar-mouse-coord.setText("".setNum(x, 'F', 4) + ", "
      * + "".setNum(y, 'F', 4))
-     */ /* TODO: use precision from unit settings */
+      TODO: use precision from unit settings */
 }
 
 /* class StatusBar() */
@@ -3438,9 +3397,9 @@ status_bar_init(void)
     status_bar-mouse-coord = tk.Label(this)
 
     status_bar-mouse-coord.set_minimum-width(300)
-    */ /* Must fit this text always
+     Must fit this text always
     status_bar-mouse-coord.set_maximum-width(300)
-    */ /* "+1.2345E+99, +1.2345E+99, +1.2345E+99"
+     "+1.2345E+99, +1.2345E+99, +1.2345E+99"
 
     this, add_widget(status_bar-mouse-coord)
     for i in range(N-STATUS) {
@@ -3461,9 +3420,10 @@ toolbar_init(void)
 }
 
 void
-scene_update(void)
+scene_update(EmbPanel *panel)
 {
-
+    printf("scene_update");
+    printf("%d\n", panel->closeable);
 }
 
 void
@@ -3675,17 +3635,16 @@ Help {
 */
 
 void
-draw_background(int scene, Painter *painter, Rect rect)
+draw_background(EmbWindow *window, EmbPanel *panel, Rect rect)
 {
-    printf("called with: %d %d", scene, rect.x);
+    EmbPainter *painter = panel->painter;
     /*
     fill_rect(painter, rect, backgroundBrush());
 
     a = rect.intersects(grid_path.controlPointRect());
     */
     int a = 1;
-    EmbWindow *w = windows[MAIN_WINDOW];
-    if (w->tabs[w->tab_index].grid && a) {
+    if (window->panels[window->tab_index]->grid && a) {
         EmbColor grid_color = black;
         painter->pen->color = grid_color;
         painter->pen->join_style = MITER_JOIN;
@@ -3699,27 +3658,32 @@ draw_background(int scene, Painter *painter, Rect rect)
 }
 
 void
-draw_crosshair(int w, Painter *painter)
+draw_crosshair(EmbWindow *window, EmbPanel *panel)
 {
-    /* painter.setBrush("NoBrush"); */
+    /*
+    Originally was fed a painter argument.
+
+    Panel could have painter/pen as a member?
+
+    It would store the visibility, color, line_thickness
+    and remember its position like in turtle graphics.
+
+    painter.setBrush("NoBrush");
     Pen *crosshair_pen = create_pen();
     crosshair_pen->color = crosshair_color;
     crosshair_pen->cosmetic = 1;
     painter->pen = crosshair_pen;
+    */
 
-    horizontal_rule(
-        w,
+    int position[2] = {
         view_mouse_point.x,
-        view_mouse_point.y - crosshair_size,
-        view_mouse_point.y + crosshair_size,
-        ALWAYS_VISIBLE);
+        view_mouse_point.y - crosshair_size
+    };
+    horizontal_rule(panel, position, 2*crosshair_size, ALWAYS_VISIBLE);
 
-    vertical_rule(
-        w,
-        view_mouse_point.y,
-        view_mouse_point.x - crosshair_size,
-        view_mouse_point.x + crosshair_size,
-        ALWAYS_VISIBLE);
+    position[0] = view_mouse_point.y;
+    position[1] = view_mouse_point.x - crosshair_size;
+    vertical_rule(panel, position, 2*crosshair_size, ALWAYS_VISIBLE);
 
     /*
     top-left = map_to_scene(
@@ -3735,12 +3699,12 @@ draw_crosshair(int w, Painter *painter)
 }
 
 /* TODO: and findClosestSnapPoint == 1 */
+/* panel->painter->pen...? */
 void
-draw_closest_qsnap(int window_id, Painter *painter)
+draw_closest_qsnap(EmbPanel *panel)
 {
-    EmbWindow *w = windows[window_id];
     /* printf("%d\n", view); */
-    printf("%d %d\n", w->n_widgets, painter->pen->cosmetic);
+    printf("%d\n", panel->n_widgets);
     printf("%f\n", qsnap_aperture_size);
     /*
     qsnap-pen = Pen(Color(qsnapLocator-color));
@@ -3778,11 +3742,9 @@ draw_closest_qsnap(int window_id, Painter *painter)
 
 /* Draw grip points for all selected objects. */
 void
-draw_foreground(int window_id, int view, Painter *painter, Rect rect)
+draw_foreground(EmbWindow *window, EmbPanel *panel, EmbPainter *painter, Rect rect)
 {
-    EmbWindow *w = windows[window_id];
-    printf("called with: %d %d", view, rect.x);
-    Pen *grip_pen = create_pen();
+    EmbPen *grip_pen = create_pen();
     grip_pen->width = 2.0;
     grip_pen->join_style = MITER_JOIN;
     grip_pen->cosmetic = 1;
@@ -3820,13 +3782,13 @@ draw_foreground(int window_id, int view, Painter *painter, Rect rect)
     }
     */
 
-    if (!w->selecting_active) {
-        draw_closest_qsnap(window_id, painter);
-        draw_crosshair(window_id, painter);
+    if (!window->selecting_active) {
+        draw_closest_qsnap(panel);
+        draw_crosshair(window, panel);
     }
 
-    if (w->tabs[w->tab_index].ruler) {
-        draw_rulers(window_id, active_scene);
+    if (window->panels[window->tab_index]->ruler) {
+        draw_rulers(panel);
     }
 }
 
@@ -3859,15 +3821,15 @@ saveBMC(void/* MdiEmbWindow *subwindow */)
     painter = QPainter(img)
     targetRect = make_rectangle(0,0,150,150)
     if (printing_disable_bg) { */
-        /* TODO: Make BMC background into it's own setting? */ /*
+        /* TODO: Make BMC background into it's own setting? 
         brush = gscene.backgroundBrush()
         gscene.setBackgroundBrush(Qt-NoBrush)
-        scene_update();
+        scene_update(panel);
         gscene.render(painter, targetRect, extents, "Qt-KeepAspectRatio")
         gscene.setBackgroundBrush(brush)
     }
     else {
-        scene_update();
+        scene_update(panel);
         gscene.render(painter, targetRect, extents, "Qt-KeepAspectRatio")
     }
     img.convertToFormat(QImage-Format-Indexed8, Qt-ThresholdDither|Qt-AvoidDither).save("test.bmc", "BMP")
@@ -4017,7 +3979,7 @@ move_action(void)
  * designs = load-data("designs.json");
 
 void
-settings_dialog(void) */ /*int showTab */ /*
+settings_dialog(void) int showTab 
 {
     dialog = settings-dialog-action(showTab);
     dialog-mainloop();
@@ -4069,7 +4031,7 @@ select_all_(void)
 
     allPath = Path();
     allPath.add-rect(gscene.scene-rect());
-    gscene.setSelectionArea(allPath, "ReplaceSelection", "intersects-item-shape", transform());
+    gscene.setSelectionpanel(allPath, "ReplaceSelection", "intersects-item-shape", transform());
     */
 }
 
@@ -4118,14 +4080,14 @@ icon_resize(int icon_size)
     color-selector.seticon-size(icon-size, icon-size);
     linetype-selector.seticon-size(icon-size*4, icon-size);
     lineweightSelector.seticon-size(icon-size*4, icon-size);
-    */ /* set the minimum combobox width so the text is always readable
+     set the minimum combobox width so the text is always readable
     layer_selector.set_minimum-width(icon-size*4);
     color-selector.set_minimum-width(icon-size*2);
     linetype-selector.set_minimum-width(icon-size*4);
     lineweightSelector.set_minimum-width(icon-size*4);
 
-    */ /* TODO: low-priority:
-    */ /* open app with icon-size set to 128. resize the icons to a smaller size.
+     TODO: low-priority:
+     open app with icon-size set to 128. resize the icons to a smaller size.
 
     */
     general_icon_size = icon_size;
@@ -4136,7 +4098,7 @@ active_mdi_window(void)
 {
     debug_message("activemdi-window()");
     /*
-    mdi-win = mdi_area.active-sub-window();
+    mdi-win = panel.active-sub-window();
     return mdi-win;
     */
 }
@@ -4225,7 +4187,7 @@ void
 active_view(void)
 {
     debug_message("active_view()");
-    mdi-win = mdi_area.active-sub-window();
+    mdi-win = panel.active-sub-window();
     if (mdi-win) {
         v = mdi-win.getView();
         return v;
@@ -4238,7 +4200,7 @@ int
 active_scene(void)
 {
     debug_message("active-scene()");
-    mdi-win = mdi_area.active-sub-window();
+    mdi-win = panel.active-sub-window();
     if (mdi-win) {
         return mdi-win.getScene();
     }
@@ -4250,7 +4212,7 @@ update_all_view_scroll_bars(int val)
 {
     printf("%d\n", val);
     /*
-    windowList = mdi_area.sub-window-list();
+    windowList = panel.sub-window-list();
     for (mdi-win in windowList) {
         mdi-win.showViewScrollBars(val);
     }
@@ -4262,7 +4224,7 @@ update_all_view_cross_hair_colors(EmbColor color)
 {
     printf("%d\n", color.r);
     /*
-    windowList = mdi_area.sub-window-list();
+    windowList = panel.sub-window-list();
     for (mdi-win in windowList) {
         mdi-win.setViewCrossHairColor(color);
     }
@@ -4274,7 +4236,7 @@ updateAllViewBackgroundColors(EmbColor color)
 {
     printf("%d\n", color.r);
     /*
-    windowList = mdi_area.sub-window-list()
+    windowList = panel.sub-window-list()
     for (mdi-win in windowList) {
         mdi-win.setViewBackgroundColor(color)
     }
@@ -4368,33 +4330,30 @@ show_scroll_bars(int val)
 }
 
 void
-set_cross_hair_color(EmbPanel *area, EmbColor color)
+set_cross_hair_color(EmbPanel *panel, EmbColor color)
 {
-    printf("%d %d\n", area->closeable, color.r);
+    printf("%d %d\n", panel->closeable, color.r);
     /* crosshair-color = color;
     gscene.set_property("VIEW-COLOR-CROSSHAIR", color);
     */
-    scene_update();
+    scene_update(panel);
 }
 
 void
-set_background_color(EmbPanel *area, EmbColor color)
+set_background_color(EmbPanel *panel, EmbColor color)
 {
-    printf("%d %d\n", area->closeable, color.r);
+    printf("%d %d\n", panel->closeable, color.r);
     /* set_background-brush(Color(color));
     gscene.set_property("VIEW-COLOR-BACKGROUND", color);
     */
-    scene_update();
+    scene_update(panel);
 }
 
 void
-set_select_box_colors(
-    EmbPanel *area,
-    EmbColor colorL, EmbColor fillL,
-    EmbColor colorR, EmbColor fillR,
-    float alpha)
+set_select_box_colors(EmbPanel *panel, EmbColor colorL, EmbColor fillL,
+    EmbColor colorR, EmbColor fillR, float alpha)
 {
-    printf("%d\n", area->closeable);
+    printf("%d\n", panel->closeable);
     printf("%d\n", colorL.r);
     printf("%d\n", fillL.r);
     printf("%d\n", colorR.r);
@@ -4404,17 +4363,15 @@ set_select_box_colors(
 }
 
 void
-update_all_view_selectbox_colors(
-    EmbColor colorL, EmbColor fillL,
-    EmbColor colorR, EmbColor fillR,
-    float alpha)
+update_all_view_selectbox_colors(EmbColor colorL, EmbColor fillL,
+    EmbColor colorR, EmbColor fillR, float alpha)
 {
     printf("%d\n", colorL.r);
     printf("%d\n", fillL.r);
     printf("%d\n", colorR.r);
     printf("%d\n", fillR.r);
     printf("alpha %f\n", alpha);
-    /* windowList = mdi_area.sub-window-list()
+    /* windowList = panel.sub-window-list()
     for (mdi-win in windowList) {
         mdi-win.setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha)
     } */
@@ -4425,7 +4382,7 @@ update_all_view_grid_colors(EmbColor color)
 {
     printf("%d", color.r);
     /*
-    windowList = mdi_area.sub-window-list();
+    windowList = panel.sub-window-list();
     for (mdi-win in windowList) {
         mdi-win.setViewGridColor(color);
     }
@@ -4437,7 +4394,7 @@ update_all_view_ruler_colors(EmbColor color)
 {
     printf("%d", color.r);
     /*
-    windowList = mdi_area.sub-window-list();
+    windowList = panel.sub-window-list();
     for (mdi-win in windowList) {
         mdi-win.set_view-ruler-color(color);
     }
@@ -4473,7 +4430,7 @@ color_selector_index_changed(int index)
     newColor = Color()
     if comboBox:
         ok = 0
-        */ /* TODO: Handle ByLayer and ByBlock and Other...
+         TODO: Handle ByLayer and ByBlock and Other...
         newColor, ok = comboBox.itemData(index).toUInt()
         if ! ok:
             warning(translate("Color Selector Conversion Error"), translate("<b>An error has occurred while changing colors.</b>"))
@@ -4481,7 +4438,7 @@ color_selector_index_changed(int index)
     else {
         warning(translate("Color Selector Pointer Error"), translate("<b>An error has occurred while changing colors.</b>"))
 
-    mdi-win = mdi_area.active-sub-window()
+    mdi-win = panel.active-sub-window()
     if (mdi-win) {
         mdi-win.currentColorChanged(newColor)
     }
@@ -4553,7 +4510,7 @@ getCurrentLayer(void)
     */
     /*
     debug_message((char*)title)
-    mdi-win = mdi_area.active-sub-window()
+    mdi-win = panel.active-sub-window()
     if (mdi-win) {
         return mdi-win.getCurrentLayer()
     }
@@ -4575,7 +4532,7 @@ get_current_color(void)
     */
     /*
     debug_message((char*)title)
-    mdi-win = mdi_area.active-sub-window()
+    mdi-win = panel.active-sub-window()
     if mdi-win:
         return mdi-win.get-current-color()
     */
@@ -4595,7 +4552,7 @@ get_current_line_type(void)
     */
     /*
     debug_message((char*)title);
-    mdi-win = mdi_area.active-sub-window();
+    mdi-win = panel.active-sub-window();
     if (mdi-win) {
         return mdi-win.get-current-line_type();
     }
@@ -4616,7 +4573,7 @@ get_current_line_weight(void)
     }
 
     debug_message(title);
-    mdi-win = mdi_area.active-sub-window();
+    mdi-win = panel.active-sub-window();
     if (mdi-win) {
         return mdi-win.get-current-line_weight();
     }
@@ -4740,14 +4697,14 @@ window_menu_about_to_show(void)
     menu-WINDOW.add-action(action-hash.value("window-previous"));
 
     menu-WINDOW.add-separator();
-    windows = mdi_area.sub-window-list();
+    windows = panel.sub-window-list();
     for (i=0; i<len(windows); i++) {
         an-action = Action(windows[i].window-title(), self);
         an-action.set_checkable(1);
         an-action.set_data(i);
         menu-WINDOW.add-action(an-action);
         connect(an-action, SIGNAL(toggled(int)), self, SLOT(windowMenuActivated(int)));
-        an-action.set_checked(mdi_area.active-sub-window() == windows[i]);
+        an-action.set_checked(panel.active-sub-window() == windows[i]);
     }
     */
 }
@@ -4763,7 +4720,7 @@ window_menu_activated(int *checked)
     if (!a-sender) {
         return;
     }
-    w = mdi_area.sub-window-list().at[a-sender.data().toInt()];
+    w = panel.sub-window-list().at[a-sender.data().toInt()];
     if (w and checked) {
         w.set_focus();
     }
@@ -4776,7 +4733,7 @@ close_event(EmbEvent event)
     debug_message("MdiWindow closeEvent()");
     printf("%d\n", event.type);
     /*
-    mdi_area.close-all-sub-windows();
+    panel.close-all-sub-windows();
     write-settings();
     event.accept();
 
@@ -4789,7 +4746,7 @@ on_close_window(void)
 {
     debug_message("onCloseWindow()");
     /*
-    mdi-win = mdi_area.active-sub-window();
+    mdi-win = panel.active-sub-window();
     if (mdi-win) {
         onClosemdi-win(mdi-win);
     }
@@ -4809,14 +4766,14 @@ on_close_mdi_win(void)
         keep_maximized = the-mdi-win.is-maximized();
     }
 
-    mdi_area.remove-sub-window(the-mdi-win);
+    panel.remove-sub-window(the-mdi-win);
     the-mdi-win.delete-later();
 
     update-menu-toolbar-statusbar();
     window-menu-about-to-show();
 
     if (keep_maximized) {
-        mdi-win = mdi_area.active-sub-window();
+        mdi-win = panel.active-sub-window();
         if (mdi-win) {
             mdi-win.show-maximized();
         }
@@ -4845,15 +4802,15 @@ update_menu_toolbar_statusbar(void)
 
     if (n_docs) {
         /*
-        */ /* Toolbars
+         Toolbars
         for key in toolbar.keys() {
             toolbar[key].show()
 
-        */ /* DockWidgets
+         DockWidgets
         dock_prop_edit.show()
         dock-undo-edit.show()
 
-        */ /* Menus
+         Menus
         menu-bar().clear()
         menu-bar().add-menu(menu-FILE)
         menu-bar().add-menu(menu-EDIT)
@@ -4869,7 +4826,7 @@ update_menu_toolbar_statusbar(void)
 
         menu-WINDOW.enabled = 1)
 
-        */ /* Statusbar
+         Statusbar
         statusbar.clear-message()
         status_bar-mouse-coord.show()
         status_bar-SNAP.show()
@@ -4948,11 +4905,11 @@ load_formats(void)
     supported-str = "";
     individual-str = "";
 
-    */ /* TODO: Stable Only (Settings Option)
-    */ /* stable = 'S';
-    */ /* unstable = 'S';
+     TODO: Stable Only (Settings Option)
+     stable = 'S';
+     unstable = 'S';
 
-    */ /* Stable + Unstable
+     Stable + Unstable
     stable = 'S';
     unstable = 'U';
 
@@ -4971,7 +4928,7 @@ load_formats(void)
         supported-str = "*" + upper-ext + " "
         individual-str = upper-ext.replace(".", "") + " - " + description + " (*" + extension + ")"
         if(readerState == stable or readerState == unstable) {
-            */ /* Exclude color file formats from open dialogs
+             Exclude color file formats from open dialogs
             if(upper-ext != "COL" and upper-ext != "EDR" and upper-ext != "INF" and upper-ext != "RGB") {
                 supported-readers.append(supported-str)
                 individual-readers.append(individual-str)
@@ -4995,11 +4952,11 @@ load_formats(void)
     /* TODO: Fixup custom filter. */
     /*custom = custom-filter
     if custom.contains("supported", "CaseInsensitive") { */
-        /* This will hide it. */ /*
+        /* This will hide it. 
         custom = ""
     }
     elif ! custom.contains("*", "CaseInsensitive") { */
-        /* This will hide it. */ /*
+        /* This will hide it. 
         custom = ""
     }
     else {
@@ -5016,10 +4973,10 @@ floating_changed_toolbar(int isFloating)
     /* tb = sender()
     if (tb) {
         if (isFloating) { */
-            /* */ /* TODO: Determine best suited close button on various platforms.
-            */ /* Style-SP-DockWidgetCloseButton
-            */ /* Style-SP-TitleBarCloseButton
-            */ /* Style-SP-DialogCloseButton */
+            /*  TODO: Determine best suited close button on various platforms.
+             Style-SP-DockWidgetCloseButton
+             Style-SP-TitleBarCloseButton
+             Style-SP-DialogCloseButton */
 /*
             ACTION = Action(tb.style().standard-icon("Style-SP-DialogCloseButton"), "Close", self)
         }
@@ -5027,7 +4984,7 @@ floating_changed_toolbar(int isFloating)
             for (action in tb.actions()) {
                 if (action.object-name() == "toolbarclose") {
                     tb.remove-action(action)
-                    */ /* disconnect(tb, SIGNAL(actionTriggered()), self, SLOT(close-toolbar()))
+                     disconnect(tb, SIGNAL(actionTriggered()), self, SLOT(close-toolbar()))
                     del action
                 }
             }
@@ -5074,13 +5031,6 @@ application_event(EmbEvent event)
     return application-event(event)
     */
 }
-
-void
-repaint(void)
-{
-
-}
-
 
 /* NOTE: This function should be used to interpret various
  * object types and save them as polylines for stitchOnly formats.
@@ -5142,7 +5092,7 @@ class MdiWindow()*/
     View*  gview
     int fileWasLoaded
 
-    */ /* QPrinter printer
+     QPrinter printer
 
     QString curFile
 void setCurrentFile(file_name)
@@ -5225,7 +5175,7 @@ on_window_activated(void/* mdi-window *subwindow */)
     status_bar[STATUS-QSNAP].set_checked(gscene.property("ENABLE-QSNAP"));
     status_bar[STATUS-QTRACK].set_checked(gscene.property("ENABLE-QTRACK"));
     status_bar[STATUS-LWT].set_checked(gscene.property("ENABLE-LWT"));
-    */ /* mw.prompt.setHistory(promptHistory);
+     mw.prompt.setHistory(promptHistory);
     */
 }
 
@@ -5345,7 +5295,7 @@ class PropertyEditor()
 
     QList<QGraphicsItem*> selectedItemList
 
-    */ /* Helper functions
+     Helper functions
     QToolButton*   createToolButton(const QString& iconName, const QString& txt)
     QLineEdit* createLineEdit(const QString& validatorType = "", int readOnly = false)
     QComboBox* create-combobox(int disable = false)
@@ -5388,7 +5338,7 @@ mapSignal(QObject* fieldObj, const QString& name, QVariant value)
     QToolButton* createToolButtonQSelect()
     QToolButton* createToolButtonPickAdd()
 
-    */ /* TODO: Alphabetic/Categorized TabWidget
+     TODO: Alphabetic/Categorized TabWidget
     bool eventFilter(QObject *obj, QEvent *event)
 }
 
@@ -5500,7 +5450,7 @@ create_button_QSelect(void)
     button-QSelect.set_icon(load-icon(quickselect-xpm));
     button-QSelect.setIconSize(QSize(iconSize, iconSize));
     button-QSelect.setText("QSelect");
-    button-QSelect.setToolTip("QSelect"); */ /* TODO: Better Description
+    button-QSelect.setToolTip("QSelect");  TODO: Better Description
     button-QSelect.setbutton-Style(Qt-button-IconOnly);
     return button-QSelect;
     */
@@ -5510,7 +5460,7 @@ void
 create_button_pick_add(void)
 {
 /*
-    */ /* TODO: Set as PickAdd or PickNew based on settings
+     TODO: Set as PickAdd or PickNew based on settings
     button_pickadd = Qbutton-(this);
     update_pick_add_mode_button(pickAdd);
     connect(button_pickadd, SIGNAL(clicked(int)), this, SLOT(togglepickadd_mode()));
@@ -5606,14 +5556,14 @@ updatefont-comboboxStrIfVaries(self, font-combobox, str)
 {
     field-old-text = font-combobox.property("FontFamily").toString()
     field-new-text = str
-    */ /* (debug_message "old: %d %s, new: %d %s", oldIndex, qPrintable(font-combobox.currentText()), newIndex, qPrintable(str))
+     (debug_message "old: %d %s, new: %d %s", oldIndex, qPrintable(font-combobox.currentText()), newIndex, qPrintable(str))
     if field-old-text.isEmpty()) {
         font-combobox.setCurrentFont(QFont(field-new-text))
         font-combobox.setProperty("FontFamily", field-new-text)
     }
     elif field-old-text != field-new-text) {
         if font-combobox.findText(field-varies-text) == -1:
-            */ /* Prevent multiple entries
+             Prevent multiple entries
             font-combobox.addItem(field-varies-text)
         font-combobox.set_current_index(font-combobox.findText(field-varies-text))
     }
@@ -5631,7 +5581,7 @@ updateComboBoxStrIfVaries(self, comboBox, str, strList)
 
     elif field-old-text != field-new-text:
         if comboBox.findText(field-varies-text) == -1:
-            */ /* Prevent multiple entries
+             Prevent multiple entries
             comboBox.addItem(field-varies-text)
         comboBox.set_current_index(comboBox.findText(field-varies-text))
 }
@@ -5674,7 +5624,7 @@ update_combobox_int_if_varies(int self, int comboBox, int val, int yesOrNoText)
     }
 
     elif field-old-text != field-new-text:
-        */ /* Prevent multiple entries
+         Prevent multiple entries
         if comboBox.findText(field-varies-text) == -1:
             comboBox.addItem(field-varies-text)
         comboBox.set_current_index(comboBox.findText(field-varies-text))
@@ -5745,7 +5695,7 @@ clear_all_fields(void)
     }
       Text Single
     comboBoxTextSingleFont.removeItem(comboBoxTextSingleFont.findText(field-varies-text))
-    */ /* NOTE: Do not clear comboBoxTextSingleFont
+     NOTE: Do not clear comboBoxTextSingleFont
     comboBoxTextSingleFont.setProperty("FontFamily", "")
 }
 
@@ -5755,7 +5705,7 @@ create-groupbox-geometry self obj-type)
 {
     gb = Qgroupbox(translate("Geometry"), this)
 
-    */ /* TODO: use proper icons
+     TODO: use proper icons
     form-layout = tk.form-layout(this)
     for i in obj-types:
         if property-editors[i].object == obj-type:
@@ -5872,7 +5822,7 @@ fieldEdited(self, fieldObj)
                     tempArcObj.setObjectEndAngle(ARC-END-ANGLE].text().tofloat())
 
         if (item.type == "Block":
-            */ /* TODO: field editing
+             TODO: field editing
             break
         if (item.type == "Circle":
             if objName == "edit-CircleCenterX":
@@ -5909,32 +5859,32 @@ fieldEdited(self, fieldObj)
             break
 
         if (item.type == "DIMALIGNED":
-            */ /* TODO: field editing
+             TODO: field editing
             break
 
         if (item.type == "DIMANGULAR":
-            */ /* TODO: field editing
+             TODO: field editing
             break
 
         if (item.type == "DIMARCLENGTH":
-            */ /* TODO: field editing
+             TODO: field editing
             break
 
         if (item.type == "DIMDIAMETER":
-            */ /* TODO: field editing
+             TODO: field editing
             break
 
         if (item.type == "DIMLEADER":
-            */ /* TODO: field editing
+             TODO: field editing
             break
 
-        if (item.type == "DIMLINEAR": */ /* TODO: field editing
+        if (item.type == "DIMLINEAR":  TODO: field editing
             break
 
-        if (item.type == "DIMORDINATE": */ /* TODO: field editing
+        if (item.type == "DIMORDINATE":  TODO: field editing
             break
 
-        if (item.type == "DIMRADIUS": */ /* TODO: field editing
+        if (item.type == "DIMRADIUS":  TODO: field editing
             break
 
         if (item.type == "ELLIPSE":
@@ -5961,9 +5911,9 @@ fieldEdited(self, fieldObj)
                 item.setObjectDiameterMinor("ELLIPSE-DIAMETER-MINOR].text().tofloat())
 
             break
-        elif IMAGE: */ /* TODO: field editing
+        elif IMAGE:  TODO: field editing
             break
-        elif INFINITELINE: */ /* TODO: field editing
+        elif INFINITELINE:  TODO: field editing
             break
         elif LINE:
             if objName == "edit-LineStartX":
@@ -5979,7 +5929,7 @@ fieldEdited(self, fieldObj)
                 item.setObjectY2(-"LINE-END-Y].text().tofloat())
 
         if (item.type == "PATH":
-            */ /* TODO: field editing
+             TODO: field editing
 
         if (item.type == "POINT":
             if objName == "edit-PointX":
@@ -5995,19 +5945,19 @@ fieldEdited(self, fieldObj)
             debug_message("TYPE Polyline has no field editing")
 
         if (item.type == "RAY":
-            */ /* TODO: field editing
+             TODO: field editing
             debug_message("TYPE Polyline has no field editing")
 
         if (item.type == "RECTANGLE":
-            */ /* TODO: field editing
+             TODO: field editing
             debug_message("TYPE Polyline has no field editing")
 
         if (item.type == "TEXTMULTI":
-            */ /* TODO: field editing
+             TODO: field editing
             debug_message("TYPE Polyline has no field editing")
 
         if (item.type == "TEXTSINGLE":
-            */ /* TODO: field editing
+             TODO: field editing
             if objName == "edit-TextSingleContents":
                 item.setObjectText(edit-TextSingleContents.text())
 
@@ -6049,12 +5999,12 @@ fieldEdited(self, fieldObj)
                 if comboBoxTextSingleUpsideDown.currentText() != field-varies-text:
                     item.setTextUpsideDown(comboBoxTextSingleUpsideDown.itemData(comboBoxTextSingleUpsideDown.currentIndex()))
 
-    */ /* Block this slot from running twice since calling setSelectedItems will trigger it
+     Block this slot from running twice since calling setSelectedItems will trigger it
     blockSignals = 1
 
     widget = QApplication-focusWidget()
-    */ /* Update so all fields have fresh data
-    */ /* TODO: Improve this
+     Update so all fields have fresh data
+     TODO: Improve this
 
     setSelectedItems(selectedItemList);
     hideAllGroups();
@@ -6095,7 +6045,7 @@ add_colors_to_combobox(int combobox)
     combobox.add_item(load-icon(colorblue-xpm), translate("Blue"), tk.Rgb(  0, 0,255));
     combobox.add_item(load-icon(colormagenta-xpm), translate("Magenta"), tk.Rgb(255, 0,255));
     combobox.add_item(load-icon(colorwhite-xpm), translate("White"), tk.Rgb(255,255,255));
-    */ /* TODO: Add Other... so the user can select custom colors */
+     TODO: Add Other... so the user can select custom colors */
 }
 
 /* . */
@@ -6145,7 +6095,7 @@ checkbox_general_mdi_bg_use_logo_state_changed(int checked)
     printf("%d\n", checked);
     /*
     preview.general-mdi-bg-use-logo = checked;
-    mdi_area.useBackgroundLogo(checked);
+    panel.useBackgroundLogo(checked);
     */
 }
 
@@ -6163,8 +6113,8 @@ chooseGeneralMdiBackgroundLogo(void)
         if selectedImage != "") {
             accept.general-mdi-bg-logo = selectedImage
 
-        */ /* Update immediately so it can be previewed
-        mdi_area.setBackgroundLogo(accept-.general-mdi-bg-logo) */
+         Update immediately so it can be previewed
+        panel.setBackgroundLogo(accept-.general-mdi-bg-logo) */
 }
 
 /* . */
@@ -6173,7 +6123,7 @@ checkbox_general_mdi_bg_use_texture_state_changed(int checked)
 {
     preview_mdi_bg_use_texture = checked;
     /*
-    mdi_area.useBackgroundTexture(checked);
+    panel.useBackgroundTexture(checked);
     */
 }
 
@@ -6193,8 +6143,8 @@ chooseGeneralMdiBackgroundTexture(void)
             accept.general-mdi-bg-texture = selectedImage
         }*/
 
-        /* Update immediately so it can be previewed. */ /*
-        mdi_area.setBackgroundTexture(accept-.general-mdi-bg-texture)
+        /* Update immediately so it can be previewed. 
+        panel.setBackgroundTexture(accept-.general-mdi-bg-texture)
     }
     */
 }
@@ -6205,7 +6155,7 @@ checkbox_general_mdi_bg_use_color_state_changed(int checked)
 {
     preview_mdi_bg_use_color = checked;
     /*
-    mdi_area.useBackgroundColor(checked);
+    panel.useBackgroundColor(checked);
     */
 }
 
@@ -6225,10 +6175,10 @@ choose_general_mdi_background_color(void)
             pix = Image(16,16);
             pix.fill(Color(accept-.general-mdi-bg-color));
             button.set_icon(pix);
-            mdi_area.setBackgroundColor(Color(accept-.general-mdi-bg-color))
+            panel.setBackgroundColor(Color(accept-.general-mdi-bg-color))
         }
         else {
-            mdi_area.setBackgroundColor(Color(dialog_general_mdi_bg_color))
+            panel.setBackgroundColor(Color(dialog_general_mdi_bg_color))
         }
     } */
 }
@@ -6239,7 +6189,7 @@ currentGeneralMdiBackgroundColorChanged(EmbColor color)
 {
     printf("%d", color.r);
    /* preview.general-mdi-bg-color = color.rgb()
-    mdi_area.setBackgroundColor(Color(preview.general-mdi-bg-color)) */
+    panel.setBackgroundColor(Color(preview.general-mdi-bg-color)) */
     /*
     lambda method constructor?
     */
@@ -6533,7 +6483,7 @@ checkbox_custom_filter_state_changed(int checked)
         else {
             opensave_custom_filter.remove("*." + format, tk.t-CaseInsensitive);
         }
-        */ /* dialog-opensave_custom_filter = checked */ /* TODO
+         dialog-opensave_custom_filter = checked  TODO
     }
     */
 }
@@ -6752,24 +6702,24 @@ checkbox_grid_load_from_file_state_changed(int checked)
     */
 }
 
-int get_widget(int w, char *tag);
-void set_group_visibility(int w, TABLE(group), int visibility);
+int get_widget(EmbWindow *window, char *tag);
+void set_group_visibility(EmbWindow *window, TABLE(group), int visibility);
 
 /* TODO: add loop to find widget */
 int
-get_widget(int w, char *tag)
+get_widget(EmbWindow *window, char *tag)
 {
     return -1;
 }
 
 void
-set_group_visibility(int w, TABLE(group), int visibility)
+set_group_visibility(EmbPanel *panel, TABLE(group), int visibility)
 {
     int i;
     for (i=0; strcmp(group[i][0], "END"); i++) {
-        int widget_index = get_widget(w, group[i][0]);
+        int widget_index = get_widget(panel, group[i][0]);
         if (widget_index > 0) {
-            windows[w]->widgets[widget_index].visibility = visibility;
+            panel->widgets[widget_index]->visibility = visibility;
         }
     }
 }
@@ -6777,17 +6727,17 @@ set_group_visibility(int w, TABLE(group), int visibility)
 /* .
  */
 void
-combobox_grid_type_current_index_changed(int type)
+combobox_grid_type_current_index_changed(EmbWindow *window, int type)
 {
     int dialog_grid_type = type;
 
     if (type == CIRCULAR_GRID) {
-        set_group_visibility(MAIN_WINDOW, grid_group_rectangular, 0);
-        set_group_visibility(MAIN_WINDOW, grid_group_circular, 1);
+        set_group_visibility(window, grid_group_rectangular, 0);
+        set_group_visibility(window, grid_group_circular, 1);
     }
     else {
-        set_group_visibility(MAIN_WINDOW, grid_group_rectangular, 0);
-        set_group_visibility(MAIN_WINDOW, grid_group_circular, 1);
+        set_group_visibility(window, grid_group_rectangular, 0);
+        set_group_visibility(window, grid_group_circular, 1);
     }
 
 }
@@ -6795,7 +6745,7 @@ combobox_grid_type_current_index_changed(int type)
 /*
  */
 void
-checkbox_grid_center_on_origin_state_changed(int checked)
+checkbox_grid_center_on_origin_state_changed(EmbWindow *window, int checked)
 {
     printf("%d", checked);
     /*
@@ -6803,7 +6753,8 @@ checkbox_grid_center_on_origin_state_changed(int checked)
 
     sender_obj = sender()
     if (!sender_obj) {
-        return
+        return;
+    }
 
     parent = sender_obj.parent();
     if (!parent) {
@@ -6913,7 +6864,7 @@ comboboxQSnapLocatorColorCurrent_index_changed(int index)
     /*
     combobox = sender()
     default_color = tk.Rgb(255,255,0)
-    */ /* Yellow
+     Yellow
     if combobox) {
         dialog-qsnap-locator-color, ok = combobox.itemData(index).toUInt()
         if (!ok) {
@@ -7024,12 +6975,12 @@ accept_changes(void)
 
     /* Make sure the user sees the changes applied immediately. */
     /*
-    mdi_area.use_background_logo(dialog-general-mdi-bg-use-logo);
-    mdi_area.use_background_texture(dialog-general-mdi-bg-use-texture);
-    mdi_area.use_background_color(dialog-general-mdi-bg-use-color);
-    mdi_area.set_background-logo(dialog-general-mdi-bg-logo);
-    mdi_area.set_background-texture(dialog-general-mdi-bg-texture);
-    mdi_area.set_background-color(dialog_general_mdi_bg_color);
+    panel.use_background_logo(dialog-general-mdi-bg-use-logo);
+    panel.use_background_texture(dialog-general-mdi-bg-use-texture);
+    panel.use_background_color(dialog-general-mdi-bg-use-color);
+    panel.set_background-logo(dialog-general-mdi-bg-logo);
+    panel.set_background-texture(dialog-general-mdi-bg-texture);
+    panel.set_background-color(dialog_general_mdi_bg_color);
     icon-resize(dialog-general-icon-size);
     update_all_view-scrollBars(dialog_display_show-scrollbars);
     update_all_view-cross-hair-colors(dialog_display_crosshair-color);
@@ -7072,12 +7023,12 @@ void
 reject_changes(void)
 {
     /*
-    mdi_area.use_background_logo(dialog-general-mdi-bg-use-logo);
-    mdi_area.use_background_texture(dialog-general-mdi-bg-use-texture);
-    mdi_area.use_background_color(dialog-general-mdi-bg-use-color);
-    mdi_area.set_background-logo(dialog-general-mdi-bg-logo);
-    mdi_area.set_background-texture(dialog-general-mdi-bg-texture);
-    mdi_area.set_background-color(dialog_general_mdi_bg_color);
+    panel.use_background_logo(dialog-general-mdi-bg-use-logo);
+    panel.use_background_texture(dialog-general-mdi-bg-use-texture);
+    panel.use_background_color(dialog-general-mdi-bg-use-color);
+    panel.set_background-logo(dialog-general-mdi-bg-logo);
+    panel.set_background-texture(dialog-general-mdi-bg-texture);
+    panel.set_background-color(dialog_general_mdi_bg_color);
     update_all_view-scroll-bars(dialog_display_show-scrollbars);
     update_all_view-cross-hair-colors(dialog_display_crosshair-color);
     update_all_view-background-colors(dialog_display_bg-color);
@@ -7245,7 +7196,7 @@ paint_event(EmbEvent event)
 {
     printf("%d\n", event.type);
     /* 
-    painter = Painter();
+    painter = EmbPainter();
     painter.setViewport(0, 0, img.width(), img.height());
     painter.setWindow(0, 0, img.width(), img.height());
     painter.drawImage(0, 0, img);
@@ -7282,7 +7233,7 @@ preview_dialog_init(self, parent, caption, dir, filter)
     view-mode = "FileDialog-Detail"
     file-mode = "FileDialog-ExistingFiles"
 
-    */ /* TODO: connect the currentChanged signal to update the preview img-widget.*/ /* 
+     TODO: connect the currentChanged signal to update the preview img-widget. 
 }
 
 void
@@ -7308,19 +7259,6 @@ SelectBox(Shape s, QWidget* parent = 0)
 def setDirection(int dir)
 def setColors(colorL, fillL, colorR, fillR, newAlpha)
 def paintEvent(QPaintEvent*)
-def forceRepaint()
-def force-repaint()
-    */ /* HACK: Take that QRubberBand!
-    hack = size()
-    resize(hack + QSize(1,1))
-    resize(hack)
-    */
-    /* WARNING
-     * DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
-     * AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
-     * ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
-
-    */
     /*
     gview.setFocusProxy(mw.prompt);
 
@@ -7402,7 +7340,7 @@ add_object(/*self, obj*/)
 {
     /*
     gscene.addItem(-obj);
-    scene_update();
+    scene_update(panel);
     hash-deleted-objects.remove(-obj.-objID);
     */
 }
@@ -7413,23 +7351,23 @@ delete_object(int obj)
 {
     printf("%d\n", obj); */
     /*
-    */ /* NOTE: We really just remove the objects from the scene.
-    */ /*       deletion actually occurs in the destructor.
+     NOTE: We really just remove the objects from the scene.
+           deletion actually occurs in the destructor.
     obj.set_selected(0);
     gscene.remove-item(-obj);
-    scene_update();
+    scene_update(panel);
     hash-deleted-objects.insert(-obj.-objID, obj);
 }
 */
 
 void
-preview_on(int clone, int mode, int x, int y, int data)
+preview_on(EmbPanel *panel, int clone, int mode, int x, int y, int data)
 {
     debug_message("View preview-on()");
     printf("%d %d, %d, %d, %d\n", clone, mode, x, y, data);
     /*
     preview-off();
-    */ /* Free the old objects before creating ones
+     Free the old objects before creating ones
 
     preview-mode = mode;
     */
@@ -7471,11 +7409,11 @@ preview_on(int clone, int mode, int x, int y, int data)
     }
     */
 
-    scene_update();
+    scene_update(panel);
 }
 
 void
-preview_off(void)
+preview_off(EmbPanel *panel)
 {
     /* Prevent memory leaks by deleting any unused instances. */
     /*
@@ -7491,7 +7429,7 @@ preview_off(void)
 
     preview_active = 0;
 
-    scene_update();
+    scene_update(panel);
 }
 
 void
@@ -7509,7 +7447,7 @@ disable_move_rapid_fire(void)
 }
 
 void
-set_qsnap(int active)
+set_qsnap(EmbPanel *panel, int active)
 {
     debug_message("View toggleQSnap()");
     printf("%d", active);
@@ -7517,42 +7455,42 @@ set_qsnap(int active)
     /*
     qsnap-toggle = on;
     gscene.set_property("ENABLE-QSNAP", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
 /* TODO: finish this.
  */
 void
-set_qtrack(int active)
+set_qtrack(EmbPanel *panel, int active)
 {
     debug_message("View toggleQTrack()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
     /* gscene.set_property("ENABLE-QTRACK", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
 void
-set_lwt(int active)
+set_lwt(EmbPanel *panel, int active)
 {
     debug_message("View toggleLwt()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
     /* gscene.set_property("ENABLE-LWT", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
 void
-set_real(int active)
+set_real(EmbPanel *panel, int active)
 {
     debug_message("View toggleReal()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
     /* gscene.set_property("ENABLE-REAL", active); */
-    scene_update();
+    scene_update(panel);
     restore_override_cursor();
 }
 
@@ -7614,7 +7552,7 @@ set_corner_button(void)
         cornerButton.setFlat(1);
         act = action-hash.value(num);
         */
-        /* NOTE: Prevent crashing if the action is NULL. */ /*
+        /* NOTE: Prevent crashing if the action is NULL. 
         if (!act) {
             error-title = translate("Corner Widget Error")
             message = translate("There are unused enum values in COMMAND-ACTIONS. Please report self as a bug.")
@@ -7623,7 +7561,7 @@ set_corner_button(void)
         }
         else {
             cornerButton.set_icon(act.icon())
-            */ /* connect(cornerButton, SIGNAL(clicked()), self, SLOT(cornerButtonClicked()))
+             connect(cornerButton, SIGNAL(clicked()), self, SLOT(cornerButtonClicked()))
             setCornerWidget(cornerButton)
             cornerButton.set_cursor(Qt-ArrowCursor)
         }
@@ -7669,7 +7607,7 @@ mouse_float_click_event(EmbEvent event)
 }
 
 void
-mouse_press_event(EmbEvent event)
+mouse_press_event(EmbPanel *panel, EmbEvent event)
 {
     printf("%d\n", event.type);
     /*
@@ -7691,7 +7629,7 @@ mouse_press_event(EmbEvent event)
             else {
                 foundGrip = 0;
                 base = pickList[0];
-                */ /* TODO: Allow multiple objects to be gripped at once */ /* 
+                 TODO: Allow multiple objects to be gripped at once  
                 if (!base) {
                     return;
                 }
@@ -7715,7 +7653,7 @@ mouse_press_event(EmbEvent event)
                     start_gripping(base);
                 }
                 else { */
-                    /* start moving */ /*
+                    /* start moving 
                     moving-active = 1;
                     pressPoint = event.pos();
                     scenePressPoint = map_to_scene(pressPoint);
@@ -7740,7 +7678,7 @@ mouse_press_event(EmbEvent event)
             releasePoint = event.pos();
             scene-release-point = map_to_scene(releasePoint);
 
-            */ /* Start select-box Code
+             Start select-box Code
             path.add-polygon(map_to_scene(select-box.geometry()));
             if (scene-release-point.x > scenePressPoint.x) {
                 if (selection-mode-pickadd) {
@@ -7765,7 +7703,7 @@ mouse_press_event(EmbEvent event)
                         }
                         else {
                             for item in item_list: {
-                                item.set_selected(!item.is-selected()) */ /* Toggle selected;
+                                item.set_selected(!item.is-selected())  Toggle selected;
                             }
                         }
                     }
@@ -7802,7 +7740,7 @@ mouse_press_event(EmbEvent event)
                         else {
                             for item in item_list:
                                 item.set_selected(!item.is-selected());
-                                */ /* Toggle selected
+                                 Toggle selected
 
                     }
                     else {
@@ -7814,7 +7752,7 @@ mouse_press_event(EmbEvent event)
                         }
                    }
                }
-            */ /* End select-box Code
+             End select-box Code
         }
 
         if (pasting_active) {
@@ -7822,9 +7760,9 @@ mouse_press_event(EmbEvent event)
             gscene.destroy-item-group(paste-object-item-group);
             for (item in item_list) {
                 gscene.remove-item(item);
-                */ /* Prevent Qt Runtime Warning,
-                */ /* QGraphicsScene-addItem: item has alreadelta-y been
-                */ /* added to self scene
+                 Prevent Qt Runtime Warning,
+                 QGraphicsScene-addItem: item has alreadelta-y been
+                 added to self scene
             }
 
             for (item in item_list) {
@@ -7853,11 +7791,11 @@ mouse_press_event(EmbEvent event)
         event.accept();
     }
     */
-    scene_update();
+    scene_update(panel);
 }
 
 void
-pan_start(EmbVector point)
+pan_start(EmbPanel *panel, EmbVector point)
 {
     printf("%f", point.x);
     /*
@@ -7876,7 +7814,7 @@ pan_start(EmbVector point)
  * If the scene-rect limits aren't increased, you cannot pan past its limits
  */
 void
-recalculate_limits(void)
+recalculate_limits(EmbPanel *panel)
 {
     /*
     Rect scene_rect, new_rect, rect;
@@ -7939,7 +7877,7 @@ event_accept(void)
 }
 
 void
-mouse_move_event(EmbEvent event)
+mouse_move_event(EmbPanel *panel, EmbEvent event)
 {
     /*
     EmbVector mouse = cursor_pos();
@@ -8035,11 +7973,11 @@ mouse_move_event(EmbEvent event)
         event_accept();
     }
 
-    scene_update();
+    scene_update(panel);
 }
 
 void
-mouse_release_event(EmbEvent event)
+mouse_release_event(EmbPanel *panel, EmbEvent event)
 {
     printf("%d\n", event.type);
     /*
@@ -8048,7 +7986,7 @@ mouse_release_event(EmbEvent event)
         if (moving-active) {
             preview-off();
             delta = scene-mouse-point.subtract(scene-press-point); */
-            /* Ensure that moving only happens if the mouse has moved. */ /*
+            /* Ensure that moving only happens if the mouse has moved. 
             if (delta.x or delta.y) {
                 moveSelected(delta);
             }
@@ -8061,14 +7999,14 @@ mouse_release_event(EmbEvent event)
     if (event.button() == "MiddleButton") {
         panning_active = 0;
         */
-        /* The Undo command will record the spot where the pan completed. */ /*
+        /* The Undo command will record the spot where the pan completed. 
         event_accept();
     }
 
     if (event.button() == "XButton1") {
         debug_message("XButton1");
         main-undo() */
-        /* TODO: Make this customizable */ /*
+        /* TODO: Make this customizable 
         event_accept();
     }
 
@@ -8080,11 +8018,11 @@ mouse_release_event(EmbEvent event)
         event_accept();
     }
     */
-    scene_update();
+    scene_update(panel);
 }
 
 void
-wheel_event(EmbEvent event)
+wheel_event(EmbPanel *panel, EmbEvent event)
 {
     float zoom_dir = 1.0;
     printf("%d\n", event.type);
@@ -8152,7 +8090,7 @@ delete_pressed(void)
     debug_message("View delete-pressed()");
     set_override_cursor("WaitCursor");
     /*
-    mdi-win = mdi_area.active_sub_window();
+    mdi-win = panel.active_sub_window();
     if (mdi-win) {
         mdi-win.delete_pressed();
     }
@@ -8201,7 +8139,7 @@ escape_pressed(void)
     */
     set_override_cursor("WaitCursor");
     /*
-    mdi_win = mdi_area.active-sub-window();
+    mdi_win = panel.active-sub-window();
     if (mdi_win) {
         mdi_win.escape_pressed();
     }
@@ -8257,20 +8195,19 @@ select_box_init(int tools)
 /* Choose between the left an right tools.
  */
 void
-select_box_direction(int tools, int dir)
+select_box_direction(EmbPanel *panel, int dir)
 {
-    printf("%d %d\n", tools, dir);
-    /*
-    tools->box-dir = dir
-    if (dir == DIRECTION-RIGHT) {
-        tools->dir-pen = tools->right-pen
-        tools->dir-brush = tools->right-brush
+    EmbPainter *tools = panel->painter;
+    printf("%d %d\n", tools->pen->cosmetic, dir);
+    tools->box_dir = dir;
+    if (dir == DIRECTION_RIGHT) {
+        tools->dir_pen = tools->right_pen;
+        tools->dir_brush = tools->right_brush;
     }
     else {
-        tools->dir-pen = tools->left-pen
-        tools->dir-brush = tools->left-brush
+        tools->dir_pen = tools->left_pen;
+        tools->dir_brush = tools->left_brush;
     }
-    */
 }
 
 void
@@ -8293,7 +8230,7 @@ set_view_select_box_colors(
  * 
  */
 void
-select_box_colors(Toolset *tools, TABLE(state), char *setting)
+select_box_colors(EmbPanel *panel, EmbPainter *tools, TABLE(state), char *setting)
 {
     char setting_str[100];
     debug_message("SelectBox colors()");
@@ -8301,51 +8238,36 @@ select_box_colors(Toolset *tools, TABLE(state), char *setting)
     tools->alpha = get_float(state, setting_str);
 
     sprintf(setting_str, "%s-color-left", setting);
-    tools->left_pen.color = get_color(state, setting_str);
-    tools->left_pen.style = LINE_STYLE_DASHED;
+    tools->left_pen->color = get_color(state, setting_str);
+    tools->left_pen->style = LINE_STYLE_DASHED;
 
     sprintf(setting_str, "%s-fill-left", setting);
-    tools->left_brush.color = get_color(state, setting_str);
-    tools->left_brush.style = BRUSH_STYLE_SOLID;
+    tools->left_brush->color = get_color(state, setting_str);
+    tools->left_brush->style = BRUSH_STYLE_SOLID;
 
     sprintf(setting_str, "%s-color-right", setting);
-    tools->right_pen.color = get_color(state, setting_str);
-    tools->right_pen.style = LINE_STYLE_SOLID;
+    tools->right_pen->color = get_color(state, setting_str);
+    tools->right_pen->style = LINE_STYLE_SOLID;
 
     sprintf(setting_str, "%s-fill-right", setting);
-    tools->right_brush.color = get_color(state, setting_str);
-    tools->right_brush.style = BRUSH_STYLE_SOLID;
+    tools->right_brush->color = get_color(state, setting_str);
+    tools->right_brush->style = BRUSH_STYLE_SOLID;
 
-    /*
-    direction(tools->box_dir);
+    /* direction(tools->box_dir); */
 
-    select_box_force_repaint();
-    */
+    scene_update(panel);
 }
 
 /* Carry out a paint given the current pen and brush.
  * May need the canvas passing in.
  */
 void
-select_box_paint_event(int tools, EmbEvent event)
+select_box_paint_event(EmbPanel *panel, EmbEvent event)
 {
-    Painter *painter = create_painter();
-    printf("%d %d %d\n", tools, event.type, painter->pen->cosmetic);
+    panel->painter->dir_pen = DIRECTION_LEFT;
     /*
-    painter->pen->dir_pen = 0;
-    painter.fill-rect(0, 0, width()-1, height()-1, dir-brush);
-    painter.draw-rect(0, 0, width()-1, height()-1);
-    */
-}
-
-/* HACK: Take that QRubberBand! */
-void
-select_box_force_repaint(void)
-{
-    /*
-    hack = size();
-    resize(hack + (1, 1));
-    resize(hack);
+    fill_rect(panel->painter, panel->rect, panel->painter->dir_brush);
+    draw_rect(panel->painter, panel->rect);
     */
 }
 

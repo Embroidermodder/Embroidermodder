@@ -19,35 +19,45 @@ add_compile_options(
 #	-Werror
 )
 
+file(GLOB SRC
+	${PROJECT_SOURCE_DIR}/src/*.c
+	${PROJECT_SOURCE_DIR}/src/libembroidery/src/*.c
+)
+
 add_executable(embroidermodder 
-	src/libembroidery/src/main.c
-	src/libembroidery/src/array.c
-	src/libembroidery/src/embroidery.h
-	src/libembroidery/src/formats.c
-	src/libembroidery/src/pattern.c
-	src/libembroidery/src/image.c
-	src/libembroidery/src/fill.c
-	src/libembroidery/src/geometry.c
-	src/libembroidery/src/compress.c
-	src/libembroidery/src/encoding.c
-	src/libembroidery/src/thread-color.c
-	src/em2.c
-	src/actuator.c
-	src/ui.c
-	src/data.c
+	${SRC}
 )
 
 target_include_directories(embroidermodder INTERFACE src/stb src src/libembroidery/src)
 
+file(GLOB ASSETS
+	${PROJECT_SOURCE_DIR}/assets/*.csv
+	${PROJECT_SOURCE_DIR}/assets/**/*.csv
+	${PROJECT_SOURCE_DIR}/assets/**/*.ttf
+	${PROJECT_SOURCE_DIR}/assets/**/*.txt
+	${PROJECT_SOURCE_DIR}/assets/**/*.md
+)
+
 if (WIN32)
 target_link_libraries(embroidermodder PRIVATE Gdi32)
-else (WIN32)
-target_link_libraries(embroidermodder PRIVATE X11 m)
-endif (WIN32)
 
 install(
-    TARGETS embroidermodder
-    RUNTIME DESTINATION /usr/bin
-	RUNTIME_DEPENDENCIES
-		${CMAKE_CURRENT_SOURCE_DIR}/assets/main_window.csv
+    FILES embroidermodder.exe
+	DESTINATION "C:/Program Files/embroidermodder"
 )
+install(
+    FILES ${ASSETS}
+	DESTINATION "C:/ProgramData/embroidermodder"
+)
+else (WIN32)
+target_link_libraries(embroidermodder PRIVATE X11 m)
+
+install(
+    FILES embroidermodder
+	DESTINATION "/usr/bin"
+)
+install(
+    FILES ${ASSETS}
+	DESTINATION "/usr/share/embroidermodder"
+)
+endif (WIN32)

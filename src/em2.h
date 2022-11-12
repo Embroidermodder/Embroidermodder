@@ -93,12 +93,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
  */
 #define VERSION           "2.0.0-alpha"
 
-#define MAIN_WINDOW                   0
-#define ABOUT_WINDOW                  1
-#define SETTINGS_WINDOW               2
-#define DETAILS_WINDOW                3
-#define CHANGELOG_WINDOW              4
-
 #define MAX_SCREEN_SIZE           10000
 #define MAX_STRING_LENGTH           200
 #define MAX_ACTIONS                 300
@@ -114,7 +108,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #define MAX_LAYERS                   30
 #define MAX_SETTINGS_IN_BOX         100
 #define MAX_SETTINGS_BOXES           10
-#define MAX_WINDOWS                  10
+#define MAX_KEYS                    256
 
 #define TABLE(A) \
     char A[MAX_CSV_ROWS][MAX_CSV_COLUMNS][MAX_STRING_LENGTH]
@@ -412,6 +406,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
  * -----------------------------------------------------------------------------
  */
 
+typedef struct EmbWidget_ EmbWidget;
+typedef struct EmbPanel_ EmbPanel;
+typedef struct EmbWindow_ EmbWindow;
+
 /* A system-agnostic rectangle for pixel locations.
  */
 typedef struct Rect_ {
@@ -427,45 +425,64 @@ typedef struct Image_ {
     char fname[MAX_STRING_LENGTH];
 } Image;
 
-/* To collect together 
+/* Can be used by both the system and the user
+ * for creating UI elements (cosmetic=1) or
+ * stitch designs (cosmetic=0).
  */
-typedef struct Pen_ {
+typedef struct EmbPen_ {
     EmbColor color;
     char join_style;
     char cosmetic;
     float width;
-} Pen;
-
-/* 
- */
-typedef struct Painter_ {
-    Pen *pen;
-    EmbPath *path;
-} Painter;
-
-/* 
- */
-typedef struct Tool_ {
-    EmbColor color;
     int style;
-} Tool;
+} EmbPen;
 
-typedef struct Toolset_ {
-    Tool left_pen;
-    Tool left_brush;
-    Tool right_pen;
-    Tool right_brush;
-    Tool dir_pen;
-    Tool dir_brush;
+/* User interface information for stitch fills.
+ *
+ * If the user wishes to draw with the brush to then
+ * fill the color region in afterwards with stitches
+ * then set cosmetic to 1.
+ */
+typedef struct EmbBrush_ {
+    EmbColor color;
+    char join_style;
+    char cosmetic;
+    float width;
+    int style;
+} EmbBrush;
+
+/* Collects all the pens and brushes into one set of
+ * user interface tools.
+ *
+ * "pen" without a prefix is the system pen, used in
+ * drawing the user interface.
+ *
+ * "path" and "image" are for storing what the EmbPainter
+ * has created in either a vectorised or rasterised
+ * format respectively.
+ */
+typedef struct EmbPainter_ {
+    EmbPen *pen;
+    EmbPath *path;
+    EmbImage *image;
+    EmbPen *left_pen;
+    EmbBrush *left_brush;
+    EmbPen *right_pen;
+    EmbBrush *right_brush;
+    EmbPen *dir_pen;
+    EmbBrush *dir_brush;
     int alpha;
     int box_dir;
-} Toolset;
+} EmbPainter;
 
 /* Widget: the basic unit of the GUI.
  */
-typedef struct EmbWidget_ {
+struct EmbWidget_ {
+    EmbWindow *window;
+    EmbPanel *panel;
     Rect rect;
     Image *image;
+    EmbPainter *painter;
     unsigned char color[4];
     char label[MAX_STRING_LENGTH];
     int mode;
@@ -512,9 +529,7 @@ typedef struct EmbWidget_ {
     char propertybox_title[MAX_STRING_LENGTH];
     int propertybox_obj_type;
     char **propertybox_properties;
-} EmbWidget;
-
-#define MAX_KEYS                    256
+};
 
 typedef struct EmbEvent_ {
     int type;
@@ -551,10 +566,12 @@ typedef struct EMLayer_ {
 /* EmbPanel: the container format for all widgets.
  *
  */
-typedef struct EmbPanel_ {
+struct EmbPanel_ {
     char title[MAX_STRING_LENGTH];
     char fname[MAX_STRING_LENGTH];
-    EmbWidget *widgets;
+    EmbPainter *painter;
+    EmbWindow *window;
+    EmbWidget *widgets[MAX_WIDGETS];
     int n_widgets;
     EmbPattern *pattern;
     EMLayer layer[MAX_LAYERS];
@@ -579,7 +596,7 @@ typedef struct EmbPanel_ {
     int bg_color;
     EmbCircle circle_ghost;
     EmbRect rect_ghost;
-} EmbPanel;
+};
 
 typedef struct Ruler_ {
     EmbVector position;
@@ -602,9 +619,10 @@ typedef struct ViewPort_ {
  * Tooltip manager: only one tooltip will show at a time,
  * so we can make the data part of the window struct.
  */
-typedef struct EmbWindow_ {
+struct EmbWindow_ {
     TABLE(data);
     EmbPanel *panels[MAX_PATTERNS];
+    int n_panels;
     int tab_index;
     int tabbed;
     int n_docs;
@@ -633,7 +651,7 @@ typedef struct EmbWindow_ {
 
     stbtt_fontinfo font;
     Rect dimension;
-} EmbWindow;
+};
 
 /*
  *  Function prototypes.
@@ -642,22 +660,7 @@ int valid_file_format(char *fname);
 
 Rect make_rectangle(int x, int y, int w, int h);
 
-int create_window(int window_id, char *title);
-void main_loop(void);
-void destroy_window(int window);
-EmbEvent process_input(int window);
-int render(int window);
-
-char *get_str(TABLE(state), char *key);
-int get_int(TABLE(state), char *key);
-float get_float(TABLE(state), char *key);
-EmbVector get_vector(TABLE(state), char *key);
-EmbColor get_color(TABLE(state), char *);
-
-void set_str(TABLE(state), char *key, char *value);
-void set_int(TABLE(state), char *key, int value);
-void set_float(TABLE(state), char *key, float value);
-void set_vector(TABLE(state), char *key, EmbVector value);
+int render(EmbWindow *window);
 
 void debug_message(char *msg);
 char *translate(char *msg);
@@ -674,27 +677,73 @@ int load_to_buffer(void);
 int save_from_buffer(void);
 void display_buffer(void);
 
-/* ui.c function declarations */
-void create_widget(int window, Rect rect, char *action_id);
-void create_label(int window, int panel, int x, int y, char *label, char *command, int visibility);
-void create_ui_rect(int window, int panel, Rect rect, EmbColor color, int visibility);
-void create_icon(int window, int panel, int n, int m, char *label);
-int get_widget_by_label(int window, char *label);
-void set_visibility(int window, int panel, char *label, int visibility);
-void horizontal_rule(int window, int panel, int x, int y, int w, int visibility);
-void vertical_rule(int window, int panel, int x, int y, int h, int visibility);
+/* ui.c function declarations
+ *
+ * The tools necessary to abstract out what system the program is
+ * running on known as the "compatibility layer" are here.
+ *
+ * TODO: create_icon is not needed when widget packing is established
+ *       then we have add_widget(window_id, panel_id, char *fname)
+ *       or something similar.
+ */
+EmbWindow *load_window_data(char *fname);
+EmbWindow *create_window(char *fname);
+EmbEvent process_input(EmbWindow *window);
+void render_clear(EmbWindow *window, EmbColor clear_color);
+void render_copy(EmbWindow *window, EmbPanel *panel, EmbImage image);
+void render_rect(EmbWindow *window, EmbPanel *panel, EmbColor color, Rect rect);
+void destroy_window(EmbWindow *window);
+void wait(int);
+
+void create_widget(EmbWindow *window, EmbPanel *panel, Rect rect, char *action_id);
+void create_label(EmbWindow *window, EmbPanel *panel, int position[2], char *label, char *command, int visibility);
+void create_ui_rect(EmbPanel *panel, Rect rect, EmbColor color, int visibility);
+void create_icon(EmbPanel *panel, int n, int m, char *label);
+void create_measurement_label(EmbPanel *panel, int offset, int yoffset, int spacing, char *label, float value);
+
+int get_widget_by_label(EmbPanel *panel, char *label);
+void set_visibility(EmbPanel *panel, char *label, int visibility);
+void horizontal_rule(EmbPanel *panel, int position[2], int w, int visibility);
+void vertical_rule(EmbPanel *panel, int position[2], int h, int visibility);
+
+void draw_line(EmbPanel *panel, EmbLine line);
+void draw_lines(EmbPanel *panel, EmbLine *line, int n_lines);
+void draw_crosshair(EmbWindow *window, EmbPanel *panel);
+void draw_rulers(EmbPanel *panel);
 
 int build_menu(char *fname, int x_offset, int menu);
 
+void create_scrollbars(EmbPanel *panel);
+void create_grid(EmbPanel *panel);
+void create_toolbars(EmbWindow *window, EmbPanel *panel);
+void create_statusbar(EmbPanel *panel);
+void create_menubar(EmbPanel *panel);
+void create_view(EmbPanel *panel);
+int create_window_tab(EmbWindow *window, char *fname);
+
+void repaint(EmbPanel *panel);
+
+
+/* For all user actions the actuator is called with the user action serialised
+ * as a single, fixed length string. This allows for non-trivial operations on
+ * the edit history because all the edit history is, is a text file with these
+ * as lines.
+ *
+ * This is also how Embroidermodder can be scripted, because there is no
+ * distinction, from the perspective of the software, between a CLI instruction
+ * and a GUI instruction. However, the user console won't be present until a later
+ * version as it is not core functionality.
+ *
+ * The actuator function is located by itself in src/actuator.c.
+ */
 int actuator(char *command);
-void wait(int);
 
 /* File Actions */
-void new_file(void);
-void open_file(void);
-void save_file(void);
-void save_file_as(void);
-void print(void);
+void new_file(EmbWindow *window);
+void open_file(EmbWindow *window);
+void save_file(EmbWindow *window);
+void save_file_as(EmbWindow *window);
+void print(EmbWindow *window);
 
 /* Edit Actions */
 void undo(void);
@@ -704,7 +753,6 @@ void copy(void);
 void paste(void);
 
 /* Dialog Actions */
-void changelog(void);
 void about(void);
 void tip_of_the_day(void);
 void help(void);
@@ -713,8 +761,8 @@ void settings_dialog(void);
 void whats_this(void);
 void layer_selector(void);
 
-int allow_zoom_in(void);
-int allow_zoom_out(void);
+int allow_zoom_in(EmbPanel *panel);
+int allow_zoom_out(EmbPanel *panel);
 
 void lineTypeSelector(void);
 void lineWeightSelector(void);
@@ -735,45 +783,47 @@ void print_pattern(void);
 void move(void);
 void export_(void);
 
-void scene_update(void);
+void scene_update(EmbPanel *panel);
 
-void set_override_cursor(char *);
+void set_override_cursor(char *cursor);
 void restore_override_cursor(void);
 
 int starts_with(char *str, char *start);
-
-void draw_line(EmbLine line);
-void draw_lines(EmbLine *line, int n_lines);
-void draw_crosshair(int w, Painter *painter);
-void draw_rulers(int w, int scene);
 
 char *translate(char *string);
 
 void crash_test(void);
 void run_script(TABLE(script));
 
-Pen *create_pen(void);
-Painter *create_painter(void);
-void destroy_pen(Pen *pen);
-void destroy_painter(Painter *painter);
+/* These drawing functions could do with a new file
+ * seperate from ui.c because they are system-agnostic.
+ */
+EmbPen *create_pen(void);
+EmbBrush *create_brush(void);
+EmbPainter *create_painter(void);
+void destroy_pen(EmbPen *pen);
+void destroy_brush(EmbBrush *brush);
+void destroy_painter(EmbPainter *painter);
 
-void create_scrollbars(int scene);
-void create_grid(int window);
-void create_toolbars(void);
-void create_statusbar(void);
-void create_menubar(void);
-void create_view(int window);
-void repaint(void);
+/* data.c functions */
+char *get_str(TABLE(state), char *key);
+int get_int(TABLE(state), char *key);
+float get_float(TABLE(state), char *key);
+EmbVector get_vector(TABLE(state), char *key);
+EmbColor get_color(TABLE(state), char *);
+
+void set_str(TABLE(state), char *key, char *value);
+void set_int(TABLE(state), char *key, int value);
+void set_float(TABLE(state), char *key, float value);
+void set_vector(TABLE(state), char *key, EmbVector value);
 
 void load_translations(void);
-
-int create_window_tab(int window, char *fname);
-
 void load_csv(TABLE(table), char *fname);
+void load_state(void);
+void print_table(TABLE(table));
+void load_translations(void);
 
 /* GLOBAL DATA */
-extern EmbWindow *windows[MAX_WINDOWS];
-
 extern int dialog_grid_load_from_file;
 
 extern const char *os_seperator;
@@ -1191,9 +1241,5 @@ extern EmbColor accept_display_selectbox_color_right;
 extern EmbColor accept_display_selectbox_fill_right;
 extern int accept_display_selectbox_alpha;
 
-void load_state(void);
-void load_csv(TABLE(table), char *fname);
-void print_table(TABLE(table));
-void load_translations(void);
 
 #endif
