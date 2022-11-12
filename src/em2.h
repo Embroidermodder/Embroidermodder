@@ -109,6 +109,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #define MAX_SETTINGS_IN_BOX         100
 #define MAX_SETTINGS_BOXES           10
 #define MAX_KEYS                    256
+#define MAX_DIALOGS                 256
 
 #define TABLE(A) \
     char A[MAX_CSV_ROWS][MAX_CSV_COLUMNS][MAX_STRING_LENGTH]
@@ -618,11 +619,28 @@ typedef struct ViewPort_ {
  *
  * Tooltip manager: only one tooltip will show at a time,
  * so we can make the data part of the window struct.
+ *
+ * Design choice: do not allow EmbWindow *dialogs to create a
+ * tree of windows. Only the main window can have dialogs.
+ * That way the route from any one widget to another goes:
+ *
+ * (Tree diagram of widget-to-widget memory walk.)
+ *
+ * | Widget A
+ * |-- Panel B
+ * |---- Dialog C
+ * |------ Main Window
+ * |---- Dialog D
+ * |-- Panel E
+ * | Widget F
  */
 struct EmbWindow_ {
     TABLE(data);
+    EmbWindow *dialogs[MAX_DIALOGS];
+    int n_dialogs;
     EmbPanel *panels[MAX_PATTERNS];
     int n_panels;
+    int active_panel;
     int tab_index;
     int tabbed;
     int n_docs;
@@ -673,9 +691,9 @@ int click_detection(EmbWidget *w, int x, int y);
 
 int find_mdi_window(char *file_name);
 
-int load_to_buffer(void);
-int save_from_buffer(void);
-void display_buffer(void);
+int load_to_buffer(EmbWindow *window);
+int save_from_buffer(EmbWindow *window);
+void display_buffer(EmbWindow *window);
 
 /* ui.c function declarations
  *
@@ -736,7 +754,7 @@ void repaint(EmbPanel *panel);
  *
  * The actuator function is located by itself in src/actuator.c.
  */
-int actuator(char *command);
+int actuator(EmbWindow *window, char *command);
 
 /* File Actions */
 void new_file(EmbWindow *window);
@@ -746,61 +764,69 @@ void save_file_as(EmbWindow *window);
 void print(EmbWindow *window);
 
 /* Edit Actions */
-void undo(void);
-void redo(void);
-void cut(void);
-void copy(void);
-void paste(void);
+void undo(EmbWindow *window);
+void redo(EmbWindow *window);
+void cut(EmbWindow *window);
+void copy(EmbWindow *window);
+void paste(EmbWindow *window);
 
 /* Dialog Actions */
-void about(void);
-void tip_of_the_day(void);
-void help(void);
-void design_details(void);
-void settings_dialog(void);
-void whats_this(void);
-void layer_selector(void);
+int create_dialog(EmbWindow *window, char *fname);
+
+int about(EmbWindow *window);
+int tip_of_the_day(EmbWindow *window);
+int help(EmbWindow *window);
+int design_details(EmbWindow *window);
+int settings_dialog(EmbWindow *window);
+
+void whats_this(EmbWindow *window);
+void layer_selector(EmbWindow *window);
 
 int allow_zoom_in(EmbPanel *panel);
 int allow_zoom_out(EmbPanel *panel);
 
-void lineTypeSelector(void);
-void lineWeightSelector(void);
+void lineTypeSelector(EmbWindow *window);
+void lineWeightSelector(EmbWindow *window);
 
-void color_selector(void);
+void color_selector(EmbWindow *window);
 
 /* Icon Actions */
 void icon_resize(int new_size);
 
-void distance(void);
-void locate_point(void);
-void delete_object(void);
-void line_type_selector(void);
-void line_weight_selector(void);
-void select_all(void);
-void check_for_updates(void);
-void print_pattern(void);
-void move(void);
-void export_(void);
+void distance(EmbWindow *window);
+void locate_point(EmbWindow *window);
+void delete_object(EmbWindow *window);
+void line_type_selector(EmbWindow *window);
+void line_weight_selector(EmbWindow *window);
+void select_all(EmbWindow *window);
+void check_for_updates(EmbWindow *window);
+void print_pattern(EmbWindow *window);
+void move(EmbWindow *window);
+void export_(EmbWindow *window);
+
+int get_widget(EmbPanel *panel, char *tag);
+void set_group_visibility(EmbPanel *panel, TABLE(group), int visibility);
 
 void scene_update(EmbPanel *panel);
 
 void set_override_cursor(char *cursor);
-void restore_override_cursor(void);
+void restore_override_cursor(EmbWindow *window);
 
+/* Utilities */
 int starts_with(char *str, char *start);
-
+int char_to_int(char a);
 char *translate(char *string);
 
-void crash_test(void);
-void run_script(TABLE(script));
+/* Testing and scripting */
+void crash_test(EmbWindow *window);
+void run_script(EmbWindow *window, TABLE(script));
 
 /* These drawing functions could do with a new file
  * seperate from ui.c because they are system-agnostic.
  */
-EmbPen *create_pen(void);
-EmbBrush *create_brush(void);
-EmbPainter *create_painter(void);
+EmbPen *create_pen(EmbWindow *window);
+EmbBrush *create_brush(EmbWindow *window);
+EmbPainter *create_painter(EmbWindow *window);
 void destroy_pen(EmbPen *pen);
 void destroy_brush(EmbBrush *brush);
 void destroy_painter(EmbPainter *painter);
@@ -817,11 +843,11 @@ void set_int(TABLE(state), char *key, int value);
 void set_float(TABLE(state), char *key, float value);
 void set_vector(TABLE(state), char *key, EmbVector value);
 
-void load_translations(void);
+void load_translations(EmbWindow *window);
 void load_csv(TABLE(table), char *fname);
-void load_state(void);
+void load_state(EmbWindow *window);
 void print_table(TABLE(table));
-void load_translations(void);
+void load_translations(EmbWindow *window);
 
 /* GLOBAL DATA */
 extern int dialog_grid_load_from_file;

@@ -9,3 +9,35 @@ Rect about_dialog_dimensions = {
     .h = 600,
     .w = 300
 };
+    /* 
+    dialog = tk.Tk();
+    dialog_title("About Embroidermodder 2");
+    dialog_minsize(400, 400);
+     tk.dialog(_mainWin);
+     img = tk.ImageWidget(application_folder + "/images/logo-small.png");
+    text_block = (
+        "Embroidermodder " + version + "\n\n" +
+        translate("http://embroidermodder.org") +
+        "\n\n" +
+        translate(
+            "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi"
+        ) + "\n\n" +
+        translate("Embroidery formats by Josh Varga.") +
+        "\n" +
+        translate("User Interface by Jonathan Greig and Robin Swift.") +
+        "\n\n" +
+        translate("Free under the zlib/libpng license.")
+        + "\n\n" +
+        translate("Build Hash: ") + BUILD_GIT_HASH
+    );
+    text = tk.Label(dialog, text=text_block);
+    text.grid(row=1, column=1);
+     text.setWordWrap(1);
+
+    button = tk.Button(
+        dialog,
+        text="Oh, Yeah!",
+        command=dialog_destroy);
+    button.grid(row=2, column=1);
+
+    dialog_mainloop();

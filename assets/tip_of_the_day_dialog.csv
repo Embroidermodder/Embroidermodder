@@ -1,0 +1,52 @@
+
+    /* 
+    appDir = qApp.applicationDirPath();
+    wizard_tip_of_the_day = tk.Dialog();
+    button1 = tk.Button(wizard_tip_of_the_day);
+    button2 = tk.Button(wizard_tip_of_the_day);
+    button3 = tk.Button(wizard_tip_of_the_day);
+
+    img_banner = ImageWidget(
+        appDir + "/images/did-you-know.png", wizard_tip_of_the_day
+    );
+
+    checkBoxTipOfTheDay = tk.CheckBox(translate("&Show tips on startup"), wizard_tip_of_the_day);
+    checkBoxTipOfTheDay.set_checked(general_tip_of_the_day); */
+    /*  connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), self, SLOT(checkBoxTipOfTheDayStateChanged(int))); 
+
+    tips = tips
+    if tips[general_current_tip] == "":
+        general_current_tip = 0
+    label_tip_of_the_day = tk.Label(tips[general_current_tip], wizard_tip_of_the_day);
+    label_tip_of_the_day.setWordWrap(1);
+
+    button1.setText("&Previous");
+    button2.setText("&Next");
+    button3.setText("&Close");
+    connect(button1,
+        SIGNAL(triggered()), wizard_tip_of_the_day,
+        SLOT(wizard_tip_of_the_day.close()));
+    connect(button2,
+        SIGNAL(triggered()), wizard_tip_of_the_day,
+        SLOT(wizard_tip_of_the_day.close()));
+    connect(button3,
+        SIGNAL(triggered()), wizard_tip_of_the_day,
+        SLOT(wizard_tip_of_the_day.close()));
+
+    layout = tk.VBoxLayout(wizard_tip_of_the_day);
+    add_widget(layout, img_banner);
+    add_strut(layout, 1);
+    add_widget(layout, label_tip_of_the_day);
+    layout.add_stretch(1);
+    layout.add_widget(checkBoxTipOfTheDay);
+    layout.add_strut(1);
+    layout.add_widget(button1);
+    layout.add_strut(1);
+    layout.add_widget(button2);
+    layout.add_strut(1);
+    layout.add_widget(button3);
+
+    wizard_tip_of_the_day.set_layout(layout);
+    wizard_tip_of_the_day.set_window_title("Tip of the Day");
+    wizard_tip_of_the_day.set_minimum_size(550, 400);
+    wizard_tip_of_the_day.exec(); */

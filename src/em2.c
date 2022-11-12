@@ -45,7 +45,7 @@ parse_command(int argc, char *argv[])
 }
 
 void
-open_panels(void)
+open_panels(EmbWindow *window)
 {
     /*
     if (len(filesToOpen) > 0) {
@@ -56,7 +56,7 @@ open_panels(void)
         argc = 10;
     }
     for (file=1; file<argc; file++) {
-        pattern[file-1] = embPattern_create();
+        pattern[file-1] = embPattern_create(window);
         embPattern_readAuto(pattern[file-1], argv[file]);
     }*/
 }
@@ -68,7 +68,7 @@ int WINAPI WinMain(
 {
     const wchar_t CLASS_NAME[] = L"embroidermodder window";
 
-    load_state();
+    load_state(window);
 
     puts(get_str(global_state, "boot message"));
 
@@ -158,7 +158,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int
 main(int argc, char *argv[])
 {
-    load_state();
+    load_state(window);
 
     puts(get_str(global_state, "boot message"));
 
@@ -248,20 +248,20 @@ button-hover
  * Crash test all basic actions.
  */
 void
-crash_test(void)
+crash_test(EmbWindow *window)
 {
-    run_script(crash_test_script);
+    run_script(window, crash_test_script);
 }
 
 void
-run_script(TABLE(script))
+run_script(EmbWindow *window, TABLE(script))
 {
     int i;
     for (i=0; i<MAX_CSV_ROWS; i++) {
         if (strcmp(script[i][0], "END")) {
             break;
         }
-        actuator(script[i][0]);
+        actuator(window, script[i][0]);
     }
 }
 
@@ -273,7 +273,7 @@ run_script(TABLE(script))
     pos = Vector(window-x, window-y)
     size = (window-width, window-height)
 
-    layoutState = settings-file.value("LayoutState").toByteArray();
+    layoutState = settings-file.value("LayoutState").toByteArray(window);
     if (!restoreState(layoutState)) {
         debug_message("LayoutState NOT restored! Setting Default Layout...");
         some_toolBar.visible = 1;
@@ -328,10 +328,10 @@ write_settings(EmbWindow *w, char *fname)
 
     fclose(f);
     /* 
-    settings["window_x"] = pos().x();
-    settings["window_y"] = pos().y();
-    settings["window_width"] = size().width();
-    settings["window_height"] = size().height();
+    settings["window_x"] = pos().x(window);
+    settings["window_y"] = pos().y(window);
+    settings["window_width"] = size().width(window);
+    settings["window_height"] = size().height(window);
     */
 }
 
@@ -346,7 +346,7 @@ find_mdi_window(char *file_name)
     char *canonical_path;
     canonical_path = canonical_file_path(file_name);
 
-    for (subWindow in panel.sub_window_list(void)) {
+    for (subWindow in panel.sub_window_list(EmbWindow *window)) {
         if (subWindow.getCurrentFile() == canonicalFilePath) {
             return subWindow;
         }
@@ -355,22 +355,51 @@ find_mdi_window(char *file_name)
     return 0;
 }
 
-/*
- *  About Dialog
+/* About Dialog
+ *
+ * Create and show the about dialog with a close button.
+ *
+ * Some layout from the previous version) {
+ *
+ * TODO: QTabWidget for about dialog
+ * QApplication_setOverrideCursor(Qt_ArrowCursor)
+ *
+ * layout = v_box(window);
+    layout.setAlignment(Qt_AlignCenter);
+    layout.addWidget(img);
+    layout.addWidget(text);
+    layout.addWidget(buttonbox);
+
+    dialog_setWindowTitle(title)
+    dialog_setMinimumWidth(img.minimumWidth()+30)
+    dialog_setMinimumHeight(img.minimumHeight()+50)
+    dialog_setLayout(layout)
+    restoreOverrideCursor()
  */
-EmbWindow *
-about_dialog_init(void)
+int
+about(EmbWindow *window)
 {
-    EmbWindow *about = create_window("assets/about_dialog.csv");
-    return about;
+    debug_message("about()");
+    return create_dialog(window, "assets/about_dialog.csv");
+}
+
+int
+create_dialog(EmbWindow *window, char *fname)
+{
+    if (window->n_dialogs >= MAX_DIALOGS) {
+        return 0;
+    }
+    window->dialogs[window->n_dialogs] = create_window(fname);
+    window->n_dialogs++;
+    return 1;
 }
 
 /* The dialog showing details of the pattern including histograms.
  */
 void
-details_dialog_free(void)
+details_dialog_free(EmbWindow *window)
 {
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 /* Creates a dialog showing key information about the pattern,
@@ -386,7 +415,7 @@ details_dialog_init(EmbWindow *w)
     int stitches_trim = 0;
     int color_total = 0;
     int color_changes = 0;
-    EmbRect bounding_rect = embRect_create();
+    EmbRect bounding_rect = embRect_create(window);
     EmbWindow *details_dialog = create_window("assets/design_details.csv");
     int right_column_offset = 100;
     int spacing = 200;
@@ -394,7 +423,7 @@ details_dialog_init(EmbWindow *w)
     /*
     button-box = tk.ButtonBox(dialog, text="QDialogButtonBox-Ok");
     connect(buttonBox, SIGNAL(accepted()), SLOT(accept()));
-    vbox_layout_main = tk.VBoxLayout();
+    vbox_layout_main = tk.VBoxLayout(window);
     vbox_layout_main, add_widget(main-widget);
     vbox_layout_main, add_widget(button-box);
     dialog-set_layout(vbox_layout_main);
@@ -449,7 +478,7 @@ details_dialog_init(EmbWindow *w)
     vbox_layout_main.addStretch(1);
     widget.set_layout(vbox_layout_main);
 
-    scroll_area = tk.scroll_area();
+    scroll_area = tk.scroll_area(window);
     scroll_area.set_widget-resizable(1);
     scroll_area.set_widget(widget);
     return scroll_area;
@@ -458,7 +487,7 @@ details_dialog_init(EmbWindow *w)
 }
 
 EmbWindow *
-create_histogram(void)
+create_histogram(EmbWindow *window)
 {
     debug_message("TODO: createHistogram");
     return NULL;
@@ -478,11 +507,11 @@ settings_dialog_init(int showTab)
 {
     printf("showTab: %d\n", showTab);
     /* mw = mw;
-    accept = copy();
-    dialog = copy();
-    preview = copy();
+    accept = copy(window);
+    dialog = copy(window);
+    preview = copy(window);
 
-    window = tk.Tk();
+    window = tk.Tk(window);
     window.size(750,550);
     tab_widget = tk.tab-widget(window);
     */
@@ -513,7 +542,7 @@ settings_dialog_init(int showTab)
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(acceptChanges()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(rejectChanges()));
 
-    vbox_layout_main = tk.VBoxLayout();
+    vbox_layout_main = tk.VBoxLayout(window);
     vbox_layout_main, add_widget(tab-widget);
     vbox_layout_main, add_widget(buttonBox);
     setLayout(vbox_layout_main);
@@ -581,7 +610,7 @@ load_file_action(char *file_name)
     ext = fileExtension(file_name);
     debug_message("ext: %s", qPrintable(ext));
 
-    p = embPattern-create();
+    p = embPattern-create(window);
     if (!p) {
         printf("Could not allocate memory for embroidery pattern\n");
         exit(1);
@@ -589,7 +618,7 @@ load_file_action(char *file_name)
 
     if (!p.readAuto(file_name)) {
         printf("Reading file was unsuccessful: %s\n", file_name);
-        restore_override_cursor();
+        restore_override_cursor(window);
         message = translate("Reading file was unsuccessful: ") + file_name
         warning(this, translate("Error reading pattern"), message)
     }
@@ -734,10 +763,10 @@ load_file_action(char *file_name)
             debug_message(".");
         }
 
-        restore_override_cursor();
+        restore_override_cursor(window);
     }
 
-    p.free();
+    p.free(window);
 
      Clear the undo stack so it is not possible to undo past this point.
     undo-history-length = 0;
@@ -748,25 +777,25 @@ load_file_action(char *file_name)
 }
 
 void
-line_action(void)
+line_action(EmbWindow *window)
 {
     debug_message("line-action()");
 }
 
 void
-distance_action(void)
+distance_action(EmbWindow *window)
 {
     debug_message("distance-action()");
 }
 
 void
-dolphin_action(void)
+dolphin_action(EmbWindow *window)
 {
     debug_message("dolphin-action()");
 }
 
 void
-ellipse_action(void)
+ellipse_action(EmbWindow *window)
 {
     debug_message("ellipse-action()");
 }
@@ -828,7 +857,7 @@ set_selected_items(int *itemList)
      * the comparison is simple.
      */
     /*
-    clear-all-fields();
+    clear-all-fields(window);
 
     for item in itemList:
         if (!item) {
@@ -839,7 +868,7 @@ set_selected_items(int *itemList)
         /* TODO: load data into the General field */
         /*
         if (item.type == "Arc") {
-            p = obj.objectCenter();
+            p = obj.objectCenter(window);
             update_edit_num_if_varies("arc-center-x", p.x, 0);
             update_edit_num_if_varies("arc-center-y", -p.y, 0);
             update_edit_num_if_varies("arc-radius", obj.objectRadius(), 0);
@@ -954,10 +983,10 @@ set_selected_items(int *itemList)
         }
 
         if (item.type == RECTANGLE) {
-            corn1 = obj.objectTopLeft();
-            corn2 = obj.objectTopRight();
-            corn3 = obj.objectBottomLeft();
-            corn4 = obj.objectBottomRight();
+            corn1 = obj.objectTopLeft(window);
+            corn2 = obj.objectTopRight(window);
+            corn3 = obj.objectBottomLeft(window);
+            corn4 = obj.objectBottomRight(window);
 
             update_edit_num_if_varies("rect-corner-x1", corn1.x, 0);
             update_edit_num_if_varies("rect-corner-y1", -corn1.y, 0);
@@ -1003,7 +1032,7 @@ set_selected_items(int *itemList)
 }
 
 void
-export_(void)
+export_(EmbWindow *window)
 {
     debug_message("Export.");
 }
@@ -1015,7 +1044,7 @@ void
 new_file(EmbWindow *w)
 {
     debug_message("New File.");
-    w->panels[n_docs]->pattern = embPattern_create();
+    w->panels[n_docs]->pattern = embPattern_create(window);
     w->tab_index = w->n_docs-1;
     w->n_docs++;
     /*
@@ -1023,13 +1052,13 @@ new_file(EmbWindow *w)
     /* connect(mdi_win, SIGNAL(sendClosemdi_win()), self, SLOT(on_close_mdi_win()));
     connect(panel, SIGNAL(subWindowActivated()), self, SLOT(on_window_activated()));
 
-    update_menu_toolbar_statusbar();
-    window_menu_about_to_show();
+    update_menu_toolbar_statusbar(window);
+    window_menu_about_to_show(window);
 
-    v = mdi_win.get_view();
+    v = mdi_win.get_view(window);
     if (v) {
-        v.recalculateLimits();
-        v.zoom_extents();
+        v.recalculateLimits(window);
+        v.zoom_extents(window);
     }
     */
 }
@@ -1069,10 +1098,10 @@ open_file(EmbWindow *window)
         openDialog = PreviewDialog(translate("Open w/Preview"), open_filesPath, format_filter_open);
          TODO: set opendialog_selectNameFilter(const String& filter) from opensave_open_format
          connect(openDialog, SIGNAL(filesSelected()), self, SLOT(open_files_selected()));
-        opendialog_exec();
+        opendialog_exec(window);
     } */
 
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 /* .
@@ -1106,15 +1135,15 @@ open_files_selected(char **files, int n_files)
 
             /* Make sure the toolbars/etc... are shown before doing their zoom_extents */
             if (doOnce) {
-                /* update_menu_toolbar_statusbar(); */
+                /* update_menu_toolbar_statusbar(window); */
                 doOnce = 0;
             }
 
             /*
             if (mdi_win.load_file(files[i])) {
                 statusbar.show_message(translate("File(s) loaded"), 2000);
-                mdi_win.show();
-                mdi_win.showMaximized(); */
+                mdi_win.show(window);
+                mdi_win.showMaximized(window); */
                 /* Prevent duplicate entries in the recent files list. 
                 if (!opensave_recent_list_of_files.contains(filesToOpen[i], CaseInsensitive) {
                     opensave_recent_list_of_files.prepend(filesToOpen[i]);*/
@@ -1127,29 +1156,29 @@ open_files_selected(char **files, int n_files)
 
                 opensave_recent_directory = FileInfo(absolute_path(files[i]));
 
-                v = mdi_win.getView();
+                v = mdi_win.getView(window);
                 if (v) {
-                    v.recalculateLimits();
-                    v.zoom_extents();
+                    v.recalculateLimits(window);
+                    v.zoom_extents(window);
                 }
             }
             else {
-                mdi_win.close();
+                mdi_win.close(window);
             }
             */
         }
     }
-    /* window_menu_about_to_show(); */
+    /* window_menu_about_to_show(window); */
 }
 
 /* .
  */
 void
-open_recent_file(void)
+open_recent_file(EmbWindow *window)
 {
     debug_message("open_recent_file()");
     /* Check to see if this from the recent files list.
-    recent_sender = sender();
+    recent_sender = sender(window);
     if (recent_sender) {
         open_file(1, str(recent_sender.data()));
     }
@@ -1162,17 +1191,20 @@ void
 save_file_as(EmbWindow *window)
 {
     debug_message("Save file as...");
-    /* Need to find the active_sub_window before it loses
-     * focus to the FileDialog */
-    /* mdi_win = active_sub_window;
-    if (!mdi_win) {
+    /* Need to find the active_panel before it loses focus
+     * to the FileDialog
+     */
+    int mdi_win = window->active_panel;
+    if (mdi_win <= 0) {
         return;
     }
 
+    /* 
     open_filesPath = opensave_recent_directory;
     file = QFileDialog_getsave_fileName(translate("Save As"), open_filesPath, format_filter_save);
 
-    mdi_win.save_file(file); */
+    mdi_win.save_file(file);
+    */
 }
 
 /* Saves a file using the standard dialog.
@@ -1213,14 +1245,14 @@ save_file(EmbWindow *window)
 
         case OBJ_TYPE_CIRCLE:
             if (formatType == EMBFORMAT_STITCHONLY) {
-                path = item.objectSavePath();
+                path = item.objectSavePath(window);
                 to_polyline(pattern, item.objectCenter(), path.simplified(), "0", item.objectColor(), "CONTINUOUS", "BYLAYER");
                  TODO: proper layer/line_type/line_weight
                  TODO: Improve precision, replace simplified
             }
             else {
-                p = item.objectCenter();
-                r = item.objectRadius();
+                p = item.objectCenter(window);
+                r = item.objectRadius(window);
                 embPattern_add_circle_object_abs(pattern, p.x(), p.y(), r);
             }
             break;
@@ -1430,32 +1462,32 @@ save_file(EmbWindow *window)
 
 /* . */
 void
-whats_this(void)
+whats_this(EmbWindow *window)
 {
     debug_message("whats_this()");
     /*
     what_this = 1;
-    QWhatsThis_enterWhatsThisMode();
+    QWhatsThis_enterWhatsThisMode(window);
     */
 }
 
 /* Call print dialog to print out a render of the embroidery.
  */
 void
-print_pattern(void)
+print_pattern(EmbWindow *window)
 {
     debug_message("print()");
     /*
-    mdi_win = panel.active_sub_window();
+    mdi_win = panel.active_sub_window(window);
     if (mdi_win) {
-        mdi_win.print();
+        mdi_win.print(window);
     }
     dialog = tk.PrintDialog(printer, this);
     if (dialog_exec() == "QDialog_Accepted") {
         painter = QPainter(printer);
         if (printing_disable_bg) {
              Save current bg
-            brush = gview.backgroundBrush();
+            brush = gview.backgroundBrush(window);
              Save ink by not printing the bg at all
             gview.setBackgroundBrush(Qt_NoBrush);
              Print, fitting the viewport contents into a full page
@@ -1476,13 +1508,13 @@ print_pattern(void)
  * If no objects are selected an error is returned.
  */
 void
-cut(void)
+cut(EmbWindow *window)
 {
     debug_message("cut()");
 
     /* gview = active_view
     if gview) {
-        gview.cut();
+        gview.cut(window);
     } */
 
     /* if (len(gscene.selected_items()) == 0) {
@@ -1492,8 +1524,8 @@ cut(void)
         /*  TODO: Prompt to select objects if nothing is preselected. */
     /* }
 
-    copy_selected();
-    delete_selected(); */
+    copy_selected(window);
+    delete_selected(window); */
 }
 
 /*
@@ -1502,12 +1534,12 @@ cut(void)
  * If no objects are selected an error is returned.
  */
 void
-copy(void)
+copy(EmbWindow *window)
 {
     debug_message("copy()");
     /* gview = active_view
     if gview:
-        gview.copy(); */
+        gview.copy(window); */
 
     /* if (len(gscene.selected_items()) == 0) {
         message = translate("Preselect objects before invoking the copy command.");
@@ -1523,13 +1555,13 @@ copy(void)
 /* .
  */
 void
-copy_selected(void)
+copy_selected(EmbWindow *window)
 {
-    /* selectedList = gscene.selected_items(); */
+    /* selectedList = gscene.selected_items(window); */
 
     /*  Prevent memory leaks by deleting any unpasted instances. */
     /* DeleteAll(cut_copy_object_list.begin(), cut_copy_object_list.end());
-    cut_copy_object_list.clear(); */
+    cut_copy_object_list.clear(window); */
 
     /*
     Create objects but do not add them to the scene just yet.
@@ -1542,13 +1574,13 @@ copy_selected(void)
 /* Paste whatever objects are on the clipboard.
  */
 void
-paste(void)
+paste(EmbWindow *window)
 {
     debug_message("paste()");
     /* 
     gview = active_view;
     if (gview) {
-        gview.paste();
+        gview.paste(window);
     } */
 
     /*if (pasting_active) {
@@ -1571,13 +1603,13 @@ paste(void)
  * if we are at the top of the array then do nothing.
  */
 void
-redo(void)
+redo(EmbWindow *window)
 {
     debug_message("redo()");
     /*
     gview = active_view;
     if (gview) {
-        gview->copy();
+        gview->copy(window);
     }
     undo_call = "";
     if (undo_history_position < undo_history_length) {
@@ -1587,7 +1619,7 @@ redo(void)
         undo_call = undo_history[undo_history_position]
          set reverse flag
         undo_call += " -r"
-        actuator(undo_call);
+        actuator(window, undo_call);
     }
     */
 }
@@ -1597,13 +1629,13 @@ redo(void)
  * of the undo_history array.
  */
 void
-undo(void)
+undo(EmbWindow *window)
 {
     debug_message("undo()");
     /*
     gview = active_view;
     if (gview) {
-        gview->paste();
+        gview->paste(window);
     }
     if (undo_history_position > 0) {
         last = undo_history[undo_history_position]
@@ -1616,7 +1648,7 @@ undo(void)
         if last[0] == "donothing":
             debug_message("The last action has no undo candidate.");
 
-        actuator(last);
+        actuator(window, last);
     }
     */
 }
@@ -1624,97 +1656,44 @@ undo(void)
 /* Uses the undo stack.
  */
 void
-repeat(void)
+repeat(EmbWindow *window)
 {
     debug_message(" . ");
 }
 
 /* .
  */
-void
-design_details(void)
+EmbWindow *
+design_details(EmbWindow *window)
 {
-    /* "assets/ui/design_details_dialog.csv" */
+    EmbWindow *result = create_window("assets/ui/design_details_dialog.csv");
+    return result;
 }
 
 
 /* .
  */
-void
-help(void)
+EmbWindow *
+help(EmbWindow *window)
 {
-    /* "assets/ui/help_window.csv" */
+    EmbWindow *result = create_window("assets/ui/help_window.csv");
+    return result;
 }
 
-/*
- * Create and show the about dialog with a close button.
- *
- * Some layout from the previous version) {
- *
- * TODO: QTabWidget for about dialog
- * QApplication_setOverrideCursor(Qt_ArrowCursor)
- *
- * layout = v_box();
-    layout.setAlignment(Qt_AlignCenter);
-    layout.addWidget(img);
-    layout.addWidget(text);
-    layout.addWidget(buttonbox);
-
-    dialog_setWindowTitle(title)
-    dialog_setMinimumWidth(img.minimumWidth()+30)
-    dialog_setMinimumHeight(img.minimumHeight()+50)
-    dialog_setLayout(layout)
-    restoreOverrideCursor()
- */
-void
-about(void)
-{
-    debug_message("about()");
-    /* 
-    dialog = tk.Tk();
-    dialog_title("About Embroidermodder 2");
-    dialog_minsize(400, 400);
-     tk.dialog(_mainWin);
-     img = tk.ImageWidget(application_folder + "/images/logo-small.png");
-    text_block = (
-        "Embroidermodder " + version + "\n\n" +
-        translate("http://embroidermodder.org") +
-        "\n\n" +
-        translate(
-            "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi"
-        ) + "\n\n" +
-        translate("Embroidery formats by Josh Varga.") +
-        "\n" +
-        translate("User Interface by Jonathan Greig and Robin Swift.") +
-        "\n\n" +
-        translate("Free under the zlib/libpng license.")
-        + "\n\n" +
-        translate("Build Hash: ") + BUILD_GIT_HASH
-    );
-    text = tk.Label(dialog, text=text_block);
-    text.grid(row=1, column=1);
-     text.setWordWrap(1);
-
-    button = tk.Button(
-        dialog,
-        text="Oh, Yeah!",
-        command=dialog_destroy);
-    button.grid(row=2, column=1);
-
-    dialog_mainloop();
-    */
-}
 
 /*
  * Display the changelog stored in the config.json data file.
  *
  * Not currently maintained.
  */
-EmbWindow *
-changelog(void)
+int
+changelog(EmbWindow *window)
 {
     debug_message("changelog()");
-    EmbWindow *changelog_window = create_window("assets/changelog_window.csv");
+    if (!create_dialog(window, "assets/changelog_window.csv")) {
+        return 0;
+    }
+    EmbWindow *changelog_window = window->dialogs[window->n_dialogs-1];
 
     int position[2] = {0, 0};
     EmbPanel *panel = changelog_window->panels[0];
@@ -1724,88 +1703,41 @@ changelog(void)
     QUrl changelogURL("help/changelog.html");
     QDesktopServices_openUrl(changelogURL);
     */
-    return changelog_window;
+    return 1;
 }
 
-/* .
+/* Note that this is a function since not all window creation tasks can
+ * be covered by the create_window CSV configuration.
  */
-void
-settings_dialog(void)
+int
+settings_dialog(EmbWindow *window)
 {
     debug_message("settings_dialog()");
+    return create_dialog(window, "assets/settings_dialog.csv");
 }
 
 /* Run the "tip of the day" dialog box.
  */
-void
-tip_of_the_day(void)
+int
+tip_of_the_day(EmbWindow *window)
 {
     debug_message("tip_of_the_day()");
-    /* 
-    appDir = qApp.applicationDirPath();
-    wizard_tip_of_the_day = tk.Dialog();
-    button1 = tk.Button(wizard_tip_of_the_day);
-    button2 = tk.Button(wizard_tip_of_the_day);
-    button3 = tk.Button(wizard_tip_of_the_day);
-
-    img_banner = ImageWidget(
-        appDir + "/images/did-you-know.png", wizard_tip_of_the_day
-    );
-
-    checkBoxTipOfTheDay = tk.CheckBox(translate("&Show tips on startup"), wizard_tip_of_the_day);
-    checkBoxTipOfTheDay.set_checked(general_tip_of_the_day); */
-    /*  connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), self, SLOT(checkBoxTipOfTheDayStateChanged(int))); 
-
-    tips = tips
-    if tips[general_current_tip] == "":
-        general_current_tip = 0
-    label_tip_of_the_day = tk.Label(tips[general_current_tip], wizard_tip_of_the_day);
-    label_tip_of_the_day.setWordWrap(1);
-
-    button1.setText("&Previous");
-    button2.setText("&Next");
-    button3.setText("&Close");
-    connect(button1,
-        SIGNAL(triggered()), wizard_tip_of_the_day,
-        SLOT(wizard_tip_of_the_day.close()));
-    connect(button2,
-        SIGNAL(triggered()), wizard_tip_of_the_day,
-        SLOT(wizard_tip_of_the_day.close()));
-    connect(button3,
-        SIGNAL(triggered()), wizard_tip_of_the_day,
-        SLOT(wizard_tip_of_the_day.close()));
-
-    layout = tk.VBoxLayout(wizard_tip_of_the_day);
-    add_widget(layout, img_banner);
-    add_strut(layout, 1);
-    add_widget(layout, label_tip_of_the_day);
-    layout.add_stretch(1);
-    layout.add_widget(checkBoxTipOfTheDay);
-    layout.add_strut(1);
-    layout.add_widget(button1);
-    layout.add_strut(1);
-    layout.add_widget(button2);
-    layout.add_strut(1);
-    layout.add_widget(button3);
-
-    wizard_tip_of_the_day.set_layout(layout);
-    wizard_tip_of_the_day.set_window_title("Tip of the Day");
-    wizard_tip_of_the_day.set_minimum_size(550, 400);
-    wizard_tip_of_the_day.exec(); */
+    return create_dialog(window, "assets/tip_of_the_day.csv");
 }
 
 /* .
  */
-void
-check_for_updates(void)
+int
+check_for_updates(EmbWindow *window)
 {
     debug_message("check_for_updates()");
+    return create_dialog(window, "assets/check_for_updates.csv");
 }
 
 /* .
  */
 void
-select_all(void)
+select_all(EmbWindow *window)
 {
     debug_message("select_all()");
 }
@@ -1813,7 +1745,7 @@ select_all(void)
 /* Open color selector dialog.
  */
 void
-color_selector(void)
+color_selector(EmbWindow *window)
 {
     debug_message("color_selector()");
 }
@@ -1821,7 +1753,7 @@ color_selector(void)
 /* Change layer action.
  */
 void
-layer_selector_action(void)
+layer_selector_action(EmbWindow *window)
 {
     debug_message("color-selector-action()");
 }
@@ -1829,7 +1761,7 @@ layer_selector_action(void)
 /* Open line type selector dialog.
  */
 void
-line_type_selector(void)
+line_type_selector(EmbWindow *window)
 {
     debug_message("line_type_selector()");
 }
@@ -1837,7 +1769,7 @@ line_type_selector(void)
 /* .
  */
 void
-line_weight_selector(void)
+line_weight_selector(EmbWindow *window)
 {
     debug_message("line_weight_selector()");
 }
@@ -1845,7 +1777,7 @@ line_weight_selector(void)
 /* Acts on the EmbPanel that is focussed.
  */
 void
-distance(void)
+distance(EmbWindow *window)
 {
     debug_message("distance()");
 }
@@ -1853,7 +1785,7 @@ distance(void)
 /* Acts on the EmbPanel that is focussed.
  */
 void
-delete_object(void)
+delete_object(EmbWindow *window)
 {
     debug_message("delete_object()");
 }
@@ -1861,7 +1793,7 @@ delete_object(void)
 /* Acts on the EmbPanel that is focussed.
  */
 void
-locate_point(void)
+locate_point(EmbWindow *window)
 {
     debug_message("locate_point()");
 }
@@ -1869,7 +1801,7 @@ locate_point(void)
 /* Acts on the EmbPanel that is focussed.
  */
 void
-move(void)
+move(EmbWindow *window)
 {
     debug_message("move()");
 }
@@ -1936,7 +1868,7 @@ zoom_to_point(EmbPanel *panel, EmbVector mouse_point, float zoom_dir)
 
     scale(s, s);
     align-scene-point-with-view-point(point-before-scale, mouse-point);
-    recalculate-limits();
+    recalculate-limits(window);
     align-scene-point-with-view-point(point-before-scale, mouse-point);
 
     update_mouse_coords(mouse-point.x, mouse-point.y);
@@ -1945,7 +1877,7 @@ zoom_to_point(EmbPanel *panel, EmbVector mouse_point, float zoom_dir)
         paste-object-item-group.set_pos(v);
 
     if (selecting-active) {
-        rect = make_rectangle(map-from-scene(scenePressPoint), mousePoint).normalized();
+        rect = make_rectangle(map-from-scene(scenePressPoint), mousePoint).normalized(window);
         select-box.set_geometry(rect);
     }
     */
@@ -1958,11 +1890,11 @@ set_snap(EmbPanel *panel, int active)
 {
     debug_message("View toggle-snap()");
     printf("%d\n", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /*  TODO: finish this. */
     /* gscene.set-property("ENABLE-SNAP", active); */
     scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(panel->window);
 }
 
 /*
@@ -2044,7 +1976,7 @@ valid_file_format(char *fname)
 /* Check that the translate call can return an entry from the table.
  */
 int
-test_translate(void)
+test_translate(EmbWindow *window)
 {
     char *translated = translate("?");
     printf("Failed to use translate.");
@@ -2168,7 +2100,7 @@ set_vector(TABLE(state), char *key, EmbVector v)
 /* We can load any of the CSV files from assets/
  * into this buffer for editing. */
 void
-display_buffer(void)
+display_buffer(EmbWindow *window)
 {
     int i;
     for (i=0; i<line_n; i++) {
@@ -2322,24 +2254,24 @@ panel_paint_event(EmbPanel *panel, EmbEvent e)
 }
 
 void
-panel_cascade(void)
+panel_cascade(EmbWindow *window)
 {
     /*
-    cascadeSubWindows();
-    zoom-extents-actionAllSubWindows();
+    cascadeSubWindows(window);
+    zoom-extents-actionAllSubWindows(window);
     */
 }
 
 void
-panel_tile(void)
+panel_tile(EmbWindow *window)
 {
     /*
-    tileSubWindows();
-    zoom-extents-actionAllSubWindows(); */
+    tileSubWindows(window);
+    zoom-extents-actionAllSubWindows(window); */
 }
 
 void
-panel_zoom_extents_actionAllSubWindows(void)
+panel_zoom_extents_actionAllSubWindows(EmbWindow *window)
 {
     /*
     for (window in subWindowList()) {
@@ -2358,7 +2290,7 @@ panel_zoom_extents_actionAllSubWindows(void)
  *  EmbPainter and EmbPen functions for drawing in the window.
  */
 EmbPen *
-create_pen(void)
+create_pen(EmbWindow *window)
 {
     EmbPen *pen = malloc(sizeof(EmbPen));
     pen->color.r = 0;
@@ -2371,11 +2303,11 @@ create_pen(void)
 }
 
 EmbPainter *
-create_painter(void)
+create_painter(EmbWindow *window)
 {
     EmbPainter *painter = malloc(sizeof(EmbPainter));
     /*
-    painter->pen = create_pen();
+    painter->pen = create_pen(window);
     painter->path = NULL;
     */
     return painter;
@@ -2425,18 +2357,18 @@ create_grid_(EmbPanel *panel, int gridType)
     int enable_grid = 1;
     switch (gridType) {
     case RECTANGULAR_GRID:
-        createGridrect();
+        createGridrect(window);
         break;
     case CIRCULAR_GRID:
-        createGridpolar();
+        createGridpolar(window);
         break;
     case ISOMETRIC_GRID:
-        createGridiso();
+        createGridiso(window);
         break;
     default:
         break;
     }
-    create-origin();
+    create-origin(window);
     */
     
     /* EXPERIMENT
@@ -2457,7 +2389,7 @@ create_grid_(EmbPanel *panel, int gridType)
 void
 create_origin(EmbPanel *panel)
 {
-    /* self.origin-path = Path(); 
+    /* self.origin-path = Path(window); 
 
     if (grid_show_origin) { */
         /* self.origin-path.addEllipse(Vector(0,0), 0.5, 0.5) */
@@ -2469,7 +2401,7 @@ create_origin(EmbPanel *panel)
 }
 
 void
-create_grid_rect(void)
+create_grid_rect(EmbWindow *window)
 {
     /*
     EmbVector point1, point2;
@@ -2482,7 +2414,7 @@ create_grid_rect(void)
     point2.x = max(gr.left(), gr.right());
     point2.y = max(gr.top(), gr.bottom());
 
-    grid-path = Path();
+    grid-path = Path(window);
     grid-path.add-rect(gr);
     float gx, gy;
     for (gx=point1.x; gx<point2.x; gx+=grid_spacing.x) {
@@ -2495,7 +2427,7 @@ create_grid_rect(void)
     } */
 
     /* Center the Grid 
-    grid-rect = grid-path.bounding-rect();
+    grid-rect = grid-path.bounding-rect(window);
     bx = gridrect.width() / 2.0;
     by = -gridrect.height() / 2.0;
     center = Vector(gridcenter.x, -gridcenter.y);
@@ -2512,7 +2444,7 @@ create_grid_rect(void)
 }
 
 void
-create_grid_polar(void)
+create_grid_polar(EmbWindow *window)
 {
     /*
     float r, ang;
@@ -2539,18 +2471,18 @@ create_grid_polar(void)
 }
 
 void
-create_grid_iso(void)
+create_grid_iso(EmbWindow *window)
 {
     /* Ensure the loop will work correctly with negative numbers */
     /* isoW = fabs(gridsize.x);
     isoH = fabs(gridsize.y);
 
     p1 = Vector(0, 0);
-    p2 = Line-from-polar(isoW, 30).p2();
-    p3 = Line-from-polar(isoH, 150).p2();
+    p2 = Line-from-polar(isoW, 30).p2(window);
+    p3 = Line-from-polar(isoH, 150).p2(window);
     p4 = p2 + p3;
 
-    grid-path = Path();
+    grid-path = Path(window);
     grid-path.moveto(p1);
     grid-path.lineto(p2);
     grid-path.lineto(p4);
@@ -2560,8 +2492,8 @@ create_grid_iso(void)
     float x, y;
     for (x=0.0; x<isoW; x+=gridspacing.x) {
         for (y=0.0; y<isoH; y+=gridspacing.y) {
-            px = Line-from-polar(x, 30).p2();
-            py = Line-from-polar(y, 150).p2();
+            px = Line-from-polar(x, 30).p2(window);
+            py = Line-from-polar(y, 150).p2(window);
 
             grid-path.moveto(px);
             grid-path.lineto(px+p3);
@@ -2571,7 +2503,7 @@ create_grid_iso(void)
     } */
 
     /* Center the Grid */
-    /* gridrect = grid-path.bounding-rect();*/
+    /* gridrect = grid-path.bounding-rect(window);*/
     /* bx is unused 
     by = -gridrect.height()/2.0;
     cx = gridcenter.x;
@@ -2600,7 +2532,7 @@ set_grid(EmbPanel *panel, int active)
         create-grid("");
     }
     */
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 void
@@ -2608,11 +2540,11 @@ set_ortho(EmbPanel *panel, int active)
 {
     debug_message("View toggleOrtho()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(panel->window, "WaitCursor");
     /* TODO: finish this. 
     gscene.set_property("ENABLE-ORTHO", active); */
     scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(panel->window);
 }
 
 void
@@ -2624,7 +2556,7 @@ set_polar(EmbPanel *panel, int active)
     /* TODO: finish this. 
     gscene.set_property("ENABLE-POLAR", active); */
     scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 void
@@ -2643,9 +2575,9 @@ set_grid_color(EmbWindow *window, EmbColor color)
 /* TODO: This check should be removed later.
  */
 void
-allow_rubber(void)
+allow_rubber(EmbWindow *window)
 {
-    /* return not rubber-room-list.size(); */
+    /* return not rubber-room-list.size(window); */
 }
 
 void
@@ -2654,7 +2586,7 @@ add_to_rubber_room(EmbPanel *panel, int item)
     printf("%d\n", item);
     /*
     rubber-room-list.append(item);
-    item.show();
+    item.show(window);
     */
     scene_update(panel);
 }
@@ -2669,7 +2601,7 @@ vulcanize_rubber_room(EmbPanel *panel)
         }
     }
 
-    rubber-room-list.clear();
+    rubber-room-list.clear(window);
     */
     scene_update(panel);
 }
@@ -2689,7 +2621,7 @@ vulcanize_object(int obj)
 }
 
 void
-clear_rubber_room(void)
+clear_rubber_room(EmbWindow *window)
 {
     /*
     for (item in rubber-room-list) {
@@ -2701,7 +2633,7 @@ clear_rubber_room(void)
             (item.type == OBJ-TYPE-POLYLINE
              && spare-rubber-list.contains("SPARE-RUBBER-POLYLINE")) ||
             (sparerubber-list.contains(item.-objID))) {
-                if (!item.-objectPath().element-count(void) {
+                if (!item.-objectPath().element-count(EmbWindow *window) {
                     error-title = translate("Empty Rubber object Error")
                     error-message = translate(
 "The rubber object added contains no points. "
@@ -2809,9 +2741,9 @@ stop_gripping(int accept)
     /*
     int gripping-active = 0;
     if (gripBase_obj) {
-        gripBase_obj.vulcanize();
+        gripBase_obj.vulcanize(window);
         if (accept) {
-            selection-changed();
+            selection-changed(window);
             */
             /*  Update the Property Editor */
             /*
@@ -2831,7 +2763,7 @@ create_ruler_text_path(EmbVector position, char *str, float height)
     printf("called with %f %s %f", position.x, str, height);
     /*
     int i;
-    path = Path();
+    path = Path(window);
 
     x-scale = height;
     y-scale = height;
@@ -3099,8 +3031,8 @@ draw_rulers(EmbPanel *panel)
     for (y=y_start; y<ruler-vert.y; y+=unit) {
         transform.translate(ruler-vert.x-vertical-ruler-size.x/2, y-rv-text-offset);
         transform.rotate(-90);
-        ruler-text-path = Path();
-        text-path = Path();
+        ruler-text-path = Path(window);
+        text-path = Path(window);
         if (ruler-metric) {
             text-path = create-ruler-text-path(0, 0, str(-y), text-height);
         }
@@ -3117,7 +3049,7 @@ draw_rulers(EmbPanel *panel)
         transform.reset()
         painter.draw-path(ruler-text-path)
 
-        lines += self.vertical-ruler-ticks();
+        lines += self.vertical-ruler-ticks(window);
     }
 
     painter.draw-lines(lines);
@@ -3136,7 +3068,7 @@ set_ruler(EmbPanel *panel, int active)
     ruler-color = get_color("ruler-color");
     */
     scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 void
@@ -3152,16 +3084,16 @@ set_ruler_color(EmbPanel *panel, EmbColor color)
  * Only needs the index for the WindowTab beause this acts on the windows[MAIN_WINDOW].
  */
 void
-layer_manager_init(int tab)
+layer_manager_init(EmbWindow *window, int tab)
 {
 
 }
 
 void
-layer_manager_delete(int tab)
+layer_manager_delete(EmbWindow *window, int tab)
 {
     printf("%d\n", tab);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 /*
@@ -3204,13 +3136,13 @@ layer_manager_add(
 */
 
 void
-layer_model(void)
+layer_model(EmbWindow *window)
 {
 
 }
 
 void
-layer_model_sorted(void)
+layer_model_sorted(EmbWindow *window)
 {
 
 }
@@ -3222,16 +3154,16 @@ layer_selector_index_changed(int index)
 }
 
 void
-layer_manager_action(void)
+layer_manager_action(EmbWindow *window)
 {
     debug_message("layerManager()");
     debug_message("Implement layerManager.");
     /*  LayerManager layman( self,  self);
-     *  layman.exec(); */
+     *  layman.exec(window); */
 }
 
 void
-layer_previous_action(void)
+layer_previous_action(EmbWindow *window)
 {
     debug_message("layerPrevious()");
     debug_message("Implement layerPrevious.");
@@ -3240,7 +3172,7 @@ layer_previous_action(void)
 /* Make layer active.
  */
 void
-make_layer_active(void)
+make_layer_active(EmbWindow *window)
 {
     debug_message("make_layer_active()");
     debug_message("Implement makeLayerActive.");
@@ -3329,8 +3261,8 @@ void status_bar_context_menu_event(
     }
 
     menu-.exec(event.globalPos());
-    restore_override_cursor();
-    statusbar.clearMessage();
+    restore_override_cursor(window);
+    statusbar.clearMessage(window);
 }
 */
 
@@ -3369,7 +3301,7 @@ status_bar_mouse_coord(EmbPanel *tab, int x, int y)
  * def setMouseCoord(x, y)
  */
 void
-status_bar_init(void)
+status_bar_init(EmbWindow *window)
 {
     /*
     (self, buttonText, mw, statbar, parent);
@@ -3414,7 +3346,7 @@ status_bar_init(void)
  */
 
 void
-toolbar_init(void)
+toolbar_init(EmbWindow *window)
 {
 
 }
@@ -3433,7 +3365,7 @@ set_override_cursor(char *cursor)
 }
 
 void
-restore_override_cursor(void)
+restore_override_cursor(EmbWindow *window)
 {
 
 }
@@ -3441,36 +3373,36 @@ restore_override_cursor(void)
 /* This may need to be a method of Main Window.
  */
 void
-clear_selection(void)
+clear_selection(EmbWindow *window)
 {
     debug_message("clear_selection");
     n_selected = 0;
-    /* gscene.clear_selection();
+    /* gscene.clear_selection(window);
     prompt = ""; */
 }
 
 void
-enableReal(void)
+enableReal(EmbWindow *window)
 {
 
 }
 
 
 void
-disableReal(void)
+disableReal(EmbWindow *window)
 {
 
 }
 
 void
-enableLwt(void)
+enableLwt(EmbWindow *window)
 {
 
 }
 
 
 void
-disableLwt(void)
+disableLwt(EmbWindow *window)
 {
 
 }
@@ -3669,7 +3601,7 @@ draw_crosshair(EmbWindow *window, EmbPanel *panel)
     and remember its position like in turtle graphics.
 
     painter.setBrush("NoBrush");
-    Pen *crosshair_pen = create_pen();
+    Pen *crosshair_pen = create_pen(window);
     crosshair_pen->color = crosshair_color;
     crosshair_pen->cosmetic = 1;
     painter->pen = crosshair_pen;
@@ -3744,7 +3676,7 @@ draw_closest_qsnap(EmbPanel *panel)
 void
 draw_foreground(EmbWindow *window, EmbPanel *panel, EmbPainter *painter, Rect rect)
 {
-    EmbPen *grip_pen = create_pen();
+    EmbPen *grip_pen = create_pen(window);
     grip_pen->width = 2.0;
     grip_pen->join_style = MITER_JOIN;
     grip_pen->cosmetic = 1;
@@ -3762,7 +3694,7 @@ draw_foreground(EmbWindow *window, EmbPanel *panel, EmbPainter *painter, Rect re
             if (item.type != "Unknown") {
                 tempBase-obj = item
                 if (tempBase-obj) {
-                    selected-grip-points = tempBase-obj.all-grip-points();
+                    selected-grip-points = tempBase-obj.all-grip-points(window);
                 }
 
                 for (ssp in selected-grip-points) {
@@ -3900,7 +3832,7 @@ create_tool_button(int type, char *label)
 /* .
  */
 void
-delete_selected(void)
+delete_selected(EmbWindow *window)
 {
     int i;
 
@@ -3947,7 +3879,7 @@ create_object_list(int *list)
  * indexed by tab. Delta is a vector.
  */
 void
-move_selected(EmbVector delta)
+move_selected(EmbWindow *window, EmbVector delta)
 {
     int i;
     printf("%f", delta.x);
@@ -3960,11 +3892,11 @@ move_selected(EmbVector delta)
     }
 
     /* Always clear the selection after a move. */
-    clear_selection();
+    clear_selection(window);
 }
 
 void
-move_action(void)
+move_action(EmbWindow *window)
 {
     debug_message(" . ");
 }
@@ -3979,15 +3911,15 @@ move_action(void)
  * designs = load-data("designs.json");
 
 void
-settings_dialog(void) int showTab 
+settings_dialog(EmbWindow *window) int showTab 
 {
     dialog = settings-dialog-action(showTab);
-    dialog-mainloop();
+    dialog-mainloop(window);
 }
 */
 
 void
-draw_icon(void)
+draw_icon(EmbWindow *window)
 {
     /*
     Would work on lists like this:
@@ -4014,34 +3946,34 @@ draw_icon(void)
 }
 
 void
-check_for_updates_(void)
+check_for_updates_(EmbWindow *window)
 {
     debug_message("check-for-updates()");
     /* TODO: Check website for versions, commands, etc... */
 }
 
 void
-select_all_(void)
+select_all_(EmbWindow *window)
 {
     debug_message("select_all()");
     /*
     if (active_view) {
-        gview.select_all();
+        gview.select_all(window);
     }
 
-    allPath = Path();
+    allPath = Path(window);
     allPath.add-rect(gscene.scene-rect());
     gscene.setSelectionpanel(allPath, "ReplaceSelection", "intersects-item-shape", transform());
     */
 }
 
 void
-design_details_(void)
+design_details_(EmbWindow *window)
 {
     if (active_scene) {
         /*
         dialog = details-dialog-init(scene, self);
-        dialog_exec();
+        dialog_exec(window);
         */        
     }
 }
@@ -4094,11 +4026,11 @@ icon_resize(int icon_size)
 }
 
 void
-active_mdi_window(void)
+active_mdi_window(EmbWindow *window)
 {
     debug_message("activemdi-window()");
     /*
-    mdi-win = panel.active-sub-window();
+    mdi-win = panel.active-sub-window(window);
     return mdi-win;
     */
 }
@@ -4108,7 +4040,7 @@ active_mdi_window(void)
  * Might need to be in View scope not Window.
  */
 void
-set_pen(void)
+set_pen(EmbWindow *window)
 {
     debug_message("set_pen");
 }
@@ -4119,10 +4051,10 @@ close_toolbar(int action)
     printf("%d", action);
     /*
     if (action.object-name() == "toolbarclose") {
-        tb = sender();
+        tb = sender(window);
         if (tb) {
             debug_message("%s closed.", str(tb.object-name()));
-            tb.hide();
+            tb.hide(window);
         }
     }
     */
@@ -4130,19 +4062,19 @@ close_toolbar(int action)
 
 
 void
-setBackgroundColor(void)
+setBackgroundColor(EmbWindow *window)
 {
 
 }
 
 void
-setGridColor(void)
+setGridColor(EmbWindow *window)
 {
     
 }
 
 void
-setCrossHairColor(void)
+setCrossHairColor(EmbWindow *window)
 {
 
 }
@@ -4164,19 +4096,19 @@ alert(char *title, char *message)
 /* Should we need to add this to an error report.
  */
 void
-report_platform(void)
+report_platform(EmbWindow *window)
 {
     /* print(os.uname()) */
 }
 
 void
-scale_action(void)
+scale_action(EmbWindow *window)
 {
     debug_message(".");
 }
 
 void
-get_file_separator(void)
+get_file_separator(EmbWindow *window)
 {
     debug_message("getFileSeparator()");
     /* return my-file-separator */
@@ -4184,12 +4116,12 @@ get_file_separator(void)
 
 /*
 void
-active_view(void)
+active_view(EmbWindow *window)
 {
     debug_message("active_view()");
-    mdi-win = panel.active-sub-window();
+    mdi-win = panel.active-sub-window(window);
     if (mdi-win) {
-        v = mdi-win.getView();
+        v = mdi-win.getView(window);
         return v;
     }
 }
@@ -4197,12 +4129,12 @@ active_view(void)
 
 /* replace with a variable in Window?
 int
-active_scene(void)
+active_scene(EmbWindow *window)
 {
     debug_message("active-scene()");
-    mdi-win = panel.active-sub-window();
+    mdi-win = panel.active-sub-window(window);
     if (mdi-win) {
-        return mdi-win.getScene();
+        return mdi-win.getScene(window);
     }
 }
 */
@@ -4212,7 +4144,7 @@ update_all_view_scroll_bars(int val)
 {
     printf("%d\n", val);
     /*
-    windowList = panel.sub-window-list();
+    windowList = panel.sub-window-list(window);
     for (mdi-win in windowList) {
         mdi-win.showViewScrollBars(val);
     }
@@ -4224,7 +4156,7 @@ update_all_view_cross_hair_colors(EmbColor color)
 {
     printf("%d\n", color.r);
     /*
-    windowList = panel.sub-window-list();
+    windowList = panel.sub-window-list(window);
     for (mdi-win in windowList) {
         mdi-win.setViewCrossHairColor(color);
     }
@@ -4262,7 +4194,7 @@ spinbox(int setting, int value)
 
 
 void
-rotate_action(void)
+rotate_action(EmbWindow *window)
 {
     debug_message("TODO");
 }
@@ -4382,7 +4314,7 @@ update_all_view_grid_colors(EmbColor color)
 {
     printf("%d", color.r);
     /*
-    windowList = panel.sub-window-list();
+    windowList = panel.sub-window-list(window);
     for (mdi-win in windowList) {
         mdi-win.setViewGridColor(color);
     }
@@ -4394,7 +4326,7 @@ update_all_view_ruler_colors(EmbColor color)
 {
     printf("%d", color.r);
     /*
-    windowList = panel.sub-window-list();
+    windowList = panel.sub-window-list(window);
     for (mdi-win in windowList) {
         mdi-win.set_view-ruler-color(color);
     }
@@ -4411,7 +4343,7 @@ update_pick_add_mode(int val)
 }
 
 void
-pick_add_mode_toggled(void)
+pick_add_mode_toggled(EmbWindow *window)
 {
     /*
     val = !selection-mode-pickadd
@@ -4446,23 +4378,23 @@ color_selector_index_changed(int index)
 }
 
 void
-linetype_selector_index_changed(int index)
+linetype_selector_index_changed(EmbWindow *window, int index)
 {
     printf("linetype-selectorIndexChanged(%d)", index);
-    actuator("do-nothing");
+    actuator(window, "do-nothing");
 }
 
 void
-lineweight_selector_index_changed(int index)
+lineweight_selector_index_changed(EmbWindow *window, int index)
 {
     printf("lineweightSelectorIndexChanged(%d)", index);
-    actuator("do-nothing");
+    actuator(window, "do-nothing");
 }
 
 /* Text font selector current font changed.
  */
 void
-text_fontSelectorCurrentFontChanged(char *font)
+text_fontSelectorCurrentFontChanged(EmbWindow *window, char *font)
 {
     printf("%s", font);
    /*  debug_message("textFontSelectorCurrentFontChanged()")
@@ -4499,7 +4431,7 @@ set_text_size(int num)
 }
 
 int
-getCurrentLayer(void)
+getCurrentLayer(EmbWindow *window)
 {
     debug_message("getCurrentLayer");
     /*
@@ -4521,7 +4453,7 @@ getCurrentLayer(void)
 /* TODO: return color ByLayer.
  */
 int
-get_current_color(void)
+get_current_color(EmbWindow *window)
 {
     debug_message("get-current-color");
     /*
@@ -4541,7 +4473,7 @@ get_current_color(void)
 
 
 int
-get_current_line_type(void)
+get_current_line_type(EmbWindow *window)
 {
     debug_message("get-current-line_type");
     /*
@@ -4552,9 +4484,9 @@ get_current_line_type(void)
     */
     /*
     debug_message((char*)title);
-    mdi-win = panel.active-sub-window();
+    mdi-win = panel.active-sub-window(window);
     if (mdi-win) {
-        return mdi-win.get-current-line_type();
+        return mdi-win.get-current-line_type(window);
     }
     */
     /* return OBJ_LWT_BYLAYER;
@@ -4563,7 +4495,7 @@ get_current_line_type(void)
 }
 
 int
-get_current_line_weight(void)
+get_current_line_weight(EmbWindow *window)
 {
     debug_message("get-current-line_weight");
     /*
@@ -4573,9 +4505,9 @@ get_current_line_weight(void)
     }
 
     debug_message(title);
-    mdi-win = panel.active-sub-window();
+    mdi-win = panel.active-sub-window(window);
     if (mdi-win) {
-        return mdi-win.get-current-line_weight();
+        return mdi-win.get-current-line_weight(window);
     }
 
     return OBJ-LWT-BYLAYER;
@@ -4587,7 +4519,7 @@ float
 calculate_angle(EmbVector point1, EmbVector point2)
 {
     printf("%f", point1.x+point2.x);
-    /* return Line(x1, -y1, x2, -y2).angle(); */
+    /* return Line(x1, -y1, x2, -y2).angle(window); */
     return 0.0;
 }
 
@@ -4595,7 +4527,7 @@ float
 calculate_distance(EmbVector point1, EmbVector point2)
 {
     printf("%f", point1.x+point2.x);
-    /* return Line(x1, y1, x2, y2).length(); */
+    /* return Line(x1, y1, x2, y2).length(window); */
     return 0.0;
 }
 
@@ -4611,7 +4543,7 @@ fill_menu(int menu_id)
             menu[menu-id].add-action(action-hash.value(menus[menu-id][i]));
         }
         else {
-            menu[menu-id].add-separator();
+            menu[menu-id].add-separator(window);
         }
     }
     */
@@ -4622,28 +4554,28 @@ fill_menu(int menu_id)
  * with a libembroidery function.
  */
 float
-native_perpendicular_distance(void)
+native_perpendicular_distance(EmbWindow *window)
 {
     /*
     EmbLine line;
     EmbVector norm;
     line = Line(x1, y1, x2, y2);
-    norm = line.normal();
+    norm = line.normal(window);
     delta.x = point.x-x1;
     delta.y = point.y-y1;
     norm.translate(delta);
     iPoint = norm.intersects(line);
-    return Line(point, iPoint).length();
+    return Line(point, iPoint).length(window);
     */
     return 0.0;
 }
 
 void
-recent_menu_about_to_show(void)
+recent_menu_about_to_show(EmbWindow *window)
 {
     debug_message("recentMenuAboutToShow()");
     /*
-    menu[RECENT-MENU].clear();
+    menu[RECENT-MENU].clear(window);
 
     recent-file-info = "";
     recent-value = "";
@@ -4676,28 +4608,28 @@ recent_menu_about_to_show(void)
     /* Ensure the list only has max amount of entries */
     /*
     while (opensave-recent-list-of-files.size() > opensave-recent-max-files) {
-        opensave-recent-list-of-files.removeLast();
+        opensave-recent-list-of-files.removeLast(window);
     }
     */
 }
 
 void
-window_menu_about_to_show(void)
+window_menu_about_to_show(EmbWindow *window)
 {
     debug_message("window-menu-about-to-show()");
     /*
-    menu-WINDOW.clear();
+    menu-WINDOW.clear(window);
     menu-WINDOW.add-action(action-hash.value("window-close"));
     menu-WINDOW.add-action(action-hash.value("window-close-all"));
-    menu-WINDOW.add-separator();
+    menu-WINDOW.add-separator(window);
     menu-WINDOW.add-action(action-hash.value("window-cascade"));
     menu-WINDOW.add-action(action-hash.value("window-tile"));
-    menu-WINDOW.add-separator();
+    menu-WINDOW.add-separator(window);
     menu-WINDOW.add-action(action-hash.value("window-next"));
     menu-WINDOW.add-action(action-hash.value("window-previous"));
 
-    menu-WINDOW.add-separator();
-    windows = panel.sub-window-list();
+    menu-WINDOW.add-separator(window);
+    windows = panel.sub-window-list(window);
     for (i=0; i<len(windows); i++) {
         an-action = Action(windows[i].window-title(), self);
         an-action.set_checkable(1);
@@ -4716,13 +4648,13 @@ window_menu_activated(int *checked)
     /*
     int a-sender;
     debug_message("windowMenuActivated()");
-    a-sender = sender();
+    a-sender = sender(window);
     if (!a-sender) {
         return;
     }
     w = panel.sub-window-list().at[a-sender.data().toInt()];
     if (w and checked) {
-        w.set_focus();
+        w.set_focus(window);
     }
     */
 }
@@ -4733,20 +4665,20 @@ close_event(EmbEvent event)
     debug_message("MdiWindow closeEvent()");
     printf("%d\n", event.type);
     /*
-    panel.close-all-sub-windows();
-    write-settings();
-    event.accept();
+    panel.close-all-sub-windows(window);
+    write-settings(window);
+    event.accept(window);
 
-    sendCloseMdiWin();
+    sendCloseMdiWin(window);
     */
 }
 
 void
-on_close_window(void)
+on_close_window(EmbWindow *window)
 {
     debug_message("onCloseWindow()");
     /*
-    mdi-win = panel.active-sub-window();
+    mdi-win = panel.active-sub-window(window);
     if (mdi-win) {
         onClosemdi-win(mdi-win);
     }
@@ -4754,7 +4686,7 @@ on_close_window(void)
 }
 
 void
-on_close_mdi_win(void)
+on_close_mdi_win(EmbWindow *window)
 {
     int keep_maximized;
     debug_message("onClosemdi-win()");
@@ -4763,19 +4695,19 @@ on_close_mdi_win(void)
     printf("%d", keep_maximized);
     /*
     if (the_mdi_win) {
-        keep_maximized = the-mdi-win.is-maximized();
+        keep_maximized = the-mdi-win.is-maximized(window);
     }
 
     panel.remove-sub-window(the-mdi-win);
-    the-mdi-win.delete-later();
+    the-mdi-win.delete-later(window);
 
-    update-menu-toolbar-statusbar();
-    window-menu-about-to-show();
+    update-menu-toolbar-statusbar(window);
+    window-menu-about-to-show(window);
 
     if (keep_maximized) {
-        mdi-win = panel.active-sub-window();
+        mdi-win = panel.active-sub-window(window);
         if (mdi-win) {
-            mdi-win.show-maximized();
+            mdi-win.show-maximized(window);
         }
     }
     */
@@ -4791,7 +4723,7 @@ resize_event(EmbEvent e)
 }
 
 void
-update_menu_toolbar_statusbar(void)
+update_menu_toolbar_statusbar(EmbWindow *window)
 {
     debug_message("updateMenuToolbarStatusbar()");
     /*
@@ -4859,12 +4791,12 @@ update_menu_toolbar_statusbar(void)
         } */
 
         /* DockWidgets */
-        /* dockPropEdit.hide();
-        dockUndoEdit.hide(); */
+        /* dockPropEdit.hide(window);
+        dockUndoEdit.hide(window); */
 
         /* Menus */
         /*
-        menu-bar().clear();
+        menu-bar().clear(window);
         menu-bar().add-menu(menu-FILE);
         menu-bar().add-menu(menu-EDIT);
         menu-bar().add-menu(menu-MENU);
@@ -4877,16 +4809,16 @@ update_menu_toolbar_statusbar(void)
         /* Statusbar */
         strcpy(statusbar_message, "");
         /*
-        status_bar_mouse_coord.hide();
+        status_bar_mouse_coord.hide(window);
         for (k=0 k<status_bar-n-keys k++) {
-            status_bar[k].hide();
+            status_bar[k].hide(window);
         }
         */
     }
 }
 
 void
-load_formats(void)
+load_formats(EmbWindow *window)
 {
     int i;
     char supported_readers[MAX_STRING_LENGTH];
@@ -4997,7 +4929,7 @@ floating_changed_toolbar(int isFloating)
  * Create the toolbars in the order given by the "order" list.
  */
 void
-build_button_grid(void)
+build_button_grid(EmbWindow *window)
 {
     debug_message("build-buttongrid");
     /* button-layout = toolbar
@@ -5055,7 +4987,7 @@ to_polyline(EmbPattern *pattern, EmbVector obj_pos,
         point-list += [a];
     }
 
-    poly_object = Polyline();
+    poly_object = Polyline(window);
     poly_object.point-list = point-list;
     poly_object.color = color;
     poly_object.line_type = "solid";
@@ -5137,14 +5069,14 @@ set_current_file(char *file_name)
 {
     printf("%s", file_name);
     /*
-    curFile = QFileInfo(file_name).canonicalFilePath();
+    curFile = QFileInfo(file_name).canonicalFilePath(window);
     setWindowModified(0);
     setWindowTitle(getShortCurrentFile());
     */
 }
 
 void
-get_short_current_file(void)
+get_short_current_file(EmbWindow *window)
 {
     /* return QFileInfo(curFile).file_name() */
 }
@@ -5154,7 +5086,7 @@ file_extension(char *file_name)
 {
     printf("%s", file_name);
     /*
-    return QFileInfo(file_name).suffix().toLower();
+    return QFileInfo(file_name).suffix().toLower(window);
     */
 }
 
@@ -5163,9 +5095,9 @@ on_window_activated(void/* mdi-window *subwindow */)
 {
     debug_message("MdiWindow onWindowActivated()");
     /*
-    mdi-win = w.mdi-window();
+    mdi-win = w.mdi-window(window);
     if (mdi-win) {
-        mdi-win.on-window-activated();
+        mdi-win.on-window-activated(window);
     }
     status_bar-SNAP.set_checked(gscene.property("ENABLE-SNAP"));
     status_bar-GRID.set_checked(gscene.property("ENABLE-GRID"));
@@ -5216,7 +5148,7 @@ current_line_weight_changed(float weight)
 }
 
 void
-update_color_line_type_line_weight(void)
+update_color_line_type_line_weight(EmbWindow *window)
 {
     debug_message("update color line type weight");
 }
@@ -5343,7 +5275,7 @@ mapSignal(QObject* fieldObj, const QString& name, QVariant value)
 }
 
 void
-pickadd_modeToggled(void)
+pickadd_modeToggled(EmbWindow *window)
 {
 
 }
@@ -5383,13 +5315,13 @@ show_one_type(int index)
 }
 
 void
-hideAllGroups(void)
+hideAllGroups(EmbWindow *window)
 {
 
 }
 
 void
-clear_all_fields(void)
+clear_all_fields(EmbWindow *window)
 {
 
 }
@@ -5425,7 +5357,7 @@ event_filter(int obj, EmbEvent event)
             return 1;
         }
         else {
-            event.ignore();
+            event.ignore(window);
         }
     }
     return QObject-eventFilter(obj, event);
@@ -5433,7 +5365,7 @@ event_filter(int obj, EmbEvent event)
 }
 
 void
-create_combobox_selected(void)
+create_combobox_selected(EmbWindow *window)
 {
     /*
     comboBoxSelected = tk.ComboBox(this);
@@ -5443,7 +5375,7 @@ create_combobox_selected(void)
 }
 
 void
-create_button_QSelect(void)
+create_button_QSelect(EmbWindow *window)
 {
     /*
     button-QSelect = tk.Button-(this);
@@ -5457,7 +5389,7 @@ create_button_QSelect(void)
 }
 
 void
-create_button_pick_add(void)
+create_button_pick_add(EmbWindow *window)
 {
 /*
      TODO: Set as PickAdd or PickNew based on settings
@@ -5492,7 +5424,7 @@ update_pick_add_mode_button(int pickadd_mode)
 }
 
 void
-toggle_pick_add_mode(void)
+toggle_pick_add_mode(EmbWindow *window)
 {
     /* emit pickadd_modeToggled() */
     debug_message("not sure how to deal with emit yet");
@@ -5503,7 +5435,7 @@ update_edit_str_if_varies(int edit, char *str)
 {
     printf("%d %s", edit, str);
     /*
-    field-old-text = edit-.text();
+    field-old-text = edit-.text(window);
     field-new-text = str;
 
     if (field-old-text.isEmpty() {
@@ -5528,7 +5460,7 @@ update_edit_num_if_varies(char *property, int num, int useAnglePrecision)
         precision = precisionLength;
     }
 
-    field-old-text = edit-.text();
+    field-old-text = edit-.text(window);
     field-new-text.setNum(num, 'f', precision);
     */
 
@@ -5592,7 +5524,7 @@ update_combobox_int_if_varies(int self, int comboBox, int val, int yesOrNoText)
 {
     printf("%d %d %d %d", self, comboBox, val, yesOrNoText);
     /*
-    field_old_text = comboBox.currentText();
+    field_old_text = comboBox.currentText(window);
     if (yesOrNoText) {
         if (val) {
             field_new_text = fieldYesText;
@@ -5637,23 +5569,23 @@ show_groups(int obj_type)
     printf("%d", obj_type);
     /*
     if (obj-type in obj-types) {
-        groupbox-geometry[obj-type-BASE].show();
+        groupbox-geometry[obj-type-BASE].show(window);
     }
     if (obj-type == "Arc") {
-        groupboxMiscArc.show();
+        groupboxMiscArc.show(window);
     }
     if (obj-type == "Image":
-        groupboxMiscImage.show();
+        groupboxMiscImage.show(window);
     }
     if (obj-type == "PATH":
-        groupboxMiscPath.show();
+        groupboxMiscPath.show(window);
     }
     if (obj-type == "POLYLINE") {
-        groupboxMiscPolyline.show();
+        groupboxMiscPolyline.show(window);
     }
     if (obj-type == "Text Single") {
-        groupboxTextTextSingle.show();
-        groupboxMiscTextSingle.show();
+        groupboxTextTextSingle.show(window);
+        groupboxMiscTextSingle.show(window);
     }
     */
 }
@@ -5672,20 +5604,20 @@ show_one_type(int self, int index)
  */
 /*
 void
-hide_all_groups(void)
+hide_all_groups(EmbWindow *window)
 {
     for i in obj-types:
-        groupbox-geometry[i].hide();
-    groupboxMiscArc.hide();
-    groupboxMiscImage.hide();
-    groupboxMiscPath.hide();
-    groupboxMiscPolyline.hide();
-    groupboxTextTextSingle.hide();
-    groupboxMiscTextSingle.hide();
+        groupbox-geometry[i].hide(window);
+    groupboxMiscArc.hide(window);
+    groupboxMiscImage.hide(window);
+    groupboxMiscPath.hide(window);
+    groupboxMiscPolyline.hide(window);
+    groupboxTextTextSingle.hide(window);
+    groupboxMiscTextSingle.hide(window);
 }
 
 void
-clear_all_fields(void)
+clear_all_fields(EmbWindow *window)
 {
     for i in range(COMBOBOX-PROPERTY-EDITORS) {
         comboBox[i].clear()
@@ -6007,7 +5939,7 @@ fieldEdited(self, fieldObj)
      TODO: Improve this
 
     setSelectedItems(selectedItemList);
-    hideAllGroups();
+    hideAllGroups(window);
     showGroups(obj-type);
 
     if (widget) {
@@ -6054,7 +5986,7 @@ combobox_language_current_index_changed(char *lang)
 {
     printf("%s\n", lang);
     /*
-    dialog-general-language = lang.toLower();
+    dialog-general-language = lang.toLower(window);
     */
 }
 
@@ -6074,10 +6006,10 @@ combobox_icon_size_current_index_changed(int index)
 {
     printf("%d\n", index);
     /*
-    combobox = sender();
+    combobox = sender(window);
     if (combobox) {
         ok = 0;
-        dialog-general-icon-size, ok = combobox.itemData(index).toUInt();
+        dialog-general-icon-size, ok = combobox.itemData(index).toUInt(window);
         if (!ok) {
             dialog-general-icon-size = 16;
         }
@@ -6101,7 +6033,7 @@ checkbox_general_mdi_bg_use_logo_state_changed(int checked)
 
 /* . */
 void
-chooseGeneralMdiBackgroundLogo(void)
+chooseGeneralMdiBackgroundLogo(EmbWindow *window)
 {
 /*
     button = sender()
@@ -6129,7 +6061,7 @@ checkbox_general_mdi_bg_use_texture_state_changed(int checked)
 
 /* . */
 void
-chooseGeneralMdiBackgroundTexture(void)
+chooseGeneralMdiBackgroundTexture(EmbWindow *window)
 {
 /*
     button = sender()
@@ -6161,17 +6093,17 @@ checkbox_general_mdi_bg_use_color_state_changed(int checked)
 
 /* . */
 void
-choose_general_mdi_background_color(void)
+choose_general_mdi_background_color(EmbWindow *window)
 {
     /*
-    button = sender();
+    button = sender(window);
     if (button) {
         color-dialog = color-dialog(Color(accept-.general-mdi-bg-color), this);
         connect(color-dialog, SIGNAL(currentColorChanged()), this, SLOT(currentGeneralMdiBackgroundColorChanged()));
-        color-dialog-exec();
+        color-dialog-exec(window);
 
         if (color-dialog-result() == "Accepted") {
-            accept.general-mdi-bg-color = color-dialog-selectedColor().rgb();
+            accept.general-mdi-bg-color = color-dialog-selectedColor().rgb(window);
             pix = Image(16,16);
             pix.fill(Color(accept-.general-mdi-bg-color));
             button.set_icon(pix);
@@ -6197,7 +6129,7 @@ currentGeneralMdiBackgroundColorChanged(EmbColor color)
 
 /* . */
 void
-checkboxTipOfTheDay_state_changed(void)
+checkboxTipOfTheDay_state_changed(EmbWindow *window)
 {
     /*
     check-func(checkboxTipOfTheDay-state-changed, general-tip-of-the-day)
@@ -6242,7 +6174,7 @@ checkboxDisableBG_state_changed(int checked)
 
 /* . */
 void
-chooseDisplayCrossHairColor(void)
+chooseDisplayCrossHairColor(EmbWindow *window)
 {
     /*
     button = sender()
@@ -6275,7 +6207,7 @@ currentDisplayCrossHairColorChanged(EmbColor color)
 
 /* . */
 void
-chooseDisplayBackgroundColor(void)
+chooseDisplayBackgroundColor(EmbWindow *window)
 {
     /*
     button = sender()
@@ -6307,17 +6239,17 @@ currentDisplayBackgroundColorChanged(EmbColor color)
 
 /* . */
 void
-chooseDisplaySelectBoxLeftColor(void)
+chooseDisplaySelectBoxLeftColor(EmbWindow *window)
 {
     /*
-    button = sender();
+    button = sender(window);
     if (button) {
         color-dialog = color-dialog(Color(accept--display-selectbox-left-color), this);
         connect(color-dialog, SIGNAL(currentColorChanged()), this, SLOT(currentDisplaySelectBoxLeftColorChanged()));
-        color-dialog-exec();
+        color-dialog-exec(window);
 
         if (color-dialog-result() == tk.Dialog-Accepted) {
-            accept-display-selectbox-left-color = color-dialog-selectedColor().rgb();
+            accept-display-selectbox-left-color = color-dialog-selectedColor().rgb(window);
             pix = Image(16, 16);
             pix.fill(Color(accept--display-selectbox-left-color));
             button.set_icon(pix);
@@ -6348,17 +6280,17 @@ currentDisplaySelectBoxLeftColorChanged(EmbColor color)
 
 /* . */
 void
-chooseDisplaySelectBoxLeftFill(void)
+chooseDisplaySelectBoxLeftFill(EmbWindow *window)
 {
     /*
-    button = sender();
+    button = sender(window);
     if (button) {
         color-dialog = color-dialog(Color(accept-display-selectbox-left-fill), this);
         connect(color-dialog, SIGNAL(currentColorChanged()), this, SLOT(currentDisplaySelectBoxLeftFillChanged()));
-        color-dialog-exec();
+        color-dialog-exec(window);
 
         if (color-dialog-result() == "Accepted") {
-            accept-display-selectbox-left-fill = color-dialog-selectedColor().rgb();
+            accept-display-selectbox-left-fill = color-dialog-selectedColor().rgb(window);
             pix = Image(16, 16);
             pix.fill(Color(accept-display-selectbox-left-fill));
             button.set_icon(pix);
@@ -6386,17 +6318,17 @@ current_display_selectbox_left_fill_changed(EmbColor color)
 }
 
 void
-choose_display_select_box_right_color(void)
+choose_display_select_box_right_color(EmbWindow *window)
 {
     /*
-    button = sender();
+    button = sender(window);
     if (button) {
         color-dialog = color-dialog(Color(accept--display-selectbox-right-color), this);
         connect(color-dialog, SIGNAL(currentColorChanged()), this, SLOT(currentDisplaySelectBoxRightColorChanged()));
-        color-dialog-exec();
+        color-dialog-exec(window);
 
         if (color-dialog-result() == "Accepted") {
-            accept-display-selectbox-right-color = color-dialog-selectedColor().rgb();
+            accept-display-selectbox-right-color = color-dialog-selectedColor().rgb(window);
             pix = Image(16, 16);
             pix.fill(Color(accept-display-selectbox-right-color));
             button.set_icon(pix);
@@ -6421,17 +6353,17 @@ currentDisplaySelectBoxRightColorChanged(EmbColor color)
 
 /* . */
 void
-choose_display_selectbox_right_fill(void)
+choose_display_selectbox_right_fill(EmbWindow *window)
 {
     /*
-    int button = sender();
+    int button = sender(window);
     if (button) {
         color-dialog = color-dialog(Color(accept-.display-selectbox-right-fill), this);
         connect(color-dialog, SIGNAL(currentColorChanged()), this, SLOT(currentDisplaySelectBoxRightFillChanged()));
-        color-dialog-exec();
+        color-dialog-exec(window);
 
         if (color-dialog-result() == "Accepted") {
-            accept.display-selectbox-right-fill = color-dialog-selectedColor().rgb();
+            accept.display-selectbox-right-fill = color-dialog-selectedColor().rgb(window);
             pix = Image(16, 16);
             pix.fill(Color(accept-.display-selectbox-right-fill));
             button.set_icon(pix);
@@ -6474,9 +6406,9 @@ checkbox_custom_filter_state_changed(int checked)
 {
     printf("%d", checked);
     /*
-    int checkbox = sender();
+    int checkbox = sender(window);
     if (checkbox) {
-        format = checkbox.text();
+        format = checkbox.text(window);
         debug_message("CustomFilter: %s %d", tk.Printable(format), checked);
         if (checked) {
             opensave_custom_filter.append(" *." + format.toLower());        }
@@ -6490,7 +6422,7 @@ checkbox_custom_filter_state_changed(int checked)
 
 /* . */
 void
-button_custom_filter_select_all_clicked(void)
+button_custom_filter_select_all_clicked(EmbWindow *window)
 {
     /*
     buttonCustomFilterSelectAll(1);
@@ -6500,11 +6432,11 @@ button_custom_filter_select_all_clicked(void)
 
 /* . */
 void
-button_custom_filter_clear_all_clicked(void)
+button_custom_filter_clear_all_clicked(EmbWindow *window)
 {
     /*
     buttonCustomFilterClearAll(0);
-    opensave_custom_filter.clear();
+    opensave_custom_filter.clear(window);
     */
 }
 
@@ -6522,12 +6454,12 @@ checkboxGridColorMatchCrossHair_state_changed(int checked)
         update_all_view_grid_colors(accept-.grid-color);
     }
 
-    sender_obj = sender();
+    sender_obj = sender(window);
     if (!sender_obj) {
         return
     }
 
-    parent = sender_obj.parent();
+    parent = sender_obj.parent(window);
     if (!parent) {
         return;
     }
@@ -6546,7 +6478,7 @@ checkboxGridColorMatchCrossHair_state_changed(int checked)
 
 /* . */
 void
-chooseGridColor(void)
+chooseGridColor(EmbWindow *window)
 {
     /*
     button = sender()
@@ -6556,7 +6488,7 @@ chooseGridColor(void)
         color-dialog-exec()
 
         if (color-dialog-result() == "Accepted") {
-            accept.grid-color = color-dialog-selectedColor().rgb();
+            accept.grid-color = color-dialog-selectedColor().rgb(window);
             pix = Image(16, 16);
             pix.fill(Color(accept-.grid-color));
             button.set_icon(pix);
@@ -6587,11 +6519,11 @@ checkbox_grid_load_from_file_state_changed(int checked)
     /*
     int dialog_grid_load_from_file = checked;
 
-    sender_obj = sender();
+    sender_obj = sender(window);
     if (!sender_obj) {
         return
 
-    parent = sender_obj.parent();
+    parent = sender_obj.parent(window);
     if (!parent) {
         return;
     }
@@ -6702,12 +6634,9 @@ checkbox_grid_load_from_file_state_changed(int checked)
     */
 }
 
-int get_widget(EmbWindow *window, char *tag);
-void set_group_visibility(EmbWindow *window, TABLE(group), int visibility);
-
 /* TODO: add loop to find widget */
 int
-get_widget(EmbWindow *window, char *tag)
+get_widget(EmbPanel *panel, char *tag)
 {
     return -1;
 }
@@ -6731,6 +6660,7 @@ combobox_grid_type_current_index_changed(EmbWindow *window, int type)
 {
     int dialog_grid_type = type;
 
+    /*
     if (type == CIRCULAR_GRID) {
         set_group_visibility(window, grid_group_rectangular, 0);
         set_group_visibility(window, grid_group_circular, 1);
@@ -6739,7 +6669,7 @@ combobox_grid_type_current_index_changed(EmbWindow *window, int type)
         set_group_visibility(window, grid_group_rectangular, 0);
         set_group_visibility(window, grid_group_circular, 1);
     }
-
+    */
 }
 
 /*
@@ -6756,7 +6686,7 @@ checkbox_grid_center_on_origin_state_changed(EmbWindow *window, int checked)
         return;
     }
 
-    parent = sender_obj.parent();
+    parent = sender_obj.parent(window);
     if (!parent) {
         return
     }
@@ -6802,17 +6732,17 @@ combobox_ruler_metric_current_index_changed(int index)
  * Needs to be aware of the current view.
  */
 void
-choose_ruler_color(void)
+choose_ruler_color(EmbWindow *window)
 {
     /*
     color_dialog = color_dialog(
         Color(accept-.ruler-color), this);
     connect(color-dialog, SIGNAL(currentColorChanged()),
         this, SLOT(currentRulerColorChanged()));
-    color-dialog-exec();
+    color-dialog-exec(window);
 
     if (color-dialog-result() == "QDialog-Accepted") {
-        accept.ruler-color = color-dialog-selectedColor().rgb();
+        accept.ruler-color = color-dialog-selectedColor().rgb(window);
         pix = Image(16, 16);
         pix.fill(Color(accept-.ruler-color));
         button.set_icon(pix);
@@ -6836,7 +6766,7 @@ current_ruler_color_changed(EmbColor color)
 }
 
 void
-button_qsnap_select_all_clicked(void)
+button_qsnap_select_all_clicked(EmbWindow *window)
 {
     /* buttonQSnapSelectAll(1); */
 }
@@ -6852,7 +6782,7 @@ button_qsnap_select_all_clicked(void)
  * tk.Variant.
 
 void
-buttonQSnapClearAllClicked(void)
+buttonQSnapClearAllClicked(EmbWindow *window)
     buttonQSnapClearAll(0)
 } */
 
@@ -6894,15 +6824,15 @@ checkbox_lwt_show_lwt_state_changed(int checked)
     preview_lwt_show_lwt = checked;
     /*
     if (preview_lwt_show_lwt) {
-        enable_lwt();
+        enable_lwt(window);
     }
     else {
-        disable_lwt();
+        disable_lwt(window);
     }
 
-    sender_obj = sender();
+    sender_obj = sender(window);
     if (sender_obj) {
-        parent = sender_obj.parent();
+        parent = sender_obj.parent(window);
         if (parent) {
             checkboxRealRender = get_widget("checkboxRealRender");
             if checkboxRealRender) {
@@ -6914,19 +6844,19 @@ checkbox_lwt_show_lwt_state_changed(int checked)
 }
 
 void
-checkbox_lwt_real_render_state_changed(int checked)
+checkbox_lwt_real_render_state_changed(EmbWindow *window, int checked)
 {
     preview_lwt_real_render = checked;
     if (preview_lwt_real_render) {
-        enableReal();
+        enableReal(window);
     }
     else {
-        disableReal();
+        disableReal(window);
     }
 }
 
 void
-combobox_selection_cool_grip_color_current_index_changed(index)
+combobox_selection_cool_grip_color_current_index_changed(EmbWindow *window,  int index)
 {
     /* TODO: Alert user if color matched the display bg color
     EmbColor default_color = blue;
@@ -6943,7 +6873,7 @@ combobox_selection_cool_grip_color_current_index_changed(index)
 }
 
 void
-combobox_selection_hot_grip_color_current_index_changed(int index)
+combobox_selection_hot_grip_color_current_index_changed(EmbWindow *window, int index)
 {
     /* TODO: Alert user if color matched the display bg color
     EmbColor default_color = red;
@@ -6961,7 +6891,7 @@ combobox_selection_hot_grip_color_current_index_changed(int index)
 
 /* . */
 void
-accept_changes(void)
+accept_changes(EmbWindow *window)
 {
     /*
     for k in preview.keys()
@@ -6995,23 +6925,23 @@ accept_changes(void)
     update_all_view-ruler-colors(dialog-ruler-color);
 
     if (dialog_lwt_show_lwt) {
-        enableLwt();
+        enableLwt(window);
     }
     else {
-        disableLwt();
+        disableLwt(window);
     }
 
     if (dialog_lwt_real_render) {
-        enableReal();
+        enableReal(window);
     }
     else {
-        disableReal();
+        disableReal(window);
     }
 
     update_pick_add_mode(dialog_selection_mode_pickadd);
 
-    writeSettings();
-    accept();
+    writeSettings(window);
+    accept(window);
     */
 }
 
@@ -7020,7 +6950,7 @@ accept_changes(void)
  * Update the view since the user must accept the preview
  */
 void
-reject_changes(void)
+reject_changes(EmbWindow *window)
 {
     /*
     panel.use_background_logo(dialog-general-mdi-bg-use-logo);
@@ -7042,26 +6972,26 @@ reject_changes(void)
     update_all_view-ruler-colors(dialog-ruler-color);
 
     if (dialog_lwt_show_lwt) {
-        enable_lwt();
+        enable_lwt(window);
     }
     else {
-        disable_lwt();
+        disable_lwt(window);
     }
 
     if (dialog_lwt_real_render) {
-        enable_real();
+        enable_real(window);
     }
     else {
-        disable_real();
+        disable_real(window);
     }
 
-    reject();
+    reject(window);
     */
 }
 
 /* Return the host system label for debugging purposes.
  */
-void platform_string(void)
+void platform_string(EmbWindow *window)
 {
     /*
     host-system = os.uname().sysname + " " + os.uname().release
@@ -7075,7 +7005,7 @@ void platform_string(void)
  * JSON dict.
  */
 void
-color_init(void)
+color_init(EmbWindow *window)
 {
     /* color-mode = COLOR-BACKGROUND
     strcpy(prefix, "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: ")
@@ -7151,7 +7081,7 @@ color_prompt(char *cmd)
 */
 
 void
-tree_view(void)
+tree_view(EmbWindow *window)
 {
 
 }
@@ -7196,7 +7126,7 @@ paint_event(EmbEvent event)
 {
     printf("%d\n", event.type);
     /* 
-    painter = EmbPainter();
+    painter = EmbPainter(window);
     painter.setViewport(0, 0, img.width(), img.height());
     painter.setWindow(0, 0, img.width(), img.height());
     painter.drawImage(0, 0, img);
@@ -7291,7 +7221,7 @@ def paintEvent(QPaintEvent*)
  * were removed from the scene.
  */
 void
-delete_objects(void)
+delete_objects(EmbWindow *window)
 {
     /*
     (delete-all hash-deleted-objects.begin() hash-deleted-objects.end())
@@ -7305,14 +7235,14 @@ delete_objects(void)
 
 /* . */
 void
-load_ruler_settings(void)
+load_ruler_settings(EmbWindow *window)
 {
     return;
 }
 
 /* . */
 EmbVector
-center(void)
+center(EmbWindow *window)
 {
     EmbVector v;
     v.x = 0;
@@ -7366,7 +7296,7 @@ preview_on(EmbPanel *panel, int clone, int mode, int x, int y, int data)
     debug_message("View preview-on()");
     printf("%d %d, %d, %d, %d\n", clone, mode, x, y, data);
     /*
-    preview-off();
+    preview-off(window);
      Free the old objects before creating ones
 
     preview-mode = mode;
@@ -7403,7 +7333,7 @@ preview_on(EmbPanel *panel, int clone, int mode, int x, int y, int data)
     }
     else {
         preview-mode = PREVIEW-MODE-NULL;
-        preview_point = Vector();
+        preview_point = Vector(window);
         preview-data = 0;
         preview-active = 0;
     }
@@ -7418,7 +7348,7 @@ preview_off(EmbPanel *panel)
     /* Prevent memory leaks by deleting any unused instances. */
     /*
     DeleteAll(preview-object-list.begin(), preview-object-list.end());
-    preview-object-list.clear();
+    preview-object-list.clear(window);
 
     if (preview_object_item_group) {
         gscene.remove-item(preview_object_item_group);
@@ -7433,21 +7363,23 @@ preview_off(EmbPanel *panel)
 }
 
 void
-enable_move_rapid_fire(void)
+enable_move_rapid_fire(EmbWindow *window)
 {
     debug_message("Enabling rapid move.");
     rapid_move_active = 1;
 }
 
 void
-disable_move_rapid_fire(void)
+disable_move_rapid_fire(EmbWindow *window)
 {
     debug_message("Disabling rapid move.");
     rapid_move_active = 0;
 }
 
+/* Although window is passed, the set_ functions here work on the active scene.
+ */
 void
-set_qsnap(EmbPanel *panel, int active)
+set_qsnap(EmbWindow *window, int active)
 {
     debug_message("View toggleQSnap()");
     printf("%d", active);
@@ -7455,47 +7387,43 @@ set_qsnap(EmbPanel *panel, int active)
     /*
     qsnap-toggle = on;
     gscene.set_property("ENABLE-QSNAP", active); */
-    scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 /* TODO: finish this.
  */
 void
-set_qtrack(EmbPanel *panel, int active)
+set_qtrack(EmbWindow *window, int active)
 {
     debug_message("View toggleQTrack()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
     /* gscene.set_property("ENABLE-QTRACK", active); */
-    scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 void
-set_lwt(EmbPanel *panel, int active)
+set_lwt(EmbWindow *window, int active)
 {
     debug_message("View toggleLwt()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
     /* gscene.set_property("ENABLE-LWT", active); */
-    scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 void
-set_real(EmbPanel *panel, int active)
+set_real(EmbWindow *window, int active)
 {
     debug_message("View toggleReal()");
     printf("%d", active);
     set_override_cursor("WaitCursor");
     /* gscene.set_property("ENABLE-REAL", active); */
-    scene_update(panel);
-    restore_override_cursor();
+    restore_override_cursor(window);
 }
 
 void
-update_mouse_coords(EmbVector position)
+update_mouse_coords(EmbWindow *window, EmbVector position)
 {
     printf("called with %f", position.x);
     /*
@@ -7543,12 +7471,12 @@ set_crosshair_color(EmbColor color)
 }
 
 void
-set_corner_button(void)
+set_corner_button(EmbWindow *window)
 {
     /*
     num = display-scrollbar-widget-num;
     if (num) {
-        cornerButton = tk.PushButton(void);
+        cornerButton = tk.PushButton(EmbWindow *window);
         cornerButton.setFlat(1);
         act = action-hash.value(num);
         */
@@ -7573,17 +7501,17 @@ set_corner_button(void)
 }
 
 void
-corner_button_clicked(void)
+corner_button_clicked(EmbWindow *window)
 {
     debug_message("Corner Button Clicked.");
     /*
     display = display-scrollbar-widget-num;
-    action-hash.value(display).trigger();
+    action-hash.value(display).trigger(window);
     */
 }
 
 void
-selection_changed(void)
+selection_changed(EmbWindow *window)
 {
     /*
     if (dock_prop_edit.isVisible()) {
@@ -7600,7 +7528,7 @@ mouse_float_click_event(EmbEvent event)
     if (event.button() == LEFT_BUTTON) {
         item = gscene.itemAt(map_to_scene(event.pos()), QTransform());
         if (item) {
-            dock_prop_edit.show();
+            dock_prop_edit.show(window);
         }
     }
     */
@@ -7613,16 +7541,16 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
     /*
     update_mouse_coords(event.x, event.y);
     if (event.button() == "LeftButton") {
-        path = Path();
+        path = Path(window);
         pickList = gscene.items(Rect(map_to_scene(
             view_mouse_point.x-pickBoxSize,
             view_mouse_point.y-pickBoxSize),
             map_to_scene(view_mouse_point.x+pickBoxSize,
             view_mouse_point.y+pickBoxSize)));
 
-        itemsInPickBox = pickList.size();
+        itemsInPickBox = pickList.size(window);
         if (itemsInPickBox && !selecting_active && !gripping-active) {
-            itemsAlreadelta-ySelected = pickList.at(0).is-selected();
+            itemsAlreadelta-ySelected = pickList.at(0).is-selected(window);
             if (!itemsAlreadelta-ySelected) {
                 pickList.at(0).set_selected(1);
             }
@@ -7655,7 +7583,7 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
                 else { */
                     /* start moving 
                     moving-active = 1;
-                    pressPoint = event.pos();
+                    pressPoint = event.pos(window);
                     scenePressPoint = map_to_scene(pressPoint);
                 }
 
@@ -7664,18 +7592,18 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
         }
         elif (!selecting_active) {
             selecting_active = 1;
-            pressPoint = event.pos();
+            pressPoint = event.pos(window);
             scenePressPoint = map_to_scene(pressPoint);
 
             if (!select-box:
                 select-box = select-box(QRubberBand-Rectangle);
             select-box.set_geometry(Rect(pressPoint, pressPoint));
-            select-box.show();
+            select-box.show(window);
         }
         else {
             selecting_active = 0;
-            select-box.hide();
-            releasePoint = event.pos();
+            select-box.hide(window);
+            releasePoint = event.pos(window);
             scene-release-point = map_to_scene(releasePoint);
 
              Start select-box Code
@@ -7733,7 +7661,7 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
                 else {
                     if (shift-key) {
                         item_list = gscene.items(path, "intersects-item-shape");
-                        if (!item_list.size(void);
+                        if (!item_list.size(EmbWindow *window);
                                 n_selected = 0;
 
 
@@ -7756,7 +7684,7 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
         }
 
         if (pasting_active) {
-            item_list = paste-object-item-group.childItems();
+            item_list = paste-object-item-group.childItems(window);
             gscene.destroy-item-group(paste-object-item-group);
             for (item in item_list) {
                 gscene.remove-item(item);
@@ -7788,7 +7716,7 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
         /* The Undo command will record the spot where
          * the pan started. */
         /*
-        event.accept();
+        event.accept(window);
     }
     */
     scene_update(panel);
@@ -7799,7 +7727,7 @@ pan_start(EmbPanel *panel, EmbVector point)
 {
     printf("%f", point.x);
     /*
-    recalculate_limits();
+    recalculate_limits(window);
 
     align-scene-point-withViewPoint(map_to_scene(point), point);
 
@@ -7819,7 +7747,7 @@ recalculate_limits(EmbPanel *panel)
     /*
     Rect scene_rect, new_rect, rect;
     viewRect = make_rectangle(map_to_scene(rect().top-left()), map_to_scene(rect().bottom-right()));
-    scene_rect = gscene.scene-rect();
+    scene_rect = gscene.scene-rect(window);
     new_rect = viewRect.adjusted(
         -viewRect.width(), -viewRect.height(),
         viewRect.width(), viewRect.height());
@@ -7848,7 +7776,7 @@ center_at(EmbVector center_point)
     EmbVector offset, new_center, view_center;
     center_on(center_point);
     /* Reshift to the center */
-    view_center = center();
+    view_center = center(window);
     embVector_subtract(center_point, view_center, &offset);
     embVector_add(center_point, offset, &new_center);
     center_on(new_center);
@@ -7860,7 +7788,7 @@ void
 align_scene_point_with_view_point(EmbVector scene_point, EmbVector view_point)
 {
     EmbVector point_before = scene_point;
-    EmbVector view_center = center();
+    EmbVector view_center = center(window);
     center_on(view_center);
     /* Reshift to the center so the scene and view points align. */
     EmbVector point_after = map_to_scene(view_point);
@@ -7871,7 +7799,7 @@ align_scene_point_with_view_point(EmbVector scene_point, EmbVector view_point)
 }
 
 void
-event_accept(void)
+event_accept(EmbWindow *window)
 {
 
 }
@@ -7880,7 +7808,7 @@ void
 mouse_move_event(EmbPanel *panel, EmbEvent event)
 {
     /*
-    EmbVector mouse = cursor_pos();
+    EmbVector mouse = cursor_pos(window);
     update_mouse_coords(mouse.x, mouse.y);
     EmbVector move_point = event.mouse.position;
     EmbVector scene_move_point = map_to_scene(move_point);
@@ -7891,7 +7819,7 @@ mouse_move_event(EmbPanel *panel, EmbEvent event)
             preview_object_item_group.set_pos(scene-mouse-point - preview_point);
             break;
         case PREVIEW_MODE_ROTATE:
-            mouse-angle = Line(preview_point.x, preview_point.y, scene-mouse-point.x, scene-mouse-point.y).angle();
+            mouse-angle = Line(preview_point.x, preview_point.y, scene-mouse-point.x, scene-mouse-point.y).angle(window);
 
             rad = radians(preview-data-mouse-angle);
             p = Vector(-preview_point.x, -preview_point.y);
@@ -7949,7 +7877,7 @@ mouse_move_event(EmbPanel *panel, EmbEvent event)
 
     if (selecting_active) {
         /*
-        if (scenemove-point.x >= scenePressPoint.x(void)) {
+        if (scenemove-point.x >= scenePressPoint.x(EmbWindow *window)) {
             select-box.setDirection(1);
         }
 
@@ -7957,7 +7885,7 @@ mouse_move_event(EmbPanel *panel, EmbEvent event)
         select-box.set_geometry(
             make_rectangle(map-from-scene(scenePressPoint), event.pos()).normalized());
         */
-        event_accept();
+        event_accept(window);
     }
 
     if (panning_active) {
@@ -7970,7 +7898,7 @@ mouse_move_event(EmbPanel *panel, EmbEvent event)
              - (event.y - pan_start.y);
         pan_start = event.position;
         */
-        event_accept();
+        event_accept(window);
     }
 
     scene_update(panel);
@@ -7984,7 +7912,7 @@ mouse_release_event(EmbPanel *panel, EmbEvent event)
     update_mouse_coords(event);
     if (event.button() == "left-button") {
         if (moving-active) {
-            preview-off();
+            preview-off(window);
             delta = scene-mouse-point.subtract(scene-press-point); */
             /* Ensure that moving only happens if the mouse has moved. 
             if (delta.x or delta.y) {
@@ -7993,21 +7921,21 @@ mouse_release_event(EmbPanel *panel, EmbEvent event)
             moving-active = 0;
         }
 
-        event_accept();
+        event_accept(window);
     }
 
     if (event.button() == "MiddleButton") {
         panning_active = 0;
         */
         /* The Undo command will record the spot where the pan completed. 
-        event_accept();
+        event_accept(window);
     }
 
     if (event.button() == "XButton1") {
         debug_message("XButton1");
         main-undo() */
         /* TODO: Make this customizable 
-        event_accept();
+        event_accept(window);
     }
 
     if (event.button() == "XButton2") {
@@ -8015,7 +7943,7 @@ mouse_release_event(EmbPanel *panel, EmbEvent event)
         main-redo() */
         /* TODO: Make this customizable */
         /*
-        event_accept();
+        event_accept(window);
     }
     */
     scene_update(panel);
@@ -8085,17 +8013,17 @@ context_menu_event(EmbEvent event)
 }
 
 void
-delete_pressed(void)
+delete_pressed(EmbWindow *window)
 {
     debug_message("View delete-pressed()");
     set_override_cursor("WaitCursor");
     /*
-    mdi-win = panel.active_sub_window();
+    mdi-win = panel.active_sub_window(window);
     if (mdi-win) {
-        mdi-win.delete_pressed();
+        mdi-win.delete_pressed(window);
     }
     */
-    restore_override_cursor();
+    restore_override_cursor(window);
     if (pasting_active) {
         /*
         gscene.remove-item(paste-object-item-group);
@@ -8107,14 +8035,14 @@ delete_pressed(void)
     zoom_window_active = 0;
     selecting_active = 0;
     /*
-    select-box.hide();
+    select-box.hide(window);
     stop-gripping(0);
-    deleteSelected();
+    deleteSelected(window);
     */
 }
 
 void
-escape_pressed(void)
+escape_pressed(EmbWindow *window)
 {
     debug_message("View escape-pressed()");
     if (pasting_active) {
@@ -8139,18 +8067,18 @@ escape_pressed(void)
     */
     set_override_cursor("WaitCursor");
     /*
-    mdi_win = panel.active-sub-window();
+    mdi_win = panel.active-sub-window(window);
     if (mdi_win) {
-        mdi_win.escape_pressed();
+        mdi_win.escape_pressed(window);
     }
     */
-    restore_override_cursor();
+    restore_override_cursor(window);
 
     if (active_view) {
         /*
-        gview.clearRubberRoom();
-        gview.previewOff();
-        gview.disableMoveRapidFire();
+        gview.clearRubberRoom(window);
+        gview.previewOff(window);
+        gview.disableMoveRapidFire(window);
         */
     }
 }
@@ -8264,7 +8192,7 @@ select_box_colors(EmbPanel *panel, EmbPainter *tools, TABLE(state), char *settin
 void
 select_box_paint_event(EmbPanel *panel, EmbEvent event)
 {
-    panel->painter->dir_pen = DIRECTION_LEFT;
+    panel->painter->box_dir = DIRECTION_LEFT;
     /*
     fill_rect(panel->painter, panel->rect, panel->painter->dir_brush);
     draw_rect(panel->painter, panel->rect);

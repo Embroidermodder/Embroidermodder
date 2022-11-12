@@ -28,21 +28,21 @@
  * by arguments.
  */
 int
-actuator(char *action)
+actuator(EmbWindow *window, char *action)
 {
     int undo_history_max = MAX_CSV_ROWS;
     int undo_history_chunk_size = 10;
-    windows[MAIN_WINDOW]->undo_history_position++;
-    if (undo_history_max <= windows[MAIN_WINDOW]->undo_history_position) {
+    window->undo_history_position++;
+    if (undo_history_max <= window->undo_history_position) {
         int i;
         int before_end_chunk = undo_history_max - undo_history_chunk_size;
         for (i=0; i<before_end_chunk; i++) {
-            strcpy(windows[MAIN_WINDOW]->undo_history[i][0], windows[MAIN_WINDOW]->undo_history[i+undo_history_chunk_size][0]);
+            strcpy(window->undo_history[i][0], window->undo_history[i+undo_history_chunk_size][0]);
         }
-        windows[MAIN_WINDOW]->undo_history_position -= undo_history_chunk_size;
+        window->undo_history_position -= undo_history_chunk_size;
     }
     
-    strcpy(windows[MAIN_WINDOW]->undo_history[windows[MAIN_WINDOW]->undo_history_position][0], action);
+    strcpy(window->undo_history[window->undo_history_position][0], action);
 
     printf("action: %s\n", action);
     /* Command/argument seperation is done in order to reduce the number of
@@ -56,39 +56,39 @@ actuator(char *action)
     }
     if (starts_with(action, "menu-state")) {
         if (!strcmp(action+11, "file")) {
-            windows[MAIN_WINDOW]->menu_state = FILE_MENU;
+            window->menu_state = FILE_MENU;
             return 0;
         }
         if (!strcmp(action+11, "edit")) {
-            windows[MAIN_WINDOW]->menu_state = EDIT_MENU;
+            window->menu_state = EDIT_MENU;
             return 0;
         }
         if (!strcmp(action+11, "view")) {
-            windows[MAIN_WINDOW]->menu_state = VIEW_MENU;
+            window->menu_state = VIEW_MENU;
             return 0;
         }
         if (!strcmp(action+11, "settings")) {
-            windows[MAIN_WINDOW]->menu_state = SETTINGS_MENU;
+            window->menu_state = SETTINGS_MENU;
             return 0;
         }
         if (!strcmp(action+11, "window")) {
-            windows[MAIN_WINDOW]->menu_state = WINDOW_MENU;
+            window->menu_state = WINDOW_MENU;
             return 0;
         }
         if (!strcmp(action+11, "help")) {
-            windows[MAIN_WINDOW]->menu_state = HELP_MENU;
+            window->menu_state = HELP_MENU;
             return 0;
         }
         if (!strcmp(action+11, "recent")) {
-            windows[MAIN_WINDOW]->menu_state = RECENT_MENU;
+            window->menu_state = RECENT_MENU;
             return 0;
         }
         if (!strcmp(action+11, "zoom")) {
-            windows[MAIN_WINDOW]->menu_state = ZOOM_MENU;
+            window->menu_state = ZOOM_MENU;
             return 0;
         }
         if (!strcmp(action+11, "pan")) {
-            windows[MAIN_WINDOW]->menu_state = PAN_MENU;
+            window->menu_state = PAN_MENU;
             return 0;
         }
         return 0;
@@ -136,61 +136,61 @@ actuator(char *action)
         char *arguments = action + strlen("tab") + 1;
         if (starts_with(arguments, "snap")) {
             debug_message("TODO: open the snap tab action.");
-            windows[MAIN_WINDOW]->tab_index = 0;
+            window->tab_index = 0;
             return 0;
         }
         if (starts_with(arguments, "grid")) {
             debug_message("TODO: open the grid tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         if (starts_with(arguments, "ruler")) {
             debug_message("TODO: open the ruler tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         if (starts_with(arguments, "ortho")) {
             debug_message("TODO: open the ortho tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         if (starts_with(arguments, "polar")) {
             debug_message("TODO: open the polar tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         if (starts_with(arguments, "snap")) {
             debug_message("TODO: open the qsnap tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         if (starts_with(arguments, "track")) {
             debug_message("TODO: open the track tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         if (starts_with(arguments, "lwt")) {
             debug_message("TODO: open the lwt tab action.");
-            windows[MAIN_WINDOW]->tab_index = 1;
+            window->tab_index = 1;
             return 0;
         }
         return 0;
     }
 
     if (starts_with(action, "new-file")) {
-        new_file();
+        new_file(window);
         return 0;
     }
     if (starts_with(action, "open")) {
-        open_file();
+        open_file(window);
         return 0;
     }
     if (starts_with(action, "save-file")) {
-        save_file();
+        save_file(window);
         return 0;
     }
     if (starts_with(action, "save-file-as")) {
-        save_file_as();
+        save_file_as(window);
         return 0;
     }
     if (starts_with(action, "check-for-updates")) {
@@ -199,19 +199,19 @@ actuator(char *action)
         return 0;
     }
     if (starts_with(action, "select-all")) {
-        select_all();
+        select_all(window);
         return 0;
     }
     if (starts_with(action, "whats-this")) {
-        whats_this();
+        whats_this(window);
         return 0;
     }
     if (starts_with(action, "design-details")) {
-        design_details();
+        design_details(window);
         return 0;
     }
     if (starts_with(action, "print-pattern")) {
-        print_pattern();
+        print_pattern(window);
         return 0;
     }
     if (starts_with(action, "exit-program")) {
@@ -220,29 +220,29 @@ actuator(char *action)
          * like the confirmation of the close, to the action.
          */
         debug_message("Closing Embroidermodder 2.0.");
-        windows[MAIN_WINDOW]->running = 0;
+        window->running = 0;
         return 0;
     }
 
     if (starts_with(action, "cut-object")) {
-        cut();
+        cut(window);
         return 0;
     }
     if (starts_with(action, "copy-object")) {
-        copy();
+        copy(window);
         return 0;
     }
     if (starts_with(action, "paste-object")) {
-        paste();
+        paste(window);
         return 0;
     }
 
     if (starts_with(action, "undo")) {
-        undo();
+        undo(window);
         return 0;
     }
     if (starts_with(action, "redo")) {
-        redo();
+        redo(window);
         return 0;
     }
 
@@ -276,19 +276,19 @@ actuator(char *action)
     }
 
     if (starts_with(action, "help")) {
-        help();
+        help(window);
         return 0;
     }
     if (starts_with(action, "changelog-dialog")) {
-        changelog();
+        changelog(window);
         return 0;
     }
     if (starts_with(action, "tip-of-the-day-dialog")) {
-        tip_of_the_day();
+        tip_of_the_day(window);
         return 0;
     }
     if (starts_with(action, "about-dialog")) {
-        about();
+        about(window);
         return 0;
     }
 
@@ -299,7 +299,7 @@ actuator(char *action)
     }
 
     if (starts_with(action, "settings-dialog")) {
-        settings_dialog();
+        EmbWindow *settings = settings_dialog(window);
         return 0;
     }
     if (starts_with(action, "make-layer-current")) {
@@ -315,16 +315,16 @@ actuator(char *action)
         return 0;
     }
     if (starts_with(action, "color-selector")) {
-        color_selector();
+        color_selector(window);
         return 0;
     }
     if (starts_with(action, "line-type-selector")) {
-        line_type_selector();
+        line_type_selector(window);
         return 0;
     }
 
     if (starts_with(action, "line-weight-selector")) {
-        line_weight_selector();
+        line_weight_selector(window);
         return 0;
     }
 
@@ -358,7 +358,7 @@ actuator(char *action)
     }
     if (starts_with(action, "enable")) {
         char *arguments = action + strlen("enable") + 1;
-        EmbPanel *panel = windows[MAIN_WINDOW]->panels[windows[MAIN_WINDOW]->tab_index];
+        EmbPanel *panel = window->panels[window->tab_index];
         if (starts_with(arguments, "grid")) {
             debug_message("Show grid");
             panel->grid = 1;
@@ -404,7 +404,7 @@ actuator(char *action)
 
     if (starts_with(action, "disable")) {
         char *arguments = action + strlen("disable") + 1;
-        EmbPanel *panel = windows[MAIN_WINDOW]->panels[windows[MAIN_WINDOW]->tab_index];
+        EmbPanel *panel = window->panels[window->tab_index];
         if (starts_with(arguments, "grid")) {
             debug_message("Hide grid in this tab.");
             panel->grid = 0;
@@ -450,7 +450,7 @@ actuator(char *action)
 
     if (starts_with(action, "toggle")) {
         char *arguments = action + strlen("toggle") + 1;
-        EmbPanel *panel = windows[MAIN_WINDOW]->panels[windows[MAIN_WINDOW]->tab_index];
+        EmbPanel *panel = window->panels[window->tab_index];
         if (starts_with(arguments, "grid")) {
             debug_message("Toggle show grid in this tab.");
             panel->grid = !panel->grid;
@@ -498,33 +498,34 @@ actuator(char *action)
         char *arguments = action + strlen("text") + 1;
         if (starts_with(arguments, "bold")) {
             debug_message("text_bold()");
-            windows[MAIN_WINDOW]->text_style.bold = !windows[MAIN_WINDOW]->text_style.bold;
+            window->text_style.bold = !window->text_style.bold;
             return 0;
         }
         if (starts_with(arguments, "italic")) {
             debug_message("text_italic()");
-            windows[MAIN_WINDOW]->text_style.italic = !windows[MAIN_WINDOW]->text_style.italic;
+            window->text_style.italic = !window->text_style.italic;
             return 0;
         }
         if (starts_with(arguments, "underline")) {
             debug_message("text_underline()");
-            windows[MAIN_WINDOW]->text_style.underline = !windows[MAIN_WINDOW]->text_style.underline;
+            window->text_style.underline = !window->text_style.underline;
             return 0;
         }
         if (starts_with(arguments, "strikeout")) {
             debug_message("text_strikeout()");
-            windows[MAIN_WINDOW]->text_style.strikeout = !windows[MAIN_WINDOW]->text_style.strikeout;
+            window->text_style.strikeout = !window->text_style.strikeout;
             return 0;
         }
         if (starts_with(arguments, "overline")) {
             debug_message("text_overline()");
-            windows[MAIN_WINDOW]->text_style.overline = !windows[MAIN_WINDOW]->text_style.overline;
+            window->text_style.overline = !window->text_style.overline;
             return 0;
         }
         return 0;
     }
 
     if (starts_with(action, "zoom")) {
+        EmbPanel *panel = window->panels[window->active_panel];
         char *arguments = action + strlen("zoom") + 1;
         if (starts_with(arguments, "real-time")) {
             debug_message("action: zoom-real-time");
@@ -539,14 +540,14 @@ actuator(char *action)
         if (starts_with(arguments, "window")) {
             debug_message("zoom_window()");
             /*
-            gview = active_view();
+            gview = active_view(window);
             if (gview) {
-                gview->zoom_window();
+                gview->zoom_window(window);
             } */
 
-            windows[MAIN_WINDOW]->zoom_window_active = 1;
-            windows[MAIN_WINDOW]->selecting_active = 0;
-            windows[MAIN_WINDOW]->n_selected = 0;
+            window->zoom_window_active = 1;
+            window->selecting_active = 0;
+            window->n_selected = 0;
             return 0;
         }
         if (starts_with(arguments, "dynamic")) {
@@ -567,7 +568,7 @@ actuator(char *action)
         if (starts_with(arguments, "in")) {
             debug_message("zoom_in()");
             debug_message("View zoom_in()");
-            if (!allow_zoom_in()) {
+            if (!allow_zoom_in(panel)) {
                 return 0;
             }
 
@@ -578,13 +579,13 @@ actuator(char *action)
 
             center_on(cntr);
             */
-            restore_override_cursor();
+            restore_override_cursor(window);
             return 0;
         }
         if (starts_with(arguments, "out")) {
             debug_message("zoom_out()");
             debug_message("View zoom_out()");
-            if (!allow_zoom_out()) {
+            if (!allow_zoom_out(panel)) {
                 return 0;
             }
 
@@ -596,15 +597,15 @@ actuator(char *action)
 
             center_on(cntr);
             */
-            restore_override_cursor();
+            restore_override_cursor(window);
             return 0;
         }
         if (starts_with(arguments, "selected")) {
             debug_message("zoom_selected()");
             set_override_cursor("Wait Cursor");
             /*
-            item_list = gscene.selected_items();
-            selected_rect_path = Path();
+            item_list = gscene.selected_items(window);
+            selected_rect_path = Path(window);
             for (item in item_list) {
                 selected_rect_path.add_polygon(item.map_to_scene(item.bounding_rect()));
             }
@@ -619,7 +620,7 @@ actuator(char *action)
 
             fit_in_view(selected_rect, "KeepAspectRatio");
             */
-            restore_override_cursor();
+            restore_override_cursor(window);
             return 0;
         }
         if (starts_with(arguments, "all")) {
@@ -638,7 +639,7 @@ actuator(char *action)
                 extents.move_center(Vector(0, 0))
 
             fit_in_view(extents, "KeepAspectRatio")
-            restore_override_cursor();
+            restore_override_cursor(window);
             */
             return 0;
         }
@@ -646,6 +647,7 @@ actuator(char *action)
 
     if (starts_with(action, "pan")) {
         char *arguments = action + strlen("pan") + 1;
+        EmbPanel *panel = window->panels[window->active_panel];
         if (starts_with(arguments, "real-time")) {
             debug_message("pan-real-time-action()");
             /* mainwnd->panning_real_time_active = 1; */
@@ -662,7 +664,7 @@ actuator(char *action)
             horizontal-scroll-bar().set_value(horizontal-scroll-bar().value() + pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update();
+            scene_update(panel);
             return 0;
         }
         if (starts_with(arguments, "right")) {
@@ -671,7 +673,7 @@ actuator(char *action)
             horizontal-scroll-bar().set_value(horizontal-scroll-bar().value() - pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update();
+            scene_update(panel);
             return 0;
         }
         if (starts_with(arguments, "up")) {
@@ -680,7 +682,7 @@ actuator(char *action)
             vertical-scroll-bar().set_value(vertical-scroll-bar().value() + pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update();
+            scene_update(panel);
             return 0;
         }
         if (starts_with(arguments, "down")) {
@@ -689,7 +691,7 @@ actuator(char *action)
             vertical-scroll-bar().set_value(vertical-scroll-bar().value() - pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update();
+            scene_update(panel);
             return 0;
         }
     }
@@ -697,7 +699,7 @@ actuator(char *action)
     if (starts_with(action, "day-vision")) {
         debug_message("action: day-vision");
         /*
-        gview = self->active_view();
+        gview = self->active_view(window);
         if (gview) {
             gview->setBackgroundColor("#FFFFFF");
             gview->setCrossHairColor("#000000");
@@ -709,7 +711,7 @@ actuator(char *action)
     if (starts_with(action, "night-vision")) {
         debug_message("action: night-vision");
         /*
-        gview = self->active_view();
+        gview = self->active_view(window);
         if gview:
             gview->setBackgroundColor("#000000");
             gview->setCrossHairColor("#FFFFFF");
@@ -718,23 +720,23 @@ actuator(char *action)
         return 0;
     }
     if (starts_with(action, "distance")) {
-        distance();
+        distance(window);
         return 0;
     }
     if (starts_with(action, "delete-object")) {
-        delete_object();
+        delete_object(window);
         return 0;
     }
     if (starts_with(action, "locate_point")) {
-        locate_point();
+        locate_point(window);
         return 0;
     }
     if (starts_with(action, "move")) {
-        move();
+        move(window);
         return 0;
     }
     if (starts_with(action, "export")) {
-        export_();
+        export_(window);
         return 0;
     }
     if (starts_with(action, "create-ui-rect")) {

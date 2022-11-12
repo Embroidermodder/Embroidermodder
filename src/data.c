@@ -15,15 +15,11 @@
 
 #include "em2.h"
 
-int char_to_int(char a);
-
 /*  DATA SECTION
  *  The data for configuring Embroidermodder 2,
  *  sets the default values should it not be present
  *  in configuration.
  */
-EmbWindow *windows[MAX_WINDOWS];
-
 TABLE(global_state);
 
 EmbColor white_color = {255, 255, 255};
@@ -421,7 +417,7 @@ EmbColor accept_display_selectbox_fill_right;
 int accept_display_selectbox_alpha;
 
 void
-load_state(void)
+load_state(EmbWindow *window)
 {
     load_csv(global_state, "assets/global_state.csv");
 
@@ -520,7 +516,7 @@ print_table(TABLE(table))
 }
 
 void
-load_translations(void)
+load_translations(EmbWindow *window)
 {
     int i;
     TABLE(language_labels);
@@ -594,7 +590,7 @@ get_vector(TABLE(state), char *key)
 }
 
 int
-load_to_buffer(void)
+load_to_buffer(EmbWindow *window)
 {
     char buffer[4096];
     size_t i, j, length;
@@ -643,7 +639,7 @@ load_to_buffer(void)
 
 
 int
-save_from_buffer(void)
+save_from_buffer(EmbWindow *window)
 {
     int i;
     FILE *fin;
