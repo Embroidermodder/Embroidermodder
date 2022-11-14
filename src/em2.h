@@ -683,14 +683,9 @@ Rect make_rectangle(int x, int y, int w, int h);
 
 int render(EmbWindow *window);
 
-
 int click_detection(EmbWidget *w, int x, int y);
 
 int find_mdi_window(STRING(file_name));
-
-int load_to_buffer(EmbWindow *window);
-int save_from_buffer(EmbWindow *window);
-void display_buffer(EmbWindow *window);
 
 /* ui.c function declarations
  *
@@ -824,10 +819,35 @@ void set_group_visibility(EmbPanel *panel, TABLE(group), int visibility);
 void set_override_cursor(EmbWindow *window, char *cursor);
 void restore_override_cursor(EmbWindow *window);
 
-/* Utilities */
+/* Utilities
+ *
+ * These functions do not interact with any part of the widget tree
+ * they are for setting, loading etc. the program state and
+ * basic mathematical operations not covered by libembroidery.
+ */
+
 int starts_with(char *str, char *start);
 int char_to_int(char a);
 char *translate(char *string);
+
+char *get_str(TABLE(state), char *key);
+int get_int(TABLE(state), char *key);
+float get_float(TABLE(state), char *key);
+EmbVector get_vector(TABLE(state), char *key);
+EmbColor get_color(TABLE(state), char *);
+
+void set_str(TABLE(state), char *key, char *value);
+void set_int(TABLE(state), char *key, int value);
+void set_float(TABLE(state), char *key, float value);
+void set_vector(TABLE(state), char *key, EmbVector value);
+
+void load_translations(void);
+void load_csv(TABLE(table), char *fname);
+void load_state(void);
+void load_csv(TABLE(table), char *fname);
+void print_table(TABLE(table));
+
+FILE *load_asset(char *fname, char *mode);
 
 /* Testing and scripting */
 void crash_test(EmbWindow *window);
@@ -842,24 +862,6 @@ EmbPainter *create_painter(EmbWindow *window);
 void destroy_pen(EmbPen *pen);
 void destroy_brush(EmbBrush *brush);
 void destroy_painter(EmbPainter *painter);
-
-/* data.c functions */
-char *get_str(TABLE(state), char *key);
-int get_int(TABLE(state), char *key);
-float get_float(TABLE(state), char *key);
-EmbVector get_vector(TABLE(state), char *key);
-EmbColor get_color(TABLE(state), char *);
-
-void set_str(TABLE(state), char *key, char *value);
-void set_int(TABLE(state), char *key, int value);
-void set_float(TABLE(state), char *key, float value);
-void set_vector(TABLE(state), char *key, EmbVector value);
-
-void load_translations(EmbWindow *window);
-void load_csv(TABLE(table), char *fname);
-void load_state(EmbWindow *window);
-void print_table(TABLE(table));
-void load_translations(EmbWindow *window);
 
 /* GLOBAL DATA */
 extern int dialog_grid_load_from_file;
@@ -1144,8 +1146,6 @@ extern int edit_toolbar_visible;
 extern int view_toolbar_visible;
 extern int window_toolbar_visible;
 
-void load_csv(TABLE(table), char *fname);
-
 extern int language;
 extern TABLE(translation_tables[N_LANGUAGES]);
 
@@ -1279,5 +1279,6 @@ extern EmbColor accept_display_selectbox_color_right;
 extern EmbColor accept_display_selectbox_fill_right;
 extern int accept_display_selectbox_alpha;
 
+extern STRING(assets_directory);
 
 #endif

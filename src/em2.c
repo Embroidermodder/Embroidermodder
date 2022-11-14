@@ -68,7 +68,7 @@ int WINAPI WinMain(
 {
     const wchar_t CLASS_NAME[] = L"embroidermodder window";
 
-    load_state(window);
+    load_state();
 
     puts(get_str(global_state, "boot message"));
 
@@ -158,14 +158,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int
 main(int argc, char *argv[])
 {
-    EmbWindow *window = create_window("assets/main_window.csv");
-    load_state(window);
+    load_state();
 
     puts(get_str(global_state, "boot message"));
 
     if (!parse_command(argc, argv)) {
 		return 0;
 	}
+
+    EmbWindow *window = create_window("assets/main_window.csv");
 
     while (running) {
         event = process_input(main);

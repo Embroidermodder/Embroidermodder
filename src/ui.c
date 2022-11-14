@@ -420,7 +420,7 @@ load_window(char *fname)
     EmbWindow *window = (EmbWindow *)malloc(sizeof(EmbWindow));
     window->n_panels = 0;
 
-    FILE *f = fopen(get_str(global_state, "interface_font"), "rb");
+    FILE *f = load_asset(get_str(global_state, "interface_font"), "rb");
     if (!f) {
         debug_message("Failed to load interface font.");
         return NULL;
@@ -460,7 +460,7 @@ load_window(char *fname)
 EmbWindow *
 create_window(char *fname)
 {
-    EmbWindow *window = load_window_data(fname);
+    EmbWindow *window = load_window(fname);
 
     /* Window compatibility layer. */
     window->display = XOpenDisplay(NULL);

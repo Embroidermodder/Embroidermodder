@@ -664,7 +664,6 @@ actuator(EmbWindow *window, char *action)
             horizontal-scroll-bar().set_value(horizontal-scroll-bar().value() + pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update(panel);
             return 0;
         }
         if (starts_with(arguments, "right")) {
@@ -673,7 +672,6 @@ actuator(EmbWindow *window, char *action)
             horizontal-scroll-bar().set_value(horizontal-scroll-bar().value() - pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update(panel);
             return 0;
         }
         if (starts_with(arguments, "up")) {
@@ -682,7 +680,6 @@ actuator(EmbWindow *window, char *action)
             vertical-scroll-bar().set_value(vertical-scroll-bar().value() + pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update(panel);
             return 0;
         }
         if (starts_with(arguments, "down")) {
@@ -691,7 +688,6 @@ actuator(EmbWindow *window, char *action)
             vertical-scroll-bar().set_value(vertical-scroll-bar().value() - pan-distance);
             update_mouse_coords(view-mouse-point.x(), view-mouse-point.y());
             */
-            scene_update(panel);
             return 0;
         }
     }
