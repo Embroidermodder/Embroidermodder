@@ -158,6 +158,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int
 main(int argc, char *argv[])
 {
+    EmbWindow *window = create_window("assets/main_window.csv");
     load_state(window);
 
     puts(get_str(global_state, "boot message"));
@@ -165,8 +166,6 @@ main(int argc, char *argv[])
     if (!parse_command(argc, argv)) {
 		return 0;
 	}
-
-    EmbWindow *main = create_window("assets/main_window.csv");
 
     while (running) {
         event = process_input(main);
@@ -290,14 +289,14 @@ run_script(EmbWindow *window, TABLE(script))
     resize(size);
  */
 void
-read_settings(EmbWindow *w, char *fname)
+read_settings(EmbWindow *window, char *fname)
 {
     debug_message("Reading settings...");
 
     load_csv(settings_state, fname);
 
-    w->dimension.w = get_int(settings_state, "main window w");
-    w->dimension.h = get_int(settings_state, "main window h");
+    window->dimension.w = get_int(settings_state, "main window w");
+    window->dimension.h = get_int(settings_state, "main window h");
 }
 
 /* Write the current settings to the standard file CSV.
@@ -306,7 +305,7 @@ read_settings(EmbWindow *w, char *fname)
  * so only what has changed needs to be written.
  */
 void
-write_settings(EmbWindow *w, char *fname)
+write_settings(EmbWindow *window, char *fname)
 {
     int i;
     debug_message("Writing settings...");
@@ -316,10 +315,10 @@ write_settings(EmbWindow *w, char *fname)
         puts("Failed to write settings: could not open file for writing.");
     }
 
-    set_int(settings_state, "main window x", w->dimension.x);
-    set_int(settings_state, "main window y", w->dimension.y);
-    set_int(settings_state, "main window w", w->dimension.w);
-    set_int(settings_state, "main window h", w->dimension.h);
+    set_int(settings_state, "main window x", window->dimension.x);
+    set_int(settings_state, "main window y", window->dimension.y);
+    set_int(settings_state, "main window w", window->dimension.w);
+    set_int(settings_state, "main window h", window->dimension.h);
 
     for (i=0; i<MAX_CSV_ROWS; i++) {
         fprintf(f, "%s=%s\r\n",
@@ -407,7 +406,7 @@ details_dialog_free(EmbWindow *window)
  * any key presses or clicks.
  */
 EmbWindow *
-details_dialog_init(EmbWindow *w)
+details_dialog_init(EmbWindow *window)
 {
     /* Dialog set minimum size. */
     int stitches_real = 0;
@@ -415,8 +414,9 @@ details_dialog_init(EmbWindow *w)
     int stitches_trim = 0;
     int color_total = 0;
     int color_changes = 0;
-    EmbRect bounding_rect = embRect_create(window);
-    EmbWindow *details_dialog = create_window("assets/design_details.csv");
+    EmbRect bounding_rect = embRect_create();
+    create_dialog(window, "assets/design_details.csv");
+    EmbWindow *details_dialog = window->dialogs[window->n_dialogs-1];
     int right_column_offset = 100;
     int spacing = 200;
 
@@ -438,8 +438,9 @@ details_dialog_init(EmbWindow *w)
     bounding_rect.set_rect(0, 0, 50, 100);
     TODO: embPattern-calcBoundingBox(pattern); */
 
+    EmbPanel *panel = window->panels[window->tab_index];
     create_labelled_int(details_dialog, right_column_offset, 0*20, spacing,
-        "Total Stitches:", w->panels[w->tab_index]->pattern->stitchList->count);
+        "Total Stitches:", panel->pattern->stitchList->count);
     create_labelled_int(details_dialog, right_column_offset, 1*20, spacing,
         "Real Stitches:", stitches_real);
     create_labelled_int(details_dialog, right_column_offset, 2*20, spacing,
@@ -451,17 +452,22 @@ details_dialog_init(EmbWindow *w)
     create_labelled_int(details_dialog, right_column_offset, 5*20, spacing,
         "Color Changes:", color_changes);
 
-    create_measurement_label(details_dialog, right_column_offset, 6*20, spacing,
+    int position[] = {right_column_offset, 6*20};
+    create_measurement_label(details_dialog, position, spacing,
         "Left:", bounding_rect.left);
-    create_measurement_label(details_dialog, right_column_offset, 7*20, spacing,
-        "Top:", bounding_rect.top);
-    create_measurement_label(details_dialog, right_column_offset, 8*20, spacing,
+    position[1] += 20;
+    create_measurement_label(details_dialog, position, spacing, "Top:", bounding_rect.top);
+    position[1] += 20;
+    create_measurement_label(details_dialog, position, spacing,
         "Right:", bounding_rect.right);
-    create_measurement_label(details_dialog, right_column_offset, 9*20, spacing,
+    position[1] += 20;
+    create_measurement_label(details_dialog, position, spacing,
         "Bottom:", bounding_rect.bottom);
-    create_measurement_label(details_dialog, right_column_offset, 10*20, spacing,
+    position[1] += 20;
+    create_measurement_label(details_dialog, position, spacing,
         "Width:", fabs(bounding_rect.left - bounding_rect.right));
-    create_measurement_label(details_dialog, right_column_offset, 11*20, spacing,
+    position[1] += 20;
+    create_measurement_label(details_dialog, position, spacing,
         "Height:", fabs(bounding_rect.top - bounding_rect.bottom));
 
     
@@ -556,11 +562,11 @@ settings_dialog_init(int showTab)
  * it then chain loads the data it needs using load_widget(tab, fname);
  */
 int
-create_window_tab(EmbWindow *w, char *fname)
+create_window_tab(EmbWindow *window, char *fname)
 {
     TABLE(tab_data);
     load_csv(tab_data, fname);
-    w->tabbed = 1;
+    window->tabbed = 1;
     
     return 0;
 }
@@ -605,7 +611,7 @@ load_file_action(char *file_name)
         return 0
     }
 
-    mw.set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
 
     ext = fileExtension(file_name);
     debug_message("ext: %s", qPrintable(ext));
@@ -1041,12 +1047,12 @@ export_(EmbWindow *window)
  * Adds an panel.
  */
 void
-new_file(EmbWindow *w)
+new_file(EmbWindow *window)
 {
     debug_message("New File.");
-    w->panels[n_docs]->pattern = embPattern_create(window);
-    w->tab_index = w->n_docs-1;
-    w->n_docs++;
+    window->panels[n_docs]->pattern = embPattern_create();
+    window->tab_index = window->n_docs-1;
+    window->n_docs++;
     /*
     mdi_win = mdi_window(doc_index, panel, "SubWindow"); */
     /* connect(mdi_win, SIGNAL(sendClosemdi_win()), self, SLOT(on_close_mdi_win()));
@@ -1070,7 +1076,7 @@ open_file(EmbWindow *window)
 /*, char *recent[], int recentFiles*/
 {
     debug_message("Open File");
-    set_override_cursor("ArrowCursor");
+    set_override_cursor(window, "ArrowCursor");
     /*
     nfdchar_t *outpath = NULL;
     nfdresult_t result = NFD_OpenDialog("c;md", NULL, &outpath);
@@ -1663,21 +1669,25 @@ repeat(EmbWindow *window)
 
 /* .
  */
-EmbWindow *
+int
 design_details(EmbWindow *window)
-{
-    EmbWindow *result = create_window("assets/ui/design_details_dialog.csv");
-    return result;
+{    
+    if (!create_dialog(window, "assets/ui/design_details_dialog.csv")) {
+        return 0;
+    }
+    return 1;
 }
 
 
 /* .
  */
-EmbWindow *
+int
 help(EmbWindow *window)
 {
-    EmbWindow *result = create_window("assets/ui/help_window.csv");
-    return result;
+    if (!create_dialog(window, "assets/ui/help_dialog.csv")) {
+        return 0;
+    }
+    return 1;
 }
 
 
@@ -1696,8 +1706,8 @@ changelog(EmbWindow *window)
     EmbWindow *changelog_window = window->dialogs[window->n_dialogs-1];
 
     int position[2] = {0, 0};
-    EmbPanel *panel = changelog_window->panels[0];
-    create_label(changelog_window, panel, position, "changelog", "do-nothing", ALWAYS_VISIBLE);
+    EmbPanel *panel = create_panel(changelog_window);
+    create_label(panel, position, "changelog", "do-nothing", ALWAYS_VISIBLE);
     /* display in a custom widget instead
     
     QUrl changelogURL("help/changelog.html");
@@ -1882,7 +1892,7 @@ zoom_to_point(EmbPanel *panel, EmbVector mouse_point, float zoom_dir)
     }
     */
 
-    scene_update(panel);
+
 }
 
 void
@@ -1890,166 +1900,12 @@ set_snap(EmbPanel *panel, int active)
 {
     debug_message("View toggle-snap()");
     printf("%d\n", active);
-    set_override_cursor(window, "WaitCursor");
+    set_override_cursor(panel->window, "WaitCursor");
     /*  TODO: finish this. */
     /* gscene.set-property("ENABLE-SNAP", active); */
-    scene_update(panel);
     restore_override_cursor(panel->window);
 }
 
-/*
- *  Functions that cannot be called through the action system
- *  and aren't to control the window state.
- */
-int
-starts_with(char *str, char *start)
-{
-    return !strncmp(str, start, strlen(start));
-}
-
-/* Whenever the code happens across a todo call,
- * write it in a log file. */
-void
-todo(char *msg, int action)
-{
-    if (debug_mode) {
-        FILE *f;
-        f = fopen("todo.txt", "w");
-        fseek(f, 0, SEEK_END);
-        fprintf(f, "%s: %d\n", msg, action);
-        fclose(f);
-    }
-}
-
-/* Whenever the code happens across a todo call,
- * write it in a log file. */
-void
-error(char *msg, int action)
-{
-    if (debug_mode) {
-        FILE *f;
-        f = fopen("error.txt", "w");
-        fseek(f, 0, SEEK_END);
-        fprintf(f, "%s: %d\n", msg, action);
-        fclose(f);
-    }
-}
-
-/*
- * Guards against debug messages coming up during normal operation.
- *
- * Just change debug_mode to 1 to activate it. We could have a toggle
- * in the program to turn it on during operation for when something starts
- * acting weird.
- */
-void
-debug_message(char *msg)
-{
-    if (debug_mode) {
-        printf("%s\n", msg);
-    }
-}
-
-/* .
- */
-int
-valid_file_format(char *fname)
-{
-    if (fname[0] == 0) {
-        return 0;
-    }
-    if (emb_identify_format(fname) >= 0) {
-        return 1;
-    }
-    return 0;
-}
-
-/* 
- *  Testing.
- *  Mostly tests for actions not causing crashes that shut the program.
- *
- *  Testing actual correct application of the action would be harder.
- */
-
-/* stores what the current error would be, should one occur */
-
-/* Check that the translate call can return an entry from the table.
- */
-int
-test_translate(EmbWindow *window)
-{
-    char *translated = translate("?");
-    printf("Failed to use translate.");
-    return !strcmp(translated, "?");
-}
-
-/* .
- */
-double
-emb_min(double x, double y)
-{
-    return x < y ? x : y;
-}
-
-/* .
- */
-double
-emb_max(double x, double y)
-{
-    return x > y ? x : y;
-}
-
-/* .
- */
-double
-emb_clamp(double lower, double x, double upper)
-{
-    return emb_max(emb_min(upper, x), lower);
-}
-
-/* .
- */
-int
-round_to_multiple(int round_up, int x, int multiple)
-{
-    int remainder;
-    if (multiple == 0) {
-        return x;
-    }
-    remainder = x % multiple;
-    if (remainder == 0) {
-        return x;
-    }
-
-    if (x < 0 && round_up) {
-        return x - remainder;
-    }
-    if (round_up) {
-        return x + multiple - remainder;
-    }
-    /* else round down */
-    if (x < 0 && !round_up) {
-        return x - multiple - remainder;
-    }
-    return x - remainder;
-}
-
-/* .
- */
-int
-valid_rgb(int red, int green, int blue)
-{
-    if (red < 0 || red > 255) {
-        return 0;
-    }
-    if (green < 0 || green > 255) {
-        return 0;
-    }
-    if (blue < 0 || blue > 255) {
-        return 0;
-    }
-    return 1;
-}
 
 void
 set_str(TABLE(state), char *key, char *value)
@@ -2058,15 +1914,15 @@ set_str(TABLE(state), char *key, char *value)
     /* See if key is present, then set that value. */
     for (i=0; i<MAX_CSV_ROWS; i++) {
         if (!strcmp(state[i][0], key)) {
-            strcpy(state[i][1], value);
+            string_copy(state[i][1], value);
             return;
         }
         /* Key is not present, create new key */
         if (!strcmp(state[i][0], "None")) {
-            strcpy(state[i][0], key);
-            strcpy(state[i][1], value);
-            strcpy(state[i+1][0], "None");
-            strcpy(state[i+1][1], "None");
+            string_copy(state[i][0], key);
+            string_copy(state[i][1], value);
+            string_copy(state[i+1][0], "None");
+            string_copy(state[i+1][1], "None");
             return;
         }
     }
@@ -2162,21 +2018,21 @@ void
 panel_use_background_logo(EmbPanel *panel, int use)
 {
     panel->use_logo = use;
-    scene_update(panel);
+
 }
 
 void
 panel_use_background_texture(EmbPanel *panel, int use)
 {
     panel->use_texture = use;
-    scene_update(panel);
+
 }
 
 void
 panel_use_background_color(EmbPanel *panel, int use)
 {
     panel->use_color = use;
-    scene_update(panel);
+
 }
 
 void
@@ -2184,7 +2040,7 @@ panel_set_background_logo(EmbPanel *panel, char *file_name)
 {
     printf("%d%s", panel->closeable, file_name);
     /* bg_logo.load(file_name); */
-    scene_update(panel);
+
 }
 
 void
@@ -2192,7 +2048,7 @@ panel_set_background_texture(EmbPanel *panel, char *file_name)
 {
     printf("%d%s", panel->closeable, file_name);
     /* bg_texture.load(file_name); */
-    scene_update(panel);
+
 }
 
 void
@@ -2208,7 +2064,7 @@ panel_set_background_color(EmbPanel *panel, EmbColor color)
     }
     */
 
-    scene_update(panel);
+
 }
 
 void
@@ -2382,7 +2238,7 @@ create_grid_(EmbPanel *panel, int gridType)
     origin_scale.x = 1.0;
     origin_scale.y = 1.0; */
     /* self.origin-path.add-list-to-path(origin-string, position, scale); */
-    scene_update(panel);
+
 }
 
 /* TODO: Make Origin Customizable. */
@@ -2524,7 +2380,7 @@ set_grid(EmbPanel *panel, int active)
 {
     debug_message("View toggleGrid()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(panel->window, "WaitCursor");
     /* 
     if (on) {
         create-grid(grid-type);
@@ -2532,7 +2388,7 @@ set_grid(EmbPanel *panel, int active)
         create-grid("");
     }
     */
-    restore_override_cursor(window);
+    restore_override_cursor(panel->window);
 }
 
 void
@@ -2543,7 +2399,7 @@ set_ortho(EmbPanel *panel, int active)
     set_override_cursor(panel->window, "WaitCursor");
     /* TODO: finish this. 
     gscene.set_property("ENABLE-ORTHO", active); */
-    scene_update(panel);
+
     restore_override_cursor(panel->window);
 }
 
@@ -2552,22 +2408,22 @@ set_polar(EmbPanel *panel, int active)
 {
     debug_message("View togglePolar()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(panel->window, "WaitCursor");
     /* TODO: finish this. 
     gscene.set_property("ENABLE-POLAR", active); */
-    scene_update(panel);
-    restore_override_cursor(window);
+
+    restore_override_cursor(panel->window);
 }
 
 void
-set_grid_color(EmbWindow *window, EmbColor color)
+set_grid_color(EmbPanel *panel, EmbColor color)
 {
     printf("called with %d", color.r);
     /*
     grid_color = color;
     gscene.set_property("VIEW-COLOR-GRID", color);
     if (gscene) {
-        scene_update(panel);
+    
     }
     */
 }
@@ -2588,7 +2444,7 @@ add_to_rubber_room(EmbPanel *panel, int item)
     rubber-room-list.append(item);
     item.show(window);
     */
-    scene_update(panel);
+
 }
 
 void
@@ -2603,7 +2459,7 @@ vulcanize_rubber_room(EmbPanel *panel)
 
     rubber-room-list.clear(window);
     */
-    scene_update(panel);
+
 }
 
 void
@@ -2681,7 +2537,7 @@ set_rubber_mode(EmbPanel *panel, int mode)
     }
     */
 
-    scene_update(panel);
+
 }
 
 /* key (string)
@@ -2699,7 +2555,7 @@ set_rubber_point(EmbPanel *panel, char *key, int point)
     }
     */
 
-    scene_update(panel);
+
 }
 
 /* key (string)
@@ -2717,7 +2573,7 @@ set_rubber_text(EmbPanel *panel, char *key, char *txt)
     }
     */
 
-    scene_update(panel);
+
 }
 
 void
@@ -3062,13 +2918,13 @@ set_ruler(EmbPanel *panel, int active)
 {
     debug_message("View toggle-ruler()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(panel->window, "WaitCursor");
     /*
     gscene.set_property("ENABLE-RULER", active);
     ruler-color = get_color("ruler-color");
     */
-    scene_update(panel);
-    restore_override_cursor(window);
+
+    restore_override_cursor(panel->window);
 }
 
 void
@@ -3076,7 +2932,7 @@ set_ruler_color(EmbPanel *panel, EmbColor color)
 {
     printf("called with %d", color.r);
     /* void ruler-color) color); */
-    scene_update(panel);
+
 }
 
 /* The layer manager.
@@ -3107,12 +2963,12 @@ layer_manager_add(
     char *color,
     char *lineType,
     float line_weight)
-    strcpy(mgr->name, name)
+    string_copy(mgr->name, name)
     mgr->visible = visible
     mgr->frozen = frozen
     mgr->z-value = zValue
-    strcpy(mgr->color, color)
-    strcpy(mgr->line_type, lineType)
+    string_copy(mgr->color, color)
+    string_copy(mgr->line_type, lineType)
     mgr->line_weight = line_weight */
     /*
      const print)
@@ -3352,14 +3208,7 @@ toolbar_init(EmbWindow *window)
 }
 
 void
-scene_update(EmbPanel *panel)
-{
-    printf("scene_update");
-    printf("%d\n", panel->closeable);
-}
-
-void
-set_override_cursor(char *cursor)
+set_override_cursor(EmbWindow *window, char *cursor)
 {
     printf("cursor: %s\n", cursor);
 }
@@ -3756,12 +3605,12 @@ saveBMC(void/* MdiEmbWindow *subwindow */)
         /* TODO: Make BMC background into it's own setting? 
         brush = gscene.backgroundBrush()
         gscene.setBackgroundBrush(Qt-NoBrush)
-        scene_update(panel);
+    
         gscene.render(painter, targetRect, extents, "Qt-KeepAspectRatio")
         gscene.setBackgroundBrush(brush)
     }
     else {
-        scene_update(panel);
+    
         gscene.render(painter, targetRect, extents, "Qt-KeepAspectRatio")
     }
     img.convertToFormat(QImage-Format-Indexed8, Qt-ThresholdDither|Qt-AvoidDither).save("test.bmc", "BMP")
@@ -4268,7 +4117,7 @@ set_cross_hair_color(EmbPanel *panel, EmbColor color)
     /* crosshair-color = color;
     gscene.set_property("VIEW-COLOR-CROSSHAIR", color);
     */
-    scene_update(panel);
+
 }
 
 void
@@ -4278,7 +4127,7 @@ set_background_color(EmbPanel *panel, EmbColor color)
     /* set_background-brush(Color(color));
     gscene.set_property("VIEW-COLOR-BACKGROUND", color);
     */
-    scene_update(panel);
+
 }
 
 void
@@ -4807,7 +4656,7 @@ update_menu_toolbar_statusbar(EmbWindow *window)
         */
 
         /* Statusbar */
-        strcpy(statusbar_message, "");
+        string_copy(statusbar_message, "");
         /*
         status_bar_mouse_coord.hide(window);
         for (k=0 k<status_bar-n-keys k++) {
@@ -4828,10 +4677,10 @@ load_formats(EmbWindow *window)
     char *description, *extension;
     int  readerState, writerState;
 
-    strcpy(supported_readers, "All Supported Files (");
-    strcpy(individual_readers, "All Files (*)");
-    strcpy(supported_writers, "All Supported Files (");
-    strcpy(individual_writers, "All Files (*)");
+    string_copy(supported_readers, "All Supported Files (");
+    string_copy(individual_readers, "All Files (*)");
+    string_copy(supported_writers, "All Supported Files (");
+    string_copy(individual_writers, "All Files (*)");
 
     /*
     supported-str = "";
@@ -5996,7 +5845,7 @@ combobox_icon_theme_current_index_changed(char *theme)
 {
     printf("%s\n", theme);
     /*
-    strcpy(dialog-general-icon-theme, theme);
+    string_copy(dialog-general-icon-theme, theme);
     */
 }
 
@@ -7008,7 +6857,7 @@ void
 color_init(EmbWindow *window)
 {
     /* color-mode = COLOR-BACKGROUND
-    strcpy(prefix, "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: ")
+    string_copy(prefix, "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: ")
     set_prompt-prefix(translate(prefix)) */
 }
 
@@ -7242,12 +7091,11 @@ load_ruler_settings(EmbWindow *window)
 
 /* . */
 EmbVector
-center(EmbWindow *window)
+center(EmbPanel *panel)
 {
     EmbVector v;
-    v.x = 0;
-    v.y = 0;
-    /* return map_to_scene(rect().center()); */
+    v.x = panel->area.x + 0.5*panel->area.w;
+    v.y = panel->area.y + 0.5*panel->area.h;
     return v;
 }
 
@@ -7270,7 +7118,7 @@ add_object(/*self, obj*/)
 {
     /*
     gscene.addItem(-obj);
-    scene_update(panel);
+
     hash-deleted-objects.remove(-obj.-objID);
     */
 }
@@ -7285,7 +7133,7 @@ delete_object(int obj)
            deletion actually occurs in the destructor.
     obj.set_selected(0);
     gscene.remove-item(-obj);
-    scene_update(panel);
+
     hash-deleted-objects.insert(-obj.-objID, obj);
 }
 */
@@ -7339,7 +7187,7 @@ preview_on(EmbPanel *panel, int clone, int mode, int x, int y, int data)
     }
     */
 
-    scene_update(panel);
+
 }
 
 void
@@ -7359,7 +7207,7 @@ preview_off(EmbPanel *panel)
 
     preview_active = 0;
 
-    scene_update(panel);
+
 }
 
 void
@@ -7383,7 +7231,7 @@ set_qsnap(EmbWindow *window, int active)
 {
     debug_message("View toggleQSnap()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /*
     qsnap-toggle = on;
     gscene.set_property("ENABLE-QSNAP", active); */
@@ -7397,7 +7245,7 @@ set_qtrack(EmbWindow *window, int active)
 {
     debug_message("View toggleQTrack()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /* gscene.set_property("ENABLE-QTRACK", active); */
     restore_override_cursor(window);
 }
@@ -7407,7 +7255,7 @@ set_lwt(EmbWindow *window, int active)
 {
     debug_message("View toggleLwt()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /* gscene.set_property("ENABLE-LWT", active); */
     restore_override_cursor(window);
 }
@@ -7417,7 +7265,7 @@ set_real(EmbWindow *window, int active)
 {
     debug_message("View toggleReal()");
     printf("%d", active);
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /* gscene.set_property("ENABLE-REAL", active); */
     restore_override_cursor(window);
 }
@@ -7719,7 +7567,7 @@ mouse_press_event(EmbPanel *panel, EmbEvent event)
         event.accept(window);
     }
     */
-    scene_update(panel);
+
 }
 
 void
@@ -7771,12 +7619,12 @@ center_on(EmbVector center_point)
  * which shifts things out of wack o-O
  */
 void
-center_at(EmbVector center_point)
+center_at(EmbPanel *panel, EmbVector center_point)
 {
     EmbVector offset, new_center, view_center;
     center_on(center_point);
     /* Reshift to the center */
-    view_center = center(window);
+    view_center = center(panel);
     embVector_subtract(center_point, view_center, &offset);
     embVector_add(center_point, offset, &new_center);
     center_on(new_center);
@@ -7785,10 +7633,10 @@ center_at(EmbVector center_point)
 /* center-on also updates the scrollbars, which shifts things out of wack o-O
  */
 void
-align_scene_point_with_view_point(EmbVector scene_point, EmbVector view_point)
+align_scene_point_with_view_point(EmbPanel *panel, EmbVector scene_point, EmbVector view_point)
 {
     EmbVector point_before = scene_point;
-    EmbVector view_center = center(window);
+    EmbVector view_center = center(panel);
     center_on(view_center);
     /* Reshift to the center so the scene and view points align. */
     EmbVector point_after = map_to_scene(view_point);
@@ -7807,6 +7655,7 @@ event_accept(EmbWindow *window)
 void
 mouse_move_event(EmbPanel *panel, EmbEvent event)
 {
+    EmbWindow *window = panel->window;
     /*
     EmbVector mouse = cursor_pos(window);
     update_mouse_coords(mouse.x, mouse.y);
@@ -7901,7 +7750,7 @@ mouse_move_event(EmbPanel *panel, EmbEvent event)
         event_accept(window);
     }
 
-    scene_update(panel);
+
 }
 
 void
@@ -7946,7 +7795,7 @@ mouse_release_event(EmbPanel *panel, EmbEvent event)
         event_accept(window);
     }
     */
-    scene_update(panel);
+
 }
 
 void
@@ -8002,8 +7851,8 @@ context_menu_event(EmbEvent event)
         show = show || (!strcmp(all_entries[i][2], "SELECTED") && (n_selected > 0));
         show = show || (!strcmp(all_entries[i][2], "ZOOM") && zoom_window_active);
         if (show) {
-			strcpy(context_menu[entry][0], all_entries[i][0]);
-			strcpy(context_menu[entry][1], all_entries[i][1]);
+			string_copy(context_menu[entry][0], all_entries[i][0]);
+			string_copy(context_menu[entry][1], all_entries[i][1]);
 			entry++;
             continue;
         }
@@ -8016,7 +7865,7 @@ void
 delete_pressed(EmbWindow *window)
 {
     debug_message("View delete-pressed()");
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /*
     mdi-win = panel.active_sub_window(window);
     if (mdi-win) {
@@ -8065,7 +7914,7 @@ escape_pressed(EmbWindow *window)
 
     }
     */
-    set_override_cursor("WaitCursor");
+    set_override_cursor(window, "WaitCursor");
     /*
     mdi_win = panel.active-sub-window(window);
     if (mdi_win) {
@@ -8182,8 +8031,6 @@ select_box_colors(EmbPanel *panel, EmbPainter *tools, TABLE(state), char *settin
     tools->right_brush->style = BRUSH_STYLE_SOLID;
 
     /* direction(tools->box_dir); */
-
-    scene_update(panel);
 }
 
 /* Carry out a paint given the current pen and brush.

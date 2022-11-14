@@ -100,6 +100,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #define MAX_SELECTED              10000
 #define MAX_PATTERNS                 10
 #define MAX_RECENT                   20
+#define MAX_DIALOGS                 256
+#define MAX_PANELS                  100
 #define MAX_WIDGETS                1000
 #define MAX_SCRIPT_LINES           1000
 #define MAX_CSV_ROWS                100
@@ -109,8 +111,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 #define MAX_SETTINGS_IN_BOX         100
 #define MAX_SETTINGS_BOXES           10
 #define MAX_KEYS                    256
-#define MAX_DIALOGS                 256
 
+#define STRING(A) \
+    char A[MAX_STRING_LENGTH]
 #define TABLE(A) \
     char A[MAX_CSV_ROWS][MAX_CSV_COLUMNS][MAX_STRING_LENGTH]
 
@@ -423,7 +426,7 @@ typedef struct Rect_ {
 /* Image data for icons and renders.
  */
 typedef struct Image_ {
-    char fname[MAX_STRING_LENGTH];
+    STRING(fname);
 } Image;
 
 /* Can be used by both the system and the user
@@ -484,16 +487,16 @@ struct EmbWidget_ {
     Rect rect;
     Image *image;
     EmbPainter *painter;
-    unsigned char color[4];
-    char label[MAX_STRING_LENGTH];
+    EmbColor color;
+    STRING(label);
     int mode;
-    char command[MAX_STRING_LENGTH];
+    STRING(command);
     char visibility;
     char active;
 
     /* Spinbox properties */
-    char category[MAX_STRING_LENGTH];
-    char name[MAX_STRING_LENGTH];
+    STRING(category);
+    STRING(name);
     float single_step;
     float range_lower;
     float range_upper;
@@ -510,7 +513,7 @@ struct EmbWidget_ {
      * SettingBox box[MAX_SETTINGS_BOXES];
      * Setting settings[MAX_SETTINGS_IN_BOX];
      */
-    char description[MAX_STRING_LENGTH];
+    STRING(description);
     int index;
     char type[50];
     int min;
@@ -523,13 +526,13 @@ struct EmbWidget_ {
      * ------------------
      * Covers Comboboxes, Line edits, Dropdowns etc.
      */
-    char property_description[MAX_STRING_LENGTH];
+    STRING(property_description);
     unsigned char property_permissions;
     unsigned char property_data_type;
 
-    char propertybox_title[MAX_STRING_LENGTH];
+    STRING(propertybox_title);
     int propertybox_obj_type;
-    char **propertybox_properties;
+    STRING(propertybox_properties);
 };
 
 typedef struct EmbEvent_ {
@@ -674,22 +677,16 @@ struct EmbWindow_ {
 /*
  *  Function prototypes.
  */
-int valid_file_format(char *fname);
+int valid_file_format(STRING(fname));
 
 Rect make_rectangle(int x, int y, int w, int h);
 
 int render(EmbWindow *window);
 
-void debug_message(char *msg);
-char *translate(char *msg);
-
-double emb_min(double x, double y);
-double emb_max(double x, double y);
-double emb_clamp(double lower, double x, double upper);
 
 int click_detection(EmbWidget *w, int x, int y);
 
-int find_mdi_window(char *file_name);
+int find_mdi_window(STRING(file_name));
 
 int load_to_buffer(EmbWindow *window);
 int save_from_buffer(EmbWindow *window);
@@ -704,20 +701,23 @@ void display_buffer(EmbWindow *window);
  *       then we have add_widget(window_id, panel_id, char *fname)
  *       or something similar.
  */
-EmbWindow *load_window_data(char *fname);
-EmbWindow *create_window(char *fname);
+EmbWindow *load_window_data(STRING(fname));
+EmbWindow *create_window(STRING(fname));
 EmbEvent process_input(EmbWindow *window);
 void render_clear(EmbWindow *window, EmbColor clear_color);
-void render_copy(EmbWindow *window, EmbPanel *panel, EmbImage image);
-void render_rect(EmbWindow *window, EmbPanel *panel, EmbColor color, Rect rect);
+void render_copy(EmbPanel *panel, EmbImage *image);
+void render_rect(EmbPanel *panel, EmbColor color, Rect rect);
 void destroy_window(EmbWindow *window);
 void wait(int);
 
-void create_widget(EmbWindow *window, EmbPanel *panel, Rect rect, char *action_id);
-void create_label(EmbWindow *window, EmbPanel *panel, int position[2], char *label, char *command, int visibility);
+EmbPanel *create_panel(EmbWindow *window);
+/* Create widgets within panels.
+ */
+void create_widget(EmbPanel *panel, Rect rect, char *action_id);
+void create_label(EmbPanel *panel, int position[2], char *label, char *command, int visibility);
 void create_ui_rect(EmbPanel *panel, Rect rect, EmbColor color, int visibility);
 void create_icon(EmbPanel *panel, int n, int m, char *label);
-void create_measurement_label(EmbPanel *panel, int offset, int yoffset, int spacing, char *label, float value);
+void create_measurement_label(EmbPanel *panel, int position[2], int spacing, char *label, float value);
 
 int get_widget_by_label(EmbPanel *panel, char *label);
 void set_visibility(EmbPanel *panel, char *label, int visibility);
@@ -729,18 +729,32 @@ void draw_lines(EmbPanel *panel, EmbLine *line, int n_lines);
 void draw_crosshair(EmbWindow *window, EmbPanel *panel);
 void draw_rulers(EmbPanel *panel);
 
-int build_menu(char *fname, int x_offset, int menu);
+int build_menu(EmbPanel *panel, char *fname, int x_offset, int menu);
 
-void create_scrollbars(EmbPanel *panel);
-void create_grid(EmbPanel *panel);
-void create_toolbars(EmbWindow *window, EmbPanel *panel);
-void create_statusbar(EmbPanel *panel);
-void create_menubar(EmbPanel *panel);
-void create_view(EmbPanel *panel);
+/* Top-level panel creation: these hold all other panels and widgets.
+ */
+void create_toolbars(EmbWindow *window);
+void create_statusbar(EmbWindow *window);
+void create_menubar(EmbWindow *panel);
+void create_view(EmbWindow *panel);
 int create_window_tab(EmbWindow *window, char *fname);
 
-void repaint(EmbPanel *panel);
+/* Second level panels: these aren't widgets or specifically named
+ * regions of the UI.
+ */
+void create_scrollbars(EmbPanel *panel);
+void create_grid(EmbPanel *panel);
 
+/* Utilties that don't use any structs.
+ */
+void debug_message(char *msg);
+char *translate(char *msg);
+
+double emb_min(double x, double y);
+double emb_max(double x, double y);
+double emb_clamp(double lower, double x, double upper);
+
+void string_copy(char dest[MAX_STRING_LENGTH], char src[MAX_STRING_LENGTH]);
 
 /* For all user actions the actuator is called with the user action serialised
  * as a single, fixed length string. This allows for non-trivial operations on
@@ -778,6 +792,7 @@ int tip_of_the_day(EmbWindow *window);
 int help(EmbWindow *window);
 int design_details(EmbWindow *window);
 int settings_dialog(EmbWindow *window);
+int check_for_updates(EmbWindow *window);
 
 void whats_this(EmbWindow *window);
 void layer_selector(EmbWindow *window);
@@ -799,7 +814,6 @@ void delete_object(EmbWindow *window);
 void line_type_selector(EmbWindow *window);
 void line_weight_selector(EmbWindow *window);
 void select_all(EmbWindow *window);
-void check_for_updates(EmbWindow *window);
 void print_pattern(EmbWindow *window);
 void move(EmbWindow *window);
 void export_(EmbWindow *window);
@@ -807,9 +821,7 @@ void export_(EmbWindow *window);
 int get_widget(EmbPanel *panel, char *tag);
 void set_group_visibility(EmbPanel *panel, TABLE(group), int visibility);
 
-void scene_update(EmbPanel *panel);
-
-void set_override_cursor(char *cursor);
+void set_override_cursor(EmbWindow *window, char *cursor);
 void restore_override_cursor(EmbWindow *window);
 
 /* Utilities */

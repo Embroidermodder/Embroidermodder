@@ -299,7 +299,7 @@ actuator(EmbWindow *window, char *action)
     }
 
     if (starts_with(action, "settings-dialog")) {
-        EmbWindow *settings = settings_dialog(window);
+        settings_dialog(window);
         return 0;
     }
     if (starts_with(action, "make-layer-current")) {
@@ -572,7 +572,7 @@ actuator(EmbWindow *window, char *action)
                 return 0;
             }
 
-            set_override_cursor("Wait Cursor");
+            set_override_cursor(window, "Wait Cursor");
             /*cntr = map_to_scene(Vector(width()/2, height()/2));
             s = display_zoom_scale_in;
             scale(s, s);
@@ -589,7 +589,7 @@ actuator(EmbWindow *window, char *action)
                 return 0;
             }
 
-            set_override_cursor("Wait Cursor");
+            set_override_cursor(window, "Wait Cursor");
             /*
             cntr = map_to_scene(Vector(width()/2, height()/2));
             s = display_zoom_scale_out;
@@ -602,7 +602,7 @@ actuator(EmbWindow *window, char *action)
         }
         if (starts_with(arguments, "selected")) {
             debug_message("zoom_selected()");
-            set_override_cursor("Wait Cursor");
+            set_override_cursor(window, "Wait Cursor");
             /*
             item_list = gscene.selected_items(window);
             selected_rect_path = Path(window);

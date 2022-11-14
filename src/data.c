@@ -427,7 +427,7 @@ load_state(EmbWindow *window)
     load_csv(tooltips, "assets/tooltips.csv");
     load_csv(action_list, "assets/action_list.csv");
 
-    load_translations();
+    load_translations(window);
 
     load_csv(arc_properties, "assets/objects/arc.csv");
     load_csv(circle_properties, "assets/objects/circle.csv");
