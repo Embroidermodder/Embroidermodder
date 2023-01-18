@@ -1,0 +1,19 @@
+name: GNU/Linux
+
+on: [push]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: build the linux version
+      run: |
+        git clone https://github.com/embroidermodder/embroidermodder
+        cd embroidermodder
+        sudo bash scripts/apt_deps.sh
+        bash scripts/build.sh
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-linux
+        path: embroidermodder

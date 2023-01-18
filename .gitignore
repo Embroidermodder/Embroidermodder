@@ -1,86 +1,26 @@
-##############################################################################
-## This is the project-wide .gitignore file for the Embroidermodder 2 project 
-## source code repository.
-## These file and directory patterns are ignored when commiting changes.
-##
-## Lines starting with a (#) character are comments. 
-## A python lexer with just comment lines highlighting is usually fine for syntax highlighting in 
-## your prefered editor for gitignore files. NOTE: patterns starting with \# are valid(escaped).
-##
-## Additional information on .gitignore files can be found here:
-##   http://git-scm.com/docs/gitignore
-##   https://help.github.com/articles/ignoring-files
-##   http://stackoverflow.com/questions/10274424/best-practice-for-using-multiple-gitignore
-## Additional .gitignore templates can be found here: 
-##   https://github.com/github/gitignore
-##############################################################################
+.vscode
 
-#########################
-# Embroidermodder 2     #
-#########################
-embroidermodder2/TODO
-embroidermodder2/settings.ini
-embroidermodder2/prompt.log
-embroidermodder2/embroidermodder2
-embroidermodder2/doxygen
-
-#########################
-# libembroidery         #
-#########################
-libembroidery/TODO
-libembroidery/doxygen
-libembroidery/lib
-
-#########################
-# libembroidery-convert #
-#########################
-libembroidery-convert/TODO
-libembroidery-convert/libembroidery-convert
-
-#########################
-# libembroidery-test    #
-#########################
-libembroidery-test/TODO
-libembroidery-test/libembroidery-test
-
-#########################
-# Misc Dev Files        #
-#########################
-*.moc
-*.obj
-*Makefile*
-*_memleak*
-*callgrind.*
-*object_script.*
-*.pro.user*
-moc_*.cpp
-qrc_*.cpp
-*-build-*
-
-#########################
-# Libraries             #
-#########################
-## Compiled Static libraries
-*.lai
-*.la
-*.lib
-*.a
-## Compiled Dynamic libraries
-*.dll
-*.so
-*.so.*
-*.dylib
-
-#########################
-# Executables           #
-#########################
+# Build
+build/
+CMakeFiles/
+.cache/
+CMakeCache.txt
+cmake_install.cmake
 *.exe
 *.out
 *.app
+*.o
+embroidermodder.exe
+embroidermodder
+.obj/
+.moc/
+.qmake.stash
+prompt.log
+settings.toml
+*.pro.user
+Makefile
 
-#########################
-# OS generated files    #
-#########################
+# OS generated files
 ## Macintosh
 .DS_Store
 .DS_Store?
@@ -90,24 +30,3 @@ qrc_*.cpp
 ehthumbs.db
 Thumbs.db
 Desktop.ini
-
-#########################
-# Python                #
-#########################
-## Byte-compiled / optimized / DLL files
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-#########################
-# Experimental Python   #
-#########################
-## Generated Settings Ini from experimental/python/gui
-embroidermodder2/settings-py.ini
-## Sphinx documentation
-experimental/python/gui/embroiderdocs/_build
-# Include the sphinx Makefile
-!experimental/python/gui/embroiderdocs/Makefile
-## Bindings stuff
-build-swigpython-Desktop_Qt_[0-9]_[0-9]_[0-9]_MinGW_32bit-Debug

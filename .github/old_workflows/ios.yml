@@ -1,0 +1,18 @@
+name: iOS
+
+on: [push]
+
+jobs:
+  build-iOS:
+    runs-on: macos-latest
+    steps:
+    - name: build dependencies and the software
+      run: |
+        git clone https://github.com/Embroidermodder/Embroidermodder
+        cd Embroidermodder
+        sh scripts/build_ios.sh
+    - name: archive iOS build
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-ios
+        path: .

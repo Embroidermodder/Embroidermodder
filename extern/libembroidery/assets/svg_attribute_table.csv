@@ -1,0 +1,460 @@
+
+
+const char svg_attribute_table[50][100][30] = {
+    /* 0: xml attributes */
+    {
+        "encoding", "standalone", "version", "/", "\0"
+    },
+    /* 1: link attributes */
+    {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "focusHighlight", "focusable", "id", "nav-down", "nav-down-left",
+        "nav-down-right", "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource", "rev",
+        "role", "systemLanguage", "target", "transform", "typeof", "xlink:actuate",
+        "xlink:arcrole", "xlink:href", "xlink:role", "xlink:show", "xlink:title",
+        "xlink:type", "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 2: animate attributes */
+    {
+        "about", "accumulate", "additive", "attributeName", "attributeType",
+        "begin", "by", "calcMode", "class", "content", "datatype", "dur", "end",
+        "fill", "from", "id", "keySplines", "keyTimes", "max", "min", "property",
+        "rel", "repeatCount", "repeatDur", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "restart", "rev", "role", "systemLanguage", "to", "typeof", "values",
+        "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 3: animate color attributes */
+    {
+        "about", "accumulate", "additive", "attributeName", "attributeType",
+        "begin", "by", "calcMode", "class", "content", "datatype", "dur",
+        "end", "fill", "from", "id", "keySplines", "keyTimes", "max", "min",
+        "property", "rel", "repeatCount", "repeatDur", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats",
+        "resource", "restart", "rev", "role", "systemLanguage",
+        "to", "typeof", "values", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title",
+        "xlink:type", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "/", "\0"
+    },
+    /* 4: animate motion attributes */
+    {
+        "about", "accumulate", "additive", "begin", "by", "calcMode", "class",
+        "content", "datatype", "dur", "end", "fill", "from", "id", "keyPoints",
+        "keySplines", "keyTimes", "max", "min", "origin", "path", "property",
+        "rel", "repeatCount", "repeatDur", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "restart", "rev", "role", "rotate", "systemLanguage", "to", "typeof",
+        "values", "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 5: animate transform attribute tokens */
+    {
+        "about", "accumulate", "additive", "attributeName", "attributeType",
+        "begin", "by", "calcMode", "class", "content", "datatype", "dur", "end",
+        "fill", "from", "id", "keySplines", "keyTimes", "max", "min",
+        "property", "rel", "repeatCount", "repeatDur", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "restart", "rev", "role", "systemLanguage", "to", "type", "typeof",
+        "values", "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 6: animation attributes */
+    {
+        "about", "begin", "class", "content", "datatype", "dur", "end",
+        "externalResourcesRequired", "fill", "focusHighlight", "focusable",
+        "height", "id", "initialVisibility", "max", "min", "nav-down",
+        "nav-down-left", "nav-down-right", "nav-left", "nav-next", "nav-prev",
+        "nav-right", "nav-up", "nav-up-left", "nav-up-right",
+        "preserveAspectRatio", "property", "rel", "repeatCount", "repeatDur",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "restart", "rev", "role", "syncBehavior",
+        "syncMaster", "syncTolerance", "systemLanguage", "transform", "typeof",
+        "width", "x", "xlink:actuate", "xlink:arcrole", "xlink:href",
+        "xlink:role", "xlink:show", "xlink:title", "xlink:type", "xml:base",
+        "xml:id", "xml:lang", "xml:space", "y", "/", "\0"
+    },
+    /* 7: audio attributes */
+    {
+        "about", "begin", "class", "content", "datatype", "dur", "end",
+        "externalResourcesRequired", "fill", "id", "max", "min", "property",
+        "rel", "repeatCount", "repeatDur", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "restart", "rev", "role", "syncBehavior", "syncMaster", "syncTolerance",
+        "systemLanguage", "type", "typeof", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title", "xlink:type",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 8: circle attributes */
+    {
+        "about", "class", "content", "cx", "cy", "datatype", "focusHighlight",
+        "focusable", "id", "nav-down", "nav-down-left", "nav-down-right",
+        "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "property", "r", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "xml:base", "xml:id", "xml:lang", "xml:space",
+        "/", "\0"
+    },
+    /* 9: defs attributes */
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "resource", "rev", "role", "typeof", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "/", "\0"
+    },
+    /* 10: desc attributes */
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "typeof", "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 11: animate attribute tokens 
+    const char *discard_attribute_tokens[] =*/ {
+        "about", "begin", "class", "content", "datatype", "id", "property",
+        "rel", "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "typeof", "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 12: animate attribute tokens 
+    const char *ellipse_attribute_tokens[] =*/ {
+        "about", "class", "content", "cx", "cy", "datatype", "focusHighlight",
+        "focusable", "id", "nav-down", "nav-down-left", "nav-down-right",
+        "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "rx", "ry", "systemLanguage", "transform", "typeof",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 13: animate attribute tokens
+    const char *font_attribute_tokens[] =  */ {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "horiz-adv-x", "horiz-origin-x", "id", "property", "rel", "resource",
+        "rev", "role", "typeof", "xml:base", "xml:id", "xml:lang", "xml:space",
+        "/", "\0"
+    },
+    /* 14: animate attribute tokens
+    const char *font_face_attribute_tokens[] =  */{
+        "about", "accent-height", "alphabetic", "ascent", "bbox", "cap-height",
+        "class", "content", "datatype", "descent", "externalResourcesRequired",
+        "font-family", "font-stretch", "font-style", "font-variant",
+        "font-weight", "hanging", "id", "ideographic", "mathematical",
+        "overline-position", "overline-thickness", "panose-1", "property",
+        "rel", "resource", "rev", "role", "slope", "stemh", "stemv",
+        "strikethrough-position", "strikethrough-thickness", "typeof",
+        "underline-position", "underline-thickness", "unicode-range",
+        "units-per-em", "widths", "x-height", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 15: animate attribute tokens 
+    const char *font_face_src_attribute_tokens[] =*/ {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "resource", "rev", "role", "typeof", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "/", "\0"
+    },
+    /* 16: animate attribute tokens 
+    const char *font_face_uri_tokens[] = */ {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "id", "property", "rel", "resource", "rev", "role",
+        "typeof", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title",
+        "xlink:type", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "/", "\0"
+    },
+    /* 17: animate attribute tokens 
+    const char *foreign_object_tokens[] = */ {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "focusHighlight", "focusable", "height", "id", "nav-down",
+        "nav-down-left", "nav-down-right", "nav-left", "nav-next",
+        "nav-prev", "nav-right", "nav-up", "nav-up-left", "nav-up-right",
+        "property", "rel", "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "width", "x", "xlink:actuate",
+        "xlink:arcrole", "xlink:href", "xlink:role", "xlink:show",
+        "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "y", "/", "\0"
+    },
+    /* 18: group attributes */
+    {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "focusHighlight", "focusable", "id", "nav-down", "nav-down-left",
+        "nav-down-right", "nav-left", "nav-next", "nav-prev", "nav-right",
+        "nav-up", "nav-up-left", "nav-up-right", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "xml:base", "xml:id", "xml:lang", "xml:space",
+        "/", "\0"
+    },
+    /* 19: glyph attributes */
+    {
+        "about", "arabic-form", "class", "content", "d", "datatype",
+        "glyph-name", "horiz-adv-x", "id", "lang", "property", "rel",
+        "resource", "rev", "role", "typeof", "unicode", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 20: handler attributes */
+    {
+        "about", "class", "content", "datatype", "ev:event",
+        "externalResourcesRequired", "id", "property", "rel", "resource",
+        "rev", "role", "type", "typeof", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title", "xlink:type",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 21: hkern attributes */
+    {
+        "about", "class", "content", "datatype", "g1", "g2", "id", "k",
+        "property", "rel", "resource", "rev", "role", "typeof", "u1", "u2",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 22: image attributes */
+    {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "focusHighlight", "focusable", "height", "id", "nav-down",
+        "nav-down-left", "nav-down-right", "nav-left", "nav-next", "nav-prev",
+        "nav-right", "nav-up", "nav-up-left", "nav-up-right", "opacity",
+        "preserveAspectRatio", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "systemLanguage", "transform", "type", "typeof", "width",
+        "x", "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "y", "/", "\0"
+    },
+    /* 23: line attributes */
+    {
+        "about", "class", "content", "datatype", "focusHighlight", "focusable",
+        "id", "nav-down", "nav-down-left", "nav-down-right", "nav-left",
+        "nav-next", "nav-prev", "nav-right", "nav-up", "nav-up-left",
+        "nav-up-right", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "systemLanguage", "transform", "typeof", "x1", "x2",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "y1", "y2", "/", "\0"
+    },
+    /* 24: linear gradient attributes */
+    {
+        "about", "class", "content", "datatype", "gradientUnits", "id",
+        "property", "rel", "resource", "rev", "role", "typeof", "x1", "x2",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "y1", "y2", "/", "\0"
+    },
+    /* 25: listener attributes */
+    {
+        "about", "class", "content", "datatype", "defaultAction", "event",
+        "handler", "id", "observer", "phase", "propagate", "property", "rel",
+        "resource", "rev", "role", "target", "typeof", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 25: metadata attributes */
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "typeof", "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 25: missing glyph attributes */
+    {
+        "about", "class", "content", "d", "datatype", "horiz-adv-x", "id",
+        "property", "rel", "resource", "rev", "role", "typeof", "xml:base",
+        "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 26: mpath attributes */
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "resource", "rev", "role", "typeof", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title", "xlink:type",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 27: path attributes */
+    {
+        "about", "class", "content", "d", "datatype", "focusHighlight",
+        "focusable", "id", "nav-down", "nav-down-left", "nav-down-right",
+        "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "pathLength", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "xml:base", "xml:id", "xml:lang", "xml:space",
+        "/", "\0"
+    },
+    /* 28: polygon attributes */
+    {
+        "about", "class", "content", "datatype", "focusHighlight", "focusable",
+        "id", "nav-down", "nav-down-left", "nav-down-right", "nav-left",
+        "nav-next", "nav-prev", "nav-right", "nav-up", "nav-up-left",
+        "nav-up-right", "points", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "systemLanguage", "transform", "typeof", "xml:base",
+        "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 29: polyline attributes */
+    {
+        "about", "class", "content", "datatype", "focusHighlight", "focusable",
+        "id", "nav-down", "nav-down-left", "nav-down-right", "nav-left",
+        "nav-next", "nav-prev", "nav-right", "nav-up", "nav-up-left",
+        "nav-up-right", "points", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "systemLanguage", "transform", "typeof", "xml:base",
+        "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 30: prefetch attributes */
+    {
+        "about", "bandwidth", "class", "content", "datatype", "id",
+        "mediaCharacterEncoding", "mediaContentEncodings", "mediaSize",
+        "mediaTime", "property", "rel", "resource", "rev", "role", "typeof",
+        "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 31: radial gradient attributes */
+    {
+        "about", "class", "content", "cx", "cy", "datatype", "gradientUnits",
+        "id", "property", "r", "rel", "resource", "rev", "role", "typeof",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 32: rect attributes */
+    {
+        "about", "class", "content", "datatype", "focusHighlight", "focusable",
+        "height", "id", "nav-down", "nav-down-left", "nav-down-right",
+        "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "rx", "ry", "systemLanguage", "transform", "typeof",
+        "width", "x", "xml:base", "xml:id", "xml:lang", "xml:space", "y",
+        "/", "\0"
+    },
+    /* 33: script attributes */
+    {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "id", "property", "rel", "resource", "rev", "role", "type", "typeof",
+        "xlink:actuate", "xlink:arcrole", "xlink:href", "xlink:role",
+        "xlink:show", "xlink:title", "xlink:type", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 34: set attributes */
+    {
+        "about", "attributeName", "attributeType", "begin", "class", "content",
+        "datatype", "dur", "end", "fill", "id", "max", "min", "property", "rel",
+        "repeatCount", "repeatDur", "requiredExtensions", "requiredFeatures",
+        "requiredFonts", "requiredFormats", "resource", "rev", "role",
+        "systemLanguage", "to", "typeof", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title", "xlink:type",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 35: solid color attributes */
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "resource", "rev", "role", "typeof", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "/", "\0"
+    },
+    /* 36: stop attributes */
+    {
+        "about", "class", "content", "datatype", "id", "offset", "property",
+        "rel", "resource", "rev", "role", "typeof", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 37: svg attributes */
+    {
+        "about", "baseProfile", "class", "content", "contentScriptType",
+        "datatype", "externalResourcesRequired", "focusHighlight", "focusable",
+        "height", "id", "nav-down", "nav-down-left", "nav-down-right",
+        "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "playbackOrder", "preserveAspectRatio",
+        "property", "rel", "resource", "rev", "role", "snapshotTime",
+        "syncBehaviorDefault", "syncToleranceDefault", "timelineBegin",
+        "typeof", "version", "viewBox", "width", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "zoomAndPan", "/", "\0"
+    },
+    /* 38: switch attributes */
+    {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "focusHighlight", "focusable", "id", "nav-down", "nav-down-left",
+        "nav-down-right", "nav-left", "nav-next", "nav-prev", "nav-right",
+        "nav-up", "nav-up-left", "nav-up-right", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "xml:base", "xml:id", "xml:lang", "xml:space",
+        "/", "\0"
+    },
+    /* 39: tbreak attributes */  
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "typeof", "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 40: text attributes */
+    {
+        "about", "class", "content", "datatype", "editable", "focusHighlight",
+        "focusable", "id", "nav-down", "nav-down-left", "nav-down-right",
+        "nav-left", "nav-next", "nav-prev", "nav-right", "nav-up",
+        "nav-up-left", "nav-up-right", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "rotate", "systemLanguage", "transform", "typeof", "x",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "y", "/", "\0"
+    },
+    /* 41: text area attributes */
+    {
+        "about", "class", "content", "datatype", "editable", "focusHighlight",
+        "focusable", "height", "id", "nav-down", "nav-down-left",
+        "nav-down-right", "nav-left", "nav-next", "nav-prev", "nav-right",
+        "nav-up", "nav-up-left", "nav-up-right", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "width", "x", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "y", "/", "\0"
+    },
+    /* 42: title attributes */
+    {
+        "about", "class", "content", "datatype", "id", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "typeof", "xml:base", "xml:id", "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 43: tspan attributes */
+    {
+        "about", "class", "content", "datatype", "focusHighlight", "focusable",
+        "id", "nav-down", "nav-down-left", "nav-down-right", "nav-left",
+        "nav-next", "nav-prev", "nav-right", "nav-up", "nav-up-left",
+        "nav-up-right", "property", "rel", "requiredExtensions",
+        "requiredFeatures", "requiredFonts", "requiredFormats", "resource",
+        "rev", "role", "systemLanguage", "typeof", "xml:base", "xml:id",
+        "xml:lang", "xml:space", "/", "\0"
+    },
+    /* 44: use attribute tokens */
+    {
+        "about", "class", "content", "datatype", "externalResourcesRequired",
+        "focusHighlight", "focusable", "id", "nav-down", "nav-down-left",
+        "nav-down-right", "nav-left", "nav-next", "nav-prev", "nav-right",
+        "nav-up", "nav-up-left", "nav-up-right", "property", "rel",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "rev", "role", "systemLanguage",
+        "transform", "typeof", "x", "xlink:actuate", "xlink:arcrole",
+        "xlink:href", "xlink:role", "xlink:show", "xlink:title", "xlink:type",
+        "xml:base", "xml:id", "xml:lang", "xml:space", "y", "/", "\0"
+    },
+    /* 45: video attribute tokens */
+    {
+        "about", "begin", "class", "content", "datatype", "dur", "end",
+        "externalResourcesRequired", "fill", "focusHighlight", "focusable",
+        "height", "id", "initialVisibility", "max", "min", "nav-down",
+        "nav-down-left", "nav-down-right", "nav-left", "nav-next", "nav-prev",
+        "nav-right", "nav-up", "nav-up-left", "nav-up-right", "overlay",
+        "preserveAspectRatio", "property", "rel", "repeatCount", "repeatDur",
+        "requiredExtensions", "requiredFeatures", "requiredFonts",
+        "requiredFormats", "resource", "restart", "rev", "role", "syncBehavior",
+        "syncMaster", "syncTolerance", "systemLanguage", "transform",
+        "transformBehavior", "type", "typeof", "width", "x", "xlink:actuate",
+        "xlink:arcrole", "xlink:href", "xlink:role", "xlink:show",
+        "xlink:title", "xlink:type", "xml:base", "xml:id", "xml:lang",
+        "xml:space", "y", "/", "\0"
+    },
+    /* 46: END */
+    {
+        "\0"
+    }
+};

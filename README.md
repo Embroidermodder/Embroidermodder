@@ -10,30 +10,33 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more information, see [our website](http://embroidermodder.github.io).
+For more information, see [our website](http://www.libembroidery.org).
 
 Dependencies
 ------------
 
 To build Embroidermodder 2 from source you will need at least:
 - [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
-- [Qt](http://www.qt-project.org) (version >= 4.8).
+- [Qt](http://www.qt-project.org) (version >= 6.0).
 
 Optionally, you may want to add:
 
 - [KDE](http://www.kde.org) for thumbnailer
 - [Valgrind](http://www.valgrind.org) for debugging
 
-Ubuntu repository packages:
-The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+_This needs to be updated to Qt6._
+
+Ubuntu/debian repository packages:
+
+The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
 ```
-sudo apt-get install git build-essential qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind
+sudo apt-get install git build-essential libgl1-mesa-dev qtcreator qt5-qmake qtbase5-dev qtdeclarative5-dev valgrind
 ```
 
 Fedora repository packages:
-The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
 ```
-sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
+sudo yum install git gdb gcc-c++ qt-devel valgrind qt5-qtscript-devel
 ```
 Building
 --------
@@ -72,29 +75,20 @@ On non-KDE environments you might want to omit `thumbnailer-kde4` building. Foll
 2. open `everything.pro` file;
 3. comment/erase `../../thumbnailer-kde4 \` line in it.
 
-Help Files
-------------
-The help files for Embroidermodder 2 are a git submodule, which means that
-they reside in a separate repository. They are not required for the application
-to run, but if they are not present, you will likely receive an error that they
-do not exist when pressing F1 or attempting to access help through the menu.
-
-If you used ```git clone``` to obtain the Embroidermodder source,
+Libembroidery
+-------------
+The core library libembroidery for Embroidermodder 2 is a git submodule, which means that
+they reside in a separate repository. It is necessary for compilation so
+if you used ```git clone``` to obtain the Embroidermodder source,
 you need to run these commands from the toplevel of
-the working tree(which is the Embroidermodder directory):
+the working tree (which is the Embroidermodder directory):
 
 ```
 git submodule init
 git submodule update
 ```
 
-If you downloaded a zip file of the Embroidermodder source rather than using git,
-you will need to:
-
-- Download the [help files](https://github.com/Embroidermodder/Embroidermodder.github.io/archive/master.zip)
-- Unzip the archive
-- Rename the "Embroidermodder.github.io-master" directory to "help"
-- Copy the "help" directory to "Embroidermodder-master/embroidermodder2/help"
+We'll eventually ship zip files which include both repositories.
 
 Sample Files
 ------------
@@ -102,12 +96,18 @@ Sample Files
 Various sample embroidery design files can be found in
 the embroidermodder2/samples folder.
 
+Running
+-------
+
+    echo "Run as administrator."
+    setx /m path "%PATH%;C:\Qt\6.4.1\mingw_64\bin"
+
 Install/Uninstall
 -----------------
 
 - Linux:
 To install, open a terminal in the
-project-files/qmake subfolder and type:
+project-files/qmake subfolder (after building) and type:
 ```
 sudo make install
 ```
@@ -117,3 +117,4 @@ project-files/qmake subfolder and type:
 ```
 sudo make uninstall
 ```
+

@@ -1,0 +1,19 @@
+% Postscript functions for the heart5 shape.
+% This file is part of Embroidermodder 2.
+
+/range {0.0 2.0} def
+/num_points 512 def
+/scale {0.04 0.04} def
+
+/heart5x {
+    /t exch def
+    16 t sin dup dup mul mul mul
+} def
+
+/heart5y {
+    /t exch def
+    13 t cos mul
+    5 2 t mul cos mul sub
+    2 3 t mul cos mul sub
+    4 t mul cos sub
+} def

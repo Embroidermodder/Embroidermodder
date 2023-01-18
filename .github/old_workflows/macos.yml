@@ -1,0 +1,19 @@
+name: Mac OS
+
+on: [push]
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - name: build the linux version
+      run: |
+        git clone https://github.com/embroidermodder/embroidermodder
+        cd embroidermodder
+        sh scripts/brew_deps.sh
+        sh scripts/build.sh
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: embroidermodder-2.0.0-alpha-linux
+        path: Embroidermodder

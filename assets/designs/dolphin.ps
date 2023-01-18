@@ -1,0 +1,140 @@
+% Postscript functions for the dolphin shape.
+% This file is part of Embroidermodder 2.
+
+% gives us: a/b * sin(c/d - e*t)
+/basisfunc {
+    /t exch def
+    /e exch def
+    /d exch def
+    /c exch def
+    /b exch def
+    /a exch def
+    a b div c d div e t mul sub sin mul
+} def
+
+/dolphinx {
+    /t exch def
+    4 23 62 33 58 t basisfunc
+    8 11 10 9 56 t basisfunc add
+    17 24 38 35 55 t basisfunc add
+    30 89 81 23 54 t basisfunc add
+    3 17 53 18 53 t basisfunc add
+    21 38 29 19 52 t basisfunc add
+    11 35 103 40 51 t basisfunc add
+    7 16 79 18 50 t basisfunc add
+    4 15 270 77 49 t basisfunc add
+    19 35 59 27 48 t basisfunc add
+    37 43 71 17 47 t basisfunc add
+    1 1 18 43 45 t basisfunc add
+    21 26 37 26 44 t basisfunc add
+    27 19 111 32 42 t basisfunc add
+    8 39 13 25 41 t basisfunc add
+    23 30 27 8 40 t basisfunc add
+    23 21 32 35 37 t basisfunc add
+    18 37 91 31 36 t basisfunc add
+    45 22 29 37 35 t basisfunc add
+    56 45 11 8 33 t basisfunc add
+    4 7 32 19 32 t basisfunc add
+    54 23 74 29 31 t basisfunc add
+    28 19 125 33 30 t basisfunc add
+    19 9 73 27 29 t basisfunc add
+    16 17 737 736 28 t basisfunc add
+    52 33 130 29 27 t basisfunc add
+    41 23 43 30 25 t basisfunc add
+    29 20 67 26 24 t basisfunc add
+    64 25 136 29 23 t basisfunc add
+    162 37 59 34 21 t basisfunc add
+    871 435 199 51 20 t basisfunc add
+    61 42 58 17 19 t basisfunc add
+    159 25 77 31 17 t basisfunc add
+    241 15 94 31 13 t basisfunc add
+    259 18 114 91 12 t basisfunc add
+    356 57 23 25 11 t basisfunc add
+    2283 137 23 25 10 t basisfunc add
+    1267 45 139 42 9 t basisfunc add
+    613 26 41 23 8 t basisfunc add
+    189 16 122 47 6 t basisfunc add
+    385 6 151 41 5 t basisfunc add
+    2551 38 106 35 4 t basisfunc add
+    1997 18 6 5 2 t basisfunc add
+    43357 47 81 26 1 t basisfunc sub
+    4699 35 25 31 3 t basisfunc sub
+    1029 34 20 21 7 t basisfunc sub
+    250 17 7 40 14 t basisfunc sub
+    140 17 14 25 15 t basisfunc sub
+    194 29 29 44 16 t basisfunc sub
+    277 52 37 53 18 t basisfunc sub
+    94 41 33 31 22 t basisfunc sub
+    57 28 44 45 26 t basisfunc sub
+    128 61 11 14 34 t basisfunc sub
+    111 95 55 37 38 t basisfunc sub
+    85 71 4 45 39 t basisfunc sub
+    25 29 129 103 43 t basisfunc sub
+    7 37 9 20 46 t basisfunc sub
+    17 32 11 28 57 t basisfunc sub
+    5 16 32 39 59 t basisfunc sub
+} def
+
+/dolphiny {
+    /t exch def
+    5 11 163 37 59 t basisfunc add
+    7 22 19 41 58 t basisfunc add
+    30 41 1 57 t basisfunc add
+    37 29 137 57 56 t basisfunc add
+    5 7 17 6 55 t basisfunc add
+    11 39 46 45 52 t basisfunc add
+    25 28 116 83 51 t basisfunc add
+    25 34 11 20 47 t basisfunc add
+    8 27 81 41 46 t basisfunc add
+    44 39 78 37 45 t basisfunc add
+    11 25 107 37 44 t basisfunc add
+    7 20 7 16 41 t basisfunc add
+    30 31 19 5 40 t basisfunc add
+    37 27 148 59 39 t basisfunc add
+    44 39 17 27 38 t basisfunc add
+    13 11 7 11 37 t basisfunc add
+    28 33 119 39 36 t basisfunc add
+    27 13 244 81 35 t basisfunc add
+    13 23 113 27 34 t basisfunc add
+    47 38 127 32 33 t basisfunc add
+    155 59 173 45 29 t basisfunc add
+    105 37 22 43 27 t basisfunc add
+    106 27 23 37 26 t basisfunc add
+    97 41 53 29 25 t basisfunc add
+    83 45 109 31 24 t basisfunc add
+    81 31 96 29 23 t basisfunc add
+    56 37 29 10 22 t basisfunc add
+    44 13 29 19 19 t basisfunc add
+    18 5 34 31 18 t basisfunc add
+    163 51 75 17 17 t basisfunc add
+    152 31 61 18 16 t basisfunc add
+    146 19 47 20 15 t basisfunc add
+    353 35 55 48 14 t basisfunc add
+    355 28 102 25 12 t basisfunc add
+    1259 63 71 18 11 t basisfunc add
+    17 35 125 52 10 t basisfunc add
+    786 23 23 26 6 t basisfunc add
+    2470 41 77 30 5 t basisfunc add
+    2329 47 47 21 4 t basisfunc add
+    2527 33 23 14 3 t basisfunc add
+    9931 33 51 35 2 t basisfunc sub
+    11506 19 56 67 -1 t basisfunc sub
+    2081 42 9 28 -7 t basisfunc sub
+    537 14 3 25 -8 t basisfunc sub
+    278 29 23 33 -9 t basisfunc sub
+    107 15 35 26 -13 t basisfunc sub
+    56 19 5 9 -20 t basisfunc sub
+    5 9 1 34 -21 t basisfunc sub
+    17 24 36 23 -28 t basisfunc sub
+    21 11 27 37 -30 t basisfunc sub
+    138 83 1 7 -31 t basisfunc sub
+    10 17 29 48 -32 t basisfunc sub
+    31 63 27 28 -42 t basisfunc sub
+    4 27 29 43 -43 t basisfunc sub
+    13 24 5 21 -48 t basisfunc sub
+    4 7 29 23 -49 t basisfunc sub
+    26 77 29 27 -50 t basisfunc sub
+    19 14 61 48 -53 t basisfunc add
+    34 25 37 26 -54 t basisfunc add
+} def
+

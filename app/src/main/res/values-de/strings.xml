@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Stickerei-Viewer</string>
+    <string name="action_open_file">Öffne Datei</string>
+    <string name="action_tool_pan">Schwenken</string>
+    <string name="action_tool_draw">Zeichnen</string>
+    <string name="action_show_statistics">Statistiken</string>
+    <string name="action_share">Teilen</string>
+    <string name="stitchblock_stitches">"%d Naht"</string>
+    <string name="external_storage_justification_write">Dateien können nicht ohne Zugriff auf Speicher gespeichert werden</string>
+    <string name="write_permissions_denied">Schreibberechtigungen verweigert</string>
+    <string name="read_permissions_denied">Leseberechtigungen verweigert</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Stornieren</string>
+    <string name="error_file_not_found">Fehler: Datei nicht gefunden.</string>
+    <string name="error_uri_not_retrieved">Fehler: URI nicht abgerufen.</string>
+    <string name="error_file_read_failed">Fehler: Datei lesen fehlgeschlagen.</string>
+    <string name="file_type_not_supported">Dateityp nicht unterstützt.</string>
+    <string name="stitch_block_color">Naht farbe</string>
+    <!-- Statistics section -->
+    <string name="number_of_stitches">Insgesamt Stiche:</string>
+    <string name="normal_stitches">  Normal:        </string>
+    <string name="jumps">  Sprünge:         </string>
+    <string name="colors">  Farbwechsel: </string>
+    <string name="size">Größe: </string>
+    <string name="total_length">Gesamtlänge: </string>
+    <string name="action_load_files">Lade Datei</string>
+</resources>

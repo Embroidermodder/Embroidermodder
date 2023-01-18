@@ -1,7 +1,0 @@
-/*! @mainpage
- *  For developers wanting to use libembroidery in another
- *  project, refer to the thumbnailer-kde4 or libembroidery-convert
- *  application source code first and refer back to here as neccessary.
- *  They serve as small examples on proper usage without going too
- *  deep into the internals of libembroidery.
- */

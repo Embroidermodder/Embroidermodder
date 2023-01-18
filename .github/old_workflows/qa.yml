@@ -1,0 +1,13 @@
+name: QA
+
+on: [push]
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Quality Assurance
+      run: |
+        git clone https://github.com/Embroidermodder/Embroidermodder
+        cd Embroidermodder
+        python3 scripts/qa.py

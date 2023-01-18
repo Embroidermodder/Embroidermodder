@@ -1,0 +1,13 @@
+"#","Default (US English) to Spanish Translation Table."
+"#","-------------------------------------------------------"
+"#","This file is part of Embroidermodder."
+"#","Copyright 2013-2022 The Embroidermodder Team"
+"#","See LICENSE for details."
+"#","-------------------------------------------------------"
+"#","NOTES: Should we account for dialectical differences between"
+"#","different versions of spanish?"
+"#","For example: español peninsular and español mexicano." 
+"New","Nueva"
+"Print","Imprimir"
+"END","END"
+

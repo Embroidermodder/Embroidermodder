@@ -1,0 +1,6 @@
+
+const char *svg_media_property_tokens[] = {
+    "audio-level", "buffered-rendering", "display", "image-rendering",
+    "pointer-events", "shape-rendering", "text-rendering", "viewport-fill",
+    "viewport-fill-opacity", "visibility", "\0"
+};

@@ -1,0 +1,44 @@
+name: Build for Release for Linux
+# eventually for all platforms
+
+on:
+  release:
+    types: [published, created, edited]
+
+jobs:
+  build-linux64:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build library and command-line program for distribution.
+      run: |
+        git clone https://github.com/Embroidermodder/libembroidery
+        cd libembroidery
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        make
+        cd ..
+        tar cf libembroidery-linux64.tar build/libembroidery* build/embroider
+    - uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: libembroidery/libembroidery-linux64.tar
+  build-macOS:
+    runs-on: macos-latest
+
+    steps:
+    - name: Build library and command-line program for distribution to macOS.
+      run: |
+        git clone https://github.com/Embroidermodder/libembroidery
+        cd libembroidery
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        cmake --build .
+        cd ..
+        tar cf libembroidery-macOS.tar build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: libembroidery/libembroidery-macOS.tar
