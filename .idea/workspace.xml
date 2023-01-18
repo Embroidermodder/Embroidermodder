@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f3501ad0-b3ae-47b6-b5b8-b792ecb5c54c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/src/dialogs.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/dialogs.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/embroidermodder.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/embroidermodder.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/nuklear_dialogs.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/nuklear_dialogs.c" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="2KWEEv10e4mXJO1AZjJrvPhKbtG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cidr.known.project.marker": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f3501ad0-b3ae-47b6-b5b8-b792ecb5c54c" name="Changes" comment="" />
+      <created>1674081837159</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1674081837159</updated>
+    </task>
+    <servers />
+  </component>
+</project>
