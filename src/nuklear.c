@@ -5,6 +5,7 @@
 /* For compiling speed this unit only implements nuklear.
  */
 #include <stdio.h>
+#include <stdlib.h>
 
 #define NK_PRIVATE
 #define NK_INCLUDE_FIXED_TYPES

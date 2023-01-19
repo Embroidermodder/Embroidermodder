@@ -3554,6 +3554,10 @@ void store_double(std::string key, double value);
 void store_int(std::string key, int value);
 void store_bool(std::string key, bool value);
 
+extern "C" {
+    void message_box(char *title, char *message);
+}
+
 extern std::unordered_map<std::string, Setting> settings;
 extern std::vector<EmbWindow> window_list;
 extern std::vector<EmbWidget> widget_list;

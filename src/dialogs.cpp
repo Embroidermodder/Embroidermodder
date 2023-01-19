@@ -67,6 +67,7 @@ void MainWindow::changelog()
 {
     QApplication::setOverrideCursor(Qt::ArrowCursor);
     debug_message("changelog()");
+    message_box("Changelog", "test");
 
     QString appDir = qApp->applicationDirPath();
     QDialog dialog(this);
