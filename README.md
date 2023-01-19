@@ -1,5 +1,4 @@
-What is Embroidermodder ?
--------------------------
+# What is Embroidermodder ?
 
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
@@ -12,11 +11,13 @@ The newest version, Embroidermodder 2 can:
 
 For more information, see [our website](http://www.libembroidery.org).
 
-Dependencies
-------------
+Embroidermodder and associated projects are built by "The Embroidermodder Team" (see [CREDITS.md](CREDITS.md)).
+
+## Dependencies
 
 To build Embroidermodder 2 from source you will need at least:
 - [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
+- [Libembroidery](https://github.com/Embroidermodder/libembroidery) (see below)
 - [Qt](http://www.qt-project.org) (version >= 6.0).
 
 Optionally, you may want to add:
@@ -24,59 +25,10 @@ Optionally, you may want to add:
 - [KDE](http://www.kde.org) for thumbnailer
 - [Valgrind](http://www.valgrind.org) for debugging
 
-_This needs to be updated to Qt6._
+All other dependencies are included into the source code in the `extern/` directory.
 
-Ubuntu/debian repository packages:
+### Libembroidery
 
-The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
-```
-sudo apt-get install git build-essential libgl1-mesa-dev qtcreator qt5-qmake qtbase5-dev qtdeclarative5-dev valgrind
-```
-
-Fedora repository packages:
-The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
-```
-sudo yum install git gdb gcc-c++ qt-devel valgrind qt5-qtscript-devel
-```
-Building
---------
-
-Various methods of building can be found in the project-files subfolder.
-For most builds, it is as simple as opening a terminal in the
-project-files/qmake subfolder and typing:
-```
-qmake && make
-```
-
-Build time can be considerably decreased on multi-core machines, for example:
-
-- Dual Core:
-```
-qmake && make -j2
-```
-- Quad Core:
-```
-qmake && make -j4
-```
-
-When building for Fedora:
-Substitute qmake-qt4 for qmake.
-
-When building for Windows:
-If you are using Qt/Mingw, substitute mingw32-make for make.
-If you are using Qt/MSVC, substitute nmake for make.
-You may need to add the directory where those executables are located to your system path.
-It is recommended that when targeting Windows, that you should omit the -j switch completely,
-otherwise build errors may occur unless you are building an individual pro file.
-
-On non-KDE environments you might want to omit `thumbnailer-kde4` building. Follow these steps **before** running `qmake && make`:
-
-1. go to `/project-files/qmake/` directory;
-2. open `everything.pro` file;
-3. comment/erase `../../thumbnailer-kde4 \` line in it.
-
-Libembroidery
--------------
 The core library libembroidery for Embroidermodder 2 is a git submodule, which means that
 they reside in a separate repository. It is necessary for compilation so
 if you used ```git clone``` to obtain the Embroidermodder source,
@@ -88,22 +40,55 @@ git submodule init
 git submodule update
 ```
 
-We'll eventually ship zip files which include both repositories.
+This is part of the build script already.
 
-Sample Files
-------------
+### Qt6
+
+#### On Windows
+
+We recommend using the standard installer: [https://www.qt.io/download-qt-installer](https://www.qt.io/download-qt-installer).
+
+#### Ubuntu/debian repository packages
+
+_This subsection is untested._
+
+The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+
+     sudo apt-get install git build-essential cmake libgl1-mesa-dev qtcreator qt6-base qt6-base-dev valgrind
+
+#### Fedora repository packages
+
+_This subsection is untested._
+
+The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+
+    sudo yum install git gdb gcc-c++ qt-devel valgrind cmake
+
+## Building
+
+Embroidermodder uses a CMake build, we recommend on Windows to use the script:
+
+     .\build.bat
+
+with the dependencies installed (see below). On all other systems use:
+
+     sh build.sh
+
+## Sample Files
 
 Various sample embroidery design files can be found in
-the embroidermodder2/samples folder.
+the assets/samples folder.
 
-Running
--------
+## Running On Windows
+
+Make sure your Qt installation is in your PATH like this:
 
     echo "Run as administrator."
     setx /m path "%PATH%;C:\Qt\6.4.1\mingw_64\bin"
 
-Install/Uninstall
------------------
+Then double click the executable.
+
+## Install/Uninstall
 
 - Linux:
 To install, open a terminal in the
