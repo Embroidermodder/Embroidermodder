@@ -74,32 +74,42 @@ with the dependencies installed (see below). On all other systems use:
 
      sh build.sh
 
-## Sample Files
+## Run and Install/Uninstall
 
-Various sample embroidery design files can be found in
-the assets/samples folder.
+### Linux
 
-## Running On Windows
+To run the build without installing enter the `build/` directory and use:
+
+    ./embroidermodder
+
+To install, open a terminal in the `build/` subfolder (after building) and type:
+
+    sudo cmake --install .
+
+To uninstall, open a terminal in the `build/` subfolder and type:
+
+    sudo cmake --uninstall .
+
+Then you'll be able to run `embroidermodder` from the command line with the command:
+
+    embroidermodder
+
+### Windows
 
 Make sure your Qt installation is in your PATH like this:
 
     echo "Run as administrator."
     setx /m path "%PATH%;C:\Qt\6.4.1\mingw_64\bin"
 
-Then double click the executable.
+Then double click the executable to run.
 
-## Install/Uninstall
+On Windows the install commands are the same, however you need to use a `cmd` terminal with admin priviledges and without `sudo`.
 
-- Linux:
-To install, open a terminal in the
-project-files/qmake subfolder (after building) and type:
-```
-sudo make install
-```
+Then you'll be able to run `embroidermodder` from the command line with the command:
 
-To uninstall, open a terminal in the
-project-files/qmake subfolder and type:
-```
-sudo make uninstall
-```
+    embroidermodder.exe
 
+## Sample Files
+
+Various sample embroidery design files can be found in
+the assets/samples folder.
