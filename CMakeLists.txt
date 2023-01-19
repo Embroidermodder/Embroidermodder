@@ -30,13 +30,12 @@ set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_DOCS OFF)
 set(GLFW_INSTALL OFF)
-set(EMBROIDERY_BUILD_SHARED_LIBS OFF)
-set(EMBROIDERY_BUILD_CLI OFF)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport OpenGL)
 qt_standard_project_setup()
 
 add_subdirectory(extern/glfw)
+add_subdirectory(extern/libembroidery)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -49,17 +48,6 @@ add_subdirectory(extern/glfw)
 set(SRC_ASSETS ${PROJECT_SOURCE_DIR}/assets)
 
 add_executable(embroidermodder
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/array.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/compress.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/encoding.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/encoding.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/fill.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/formats.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/geometry.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/image.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/main.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/pattern.c
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src/thread-color.c
 	${PROJECT_SOURCE_DIR}/src/actions.cpp
 	${PROJECT_SOURCE_DIR}/src/dialogs.cpp
 	${PROJECT_SOURCE_DIR}/src/embroidermodder.cpp
@@ -109,7 +97,9 @@ target_link_libraries(embroidermodder PRIVATE
 	Qt6::Widgets
 	Qt6::OpenGL
 	Qt6::PrintSupport
-	glfw)
+	glfw
+	embroidery_static
+	opengl32)
 
 set_target_properties(embroidermodder PROPERTIES
     WIN32_EXECUTABLE ON
