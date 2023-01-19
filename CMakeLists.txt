@@ -30,7 +30,7 @@ set(GLFW_BUILD_TESTS OFF)
 set(GLFW_BUILD_DOCS OFF)
 set(GLFW_INSTALL OFF)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport OpenGL)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport)
 qt_standard_project_setup()
 
 add_subdirectory(extern/glfw)
@@ -55,8 +55,6 @@ add_executable(embroidermodder
 	${PROJECT_SOURCE_DIR}/src/mainwindow.cpp
 	${PROJECT_SOURCE_DIR}/src/mdiarea.cpp
 	${PROJECT_SOURCE_DIR}/src/mdiwindow.cpp
-	${PROJECT_SOURCE_DIR}/src/nuklear_dialogs.c
-	${PROJECT_SOURCE_DIR}/src/nuklear.c
 	${PROJECT_SOURCE_DIR}/src/object-arc.cpp
 	${PROJECT_SOURCE_DIR}/src/object-base.cpp
 	${PROJECT_SOURCE_DIR}/src/object-circle.cpp
@@ -80,12 +78,19 @@ add_executable(embroidermodder
 	${PROJECT_SOURCE_DIR}/src/undo-commands.cpp
 	${PROJECT_SOURCE_DIR}/src/undo-editor.cpp
 	${PROJECT_SOURCE_DIR}/src/view.cpp
+	${PROJECT_SOURCE_DIR}/extern/imgui/imgui.cpp
+	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_demo.cpp
+	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_draw.cpp
+	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_tables.cpp
+	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_widgets.cpp
+	${PROJECT_SOURCE_DIR}/extern/imgui/backends/imgui_impl_glfw.cpp
+    ${PROJECT_SOURCE_DIR}/extern/imgui/backends/imgui_impl_opengl2.cpp
 )
 
 include_directories(
 	${PROJECT_SOURCE_DIR}/extern/glew/include
 	${PROJECT_SOURCE_DIR}/extern/glfw/include
-	${PROJECT_SOURCE_DIR}/extern/Nuklear
+	${PROJECT_SOURCE_DIR}/extern/imgui
 	${PROJECT_SOURCE_DIR}/extern/toml11
 	${PROJECT_SOURCE_DIR}/extern/libembroidery/src
 	${PROJECT_SOURCE_DIR}/src
@@ -94,7 +99,6 @@ include_directories(
 target_link_libraries(embroidermodder PRIVATE
 	Qt6::Core
 	Qt6::Widgets
-	Qt6::OpenGL
 	Qt6::PrintSupport
 	glfw
 	embroidery_static

@@ -3553,10 +3553,7 @@ void store_string(std::string key, std::string value);
 void store_double(std::string key, double value);
 void store_int(std::string key, int value);
 void store_bool(std::string key, bool value);
-
-extern "C" {
-    void message_box(char *title, char *message);
-}
+void imgui_example(std::string title, std::string message);
 
 extern std::unordered_map<std::string, Setting> settings;
 extern std::vector<EmbWindow> window_list;

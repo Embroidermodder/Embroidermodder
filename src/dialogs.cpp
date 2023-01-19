@@ -13,7 +13,86 @@
  *      https://peps.python.org/pep-0007/
  */
 
+
+#include "imgui.h"
+#include "backends/imgui_impl_glfw.h"
+#include "backends/imgui_impl_opengl2.h"
+
+#include <iostream>
+
+#include <GLFW/glfw3.h>
+
 #include "embroidermodder.h"
+
+void
+MainWindow::changelog()
+{
+    debug_message("changelog()");
+
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    std::ifstream file("docs/changelog.md");
+    std::string message, line, title = "Changelog -- Embroidermodder 2";
+    while (std::getline(file, line)) {
+        message += line + "\n";
+    }
+
+    int width = 500;
+    int height = 200;
+    if (!glfwInit()) {
+        std::cout << "ERROR: Failed to initialise GLFW." << std::endl;
+        return;
+    }
+    GLFWwindow *window = glfwCreateWindow(width, height, title.data(), NULL, NULL);
+    if (!window) {
+        std::cout << "ERROR: Failed to create GLFW window." << std::endl;
+        glfwTerminate();
+        return;
+    }
+    glfwMakeContextCurrent(window);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL2_Init();
+
+    glfwGetFramebufferSize(window, &width, &height);
+    ImVec2 v = {width, height};
+    ImGui::SetNextWindowPos({0.0, 0.0});
+    ImGui::SetNextWindowSize(v);
+
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::ShowDemoWindow();
+
+        ImGui::Begin(title.data());
+        ImGui::Text(message.data());
+        if (ImGui::Button("Close")) {
+            break;
+        }
+        ImGui::End();
+        ImGui::Render();
+
+        glfwGetFramebufferSize(window, &width, &height);
+        glViewport(0, 0, width, height);
+        glClearColor(0.1, 0.1, 0.1, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+
+        glfwMakeContextCurrent(window);
+        glfwSwapBuffers(window);
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    QApplication::restoreOverrideCursor();
+}
 
 void MainWindow::about()
 {
@@ -58,41 +137,6 @@ void MainWindow::about()
     dialog.setWindowTitle(title);
     dialog.setMinimumWidth(img.minimumWidth()+30);
     dialog.setMinimumHeight(img.minimumHeight()+50);
-    dialog.setLayout(&layout);
-    dialog.exec();
-    QApplication::restoreOverrideCursor();
-}
-
-void MainWindow::changelog()
-{
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    debug_message("changelog()");
-    message_box("Changelog", "test");
-
-    QString appDir = qApp->applicationDirPath();
-    QDialog dialog(this);
-    std::ifstream file("docs/changelog.md");
-    std::string s, line;
-    while (std::getline(file, line)) {
-        s += line + "\n";
-    }
-    QPlainTextEdit text(QString::fromLocal8Bit(s));
-
-    QDialogButtonBox buttonbox(Qt::Horizontal, &dialog);
-    QPushButton close_button(&dialog);
-    close_button.setText("Close");
-    buttonbox.addButton(&close_button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-
-    QVBoxLayout layout;
-    layout.setAlignment(Qt::AlignCenter);
-    layout.addWidget(&text);
-    layout.addWidget(&buttonbox);
-
-    dialog.setWindowTitle("Changelog -- Embroidermodder 2");
-    dialog.setMinimumWidth(300);
-    dialog.setMinimumHeight(500);
     dialog.setLayout(&layout);
     dialog.exec();
     QApplication::restoreOverrideCursor();

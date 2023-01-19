@@ -14,6 +14,7 @@
  */
 
 #include "embroidermodder.h"
+#undef main
 
 void loadConfiguration(void);
 
