@@ -27,12 +27,89 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-GLuint circle_;
+ImFont *font;
+bool imgui_running = true;
+GLuint circle_ = 0;
+std::string menu_action = "";
 
-int
-load_textures(void)
+std::vector<std::vector<std::string>> file_menu_layout = {
+    {"New", "new"},
+    {"Open", "open"},
+    {"---", "---"},
+    {"Save", "save"},
+    {"Save As...", "saveas"},
+    {"Export", "export"},
+    {"---", "---"},
+    {"Close", "close"},
+    {"---", "---"},
+    {"Print", "print"},
+    {"---", "---"},
+    {"Quit", "quit"}
+};
+std::vector<std::vector<std::string>> edit_menu_layout = {
+    {"Undo", "undo"},
+    {"Redo", "redo"},
+    {"---", "---"},
+    {"Cut", "cut"},
+    {"Copy", "copy"},
+    {"Paste", "paste"}
+};
+std::vector<std::vector<std::string>> view_menu_layout = {
+    {"Zoom Realtime", "zoom realtime"},
+    {"---", "---"},
+    {"Zoom In", "zoom in"},
+    {"Zoom Out", "zoom out"},
+    {"Zoom Extents", "zoom extents"},
+    {"---", "---"},
+    {"Pan Left", "pan left"},
+    {"Pan Right", "pan right"},
+    {"Pan Up", "pan up"},
+    {"Pan Down", "pan down"},
+    {"---", "---"},
+    {"Day", "day"},
+    {"Night", "night"}
+};
+std::vector<std::vector<std::string>> draw_menu_layout = {
+    {"Circle", "circle"},
+    {"Ellipse", "ellipse"},
+    {"Rectangle", "rectangle"},
+    {"Polyline", "polyline"},
+    {"Polygon", "polygon"},
+};
+
+GLuint
+load_texture(const char *fname)
 {
-    return 0;
+    GLuint texture_id;
+    int width, height;
+    unsigned char *data = stbi_load(fname, &width, &height, NULL, 4);
+    if (!data) {
+        return 0;
+    }
+
+    glGenTextures(1, &texture_id);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    stbi_image_free(data);
+
+    return texture_id;
+}
+
+void
+set_style(void)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    font = io.Fonts->AddFontFromFileTTF("fonts/SourceSans3-regular.ttf", 16);
+    ImGui::PushFont(font);
+
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.35f, 0.35f, 0.35f, 1.00f);
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(0.35f, 0.35f, 0.35f, 1.00f);
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
+    style.Colors[ImGuiCol_MenuBarBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
 }
 
 void
@@ -93,9 +170,28 @@ imgui_actuator(std::string command)
     if (command == "open") {
         std::cout << "Open File" << std::endl;
     }
+    if (command == "quit") {
+        imgui_running = false;
+    }
 }
 
-int state = 0;
+void
+load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_layout)
+{
+    if (ImGui::BeginMenu(menu_label.c_str())) {
+        for (auto i : menu_layout) {
+            if (i[0] == "---") {
+                ImGui::Separator();
+            }
+            else {
+                if (ImGui::MenuItem(i[0].c_str())) {
+                    menu_action = i[1];
+                }
+            }
+        }
+        ImGui::EndMenu();
+    }
+}
 
 void
 main_widget(void)
@@ -109,22 +205,20 @@ main_widget(void)
     ImGui::SetWindowFontScale(1.5);
 
     ImGui::Text("Example");
+    menu_action = "";
+
+    ImVec2 size = {50, 50};
+	if (ImGui::ImageButton((void*)(intptr_t)circle_, size)) {
+        menu_action = "circle";
+    }
 
     if (ImGui::BeginMenuBar()) {
-        if (ImGui::BeginMenu("File")) {
-            static bool open_file = false;
-            if (ImGui::MenuItem("New")) {
-                state = 1;
-                imgui_actuator("new");
-            }
-            ImGui::Separator();
-            ImGui::MenuItem("Open", "", &open_file);
-            if (state > 0) {
-                ImGui::MenuItem("Save");
-            }
-            ImGui::EndMenu();
-        }
+        load_menu("File", file_menu_layout);
+        load_menu("Edit", edit_menu_layout);
         ImGui::EndMenuBar();
+    }
+    if (menu_action != "") {
+        imgui_actuator(menu_action);
     }
 
     if (ImGui::Button("Close")) {
@@ -139,8 +233,8 @@ imgui_version(void)
 {
     imgui_load_configuration();
 
-    int width = 500;
-    int height = 200;
+    int width = 640;
+    int height = 480;
     if (!glfwInit()) {
         std::cout << "ERROR: Failed to initialise GLFW." << std::endl;
         return;
@@ -165,7 +259,10 @@ imgui_version(void)
     ImGui::SetNextWindowPos({0.0, 0.0});
     ImGui::SetNextWindowSize(v);
 
-    load_textures();
+    set_style();
+
+    std::string fname = "assets/icons/default/circle.png";
+    circle_ = load_texture(fname.c_str());
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
@@ -187,6 +284,9 @@ imgui_version(void)
 
         glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
+        if (!imgui_running) {
+            break;
+        }
     }
 
     glfwDestroyWindow(window);

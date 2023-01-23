@@ -1,6 +1,0 @@
-[submodule "extern/libembroidery"]
-	path = extern/libembroidery
-	url = https://github.com/embroidermodder/libembroidery
-[submodule "extern/imgui"]
-	path = extern/imgui
-	url = https://github.com/ocornut/imgui

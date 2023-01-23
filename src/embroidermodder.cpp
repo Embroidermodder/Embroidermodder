@@ -23,8 +23,6 @@ const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
 
 /* TTF_Font *interface_font; */
-std::vector<EmbWindow> window_list;
-std::vector<EmbWidget> widget_list;
 std::vector<EmbPattern> pattern_list;
 int generated_widgets = 0;
 std::vector<int> selected;
@@ -281,57 +279,6 @@ GroupBox geometry_circle = {
 };
 
 int
-click_detection(EmbWidget *w, int x, int y)
-{
-    return (w->rect.x < x)
-        && (x < w->rect.x + w->rect.w)
-        && (w->rect.y < y)
-        && (y < w->rect.y + w->rect.h);
-}
-
-Rect
-make_rectangle(int x, int y, int w, int h)
-{
-    Rect rect;
-    rect.x = x;
-    rect.y = y;
-    rect.w = w;
-    rect.h = h;
-    return rect;
-}
-
-EmbWidget *
-get_widget_by_key(char *key)
-{
-    for (std::vector<EmbWidget>::size_type i=0; i<widget_list.size(); i++) {
-        if (widget_list[i].key == key) {
-            return &(widget_list[i]);
-        }
-    }
-    return NULL;
-}
-
-int
-get_widget_by_label(char *label)
-{
-    for (std::vector<EmbWidget>::size_type i=0; i<widget_list.size(); i++) {
-        if (widget_list[i].label == label) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-void
-set_visibility(char *label, int visibility)
-{
-    int index = get_widget_by_label(label);
-    if (index >= 0) {
-        widget_list[index].visibility = visibility;
-    }
-}
-
-int
 parse_command(int argc, char *argv[], std::vector<std::string> files)
 {
     for (int i=1; i<argc; i++) {
@@ -537,29 +484,6 @@ translate(std::string string)
     }
     return string;
 }
-
-/* https://doc.qt.io/qt-6/qopenglwidget.html
- *
- * Eventually move onto SDL/GLFW
-
-void
-GLView::initializeGL(void)
-{
-
-}
-
-void
-GLView::resizeGL(int w, int h)
-{
-
-}
-
-void
-GLView::paintGL(void)
-{
-
-}
- */
 
 Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
 {

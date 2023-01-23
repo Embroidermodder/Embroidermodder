@@ -127,38 +127,6 @@ bool  settings_text_style_strikeout;
 std::vector<std::string> undo_history;
 int undo_history_position = 0;
 
-void
-line_action(EmbWindow *window)
-{
-    debug_message("line_action(window=" + window->label + ");");
-}
-
-void
-distance_action(EmbWindow *window)
-{
-    debug_message("distance_action(window=" + window->label + ");");
-}
-
-void
-dolphin_action(EmbWindow *window)
-{
-    debug_message("dolphin_action(window=" + window->label + ");");
-}
-
-void
-ellipse_action(EmbWindow *window)
-{
-    debug_message("ellipse_action(window=" + window->label + ");");
-}
-
-/* Acts on the EmbPanel that is focussed.
- */
-void
-distance(EmbWindow *window)
-{
-    debug_message("distance(window=" + window->label + ");");
-}
-
 int
 MainWindow::run_script(std::string filename)
 {
