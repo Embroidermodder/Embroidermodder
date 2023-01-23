@@ -18,6 +18,11 @@ For more information, see [our website](http://www.libembroidery.org) where the 
 We don't have a forum so if you have any issues with following the build described here, feel free to post it as a github issue.
 If this becomes unworkable we'll set one up.
 
+#### Sample Files
+
+Various sample embroidery design files can be found in
+the assets/samples folder.
+
 ## Dependencies
 
 To build Embroidermodder 2 from source you will need at least:
@@ -25,12 +30,9 @@ To build Embroidermodder 2 from source you will need at least:
 - [Libembroidery](https://github.com/Embroidermodder/libembroidery) (see below)
 - [Qt](http://www.qt-project.org) (version >= 6.0).
 
-Optionally, you may want to add:
-
-- [KDE](http://www.kde.org) for thumbnailer
-- [Valgrind](http://www.valgrind.org) for debugging
-
 All other dependencies are included into the source code in the `extern/` directory.
+
+(Note that this doesn't cover the thumbnailer, which requires KDE.)
 
 ### Libembroidery
 
@@ -113,8 +115,3 @@ On Windows the install commands are the same, however you need to use a `cmd` te
 Then you'll be able to run `embroidermodder` from the command line with the command:
 
     embroidermodder.exe
-
-## Sample Files
-
-Various sample embroidery design files can be found in
-the assets/samples folder.
