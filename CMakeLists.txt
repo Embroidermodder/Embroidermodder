@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.20)
 
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
+set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/extern/glew/include)
+set(CMAKE_LIBRARY_PATH ${CMAKE_SOURCE_DIR}/extern/glew/lib/Release/x64)
+find_package(GLEW REQUIRED)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
@@ -33,8 +37,9 @@ set(GLFW_INSTALL OFF)
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport)
 qt_standard_project_setup()
 
-add_subdirectory(extern/glfw)
-add_subdirectory(extern/libembroidery)
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/glfw)
+#add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ImFileDialog)
+add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
 # The makers of CMake advise that you do not glob source files.
 #
@@ -44,62 +49,72 @@ add_subdirectory(extern/libembroidery)
 # give them the same treatment and list them explicitly here.
 #
 
-set(SRC_ASSETS ${PROJECT_SOURCE_DIR}/assets)
+set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
+
+add_executable(imgui_embroidermodder
+	${CMAKE_SOURCE_DIR}/src/imgui_embroidermodder.cpp
+	${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp
+	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_demo.cpp
+	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_draw.cpp
+	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_tables.cpp
+	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_widgets.cpp
+	${CMAKE_SOURCE_DIR}/extern/imgui/backends/imgui_impl_glfw.cpp
+    ${CMAKE_SOURCE_DIR}/extern/imgui/backends/imgui_impl_opengl2.cpp
+)
 
 add_executable(embroidermodder
-	${PROJECT_SOURCE_DIR}/src/actions.cpp
-	${PROJECT_SOURCE_DIR}/src/dialogs.cpp
-	${PROJECT_SOURCE_DIR}/src/embroidermodder.cpp
-	${PROJECT_SOURCE_DIR}/src/mainwindow-commands.cpp
-	${PROJECT_SOURCE_DIR}/src/mainwindow-settings.cpp
-	${PROJECT_SOURCE_DIR}/src/mainwindow.cpp
-	${PROJECT_SOURCE_DIR}/src/mdiarea.cpp
-	${PROJECT_SOURCE_DIR}/src/mdiwindow.cpp
-	${PROJECT_SOURCE_DIR}/src/object-arc.cpp
-	${PROJECT_SOURCE_DIR}/src/object-base.cpp
-	${PROJECT_SOURCE_DIR}/src/object-circle.cpp
-	${PROJECT_SOURCE_DIR}/src/object-dimleader.cpp
-	${PROJECT_SOURCE_DIR}/src/object-ellipse.cpp
-	${PROJECT_SOURCE_DIR}/src/object-image.cpp
-	${PROJECT_SOURCE_DIR}/src/object-line.cpp
-	${PROJECT_SOURCE_DIR}/src/object-path.cpp
-	${PROJECT_SOURCE_DIR}/src/object-point.cpp
-	${PROJECT_SOURCE_DIR}/src/object-polygon.cpp
-	${PROJECT_SOURCE_DIR}/src/object-polyline.cpp
-	${PROJECT_SOURCE_DIR}/src/object-rect.cpp
-	${PROJECT_SOURCE_DIR}/src/object-save.cpp
-	${PROJECT_SOURCE_DIR}/src/object-textsingle.cpp
-	${PROJECT_SOURCE_DIR}/src/preview-dialog.cpp
-	${PROJECT_SOURCE_DIR}/src/property-editor.cpp
-	${PROJECT_SOURCE_DIR}/src/selectbox.cpp
-	${PROJECT_SOURCE_DIR}/src/settings-dialog.cpp
-	${PROJECT_SOURCE_DIR}/src/statusbar.cpp
-	${PROJECT_SOURCE_DIR}/src/svg.cpp
-	${PROJECT_SOURCE_DIR}/src/undo-commands.cpp
-	${PROJECT_SOURCE_DIR}/src/undo-editor.cpp
-	${PROJECT_SOURCE_DIR}/src/view.cpp
-	${PROJECT_SOURCE_DIR}/extern/imgui/imgui.cpp
-	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_demo.cpp
-	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_draw.cpp
-	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_tables.cpp
-	${PROJECT_SOURCE_DIR}/extern/imgui/imgui_widgets.cpp
-	${PROJECT_SOURCE_DIR}/extern/imgui/backends/imgui_impl_glfw.cpp
-    ${PROJECT_SOURCE_DIR}/extern/imgui/backends/imgui_impl_opengl2.cpp
+	${CMAKE_SOURCE_DIR}/src/actions.cpp
+	${CMAKE_SOURCE_DIR}/src/dialogs.cpp
+	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
+	${CMAKE_SOURCE_DIR}/src/mainwindow-commands.cpp
+	${CMAKE_SOURCE_DIR}/src/mainwindow-settings.cpp
+	${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
+	${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
+	${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
+	${CMAKE_SOURCE_DIR}/src/object-arc.cpp
+	${CMAKE_SOURCE_DIR}/src/object-base.cpp
+	${CMAKE_SOURCE_DIR}/src/object-circle.cpp
+	${CMAKE_SOURCE_DIR}/src/object-dimleader.cpp
+	${CMAKE_SOURCE_DIR}/src/object-ellipse.cpp
+	${CMAKE_SOURCE_DIR}/src/object-image.cpp
+	${CMAKE_SOURCE_DIR}/src/object-line.cpp
+	${CMAKE_SOURCE_DIR}/src/object-path.cpp
+	${CMAKE_SOURCE_DIR}/src/object-point.cpp
+	${CMAKE_SOURCE_DIR}/src/object-polygon.cpp
+	${CMAKE_SOURCE_DIR}/src/object-polyline.cpp
+	${CMAKE_SOURCE_DIR}/src/object-rect.cpp
+	${CMAKE_SOURCE_DIR}/src/object-save.cpp
+	${CMAKE_SOURCE_DIR}/src/object-textsingle.cpp
+	${CMAKE_SOURCE_DIR}/src/preview-dialog.cpp
+	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
+	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
+	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
+	${CMAKE_SOURCE_DIR}/src/statusbar.cpp
+	${CMAKE_SOURCE_DIR}/src/svg.cpp
+	${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
+	${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
+	${CMAKE_SOURCE_DIR}/src/view.cpp
 )
 
 include_directories(
-	${PROJECT_SOURCE_DIR}/extern/glew/include
-	${PROJECT_SOURCE_DIR}/extern/glfw/include
-	${PROJECT_SOURCE_DIR}/extern/imgui
-	${PROJECT_SOURCE_DIR}/extern/toml11
-	${PROJECT_SOURCE_DIR}/extern/libembroidery/src
-	${PROJECT_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/extern/glew/include
+	${CMAKE_SOURCE_DIR}/extern/glfw/include
+	${CMAKE_SOURCE_DIR}/extern/imgui
+	${CMAKE_SOURCE_DIR}/extern/imgui_markdown
+	${CMAKE_SOURCE_DIR}/extern/toml11
+	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
+	${CMAKE_SOURCE_DIR}/src
 )
 
 target_link_libraries(embroidermodder PRIVATE
 	Qt6::Core
 	Qt6::Widgets
 	Qt6::PrintSupport
+	embroidery_static
+)
+
+target_link_libraries(imgui_embroidermodder PRIVATE
+	GLEW::GLEW
 	glfw
 	embroidery_static
 	opengl32)

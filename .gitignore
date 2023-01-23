@@ -2,23 +2,10 @@
 
 # Build
 build/
-CMakeFiles/
-.cache/
-CMakeCache.txt
-cmake_install.cmake
 *.exe
 *.out
 *.app
 *.o
-embroidermodder.exe
-embroidermodder
-.obj/
-.moc/
-.qmake.stash
-prompt.log
-settings.toml
-*.pro.user
-Makefile
 
 # OS generated files
 ## Macintosh

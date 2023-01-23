@@ -534,13 +534,6 @@ static void version()
 
 int main(int argc, char* argv[])
 {
-    if (argc>1) {
-        if (argv[1][0] == 'i') {
-            imgui_version();
-            return 0;
-        }
-    }
-
 #if defined(Q_OS_MAC)
     Application app(argc, argv);
 #else
