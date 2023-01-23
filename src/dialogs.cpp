@@ -24,17 +24,120 @@
 
 #include "embroidermodder.h"
 
-void
-MainWindow::changelog()
-{
-    debug_message("changelog()");
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-    std::ifstream file("docs/changelog.md");
-    std::string message, line, title = "Changelog -- Embroidermodder 2";
-    while (std::getline(file, line)) {
-        message += line + "\n";
+GLuint circle_;
+
+int
+load_textures(void)
+{
+    return 0;
+}
+
+void
+imgui_load_configuration(void)
+{
+    auto config = toml::parse("imgui_config.toml");
+
+    for (const auto &[i, j] : config.as_table()) {
+        if (!config[i].is_table()) {
+            continue;
+        }
+        if (!config[i].contains("type")) {
+            continue;
+        }
+        std::string s = toml::get<std::string>(config[i]["type"]);
+        if (s == "top-menu") {
+            // If the menu doesn't exist, create it.
+            std::string s_label = toml::get<std::string>(config[i]["label"]);
+        }
     }
+    for (const auto &[i, j] : config.as_table()) {
+        if (!config[i].is_table()) {
+            continue;
+        }
+        if (!config[i].contains("type")) {
+            continue;
+        }
+        std::string s = toml::get<std::string>(config[i]["type"]);
+        if (s == "menu-item") {
+        }
+    }
+
+    /*
+
+    if (toolbarName.toUpper() != "NONE") {
+        //If the toolbar doesn't exist, create it.
+        if (!toolbarHash.value(toolbarName)) {
+            QToolBar* tb = new QToolBar(toolbarName, this);
+            tb->setObjectName("toolbar" + toolbarName);
+            connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+            addToolBar(Qt::LeftToolBarArea, tb);
+            addToolBarBreak(Qt::LeftToolBarArea);
+            toolbarHash.insert(toolbarName, tb);
+        }
+
+        //TODO: order actions position in toolbar based on .ini setting
+        toolbarHash.value(toolbarName)->addAction(ACTION);
+    }
+    */
+}
+
+void
+imgui_actuator(std::string command)
+{
+    if (command == "new") {
+        std::cout << "New File" << std::endl;
+    }
+    if (command == "open") {
+        std::cout << "Open File" << std::endl;
+    }
+}
+
+int state = 0;
+
+void
+main_widget(void)
+{
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::SetNextWindowSize(viewport->Size);
+    ImGui::Begin("Embroidermodder", NULL, ImGuiWindowFlags_MenuBar
+        | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar
+        | ImGuiWindowFlags_NoMove );
+    ImGui::SetWindowFontScale(1.5);
+
+    ImGui::Text("Example");
+
+    if (ImGui::BeginMenuBar()) {
+        if (ImGui::BeginMenu("File")) {
+            static bool open_file = false;
+            if (ImGui::MenuItem("New")) {
+                state = 1;
+                imgui_actuator("new");
+            }
+            ImGui::Separator();
+            ImGui::MenuItem("Open", "", &open_file);
+            if (state > 0) {
+                ImGui::MenuItem("Save");
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMenuBar();
+    }
+
+    if (ImGui::Button("Close")) {
+        std::cout << "Close" << std::endl;
+    }
+
+    ImGui::End();
+}
+
+void
+imgui_version(void)
+{
+    imgui_load_configuration();
 
     int width = 500;
     int height = 200;
@@ -42,7 +145,8 @@ MainWindow::changelog()
         std::cout << "ERROR: Failed to initialise GLFW." << std::endl;
         return;
     }
-    GLFWwindow *window = glfwCreateWindow(width, height, title.data(), NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(width, height,
+        "Embroidermodder " VERSION, NULL, NULL);
     if (!window) {
         std::cout << "ERROR: Failed to create GLFW window." << std::endl;
         glfwTerminate();
@@ -61,6 +165,8 @@ MainWindow::changelog()
     ImGui::SetNextWindowPos({0.0, 0.0});
     ImGui::SetNextWindowSize(v);
 
+    load_textures();
+
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
@@ -68,14 +174,8 @@ MainWindow::changelog()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::ShowDemoWindow();
+        main_widget();
 
-        ImGui::Begin(title.data());
-        ImGui::Text(message.data());
-        if (ImGui::Button("Close")) {
-            break;
-        }
-        ImGui::End();
         ImGui::Render();
 
         glfwGetFramebufferSize(window, &width, &height);
@@ -91,7 +191,11 @@ MainWindow::changelog()
 
     glfwDestroyWindow(window);
     glfwTerminate();
-    QApplication::restoreOverrideCursor();
+}
+
+void
+MainWindow::changelog()
+{
 }
 
 void MainWindow::about()

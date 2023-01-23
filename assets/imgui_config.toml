@@ -1,0 +1,148 @@
+#
+#  Embroidermodder 2.
+#
+#  ____________________________________________________________
+#
+#  Copyright 2013_2022 The Embroidermodder Team
+#  Embroidermodder 2 is Open Source Software.
+#  See LICENSE for licensing terms.
+#
+#  ____________________________________________________________
+#
+
+[general]
+type = "meta"
+languages = [
+    "translations/default.csv",
+    "translations/english_us.csv",
+    "translations/english_gb.csv",
+    "translations/french.csv",
+    "translations/spanish.csv",
+    "translations/hindi.csv",
+    "translations/chinese_traditional.csv",
+    "translations/chinese_simplified.csv",
+    "translations/arabic.csv",
+    "translations/russian.csv"
+]
+crash_test = [
+    "do-nothing",
+    "debug-message File actions",
+    "new-file",
+    "# Need to set the filename here.",
+    "open-file",
+    "save-file",
+    "save-file-as",
+
+    "debug-message Edit actions",
+    "# Place some objects to alter here.",
+    "cut",
+    "copy",
+    "paste",
+
+    "debug-message Configuring the UI.",
+    "icon 24",
+    "icon 32",
+    "icon 48",
+    "icon 64",
+    "icon 128",
+    "icon 16"
+]
+boot-message = """
+ _____________________________________________________________
+|                 EMBROIDERMODDER 2.0.0-alpha                 |
+|                  http://libembroidery.org                   |
+|-------------------------------------------------------------|
+|        Copyright 2013-2022 The Embroidermodder Team         |
+|       Distributed under the terms of the zlib license.      |
+|_____________________________________________________________|
+"""
+greig-message = """\
+Hi there. If you are not a developer, report this as a bug. \
+If you are a developer, your code needs examined, \
+and possibly your head too.\
+"""
+help-message = """
+Usage: embroidermodder [options] files ...
+
+Options:
+  -d, --debug      Print lots of debugging information.
+  -h, --help       Print this message and exit.
+  -v, --version    Print the version number of embroidermodder and exit.
+"""
+
+[draw-menu]
+type = "top-menu"
+label = "Draw"
+position = 8
+
+[ellipse-menu]
+type = "menu-item"
+menu = "Draw"
+icon = "ellipse"
+command = "add ellipse"
+label = "Add Ellipse"
+position = 9
+tooltip = "Ellipse"
+statustip = "Creates a ellipse:  ELLIPSE"
+
+[circle-menu]
+type = "menu-item"
+menu = "Draw"
+icon = "circle"
+command = "add circle"
+label = "Add Circle"
+position = 8
+tooltip = "Circle"
+statustip = "Creates a circle:  CIRCLE"
+
+[dolphin]
+type = "design"
+label = "Dolphin"
+shape-def = "designs/dolphin.ps"
+num-points = 512
+scale-x = 0.04
+scale-y = 0.04
+description = "Adds a dolphin design to the vector layer."
+
+[heart4]
+type = "design"
+label = "heart4"
+num-points = 100
+scale-x = 1.0
+scale-y = 1.0
+decorated-label = "&Heart4"
+description = "Adds a heart to the vector layer: heart4."
+shape-def = "designs/heart4.ps"
+
+#  System Specific Overrides
+#
+
+[android]
+type = "system-overrides"
+em2_version = "Android Version"
+assets_directory = "/usr/share/embroidermodder"
+os_seperator = "/"
+
+[ios]
+type = "system-overrides"
+em2_version = "iOS version"
+assets_directory = "/usr/share/embroidermodder"
+os_seperator = "/"
+
+[linux]
+type = "system-overrides"
+em2_version = "X11 version"
+assets_directory = "/usr/share/embroidermodder"
+os_seperator = "/"
+
+[macos]
+type = "system-overrides"
+em2_version = "Mac OS Cocoa version"
+assets_directory = "/usr/share/embroidermodder"
+os_seperator = "/"
+
+[win32]
+type = "system-overrides"
+em2_version = "Win32 version"
+assets_directory = "C:\\ProgramData\\embroidermodder"
+os_seperator = "\\"
