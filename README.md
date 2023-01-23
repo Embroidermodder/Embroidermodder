@@ -9,9 +9,14 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more information, see [our website](http://www.libembroidery.org).
-
 Embroidermodder and associated projects are built by "The Embroidermodder Team" (see [CREDITS.md](CREDITS.md)).
+
+## Documentation and Community
+
+For more information, see [our website](http://www.libembroidery.org) where the manuals are hosted.
+
+We don't have a forum so if you have any issues with following the build described here, feel free to post it as a github issue.
+If this becomes unworkable we'll set one up.
 
 ## Dependencies
 
