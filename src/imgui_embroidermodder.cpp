@@ -17,22 +17,34 @@
 #include "imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl2.h"
+#include "TextEditor.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
 
 #include <iostream>
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <toml.hpp>
 #include <embroidery.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
-
 #define VERSION "2.0.0-alpha"
 
-ImFont *font;
-bool imgui_running = true;
-GLuint circle_ = 0;
-std::string menu_action = "";
+typedef struct Icon_ {
+    std::string fname;
+    std::string command;
+    GLuint texture_id;
+} Icon;
+
+static int icon_size = 16;
+static ImFont *font;
+static bool running = true;
+static GLuint circle_ = 0;
+static std::vector<EmbPattern*> pattern_list;
+static std::vector<Icon> icon_list;
+static std::string menu_action = "";
+static std::string current_pattern = "";
+static TextEditor editor;
 
 std::vector<std::vector<std::string>> file_menu_layout = {
     {"New", "new"},
@@ -79,21 +91,48 @@ std::vector<std::vector<std::string>> draw_menu_layout = {
     {"Polygon", "polygon"},
 };
 
+void set_style(void);
+void load_configuration(void);
+void actuator(std::string command);
+void load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_layout);
+void load_toolbar(std::string menu_label, std::vector<std::vector<std::string>> toolbar_layout);
+
+GLuint
+gen_gl_texture(uint8_t* data, int w, int h, char fmt)
+{
+    GLuint texture;
+
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return texture;
+}
+
+/* Description is a a simple string table of path instructions,
+ * 
+ */
+int
+render_vector_graphic(std::vector<std::string> description)
+{
+    return 0;
+}
+
 GLuint
 load_texture(const char *fname)
 {
-    GLuint texture_id;
     int width, height;
-    unsigned char *data = stbi_load(fname, &width, &height, NULL, 4);
+    uint8_t* data = stbi_load(fname, &width, &height, NULL, 4);
     if (!data) {
         return 0;
     }
 
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    GLuint texture_id = gen_gl_texture(data, width, height, 0);
     stbi_image_free(data);
 
     return texture_id;
@@ -107,14 +146,14 @@ set_style(void)
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.45f, 0.45f, 0.45f, 1.00f);
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
     style.Colors[ImGuiCol_PopupBg] = ImVec4(0.55f, 0.55f, 0.55f, 1.00f);
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.65f, 0.65f, 0.65f, 1.00f);
     style.Colors[ImGuiCol_MenuBarBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
 }
 
 void
-imgui_load_configuration(void)
+load_configuration(void)
 {
     auto config = toml::parse("imgui_config.toml");
 
@@ -142,28 +181,10 @@ imgui_load_configuration(void)
         if (s == "menu-item") {
         }
     }
-
-    /*
-
-    if (toolbarName.toUpper() != "NONE") {
-        //If the toolbar doesn't exist, create it.
-        if (!toolbarHash.value(toolbarName)) {
-            QToolBar* tb = new QToolBar(toolbarName, this);
-            tb->setObjectName("toolbar" + toolbarName);
-            connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
-            addToolBar(Qt::LeftToolBarArea, tb);
-            addToolBarBreak(Qt::LeftToolBarArea);
-            toolbarHash.insert(toolbarName, tb);
-        }
-
-        //TODO: order actions position in toolbar based on .ini setting
-        toolbarHash.value(toolbarName)->addAction(ACTION);
-    }
-    */
 }
 
 void
-imgui_actuator(std::string command)
+actuator(std::string command)
 {
     if (command == "new") {
         std::cout << "New File" << std::endl;
@@ -172,7 +193,7 @@ imgui_actuator(std::string command)
         std::cout << "Open File" << std::endl;
     }
     if (command == "quit") {
-        imgui_running = false;
+        running = false;
     }
 }
 
@@ -192,6 +213,27 @@ load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_lay
         }
         ImGui::EndMenu();
     }
+}
+
+void
+load_toolbar(std::string menu_label, std::vector<std::vector<std::string>> toolbar_layout)
+{
+    for (auto i : toolbar_layout) {
+        if (i[0] == "---") {
+            ImGui::Separator();
+        }
+        else {
+            if (ImGui::Button(i[0].c_str())) {
+                menu_action = i[1];
+            }
+        }
+    }
+}
+
+void
+pattern_view(int index)
+{
+
 }
 
 void
@@ -216,14 +258,20 @@ main_widget(void)
     if (ImGui::BeginMenuBar()) {
         load_menu("File", file_menu_layout);
         load_menu("Edit", edit_menu_layout);
+        load_menu("View", view_menu_layout);
+        load_menu("Draw", draw_menu_layout);
         ImGui::EndMenuBar();
     }
     if (menu_action != "") {
-        imgui_actuator(menu_action);
+        actuator(menu_action);
     }
 
-    if (ImGui::Button("Close")) {
-        std::cout << "Close" << std::endl;
+    editor.Render("Text Editor");
+
+    if (pattern_list.size() > 0) {
+        if (ImGui::Button("Close")) {
+            std::cout << "Close" << std::endl;
+        }
     }
 
     ImGui::End();
@@ -232,7 +280,7 @@ main_widget(void)
 int
 main(int argc, char* argv[])
 {
-    imgui_load_configuration();
+    load_configuration();
 
     int width = 640;
     int height = 480;
@@ -265,6 +313,14 @@ main(int argc, char* argv[])
     std::string fname = "assets/icons/default/circle.png";
     circle_ = load_texture(fname.c_str());
 
+    std::string line;
+    std::ifstream file;
+    file.open("imgui_config.toml");
+    while (std::getline(file, line)) {
+        editor.InsertText(line);
+        editor.InsertText("\n");
+    }
+
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
@@ -285,7 +341,7 @@ main(int argc, char* argv[])
 
         glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
-        if (!imgui_running) {
+        if (!running) {
             break;
         }
     }

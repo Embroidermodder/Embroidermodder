@@ -38,7 +38,6 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport)
 qt_standard_project_setup()
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/glfw)
-#add_subdirectory(${CMAKE_SOURCE_DIR}/extern/ImFileDialog)
 add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
 # The makers of CMake advise that you do not glob source files.
@@ -53,6 +52,7 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 add_executable(imgui_embroidermodder
 	${CMAKE_SOURCE_DIR}/src/imgui_embroidermodder.cpp
+	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit/TextEditor.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_demo.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_draw.cpp
@@ -100,9 +100,10 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/extern/glew/include
 	${CMAKE_SOURCE_DIR}/extern/glfw/include
 	${CMAKE_SOURCE_DIR}/extern/imgui
-	${CMAKE_SOURCE_DIR}/extern/imgui_markdown
 	${CMAKE_SOURCE_DIR}/extern/toml11
+	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
+	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
 	${CMAKE_SOURCE_DIR}/src
 )
 
@@ -114,7 +115,6 @@ target_link_libraries(embroidermodder PRIVATE
 )
 
 target_link_libraries(imgui_embroidermodder PRIVATE
-	GLEW::GLEW
 	glfw
 	embroidery_static
 	opengl32)
