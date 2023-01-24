@@ -9,11 +9,13 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-Embroidermodder and associated projects are built by "The Embroidermodder Team" (see [CREDITS.md](CREDITS.md)).
+Embroidermodder and associated projects are built by _The Embroidermodder Team_ (see [CREDITS.md](CREDITS.md)).
 
 ## Documentation and Community
 
-For more information, see [our website](http://www.libembroidery.org) where the manuals are hosted.
+For more information, see [our website](http://www.libembroidery.org) where the manuals are hosted. Embroidermodder 2 is
+built on top of our own [libembroidery](https://github.com/Embroidermodder/libembroidery) C library: if you need an
+automated solution you'll be better served by the command line tools there.
 
 We don't have a forum so if you have any issues with following the build described here, feel free to post it as a github issue.
 If this becomes unworkable we'll set one up.
@@ -25,29 +27,12 @@ the assets/samples folder.
 
 ## Dependencies
 
-To build Embroidermodder 2 from source you will need at least:
-- [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
-- [Libembroidery](https://github.com/Embroidermodder/libembroidery) (see below)
-- [Qt](http://www.qt-project.org) (version >= 6.0).
+To build Embroidermodder 2 from source you will need at least to download this repository and [Qt](http://www.qt-project.org) (version >= 6.0).
+We're working on moving to the lighter Dear ImGui with GLFW backend, so eventually you'll just need a basic CMake build environment.
 
 All other dependencies are included into the source code in the `extern/` directory.
 
 (Note that this doesn't cover the thumbnailer, which requires KDE.)
-
-### Libembroidery
-
-The core library libembroidery for Embroidermodder 2 is a git submodule, which means that
-they reside in a separate repository. It is necessary for compilation so
-if you used ```git clone``` to obtain the Embroidermodder source,
-you need to run these commands from the toplevel of
-the working tree (which is the Embroidermodder directory):
-
-```
-git submodule init
-git submodule update
-```
-
-This is part of the build script already.
 
 ### Qt6
 
