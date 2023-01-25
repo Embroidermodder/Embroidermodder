@@ -12,6 +12,32 @@
 
 version = "2.0.0-alpha"
 
+translation_files = [
+    "translations/afrikaans.toml",
+    "translations/arabic.toml",
+    "translations/chinese_traditional.toml",
+    "translations/chinese_simplified.toml",
+    "translations/czech.toml",
+    "translations/dutch.toml",
+    "translations/finnish.toml",
+    "translations/hindi.toml",
+    "translations/polish.toml",
+    "translations/spanish.toml",
+    "translations/danish.toml",
+    "translations/french.toml",
+    "translations/italian.toml",
+    "translations/portuguese.toml",
+    "translations/swedish.toml",
+    "translations/german.toml",
+    "translations/japanese.toml",
+    "translations/romanian.toml",
+    "translations/turkish.toml",
+    "translations/english_gb.toml",
+    "translations/greek.toml",
+    "translations/korean.toml",
+    "translations/russian.toml"
+]
+
 menu_layout = [
     ["File", "file_menu"],
     ["Open Recent", "open_recent_menu"],
@@ -505,8 +531,142 @@ tips = [
     "that you can quickly change the background, crosshair and grid colors using the 'RGB' command?"
 ]
 
+
 [general]
-type = "meta"
+window_position_x = 0
+window_position_y = 0
+window_size_x = 800
+window_size_y = 600
+language = "default"
+icon_theme = "default"
+icon_size = 16
+mdi_bg_use_logo = true
+mdi_bg_use_texture = true
+mdi_bg_use_color = true
+mdi_bg_logo = "./images/logo_spirals.png"
+mdi_bg_texture = "./images/texture_spirals.png"
+mdi_bg_color = [192, 192, 192]
+tip_of_the_day = true
+current_tip = 0
+system_help_browser = true
+
+[display]
+use_opengl = false
+renderhint_aa = false
+renderhint_smooth_pix = false
+renderhint_high_aa = false
+renderhint_noncosmetic = false
+show_scrollbars = true
+scrollbar_widget_num = 0
+crosshair_color = [0,  0,  0]
+bg_color = [235, 235, 235]
+selectbox_left_color = [0, 128, 0]
+selectbox_left_fill = [0, 255,  0]
+selectbox_right_color = [0, 0, 128]
+selectbox_right_fill = [0, 0, 255]
+selectbox_alpha = 32
+zoomscale_in = 2.0
+zoomscale_out = 0.5
+crosshair_percent = 5
+units = "mm"
+
+[prompt]
+color = [0,  0,  0]
+bg_color = [255, 255, 255]
+font_family = "Monospace"
+font_style = "normal"
+font_size = 12
+save_history = true
+save_history_as_html = false
+save_history_filename = "./prompt.log"
+
+[opensave]
+custom_filter = "supported"
+open_format = "*.*"
+open_thumbnail = false
+save_format = "*.*"
+save_thumbnail = false
+
+[recent]
+max_files = 10
+list_of_files = []
+directory = "./samples"
+
+[trimming]
+trim_dst_num_jumps = 5
+
+[printing]
+printing_default_device = ""
+printing_use_last_device = false
+printing_disable_bg = true
+
+[grid]
+show_on_load = true
+show_origin = true
+color_match_crosshair = true
+color = [0, 0, 0]
+load_from_file = true
+type = "Rectangular"
+center_on_origin = true
+center_x = 0.0
+center_y = 0.0
+size_x = 100.0
+size_y = 100.0
+spacing_x = 25.0
+spacing_y = 25.0
+size_radius = 50.0
+spacing_radius = 25.0
+spacing_angle = 45.0
+
+[ruler]
+ruler_show_on_load = true
+ruler_metric = true
+ruler_color = [210,210, 50]
+ruler_pixel_size = 20
+
+[qsnap]
+enabled = true
+locator_color = [255, 255, 0]
+locator_size = 4
+aperture_size = 10
+endpoint = true
+midpoint = true
+center = true
+node = true
+quadrant = true
+intersection = true
+extension = true
+insertion = false
+perpendicular = true
+tangent = true
+nearest = false
+apparent = false
+parallel = false
+
+[lineweight]
+lwt_show_lwt = false
+lwt_real_render = true
+lwt_default_lwt = 0
+
+[selection]
+selection_mode_pickfirst = true
+selection_mode_pickadd = true
+selection_mode_pickdrag= false
+selection_coolgrip_color = [0, 0, 255]
+selection_hotgrip_color = [255, 0, 0]
+selection_grip_size = 4
+selection_pickbox_size = 4
+
+[text]
+font = "Arial"
+size = 12.0
+angle = 0.0
+bold = false
+italic = false
+underline = false
+strikeout = false
+overline= false
+
 languages = [
     "translations/default.csv",
     "translations/english_us.csv",
@@ -4653,83 +4813,3 @@ toolbar = "None"
 tooltip = "&Tip Of The Day"
 statustip = "Displays a dialog with useful tips:  TIPS"
 alias = ["TIPS", "TIPOFTHEDAY"]
-
-[german-translation]
-type = "translation"
-language_code = "de"
-language_en = "german"
-language = "deutsche"
-data = [
-    ["Day", "Tag"],
-    ["Night", "Nacht"]
-]
-
-[french-translation]
-type = "translation"
-language_code = "fr"
-language_en = "french"
-language = "française"
-data = [
-    ["Day", "Journée"],
-    ["Night", "Nuit"]
-]
-
-[chinese-traditional-translation]
-type = "translation"
-language_code = "zh"
-language_en = "chinese-traditional"
-language = "中國人"
-data = [
-    ["Day", "中午"],
-    ["Night", "半夜"]
-]
-
-[chinese-simplified-translation]
-type = "translation"
-language_code = "zh"
-language_en = "chinese-simplified"
-language = "中国人"
-data = [
-    ["Day", "中午"],
-    ["Night", "半夜"]
-]
-
-[hindi-translation]
-type = "translation"
-language_code = "hi"
-language_en = "hindi"
-language = "हिंदी"
-data = [
-    ["Day", "दिन"],
-    ["Night", "रात"]
-]
-
-[russian-translation]
-type = "translation"
-language_code = "ru"
-language_en = "russian"
-language = "русский"
-data = [
-    ["Day", "день"],
-    ["Night", "ночь"]
-]
-
-[arabic-translation]
-type = "translation"
-language_code = "ar"
-language_en = "arabic"
-language = "عربى"
-data = [
-    ["Day", "يوم"],
-    ["Night", "ليل"]
-]
-
-[spanish-translation]
-type = "translation"
-language_code = "es"
-language_en = "spanish"
-language = "española"
-data = [
-    ["Day", "día"],
-    ["Night", "noche"]
-]

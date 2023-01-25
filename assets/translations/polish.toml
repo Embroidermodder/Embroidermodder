@@ -1,0 +1,1264 @@
+    <message>
+        "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "
+    <message>
+        "Specify radius of circle or [Diameter]: "
+    <message>
+        "This should never happen."
+    <message>
+        "Specify second end point of circle&apos;s diameter: "
+    <message>
+        "Specify second point on circle: "
+    <message>
+        "Specify third point on circle: "
+    <message>
+        "Specify point on object for second tangent of circle: "
+    <message>
+        "Specify radius of circle: "
+    <message>
+        "Specify second point: "
+    <message>
+        "Specify first end point of circle&apos;s diameter: "
+    <message>
+        "Specify first point of circle: "
+    <message>
+        "Specify point on object for first tangent of circle: "
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Specify diameter of circle: "
+    <message>
+        "Requires numeric radius, point on circumference, or &quot;D&quot;."
+    <message>
+        "Requires numeric distance or second point."
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Specify second point of circle: "
+    <message>
+        "Specify third point of circle: "
+    <message>
+        "Specify first point: "
+    <message>
+        "Specify second point: "
+    <message>
+        "Requires numeric distance or two points."
+    <message>
+        "Distance"
+    <message>
+        "Angle"
+    <message>
+        "Delta X"
+    <message>
+        "Delta Y"
+    <message>
+        "Specify first axis start point or [Center]: "
+    <message>
+        "Specify first axis end point: "
+    <message>
+        "Specify second axis end point or [Rotation]: "
+    <message>
+        "This should never happen."
+    <message>
+        "Specify center point: "
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Specify rotation: "
+    <message>
+        "Specify ellipse rotation: "
+    <message>
+        "Invalid angle. Input a numeric angle or pick a point."
+    <message>
+        "Preselect objects before invoking the delete command."
+    <message>
+        "Delete Preselect"
+    <message>
+        "Specify first point: "
+    <message>
+        "Specify next point or [Undo]: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Specify point: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Preselect objects before invoking the move command."
+    <message>
+        "Move Preselect"
+    <message>
+        "Specify base point: "
+    <message>
+        "Specify destination point: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Specify start point: "
+        "Określ punkt początkowy: "
+    <message>
+        "Specify next point or [Arc/Undo]: "
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Platform"
+    <message>
+        "Specify first point: "
+    <message>
+        "Specify next point: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Enter number of sides"
+    <message>
+        "Specify polygon type [Inscribed in circle/Circumscribed around circle]"
+    <message>
+        "Specify center point or [Sidelength]: "
+    <message>
+        "Requires an integer between 3 and 1024."
+        "Wymagana liczba całkowita z zakresu od 3 do 1024."
+    <message>
+        "Specify start point: "
+        "Określ punkt początkowy: "
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Specify polygon corner point or [Distance]: "
+    <message>
+        "Specify polygon side point or [Distance]: "
+    <message>
+        "Polygon type is not Inscribed or Circumscribed."
+    <message>
+        "Invalid option keyword."
+        "Nieprawidłowe słowo kluczowe opcji."
+    <message>
+        "Specify distance: "
+    <message>
+        "Requires valid numeric distance."
+    <message>
+        "Specify first point: "
+    <message>
+        "Specify next point or [Undo]: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Specify first point: "
+    <message>
+        "Specify second point: "
+    <message>
+        "Requires two points."
+    <message>
+        "Specify first corner point or [Chamfer/Fillet]: "
+    <message>
+        "Specify other corner point or [Dimensions]: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Specify first point: "
+    <message>
+        "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: "
+    <message>
+        "Specify crosshair color: "
+    <message>
+        "Specify grid color: "
+    <message>
+        "Invalid color. R,G,B values must be in the range of 0-255."
+    <message>
+        "Specify background color: "
+    <message>
+        "Preselect objects before invoking the rotate command."
+    <message>
+        "Rotate Preselect"
+    <message>
+        "Specify base point: "
+    <message>
+        "Specify rotation angle or [Reference]: "
+    <message>
+        "Specify second point: "
+    <message>
+        "Specify the new angle: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Specify the reference angle"
+    <message>
+        "Requires valid numeric angle, second point, or option keyword."
+    <message>
+        "Requires valid numeric angle or two points."
+    <message>
+        "Requires valid numeric angle or second point."
+    <message>
+        "Preselect objects before invoking the scale command."
+    <message>
+        "Scale Preselect"
+    <message>
+        "Specify base point: "
+    <message>
+        "Specify scale factor or [Reference]: "
+    <message>
+        "Specify second point: "
+    <message>
+        "Value must be positive and nonzero."
+    <message>
+        "Specify new length: "
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Specify reference length"
+    <message>
+        "Requires valid numeric distance, second point, or option keyword."
+    <message>
+        "Requires valid numeric distance or two points."
+    <message>
+        "Requires valid numeric distance or second point."
+    <message>
+        "Current font: "
+    <message>
+        "Text height: "
+    <message>
+        "Specify start point of text or [Justify/Setfont]: "
+    <message>
+        "Specify text height"
+    <message>
+        "Specify text angle"
+    <message>
+        "Enter text: "
+    <message>
+        "Specify center point of text or [Justify/Setfont]: "
+    <message>
+        "Specify right-end point of text or [Justify/Setfont]: "
+    <message>
+        "Specify middle point of text or [Justify/Setfont]: "
+    <message>
+        "Specify top-left point of text or [Justify/Setfont]: "
+    <message>
+        "Specify top-center point of text or [Justify/Setfont]: "
+    <message>
+        "Specify top-right point of text or [Justify/Setfont]: "
+    <message>
+        "Specify middle-left point of text or [Justify/Setfont]: "
+    <message>
+        "Specify middle-center point of text or [Justify/Setfont]: "
+    <message>
+        "Specify middle-right point of text or [Justify/Setfont]: "
+    <message>
+        "Specify bottom-left point of text or [Justify/Setfont]: "
+    <message>
+        "Specify bottom-center point of text or [Justify/Setfont]: "
+    <message>
+        "Specify bottom-right point of text or [Justify/Setfont]: "
+    <message>
+        "Invalid option keyword."
+        "Nieprawidłowe słowo kluczowe opcji."
+    <message>
+        "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "
+    <message>
+        "Specify font name: "
+    <message>
+        "Point or option keyword required."
+    <message>
+        "Requires valid numeric distance or second point."
+    <message>
+        "Requires valid numeric angle or second point."
+    <message>
+        "Enter number of star points"
+    <message>
+        "Specify outer radius of star: "
+    <message>
+        "Specify inner radius of star: "
+    <message>
+        "Specify center point: "
+    <message>
+        "Requires an integer between 3 and 1024."
+        "Wymagana liczba całkowita z zakresu od 3 do 1024."
+    <message>
+        "Invalid point."
+        "Nieprawidłowy punkt."
+    <message>
+        "Enter an option [Cascade/Tile]: "
+    <message>
+        "Invalid option keyword."
+        "Nieprawidłowe słowo kluczowe opcji."
+</TS>
+    <message>
+        "Command: "
+        "Polecenie: "
+    <message>
+        "*Cancel*"
+        "*Anuluj*"
+    <message>
+        "Embroidery Design Details"
+    <message>
+        "General Information"
+    <message>
+        "Total Stitches:"
+    <message>
+        "Real Stitches:"
+    <message>
+        "Jump Stitches:"
+    <message>
+        "Trim Stitches:"
+    <message>
+        "Total Colors:"
+    <message>
+        "Color Changes:"
+    <message>
+        "Left:"
+    <message>
+        "Top:"
+    <message>
+        "Right:"
+    <message>
+        "Bottom:"
+    <message>
+        "Width:"
+    <message>
+        "Height:"
+    <message>
+        "Layer Manager"
+    <message>
+        "Name"
+        "Nazwa"
+    <message>
+        "Visible"
+    <message>
+        "Frozen"
+    <message>
+        "Z Value"
+    <message>
+        "Color"
+        "Kolor"
+    <message>
+        "Linetype"
+    <message>
+        "Lineweight"
+    <message>
+        "Print"
+        "Drukuj"
+    <message>
+        "Error reading file"
+    <message>
+        "Cannot read file %1:
+%2."
+    <message>
+        "Error reading pattern"
+    <message>
+        "Cannot read pattern"
+    <message>
+        "&amp;Do Nothing"
+    <message>
+        "Does Nothing"
+    <message>
+        "&amp;Cascade"
+    <message>
+        "Cascade the windows."
+    <message>
+        "&amp;Tile"
+    <message>
+        "Tile the windows."
+    <message>
+        "Cl&amp;ose"
+    <message>
+        "Close the active window."
+    <message>
+        "Close &amp;All"
+    <message>
+        "Close all the windows."
+    <message>
+        "Ne&amp;xt"
+    <message>
+        "Move the focus to the next window."
+    <message>
+        "Pre&amp;vious"
+    <message>
+        "Move the focus to the previous window."
+    <message>
+        "&amp;New"
+        "&amp;Nowy"
+    <message>
+        "Create a new file."
+    <message>
+        "&amp;Open"
+        "&amp;Otwórz"
+    <message>
+        "Open an existing file."
+    <message>
+        "&amp;Save"
+        "Zapi&amp;sz"
+    <message>
+        "Save the design to disk."
+    <message>
+        "Save &amp;As"
+        "Zapisz j&amp;ako"
+    <message>
+        "Save the design under a new name."
+    <message>
+        "&amp;Print"
+        "&amp;Drukuj"
+    <message>
+        "Print the design."
+    <message>
+        "&amp;Details"
+    <message>
+        "Details of the current design."
+    <message>
+        "E&amp;xit"
+    <message>
+        "Exit the application."
+    <message>
+        "Cu&amp;t"
+        "Wy&amp;tnij"
+    <message>
+        "Cut the current selection&apos;s contents to the clipboard."
+    <message>
+        "&amp;Copy"
+        "&amp;Kopiuj"
+    <message>
+        "Copy the current selection&apos;s contents to the clipboard."
+    <message>
+        "&amp;Paste"
+        "&amp;Wklej"
+    <message>
+        "Paste the clipboard&apos;s contents into the current selection."
+    <message>
+        "&amp;Help"
+        "Pomo&amp;c"
+    <message>
+        "Displays help."
+    <message>
+        "&amp;Changelog"
+    <message>
+        "Describes new features in this product."
+    <message>
+        "&amp;Tip Of The Day"
+    <message>
+        "Displays a dialog with useful tips"
+    <message>
+        "&amp;About "
+    <message>
+        "Displays information about this product."
+    <message>
+        "&amp;Undo"
+        "&amp;Cofnij"
+    <message>
+        "Reverses the most recent action."
+    <message>
+        "&amp;Redo"
+        "&amp;Ponów"
+    <message>
+        "Reverses the effects of the previous undo action."
+    <message>
+        "Icon&amp;16"
+    <message>
+        "Sets the toolbar icon size to 16x16."
+    <message>
+        "Icon&amp;24"
+    <message>
+        "Sets the toolbar icon size to 24x24."
+    <message>
+        "Icon&amp;32"
+    <message>
+        "Sets the toolbar icon size to 32x32."
+    <message>
+        "Icon&amp;48"
+    <message>
+        "Sets the toolbar icon size to 48x48."
+    <message>
+        "Icon&amp;64"
+    <message>
+        "Sets the toolbar icon size to 64x64."
+    <message>
+        "Icon12&amp;8"
+    <message>
+        "Sets the toolbar icon size to 128x128."
+    <message>
+        "&amp;Settings"
+    <message>
+        "Configure settings specific to this product."
+    <message>
+        "&amp;Make Layer Active"
+    <message>
+        "Makes the layer of a selected object the active layer"
+    <message>
+        "&amp;Layers"
+    <message>
+        "Manages layers and layer properties:  LAYER"
+    <message>
+        "&amp;Layer Selector"
+    <message>
+        "Dropdown selector for changing the current layer"
+    <message>
+        "&amp;Layer Previous"
+    <message>
+        "Restores the previous layer settings:  LAYERP"
+    <message>
+        "&amp;Color Selector"
+    <message>
+        "Dropdown selector for changing the current thread color"
+    <message>
+        "&amp;Stitchtype Selector"
+    <message>
+        "Dropdown selector for changing the current stitch type"
+    <message>
+        "&amp;Threadweight Selector"
+    <message>
+        "Dropdown selector for changing the current thread weight"
+    <message>
+        "&amp;Hide All Layers"
+    <message>
+        "Turns the visibility off for all layers in the current drawing:  HIDEALL"
+    <message>
+        "&amp;Show All Layers"
+    <message>
+        "Turns the visibility on for all layers in the current drawing:  SHOWALL"
+    <message>
+        "&amp;Freeze All Layers"
+    <message>
+        "Freezes all layers in the current drawing:  FREEZEALL"
+    <message>
+        "&amp;Thaw All Layers"
+    <message>
+        "Thaws all layers in the current drawing:  THAWALL"
+    <message>
+        "&amp;Lock All Layers"
+    <message>
+        "Locks all layers in the current drawing:  LOCKALL"
+    <message>
+        "&amp;Unlock All Layers"
+    <message>
+        "Unlocks all layers in the current drawing:  UNLOCKALL"
+    <message>
+        "&amp;Bold Text"
+    <message>
+        "Sets text to be bold."
+    <message>
+        "&amp;Italic Text"
+    <message>
+        "Sets text to be italic."
+    <message>
+        "&amp;Underline Text"
+    <message>
+        "Sets text to be underlined."
+    <message>
+        "&amp;StrikeOut Text"
+    <message>
+        "Sets text to be striked out."
+    <message>
+        "&amp;Overline Text"
+    <message>
+        "Sets text to be overlined."
+    <message>
+        "Zoom &amp;Realtime"
+    <message>
+        "Zooms to increase or decrease the apparent size of objects in the current viewport."
+    <message>
+        "Zoom &amp;Previous"
+    <message>
+        "Zooms to display the previous view."
+    <message>
+        "Zoom &amp;Window"
+    <message>
+        "Zooms to display an area specified by a rectangular window."
+    <message>
+        "Zoom &amp;Dynamic"
+    <message>
+        "Zooms to display the generated portion of the drawing."
+    <message>
+        "Zoom &amp;Scale"
+    <message>
+        "Zooms the display using a specified scale factor."
+    <message>
+        "Zoom &amp;Center"
+    <message>
+        "Zooms to display a view specified by a center point and magnification or height."
+    <message>
+        "Zoom &amp;In"
+    <message>
+        "Zooms to increase the apparent size of objects."
+    <message>
+        "Zoom &amp;Out"
+    <message>
+        "Zooms to decrease the apparent size of objects."
+    <message>
+        "Zoom Selec&amp;ted"
+    <message>
+        "Zooms to display the selected objects."
+    <message>
+        "Zoom &amp;All"
+    <message>
+        "Zooms to display the drawing extents or the grid limits."
+    <message>
+        "Zoom &amp;Extents"
+    <message>
+        "Zooms to display the drawing extents."
+    <message>
+        "&amp;Pan Realtime"
+    <message>
+        "Moves the view in the current viewport."
+    <message>
+        "&amp;Pan Point"
+    <message>
+        "Moves the view by the specified distance."
+    <message>
+        "&amp;Pan Left"
+    <message>
+        "Moves the view to the left."
+    <message>
+        "&amp;Pan Right"
+    <message>
+        "Moves the view to the right."
+    <message>
+        "&amp;Pan Up"
+    <message>
+        "Moves the view up."
+    <message>
+        "&amp;Pan Down"
+    <message>
+        "Moves the view down."
+    <message>
+        "&amp;Day"
+    <message>
+        "Updates the current view using day vision settings."
+    <message>
+        "&amp;Night"
+    <message>
+        "Updates the current view using night vision settings."
+    <message>
+        "Testing Feature"
+    <message>
+        "&lt;b&gt;This feature is in testing.&lt;/b&gt;"
+    <message>
+        "
+
+"
+    <message>
+        "http://embroidermodder.sourceforge.net"
+    <message>
+        "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi"
+    <message>
+        "Embroidery formats by Josh Varga."
+    <message>
+        "
+"
+    <message>
+        "User Interface by Jonathan Greig."
+    <message>
+        "Free under the zlib/libpng license."
+    <message>
+        "&amp;Show tips on startup"
+    <message>
+        "&amp;Previous"
+    <message>
+        "&amp;Next"
+    <message>
+        "&amp;Close"
+    <message>
+        "Color Selector Conversion Error"
+    <message>
+        "&lt;b&gt;An error has occured while changing colors.&lt;/b&gt;"
+    <message>
+        "Color Selector Pointer Error"
+    <message>
+        "Native MessageBox Error"
+    <message>
+        "Incorrect use of the native messageBox function."
+    <message>
+        "ScaleFactor Error"
+    <message>
+        "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too."
+    <message>
+        "&amp;File"
+        "&amp;Plik"
+    <message>
+        "&amp;Edit"
+    <message>
+        "&amp;View"
+        "&amp;Widok"
+    <message>
+        "&amp;Window"
+        "&amp;Okno"
+    <message>
+        "Open &amp;Recent"
+    <message>
+        "&amp;Zoom"
+    <message>
+        "&amp;Pan"
+        "&amp;Przesuń"
+    <message>
+        "File"
+    <message>
+        "Edit"
+    <message>
+        "View"
+        "Widok"
+    <message>
+        "Zoom"
+    <message>
+        "Pan"
+        "Przesuń"
+    <message>
+        "Icon"
+    <message>
+        "Help"
+        "Pomoc"
+    <message>
+        "Layer"
+    <message>
+        "Properties"
+    <message>
+        "Text"
+    <message>
+        "Command Prompt"
+    <message>
+        "Open"
+        "Otwórz"
+    <message>
+        "Open w/Preview"
+    <message>
+        "File(s) loaded"
+    <message>
+        "Save"
+    <message>
+        "Red"
+        "Czerwony"
+    <message>
+        "Yellow"
+        "Żółty"
+    <message>
+        "Green"
+        "Zielony"
+    <message>
+        "Cyan"
+        "Niebiesko-Zielony"
+    <message>
+        "Blue"
+        "Niebieski"
+    <message>
+        "Magenta"
+        "Amarantowy"
+    <message>
+        "White"
+        "Biały"
+    <message>
+        "Other..."
+    <message>
+        "Properties"
+    <message>
+        "No Selection"
+        "Brak wyboru"
+    <message>
+        "Varies"
+    <message>
+        "Arc"
+        "Łuk"
+    <message>
+        "Block"
+    <message>
+        "Circle"
+        "Okrąg"
+    <message>
+        "Aligned Dimension"
+    <message>
+        "Angular Dimension"
+    <message>
+        "Arclength Dimension"
+    <message>
+        "Diameter Dimension"
+    <message>
+        "Leader Dimension"
+    <message>
+        "Linear Dimension"
+    <message>
+        "Ordinate Dimension"
+    <message>
+        "Radius Dimension"
+    <message>
+        "Ellipse"
+        "Elipsa"
+    <message>
+        "Image"
+    <message>
+        "Infinite Line"
+    <message>
+        "Line"
+        "Linia"
+    <message>
+        "Point"
+        "Punkt"
+    <message>
+        "Polygon"
+    <message>
+        "Polyline"
+        "Polilinia"
+    <message>
+        "Ray"
+    <message>
+        "Rectangle"
+        "Prostokąt"
+    <message>
+        "Multiline Text"
+    <message>
+        "Unknown"
+    <message>
+        "General"
+    <message>
+        "Layer"
+    <message>
+        "Color"
+        "Kolor"
+    <message>
+        "LineType"
+    <message>
+        "LineWeight"
+        "Szerokość linii"
+    <message>
+        "Geometry"
+        "Geometria"
+    <message>
+        "Center X"
+        "Środek X"
+    <message>
+        "Center Y"
+        "Środek Y"
+    <message>
+        "Radius"
+        "Promień"
+    <message>
+        "Start Angle"
+    <message>
+        "End Angle"
+    <message>
+        "Start X"
+        "Początek X"
+    <message>
+        "Start Y"
+        "Początek Y"
+    <message>
+        "End X"
+        "Koniec X"
+    <message>
+        "End Y"
+        "Koniec Y"
+    <message>
+        "Area"
+    <message>
+        "Arc Length"
+    <message>
+        "Chord"
+    <message>
+        "Included Angle"
+    <message>
+        "Misc"
+    <message>
+        "Clockwise"
+    <message>
+        "Position X"
+        "Pozycja X"
+    <message>
+        "Position Y"
+        "Pozycja Y"
+    <message>
+        "Diameter"
+        "Średnica"
+    <message>
+        "Circumference"
+    <message>
+        "Major Radius"
+    <message>
+        "Minor Radius"
+    <message>
+        "Major Diameter"
+    <message>
+        "Minor Diameter"
+    <message>
+        "Width"
+        "Szerokość"
+    <message>
+        "Height"
+        "Wysokość"
+    <message>
+        "Name"
+    <message>
+        "Path"
+    <message>
+        "2nd X"
+    <message>
+        "2nd Y"
+    <message>
+        "Vector X"
+    <message>
+        "Vector Y"
+    <message>
+        "Delta X"
+    <message>
+        "Delta Y"
+    <message>
+        "Angle"
+        "Kąt"
+    <message>
+        "Length"
+    <message>
+        "Vertex Radius"
+    <message>
+        "Side Radius"
+    <message>
+        "Vertex Diameter"
+    <message>
+        "Side Diameter"
+    <message>
+        "Interior Angle"
+    <message>
+        "Vertex #"
+    <message>
+        "Vertex X"
+    <message>
+        "Vertex Y"
+    <message>
+        "Closed"
+    <message>
+        "Corner 1 X"
+    <message>
+        "Corner 1 Y"
+    <message>
+        "Corner 2 X"
+    <message>
+        "Corner 2 Y"
+    <message>
+        "Corner 3 X"
+    <message>
+        "Corner 3 Y"
+    <message>
+        "Corner 4 X"
+    <message>
+        "Corner 4 Y"
+    <message>
+        "Text"
+    <message>
+        "Contents"
+    <message>
+        "Font"
+    <message>
+        "Justify"
+        "Justowanie"
+    <message>
+        "Rotation"
+    <message>
+        "Backward"
+    <message>
+        "UpsideDown"
+    <message>
+        "Error - Negative Lineweight"
+    <message>
+        "Lineweight: %1"
+    <message>
+        "ScaleFactor Error"
+    <message>
+        "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too."
+    <message>
+        "Navigation"
+    <message>
+        "General"
+    <message>
+        "Files/Paths"
+    <message>
+        "Display"
+    <message>
+        "Prompt"
+    <message>
+        "Open/Save"
+    <message>
+        "Printing"
+    <message>
+        "Snap"
+    <message>
+        "Grid/Ruler"
+    <message>
+        "Ortho/Polar"
+    <message>
+        "QuickSnap"
+    <message>
+        "QuickTrack"
+    <message>
+        "LineWeight"
+        "Szerokość linii"
+    <message>
+        "Selection"
+    <message>
+        "Settings"
+    <message>
+        "Icons"
+    <message>
+        "Icon Theme"
+    <message>
+        "Icon Size"
+    <message>
+        "Background"
+    <message>
+        "Use Logo"
+    <message>
+        "Choose"
+    <message>
+        "Use Texture"
+    <message>
+        "Use Color"
+    <message>
+        "Tips"
+    <message>
+        "Show Tip of the Day on startup"
+    <message>
+        "ScrollBars"
+    <message>
+        "Show ScrollBars"
+    <message>
+        "Perform action when clicking corner widget"
+    <message>
+        "Colors"
+    <message>
+        "Crosshair Color"
+    <message>
+        "Background Color"
+    <message>
+        "Selection Box Color (Crossing)"
+    <message>
+        "Selection Box Fill (Crossing)"
+    <message>
+        "Selection Box Color (Window)"
+    <message>
+        "Selection Box Fill (Window)"
+    <message>
+        "Selection Box Fill Alpha"
+    <message>
+        "Zoom"
+    <message>
+        "Zoom In Scale"
+    <message>
+        "Zoom Out Scale"
+    <message>
+        "Text Color"
+    <message>
+        "Font"
+    <message>
+        "Font Family"
+    <message>
+        "Font Style"
+    <message>
+        "Font Size"
+    <message>
+        "History"
+    <message>
+        "Save History"
+    <message>
+        "Save As HTML"
+    <message>
+        "Custom Filter"
+    <message>
+        "Select All"
+    <message>
+        "File Open"
+    <message>
+        "Preview Thumbnails"
+    <message>
+        "Number of recently accessed files to show"
+    <message>
+        "File Save"
+    <message>
+        "Save Thumbnails"
+    <message>
+        "AutoSave"
+    <message>
+        "Trimming"
+    <message>
+        "DST Only: Minimum number of jumps to trim"
+    <message>
+        "Default Printer"
+    <message>
+        "Use as default device"
+    <message>
+        "Use last used device"
+    <message>
+        "Save Ink"
+    <message>
+        "Disable Background"
+    <message>
+        "Grid Misc"
+    <message>
+        "Initially show grid when loading a file"
+    <message>
+        "Show the origin when the grid is enabled"
+    <message>
+        "Grid Color"
+    <message>
+        "Match grid color to crosshair color"
+    <message>
+        "Grid Geometry"
+    <message>
+        "Set grid size from opened file"
+    <message>
+        "Grid Type"
+    <message>
+        "Center the grid on the origin"
+    <message>
+        "Grid Center X"
+    <message>
+        "Grid Center Y"
+    <message>
+        "Grid Size X"
+    <message>
+        "Grid Size Y"
+    <message>
+        "Grid Spacing X"
+    <message>
+        "Grid Spacing Y"
+    <message>
+        "Grid Size Radius"
+    <message>
+        "Grid Spacing Radius"
+    <message>
+        "Grid Spacing Angle"
+    <message>
+        "Ruler Misc"
+    <message>
+        "Initially show ruler when loading a file"
+    <message>
+        "Ruler Units"
+    <message>
+        "Ruler Color"
+    <message>
+        "Ruler Geometry"
+    <message>
+        "Ruler Pixel Size"
+    <message>
+        "Locators Used"
+    <message>
+        "Endpoint"
+    <message>
+        "Midpoint"
+    <message>
+        "Center"
+    <message>
+        "Node"
+    <message>
+        "Quadrant"
+    <message>
+        "Intersection"
+    <message>
+        "Extension"
+    <message>
+        "Insertion"
+    <message>
+        "Perpendicular"
+    <message>
+        "Tangent"
+    <message>
+        "Nearest"
+    <message>
+        "Apparent Intersection"
+    <message>
+        "Parallel"
+    <message>
+        "Clear All"
+    <message>
+        "Visual Configuration"
+    <message>
+        "Locator Color"
+    <message>
+        "Locator Size"
+    <message>
+        "Sensitivity"
+    <message>
+        "Aperture Size"
+    <message>
+        "LineWeight Misc"
+    <message>
+        "Show LineWeight"
+    <message>
+        "RealRender"
+    <message>
+        "Default weight"
+    <message>
+        "Modes"
+    <message>
+        "Allow Preselection (PickFirst)"
+    <message>
+        "Add to Selection (PickAdd)"
+    <message>
+        "Drag to Select (PickDrag)"
+    <message>
+        "Cool Grip (Unselected)"
+    <message>
+        "Hot Grip (Selected)"
+    <message>
+        "Sizes"
+    <message>
+        "Grip Size"
+    <message>
+        "Pickbox Size"
+    <message>
+        "Red"
+        "Czerwony"
+    <message>
+        "Yellow"
+        "Żółty"
+    <message>
+        "Green"
+        "Zielony"
+    <message>
+        "Cyan"
+        "Niebiesko-Zielony"
+    <message>
+        "Blue"
+        "Niebieski"
+    <message>
+        "Magenta"
+        "Amarantowy"
+    <message>
+        "White"
+        "Biały"
+    <message>
+        "Open File"
+    <message>
+        "Images (*.bmp *.png *.jpg)"
+    <message>
+        "New"
+    <message>
+        "History"
+    <message>
+        "ZoomSelected Preselect"
+    <message>
+        "Preselect objects before invoking the zoomSelected command."
+    <message>
+        "Grip Edit "
+    <message>
+        "Delete 1 "
+    <message>
+        "Cut Preselect"
+    <message>
+        "Preselect objects before invoking the cut command."
+    <message>
+        "Copy Preselect"
+    <message>
+        "Preselect objects before invoking the copy command."
+    <message>
+        "Move 1 "
+    <message>
+        "Rotate 1 "
+    <message>
+        "Mirror 1 "
+    <message>
+        "Scale 1 "
+</TS>

@@ -1,0 +1,791 @@
+# Default (US English) to Chinese (Traditional) Table.
+# -------------------------------------------------------
+# This file is part of Embroidermodder.
+# Copyright 2013-2022 The Embroidermodder Team
+# See LICENSE for details.
+# -------------------------------------------------------
+#
+
+type = "translation"
+language_code = "de"
+language_en = "german"
+language = "deutsche"
+data = [
+    ["New", "Neu"],
+    ["Command: ", "Befehl: "],
+    ["*Cancel*", "*Abbrechen*"],
+    ["Embroidery Design Details", "Details zum Stickdesign"],
+    ["General Information", "Allgemeine Informationen"],
+    ["Total Stitches:", "Gesamtstiche:"],
+    ["Day", "Tag"],
+    ["Real Stitches:", "Echte Stiche:"],
+    ["Jump Stitches:", "Sprungstiche:"],
+    ["Trim Stitches:", "Trimmstiche:"],
+    ["Total Colors:", "Gesamtfarben:"],
+    ["Color Changes:", "Farbwechsel:"],
+    ["Left:", "Links:"],
+    ["Top:", "Oben:"],
+    ["Right:", "Rechts:"],
+    ["Bottom:", "Unten:"],
+    ["Width:", "Breite"],
+    ["Frozen", "Fixiert"],
+    ["Z Value", "Z Wert"],
+    ["Color", "Farbe"],
+    ["Linetype", "Linienart"],
+    ["Lineweight", "Strichbreite"],
+    ["Print", "Druck"],
+    ["Error reading file", "Dateilesefehler"],
+    ["Cannot read file %1: %2.", "Datei nicht lesbar %1: %2."],
+    ["Error reading pattern", "Fehler beim Lesen des Musters"],
+    ["Cannot read pattern", "Muster nicht lesbar"],
+    ["&Do Nothing", "&Nichts bearbeitet"],
+    ["Height:", "Höhe:"],
+    ["Night", "Nacht"],
+    ["Name", "Name"],
+    ["Close &All", "Alle &schließen"],
+    ["Visible", "Sichtbar"],
+    ["Close all the windows.", "Alle Fenster schließen"],
+    ["Ne&xt", "Weiter"],
+    ["Pre&vious", "&Zurück"]
+]
+to_translate = [
+    "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
+    "Specify radius of circle or [Diameter]: ",
+    "This should never happen.",
+    "Specify second end point of circle's diameter: ",
+    "Specify second point on circle: ",
+    "Specify third point on circle: ",
+    "Specify point on object for second tangent of circle: ",
+    "Specify radius of circle: ",
+    "Specify second point: ",
+    "Specify first end point of circle&apos;s diameter: ",
+    "Specify first point of circle: ",
+    "Specify point on object for first tangent of circle: ",
+    "Point or option keyword required.",
+    "Specify diameter of circle: ",
+    "Requires numeric radius, point on circumference, or \"D\".",
+    "Requires numeric distance or second point.",
+    "Invalid point.",
+    "Specify second point of circle: ",
+    "Specify third point of circle: ",
+    "Specify first point: ",
+    "Specify second point: ",
+    "Requires numeric distance or two points.",
+    "Distance",
+    "Angle",
+    "Delta X",
+    "Delta Y",
+    "Specify first axis start point or [Center]: ",
+    "Specify first axis end point: ",
+    "Specify second axis end point or [Rotation]: ",
+    "This should never happen.",
+    "Specify center point: ",
+    "Point or option keyword required.",
+    "Invalid point.",
+    "Specify rotation: ",
+    "Specify ellipse rotation: ",
+    "Invalid angle. Input a numeric angle or pick a point.",
+    "Preselect objects before invoking the delete command.",
+    "Delete Preselect",
+    "Specify first point: ",
+    "Specify next point or [Undo]: ",
+    "Invalid point.",
+    "Point or option keyword required.",
+    "Specify point: ",
+    "Invalid point.",
+    "Preselect objects before invoking the move command.",
+    "Move Preselect",
+    "Specify base point: ",
+    "Specify destination point: ",
+    "Invalid point.",
+    "Specify start point: ",
+    "Specify next point or [Arc/Undo]: ",
+    "Point or option keyword required.",
+    "Platform",
+    "Specify first point: ",
+    "Specify next point: ",
+    "Invalid point.",
+    "Enter number of sides",
+    "Specify polygon type [Inscribed in circle/Circumscribed around circle]",
+    "Specify center point or [Sidelength]: ",
+    "Requires an integer between 3 and 1024.",
+    "Specify start point: ",
+    "Point or option keyword required.",
+    "Specify polygon corner point or [Distance]: ",
+    "Specify polygon side point or [Distance]: ",
+    "Polygon type is not Inscribed or Circumscribed.",
+    "Invalid option keyword.",
+    "Specify distance: ",
+    "Requires valid numeric distance.",
+    "Specify first point: ",
+    "Specify next point or [Undo]: ",
+    "Invalid point.",
+    "Point or option keyword required.",
+    "Specify first point: ",
+    "Specify second point: ",
+    "Requires two points.",
+    "Specify first corner point or [Chamfer/Fillet]: ",
+    "Specify other corner point or [Dimensions]: ",
+    "Invalid point.",
+    "Specify first point: ",
+    "Enter RED,GREEN,BLUE values for background or [Crosshair/Grid]: ",
+    "Specify crosshair color: ",
+    "Specify grid color: ",
+    "Invalid color. R,G,B values must be in the range of 0-255.",
+    "Specify background color: ",
+    "Preselect objects before invoking the rotate command.",
+    "Rotate Preselect",
+    "Specify base point: ",
+    "Specify rotation angle or [Reference]: ",
+    "Specify second point: ",
+    "Specify the new angle: ",
+    "Invalid point.",
+    "Specify the reference angle",
+    "Requires valid numeric angle, second point, or option keyword.",
+    "Requires valid numeric angle or two points.",
+    "Requires valid numeric angle or second point.",
+    "Preselect objects before invoking the scale command.",
+    "Scale Preselect",
+    "Specify base point: ",
+    "Specify scale factor or [Reference]: ",
+    "Specify second point: ",
+    "Value must be positive and nonzero.",
+    "Specify new length: ",
+    "Invalid point.",
+    "Specify reference length",
+    "Requires valid numeric distance, second point, or option keyword.",
+    "Requires valid numeric distance or two points.",
+    "Requires valid numeric distance or second point.",
+    "Current font: ",
+    "Text height: ",
+    "Specify start point of text or [Justify/Setfont]: ",
+    "Specify text height",
+    "Specify text angle",
+    "Enter text: ",
+    "Specify center point of text or [Justify/Setfont]: ",
+    "Specify right-end point of text or [Justify/Setfont]: ",
+    "Specify middle point of text or [Justify/Setfont]: ",
+    "Specify top-left point of text or [Justify/Setfont]: ",
+    "Specify top-center point of text or [Justify/Setfont]: ",
+    "Specify top-right point of text or [Justify/Setfont]: ",
+    "Specify middle-left point of text or [Justify/Setfont]: ",
+    "Specify middle-center point of text or [Justify/Setfont]: ",
+    "Specify middle-right point of text or [Justify/Setfont]: ",
+    "Specify bottom-left point of text or [Justify/Setfont]: ",
+    "Specify bottom-center point of text or [Justify/Setfont]: ",
+    "Specify bottom-right point of text or [Justify/Setfont]: ",
+    "Invalid option keyword.",
+    "Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: ",
+    "Specify font name: ",
+    "Point or option keyword required.",
+    "Requires valid numeric distance or second point.",
+    "Requires valid numeric angle or second point.",
+    "Enter number of star points",
+    "Specify outer radius of star: ",
+    "Specify inner radius of star: ",
+    "Specify center point: ",
+    "Requires an integer between 3 and 1024.",
+    "Invalid point.",
+    "Enter an option [Cascade/Tile]: ",
+    "Invalid option keyword.",    "Tangent",
+    "Nearest",
+    "Apparent Intersection",
+    "Parallel",
+    "Clear All",
+    "Visual Configuration",
+    "Locator Color",
+    "Locator Size",
+    "Sensitivity",
+    "Aperture Size",
+    "LineWeight Misc",
+    "Show LineWeight",
+    "RealRender",
+    "Default weight",
+    "Modes",
+    "Allow Preselection (PickFirst)",
+    "Add to Selection (PickAdd)",
+    "Drag to Select (PickDrag)",
+    "Cool Grip (Unselected)",
+    "Hot Grip (Selected)",
+    "Sizes",
+    "Grip Size",
+    "Pickbox Size",
+    "Red",
+    "Yellow",
+    "Green",
+    "Cyan",
+    "Blue",
+    "Magenta",
+    "White",
+    "Open File",
+    "Images (*.bmp *.png *.jpg)",
+    "History",
+    "ZoomSelected Preselect",
+    "Preselect objects before invoking the zoomSelected command.",
+    "Grip Edit ",
+    "Delete 1 ",
+    "Cut Preselect",
+    "Preselect objects before invoking the cut command.",
+    "Copy Preselect",
+    "Preselect objects before invoking the copy command.",
+    "Move 1 ",
+    "Rotate 1 ",
+    "Mirror 1 ",
+    "Scale 1 ",
+    "Length",
+    "Vertex Radius",
+    "Side Radius",
+    "Vertex Diameter",
+    "Side Diameter",
+    "Interior Angle",
+    "Vertex #",
+    "Vertex X",
+    "Vertex Y",
+    "Closed",
+    "Corner 1 X",
+    "Corner 1 Y",
+    "Corner 2 X",
+    "Corner 2 Y",
+    "Corner 3 X",
+    "Corner 3 Y",
+    "Corner 4 X",
+    "Corner 4 Y",
+    "Text",
+    "Contents",
+    "Font",
+    "Justify",
+    "Rotation",
+    "Backward",
+    "UpsideDown",
+    "Error - Negative Lineweight",
+    "Lineweight: %1",
+    "ScaleFactor Error",
+    "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.",
+    "Navigation",
+    "Files/Paths",
+    "Display",
+    "Prompt",
+    "Open/Save",
+    "Printing",
+    "Snap",
+    "Grid/Ruler",
+    "Ortho/Polar",
+    "QuickSnap",
+    "QuickTrack",
+    "LineWeight",
+    "Selection",
+    "Settings",
+    "Icons",
+    "Icon Theme",
+    "Icon Size",
+    "Background",
+    "Use Logo",
+    "Choose",
+    "Use Texture",
+    "Use Color",
+    "Tips",
+    "Show Tip of the Day on startup",
+    "ScrollBars",
+    "Show ScrollBars",
+    "Perform action when clicking corner widget",
+    "Colors",
+    "Crosshair Color",
+    "Background Color",
+    "Selection Box Color (Crossing)",
+    "Selection Box Fill (Crossing)",
+    "Selection Box Color (Window)",
+    "Selection Box Fill (Window)",
+    "Selection Box Fill Alpha",
+    "Zoom",
+    "Zoom In Scale",
+    "Zoom Out Scale",
+    "Text Color",
+    "Font",
+    "Font Family",
+    "Font Style",
+    "Font Size",
+    "History",
+    "Save History",
+    "Save As HTML",
+    "Custom Filter",
+    "Select All",
+    "File Open",
+    "Preview Thumbnails",
+    "Number of recently accessed files to show",
+    "File Save",
+    "Save Thumbnails",
+    "AutoSave",
+    "Trimming",
+    "DST Only: Minimum number of jumps to trim",
+    "Default Printer",
+    "Use as default device",
+    "Use last used device",
+    "Save Ink",
+    "Disable Background",
+    "Grid Misc",
+    "Initially show grid when loading a file",
+    "Show the origin when the grid is enabled",
+    "Grid Color",
+    "Match grid color to crosshair color",
+    "Grid Geometry",
+    "Set grid size from opened file",
+    "Grid Type",
+    "Center the grid on the origin",
+    "Grid Center X",
+    "Grid Center Y",
+    "Updates the current view using day vision settings.",
+    "&Night",
+    "Updates the current view using night vision settings.",
+    "Testing Feature",
+    "&lt;b&gt;This feature is in testing.&lt;/b&gt;",
+    "http://embroidermodder.sourceforge.net",
+    "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi",
+    "Embroidery formats by Josh Varga.",
+    "User Interface by Jonathan Greig.",
+    "Free under the zlib/libpng license.",
+    "&Show tips on startup",
+    "&Previous",
+    "&Next",
+    "&Close",
+    "Color Selector Conversion Error",
+    "&lt;b&gt;An error has occured while changing colors.&lt;/b&gt;",
+    "Color Selector Pointer Error",
+    "Native MessageBox Error",
+    "Incorrect use of the native messageBox function.",
+    "ScaleFactor Error",
+    "Hi there. If you are not a developer, report this as a bug. If you are a developer, your code needs examined, and possibly your head too.",
+    "Layer Manager",
+    "Does Nothing",
+    "&Cascade",
+    "Cascade the windows.",
+    "&Tile",
+    "Tile the windows.",
+    "Cl&ose",
+    "Close the active window.",
+    "Move the focus to the next window.",
+    "Move the focus to the previous window."
+]
+
+to_sort = """
+    <message>
+        "&New", "&Neu"
+    <message>
+        "Create a new file.", "Neue Datei erstellen."
+    <message>
+        "&Open", "Öffnen"
+    <message>
+        "Open an existing file.", "Vorhandene Datei öffnen."
+    <message>
+        "&Save", "&Speichern"
+    <message>
+        "Save the design to disk.", "Design speichern"
+    <message>
+        "Save &As", "Speichern unter"
+    <message>
+        "Save the design under a new name.", "Design speichern unter"
+    <message>
+        "&Print", "&Drucken"
+    <message>
+        "Print the design.", "Design drucken"
+    <message>
+        "&Details", "Details"
+    <message>
+        "Details of the current design.", "Details des aktuellen Designs"
+    <message>
+        "E&xit", "&Beenden"
+    <message>
+        "Exit the application.", "Programm beenden"
+    <message>
+        "Cu&t", "Ausschnei&den"
+    <message>
+        "Cut the current selection&apos;s contents to the clipboard."
+    <message>
+        "&Copy", "&Kopieren"
+    <message>
+        "Copy the current selection&apos;s contents to the clipboard."
+    <message>
+        "&Paste", "Einfügen"
+    <message>
+        "Paste the clipboard&apos;s contents into the current selection."
+    <message>
+        "&Help", "&Hilfe"
+    <message>
+        "Displays help.", "Hilfe anzeigen."
+    <message>
+        "&Changelog"
+    <message>
+        "Describes new features in this product."
+    <message>
+        "&Tip Of The Day", "Tip des Tages"
+    <message>
+        "Displays a dialog with useful tips", "Zeige hilfreiche Tipps"
+    <message>
+        "&About ", "Über"
+    <message>
+        "Displays information about this product.", "Zeige Informationen dieses Produkts"
+    <message>
+        "&Undo", "Rückgängig"
+    <message>
+        "Reverses the most recent action."
+    <message>
+        "&Redo", "Wiederholen"
+    <message>
+        "Reverses the effects of the previous undo action."
+    <message>
+        "Icon&16"
+    <message>
+        "Sets the toolbar icon size to 16x16.", "Werzeugleisten Icons auf 16x16."
+    <message>
+        "Icon&24"
+    <message>
+        "Sets the toolbar icon size to 24x24.", "Werzeugleisten Icons auf 24x24."
+    <message>
+        "Icon&32"
+    <message>
+        "Sets the toolbar icon size to 32x32.", "Werzeugleisten Icons auf 32x32."
+    <message>
+        "Icon&48"
+    <message>
+        "Sets the toolbar icon size to 48x48.", "Werzeugleisten Icons auf 48x48."
+    <message>
+        "Icon&64"
+    <message>
+        "Sets the toolbar icon size to 64x64.", "Werzeugleisten Icons auf 64x64."
+    <message>
+        "Icon12&8"
+    <message>
+        "Sets the toolbar icon size to 128x128.", "Werzeugleisten Icons auf 128x128."
+    <message>
+        "&Settings", "Einstellungen"
+    <message>
+        "Configure settings specific to this product."
+    <message>
+        "&Make Layer Active"
+    <message>
+        "Makes the layer of a selected object the active layer"
+    <message>
+        "&Layers"
+    <message>
+        "Manages layers and layer properties:  LAYER"
+    <message>
+        "&Layer Selector"
+    <message>
+        "Dropdown selector for changing the current layer"
+    <message>
+        "&Layer Previous"
+    <message>
+        "Restores the previous layer settings:  LAYERP"
+    <message>
+        "&Color Selector"
+    <message>
+        "Dropdown selector for changing the current thread color"
+    <message>
+        "&Stitchtype Selector"
+    <message>
+        "Dropdown selector for changing the current stitch type"
+    <message>
+        "&Threadweight Selector"
+    <message>
+        "Dropdown selector for changing the current thread weight"
+    <message>
+        "&Hide All Layers"
+    <message>
+        "Turns the visibility off for all layers in the current drawing:  HIDEALL"
+    <message>
+        "&Show All Layers"
+    <message>
+        "Turns the visibility on for all layers in the current drawing:  SHOWALL"
+    <message>
+        "&Freeze All Layers"
+    <message>
+        "Freezes all layers in the current drawing:  FREEZEALL"
+    <message>
+        "&Thaw All Layers"
+    <message>
+        "Thaws all layers in the current drawing:  THAWALL"
+    <message>
+        "&Lock All Layers"
+    <message>
+        "Locks all layers in the current drawing:  LOCKALL"
+    <message>
+        "&Unlock All Layers"
+    <message>
+        "Unlocks all layers in the current drawing:  UNLOCKALL"
+    <message>
+        "&Bold Text"
+    <message>
+        "Sets text to be bold."
+    <message>
+        "&Italic Text"
+    <message>
+        "Sets text to be italic."
+    <message>
+        "&Underline Text"
+    <message>
+        "Sets text to be underlined."
+    <message>
+        "&StrikeOut Text"
+    <message>
+        "Sets text to be striked out."
+    <message>
+        "&Overline Text"
+    <message>
+        "Sets text to be overlined."
+    <message>
+        "Zoom &Realtime"
+    <message>
+        "Zooms to increase or decrease the apparent size of objects in the current viewport."
+    <message>
+        "Zoom &Previous"
+    <message>
+        "Zooms to display the previous view."
+    <message>
+        "Zoom &Window"
+    <message>
+        "Zooms to display an area specified by a rectangular window."
+    <message>
+        "Zoom &Dynamic"
+    <message>
+        "Zooms to display the generated portion of the drawing."
+    <message>
+        "Zoom &Scale"
+    <message>
+        "Zooms the display using a specified scale factor."
+    <message>
+        "Zoom &Center"
+    <message>
+        "Zooms to display a view specified by a center point and magnification or height."
+    <message>
+        "Zoom &In"
+    <message>
+        "Zooms to increase the apparent size of objects."
+    <message>
+        "Zoom &Out"
+    <message>
+        "Zooms to decrease the apparent size of objects."
+    <message>
+        "Zoom Selec&ted"
+    <message>
+        "Zooms to display the selected objects."
+    <message>
+        "Zoom &All"
+    <message>
+        "Zooms to display the drawing extents or the grid limits."
+    <message>
+        "Zoom &Extents"
+    <message>
+        "Zooms to display the drawing extents."
+    <message>
+        "&Pan Realtime",
+        "Moves the view in the current viewport.",
+        "&Pan Point",
+        "Moves the view by the specified distance.",
+        "&Pan Left",
+        "Moves the view to the left.",
+        "&Pan Right",
+        "Moves the view to the right.",
+        "&Pan Up",
+        "Moves the view up.",
+        "&Pan Down",
+        "Moves the view down.",
+        "&Day"
+    <message>
+    <message>
+    ["&File", "&Datei"],
+    ["&Edit", "&Bearbeiten"],
+    ["&View", "&Ansicht"],
+    <message>
+        "&Window", "&Fenster"
+    <message>
+        "Open &Recent"
+    <message>
+        "&Zoom", "&Zoomen"
+    <message>
+        "&Pan", "&Verschieben"
+    <message>
+        "File", "Datei"
+    <message>
+        "Edit", "Bearbeiten"
+    <message>
+        "View", "Ansicht"
+    <message>
+        "Zoom", "Zoomen"
+    <message>
+        "Pan", "Verschieben"
+    <message>
+        "Icon"
+    <message>
+        "Help", "Hilfe"
+    <message>
+        "Layer"
+    <message>
+        "Properties", "Eigenschaften"
+    <message>
+        "Text"
+    <message>
+        "Command Prompt"
+    <message>
+        "Open"
+    <message>
+        "Open w/Preview"
+    <message>
+        "File(s) loaded"
+    <message>
+        "Save"
+    <message>
+        "Red"
+    <message>
+        "Yellow"
+    <message>
+        "Green"
+    <message>
+        "Cyan"
+    <message>
+        "Blue"
+    <message>
+        "Magenta"
+    <message>
+        "White"
+    <message>
+        "Other..."
+    <message>
+        "Properties", "Eigenshaften"
+    <message>
+        "No Selection", "Keine Auswahl"
+    <message>
+        "Varies"
+    <message>
+        "Arc", "Bogen"
+    <message>
+        "Block"
+    <message>
+        "Circle", "Kreis"
+    <message>
+        "Aligned Dimension"
+    <message>
+        "Angular Dimension"
+    <message>
+        "Arclength Dimension"
+    <message>
+        "Diameter Dimension"
+    <message>
+        "Leader Dimension"
+    <message>
+        "Linear Dimension"
+    <message>
+        "Ordinate Dimension"
+    <message>
+        "Radius Dimension"
+    <message>
+        "Ellipse"
+    <message>
+        "Image"
+    <message>
+        "Infinite Line"
+    <message>
+        "Line", "Linie"
+    <message>
+        "Point", "Punkt"
+    <message>
+        "Polygon"
+    <message>
+        "Polyline", "PolyLinie"
+    <message>
+        "Ray"
+    <message>
+        "Rectangle"
+    <message>
+        "Multiline Text"
+    <message>
+        "Unknown"
+    <message>
+        "General", "Allgemein"
+    <message>
+        "Layer"
+    <message>
+        "Color"
+    <message>
+        "LineType"
+    <message>
+        "LineWeight"
+    <message>
+        "Geometry", "Geometrie"
+    <message>
+        "Center X"
+    <message>
+        "Center Y"
+    <message>
+        "Radius"
+    <message>
+        "Start Angle"
+    <message>
+        "End Angle"
+    <message>
+        "Start X"
+    <message>
+        "Start Y"
+    <message>
+        "End X"
+    <message>
+        "End Y"
+    <message>
+        "Area"
+    <message>
+        "Arc Length"
+    <message>
+        "Chord"
+    <message>
+        "Included Angle"
+    <message>
+        "Misc", "Verschiedenes"
+    <message>
+        "Clockwise"
+    <message>
+        "Position X",
+        "Position Y"
+    <message>
+        ["Diameter", "Durchmesser"]
+    <message>
+        "Circumference",
+        "Major Radius",
+        "Minor Radius",
+        "Major Diameter",
+        "Minor Diameter",
+        "Width",
+        "Height",
+        "Name",
+        "Path",
+        "2nd X",
+        "2nd Y",
+        "Vector X",
+        "Vector Y",
+        "Delta X",
+        "Delta Y",
+        "Grid Size X",
+        "Grid Size Y",
+        "Grid Spacing X",
+        "Grid Spacing Y",
+        "Grid Size Radius",
+        "Grid Spacing Radius",
+        "Grid Spacing Angle",
+        "Ruler Misc",
+        "Initially show ruler when loading a file",
+        "Ruler Units",
+        "Ruler Color",
+        "Ruler Geometry",
+        "Ruler Pixel Size",
+        "Locators Used",
+        "Node",
+        "Quadrant",
+        "Intersection",
+        "Extension",
+        "Insertion"
+    <message>
+    ["Angle", "Winkel"],
+    ["General", "Allgemein"],
+    ["Endpoint", "Endpunkt"],
+    ["Midpoint", "Mittelpunkt"],
+    ["Center", "Zentrum"],
+    ["Perpendicular", "Senkrecht"]
+
+"""
