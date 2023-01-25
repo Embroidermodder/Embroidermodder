@@ -51,7 +51,8 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 add_executable(imgui_embroidermodder
-	${CMAKE_SOURCE_DIR}/src/imgui_embroidermodder.cpp
+	${CMAKE_SOURCE_DIR}/src/actuator.cpp
+	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
 	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit/TextEditor.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_demo.cpp
@@ -63,37 +64,37 @@ add_executable(imgui_embroidermodder
 )
 
 add_executable(embroidermodder
-	${CMAKE_SOURCE_DIR}/src/actions.cpp
-	${CMAKE_SOURCE_DIR}/src/dialogs.cpp
-	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
-	${CMAKE_SOURCE_DIR}/src/mainwindow-commands.cpp
-	${CMAKE_SOURCE_DIR}/src/mainwindow-settings.cpp
-	${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
-	${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
-	${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
-	${CMAKE_SOURCE_DIR}/src/object-arc.cpp
-	${CMAKE_SOURCE_DIR}/src/object-base.cpp
-	${CMAKE_SOURCE_DIR}/src/object-circle.cpp
-	${CMAKE_SOURCE_DIR}/src/object-dimleader.cpp
-	${CMAKE_SOURCE_DIR}/src/object-ellipse.cpp
-	${CMAKE_SOURCE_DIR}/src/object-image.cpp
-	${CMAKE_SOURCE_DIR}/src/object-line.cpp
-	${CMAKE_SOURCE_DIR}/src/object-path.cpp
-	${CMAKE_SOURCE_DIR}/src/object-point.cpp
-	${CMAKE_SOURCE_DIR}/src/object-polygon.cpp
-	${CMAKE_SOURCE_DIR}/src/object-polyline.cpp
-	${CMAKE_SOURCE_DIR}/src/object-rect.cpp
-	${CMAKE_SOURCE_DIR}/src/object-save.cpp
-	${CMAKE_SOURCE_DIR}/src/object-textsingle.cpp
-	${CMAKE_SOURCE_DIR}/src/preview-dialog.cpp
-	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
-	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
-	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
-	${CMAKE_SOURCE_DIR}/src/statusbar.cpp
-	${CMAKE_SOURCE_DIR}/src/svg.cpp
-	${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
-	${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
-	${CMAKE_SOURCE_DIR}/src/view.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/actions.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/dialogs.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/embroidermodder.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-commands.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-settings.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mdiarea.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mdiwindow.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-arc.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-base.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-circle.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-dimleader.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-ellipse.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-image.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-line.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-path.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-point.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-polygon.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-polyline.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-rect.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-save.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-textsingle.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/preview-dialog.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/property-editor.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/selectbox.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/settings-dialog.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/svg.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/undo-commands.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/undo-editor.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/view.cpp
 )
 
 include_directories(
@@ -105,6 +106,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
 	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/embroidermodder2
 )
 
 target_link_libraries(embroidermodder PRIVATE
