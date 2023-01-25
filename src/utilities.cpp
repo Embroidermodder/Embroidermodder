@@ -17,6 +17,11 @@
 
 std::string translate(std::string string)
 {
+    for (auto i : translations[language]) {
+        if (i[0] == string) {
+            return i[1];
+        }
+    }
     return string;
 }
 

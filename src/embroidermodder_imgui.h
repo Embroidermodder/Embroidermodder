@@ -461,12 +461,14 @@ extern bool running;
 extern bool debug_mode;
 extern bool show_about_dialog;
 extern bool show_editor;
+extern int language;
 extern int pattern_index;
 extern int n_patterns;
 extern std::string current_fname;
 extern std::string assets_dir;
 extern std::vector<Action> action_list;
 extern std::vector<EmbPattern*> pattern_list;
+extern string_matrix translations[N_LANGUAGES];
 extern std::unordered_map<std::string, string_matrix> menu_layout;
 
 /* Function Prototypes.
