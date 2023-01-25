@@ -27,7 +27,6 @@ TODO - embroidermodder2.ico 16 x 16 looks horrible
 //Stuff for 2.0 alpha4:
 //====================
 WIP - CAD Command: Arc (rt)
-TODO - Load/Save Menu/Toolbars configurations into settings.ini
 TODO - automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="https://github.com/Embroidermodder/Embroidermodder/commit/%H">%s</a>'
 
 //====================

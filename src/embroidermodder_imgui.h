@@ -22,8 +22,9 @@
 #include <vector>
 #include <unordered_map>
 
-#include <toml.hpp>
 #include <embroidery.h>
+
+#include <GL/glew.h>
 
 #define LANGUAGE_DEFAULT              0
 #define LANGUAGE_ENGLISH_US           1
@@ -439,12 +440,52 @@ OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
 
 typedef struct Action_ {
     int action;
-    char command[80];
-    char menu_label[80];
-    char description[200];
+    std::string command;
+    std::string menu_label;
+    std::string description;
 } Action;
 
+typedef struct Icon_ {
+    std::string fname;
+    std::string command;
+    GLuint texture_id;
+} Icon;
+
+typedef std::vector<std::vector<std::string>> string_matrix;
+
+/* Global variables.
+ * -----------------------------------------------------------------------------
+ */
+
 extern bool running;
+extern bool debug_mode;
+extern bool show_about_dialog;
+extern bool show_editor;
+extern int pattern_index;
+extern int n_patterns;
+extern std::string current_fname;
+extern std::string assets_dir;
+extern std::vector<Action> action_list;
+extern std::vector<EmbPattern*> pattern_list;
+extern std::unordered_map<std::string, string_matrix> menu_layout;
+
+/* Function Prototypes.
+ * -----------------------------------------------------------------------------
+ */
+void set_style(void);
+void load_configuration(void);
+void actuator(std::string command);
+void load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_layout);
+void load_toolbar(std::string menu_label, std::vector<std::vector<std::string>> toolbar_layout);
+int render_vector_graphic(std::vector<std::string> description);
+
+void about_dialog(void);
+void changelog_dialog(void);
+void help_dialog(void);
+void alert(void);
+
+std::string translate(std::string string);
+void debug_message(std::string string);
 
 #endif /* EMBROIDERMODDER_IMGUI_H */
 

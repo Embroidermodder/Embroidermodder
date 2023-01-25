@@ -18,85 +18,34 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl2.h"
 #include "TextEditor.h"
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-#include <iostream>
+#include "embroidermodder_imgui.h"
 
-#include <GL/glew.h>
+#include <iostream>
+#include <fstream>
+
 #include <GLFW/glfw3.h>
-#include <toml.hpp>
 #include <embroidery.h>
 
-#define VERSION "2.0.0-alpha"
-
-typedef struct Icon_ {
-    std::string fname;
-    std::string command;
-    GLuint texture_id;
-} Icon;
-
 bool running = true;
-
-static int icon_size = 16;
-static ImFont *font;
-static GLuint circle_ = 0;
-static std::vector<EmbPattern*> pattern_list;
-static std::vector<Icon> icon_list;
-static std::string menu_action = "";
-static std::string current_pattern = "";
-static TextEditor editor;
-
-std::vector<std::vector<std::string>> file_menu_layout = {
-    {"New", "new"},
-    {"Open", "open"},
-    {"---", "---"},
-    {"Save", "save"},
-    {"Save As...", "saveas"},
-    {"Export", "export"},
-    {"---", "---"},
-    {"Close", "close"},
-    {"---", "---"},
-    {"Print", "print"},
-    {"---", "---"},
-    {"Quit", "quit"}
-};
-std::vector<std::vector<std::string>> edit_menu_layout = {
-    {"Undo", "undo"},
-    {"Redo", "redo"},
-    {"---", "---"},
-    {"Cut", "cut"},
-    {"Copy", "copy"},
-    {"Paste", "paste"}
-};
-std::vector<std::vector<std::string>> view_menu_layout = {
-    {"Zoom Realtime", "zoom realtime"},
-    {"---", "---"},
-    {"Zoom In", "zoom in"},
-    {"Zoom Out", "zoom out"},
-    {"Zoom Extents", "zoom extents"},
-    {"---", "---"},
-    {"Pan Left", "pan left"},
-    {"Pan Right", "pan right"},
-    {"Pan Up", "pan up"},
-    {"Pan Down", "pan down"},
-    {"---", "---"},
-    {"Day", "day"},
-    {"Night", "night"}
-};
-std::vector<std::vector<std::string>> draw_menu_layout = {
-    {"Circle", "circle"},
-    {"Ellipse", "ellipse"},
-    {"Rectangle", "rectangle"},
-    {"Polyline", "polyline"},
-    {"Polygon", "polygon"},
-};
-
-void set_style(void);
-void load_configuration(void);
-void actuator(std::string command);
-void load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_layout);
-void load_toolbar(std::string menu_label, std::vector<std::vector<std::string>> toolbar_layout);
+bool debug_mode = true;
+bool show_about_dialog = false;
+bool show_editor = false;
+int icon_size = 16;
+ImFont *font;
+GLuint circle_ = 0;
+int pattern_index = 0;
+int n_patterns = 0;
+std::string current_fname = "Untitled.dst";
+std::string assets_dir = "../assets/";
+std::vector<Action> action_list;
+std::vector<EmbPattern*> pattern_list;
+std::unordered_map<std::string, string_matrix> menu_layout;
+std::vector<Icon> icon_list;
+std::string menu_action = "";
+std::string current_pattern = "";
+TextEditor editor;
 
 GLuint
 gen_gl_texture(uint8_t* data, int w, int h, char fmt)
@@ -115,14 +64,6 @@ gen_gl_texture(uint8_t* data, int w, int h, char fmt)
     return texture;
 }
 
-/* Description is a a simple string table of path instructions,
- * 
- */
-int
-render_vector_graphic(std::vector<std::string> description)
-{
-    return 0;
-}
 
 GLuint
 load_texture(const char *fname)
@@ -142,8 +83,9 @@ load_texture(const char *fname)
 void
 set_style(void)
 {
+    std::string font_file = assets_dir + "fonts/SourceSans3-regular.ttf";
     ImGuiIO& io = ImGui::GetIO();
-    font = io.Fonts->AddFontFromFileTTF("fonts/SourceSans3-regular.ttf", 16);
+    font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 16);
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
@@ -154,48 +96,20 @@ set_style(void)
 }
 
 void
-load_configuration(void)
-{
-    auto config = toml::parse("imgui_config.toml");
-
-    for (const auto &[i, j] : config.as_table()) {
-        if (!config[i].is_table()) {
-            continue;
-        }
-        if (!config[i].contains("type")) {
-            continue;
-        }
-        std::string s = toml::get<std::string>(config[i]["type"]);
-        if (s == "top-menu") {
-            // If the menu doesn't exist, create it.
-            std::string s_label = toml::get<std::string>(config[i]["label"]);
-        }
-    }
-    for (const auto &[i, j] : config.as_table()) {
-        if (!config[i].is_table()) {
-            continue;
-        }
-        if (!config[i].contains("type")) {
-            continue;
-        }
-        std::string s = toml::get<std::string>(config[i]["type"]);
-        if (s == "menu-item") {
-        }
-    }
-}
-
-void
-load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_layout)
+load_menu(std::string menu_label)
 {
     if (ImGui::BeginMenu(menu_label.c_str())) {
-        for (auto i : menu_layout) {
+        for (auto i : menu_layout[menu_label]) {
             if (i[0] == "---") {
                 ImGui::Separator();
+                continue;
             }
-            else {
-                if (ImGui::MenuItem(i[0].c_str())) {
-                    menu_action = i[1];
-                }
+            if (i[1] == "submenu") {
+                load_menu(i[0]);
+                continue;
+            }
+            if (ImGui::MenuItem(i[0].c_str())) {
+                menu_action = i[1];
             }
         }
         ImGui::EndMenu();
@@ -203,24 +117,21 @@ load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_lay
 }
 
 void
-load_toolbar(std::string menu_label, std::vector<std::vector<std::string>> toolbar_layout)
+load_toolbar(std::string toolbar_label)
 {
-    for (auto i : toolbar_layout) {
+    for (auto i : menu_layout.at(toolbar_label)) {
         if (i[0] == "---") {
             ImGui::Separator();
+            continue;
         }
-        else {
-            if (ImGui::Button(i[0].c_str())) {
-                menu_action = i[1];
-            }
+        ImGui::Button(i[0].c_str());
+        ImGui::SameLine();
+        ImVec2 size = {50, 50};
+    	if (ImGui::ImageButton((void*)(intptr_t)circle_, size)) {
+            menu_action = "circle";
         }
+        /* menu_action = i[1]; */
     }
-}
-
-void
-pattern_view(int index)
-{
-
 }
 
 void
@@ -237,23 +148,26 @@ main_widget(void)
     ImGui::Text("Example");
     menu_action = "";
 
-    ImVec2 size = {50, 50};
-	if (ImGui::ImageButton((void*)(intptr_t)circle_, size)) {
-        menu_action = "circle";
-    }
-
     if (ImGui::BeginMenuBar()) {
-        load_menu("File", file_menu_layout);
-        load_menu("Edit", edit_menu_layout);
-        load_menu("View", view_menu_layout);
-        load_menu("Draw", draw_menu_layout);
+        load_menu("File");
+        load_menu("Edit");
+        load_menu("View");
+        load_menu("Draw");
         ImGui::EndMenuBar();
     }
     if (menu_action != "") {
         actuator(menu_action);
     }
 
-    editor.Render("Text Editor");
+    if (show_about_dialog) {
+        about_dialog();
+    }
+
+    /* load_toolbar(); */
+
+    if (show_editor) {
+        editor.Render("Text Editor");
+    }
 
     if (pattern_list.size() > 0) {
         if (ImGui::Button("Close")) {
@@ -264,9 +178,24 @@ main_widget(void)
     ImGui::End();
 }
 
+void
+load_text_file(std::string fname)
+{
+    std::string line;
+    std::ifstream file;
+    file.open(fname);
+    while (std::getline(file, line)) {
+        editor.InsertText(line + "\n");
+    }
+}
+
 int
 main(int argc, char* argv[])
 {
+    if (argc>1) {
+        assets_dir = std::string(argv[1]);
+    }
+
     load_configuration();
 
     int width = 640;
@@ -297,16 +226,10 @@ main(int argc, char* argv[])
 
     set_style();
 
-    std::string fname = "assets/icons/default/circle.png";
+    std::string fname = assets_dir + "icons/default/circle.png";
     circle_ = load_texture(fname.c_str());
 
-    std::string line;
-    std::ifstream file;
-    file.open("imgui_config.toml");
-    while (std::getline(file, line)) {
-        editor.InsertText(line);
-        editor.InsertText("\n");
-    }
+    /* load_text_file("imgui_config.toml"); */
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();

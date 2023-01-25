@@ -5,4 +5,3 @@ cd build
 cmake -G "MinGW Makefiles" ..
 MinGW32-make.exe -j4
 cd ..
-xcopy assets build\ /E

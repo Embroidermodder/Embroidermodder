@@ -7,4 +7,3 @@ cd build
 cmake ..
 cmake --build .
 cd ..
-cp -r assets/* build
