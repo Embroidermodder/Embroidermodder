@@ -27,34 +27,40 @@ the assets/samples folder.
 
 ## Dependencies
 
-To build Embroidermodder 2 from source you will need at least to download this repository and [Qt](http://www.qt-project.org) (version >= 6.0).
-We're working on moving to the lighter Dear ImGui with GLFW backend, so eventually you'll just need a basic CMake build environment.
+We're working on moving to the lighter Dear ImGui with GLFW backend, so you'll just need a basic CMake build environment which is detailed below if you're new to that build method.
 
 All other dependencies are included into the source code in the `extern/` directory.
 
 (Note that this doesn't cover the thumbnailer, which requires KDE.)
 
-### Qt6
+#### Windows
 
-#### On Windows
+We currently use the following tools, but any equivalent CMake build environment should work:
 
-We recommend using the standard installer: [https://www.qt.io/download-qt-installer](https://www.qt.io/download-qt-installer).
+1. [MinGW Build Environment](https://www.mingw-w64.org/downloads/) for g++, make etc.
+2. [Git for Windows](https://gitforwindows.org/) for version control.
+3. [CMake](https://cmake.org/download/).
+4. A good text edtior. For Windows I'd recommend [Notepad++](https://notepad-plus-plus.org/downloads/) or [Visual Studio Code](https://code.visualstudio.com/).
 
-#### Ubuntu/debian repository packages
+Make sure all these tools are in your `PATH`, this may be managed by your installers or you can use the `setx` command as an administrator to alter it.
 
-_This subsection is untested._
+#### MacOS
 
-The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+_We need someone with a MacBook to test this._
 
-     sudo apt-get install git build-essential cmake libgl1-mesa-dev qtcreator qt6-base qt6-base-dev valgrind
+Install XCode, CMake and git.
 
-#### Fedora repository packages
+#### Ubuntu/Debian
 
-_This subsection is untested._
+The build dependencies can be installed easily by opening a terminal and issuing this command:
 
-The Qt, and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+     sudo apt-get install git build-essential cmake libgl1-mesa-dev valgrind
 
-    sudo yum install git gdb gcc-c++ qt-devel valgrind cmake
+#### Fedora
+
+The build dependencies can be installed easily by opening a terminal and issuing this command:
+
+    sudo yum install git gdb gcc-c++ valgrind cmake
 
 ## Building
 
@@ -88,12 +94,7 @@ Then you'll be able to run `embroidermodder` from the command line with the comm
 
 ### Windows
 
-Make sure your Qt installation is in your PATH like this:
-
-    echo "Run as administrator."
-    setx /m path "%PATH%;C:\Qt\6.4.1\mingw_64\bin"
-
-Then double click the executable to run.
+To Embroidermodder 2, enter the `build/` directory and double-click the executable.
 
 On Windows the install commands are the same, however you need to use a `cmd` terminal with admin priviledges and without `sudo`.
 

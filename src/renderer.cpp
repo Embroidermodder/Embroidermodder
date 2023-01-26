@@ -19,7 +19,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
-#include "embroidermodder_imgui.h"
+#include "embroidermodder.h"
 
 /* Description is a a simple string table of path instructions,
  * 

@@ -1,10 +1,10 @@
-"#","Default (US English) to Chinese (Simplified) Translation Table."
-"#","-------------------------------------------------------"
-"#","This file is part of Embroidermodder."
-"#","Copyright 2013-2022 The Embroidermodder Team"
-"#","See LICENSE for details."
-"#","-------------------------------------------------------"
-"#"," "
+# Default (US English) to Chinese (Simplified) Translation Table.
+# -------------------------------------------------------
+# This file is part of Embroidermodder.
+# Copyright 2013-2022 The Embroidermodder Team
+# See LICENSE for details.
+# -------------------------------------------------------
+#
 
 type = "translation"
 language_code = "zh"
@@ -15,83 +15,45 @@ data = [
     ["Night", "半夜"]
 ]
 
-    <message>
-        "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "
-    <message>
-        "Specify radius of circle or [Diameter]: "
-    <message>
-        "This should never happen."
-    <message>
-        "Specify second end point of circle&apos;s diameter: "
-    <message>
-        "Specify second point on circle: "
-    <message>
-        "Specify third point on circle: "
-    <message>
-        "Specify point on object for second tangent of circle: "
-    <message>
-        "Specify radius of circle: "
-    <message>
-        "Specify second point: "
-    <message>
-        "Specify first end point of circle&apos;s diameter: "
-    <message>
-        "Specify first point of circle: "
-    <message>
-        "Specify point on object for first tangent of circle: "
-    <message>
-        "Point or option keyword required."
-    <message>
-        "Specify diameter of circle: "
-    <message>
-        "Requires numeric radius, point on circumference, or &quot;D&quot;."
-    <message>
-        "Requires numeric distance or second point."
-    <message>
-        "Invalid point."
-    <message>
+to_translate = [
+    "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
+    "Specify radius of circle or [Diameter]: ",
+    "This should never happen.",
+    "Specify second end point of circle's diameter: ",
+    "Specify second point on circle: ",
+    "Specify third point on circle: ",
+    "Specify point on object for second tangent of circle: ",
+    "Specify radius of circle: ",
+    "Specify second point: ",
+    "Specify first end point of circle's diameter: ",
+    "Specify first point of circle: ",
+    "Specify point on object for first tangent of circle: ",
+    "Point or option keyword required.",
+    "Specify diameter of circle: ",
+    "Requires numeric radius, point on circumference, or &quot;D&quot;.",
+    "Requires numeric distance or second point.",
+    "Invalid point.",
         "Specify second point of circle: "
-    <message>
         "Specify third point of circle: "
-    <message>
         "Specify first point: "
-    <message>
         "Specify second point: "
-    <message>
         "Requires numeric distance or two points."
-    <message>
         "Distance"
-    <message>
         "Angle"
-    <message>
         "Delta X"
-    <message>
         "Delta Y"
-    <message>
         "Specify first axis start point or [Center]: "
-    <message>
         "Specify first axis end point: "
-    <message>
         "Specify second axis end point or [Rotation]: "
-    <message>
         "This should never happen."
-    <message>
         "Specify center point: "
-    <message>
         "Point or option keyword required."
-    <message>
         "Invalid point."
-    <message>
         "Specify rotation: "
-    <message>
         "Specify ellipse rotation: "
-    <message>
         "Invalid angle. Input a numeric angle or pick a point."
-    <message>
         "Preselect objects before invoking the delete command."
-    <message>
         "Delete Preselect"
-    <message>
         "Specify first point: "
     <message>
         "Specify next point or [Undo]: "
@@ -335,42 +297,24 @@ data = [
     <message>
         "Frozen"
     <message>
-        "Z Value"
-    <message>
-        "Color"
-    <message>
-        "Linetype"
-    <message>
-        "Lineweight"
-    <message>
-        "Print"
-    <message>
-        "Error reading file"
-    <message>
-        "Cannot read file %1:
-%2."
-    <message>
-        "Error reading pattern"
-    <message>
-        "Cannot read pattern"
-    <message>
-        "&amp;Do Nothing"
-    <message>
-        "Does Nothing"
-    <message>
-        "&amp;Cascade"
-    <message>
-        "Cascade the windows."
-    <message>
-        "&amp;Tile"
-    <message>
-        "Tile the windows."
-    <message>
-        "Cl&amp;ose"
-    <message>
-        "Close the active window."
-    <message>
-        "Close &amp;All"
+    "Z Value",
+    "Color",
+    "Linetype",
+    "Lineweight",
+    "Print",
+    "Error reading file",
+    "Cannot read file %1: %2.",
+    "Error reading pattern",
+    "Cannot read pattern",
+    "&amp;Do Nothing",
+    "Does Nothing",
+    "&amp;Cascade",
+    "Cascade the windows.",
+    "&amp;Tile",
+    "Tile the windows.",
+    "Cl&amp;ose",
+    "Close the active window.",
+    "Close &amp;All"
     <message>
         "Close all the windows."
     <message>
@@ -412,15 +356,15 @@ data = [
     <message>
         "Cu&amp;t"
     <message>
-        "Cut the current selection&apos;s contents to the clipboard."
+        "Cut the current selection's contents to the clipboard."
     <message>
         "&amp;Copy"
     <message>
-        "Copy the current selection&apos;s contents to the clipboard."
+        "Copy the current selection's contents to the clipboard."
     <message>
         "&amp;Paste"
     <message>
-        "Paste the clipboard&apos;s contents into the current selection."
+        "Paste the clipboard's contents into the current selection."
     <message>
         "&amp;Help"
     <message>
@@ -616,30 +560,15 @@ data = [
     <message>
         "&amp;Day"
     <message>
-        "Updates the current view using day vision settings."
-    <message>
-        "&amp;Night"
-    <message>
-        "Updates the current view using night vision settings."
-    <message>
-        "Testing Feature"
-    <message>
-        "&lt;b&gt;This feature is in testing.&lt;/b&gt;"
-    <message>
-        "
-
-"
-    <message>
-        "http://embroidermodder.sourceforge.net"
-    <message>
-        "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi"
-    <message>
-        "Embroidery formats by Josh Varga."
-    <message>
-        "
-"
-    <message>
-        "User Interface by Jonathan Greig."
+        "Updates the current view using day vision settings.",
+        "&amp;Night",
+        "Updates the current view using night vision settings.",
+        "Testing Feature",
+        "**This feature is in testing.**",
+        "http://embroidermodder.sourceforge.net",
+        "Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi",
+        "Embroidery formats by Josh Varga.",
+        "User Interface by Jonathan Greig.",
     <message>
         "Free under the zlib/libpng license."
     <message>
@@ -1161,39 +1090,22 @@ data = [
     <message>
         "Blue"
     <message>
-        "Magenta"
-    <message>
-        "White"
-    <message>
-        "Open File"
-    <message>
-        "Images (*.bmp *.png *.jpg)"
-    <message>
-        "New"
-    <message>
-        "History"
-    <message>
-        "ZoomSelected Preselect"
-    <message>
-        "Preselect objects before invoking the zoomSelected command."
-    <message>
-        "Grip Edit "
-    <message>
-        "Delete 1 "
-    <message>
-        "Cut Preselect"
-    <message>
-        "Preselect objects before invoking the cut command."
-    <message>
-        "Copy Preselect"
-    <message>
-        "Preselect objects before invoking the copy command."
-    <message>
-        "Move 1 "
-    <message>
-        "Rotate 1 "
-    <message>
-        "Mirror 1 "
-    <message>
-        "Scale 1 "
-</TS>
+        "Magenta",
+        "White",
+        "Open File",
+    "Images (*.bmp *.png *.jpg)",
+    "New",
+    "History",
+    "ZoomSelected Preselect",
+    "Preselect objects before invoking the zoomSelected command.",
+    "Grip Edit ",
+    "Delete 1 ",
+    "Cut Preselect",
+    "Preselect objects before invoking the cut command.",
+    "Copy Preselect",
+    "Preselect objects before invoking the copy command.",
+    "Move 1 ",
+    "Rotate 1 ",
+    "Mirror 1 ",
+    "Scale 1 "
+]

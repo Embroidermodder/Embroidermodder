@@ -1,10 +1,4 @@
 
-#include <QGraphicsScene>
-#include <QGraphicsItem>
-#include <QPainter>
-#include <QImage>
-#include <QFile>
-
 #include "embroidery.h"
 
 class EmbroideryThumbnailer : public ThumbCreator

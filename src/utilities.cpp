@@ -13,7 +13,7 @@
  *      https://peps.python.org/pep-0007/
  */
 
-#include "embroidermodder_imgui.h"
+#include "embroidermodder.h"
 
 std::string translate(std::string string)
 {

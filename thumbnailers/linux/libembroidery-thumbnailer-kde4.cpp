@@ -1,9 +1,4 @@
 #include "libembroidery-thumbnailer-kde4.h"
-#include <QGraphicsScene>
-#include <QGraphicsItem>
-#include <QPainter>
-#include <QImage>
-#include <QFile>
 
 #include "emb-reader-writer.h"
 

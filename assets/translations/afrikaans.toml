@@ -1,67 +1,46 @@
-    <message>
-        "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "
-    <message>
-        "Specify radius of circle or [Diameter]: "
-    <message>
-        "This should never happen."
-    <message>
-        "Specify second end point of circle&apos;s diameter: "
-    <message>
-        "Specify second point on circle: "
-    <message>
-        "Specify third point on circle: "
-    <message>
-        "Specify point on object for second tangent of circle: "
-    <message>
-        "Specify radius of circle: "
-    <message>
-        "Specify second point: "
-    <message>
-        "Specify first end point of circle&apos;s diameter: "
-    <message>
-        "Specify first point of circle: "
-    <message>
-        "Specify point on object for first tangent of circle: "
-    <message>
-        "Point or option keyword required."
-    <message>
-        "Specify diameter of circle: "
-    <message>
-        "Requires numeric radius, point on circumference, or &quot;D&quot;."
-    <message>
-        "Requires numeric distance or second point."
-    <message>
-        "Invalid point."
-    <message>
-        "Specify second point of circle: "
-    <message>
-        "Specify third point of circle: "
-    <message>
-        "Specify first point: "
-    <message>
-        "Specify second point: "
-    <message>
-        "Requires numeric distance or two points."
-    <message>
-        "Distance"
-    <message>
-        "Angle"
-    <message>
-        "Delta X"
-    <message>
-        "Delta Y"
-    <message>
-        "Specify first axis start point or [Center]: "
-    <message>
-        "Specify first axis end point: "
-    <message>
-        "Specify second axis end point or [Rotation]: "
-    <message>
-        "This should never happen."
-    <message>
-        "Specify center point: "
-    <message>
-        "Point or option keyword required."
+# Default (US English) to Afrikaans Translation Table.
+# -------------------------------------------------------
+# This file is part of Embroidermodder.
+# Copyright 2013-2022 The Embroidermodder Team
+# See LICENSE for details.
+# -------------------------------------------------------
+#
+
+type = "translation"
+
+to_translate = [
+    "Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: ",
+    "Specify radius of circle or [Diameter]: ",
+    "This should never happen.",
+    "Specify second end point of circle&apos;s diameter: ",
+    "Specify second point on circle: ",
+    "Specify third point on circle: ",
+    "Specify point on object for second tangent of circle: ",
+    "Specify radius of circle: ",
+    "Specify second point: ",
+    "Specify first end point of circle&apos;s diameter: ",
+    "Specify first point of circle: ",
+    "Specify point on object for first tangent of circle: ",
+    "Point or option keyword required.",
+    "Specify diameter of circle: ",
+    "Requires numeric radius, point on circumference, or &quot;D&quot;.",
+    "Requires numeric distance or second point.",
+    "Invalid point.",
+    "Specify second point of circle: ",
+    "Specify third point of circle: ",
+    "Specify first point: ",
+    "Specify second point: ",
+    "Requires numeric distance or two points.",
+    "Distance",
+    "Angle",
+    "Delta X",
+    "Delta Y",
+    "Specify first axis start point or [Center]: ",
+    "Specify first axis end point: ",
+    "Specify second axis end point or [Rotation]: ",
+    "This should never happen.",
+    "Specify center point: ",
+    "Point or option keyword required."
     <message>
         "Invalid point."
     <message>
@@ -223,30 +202,18 @@
     <message>
         "Specify text angle"
     <message>
-        "Enter text: "
-    <message>
-        "Specify center point of text or [Justify/Setfont]: "
-    <message>
-        "Specify right-end point of text or [Justify/Setfont]: "
-    <message>
-        "Specify middle point of text or [Justify/Setfont]: "
-    <message>
-        "Specify top-left point of text or [Justify/Setfont]: "
-    <message>
-        "Specify top-center point of text or [Justify/Setfont]: "
-    <message>
-        "Specify top-right point of text or [Justify/Setfont]: "
-    <message>
-        "Specify middle-left point of text or [Justify/Setfont]: "
-    <message>
-        "Specify middle-center point of text or [Justify/Setfont]: "
-    <message>
-        "Specify middle-right point of text or [Justify/Setfont]: "
-    <message>
-        "Specify bottom-left point of text or [Justify/Setfont]: "
-    <message>
-        "Specify bottom-center point of text or [Justify/Setfont]: "
-    <message>
+        "Enter text: ",
+        "Specify center point of text or [Justify/Setfont]: ",
+        "Specify right-end point of text or [Justify/Setfont]: ",
+        "Specify middle point of text or [Justify/Setfont]: ",
+        "Specify top-left point of text or [Justify/Setfont]: ",
+        "Specify top-center point of text or [Justify/Setfont]: ",
+        "Specify top-right point of text or [Justify/Setfont]: ",
+        "Specify middle-left point of text or [Justify/Setfont]: ",
+        "Specify middle-center point of text or [Justify/Setfont]: ",
+        "Specify middle-right point of text or [Justify/Setfont]: ",
+        "Specify bottom-left point of text or [Justify/Setfont]: ",
+        "Specify bottom-center point of text or [Justify/Setfont]: ",
         "Specify bottom-right point of text or [Justify/Setfont]: "
     <message>
         "Invalid option keyword."
@@ -273,52 +240,27 @@
     <message>
         "Invalid point."
     <message>
-        "Enter an option [Cascade/Tile]: "
+    "Enter an option [Cascade/Tile]: ",
+    "Invalid option keyword."
+]
+
+data = [
+    ["Command: ", "Opdrag: "],
+    ["*Cancel*", "*Kanselleer*"],
+    ["Embroidery Design Details", "Borduur-ontwerp Inligting"],
+    ["General Information", "Algmene Inligting"],
+    ["Total Stitches:", "Hoeveelheid Steke:"],
+    ["Real Stitches:", "Hoeveelheid Borduursteke:"],
+    ["Jump Stitches:", "Spring Steke:"],
+    ["Trim Stitches:", "Knip Steke:"],
+    ["Total Colors:", "Hoeveelheid Kleure:"],
+    ["Color Changes:", "Kleur Veranderings:"],
+    ["Left:", "Links:"],
+    ["Top:", "Bopunt:"
     <message>
-        "Invalid option keyword."
-</TS>
+        "Right:", "Regs:"
     <message>
-        "Command: "
-        "Opdrag: "
-    <message>
-        "*Cancel*"
-        "*Kanselleer*"
-    <message>
-        "Embroidery Design Details"
-        "Borduur-ontwerp Inligting"
-    <message>
-        "General Information"
-        "Algmene Inligting"
-    <message>
-        "Total Stitches:"
-        "Hoeveelheid Steke:"
-    <message>
-        "Real Stitches:"
-        "Hoeveelheid Borduursteke:"
-    <message>
-        "Jump Stitches:"
-        "Spring Steke:"
-    <message>
-        "Trim Stitches:"
-        "Knip Steke:"
-    <message>
-        "Total Colors:"
-        "Hoeveelheid Kleure:"
-    <message>
-        "Color Changes:"
-        "Kleur Veranderings:"
-    <message>
-        "Left:"
-        "Links:"
-    <message>
-        "Top:"
-        "Bopunt:"
-    <message>
-        "Right:"
-        "Regs:"
-    <message>
-        "Bottom:"
-        "Onderpunt:"
+        "Bottom:", "Onderpunt:"
     <message>
         "Width:"
         "Wydte:"

@@ -36,15 +36,38 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
 
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
-add_executable(imgui_embroidermodder
+add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/actuator.cpp
 	${CMAKE_SOURCE_DIR}/src/data.cpp
 	${CMAKE_SOURCE_DIR}/src/dialogs.cpp
 	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
-	${CMAKE_SOURCE_DIR}/src/property_editor.cpp
+	${CMAKE_SOURCE_DIR}/src/mainwindow-commands.cpp
+	${CMAKE_SOURCE_DIR}/src/mainwindow-settings.cpp
+	${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
+	${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
+	${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
+	${CMAKE_SOURCE_DIR}/src/object-arc.cpp
+	${CMAKE_SOURCE_DIR}/src/object-base.cpp
+	${CMAKE_SOURCE_DIR}/src/object-circle.cpp
+	${CMAKE_SOURCE_DIR}/src/object-ellipse.cpp
+	${CMAKE_SOURCE_DIR}/src/object-image.cpp
+	${CMAKE_SOURCE_DIR}/src/object-line.cpp
+	${CMAKE_SOURCE_DIR}/src/object-path.cpp
+	${CMAKE_SOURCE_DIR}/src/object-polygon.cpp
+	${CMAKE_SOURCE_DIR}/src/object-polyline.cpp
+	${CMAKE_SOURCE_DIR}/src/object-rect.cpp
+	${CMAKE_SOURCE_DIR}/src/object-save.cpp
+	${CMAKE_SOURCE_DIR}/src/object-textsingle.cpp
+	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/renderer.cpp
-	${CMAKE_SOURCE_DIR}/src/settings_editor.cpp
+	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
+	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
+	${CMAKE_SOURCE_DIR}/src/statusbar.cpp
+	${CMAKE_SOURCE_DIR}/src/svg.cpp
+	${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
+	${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/utilities.cpp
+	${CMAKE_SOURCE_DIR}/src/view.cpp
 	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit/TextEditor.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui_demo.cpp
@@ -66,12 +89,12 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 )
 
-target_link_libraries(imgui_embroidermodder PRIVATE
+target_link_libraries(embroidermodder PRIVATE
 	glfw
 	embroidery_static
 	opengl32)
 
-set_target_properties(imgui_embroidermodder PROPERTIES
+set_target_properties(embroidermodder PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
 )
@@ -104,16 +127,13 @@ install(
 
 install(
 	FILES
-		${SRC_ASSETS}/translations/arabic.csv
-		${SRC_ASSETS}/translations/chinese_simplified.csv
-		${SRC_ASSETS}/translations/chinese_traditional.csv
-		${SRC_ASSETS}/translations/default.csv
-		${SRC_ASSETS}/translations/english_gb.csv
-		${SRC_ASSETS}/translations/english_us.csv
-		${SRC_ASSETS}/translations/french.csv
-		${SRC_ASSETS}/translations/hindi.csv
-		${SRC_ASSETS}/translations/russian.csv
-		${SRC_ASSETS}/translations/spanish.csv
+		${SRC_ASSETS}/translations/arabic.toml
+		${SRC_ASSETS}/translations/chinese_simplified.toml
+		${SRC_ASSETS}/translations/chinese_traditional.toml
+		${SRC_ASSETS}/translations/french.toml
+		${SRC_ASSETS}/translations/hindi.toml
+		${SRC_ASSETS}/translations/russian.toml
+		${SRC_ASSETS}/translations/spanish.toml
 	DESTINATION
 		${ASSETS_DIR}/translations
 )
