@@ -26,6 +26,8 @@
 
 #include <GL/glew.h>
 
+#define MAX_PATTERNS                 50
+
 #define LANGUAGE_DEFAULT              0
 #define LANGUAGE_ENGLISH_US           1
 #define LANGUAGE_ENGLISH_UK           2
@@ -461,13 +463,15 @@ extern bool running;
 extern bool debug_mode;
 extern bool show_about_dialog;
 extern bool show_editor;
+extern bool show_rulers;
+extern bool show_grid;
 extern int language;
 extern int pattern_index;
 extern int n_patterns;
 extern std::string current_fname;
 extern std::string assets_dir;
 extern std::vector<Action> action_list;
-extern std::vector<EmbPattern*> pattern_list;
+extern EmbPattern* pattern_list[MAX_PATTERNS];
 extern string_matrix translations[N_LANGUAGES];
 extern std::unordered_map<std::string, string_matrix> menu_layout;
 
@@ -488,6 +492,8 @@ void alert(void);
 
 std::string translate(std::string string);
 void debug_message(std::string string);
+
+void pattern_view(void);
 
 #endif /* EMBROIDERMODDER_IMGUI_H */
 

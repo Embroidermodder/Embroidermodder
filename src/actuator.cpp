@@ -78,9 +78,11 @@ actuator(std::string command)
     }
     if (command == "new") {
         debug_message(translate("New File"));
+        pattern_list[n_patterns] = embPattern_create();
+        n_patterns++;
     }
     if (command == "night") {
-        debug_message("New File");
+        debug_message("Night");
     }
     if (command == "open") {
         debug_message("Open File");

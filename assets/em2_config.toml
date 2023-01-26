@@ -130,29 +130,35 @@ toolbar_layout = [
 ]
 
 file_toolbar = [
-    ["New", "new"]
+    "new",
+    "open",
+    "save",
+    "saveas"
 ]
 
 edit_toolbar = [
-    ["Cut", "cut"]    
+    "cut",
+    "copy",
+    "paste"
 ]
 
 view_toolbar = [
-    ["Day", "day"]    
+    "day"
 ]
 
 zoom_toolbar = [
-    ["Zoom In", "zoomin"]    
+    "zoomin"
 ]
 
 draw_toolbar = [
-    ["Circle", "circle"],
-    ["Dolphin", "dolphin"],
-    ["Treble Clef", "trebleclef"]
+    "circle",
+    "dolphin",
+    "trebleclef"
 ]
 
 inquiry_toolbar = [
-    ["Distance", "distance"]
+    "details",
+    "distance"
 ]
 
 action_list = [

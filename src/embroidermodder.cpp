@@ -32,19 +32,20 @@ bool running = true;
 bool debug_mode = true;
 bool show_about_dialog = false;
 bool show_editor = false;
+bool show_rulers = true;
+bool show_grid = true;
 int language = LANGUAGE_DEFAULT;
 int icon_size = 16;
 ImFont *font;
-GLuint circle_ = 0;
 int pattern_index = 0;
 int n_patterns = 0;
 std::string current_fname = "Untitled.dst";
 std::string assets_dir = "../assets/";
 std::vector<Action> action_list;
-std::vector<EmbPattern*> pattern_list;
+EmbPattern* pattern_list[MAX_PATTERNS];
 string_matrix translations[N_LANGUAGES];
+std::unordered_map<std::string, GLuint> textures;
 std::unordered_map<std::string, string_matrix> menu_layout;
-std::vector<Icon> icon_list;
 std::string menu_action = "";
 std::string current_pattern = "";
 TextEditor editor;
@@ -61,25 +62,32 @@ gen_gl_texture(uint8_t* data, int w, int h, char fmt)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return texture;
 }
 
-
-GLuint
-load_texture(const char *fname)
+int
+load_textures(std::vector<std::string> texture_list)
 {
-    int width, height;
-    uint8_t* data = stbi_load(fname, &width, &height, NULL, 4);
-    if (!data) {
-        return 0;
+    for (std::string icon : texture_list) {
+        int width, height;
+        std::string fname = assets_dir + "icons/default/" + icon + ".png";
+        uint8_t* data = stbi_load(fname.c_str(), &width, &height, NULL, 4);
+        if (!data) {
+            return 1;
+        }
+
+        GLuint texture_id = gen_gl_texture(data, width, height, 0);
+        stbi_image_free(data);
+
+        textures[icon] = texture_id;
     }
 
-    GLuint texture_id = gen_gl_texture(data, width, height, 0);
-    stbi_image_free(data);
-
-    return texture_id;
+    return 0;
 }
 
 void
@@ -87,7 +95,10 @@ set_style(void)
 {
     std::string font_file = assets_dir + "fonts/SourceSans3-regular.ttf";
     ImGuiIO& io = ImGui::GetIO();
-    font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 16);
+    ImFontConfig config;
+    config.OversampleH = 2;
+    config.OversampleV = 2;
+    font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 16, &config);
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
@@ -119,20 +130,21 @@ load_menu(std::string menu_label)
 }
 
 void
-load_toolbar(std::string toolbar_label)
+load_toolbar(std::vector<std::string> toolbar)
 {
-    for (auto i : menu_layout.at(toolbar_label)) {
-        if (i[0] == "---") {
+    for (int i=0; i<toolbar.size(); i++) {
+        std::string icon = toolbar[i];
+        if (icon == "---") {
             ImGui::Separator();
             continue;
         }
-        ImGui::Button(i[0].c_str());
-        ImGui::SameLine();
-        ImVec2 size = {50, 50};
-    	if (ImGui::ImageButton((void*)(intptr_t)circle_, size)) {
-            menu_action = "circle";
+        ImVec2 size = {icon_size, icon_size};
+    	if (ImGui::ImageButton((void*)(intptr_t)textures[icon], size)) {
+            menu_action = icon;
         }
-        /* menu_action = i[1]; */
+        if (i+1<toolbar.size()) {
+            ImGui::SameLine();
+        }
     }
 }
 
@@ -147,7 +159,6 @@ main_widget(void)
         | ImGuiWindowFlags_NoMove );
     ImGui::SetWindowFontScale(1.5);
 
-    ImGui::Text("Example");
     menu_action = "";
 
     if (ImGui::BeginMenuBar()) {
@@ -157,24 +168,38 @@ main_widget(void)
         load_menu("Draw");
         ImGui::EndMenuBar();
     }
+
+    load_toolbar({
+        "new",
+        "open",
+        "save",
+        "saveas"
+    });
+
     if (menu_action != "") {
         actuator(menu_action);
     }
 
+    if (ImGui:: BeginTabBar("Tab Bar")) {
+        for (int i=0; i<n_patterns; i++) {
+            if (ImGui::BeginTabItem("Untitled.dst")) {
+                if (i == pattern_index) {
+                    pattern_view();
+                }
+                ImGui::EndTabItem();
+            }
+        }
+        if (show_editor) {
+            if (ImGui::BeginTabItem("Text Editor")) {
+                editor.Render("Text Editor");
+                ImGui::EndTabItem();
+            }
+        }
+        ImGui::EndTabBar();
+    }
+
     if (show_about_dialog) {
         about_dialog();
-    }
-
-    /* load_toolbar(); */
-
-    if (show_editor) {
-        editor.Render("Text Editor");
-    }
-
-    if (pattern_list.size() > 0) {
-        if (ImGui::Button("Close")) {
-            std::cout << "Close" << std::endl;
-        }
     }
 
     ImGui::End();
@@ -228,8 +253,13 @@ main(int argc, char* argv[])
 
     set_style();
 
-    std::string fname = assets_dir + "icons/default/circle.png";
-    circle_ = load_texture(fname.c_str());
+    load_textures({
+        "new",
+        "open",
+        "save",
+        "saveas",
+        "circle"
+    });
 
     /* load_text_file("imgui_config.toml"); */
 
