@@ -20,6 +20,8 @@
 #include <unordered_map>
 #include <iostream>
 
+/* The actuator changes the program state via these global variables.
+ */
 int settings_general_icon_size;
 bool settings_general_mdi_bg_use_logo;
 bool settings_general_mdi_bg_use_texture;
@@ -128,154 +130,167 @@ bool settings_text_style_strikeout;
 std::vector<std::string> undo_history;
 int undo_history_position = 0;
 
-void
-actuator(std::string command)
-{
-    if (command == "about") {
-        debug_message(translate("About Dialog"));
-        show_about_dialog = true;
-    }
-    if (command == "circle") {
-        debug_message(translate("Add Circle"));
-    }
-    if (command == "close") {
-        debug_message(translate("Close Window"));
-    }
-    if (command == "copy") {
-        debug_message(translate("Copy"));
-    }
-    if (command == "cut") {
-        debug_message(translate("Cut"));
-    }
-    if (command == "day") {
-        debug_message(translate("Day"));
-    }
-    if (command == "editor") {
-        debug_message(translate("Open Text Editor"));
-        show_editor = true;
-    }
-    if (command == "export") {
-        debug_message(translate("Export as"));
-        embPattern_writeAuto(pattern_list[n_patterns], current_fname.c_str());
-    }
-    if (command == "icon16") {
-        debug_message("icon16");
-        icon_size = 16;
-    }
-    if (command == "icon24") {
-        debug_message("icon24");
-        icon_size = 24;
-    }
-    if (command == "icon32") {
-        debug_message("icon32");
-        icon_size = 32;
-    }
-    if (command == "icon48") {
-        debug_message("icon48");
-        icon_size = 48;
-    }
-    if (command == "icon64") {
-        debug_message("icon64");
-        icon_size = 64;
-    }
-    if (command == "icon128") {
-        debug_message("icon128");
-        icon_size = 128;
-    }
-    if (command == "open") {
-        debug_message("Close Window");
-        embPattern_readAuto(pattern_list[n_patterns], current_fname.c_str());
-        n_patterns++;
-    }
-    if (command == "print") {
-        debug_message("Close Window");
-    }
-    if (command == "details") {
-        debug_message("Details Dialog");
-    }
-    if (command == "undo") {
-        debug_message("Undo");
-    }
-    if (command == "redo") {
-        debug_message("Redo");
-    }
-    if (command == "paste") {
-        debug_message("Paste");
-    }
-    if (command == "pan left") {
-        debug_message("New File");
-    }
-    if (command == "pan right") {
-        debug_message("Pan Right");
-    }
-    if (command == "pan up") {
-        debug_message(translate("Pan Up"));
-    }
-    if (command == "pan down") {
-        debug_message(translate("Pan Down"));
-    }
-    if (command == "new") {
-        debug_message(translate("New File"));
-        pattern_list[n_patterns] = embPattern_create();
-        n_patterns++;
-    }
-    if (command == "night") {
-        debug_message("Night");
-    }
-    if (command == "open") {
-        debug_message("Open File");
-    }
-    if (command == "ellipse") {
-        debug_message("Add Polygon");
-    }
-    if (command == "polygon") {
-        debug_message("Add Polygon");
-    }
-    if (command == "polyline") {
-        debug_message("Add Polyline");
-    }
-    if (command == "rectangle") {
-        debug_message("Add Rectangle");
-    }
-    if (command == "save") {
-        debug_message("Save");
-        if (n_patterns) {
-            embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
-        }
-    }
-    if (command == "saveas") {
-        debug_message("Save as...");
-        if (n_patterns) {
-            embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
-        }
-    }
-    if (command == "quit") {
-        debug_message("Quitting.");
-        running = false;
-    }
-    if (command == "zoom extents") {
-        debug_message("Zoom Extents");
-    }
-    if (command == "zoom in") {
-        debug_message("Zoom In");
-    }
-    if (command == "zoom out") {
-        debug_message("Zoom Out");
-    }
-    if (command == "zoom realtime") {
-        debug_message("Zoom Realtime");
-    }
-}
+/* Function Prototypes.
+ */
+void about_action(std::vector<std::string> args);
+void debug_action(std::vector<std::string> args);
+void error_action(std::vector<std::string> args);
 
+/* File-scope variables.
+ */
+static std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
+    {"about", about_action},
+    {"debug", debug_action},
+    {"error", error_action},
+    {"todo", error_action},
+    {"alert", error_action},
+    {"blinkPrompt", error_action},
+    {"setPromptPrefix", error_action},
+    {"appendPromptHistory", error_action},
+    {"enablePromptRapidFire", error_action},
+    {"disablePromptRapidFire", error_action},
+    {"enableMoveRapidFire", error_action},
+    {"disableMoveRapidFire", error_action},
+    {"initCommand", error_action},
+    {"endCommand", error_action},
+    {"newFile", error_action},
+    {"openFile", error_action},
+    {"exit", error_action},
+    {"help", error_action},
+    {"about", error_action},
+    {"tipOfTheDay", error_action},
+    {"windowCascade", error_action},
+    {"windowTile", error_action},
+    {"windowClose", error_action},
+    {"windowCloseAll", error_action},
+    {"windowNext", error_action},
+    {"windowPrevious", error_action},
+    {"platformString", error_action},
+    {"messageBox", error_action},
+    {"isInt", error_action},
+    {"undo", error_action},
+    {"redo", error_action},
+    {"icon16", error_action},
+    {"icon24", error_action},
+    {"icon32", error_action},
+    {"icon48", error_action},
+    {"icon64", error_action},
+    {"icon128", error_action},
+    {"panLeft", error_action},
+    {"panRight", error_action},
+    {"panUp", error_action},
+    {"panDown", error_action},
+    {"zoomIn", error_action},
+    {"zoomOut", error_action},
+    {"zoomExtents", error_action},
+    {"printArea", error_action},
+    {"dayVision", error_action},
+    {"nightVision", error_action},
+    {"setBackgroundColor", error_action},
+    {"setCrossHairColor", error_action},
+    {"setGridColor", error_action},
+    {"textFont", error_action},
+    {"textSize", error_action},
+    {"textAngle", error_action},
+    {"textBold", error_action},
+    {"textItalic", error_action},
+    {"textUnderline", error_action},
+    {"textStrikeOut", error_action},
+    {"textOverline", error_action},
+    {"setTextFont", error_action},
+    {"setTextSize", error_action},
+    {"setTextAngle", error_action},
+    {"setTextBold", error_action},
+    {"setTextItalic", error_action},
+    {"setTextUnderline", error_action},
+    {"setTextStrikeOut", error_action},
+    {"setTextOverline", error_action},
+    {"previewOn", error_action},
+    {"previewOff", error_action},
+    {"vulcanize", error_action},
+    {"allowRubber", error_action},
+    {"setRubberMode", error_action},
+    {"setRubberPoint", error_action},
+    {"setRubberText", error_action},
+    {"addRubber", error_action},
+    {"clearRubber", error_action},
+    {"spareRubber", error_action},
+    {"addTextMulti", error_action},
+    {"addTextSingle", error_action},
+    {"addInfiniteLine", error_action},
+    {"addRay", error_action},
+    {"addLine", error_action},
+    {"addTriangle", error_action},
+    {"addRectangle", error_action},
+    {"addRoundedRectangle", error_action},
+    {"addArc", error_action},
+    {"addCircle", error_action},
+    {"addEllipse", error_action},
+    {"addPoint", error_action},
+    {"addRegularPolygon", error_action},
+    {"addPolygon", error_action},
+    {"addPolyline", error_action},
+    {"addPath", error_action},
+    {"addHorizontalDimension", error_action},
+    {"addVerticalDimension", error_action},
+    {"addImage", error_action},
+    {"addDimLeader", error_action},
+    {"setCursorShape", error_action},
+    {"calculateAngle", error_action},
+    {"calculateDistance", error_action},
+    {"perpendicularDistance", error_action},
+    {"numSelected", error_action},
+    {"selectAll", error_action},
+    {"addToSelection", error_action},
+    {"clearSelection", error_action},
+    {"deleteSelected", error_action},
+    {"cutSelected", error_action},
+    {"copySelected", error_action},
+    {"pasteSelected", error_action},
+    {"moveSelected", error_action},
+    {"scaleSelected", error_action},
+    {"rotateSelected", error_action},
+    {"mirrorSelected", error_action},
+    {"qsnapX", error_action},
+    {"qsnapY", error_action},
+    {"mouseX", error_action},
+    {"mouseY", error_action},
+    {"include", error_action},
+};
 
-#if 0
-
-
+/* SCRIPTING
+ *
+ * Since the actuator uses command line style parsing, a script is just a text
+ * file with each line a compatible command.
+ *
+ * It should be stressed that this has no control flow on purpose. We don't want
+ * this to be hacked into a full scripting language that could cause havoc on
+ * the user's system.
+ *
+ * However, it may be useful to set and get variables and define macros:
+ * neither of these will allow for endless loops, stack overflow or other
+ * problems that third-party scripts could introduce.
+ *
+ *     example.sh
+ *     ------------------------------------------------------------------
+ *     # Save characters by defining functions.
+ *     # The syntax features
+ *     # Semi-colon ';' seperates out lines like in bash.
+ *     # The line ending is the end of the function, but the style
+ *     # is a shell function, so we need to write the end brace.
+ *
+ *     donut() { circle $1 $2 $3 $5 ; circle $1 $2 $4 $5 }
+ *
+ *     donut 10 20 20 black
+ *     donut 20 40 20 black
+ *     ------------------------------------------------------------------
+ */
 int
-MainWindow::run_script(std::string filename)
+run_script(std::string filename)
 {
+    std::string line;
     std::fstream infile(filename);
-    for (std::string line; std::getline(infile, line);) {
+    while (std::getline(infile, line)) {
         actuator(line);
     }
     return 0;
@@ -293,18 +308,18 @@ MainWindow::run_script(std::string filename)
  * line works: seperated by spaces we have a function followed
  * by arguments.
  */
-int
-MainWindow::actuator(std::string command_line)
+void
+actuator(std::string command_line)
 {
-    std::vector<std::string> tokens;
+    std::vector<std::string> args;
     std::stringstream check1(command_line);
     std::string token;
     while (std::getline(check1, token, ' ')) {
-        tokens.push_back(token);
+        args.push_back(token);
     }
-    std::string command = tokens[0];
+    std::string command = args[0];
+    args.erase(args.begin());
 
-    /* Alternative undo system. Currently not used. */
     undo_history.push_back(command_line);
 
     /* Command/argument seperation is done in order to reduce the number of
@@ -315,13 +330,153 @@ MainWindow::actuator(std::string command_line)
     debug_message(command_line);
 
     if (command == "about") {
-        about();
-        return 0;
+        return;
+    }
+    if (command == "circle") {
+        return;
+    }
+    if (command == "close") {
+        return;
+    }
+    if (command == "copy") {
+        return;
     }
     if (command == "cut") {
-        cut();
-        return 0;
+        /* cut_selected();*/
+        return;
     }
+    if (command == "day") {
+        /* day_vision(); */
+        return;
+    }
+    if (command == "editor") {
+        show_editor = true;
+        return;
+    }
+    if (command == "export") {
+        embPattern_writeAuto(pattern_list[n_patterns], current_fname.c_str());
+        return;
+    }
+    if (command == "icon16") {
+        icon_size = 16;
+        return;
+    }
+    if (command == "icon24") {
+        icon_size = 24;
+        return;
+    }
+    if (command == "icon32") {
+        icon_size = 32;
+        return;
+    }
+    if (command == "icon48") {
+        icon_size = 48;
+        return;
+    }
+    if (command == "icon64") {
+        icon_size = 64;
+        return;
+    }
+    if (command == "icon128") {
+        icon_size = 128;
+        return;
+    }
+    if (command == "open") {
+        embPattern_readAuto(pattern_list[n_patterns], current_fname.c_str());
+        n_patterns++;
+        return;
+    }
+    if (command == "print") {
+        return;
+    }
+    if (command == "details") {
+        return;
+    }
+    if (command == "undo") {
+        return;
+    }
+    if (command == "redo") {
+        return;
+    }
+    if (command == "paste") {
+        return;
+    }
+    if (command == "pan") {
+        if (args[1] == "left") {
+            return;
+        }
+        if (args[1] == "right") {
+            return;
+        }
+        if (command == "pan up") {
+            return;
+        }
+        if (command == "pan down") {
+            return;
+        }
+    }
+    if (command == "new") {
+        pattern_list[n_patterns] = embPattern_create();
+        pattern_index = n_patterns;
+        n_patterns++;
+        return;
+    }
+    if (command == "night") {
+        return;
+    }
+    if (command == "open") {
+        return;
+    }
+    if (command == "ellipse") {
+        return;
+    }
+    if (command == "polygon") {
+        return;
+    }
+    if (command == "polyline") {
+        return;
+    }
+    if (command == "rectangle") {
+        return;
+    }
+    if (command == "save") {
+        if (n_patterns) {
+            embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
+        }
+        return;
+    }
+    if (command == "saveas") {
+        if (n_patterns) {
+            embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
+        }
+        return;
+    }
+    if (command == "quit") {
+        running = false;
+        return;
+    }
+    if (command == "zoom") {
+        if (args.size() == 1) {
+            return;
+        }
+        if (args[1] == "extents") {
+
+        }
+        if (args[1] == "in") {
+
+        }
+        if (args[1] == "out") {
+
+        }
+        if (args[1] == "realtime") {
+
+        }
+        return;
+    }
+}
+
+
+#if 0
     if (command == "donothing") {
         debug_message("This action intentionally does nothing.");
         return 0;
@@ -348,10 +503,6 @@ MainWindow::actuator(std::string command_line)
     }
     if (command == "help") {
         help();
-        return 0;
-    }
-    if (command == "tip-of-the-day") {
-        tipOfTheDay();
         return 0;
     }
     if (command == "windowcascade") {
@@ -428,44 +579,12 @@ MainWindow::actuator(std::string command_line)
         paste();
         return 0;
     }
-    if (command == "help") {
-        help();
-        return 0;
-    }
     if (command == "changelog") {
         changelog();
         return 0;
     }
-    if (command == "tipoftheday") {
-        tipOfTheDay();
-        return 0;
-    }
     if (command == "whatsthis") {
         whatsThisContextHelp();
-        return 0;
-    }
-    if (command == "icon16") {
-        icon16();
-        return 0;
-    }
-    if (command == "icon24") {
-        icon24();
-        return 0;
-    }
-    if (command == "icon32") {
-        icon32();
-        return 0;
-    }
-    if (command == "icon48") {
-        icon48();
-        return 0;
-    }
-    if (command == "icon64") {
-        icon64();
-        return 0;
-    }
-    if (command == "icon128") {
-        icon128();
         return 0;
     }
     if (command == "settingsdialog") {
@@ -484,7 +603,6 @@ MainWindow::actuator(std::string command_line)
         layerPrevious();
         return 0;
     }
-    /*
     if (command == "textbold") {
         setTextBold(bool);
         return 0;
@@ -521,7 +639,6 @@ MainWindow::actuator(std::string command_line)
         zoomScale();
         return 0;
     }
-    */
     if (command == "zoomrealtime") {
         zoomRealtime();
         return 0;
@@ -550,16 +667,38 @@ MainWindow::actuator(std::string command_line)
         zoomExtents();
         return 0;
     }
-    if (command == "day") {
-        dayVision();
-        return 0;
-    }
     if (command == "night") {
         nightVision();
         return 0;
     }
+    if (command == "numSelected") {
+        nativeNumSelected());
+    }
+    if (command == "selectAll") {
+        nativeSelectAll();
+    }
+    if (command == "addToSelection") {
+        // TODO: finish
+    }
+    if (command == "clearSelection") {
+        nativeClearSelection();
+    }
+    if ((command == "deleteSelected")) {
+        nativeDeleteSelected();
+    }
+    if (command == "qsnapX") {
+        nativeQSnapY();
+    }
+    if (command == "qsnapY") {
+        nativeQSnapY();
+    }
+    if (command == "mouseX") {
+        nativeMouseX();
+    }
+    if (command == "mouseY") {
+        nativeMouseY();
+    }
 
-    /*
     nativeAlert(const std::string& txt);
     nativeBlinkPrompt();
     nativeSetPromptPrefix(const std::string& txt);
@@ -640,7 +779,6 @@ MainWindow::actuator(std::string command_line)
     nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
     nativeClearSelection();
     nativeDeleteSelected();
-    nativeCutSelected(double x, double y);
     nativeCopySelected(double x, double y);
     nativePasteSelected(double x, double y);
     nativeMoveSelected(double dx, double dy);
@@ -653,85 +791,53 @@ MainWindow::actuator(std::string command_line)
     double nativeMouseX();
     double nativeMouseY();
 
-    if ((command =="menu-state")) {
-        if (!strcmp(action+11, "file")) {
-            window->menu_state = FILE_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "edit")) {
-            window->menu_state = EDIT_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "view")) {
-            window->menu_state = VIEW_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "settings")) {
-            window->menu_state = SETTINGS_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "window")) {
-            window->menu_state = WINDOW_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "help")) {
-            window->menu_state = HELP_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "recent")) {
-            window->menu_state = RECENT_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "zoom")) {
-            window->menu_state = ZOOM_MENU;
-            return 0;
-        }
-        if (!strcmp(action+11, "pan")) {
-            window->menu_state = PAN_MENU;
-            return 0;
-        }
-        return 0;
-    }
-    */
+    "file"
+    "edit"
+    "view"
+    "settings"
+    "window"
+    "help"
+    "recent"
+    "zoom"
+    "pan"
 
-    if ((command == "debug-message")) {
+    if (command == "debug-message") {
         debug_message(command.substr(13, command.size()-13));
         return 0;
     }
 
-    if ((command == "add")) {
-        if ((command == "circle")) {
+    if (command == "add") {
+        if (command == "circle") {
             debug_message("TODO: add circle action.");
             return 0;
         }
-        if ((command == "ellipse")) {
+        if (command == "ellipse") {
             debug_message("TODO: add ellipse action.");
             return 0;
         }
-        if ((command =="path")) {
+        if (command =="path") {
             debug_message("TODO: add path action.");
             return 0;
         }
-        if ((command =="heart")) {
+        if (command =="heart") {
             debug_message("TODO: add heart action.");
             return 0;
         }
-        if ((command =="treble clef")) {
+        if (command =="treble clef") {
             debug_message("TODO: add treble clef action.");
             return 0;
         }
-        if ((command =="line")) {
+        if (command =="line") {
             debug_message("TODO: add line action.");
             return 0;
         }
-        if ((command =="dolphin")) {
+        if (command =="dolphin") {
             debug_message("TODO: add dolphin action.");
             return 0;
         }
         return 0;
     }
 
-    /*
     if (command =="tab") {
         if (command =="snap") {
             debug_message("TODO: open the snap tab action.");
@@ -777,11 +883,11 @@ MainWindow::actuator(std::string command_line)
     }
 
     if ((command =="save")) {
-        save_file(window);
+        save_file();
         return 0;
     }
     if ((command =="save-as")) {
-        save_file_as(window);
+        save_file_as();
         return 0;
     }
     if ((command =="check-for-updates")) {
@@ -790,22 +896,21 @@ MainWindow::actuator(std::string command_line)
         return 0;
     }
     if ((command =="select-all")) {
-        select_all(window);
+        select_all();
         return 0;
     }
     if ((command =="whats-this")) {
-        whats_this(window);
+        whats_this();
         return 0;
     }
     if ((command =="design-details")) {
-        design_details(window);
+        design_details();
         return 0;
     }
     if ((command =="print-pattern")) {
-        print_pattern(window);
+        print_pattern();
         return 0;
     }
-    */
 
     if ((command =="exit-program")) {
         /*
@@ -818,40 +923,27 @@ MainWindow::actuator(std::string command_line)
     }
 
     if ((command =="copy-object")) {
-        copy(window);
+        copy();
         return 0;
     }
-    if ((command =="paste-object")) {
-        paste(window);
+    if (command =="paste-object") {
+        paste();
         return 0;
     }
-
-
-    if ((command =="help")) {
-        help(window);
+    if (command =="help") {
+        help();
         return 0;
     }
-    if ((command =="changelog-dialog")) {
-        changelog(window);
+    if (command =="changelog-dialog") {
+        changelog();
         return 0;
     }
-    if ((command =="tip-of-the-day-dialog")) {
-        tip_of_the_day(window);
+    if (command =="tip-of-the-day-dialog") {
+        tip_of_the_day();
         return 0;
     }
-    if ((command =="about-dialog")) {
-        about(window);
-        return 0;
-    }
-
-    if ((command =="icon")) {
-        debug_message("icon_resize()");
-        icon_resize(atoi(action+5));
-        return 0;
-    }
-
     if ((command =="settings-dialog")) {
-  settings_dialog(window);
+        settings_dialog();
         return 0;
     }
     if ((command =="make-layer-current")) {
@@ -867,16 +959,16 @@ MainWindow::actuator(std::string command_line)
         return 0;
     }
     if ((command =="color-selector")) {
-        color_selector(window);
+        color_selector();
         return 0;
     }
     if ((command =="line-type-selector")) {
-        line_type_selector(window);
+        line_type_selector();
         return 0;
     }
 
     if ((command =="line-weight-selector")) {
-        line_weight_selector(window);
+        line_weight_selector();
         return 0;
     }
 
@@ -1107,9 +1199,9 @@ MainWindow::actuator(std::string command_line)
         if ((command =="window")) {
             debug_message("zoom_window()");
             /*
-            gview = active_view(window);
+            gview = active_view();
             if (gview) {
-                gview->zoom_window(window);
+                gview->zoom_window();
             } */
 
             zoom_window_active = 1;
@@ -1146,7 +1238,7 @@ MainWindow::actuator(std::string command_line)
 
             center_on(cntr);
             */
-            restore_override_cursor(window);
+            restore_override_cursor();
             return 0;
         }
         if ((command =="out")) {
@@ -1164,15 +1256,15 @@ MainWindow::actuator(std::string command_line)
 
             center_on(cntr);
             */
-            restore_override_cursor(window);
+            restore_override_cursor();
             return 0;
         }
         if ((command =="selected")) {
             debug_message("zoom_selected()");
             set_override_cursor(window, "Wait Cursor");
             /*
-            item_list = gscene.selected_items(window);
-            selected_rect_path = Path(window);
+            item_list = gscene.selected_items();
+            selected_rect_path = Path();
             for (item in item_list) {
                 selected_rect_path.add_polygon(item.map_to_scene(item.bounding_rect();
             }
@@ -1187,7 +1279,7 @@ MainWindow::actuator(std::string command_line)
 
             fit_in_view(selected_rect, "KeepAspectRatio");
             */
-            restore_override_cursor(window);
+            restore_override_cursor();
             return 0;
         }
         if ((command =="all")) {
@@ -1206,14 +1298,14 @@ MainWindow::actuator(std::string command_line)
                 extents.move_center(Vector(0, 0))
 
             fit_in_view(extents, "KeepAspectRatio")
-            restore_override_cursor(window);
+            restore_override_cursor();
             */
             return 0;
         }
     }
 
     if ((command =="distance")) {
-        distance(window);
+        distance();
         return 0;
     }
     if (command =="delete-object") {
@@ -1221,15 +1313,15 @@ MainWindow::actuator(std::string command_line)
         return 0;
     }
     if (command =="locate_point") {
-        locate_point(window);
+        locate_point();
         return 0;
     }
     if (command =="move") {
-        move(window);
+        move();
         return 0;
     }
     if (command =="export") {
-        export_(window);
+        export_();
         return 0;
     }
 
@@ -1258,591 +1350,330 @@ MainWindow::actuator(std::string command_line)
     return 0;
 }
 
-java_natives = [
-    "debug",
-    "error",
-    "todo",
-    "alert",
-    "blinkPrompt",
-    "setPromptPrefix",
-    "appendPromptHistory",
-    "enablePromptRapidFire",
-    "disablePromptRapidFire",
-    "enableMoveRapidFire",
-    "disableMoveRapidFire",
-    "initCommand",
-    "endCommand",
-    "newFile",
-    "openFile",
-    "exit",
-    "help",
-    "about",
-    "tipOfTheDay",
-    "windowCascade",
-    "windowTile",
-    "windowClose",
-    "windowCloseAll",
-    "windowNext",
-    "windowPrevious",
-    "platformString",
-    "messageBox",
-    "isInt",
-    "undo",
-    "redo",
-    "icon16",
-    "icon24",
-    "icon32",
-    "icon48",
-    "icon64",
-    "icon128",
-    "panLeft",
-    "panRight",
-    "panUp",
-    "panDown",
-    "zoomIn",
-    "zoomOut",
-    "zoomExtents",
-    "printArea",
-    "dayVision",
-    "nightVision",
-    "setBackgroundColor",
-    "setCrossHairColor",
-    "setGridColor",
-    "textFont",
-    "textSize",
-    "textAngle",
-    "textBold",
-    "textItalic",
-    "textUnderline",
-    "textStrikeOut",
-    "textOverline",
-    "setTextFont",
-    "setTextSize",
-    "setTextAngle", scriptValSetTextAngle);
-    "setTextBold", scriptValSetTextBold);
-    "setTextItalic", scriptValSetTextItalic);
-    "setTextUnderline", scriptValSetTextUnderline);
-    "setTextStrikeOut", scriptValSetTextStrikeOut);
-    "setTextOverline", scriptValSetTextOverline);
-    "previewOn", scriptValPreviewOn);
-    "previewOff", scriptValPreviewOff);
-    "vulcanize",
-    "allowRubber",
-    "setRubberMode",
-    "setRubberPoint",
-    "setRubberText",
-    "addRubber",
-    "clearRubber",
-    "spareRubber",
-    "addTextMulti",
-    "addTextSingle",
-    "addInfiniteLine",
-    "addRay",
-    "addLine",
-    "addTriangle",
-    "addRectangle",
-    "addRoundedRectangle", scriptValAddRoundedRectangle);
-    "addArc", scriptValAddArc);
-    "addCircle", scriptValAddCircle);
-    "addEllipse", scriptValAddEllipse);
-    "addPoint", scriptValAddPoint);
-    "addRegularPolygon", scriptValAddRegularPolygon);
-    "addPolygon", scriptValAddPolygon);
-    "addPolyline", scriptValAddPolyline);
-    "addPath", scriptValAddPath);
-    "addHorizontalDimension", scriptValAddHorizontalDimension);
-    "addVerticalDimension", scriptValAddVerticalDimension);
-    "addImage", scriptValAddImage);
-    "addDimLeader", scriptValAddDimLeader);
-    "setCursorShape", scriptValSetCursorShape);
-    "calculateAngle", scriptValCalculateAngle);
-    "calculateDistance", scriptValCalculateDistance);
-    "perpendicularDistance", scriptValPerpendicularDistance);
-    "numSelected", scriptValNumSelected);
-    "selectAll", scriptValSelectAll);
-    "addToSelection", scriptValAddToSelection);
-    "clearSelection", scriptValClearSelection);
-    "deleteSelected", scriptValDeleteSelected);
-    "cutSelected", scriptValCutSelected);
-    "copySelected", scriptValCopySelected);
-    "pasteSelected", scriptValPasteSelected);
-    "moveSelected", scriptValMoveSelected);
-    "scaleSelected", scriptValScaleSelected);
-    "rotateSelected", scriptValRotateSelected);
-    "mirrorSelected", scriptValMirrorSelected);
-    "qsnapX",
-    "qsnapY",
-    "mouseX",
-    "mouseY",
-
-    "include"
-]
-
-javaInclude()
+void
+include_script(std::vector<std::string> args)
 {
-    std::string fileName = args[0].toString();
-    QFile scriptFile("commands/" + fileName);
-
-    if (!scriptFile.open(QIODevice::ReadOnly))
-        return -1;
-/*
-    QTextStream stream(&scriptFile);
-    std::string s = stream.readAll();
-    scriptFile.close();
-
-    QContext* parent = context->parentContext();
-
-    if (parent!=0)
-    {
-        context->setActivationObject(context->parentContext()->activationObject());
-        context->setThisObject(context->parentContext()->thisObject());
+    if (args.size < 1) {
+        return 0;
     }
-
-    QScriptValue result = engine->evaluate(s);
-*/
-    return 0;
+    run_script(args[0]);
 }
 
-javaDebug()
+void
+Debug()
 {
-    if (engine->argumentCount() != 1)
+    if (args.size() < 1) {
         return engine->throwError("debug() requires one argument");
-    if (!engine->argument(0).isString())
-        return engine->throwError(QScriptengine::TypeError, "debug(): first argument is not a string");
+    }
+    if (!token[0).isString())
+        return debug_message("debug(): first argument is not a string");
 
-    debug_message("%s", qPrintable(engine->argument(0).toString();
-    return QJSValue();
+    debug_message("%s", qPrintable(token[0).toString();
 }
 
-javaError()
+void
+Error()
 {
-    if (engine->argumentCount() != 2)    return engine->throwError("error() requires two arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "error(): first argument is not a string");
-    if (!engine->argument(1).isString()) return engine->throwError(QScriptengine::TypeError, "error(): second argument is not a string");
+    if (args.size() < 2)    return engine->throwError("error() requires two arguments");
+    if (!token[0).isString()) return debug_message("error(): first argument is not a string");
+    if (!token[1).isString()) return debug_message("error(): second argument is not a string");
 
-    std::string strCmd = engine->argument(0).toString();
-    std::string strErr = engine->argument(1).toString();
+    std::string strCmd = token[0).toString();
+    std::string strErr = token[1).toString();
 
-    mainWin()->nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
-    mainWin()->nativeAppendPromptHistory(std::string());
-    mainWin()->nativeEndCommand();
-    return QJSValue();
+    nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
+    nativeAppendPromptHistory(std::string());
+    nativeEndCommand();
 }
 
-javaTodo()
+void
+Todo()
 {
-    if (engine->argumentCount() != 2)    return engine->throwError("todo() requires two arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "todo(): first argument is not a string");
-    if (!engine->argument(1).isString()) return engine->throwError(QScriptengine::TypeError, "todo(): second argument is not a string");
+    if (args.size() < 2)    return engine->throwError("todo() requires two arguments");
+    if (!token[0).isString()) return debug_message("todo(): first argument is not a string");
+    if (!token[1).isString()) return debug_message("todo(): second argument is not a string");
 
-    std::string strCmd  = engine->argument(0).toString();
-    std::string strTodo = engine->argument(1).toString();
+    std::string strCmd  = token[0).toString();
+    std::string strTodo = token[1).toString();
 
-    mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
-    mainWin()->nativeEndCommand();
-    return QJSValue();
+    nativeAlert("TODO: (" + strCmd + ") " + strTodo);
+    nativeEndCommand();
 }
 
-javaAlert()
+void
+Alert()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("alert() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "alert(): first argument is not a string");
+    if (args.size() < 1)    return engine->throwError("alert() requires one argument");
+    if (!token[0).isString()) return debug_message("alert(): first argument is not a string");
 
-    mainWin()->nativeAlert(engine->argument(0).toString());
-    return QJSValue();
+    nativeAlert(token[0).toString());
 }
 
-javaBlinkPrompt()
+    nativeBlinkPrompt();
+
+void
+SetPromptPrefix()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("blinkPrompt() requires zero arguments");
+    if (args.size() < 1)    return engine->throwError("setPromptPrefix() requires one argument");
+    if (!token[0).isString()) return debug_message("setPromptPrefix(): first argument is not a string");
 
-    mainWin()->nativeBlinkPrompt();
-    return QJSValue();
+    nativeSetPromptPrefix(token[0).toString());
 }
 
-javaSetPromptPrefix()
-{
-    if (engine->argumentCount() != 1)    return engine->throwError("setPromptPrefix() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "setPromptPrefix(): first argument is not a string");
-
-    mainWin()->nativeSetPromptPrefix(engine->argument(0).toString());
-    return QJSValue();
-}
-
-javaAppendPromptHistory()
+void
+AppendPromptHistory()
 {
     int args = engine->argumentCount();
     if (args == 0)
     {
-        mainWin()->nativeAppendPromptHistory(std::string());
+        nativeAppendPromptHistory(std::string());
     }
     else if (args == 1)
     {
-        mainWin()->nativeAppendPromptHistory(engine->argument(0).toString());
+        nativeAppendPromptHistory(token[0).toString());
     }
     else
     {
         return engine->throwError("appendPromptHistory() requires one or zero arguments");
     }
-    return QJSValue();
 }
 
-javaEnablePromptRapidFire()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("enablePromptRapidFire() requires zero arguments");
-
-    mainWin()->nativeEnablePromptRapidFire();
-    return QJSValue();
-}
-
-javaDisablePromptRapidFire()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("disablePromptRapidFire() requires zero arguments");
-
-    mainWin()->nativeDisablePromptRapidFire();
-    return QJSValue();
-}
-
-javaEnableMoveRapidFire()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("enableMoveRapidFire() requires zero arguments");
-
-    mainWin()->nativeEnableMoveRapidFire();
-    return QJSValue();
-}
-
-javaDisableMoveRapidFire()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("disableMoveRapidFire() requires zero arguments");
-
-    mainWin()->nativeDisableMoveRapidFire();
-    return QJSValue();
-}
-
-javaInitCommand()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("initCommand() requires zero arguments");
-
-    mainWin()->nativeInitCommand();
-    return QJSValue();
-}
+    nativeEnablePromptRapidFire();
+    nativeDisablePromptRapidFire();
+    nativeEnableMoveRapidFire();
+    nativeDisableMoveRapidFire();
+    nativeInitCommand();
 
     if (command == "end-command") {
         nativeEndCommand();
     }
 
-javaExit()
+
+void
+MessageBox()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("exit() requires zero arguments");
+    if (args.size() < 3)    return engine->throwError("messageBox() requires three arguments");
+    if (!token[0).isString()) return debug_message("messageBox(): first argument is not a string");
+    if (!token[1).isString()) return debug_message("messageBox(): second argument is not a string");
+    if (!token[2).isString()) return debug_message("messageBox(): third argument is not a string");
 
-    mainWin()->nativeExit();
-    return QJSValue();
-}
-
-javaHelp()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("help() requires zero arguments");
-
-    mainWin()->nativeHelp();
-    return QJSValue();
-}
-
-javaTipOfTheDay()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("tipOfTheDay() requires zero arguments");
-
-    mainWin()->nativeTipOfTheDay();
-    return QJSValue();
-}
-
-javaMessageBox()
-{
-    if (engine->argumentCount() != 3)    return engine->throwError("messageBox() requires three arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "messageBox(): first argument is not a string");
-    if (!engine->argument(1).isString()) return engine->throwError(QScriptengine::TypeError, "messageBox(): second argument is not a string");
-    if (!engine->argument(2).isString()) return engine->throwError(QScriptengine::TypeError, "messageBox(): third argument is not a string");
-
-    std::string type  = engine->argument(0).toString().toLower();
-    std::string title = engine->argument(1).toString();
-    std::string text  = engine->argument(2).toString();
+    std::string type  = token[0).toString().toLower();
+    std::string title = token[1).toString();
+    std::string text  = token[2).toString();
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning")
         return engine->throwError(QScriptengine::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
-    mainWin()->nativeMessageBox(type, title, text);
-    return QJSValue();
+    nativeMessageBox(type, title, text);
 }
 
-javaIsInt()
+void
+IsInt()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("isInt() requires one argument");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "isInt(): first argument is not a number");
+    if (args.size() < 1)    return engine->throwError("isInt() requires one argument");
+    if (!token[0).isNumber()) return debug_message("isInt(): first argument is not a number");
 
-    double num = engine->argument(0).toNumber();
+    double num = token[0).toNumber();
 
     //isNaN check
-    if (qIsNaN(num)) return engine->throwError(QScriptengine::TypeError, "isInt(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(num)) return debug_message("isInt(): first argument failed isNaN check. There is an error in your code.");
 
     if (fmod(num, 1) == 0)
         return QJSValue(true);
-    return QJSValue(false);
 }
 
-javaUndo()
+    nativeUndo();
+    nativeRedo();
+
+PrintArea()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("undo() requires zero arguments");
+    if (args.size() < 4)    return engine->throwError("printArea() requires four arguments");
+    if (!token[0).isNumber()) return debug_message("printArea(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("printArea(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("printArea(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("printArea(): fourth argument is not a number");
 
-    mainWin()->nativeUndo();
-    return QJSValue();
-}
-
-javaRedo()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("redo() requires zero arguments");
-
-    mainWin()->nativeRedo();
-    return QJSValue();
-}
-
-javaPrintArea()
-{
-    if (engine->argumentCount() != 4)    return engine->throwError("printArea() requires four arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "printArea(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "printArea(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "printArea(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "printArea(): fourth argument is not a number");
-
-    double x = engine->argument(0).toNumber();
-    double y = engine->argument(1).toNumber();
-    double w = engine->argument(2).toNumber();
-    double h = engine->argument(3).toNumber();
+    double x = token[0).toNumber();
+    double y = token[1).toNumber();
+    double w = token[2).toNumber();
+    double h = token[3).toNumber();
 
     //isNaN check
-    if (qIsNaN(x)) return engine->throwError(QScriptengine::TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return engine->throwError(QScriptengine::TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(w)) return engine->throwError(QScriptengine::TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(h)) return engine->throwError(QScriptengine::TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x)) return debug_message("printArea(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y)) return debug_message("printArea(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(w)) return debug_message("printArea(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(h)) return debug_message("printArea(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativePrintArea(x, y, w, h);
-    return QJSValue();
+    nativePrintArea(x, y, w, h);
 }
 
-javaSetBackgroundColor()
+void
+SetBackgroundColor()
 {
-    if (engine->argumentCount() != 3)    return engine->throwError("setBackgroundColor() requires three arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "setBackgroundColor(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "setBackgroundColor(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "setBackgroundColor(): third argument is not a number");
+    if (args.size() < 3)    return engine->throwError("setBackgroundColor() requires three arguments");
+    if (!token[0).isNumber()) return debug_message("setBackgroundColor(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("setBackgroundColor(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("setBackgroundColor(): third argument is not a number");
 
-    double r = engine->argument(0).toNumber();
-    double g = engine->argument(1).toNumber();
-    double b = engine->argument(2).toNumber();
+    double r = token[0).toNumber();
+    double g = token[1).toNumber();
+    double b = token[2).toNumber();
 
     //isNaN check
-    if (qIsNaN(r)) return engine->throwError(QScriptengine::TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return engine->throwError(QScriptengine::TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return engine->throwError(QScriptengine::TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(r)) return debug_message("setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(g)) return debug_message("setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(b)) return debug_message("setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
 
     if (r < 0 || r > 255) { return engine->throwError(QScriptengine::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return engine->throwError(QScriptengine::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return engine->throwError(QScriptengine::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetBackgroundColor(r, g, b);
-    return QJSValue();
+    nativeSetBackgroundColor(r, g, b);
 }
 
-javaSetCrossHairColor()
+void
+SetCrossHairColor()
 {
-    if (engine->argumentCount() != 3)    return engine->throwError("setCrossHairColor() requires three arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "setCrossHairColor(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "setCrossHairColor(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "setCrossHairColor(): third argument is not a number");
+    if (args.size() < 3)    return engine->throwError("setCrossHairColor() requires three arguments");
+    if (!token[0).isNumber()) return debug_message("setCrossHairColor(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("setCrossHairColor(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("setCrossHairColor(): third argument is not a number");
 
-    double r = engine->argument(0).toNumber();
-    double g = engine->argument(1).toNumber();
-    double b = engine->argument(2).toNumber();
+    double r = token[0).toNumber();
+    double g = token[1).toNumber();
+    double b = token[2).toNumber();
 
     //isNaN check
-    if (qIsNaN(r)) return engine->throwError(QScriptengine::TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return engine->throwError(QScriptengine::TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return engine->throwError(QScriptengine::TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(r)) return debug_message("setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(g)) return debug_message("setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(b)) return debug_message("setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
 
     if (r < 0 || r > 255) { return engine->throwError(QScriptengine::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return engine->throwError(QScriptengine::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return engine->throwError(QScriptengine::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetCrossHairColor(r, g, b);
-    return QJSValue();
+    nativeSetCrossHairColor(r, g, b);
 }
 
-javaSetGridColor()
+void
+SetGridColor()
 {
-    if (engine->argumentCount() != 3)    return engine->throwError("setGridColor() requires three arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "setGridColor(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "setGridColor(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "setGridColor(): third argument is not a number");
+    if (args.size() < 3)    return engine->throwError("setGridColor() requires three arguments");
+    if (!token[0).isNumber()) return debug_message("setGridColor(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("setGridColor(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("setGridColor(): third argument is not a number");
 
-    double r = engine->argument(0).toNumber();
-    double g = engine->argument(1).toNumber();
-    double b = engine->argument(2).toNumber();
+    double r = token[0).toNumber();
+    double g = token[1).toNumber();
+    double b = token[2).toNumber();
 
     //isNaN check
-    if (qIsNaN(r)) return engine->throwError(QScriptengine::TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return engine->throwError(QScriptengine::TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return engine->throwError(QScriptengine::TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(r)) return debug_message("setGridColor(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(g)) return debug_message("setGridColor(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(b)) return debug_message("setGridColor(): third argument failed isNaN check. There is an error in your code.");
 
     if (r < 0 || r > 255) { return engine->throwError(QScriptengine::UnknownError, "setGridColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return engine->throwError(QScriptengine::UnknownError, "setGridColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return engine->throwError(QScriptengine::UnknownError, "setGridColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetGridColor(r, g, b);
-    return QJSValue();
+    nativeSetGridColor(r, g, b);
 }
 
-javaTextFont()
+void
+SetTextFont()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("textFont() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextFont());
+    if (args.size() < 1)    return engine->throwError("setTextFont() requires one argument");
+
+    settings_text_font = token[0];
 }
 
-javaTextSize()
+void
+SetTextSize()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("textSize() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextSize());
-}
+    if (args.size() < 1)    return engine->throwError("setTextSize() requires one argument");
+    if (!token[0).isNumber()) return debug_message("setTextSize(): first argument is not a number");
 
-javaTextAngle()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("textAngle() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextAngle());
-}
-
-javaTextBold()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("textBold() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextBold());
-}
-
-javaTextItalic()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("textItalic() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextItalic());
-}
-
-javaTextUnderline()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("textUnderline() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextUnderline());
-}
-
-javaTextStrikeOut()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("textStrikeOut() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextStrikeOut());
-}
-
-javaTextOverline()
-{
-    if (engine->argumentCount() != 0) return engine->throwError("textOverline() requires zero arguments");
-    return QJSValue(mainWin()->nativeTextOverline());
-}
-
-javaSetTextFont()
-{
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextFont() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "setTextFont(): first argument is not a string");
-
-    mainWin()->nativeSetTextFont(engine->argument(0).toString());
-    return QJSValue();
-}
-
-javaSetTextSize()
-{
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextSize() requires one argument");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "setTextSize(): first argument is not a number");
-
-    double num = engine->argument(0).toNumber();
+    double num = token[0).toNumber();
 
     //isNaN check
-    if (qIsNaN(num)) return engine->throwError(QScriptengine::TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(num)) return debug_message("setTextSize(): first argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetTextSize(num);
-    return QJSValue();
+    nativeSetTextSize(num);
 }
 
-javaSetTextAngle()
+void
+SetTextAngle()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextAngle() requires one argument");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "setTextAngle(): first argument is not a number");
+    if (args.size() < 1)    return engine->throwError("setTextAngle() requires one argument");
+    if (!token[0).isNumber()) return debug_message("setTextAngle(): first argument is not a number");
 
-    double num = engine->argument(0).toNumber();
+    double num = token[0).toNumber();
 
     //isNaN check
-    if (qIsNaN(num)) return engine->throwError(QScriptengine::TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(num)) return debug_message("setTextAngle(): first argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetTextAngle(num);
-    return QJSValue();
+    nativeSetTextAngle(num);
 }
 
-javaSetTextBold()
+void
+SetTextBold()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextBold() requires one argument");
-    if (!engine->argument(0).isBool()) return engine->throwError(QScriptengine::TypeError, "setTextBold(): first argument is not a bool");
+    if (args.size() < 1)    return engine->throwError("setTextBold() requires one argument");
+    if (!token[0).isBool()) return debug_message("setTextBold(): first argument is not a bool");
 
-    mainWin()->nativeSetTextBold(engine->argument(0).toBool());
-    return QJSValue();
+    nativeSetTextBold(token[0).toBool());
 }
 
-javaSetTextItalic()
+void
+SetTextItalic()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextItalic() requires one argument");
-    if (!engine->argument(0).isBool()) return engine->throwError(QScriptengine::TypeError, "setTextItalic(): first argument is not a bool");
+    if (args.size() < 1)    return engine->throwError("setTextItalic() requires one argument");
+    if (!token[0).isBool()) return debug_message("setTextItalic(): first argument is not a bool");
 
-    mainWin()->nativeSetTextItalic(engine->argument(0).toBool());
-    return QJSValue();
+    nativeSetTextItalic(token[0).toBool());
 }
 
-javaSetTextUnderline()
+void
+SetTextUnderline()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextUnderline() requires one argument");
-    if (!engine->argument(0).isBool()) return engine->throwError(QScriptengine::TypeError, "setTextUnderline(): first argument is not a bool");
+    if (args.size() < 1)    return engine->throwError("setTextUnderline() requires one argument");
+    if (!token[0).isBool()) return debug_message("setTextUnderline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextUnderline(engine->argument(0).toBool());
-    return QJSValue();
+    nativeSetTextUnderline(token[0).toBool());
 }
 
-javaSetTextStrikeOut()
+void
+SetTextStrikeOut()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextStrikeOut() requires one argument");
-    if (!engine->argument(0).isBool()) return engine->throwError(QScriptengine::TypeError, "setTextStrikeOut(): first argument is not a bool");
+    if (args.size() < 1)    return engine->throwError("setTextStrikeOut() requires one argument");
+    if (!token[0).isBool()) return debug_message("setTextStrikeOut(): first argument is not a bool");
 
-    mainWin()->nativeSetTextStrikeOut(engine->argument(0).toBool());
-    return QJSValue();
+    nativeSetTextStrikeOut(token[0).toBool());
 }
 
-javaSetTextOverline()
+void
+SetTextOverline()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setTextOverline() requires one argument");
-    if (!engine->argument(0).isBool()) return engine->throwError(QScriptengine::TypeError, "setTextOverline(): first argument is not a bool");
+    if (args.size() < 1)    return engine->throwError("setTextOverline() requires one argument");
+    if (!token[0).isBool()) return debug_message("setTextOverline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextOverline(engine->argument(0).toBool());
-    return QJSValue();
+    nativeSetTextOverline(token[0).toBool());
 }
 
-javaPreviewOn()
+PreviewOn()
 {
-    if (engine->argumentCount() != 5)    return engine->throwError("previewOn() requires five arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "previewOn(): first argument is not a string");
-    if (!engine->argument(1).isString()) return engine->throwError(QScriptengine::TypeError, "previewOn(): second argument is not a string");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "previewOn(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "previewOn(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "previewOn(): fifth argument is not a number");
+    if (args.size() < 5)    return engine->throwError("previewOn() requires five arguments");
+    if (!token[0).isString()) return debug_message("previewOn(): first argument is not a string");
+    if (!token[1).isString()) return debug_message("previewOn(): second argument is not a string");
+    if (!token[2).isNumber()) return debug_message("previewOn(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("previewOn(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("previewOn(): fifth argument is not a number");
 
-    std::string cloneStr = engine->argument(0).toString().toUpper();
-    std::string modeStr  = engine->argument(1).toString().toUpper();
-    double x          = engine->argument(2).toNumber();
-    double y          = engine->argument(3).toNumber();
-    double data       = engine->argument(4).toNumber();
+    std::string cloneStr = token[0).toString().toUpper();
+    std::string modeStr  = token[1).toString().toUpper();
+    double x          = token[2).toNumber();
+    double y          = token[3).toNumber();
+    double data       = token[4).toNumber();
 
     int clone = PREVIEW_CLONE_NULL;
     int mode = PREVIEW_MODE_NULL;
@@ -1856,493 +1687,497 @@ javaPreviewOn()
     else                         { return engine->throwError(QScriptengine::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
     //isNaN check
-    if (qIsNaN(x))    return engine->throwError(QScriptengine::TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))    return engine->throwError(QScriptengine::TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(data)) return engine->throwError(QScriptengine::TypeError, "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x))    return debug_message("previewOn(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y))    return debug_message("previewOn(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(data)) return debug_message("previewOn(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativePreviewOn(clone, mode, x, y, data);
+    nativePreviewOn(clone, mode, x, y, data);
     return QJSValue();
 }
 
-javaPreviewOff()
+void
+PreviewOff()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("previewOff() requires zero arguments");
-
-    mainWin()->nativePreviewOff();
-    return QJSValue();
+    nativePreviewOff();
 }
 
-javaVulcanize()
+void
+Vulcanize()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("vulcanize() requires zero arguments");
-
-    mainWin()->nativeVulcanize();
-    return QJSValue();
+    nativeVulcanize();
 }
 
-javaAllowRubber()
+void
+AllowRubber()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("allowRubber() requires zero arguments");
-
-    return QJSValue(mainWin()->nativeAllowRubber());
+    return QJSValue(nativeAllowRubber());
 }
 
-javaSetRubberMode()
+void
+SetRubberMode()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setRubberMode() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "setRubberMode(): first argument is not a string");
+    if (args.size() < 1)    return engine->throwError("setRubberMode() requires one argument");
+    if (!token[0).isString()) return debug_message("setRubberMode(): first argument is not a string");
 
-    std::string mode = engine->argument(0).toString().toUpper();
+    std::string mode = token[0).toString().toUpper();
 
-    if     (mode == "CIRCLE_1P_RAD")                     { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
-    else if (mode == "CIRCLE_1P_DIA")                     { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
+    if (mode == "CIRCLE_1P_RAD") {
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
+    else if (mode == "CIRCLE_1P_DIA") {
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
+    else if (mode == "CIRCLE_2P") {
+        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
+    else if (mode == "CIRCLE_3P")                         { nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
+    else if (mode == "CIRCLE_TTR")                        { nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    else if (mode == "CIRCLE_TTR")                        { nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
-    else if (mode == "DIMLEADER_LINE")                    { mainWin()->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
+    else if (mode == "DIMLEADER_LINE")                    { nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
 
-    else if (mode == "ELLIPSE_LINE")                      { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
+    else if (mode == "ELLIPSE_LINE")                      { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
+    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
+    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
+    else if (mode == "ELLIPSE_ROTATION")                  { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
 
-    else if (mode == "LINE")                              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
+    else if (mode == "LINE")                              { nativeSetRubberMode(OBJ_RUBBER_LINE); }
 
-    else if (mode == "POLYGON")                           { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE")              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
+    else if (mode == "POLYGON")                           { nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
+    else if (mode == "POLYGON_INSCRIBE")                  { nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if (mode == "POLYGON_CIRCUMSCRIBE")              { nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
-    else if (mode == "POLYLINE")                          { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
+    else if (mode == "POLYLINE")                          { nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
 
-    else if (mode == "RECTANGLE")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
+    else if (mode == "RECTANGLE")                         { nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
 
-    else if (mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+    else if (mode == "TEXTSINGLE")                        { nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else                                                 { return engine->throwError(QScriptengine::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
     return QJSValue();
 }
 
-javaSetRubberPoint()
+SetRubberPoint()
 {
-    if (engine->argumentCount() != 3)    return engine->throwError("setRubberPoint() requires three arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "setRubberPoint(): first argument is not a string");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "setRubberPoint(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "setRubberPoint(): third argument is not a number");
+    if (args.size() < 3)    return engine->throwError("setRubberPoint() requires three arguments");
+    if (!token[0).isString()) return debug_message("setRubberPoint(): first argument is not a string");
+    if (!token[1).isNumber()) return debug_message("setRubberPoint(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("setRubberPoint(): third argument is not a number");
 
-    std::string key = engine->argument(0).toString().toUpper();
-    double x     = engine->argument(1).toNumber();
-    double y     = engine->argument(2).toNumber();
+    std::string key = token[0).toString().toUpper();
+    double x     = token[1).toNumber();
+    double y     = token[2).toNumber();
 
     //isNaN check
-    if (qIsNaN(x)) return engine->throwError(QScriptengine::TypeError, "setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return engine->throwError(QScriptengine::TypeError, "setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x)) return debug_message("setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y)) return debug_message("setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetRubberPoint(key, x, y);
+    nativeSetRubberPoint(key, x, y);
     return QJSValue();
 }
 
-javaSetRubberText()
+SetRubberText()
 {
-    if (engine->argumentCount() != 2)    return engine->throwError("setRubberText() requires two arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "setRubberText(): first argument is not a string");
-    if (!engine->argument(1).isString()) return engine->throwError(QScriptengine::TypeError, "setRubberText(): second argument is not a string");
+    if (args.size() < 2)    return engine->throwError("setRubberText() requires two arguments");
+    if (!token[0).isString()) return debug_message("setRubberText(): first argument is not a string");
+    if (!token[1).isString()) return debug_message("setRubberText(): second argument is not a string");
 
-    std::string key = engine->argument(0).toString().toUpper();
-    std::string txt = engine->argument(1).toString();
+    std::string key = token[0).toString().toUpper();
+    std::string txt = token[1).toString();
 
-    mainWin()->nativeSetRubberText(key, txt);
+    nativeSetRubberText(key, txt);
     return QJSValue();
 }
 
-javaAddRubber()
+AddRubber()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("addRubber() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "addRubber(): first argument is not a string");
+    if (args.size() < 1)    return engine->throwError("addRubber() requires one argument");
+    if (!token[0).isString()) return debug_message("addRubber(): first argument is not a string");
 
-    std::string objType = engine->argument(0).toString().toUpper();
+    std::string objType = token[0).toString().toUpper();
 
-    if (!mainWin()->nativeAllowRubber())
+    if (!nativeAllowRubber())
         return engine->throwError(QScriptengine::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
-    double mx = mainWin()->nativeMouseX();
-    double my = mainWin()->nativeMouseY();
+    double mx = nativeMouseX();
+    double my = nativeMouseY();
 
     if     (objType == "ARC")          {} //TODO: handle this type
     else if (objType == "BLOCK")        {} //TODO: handle this type
-    else if (objType == "CIRCLE")       { mainWin()->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "CIRCLE")       { nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
     else if (objType == "DIMALIGNED")   {} //TODO: handle this type
     else if (objType == "DIMANGULAR")   {} //TODO: handle this type
     else if (objType == "DIMARCLENGTH") {} //TODO: handle this type
     else if (objType == "DIMDIAMETER")  {} //TODO: handle this type
-    else if (objType == "DIMLEADER")    { mainWin()->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "DIMLEADER")    { nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "DIMLINEAR")    {} //TODO: handle this type
     else if (objType == "DIMORDINATE")  {} //TODO: handle this type
     else if (objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if (objType == "ELLIPSE")      { mainWin()->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "ELLIPSE")      { nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "ELLIPSEARC")   {} //TODO: handle this type
     else if (objType == "HATCH")        {} //TODO: handle this type
     else if (objType == "IMAGE")        {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE")         { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "LINE")         { nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "PATH")         {} //TODO: handle this type
     else if (objType == "POINT")        {} //TODO: handle this type
-    else if (objType == "POLYGON")      { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE")     { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON")      { nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYLINE")     { nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY")          {} //TODO: handle this type
-    else if (objType == "RECTANGLE")    { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "RECTANGLE")    { nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "SPLINE")       {} //TODO: handle this type
     else if (objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE")   { mainWin()->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
-
-    return QJSValue();
+    else if (objType == "TEXTSINGLE")   { nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 }
 
-javaClearRubber()
+    nativeClearRubber();
+
+SpareRubber()
 {
-    if (engine->argumentCount() != 0) return engine->throwError("clearRubber() requires zero arguments");
+    if (args.size() < 1)    return engine->throwError("spareRubber() requires one argument");
+    if (!token[0).isString()) return debug_message("spareRubber(): first argument is not a string");
 
-    mainWin()->nativeClearRubber();
-    return QJSValue();
-}
+    std::string objID = token[0).toString().toUpper();
 
-javaSpareRubber()
-{
-    if (engine->argumentCount() != 1)    return engine->throwError("spareRubber() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "spareRubber(): first argument is not a string");
-
-    std::string objID = engine->argument(0).toString().toUpper();
-
-    if     (objID == "PATH")     { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if (objID == "POLYGON")  { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if (objID == "POLYLINE") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    if     (objID == "PATH")     { nativeSpareRubber(SPARE_RUBBER_PATH);     }
+    else if (objID == "POLYGON")  { nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
+    else if (objID == "POLYLINE") { nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
     else
     {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
-        if (!ok) return engine->throwError(QScriptengine::TypeError, "spareRubber(): error converting object ID into an int64");
-        mainWin()->nativeSpareRubber(id);
+        if (!ok) return debug_message("spareRubber(): error converting object ID into an int64");
+        nativeSpareRubber(id);
     }
-
-    return QJSValue();
 }
 
-javaAddTextMulti()
+void
+AddTextMulti()
 {
-    if (engine->argumentCount() != 5)    return engine->throwError("addTextMulti() requires five arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "addTextMulti(): first argument is not a string");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTextMulti(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTextMulti(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTextMulti(): fourth argument is not a number");
-    if (!engine->argument(4).isBool())   return engine->throwError(QScriptengine::TypeError, "addTextMulti(): fifth argument is not a bool");
+    if (args.size() < 5) {
+        debug_message("addTextMulti() requires five arguments");
+        return;
+    }
+    if (!token[0).isString()) return debug_message("addTextMulti(): first argument is not a string");
+    if (!token[1).isNumber()) return debug_message("addTextMulti(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addTextMulti(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addTextMulti(): fourth argument is not a number");
+    if (!token[4).isBool())   return debug_message("addTextMulti(): fifth argument is not a bool");
 
-    std::string str   = engine->argument(0).toString();
-    double   x     = engine->argument(1).toNumber();
-    double   y     = engine->argument(2).toNumber();
-    double   rot   = engine->argument(3).toNumber();
-    bool   fill  = engine->argument(4).toBool();
+    std::string str   = token[0).toString();
+    double   x     = token[1).toNumber();
+    double   y     = token[2).toNumber();
+    double   rot   = token[3).toNumber();
+    bool   fill  = token[4).toBool();
 
     //isNaN check
-    if (qIsNaN(x))   return engine->throwError(QScriptengine::TypeError, "addTextMulti(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return engine->throwError(QScriptengine::TypeError, "addTextMulti(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x))   return debug_message("addTextMulti(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y))   return debug_message("addTextMulti(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
-    return QJSValue();
+    nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
 
-javaAddTextSingle()
+void
+AddTextSingle()
 {
-    if (engine->argumentCount() != 5)    return engine->throwError("addTextSingle() requires five arguments");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "addTextSingle(): first argument is not a string");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTextSingle(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTextSingle(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTextSingle(): fourth argument is not a number");
-    if (!engine->argument(4).isBool())   return engine->throwError(QScriptengine::TypeError, "addTextSingle(): fifth argument is not a bool");
+    if (args.size() < 5) {
+        debug_message("addTextSingle() requires five arguments");
+        return;
+    }
+    if (!token[0).isString()) return debug_message("addTextSingle(): first argument is not a string");
+    if (!token[1).isNumber()) return debug_message("addTextSingle(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addTextSingle(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addTextSingle(): fourth argument is not a number");
+    if (!token[4).isBool())   return debug_message("addTextSingle(): fifth argument is not a bool");
 
-    std::string str   = engine->argument(0).toString();
-    double   x     = engine->argument(1).toNumber();
-    double   y     = engine->argument(2).toNumber();
-    double   rot   = engine->argument(3).toNumber();
-    bool   fill  = engine->argument(4).toBool();
+    std::string str = args[0];
+    double   x     = args[1).toNumber();
+    double   y     = args[2).toNumber();
+    double   rot   = args[3).toNumber();
+    bool   fill  = args[4).toBool();
 
     //isNaN check
-    if (qIsNaN(x))   return engine->throwError(QScriptengine::TypeError, "addTextSingle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return engine->throwError(QScriptengine::TypeError, "addTextSingle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x))   return debug_message("addTextSingle(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y))   return debug_message("addTextSingle(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddInfiniteLine()
+void
+AddInfiniteLine()
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addInfiniteLine command");
-    return QJSValue();
 }
 
-javaAddRay()
+void
+AddRay()
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRay command");
-    return QJSValue();
 }
 
-javaAddLine()
+void
+AddLine()
 {
-    if (engine->argumentCount() != 5)    return engine->throwError("addLine() requires five arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addLine(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addLine(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addLine(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addLine(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addLine(): fifth argument is not a number");
+    if (args.size() < 5)    return engine->throwError("addLine() requires five arguments");
+    if (!token[0).isNumber()) return debug_message("addLine(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addLine(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addLine(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addLine(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addLine(): fifth argument is not a number");
 
-    double x1  = engine->argument(0).toNumber();
-    double y1  = engine->argument(1).toNumber();
-    double x2  = engine->argument(2).toNumber();
-    double y2  = engine->argument(3).toNumber();
-    double rot = engine->argument(4).toNumber();
+    double x1  = token[0).toNumber();
+    double y1  = token[1).toNumber();
+    double x2  = token[2).toNumber();
+    double y2  = token[3).toNumber();
+    double rot = token[4).toNumber();
 
     //isNaN check
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "addLine(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "addLine(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "addLine(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "addLine(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addLine(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x1))  return debug_message("addLine(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y1))  return debug_message("addLine(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x2))  return debug_message("addLine(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y2))  return debug_message("addLine(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addLine(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddTriangle()
+void
+AddTriangle()
 {
-    if (engine->argumentCount() != 8)    return engine->throwError("addTriangle() requires eight arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): fifth argument is not a number");
-    if (!engine->argument(5).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): sixth argument is not a number");
-    if (!engine->argument(6).isNumber()) return engine->throwError(QScriptengine::TypeError, "addTriangle(): seventh argument is not a number");
-    if (!engine->argument(7).isBool())   return engine->throwError(QScriptengine::TypeError, "addTriangle(): eighth argument is not a bool");
+    if (args.size() < 8)    return engine->throwError("addTriangle() requires eight arguments");
+    if (!token[0).isNumber()) return debug_message("addTriangle(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addTriangle(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addTriangle(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addTriangle(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addTriangle(): fifth argument is not a number");
+    if (!token[5).isNumber()) return debug_message("addTriangle(): sixth argument is not a number");
+    if (!token[6).isNumber()) return debug_message("addTriangle(): seventh argument is not a number");
+    if (!token[7).isBool())   return debug_message("addTriangle(): eighth argument is not a bool");
 
-    double x1     = engine->argument(0).toNumber();
-    double y1     = engine->argument(1).toNumber();
-    double x2     = engine->argument(2).toNumber();
-    double y2     = engine->argument(3).toNumber();
-    double x3     = engine->argument(4).toNumber();
-    double y3     = engine->argument(5).toNumber();
-    double rot    = engine->argument(6).toNumber();
-    bool fill   = engine->argument(7).toBool();
+    double x1     = token[0).toNumber();
+    double y1     = token[1).toNumber();
+    double x2     = token[2).toNumber();
+    double y2     = token[3).toNumber();
+    double x3     = token[4).toNumber();
+    double y3     = token[5).toNumber();
+    double rot    = token[6).toNumber();
+    bool fill   = token[7).toBool();
 
     //isNaN check
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "addTriangle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "addTriangle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "addTriangle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x3))  return engine->throwError(QScriptengine::TypeError, "addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y3))  return engine->throwError(QScriptengine::TypeError, "addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x1))  return debug_message("addTriangle(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y1))  return debug_message("addTriangle(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x2))  return debug_message("addTriangle(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y2))  return debug_message("addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x3))  return debug_message("addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y3))  return debug_message("addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
+    nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return QJSValue();
 }
 
-javaAddRectangle()
+void
+AddRectangle()
 {
-    if (engine->argumentCount() != 6)    return engine->throwError("addRectangle() requires six arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRectangle(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRectangle(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRectangle(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRectangle(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRectangle(): fifth argument is not a number");
-    if (!engine->argument(5).isBool())   return engine->throwError(QScriptengine::TypeError, "addRectangle(): sixth argument is not a bool");
+    if (args.size() < 6)    return engine->throwError("addRectangle() requires six arguments");
+    if (!token[0).isNumber()) return debug_message("addRectangle(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addRectangle(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addRectangle(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addRectangle(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addRectangle(): fifth argument is not a number");
+    if (!token[5).isBool())   return debug_message("addRectangle(): sixth argument is not a bool");
 
-    double x    = engine->argument(0).toNumber();
-    double y    = engine->argument(1).toNumber();
-    double w    = engine->argument(2).toNumber();
-    double h    = engine->argument(3).toNumber();
-    double rot  = engine->argument(4).toNumber();
-    bool fill = engine->argument(5).toBool();
+    double x    = token[0).toNumber();
+    double y    = token[1).toNumber();
+    double w    = token[2).toNumber();
+    double h    = token[3).toNumber();
+    double rot  = token[4).toNumber();
+    bool fill = token[5).toBool();
 
     //isNaN check
-    if (qIsNaN(x))   return engine->throwError(QScriptengine::TypeError, "addRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return engine->throwError(QScriptengine::TypeError, "addRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(w))   return engine->throwError(QScriptengine::TypeError, "addRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(h))   return engine->throwError(QScriptengine::TypeError, "addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x))   return debug_message("addRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y))   return debug_message("addRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(w))   return debug_message("addRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(h))   return debug_message("addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddRoundedRectangle()
+void
+AddRoundedRectangle()
 {
-    if (engine->argumentCount() != 7)    return engine->throwError("addRoundedRectangle() requires seven arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): fifth argument is not a number");
-    if (!engine->argument(5).isNumber()) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): sixth argument is not a number");
-    if (!engine->argument(6).isBool())   return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): seventh argument is not a bool");
+    if (args.size() < 7)    return engine->throwError("addRoundedRectangle() requires seven arguments");
+    if (!token[0).isNumber()) return debug_message("addRoundedRectangle(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addRoundedRectangle(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addRoundedRectangle(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addRoundedRectangle(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addRoundedRectangle(): fifth argument is not a number");
+    if (!token[5).isNumber()) return debug_message("addRoundedRectangle(): sixth argument is not a number");
+    if (!token[6).isBool())   return debug_message("addRoundedRectangle(): seventh argument is not a bool");
 
-    double x    = engine->argument(0).toNumber();
-    double y    = engine->argument(1).toNumber();
-    double w    = engine->argument(2).toNumber();
-    double h    = engine->argument(3).toNumber();
-    double rad  = engine->argument(4).toNumber();
-    double rot  = engine->argument(5).toNumber();
-    bool fill = engine->argument(6).toBool();
+    double x    = token[0).toNumber();
+    double y    = token[1).toNumber();
+    double w    = token[2).toNumber();
+    double h    = token[3).toNumber();
+    double rad  = token[4).toNumber();
+    double rot  = token[5).toNumber();
+    bool fill = token[6).toBool();
 
     //isNaN check
-    if (qIsNaN(x))   return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(w))   return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(h))   return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rad)) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x))   return debug_message("addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y))   return debug_message("addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(w))   return debug_message("addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(h))   return debug_message("addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rad)) return debug_message("addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
+    nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return QJSValue();
 }
 
-javaAddArc()
+void
+AddArc()
 {
-    if (engine->argumentCount() != 6)    return engine->throwError("addArc() requires six arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addArc(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addArc(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addArc(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addArc(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addArc(): fifth argument is not a number");
-    if (!engine->argument(5).isNumber()) return engine->throwError(QScriptengine::TypeError, "addArc(): sixth argument is not a number");
+    if (args.size() < 6)    return engine->throwError("addArc() requires six arguments");
+    if (!token[0).isNumber()) return debug_message("addArc(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addArc(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addArc(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addArc(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addArc(): fifth argument is not a number");
+    if (!token[5).isNumber()) return debug_message("addArc(): sixth argument is not a number");
 
-    double startX = engine->argument(0).toNumber();
-    double startY = engine->argument(1).toNumber();
-    double midX   = engine->argument(2).toNumber();
-    double midY   = engine->argument(3).toNumber();
-    double endX   = engine->argument(4).toNumber();
-    double endY   = engine->argument(5).toNumber();
+    double startX = token[0).toNumber();
+    double startY = token[1).toNumber();
+    double midX   = token[2).toNumber();
+    double midY   = token[3).toNumber();
+    double endX   = token[4).toNumber();
+    double endY   = token[5).toNumber();
 
     //isNaN check
-    if (qIsNaN(startX)) return engine->throwError(QScriptengine::TypeError, "addArc(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(startY)) return engine->throwError(QScriptengine::TypeError, "addArc(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(midX))   return engine->throwError(QScriptengine::TypeError, "addArc(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(midY))   return engine->throwError(QScriptengine::TypeError, "addArc(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(endX))   return engine->throwError(QScriptengine::TypeError, "addArc(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(endY))   return engine->throwError(QScriptengine::TypeError, "addArc(): sixth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(startX)) return debug_message("addArc(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(startY)) return debug_message("addArc(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(midX))   return debug_message("addArc(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(midY))   return debug_message("addArc(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(endX))   return debug_message("addArc(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(endY))   return debug_message("addArc(): sixth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
+    nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddCircle()
+void
+AddCircle()
 {
-    if (engine->argumentCount() != 4)    return engine->throwError("addCircle() requires four arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addCircle(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addCircle(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addCircle(): third argument is not a number");
-    if (!engine->argument(3).isBool())   return engine->throwError(QScriptengine::TypeError, "addCircle(): fourth argument is not a bool");
+    if (args.size() < 4)    return engine->throwError("addCircle() requires four arguments");
+    if (!token[0).isNumber()) return debug_message("addCircle(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addCircle(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addCircle(): third argument is not a number");
+    if (!token[3).isBool())   return debug_message("addCircle(): fourth argument is not a bool");
 
-    double centerX = engine->argument(0).toNumber();
-    double centerY = engine->argument(1).toNumber();
-    double radius  = engine->argument(2).toNumber();
-    bool fill    = engine->argument(3).toBool();
+    double centerX = token[0).toNumber();
+    double centerY = token[1).toNumber();
+    double radius  = token[2).toNumber();
+    bool fill    = token[3).toBool();
 
     //isNaN check
-    if (qIsNaN(centerX)) return engine->throwError(QScriptengine::TypeError, "addCircle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(centerY)) return engine->throwError(QScriptengine::TypeError, "addCircle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(radius))  return engine->throwError(QScriptengine::TypeError, "addCircle(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(centerX)) return debug_message("addCircle(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(centerY)) return debug_message("addCircle(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(radius))  return debug_message("addCircle(): third argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
+    nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddSlot()
+void
+AddSlot()
 {
-    if (engine->argumentCount() != 6)    return engine->throwError("addSlot() requires six arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addSlot(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addSlot(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addSlot(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addSlot(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addSlot(): fifth argument is not a number");
-    if (!engine->argument(5).isBool())   return engine->throwError(QScriptengine::TypeError, "addSlot(): sixth argument is not a bool");
+    if (args.size() < 6)    return engine->throwError("addSlot() requires six arguments");
+    if (!token[0).isNumber()) return debug_message("addSlot(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addSlot(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addSlot(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addSlot(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addSlot(): fifth argument is not a number");
+    if (!token[5).isBool())   return debug_message("addSlot(): sixth argument is not a bool");
 
-    double centerX  = engine->argument(0).toNumber();
-    double centerY  = engine->argument(1).toNumber();
-    double diameter = engine->argument(2).toNumber();
-    double length   = engine->argument(3).toNumber();
-    double rot      = engine->argument(4).toNumber();
-    bool fill     = engine->argument(5).toBool();
+    double centerX  = token[0).toNumber();
+    double centerY  = token[1).toNumber();
+    double diameter = token[2).toNumber();
+    double length   = token[3).toNumber();
+    double rot      = token[4).toNumber();
+    bool fill     = token[5).toBool();
 
     //isNaN check
-    if (qIsNaN(centerX))  return engine->throwError(QScriptengine::TypeError, "addSlot(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(centerY))  return engine->throwError(QScriptengine::TypeError, "addSlot(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(diameter)) return engine->throwError(QScriptengine::TypeError, "addSlot(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(length))   return engine->throwError(QScriptengine::TypeError, "addSlot(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot))      return engine->throwError(QScriptengine::TypeError, "addSlot(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(centerX))  return debug_message("addSlot(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(centerY))  return debug_message("addSlot(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(diameter)) return debug_message("addSlot(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(length))   return debug_message("addSlot(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot))      return debug_message("addSlot(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
+    nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddEllipse()
+void
+AddEllipse()
 {
-    if (engine->argumentCount() != 6)    return engine->throwError("addEllipse() requires six arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addEllipse(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addEllipse(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addEllipse(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addEllipse(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addEllipse(): fifth argument is not a number");
-    if (!engine->argument(5).isBool())   return engine->throwError(QScriptengine::TypeError, "addEllipse(): sixth argument is not a bool");
+    if (args.size() < 6)    return engine->throwError("addEllipse() requires six arguments");
+    if (!token[0).isNumber()) return debug_message("addEllipse(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addEllipse(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addEllipse(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addEllipse(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addEllipse(): fifth argument is not a number");
+    if (!token[5).isBool())   return debug_message("addEllipse(): sixth argument is not a bool");
 
-    double centerX = engine->argument(0).toNumber();
-    double centerY = engine->argument(1).toNumber();
-    double radX    = engine->argument(2).toNumber();
-    double radY    = engine->argument(3).toNumber();
-    double rot     = engine->argument(4).toNumber();
-    bool fill    = engine->argument(5).toBool();
+    double centerX = token[0).toNumber();
+    double centerY = token[1).toNumber();
+    double radX    = token[2).toNumber();
+    double radY    = token[3).toNumber();
+    double rot     = token[4).toNumber();
+    bool fill    = token[5).toBool();
 
     //isNaN check
-    if (qIsNaN(centerX)) return engine->throwError(QScriptengine::TypeError, "addEllipse(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(centerY)) return engine->throwError(QScriptengine::TypeError, "addEllipse(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(radX))    return engine->throwError(QScriptengine::TypeError, "addEllipse(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(radY))    return engine->throwError(QScriptengine::TypeError, "addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot))     return engine->throwError(QScriptengine::TypeError, "addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(centerX)) return debug_message("addEllipse(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(centerY)) return debug_message("addEllipse(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(radX))    return debug_message("addEllipse(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(radY))    return debug_message("addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot))     return debug_message("addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
-    return QJSValue();
+    nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
 }
 
-javaAddPoint()
+void
+AddPoint()
 {
-    if (engine->argumentCount() != 2)    return engine->throwError("addPoint() requires two arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addPoint(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addPoint(): second argument is not a number");
+    if (args.size() < 2)    return engine->throwError("addPoint() requires two arguments");
+    if (!token[0).isNumber()) return debug_message("addPoint(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addPoint(): second argument is not a number");
 
-    double x = engine->argument(0).toNumber();
-    double y = engine->argument(1).toNumber();
+    double x = token[0).toNumber();
+    double y = token[1).toNumber();
 
     //isNaN check
-    if (qIsNaN(x)) return engine->throwError(QScriptengine::TypeError, "addPoint(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return engine->throwError(QScriptengine::TypeError, "addPoint(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x)) return debug_message("addPoint(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y)) return debug_message("addPoint(): second argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddPoint(x,y);
-    return QJSValue();
+    nativeAddPoint(x,y);
 }
 
-javaAddPolygon()
+void
+AddPolygon()
 {
-    if (engine->argumentCount() != 1)   return engine->throwError("addPolygon() requires one argument");
-    if (!engine->argument(0).isArray()) return engine->throwError(QScriptengine::TypeError, "addPolygon(): first argument is not an array");
+    if (args.size() < 1)   return engine->throwError("addPolygon() requires one argument");
+    if (!token[0).isArray()) return debug_message("addPolygon(): first argument is not an array");
 
-    QVariantList varList = engine->argument(0).toVariant().toList();
+    QVariantList varList = token[0).toVariant().toList();
     int varSize = varList.size();
-    if (varSize < 2) return engine->throwError(QScriptengine::TypeError, "addPolygon(): array must contain at least two elements");
-    if (varSize % 2) return engine->throwError(QScriptengine::TypeError, "addPolygon(): array cannot contain an odd number of elements");
+    if (varSize < 2) return debug_message("addPolygon(): array must contain at least two elements");
+    if (varSize % 2) return debug_message("addPolygon(): array cannot contain an odd number of elements");
 
     bool lineTo = false;
     bool xCoord = true;
@@ -2370,7 +2205,7 @@ javaAddPolygon()
             }
         }
         else
-            return engine->throwError(QScriptengine::TypeError, "addPolygon(): array contains one or more invalid elements");
+            return debug_message("addPolygon(): array contains one or more invalid elements");
     }
 
     //Close the polygon
@@ -2378,19 +2213,20 @@ javaAddPolygon()
 
     path.translate(-startX, -startY);
 
-    mainWin()->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddPolyline()
+void
+AddPolyline()
 {
-    if (engine->argumentCount() != 1)   return engine->throwError("addPolyline() requires one argument");
-    if (!engine->argument(0).isArray()) return engine->throwError(QScriptengine::TypeError, "addPolyline(): first argument is not an array");
+    if (args.size() < 1)   return engine->throwError("addPolyline() requires one argument");
+    if (!token[0).isArray()) return debug_message("addPolyline(): first argument is not an array");
 
-    QVariantList varList = engine->argument(0).toVariant().toList();
+    QVariantList varList = token[0).toVariant().toList();
     int varSize = varList.size();
-    if (varSize < 2) return engine->throwError(QScriptengine::TypeError, "addPolyline(): array must contain at least two elements");
-    if (varSize % 2) return engine->throwError(QScriptengine::TypeError, "addPolyline(): array cannot contain an odd number of elements");
+    if (varSize < 2) return debug_message("addPolyline(): array must contain at least two elements");
+    if (varSize % 2) return debug_message("addPolyline(): array cannot contain an odd number of elements");
 
     bool lineTo = false;
     bool xCoord = true;
@@ -2418,284 +2254,301 @@ javaAddPolyline()
             }
         }
         else
-            return engine->throwError(QScriptengine::TypeError, "addPolyline(): array contains one or more invalid elements");
+            return debug_message("addPolyline(): array contains one or more invalid elements");
     }
 
     path.translate(-startX, -startY);
 
-    mainWin()->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaAddDimLeader()
+void
+AddDimLeader()
 {
-    if (engine->argumentCount() != 5)    return engine->throwError("addDimLeader() requires five arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "addDimLeader(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "addDimLeader(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "addDimLeader(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "addDimLeader(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "addDimLeader(): fifth argument is not a number");
+    if (args.size() < 5)    return engine->throwError("addDimLeader() requires five arguments");
+    if (!token[0).isNumber()) return debug_message("addDimLeader(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("addDimLeader(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("addDimLeader(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("addDimLeader(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("addDimLeader(): fifth argument is not a number");
 
-    double x1  = engine->argument(0).toNumber();
-    double y1  = engine->argument(1).toNumber();
-    double x2  = engine->argument(2).toNumber();
-    double y2  = engine->argument(3).toNumber();
-    double rot = engine->argument(4).toNumber();
+    double x1  = token[0).toNumber();
+    double y1  = token[1).toNumber();
+    double x2  = token[2).toNumber();
+    double y2  = token[3).toNumber();
+    double rot = token[4).toNumber();
 
     //isNaN check
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "addDimLeader(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "addDimLeader(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "addDimLeader(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x1))  return debug_message("addDimLeader(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y1))  return debug_message("addDimLeader(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x2))  return debug_message("addDimLeader(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y2))  return debug_message("addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(rot)) return debug_message("addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return QJSValue();
 }
 
-javaSetCursorShape()
+void
+SetCursorShape()
 {
-    if (engine->argumentCount() != 1)    return engine->throwError("setCursorShape() requires one argument");
-    if (!engine->argument(0).isString()) return engine->throwError(QScriptengine::TypeError, "setCursorShape(): first argument is not a string");
+    if (args.size() < 1)    return engine->throwError("setCursorShape() requires one argument");
+    if (!token[0).isString()) return debug_message("setCursorShape(): first argument is not a string");
 
-    std::string shape = engine->argument(0).toString();
-    mainWin()->nativeSetCursorShape(shape);
+    std::string shape = token[0).toString();
+    nativeSetCursorShape(shape);
     return QJSValue();
 }
 
-javaCalculateAngle()
+void
+CalculateAngle()
 {
-    if (engine->argumentCount() != 4)    return engine->throwError("calculateAngle() requires four arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateAngle(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateAngle(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateAngle(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateAngle(): fourth argument is not a number");
+    if (args.size() < 4)    return engine->throwError("calculateAngle() requires four arguments");
+    if (!token[0).isNumber()) return debug_message("calculateAngle(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("calculateAngle(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("calculateAngle(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("calculateAngle(): fourth argument is not a number");
 
-    double x1 = engine->argument(0).toNumber();
-    double y1 = engine->argument(1).toNumber();
-    double x2 = engine->argument(2).toNumber();
-    double y2 = engine->argument(3).toNumber();
+    double x1 = token[0).toNumber();
+    double y1 = token[1).toNumber();
+    double x2 = token[2).toNumber();
+    double y2 = token[3).toNumber();
 
     //isNaN check
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "calculateAngle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "calculateAngle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "calculateAngle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x1))  return debug_message("calculateAngle(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y1))  return debug_message("calculateAngle(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x2))  return debug_message("calculateAngle(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y2))  return debug_message("calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
 
-    return QJSValue(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
+    return QJSValue(nativeCalculateAngle(x1, y1, x2, y2));
 }
 
-javaCalculateDistance()
+void
+CalculateDistance()
 {
-    if (engine->argumentCount() != 4)    return engine->throwError("calculateDistance() requires four arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateDistance(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateDistance(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateDistance(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "calculateDistance(): fourth argument is not a number");
+    if (args.size() < 4)    return engine->throwError("calculateDistance() requires four arguments");
+    if (!token[0).isNumber()) return debug_message("calculateDistance(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("calculateDistance(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("calculateDistance(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("calculateDistance(): fourth argument is not a number");
 
-    double x1 = engine->argument(0).toNumber();
-    double y1 = engine->argument(1).toNumber();
-    double x2 = engine->argument(2).toNumber();
-    double y2 = engine->argument(3).toNumber();
+    double x1 = token[0).toNumber();
+    double y1 = token[1).toNumber();
+    double x2 = token[2).toNumber();
+    double y2 = token[3).toNumber();
 
     //isNaN check
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "calculateDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "calculateDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "calculateDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x1))  return debug_message("calculateDistance(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y1))  return debug_message("calculateDistance(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x2))  return debug_message("calculateDistance(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y2))  return debug_message("calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
 
-    return QJSValue(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
+    return QJSValue(nativeCalculateDistance(x1, y1, x2, y2));
 }
 
-javaPerpendicularDistance()
+void
+PerpendicularDistance()
 {
-    if (engine->argumentCount() != 6)    return engine->throwError("perpendicularDistance() requires six arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): fourth argument is not a number");
-    if (!engine->argument(4).isNumber()) return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): fifth argument is not a number");
-    if (!engine->argument(5).isNumber()) return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): sixth argument is not a number");
+    if (args.size() < 6)    return engine->throwError("perpendicularDistance() requires six arguments");
+    if (!token[0).isNumber()) return debug_message("perpendicularDistance(): first argument is not a number");
+    if (!token[1).isNumber()) return debug_message("perpendicularDistance(): second argument is not a number");
+    if (!token[2).isNumber()) return debug_message("perpendicularDistance(): third argument is not a number");
+    if (!token[3).isNumber()) return debug_message("perpendicularDistance(): fourth argument is not a number");
+    if (!token[4).isNumber()) return debug_message("perpendicularDistance(): fifth argument is not a number");
+    if (!token[5).isNumber()) return debug_message("perpendicularDistance(): sixth argument is not a number");
 
-    double px = engine->argument(0).toNumber();
-    double py = engine->argument(1).toNumber();
-    double x1 = engine->argument(2).toNumber();
-    double y1 = engine->argument(3).toNumber();
-    double x2 = engine->argument(4).toNumber();
-    double y2 = engine->argument(5).toNumber();
+    double px = token[0).toNumber();
+    double py = token[1).toNumber();
+    double x1 = token[2).toNumber();
+    double y1 = token[3).toNumber();
+    double x2 = token[4).toNumber();
+    double y2 = token[5).toNumber();
 
     //isNaN check
-    if (qIsNaN(px))  return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(py))  return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(px))  return debug_message("perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(py))  return debug_message("perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x1))  return debug_message("perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y1))  return debug_message("perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(x2))  return debug_message("perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
+    if (qIsNaN(y2))  return debug_message("perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
 
-    return QJSValue(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
+    return QJSValue(nativePerpendicularDistance(px, py, x1, y1, x2, y2));
 }
 
-    if ((command == "numSelected")) {
-        nativeNumSelected());
-    }
-    if ((command == "selectAll")) {
-        nativeSelectAll();
-    }
-    if ((command == "addToSelection")) {
-        // TODO: finish
-    }
-    if ((command == "clearSelection")) {
-        nativeClearSelection();
-    }
-    if ((command == "deleteSelected")) {
-        nativeDeleteSelected();
+void
+cut_selected(std::vector<std::string> args)
+{
+    if (args.size() < 2) {
+        debug_message("cutSelected() requires two arguments");
     }
 
-javaCutSelected()
-{
-    if (engine->argumentCount() != 2)    return engine->throwError("cutSelected() requires two arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "cutSelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "cutSelected(): second argument is not a number");
+    double x = string_to_number("cutSelected()", args, 0);
+    double y = string_to_number("cutSelected()", args, 1);
 
-    double x = engine->argument(0).toNumber();
-    double y = engine->argument(1).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x)) return engine->throwError(QScriptengine::TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return engine->throwError(QScriptengine::TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
-
-    mainWin()->nativeCutSelected(x, y);
-    return QJSValue();
+    nativeCutSelected(x, y);
 }
 
-javaCopySelected()
+int
+string_to_double(std::vector<std::string> args, int n, double *result)
 {
-    if (engine->argumentCount() != 2)    return engine->throwError("copySelected() requires two arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "copySelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "copySelected(): second argument is not a number");
-
-    double x = engine->argument(0).toNumber();
-    double y = engine->argument(1).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x)) return engine->throwError(QScriptengine::TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return engine->throwError(QScriptengine::TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
-
-    mainWin()->nativeCopySelected(x, y);
-    return QJSValue();
-}
-
-javaPasteSelected()
-{
-    if (engine->argumentCount() != 2)    return engine->throwError("pasteSelected() requires two arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "pasteSelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "pasteSelected(): second argument is not a number");
-
-    double x = engine->argument(0).toNumber();
-    double y = engine->argument(1).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x)) return engine->throwError(QScriptengine::TypeError, "pasteSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return engine->throwError(QScriptengine::TypeError, "pasteSelected(): second argument failed isNaN check. There is an error in your code.");
-
-    mainWin()->nativePasteSelected(x, y);
-    return QJSValue();
-}
-
-javaMoveSelected()
-{
-    if (engine->argumentCount() != 2)    return engine->throwError("moveSelected() requires two arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "moveSelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "moveSelected(): second argument is not a number");
-
-    double dx = engine->argument(0).toNumber();
-    double dy = engine->argument(1).toNumber();
-
-    //isNaN check
-    if (qIsNaN(dx)) return engine->throwError(QScriptengine::TypeError, "moveSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(dy)) return engine->throwError(QScriptengine::TypeError, "moveSelected(): second argument failed isNaN check. There is an error in your code.");
-
-    mainWin()->nativeMoveSelected(dx, dy);
-    return QJSValue();
-}
-
-javaScaleSelected()
-{
-    if (engine->argumentCount() != 3)    return engine->throwError("scaleSelected() requires three arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "scaleSelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "scaleSelected(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "scaleSelected(): third argument is not a number");
-
-    double x      = engine->argument(0).toNumber();
-    double y      = engine->argument(1).toNumber();
-    double factor = engine->argument(2).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x))      return engine->throwError(QScriptengine::TypeError, "scaleSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))      return engine->throwError(QScriptengine::TypeError, "scaleSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(factor)) return engine->throwError(QScriptengine::TypeError, "scaleSelected(): third argument failed isNaN check. There is an error in your code.");
-
-    if (factor <= 0.0) return engine->throwError(QScriptengine::UnknownError, "scaleSelected(): scale factor must be greater than zero");
-
-    mainWin()->nativeScaleSelected(x, y, factor);
-    return QJSValue();
-}
-
-javaRotateSelected()
-{
-    if (engine->argumentCount() != 3)    return engine->throwError("rotateSelected() requires three arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "rotateSelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "rotateSelected(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "rotateSelected(): third argument is not a number");
-
-    double x   = engine->argument(0).toNumber();
-    double y   = engine->argument(1).toNumber();
-    double rot = engine->argument(2).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x))   return engine->throwError(QScriptengine::TypeError, "rotateSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return engine->throwError(QScriptengine::TypeError, "rotateSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return engine->throwError(QScriptengine::TypeError, "rotateSelected(): third argument failed isNaN check. There is an error in your code.");
-
-    mainWin()->nativeRotateSelected(x, y, rot);
-    return QJSValue();
-}
-
-javaMirrorSelected()
-{
-    if (engine->argumentCount() != 4)    return engine->throwError("mirrorSelected() requires four arguments");
-    if (!engine->argument(0).isNumber()) return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): first argument is not a number");
-    if (!engine->argument(1).isNumber()) return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): second argument is not a number");
-    if (!engine->argument(2).isNumber()) return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): third argument is not a number");
-    if (!engine->argument(3).isNumber()) return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): fourth argument is not a number");
-
-    double x1 = engine->argument(0).toNumber();
-    double y1 = engine->argument(1).toNumber();
-    double x2 = engine->argument(2).toNumber();
-    double y2 = engine->argument(3).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x1))  return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return engine->throwError(QScriptengine::TypeError, "mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.");
-
-    mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
-    return QJSValue();
-}
-
-    if (!strcmp(command, "qsnapX")) {
-        nativeQSnapY();
+    if (!args[n].isNumber()) {
+        debug_message(function + ": argument " + n + " is not a number.");
+        return 1;
     }
-    if (!strcmp(command, "qsnapY")) {
-        nativeQSnapY();
+
+    *result = args[n].toNumber();
+
+    if (qIsNaN(*result)) {
+        debug_message(function + ": argument " + n + "failed isNaN check. There is an error in your code.");
+        return 1;
     }
-    if (!strcmp(command, "mouseX")) {
-        nativeMouseX();
+
+    return 0;
+}
+
+void
+CopySelected(std::vector<std::string> args)
+{
+    if (args.size() < 2)
+        return engine->throwError("copySelected() requires two arguments");
+
+    double x = string_to_number("copySelected()", args, 0);
+    double y = string_to_number("copySelected()", args, 1);
+
+    nativeCopySelected(x, y);
+}
+
+void
+PasteSelected(std::vector<std::string> args)
+{
+    double x, y;
+    if (args.size() < 2)    return engine->throwError("pasteSelected() requires two arguments");
+
+    if (!string_to_number("pasteSelected()", args, 0, &x)) {
+        return;
     }
-    if (!strcmp(command, "mouseY")) {
-        nativeMouseY();
+    if (!string_to_number("pasteSelected()", args, 1, &y)) {
+        return;
     }
+
+    nativePasteSelected(x, y);
+}
+
+void
+MoveSelected(std::vector<std::string> args)
+{
+    if (args.size() < 2)
+        return engine->throwError("moveSelected() requires two arguments");
+
+    if (!string_to_number("moveSelected()", args, 0, &dx)) {
+        return;
+    }
+    if (!string_to_number("moveSelected()", args, 1, &dy)) {
+        return;
+    }
+
+    nativeMoveSelected(dx, dy);
+}
+
+void
+ScaleSelected(std::vector<std::string> args)
+{
+    if (args.size() < 3) {
+        return engine->throwError("scaleSelected() requires three arguments");
+    }
+
+    double x = string_to_number("scaleSelected()", args, 0);
+    double y = string_to_number("scaleSelected()", args, 1);
+    double factor = string_to_number("scaleSelected()", args, 2);
+
+    nativeScaleSelected(x, y, factor);
+}
+
+void
+RotateSelected(std::vector<std::string> args)
+{
+    if (args.size() < 3) {
+        debug_message("rotateSelected() requires three arguments");
+        return;
+    }
+
+    double x = string_to_number("rotateSelected()", args, 0);
+    double y = string_to_number("rotateSelected()", args, 1);
+    double rot = string_to_number("rotateSelected()", args, 2);
+
+    nativeRotateSelected(x, y, rot);
+}
+
+void MirrorSelected(std::vector<std::string> args)
+{
+    if (args.size() < 4) {
+        return engine->throwError("mirrorSelected() requires 4 arguments");
+    }
+
+    double x1 = string_to_number("mirrorSelected()", args, 0);
+    double y1 = string_to_number("mirrorSelected()", args, 1);
+    double x2 = string_to_number("mirrorSelected()", args, 2);
+    double y2 = string_to_number("mirrorSelected()", args, 3);
+
+    nativeMirrorSelected(x1, y1, x2, y2);
+}
+
 
 #endif
+
+
+void
+about_action(std::vector<std::string> args)
+{
+    show_about_dialog = true;
+}
+
+void
+debug_action(std::vector<std::string> args)
+{
+    debug_message(args[0]);
+}
+
+void
+error_action(std::vector<std::string> args)
+{
+
+}
+
+void
+changelog_action(std::vector<std::string> args)
+{
+    
+}
+
+void
+copy_action(std::vector<std::string> args)
+{
+    
+}
+
+void
+cut_action(std::vector<std::string> args)
+{
+    
+}
+
+void
+pan_action(std::vector<std::string> args)
+{
+    
+}
+
+void
+paste_action(std::vector<std::string> args)
+{
+    
+}
+
+void
+zoom_action(std::vector<std::string> args)
+{
+    
+}
 

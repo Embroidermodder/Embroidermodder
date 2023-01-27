@@ -63,7 +63,6 @@ add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
 	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
 	${CMAKE_SOURCE_DIR}/src/statusbar.cpp
-	${CMAKE_SOURCE_DIR}/src/svg.cpp
 	${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
 	${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/utilities.cpp
