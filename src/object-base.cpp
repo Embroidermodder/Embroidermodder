@@ -87,7 +87,7 @@ EmbVector BaseObject::objectRubberPoint(const std::string& key) const
 
     QGraphicsScene* gscene = scene();
     if (gscene)
-        return scene()->property(SCENE_QSNAP_POINT).toPointF();
+        return scene()->property("SCENE_QSNAP_POINT").toPointF();
     return EmbVector();
 }
 

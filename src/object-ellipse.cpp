@@ -357,7 +357,7 @@ EllipseObject::~EllipseObject()
 void EllipseObject::init(double centerX, double centerY, double width, double height, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_ELLIPSE);
+    setData(OBJ_NAME, "Ellipse");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

@@ -39,7 +39,7 @@ PointObject::~PointObject()
 void PointObject::init(double x, double y, unsigned int rgb, int lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_POINT);
+    setData(OBJ_NAME, "Point");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

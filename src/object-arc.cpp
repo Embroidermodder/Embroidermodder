@@ -39,7 +39,7 @@ ArcObject::~ArcObject()
 void ArcObject::init(double startX, double startY, double midX, double midY, double endX, double endY, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_ARC);
+    setData(OBJ_NAME, "Arc");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

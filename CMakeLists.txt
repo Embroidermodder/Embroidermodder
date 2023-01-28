@@ -41,9 +41,6 @@ add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/data.cpp
 	${CMAKE_SOURCE_DIR}/src/dialogs.cpp
 	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
-	${CMAKE_SOURCE_DIR}/src/mainwindow-commands.cpp
-	${CMAKE_SOURCE_DIR}/src/mainwindow-settings.cpp
-	${CMAKE_SOURCE_DIR}/src/mainwindow.cpp
 	${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
 	${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
 	${CMAKE_SOURCE_DIR}/src/object-arc.cpp
@@ -63,9 +60,7 @@ add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
 	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
 	${CMAKE_SOURCE_DIR}/src/statusbar.cpp
-	${CMAKE_SOURCE_DIR}/src/undo-commands.cpp
 	${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
-	${CMAKE_SOURCE_DIR}/src/utilities.cpp
 	${CMAKE_SOURCE_DIR}/src/view.cpp
 	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit/TextEditor.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp

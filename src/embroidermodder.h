@@ -28,98 +28,6 @@
 
 #define MAX_PATTERNS                 50
 
-#define LANGUAGE_DEFAULT              0
-#define LANGUAGE_ENGLISH_US           1
-#define LANGUAGE_ENGLISH_UK           2
-#define LANGUAGE_FRENCH               3
-#define LANGUAGE_SPANISH              4
-#define LANGUAGE_HINDI                5
-#define LANGUAGE_CHINESE_TRADITIONAL  6
-#define LANGUAGE_CHINESE_SIMPLIFIED   7
-#define LANGUAGE_ARABIC               8
-#define LANGUAGE_RUSSIAN              9
-#define N_LANGUAGES                  10
-
-#define ACTION_donothing              0
-#define ACTION_new                    1
-#define ACTION_open                   2
-#define ACTION_save                   3
-#define ACTION_saveas                 4
-#define ACTION_print                  5
-#define ACTION_designdetails          6
-#define ACTION_exit                   7
-#define ACTION_cut                    8
-#define ACTION_copy                   9
-#define ACTION_paste                 10
-#define ACTION_undo                  11
-#define ACTION_redo                  12
-// Window Menu
-#define ACTION_windowclose           13
-#define ACTION_windowcloseall        14
-#define ACTION_windowcascade         15
-#define ACTION_windowtile            16
-#define ACTION_windownext            17
-#define ACTION_windowprevious        18
-// Help Menu
-#define ACTION_help                  19
-#define ACTION_changelog             20
-#define ACTION_tipoftheday           21
-#define ACTION_about                 22
-#define ACTION_whatsthis             23
-// Icons
-#define ACTION_icon16                24
-#define ACTION_icon24                25
-#define ACTION_icon32                26
-#define ACTION_icon48                27
-#define ACTION_icon64                28
-#define ACTION_icon128               29
-#define ACTION_settingsdialog        30
-// Layer ToolBar
-#define ACTION_makelayercurrent      31
-#define ACTION_layers                32
-#define ACTION_layerselector         33
-#define ACTION_layerprevious         34
-#define ACTION_colorselector         35
-#define ACTION_linetypeselector      36
-#define ACTION_lineweightselector    37
-#define ACTION_hidealllayers         38
-#define ACTION_showalllayers         39
-#define ACTION_freezealllayers       40
-#define ACTION_thawalllayers         41
-#define ACTION_lockalllayers         42
-#define ACTION_unlockalllayers       43
-//Text ToolBar
-#define ACTION_textbold              44
-#define ACTION_textitalic            45
-#define ACTION_textunderline         46
-#define ACTION_textstrikeout         47
-#define ACTION_textoverline          48
-// Zoom ToolBar
-#define ACTION_zoomrealtime          49
-#define ACTION_zoomprevious          50
-#define ACTION_zoomwindow            51
-#define ACTION_zoomdynamic           52
-#define ACTION_zoomscale             53
-#define ACTION_zoomcenter            54
-#define ACTION_zoomin                55
-#define ACTION_zoomout               56
-#define ACTION_zoomselected          57
-#define ACTION_zoomall               58
-#define ACTION_zoomextents           59
-// Pan SubMenu
-#define ACTION_panrealtime           60
-#define ACTION_panpoint              61
-#define ACTION_panleft               62
-#define ACTION_panright              63
-#define ACTION_panup                 64
-#define ACTION_pandown               65
-#define ACTION_day                   66
-#define ACTION_night                 67
-// TODO
-#define ACTION_spellcheck            68
-#define ACTION_quickselect           69
-#define ACTION_null                  70
-
 #define WIDGET_MODE_BLOCK             0
 #define WIDGET_MODE_TEXT              1
 #define WIDGET_MODE_IMAGE             2
@@ -147,7 +55,7 @@
 #define VIEW_STATE_USE_COLOR     0x0800
 #define VIEW_STATE_GRID          0x1000
 
-/* Permissions System (Not implemented)
+/* Permissions System(Not implemented)
  * ------------------------------------
  *
  * The permissions flag determines whether the user or the system can run this
@@ -156,28 +64,7 @@
 #define PERMISSIONS_USER              0
 #define PERMISSIONS_SYSTEM            1
 
-/* Visibility */
-#define INVISIBLE                     0
-#define ALWAYS_VISIBLE                1
-#define FILE_MENU                     2
-#define EDIT_MENU                     3
-#define VIEW_MENU                     4
-#define SETTINGS_MENU                 5
-#define WINDOW_MENU                   6
-#define HELP_MENU                     7
-#define RECENT_MENU                   8
-#define ZOOM_MENU                     9
-#define PAN_MENU                     10
-
 #define MITER_JOIN                    0
-
-#define DATA_TYPE_DOUBLE              0
-#define DATA_TYPE_INT                 1
-#define DATA_TYPE_STRING              2
-#define DATA_TYPE_META                3
-#define DATA_TYPE_TITLE               4
-#define DATA_TYPE_GROUP_BOX           5
-#define DATA_TYPE_END_MARKER         -1
 
 #define LINE_STYLE_DASHED             0
 #define LINE_STYLE_SOLID              1
@@ -201,40 +88,40 @@
 /* NOTE: Allow this enum to evaluate false */
 #define OBJ_TYPE_NULL                 0
 /* NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
-#define OBJ_TYPE_BASE            100000
-#define OBJ_TYPE_ARC             100001
-#define OBJ_TYPE_BLOCK           100002
-#define OBJ_TYPE_CIRCLE          100003
-#define OBJ_TYPE_DIMALIGNED      100004
-#define OBJ_TYPE_DIMANGULAR      100005
-#define OBJ_TYPE_DIMARCLENGTH    100006
-#define OBJ_TYPE_DIMDIAMETER     100007
-#define OBJ_TYPE_DIMLEADER       100008
-#define OBJ_TYPE_DIMLINEAR       100009
-#define OBJ_TYPE_DIMORDINATE     100010
-#define OBJ_TYPE_DIMRADIUS       100011
-#define OBJ_TYPE_ELLIPSE         100012
-#define OBJ_TYPE_ELLIPSEARC      100013
-#define OBJ_TYPE_RUBBER          100014
-#define OBJ_TYPE_GRID            100015
-#define OBJ_TYPE_HATCH           100016
-#define OBJ_TYPE_IMAGE           100017
-#define OBJ_TYPE_INFINITELINE    100018
-#define OBJ_TYPE_LINE            100019
-#define OBJ_TYPE_PATH            100020
-#define OBJ_TYPE_POINT           100021
-#define OBJ_TYPE_POLYGON         100022
-#define OBJ_TYPE_POLYLINE        100023
-#define OBJ_TYPE_RAY             100024
-#define OBJ_TYPE_RECTANGLE       100025
-#define OBJ_TYPE_SLOT            100026
-#define OBJ_TYPE_SPLINE          100027
-#define OBJ_TYPE_TEXTMULTI       100028
-#define OBJ_TYPE_TEXTSINGLE      100029
-#define OBJ_TYPE_UNKNOWN         100030
+#define OBJ_TYPE_BASE                 0
+#define OBJ_TYPE_ARC                  1
+#define OBJ_TYPE_BLOCK                2
+#define OBJ_TYPE_CIRCLE               3
+#define OBJ_TYPE_DIMALIGNED           4
+#define OBJ_TYPE_DIMANGULAR           5
+#define OBJ_TYPE_DIMARCLENGTH         6
+#define OBJ_TYPE_DIMDIAMETER          7
+#define OBJ_TYPE_DIMLEADER            8
+#define OBJ_TYPE_DIMLINEAR            9
+#define OBJ_TYPE_DIMORDINATE         10
+#define OBJ_TYPE_DIMRADIUS           11
+#define OBJ_TYPE_ELLIPSE             12
+#define OBJ_TYPE_ELLIPSEARC          13
+#define OBJ_TYPE_RUBBER              14
+#define OBJ_TYPE_GRID                15
+#define OBJ_TYPE_HATCH               16
+#define OBJ_TYPE_IMAGE               17
+#define OBJ_TYPE_INFINITELINE        18
+#define OBJ_TYPE_LINE                19
+#define OBJ_TYPE_PATH                20
+#define OBJ_TYPE_POINT               21
+#define OBJ_TYPE_POLYGON             22
+#define OBJ_TYPE_POLYLINE            23
+#define OBJ_TYPE_RAY                 24
+#define OBJ_TYPE_RECTANGLE           25
+#define OBJ_TYPE_SLOT                26
+#define OBJ_TYPE_SPLINE              27
+#define OBJ_TYPE_TEXTMULTI           28
+#define OBJ_TYPE_TEXTSINGLE          29
+#define OBJ_TYPE_UNKNOWN             30
 
 /* CAD Linetypes
- * (CONT, CENTER, DOT, HIDDEN, PHANTOM, ZIGZAG)
+ *(CONT, CENTER, DOT, HIDDEN, PHANTOM, ZIGZAG)
  *
  * Embroidery Stitchtypes
  * RUNNING  ---------
@@ -369,7 +256,7 @@
 
 // Custom Data used in QGraphicsItems
 
-//     (int, QVariant)
+//(int, QVariant)
 // I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
 // I.E. object.setData(OBJ_LAYER, "OUTLINE");
 // I.E. object.setData(OBJ_COLOR, 123);
@@ -386,62 +273,17 @@ OBJ_LWT    = 5, //value type - int: 0-27
 OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
 };
 
-//OBJ_NAME_VALUES
-#define  OBJ_NAME_NULL          "Unknown"
-#define  OBJ_NAME_BASE          "Base"
-#define  OBJ_NAME_ARC           "Arc"
-#define  OBJ_NAME_BLOCK         "Block"
-#define  OBJ_NAME_CIRCLE        "Circle"
-#define  OBJ_NAME_DIMALIGNED    "Aligned Dimension"
-#define  OBJ_NAME_DIMANGULAR    "Angular Dimension"
-#define  OBJ_NAME_DIMARCLENGTH  "Arc Length Dimension"
-#define  OBJ_NAME_DIMDIAMETER   "Diameter Dimension"
-#define  OBJ_NAME_DIMLEADER     "Leader Dimension"
-#define  OBJ_NAME_DIMLINEAR     "Linear Dimension"
-#define  OBJ_NAME_DIMORDINATE   "Ordinate Dimension"
-#define  OBJ_NAME_DIMRADIUS     "Radius Dimension"
-#define  OBJ_NAME_ELLIPSE       "Ellipse"
-#define  OBJ_NAME_ELLIPSEARC    "Elliptical Arc"
-#define  OBJ_NAME_RUBBER        "Rubber"
-#define  OBJ_NAME_GRID          "Grid"
-#define  OBJ_NAME_HATCH         "Hatch"
-#define  OBJ_NAME_IMAGE         "Image"
-#define  OBJ_NAME_INFINITELINE  "Infinite Line"
-#define  OBJ_NAME_LINE          "Line"
-#define  OBJ_NAME_PATH          "Path"
-#define  OBJ_NAME_POINT         "Point"
-#define  OBJ_NAME_POLYGON       "Polygon"
-#define  OBJ_NAME_POLYLINE      "Polyline"
-#define  OBJ_NAME_RAY           "Ray"
-#define  OBJ_NAME_RECTANGLE     "Rectangle"
-#define  OBJ_NAME_SLOT          "Slot"
-#define  OBJ_NAME_SPLINE        "Spline"
-#define  OBJ_NAME_TEXTMULTI     "Multi Line Text"
-#define  OBJ_NAME_TEXTSINGLE    "Single Line Text"
-
 #define  ENABLE_LWT         "ENABLE_LWT"
 #define  ENABLE_REAL       "ENABLE_REAL"
 
-#define  SCENE_QSNAP_POINT   "SCENE_QSNAP_POINT"
-#define  SCENE_MOUSE_POINT   "SCENE_MOUSE_POINT"
-#define  VIEW_MOUSE_POINT     "VIEW_MOUSE_POINT"
-#define  RUBBER_ROOM               "RUBBER_ROOM"
-
-#define  VIEW_COLOR_BACKGROUND  "VIEW_COLOR_BACKGROUND"
 #define  VIEW_COLOR_CROSSHAIR   "VIEW_COLOR_CROSSHAIR"
 #define  VIEW_COLOR_GRID        "VIEW_COLOR_GRID"
-
-#define BOOL_VALUE   0
-#define REAL_VALUE   1
-#define INT_VALUE    2
-#define STRING_VALUE 3
 
 /* TYPEDEFS
  * -----------------------------------------------------------------------------
  */
 
 typedef struct Action_ {
-    int action;
     std::string command;
     std::string menu_label;
     std::string description;
@@ -486,26 +328,16 @@ extern bool show_editor;
 extern bool show_rulers;
 extern bool show_grid;
 extern int icon_size;
-extern int language;
+extern std::string language;
 extern int pattern_index;
 extern int n_patterns;
 extern std::string current_fname;
 extern std::string assets_dir;
-extern std::vector<Action> action_list;
+//extern std::vector<Action> action_list;
 extern EmbPattern* pattern_list[MAX_PATTERNS];
-extern string_matrix translations[N_LANGUAGES];
+extern string_matrix translation_table;
 extern std::unordered_map<std::string, string_matrix> menu_layout;
-extern int toolbar_file_entries[];
-extern int toolbar_edit_entries[];
-extern int toolbar_view_entries[];
 extern std::string os_seperator;
-extern int file_menu_data[];
-extern int edit_menu_data[];
-extern int view_menu_data[];
-extern int settings_menu_data[];
-extern int zoom_menu_data[];
-extern int pan_menu_data[];
-extern int help_menu_data[];
 extern std::string settings_general_language;
 extern std::string settings_general_icon_theme;
 extern int settings_general_icon_size;
@@ -617,16 +449,6 @@ extern bool settings_text_style_strikeout;
 #endif /* EMBROIDERMODDER_H */
 
 #if 0
-
-typedef struct Action_ {
-    int action;
-    char command[80];
-    char menu_label[80];
-    char description[200];
-} Action;
-
-extern std::unordered_map<std::string, QAction *> action_list_;
-
 inline double pi()
 {
     return (qAtan(1.0)*4.0);
@@ -678,9 +500,9 @@ class LayerManager : public QDialog
               std::string& lineWeight,
               bool print);
 
-    QStandardItemModel*    layerModel;
+    QStandardItemModel* layerModel;
     QSortFilterProxyModel* layerModelSorted;
-    QTreeView*             treeView;
+    QTreeView* treeView;
 };
 
 // On Mac, if the user drops a file on the app's Dock icon, or uses Open As, then this is how the app actually opens the file.
@@ -759,7 +581,7 @@ class CmdPromptInput : public QLineEdit
     void checkCursorPosition(int oldpos, int newpos);
     void copyClip();
     void pasteClip();
-    QHash<std::string, std::string>*  aliasHash;
+    QHash<std::string, std::string>* aliasHash;
 
     void changeFormatting(std::vector<QTextLayout::FormatRange>& formats);
     void clearFormatting();
@@ -893,14 +715,14 @@ class CmdPrompt : public QWidget
 
     void historyAppended(std::string& txt);
 
-    CmdPromptInput*    promptInput;
-    CmdPromptHistory*  promptHistory;
-    QVBoxLayout*       promptVBoxLayout;
-    QFrame*            promptDivider;
+    CmdPromptInput* promptInput;
+    CmdPromptHistory* promptHistory;
+    QVBoxLayout* promptVBoxLayout;
+    QFrame* promptDivider;
 
     CmdPromptSplitter* promptSplitter;
 
-    QHash<std::string, std::string>*  styleHash;
+    QHash<std::string, std::string>* styleHash;
     void updateStyle();
     QTimer* blinkTimer;
     bool blinkState;
@@ -969,10 +791,10 @@ class MdiWindow: public QMdiSubWindow
     void promptInputPrevious();
     void promptInputNext();
 
-    MainWindow*                mainWin;
-    QMdiArea*                  mdiArea;
-    QGraphicsScene*            gscene;
-    View*                      gview;
+    MainWindow* mainWin;
+    QMdiArea* mdiArea;
+    QGraphicsScene* gscene;
+    View* gview;
 
     bool fileWasLoaded;
 
@@ -980,7 +802,7 @@ class MdiWindow: public QMdiSubWindow
     std::vector<std::string> promptInputList;
     int promptInputNum;
 
-    QPrinter                   printer;
+    QPrinter printer;
 
     std::string curFile;
     void setCurrentFile(std::string& fileName);
@@ -1057,9 +879,6 @@ class MainWindow: public QMainWindow
     ~MainWindow();
 
     void check_load_file(std::string path);
-    View* activeView();
-    QGraphicsScene* activeScene();
-    QUndoStack* activeUndoStack();
     void terminal();
     void ui_constructor(std::vector<std::string> script);
 
@@ -1104,10 +923,10 @@ class MainWindow: public QMainWindow
 
     void recentMenuAboutToShow();
 
-    void onWindowActivated (QMdiSubWindow* w);
+    void onWindowActivated(QMdiSubWindow* w);
     void windowMenuAboutToShow();
     void windowMenuActivated( bool checked/*int id*/ );
-    QAction*                        getAction(int actionEnum);
+    QAction* getAction(int actionEnum);
 
     void updateAllViewScrollBars(bool val);
     void updateAllViewCrossHairColors(unsigned int color);
@@ -1145,9 +964,9 @@ class MainWindow: public QMainWindow
 
     QAction* myFileSeparator;
 
-    QWizard*    wizardTipOfTheDay;
-    QLabel*     labelTipOfTheDay;
-    QCheckBox*  checkBoxTipOfTheDay;
+    QWizard* wizardTipOfTheDay;
+    QLabel* labelTipOfTheDay;
+    QCheckBox* checkBoxTipOfTheDay;
     std::stringList listTipOfTheDay;
 
     void createAllActions();
@@ -1178,34 +997,14 @@ class MainWindow: public QMainWindow
     QToolBar* toolbarPrompt;
 
     //Selectors
-    QComboBox*     layerSelector;
-    QComboBox*     colorSelector;
-    QComboBox*     linetypeSelector;
-    QComboBox*     lineweightSelector;
+    QComboBox* layerSelector;
+    QComboBox* colorSelector;
+    QComboBox* linetypeSelector;
+    QComboBox* lineweightSelector;
     QFontComboBox* textFontSelector;
-    QComboBox*     textSizeSelector;
+    QComboBox* textSizeSelector;
 
-    //Menus
-    void createAllMenus();
-
-    QMenu* fileMenu;
-    QMenu* editMenu;
-    QMenu* viewMenu;
-    QMenu* settingsMenu;
-    QMenu* windowMenu;
-    QMenu* helpMenu;
-    //====================================================
-    //SubMenus
-    //====================================================
-    QMenu* recentMenu;
-    QMenu* zoomMenu;
-    QMenu* panMenu;
-
-private slots:
     void hideUnimplemented();
-
-public slots:
-
     void stub_implement(std::string txt);
     void stub_testing();
 
@@ -1311,24 +1110,14 @@ public slots:
     void zoomSelected();
     void zoomAll();
     void zoomExtents();
-    // Pan SubMenu
-    void panrealtime();
-    void panpoint();
-    void panLeft();
-    void panRight();
-    void panUp();
-    void panDown();
-
-    void dayVision();
-    void nightVision();
 
     void doNothing();
 
     //Natives
-    void nativeAlert                  (std::string& txt);
+    void nativeAlert(std::string& txt);
     void nativeBlinkPrompt();
-    void nativeSetPromptPrefix        (std::string& txt);
-    void nativeAppendPromptHistory    (std::string& txt);
+    void nativeSetPromptPrefix(std::string& txt);
+    void nativeAppendPromptHistory(std::string& txt);
     void nativeEnablePromptRapidFire();
     void nativeDisablePromptRapidFire();
     void nativeInitCommand();
@@ -1352,14 +1141,11 @@ public slots:
 
     void nativeMessageBox(std::string& type, std::string& title, std::string& text);
 
-    void nativePrintArea              (double x, double y, double w, double h);
+    void nativePrintArea(double x, double y, double w, double h);
 
-    void nativeDayVision();
-    void nativeNightVision();
-
-    void nativeSetBackgroundColor     (unsigned char r, unsigned char g, unsigned char b);
-    void nativeSetCrossHairColor      (unsigned char r, unsigned char g, unsigned char b);
-    void nativeSetGridColor           (unsigned char r, unsigned char g, unsigned char b);
+    void nativeSetBackgroundColor(unsigned char r, unsigned char g, unsigned char b);
+    void nativeSetCrossHairColor(unsigned char r, unsigned char g, unsigned char b);
+    void nativeSetGridColor(unsigned char r, unsigned char g, unsigned char b);
 
     std::string nativeTextFont();
     double nativeTextSize();
@@ -1370,29 +1156,28 @@ public slots:
     bool nativeTextStrikeOut();
     bool nativeTextOverline();
 
-    void nativeSetTextFont            (std::string& str);
-    void nativeSetTextSize            (double num);
-    void nativeSetTextAngle           (double num);
-    void nativeSetTextBold            (bool val);
-    void nativeSetTextItalic          (bool val);
-    void nativeSetTextUnderline       (bool val);
-    void nativeSetTextStrikeOut       (bool val);
-    void nativeSetTextOverline        (bool val);
+    void nativeSetTextFont(std::string& str);
+    void nativeSetTextSize(double num);
+    void nativeSetTextAngle(double num);
+    void nativeSetTextBold(bool val);
+    void nativeSetTextItalic(bool val);
+    void nativeSetTextUnderline(bool val);
+    void nativeSetTextStrikeOut(bool val);
+    void nativeSetTextOverline(bool val);
 
-    void nativePreviewOn              (int clone, int mode, double x, double y, double data);
+    void nativePreviewOn(int clone, int mode, double x, double y, double data);
     void nativePreviewOff();
 
     void nativeVulcanize();
     void nativeClearRubber();
     bool nativeAllowRubber();
-    void nativeSpareRubber            (size_t id);
+    void nativeSpareRubber(size_t id);
     //TODO: void nativeSetRubberFilter(size_t id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    void nativeSetRubberMode          (int mode);
-    void nativeSetRubberPoint (std::string& key, double x, double y);
-    void nativeSetRubberText          (std::string& key, std::string& txt);
+    void nativeSetRubberPoint(std::string& key, double x, double y);
+    void nativeSetRubberText(std::string& key, std::string& txt);
 
-    void nativeAddTextMulti           (std::string& str, double x, double y, double rot, bool fill, int rubberMode);
-    void nativeAddTextSingle          (std::string& str, double x, double y, double rot, bool fill, int rubberMode);
+    void nativeAddTextMulti(std::string& str, double x, double y, double rot, bool fill, int rubberMode);
+    void nativeAddTextSingle(std::string& str, double x, double y, double rot, bool fill, int rubberMode);
 
     void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot);
     void nativeAddRay(double x1, double y1, double x2, double y2, double rot);
@@ -1400,39 +1185,33 @@ public slots:
     void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
     void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode);
     void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill);
-    void nativeAddArc(double startX, double startY, double midX, double midY, double endX, double endY, int rubberMode);
-    void nativeAddCircle              (double centerX, double centerY, double radius, bool fill, int rubberMode);
-    void nativeAddSlot                (double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
-    void nativeAddEllipse             (double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
-    void nativeAddPoint (double x, double y);
-    void nativeAddRegularPolygon      (double centerX, double centerY, quint16 sides, unsigned char mode, double rad, double rot, bool fill);
-    void nativeAddPolygon             (double startX, double startY, QPainterPath& p, int rubberMode);
-    void nativeAddPolyline            (double startX, double startY, QPainterPath& p, int rubberMode);
-    void nativeAddPath                (double startX, double startY, QPainterPath& p, int rubberMode);
-    void nativeAddHorizontalDimension (double x1, double y1, double x2, double y2, double legHeight);
-    void nativeAddVerticalDimension   (double x1, double y1, double x2, double y2, double legHeight);
-    void nativeAddImage               (std::string& img, double x, double y, double w, double h, double rot);
+    void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
+    void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
+    void nativeAddPoint(double x, double y);
+    void nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, unsigned char mode, double rad, double rot, bool fill);
+    void nativeAddPolygon(double startX, double startY, QPainterPath& p, int rubberMode);
+    void nativeAddPolyline(double startX, double startY, QPainterPath& p, int rubberMode);
+    void nativeAddPath(double startX, double startY, QPainterPath& p, int rubberMode);
+    void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight);
+    void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight);
+    void nativeAddImage(std::string& img, double x, double y, double w, double h, double rot);
 
-    void nativeAddDimLeader           (double x1, double y1, double x2, double y2, double rot, int rubberMode);
+    void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode);
 
-    void nativeSetCursorShape        (std::string& str);
-    double nativeCalculateAngle        (double x1, double y1, double x2, double y2);
-    double nativeCalculateDistance     (double x1, double y1, double x2, double y2);
-    double nativePerpendicularDistance (double px, double py, double x1, double y1, double x2, double y2);
+    double nativeCalculateAngle(double x1, double y1, double x2, double y2);
+    double nativeCalculateDistance(double x1, double y1, double x2, double y2);
+    double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
 
     int nativeNumSelected();
     void nativeSelectAll();
-    void nativeAddToSelection         (QPainterPath path, Qt::ItemSelectionMode mode);
+    void nativeAddToSelection(QPainterPath path, Qt::ItemSelectionMode mode);
     void nativeClearSelection();
     void nativeDeleteSelected();
-    void nativeCutSelected          (double x, double y);
-    void nativeCopySelected         (double x, double y);
-    void nativePasteSelected        (double x, double y);
-    void nativeMoveSelected         (double dx, double dy);
-    void nativeScaleSelected        (double x, double y, double factor);
-    void nativeRotateSelected       (double x, double y, double rot);
-    void nativeMirrorSelected       (double x1, double y1, double x2, double y2);
-
+    void nativeCutSelected(double x, double y);
+    void nativeCopySelected(double x, double y);
+    void nativePasteSelected(double x, double y);
+    void nativeMoveSelected(double dx, double dy);
+    
     double nativeQSnapX();
     double nativeQSnapY();
     double nativeMouseX();
@@ -1649,8 +1428,8 @@ public:
     double objectY1()        { return objectEndPoint1().y(); }
     double objectX2()        { return objectEndPoint2().x(); }
     double objectY2()        { return objectEndPoint2().y(); }
-    double objectDeltaX()    { return (objectX2() - objectX1()); }
-    double objectDeltaY()    { return (objectY2() - objectY1()); }
+    double objectDeltaX()    { return(objectX2() - objectX1()); }
+    double objectDeltaY()    { return(objectY2() - objectY1()); }
     double objectAngle();
     double objectLength()    { return line().length(); }
 
@@ -1781,8 +1560,8 @@ public:
     double objectY1()        { return objectEndPoint1().y(); }
     double objectX2()        { return objectEndPoint2().x(); }
     double objectY2()        { return objectEndPoint2().y(); }
-    double objectDeltaX()    { return (objectX2() - objectX1()); }
-    double objectDeltaY()    { return (objectY2() - objectY1()); }
+    double objectDeltaX()    { return(objectX2() - objectX1()); }
+    double objectDeltaY()    { return(objectY2() - objectY1()); }
     double objectAngle();
     double objectLength()    { return line().length()*scale(); }
 
@@ -1984,34 +1763,34 @@ class SaveObject : public QObject
 
     bool save(std::string &fileName);
 
-    void addArc        (EmbPattern* pattern, QGraphicsItem* item);
-    void addBlock      (EmbPattern* pattern, QGraphicsItem* item);
-    void addCircle     (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAligned (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimAngular (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimArcLength (EmbPattern* pattern, QGraphicsItem* item);
+    void addArc(EmbPattern* pattern, QGraphicsItem* item);
+    void addBlock(EmbPattern* pattern, QGraphicsItem* item);
+    void addCircle(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimAligned(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimAngular(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimArcLength(EmbPattern* pattern, QGraphicsItem* item);
     void addDimDiameter(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLeader  (EmbPattern* pattern, QGraphicsItem* item);
-    void addDimLinear  (EmbPattern* pattern, QGraphicsItem* item);
+    void addDimLeader(EmbPattern* pattern, QGraphicsItem* item);
+    void addDimLinear(EmbPattern* pattern, QGraphicsItem* item);
     void addDimOrdinate(EmbPattern* pattern, QGraphicsItem* item);
-    void addDimRadius  (EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipse    (EmbPattern* pattern, QGraphicsItem* item);
-    void addEllipseArc (EmbPattern* pattern, QGraphicsItem* item);
-    void addGrid       (EmbPattern* pattern, QGraphicsItem* item);
-    void addHatch      (EmbPattern* pattern, QGraphicsItem* item);
-    void addImage      (EmbPattern* pattern, QGraphicsItem* item);
-    void addInfiniteLine (EmbPattern* pattern, QGraphicsItem* item);
-    void addLine       (EmbPattern* pattern, QGraphicsItem* item);
-    void addPath       (EmbPattern* pattern, QGraphicsItem* item);
-    void addPoint (EmbPattern* pattern, QGraphicsItem* item);
-    void addPolygon    (EmbPattern* pattern, QGraphicsItem* item);
-    void addPolyline   (EmbPattern* pattern, QGraphicsItem* item);
-    void addRay        (EmbPattern* pattern, QGraphicsItem* item);
-    void addRectangle  (EmbPattern* pattern, QGraphicsItem* item);
-    void addSlot       (EmbPattern* pattern, QGraphicsItem* item);
-    void addSpline     (EmbPattern* pattern, QGraphicsItem* item);
-    void addTextMulti  (EmbPattern* pattern, QGraphicsItem* item);
-    void addTextSingle (EmbPattern* pattern, QGraphicsItem* item);
+    void addDimRadius(EmbPattern* pattern, QGraphicsItem* item);
+    void addEllipse(EmbPattern* pattern, QGraphicsItem* item);
+    void addEllipseArc(EmbPattern* pattern, QGraphicsItem* item);
+    void addGrid(EmbPattern* pattern, QGraphicsItem* item);
+    void addHatch(EmbPattern* pattern, QGraphicsItem* item);
+    void addImage(EmbPattern* pattern, QGraphicsItem* item);
+    void addInfiniteLine(EmbPattern* pattern, QGraphicsItem* item);
+    void addLine(EmbPattern* pattern, QGraphicsItem* item);
+    void addPath(EmbPattern* pattern, QGraphicsItem* item);
+    void addPoint(EmbPattern* pattern, QGraphicsItem* item);
+    void addPolygon(EmbPattern* pattern, QGraphicsItem* item);
+    void addPolyline(EmbPattern* pattern, QGraphicsItem* item);
+    void addRay(EmbPattern* pattern, QGraphicsItem* item);
+    void addRectangle(EmbPattern* pattern, QGraphicsItem* item);
+    void addSlot(EmbPattern* pattern, QGraphicsItem* item);
+    void addSpline(EmbPattern* pattern, QGraphicsItem* item);
+    void addTextMulti(EmbPattern* pattern, QGraphicsItem* item);
+    void addTextSingle(EmbPattern* pattern, QGraphicsItem* item);
 
     QGraphicsScene* gscene;
     int formatType;
@@ -2126,37 +1905,37 @@ private:
 
     std::vector<QGraphicsItem*> selectedItemList;
 
-    ArcObject*          tempArcObj;
-    BlockObject*        tempBlockObj;
-    CircleObject*       tempCircleObj;
-    DimAlignedObject*   tempDimAlignedObj;
-    DimAngularObject*   tempDimAngularObj;
+    ArcObject* tempArcObj;
+    BlockObject* tempBlockObj;
+    CircleObject* tempCircleObj;
+    DimAlignedObject* tempDimAlignedObj;
+    DimAngularObject* tempDimAngularObj;
     DimArcLengthObject* tempDimArcLenObj;
-    DimDiameterObject*  tempDimDiamObj;
-    DimLeaderObject*    tempDimLeaderObj;
-    DimLinearObject*    tempDimLinearObj;
-    DimOrdinateObject*  tempDimOrdObj;
-    DimRadiusObject*    tempDimRadiusObj;
-    EllipseObject*      tempEllipseObj;
-    EllipseArcObject*   tempEllipseArcObj;
-    HatchObject*        tempHatchObj;
-    ImageObject*        tempImageObj;
+    DimDiameterObject* tempDimDiamObj;
+    DimLeaderObject* tempDimLeaderObj;
+    DimLinearObject* tempDimLinearObj;
+    DimOrdinateObject* tempDimOrdObj;
+    DimRadiusObject* tempDimRadiusObj;
+    EllipseObject* tempEllipseObj;
+    EllipseArcObject* tempEllipseArcObj;
+    HatchObject* tempHatchObj;
+    ImageObject* tempImageObj;
     InfiniteLineObject* tempInfLineObj;
-    LineObject*         tempLineObj;
-    PathObject*         tempPathObj;
-    PointObject*        tempPointObj;
-    PolygonObject*      tempPolygonObj;
-    PolylineObject*     tempPolylineObj;
-    RayObject*          tempRayObj;
-    RectObject*         tempRectObj;
-    SplineObject*       tempSplineObj;
-    TextMultiObject*    tempTextMultiObj;
-    TextSingleObject*   tempTextSingleObj;
+    LineObject* tempLineObj;
+    PathObject* tempPathObj;
+    PointObject* tempPointObj;
+    PolygonObject* tempPolygonObj;
+    PolylineObject* tempPolylineObj;
+    RayObject* tempRayObj;
+    RectObject* tempRectObj;
+    SplineObject* tempSplineObj;
+    TextMultiObject* tempTextMultiObj;
+    TextSingleObject* tempTextSingleObj;
 
     //Helper functions
-    QToolButton*   createToolButton(std::string& iconName, std::string& txt);
-    QLineEdit*  createLineEdit(std::string& validatorType = std::string(), bool readOnly = false);
-    QComboBox*     createComboBox(bool disable = false);
+    QToolButton* createToolButton(std::string& iconName, std::string& txt);
+    QLineEdit* createLineEdit(std::string& validatorType = std::string(), bool readOnly = false);
+    QComboBox* createComboBox(bool disable = false);
     QFontComboBox* createFontComboBox(bool disable = false);
 
     int precisionAngle;
@@ -2183,11 +1962,11 @@ private:
     //====================
     //Selection
     //====================
-    QComboBox*   createComboBoxSelected();
+    QComboBox* createComboBoxSelected();
     QToolButton* createToolButtonQSelect();
     QToolButton* createToolButtonPickAdd();
 
-    QComboBox*   comboBoxSelected;
+    QComboBox* comboBoxSelected;
     QToolButton* toolButtonQSelect;
     QToolButton* toolButtonPickAdd;
 
@@ -2196,26 +1975,26 @@ private:
     //====================
     //General
     //====================
-    QGroupBox*   createGroupBoxGeneral();
-    QGroupBox*   groupBoxGeneral;
+    QGroupBox* createGroupBoxGeneral();
+    QGroupBox* groupBoxGeneral;
 
     QToolButton* toolButtonGeneralLayer;
     QToolButton* toolButtonGeneralColor;
     QToolButton* toolButtonGeneralLineType;
     QToolButton* toolButtonGeneralLineWeight;
 
-    QComboBox*   comboBoxGeneralLayer;
-    QComboBox*   comboBoxGeneralColor;
-    QComboBox*   comboBoxGeneralLineType;
-    QComboBox*   comboBoxGeneralLineWeight;
+    QComboBox* comboBoxGeneralLayer;
+    QComboBox* comboBoxGeneralColor;
+    QComboBox* comboBoxGeneralLineType;
+    QComboBox* comboBoxGeneralLineWeight;
 
     //====================
     //Geometry
     //====================
 
     //Arc
-    QGroupBox*   createGroupBoxGeometryArc();
-    QGroupBox*   groupBoxGeometryArc;
+    QGroupBox* createGroupBoxGeometryArc();
+    QGroupBox* groupBoxGeometryArc;
 
     QToolButton* toolButtonArcCenterX;
     QToolButton* toolButtonArcCenterY;
@@ -2245,16 +2024,16 @@ private:
     QLineEdit* lineEditArcChord;
     QLineEdit* lineEditArcIncAngle;
 
-    QGroupBox*   createGroupBoxMiscArc();
-    QGroupBox*   groupBoxMiscArc;
+    QGroupBox* createGroupBoxMiscArc();
+    QGroupBox* groupBoxMiscArc;
 
     QToolButton* toolButtonArcClockwise;
 
-    QComboBox*   comboBoxArcClockwise;
+    QComboBox* comboBoxArcClockwise;
 
     //Block
-    QGroupBox*   createGroupBoxGeometryBlock();
-    QGroupBox*   groupBoxGeometryBlock;
+    QGroupBox* createGroupBoxGeometryBlock();
+    QGroupBox* groupBoxGeometryBlock;
 
     QToolButton* toolButtonBlockX;
     QToolButton* toolButtonBlockY;
@@ -2269,56 +2048,56 @@ private:
     QLineEdit* lineEditCircle[6];
 
     //DimAligned
-    QGroupBox*   createGroupBoxGeometryDimAligned();
-    QGroupBox*   groupBoxGeometryDimAligned;
+    QGroupBox* createGroupBoxGeometryDimAligned();
+    QGroupBox* groupBoxGeometryDimAligned;
 
     //TODO: toolButtons and lineEdits for DimAligned
 
     //DimAngular
-    QGroupBox*   createGroupBoxGeometryDimAngular();
-    QGroupBox*   groupBoxGeometryDimAngular;
+    QGroupBox* createGroupBoxGeometryDimAngular();
+    QGroupBox* groupBoxGeometryDimAngular;
 
     //TODO: toolButtons and lineEdits for DimAngular
 
     //DimArcLength
-    QGroupBox*   createGroupBoxGeometryDimArcLength();
-    QGroupBox*   groupBoxGeometryDimArcLength;
+    QGroupBox* createGroupBoxGeometryDimArcLength();
+    QGroupBox* groupBoxGeometryDimArcLength;
 
     //TODO: toolButtons and lineEdits for DimArcLength
 
     //DimDiameter
-    QGroupBox*   createGroupBoxGeometryDimDiameter();
-    QGroupBox*   groupBoxGeometryDimDiameter;
+    QGroupBox* createGroupBoxGeometryDimDiameter();
+    QGroupBox* groupBoxGeometryDimDiameter;
 
     //TODO: toolButtons and lineEdits for DimDiameter
 
     //DimLeader
-    QGroupBox*   createGroupBoxGeometryDimLeader();
-    QGroupBox*   groupBoxGeometryDimLeader;
+    QGroupBox* createGroupBoxGeometryDimLeader();
+    QGroupBox* groupBoxGeometryDimLeader;
 
     //TODO: toolButtons and lineEdits for DimLeader
 
     //DimLinear
-    QGroupBox*   createGroupBoxGeometryDimLinear();
-    QGroupBox*   groupBoxGeometryDimLinear;
+    QGroupBox* createGroupBoxGeometryDimLinear();
+    QGroupBox* groupBoxGeometryDimLinear;
 
     //TODO: toolButtons and lineEdits for DimLinear
 
     //DimOrdinate
-    QGroupBox*   createGroupBoxGeometryDimOrdinate();
-    QGroupBox*   groupBoxGeometryDimOrdinate;
+    QGroupBox* createGroupBoxGeometryDimOrdinate();
+    QGroupBox* groupBoxGeometryDimOrdinate;
 
     //TODO: toolButtons and lineEdits for DimOrdinate
 
     //DimRadius
-    QGroupBox*   createGroupBoxGeometryDimRadius();
-    QGroupBox*   groupBoxGeometryDimRadius;
+    QGroupBox* createGroupBoxGeometryDimRadius();
+    QGroupBox* groupBoxGeometryDimRadius;
 
     //TODO: toolButtons and lineEdits for DimRadius
 
     //Ellipse
-    QGroupBox*   createGroupBoxGeometryEllipse();
-    QGroupBox*   groupBoxGeometryEllipse;
+    QGroupBox* createGroupBoxGeometryEllipse();
+    QGroupBox* groupBoxGeometryEllipse;
 
     QToolButton* toolButtonEllipseCenterX;
     QToolButton* toolButtonEllipseCenterY;
@@ -2335,8 +2114,8 @@ private:
     QLineEdit* lineEditEllipseDiameterMinor;
 
     //Image
-    QGroupBox*   createGroupBoxGeometryImage();
-    QGroupBox*   groupBoxGeometryImage;
+    QGroupBox* createGroupBoxGeometryImage();
+    QGroupBox* groupBoxGeometryImage;
 
     QToolButton* toolButtonImageX;
     QToolButton* toolButtonImageY;
@@ -2348,8 +2127,8 @@ private:
     QLineEdit* lineEditImageWidth;
     QLineEdit* lineEditImageHeight;
 
-    QGroupBox*   createGroupBoxMiscImage();
-    QGroupBox*   groupBoxMiscImage;
+    QGroupBox* createGroupBoxMiscImage();
+    QGroupBox* groupBoxMiscImage;
 
     QToolButton* toolButtonImageName;
     QToolButton* toolButtonImagePath;
@@ -2358,8 +2137,8 @@ private:
     QLineEdit* lineEditImagePath;
 
     //Infinite Line
-    QGroupBox*   createGroupBoxGeometryInfiniteLine();
-    QGroupBox*   groupBoxGeometryInfiniteLine;
+    QGroupBox* createGroupBoxGeometryInfiniteLine();
+    QGroupBox* groupBoxGeometryInfiniteLine;
 
     QToolButton* toolButtonInfiniteLineX1;
     QToolButton* toolButtonInfiniteLineY1;
@@ -2376,8 +2155,8 @@ private:
     QLineEdit* lineEditInfiniteLineVectorY;
 
     //Line
-    QGroupBox*   createGroupBoxGeometryLine();
-    QGroupBox*   groupBoxGeometryLine;
+    QGroupBox* createGroupBoxGeometryLine();
+    QGroupBox* groupBoxGeometryLine;
 
     QToolButton* toolButtonLineStartX;
     QToolButton* toolButtonLineStartY;
@@ -2398,8 +2177,8 @@ private:
     QLineEdit* lineEditLineLength;
 
     //Path
-    QGroupBox*   createGroupBoxGeometryPath();
-    QGroupBox*   groupBoxGeometryPath;
+    QGroupBox* createGroupBoxGeometryPath();
+    QGroupBox* groupBoxGeometryPath;
 
     QToolButton* toolButtonPathVertexNum;
     QToolButton* toolButtonPathVertexX;
@@ -2407,22 +2186,22 @@ private:
     QToolButton* toolButtonPathArea;
     QToolButton* toolButtonPathLength;
 
-    QComboBox*   comboBoxPathVertexNum;
+    QComboBox* comboBoxPathVertexNum;
     QLineEdit* lineEditPathVertexX;
     QLineEdit* lineEditPathVertexY;
     QLineEdit* lineEditPathArea;
     QLineEdit* lineEditPathLength;
 
-    QGroupBox*   createGroupBoxMiscPath();
-    QGroupBox*   groupBoxMiscPath;
+    QGroupBox* createGroupBoxMiscPath();
+    QGroupBox* groupBoxMiscPath;
 
     QToolButton* toolButtonPathClosed;
 
-    QComboBox*   comboBoxPathClosed;
+    QComboBox* comboBoxPathClosed;
 
     //Point
-    QGroupBox*   createGroupBoxGeometryPoint();
-    QGroupBox*   groupBoxGeometryPoint;
+    QGroupBox* createGroupBoxGeometryPoint();
+    QGroupBox* groupBoxGeometryPoint;
 
     QToolButton* toolButtonPointX;
     QToolButton* toolButtonPointY;
@@ -2431,8 +2210,8 @@ private:
     QLineEdit* lineEditPointY;
 
     //Polygon
-    QGroupBox*   createGroupBoxGeometryPolygon();
-    QGroupBox*   groupBoxGeometryPolygon;
+    QGroupBox* createGroupBoxGeometryPolygon();
+    QGroupBox* groupBoxGeometryPolygon;
 
     QToolButton* toolButtonPolygonCenterX;
     QToolButton* toolButtonPolygonCenterY;
@@ -2451,8 +2230,8 @@ private:
     QLineEdit* lineEditPolygonInteriorAngle;
 
     //Polyline
-    QGroupBox*   createGroupBoxGeometryPolyline();
-    QGroupBox*   groupBoxGeometryPolyline;
+    QGroupBox* createGroupBoxGeometryPolyline();
+    QGroupBox* groupBoxGeometryPolyline;
 
     QToolButton* toolButtonPolylineVertexNum;
     QToolButton* toolButtonPolylineVertexX;
@@ -2460,22 +2239,22 @@ private:
     QToolButton* toolButtonPolylineArea;
     QToolButton* toolButtonPolylineLength;
 
-    QComboBox*   comboBoxPolylineVertexNum;
+    QComboBox* comboBoxPolylineVertexNum;
     QLineEdit* lineEditPolylineVertexX;
     QLineEdit* lineEditPolylineVertexY;
     QLineEdit* lineEditPolylineArea;
     QLineEdit* lineEditPolylineLength;
 
-    QGroupBox*   createGroupBoxMiscPolyline();
-    QGroupBox*   groupBoxMiscPolyline;
+    QGroupBox* createGroupBoxMiscPolyline();
+    QGroupBox* groupBoxMiscPolyline;
 
     QToolButton* toolButtonPolylineClosed;
 
-    QComboBox*   comboBoxPolylineClosed;
+    QComboBox* comboBoxPolylineClosed;
 
     //Ray
-    QGroupBox*   createGroupBoxGeometryRay();
-    QGroupBox*   groupBoxGeometryRay;
+    QGroupBox* createGroupBoxGeometryRay();
+    QGroupBox* groupBoxGeometryRay;
 
     QToolButton* toolButtonRayX1;
     QToolButton* toolButtonRayY1;
@@ -2492,8 +2271,8 @@ private:
     QLineEdit* lineEditRayVectorY;
 
     //Rectangle
-    QGroupBox*   createGroupBoxGeometryRectangle();
-    QGroupBox*   groupBoxGeometryRectangle;
+    QGroupBox* createGroupBoxGeometryRectangle();
+    QGroupBox* groupBoxGeometryRectangle;
 
     QToolButton* toolButtonRectangleCorner1X;
     QToolButton* toolButtonRectangleCorner1Y;
@@ -2519,8 +2298,8 @@ private:
     QLineEdit* lineEditRectangleArea;
 
     //Text Multi
-    QGroupBox*   createGroupBoxGeometryTextMulti();
-    QGroupBox*   groupBoxGeometryTextMulti;
+    QGroupBox* createGroupBoxGeometryTextMulti();
+    QGroupBox* groupBoxGeometryTextMulti;
 
     QToolButton* toolButtonTextMultiX;
     QToolButton* toolButtonTextMultiY;
@@ -2529,8 +2308,8 @@ private:
     QLineEdit* lineEditTextMultiY;
 
     //Text Single
-    QGroupBox*   createGroupBoxTextTextSingle();
-    QGroupBox*   groupBoxTextTextSingle;
+    QGroupBox* createGroupBoxTextTextSingle();
+    QGroupBox* groupBoxTextTextSingle;
 
     QToolButton* toolButtonTextSingleContents;
     QToolButton* toolButtonTextSingleFont;
@@ -2538,14 +2317,14 @@ private:
     QToolButton* toolButtonTextSingleHeight;
     QToolButton* toolButtonTextSingleRotation;
 
-    QLineEdit*  lineEditTextSingleContents;
+    QLineEdit* lineEditTextSingleContents;
     QFontComboBox* comboBoxTextSingleFont;
-    QComboBox*     comboBoxTextSingleJustify;
-    QLineEdit*  lineEditTextSingleHeight;
-    QLineEdit*  lineEditTextSingleRotation;
+    QComboBox* comboBoxTextSingleJustify;
+    QLineEdit* lineEditTextSingleHeight;
+    QLineEdit* lineEditTextSingleRotation;
 
-    QGroupBox*   createGroupBoxGeometryTextSingle();
-    QGroupBox*   groupBoxGeometryTextSingle;
+    QGroupBox* createGroupBoxGeometryTextSingle();
+    QGroupBox* groupBoxGeometryTextSingle;
 
     QToolButton* toolButtonTextSingleX;
     QToolButton* toolButtonTextSingleY;
@@ -2553,14 +2332,14 @@ private:
     QLineEdit* lineEditTextSingleX;
     QLineEdit* lineEditTextSingleY;
 
-    QGroupBox*   createGroupBoxMiscTextSingle();
-    QGroupBox*   groupBoxMiscTextSingle;
+    QGroupBox* createGroupBoxMiscTextSingle();
+    QGroupBox* groupBoxMiscTextSingle;
 
     QToolButton* toolButtonTextSingleBackward;
     QToolButton* toolButtonTextSingleUpsideDown;
 
-    QComboBox*   comboBoxTextSingleBackward;
-    QComboBox*   comboBoxTextSingleUpsideDown;
+    QComboBox* comboBoxTextSingleBackward;
+    QComboBox* comboBoxTextSingleUpsideDown;
 };
 
 class SelectBox : public QRubberBand
@@ -2600,7 +2379,7 @@ class Settings_Dialog : public QDialog
     ~Settings_Dialog();
 
 private:
-    MainWindow*       mainWin;
+    MainWindow* mainWin;
 
     QTabWidget* tabWidget;
 
@@ -2900,7 +2679,7 @@ class StatusBarButton : public QToolButton
     void disableReal();
 
     MainWindow* mainWin;
-    StatusBar*  statusbar;
+    StatusBar* statusbar;
 };
 
 class StatusBar : public QStatusBar
@@ -2928,7 +2707,7 @@ class UndoableAddCommand : public QUndoCommand
     void redo();
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
 };
 
 class UndoableDeleteCommand : public QUndoCommand
@@ -2939,7 +2718,7 @@ class UndoableDeleteCommand : public QUndoCommand
     void redo();
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
 };
 
 class UndoableMoveCommand : public QUndoCommand
@@ -2950,7 +2729,7 @@ class UndoableMoveCommand : public QUndoCommand
     void redo();
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
     double dx;
     double dy;
 };
@@ -2964,7 +2743,7 @@ class UndoableRotateCommand : public QUndoCommand
     void rotate(double x, double y, double rot);
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
     double pivotX;
     double pivotY;
     double angle;
@@ -2978,7 +2757,7 @@ class UndoableScaleCommand : public QUndoCommand
     void redo();
 
     BaseObject* object;
-    View*       gview;
+    View* gview;
     double dx;
     double dy;
     double factor;
@@ -2999,7 +2778,7 @@ class UndoableNavCommand : public QUndoCommand
     EmbVector fromCenter;
     EmbVector toCenter;
     bool done;
-    View*   gview;
+    View* gview;
 };
 
 class UndoableGripEditCommand : public QUndoCommand
@@ -3060,7 +2839,7 @@ private:
     int iconSize;
 
     QUndoGroup* undoGroup;
-    QUndoView*  undoView;
+    QUndoView* undoView;
 };
 
 class View : public QGraphicsView
@@ -3076,7 +2855,6 @@ class View : public QGraphicsView
     void centerAt(EmbVector& centerPoint);
     EmbVector center() { return mapToScene(rect().center()); }
 
-    QUndoStack* getUndoStack() { return undoStack; }
     void addObject(BaseObject* obj);
     void deleteObject(BaseObject* obj);
     void vulcanizeObject(BaseObject* obj);
@@ -3086,12 +2864,7 @@ class View : public QGraphicsView
     void zoomWindow();
     void zoomSelected();
     void zoomExtents();
-    void panRealTime();
-    void panPoint();
-    void panLeft();
-    void panRight();
-    void panUp();
-    void panDown();
+
     void selectAll();
     void selectionChanged();
     void clearSelection();

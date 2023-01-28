@@ -40,7 +40,7 @@ ImageObject::~ImageObject()
 void ImageObject::init(double x, double y, double w, double h, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_IMAGE);
+    setData(OBJ_NAME, "Image");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

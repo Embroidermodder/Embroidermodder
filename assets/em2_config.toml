@@ -51,6 +51,16 @@ ui_files = [
     "ui/settings_editor.toml"
 ]
 
+#    fileMenu     = new QMenu(tr("&File"),     this);
+#    editMenu     = new QMenu(tr("&Edit"),     this);
+#    viewMenu     = new QMenu(tr("&View"),     this);
+#    settingsMenu = new QMenu(tr("&Settings"), this);
+#    windowMenu   = new QMenu(tr("&Window"),   this);
+#    helpMenu     = new QMenu(tr("&Help"),     this);
+#    //SubMenus
+#    recentMenu   = new QMenu(tr("Open &Recent"), this);
+#    zoomMenu     = new QMenu(tr("&Zoom"),        this);
+#    panMenu      = new QMenu(tr("&Pan"),         this);
 menu_layout = [
     ["File", "file_menu"],
     ["Open Recent", "open_recent_menu"],
@@ -59,7 +69,10 @@ menu_layout = [
     ["Zoom", "zoom_menu"],
     ["Pan", "pan_menu"],
     ["Tools", "tools_menu"],
-    ["Draw", "draw_menu"]
+    ["Draw", "draw_menu"],
+    ["Settings", "settings_menu"],
+    ["Help", "help_menu"],
+    ["Window", "window_menu"]
 ]
 
 file_menu = [
@@ -101,20 +114,47 @@ view_menu = [
     ["Night", "night"]
 ]
 
+settings_menu = [
+    ["Settings...", "settingsdialog"]
+]
+
 zoom_menu = [
-    ["Zoom Realtime", "zoom realtime"],
+    ["Zoom Real Time", "zoom realtime"],
+    ["Zoom Previous", "zoom previous"],
+    ["---", "---"],
+    ["Zoom Window", "zoom window"],
+    ["Zoom Dynamic", "zoom dynamic"],
+    ["Zoom Scale", "zoom scale"],
+    ["Zoom Center", "zoom center"],
     ["---", "---"],
     ["Zoom In", "zoom in"],
     ["Zoom Out", "zoom out"],
-    ["Zoom Extents", "zoom extents"],
-    ["---", "---"]
+    ["---", "---"],
+    ["Zoom Selected", "zoom selected"],
+    ["Zoom All", "zoom all"],
+    ["Zoom Extents", "zoom extents"]
 ]
 
 pan_menu = [
+    ["Pan Real Time", "pan realtime"],
+    ["Pan Point", "pan point"],
+    ["---", "---"],
     ["Pan Left", "pan left"],
     ["Pan Right", "pan right"],
     ["Pan Up", "pan up"],
     ["Pan Down", "pan down"]
+]
+
+help_menu = [
+    ["Help", "help"],
+    ["---", "---"],
+    ["Changelog", "changelog"],
+    ["---", "---"],
+    ["Tip of the Day", "tip-of-the-day"],
+    ["---", "---"],
+    ["About", "about"],
+    ["---", "---"],
+    ["What's This?", "whatsthis"]
 ]
 
 draw_menu = [
@@ -134,13 +174,38 @@ tools_menu = [
     ["Distance", "distance"]
 ]
 
+window_menu = [
+    ["Close", "window close"],
+    ["Close All", "window closeall"],
+    ["---", "---"],
+    ["Cascade", "window cascade"],
+    ["Tile", "window tile"],
+    ["---", "---"],
+    ["Next", "window next"],
+    ["Previous", "window previous"],
+    ["---", "---"]
+]
+
+#    toolbarFile       = addToolBar(tr("File"));
+#    toolbarEdit       = addToolBar(tr("Edit"));
+#    toolbarView       = addToolBar(tr("View"));
+#    toolbarZoom       = addToolBar(tr("Zoom"));
+#    toolbarPan        = addToolBar(tr("Pan"));
+#    toolbarIcon       = addToolBar(tr("Icon"));
+#    toolbarHelp       = addToolBar(tr("Help"));
+#    toolbarLayer      = addToolBar(tr("Layer"));
+#    toolbarProperties = addToolBar(tr("Properties"));
+#    toolbarText       = addToolBar(tr("Text"));
+#    toolbarPrompt     = addToolBar(tr("Command Prompt"));
 toolbar_layout = [
     ["File", "file_toolbar"],
     ["Edit", "edit_toolbar"],
     ["View", "view_toolbar"],
-    ["Zoom", "zoom_toolbar"],    
-    ["Draw", "draw_toolbar"]
+    ["Zoom", "zoom_toolbar"],
+    ["Draw", "draw_toolbar"],
+    ["Inquiry", "inquiry_toolbar"]
 ]
+
 
 file_toolbar = [
     "new",
@@ -156,11 +221,22 @@ edit_toolbar = [
 ]
 
 view_toolbar = [
-    "day"
+    "day",
+    "night"
 ]
 
 zoom_toolbar = [
-    "zoomin"
+    "zoomwindow",
+    "zoomdynamic",
+    "zoomscale",
+    "---",
+    "zoomcenter",
+    "zoomin",
+    "zoomout",
+    "---",
+    "zoomselected",
+    "zoomall",
+    "zoomextents"
 ]
 
 draw_toolbar = [
@@ -172,6 +248,35 @@ draw_toolbar = [
 inquiry_toolbar = [
     "details",
     "distance"
+]
+
+pan_toolbar = [
+    "panrealtime",
+    "panpoint",
+    "---",
+    "panleft",
+    "panright",
+    "panup",
+    "pandown"
+]
+
+icon_toolbar = [
+    "icon16",
+    "icon24",
+    "icon32",
+    "icon48",
+    "icon64",
+    "icon128"
+]
+
+help_toolbar = [
+    "help",
+    "---",
+    "changelog",
+    "---",
+    "about",
+    "---",
+    "whatsthis"
 ]
 
 action_list = []

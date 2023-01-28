@@ -41,7 +41,7 @@ PolylineObject::~PolylineObject()
 void PolylineObject::init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_POLYLINE);
+    setData(OBJ_NAME, "Polyline");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

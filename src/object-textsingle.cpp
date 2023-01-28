@@ -45,7 +45,7 @@ TextSingleObject::~TextSingleObject()
 void TextSingleObject::init(const std::string& str, double x, double y, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_TEXTSINGLE);
+    setData(OBJ_NAME, "Single Line Text");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

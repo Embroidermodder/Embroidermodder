@@ -34,7 +34,7 @@ bool show_about_dialog = false;
 bool show_editor = false;
 bool show_rulers = true;
 bool show_grid = true;
-int language = LANGUAGE_DEFAULT;
+std::string language = "default";
 int icon_size = 16;
 ImFont *font;
 int pattern_index = 0;
@@ -43,7 +43,7 @@ std::string current_fname = "Untitled.dst";
 std::string assets_dir = "../assets/";
 std::vector<Action> action_list;
 EmbPattern* pattern_list[MAX_PATTERNS];
-string_matrix translations[N_LANGUAGES];
+string_matrix translation_table;
 std::unordered_map<std::string, GLuint> textures;
 std::unordered_map<std::string, string_matrix> menu_layout;
 std::string menu_action = "";
@@ -132,7 +132,8 @@ load_menu(std::string menu_label)
 void
 load_toolbar(std::vector<std::string> toolbar)
 {
-    for (int i=0; i<toolbar.size(); i++) {
+    int length = toolbar.size();
+    for (int i=0; i<length; i++) {
         std::string icon = toolbar[i];
         if (icon == "---") {
             ImGui::Separator();
@@ -142,7 +143,7 @@ load_toolbar(std::vector<std::string> toolbar)
     	if (ImGui::ImageButton((void*)(intptr_t)textures[icon], size)) {
             menu_action = icon;
         }
-        if (i+1<toolbar.size()) {
+        if (i+1 < length) {
             ImGui::SameLine();
         }
     }
@@ -294,24 +295,6 @@ main(int argc, char* argv[])
 }
 
 #if 0
-/*
- *  Embroidermodder 2.
- *
- *  ------------------------------------------------------------
- *
- *  Copyright 2013-2022 The Embroidermodder Team
- *  Embroidermodder 2 is Open Source Software.
- *  See LICENSE for licensing terms.
- *
- *  ------------------------------------------------------------
- *
- *  Use Python's PEP7 style guide.
- *      https://peps.python.org/pep-0007/
- */
-
-#include "embroidermodder.h"
-#undef main
-
 void loadConfiguration(void);
 
 const char* _appName_ = "Embroidermodder";
@@ -324,8 +307,6 @@ int generated_widgets = 0;
 std::vector<int> selected;
 int testing = 0;
 int debug_mode = 0;
-int language = 0;
-std::vector<std::vector<std::vector<std::string>>> translation_tables;
 EmbColor palette[256];
 std::string assets_directory = ".";
 std::string os_seperator = "/";
@@ -358,90 +339,9 @@ int toolbar_view_entries[] = {
     -2
 };
 
-int file_menu_data[] = {
-    -1,
-    ACTION_save,
-    ACTION_saveas,
-    -1,
-    ACTION_print,
-    -1,
-    ACTION_windowclose,
-    -1,
-    ACTION_designdetails,
-    -1,
-    ACTION_exit,
-    -2
-};
-
-int edit_menu_data[] = {
-    ACTION_undo,
-    ACTION_redo,
-    -1,
-    ACTION_cut,
-    ACTION_copy,
-    ACTION_paste,
-    -1,
-    -2
-};
-
-int view_menu_data[] = {
-    -1,
-    ACTION_day,
-    ACTION_night,
-    -1,
-    -2
-};
-
-int settings_menu_data[] = {
-    ACTION_settingsdialog,
-    -1,
-    -2
-};
-
-int zoom_menu_data[] = {
-    ACTION_zoomrealtime,
-    ACTION_zoomprevious,
-    -1,
-    ACTION_zoomwindow,
-    ACTION_zoomdynamic,
-    ACTION_zoomscale,
-    ACTION_zoomcenter,
-    -1,
-    ACTION_zoomin,
-    ACTION_zoomout,
-    -1,
-    ACTION_zoomselected,
-    ACTION_zoomall,
-    ACTION_zoomextents,
-    -2
-};
-
-int pan_menu_data[] = {
-    ACTION_panrealtime,
-    ACTION_panpoint,
-    -1,
-    ACTION_panleft,
-    ACTION_panright,
-    ACTION_panup,
-    ACTION_pandown,
-    -2
-};
-
-int help_menu_data[] = {
-    ACTION_help,
-    -1,
-    ACTION_changelog,
-    -1,
-    ACTION_tipoftheday,
-    -1,
-    ACTION_about,
-    -1,
-    ACTION_whatsthis,
-    -2
-};
-
+/*
 Action action_list[] = {
-    {ACTION_donothing, "donothing", "&Do Nothing", "Does Nothing"},
+    {"donothing", "&Do Nothing", "Does Nothing"},
     {ACTION_windowcascade, "windowcascade", "&Cascade", "Cascade the windows."},
     {ACTION_windowtile, "windowtile", "&Tile", "Tile the windows."},
     {ACTION_windowclose, "windowclose", "Cl&ose", "Close the active window."},
@@ -522,6 +422,7 @@ Action action_list[] = {
     {ACTION_night, "night", "&Night", "Updates the current view using night vision settings."},
     {-1, "END", "END", "END"}
 };
+*/
 
 std::vector<LineEdit> geometry_circle_line_edits = {
     {
@@ -768,21 +669,6 @@ load_asset(std::string fname, char *mode)
         << " could not open file " << asset << " in mode." << std::endl;
     }
     return f;
-}
-
-std::string
-translate(std::string string)
-{
-    for (size_t i=0; i<translation_tables[language].size(); i++) {
-        if (translation_tables[language][i][0] == string) {
-            return translation_tables[language][i][1];
-        }
-    }
-    return string;
-}
-
-Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
-{
 }
 
 bool Application::event(QEvent *event)

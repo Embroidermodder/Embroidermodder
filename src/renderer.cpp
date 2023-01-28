@@ -27,6 +27,138 @@
 int
 render_vector_graphic(std::vector<std::string> description)
 {
+    #if 0
+    
+        if (p->circles) {
+            for (int i=0; i<p->circles->count; i++) {
+                EmbCircle c = p->circles->circle[i];
+                EmbColor thisColor = c.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                nativeAddCircle(c.center.x, c.center.y, c.radius, false, OBJ_RUBBER_OFF); //TODO: fill
+            }
+        }
+        if (p->ellipses) {
+            for (int i=0; i<p->ellipses->count; i++) {
+                EmbEllipse e = p->ellipses->ellipse[i];
+                EmbColor thisColor = e.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                nativeAddEllipse(e.center.x, e.center.y, e.radius.x, e.radius.y, 0, false, OBJ_RUBBER_OFF);
+                // TODO: rotation and fill
+            }
+        }
+        if (p->lines) {
+            for (int i=0; i<p->lines->count; i++) {
+                EmbLine li = p->lines->line[i];
+                EmbColor thisColor = li.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                nativeAddLine(li.start.x, li.start.y, li.end.x, li.end.y, 0, OBJ_RUBBER_OFF);
+                // TODO: rotation
+            }
+        }
+        if (p->paths) {
+            //TODO: This is unfinished. It needs more work
+            for (int i=0; i<p->paths->count; i++) {
+                QPainterPath pathPath;
+                EmbArray *curPointList = p->paths->path[i].pointList;
+                EmbColor thisColor = p->paths->path[i].color;
+                if (curPointList) {
+                    EmbPoint pp = curPointList->point[0];
+                    pathPath.moveTo(pp.position.x, -pp.position.y);
+                    //NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                }
+                for (int j=0; j<curPointList->count; j++) {
+                    EmbPoint pp = curPointList->point[j];
+                    pathPath.lineTo(pp.position.x, -pp.position.y);
+                    // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+                }
+
+                QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                loadPen.setWidthF(0.35);
+                loadPen.setCapStyle(Qt::RoundCap);
+                loadPen.setJoinStyle(Qt::RoundJoin);
+
+                PathObject* obj = new PathObject(0,0, pathPath, loadPen.color().rgb());
+                obj->setObjectRubberMode(OBJ_RUBBER_OFF);
+                gscene->addItem(obj);
+            }
+        }
+        if (p->points) {
+            for (int i=0; i<p->points->count; i++) {
+                EmbPoint po = p->points->point[i];
+                EmbColor thisColor = po.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                nativeAddPoint(po.position.x, po.position.y);
+            }
+        }
+        if (p->polygons) {
+            for (int i=0; i<p->polygons->count; i++) {
+                QPainterPath polygonPath;
+                bool firstPoint = false;
+                double startX = 0, startY = 0;
+                double x = 0, y = 0;
+                EmbArray *curPointList = p->polygons->polygon[i].pointList;
+                EmbColor thisColor = p->polygons->polygon[i].color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                for (int j=0; j<curPointList->count; j++) {
+                    EmbPoint pp = curPointList->point[j];
+                    x = pp.position.x;
+                    y = -pp.position.y;
+                    // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                    if (firstPoint) { polygonPath.lineTo(x,y); }
+                    else           { polygonPath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
+                }
+
+                polygonPath.translate(-startX, -startY);
+                nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
+            }
+        }
+        /* NOTE: Polylines should only contain NORMAL stitches. */
+        if (p->polylines) {
+            for (int i=0; i<p->polylines->count; i++) {
+                EmbPolyline pl = p->polylines->polyline[i];
+                QPainterPath polylinePath;
+                bool firstPoint = false;
+                double startX = 0, startY = 0;
+                double x = 0, y = 0;
+                EmbArray *curPointList = pl.pointList;
+                EmbColor thisColor = pl.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                for (int j=0; j<curPointList->count; j++) {
+                    EmbPoint pp = curPointList->point[j];
+                    x = pp.position.x;
+                    y = -pp.position.y;
+                    // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
+
+                    if (firstPoint) {
+                        polylinePath.lineTo(x,y);
+                    }
+                    else {
+                        polylinePath.moveTo(x,y);
+                        firstPoint = true;
+                        startX = x;
+                        startY = y;
+                    }
+                }
+
+                polylinePath.translate(-startX, -startY);
+                nativeAddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
+            }
+        }
+        if (p->rects) {
+            for (int i=0; i<p->rects->count; i++) {
+                EmbRect r = p->rects->rect[i];
+                EmbColor thisColor = r.color;
+                setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+                //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+                nativeAddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+            }
+        }
+    #endif
     return 0;
 }
 

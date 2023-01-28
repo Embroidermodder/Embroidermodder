@@ -1034,9 +1034,9 @@ void View::updateMouseCoords(int x, int y)
 {
     viewMousePoint = EmbVector(x, y);
     sceneMousePoint = mapToScene(viewMousePoint);
-    gscene->setProperty(SCENE_QSNAP_POINT, sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
-    gscene->setProperty(SCENE_MOUSE_POINT, sceneMousePoint);
-    gscene->setProperty(VIEW_MOUSE_POINT, viewMousePoint);
+    gscene->setProperty("SCENE_QSNAP_POINT", sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
+    gscene->setProperty("SCENE_MOUSE_POINT", sceneMousePoint);
+    gscene->setProperty("VIEW_MOUSE_POINT", viewMousePoint);
     mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
@@ -1147,16 +1147,6 @@ void View::zoomExtents()
     }
     fitInView(extents, Qt::KeepAspectRatio);
     QApplication::restoreOverrideCursor();
-}
-
-void View::panRealTime()
-{
-    panningRealTimeActive = true;
-}
-
-void View::panPoint()
-{
-    panningPointActive = true;
 }
 
 void View::panLeft()
@@ -2167,7 +2157,7 @@ void View::setCrossHairColor(unsigned int color)
 void View::setBackgroundColor(unsigned int color)
 {
     setBackgroundBrush(QColor(color));
-    gscene->setProperty(VIEW_COLOR_BACKGROUND, color);
+    gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
     if (gscene) gscene->update();
 }
 

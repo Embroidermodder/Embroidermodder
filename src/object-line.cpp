@@ -163,7 +163,7 @@ LineObject::~LineObject()
 void LineObject::init(double x1, double y1, double x2, double y2, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
-    setData(OBJ_NAME, OBJ_NAME_LINE);
+    setData(OBJ_NAME, "Line");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.

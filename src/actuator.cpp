@@ -22,6 +22,7 @@
 
 /* The actuator changes the program state via these global variables.
  */
+double output;
 int settings_general_icon_size;
 bool settings_general_mdi_bg_use_logo;
 bool settings_general_mdi_bg_use_texture;
@@ -133,12 +134,18 @@ int undo_history_position = 0;
 /* Function Prototypes.
  */
 void about_action(std::vector<std::string> args);
+void day_vision_action(std::vector<std::string> args);
 void debug_action(std::vector<std::string> args);
 void error_action(std::vector<std::string> args);
+void icon_action(std::vector<std::string> args);
+void new_file_action(std::vector<std::string> args);
+void night_vision_action(std::vector<std::string> args);
+void pan_action(std::vector<std::string> args);
+void zoom_action(std::vector<std::string> args);
 
 /* File-scope variables.
  */
-static std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
+std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
     {"about", about_action},
     {"debug", debug_action},
     {"error", error_action},
@@ -153,7 +160,7 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"disableMoveRapidFire", error_action},
     {"initCommand", error_action},
     {"endCommand", error_action},
-    {"newFile", error_action},
+    {"new", new_file_action},
     {"openFile", error_action},
     {"exit", error_action},
     {"help", error_action},
@@ -170,22 +177,12 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"isInt", error_action},
     {"undo", error_action},
     {"redo", error_action},
-    {"icon16", error_action},
-    {"icon24", error_action},
-    {"icon32", error_action},
-    {"icon48", error_action},
-    {"icon64", error_action},
-    {"icon128", error_action},
-    {"panLeft", error_action},
-    {"panRight", error_action},
-    {"panUp", error_action},
-    {"panDown", error_action},
-    {"zoomIn", error_action},
-    {"zoomOut", error_action},
-    {"zoomExtents", error_action},
+    {"icon", icon_action},
+    {"pan", pan_action},
+    {"zoom", zoom_action},
     {"printArea", error_action},
-    {"dayVision", error_action},
-    {"nightVision", error_action},
+    {"dayVision", day_vision_action},
+    {"nightVision", night_vision_action},
     {"setBackgroundColor", error_action},
     {"setCrossHairColor", error_action},
     {"setGridColor", error_action},
@@ -329,16 +326,17 @@ actuator(std::string command_line)
      */
     debug_message(command_line);
 
-    if (command == "about") {
-        return;
+    std::unordered_map<std::string, void (*)(std::vector<std::string>)> ::const_iterator function = function_table.find(command);
+    if (function != function_table.end()) {
+        function->second(args);
     }
-    if (command == "circle") {
-        return;
+    else {
+        debug_message("ERROR: action not in function_table.");
     }
+}
+
+#if 0
     if (command == "close") {
-        return;
-    }
-    if (command == "copy") {
         return;
     }
     if (command == "cut") {
@@ -355,30 +353,6 @@ actuator(std::string command_line)
     }
     if (command == "export") {
         embPattern_writeAuto(pattern_list[n_patterns], current_fname.c_str());
-        return;
-    }
-    if (command == "icon16") {
-        icon_size = 16;
-        return;
-    }
-    if (command == "icon24") {
-        icon_size = 24;
-        return;
-    }
-    if (command == "icon32") {
-        icon_size = 32;
-        return;
-    }
-    if (command == "icon48") {
-        icon_size = 48;
-        return;
-    }
-    if (command == "icon64") {
-        icon_size = 64;
-        return;
-    }
-    if (command == "icon128") {
-        icon_size = 128;
         return;
     }
     if (command == "open") {
@@ -399,26 +373,6 @@ actuator(std::string command_line)
         return;
     }
     if (command == "paste") {
-        return;
-    }
-    if (command == "pan") {
-        if (args[1] == "left") {
-            return;
-        }
-        if (args[1] == "right") {
-            return;
-        }
-        if (command == "pan up") {
-            return;
-        }
-        if (command == "pan down") {
-            return;
-        }
-    }
-    if (command == "new") {
-        pattern_list[n_patterns] = embPattern_create();
-        pattern_index = n_patterns;
-        n_patterns++;
         return;
     }
     if (command == "night") {
@@ -455,38 +409,12 @@ actuator(std::string command_line)
         running = false;
         return;
     }
-    if (command == "zoom") {
-        if (args.size() == 1) {
-            return;
-        }
-        if (args[1] == "extents") {
-
-        }
-        if (args[1] == "in") {
-
-        }
-        if (args[1] == "out") {
-
-        }
-        if (args[1] == "realtime") {
-
-        }
-        return;
-    }
-}
-
-
-#if 0
     if (command == "donothing") {
         debug_message("This action intentionally does nothing.");
         return 0;
     }
     if (command == "exit") {
         exit();
-        return 0;
-    }
-    if (command == "new") {
-        newFile();
         return 0;
     }
     if (command == "open") {
@@ -528,24 +456,6 @@ actuator(std::string command_line)
     if (command == "windowprevious") {
         nativeWindowPrevious();
         return 0;
-    }
-    if (command == "panrealtime") {
-        panrealtime();
-    }
-    if (command == "panpoint") {
-        panpoint();
-    }
-    if (command == "panleft") {
-        panLeft();
-    }
-    if (command == "panright") {
-        panRight();
-    }
-    if (command == "panup") {
-        panUp();
-    }
-    if (command == "pandown") {
-        panDown();
     }
     if (command == "platform") {
         std::cout << nativePlatformString().toStdString() << std::endl;
@@ -623,54 +533,6 @@ actuator(std::string command_line)
         setTextOverline(bool);
         return 0;
     }
-    if (command == "zoomprevious") {
-        zoomPrevious();
-        return 0;
-    }
-    if (icon == "zoomwindow") {
-        zoomWindow();
-        return 0;
-    }
-    if (icon == "zoomdynamic") {
-        zoomDynamic();
-        return 0;
-    }
-    if (icon == "zoomscale") {
-        zoomScale();
-        return 0;
-    }
-    if (command == "zoomrealtime") {
-        zoomRealtime();
-        return 0;
-    }
-    if ((command == "zoomcenter")) {
-        zoomCenter();
-        return 0;
-    }
-    if (command == "zoomin") {
-        zoomIn();
-        return 0;
-    }
-    if (command == "zoomout") {
-        zoomOut();
-        return 0;
-    }
-    if (command == "zoomselected") {
-        zoomSelected();
-        return 0;
-    }
-    if (command == "zoomall") {
-        zoomAll();
-        return 0;
-    }
-    if (command == "zoomextents") {
-        zoomExtents();
-        return 0;
-    }
-    if (command == "night") {
-        nightVision();
-        return 0;
-    }
     if (command == "numSelected") {
         nativeNumSelected());
     }
@@ -699,97 +561,7 @@ actuator(std::string command_line)
         nativeMouseY();
     }
 
-    nativeAlert(const std::string& txt);
-    nativeBlinkPrompt();
-    nativeSetPromptPrefix(const std::string& txt);
 
-    nativeMessageBox(const std::string& type, const std::string& title, const std::string& text);
-
-    nativePrintArea (double x, double y, double w, double h);
-
-    nativeSetBackgroundColor     (unsigned char r, unsigned char g, unsigned char b);
-    nativeSetCrossHairColor      (unsigned char r, unsigned char g, unsigned char b);
-    nativeSetGridColor           (unsigned char r, unsigned char g, unsigned char b);
-
-    std::string nativeTextFont();
-    double   nativeTextSize();
-    double   nativeTextAngle();
-    bool   nativeTextBold();
-    bool   nativeTextItalic();
-    bool   nativeTextUnderline();
-    bool   nativeTextStrikeOut();
-    bool   nativeTextOverline();
-
-    nativeSetTextFont(const std::string& str);
-    nativeSetTextSize(double num);
-    nativeSetTextAngle(double num);
-    nativeSetTextBold(bool val);
-    nativeSetTextItalic(bool val);
-    nativeSetTextUnderline       (bool val);
-    nativeSetTextStrikeOut       (bool val);
-    nativeSetTextOverline        (bool val);
-
-    nativePreviewOn              (int clone, int mode, double x, double y, double data);
-    nativePreviewOff();
-
-    nativeVulcanize();
-    nativeClearRubber();
-    bool nativeAllowRubber();
-    nativeSpareRubber            (qint64 id);
-    //TODO: nativeSetRubberFilter(qint64 id); //TODO: This is so more than 1 rubber object can exist at one time without updating all rubber objects at once
-    nativeSetRubberMode          (int mode);
-    nativeSetRubberPoint         (const std::string& key, double x, double y);
-    nativeSetRubberText          (const std::string& key, const std::string& txt);
-
-    nativeAddTextMulti           (const std::string& str, double x, double y, double rot, bool fill, int rubberMode);
-    nativeAddTextSingle          (const std::string& str, double x, double y, double rot, bool fill, int rubberMode);
-
-    nativeAddInfiniteLine (double x1, double y1, double x2, double y2, double rot);
-    nativeAddRay (double x1, double y1, double x2, double y2, double rot);
-    nativeAddLine (double x1, double y1, double x2, double y2, double rot, int rubberMode);
-    nativeAddTriangle (double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill);
-    nativeAddRectangle (double x, double y, double w, double h, double rot, bool fill, int rubberMode);
-    nativeAddRoundedRectangle (double x, double y, double w, double h, double rad, double rot, bool fill);
-    nativeAddArc (double startX, double startY, double midX, double midY, double endX, double endY, int rubberMode);
-    nativeAddCircle (double centerX, double centerY, double radius, bool fill, int rubberMode);
-    nativeAddSlot (double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode);
-    nativeAddEllipse (double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode);
-    nativeAddPoint (double x, double y);
-    nativeAddRegularPolygon (double centerX, double centerY, quint16 sides, unsigned char mode, double rad, double rot, bool fill);
-    nativeAddPolygon (double startX, double startY, const QPainterPath& p, int rubberMode);
-    nativeAddPolyline (double startX, double startY, const QPainterPath& p, int rubberMode);
-    nativeAddPath (double startX, double startY, const QPainterPath& p, int rubberMode);
-    nativeAddHorizontalDimension (double x1, double y1, double x2, double y2, double legHeight);
-    nativeAddVerticalDimension (double x1, double y1, double x2, double y2, double legHeight);
-    nativeAddImage               (const std::string& img, double x, double y, double w, double h, double rot);
-
-    nativeAddDimLeader (double x1, double y1, double x2, double y2, double rot, int rubberMode);
-
-    nativeSetCursorShape(const std::string& str);
-    double nativeCalculateAngle(double x1, double y1, double x2, double y2);
-    double nativeCalculateDistance(double x1, double y1, double x2, double y2);
-    double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2);
-
-    if (!strcmp(command, "number selected")) {
-        int x = nativeNumSelected();
-        printf("%d\n", x);
-    }
-
-    nativeSelectAll();
-    nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
-    nativeClearSelection();
-    nativeDeleteSelected();
-    nativeCopySelected(double x, double y);
-    nativePasteSelected(double x, double y);
-    nativeMoveSelected(double dx, double dy);
-    nativeScaleSelected(double x, double y, double factor);
-    nativeRotateSelected(double x, double y, double rot);
-    nativeMirrorSelected(double x1, double y1, double x2, double y2);
-
-    double nativeQSnapX();
-    double nativeQSnapY();
-    double nativeMouseX();
-    double nativeMouseY();
 
     "file"
     "edit"
@@ -1199,9 +971,9 @@ actuator(std::string command_line)
         if ((command =="window")) {
             debug_message("zoom_window()");
             /*
-            gview = active_view();
-            if (gview) {
-                gview->zoom_window();
+            active_view = active_view();
+            if (active_view) {
+                active_view->zoom_window();
             } */
 
             zoom_window_active = 1;
@@ -1363,23 +1135,23 @@ void
 Debug()
 {
     if (args.size() < 1) {
-        return engine->throwError("debug() requires one argument");
+        debug_message("debug() requires one argument");
     }
-    if (!token[0).isString())
+    if (!args[0).isString())
         return debug_message("debug(): first argument is not a string");
 
-    debug_message("%s", qPrintable(token[0).toString();
+    debug_message("%s", qPrintable(args[0).toString();
 }
 
 void
 Error()
 {
-    if (args.size() < 2)    return engine->throwError("error() requires two arguments");
-    if (!token[0).isString()) return debug_message("error(): first argument is not a string");
-    if (!token[1).isString()) return debug_message("error(): second argument is not a string");
+    if (args.size() < 2)    debug_message("error() requires two arguments");
+    if (!args[0).isString()) return debug_message("error(): first argument is not a string");
+    if (!args[1).isString()) return debug_message("error(): second argument is not a string");
 
-    std::string strCmd = token[0).toString();
-    std::string strErr = token[1).toString();
+    std::string strCmd = args[0).toString();
+    std::string strErr = args[1).toString();
 
     nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
     nativeAppendPromptHistory(std::string());
@@ -1389,12 +1161,12 @@ Error()
 void
 Todo()
 {
-    if (args.size() < 2)    return engine->throwError("todo() requires two arguments");
-    if (!token[0).isString()) return debug_message("todo(): first argument is not a string");
-    if (!token[1).isString()) return debug_message("todo(): second argument is not a string");
+    if (args.size() < 2)    debug_message("todo() requires two arguments");
+    if (!args[0).isString()) return debug_message("todo(): first argument is not a string");
+    if (!args[1).isString()) return debug_message("todo(): second argument is not a string");
 
-    std::string strCmd  = token[0).toString();
-    std::string strTodo = token[1).toString();
+    std::string strCmd  = args[0).toString();
+    std::string strTodo = args[1).toString();
 
     nativeAlert("TODO: (" + strCmd + ") " + strTodo);
     nativeEndCommand();
@@ -1403,10 +1175,10 @@ Todo()
 void
 Alert()
 {
-    if (args.size() < 1)    return engine->throwError("alert() requires one argument");
-    if (!token[0).isString()) return debug_message("alert(): first argument is not a string");
+    if (args.size() < 1)    debug_message("alert() requires one argument");
+    if (!args[0).isString()) return debug_message("alert(): first argument is not a string");
 
-    nativeAlert(token[0).toString());
+    nativeAlert(args[0).toString());
 }
 
     nativeBlinkPrompt();
@@ -1414,10 +1186,10 @@ Alert()
 void
 SetPromptPrefix()
 {
-    if (args.size() < 1)    return engine->throwError("setPromptPrefix() requires one argument");
-    if (!token[0).isString()) return debug_message("setPromptPrefix(): first argument is not a string");
+    if (args.size() < 1)    debug_message("setPromptPrefix() requires one argument");
+    if (!args[0).isString()) return debug_message("setPromptPrefix(): first argument is not a string");
 
-    nativeSetPromptPrefix(token[0).toString());
+    nativeSetPromptPrefix(args[0).toString());
 }
 
 void
@@ -1430,11 +1202,11 @@ AppendPromptHistory()
     }
     else if (args == 1)
     {
-        nativeAppendPromptHistory(token[0).toString());
+        nativeAppendPromptHistory(args[0).toString());
     }
     else
     {
-        return engine->throwError("appendPromptHistory() requires one or zero arguments");
+        debug_message("appendPromptHistory() requires one or zero arguments");
     }
 }
 
@@ -1452,17 +1224,17 @@ AppendPromptHistory()
 void
 MessageBox()
 {
-    if (args.size() < 3)    return engine->throwError("messageBox() requires three arguments");
-    if (!token[0).isString()) return debug_message("messageBox(): first argument is not a string");
-    if (!token[1).isString()) return debug_message("messageBox(): second argument is not a string");
-    if (!token[2).isString()) return debug_message("messageBox(): third argument is not a string");
+    if (args.size() < 3)    debug_message("messageBox() requires three arguments");
+    if (!args[0).isString()) return debug_message("messageBox(): first argument is not a string");
+    if (!args[1).isString()) return debug_message("messageBox(): second argument is not a string");
+    if (!args[2).isString()) return debug_message("messageBox(): third argument is not a string");
 
-    std::string type  = token[0).toString().toLower();
-    std::string title = token[1).toString();
-    std::string text  = token[2).toString();
+    std::string type  = args[0).toString().toLower();
+    std::string title = args[1).toString();
+    std::string text  = args[2).toString();
 
     if (type != "critical" && type != "information" && type != "question" && type != "warning")
-        return engine->throwError(QScriptengine::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+        debug_message(QScriptengine::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
     nativeMessageBox(type, title, text);
 }
@@ -1470,10 +1242,10 @@ MessageBox()
 void
 IsInt()
 {
-    if (args.size() < 1)    return engine->throwError("isInt() requires one argument");
-    if (!token[0).isNumber()) return debug_message("isInt(): first argument is not a number");
+    if (args.size() < 1)    debug_message("isInt() requires one argument");
+    if (!args[0).isNumber()) return debug_message("isInt(): first argument is not a number");
 
-    double num = token[0).toNumber();
+    double num = args[0];
 
     //isNaN check
     if (qIsNaN(num)) return debug_message("isInt(): first argument failed isNaN check. There is an error in your code.");
@@ -1487,16 +1259,16 @@ IsInt()
 
 PrintArea()
 {
-    if (args.size() < 4)    return engine->throwError("printArea() requires four arguments");
-    if (!token[0).isNumber()) return debug_message("printArea(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("printArea(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("printArea(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("printArea(): fourth argument is not a number");
+    if (args.size() < 4)    debug_message("printArea() requires four arguments");
+    if (!args[0).isNumber()) return debug_message("printArea(): first argument is not a number");
+    if (!args[1).isNumber()) return debug_message("printArea(): second argument is not a number");
+    if (!args[2).isNumber()) return debug_message("printArea(): third argument is not a number");
+    if (!args[3).isNumber()) return debug_message("printArea(): fourth argument is not a number");
 
-    double x = token[0).toNumber();
-    double y = token[1).toNumber();
-    double w = token[2).toNumber();
-    double h = token[3).toNumber();
+    double x = args[0];
+    double y = args[1];
+    double w = args[2];
+    double h = args[3];
 
     //isNaN check
     if (qIsNaN(x)) return debug_message("printArea(): first argument failed isNaN check. There is an error in your code.");
@@ -1510,23 +1282,23 @@ PrintArea()
 void
 SetBackgroundColor()
 {
-    if (args.size() < 3)    return engine->throwError("setBackgroundColor() requires three arguments");
-    if (!token[0).isNumber()) return debug_message("setBackgroundColor(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("setBackgroundColor(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("setBackgroundColor(): third argument is not a number");
+    if (args.size() < 3)    debug_message("setBackgroundColor() requires three arguments");
+    if (!args[0).isNumber()) return debug_message("setBackgroundColor(): first argument is not a number");
+    if (!args[1).isNumber()) return debug_message("setBackgroundColor(): second argument is not a number");
+    if (!args[2).isNumber()) return debug_message("setBackgroundColor(): third argument is not a number");
 
-    double r = token[0).toNumber();
-    double g = token[1).toNumber();
-    double b = token[2).toNumber();
+    double r = args[0];
+    double g = args[1];
+    double b = args[2];
 
     //isNaN check
     if (qIsNaN(r)) return debug_message("setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
     if (qIsNaN(g)) return debug_message("setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
     if (qIsNaN(b)) return debug_message("setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
 
-    if (r < 0 || r > 255) { return engine->throwError(QScriptengine::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return engine->throwError(QScriptengine::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return engine->throwError(QScriptengine::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { debug_message(QScriptengine::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
     nativeSetBackgroundColor(r, g, b);
 }
@@ -1534,23 +1306,16 @@ SetBackgroundColor()
 void
 SetCrossHairColor()
 {
-    if (args.size() < 3)    return engine->throwError("setCrossHairColor() requires three arguments");
-    if (!token[0).isNumber()) return debug_message("setCrossHairColor(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("setCrossHairColor(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("setCrossHairColor(): third argument is not a number");
+    if (args.size() < 3)    debug_message("setCrossHairColor() requires three arguments");
 
-    double r = token[0).toNumber();
-    double g = token[1).toNumber();
-    double b = token[2).toNumber();
+    double r = args[0];
+    double g = args[1];
+    double b = args[2];
 
-    //isNaN check
-    if (qIsNaN(r)) return debug_message("setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return debug_message("setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return debug_message("setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
 
-    if (r < 0 || r > 255) { return engine->throwError(QScriptengine::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return engine->throwError(QScriptengine::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return engine->throwError(QScriptengine::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
 
     nativeSetCrossHairColor(r, g, b);
 }
@@ -1558,23 +1323,23 @@ SetCrossHairColor()
 void
 SetGridColor()
 {
-    if (args.size() < 3)    return engine->throwError("setGridColor() requires three arguments");
-    if (!token[0).isNumber()) return debug_message("setGridColor(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("setGridColor(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("setGridColor(): third argument is not a number");
+    if (args.size() < 3)    debug_message("setGridColor() requires three arguments");
+    if (!args[0).isNumber()) return debug_message("setGridColor(): first argument is not a number");
+    if (!args[1).isNumber()) return debug_message("setGridColor(): second argument is not a number");
+    if (!args[2).isNumber()) return debug_message("setGridColor(): third argument is not a number");
 
-    double r = token[0).toNumber();
-    double g = token[1).toNumber();
-    double b = token[2).toNumber();
+    double r = args[0];
+    double g = args[1];
+    double b = args[2];
 
     //isNaN check
     if (qIsNaN(r)) return debug_message("setGridColor(): first argument failed isNaN check. There is an error in your code.");
     if (qIsNaN(g)) return debug_message("setGridColor(): second argument failed isNaN check. There is an error in your code.");
     if (qIsNaN(b)) return debug_message("setGridColor(): third argument failed isNaN check. There is an error in your code.");
 
-    if (r < 0 || r > 255) { return engine->throwError(QScriptengine::UnknownError, "setGridColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { return engine->throwError(QScriptengine::UnknownError, "setGridColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { return engine->throwError(QScriptengine::UnknownError, "setGridColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setGridColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setGridColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { debug_message(QScriptengine::UnknownError, "setGridColor(): b value must be in range 0-255"); }
 
     nativeSetGridColor(r, g, b);
 }
@@ -1582,18 +1347,18 @@ SetGridColor()
 void
 SetTextFont()
 {
-    if (args.size() < 1)    return engine->throwError("setTextFont() requires one argument");
+    if (args.size() < 1)    debug_message("setTextFont() requires one argument");
 
-    settings_text_font = token[0];
+    settings_text_font = args[0];
 }
 
 void
 SetTextSize()
 {
-    if (args.size() < 1)    return engine->throwError("setTextSize() requires one argument");
-    if (!token[0).isNumber()) return debug_message("setTextSize(): first argument is not a number");
+    if (args.size() < 1)    debug_message("setTextSize() requires one argument");
+    if (!args[0).isNumber()) return debug_message("setTextSize(): first argument is not a number");
 
-    double num = token[0).toNumber();
+    double num = args[0];
 
     //isNaN check
     if (qIsNaN(num)) return debug_message("setTextSize(): first argument failed isNaN check. There is an error in your code.");
@@ -1604,10 +1369,10 @@ SetTextSize()
 void
 SetTextAngle()
 {
-    if (args.size() < 1)    return engine->throwError("setTextAngle() requires one argument");
-    if (!token[0).isNumber()) return debug_message("setTextAngle(): first argument is not a number");
+    if (args.size() < 1)    debug_message("setTextAngle() requires one argument");
+    if (!args[0).isNumber()) return debug_message("setTextAngle(): first argument is not a number");
 
-    double num = token[0).toNumber();
+    double num = args[0];
 
     //isNaN check
     if (qIsNaN(num)) return debug_message("setTextAngle(): first argument failed isNaN check. There is an error in your code.");
@@ -1618,81 +1383,70 @@ SetTextAngle()
 void
 SetTextBold()
 {
-    if (args.size() < 1)    return engine->throwError("setTextBold() requires one argument");
-    if (!token[0).isBool()) return debug_message("setTextBold(): first argument is not a bool");
+    if (args.size() < 1)    debug_message("setTextBold() requires one argument");
+    if (!args[0).isBool()) return debug_message("setTextBold(): first argument is not a bool");
 
-    nativeSetTextBold(token[0).toBool());
+    nativeSetTextBold(args[0).toBool());
 }
 
 void
 SetTextItalic()
 {
-    if (args.size() < 1)    return engine->throwError("setTextItalic() requires one argument");
-    if (!token[0).isBool()) return debug_message("setTextItalic(): first argument is not a bool");
+    if (args.size() < 1)    debug_message("setTextItalic() requires one argument");
+    if (!args[0).isBool()) return debug_message("setTextItalic(): first argument is not a bool");
 
-    nativeSetTextItalic(token[0).toBool());
+    nativeSetTextItalic(args[0).toBool());
 }
 
 void
 SetTextUnderline()
 {
-    if (args.size() < 1)    return engine->throwError("setTextUnderline() requires one argument");
-    if (!token[0).isBool()) return debug_message("setTextUnderline(): first argument is not a bool");
+    if (args.size() < 1)    debug_message("setTextUnderline() requires one argument");
+    if (!args[0).isBool()) return debug_message("setTextUnderline(): first argument is not a bool");
 
-    nativeSetTextUnderline(token[0).toBool());
+    nativeSetTextUnderline(args[0).toBool());
 }
 
 void
 SetTextStrikeOut()
 {
-    if (args.size() < 1)    return engine->throwError("setTextStrikeOut() requires one argument");
-    if (!token[0).isBool()) return debug_message("setTextStrikeOut(): first argument is not a bool");
+    if (args.size() < 1)    debug_message("setTextStrikeOut() requires one argument");
+    if (!args[0).isBool()) return debug_message("setTextStrikeOut(): first argument is not a bool");
 
-    nativeSetTextStrikeOut(token[0).toBool());
+    nativeSetTextStrikeOut(args[0).toBool());
 }
 
 void
 SetTextOverline()
 {
-    if (args.size() < 1)    return engine->throwError("setTextOverline() requires one argument");
-    if (!token[0).isBool()) return debug_message("setTextOverline(): first argument is not a bool");
+    if (args.size() < 1)    debug_message("setTextOverline() requires one argument");
+    if (!args[0).isBool()) return debug_message("setTextOverline(): first argument is not a bool");
 
-    nativeSetTextOverline(token[0).toBool());
+    nativeSetTextOverline(args[0).toBool());
 }
 
-PreviewOn()
+void PreviewOn()
 {
-    if (args.size() < 5)    return engine->throwError("previewOn() requires five arguments");
-    if (!token[0).isString()) return debug_message("previewOn(): first argument is not a string");
-    if (!token[1).isString()) return debug_message("previewOn(): second argument is not a string");
-    if (!token[2).isNumber()) return debug_message("previewOn(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("previewOn(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("previewOn(): fifth argument is not a number");
+    if (args.size() < 5)    debug_message("previewOn() requires five arguments");
 
-    std::string cloneStr = token[0).toString().toUpper();
-    std::string modeStr  = token[1).toString().toUpper();
-    double x          = token[2).toNumber();
-    double y          = token[3).toNumber();
-    double data       = token[4).toNumber();
+    std::string cloneStr = args[0).toString().toUpper();
+    std::string modeStr  = args[1).toString().toUpper();
+    double x          = args[2];
+    double y          = args[3];
+    double data       = args[4];
 
     int clone = PREVIEW_CLONE_NULL;
     int mode = PREVIEW_MODE_NULL;
     if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
     else if (cloneStr == "RUBBER")   { clone = PREVIEW_CLONE_RUBBER;   }
-    else                            { return engine->throwError(QScriptengine::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
+    else                            { debug_message(QScriptengine::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
 
     if     (modeStr == "MOVE")   { mode = PREVIEW_MODE_MOVE;   }
     else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
     else if (modeStr == "SCALE")  { mode = PREVIEW_MODE_SCALE;  }
-    else                         { return engine->throwError(QScriptengine::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
-
-    //isNaN check
-    if (qIsNaN(x))    return debug_message("previewOn(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))    return debug_message("previewOn(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(data)) return debug_message("previewOn(): fifth argument failed isNaN check. There is an error in your code.");
+    else                         { debug_message(QScriptengine::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
     nativePreviewOn(clone, mode, x, y, data);
-    return QJSValue();
 }
 
 void
@@ -1707,109 +1461,144 @@ Vulcanize()
     nativeVulcanize();
 }
 
-void
-AllowRubber()
+void set_rubber_mode_action(std::vector<std::string> args)
 {
-    return QJSValue(nativeAllowRubber());
+    if (args.size() < 1) {
+        debug_message("setRubberMode() requires one argument");
+    }
+
+    std::string mode = args[0].toString().toUpper();
+
+    View* active_view = activeView();
+    if (active_view) {
+        if (mode == "CIRCLE_1P_RAD") {
+            active_view->rubber_mode = OBJ_RUBBER_CIRCLE_1P_RAD;
+        }
+        else if (mode == "CIRCLE_1P_DIA") {
+            active_view->rubber_mode = OBJ_RUBBER_CIRCLE_1P_DIA;
+        }
+        else if (mode == "CIRCLE_2P") {
+            active_view->rubber_mode = OBJ_RUBBER_CIRCLE_2P;
+        }
+        else if (mode == "CIRCLE_3P") {
+            active_view->rubber_mode = OBJ_RUBBER_CIRCLE_3P;
+        }
+        else if (mode == "CIRCLE_TTR") {
+            active_view->rubber_mode = OBJ_RUBBER_CIRCLE_TTR;
+        }
+        else if (mode == "CIRCLE_TTR") {
+            active_view->rubber_mode = OBJ_RUBBER_CIRCLE_TTT;
+        }
+        else if (mode == "DIMLEADER_LINE") {
+            active_view->rubber_mode = OBJ_RUBBER_DIMLEADER_LINE;
+        }
+        else if (mode == "ELLIPSE_LINE") {
+            active_view->rubber_mode = OBJ_RUBBER_ELLIPSE_LINE;
+        }
+        else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") {
+            active_view->rubber_mode = OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS;
+        }
+        else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") {
+            active_view->rubber_mode = OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS;
+        }
+        else if (mode == "ELLIPSE_ROTATION") {
+            active_view->rubber_mode = OBJ_RUBBER_ELLIPSE_ROTATION;
+        }
+        else if (mode == "LINE") {
+            active_view->rubber_mode = OBJ_RUBBER_LINE;
+        }
+        else if (mode == "POLYGON") {
+            active_view->rubber_mode = OBJ_RUBBER_POLYGON;
+        }
+        else if (mode == "POLYGON_INSCRIBE") {
+            active_view->rubber_mode = OBJ_RUBBER_POLYGON_INSCRIBE;
+        }
+        else if (mode == "POLYGON_CIRCUMSCRIBE") {
+            active_view->rubber_mode = OBJ_RUBBER_POLYGON_CIRCUMSCRIBE;
+        }
+        else if (mode == "POLYLINE") {
+            active_view->rubber_mode = OBJ_RUBBER_POLYLINE;
+        }
+        else if (mode == "RECTANGLE") {
+            active_view->rubber_mode = OBJ_RUBBER_RECTANGLE;
+        }
+        else if (mode == "TEXTSINGLE") {
+            active_view->rubber_mode = OBJ_RUBBER_TEXTSINGLE;
+        }
+        else {
+            debug_message("Unknown rubber_mode value.");
+        }
+    }
 }
 
-void
-SetRubberMode()
+void set_rubber_point_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    return engine->throwError("setRubberMode() requires one argument");
-    if (!token[0).isString()) return debug_message("setRubberMode(): first argument is not a string");
+    if (args.size() < 3) {
+        debug_message("setRubberPoint() requires three arguments");
+    }
 
-    std::string mode = token[0).toString().toUpper();
-
-    if (mode == "CIRCLE_1P_RAD") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
-    else if (mode == "CIRCLE_1P_DIA") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P") {
-        nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P")                         { nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR")                        { nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR")                        { nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
-
-    else if (mode == "DIMLEADER_LINE")                    { nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
-
-    else if (mode == "ELLIPSE_LINE")                      { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION")                  { nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
-
-    else if (mode == "LINE")                              { nativeSetRubberMode(OBJ_RUBBER_LINE); }
-
-    else if (mode == "POLYGON")                           { nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE")                  { nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE")              { nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
-
-    else if (mode == "POLYLINE")                          { nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
-
-    else if (mode == "RECTANGLE")                         { nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
-
-    else if (mode == "TEXTSINGLE")                        { nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
-
-    else                                                 { return engine->throwError(QScriptengine::UnknownError, "setRubberMode(): unknown rubberMode value"); }
-
-    return QJSValue();
-}
-
-SetRubberPoint()
-{
-    if (args.size() < 3)    return engine->throwError("setRubberPoint() requires three arguments");
-    if (!token[0).isString()) return debug_message("setRubberPoint(): first argument is not a string");
-    if (!token[1).isNumber()) return debug_message("setRubberPoint(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("setRubberPoint(): third argument is not a number");
-
-    std::string key = token[0).toString().toUpper();
-    double x     = token[1).toNumber();
-    double y     = token[2).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x)) return debug_message("setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return debug_message("setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
+    std::string key = args[0].toUpper();
+    double x = args[1];
+    double y = args[2];
 
     nativeSetRubberPoint(key, x, y);
-    return QJSValue();
 }
 
-SetRubberText()
+void set_rubber_text_action(std::vector<std::string> args)
 {
-    if (args.size() < 2)    return engine->throwError("setRubberText() requires two arguments");
-    if (!token[0).isString()) return debug_message("setRubberText(): first argument is not a string");
-    if (!token[1).isString()) return debug_message("setRubberText(): second argument is not a string");
+    if (args.size() < 2) {
+        debug_message("setRubberText() requires two arguments");
+    }
 
-    std::string key = token[0).toString().toUpper();
-    std::string txt = token[1).toString();
+    std::string key = args[0].toUpper();
+    std::string txt = args[1];
 
     nativeSetRubberText(key, txt);
-    return QJSValue();
 }
 
-AddRubber()
+void add_rubber_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    return engine->throwError("addRubber() requires one argument");
-    if (!token[0).isString()) return debug_message("addRubber(): first argument is not a string");
+    if (args.size() < 1)    debug_message("addRubber() requires one argument");
+    if (!args[0).isString()) return debug_message("addRubber(): first argument is not a string");
 
-    std::string objType = token[0).toString().toUpper();
+    std::string objType = args[0).toString().toUpper();
 
     if (!nativeAllowRubber())
-        return engine->throwError(QScriptengine::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
+        debug_message(QScriptengine::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     double mx = nativeMouseX();
     double my = nativeMouseY();
 
-    if     (objType == "ARC")          {} //TODO: handle this type
-    else if (objType == "BLOCK")        {} //TODO: handle this type
-    else if (objType == "CIRCLE")       { nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
-    else if (objType == "DIMALIGNED")   {} //TODO: handle this type
-    else if (objType == "DIMANGULAR")   {} //TODO: handle this type
-    else if (objType == "DIMARCLENGTH") {} //TODO: handle this type
-    else if (objType == "DIMDIAMETER")  {} //TODO: handle this type
-    else if (objType == "DIMLEADER")    { nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if (objType == "DIMLINEAR")    {} //TODO: handle this type
-    else if (objType == "DIMORDINATE")  {} //TODO: handle this type
+    if (objType == "ARC") {
+
+    }
+    else if (objType == "BLOCK") {
+
+    }
+    else if (objType == "CIRCLE") {
+        nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+    }
+    else if (objType == "DIMALIGNED") {
+
+    }
+    else if (objType == "DIMANGULAR") {
+
+    } //TODO: handle this type
+    else if (objType == "DIMARCLENGTH") {
+
+    } //TODO: handle this type
+    else if (objType == "DIMDIAMETER")  {
+
+    } //TODO: handle this type
+    else if (objType == "DIMLEADER")    {
+        nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "DIMLINEAR")    {
+
+    } //TODO: handle this type
+    else if (objType == "DIMORDINATE")  {
+
+    } //TODO: handle this type
     else if (objType == "DIMRADIUS")    {} //TODO: handle this type
     else if (objType == "ELLIPSE")      { nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "ELLIPSEARC")   {} //TODO: handle this type
@@ -1823,25 +1612,38 @@ AddRubber()
     else if (objType == "POLYLINE")     { nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY")          {} //TODO: handle this type
     else if (objType == "RECTANGLE")    { nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
-    else if (objType == "SPLINE")       {} //TODO: handle this type
-    else if (objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if (objType == "TEXTSINGLE")   { nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "SPLINE") {
+
+    }
+    else if (objType == "TEXTMULTI") {
+
+    }
+    else if (objType == "TEXTSINGLE") {
+        nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
+    }
 }
 
     nativeClearRubber();
 
-SpareRubber()
+void spare_rubber_action()
 {
-    if (args.size() < 1)    return engine->throwError("spareRubber() requires one argument");
-    if (!token[0).isString()) return debug_message("spareRubber(): first argument is not a string");
+    if (args.size() < 1) {
+        debug_message("spareRubber() requires one argument");
+        return;
+    }
 
-    std::string objID = token[0).toString().toUpper();
+    std::string objID = args[0].toUpper();
 
-    if     (objID == "PATH")     { nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if (objID == "POLYGON")  { nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if (objID == "POLYLINE") { nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
-    else
-    {
+    if (objID == "PATH") {
+        nativeSpareRubber(SPARE_RUBBER_PATH);
+    }
+    else if (objID == "POLYGON") {
+        nativeSpareRubber(SPARE_RUBBER_POLYGON);
+    }
+    else if (objID == "POLYLINE") {
+        nativeSpareRubber(SPARE_RUBBER_POLYLINE);
+    }
+    else {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
         if (!ok) return debug_message("spareRubber(): error converting object ID into an int64");
@@ -1849,29 +1651,18 @@ SpareRubber()
     }
 }
 
-void
-AddTextMulti()
+void add_text_multi_action()
 {
     if (args.size() < 5) {
         debug_message("addTextMulti() requires five arguments");
         return;
     }
-    if (!token[0).isString()) return debug_message("addTextMulti(): first argument is not a string");
-    if (!token[1).isNumber()) return debug_message("addTextMulti(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addTextMulti(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addTextMulti(): fourth argument is not a number");
-    if (!token[4).isBool())   return debug_message("addTextMulti(): fifth argument is not a bool");
 
-    std::string str   = token[0).toString();
-    double   x     = token[1).toNumber();
-    double   y     = token[2).toNumber();
-    double   rot   = token[3).toNumber();
-    bool   fill  = token[4).toBool();
-
-    //isNaN check
-    if (qIsNaN(x))   return debug_message("addTextMulti(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return debug_message("addTextMulti(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
+    std::string str   = args[0).toString();
+    double   x     = args[1];
+    double   y     = args[2];
+    double   rot   = args[3];
+    bool   fill  = args[4).toBool();
 
     nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
@@ -1883,25 +1674,14 @@ AddTextSingle()
         debug_message("addTextSingle() requires five arguments");
         return;
     }
-    if (!token[0).isString()) return debug_message("addTextSingle(): first argument is not a string");
-    if (!token[1).isNumber()) return debug_message("addTextSingle(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addTextSingle(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addTextSingle(): fourth argument is not a number");
-    if (!token[4).isBool())   return debug_message("addTextSingle(): fifth argument is not a bool");
 
     std::string str = args[0];
-    double   x     = args[1).toNumber();
-    double   y     = args[2).toNumber();
-    double   rot   = args[3).toNumber();
+    double   x     = args[1];
+    double   y     = args[2];
+    double   rot   = args[3];
     bool   fill  = args[4).toBool();
 
-    //isNaN check
-    if (qIsNaN(x))   return debug_message("addTextSingle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return debug_message("addTextSingle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
-
     nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
@@ -1919,262 +1699,185 @@ AddRay()
 }
 
 void
-AddLine()
+add_line_action(std::vector<std::string> args)
 {
-    if (args.size() < 5)    return engine->throwError("addLine() requires five arguments");
-    if (!token[0).isNumber()) return debug_message("addLine(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addLine(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addLine(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addLine(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addLine(): fifth argument is not a number");
+    if (args.size() < 5)    debug_message("addLine() requires five arguments");
 
-    double x1  = token[0).toNumber();
-    double y1  = token[1).toNumber();
-    double x2  = token[2).toNumber();
-    double y2  = token[3).toNumber();
-    double rot = token[4).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x1))  return debug_message("addLine(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return debug_message("addLine(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return debug_message("addLine(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return debug_message("addLine(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addLine(): fifth argument failed isNaN check. There is an error in your code.");
+    double x1  = args[0];
+    double y1  = args[1];
+    double x2  = args[2];
+    double y2  = args[3];
+    double rot = args[4];
 
     nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
-AddTriangle()
+add_triangle_action(std::vector<std::string> args)
 {
-    if (args.size() < 8)    return engine->throwError("addTriangle() requires eight arguments");
-    if (!token[0).isNumber()) return debug_message("addTriangle(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addTriangle(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addTriangle(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addTriangle(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addTriangle(): fifth argument is not a number");
-    if (!token[5).isNumber()) return debug_message("addTriangle(): sixth argument is not a number");
-    if (!token[6).isNumber()) return debug_message("addTriangle(): seventh argument is not a number");
-    if (!token[7).isBool())   return debug_message("addTriangle(): eighth argument is not a bool");
+    if (args.size() < 8)    debug_message("addTriangle() requires eight arguments");
 
-    double x1     = token[0).toNumber();
-    double y1     = token[1).toNumber();
-    double x2     = token[2).toNumber();
-    double y2     = token[3).toNumber();
-    double x3     = token[4).toNumber();
-    double y3     = token[5).toNumber();
-    double rot    = token[6).toNumber();
-    bool fill   = token[7).toBool();
-
-    //isNaN check
-    if (qIsNaN(x1))  return debug_message("addTriangle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return debug_message("addTriangle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return debug_message("addTriangle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return debug_message("addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x3))  return debug_message("addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y3))  return debug_message("addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
+    double x1     = args[0];
+    double y1     = args[1];
+    double x2     = args[2];
+    double y2     = args[3];
+    double x3     = args[4];
+    double y3     = args[5];
+    double rot    = args[6];
+    bool fill   = args[7).toBool();
 
     nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
-    return QJSValue();
 }
 
 void
-AddRectangle()
+add_rectangle_action(std::vector<std::string> args)
 {
-    if (args.size() < 6)    return engine->throwError("addRectangle() requires six arguments");
-    if (!token[0).isNumber()) return debug_message("addRectangle(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addRectangle(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addRectangle(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addRectangle(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addRectangle(): fifth argument is not a number");
-    if (!token[5).isBool())   return debug_message("addRectangle(): sixth argument is not a bool");
+    if (args.size() < 6) {
+        debug_message("addRectangle() requires six arguments");
+        return;
+    }
 
-    double x    = token[0).toNumber();
-    double y    = token[1).toNumber();
-    double w    = token[2).toNumber();
-    double h    = token[3).toNumber();
-    double rot  = token[4).toNumber();
-    bool fill = token[5).toBool();
-
-    //isNaN check
-    if (qIsNaN(x))   return debug_message("addRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return debug_message("addRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(w))   return debug_message("addRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(h))   return debug_message("addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    double x    = args[0];
+    double y    = args[1];
+    double w    = args[2];
+    double h    = args[3];
+    double rot  = args[4];
+    bool fill = args[5).toBool();
 
     nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
-AddRoundedRectangle()
+add_rounded_rectangle_action(std::vector<std::string> args)
 {
-    if (args.size() < 7)    return engine->throwError("addRoundedRectangle() requires seven arguments");
-    if (!token[0).isNumber()) return debug_message("addRoundedRectangle(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addRoundedRectangle(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addRoundedRectangle(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addRoundedRectangle(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addRoundedRectangle(): fifth argument is not a number");
-    if (!token[5).isNumber()) return debug_message("addRoundedRectangle(): sixth argument is not a number");
-    if (!token[6).isBool())   return debug_message("addRoundedRectangle(): seventh argument is not a bool");
+    if (args.size() < 7) {
+        debug_message("addRoundedRectangle() requires seven arguments");
+        return;
+    }
 
-    double x    = token[0).toNumber();
-    double y    = token[1).toNumber();
-    double w    = token[2).toNumber();
-    double h    = token[3).toNumber();
-    double rad  = token[4).toNumber();
-    double rot  = token[5).toNumber();
-    bool fill = token[6).toBool();
-
-    //isNaN check
-    if (qIsNaN(x))   return debug_message("addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y))   return debug_message("addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(w))   return debug_message("addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(h))   return debug_message("addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rad)) return debug_message("addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
+    double x = stod(args[0]);
+    double y = stod(args[1]);
+    double w = args[2].toNumber();
+    double h = args[3].toNumber();
+    double rad = args[4].toNumber();
+    double rot = args[5].toNumber();
+    bool fill = args[6].toBool();
 
     nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
-    return QJSValue();
 }
 
 void
-AddArc()
+add_arc_action(std::vector<std::string> args)
 {
-    if (args.size() < 6)    return engine->throwError("addArc() requires six arguments");
-    if (!token[0).isNumber()) return debug_message("addArc(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addArc(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addArc(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addArc(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addArc(): fifth argument is not a number");
-    if (!token[5).isNumber()) return debug_message("addArc(): sixth argument is not a number");
+    if (args.size() < 6) {
+        debug_message("addArc() requires six arguments");
+        return;
+    }
 
-    double startX = token[0).toNumber();
-    double startY = token[1).toNumber();
-    double midX   = token[2).toNumber();
-    double midY   = token[3).toNumber();
-    double endX   = token[4).toNumber();
-    double endY   = token[5).toNumber();
+    EmbArc arc;
+    arc.start.x = stod(args[0]);
+    arc.start.y = -stod(args[1]);
+    arc.mid.x = stod(args[2]);
+    arc.mid.y = -stod(args[3]);
+    arc.end.x = stod(args[4]);
+    arc.end.y = -stod(args[5]);
+    arc.color = getCurrentColor();
 
-    //isNaN check
-    if (qIsNaN(startX)) return debug_message("addArc(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(startY)) return debug_message("addArc(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(midX))   return debug_message("addArc(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(midY))   return debug_message("addArc(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(endX))   return debug_message("addArc(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(endY))   return debug_message("addArc(): sixth argument failed isNaN check. There is an error in your code.");
-
-    nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
-    return QJSValue();
+    if (active_view && active_scene) {
+        embPattern_addArc(patterns[pattern_index], arc);
+        std::string name;
+        name  = "pattern" + stoi(pattern_index);
+        name += ".arc" + stoi(patterns[pattern_index]->arcs->count);
+        rubber_points_mode[name] = OBJ_RUBBER_OFF;
+        if (OBJ_RUBBER_OFF) {
+            active_view->addToRubberRoom(arcObj);
+        }
+    }
 }
 
 void
-AddCircle()
+add_circle_action(std::vector<std::string> args)
 {
-    if (args.size() < 4)    return engine->throwError("addCircle() requires four arguments");
-    if (!token[0).isNumber()) return debug_message("addCircle(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addCircle(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addCircle(): third argument is not a number");
-    if (!token[3).isBool())   return debug_message("addCircle(): fourth argument is not a bool");
+    if (args.size() < 4)    debug_message("addCircle() requires four arguments");
 
-    double centerX = token[0).toNumber();
-    double centerY = token[1).toNumber();
-    double radius  = token[2).toNumber();
-    bool fill    = token[3).toBool();
-
-    //isNaN check
-    if (qIsNaN(centerX)) return debug_message("addCircle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(centerY)) return debug_message("addCircle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(radius))  return debug_message("addCircle(): third argument failed isNaN check. There is an error in your code.");
-
-    nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
-    return QJSValue();
+    double centerX = args[0];
+    double centerY = args[1];
+    double radius  = args[2];
+    bool fill = args[3];
+    
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && active_scene && stack) {
+        CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: circle fill
+        if (rubber_mode) {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
 }
 
 void
-AddSlot()
+add_slot_action(std::vector<std::string> args)
 {
-    if (args.size() < 6)    return engine->throwError("addSlot() requires six arguments");
-    if (!token[0).isNumber()) return debug_message("addSlot(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addSlot(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addSlot(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addSlot(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addSlot(): fifth argument is not a number");
-    if (!token[5).isBool())   return debug_message("addSlot(): sixth argument is not a bool");
+    if (args.size() < 6) {
+        debug_message("addSlot() requires six arguments");
+        return;
+    }
 
-    double centerX  = token[0).toNumber();
-    double centerY  = token[1).toNumber();
-    double diameter = token[2).toNumber();
-    double length   = token[3).toNumber();
-    double rot      = token[4).toNumber();
-    bool fill     = token[5).toBool();
-
-    //isNaN check
-    if (qIsNaN(centerX))  return debug_message("addSlot(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(centerY))  return debug_message("addSlot(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(diameter)) return debug_message("addSlot(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(length))   return debug_message("addSlot(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot))      return debug_message("addSlot(): fifth argument failed isNaN check. There is an error in your code.");
+    double centerX  = args[0];
+    double centerY  = args[1];
+    double diameter = args[2];
+    double length = args[3];
+    double rot = args[4];
+    bool fill = args[5];
 
     nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
-AddEllipse()
+add_ellipse_action()
 {
-    if (args.size() < 6)    return engine->throwError("addEllipse() requires six arguments");
-    if (!token[0).isNumber()) return debug_message("addEllipse(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addEllipse(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addEllipse(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addEllipse(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addEllipse(): fifth argument is not a number");
-    if (!token[5).isBool())   return debug_message("addEllipse(): sixth argument is not a bool");
+    if (args.size() < 6)    debug_message("addEllipse() requires six arguments");
 
-    double centerX = token[0).toNumber();
-    double centerY = token[1).toNumber();
-    double radX    = token[2).toNumber();
-    double radY    = token[3).toNumber();
-    double rot     = token[4).toNumber();
-    bool fill    = token[5).toBool();
-
-    //isNaN check
-    if (qIsNaN(centerX)) return debug_message("addEllipse(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(centerY)) return debug_message("addEllipse(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(radX))    return debug_message("addEllipse(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(radY))    return debug_message("addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot))     return debug_message("addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
+    double centerX = stod(args[0]);
+    double centerY = stod(args[1]);
+    double radX = stod(args[2]);
+    double radY = stod(args[3]);
+    double rot = stod(args[4]);
+    bool fill = args[5];
 
     nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
 }
 
 void
-AddPoint()
+add_point_action(std::vector<std::string> args)
 {
-    if (args.size() < 2)    return engine->throwError("addPoint() requires two arguments");
-    if (!token[0).isNumber()) return debug_message("addPoint(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addPoint(): second argument is not a number");
+    if (args.size() < 2) {
+        debug_message("addPoint() requires two arguments");
+        return;
+    }
 
-    double x = token[0).toNumber();
-    double y = token[1).toNumber();
+    double x = stod(args[0]);
+    double y = stod(args[1]);
 
-    //isNaN check
-    if (qIsNaN(x)) return debug_message("addPoint(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return debug_message("addPoint(): second argument failed isNaN check. There is an error in your code.");
-
-    nativeAddPoint(x,y);
+    nativeAddPoint(x, y);
 }
 
 void
-AddPolygon()
+add_polygon_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)   return engine->throwError("addPolygon() requires one argument");
-    if (!token[0).isArray()) return debug_message("addPolygon(): first argument is not an array");
+    if (args.size() < 1)   debug_message("addPolygon() requires one argument");
+    if (!args[0).isArray()) return debug_message("addPolygon(): first argument is not an array");
 
-    QVariantList varList = token[0).toVariant().toList();
+    QVariantList varList = args[0).toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) return debug_message("addPolygon(): array must contain at least two elements");
     if (varSize % 2) return debug_message("addPolygon(): array cannot contain an odd number of elements");
@@ -2214,16 +1917,15 @@ AddPolygon()
     path.translate(-startX, -startY);
 
     nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
-AddPolyline()
+add_polyline_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)   return engine->throwError("addPolyline() requires one argument");
-    if (!token[0).isArray()) return debug_message("addPolyline(): first argument is not an array");
+    if (args.size() < 1)   debug_message("addPolyline() requires one argument");
+    if (!args[0).isArray()) return debug_message("addPolyline(): first argument is not an array");
 
-    QVariantList varList = token[0).toVariant().toList();
+    QVariantList varList = args[0).toVariant().toList();
     int varSize = varList.size();
     if (varSize < 2) return debug_message("addPolyline(): array must contain at least two elements");
     if (varSize % 2) return debug_message("addPolyline(): array cannot contain an odd number of elements");
@@ -2260,89 +1962,98 @@ AddPolyline()
     path.translate(-startX, -startY);
 
     nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
-AddDimLeader()
+add_dim_leader_action(std::vector<std::string> args)
 {
-    if (args.size() < 5)    return engine->throwError("addDimLeader() requires five arguments");
-    if (!token[0).isNumber()) return debug_message("addDimLeader(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("addDimLeader(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("addDimLeader(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("addDimLeader(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("addDimLeader(): fifth argument is not a number");
+    if (args.size() < 5) {
+        debug_message("addDimLeader() requires five arguments");
+    }
 
-    double x1  = token[0).toNumber();
-    double y1  = token[1).toNumber();
-    double x2  = token[2).toNumber();
-    double y2  = token[3).toNumber();
-    double rot = token[4).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x1))  return debug_message("addDimLeader(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return debug_message("addDimLeader(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return debug_message("addDimLeader(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return debug_message("addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(rot)) return debug_message("addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
+    double x1  = args[0];
+    double y1  = args[1];
+    double x2  = args[2];
+    double y2  = args[3];
+    double rot = args[4];
 
     nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
-    return QJSValue();
 }
 
 void
-SetCursorShape()
+set_cursor_shape_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    return engine->throwError("setCursorShape() requires one argument");
-    if (!token[0).isString()) return debug_message("setCursorShape(): first argument is not a string");
+    if (args.size() < 1) {
+        debug_message("setCursorShape() requires one argument");
+    }
 
-    std::string shape = token[0).toString();
-    nativeSetCursorShape(shape);
-    return QJSValue();
+    std::string shape = args[0];
+
+    if (active_view) {
+        std::string shape = str.toLower();
+        if (shape == "arrow")
+            active_view->setCursor(QCursor(ArrowCursor));
+        else if (shape == "uparrow")
+            active_view->setCursor(QCursor(UpArrowCursor));
+        else if (shape == "cross")
+            active_view->setCursor(QCursor(CrossCursor));
+        else if (shape == "wait")
+            active_view->setCursor(QCursor(WaitCursor));
+        else if (shape == "ibeam")
+            active_view->setCursor(QCursor(IBeamCursor));
+        else if (shape == "resizevert")
+            active_view->setCursor(QCursor(SizeVerCursor));
+        else if (shape == "resizehoriz")
+            active_view->setCursor(QCursor(SizeHorCursor));
+        else if (shape == "resizediagleft")  active_view->setCursor(QCursor(SizeBDiagCursor));
+        else if (shape == "resizediagright") active_view->setCursor(QCursor(SizeFDiagCursor));
+        else if (shape == "move")            active_view->setCursor(QCursor(SizeAllCursor));
+        else if (shape == "blank")           active_view->setCursor(QCursor(BlankCursor));
+        else if (shape == "splitvert")       active_view->setCursor(QCursor(SplitVCursor));
+        else if (shape == "splithoriz")      active_view->setCursor(QCursor(SplitHCursor));
+        else if (shape == "handpointing")    active_view->setCursor(QCursor(PointingHandCursor));
+        else if (shape == "forbidden")       active_view->setCursor(QCursor(ForbiddenCursor));
+        else if (shape == "handopen")        active_view->setCursor(QCursor(OpenHandCursor));
+        else if (shape == "handclosed")
+            active_view->setCursor(QCursor(ClosedHandCursor));
+        else if (shape == "whatsthis")
+            active_view->setCursor(QCursor(WhatsThisCursor));
+        else if (shape == "busy")
+            active_view->setCursor(QCursor(BusyCursor));
+        else if (shape == "dragmove")
+            active_view->setCursor(QCursor(DragMoveCursor));
+        else if (shape == "dragcopy")
+            active_view->setCursor(QCursor(DragCopyCursor));
+        else if (shape == "draglink")
+            active_view->setCursor(QCursor(DragLinkCursor));
+    }
 }
 
 void
-CalculateAngle()
+calculate_angle_action(std::vector<std::string> args)
 {
-    if (args.size() < 4)    return engine->throwError("calculateAngle() requires four arguments");
-    if (!token[0).isNumber()) return debug_message("calculateAngle(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("calculateAngle(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("calculateAngle(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("calculateAngle(): fourth argument is not a number");
+    if (args.size() < 4) {
+        debug_message("calculateAngle() requires four arguments");
+        return;
+    }
 
-    double x1 = token[0).toNumber();
-    double y1 = token[1).toNumber();
-    double x2 = token[2).toNumber();
-    double y2 = token[3).toNumber();
+    double x1 = args[0]);
+    double y1 = args[1];
+    double x2 = args[2];
+    double y2 = args[3];
 
-    //isNaN check
-    if (qIsNaN(x1))  return debug_message("calculateAngle(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return debug_message("calculateAngle(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return debug_message("calculateAngle(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return debug_message("calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
-
-    return QJSValue(nativeCalculateAngle(x1, y1, x2, y2));
+    output = nativeCalculateAngle(x1, y1, x2, y2);
 }
 
 void
-CalculateDistance()
+calculate_distance_action(std::vector<std::string> args)
 {
-    if (args.size() < 4)    return engine->throwError("calculateDistance() requires four arguments");
-    if (!token[0).isNumber()) return debug_message("calculateDistance(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("calculateDistance(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("calculateDistance(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("calculateDistance(): fourth argument is not a number");
+    if (args.size() < 4)    debug_message("calculateDistance() requires four arguments");
 
-    double x1 = token[0).toNumber();
-    double y1 = token[1).toNumber();
-    double x2 = token[2).toNumber();
-    double y2 = token[3).toNumber();
-
-    //isNaN check
-    if (qIsNaN(x1))  return debug_message("calculateDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return debug_message("calculateDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return debug_message("calculateDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return debug_message("calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    double x1 = args[0];
+    double y1 = args[1];
+    double x2 = args[2];
+    double y2 = args[3];
 
     return QJSValue(nativeCalculateDistance(x1, y1, x2, y2));
 }
@@ -2350,30 +2061,19 @@ CalculateDistance()
 void
 PerpendicularDistance()
 {
-    if (args.size() < 6)    return engine->throwError("perpendicularDistance() requires six arguments");
-    if (!token[0).isNumber()) return debug_message("perpendicularDistance(): first argument is not a number");
-    if (!token[1).isNumber()) return debug_message("perpendicularDistance(): second argument is not a number");
-    if (!token[2).isNumber()) return debug_message("perpendicularDistance(): third argument is not a number");
-    if (!token[3).isNumber()) return debug_message("perpendicularDistance(): fourth argument is not a number");
-    if (!token[4).isNumber()) return debug_message("perpendicularDistance(): fifth argument is not a number");
-    if (!token[5).isNumber()) return debug_message("perpendicularDistance(): sixth argument is not a number");
+    if (args.size() < 6) {
+        debug_message("perpendicularDistance() requires six arguments");
+        return;
+    }
 
-    double px = token[0).toNumber();
-    double py = token[1).toNumber();
-    double x1 = token[2).toNumber();
-    double y1 = token[3).toNumber();
-    double x2 = token[4).toNumber();
-    double y2 = token[5).toNumber();
+    double px = stod(args[0]);
+    double py = stod(args[1]);
+    double x1 = stod(args[2]);
+    double y1 = stod(args[3]);
+    double x2 = stod(args[4]);
+    double y2 = stod(args[5]);
 
-    //isNaN check
-    if (qIsNaN(px))  return debug_message("perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(py))  return debug_message("perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x1))  return debug_message("perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y1))  return debug_message("perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(x2))  return debug_message("perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y2))  return debug_message("perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
-
-    return QJSValue(nativePerpendicularDistance(px, py, x1, y1, x2, y2));
+    output = nativePerpendicularDistance(px, py, x1, y1, x2, y2);
 }
 
 void
@@ -2383,8 +2083,8 @@ cut_selected(std::vector<std::string> args)
         debug_message("cutSelected() requires two arguments");
     }
 
-    double x = string_to_number("cutSelected()", args, 0);
-    double y = string_to_number("cutSelected()", args, 1);
+    double x = stod("cutSelected()", args, 0);
+    double y = stod("cutSelected()", args, 1);
 
     nativeCutSelected(x, y);
 }
@@ -2411,10 +2111,10 @@ void
 CopySelected(std::vector<std::string> args)
 {
     if (args.size() < 2)
-        return engine->throwError("copySelected() requires two arguments");
+        debug_message("copySelected() requires two arguments");
 
-    double x = string_to_number("copySelected()", args, 0);
-    double y = string_to_number("copySelected()", args, 1);
+    double x = stod("copySelected()", args, 0);
+    double y = stod("copySelected()", args, 1);
 
     nativeCopySelected(x, y);
 }
@@ -2423,12 +2123,12 @@ void
 PasteSelected(std::vector<std::string> args)
 {
     double x, y;
-    if (args.size() < 2)    return engine->throwError("pasteSelected() requires two arguments");
+    if (args.size() < 2)    debug_message("pasteSelected() requires two arguments");
 
-    if (!string_to_number("pasteSelected()", args, 0, &x)) {
+    if (!stod("pasteSelected()", args, 0, &x)) {
         return;
     }
-    if (!string_to_number("pasteSelected()", args, 1, &y)) {
+    if (!stod("pasteSelected()", args, 1, &y)) {
         return;
     }
 
@@ -2436,62 +2136,70 @@ PasteSelected(std::vector<std::string> args)
 }
 
 void
-MoveSelected(std::vector<std::string> args)
+move_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 2)
-        return engine->throwError("moveSelected() requires two arguments");
+        debug_message("moveSelected() requires two arguments");
 
-    if (!string_to_number("moveSelected()", args, 0, &dx)) {
-        return;
-    }
-    if (!string_to_number("moveSelected()", args, 1, &dy)) {
-        return;
-    }
+    double dx = stod(args[0]);
+    double dy = stod(args[1]);
 
     nativeMoveSelected(dx, dy);
 }
 
 void
-ScaleSelected(std::vector<std::string> args)
+scale_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 3) {
-        return engine->throwError("scaleSelected() requires three arguments");
+        debug_message("scaleSelected() requires three arguments");
     }
 
-    double x = string_to_number("scaleSelected()", args, 0);
-    double y = string_to_number("scaleSelected()", args, 1);
-    double factor = string_to_number("scaleSelected()", args, 2);
+    double x = stod(args[0]);
+    double y = stod(args[1]);
+    double factor = stod(args[2]);
 
-    nativeScaleSelected(x, y, factor);
+    if (factor <= 0.0) {
+        QMessageBox::critical(this, translate("ScaleFactor Error"),
+                                translate("Hi there. If you are not a developer, report this as a bug. "
+                                "If you are a developer, your code needs examined, and possibly your head too."));
+    }
+
+    if (active_view) {
+        active_view->scaleSelected(x, -y, factor);
+    }
 }
 
 void
-RotateSelected(std::vector<std::string> args)
+rotate_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 3) {
         debug_message("rotateSelected() requires three arguments");
         return;
     }
 
-    double x = string_to_number("rotateSelected()", args, 0);
-    double y = string_to_number("rotateSelected()", args, 1);
-    double rot = string_to_number("rotateSelected()", args, 2);
+    double x = stod(args[0]);
+    double y = stod(args[1]);
+    double rot = stod(args[2]);
 
-    nativeRotateSelected(x, y, rot);
+    if (active_view) {
+        active_view->rotateSelected(x, -y, -rot);
+    }
 }
 
-void MirrorSelected(std::vector<std::string> args)
+void mirror_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 4) {
-        return engine->throwError("mirrorSelected() requires 4 arguments");
+        debug_message("mirror_selected_action() requires 4 arguments");
     }
 
-    double x1 = string_to_number("mirrorSelected()", args, 0);
-    double y1 = string_to_number("mirrorSelected()", args, 1);
-    double x2 = string_to_number("mirrorSelected()", args, 2);
-    double y2 = string_to_number("mirrorSelected()", args, 3);
+    double x1 = stod(args[0]);
+    double y1 = stod(args[1]);
+    double x2 = stod(args[2]);
+    double y2 = stod(args[3]);
 
-    nativeMirrorSelected(x1, y1, x2, y2);
+    if (active_view) {
+        active_view->mirrorSelected(x1, -y1, x2, -y2);
+    }
 }
 
 
@@ -2535,9 +2243,61 @@ cut_action(std::vector<std::string> args)
 }
 
 void
+icon_action(std::vector<std::string> args)
+{
+    if (args.size() < 1) {
+        debug_message("ERROR: icon action requires 1 argument.");
+        return;
+    }
+
+    int new_size = std::stoi(args[0]);
+
+    if (icon_size >= 16 && icon_size <= 128) {
+        icon_size = new_size;
+    }
+}
+
+void
 pan_action(std::vector<std::string> args)
 {
-    
+    if (args.size() < 1) {
+        debug_message("ERROR: pan action requires 1 argument.");
+        return;
+    }
+    #if 0
+
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack) {
+        if (args[0] == "realtime") {
+            active_view->panningRealTimeActive = true;
+            return;
+        }
+        if (args[0] == "point") {
+            active_view->panningPointActive = true;
+            return;
+        }
+        if (args[0] == "left") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+        if (args[0] == "right") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+        if (args[0] == "up") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+        if (args[0] == "down") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+    }
+    #endif
 }
 
 void
@@ -2549,6 +2309,2451 @@ paste_action(std::vector<std::string> args)
 void
 zoom_action(std::vector<std::string> args)
 {
-    
+    if (args.size() < 1) {
+        debug_message("ERROR: zoom action requires 1 argument.");
+        return;
+    }
+
+    if (args[0] == "previous") {
+        /* zoomPrevious(); */
+        return;
+    }
+    if (args[0] == "window") {
+        /* zoomWindow(); */
+        return;
+    }
+    if (args[0] == "dynamic") {
+        /* zoomDynamic(); */
+        return;
+    }
+    if (args[0] == "scale") {
+        /* zoomScale(); */
+        return;
+    }
+    if (args[0] == "realtime") {
+        /* zoomRealtime(); */
+        return;
+    }
+    if (args[0] == "center") {
+        /* zoomCenter(); */
+        return;
+    }
+    if (args[0] == "in") {
+        /* zoomIn(); */
+        return;
+    }
+    if (args[0] == "out") {
+        /* zoomOut(); */
+        return;
+    }
+    if (args[0] == "selected") {
+        /* zoomSelected(); */
+        return;
+    }
+    if (args[0] == "all") {
+        /* zoomAll(); */
+        return;
+    }
+    if (args[0] == "extents") {
+        /* zoomExtents(); */
+        return;
+    }
 }
 
+void new_file_action(std::vector<std::string> args)
+{
+    pattern_list[n_patterns] = embPattern_create();
+    pattern_index = n_patterns;
+    n_patterns++;
+}
+
+
+#if 0
+void stub_implement_action(std::string txt)
+{
+    debug_message("TODO: %s", qPrintable(txt));
+}
+
+void stub_testing_action()
+{
+    QMessageBox::warning(this, translate("Testing Feature"), translate("<b>This feature is in testing.</b>"));
+}
+
+void exit_action()
+{
+    debug_message("exit()");
+    if (settings_prompt_save_history) {
+        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html);
+        // TODO: get filename from settings
+    }
+    qApp->closeAllWindows();
+    this->deleteLater();
+    // Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
+}
+
+void quit_action()
+{
+    debug_message("quit()");
+    exit();
+}
+
+void checkForUpdates()
+{
+    debug_message("checkForUpdates()");
+    //TODO: Check website for new versions, commands, etc...
+}
+
+void cut()
+{
+    debug_message("cut()");
+    if (active_view) {
+        active_view->cut();
+    }
+}
+
+void copy()
+{
+    debug_message("copy()");
+    if (active_view) {
+        active_view->copy();
+    }
+}
+
+void paste()
+{
+    debug_message("paste()");
+    if (active_view) {
+        active_view->paste();
+    }
+}
+
+void select_all_action()
+{
+    debug_message("selectAll()");
+    if (active_view) {
+        active_view->selectAll();
+    }
+}
+
+std::string platformString()
+{
+    std::string os;
+    #if _WIN32
+    os = "Windows";
+    #else
+    os = uname();
+    #endif
+    debug_message("Platform: %s", qPrintable(os));
+    return os;
+}
+
+void design_details_action()
+{
+    if (active_scene) {
+        EmbDetailsDialog dialog(active_scene, this);
+        dialog.exec();
+    }
+}
+
+void whats_this_context_help_action()
+{
+    debug_message("whatsThisContextHelp()");
+    whats_this_active = true;
+}
+
+void print_action()
+{
+    debug_message("print()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (active_sub_window) {
+        active_sub_window->print();
+    }
+}
+
+void tipOfTheDay()
+{
+    debug_message("tipOfTheDay()");
+
+    std::string appDir = qApp->applicationDirPath();
+
+    wizardTipOfTheDay = new QWizard(this);
+    wizardTipOfTheDay->setAttribute(WA_DeleteOnClose);
+    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
+    wizardTipOfTheDay->setMinimumSize(550, 400);
+
+    QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
+
+    ImageWidget* imgBanner = new ImageWidget(appDir + "/images/did-you-know.png", wizardTipOfTheDay);
+
+    if (settings_general_current_tip >= listTipOfTheDay.size()) {
+        settings_general_current_tip = 0;
+    }
+    labelTipOfTheDay = new QLabel(listTipOfTheDay.value(settings_general_current_tip), wizardTipOfTheDay);
+    labelTipOfTheDay->setWordWrap(true);
+
+    QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
+    settings_general_tip_of_the_day = settings_general_tip_of_the_day;
+    checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
+    connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
+
+    QVBoxLayout* layout = new QVBoxLayout(wizardTipOfTheDay);
+    layout->addWidget(imgBanner);
+    layout->addStrut(1);
+    layout->addWidget(labelTipOfTheDay);
+    layout->addStretch(1);
+    layout->addWidget(checkBoxTipOfTheDay);
+    page->setLayout(layout);
+    wizardTipOfTheDay->addPage(page);
+
+    wizardTipOfTheDay->setWindowTitle("Tip of the Day");
+
+    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious)
+    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext)
+    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose)
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
+    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
+    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
+    connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), this, SLOT(buttonTipOfTheDayClicked(int)));
+
+    QList<QWizard::WizardButton> listTipOfTheDayButtons;
+    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1 << QWizard::CustomButton2 << QWizard::CustomButton3;
+    wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
+
+    wizardTipOfTheDay->exec();
+}
+
+void checkBoxTipOfTheDayStateChanged(int checked)
+{
+    settings_general_tip_of_the_day = checked;
+}
+
+void button_tip_of_the_day_clicked(int button)
+{
+    debug_message("buttonTipOfTheDayClicked(%d)", button);
+    if (button == QWizard::CustomButton1)
+    {
+        if (settings_general_current_tip > 0)
+            settings_general_current_tip--;
+        else
+            settings_general_current_tip = listTipOfTheDay.size()-1;
+        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
+    }
+    else if (button == QWizard::CustomButton2)
+    {
+        settings_general_current_tip++;
+        if (settings_general_current_tip >= listTipOfTheDay.size())
+            settings_general_current_tip = 0;
+        labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
+    }
+    else if (button == QWizard::CustomButton3)
+    {
+        wizardTipOfTheDay->close();
+    }
+}
+
+// Standard Slots
+void undo_action()
+{
+    debug_message("undo()");
+    std::string prefix = prompt->getPrefix();
+    if (dockUndoEdit->canUndo()) {
+        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+        prompt->appendHistory(std::string());
+        dockUndoEdit->undo();
+        prompt->setPrefix(prefix);
+    }
+    else {
+        prompt->alert("Nothing to undo");
+        prompt->setPrefix(prefix);
+    }
+}
+
+void redo_action()
+{
+    debug_message("redo()");
+    std::string prefix = prompt->getPrefix();
+    if (dockUndoEdit->canRedo()) {
+        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+        prompt->appendHistory(std::string());
+        dockUndoEdit->redo();
+        prompt->setPrefix(prefix);
+    }
+    else {
+        prompt->alert("Nothing to redo");
+        prompt->setPrefix(prefix);
+    }
+}
+
+void set_shift_pressed()
+{
+    shiftKeyPressedState = true;
+}
+
+void set_shift_released()
+{
+    shiftKeyPressedState = false;
+}
+
+void iconResize(int iconSize)
+{
+    this->setIconSize(QSize(iconSize, iconSize));
+    layerSelector->setIconSize(QSize(iconSize*4, iconSize));
+    colorSelector->setIconSize(QSize(iconSize,   iconSize));
+    linetypeSelector->setIconSize(QSize(iconSize*4, iconSize));
+    lineweightSelector->setIconSize(QSize(iconSize*4, iconSize));
+    //set the minimum combobox width so the text is always readable
+    layerSelector->setMinimumWidth(iconSize*4);
+    colorSelector->setMinimumWidth(iconSize*2);
+    linetypeSelector->setMinimumWidth(iconSize*4);
+    lineweightSelector->setMinimumWidth(iconSize*4);
+
+    //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
+
+    settings_general_icon_size = iconSize;
+}
+
+void setUndoCleanIcon(bool opened)
+{
+    dockUndoEdit->updateCleanIcon(opened);
+}
+
+void updateAllViewScrollBars(bool val)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if (mdiWin) { mdiWin->showViewScrollBars(val); }
+    }
+}
+
+void updateAllViewCrossHairColors(unsigned int color)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if (mdiWin) { mdiWin->setViewCrossHairColor(color); }
+    }
+}
+
+void updateAllViewBackgroundColors(unsigned int color)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if (mdiWin) { mdiWin->setViewBackgroundColor(color); }
+    }
+}
+
+void updateAllViewSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if (mdiWin) { mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha); }
+    }
+}
+
+void updateAllViewGridColors(unsigned int color)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if (mdiWin) { mdiWin->setViewGridColor(color); }
+    }
+}
+
+void updateAllViewRulerColors(unsigned int color)
+{
+    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    for(int i = 0; i < windowList.count(); ++i)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
+        if (mdiWin) { mdiWin->setViewRulerColor(color); }
+    }
+}
+
+void updatePickAddMode(bool val)
+{
+    settings_selection_mode_pickadd = val;
+    dockPropEdit->updatePickAddModeButton(val);
+}
+
+void pickAddModeToggled()
+{
+    bool val = !settings_selection_mode_pickadd;
+    updatePickAddMode(val);
+}
+
+// Layer ToolBar
+void makeLayerActive()
+{
+    debug_message("makeLayerActive()");
+    stub_implement("Implement makeLayerActive.");
+}
+
+void layerManager()
+{
+    debug_message("layerManager()");
+    stub_implement("Implement layerManager.");
+    LayerManager layman(this, this);
+    layman.exec();
+}
+
+void layerPrevious()
+{
+    debug_message("layerPrevious()");
+    stub_implement("Implement layerPrevious.");
+}
+
+// Zoom ToolBar
+void zoomRealtime()
+{
+    debug_message("zoomRealtime()");
+    stub_implement("Implement zoomRealtime.");
+}
+
+void zoomPrevious()
+{
+    debug_message("zoomPrevious()");
+    stub_implement("Implement zoomPrevious.");
+}
+
+void zoomWindow()
+{
+    debug_message("zoomWindow()");
+    View* active_view = activeView();
+    if (active_view) { active_view->zoomWindow(); }
+}
+
+void zoomDynamic()
+{
+    debug_message("zoomDynamic()");
+    stub_implement("Implement zoomDynamic.");
+}
+
+void zoomScale()
+{
+    debug_message("zoomScale()");
+    stub_implement("Implement zoomScale.");
+}
+
+void zoomCenter()
+{
+    debug_message("zoomCenter()");
+    stub_implement("Implement zoomCenter.");
+}
+
+void zoomIn()
+{
+    debug_message("zoomIn()");
+    View* active_view = activeView();
+    if (active_view) { active_view->zoomIn(); }
+}
+
+void zoomOut()
+{
+    debug_message("zoomOut()");
+    View* active_view = activeView();
+    if (active_view) { active_view->zoomOut(); }
+}
+
+void zoomSelected()
+{
+    debug_message("zoomSelected()");
+    View* active_view = activeView();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack)
+    {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", active_view, 0);
+        stack->push(cmd);
+    }
+}
+
+void zoomAll()
+{
+    debug_message("zoomAll()");
+    stub_implement("Implement zoomAll.");
+}
+
+void zoomExtents()
+{
+    debug_message("zoomExtents()");
+    View* active_view = activeView();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", active_view, 0);
+        stack->push(cmd);
+    }
+}
+#endif
+
+void day_vision_action(std::vector<std::string> args)
+{
+    /*
+    View* active_view = activeView();
+    if (active_view) {
+        active_view->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        active_view->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        active_view->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    }
+    */
+}
+
+void night_vision_action(std::vector<std::string> args)
+{
+    /*
+    View* active_view = activeView();
+    if (active_view) {
+        active_view->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        active_view->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        active_view->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    }
+    */
+}
+
+void do_nothing_action(std::vector<std::string> args)
+{
+    //This function intentionally does nothing.
+    debug_message("doNothing()");
+}
+
+#if 0
+void layerSelectorIndexChanged(int index)
+{
+    debug_message("layerSelectorIndexChanged(%d)", index);
+}
+
+void colorSelectorIndexChanged(int index)
+{
+    debug_message("colorSelectorIndexChanged(%d)", index);
+
+    QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
+    unsigned int newColor;
+    if (comboBox)
+    {
+        bool ok = 0;
+        //TODO: Handle ByLayer and ByBlock and Other...
+        newColor = comboBox->itemData(index).toUInt(&ok);
+        if (!ok)
+            QMessageBox::warning(this, translate("Color Selector Conversion Error"), translate("<b>An error has occured while changing colors.</b>"));
+    }
+    else
+        QMessageBox::warning(this, translate("Color Selector Pointer Error"), translate("<b>An error has occured while changing colors.</b>"));
+
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { mdiWin->currentColorChanged(newColor); }
+}
+
+void linetypeSelectorIndexChanged(int index)
+{
+    debug_message("linetypeSelectorIndexChanged(%d)", index);
+}
+
+void lineweightSelectorIndexChanged(int index)
+{
+    debug_message("lineweightSelectorIndexChanged(%d)", index);
+}
+
+void textFontSelectorCurrentFontChanged(const QFont& font)
+{
+    debug_message("textFontSelectorCurrentFontChanged()");
+    setTextFont(font.family());
+}
+
+void textSizeSelectorIndexChanged(int index)
+{
+    debug_message("textSizeSelectorIndexChanged(%d)", index);
+    settings_text_size = qFabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
+}
+
+std::string textFont()
+{
+    return settings_text_font;
+}
+
+double textSize()
+{
+    return settings_text_size;
+}
+
+double textAngle()
+{
+    return settings_text_angle;
+}
+
+bool textBold()
+{
+    return settings_text_style_bold;
+}
+
+bool textItalic()
+{
+    return settings_text_style_italic;
+}
+
+bool textUnderline()
+{
+    return settings_text_style_underline;
+}
+
+bool textStrikeOut()
+{
+    return settings_text_style_strikeout;
+}
+
+bool textOverline()
+{
+    return settings_text_style_overline;
+}
+
+void setTextFont(const std::string& str)
+{
+    textFontSelector->setCurrentFont(QFont(str));
+    settings_text_font = str;
+}
+
+void setTextSize(double num)
+{
+    settings_text_size = qFabs(num);
+    int index = textSizeSelector->findText("Custom", MatchContains);
+    if (index != -1)
+        textSizeSelector->removeItem(index);
+    textSizeSelector->addItem("Custom " + std::string().setNum(num, 'f', 2) + " pt", num);
+    index = textSizeSelector->findText("Custom", MatchContains);
+    if (index != -1)
+        textSizeSelector->setCurrentIndex(index);
+}
+
+void setTextAngle(double num)
+{
+    settings_text_angle = num;
+}
+
+void setTextBold(bool val)
+{
+    settings_text_style_bold = val;
+}
+
+void setTextItalic(bool val)
+{
+    settings_text_style_italic = val;
+}
+
+void setTextUnderline(bool val)
+{
+    settings_text_style_underline = val;
+}
+
+void setTextStrikeOut(bool val)
+{
+    settings_text_style_strikeout = val;
+}
+
+void setTextOverline(bool val)
+{
+    settings_text_style_overline = val;
+}
+
+std::string getCurrentLayer()
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { return mdiWin->getCurrentLayer(); }
+    return "0";
+}
+
+unsigned int getCurrentColor()
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { return mdiWin->getCurrentColor(); }
+    return 0; //TODO: return color ByLayer
+}
+
+std::string getCurrentLineType()
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { return mdiWin->getCurrentLineType(); }
+    return "ByLayer";
+}
+
+std::string getCurrentLineWeight()
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { return mdiWin->getCurrentLineWeight(); }
+    return "ByLayer";
+}
+
+void deletePressed()
+{
+    debug_message("deletePressed()");
+    QApplication::setOverrideCursor(WaitCursor);
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { mdiWin->deletePressed(); }
+    QApplication::restoreOverrideCursor();
+}
+
+void escapePressed()
+{
+    debug_message("escapePressed()");
+    QApplication::setOverrideCursor(WaitCursor);
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) { mdiWin->escapePressed(); }
+    QApplication::restoreOverrideCursor();
+
+    nativeEndCommand();
+}
+
+void toggleGrid()
+{
+    debug_message("toggleGrid()");
+    statusbar->statusBarGridButton->toggle();
+}
+
+void toggleRuler()
+{
+    debug_message("toggleRuler()");
+    statusbar->statusBarRulerButton->toggle();
+}
+
+void toggleLwt()
+{
+    debug_message("toggleLwt()");
+    statusbar->statusBarLwtButton->toggle();
+}
+
+void enablePromptRapidFire()
+{
+    prompt->enableRapidFire();
+}
+
+void disablePromptRapidFire()
+{
+    prompt->disableRapidFire();
+}
+
+void enableMoveRapidFire()
+{
+    View* active_view = activeView();
+    if (active_view) active_view->enableMoveRapidFire();
+}
+
+void disableMoveRapidFire()
+{
+    View* active_view = activeView();
+    if (active_view) active_view->disableMoveRapidFire();
+}
+
+void promptHistoryAppended(const std::string& txt)
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) mdiWin->promptHistoryAppended(txt);
+}
+
+void logPromptInput(const std::string& txt)
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) mdiWin->logPromptInput(txt);
+}
+
+void promptInputPrevious()
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) mdiWin->promptInputPrevious();
+}
+
+void promptInputNext()
+{
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) mdiWin->promptInputNext();
+}
+
+void runCommand()
+{
+    /* TODO. */
+    QAction* act = qobject_cast<QAction*>(sender());
+    if (act) {
+        debug_message("runCommand(%s)", qPrintable(act->objectName()));
+        prompt->endCommand();
+        prompt->setCurrentText(act->objectName());
+        prompt->processInput(Key_Return);
+    }
+}
+
+void runCommandMain(const std::string& cmd)
+{
+    debug_message("runCommandMain(%s)", qPrintable(cmd));
+    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
+    // if (!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
+    // engine->evaluate(cmd + "_main()", fileName);
+}
+
+void runCommandClick(const std::string& cmd, double x, double y)
+{
+    debug_message("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
+    // engine->evaluate(cmd + "_click(" + std::string().setNum(x) + "," + std::string().setNum(-y) + ")", fileName);
+}
+
+void runCommandMove(const std::string& cmd, double x, double y)
+{
+    debug_message("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
+    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
+    // engine->evaluate(cmd + "_move(" + std::string().setNum(x) + "," + std::string().setNum(-y) + ")", fileName);
+}
+
+void runCommandContext(const std::string& cmd, const std::string& str)
+{
+    debug_message("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
+    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
+    // engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
+}
+
+void runCommandPrompt(const std::string& cmd, const std::string& str)
+{
+    debug_message("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
+    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
+    //NOTE: Replace any special characters that will cause a syntax error
+    std::string safeStr = str;
+    safeStr.replace("\\", "\\\\");
+    safeStr.replace("\'", "\\\'");
+    /*
+    if (prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName); }
+    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
+    */
+}
+
+void nativeAlert(const std::string& txt)
+{
+    prompt->alert(txt);
+}
+
+void nativeBlinkPrompt()
+{
+    prompt->startBlinking();
+}
+
+void nativeSetPromptPrefix(const std::string& txt)
+{
+    prompt->setPrefix(txt);
+}
+
+void nativeAppendPromptHistory(const std::string& txt)
+{
+    prompt->appendHistory(txt);
+}
+
+void nativeEnablePromptRapidFire()
+{
+    enablePromptRapidFire();
+}
+
+void nativeDisablePromptRapidFire()
+{
+    disablePromptRapidFire();
+}
+
+void nativeEnableMoveRapidFire()
+{
+    enableMoveRapidFire();
+}
+
+void nativeDisableMoveRapidFire()
+{
+    disableMoveRapidFire();
+}
+
+void nativeInitCommand()
+{
+    View* active_view = activeView();
+    if (active_view) active_view->clearRubberRoom();
+}
+
+void nativeEndCommand()
+{
+    View* active_view = activeView();
+    if (active_view)
+    {
+        active_view->clearRubberRoom();
+        active_view->previewOff();
+        active_view->disableMoveRapidFire();
+    }
+    prompt->endCommand();
+}
+
+void nativeExit()
+{
+    exit();
+}
+
+void nativeHelp()
+{
+    help();
+}
+
+void nativeAbout()
+{
+    about();
+}
+
+void nativeTipOfTheDay()
+{
+    tipOfTheDay();
+}
+
+void nativeWindowCascade()
+{
+    mdiArea->cascade();
+}
+
+void nativeWindowTile()
+{
+    mdiArea->tile();
+}
+
+void nativeWindowClose()
+{
+    onCloseWindow();
+}
+
+void nativeWindowCloseAll()
+{
+    mdiArea->closeAllSubWindows();
+}
+
+void nativeWindowNext()
+{
+    mdiArea->activateNextSubWindow();
+}
+
+void nativeWindowPrevious()
+{
+    mdiArea->activatePreviousSubWindow();
+}
+
+std::string nativePlatformString()
+{
+    return platformString();
+}
+
+void nativeMessageBox(const std::string& type, const std::string& title, const std::string& text)
+{
+    std::string msgType = type.toLower();
+    if     (msgType == "critical")    { QMessageBox::critical   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
+    else if (msgType == "information") { QMessageBox::information(this, translate(qPrintable(title)), translate(qPrintable(text))); }
+    else if (msgType == "question")    { QMessageBox::question   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
+    else if (msgType == "warning")     { QMessageBox::warning    (this, translate(qPrintable(title)), translate(qPrintable(text))); }
+    else                              { QMessageBox::critical   (this, translate("Native MessageBox Error"), translate("Incorrect use of the native messageBox function.")); }
+}
+
+void nativePrintArea(double x, double y, double w, double h)
+{
+    debug_message("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
+    //TODO: Print Setup Stuff
+    print();
+}
+
+void nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
+{
+    settings_display_bg_color = qRgb(r,g,b);
+    updateAllViewBackgroundColors(qRgb(r,g,b));
+}
+
+void nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
+{
+    settings_display_crosshair_color = qRgb(r,g,b);
+    updateAllViewCrossHairColors(qRgb(r,g,b));
+}
+
+void nativeSetGridColor(quint8 r, quint8 g, quint8 b)
+{
+    settings_grid_color = qRgb(r,g,b);
+    updateAllViewGridColors(qRgb(r,g,b));
+}
+
+std::string nativeTextFont()
+{
+    return textFont();
+}
+
+double nativeTextSize()
+{
+    return textSize();
+}
+
+double nativeTextAngle()
+{
+    return textAngle();
+}
+
+bool nativeTextBold()
+{
+    return textBold();
+}
+
+bool nativeTextItalic()
+{
+    return textItalic();
+}
+
+bool nativeTextUnderline()
+{
+    return textUnderline();
+}
+
+bool nativeTextStrikeOut()
+{
+    return textStrikeOut();
+}
+
+bool nativeTextOverline()
+{
+    return textOverline();
+}
+
+void nativeSetTextFont(const std::string& str)
+{
+    setTextFont(str);
+}
+
+void nativeSetTextSize(double num)
+{
+    setTextSize(num);
+}
+
+void nativeSetTextAngle(double num)
+{
+    setTextAngle(num);
+}
+
+void nativeSetTextBold(bool val)
+{
+    setTextBold(val);
+}
+
+void nativeSetTextItalic(bool val)
+{
+    setTextItalic(val);
+}
+
+void nativeSetTextUnderline(bool val)
+{
+    setTextUnderline(val);
+}
+
+void nativeSetTextStrikeOut(bool val)
+{
+    setTextStrikeOut(val);
+}
+
+void nativeSetTextOverline(bool val)
+{
+    setTextOverline(val);
+}
+
+void nativePreviewOn(int clone, int mode, double x, double y, double data)
+{
+    View* active_view = activeView();
+    if (active_view) active_view->previewOn(clone, mode, x, -y, data);
+}
+
+void nativePreviewOff()
+{
+    View* active_view = activeView();
+    if (active_view) active_view->previewOff();
+}
+
+void nativeVulcanize()
+{
+    View* active_view = activeView();
+    if (active_view) active_view->vulcanizeRubberRoom();
+}
+
+void nativeClearRubber()
+{
+    View* active_view = activeView();
+    if (active_view) active_view->clearRubberRoom();
+}
+
+bool nativeAllowRubber()
+{
+    View* active_view = activeView();
+    if (active_view) return active_view->allowRubber();
+    return false;
+}
+
+void nativeSpareRubber(qint64 id)
+{
+    if (active_view) active_view->spareRubber(id);
+}
+
+void nativeSetRubberPoint(const std::string& key, double x, double y)
+{
+    if (active_view) active_view->setRubberPoint(key, EmbVector(x, -y));
+}
+
+void nativeSetRubberText(const std::string& key, const std::string& txt)
+{
+    if (active_view) active_view->setRubberText(key, txt);
+}
+
+void nativeAddTextMulti(const std::string& str, double x, double y, double rot, bool fill, int rubberMode)
+{
+}
+
+void nativeAddTextSingle(const std::string& str, double x, double y, double rot, bool fill, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack)
+    {
+        TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
+        obj->setObjectTextFont(settings_text_font);
+        obj->setObjectTextSize(settings_text_size);
+        obj->setObjectTextStyle(settings_text_style_bold,
+                                settings_text_style_italic,
+                                settings_text_style_underline,
+                                settings_text_style_strikeout,
+                                settings_text_style_overline);
+        obj->setObjectTextBackward(false);
+        obj->setObjectTextUpsideDown(false);
+        obj->setRotation(-rot);
+        //TODO: single line text fill
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
+{
+}
+
+void nativeAddRay(double x1, double y1, double x2, double y2, double rot)
+{
+}
+
+void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack)
+    {
+        LineObject* obj = new LineObject(x1, -y1, x2, -y2, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
+{
+}
+
+void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack)
+    {
+        RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: rect fill
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
+{
+}
+
+void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
+{
+    //TODO: Use UndoableAddCommand for slots
+    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
+    slotObj->setRotation(-rot);
+    slotObj->setObjectRubberMode(rubberMode);
+    if (rubberMode) active_view->addToRubberRoom(slotObj);
+    scene->addItem(slotObj);
+    //TODO: slot fill
+    scene->update();
+}
+
+void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack) {
+        EllipseObject* obj = new EllipseObject(centerX, -centerY, width, height, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: ellipse fill
+        if (rubberMode) {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+void nativeAddPoint(double x, double y)
+{
+    View* active_view = activeView();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack) {
+        PointObject* obj = new PointObject(x, -y, getCurrentColor());
+        UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+        stack->push(cmd);
+    }
+}
+
+void nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, quint8 mode, double rad, double rot, bool fill)
+{
+}
+
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack)
+    {
+        PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack) {
+        PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
+void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
+{
+}
+
+void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
+{
+}
+
+void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
+{
+}
+
+void nativeAddImage(const std::string& img, double x, double y, double w, double h, double rot)
+{
+}
+
+void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+{
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack) {
+        DimLeaderObject* obj = new DimLeaderObject(x1, -y1, x2, -y2, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+}
+
+
+double nativeCalculateAngle(double x1, double y1, double x2, double y2)
+{
+    return EmbLine(x1, -y1, x2, -y2).angle();
+}
+
+double nativeCalculateDistance(double x1, double y1, double x2, double y2)
+{
+    return EmbLine(x1, y1, x2, y2).length();
+}
+
+double nativePerpendicularDistance(double px, double py, double x1, double y1, double x2, double y2)
+{
+    EmbLine line(x1, y1, x2, y2);
+    EmbLine norm = line.normalVector();
+    double dx = px-x1;
+    double dy = py-y1;
+    norm.translate(dx, dy);
+    EmbVector iPoint;
+    norm.intersects(line, &iPoint);
+    return EmbLine(px, py, iPoint.x(), iPoint.y()).length();
+}
+
+int nativeNumSelected()
+{
+    View* active_view = activeView();
+    if (active_view) { return active_view->numSelected(); }
+    return 0;
+}
+
+void nativeSelectAll()
+{
+    View* active_view = activeView();
+    if (active_view) {
+        active_view->selectAll();
+    }
+}
+
+void nativeAddToSelection(const QPainterPath path, ItemSelectionMode mode)
+{
+
+}
+
+void clear_selection_action(std::vector<std::string> args)
+{
+    if (active_view) {
+        active_view->clearSelection();
+    }
+}
+
+void nativeDeleteSelected()
+{
+    if (active_view) {
+        active_view->deleteSelected();
+    }
+}
+
+void nativeCutSelected(double x, double y)
+{
+}
+
+void nativeCopySelected(double x, double y)
+{
+}
+
+void nativePasteSelected(double x, double y)
+{
+}
+
+void nativeMoveSelected(double dx, double dy)
+{
+    View* active_view = activeView();
+    if (active_view) { active_view->moveSelected(dx, -dy); }
+}
+
+double nativeQSnapX()
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) return scene->property("SCENE_QSNAP_POINT").toPointF().x();
+    return 0.0;
+}
+
+double nativeQSnapY()
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        return -scene->property("SCENE_QSNAP_POINT").toPointF().y();
+    }
+    return 0.0;
+}
+
+double nativeMouseX()
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        debug_message("mouseX: %.50f", scene->property("SCENE_MOUSE_POINT").toPointF().x());
+        return scene->property("SCENE_MOUSE_POINT").toPointF().x();
+    }
+    return 0.0;
+}
+
+double nativeMouseY()
+{
+    QGraphicsScene* scene = activeScene();
+    if (scene) {
+        debug_message("mouseY: %.50f", -scene->property("SCENE_MOUSE_POINT").toPointF().y());
+        return -scene->property("SCENE_MOUSE_POINT").toPointF().y();
+    }
+    return 0.0;
+}
+#endif
+
+#if 0
+MainWindow *mainWin;
+std::string settings_general_language;
+std::string settings_general_icon_theme;
+
+void createAllActions()
+{
+    debug_message("Creating All Actions...");
+    for (int i=0; action_list[i].action>=0; i++) {
+        std::string icon = action_list[i].command;
+        std::string toolTip = translate(action_list[i].menu_label);
+        std::string statusTip = translate(action_list[i].description);
+        QAction *ACTION = new QAction(load_icon(icon), toolTip, this);
+        ACTION->setStatusTip(statusTip);
+        ACTION->setObjectName(icon);
+        // TODO: Set What's This Context Help to statusTip for now so there is some infos there.
+        // Make custom whats this context help popup with more descriptive help than just
+        // the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup
+        // at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.
+        ACTION->setWhatsThis(statusTip);
+        // TODO: Finish All Commands ... <.<
+
+        if (icon == "textbold") {
+            ACTION->setCheckable(true);
+            connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextBold(bool)));
+        }
+        else if (icon == "textitalic") {
+            ACTION->setCheckable(true);
+            connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextItalic(bool)));
+        }
+        else if (icon == "textunderline") {
+            ACTION->setCheckable(true);
+            connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextUnderline(bool)));
+        }
+        else if (icon == "textstrikeout") {
+            ACTION->setCheckable(true);
+            connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextStrikeOut(bool)));
+        }
+        else if (icon == "textoverline") {
+            ACTION->setCheckable(true);
+            connect(ACTION, SIGNAL(toggled(bool)), this, SLOT(setTextOverline(bool)));
+        }
+        else {
+            connect(ACTION, &QAction::triggered, this, [=](){
+                actuator(ACTION->objectName().toStdString());
+            });
+        }
+
+        if (icon == "new") {
+            ACTION->setShortcut(QKeySequence::New);
+        }
+        else if (icon == "open") {
+            ACTION->setShortcut(QKeySequence::Open);
+        }
+        else if (icon == "save") {
+            ACTION->setShortcut(QKeySequence::Save);
+        }
+        else if (icon == "saveas") {
+            ACTION->setShortcut(QKeySequence::SaveAs);
+        }
+        else if (icon == "print") {
+            ACTION->setShortcut(QKeySequence::Print);
+        }
+        else if (icon == "designdetails") {
+            ACTION->setShortcut(QKeySequence("Ctrl+D"));
+        }
+        else if (icon == "exit") {
+            ACTION->setShortcut(QKeySequence("Ctrl+Q"));
+        }
+        else if (icon == "cut") {
+            ACTION->setShortcut(QKeySequence::Cut);
+        }
+        else if (icon == "copy") {
+            ACTION->setShortcut(QKeySequence::Copy);
+        }
+        else if (icon == "paste") {
+            ACTION->setShortcut(QKeySequence::Paste);
+        }
+        else if (icon == "windowclose") {
+            ACTION->setShortcut(QKeySequence::Close);
+        }
+        else if (icon == "windownext") {
+            ACTION->setShortcut(QKeySequence::NextChild);
+        }
+        else if (icon == "windowprevious") {
+            ACTION->setShortcut(QKeySequence::PreviousChild);
+        }
+        actionHash.insert(action_list[i].action, ACTION);
+    }
+
+    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+}
+
+void createLayerToolbar()
+{
+    debug_message("MainWindow createLayerToolbar()");
+
+    toolbarLayer->setObjectName("toolbarLayer");
+    toolbarLayer->addAction(actionHash.value(ACTION_makelayercurrent));
+    toolbarLayer->addAction(actionHash.value(ACTION_layers));
+
+    layerSelector->setFocusProxy(prompt);
+    //NOTE: Qt4.7 wont load icons without an extension...
+    //TODO: Create layer pixmaps by concatenating several icons
+    layerSelector->addItem(load_icon("linetypebylayer"), "0");
+    layerSelector->addItem(load_icon("linetypebylayer"), "1");
+    layerSelector->addItem(load_icon("linetypebylayer"), "2");
+    layerSelector->addItem(load_icon("linetypebylayer"), "3");
+    layerSelector->addItem(load_icon("linetypebylayer"), "4");
+    layerSelector->addItem(load_icon("linetypebylayer"), "5");
+    layerSelector->addItem(load_icon("linetypebylayer"), "6");
+    layerSelector->addItem(load_icon("linetypebylayer"), "7");
+    layerSelector->addItem(load_icon("linetypebylayer"), "8");
+    layerSelector->addItem(load_icon("linetypebylayer"), "9");
+    toolbarLayer->addWidget(layerSelector);
+    connect(layerSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(layerSelectorIndexChanged(int)));
+
+    toolbarLayer->addAction(actionHash.value(ACTION_layerprevious));
+
+    connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void createPropertiesToolbar()
+{
+    debug_message("MainWindow createPropertiesToolbar()");
+
+    toolbarProperties->setObjectName("toolbarProperties");
+
+    colorSelector->setFocusProxy(prompt);
+    colorSelector->addItem(load_icon("colorbylayer"), "ByLayer");
+    colorSelector->addItem(load_icon("colorbyblock"), "ByBlock");
+    colorSelector->addItem(load_icon("colorred"    ), translate("Red"),     qRgb(255,  0,  0));
+    colorSelector->addItem(load_icon("coloryellow" ), translate("Yellow"),  qRgb(255,255,  0));
+    colorSelector->addItem(load_icon("colorgreen"  ), translate("Green"),   qRgb(  0,255,  0));
+    colorSelector->addItem(load_icon("colorcyan"   ), translate("Cyan"),    qRgb(  0,255,255));
+    colorSelector->addItem(load_icon("colorblue"   ), translate("Blue"),    qRgb(  0,  0,255));
+    colorSelector->addItem(load_icon("colormagenta"), translate("Magenta"), qRgb(255,  0,255));
+    colorSelector->addItem(load_icon("colorwhite"  ), translate("White"),   qRgb(255,255,255));
+    colorSelector->addItem(load_icon("colorother"  ), translate("Other..."));
+    toolbarProperties->addWidget(colorSelector);
+    connect(colorSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelectorIndexChanged(int)));
+
+    toolbarProperties->addSeparator();
+    linetypeSelector->setFocusProxy(prompt);
+    linetypeSelector->addItem(load_icon("linetypebylayer"   ), "ByLayer");
+    linetypeSelector->addItem(load_icon("linetypebyblock"   ), "ByBlock");
+    linetypeSelector->addItem(load_icon("linetypecontinuous"), "Continuous");
+    linetypeSelector->addItem(load_icon("linetypehidden"    ), "Hidden");
+    linetypeSelector->addItem(load_icon("linetypecenter"    ), "Center");
+    linetypeSelector->addItem(load_icon("linetypeother"     ), "Other...");
+    toolbarProperties->addWidget(linetypeSelector);
+    connect(linetypeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(linetypeSelectorIndexChanged(int)));
+
+    toolbarProperties->addSeparator();
+    lineweightSelector->setFocusProxy(prompt);
+    lineweightSelector->addItem(load_icon("lineweightbylayer"), "ByLayer", -2.00);
+    lineweightSelector->addItem(load_icon("lineweightbyblock"), "ByBlock", -1.00);
+    lineweightSelector->addItem(load_icon("lineweightdefault"), "Default",  0.00);
+    //TODO: Thread weight is weird. See http://en.wikipedia.org/wiki/Thread_(yarn)#Weight
+    lineweightSelector->addItem(load_icon("lineweight01"), "0.00 mm", 0.00);
+    lineweightSelector->addItem(load_icon("lineweight02"), "0.05 mm", 0.05);
+    lineweightSelector->addItem(load_icon("lineweight03"), "0.15 mm", 0.15);
+    lineweightSelector->addItem(load_icon("lineweight04"), "0.20 mm", 0.20);
+    lineweightSelector->addItem(load_icon("lineweight05"), "0.25 mm", 0.25);
+    lineweightSelector->addItem(load_icon("lineweight06"), "0.30 mm", 0.30);
+    lineweightSelector->addItem(load_icon("lineweight07"), "0.35 mm", 0.35);
+    lineweightSelector->addItem(load_icon("lineweight08"), "0.40 mm", 0.40);
+    lineweightSelector->addItem(load_icon("lineweight09"), "0.45 mm", 0.45);
+    lineweightSelector->addItem(load_icon("lineweight10"), "0.50 mm", 0.50);
+    lineweightSelector->addItem(load_icon("lineweight11"), "0.55 mm", 0.55);
+    lineweightSelector->addItem(load_icon("lineweight12"), "0.60 mm", 0.60);
+    lineweightSelector->addItem(load_icon("lineweight13"), "0.65 mm", 0.65);
+    lineweightSelector->addItem(load_icon("lineweight14"), "0.70 mm", 0.70);
+    lineweightSelector->addItem(load_icon("lineweight15"), "0.75 mm", 0.75);
+    lineweightSelector->addItem(load_icon("lineweight16"), "0.80 mm", 0.80);
+    lineweightSelector->addItem(load_icon("lineweight17"), "0.85 mm", 0.85);
+    lineweightSelector->addItem(load_icon("lineweight18"), "0.90 mm", 0.90);
+    lineweightSelector->addItem(load_icon("lineweight19"), "0.95 mm", 0.95);
+    lineweightSelector->addItem(load_icon("lineweight20"), "1.00 mm", 1.00);
+    lineweightSelector->addItem(load_icon("lineweight21"), "1.05 mm", 1.05);
+    lineweightSelector->addItem(load_icon("lineweight22"), "1.10 mm", 1.10);
+    lineweightSelector->addItem(load_icon("lineweight23"), "1.15 mm", 1.15);
+    lineweightSelector->addItem(load_icon("lineweight24"), "1.20 mm", 1.20);
+    lineweightSelector->setMinimumContentsLength(8); // Prevent dropdown text readability being squish...d.
+    toolbarProperties->addWidget(lineweightSelector);
+    connect(lineweightSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(lineweightSelectorIndexChanged(int)));
+
+    connect(toolbarProperties, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void createTextToolbar()
+{
+    debug_message("MainWindow createTextToolbar()");
+
+    toolbarText->setObjectName("toolbarText");
+
+    toolbarText->addWidget(textFontSelector);
+    textFontSelector->setCurrentFont(QFont(settings_text_font));
+    connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
+
+    toolbarText->addAction(actionHash.value(ACTION_textbold));
+    actionHash.value(ACTION_textbold)->setChecked(settings_text_style_bold);
+    toolbarText->addAction(actionHash.value(ACTION_textitalic));
+    actionHash.value(ACTION_textitalic)->setChecked(settings_text_style_italic);
+    toolbarText->addAction(actionHash.value(ACTION_textunderline));
+    actionHash.value(ACTION_textunderline)->setChecked(settings_text_style_underline);
+    toolbarText->addAction(actionHash.value(ACTION_textstrikeout));
+    actionHash.value(ACTION_textstrikeout)->setChecked(settings_text_style_strikeout);
+    toolbarText->addAction(actionHash.value(ACTION_textoverline));
+    actionHash.value(ACTION_textoverline)->setChecked(settings_text_style_overline);
+
+    textSizeSelector->setFocusProxy(prompt);
+    textSizeSelector->addItem("6 pt",   6);
+    textSizeSelector->addItem("8 pt",   8);
+    textSizeSelector->addItem("9 pt",   9);
+    textSizeSelector->addItem("10 pt", 10);
+    textSizeSelector->addItem("11 pt", 11);
+    textSizeSelector->addItem("12 pt", 12);
+    textSizeSelector->addItem("14 pt", 14);
+    textSizeSelector->addItem("18 pt", 18);
+    textSizeSelector->addItem("24 pt", 24);
+    textSizeSelector->addItem("30 pt", 30);
+    textSizeSelector->addItem("36 pt", 36);
+    textSizeSelector->addItem("48 pt", 48);
+    textSizeSelector->addItem("60 pt", 60);
+    textSizeSelector->addItem("72 pt", 72);
+    setTextSize(settings_text_size);
+    toolbarText->addWidget(textSizeSelector);
+    connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
+
+    connect(toolbarText, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
+}
+
+void createPromptToolbar()
+{
+    debug_message("MainWindow createPromptToolbar()");
+
+    toolbarPrompt->setObjectName("toolbarPrompt");
+    toolbarPrompt->addWidget(prompt);
+    toolbarPrompt->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    connect(toolbarPrompt, SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
+}
+
+void createAllToolbars()
+{
+    debug_message("MainWindow createAllToolbars()");
+
+    add_to_toolbar(toolbarFile, "toolbarFile", toolbar_file_entries);
+    add_to_toolbar(toolbarEdit, "toolbarEdit", toolbar_edit_entries);
+    add_to_toolbar(toolbarView, "toolbarView", toolbar_view_entries);
+    add_to_toolbar(toolbarZoom, "toolbarZoom", toolbar_zoom_entries);
+    add_to_toolbar(toolbarPan, "toolbarPan", toolbar_pan_entries);
+    add_to_toolbar(toolbarIcon, "toolbarIcon", toolbar_icon_entries);
+    add_to_toolbar(toolbarHelp, "toolbarHelp", toolbar_help_entries);
+
+    createLayerToolbar();
+    createPropertiesToolbar();
+    createTextToolbar();
+    createPromptToolbar();
+
+    // Horizontal
+    toolbarView->setOrientation(Qt::Horizontal);
+    toolbarZoom->setOrientation(Qt::Horizontal);
+    toolbarLayer->setOrientation(Qt::Horizontal);
+    toolbarProperties->setOrientation(Qt::Horizontal);
+    toolbarText->setOrientation(Qt::Horizontal);
+    toolbarPrompt->setOrientation(Qt::Horizontal);
+    // Top
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarFile);
+    addToolBar(Qt::TopToolBarArea, toolbarEdit);
+    addToolBar(Qt::TopToolBarArea, toolbarHelp);
+    addToolBar(Qt::TopToolBarArea, toolbarIcon);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarZoom);
+    addToolBar(Qt::TopToolBarArea, toolbarPan);
+    addToolBar(Qt::TopToolBarArea, toolbarView);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarLayer);
+    addToolBar(Qt::TopToolBarArea, toolbarProperties);
+    addToolBarBreak(Qt::TopToolBarArea);
+    addToolBar(Qt::TopToolBarArea, toolbarText);
+    // Bottom
+    addToolBar(Qt::BottomToolBarArea, toolbarPrompt);
+
+    //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
+}
+
+void createAllMenus()
+{
+    debug_message("MainWindow createAllMenus()");
+
+    menuBar()->addMenu(fileMenu);
+    fileMenu->addAction(actionHash.value(ACTION_new));
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_open));
+
+    fileMenu->addMenu(recentMenu);
+    connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
+    recentMenu->setTearOffEnabled(false);
+    create_menu(actionHash, fileMenu, file_menu_data, false);
+
+    menuBar()->addMenu(editMenu);
+    create_menu(actionHash, editMenu, edit_menu_data, true);
+
+    menuBar()->addMenu(viewMenu);
+    viewMenu->addSeparator();
+    viewMenu->addMenu(zoomMenu);
+    zoomMenu->setIcon(load_icon("zoom"));
+    create_menu(actionHash, zoomMenu, zoom_menu_data, true);
+    viewMenu->addMenu(panMenu);
+    panMenu->setIcon(load_icon("pan"));
+    create_menu(actionHash, panMenu, pan_menu_data, true);
+    create_menu(actionHash, viewMenu, view_menu_data, true);
+
+    menuBar()->addMenu(settingsMenu);
+    create_menu(actionHash, settingsMenu, settings_menu_data, true);
+
+    menuBar()->addMenu(windowMenu);
+    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    // Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
+    windowMenu->setTearOffEnabled(false);
+
+    menuBar()->addMenu(helpMenu);
+    create_menu(actionHash, helpMenu, help_menu_data, true);
+}
+
+void
+check_load_file(std::string path)
+{
+    std::string appDir = qApp->applicationDirPath();
+    QFileInfo check(appDir + std::string::fromLocal8Bit(path));
+    if (!check.exists()) {
+        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ")
+                              + check.absoluteFilePath());
+    }
+}
+
+MainWindow() : QMainWindow(0)
+{
+    readSettings();
+
+    std::string appDir = qApp->applicationDirPath();
+    // Verify that files/directories needed are actually present.
+    check_load_file("/designs");
+    check_load_file("/docs");
+    check_load_file("/icons");
+    check_load_file("/images");
+    check_load_file("/samples");
+    check_load_file("/translations");
+
+    debug_message("language: " + settings_general_language.toStdString());
+    if (settings_general_language == "system") {
+        settings_general_language = QLocale::system().languageToString(QLocale::system().language()).toLocal8Bit().toLower();
+    }
+
+    //Selectors
+    layerSelector      = new QComboBox(this);
+    colorSelector      = new QComboBox(this);
+    linetypeSelector   = new QComboBox(this);
+    lineweightSelector = new QComboBox(this);
+    textFontSelector   = new QFontComboBox(this);
+    textSizeSelector   = new QComboBox(this);
+
+    numOfDocs = 0;
+    docIndex = 0;
+
+    shiftKeyPressedState = false;
+
+    setWindowIcon(load_icon("app"));
+    setMinimumSize(800, 480); //Require Minimum WVGA
+
+    loadFormats();
+
+    //create the mdiArea
+    QFrame* vbox = new QFrame(this);
+    QVBoxLayout* layout = new QVBoxLayout(vbox);
+    /* layout->setMargin(0); */
+    vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
+    mdiArea = new MdiArea(this, vbox);
+    mdiArea->useBackgroundLogo(settings_general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(settings_general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(settings_general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(settings_general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
+    mdiArea->setViewMode(QMdiArea::TabbedView);
+    mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+    layout->addWidget(mdiArea);
+    setCentralWidget(vbox);
+
+    //create the Command Prompt
+    prompt = new CmdPrompt(this);
+    prompt->setFocus(Qt::OtherFocusReason);
+    this->setFocusProxy(prompt);
+    mdiArea->setFocusProxy(prompt);
+
+    prompt->setPromptTextColor(QColor(settings_prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(settings_prompt_bg_color));
+
+    connect(prompt, SIGNAL(startCommand(const std::string&)), this, SLOT(logPromptInput(const std::string&)));
+
+    connect(prompt, SIGNAL(startCommand(const std::string&)), this, SLOT(runCommandMain(const std::string&)));
+    connect(prompt, SIGNAL(runCommand(const std::string&, const std::string&)), this, SLOT(runCommandPrompt(const std::string&, const std::string&)));
+
+    connect(prompt, SIGNAL(deletePressed()),    this, SLOT(deletePressed()));
+    //TODO: connect(prompt, SIGNAL(tabPressed()),       this, SLOT(someUnknownSlot()));
+    connect(prompt, SIGNAL(escapePressed()),    this, SLOT(escapePressed()));
+    connect(prompt, SIGNAL(upPressed()),        this, SLOT(promptInputPrevious()));
+    connect(prompt, SIGNAL(downPressed()),      this, SLOT(promptInputNext()));
+    connect(prompt, SIGNAL(F1Pressed()),        this, SLOT(help()));
+    //TODO: connect(prompt, SIGNAL(F2Pressed()),        this, SLOT(floatHistory()));
+    //TODO: connect(prompt, SIGNAL(F3Pressed()),        this, SLOT(toggleQSNAP()));
+    connect(prompt, SIGNAL(F4Pressed()),        this, SLOT(toggleLwt())); //TODO: typically this is toggleTablet(), make F-Keys customizable thru settings
+    //TODO: connect(prompt, SIGNAL(F5Pressed()),        this, SLOT(toggleISO()));
+    //TODO: connect(prompt, SIGNAL(F6Pressed()),        this, SLOT(toggleCoords()));
+    connect(prompt, SIGNAL(F7Pressed()),        this, SLOT(toggleGrid()));
+    //TODO: connect(prompt, SIGNAL(F8Pressed()),        this, SLOT(toggleORTHO()));
+    //TODO: connect(prompt, SIGNAL(F9Pressed()),        this, SLOT(toggleSNAP()));
+    //TODO: connect(prompt, SIGNAL(F10Pressed()),       this, SLOT(togglePOLAR()));
+    //TODO: connect(prompt, SIGNAL(F11Pressed()),       this, SLOT(toggleQTRACK()));
+    connect(prompt, SIGNAL(F12Pressed()),       this, SLOT(toggleRuler()));
+    connect(prompt, SIGNAL(cutPressed()),       this, SLOT(cut()));
+    connect(prompt, SIGNAL(copyPressed()),      this, SLOT(copy()));
+    connect(prompt, SIGNAL(pastePressed()),     this, SLOT(paste()));
+    connect(prompt, SIGNAL(selectAllPressed()), this, SLOT(selectAll()));
+    connect(prompt, SIGNAL(undoPressed()),      this, SLOT(undo()));
+    connect(prompt, SIGNAL(redoPressed()),      this, SLOT(redo()));
+
+    connect(prompt, SIGNAL(shiftPressed()),     this, SLOT(setShiftPressed()));
+    connect(prompt, SIGNAL(shiftReleased()),    this, SLOT(setShiftReleased()));
+
+    connect(prompt, SIGNAL(showSettings()),     this, SLOT(settingsPrompt()));
+
+    connect(prompt, SIGNAL(historyAppended(const std::string&)), this, SLOT(promptHistoryAppended(const std::string&)));
+
+    //create the Object Property Editor
+    std::string s = appDir + "/icons/" + settings_general_icon_theme;
+    dockPropEdit = new PropertyEditor(s, settings_selection_mode_pickadd, prompt, this);
+    addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
+    connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
+
+    //create the Command History Undo Editor
+    dockUndoEdit = new UndoEditor(s, prompt, this);
+    addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
+
+    //setDockOptions(QAnimatedDocks | QAllowTabbedDocks | QVerticalTabs); //TODO: Load these from settings
+    //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
+
+    statusbar = new StatusBar(this, this);
+    this->setStatusBar(statusbar);
+
+    createAllActions();
+    createAllMenus();
+    createAllToolbars();
+
+    iconResize(settings_general_icon_size);
+    updateMenuToolbarStatusbar();
+
+    //Show date in statusbar after it has been updated
+    QDate date = QDate::currentDate();
+    std::string datestr = date.toString("MMMM d, yyyy");
+    statusbar->showMessage(datestr);
+
+    showNormal();
+
+    //Load tips from external file
+    std::vector<std::string> tips;
+
+    QFile tipFile(appDir + "/docs/tips.txt");
+    if (tipFile.open(QFile::ReadOnly)) {
+        QTextStream stream(&tipFile);
+        std::string tipLine;
+        do {
+            tipLine = stream.readLine();
+            if (!tipLine.isEmpty())
+                listTipOfTheDay << tipLine;
+        }
+        while(!tipLine.isNull());
+    }
+    if (settings_general_tip_of_the_day) {
+        tipOfTheDay();
+    }
+}
+
+~MainWindow()
+{
+    debug_message("Destructor()");
+
+    //Prevent memory leaks by deleting any unpasted objects
+    qDeleteAll(cutCopyObjectList.begin(), cutCopyObjectList.end());
+    cutCopyObjectList.clear();
+}
+
+QAction* getAction(int actionEnum)
+{
+    return actionHash.value(actionEnum);
+}
+
+void recentMenuAboutToShow()
+{
+    debug_message("recentMenuAboutToShow()");
+    recentMenu->clear();
+
+    QFileInfo recentFileInfo;
+    std::string recentValue;
+    for (int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i) {
+        //If less than the max amount of entries add to menu
+        if (i < settings_opensave_recent_max_files) {
+            recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files.at(i));
+            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName())) {
+                recentValue.setNum(i+1);
+                QAction* rAction;
+                if     (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
+                else if (recentValue.toInt() == 10)                            rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
+                else                                                          rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
+                rAction->setCheckable(false);
+                rAction->setData(settings_opensave_recent_list_of_files.at(i));
+                recentMenu->addAction(rAction);
+                connect(rAction, SIGNAL(triggered()), this, SLOT(openrecentfile()));
+            }
+        }
+    }
+    //Ensure the list only has max amount of entries
+    while(settings_opensave_recent_list_of_files.size() > settings_opensave_recent_max_files)
+    {
+        settings_opensave_recent_list_of_files.removeLast();
+    }
+}
+
+void windowMenuAboutToShow()
+{
+    debug_message("windowMenuAboutToShow()");
+    std::vector<QMdiSubWindow*> windows = mdiArea->subWindowList();
+    for(int i = 0; i < windows.count(); ++i)
+    {
+        QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
+        aAction->setCheckable(true);
+        aAction->setData(i);
+        windowMenu->addAction(aAction);
+        connect(aAction, SIGNAL(toggled(bool)), this, SLOT(windowMenuActivated(bool)));
+        aAction->setChecked(mdiArea->activeSubWindow() == windows.at(i));
+    }
+}
+
+void windowMenuActivated(bool checked)
+{
+    debug_message("windowMenuActivated()");
+    QAction* aSender = qobject_cast<QAction*>(sender());
+    if (!aSender)
+        return;
+    QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
+    if (w && checked)
+        w->setFocus();
+}
+
+void newFile()
+{
+    debug_message("newFile()");
+    pattern_index++;
+    n_patterns++;
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
+    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+
+    updateMenuToolbarStatusbar();
+    windowMenuAboutToShow();
+
+    View* v = mdiWin->getView();
+    if (v) {
+        v->recalculateLimits();
+        v->zoomExtents();
+    }
+}
+
+void openFile(bool recent, const std::string& recentFile)
+{
+    debug_message("openFile()");
+
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+
+    std::stringList files;
+    bool preview = settings_opensave_open_thumbnail;
+    openFilesPath = settings_opensave_recent_directory;
+
+    // Check to see if this from the recent files list
+    if (recent) {
+        files.append(recentFile);
+        openFilesSelected(files);
+    }
+    else {
+        if (!preview) {
+            // TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
+            files = QFileDialog::getOpenFileNames(this, translate("Open"), openFilesPath, formatFilterOpen);
+            openFilesSelected(files);
+        }
+        else {
+            PreviewDialog* openDialog = new PreviewDialog(this, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
+            //TODO: set openDialog->selectNameFilter(const std::string& filter) from settings_opensave_open_format
+            connect(openDialog, SIGNAL(filesSelected(const std::stringList&)), this, SLOT(openFilesSelected(const std::stringList&)));
+            openDialog->exec();
+        }
+    }
+
+    QApplication::restoreOverrideCursor();
+}
+
+void openFilesSelected(const std::stringList& filesToOpen)
+{
+    bool doOnce = true;
+
+    if (filesToOpen.count()) {
+        for (int i = 0; i < filesToOpen.count(); i++) {
+            if (!validFileFormat(filesToOpen[i])) {
+                continue;
+            }
+
+            QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
+            if (existing) {
+                mdiArea->setActiveSubWindow(existing);
+                continue;
+            }
+
+            //The docIndex doesn't need increased as it is only used for unnamed files
+            numOfDocs++;
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
+            connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+
+            //Make sure the toolbars/etc... are shown before doing their zoomExtents
+            if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+
+            if (mdiWin->loadFile(filesToOpen.at(i))) {
+                statusbar->showMessage(tr("File(s) loaded"), 2000);
+                mdiWin->show();
+                mdiWin->showMaximized();
+                //Prevent duplicate entries in the recent files list
+                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
+                {
+                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                }
+                //Move the recent file to the top of the list
+                else
+                {
+                    settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
+                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                }
+                settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+
+                View* v = mdiWin->getView();
+                if (v)
+                {
+                    v->recalculateLimits();
+                    v->zoomExtents();
+                }
+            }
+            else {
+                mdiWin->close();
+            }
+        }
+    }
+
+    windowMenuAboutToShow();
+}
+
+void openrecentfile()
+{
+    debug_message("openrecentfile()");
+
+    //Check to see if this from the recent files list
+    QAction* recentSender = qobject_cast<QAction*>(sender());
+    if (recentSender) {
+        openFile(true, recentSender->data().toString());
+    }
+}
+
+void savefile()
+{
+    debug_message("savefile()");
+}
+
+void saveasfile()
+{
+    debug_message("saveasfile()");
+    // need to find the activeSubWindow before it loses focus to the FileDialog
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (!mdiWin) {
+        return;
+    }
+
+    std::string file;
+    openFilesPath = settings_opensave_recent_directory;
+    file = QFileDialog::getSaveFileName(this, translate("Save As"), openFilesPath, formatFilterSave);
+
+    mdiWin->saveFile(file);
+}
+
+QMdiSubWindow* findMdiWindow(const std::string& fileName)
+{
+    debug_message("findMdiWindow(" + fileName.toStdString() + ")");
+    std::string canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
+
+    foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
+        if (mdiWin) {
+            if (mdiWin->getCurrentFile() == canonicalFilePath) {
+                return subWindow;
+            }
+        }
+    }
+    return 0;
+}
+
+void closeEvent(QCloseEvent* event)
+{
+    mdiArea->closeAllSubWindows();
+    writeSettings();
+    event->accept();
+}
+
+void onCloseWindow()
+{
+    debug_message("onCloseWindow()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (mdiWin) {
+        onCloseMdiWin(mdiWin);
+    }
+}
+
+void onCloseMdiWin(MdiWindow* theMdiWin)
+{
+    debug_message("onCloseMdiWin()");
+    numOfDocs--;
+
+    bool keepMaximized;
+    if (theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
+
+    mdiArea->removeSubWindow(theMdiWin);
+    theMdiWin->deleteLater();
+
+    updateMenuToolbarStatusbar();
+    windowMenuAboutToShow();
+
+    if (keepMaximized)
+    {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+        if (mdiWin) { mdiWin->showMaximized(); }
+    }
+}
+
+void onWindowActivated(QMdiSubWindow* w)
+{
+    debug_message("onWindowActivated()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
+    if (mdiWin) {
+        mdiWin->onWindowActivated();
+    }
+}
+
+void resizeEvent(QResizeEvent* e)
+{
+    debug_message("resizeEvent()");
+    QresizeEvent(e);
+    statusBar()->setSizeGripEnabled(!isMaximized());
+}
+
+QAction* getFileSeparator()
+{
+    debug_message("getFileSeparator()");
+    return myFileSeparator;
+}
+
+void updateMenuToolbarStatusbar()
+{
+    debug_message("updateMenuToolbarStatusbar()");
+
+    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
+    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+
+    if (numOfDocs) {
+        //Toolbars
+        toolbarView->show();
+        toolbarZoom->show();
+        toolbarPan->show();
+        toolbarIcon->show();
+        toolbarHelp->show();
+        toolbarLayer->show();
+        toolbarText->show();
+        toolbarProperties->show();
+        toolbarPrompt->show();
+
+        foreach(QToolBar* tb, toolbarHash)
+        {
+            tb->show();
+        }
+
+        //DockWidgets
+        dockPropEdit->show();
+        dockUndoEdit->show();
+
+        //Menus
+        menuBar()->clear();
+        menuBar()->addMenu(fileMenu);
+        menuBar()->addMenu(editMenu);
+        menuBar()->addMenu(viewMenu);
+
+        foreach(QMenu* menu, menuHash)
+        {
+            menuBar()->addMenu(menu);
+        }
+
+        menuBar()->addMenu(settingsMenu);
+        menuBar()->addMenu(windowMenu);
+        menuBar()->addMenu(helpMenu);
+
+        windowMenu->setEnabled(true);
+
+        //Statusbar
+        statusbar->clearMessage();
+        statusbar->statusBarMouseCoord->show();
+        statusbar->statusBarSnapButton->show();
+        statusbar->statusBarGridButton->show();
+        statusbar->statusBarRulerButton->show();
+        statusbar->statusBarOrthoButton->show();
+        statusbar->statusBarPolarButton->show();
+        statusbar->statusBarQSnapButton->show();
+        statusbar->statusBarQTrackButton->show();
+        statusbar->statusBarLwtButton->show();
+    }
+    else {
+        //Toolbars
+        toolbarView->hide();
+        toolbarZoom->hide();
+        toolbarPan->hide();
+        toolbarIcon->hide();
+        toolbarHelp->hide();
+        toolbarLayer->hide();
+        toolbarText->hide();
+        toolbarProperties->hide();
+        toolbarPrompt->hide();
+        foreach(QToolBar* tb, toolbarHash)
+        {
+            tb->hide();
+        }
+
+        //DockWidgets
+        dockPropEdit->hide();
+        dockUndoEdit->hide();
+
+        //Menus
+        menuBar()->clear();
+        menuBar()->addMenu(fileMenu);
+        menuBar()->addMenu(editMenu);
+        menuBar()->addMenu(settingsMenu);
+        menuBar()->addMenu(windowMenu);
+        menuBar()->addMenu(helpMenu);
+
+        windowMenu->setEnabled(false);
+
+        //Statusbar
+        statusbar->clearMessage();
+        statusbar->statusBarMouseCoord->hide();
+        statusbar->statusBarSnapButton->hide();
+        statusbar->statusBarGridButton->hide();
+        statusbar->statusBarRulerButton->hide();
+        statusbar->statusBarOrthoButton->hide();
+        statusbar->statusBarPolarButton->hide();
+        statusbar->statusBarQSnapButton->hide();
+        statusbar->statusBarQTrackButton->hide();
+        statusbar->statusBarLwtButton->hide();
+    }
+    hideUnimplemented();
+}
+
+void hideUnimplemented()
+{
+    debug_message("hideUnimplemented()");
+}
+
+bool validFileFormat(const std::string& fileName)
+{
+    /* TODO: need to extract the extention */
+    if (emb_identify_format(qPrintable(fileName))) {
+        return true;
+    }
+    return false;
+}
+
+void loadFormats()
+{
+    char stable, unstable;
+    std::string supportedReaders  = "All Supported Files (";
+    std::string individualReaders = "All Files (*);;";
+    std::string supportedWriters  = "All Supported Files (";
+    std::string individualWriters = "All Files (*);;";
+    std::string supportedStr;
+    std::string individualStr;
+
+    //TODO: Stable Only (Settings Option)
+    //stable = 'S'; unstable = 'S';
+
+    //Stable + Unstable
+    stable = 'S'; unstable = 'U';
+
+    const char* extension = 0;
+    const char* description = 0;
+    char readerState;
+    char writerState;
+
+    EmbFormatList* curFormat = 0;
+    for (int i=0; i < numberOfFormats; i++) {
+        extension = formatTable[i].extension;
+        description = formatTable[i].description;
+        readerState = formatTable[i].reader_state;
+        writerState = formatTable[i].writer_state;
+
+        std::string upperExt = std::string(extension).toUpper();
+        supportedStr = "*" + upperExt + " ";
+        individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
+        if (readerState == stable || readerState == unstable) {
+            //Exclude color file formats from open dialogs
+            if (upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB") {
+                supportedReaders.append(supportedStr);
+                individualReaders.append(individualStr);
+            }
+        }
+        if (writerState == stable || writerState == unstable) {
+            supportedWriters.append(supportedStr);
+            individualWriters.append(individualStr);
+        }
+    }
+
+    supportedReaders.append(");;");
+    supportedWriters.append(");;");
+
+    formatFilterOpen = supportedReaders + individualReaders;
+    formatFilterSave = supportedWriters + individualWriters;
+
+    //TODO: Fixup custom filter
+    /*
+    std::string custom = getSettingsCustomFilter();
+    if (custom.contains("supported", Qt::CaseInsensitive))
+        custom = ""; //This will hide it
+    else if (!custom.contains("*", Qt::CaseInsensitive))
+        custom = ""; //This will hide it
+    else
+        custom = "Custom Filter(" + custom + ");;";
+
+    return translate(qPrintable(custom + supported + all));
+    */
+}
+
+void closeToolBar(QAction* action)
+{
+    if (action->objectName() == "toolbarclose") {
+        QToolBar* tb = qobject_cast<QToolBar*>(sender());
+        if (tb) {
+            debug_message("%s closed.", qPrintable(tb->objectName()));
+            tb->hide();
+        }
+    }
+}
+
+void floatingChangedToolBar(bool isFloating)
+{
+    QToolBar* tb = qobject_cast<QToolBar*>(sender());
+    if (tb) {
+        if (isFloating) {
+            /*
+            //TODO: Determine best suited close button on various platforms.
+            QStyle::SP_DockWidgetCloseButton
+            QStyle::SP_TitleBarCloseButton
+            QStyle::SP_DialogCloseButton
+            */
+            QAction *ACTION = new QAction(tb->style()->standardIcon(QStyle::SP_DialogCloseButton), "Close", this);
+            ACTION->setStatusTip("Close the " + tb->windowTitle() + " Toolbar");
+            ACTION->setObjectName("toolbarclose");
+            tb->addAction(ACTION);
+            connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+        }
+        else
+        {
+            std::vector<QAction*> actList = tb->actions();
+            for(int i = 0; i < actList.size(); ++i)
+            {
+                QAction* ACTION = actList.value(i);
+                if (ACTION->objectName() == "toolbarclose")
+                {
+                    tb->removeAction(ACTION);
+                    disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
+                    delete ACTION;
+                }
+            }
+        }
+    }
+}
+
+#endif
