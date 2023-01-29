@@ -100,29 +100,20 @@ EmbVector DimLeaderObject::objectEndPoint2() const
 {
     EmbLine lyne = line();
     double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double x2 = lyne.x2()*scale();
-    double y2 = lyne.y2()*scale();
-    double rotEnd2X = x2*cosRot - y2*sinRot;
-    double rotEnd2Y = x2*sinRot + y2*cosRot;
+    EmbVector point2;
+    point2.x = lyne.x2()*scale();
+    point2.y = lyne.y2()*scale();
+    EmbVector rot = embVector_rotate(point2, alpha);
 
-    return (scenePos() + EmbVector(rotEnd2X, rotEnd2Y));
+    return (scenePos() + rot);
 }
 
 EmbVector DimLeaderObject::objectMidPoint() const
 {
-    EmbLine lyne = line();
-    EmbVector mp = lyne.pointAt(0.5);
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double mx = mp.x()*scale();
-    double my = mp.y()*scale();
-    double rotMidX = mx*cosRot - my*sinRot;
-    double rotMidY = mx*sinRot + my*cosRot;
-
-    return (scenePos() + EmbVector(rotMidX, rotMidY));
+    EmbVector mp = line().pointAt(0.5) * scale();
+    double alpha = radians(rotation());
+    EmbVector rotMid = embVector_rotate(mp, alpha);
+    return scenePos() + rotMid;
 }
 
 double DimLeaderObject::objectAngle() const
@@ -205,7 +196,7 @@ void DimLeaderObject::updateLeader()
     {
         arrowStylePath = QPainterPath();
         double side = EmbLine(ap1, ap2).length();
-        QRectF ar0(0, 0, side, side);
+        EmbRect ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
     }
@@ -291,12 +282,13 @@ EmbVector DimLeaderObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> DimLeaderObject::allGripPoints()
+std::vector<EmbVector> DimLeaderObject_allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2();
-    if (curved)
+    if (curved) {
         gripPoints << objectMidPoint();
+    }
     return gripPoints;
 }
 
@@ -309,8 +301,8 @@ void DimLeaderObject::gripEdit(const EmbVector& before, const EmbVector& after)
         setObjectEndPoint2(after);
     }
     else if (before == objectMidPoint()) {
-        EmbVector delta = after-before;
-        moveBy(delta.x(), delta.y());
+        EmbVector delta = embVector_subtract(after, before);
+        moveBy(delta);
     }
 }
 #endif

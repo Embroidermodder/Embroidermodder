@@ -20,123 +20,15 @@
 #include <unordered_map>
 #include <iostream>
 
-/* The actuator changes the program state via these global variables.
- */
-double output;
-int settings_general_icon_size;
-bool settings_general_mdi_bg_use_logo;
-bool settings_general_mdi_bg_use_texture;
-bool settings_general_mdi_bg_use_color;
-std::string settings_general_mdi_bg_logo;
-std::string settings_general_mdi_bg_texture;
-unsigned int  settings_general_mdi_bg_color;
-bool settings_general_tip_of_the_day;
-unsigned int settings_general_current_tip;
-bool settings_general_system_help_browser;
-bool settings_general_check_for_updates;
-bool settings_display_use_opengl;
-bool settings_display_renderhint_aa;
-bool settings_display_renderhint_text_aa;
-bool settings_display_renderhint_smooth_pix;
-bool settings_display_renderhint_high_aa;
-bool settings_display_renderhint_noncosmetic;
-bool settings_display_show_scrollbars;
-int settings_display_scrollbar_widget_num;
-unsigned int  settings_display_crosshair_color;
-unsigned int  settings_display_bg_color;
-unsigned int  settings_display_selectbox_left_color;
-unsigned int  settings_display_selectbox_left_fill;
-unsigned int  settings_display_selectbox_right_color;
-unsigned int  settings_display_selectbox_right_fill;
-unsigned char  settings_display_selectbox_alpha;
-double settings_display_zoomscale_in;
-double settings_display_zoomscale_out;
-unsigned char  settings_display_crosshair_percent;
-std::string settings_display_units;
-unsigned int  settings_prompt_text_color;
-unsigned int  settings_prompt_bg_color;
-std::string settings_prompt_font_family;
-std::string settings_prompt_font_style;
-unsigned char  settings_prompt_font_size;
-bool settings_prompt_save_history;
-bool settings_prompt_save_history_as_html;
-std::string settings_prompt_save_history_filename;
-std::string settings_opensave_custom_filter;
-std::string settings_opensave_open_format;
-bool settings_opensave_open_thumbnail;
-std::string settings_opensave_save_format;
-bool settings_opensave_save_thumbnail;
-unsigned char  settings_opensave_recent_max_files;
-std::vector<std::string> settings_opensave_recent_list_of_files;
-std::string settings_opensave_recent_directory;
-unsigned char  settings_opensave_trim_dst_num_jumps;
-std::string settings_printing_default_device;
-bool settings_printing_use_last_device;
-bool settings_printing_disable_bg;
-bool settings_grid_show_on_load;
-bool settings_grid_show_origin;
-bool settings_grid_color_match_crosshair;
-unsigned int  settings_grid_color;
-bool settings_grid_load_from_file;
-std::string settings_grid_type;
-bool settings_grid_center_on_origin;
-double settings_grid_center_x;
-double settings_grid_center_y;
-double settings_grid_size_x;
-double settings_grid_size_y;
-double settings_grid_spacing_x;
-double settings_grid_spacing_y;
-double settings_grid_size_radius;
-double settings_grid_spacing_radius;
-double settings_grid_spacing_angle;
-bool settings_ruler_show_on_load;
-bool settings_ruler_metric;
-unsigned int  settings_ruler_color;
-unsigned char  settings_ruler_pixel_size;
-bool settings_qsnap_enabled;
-unsigned int  settings_qsnap_locator_color;
-unsigned char  settings_qsnap_locator_size;
-unsigned char  settings_qsnap_aperture_size;
-bool settings_qsnap_endpoint;
-bool settings_qsnap_midpoint;
-bool settings_qsnap_center;
-bool settings_qsnap_node;
-bool settings_qsnap_quadrant;
-bool settings_qsnap_intersection;
-bool settings_qsnap_extension;
-bool settings_qsnap_insertion;
-bool settings_qsnap_perpendicular;
-bool settings_qsnap_tangent;
-bool settings_qsnap_nearest;
-bool settings_qsnap_apparent;
-bool settings_qsnap_parallel;
-bool settings_lwt_show_lwt;
-bool settings_lwt_real_render;
-double settings_lwt_default_lwt;
-bool settings_selection_mode_pickfirst;
-bool settings_selection_mode_pickadd;
-bool settings_selection_mode_pickdrag;
-unsigned int  settings_selection_coolgrip_color;
-unsigned int  settings_selection_hotgrip_color;
-unsigned char  settings_selection_grip_size;
-unsigned char  settings_selection_pickbox_size;
-std::string settings_text_font;
-double settings_text_size;
-double settings_text_angle;
-bool settings_text_style_bold;
-bool settings_text_style_italic;
-bool settings_text_style_underline;
-bool settings_text_style_overline;
-bool settings_text_style_strikeout;
-std::vector<std::string> undo_history;
-int undo_history_position = 0;
-
 /* Function Prototypes.
  */
 void about_action(std::vector<std::string> args);
+void alert_action(std::vector<std::string> args);
 void day_vision_action(std::vector<std::string> args);
 void debug_action(std::vector<std::string> args);
 void error_action(std::vector<std::string> args);
+void todo_action(std::vector<std::string> args);
+void exit_action(std::vector<std::string> args);
 void icon_action(std::vector<std::string> args);
 void new_file_action(std::vector<std::string> args);
 void night_vision_action(std::vector<std::string> args);
@@ -162,10 +54,10 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"endCommand", error_action},
     {"new", new_file_action},
     {"openFile", error_action},
-    {"exit", error_action},
+    {"exit", exit_action},
+    {"quit", exit_action},
     {"help", error_action},
-    {"about", error_action},
-    {"tipOfTheDay", error_action},
+    {"tip-of-the-day", error_action},
     {"windowCascade", error_action},
     {"windowTile", error_action},
     {"windowClose", error_action},
@@ -173,16 +65,16 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"windowNext", error_action},
     {"windowPrevious", error_action},
     {"platformString", error_action},
-    {"messageBox", error_action},
+    {"message-box", error_action},
     {"isInt", error_action},
     {"undo", error_action},
     {"redo", error_action},
     {"icon", icon_action},
     {"pan", pan_action},
     {"zoom", zoom_action},
-    {"printArea", error_action},
-    {"dayVision", day_vision_action},
-    {"nightVision", night_vision_action},
+    {"print-area", error_action},
+    {"day", day_vision_action},
+    {"night", night_vision_action},
     {"setBackgroundColor", error_action},
     {"setCrossHairColor", error_action},
     {"setGridColor", error_action},
@@ -405,16 +297,8 @@ actuator(std::string command_line)
         }
         return;
     }
-    if (command == "quit") {
-        running = false;
-        return;
-    }
     if (command == "donothing") {
         debug_message("This action intentionally does nothing.");
-        return 0;
-    }
-    if (command == "exit") {
-        exit();
         return 0;
     }
     if (command == "open") {
@@ -475,10 +359,6 @@ actuator(std::string command_line)
     }
     if (command == "designdetails") {
         designDetails();
-        return 0;
-    }
-    if (command == "exit") {
-        exit();
         return 0;
     }
     if (command == "copy")  {
@@ -681,16 +561,6 @@ actuator(std::string command_line)
     }
     if ((command =="print-pattern")) {
         print_pattern();
-        return 0;
-    }
-
-    if ((command =="exit-program")) {
-        /*
-         * Instead of closing using exit() this allows us to chain any checks,
-         * like the confirmation of the close, to the action.
-         */
-        debug_message("Closing Embroidermodder 2.0.");
-        window->running = 0;
         return 0;
     }
 
@@ -2225,6 +2095,20 @@ error_action(std::vector<std::string> args)
 }
 
 void
+exit_action(std::vector<std::string> args)
+{
+    debug_message("Closing Embroidermodder 2.0.");
+    running = false;
+    /*
+    if (settings_prompt_save_history) {
+        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html);
+        // TODO: get filename from settings
+    }
+    qApp->closeAllWindows();
+    */
+}
+
+void
 changelog_action(std::vector<std::string> args)
 {
     
@@ -2379,24 +2263,6 @@ void stub_testing_action()
     QMessageBox::warning(this, translate("Testing Feature"), translate("<b>This feature is in testing.</b>"));
 }
 
-void exit_action()
-{
-    debug_message("exit()");
-    if (settings_prompt_save_history) {
-        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html);
-        // TODO: get filename from settings
-    }
-    qApp->closeAllWindows();
-    this->deleteLater();
-    // Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
-}
-
-void quit_action()
-{
-    debug_message("quit()");
-    exit();
-}
-
 void checkForUpdates()
 {
     debug_message("checkForUpdates()");
@@ -2518,7 +2384,7 @@ void tipOfTheDay()
     wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
     connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), this, SLOT(buttonTipOfTheDayClicked(int)));
 
-    QList<QWizard::WizardButton> listTipOfTheDayButtons;
+    std::vector<QWizard::WizardButton> listTipOfTheDayButtons;
     listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1 << QWizard::CustomButton2 << QWizard::CustomButton3;
     wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
 
@@ -2622,7 +2488,7 @@ void setUndoCleanIcon(bool opened)
 
 void updateAllViewScrollBars(bool val)
 {
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
@@ -2632,7 +2498,7 @@ void updateAllViewScrollBars(bool val)
 
 void updateAllViewCrossHairColors(unsigned int color)
 {
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
@@ -2642,7 +2508,7 @@ void updateAllViewCrossHairColors(unsigned int color)
 
 void updateAllViewBackgroundColors(unsigned int color)
 {
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
@@ -2652,7 +2518,7 @@ void updateAllViewBackgroundColors(unsigned int color)
 
 void updateAllViewSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)
 {
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
@@ -2662,7 +2528,7 @@ void updateAllViewSelectBoxColors(unsigned int colorL, unsigned int fillL, unsig
 
 void updateAllViewGridColors(unsigned int color)
 {
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
@@ -2672,7 +2538,7 @@ void updateAllViewGridColors(unsigned int color)
 
 void updateAllViewRulerColors(unsigned int color)
 {
-    QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
+    std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
     for(int i = 0; i < windowList.count(); ++i)
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
@@ -2965,7 +2831,7 @@ void setTextOverline(bool val)
 std::string getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (mdiWin) { return mdiWin->getCurrentLayer(); }
+    if (mdiWin) { return mdiWin->curLayer; }
     return "0";
 }
 
@@ -3187,11 +3053,6 @@ void nativeEndCommand()
     prompt->endCommand();
 }
 
-void nativeExit()
-{
-    exit();
-}
-
 void nativeHelp()
 {
     help();
@@ -3246,7 +3107,7 @@ void nativeMessageBox(const std::string& type, const std::string& title, const s
 {
     std::string msgType = type.toLower();
     if     (msgType == "critical")    { QMessageBox::critical   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
-    else if (msgType == "information") { QMessageBox::information(this, translate(qPrintable(title)), translate(qPrintable(text))); }
+    else if (msgType == "information") { information_messagebox(this, translate(qPrintable(title)), translate(qPrintable(text))); }
     else if (msgType == "question")    { QMessageBox::question   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
     else if (msgType == "warning")     { QMessageBox::warning    (this, translate(qPrintable(title)), translate(qPrintable(text))); }
     else                              { QMessageBox::critical   (this, translate("Native MessageBox Error"), translate("Incorrect use of the native messageBox function.")); }
@@ -4326,7 +4187,7 @@ void newFile()
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    View* v = mdiWin->getView();
+    View* v = mdiWin->gview;
     if (v) {
         v->recalculateLimits();
         v->zoomExtents();
@@ -4407,9 +4268,8 @@ void openFilesSelected(const std::stringList& filesToOpen)
                 }
                 settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
-                View* v = mdiWin->getView();
-                if (v)
-                {
+                View* v = mdiWin->gview;
+                if (v) {
                     v->recalculateLimits();
                     v->zoomExtents();
                 }
@@ -4463,7 +4323,7 @@ QMdiSubWindow* findMdiWindow(const std::string& fileName)
     foreach (QMdiSubWindow* subWindow, mdiArea->subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
         if (mdiWin) {
-            if (mdiWin->getCurrentFile() == canonicalFilePath) {
+            if (mdiWin->curFile == canonicalFilePath) {
                 return subWindow;
             }
         }

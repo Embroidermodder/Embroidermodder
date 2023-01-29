@@ -712,7 +712,7 @@ QWidget* Settings_Dialog::createTabPrinting()
     radioButtonUseLast->setChecked(settings_printing_use_last_device);
 
     QComboBox* comboBoxDefaultDevice = new QComboBox(groupBoxDefaultPrinter);
-    QList<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
+    std::vector<QPrinterInfo> listAvailPrinters = QPrinterInfo::availablePrinters();
     foreach(QPrinterInfo info, listAvailPrinters)
     {
         comboBoxDefaultDevice->addItem(mainWin->load_icon("print"), info.printerName());

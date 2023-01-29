@@ -63,68 +63,40 @@ void ImageObject::setObjectRect(double x, double y, double w, double h)
 
 EmbVector ImageObject::objectTopLeft() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector tl = rect().topLeft();
-    double ptlX = tl.x()*scale();
-    double ptlY = tl.y()*scale();
-    double ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    double ptlYrot = ptlX*sinRot + ptlY*cosRot;
-
-    return (scenePos() + EmbVector(ptlXrot, ptlYrot));
+    double alpha = radians(rotation());
+    EmbVector tl = rect().topRight() * scale();
+    EmbVector ptlrot = embVector_rotate(tl, alpha);
+    return scenePos() + ptlrot;
 }
 
 EmbVector ImageObject::objectTopRight() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector tr = rect().topRight();
-    double ptrX = tr.x()*scale();
-    double ptrY = tr.y()*scale();
-    double ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    double ptrYrot = ptrX*sinRot + ptrY*cosRot;
-
-    return (scenePos() + EmbVector(ptrXrot, ptrYrot));
+    double alpha = radians(rotation());
+    EmbVector tr = rect().topRight() * scale();
+    EmbVector ptrrot = embVector_rotate(tr, alpha);
+    return scenePos() + ptrrot;
 }
 
 EmbVector ImageObject::objectBottomLeft() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector bl = rect().bottomLeft();
-    double pblX = bl.x()*scale();
-    double pblY = bl.y()*scale();
-    double pblXrot = pblX*cosRot - pblY*sinRot;
-    double pblYrot = pblX*sinRot + pblY*cosRot;
-
-    return (scenePos() + EmbVector(pblXrot, pblYrot));
+    double alpha = radians(rotation());
+    EmbVector bl = rect().topRight() * scale();
+    EmbVector pblrot = embVector_rotate(bl, alpha);
+    return scenePos() + pblrot;
 }
 
 EmbVector ImageObject::objectBottomRight() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector br = rect().bottomRight();
-    double pbrX = br.x()*scale();
-    double pbrY = br.y()*scale();
-    double pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    double pbrYrot = pbrX*sinRot + pbrY*cosRot;
-
-    return (scenePos() + EmbVector(pbrXrot, pbrYrot));
+    double alpha = radians(rotation());
+    EmbVector br = rect().topRight() * scale();
+    EmbVector pbrrot = embVector_rotate(br, alpha);
+    return scenePos() + pbrrot;
 }
 
 void ImageObject::updatePath()
 {
     QPainterPath path;
-    QRectF r = rect();
+    EmbRect r = rect();
     path.moveTo(r.bottomLeft());
     path.lineTo(r.bottomRight());
     path.lineTo(r.topRight());
@@ -204,9 +176,9 @@ EmbVector ImageObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> ImageObject::allGripPoints()
+std::vector<EmbVector> ImageObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
 }

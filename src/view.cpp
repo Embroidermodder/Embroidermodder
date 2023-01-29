@@ -492,7 +492,7 @@ void View::createOrigin() //TODO: Make Origin Customizable
 
 void View::createGridRect()
 {
-    QRectF gr(0, 0, settings_grid_size_x, -settings_grid_size_y);
+    EmbRect gr(0, 0, settings_grid_size_x, -settings_grid_size_y);
     //Ensure the loop will work correctly with negative numbers
     double x1 = std::min(gr.left(), gr.right());
     double y1 = std::min(gr.top(), gr.bottom());
@@ -511,7 +511,7 @@ void View::createGridRect()
     }
 
     //Center the Grid
-    QRectF gridRect = gridPath.boundingRect();
+    EmbRect gridRect = gridPath.boundingRect();
     double bx = gridRect.width()/2.0;
     double by = -gridRect.height()/2.0;
     double dx = settings_grid_center_x - bx;
@@ -536,7 +536,7 @@ void View::createGridPolar()
     }
     for (double ang = 0; ang < 360; ang += settings_grid_spacing_angle) {
         gridPath.moveTo(0, 0);
-        gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
+        gridPath.lineTo(EmbLine::fromPolar(rad, ang).p2());
     }
 
     if (!settings_grid_center_on_origin) {
@@ -551,8 +551,8 @@ void View::createGridIso()
     double isoH = std::fabs(settings_grid_size_y);
 
     EmbVector p1 = EmbVector(0,0);
-    EmbVector p2 = QLineF::fromPolar(isoW,  30).p2();
-    EmbVector p3 = QLineF::fromPolar(isoH, 150).p2();
+    EmbVector p2 = EmbLine::fromPolar(isoW,  30).p2();
+    EmbVector p3 = EmbLine::fromPolar(isoH, 150).p2();
     EmbVector p4 = p2 + p3;
 
     gridPath = QPainterPath();
@@ -564,8 +564,8 @@ void View::createGridIso()
 
     for (float x = 0.0; x < isoW; x += settings_grid_spacing_x) {
         for (float y = 0.0; y < isoH; y += settings_grid_spacing_y) {
-            EmbVector px = QLineF::fromPolar(x,  30).p2();
-            EmbVector py = QLineF::fromPolar(y, 150).p2();
+            EmbVector px = EmbLine::fromPolar(x,  30).p2();
+            EmbVector py = EmbLine::fromPolar(y, 150).p2();
 
             gridPath.moveTo(px);
             gridPath.lineTo(px+p3);
@@ -576,7 +576,7 @@ void View::createGridIso()
 
     //Center the Grid
 
-    QRectF gridRect = gridPath.boundingRect();
+    EmbRect gridRect = gridPath.boundingRect();
     // bx is unused
     double by = -gridRect.height()/2.0;
 
@@ -692,7 +692,7 @@ bool View::isRealEnabled()
     return gscene->property(ENABLE_REAL).toBool();
 }
 
-void View::drawBackground(QPainter* painter, const QRectF& rect)
+void View::drawBackground(QPainter* painter, const EmbRect& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
@@ -707,7 +707,7 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
     }
 }
 
-void View::drawForeground(QPainter* painter, const QRectF& rect)
+void View::drawForeground(QPainter* painter, const EmbRect& rect)
 {
     //==================================================
     //Draw grip points for all selected objects
@@ -720,8 +720,8 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     painter->setPen(gripPen);
     EmbVector gripOffset(gripSize, gripSize);
 
-    QList<EmbVector> selectedGripPoints;
-    QList<QGraphicsItem*> selectedItemList = gscene->selectedItems();
+    std::vector<EmbVector> selectedGripPoints;
+    std::vector<QGraphicsItem*> selectedItemList = gscene->selectedItems();
     if (selectedItemList.size() <= 100) {
         foreach (QGraphicsItem* item, selectedItemList) {
             if (item->type() >= OBJ_TYPE_BASE) {
@@ -733,10 +733,10 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                     EmbVector q1 = mapFromScene(ssp) + gripOffset;
 
                     if (ssp == sceneGripPoint) {
-                        painter->fillRect(QRectF(mapToScene(p1), mapToScene(q1)), QColor::fromRgb(gripColorHot));
+                        painter->fillRect(EmbRect(mapToScene(p1), mapToScene(q1)), QColor::fromRgb(gripColorHot));
                     }
                     else {
-                        painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
+                        painter->drawRect(EmbRect(mapToScene(p1), mapToScene(q1)));
                     }
                 }
             }
@@ -756,8 +756,8 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         painter->setPen(qsnapPen);
         EmbVector qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
 
-        QList<EmbVector> apertureSnapPoints;
-        QList<QGraphicsItem *> apertureItemList = items(viewMousePoint.x()-qsnapApertureSize,
+        std::vector<EmbVector> apertureSnapPoints;
+        std::vector<QGraphicsItem *> apertureItemList = items(viewMousePoint.x()-qsnapApertureSize,
                                                         viewMousePoint.y()-qsnapApertureSize,
                                                         qsnapApertureSize*2,
                                                         qsnapApertureSize*2);
@@ -771,7 +771,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         foreach (EmbVector asp, apertureSnapPoints) {
             EmbVector p1 = mapFromScene(asp) - qsnapOffset;
             EmbVector q1 = mapFromScene(asp) + qsnapOffset;
-            painter->drawRect(QRectF(mapToScene(p1), mapToScene(q1)));
+            painter->drawRect(EmbRect(mapToScene(p1), mapToScene(q1)));
         }
     }
 
@@ -850,22 +850,22 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                 double rvTextOffset = mapToScene(0, 3).y() - oy;
                 double textHeight = rhh*medium;
 
-                QVector<QLineF> lines;
-                lines.append(QLineF(ox, rhy, rhx, rhy));
-                lines.append(QLineF(rvx, oy, rvx, rvy));
+                QVector<EmbLine> lines;
+                lines.append(EmbLine(ox, rhy, rhx, rhy));
+                lines.append(EmbLine(rvx, oy, rvx, rvy));
 
                 double mx = sceneMousePoint.x();
                 double my = sceneMousePoint.y();
-                lines.append(QLineF(mx, rhy, mx, oy));
-                lines.append(QLineF(rvx, my, ox, my));
+                lines.append(EmbLine(mx, rhy, mx, oy));
+                lines.append(EmbLine(rvx, my, ox, my));
 
                 QTransform transform;
 
                 QPen rulerPen(QColor(0,0,0));
                 rulerPen.setCosmetic(true);
                 painter->setPen(rulerPen);
-                painter->fillRect(QRectF(ox, oy, rhw, rhh), rulerColor);
-                painter->fillRect(QRectF(ox, oy, rvw, rvh), rulerColor);
+                painter->fillRect(EmbRect(ox, oy, rhw, rhh), rulerColor);
+                painter->fillRect(EmbRect(ox, oy, rvw, rvh), rulerColor);
 
                 int xFlow;
                 int xStart;
@@ -912,41 +912,41 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                         transform.reset();
                         painter->drawPath(rulerTextPath);
 
-                        lines.append(QLineF(x, rhy, x, oy));
+                        lines.append(EmbLine(x, rhy, x, oy));
                         if (rulerMetric) {
-                            lines.append(QLineF(x, rhy, x, oy));
-                            lines.append(QLineF(x+fraction  , rhy, x+fraction,   rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*5, rhy, x+fraction*5, rhy-rhh*medium)); //Half
-                            lines.append(QLineF(x+fraction*6, rhy, x+fraction*6, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*7, rhy, x+fraction*7, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*8, rhy, x+fraction*8, rhy-rhh*little));
-                            lines.append(QLineF(x+fraction*9, rhy, x+fraction*9, rhy-rhh*little));
+                            lines.append(EmbLine(x, rhy, x, oy));
+                            lines.append(EmbLine(x+fraction  , rhy, x+fraction,   rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*5, rhy, x+fraction*5, rhy-rhh*medium)); //Half
+                            lines.append(EmbLine(x+fraction*6, rhy, x+fraction*6, rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*7, rhy, x+fraction*7, rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*8, rhy, x+fraction*8, rhy-rhh*little));
+                            lines.append(EmbLine(x+fraction*9, rhy, x+fraction*9, rhy-rhh*little));
                         }
                         else {
                             if (feet) {
                                 for (int i = 0; i < 12; ++i) {
-                                    lines.append(QLineF(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium));
+                                    lines.append(EmbLine(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium));
                                 }
                             }
                             else {
-                                lines.append(QLineF(x+fraction   , rhy, x+fraction,    rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction* 5, rhy, x+fraction* 5, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 6, rhy, x+fraction* 6, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 7, rhy, x+fraction* 7, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction* 8, rhy, x+fraction* 8, rhy-rhh*medium)); //Half
-                                lines.append(QLineF(x+fraction* 9, rhy, x+fraction* 9, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*10, rhy, x+fraction*10, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*11, rhy, x+fraction*11, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*12, rhy, x+fraction*12, rhy-rhh*medium)); //Quarter
-                                lines.append(QLineF(x+fraction*13, rhy, x+fraction*13, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*14, rhy, x+fraction*14, rhy-rhh*little));
-                                lines.append(QLineF(x+fraction*15, rhy, x+fraction*15, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction   , rhy, x+fraction,    rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
+                                lines.append(EmbLine(x+fraction* 5, rhy, x+fraction* 5, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction* 6, rhy, x+fraction* 6, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction* 7, rhy, x+fraction* 7, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction* 8, rhy, x+fraction* 8, rhy-rhh*medium)); //Half
+                                lines.append(EmbLine(x+fraction* 9, rhy, x+fraction* 9, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction*10, rhy, x+fraction*10, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction*11, rhy, x+fraction*11, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction*12, rhy, x+fraction*12, rhy-rhh*medium)); //Quarter
+                                lines.append(EmbLine(x+fraction*13, rhy, x+fraction*13, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction*14, rhy, x+fraction*14, rhy-rhh*little));
+                                lines.append(EmbLine(x+fraction*15, rhy, x+fraction*15, rhy-rhh*little));
                             }
                         }
                     }
@@ -966,47 +966,47 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                         transform.reset();
                         painter->drawPath(rulerTextPath);
 
-                        lines.append(QLineF(rvx, y, ox, y));
+                        lines.append(EmbLine(rvx, y, ox, y));
                         if (rulerMetric) {
-                            lines.append(QLineF(rvx, y+fraction  , rvx-rvw*little, y+fraction));
-                            lines.append(QLineF(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
-                            lines.append(QLineF(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
-                            lines.append(QLineF(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4));
-                            lines.append(QLineF(rvx, y+fraction*5, rvx-rvw*medium, y+fraction*5)); //Half
-                            lines.append(QLineF(rvx, y+fraction*6, rvx-rvw*little, y+fraction*6));
-                            lines.append(QLineF(rvx, y+fraction*7, rvx-rvw*little, y+fraction*7));
-                            lines.append(QLineF(rvx, y+fraction*8, rvx-rvw*little, y+fraction*8));
-                            lines.append(QLineF(rvx, y+fraction*9, rvx-rvw*little, y+fraction*9));
+                            lines.append(EmbLine(rvx, y+fraction  , rvx-rvw*little, y+fraction));
+                            lines.append(EmbLine(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
+                            lines.append(EmbLine(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
+                            lines.append(EmbLine(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4));
+                            lines.append(EmbLine(rvx, y+fraction*5, rvx-rvw*medium, y+fraction*5)); //Half
+                            lines.append(EmbLine(rvx, y+fraction*6, rvx-rvw*little, y+fraction*6));
+                            lines.append(EmbLine(rvx, y+fraction*7, rvx-rvw*little, y+fraction*7));
+                            lines.append(EmbLine(rvx, y+fraction*8, rvx-rvw*little, y+fraction*8));
+                            lines.append(EmbLine(rvx, y+fraction*9, rvx-rvw*little, y+fraction*9));
                         }
                         else {
                             if (feet) {
                                 for (int i = 0; i < 12; ++i) {
-                                    lines.append(QLineF(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i));
+                                    lines.append(EmbLine(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i));
                                 }
                             }
                             else {
-                                lines.append(QLineF(rvx, y+fraction   , rvx-rvw*little, y+fraction));
-                                lines.append(QLineF(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2));
-                                lines.append(QLineF(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3));
-                                lines.append(QLineF(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4)); //Quarter
-                                lines.append(QLineF(rvx, y+fraction* 5, rvx-rvw*little, y+fraction* 5));
-                                lines.append(QLineF(rvx, y+fraction* 6, rvx-rvw*little, y+fraction* 6));
-                                lines.append(QLineF(rvx, y+fraction* 7, rvx-rvw*little, y+fraction* 7));
-                                lines.append(QLineF(rvx, y+fraction* 8, rvx-rvw*medium, y+fraction* 8)); //Half
-                                lines.append(QLineF(rvx, y+fraction* 9, rvx-rvw*little, y+fraction* 9));
-                                lines.append(QLineF(rvx, y+fraction*10, rvx-rvw*little, y+fraction*10));
-                                lines.append(QLineF(rvx, y+fraction*11, rvx-rvw*little, y+fraction*11));
-                                lines.append(QLineF(rvx, y+fraction*12, rvx-rvw*medium, y+fraction*12)); //Quarter
-                                lines.append(QLineF(rvx, y+fraction*13, rvx-rvw*little, y+fraction*13));
-                                lines.append(QLineF(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14));
-                                lines.append(QLineF(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15));
+                                lines.append(EmbLine(rvx, y+fraction   , rvx-rvw*little, y+fraction));
+                                lines.append(EmbLine(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2));
+                                lines.append(EmbLine(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3));
+                                lines.append(EmbLine(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4)); //Quarter
+                                lines.append(EmbLine(rvx, y+fraction* 5, rvx-rvw*little, y+fraction* 5));
+                                lines.append(EmbLine(rvx, y+fraction* 6, rvx-rvw*little, y+fraction* 6));
+                                lines.append(EmbLine(rvx, y+fraction* 7, rvx-rvw*little, y+fraction* 7));
+                                lines.append(EmbLine(rvx, y+fraction* 8, rvx-rvw*medium, y+fraction* 8)); //Half
+                                lines.append(EmbLine(rvx, y+fraction* 9, rvx-rvw*little, y+fraction* 9));
+                                lines.append(EmbLine(rvx, y+fraction*10, rvx-rvw*little, y+fraction*10));
+                                lines.append(EmbLine(rvx, y+fraction*11, rvx-rvw*little, y+fraction*11));
+                                lines.append(EmbLine(rvx, y+fraction*12, rvx-rvw*medium, y+fraction*12)); //Quarter
+                                lines.append(EmbLine(rvx, y+fraction*13, rvx-rvw*little, y+fraction*13));
+                                lines.append(EmbLine(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14));
+                                lines.append(EmbLine(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15));
                             }
                         }
                     }
                 }
 
                 painter->drawLines(lines);
-                painter->fillRect(QRectF(ox, oy, rvw, rhh), rulerColor);
+                painter->fillRect(EmbRect(ox, oy, rvw, rhh), rulerColor);
             }
         }
     }
@@ -1020,11 +1020,11 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         QPen crosshairPen(QColor::fromRgb(crosshairColor));
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
-        painter->drawLine(QLineF(mapToScene(viewMousePoint.x(), viewMousePoint.y()-crosshairSize),
+        painter->drawLine(EmbLine(mapToScene(viewMousePoint.x(), viewMousePoint.y()-crosshairSize),
                                  mapToScene(viewMousePoint.x(), viewMousePoint.y()+crosshairSize)));
-        painter->drawLine(QLineF(mapToScene(viewMousePoint.x()-crosshairSize, viewMousePoint.y()),
+        painter->drawLine(EmbLine(mapToScene(viewMousePoint.x()-crosshairSize, viewMousePoint.y()),
                                  mapToScene(viewMousePoint.x()+crosshairSize, viewMousePoint.y())));
-        painter->drawRect(QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+        painter->drawRect(EmbRect(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
                                  mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
     }
 }
@@ -1063,7 +1063,7 @@ void View::setCornerButton()
         QAction* act = mainWin->actionHash.value(num);
         //NOTE: Prevent crashing if the action is NULL.
         if (!act) {
-            QMessageBox::information(this, translate("Corner Widget Error"), translate("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
+            information_messagebox(this, translate("Corner Widget Error"), translate("There are unused enum values in COMMAND_ACTIONS. Please report this as a bug."));
             setCornerWidget(0);
         }
         else {
@@ -1122,14 +1122,14 @@ void View::zoomWindow()
 void View::zoomSelected()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     QPainterPath selectedRectPath;
     foreach (QGraphicsItem* item, itemList) {
         selectedRectPath.addPolygon(item->mapToScene(item->boundingRect()));
     }
-    QRectF selectedRect = selectedRectPath.boundingRect();
+    EmbRect selectedRect = selectedRectPath.boundingRect();
     if (selectedRect.isNull()) {
-        QMessageBox::information(this, translate("ZoomSelected Preselect"), translate("Preselect objects before invoking the zoomSelected command."));
+        information_messagebox(this, translate("ZoomSelected Preselect"), translate("Preselect objects before invoking the zoomSelected command."));
         //TODO: Support Post selection of objects
     }
     fitInView(selectedRect, Qt::KeepAspectRatio);
@@ -1139,7 +1139,7 @@ void View::zoomSelected()
 void View::zoomExtents()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    QRectF extents = gscene->itemsBoundingRect();
+    EmbRect extents = gscene->itemsBoundingRect();
     if (extents.isNull()) {
         extents.setWidth(settings_grid_size_x);
         extents.setHeight(settings_grid_size_y);
@@ -1152,28 +1152,28 @@ void View::zoomExtents()
 void View::panLeft()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + panDistance);
-    updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
+    updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
 void View::panRight()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() - panDistance);
-    updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
+    updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
 void View::panUp()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() + panDistance);
-    updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
+    updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
 void View::panDown()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() - panDistance);
-    updateMouseCoords(viewMousePoint.x(), viewMousePoint.y());
+    updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
@@ -1211,7 +1211,7 @@ void View::mousePressEvent(QMouseEvent* event)
             return;
         }
         QPainterPath path;
-        QList<QGraphicsItem*> pickList = gscene->items(QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+        std::vector<QGraphicsItem*> pickList = gscene->items(EmbRect(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
                                                               mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize)));
 
         bool itemsInPickBox = pickList.size();
@@ -1229,8 +1229,8 @@ void View::mousePressEvent(QMouseEvent* event)
                 EmbVector gripPoint = base->mouseSnapPoint(sceneMousePoint);
                 EmbVector p1 = mapFromScene(gripPoint) - qsnapOffset;
                 EmbVector q1 = mapFromScene(gripPoint) + qsnapOffset;
-                QRectF gripRect = QRectF(mapToScene(p1), mapToScene(q1));
-                QRectF pickRect = QRectF(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
+                EmbRect gripRect = EmbRect(mapToScene(p1), mapToScene(q1));
+                EmbRect pickRect = EmbRect(mapToScene(viewMousePoint.x()-pickBoxSize, viewMousePoint.y()-pickBoxSize),
                                         mapToScene(viewMousePoint.x()+pickBoxSize, viewMousePoint.y()+pickBoxSize));
                 if (gripRect.intersects(pickRect))
                     foundGrip = true;
@@ -1272,19 +1272,19 @@ void View::mousePressEvent(QMouseEvent* event)
             if (sceneReleasePoint.x() > scenePressPoint.x()) {
                 if (settings_selection_mode_pickadd) {
                     if (mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         if (!itemList.size())
                             clearSelection();
                         else {
@@ -1294,7 +1294,7 @@ void View::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         clearSelection();
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1303,19 +1303,19 @@ void View::mousePressEvent(QMouseEvent* event)
             else {
                 if (settings_selection_mode_pickadd) {
                     if (mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (mainWin->isShiftPressed()) {
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         if (!itemList.size())
                             clearSelection();
                         else {
@@ -1325,7 +1325,7 @@ void View::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         clearSelection();
-                        QList<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1335,7 +1335,7 @@ void View::mousePressEvent(QMouseEvent* event)
         }
 
         if (pastingActive) {
-            QList<QGraphicsItem*> itemList = pasteObjectItemGroup->childItems();
+            std::vector<QGraphicsItem*> itemList = pasteObjectItemGroup->childItems();
             gscene->destroyItemGroup(pasteObjectItemGroup);
             foreach (QGraphicsItem* item, itemList) {
                 gscene->removeItem(item); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
@@ -1384,9 +1384,9 @@ void View::recalculateLimits()
 {
     //NOTE: Increase the sceneRect limits if the point we want to go to lies outside of sceneRect's limits
     //      If the sceneRect limits aren't increased, you cannot pan past its limits
-    QRectF  viewRect(mapToScene(rect().topLeft()), mapToScene(rect().bottomRight()));
-    QRectF  sceneRect(gscene->sceneRect());
-    QRectF  newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
+    EmbRect  viewRect(mapToScene(rect().topLeft()), mapToScene(rect().bottomRight()));
+    EmbRect  sceneRect(gscene->sceneRect());
+    EmbRect  newRect = viewRect.adjusted(-viewRect.width(), -viewRect.height(), viewRect.width(), viewRect.height());
     if (!sceneRect.contains(newRect.topLeft()) || !sceneRect.contains(newRect.bottomRight())) {
         gscene->setSceneRect(sceneRect.adjusted(-viewRect.width(),
                                                 -viewRect.height(),
@@ -1434,56 +1434,41 @@ void View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);
         }
         else if (previewMode == PREVIEW_MODE_ROTATE) {
-            double x = previewPoint.x();
-            double y = previewPoint.y();
-            double rot = previewData;
+            double mouseAngle = EmbLine(previewPoint, sceneMousePoint).angle();
 
-            double mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle();
+            EmbVector p;
+            double alpha = radians(previewData - mouseAngle);
+            p.x = -previewPoint.x;
+            p.y = -previewPoint.y;
+            rot = embVector_rotate(p, alpha);
+            rot = embVector_add(rot, previewPoint);
 
-            double rad = radians(rot-mouseAngle);
-            double cosRot = cos(rad);
-            double sinRot = sin(rad);
-            double px = 0;
-            double py = 0;
-            px -= x;
-            py -= y;
-            double rotX = px*cosRot - py*sinRot;
-            double rotY = px*sinRot + py*cosRot;
-            rotX += x;
-            rotY += y;
-
-            previewObjectItemGroup->setPos(rotX, rotY);
-            previewObjectItemGroup->setRotation(rot-mouseAngle);
+            previewObjectItemGroup->setPos(rot);
+            previewObjectItemGroup->setRotation(previewData - mouseAngle);
         }
         else if (previewMode == PREVIEW_MODE_SCALE) {
-            double x = previewPoint.x();
-            double y = previewPoint.y();
             double scaleFactor = previewData;
 
-            double factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor;
+            double factor = EmbLine(previewPoint, sceneMousePoint).length()/scaleFactor;
 
             previewObjectItemGroup->setScale(1);
             previewObjectItemGroup->setPos(0,0);
 
             if (scaleFactor <= 0.0) {
-                QMessageBox::critical(this, QObject::tr("ScaleFactor Error"),
-                                    QObject::tr("Hi there. If you are not a developer, report this as a bug. "
+                QMessageBox::critical(this, translate("ScaleFactor Error"),
+                                    translate("Hi there. If you are not a developer, report this as a bug. "
                                     "If you are a developer, your code needs examined, and possibly your head too."));
             }
             else {
                 //Calculate the offset
-                double oldX = 0;
-                double oldY = 0;
-                QLineF scaleLine(x, y, oldX, oldY);
+                EmbVector old(0, 0);
+                EmbLine scaleLine(preview_point, old);
                 scaleLine.setLength(scaleLine.length()*factor);
-                double newX = scaleLine.x2();
-                double newY = scaleLine.y2();
 
-                double dx = newX - oldX;
-                double dy = newY - oldY;
+                EmbVector delta = embVector_subtract(scaleLine.end, old);
 
                 previewObjectItemGroup->setScale(previewObjectItemGroup->scale()*factor);
-                previewObjectItemGroup->moveBy(dx, dy);
+                previewObjectItemGroup->moveBy(delta);
             }
         }
     }
@@ -1632,7 +1617,7 @@ void View::zoomToPoint(const EmbVector& mousePoint, int zoomDir)
 void View::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu;
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();
 
     for(int i = 0; i < itemList.size(); i++)
@@ -1770,7 +1755,7 @@ void View::clearSelection()
 
 void View::deleteSelected()
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Delete " + std::string().setNum(itemList.size()));
@@ -1795,7 +1780,7 @@ void View::cut()
 {
     if (gscene->selectedItems().isEmpty())
     {
-        QMessageBox::information(this, translate("Cut Preselect"), translate("Preselect objects before invoking the cut command."));
+        information_messagebox(this, translate("Cut Preselect"), translate("Preselect objects before invoking the cut command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
 
@@ -1809,7 +1794,7 @@ void View::copy()
 {
     if (gscene->selectedItems().isEmpty())
     {
-        QMessageBox::information(this, translate("Copy Preselect"), translate("Preselect objects before invoking the copy command."));
+        information_messagebox(this, translate("Copy Preselect"), translate("Preselect objects before invoking the copy command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
 
@@ -1819,7 +1804,7 @@ void View::copy()
 
 void View::copySelected()
 {
-    QList<QGraphicsItem*> selectedList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> selectedList = gscene->selectedItems();
 
     //Prevent memory leaks by deleting any unpasted instances
     qDeleteAll(mainWin->cutCopyObjectList.begin(), mainWin->cutCopyObjectList.end());
@@ -1848,9 +1833,9 @@ void View::paste()
     mainWin->cutCopyObjectList = createObjectList(mainWin->cutCopyObjectList);
 }
 
-QList<QGraphicsItem*> View::createObjectList(QList<QGraphicsItem*> list)
+std::vector<QGraphicsItem*> View::createObjectList(std::vector<QGraphicsItem*> list)
 {
-    QList<QGraphicsItem*> copyList;
+    std::vector<QGraphicsItem*> copyList;
 
     for(int i = 0; i < list.size(); i++)
     {
@@ -2028,7 +2013,7 @@ void View::moveAction()
 
 void View::moveSelected(double dx, double dy)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Move " + std::string().setNum(itemList.size()));
@@ -2057,7 +2042,7 @@ void View::rotateAction()
 
 void View::rotateSelected(double x, double y, double rot)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Rotate " + std::string().setNum(itemList.size()));
@@ -2079,7 +2064,7 @@ void View::rotateSelected(double x, double y, double rot)
 
 void View::mirrorSelected(double x1, double y1, double x2, double y2)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Mirror " + std::string().setNum(itemList.size()));
@@ -2108,7 +2093,7 @@ void View::scaleAction()
 
 void View::scaleSelected(double x, double y, double factor)
 {
-    QList<QGraphicsItem*> itemList = gscene->selectedItems();
+    std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Scale " + std::string().setNum(itemList.size()));

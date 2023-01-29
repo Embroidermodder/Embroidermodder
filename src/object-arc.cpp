@@ -16,30 +16,12 @@
 #include "embroidermodder.h"
 
 #if 0
-ArcObject::ArcObject(double startX, double startY, double midX, double midY, double endX, double endY, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ArcObject Constructor()");
-    init(startX, startY, midX, midY, endX, endY, rgb, SolidLine); //TODO: getCurrentLineType
-}
-
-ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ArcObject Constructor()");
-    if (obj) {
-        init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-ArcObject::~ArcObject()
-{
-    debug_message("ArcObject Destructor()");
-}
-
-void ArcObject::init(double startX, double startY, double midX, double midY, double endX, double endY, unsigned int rgb, PenStyle lineType)
+void ArcObject::init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Arc");
+
+    arc = arc_in;
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -51,30 +33,21 @@ void ArcObject::init(double startX, double startY, double midX, double midY, dou
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
-void ArcObject::calculateArcData(double startX, double startY, double midX, double midY, double endX, double endY)
+void ArcObject::calculateArcData(EmbArc arc)
 {
-    double centerX;
-    double centerY;
-    EmbArc arc;
     EmbVector center;
-    arc.start.x = startX;
-    arc.start.y = startY;
-    arc.mid.x = midX;
-    arc.mid.y = midY;
-    arc.end.x = endX;
-    arc.end.y = endY;
     getArcCenter(arc, &center);
 
     arcStartPoint = embVector_subtract(arc.start, center);
     arcMidPoint = embVector_subtract(arc.mid, center);
     arcEndPoint = embVector_subtract(arc.end, center);
 
-    setPos(center.x, center.y);
+    setPos(center);
 
-    double radius = QLineF(center.x, center.y, arc.mid.x, arc.mid.y).length();
+    double radius = EmbLine(center, arc.mid).length();
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -83,47 +56,32 @@ void ArcObject::calculateArcData(double startX, double startY, double midX, doub
 
 void ArcObject::updateArcRect(double radius)
 {
-    QRectF arcRect;
+    EmbRect arcRect;
     arcRect.setWidth(radius*2.0);
     arcRect.setHeight(radius*2.0);
     arcRect.moveCenter(EmbVector(0,0));
     setRect(arcRect);
 }
 
-void ArcObject::setObjectCenter(EmbVector& point)
+void ArcObject::setObjectCenter(EmbVector point)
 {
-    setObjectCenter(point.x(), point.y());
-}
-
-void ArcObject::setObjectCenter(double pointX, double pointY)
-{
-    setPos(pointX, pointY);
-}
-
-void ArcObject::setObjectCenterX(double pointX)
-{
-    setX(pointX);
-}
-
-void ArcObject::setObjectCenterY(double pointY)
-{
-    setY(pointY);
+    setPos(point);
 }
 
 void ArcObject::setObjectRadius(double radius)
 {
     double rad;
-    if (radius <= 0)
-    {
+    if (radius <= 0) {
         rad = 0.0000001;
     }
-    else
+    else {
         rad = radius;
+    }
 
     EmbVector center = scenePos();
-    QLineF startLine = QLineF(center, objectStartPoint());
-    QLineF midLine   = QLineF(center, objectMidPoint());
-    QLineF endLine   = QLineF(center, objectEndPoint());
+    EmbLine startLine = EmbLine(center, objectStartPoint());
+    EmbLine midLine   = EmbLine(center, objectMidPoint());
+    EmbLine endLine   = EmbLine(center, objectEndPoint());
     startLine.setLength(rad);
     midLine.setLength(rad);
     endLine.setLength(rad);
@@ -144,119 +102,59 @@ void ArcObject::setObjectEndAngle(double angle)
     //TODO: ArcObject setObjectEndAngle
 }
 
-void ArcObject::setObjectStartPoint(EmbVector& point)
+void ArcObject::setObjectStartPoint(EmbVector point)
 {
-    setObjectStartPoint(point.x(), point.y());
+    arc.start = point;
+    calculateArcData(arc);
 }
 
-void ArcObject::setObjectStartPoint(double pointX, double pointY)
+void ArcObject::setObjectMidPoint(EmbVector point)
 {
-    calculateArcData(pointX, pointY, arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
+    arc.mid = point;
+    calculateArcData(arc);
 }
 
-void ArcObject::setObjectMidPoint(EmbVector& point)
+void ArcObject::setObjectEndPoint(EmbVector point)
 {
-    setObjectMidPoint(point.x(), point.y());
-}
-
-void ArcObject::setObjectMidPoint(double pointX, double pointY)
-{
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), pointX, pointY, arcEndPoint.x(), arcEndPoint.y());
-}
-
-void ArcObject::setObjectEndPoint(EmbVector& point)
-{
-    setObjectEndPoint(point.x(), point.y());
-}
-
-void ArcObject::setObjectEndPoint(double pointX, double pointY)
-{
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), pointX, pointY);
+    arc.end = point;
+    calculateArcData(arc);
 }
 
 double ArcObject::objectStartAngle() const
 {
-    double angle = QLineF(scenePos(), objectStartPoint()).angle();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
-    return angle;
+    return std::fmodf(EmbLine(scenePos(), objectStartPoint()).angle(), 360.0);;
 }
 
 double ArcObject::objectEndAngle() const
 {
-    double angle = QLineF(scenePos(), objectEndPoint()).angle();
-    while(angle >= 360.0) { angle -= 360.0; }
-    while(angle < 0.0)    { angle += 360.0; }
-    return angle;
+    return std::fmodf(EmbLine(scenePos(), objectEndPoint()).angle(), 360.0);
 }
 
 EmbVector ArcObject::objectStartPoint() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double x = arcStartPoint.x()*scale();
-    double y = arcStartPoint.y()*scale();
-    double rotX = x*cosRot - y*sinRot;
-    double rotY = x*sinRot + y*cosRot;
+    double alpha = radians(rotation());
+    EmbVector position = embVector_scale(arc.start, scale());
+    EmbVector rot = embVector_rotate(postion, alpha);
 
-    return (scenePos() + EmbVector(rotX, rotY));
-}
-
-double ArcObject::objectStartX() const
-{
-    return objectStartPoint().x();
-}
-
-double ArcObject::objectStartY() const
-{
-    return objectStartPoint().y();
+    return scenePos() + rot;
 }
 
 EmbVector ArcObject::objectMidPoint() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double x = arcMidPoint.x()*scale();
-    double y = arcMidPoint.y()*scale();
-    double rotX = x*cosRot - y*sinRot;
-    double rotY = x*sinRot + y*cosRot;
+    double alpha = radians(rotation());
+    EmbVector position = embVector_scale(arc.mid, scale());
+    EmbVector rot = embVector_rotate(postion, alpha);
 
-    return (scenePos() + EmbVector(rotX, rotY));
-}
-
-double ArcObject::objectMidX() const
-{
-    return objectMidPoint().x();
-}
-
-double ArcObject::objectMidY() const
-{
-    return objectMidPoint().y();
+    return scenePos() + rot;
 }
 
 EmbVector ArcObject::objectEndPoint() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double x = arcEndPoint.x()*scale();
-    double y = arcEndPoint.y()*scale();
-    double rotX = x*cosRot - y*sinRot;
-    double rotY = x*sinRot + y*cosRot;
+    double alpha = radians(rotation());
+    EmbVector position = embVector_scale(arc.end, scale());
+    EmbVector rot = embVector_rotate(postion, alpha);
 
-    return (scenePos() + EmbVector(rotX, rotY));
-}
-
-double ArcObject::objectEndX() const
-{
-    return objectEndPoint().x();
-}
-
-double ArcObject::objectEndY() const
-{
-    return objectEndPoint().y();
+    return scenePos() + rot;
 }
 
 double ArcObject::objectArea() const
@@ -274,13 +172,7 @@ double ArcObject::objectArcLength() const
 
 double ArcObject::objectChord() const
 {
-    EmbVector start, end, delta;
-    start.x = objectStartX();
-    start.y = objectStartY();
-    end.x = objectEndX();
-    end.y = objectEndY();
-    embVector_subtract(start, end, &delta);
-    return embVector_length(delta);
+    return embVector_distance(arc.start, arc.end);
 }
 
 double ArcObject::objectIncludedAngle() const
@@ -300,18 +192,12 @@ double ArcObject::objectIncludedAngle() const
 bool ArcObject::objectClockwise() const
 {
     // NOTE: Y values are inverted here on purpose
-    EmbArc arc;
-    arc.start.x = objectStartX();
-    arc.start.y = -objectStartY();
-    arc.mid.x = objectMidX();
-    arc.mid.y = -objectMidY();
-    arc.end.x = objectEndX();
-    arc.end.y = -objectEndY();
+    EmbArc arc2 = arc;
+    arc2.start.y *= -1.0;
+    arc2.mid.y *= -1.0;
+    arc2.end.y *= -1.0;
 
-    if (isArcClockwise(arc)) {
-        return true;
-    }
-    return false;
+    return embArc_clockwise(arc2);
 }
 
 void ArcObject::updatePath()
@@ -319,8 +205,9 @@ void ArcObject::updatePath()
     double startAngle = (objectStartAngle() + rotation());
     double spanAngle = objectIncludedAngle();
 
-    if (objectClockwise())
+    if (objectClockwise()) {
         spanAngle = -spanAngle;
+    }
 
     QPainterPath path;
     path.arcMoveTo(rect(), startAngle);
@@ -349,7 +236,7 @@ void ArcObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidg
         spanAngle = -spanAngle;
 
     double rad = objectRadius();
-    QRectF paintRect(-rad, -rad, rad*2.0, rad*2.0);
+    EmbRect paintRect(-rad, -rad, rad*2.0, rad*2.0);
     painter->drawArc(paintRect, startAngle, spanAngle);
 }
 
@@ -377,10 +264,10 @@ EmbVector ArcObject::mouseSnapPoint(EmbVector& mousePoint)
     EmbVector mid    = objectMidPoint();
     EmbVector end    = objectEndPoint();
 
-    double cntrDist  = QLineF(mousePoint, center).length();
-    double startDist = QLineF(mousePoint, start).length();
-    double midDist   = QLineF(mousePoint, mid).length();
-    double endDist   = QLineF(mousePoint, end).length();
+    double cntrDist  = EmbLine(mousePoint, center).length();
+    double startDist = EmbLine(mousePoint, start).length();
+    double midDist   = EmbLine(mousePoint, mid).length();
+    double endDist   = EmbLine(mousePoint, end).length();
 
     double minDist = std::min(std::min(cntrDist, startDist), std::min(midDist, endDist));
 
@@ -392,9 +279,9 @@ EmbVector ArcObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> ArcObject::allGripPoints()
+std::vector<EmbVector> ArcObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectCenter() << objectStartPoint() << objectMidPoint() << objectEndPoint();
     return gripPoints;
 }

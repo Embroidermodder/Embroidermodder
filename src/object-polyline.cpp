@@ -89,7 +89,7 @@ void PolylineObject::updateRubber(QPainter* painter)
     {
         setObjectPos(objectRubberPoint("POLYLINE_POINT_0"));
 
-        QLineF rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(std::string())));
+        EmbLine rubberLine(normalPath.currentPosition(), mapFromScene(objectRubberPoint(std::string())));
         if (painter) drawRubberLine(rubberLine, painter, VIEW_COLOR_CROSSHAIR);
 
         bool ok = false;
@@ -142,7 +142,7 @@ void PolylineObject::updateRubber(QPainter* painter)
                 painter->drawLine(enPoint, mapFromScene(objectRubberPoint(std::string())));
             }
 
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+            EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
@@ -156,7 +156,7 @@ void PolylineObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
     if (!normalPath.elementCount())
-        QMessageBox::critical(0, QObject::tr("Empty Polyline Error"), QObject::tr("The polyline added contains no points. The command that created this object has flawed logic."));
+        QMessageBox::critical(0, translate("Empty Polyline Error"), translate("The polyline added contains no points. The command that created this object has flawed logic."));
 }
 
 // Returns the closest snap point to the mouse point
@@ -164,13 +164,13 @@ EmbVector PolylineObject::mouseSnapPoint(const EmbVector& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
-    double closestDist = QLineF(mousePoint, closestPoint).length();
+    double closestDist = EmbLine(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
     for(int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         EmbVector elemPoint = mapToScene(element.x, element.y);
-        double elemDist = QLineF(mousePoint, elemPoint).length();
+        double elemDist = EmbLine(mousePoint, elemPoint).length();
         if (elemDist < closestDist)
         {
             closestPoint = elemPoint;
@@ -180,9 +180,9 @@ EmbVector PolylineObject::mouseSnapPoint(const EmbVector& mousePoint)
     return closestPoint;
 }
 
-QList<EmbVector> PolylineObject::allGripPoints()
+std::vector<EmbVector> PolylineObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     QPainterPath::Element element;
     for(int i = 0; i < normalPath.elementCount(); ++i)
     {

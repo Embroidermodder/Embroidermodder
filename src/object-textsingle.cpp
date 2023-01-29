@@ -26,13 +26,13 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
 {
     debug_message("TextSingleObject Constructor()");
     if (obj) {
-        setObjectTextFont(obj->objectTextFont());
-        setObjectTextSize(obj->objectTextSize());
+        setObjectTextFont(obj->objTextFont);
+        setObjectTextSize(obj->objTextSize);
         setRotation(obj->rotation());
-        setObjectTextBackward(obj->objectTextBackward());
-        setObjectTextUpsideDown(obj->objectTextUpsideDown());
-        setObjectTextStyle(obj->objectTextBold(), obj->objectTextItalic(), obj->objectTextUnderline(), obj->objectTextStrikeOut(), obj->objectTextOverline());
-        init(obj->objectText(), obj->objectX(), obj->objectY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+        setObjectTextBackward(obj->objTextBackward);
+        setObjectTextUpsideDown(obj->objTextUpsideDown);
+        setObjectTextStyle(obj->objTextBold, obj->objTextItalic, obj->objTextUnderline, obj->objTextStrikeOut, obj->objTextOverline);
+        init(obj->objText, obj->objectX(), obj->objectY(), obj->objectColorRGB(), SolidLine); //TODO: getCurrentLineType
         setScale(obj->scale());
     }
 }
@@ -87,7 +87,7 @@ void TextSingleObject::setObjectText(const std::string& str)
     textPath.addText(0, 0, font, str);
 
     //Translate the path based on the justification
-    QRectF jRect = textPath.boundingRect();
+    EmbRect jRect = textPath.boundingRect();
     if (objTextJustify == "Left") {
         textPath.translate(-jRect.left(), 0);
     }
@@ -286,7 +286,7 @@ void TextSingleObject::updateRubber(QPainter* painter)
                 painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(std::string()))-mapFromScene(gripPoint)));
             }
 
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+            EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
@@ -306,9 +306,9 @@ EmbVector TextSingleObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> TextSingleObject::allGripPoints()
+std::vector<EmbVector> TextSingleObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
 }
@@ -318,19 +318,19 @@ void TextSingleObject::gripEdit(const EmbVector& before, const EmbVector& after)
     if (before == scenePos()) { EmbVector delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-QList<QPainterPath> TextSingleObject::subPathList() const
+std::vector<QPainterPath> TextSingleObject::subPathList() const
 {
     double s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
 
-    QList<QPainterPath> pathList;
+    std::vector<QPainterPath> pathList;
 
     QPainterPath path = objTextPath;
 
     QPainterPath::Element element;
-    QList<int> pathMoves;
+    std::vector<int> pathMoves;
     int numMoves = 0;
 
     for(int i = 0; i < path.elementCount(); i++)

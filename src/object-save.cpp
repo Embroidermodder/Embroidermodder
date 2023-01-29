@@ -358,7 +358,7 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
     {
         if (formatType == EMBFORMAT_STITCHONLY)
         {
-            QList<QPainterPath> pathList = obj->objectSavePathList();
+            std::vector<QPainterPath> pathList = obj->objectSavePathList();
             foreach(QPainterPath path, pathList)
             {
                 toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified

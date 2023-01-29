@@ -17,6 +17,118 @@
 
 #include <toml.hpp>
 
+
+/* The actuator changes the program state via these global variables.
+ */
+double output;
+int settings_general_icon_size;
+bool settings_general_mdi_bg_use_logo;
+bool settings_general_mdi_bg_use_texture;
+bool settings_general_mdi_bg_use_color;
+std::string settings_general_mdi_bg_logo;
+std::string settings_general_mdi_bg_texture;
+unsigned int  settings_general_mdi_bg_color;
+bool settings_general_tip_of_the_day;
+unsigned int settings_general_current_tip;
+bool settings_general_system_help_browser;
+bool settings_general_check_for_updates;
+bool settings_display_use_opengl;
+bool settings_display_renderhint_aa;
+bool settings_display_renderhint_text_aa;
+bool settings_display_renderhint_smooth_pix;
+bool settings_display_renderhint_high_aa;
+bool settings_display_renderhint_noncosmetic;
+bool settings_display_show_scrollbars;
+int settings_display_scrollbar_widget_num;
+unsigned int  settings_display_crosshair_color;
+unsigned int  settings_display_bg_color;
+unsigned int  settings_display_selectbox_left_color;
+unsigned int  settings_display_selectbox_left_fill;
+unsigned int  settings_display_selectbox_right_color;
+unsigned int  settings_display_selectbox_right_fill;
+unsigned char  settings_display_selectbox_alpha;
+double settings_display_zoomscale_in;
+double settings_display_zoomscale_out;
+unsigned char  settings_display_crosshair_percent;
+std::string settings_display_units;
+unsigned int  settings_prompt_text_color;
+unsigned int  settings_prompt_bg_color;
+std::string settings_prompt_font_family;
+std::string settings_prompt_font_style;
+unsigned char  settings_prompt_font_size;
+bool settings_prompt_save_history;
+bool settings_prompt_save_history_as_html;
+std::string settings_prompt_save_history_filename;
+std::string settings_opensave_custom_filter;
+std::string settings_opensave_open_format;
+bool settings_opensave_open_thumbnail;
+std::string settings_opensave_save_format;
+bool settings_opensave_save_thumbnail;
+unsigned char  settings_opensave_recent_max_files;
+std::vector<std::string> settings_opensave_recent_list_of_files;
+std::string settings_opensave_recent_directory;
+unsigned char  settings_opensave_trim_dst_num_jumps;
+std::string settings_printing_default_device;
+bool settings_printing_use_last_device;
+bool settings_printing_disable_bg;
+bool settings_grid_show_on_load;
+bool settings_grid_show_origin;
+bool settings_grid_color_match_crosshair;
+unsigned int  settings_grid_color;
+bool settings_grid_load_from_file;
+std::string settings_grid_type;
+bool settings_grid_center_on_origin;
+double settings_grid_center_x;
+double settings_grid_center_y;
+double settings_grid_size_x;
+double settings_grid_size_y;
+double settings_grid_spacing_x;
+double settings_grid_spacing_y;
+double settings_grid_size_radius;
+double settings_grid_spacing_radius;
+double settings_grid_spacing_angle;
+bool settings_ruler_show_on_load;
+bool settings_ruler_metric;
+unsigned int  settings_ruler_color;
+unsigned char  settings_ruler_pixel_size;
+bool settings_qsnap_enabled;
+unsigned int  settings_qsnap_locator_color;
+unsigned char  settings_qsnap_locator_size;
+unsigned char  settings_qsnap_aperture_size;
+bool settings_qsnap_endpoint;
+bool settings_qsnap_midpoint;
+bool settings_qsnap_center;
+bool settings_qsnap_node;
+bool settings_qsnap_quadrant;
+bool settings_qsnap_intersection;
+bool settings_qsnap_extension;
+bool settings_qsnap_insertion;
+bool settings_qsnap_perpendicular;
+bool settings_qsnap_tangent;
+bool settings_qsnap_nearest;
+bool settings_qsnap_apparent;
+bool settings_qsnap_parallel;
+bool settings_lwt_show_lwt;
+bool settings_lwt_real_render;
+double settings_lwt_default_lwt;
+bool settings_selection_mode_pickfirst;
+bool settings_selection_mode_pickadd;
+bool settings_selection_mode_pickdrag;
+unsigned int  settings_selection_coolgrip_color;
+unsigned int  settings_selection_hotgrip_color;
+unsigned char  settings_selection_grip_size;
+unsigned char  settings_selection_pickbox_size;
+std::string settings_text_font;
+double settings_text_size;
+double settings_text_angle;
+bool settings_text_style_bold;
+bool settings_text_style_italic;
+bool settings_text_style_underline;
+bool settings_text_style_overline;
+bool settings_text_style_strikeout;
+std::vector<std::string> undo_history;
+int undo_history_position = 0;
+
 string_matrix
 load_string_matrix(toml::value config, std::string menu_name)
 {

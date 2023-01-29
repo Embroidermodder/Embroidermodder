@@ -621,9 +621,9 @@ EmbVector CircleObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> CircleObject::allGripPoints()
+std::vector<EmbVector> CircleObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
 }

@@ -40,9 +40,7 @@ global.firstY;
 global.prevX;
 global.prevY;
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-function main()
+void main()
 {
     initCommand();
     clearSelection();
@@ -54,18 +52,16 @@ function main()
     setPromptPrefix(qsTr("Specify first point: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-function click(x, y)
+void
+click(EmbVector p)
 {
     if (global.firstRun)
     {
         global.firstRun = false;
-        global.firstX = x;
-        global.firstY = y;
-        global.prevX = x;
-        global.prevY = y;
+        global.firstX = p.x;
+        global.firstY = p.y;
+        global.prevX = p.x;
+        global.prevY = p.y;
         addRubber("LINE");
         setRubberMode("LINE");
         setRubberPoint("LINE_START", global.firstX, global.firstY);
@@ -141,118 +137,69 @@ prompt(std::string str)
     }
 }
 
-LineObject::LineObject(double x1, double y1, double x2, double y2, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("LineObject Constructor()");
-    init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-LineObject::LineObject(LineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("LineObject Constructor()");
-    if (obj) {
-        init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-    }
-}
-
-LineObject::~LineObject()
-{
-    debug_message("LineObject Destructor()");
-}
-
-void LineObject::init(double x1, double y1, double x2, double y2, unsigned int rgb, Qt::PenStyle lineType)
+void LineObject::init(EmbLine line_in, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Line");
+
+    line = line_in;
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setObjectEndPoint1(x1, y1);
-    setObjectEndPoint2(x2, y2);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objPen);
 }
 
-void LineObject::setObjectEndPoint1(EmbVector& endPt1)
+void LineObject::setObjectEndPoint1(EmbVector point1)
 {
-    setObjectEndPoint1(endPt1.x(), endPt1.y());
-}
-
-void LineObject::setObjectEndPoint1(double x1, double y1)
-{
-    EmbVector endPt2 = objectEndPoint2();
-    double x2 = endPt2.x();
-    double y2 = endPt2.y();
-    double dx = x2 - x1;
-    double dy = y2 - y1;
+    double dx = line.start.x - point1.x;
+    double dy = line.start.y - point1.y;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
-    setPos(x1, y1);
+    setPos(point1);
 }
 
-void LineObject::setObjectEndPoint2(EmbVector& endPt2)
+void LineObject::setObjectEndPoint2(EmbVector point1)
 {
-    setObjectEndPoint2(endPt2.x(), endPt2.y());
-}
-
-void LineObject::setObjectEndPoint2(double x2, double y2)
-{
-    EmbVector endPt1 = scenePos();
-    double x1 = endPt1.x();
-    double y1 = endPt1.y();
-    double dx = x2 - x1;
-    double dy = y2 - y1;
+    double dx = line.end.x - point1.x;
+    double dy = line.end.y - point1.y;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
-    setPos(x1, y1);
+    setPos(point1);
 }
 
 EmbVector LineObject::objectEndPoint2() const
 {
-    QLineF lyne = line();
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double x2 = lyne.x2()*scale();
-    double y2 = lyne.y2()*scale();
-    double rotEnd2X = x2*cosRot - y2*sinRot;
-    double rotEnd2Y = x2*sinRot + y2*cosRot;
+    EmbLine lyne = line();
+    double alpha = radians(rotation());
+    EmbVector point2;
+    point2.x = lyne.x2()*scale();
+    point2.y = lyne.y2()*scale();
+    EmbVector rotEnd = embVector_rotate(point2, alpha);
 
-    return (scenePos() + EmbVector(rotEnd2X, rotEnd2Y));
+    return scenePos() + rotEnd;
 }
 
 EmbVector LineObject::objectMidPoint() const
 {
-    QLineF lyne = line();
-    EmbVector mp = lyne.pointAt(0.5);
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-    double mx = mp.x()*scale();
-    double my = mp.y()*scale();
-    double rotMidX = mx*cosRot - my*sinRot;
-    double rotMidY = mx*sinRot + my*cosRot;
+    EmbLine lyne = line();
+    EmbVector mp = lyne.pointAt(0.5) * scale();
+    double alpha = radians(rotation());
+    EmbVector rotMid = embVector_rotate(mp, alpha);
 
-    return (scenePos() + EmbVector(rotMidX, rotMidY));
+    return scenePos() + rotMid;
 }
 
 double LineObject::objectAngle() const
 {
-    double angle = line().angle() - rotation();
-    while (angle >= 360.0) {
-        angle -= 360.0;
-    }
-    while (angle < 0.0) {
-        angle += 360.0;
-    }
-    return angle;
+    return std::fmodf(line().angle() - rotation(), 360.0);
 }
 
 void LineObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
@@ -281,8 +228,7 @@ void LineObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWid
 void LineObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_LINE)
-    {
+    if (rubberMode == OBJ_RUBBER_LINE) {
         EmbVector sceneStartPoint = objectRubberPoint("LINE_START");
         EmbVector sceneQSnapPoint = objectRubberPoint("LINE_END");
 
@@ -291,16 +237,14 @@ void LineObject::updateRubber(QPainter* painter)
 
         drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             EmbVector gripPoint = objectRubberPoint("GRIP_POINT");
             if     (gripPoint == objectEndPoint1()) painter->drawLine(line().p2(), mapFromScene(objectRubberPoint(std::string())));
             else if (gripPoint == objectEndPoint2()) painter->drawLine(line().p1(), mapFromScene(objectRubberPoint(std::string())));
             else if (gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(std::string()))-mapFromScene(gripPoint)));
 
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+            EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
@@ -321,9 +265,9 @@ EmbVector LineObject::mouseSnapPoint(EmbVector& mousePoint)
     EmbVector endPoint2 = objectEndPoint2();
     EmbVector midPoint  = objectMidPoint();
 
-    double end1Dist = QLineF(mousePoint, endPoint1).length();
-    double end2Dist = QLineF(mousePoint, endPoint2).length();
-    double midDist  = QLineF(mousePoint, midPoint).length();
+    double end1Dist = EmbLine(mousePoint, endPoint1).length();
+    double end2Dist = EmbLine(mousePoint, endPoint2).length();
+    double midDist  = EmbLine(mousePoint, midPoint).length();
 
     double minDist = std::min(std::min(end1Dist, end2Dist), midDist);
 
@@ -334,9 +278,9 @@ EmbVector LineObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> LineObject::allGripPoints()
+std::vector<EmbVector> LineObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
     return gripPoints;
 }

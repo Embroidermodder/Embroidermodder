@@ -67,8 +67,8 @@ void BaseObject::setObjectLineWeight(double lineWeight)
         }
         else
         {
-            QMessageBox::warning(0, QObject::tr("Error - Negative Lineweight"),
-                                    QObject::tr("Lineweight: %1")
+            QMessageBox::warning(0, translate("Error - Negative Lineweight"),
+                                    translate("Lineweight: %1")
                                     .arg(std::string().setNum(lineWeight)));
             debug_message("Lineweight cannot be negative! Inverting sign.");
             lwtPen.setWidthF(-lineWeight);
@@ -98,7 +98,7 @@ std::string BaseObject::objectRubberText(const std::string& key) const
     return std::string();
 }
 
-QRectF BaseObject::boundingRect() const
+EmbRect BaseObject::boundingRect() const
 {
     //If gripped, force this object to be drawn even if it is offscreen
     if (objectRubberMode() == OBJ_RUBBER_GRIP)
@@ -106,7 +106,7 @@ QRectF BaseObject::boundingRect() const
     return path().boundingRect();
 }
 
-void BaseObject::drawRubberLine(const QLineF& rubLine, QPainter* painter, const char* colorFromScene)
+void BaseObject::drawRubberLine(const EmbLine& rubLine, QPainter* painter, const char* colorFromScene)
 {
     if (painter) {
         QGraphicsScene* objScene = scene();

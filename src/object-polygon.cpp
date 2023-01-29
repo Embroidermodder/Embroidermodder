@@ -123,7 +123,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
 
         EmbVector inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
-        QLineF inscribeLine = QLineF(EmbVector(0,0), inscribePoint);
+        EmbLine inscribeLine = EmbLine(EmbVector(0,0), inscribePoint);
         double inscribeAngle = inscribeLine.angle();
         double inscribeInc = 360.0/numSides;
 
@@ -147,7 +147,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         quint16 numSides = objectRubberPoint("POLYGON_NUM_SIDES").x();
 
         EmbVector circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
-        QLineF circumscribeLine = QLineF(EmbVector(0,0), circumscribePoint);
+        EmbLine circumscribeLine = EmbLine(EmbVector(0,0), circumscribePoint);
         double circumscribeAngle = circumscribeLine.angle();
         double circumscribeInc = 360.0/numSides;
 
@@ -155,10 +155,10 @@ void PolygonObject::updateRubber(QPainter* painter)
 
         QPainterPath circumscribePath;
         //First Point
-        QLineF prev(circumscribeLine.p2(), EmbVector(0,0));
+        EmbLine prev(circumscribeLine.p2(), EmbVector(0,0));
         prev = prev.normalVector();
         circumscribeLine.setAngle(circumscribeAngle + circumscribeInc);
-        QLineF perp(circumscribeLine.p2(), EmbVector(0,0));
+        EmbLine perp(circumscribeLine.p2(), EmbVector(0,0));
         perp = perp.normalVector();
         EmbVector iPoint;
         perp.intersects(prev, &iPoint);
@@ -168,7 +168,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         {
             prev = perp;
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
-            perp = QLineF(circumscribeLine.p2(), EmbVector(0,0));
+            perp = EmbLine(circumscribeLine.p2(), EmbVector(0,0));
             perp = perp.normalVector();
             perp.intersects(prev, &iPoint);
             circumscribePath.lineTo(iPoint);
@@ -195,7 +195,7 @@ void PolygonObject::updateRubber(QPainter* painter)
             painter->drawLine(emPoint, mapFromScene(objectRubberPoint(std::string())));
             painter->drawLine(enPoint, mapFromScene(objectRubberPoint(std::string())));
 
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+            EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
@@ -209,7 +209,7 @@ void PolygonObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
     if (!normalPath.elementCount())
-        QMessageBox::critical(0, QObject::tr("Empty Polygon Error"), QObject::tr("The polygon added contains no points. The command that created this object has flawed logic."));
+        QMessageBox::critical(0, translate("Empty Polygon Error"), translate("The polygon added contains no points. The command that created this object has flawed logic."));
 }
 
 // Returns the closest snap point to the mouse point
@@ -217,12 +217,12 @@ EmbVector PolygonObject::mouseSnapPoint(const EmbVector& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
-    double closestDist = QLineF(mousePoint, closestPoint).length();
+    double closestDist = EmbLine(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
     for (int i = 0; i < elemCount; ++i) {
         element = normalPath.elementAt(i);
         EmbVector elemPoint = mapToScene(element.x, element.y);
-        double elemDist = QLineF(mousePoint, elemPoint).length();
+        double elemDist = EmbLine(mousePoint, elemPoint).length();
         if (elemDist < closestDist) {
             closestPoint = elemPoint;
             closestDist = elemDist;

@@ -185,10 +185,10 @@ void MdiWindow::saveBMC()
     //TODO: figure out how to center the image, right now it just plops it to the left side.
     QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
     img.fill(qRgb(255,255,255));
-    QRectF extents = gscene->itemsBoundingRect();
+    EmbRect extents = gscene->itemsBoundingRect();
 
     QPainter painter(&img);
-    QRectF targetRect(0,0,150,150);
+    EmbRect targetRect(0,0,150,150);
     // TODO: Make BMC background into it's own setting?
     if (settings_printing_disable_bg) {
         QBrush brush = gscene->backgroundBrush();

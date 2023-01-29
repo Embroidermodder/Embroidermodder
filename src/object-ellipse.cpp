@@ -375,7 +375,7 @@ void EllipseObject::init(double centerX, double centerY, double width, double he
 
 void EllipseObject::setObjectSize(double width, double height)
 {
-    QRectF elRect = rect();
+    EmbRect elRect = rect();
     elRect.setWidth(width);
     elRect.setHeight(height);
     elRect.moveCenter(EmbVector(0,0));
@@ -414,7 +414,7 @@ void EllipseObject::setObjectRadiusMinor(double radius)
 
 void EllipseObject::setObjectDiameterMajor(double diameter)
 {
-    QRectF elRect = rect();
+    EmbRect elRect = rect();
     if (elRect.width() > elRect.height())
         elRect.setWidth(diameter);
     else
@@ -425,7 +425,7 @@ void EllipseObject::setObjectDiameterMajor(double diameter)
 
 void EllipseObject::setObjectDiameterMinor(double diameter)
 {
-    QRectF elRect = rect();
+    EmbRect elRect = rect();
     if (elRect.width() < elRect.height())
         elRect.setWidth(diameter);
     else
@@ -473,7 +473,7 @@ EmbVector EllipseObject::objectQuadrant270() const
 void EllipseObject::updatePath()
 {
     QPainterPath path;
-    QRectF r = rect();
+    EmbRect r = rect();
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
     //NOTE: Reverse the path so that the inside area isn't considered part of the ellipse
@@ -614,9 +614,9 @@ EmbVector EllipseObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> EllipseObject::allGripPoints()
+std::vector<EmbVector> EllipseObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
 }
@@ -629,7 +629,7 @@ void EllipseObject::gripEdit(const EmbVector& before, const EmbVector& after)
 QPainterPath EllipseObject::objectSavePath() const
 {
     QPainterPath path;
-    QRectF r = rect();
+    EmbRect r = rect();
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 

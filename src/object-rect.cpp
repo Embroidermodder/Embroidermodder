@@ -16,29 +16,7 @@
 #include "embroidermodder.h"
 
 #if 0
-RectObject::RectObject(double x, double y, double w, double h, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("RectObject Constructor()");
-    init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
-
-RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("RectObject Constructor()");
-    if (obj)
-    {
-        EmbVector ptl = obj->objectTopLeft();
-        init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-RectObject::~RectObject()
-{
-    debug_message("RectObject Destructor()");
-}
-
-void RectObject::init(double x, double y, double w, double h, unsigned int rgb, Qt::PenStyle lineType)
+void RectObject::init(EmbRect rect, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Rectangle");
@@ -64,68 +42,40 @@ void RectObject::setObjectRect(double x, double y, double w, double h)
 
 EmbVector RectObject::objectTopLeft() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector tl = rect().topLeft();
-    double ptlX = tl.x()*scale();
-    double ptlY = tl.y()*scale();
-    double ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    double ptlYrot = ptlX*sinRot + ptlY*cosRot;
-
-    return (scenePos() + EmbVector(ptlXrot, ptlYrot));
+    double alpha = radians(rotation());
+    EmbVector tl = rect().topLeft() * scale();
+    EmbVector ptlrot = embVector_rotate(t1, alpha);
+    return scenePos() + ptlrot;
 }
 
 EmbVector RectObject::objectTopRight() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector tr = rect().topRight();
-    double ptrX = tr.x()*scale();
-    double ptrY = tr.y()*scale();
-    double ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    double ptrYrot = ptrX*sinRot + ptrY*cosRot;
-
-    return (scenePos() + EmbVector(ptrXrot, ptrYrot));
+    double alpha = radians(rotation());
+    EmbVector tr = rect().topRight() * scale();
+    EmbVector ptlrot = embVector_rotate(t1, alpha);
+    return scenePos() + ptrrot;
 }
 
 EmbVector RectObject::objectBottomLeft() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector bl = rect().bottomLeft();
-    double pblX = bl.x()*scale();
-    double pblY = bl.y()*scale();
-    double pblXrot = pblX*cosRot - pblY*sinRot;
-    double pblYrot = pblX*sinRot + pblY*cosRot;
-
-    return (scenePos() + EmbVector(pblXrot, pblYrot));
+    double alpha = radians(rotation());
+    EmbVector bl = rect().bottomLeft() * scale();
+    EmbVector pblrot = embVector_rotate(b1, alpha);
+    return scenePos() + pblrot;
 }
 
 EmbVector RectObject::objectBottomRight() const
 {
-    double rot = radians(rotation());
-    double cosRot = cos(rot);
-    double sinRot = sin(rot);
-
-    EmbVector br = rect().bottomRight();
-    double pbrX = br.x()*scale();
-    double pbrY = br.y()*scale();
-    double pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    double pbrYrot = pbrX*sinRot + pbrY*cosRot;
-
-    return (scenePos() + EmbVector(pbrXrot, pbrYrot));
+    double alpha = radians(rotation());
+    EmbVector br = rect().bottomRight() * scale();
+    EmbVector pbrrot = embVector_rotate(br, alpha);
+    return scenePos() + pbrrot;
 }
 
 void RectObject::updatePath()
 {
     QPainterPath path;
-    QRectF r = rect();
+    EmbRect r = rect();
     path.moveTo(r.bottomLeft());
     path.lineTo(r.bottomRight());
     path.lineTo(r.topRight());
@@ -177,12 +127,12 @@ void RectObject::updateRubber(QPainter* painter)
             EmbVector gripPoint = objectRubberPoint("GRIP_POINT");
             EmbVector after = objectRubberPoint(std::string());
             EmbVector delta = after-gripPoint;
-            if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(QRectF(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
-            else if (gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
-            else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(QRectF(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
+            if     (gripPoint == objectTopLeft())     { painter->drawPolygon(mapFromScene(EmbRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()))); }
+            else if (gripPoint == objectTopRight())    { painter->drawPolygon(mapFromScene(EmbRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()))); }
+            else if (gripPoint == objectBottomLeft())  { painter->drawPolygon(mapFromScene(EmbRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()))); }
+            else if (gripPoint == objectBottomRight()) { painter->drawPolygon(mapFromScene(EmbRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()))); }
 
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+            EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
             */
 
@@ -190,7 +140,7 @@ void RectObject::updateRubber(QPainter* painter)
             EmbVector after = objectRubberPoint(std::string());
             EmbVector delta = after-gripPoint;
 
-            QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+            EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
             drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
         }
     }
@@ -212,10 +162,10 @@ EmbVector RectObject::mouseSnapPoint(const EmbVector& mousePoint)
     EmbVector pbl = objectBottomLeft();  //Bottom Left Corner QSnap
     EmbVector pbr = objectBottomRight(); //Bottom Right Corner QSnap
 
-    double ptlDist = QLineF(mousePoint, ptl).length();
-    double ptrDist = QLineF(mousePoint, ptr).length();
-    double pblDist = QLineF(mousePoint, pbl).length();
-    double pbrDist = QLineF(mousePoint, pbr).length();
+    double ptlDist = EmbLine(mousePoint, ptl).length();
+    double ptrDist = EmbLine(mousePoint, ptr).length();
+    double pblDist = EmbLine(mousePoint, pbl).length();
+    double pbrDist = EmbLine(mousePoint, pbr).length();
 
     double minDist = std::min(std::min(ptlDist, ptrDist), std::min(pblDist, pbrDist));
 
@@ -227,9 +177,9 @@ EmbVector RectObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> RectObject::allGripPoints()
+std::vector<EmbVector> RectObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
 }
@@ -246,7 +196,7 @@ void RectObject::gripEdit(const EmbVector& before, const EmbVector& after)
 QPainterPath RectObject::objectSavePath() const
 {
     QPainterPath path;
-    QRectF r = rect();
+    EmbRect r = rect();
     path.moveTo(r.bottomLeft());
     path.lineTo(r.bottomRight());
     path.lineTo(r.topRight());

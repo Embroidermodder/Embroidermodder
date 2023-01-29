@@ -688,9 +688,9 @@ void CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
         this->setCursorPosition(prefix.length());
 }
 
-void CmdPromptInput::changeFormatting(const QList<QTextLayout::FormatRange>& formats)
+void CmdPromptInput::changeFormatting(const std::vector<QTextLayout::FormatRange>& formats)
 {
-    QList<QInputMethodEvent::Attribute> attributes;
+    std::vector<QInputMethodEvent::Attribute> attributes;
     foreach(const QTextLayout::FormatRange& range, formats)
     {
         QInputMethodEvent::AttributeType type = QInputMethodEvent::TextFormat;
@@ -705,7 +705,7 @@ void CmdPromptInput::changeFormatting(const QList<QTextLayout::FormatRange>& for
 
 void CmdPromptInput::clearFormatting()
 {
-    changeFormatting(QList<QTextLayout::FormatRange>());
+    changeFormatting(std::vector<QTextLayout::FormatRange>());
 }
 
 void CmdPromptInput::applyFormatting()
@@ -715,7 +715,7 @@ void CmdPromptInput::applyFormatting()
     int start = -1;
     int stop = -1;
 
-    QList<QTextLayout::FormatRange> formats;
+    std::vector<QTextLayout::FormatRange> formats;
 
     //Bold Prefix
     QTextCharFormat formatPrefix;

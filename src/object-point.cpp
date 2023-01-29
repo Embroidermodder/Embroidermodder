@@ -76,7 +76,7 @@ void PointObject::updateRubber(QPainter* painter)
         if (painter) {
             EmbVector gripPoint = objectRubberPoint("GRIP_POINT");
             if (gripPoint == scenePos()) {
-                QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
+                EmbLine rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(std::string())));
                 drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
             }
         }
@@ -97,9 +97,9 @@ EmbVector PointObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-QList<EmbVector> PointObject::allGripPoints()
+std::vector<EmbVector> PointObject::allGripPoints()
 {
-    QList<EmbVector> gripPoints;
+    std::vector<EmbVector> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
 }
