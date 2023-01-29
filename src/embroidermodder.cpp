@@ -49,6 +49,88 @@ std::unordered_map<std::string, string_matrix> menu_layout;
 std::string menu_action = "";
 std::string current_pattern = "";
 TextEditor editor;
+std::vector<std::string> file_toolbar = {
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails"
+};
+std::vector<std::string> edit_toolbar = {
+    "undo",
+    "redo",
+    "cut",
+    "copy",
+    "paste"
+};
+std::vector<std::string> view_toolbar = {
+    "day",
+    "night",
+    "zoomin",
+    "zoomout",
+    "zoomextents"
+};
+std::vector<std::string> help_toolbar = {
+    "help"
+};
+std::vector<std::string> texture_list = {
+    "new",
+    "open",
+    "save",
+    "saveas",
+    "print",
+    "designdetails",
+    "undo",
+    "redo",
+    "cut",
+    "copy",
+    "paste",
+    "day",
+    "night",
+    "zoomin",
+    "zoomout",
+    "zoomextents",
+    "help"
+};
+int testing = 0;
+
+
+int
+parse_command(int argc, char *argv[], std::vector<std::string> files)
+{
+    for (int i=1; i<argc; i++) {
+        std::string s(argv[i]);
+        if ((s == "--local-boot") || (s == "-L")) {
+            assets_dir = argv[i+1];
+            std::cout << "Booting from \"" << assets_dir << "\"." << std::endl;
+            i++;
+            continue;
+        }
+        if ((s == "--debug") || (s == "-d")) {
+            debug_mode = 1;
+            printf("DEBUG MODE\n");
+            continue;
+        }
+        if ((s == "--help") || (s == "-h")) {
+            /* Store internally so we don't need to load
+             * the global state before parsing the command.
+            print_string_list(help_message); */
+            return 0;
+        }
+        if ((s == "--version") || (s == "-v")) {
+            /* For scripts that need the version string */
+            std::cout << VERSION;
+            return 0;
+        }
+        if (s == "--test") {
+            testing = 1;
+            continue;
+        }
+        files.push_back(s);
+    }
+    return 1;
+}
 
 GLuint
 gen_gl_texture(uint8_t* data, int w, int h, char fmt)
@@ -106,6 +188,7 @@ set_style(void)
     style.Colors[ImGuiCol_PopupBg] = ImVec4(0.55f, 0.55f, 0.55f, 1.00f);
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.65f, 0.65f, 0.65f, 1.00f);
     style.Colors[ImGuiCol_MenuBarBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
+    style.Colors[ImGuiCol_ChildBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
 }
 
 void
@@ -167,20 +250,31 @@ main_widget(void)
         load_menu("Edit");
         load_menu("View");
         load_menu("Draw");
+        load_menu("Window");
+        load_menu("Settings");
+        load_menu("Help");
         ImGui::EndMenuBar();
     }
 
-    load_toolbar({
-        "new",
-        "open",
-        "save",
-        "saveas"
-    });
+    load_toolbar(file_toolbar);
+    ImGui::SameLine();
+    load_toolbar(edit_toolbar);
+    ImGui::SameLine();
+    load_toolbar(view_toolbar);
 
     if (menu_action != "") {
         actuator(menu_action);
     }
 
+    ImGui::Columns(2, "Undo History");
+    ImGui::SetColumnWidth(-1, 100);
+    ImGui::BeginChild("Undo History");
+    ImGui::Text("Undo History");
+    for (std::string undo_item : undo_history) {
+        ImGui::Text(undo_item.c_str());
+    }
+    ImGui::EndChild();
+    ImGui::NextColumn();
     if (ImGui:: BeginTabBar("Tab Bar")) {
         for (int i=0; i<n_patterns; i++) {
             if (ImGui::BeginTabItem("Untitled.dst")) {
@@ -198,6 +292,7 @@ main_widget(void)
         }
         ImGui::EndTabBar();
     }
+    ImGui::Columns();
 
     if (show_about_dialog) {
         about_dialog();
@@ -221,7 +316,8 @@ int
 main(int argc, char* argv[])
 {
     if (argc>1) {
-        assets_dir = std::string(argv[1]);
+        // assets_dir = std::string(argv[1]);
+        current_fname = argv[1];
     }
 
     load_configuration();
@@ -254,13 +350,7 @@ main(int argc, char* argv[])
 
     set_style();
 
-    load_textures({
-        "new",
-        "open",
-        "save",
-        "saveas",
-        "circle"
-    });
+    load_textures(texture_list);
 
     /* load_text_file("imgui_config.toml"); */
 
@@ -295,49 +385,6 @@ main(int argc, char* argv[])
 }
 
 #if 0
-void loadConfiguration(void);
-
-const char* _appName_ = "Embroidermodder";
-const char* _appVer_  = "v2.0 alpha";
-bool exitApp = false;
-
-/* TTF_Font *interface_font; */
-std::vector<EmbPattern> pattern_list;
-int generated_widgets = 0;
-std::vector<int> selected;
-int testing = 0;
-int debug_mode = 0;
-EmbColor palette[256];
-std::string assets_directory = ".";
-std::string os_seperator = "/";
-
-int toolbar_file_entries[] = {
-    ACTION_new,
-    ACTION_open,
-    ACTION_save,
-    ACTION_saveas,
-    ACTION_print,
-    ACTION_designdetails,
-    -1,
-    ACTION_undo,
-    ACTION_redo,
-    -1,
-    ACTION_help,
-    -2
-};
-
-int toolbar_edit_entries[] = {
-    ACTION_cut,
-    ACTION_copy,
-    ACTION_paste,
-    -2
-};
-
-int toolbar_view_entries[] = {
-    ACTION_day,
-    ACTION_night,
-    -2
-};
 
 /*
 Action action_list[] = {
@@ -475,41 +522,6 @@ GroupBox geometry_circle = {
     .obj_type = OBJ_TYPE_CIRCLE
 };
 
-int
-parse_command(int argc, char *argv[], std::vector<std::string> files)
-{
-    for (int i=1; i<argc; i++) {
-        std::string s(argv[i]);
-        if ((s == "--local-boot") || (s == "-L")) {
-            assets_directory = argv[i+1];
-            std::cout << "Booting from \"" << assets_directory << "\"." << std::endl;
-            i++;
-            continue;
-        }
-        if ((s == "--debug") || (s == "-d")) {
-            debug_mode = 1;
-            printf("DEBUG MODE\n");
-            continue;
-        }
-        if ((s == "--help") || (s == "-h")) {
-            /* Store internally so we don't need to load
-             * the global state before parsing the command.
-            print_string_list(help_message); */
-            return 0;
-        }
-        if ((s == "--version") || (s == "-v")) {
-            /* For scripts that need the version string */
-            std::cout << VERSION;
-            return 0;
-        }
-        if (s == "--test") {
-            testing = 1;
-            continue;
-        }
-        files.push_back(s);
-    }
-    return 1;
-}
 
 double
 random_uniform(void)

@@ -27,6 +27,7 @@ void alert_action(std::vector<std::string> args);
 void day_vision_action(std::vector<std::string> args);
 void debug_action(std::vector<std::string> args);
 void error_action(std::vector<std::string> args);
+void open_file_action(std::vector<std::string> args);
 void todo_action(std::vector<std::string> args);
 void exit_action(std::vector<std::string> args);
 void icon_action(std::vector<std::string> args);
@@ -145,6 +146,7 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"mouseX", error_action},
     {"mouseY", error_action},
     {"include", error_action},
+    {"open", open_file_action}
 };
 
 /* SCRIPTING
@@ -228,201 +230,75 @@ actuator(std::string command_line)
 }
 
 #if 0
-    if (command == "close") {
-        return;
-    }
-    if (command == "cut") {
-        /* cut_selected();*/
-        return;
-    }
-    if (command == "day") {
-        /* day_vision(); */
-        return;
-    }
-    if (command == "editor") {
+    "close"
+    "cut"
+    "day"
+    "editor"
         show_editor = true;
-        return;
-    }
-    if (command == "export") {
+    "export"
         embPattern_writeAuto(pattern_list[n_patterns], current_fname.c_str());
-        return;
-    }
-    if (command == "open") {
+    "open"
         embPattern_readAuto(pattern_list[n_patterns], current_fname.c_str());
         n_patterns++;
-        return;
-    }
-    if (command == "print") {
-        return;
-    }
-    if (command == "details") {
-        return;
-    }
-    if (command == "undo") {
-        return;
-    }
-    if (command == "redo") {
-        return;
-    }
-    if (command == "paste") {
-        return;
-    }
-    if (command == "night") {
-        return;
-    }
-    if (command == "open") {
-        return;
-    }
-    if (command == "ellipse") {
-        return;
-    }
-    if (command == "polygon") {
-        return;
-    }
-    if (command == "polyline") {
-        return;
-    }
-    if (command == "rectangle") {
-        return;
-    }
-    if (command == "save") {
+    "print",
+    "details",
+    "undo",
+    "redo",
+    "paste",
+    "night",
+    "open",
+    "ellipse",
+    "polygon",
+    "polyline",
+    "rectangle",
+    "save",
         if (n_patterns) {
             embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
         }
         return;
-    }
-    if (command == "saveas") {
+    "saveas",
         if (n_patterns) {
             embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
         }
         return;
-    }
-    if (command == "donothing") {
-        debug_message("This action intentionally does nothing.");
-        return 0;
-    }
-    if (command == "open") {
-        openFile();
-        return 0;
-    }
-    if (command == "undo") {
-        undo();
-        return 0;
-    }
-    if (command == "redo") {
-        redo();
-        return 0;
-    }
-    if (command == "help") {
-        help();
-        return 0;
-    }
-    if (command == "windowcascade") {
-        nativeWindowCascade();
-        return 0;
-    }
-    if (command == "windowtile") {
-        nativeWindowTile();
-        return 0;
-    }
-    if (command == "windowcloseall") {
-        nativeWindowCloseAll();
-        return 0;
-    }
-    if (command == "windowclose") {
-        nativeWindowClose();
-        return 0;
-    }
-    if (command == "windownext") {
-        nativeWindowNext();
-        return 0;
-    }
-    if (command == "windowprevious") {
-        nativeWindowPrevious();
-        return 0;
-    }
-    if (command == "platform") {
-        std::cout << nativePlatformString().toStdString() << std::endl;
-        return 0;
-    }
-    if (command == "save") {
-        savefile();
-        return 0;
-    }
-    if (command == "saveas") {
-        saveasfile();
-        return 0;
-    }
-    if (command == "print") {
-        print();
-        return 0;
-    }
-    if (command == "designdetails") {
-        designDetails();
-        return 0;
-    }
-    if (command == "copy")  {
-        copy();
-        return 0;
-    }
-    if (command == "paste") {
-        paste();
-        return 0;
-    }
-    if (command == "changelog") {
-        changelog();
-        return 0;
-    }
-    if (command == "whatsthis") {
-        whatsThisContextHelp();
-        return 0;
-    }
+    "donothing" debug_message("This action intentionally does nothing.");
+    {"undo", undo_action},
+    {"redo", redo_action},
+    {"help", help_action},
+    {"windowcascade", window_cascade_action},
+    {"windowtile", nativeWindowTile_action},
+    {"windowcloseall") nativeWindowCloseAll();
+    {"windowclose") nativeWindowClose();
+    {"windownext") nativeWindowNext();
+    {"windowprevious") nativeWindowPrevious();
+    {"platform") std::cout << nativePlatformString().toStdString() << std::endl;
+    if (command == "save") savefile();
+    if (command == "saveas") saveasfile();
+    if (command == "print") print();
+    if (command == "designdetails") designDetails();
+    if (command == "copy") copy();
+    if (command == "paste") paste();
+    if (command == "changelog") changelog();
+    if (command == "whatsthis") whatsThisContextHelp();
     if (command == "settingsdialog") {
         settingsDialog();
-        return 0;
-    }
     if (command == "makelayercurrent") {
         makeLayerActive();
-        return 0;
-    }
     if (command == "layers") {
         layerManager();
-        return 0;
-    }
     if (command == "layerprevious") {
         layerPrevious();
-        return 0;
-    }
-    if (command == "textbold") {
-        setTextBold(bool);
-        return 0;
-    }
-    if (command == "textitalic") {
-        setTextItalic(bool);
-        return 0;
-    }
-    if (command == "textunderline") {
-        setTextUnderline(bool);
-        return 0;
-    }
-    if (command == "textstrikeout") {
-        setTextStrikeOut(bool);
-        return 0;
-    }
-    if (command == "textoverline") {
-        setTextOverline(bool);
-        return 0;
-    }
-    if (command == "numSelected") {
-        nativeNumSelected());
-    }
-    if (command == "selectAll") {
-        nativeSelectAll();
-    }
-    if (command == "addToSelection") {
+    "textbold") setTextBold(bool);
+    "textitalic") setTextItalic(bool);
+    "textunderline") setTextUnderline(bool);
+    "textstrikeout") setTextStrikeOut(bool);
+    "textoverline") setTextOverline(bool);
+    "numSelected") nativeNumSelected());
+    "selectAll") nativeSelectAll();
+    "addToSelection") {
         // TODO: finish
     }
-    if (command == "clearSelection") {
+    "clearSelection") {
         nativeClearSelection();
     }
     if ((command == "deleteSelected")) {
@@ -687,142 +563,94 @@ actuator(std::string command_line)
         return 0;
     }
 
-    if ((command =="disable")) {
-        char *arguments = action + strlen("disable") + 1;
+    if (command =="disable") {
         EmbWidget *panel = widget_list + window->tab_index;
-        if ((command =="grid")) {
-            debug_message("Hide grid in this tab.");
+        if (command =="grid") {
             if (panel->view_state | VIEW_STATE_GRID) {
                 panel->view_state -= VIEW_STATE_GRID;
             }
-            return 0;
         }
-        if ((command =="real")) {
-            debug_message("Disable real render in this tab.");
+        if (command =="real") {
             if (panel->view_state | VIEW_STATE_REAL) {
                 panel->view_state -= VIEW_STATE_REAL;
             }
-            return 0;
         }
-        if ((command =="ruler")) {
-            debug_message("Hide rulers in this tab.");
+        if (command =="ruler") {
             if (panel->view_state | VIEW_STATE_RULER) {
                 panel->view_state -= VIEW_STATE_RULER;
             }
-            return 0;
         }
-        if ((command =="ortho")) {
-            debug_message("Hide orthogonal grid in this tab.");
+        if (command =="ortho") {
             if (panel->view_state | VIEW_STATE_ORTHO) {
                 panel->view_state -= VIEW_STATE_ORTHO;
             }
-            return 0;
         }
-        if ((command =="qsnap")) {
-            debug_message("Disable qsnap mode in this tab.");
+        if (command =="qsnap") {
             if (panel->view_state | VIEW_STATE_SNAP) {
                 panel->view_state -= VIEW_STATE_SNAP;
             }
-            return 0;
         }
-        if ((command =="polar")) {
-            debug_message("Disable orthogonal grid in this tab.");
+        if (command =="polar") {
             if (panel->view_state | VIEW_STATE_POLAR) {
                 panel->view_state -= VIEW_STATE_POLAR;
             }
-            return 0;
         }
-        if ((command =="track")) {
-            debug_message("Disable QTrack in this tab.");
+        if (command =="track") {
             if (panel->view_state | VIEW_STATE_QTRACK) {
                 panel->view_state -= VIEW_STATE_QTRACK;
             }
-            return 0;
         }
-        if ((command =="lwt")) {
-            debug_message("Hide lineweight in this tab.");
+        if (command =="lwt") {
             if (panel->view_state | VIEW_STATE_LWT) {
                 panel->view_state -= VIEW_STATE_LWT;
             }
-            return 0;
         }
-        return 0;
     }
 
-    if ((command =="toggle")) {
-        char *arguments = action + strlen("toggle") + 1;
+    if (command =="toggle") {
         EmbWidget *panel = widget_list + window->tab_index;
         if ((command =="grid")) {
-            debug_message("Toggle show grid in this tab.");
             panel->view_state ^= VIEW_STATE_GRID;
-            return 0;
         }
         if ((command =="real")) {
-            debug_message("Toggle real render.");
             panel->view_state ^= VIEW_STATE_REAL;
-            return 0;
         }
         if ((command =="ruler")) {
-            debug_message("toggle show ruler");
             panel->view_state ^= VIEW_STATE_RULER;
-            return 0;
         }
         if ((command =="ortho")) {
-            debug_message("StatusBarButton toggleOrtho()");
             panel->view_state ^= VIEW_STATE_ORTHO;
-            return 0;
         }
         if ((command =="qsnap")) {
-            debug_message("StatusBarButton toggleOrtho()");
             panel->view_state ^= VIEW_STATE_SNAP;
-            return 0;
         }
         if ((command =="polar")) {
-            debug_message("StatusBarButton toggleOrtho()");
             panel->view_state ^= VIEW_STATE_POLAR;
-            return 0;
         }
-        if ((command =="track")) {
-            debug_message("StatusBarButton toggleQTrack()");
+        if (command =="track") {
             panel->view_state ^= VIEW_STATE_QTRACK;
-            return 0;
         }
-        if ((command =="lwt")) {
-            debug_message("StatusBarButton toggleLwt()");
+        if (command =="lwt") {
             panel->view_state ^= VIEW_STATE_LWT;
-            return 0;
         }
-        return 0;
     }
 
-    if ((command =="text")) {
-        char *arguments = action + strlen("text") + 1;
+    if (command =="text") {
         if ((command =="bold")) {
-            debug_message("text_bold()");
-            window->root->text_style.bold = !window->root->text_style.bold;
-            return 0;
+            text_style.bold = !text_style.bold;
         }
-        if ((command =="italic")) {
-            debug_message("text_italic()");
-            window->root->text_style.italic = !window->root->text_style.italic;
-            return 0;
+        if (command =="italic") {
+            text_style.italic = !text_style.italic;
         }
         if ((command =="underline")) {
-            debug_message("text_underline()");
-            window->root->text_style.underline = !window->root->text_style.underline;
-            return 0;
+            text_style.underline = !text_style.underline;
         }
         if ((command =="strikeout")) {
-            debug_message("text_strikeout()");
-            window->root->text_style.strikeout = !window->root->text_style.strikeout;
-            return 0;
+            text_style.strikeout = !text_style.strikeout;
         }
         if ((command =="overline")) {
-            debug_message("text_overline()");
-            window->root->text_style.overline = !window->root->text_style.overline;
-            return 0;
+            text_style.overline = !text_style.overline;
         }
-        return 0;
     }
 
     if ((command =="zoom")) {
@@ -851,22 +679,22 @@ actuator(std::string command_line)
             n_selected = 0;
             return 0;
         }
-        if ((command =="dynamic")) {
+        if (command =="dynamic") {
             debug_message("zoom_dynamic()");
             debug_message("Implement zoom_dynamic.");
             return 0;
         }
-        if ((command =="scale")) {
+        if (command =="scale") {
             debug_message("zoom_scale()");
             debug_message("Implement zoom_scale.");
             return 0;
         }
-        if ((command =="center")) {
+        if (command =="center") {
             debug_message("zoom_center()");
             debug_message("Implement zoom_center.");
             return 0;
         }
-        if ((command =="in")) {
+        if (command =="in") {
             debug_message("zoom_in()");
             debug_message("View zoom_in()");
             if (!allow_zoom_in(panel)) {
@@ -2139,6 +1967,13 @@ icon_action(std::vector<std::string> args)
     if (icon_size >= 16 && icon_size <= 128) {
         icon_size = new_size;
     }
+}
+
+void
+open_file_action(std::vector<std::string> args)
+{
+    embPattern_readAuto(pattern_list[pattern_index], current_fname.c_str());
+    n_patterns++;
 }
 
 void

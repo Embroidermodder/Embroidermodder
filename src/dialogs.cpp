@@ -20,6 +20,8 @@
 void
 about_dialog(void)
 {
+    debug_message("about_dialog()");
+
     ImGui::Begin("About Embroidermodder 2");
     // ImageWidget img(assets_dir + "/images/logo-small");
     ImGui::Text("Embroidermodder " VERSION);
@@ -29,68 +31,15 @@ about_dialog(void)
     ImGui::Text("User Interface by Jonathan Greig and Robin Swift.");
     ImGui::Text("Free under the zlib/libpng license.");
     ImGui::End();
-}
 
-void
-changelog_dialog(void)
-{
-    ImGui::Begin("Changelog");
-    ImGui::End();
-}
-
-void
-help_dialog(void)
-{
-    ImGui::Begin("Help");
-    ImGui::End();    
-}
-
-void
-alert(void)
-{
-    ImGui::Begin("Warning");
-    ImGui::End();
-}
-
-void
-details_dialog(void)
-{
-    ImGui::Begin("Design Details");
-    ImGui::End();
-}
-
-#if 0
-void
-changelog()
-{
-}
-
-void about()
-{
+    /*
     QApplication::setOverrideCursor(ArrowCursor);
-    debug_message("about()");
     std::string appDir = qApp->applicationDirPath();
     std::string appName = QApplication::applicationName();
     std::string title = "About " + appName;
 
     QDialog dialog(this);
     ImageWidget img(appDir + "/images/logo-small");
-    QLabel text(appName + translate("\n\n") +
-                          translate("http://embroidermodder.github.io") +
-                          translate("\n\n") +
-                          translate("Available Platforms: GNU/Linux, Windows, Mac OSX, Raspberry Pi") +
-                          translate("\n\n") +
-                          translate("Embroidery formats by Josh Varga and Robin Swift.") +
-                          translate("\n") +
-                          translate("User Interface by Jonathan Greig and Robin Swift.") +
-                          translate("\n\n") +
-                          translate("Free under the zlib/libpng license.")
-                          #if defined(BUILD_GIT_HASH)
-                          + translate("\n\n") +
-                          translate("Build Hash: ") + qPrintable(BUILD_GIT_HASH)
-                          #endif
-                          );
-    text.setWordWrap(true);
 
     QDialogButtonBox buttonbox(Horizontal, &dialog);
     QPushButton button(&dialog);
@@ -111,10 +60,23 @@ void about()
     dialog.setLayout(&layout);
     dialog.exec();
     QApplication::restoreOverrideCursor();
+    */
 }
 
-void help()
+void
+changelog_dialog(void)
 {
+    ImGui::Begin("Changelog");
+    ImGui::End();
+}
+
+void
+help_dialog(void)
+{
+    ImGui::Begin("Help");
+    ImGui::End();    
+
+    /*
     QApplication::setOverrideCursor(ArrowCursor);
     debug_message("help()");
 
@@ -145,8 +107,24 @@ void help()
     dialog.setLayout(&layout);
     dialog.exec();
     QApplication::restoreOverrideCursor();
+    */
 }
 
+void
+alert(void)
+{
+    ImGui::Begin("Warning");
+    ImGui::End();
+}
+
+void
+details_dialog(void)
+{
+    ImGui::Begin("Design Details");
+    ImGui::End();
+}
+
+#if 0
 void terminal()
 {
     QApplication::setOverrideCursor(ArrowCursor);
