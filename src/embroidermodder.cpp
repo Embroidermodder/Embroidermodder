@@ -74,6 +74,12 @@ std::vector<std::string> view_toolbar = {
 std::vector<std::string> help_toolbar = {
     "help"
 };
+std::vector<std::string> draw_toolbar = {
+    "arc",
+    "circle",
+    "ellipse",
+    "rectangle"
+};
 std::vector<std::string> texture_list = {
     "new",
     "open",
@@ -91,7 +97,10 @@ std::vector<std::string> texture_list = {
     "zoomin",
     "zoomout",
     "zoomextents",
-    "help"
+    "help",
+    "arc",
+    "circle",
+    "ellipse"
 };
 int testing = 0;
 
@@ -260,6 +269,8 @@ main_widget(void)
     ImGui::SameLine();
     load_toolbar(edit_toolbar);
     ImGui::SameLine();
+    load_toolbar(draw_toolbar);
+
     load_toolbar(view_toolbar);
 
     if (menu_action != "") {
@@ -322,8 +333,14 @@ main(int argc, char* argv[])
 
     load_configuration();
 
-    int width = 640;
-    int height = 480;
+    for (int i=0; i<MAX_PATTERNS; i++) {        
+        views[i].origin.x = 200.0;
+        views[i].origin.y = 200.0;
+        views[i].scale = 10.0;
+    }
+
+    int width = 1080;
+    int height = 576;
     if (!glfwInit()) {
         std::cout << "ERROR: Failed to initialise GLFW." << std::endl;
         return 2;

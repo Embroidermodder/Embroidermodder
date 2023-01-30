@@ -21,6 +21,8 @@
 
 #include "embroidermodder.h"
 
+View views[MAX_PATTERNS];
+
 inline ImVec2 to_ImVec2(EmbVector v)
 {
     return ImVec2(v.x, v.y);
@@ -41,7 +43,11 @@ render_pattern(EmbPattern *p)
             //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
             // , false, OBJ_RUBBER_OFF
             int color = IM_COL32(c.color.r, c.color.g, c.color.b, 255);
-            draw_list->AddCircle(to_ImVec2(c.center), c.radius, color);
+            EmbVector scene_center;
+            embVector_add(c.center, views[pattern_index].origin, &scene_center);
+            double scene_radius = c.radius * views[pattern_index].scale;
+            std::cout << scene_center.x << scene_center.y << scene_radius << std::endl;
+            draw_list->AddCircleFilled(to_ImVec2(scene_center), scene_radius, color);
             // TODO: fill
         }
     }
@@ -230,6 +236,7 @@ draw_rulers(void)
             );
         }
     }
+    /* draw_list->AddText(ImVec2(x, y), 0xFFFFFFFF, str); */
 }
 
 void
@@ -251,6 +258,22 @@ draw_grid(void)
 }
 
 void
+render_sandbox(void)
+{
+    EmbVector position = {50, 50};
+    EmbVector pos;
+    double radius = 10;
+    embVector_add(position, views[pattern_index].origin, &pos);
+
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    draw_list->AddCircleFilled(
+        to_ImVec2(pos),
+        radius*views[pattern_index].scale,
+        IM_COL32(0, 0, 0, 255)
+    );
+}
+
+void
 pattern_view(void)
 {
     EmbPattern *pattern = pattern_list[pattern_index];
@@ -261,90 +284,5 @@ pattern_view(void)
         draw_grid();
     }
     render_pattern(pattern);
+    // render_sandbox();
 }
-
-
-#if 0
-QPainterPath
-add_to_path(QPainterPath path, char type, EmbVector offset, float *data, float scale)
-{
-    if (type == 'm') {
-        path.moveTo(offset.x+scale*data[0], offset.y-scale*data[1]);
-    }
-    if (type == 'l') {
-        path.lineTo(offset.x+scale*data[0], offset.y-scale*data[1]);
-    }
-    if (type == 'e') {
-        path.addEllipse(EmbVector(offset.x+scale*data[0], offset.y-scale*data[1]),
-            data[2]*scale, data[3]*scale);
-    }
-    if (type == 'a') {
-        path.arcTo(offset.x+scale*data[0], offset.y-scale*data[1],
-            data[2]*scale, data[3]*scale, data[4], data[5]);
-    }
-    return path;
-}
-
-QPainterPath
-load_to_qpath(EmbVector offset, std::string str, float scale)
-{
-    QPainterPath path;
-
-    char type = '0';
-    int dot = 0;
-    int index = 0;
-    float position[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    int first = 1;
-    float sign = 1.0;
-    for (size_t i=0; i<str.size(); i++) {
-        char c = str[i];
-        if ((c >= 'a') && (c <= 'z')) {
-            dot = 0;
-            index = 0;
-            if (!first) {
-                position[index] *= sign;
-                path = add_to_path(path, type, offset, position, scale);
-            }
-            first = 0;
-            type = c;
-            sign = 1.0;
-            for (int j=0; j<6; j++) {
-                position[j] = 0.0;
-            }
-        }
-        if ((c >= '0') && (c <= '9')) {
-            int x = (int)(c - '0');
-            if (dot) {
-                position[index] = position[index] + pow(0.1, dot)*x;
-                dot++;
-            }
-            else {
-                position[index] = 10.0 * position[index] + 1.0*x;
-            }
-        }
-        if (c == '-') {
-            sign = -1.0;
-        }
-        if (c == '.') {
-            dot = 1;
-        }
-        if (c == ',') {
-            position[index] *= sign;
-            index++;
-            sign = 1.0;
-            dot = 0;
-        }
-    }
-
-    position[index] *= sign;
-    path = add_to_path(path, type, offset, position, scale);
-
-    return path;
-}
-
-void
-createRulerTextPath(float x, float y, std::string str, float height)
-{
-    imdraw->AddText(ImVec2(x, y), 0xFFFFFFFF, str);
-}
-#endif

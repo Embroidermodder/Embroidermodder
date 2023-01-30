@@ -317,6 +317,11 @@ typedef struct GroupBox_ {
     int obj_type;
 } GroupBox;
 
+typedef struct View_ {
+    EmbVector origin;
+    double scale;
+} View;
+
 typedef std::vector<std::vector<std::string>> string_matrix;
 
 /* Function Prototypes.
@@ -468,5 +473,6 @@ extern bool settings_text_style_underline;
 extern bool settings_text_style_overline;
 extern bool settings_text_style_strikeout;
 extern std::vector<std::string> undo_history;
+extern View views[MAX_PATTERNS];
 
 #endif /* EMBROIDERMODDER_H */

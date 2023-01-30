@@ -17,6 +17,19 @@
 
 #include <toml.hpp>
 
+/*
+#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+std::string settingsDir = QDir::homePath() + "/.embroidermodder2/";
+#else
+std::string settingsDir = "";
+#endif
+std::string defaultsPath = "./defaults.toml";
+std::string settingsPath = settingsDir + "settings.toml";
+*/
+
+std::vector<std::string> ui_script;
+std::unordered_map<std::string, Setting> settings;
+std::unordered_map<std::string, std::string> settings_str;
 
 /* The actuator changes the program state via these global variables.
  */
@@ -189,22 +202,6 @@ load_configuration(void)
     }
 }
 
-
-#if 0
-
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
-std::string settingsDir = QDir::homePath() + "/.embroidermodder2/";
-#else
-std::string settingsDir = "";
-#endif
-std::string defaultsPath = "./defaults.toml";
-std::string settingsPath = settingsDir + "settings.toml";
-
-std::vector<std::string> ui_script;
-std::unordered_map<std::string, Setting> settings;
-std::unordered_map<std::string, std::string> settings_str;
-std::unordered_map<std::string, QAction *> action_list_;
-
 std::string load_string(std::string s)
 {
     std::unordered_map<std::string, std::string>::const_iterator result = settings_str.find(s);
@@ -289,10 +286,7 @@ void store_bool(std::string key, bool value)
     }
 }
 
-std::string str_from_toml(toml::value value)
-{
-    return std::string::fromLocal8Bit(toml::get<std::string>(value));
-}
+#if 0
 
 void load_configuration(void)
 {
@@ -327,11 +321,11 @@ void load_configuration(void)
         }
         std::string s = toml::get<std::string>(config[i]["type"]);
         if (s == "menu-item") {
-            std::string menuName = str_from_toml(config[i]["menu"]);
-            std::string cmdName = str_from_toml(config[i]["command"]);
-            std::string icon = str_from_toml(config[i]["icon"]);
-            std::string toolTip = str_from_toml(config[i]["tooltip"]);
-            std::string statusTip = str_from_toml(config[i]["statustip"]);
+            std::string menuName = toml::get<std::string>(config[i]["menu"]);
+            std::string cmdName = toml::get<std::string>(config[i]["command"]);
+            std::string icon = toml::get<std::string>(config[i]["icon"]);
+            std::string toolTip = toml::get<std::string>(config[i]["tooltip"]);
+            std::string statusTip = toml::get<std::string>(config[i]["statustip"]);
             QAction *ACTION = new QAction(load_icon(icon), toolTip, this);
             ACTION->setStatusTip(statusTip);
             ACTION->setObjectName(cmdName);

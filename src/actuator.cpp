@@ -24,6 +24,8 @@
  */
 void about_action(std::vector<std::string> args);
 void alert_action(std::vector<std::string> args);
+void arc_action(std::vector<std::string> args);
+void circle_action(std::vector<std::string> args);
 void day_vision_action(std::vector<std::string> args);
 void debug_action(std::vector<std::string> args);
 void error_action(std::vector<std::string> args);
@@ -40,10 +42,12 @@ void zoom_action(std::vector<std::string> args);
  */
 std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
     {"about", about_action},
+    {"alert", error_action},
+    {"arc", arc_action},
+    {"circle", circle_action},
     {"debug", debug_action},
     {"error", error_action},
     {"todo", error_action},
-    {"alert", error_action},
     {"blinkPrompt", error_action},
     {"setPromptPrefix", error_action},
     {"appendPromptHistory", error_action},
@@ -1536,8 +1540,16 @@ add_slot_action(std::vector<std::string> args)
     double length = args[3];
     double rot = args[4];
     bool fill = args[5];
+    int rubberMode = OBJ_RUBBER_OFF;
 
-    nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
+    //TODO: Use UndoableAddCommand for slots
+    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
+    slotObj->setRotation(-rot);
+    slotObj->setObjectRubberMode(rubberMode);
+    if (rubberMode) active_view->addToRubberRoom(slotObj);
+    scene->addItem(slotObj);
+    //TODO: slot fill
+    scene->update();
 }
 
 void
@@ -1911,6 +1923,35 @@ about_action(std::vector<std::string> args)
 }
 
 void
+arc_action(std::vector<std::string> args)
+{
+    EmbArc arc;
+    arc.start.x = 0.0;
+    arc.start.x = 0.0;
+    arc.mid.x = 50.0;
+    arc.mid.x = 50.0;
+    arc.end.x = 100.0;
+    arc.end.x = 0.0;
+    arc.color.r = 0;
+    arc.color.g = 0;
+    arc.color.b = 0;
+    // embPattern_addArcAbs(pattern_list[pattern_index], arc);
+}
+
+void
+circle_action(std::vector<std::string> args)
+{
+    EmbCircle circle;
+    circle.center.x = 0.0;
+    circle.center.y = 0.0;
+    circle.radius = 10.0;
+    circle.color.r = 0;
+    circle.color.g = 0;
+    circle.color.b = 0;
+    embPattern_addCircleAbs(pattern_list[pattern_index], circle);
+}
+
+void
 debug_action(std::vector<std::string> args)
 {
     debug_message(args[0]);
@@ -2058,11 +2099,11 @@ zoom_action(std::vector<std::string> args)
         return;
     }
     if (args[0] == "in") {
-        /* zoomIn(); */
+        views[pattern_index].scale *= 2.0;
         return;
     }
     if (args[0] == "out") {
-        /* zoomOut(); */
+        views[pattern_index].scale *= 0.5;
         return;
     }
     if (args[0] == "selected") {
@@ -3202,18 +3243,6 @@ void nativeAddRoundedRectangle(double x, double y, double w, double h, double ra
 {
 }
 
-void nativeAddSlot(double centerX, double centerY, double diameter, double length, double rot, bool fill, int rubberMode)
-{
-    //TODO: Use UndoableAddCommand for slots
-    SlotObject* slotObj = new SlotObject(centerX, -centerY, diameter, length, getCurrentColor());
-    slotObj->setRotation(-rot);
-    slotObj->setObjectRubberMode(rubberMode);
-    if (rubberMode) active_view->addToRubberRoom(slotObj);
-    scene->addItem(slotObj);
-    //TODO: slot fill
-    scene->update();
-}
-
 void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
     View* active_view = activeView();
@@ -3448,9 +3477,7 @@ double nativeMouseY()
     }
     return 0.0;
 }
-#endif
 
-#if 0
 MainWindow *mainWin;
 std::string settings_general_language;
 std::string settings_general_icon_theme;
