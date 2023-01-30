@@ -27,7 +27,6 @@ std::string defaultsPath = "./defaults.toml";
 std::string settingsPath = settingsDir + "settings.toml";
 */
 
-std::vector<std::string> ui_script;
 std::unordered_map<std::string, Setting> settings;
 std::unordered_map<std::string, std::string> settings_str;
 
@@ -131,16 +130,6 @@ unsigned int  settings_selection_coolgrip_color;
 unsigned int  settings_selection_hotgrip_color;
 unsigned char  settings_selection_grip_size;
 unsigned char  settings_selection_pickbox_size;
-std::string settings_text_font;
-double settings_text_size;
-double settings_text_angle;
-bool settings_text_style_bold;
-bool settings_text_style_italic;
-bool settings_text_style_underline;
-bool settings_text_style_overline;
-bool settings_text_style_strikeout;
-std::vector<std::string> undo_history;
-int undo_history_position = 0;
 
 string_matrix
 load_string_matrix(toml::value config, std::string menu_name)

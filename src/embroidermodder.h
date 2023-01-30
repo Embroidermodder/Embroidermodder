@@ -26,8 +26,6 @@
 
 #include <GL/glew.h>
 
-#define MAX_PATTERNS                 50
-
 /* TYPEDEFS
  * -----------------------------------------------------------------------------
  */
@@ -80,8 +78,17 @@ typedef struct View_ {
     bool qtrack_mode;
     bool lwt_mode;
     bool metric;
+    std::string text_font;
+    double text_size;
+    double text_angle;
+    bool text_style_bold;
+    bool text_style_italic;
+    bool text_style_underline;
+    bool text_style_overline;
+    bool text_style_strikeout;
     std::string filename;
     std::vector<std::string> undo_history;
+    int undo_history_position;
 } View;
 
 typedef std::vector<std::vector<std::string>> string_matrix;
@@ -95,6 +102,7 @@ void actuator(std::string command);
 void load_menu(std::string menu_label, std::vector<std::vector<std::string>> menu_layout);
 void load_toolbar(std::string menu_label, std::vector<std::vector<std::string>> toolbar_layout);
 
+void settings_editor(void);
 void about_dialog(void);
 void changelog_dialog(void);
 void help_dialog(void);
@@ -111,6 +119,23 @@ std::string store_string(std::string s);
 
 View init_view(void);
 
+void about_action(std::vector<std::string> args);
+void alert_action(std::vector<std::string> args);
+void arc_action(std::vector<std::string> args);
+void circle_action(std::vector<std::string> args);
+void day_vision_action(std::vector<std::string> args);
+void debug_action(std::vector<std::string> args);
+void error_action(std::vector<std::string> args);
+void open_file_action(std::vector<std::string> args);
+void todo_action(std::vector<std::string> args);
+void exit_action(std::vector<std::string> args);
+void icon_action(std::vector<std::string> args);
+void new_file_action(std::vector<std::string> args);
+void night_vision_action(std::vector<std::string> args);
+void pan_action(std::vector<std::string> args);
+void zoom_action(std::vector<std::string> args);
+void settings_editor_action(std::vector<std::string> args);
+
 /* Global variables.
  * -----------------------------------------------------------------------------
  */
@@ -120,11 +145,11 @@ extern std::unordered_map<std::string, std::string> str_settings;
 extern bool running;
 extern bool debug_mode;
 extern bool show_about_dialog;
+extern bool show_settings_editor;
 extern bool show_editor;
 extern int icon_size;
 extern std::string language;
 extern int pattern_index;
-extern int n_patterns;
 extern std::string current_fname;
 extern std::string assets_dir;
 //extern std::vector<Action> action_list;
@@ -230,14 +255,6 @@ extern unsigned int settings_selection_coolgrip_color;
 extern unsigned int settings_selection_hotgrip_color;
 extern unsigned char settings_selection_grip_size;
 extern unsigned char settings_selection_pickbox_size;
-extern std::string settings_text_font;
-extern double settings_text_size;
-extern double settings_text_angle;
-extern bool settings_text_style_bold;
-extern bool settings_text_style_italic;
-extern bool settings_text_style_underline;
-extern bool settings_text_style_overline;
-extern bool settings_text_style_strikeout;
 extern std::vector<View> views;
 
 #endif /* EMBROIDERMODDER_H */

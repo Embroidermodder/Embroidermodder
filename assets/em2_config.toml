@@ -163,15 +163,20 @@ draw_menu = [
     ["Rectangle", "rectangle"],
     ["Polyline", "polyline"],
     ["Polygon", "polygon"],
-    ["About", "about"],
-    ["Editor", "editor"],
     ["Dolphin", "dolphin"],
     ["Star", "star"],
     ["Treble Clef", "trebleclef"]
 ]
 
 tools_menu = [
-    ["Distance", "distance"]
+    ["Statistics", "statistics"],
+    ["Distance", "distance"],
+    ["Simulate", "simulate"],
+    ["Text Editor", "editor"],
+    ["Histogram", "histogram"],
+    ["Real Render", "real-render"],
+    ["Auto Stitch", "autostitch"],
+    ["Stitch Fill", "stitch-fill"]
 ]
 
 window_menu = [

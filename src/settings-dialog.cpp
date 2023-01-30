@@ -15,68 +15,150 @@
 
 #include "embroidermodder.h"
 
+#include "imgui.h"
+
+void create_tab_general(void);
+void create_tab_files_paths(void);
+void create_tab_display(void);
+void create_tab_prompt(void);
+void create_tab_open_save(void);
+void create_tab_printing(void);
+void create_tab_snap(void);
+void create_tab_grid_ruler(void);
+void create_tab_ortho_polar(void);
+void create_tab_quicksnap(void);
+void create_tab_quicktrack(void);
+void create_tab_lineweight(void);
+void create_tab_selection(void);
+
 void
 settings_editor(void)
 {
+    /* minimum size 750, 550*/
+    // ImGuiTabItemFlags_SetSelected
+    ImGui::Begin("Settings");
+    if (ImGui:: BeginTabBar("Tab Bar")) {
+        if (ImGui::BeginTabItem("General")) {
+            create_tab_general();
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Files/Paths")) {
+            create_tab_files_paths();
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Display")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Prompt")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Open/Save")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Printing")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Snap")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Grid/Ruler")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Ortho/Polar")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("QuickSnap")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("QuickTrack")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("LineWeight")) {
+            ImGui::EndTabItem();
+        }
+        if (ImGui::BeginTabItem("Selection")) {
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
+    }
+
+    if (ImGui::Button("Accept")) {
+        
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+        show_settings_editor = false;
+    }
+    ImGui::End();
+}
+
+void
+create_tab_general()
+{
+    
+}
+void
+create_tab_files_paths()
+{
+    
+}
+
+void create_tab_display(void)
+{
+
+}
+
+void create_tab_prompt(void)
+{
+
+}
+
+void create_tab_open_save(void)
+{
+
+}
+
+void create_tab_printing(void)
+{
+
+}
+
+void create_tab_snap(void)
+{
+    
+}
+
+void create_tab_grid_ruler(void)
+{
+    
+}
+
+void create_tab_ortho_polar(void)
+{
+    
+}
+
+void create_tab_quicksnap(void)
+{
+    
+}
+
+void create_tab_quicktrack(void)
+{
+    
+}
+
+void create_tab_lineweight(void)
+{
+    
+}
+
+void create_tab_selection(void)
+{
+
 }
 
 #if 0
-Settings_Dialog::Settings_Dialog(MainWindow* mw, const std::string& showTab, QWidget* parent) : QDialog(parent)
-{
-    mainWin = mw;
-    setMinimumSize(750,550);
-
-    tabWidget = new QTabWidget(this);
-
-    //TODO: Add icons to tabs
-    tabWidget->addTab(createTabGeneral(),    translate("General"));
-    tabWidget->addTab(createTabFilesPaths(), translate("Files/Paths"));
-    tabWidget->addTab(createTabDisplay(),    translate("Display"));
-    tabWidget->addTab(createTabPrompt(),     translate("Prompt"));
-    tabWidget->addTab(createTabOpenSave(),   translate("Open/Save"));
-    tabWidget->addTab(createTabPrinting(),   translate("Printing"));
-    tabWidget->addTab(createTabSnap(),       translate("Snap"));
-    tabWidget->addTab(createTabGridRuler(),  translate("Grid/Ruler"));
-    tabWidget->addTab(createTabOrthoPolar(), translate("Ortho/Polar"));
-    tabWidget->addTab(createTabQuickSnap(),  translate("QuickSnap"));
-    tabWidget->addTab(createTabQuickTrack(), translate("QuickTrack"));
-    tabWidget->addTab(createTabLineWeight(), translate("LineWeight"));
-    tabWidget->addTab(createTabSelection(),  translate("Selection"));
-
-    if     (showTab == "General")     tabWidget->setCurrentIndex( 0);
-    else if (showTab == "Files/Path")  tabWidget->setCurrentIndex( 1);
-    else if (showTab == "Display")     tabWidget->setCurrentIndex( 2);
-    else if (showTab == "Prompt")      tabWidget->setCurrentIndex( 3);
-    else if (showTab == "Open/Save")   tabWidget->setCurrentIndex( 4);
-    else if (showTab == "Printing")    tabWidget->setCurrentIndex( 5);
-    else if (showTab == "Snap")        tabWidget->setCurrentIndex( 6);
-    else if (showTab == "Grid/Ruler")  tabWidget->setCurrentIndex( 7);
-    else if (showTab == "Ortho/Polar") tabWidget->setCurrentIndex( 8);
-    else if (showTab == "QuickSnap")   tabWidget->setCurrentIndex( 9);
-    else if (showTab == "QuickTrack")  tabWidget->setCurrentIndex(10);
-    else if (showTab == "LineWeight")  tabWidget->setCurrentIndex(11);
-    else if (showTab == "Selection")   tabWidget->setCurrentIndex(12);
-
-    buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(acceptChanges()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(rejectChanges()));
-
-    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(this);
-    vboxLayoutMain->addWidget(tabWidget);
-    vboxLayoutMain->addWidget(buttonBox);
-    setLayout(vboxLayoutMain);
-
-    setWindowTitle(tr("Settings"));
-
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-}
-
-Settings_Dialog::~Settings_Dialog()
-{
-    QApplication::restoreOverrideCursor();
-}
-
 QWidget* Settings_Dialog::createTabGeneral()
 {
     QWidget* widget = new QWidget(this);

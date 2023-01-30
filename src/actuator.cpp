@@ -20,24 +20,6 @@
 #include <unordered_map>
 #include <iostream>
 
-/* Function Prototypes.
- */
-void about_action(std::vector<std::string> args);
-void alert_action(std::vector<std::string> args);
-void arc_action(std::vector<std::string> args);
-void circle_action(std::vector<std::string> args);
-void day_vision_action(std::vector<std::string> args);
-void debug_action(std::vector<std::string> args);
-void error_action(std::vector<std::string> args);
-void open_file_action(std::vector<std::string> args);
-void todo_action(std::vector<std::string> args);
-void exit_action(std::vector<std::string> args);
-void icon_action(std::vector<std::string> args);
-void new_file_action(std::vector<std::string> args);
-void night_vision_action(std::vector<std::string> args);
-void pan_action(std::vector<std::string> args);
-void zoom_action(std::vector<std::string> args);
-
 /* File-scope variables.
  */
 std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
@@ -109,6 +91,7 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"addRubber", error_action},
     {"clearRubber", error_action},
     {"spareRubber", error_action},
+    {"settingsdialog", settings_editor_action},
     {"addTextMulti", error_action},
     {"addTextSingle", error_action},
     {"addInfiniteLine", error_action},
@@ -215,7 +198,7 @@ actuator(std::string command_line)
     std::string command = args[0];
     args.erase(args.begin());
 
-    if (n_patterns > 0) {
+    if (views.size() > 0) {
         views[pattern_index].undo_history.push_back(command_line);
     }
 
@@ -233,6 +216,11 @@ actuator(std::string command_line)
     else {
         debug_message("ERROR: action not in function_table.");
     }
+}
+
+void settings_editor_action(std::vector<std::string> args)
+{
+    show_settings_editor = true;
 }
 
 #if 0
@@ -286,8 +274,6 @@ actuator(std::string command_line)
     if (command == "paste") paste();
     if (command == "changelog") changelog();
     if (command == "whatsthis") whatsThisContextHelp();
-    if (command == "settingsdialog") {
-        settingsDialog();
     if (command == "makelayercurrent") {
         makeLayerActive();
     if (command == "layers") {
@@ -322,18 +308,6 @@ actuator(std::string command_line)
     if (command == "mouseY") {
         nativeMouseY();
     }
-
-
-
-    "file"
-    "edit"
-    "view"
-    "settings"
-    "window"
-    "help"
-    "recent"
-    "zoom"
-    "pan"
 
     if (command == "debug-message") {
         debug_message(command.substr(13, command.size()-13));
@@ -2015,8 +1989,12 @@ icon_action(std::vector<std::string> args)
 void
 open_file_action(std::vector<std::string> args)
 {
-    embPattern_readAuto(views[pattern_index].pattern, current_fname.c_str());
-    n_patterns++;
+    for (std::string file : args) {
+        View view = init_view();
+        view.filename = file;
+        embPattern_readAuto(view.pattern, view.filename.c_str());
+        views.push_back(view);
+    }
 }
 
 void
@@ -2127,8 +2105,7 @@ void new_file_action(std::vector<std::string> args)
     View view = init_view();
     view.pattern = embPattern_create();
     views.push_back(view);
-    pattern_index = n_patterns;
-    n_patterns++;
+    pattern_index = views.size() - 1;
 }
 
 
@@ -4045,7 +4022,6 @@ void newFile()
 {
     debug_message("newFile()");
     pattern_index++;
-    n_patterns++;
     MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
     connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));

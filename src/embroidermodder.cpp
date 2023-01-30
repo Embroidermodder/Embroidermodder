@@ -31,16 +31,15 @@
 bool running = true;
 bool debug_mode = true;
 bool show_about_dialog = false;
+bool show_settings_editor = false;
 bool show_editor = false;
 std::string language = "default";
 int icon_size = 16;
 ImFont *font;
 int pattern_index = 0;
-int n_patterns = 0;
 std::string current_fname = "Untitled.dst";
 std::string assets_dir = "../assets/";
 std::vector<Action> action_list;
-EmbPattern* pattern_list[MAX_PATTERNS];
 string_matrix translation_table;
 std::unordered_map<std::string, std::string> str_settings;
 std::unordered_map<std::string, GLuint> textures;
@@ -128,7 +127,7 @@ parse_command(int argc, char *argv[], std::vector<std::string> files)
         }
         if ((s == "--version") || (s == "-v")) {
             /* For scripts that need the version string */
-            std::cout << VERSION;
+            std::cout << VERSION << std::endl;
             return 0;
         }
         if (s == "--test") {
@@ -175,6 +174,20 @@ load_textures(std::vector<std::string> texture_list)
         stbi_image_free(data);
 
         textures[icon] = texture_id;
+    }
+
+    {
+        int width, height;
+        std::string fname = assets_dir + "images/texture-spirals.png";
+        uint8_t* data = stbi_load(fname.c_str(), &width, &height, NULL, 4);
+        if (!data) {
+            return 1;
+        }
+
+        GLuint texture_id = gen_gl_texture(data, width, height, 0);
+        stbi_image_free(data);
+
+        textures["texture-spirals"] = texture_id;
     }
 
     return 0;
@@ -257,6 +270,7 @@ main_widget(void)
         load_menu("File");
         load_menu("Edit");
         load_menu("View");
+        load_menu("Tools");
         load_menu("Draw");
         load_menu("Window");
         load_menu("Settings");
@@ -276,7 +290,7 @@ main_widget(void)
         actuator(menu_action);
     }
 
-    if (n_patterns > 0) {
+    if (views.size() > 0) {
         if (ImGui:: BeginTabBar("Tab Bar")) {
             for (View view : views) {
                 if (ImGui::BeginTabItem(view.filename.c_str())) {
@@ -303,9 +317,18 @@ main_widget(void)
             ImGui::EndTabBar();
         }
     }
+    else {
+        ImVec2 size = {500, 300};
+        ImGui::Image((void*)(intptr_t)textures["texture-spirals"], size);
+        ImGui::Image((void*)(intptr_t)textures["texture-spirals"], size);
+    }
 
     if (show_about_dialog) {
         about_dialog();
+    }
+
+    if (show_settings_editor) {
+        settings_editor();
     }
 
     ImGui::End();
@@ -325,12 +348,16 @@ load_text_file(std::string fname)
 int
 main(int argc, char* argv[])
 {
-    if (argc>1) {
-        // assets_dir = std::string(argv[1]);
-        current_fname = argv[1];
+    std::vector<std::string> files;
+    if (!parse_command(argc, argv, files)) {
+        return 0;
     }
 
     load_configuration();
+
+    for (std::string file : files) {
+        open_file_action(files);
+    }
 
     int width = 1080;
     int height = 576;
@@ -395,92 +422,6 @@ main(int argc, char* argv[])
 }
 
 #if 0
-
-/*
-Action action_list[] = {
-    {"donothing", "&Do Nothing", "Does Nothing"},
-    {ACTION_windowcascade, "windowcascade", "&Cascade", "Cascade the windows."},
-    {ACTION_windowtile, "windowtile", "&Tile", "Tile the windows."},
-    {ACTION_windowclose, "windowclose", "Cl&ose", "Close the active window."},
-    {ACTION_windowcloseall, "windowcloseall", "Close &All", "Close all the windows."},
-    {ACTION_windownext, "windownext", "Ne&xt", "Move the focus to the next window."},
-    {ACTION_windowprevious, "windowprevious", "Pre&vious", "Move the focus to the previous window."},
-
-    {ACTION_new, "new", "&New", "Create a new file."},
-    {ACTION_open, "open", "&Open", "Open an existing file."},
-    {ACTION_save, "save", "&Save", "Save the design to disk."},
-    {ACTION_saveas, "saveas", "Save &As", "Save the design under a new name."},
-    {ACTION_print, "print", "&Print", "Print the design."},
-    {ACTION_designdetails, "designdetails", "&Details", "Details of the current design."},
-    {ACTION_exit, "exit", "E&xit", "Exit the application."},
-
-    {ACTION_cut, "cut", "Cu&t", "Cut the current selection's contents to the clipboard."},
-    {ACTION_copy, "copy", "&Copy", "Copy the current selection's contents to the clipboard."},
-    {ACTION_paste, "paste", "&Paste", "Paste the clipboard's contents into the current selection."},
-
-    {ACTION_help, "help", "&Help", "Displays help."},
-    {ACTION_changelog, "changelog", "&Changelog", "Describes new features in this product."},
-    {ACTION_tipoftheday, "tipoftheday", "&Tip Of The Day", "Displays a dialog with useful tips"},
-    {ACTION_about, "about", "&About Embroidermodder " VERSION, "Displays information about this product."},
-    {ACTION_whatsthis, "whatsthis", "&What's This?", "What's This? Context Help!"},
-
-    {ACTION_undo, "undo", "&Undo", "Reverses the most recent action."},
-    {ACTION_redo, "redo", "&Redo", "Reverses the effects of the previous undo action."},
-
-    {ACTION_icon16, "icon16", "Icon&16", "Sets the toolbar icon size to 16x16."},
-    {ACTION_icon24, "icon24", "Icon&24", "Sets the toolbar icon size to 24x24."},
-    {ACTION_icon32, "icon32", "Icon&32", "Sets the toolbar icon size to 32x32."},
-    {ACTION_icon48, "icon48", "Icon&48", "Sets the toolbar icon size to 48x48."},
-    {ACTION_icon64, "icon64", "Icon&64", "Sets the toolbar icon size to 64x64."},
-    {ACTION_icon128, "icon128", "Icon12&8", "Sets the toolbar icon size to 128x128."},
-
-    {ACTION_settingsdialog, "settingsdialog", "&Settings", "Configure settings specific to this product."},
-
-    {ACTION_makelayercurrent, "makelayercurrent", "&Make Layer Active", "Makes the layer of a selected object the active layer"},
-    {ACTION_layers, "layers", "&Layers", "Manages layers and layer properties:  LAYER"},
-    {ACTION_layerselector, "layerselector", "&Layer Selector", "Dropdown selector for changing the current layer"},
-    {ACTION_layerprevious, "layerprevious", "&Layer Previous", "Restores the previous layer settings:  LAYERP"},
-    {ACTION_colorselector, "colorselector", "&Color Selector", "Dropdown selector for changing the current thread color"},
-    {ACTION_linetypeselector, "linetypeselector", "&Stitchtype Selector", "Dropdown selector for changing the current stitch type"},
-    {ACTION_lineweightselector, "lineweightselector", "&Threadweight Selector", "Dropdown selector for changing the current thread weight"},
-    {ACTION_hidealllayers, "hidealllayers", "&Hide All Layers", "Turns the visibility off for all layers in the current drawing:  HIDEALL"},
-    {ACTION_showalllayers, "showalllayers", "&Show All Layers", "Turns the visibility on for all layers in the current drawing:  SHOWALL"},
-    {ACTION_freezealllayers, "freezealllayers", "&Freeze All Layers", "Freezes all layers in the current drawing:  FREEZEALL"},
-    {ACTION_thawalllayers, "thawalllayers", "&Thaw All Layers", "Thaws all layers in the current drawing:  THAWALL"},
-    {ACTION_lockalllayers, "lockalllayers", "&Lock All Layers", "Locks all layers in the current drawing:  LOCKALL"},
-    {ACTION_unlockalllayers, "unlockalllayers", "&Unlock All Layers", "Unlocks all layers in the current drawing:  UNLOCKALL"},
-
-    {ACTION_textbold, "textbold", "&Bold Text", "Sets text to be bold."},
-    {ACTION_textitalic, "textitalic", "&Italic Text", "Sets text to be italic."},
-    {ACTION_textunderline, "textunderline", "&Underline Text", "Sets text to be underlined."},
-    {ACTION_textstrikeout, "textstrikeout", "&StrikeOut Text", "Sets text to be striked out."},
-    {ACTION_textoverline, "textoverline", "&Overline Text", "Sets text to be overlined."},
-
-    {ACTION_zoomrealtime, "zoomrealtime", "Zoom &Realtime", "Zooms to increase or decrease the apparent size of objects in the current viewport."},
-    {ACTION_zoomprevious, "zoomprevious", "Zoom &Previous", "Zooms to display the previous view."},
-    {ACTION_zoomwindow, "zoomwindow", "Zoom &Window", "Zooms to display an area specified by a rectangular window."},
-    {ACTION_zoomdynamic, "zoomdynamic", "Zoom &Dynamic", "Zooms to display the generated portion of the drawing."},
-    {ACTION_zoomscale, "zoomscale", "Zoom &Scale", "Zooms the display using a specified scale factor."},
-    {ACTION_zoomcenter, "zoomcenter", "Zoom &Center", "Zooms to display a view specified by a center point and magnification or height."},
-    {ACTION_zoomin, "zoomin", "Zoom &In", "Zooms to increase the apparent size of objects."},
-    {ACTION_zoomout, "zoomout", "Zoom &Out", "Zooms to decrease the apparent size of objects."},
-    {ACTION_zoomselected, "zoomselected", "Zoom Selec&ted", "Zooms to display the selected objects."},
-    {ACTION_zoomall, "zoomall", "Zoom &All", "Zooms to display the drawing extents or the grid limits."},
-    {ACTION_zoomextents, "zoomextents", "Zoom &Extents", "Zooms to display the drawing extents."},
-
-    {ACTION_panrealtime, "panrealtime", "&Pan Realtime", "Moves the view in the current viewport."},
-    {ACTION_panpoint, "panpoint", "&Pan Point", "Moves the view by the specified distance."},
-    {ACTION_panleft, "panleft", "&Pan Left", "Moves the view to the left."},
-    {ACTION_panright, "panright", "&Pan Right", "Moves the view to the right."},
-    {ACTION_panup, "panup", "&Pan Up", "Moves the view up."},
-    {ACTION_pandown, "pandown", "&Pan Down", "Moves the view down."},
-
-    {ACTION_day, "day", "&Day", "Updates the current view using day vision settings."},
-    {ACTION_night, "night", "&Night", "Updates the current view using night vision settings."},
-    {-1, "END", "END", "END"}
-};
-*/
-
 std::vector<LineEdit> geometry_circle_line_edits = {
     {
         .label = "Center X",
@@ -781,6 +722,419 @@ int main(int argc, char* argv[])
         mainWin->openFilesSelected(filesToOpen);
 
     return app.exec();
+}
+
+#endif
+
+
+#if 0
+
+void init_mdi_area(int i)
+{
+    mdi_area[i].useLogo = false;
+    mdi_area[i].useTexture = false;
+    mdi_area[i].useColor = false;
+    mdi_area[i].bgLogo = "";
+    mdi_area[i].bgTexture = "";
+    mdi_area[i].bgColor = IM_COL32(40, 20, 10, 255);
+}
+
+void mdi_area_double_click(void)
+{
+    mainWin->openFile();
+}
+
+void MdiArea::paintEvent(QPaintEvent* /*e*/)
+{
+    QWidget* vport = viewport();
+    QRect rect = vport->rect();
+
+    QPainter painter(vport);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+    //Always fill with a solid color first
+    if (useColor) 
+        painter.fillRect(rect, bgColor);
+    else
+        painter.fillRect(rect, background());
+
+    //Then overlay the texture
+    if (useTexture) {
+        QBrush bgBrush(bgTexture);
+        painter.fillRect(rect, bgBrush);
+    }
+
+    //Overlay the logo last
+    if (useLogo) {
+        //Center the pixmap
+        int dx = (rect.width()-bgLogo.width())/2;
+        int dy = (rect.height()-bgLogo.height())/2;
+        painter.drawPixmap(dx, dy, bgLogo.width(), bgLogo.height(), bgLogo);
+    }
+}
+
+void MdiArea::cascade()
+{
+    cascadeSubWindows();
+    zoomExtentsAllSubWindows();
+}
+
+void MdiArea::tile()
+{
+    tileSubWindows();
+    zoomExtentsAllSubWindows();
+}
+
+void MdiArea::zoomExtentsAllSubWindows()
+{
+    for (QMdiSubWindow* window : subWindowList()) {
+        MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
+        if (mdiWin) {
+            View* v = mdiWin->gview;
+            if (v) {
+                v->recalculateLimits();
+                v->zoomExtents();
+            }
+        }
+    }
+}
+
+MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
+{
+    mainWin = mw;
+    mdiArea = parent;
+
+    myIndex = theIndex;
+
+    fileWasLoaded = false;
+
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    std::string aName;
+    // TODO sprintf in Qt6
+    //curFile = aName.sprintf("Untitled%d.dst", myIndex);
+    curFile = "Untitled.dst";
+    this->setWindowTitle(curFile);
+
+    this->setWindowIcon(mainWin->load_icon("app"));
+
+    gscene = new QGraphicsScene(0,0,0,0, this);
+    gview = new View(mainWin, gscene, this);
+
+    setWidget(gview);
+
+    //WARNING: DO NOT SET THE QMDISUBWINDOW (this) FOCUSPROXY TO THE PROMPT
+    //WARNING: AS IT WILL CAUSE THE WINDOW MENU TO NOT SWITCH WINDOWS PROPERLY!
+    //WARNING: ALTHOUGH IT SEEMS THAT SETTING INTERNAL WIDGETS FOCUSPROXY IS OK.
+    gview->setFocusProxy(mainWin->prompt);
+
+    resize(sizeHint());
+
+    promptHistory = "Welcome to Embroidermodder 2!<br/>Open some of our sample files. Many formats are supported.<br/>For help, press F1.";
+    mainWin->prompt->setHistory(promptHistory);
+    promptInputList << "";
+    promptInputNum = 0;
+
+    curLayer = "0";
+    curColor = 0; //TODO: color ByLayer
+    curLineType = "ByLayer";
+    curLineWeight = "ByLayer";
+
+    // Due to strange Qt4.2.3 feature the child window icon is not drawn
+    // in the main menu if showMaximized() is called for a non-visible child window
+    // Therefore calling show() first...
+    show();
+    showMaximized();
+
+    setFocusPolicy(Qt::WheelFocus);
+    setFocus();
+
+    onWindowActivated();
+}
+
+MdiWindow::~MdiWindow()
+{
+    debug_message("MdiWindow Destructor()");
+}
+
+bool MdiWindow::saveFile(const std::string &fileName)
+{
+    SaveObject saveObj(gscene, this);
+    return saveObj.save(fileName);
+}
+
+bool MdiWindow::loadFile(const std::string &fileName)
+{
+    debug_message("MdiWindow loadFile()");
+
+    unsigned int tmpColor = getCurrentColor();
+
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+    {
+        QMessageBox::warning(this, translate("Error reading file"),
+                             translate("Cannot read file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return false;
+    }
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
+    std::string ext = fileExtension(fileName);
+    debug_message("ext: %s", qPrintable(ext));
+
+    //Read
+    EmbPattern* p = embPattern_create();
+    if (!p) { printf("Could not allocate memory for embroidery pattern\n"); exit(1); }
+    int readSuccessful = 0;
+    std::string readError;
+    int reader = emb_identify_format(qPrintable(fileName));
+    if (reader < 0) {
+        readSuccessful = 0;
+        readError = "Unsupported read file type: " + fileName;
+        debug_message("Unsupported read file type: " + fileName.toStdString());
+    }
+    else {
+        readSuccessful = embPattern_read(p, qPrintable(fileName), reader);
+        if (!readSuccessful) {
+            readError = "Reading file was unsuccessful: " + fileName;
+            debug_message("Reading file was unsuccessful: " + fileName.toStdString());
+        }
+    }
+    if (!readSuccessful) {
+        QMessageBox::warning(this, translate("Error reading pattern"), translate(qPrintable(readError)));
+        QApplication::restoreOverrideCursor();
+        QMessageBox::warning(this, translate("Error reading pattern"), translate("Cannot read pattern"));
+    }
+    else {
+        embPattern_moveStitchListToPolylines(p); //TODO: Test more
+        int stitchCount = p->stitchList->count;
+        QPainterPath path;
+
+
+        setCurrentFile(fileName);
+        mainWin->statusbar->showMessage("File loaded.");
+        std::string stitches;
+        stitches.setNum(stitchCount);
+
+        if (settings_grid_load_from_file) {
+            //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
+        }
+
+        QApplication::restoreOverrideCursor();
+    }
+    embPattern_free(p);
+
+    //Clear the undo stack so it is not possible to undo past this point.
+    gview->undoStack->clear();
+
+    setCurrentColor(tmpColor);
+
+    fileWasLoaded = true;
+    mainWin->setUndoCleanIcon(fileWasLoaded);
+    return fileWasLoaded;
+}
+
+void MdiWindow::print()
+{
+    QPrintDialog dialog(&printer, this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QPainter painter(&printer);
+        if (settings_printing_disable_bg) {
+            //Save current bg
+            QBrush brush = gview->backgroundBrush();
+            //Save ink by not printing the bg at all
+            gview->setBackgroundBrush(Qt::NoBrush);
+            //Print, fitting the viewport contents into a full page
+            gview->render(&painter);
+            //Restore the bg
+            gview->setBackgroundBrush(brush);
+        }
+        else {
+            //Print, fitting the viewport contents into a full page
+            gview->render(&painter);
+        }
+    }
+}
+
+//TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
+
+//TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
+//TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
+//NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
+void MdiWindow::saveBMC()
+{
+    //TODO: figure out how to center the image, right now it just plops it to the left side.
+    QImage img(150, 150, QImage::Format_ARGB32_Premultiplied);
+    img.fill(qRgb(255,255,255));
+    EmbRect extents = gscene->itemsBoundingRect();
+
+    QPainter painter(&img);
+    EmbRect targetRect(0,0,150,150);
+    // TODO: Make BMC background into it's own setting?
+    if (settings_printing_disable_bg) {
+        QBrush brush = gscene->backgroundBrush();
+        gscene->setBackgroundBrush(Qt::NoBrush);
+        gscene->update();
+        gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
+        gscene->setBackgroundBrush(brush);
+    }
+    else {
+        gscene->update();
+        gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
+    }
+
+    img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
+}
+
+void MdiWindow::setCurrentFile(const std::string &fileName)
+{
+    curFile = QFileInfo(fileName).canonicalFilePath();
+    setWindowModified(false);
+    setWindowTitle(getShortCurrentFile());
+}
+
+std::string MdiWindow::getShortCurrentFile()
+{
+    return QFileInfo(curFile).fileName();
+}
+
+std::string MdiWindow::fileExtension(const std::string& fileName)
+{
+    return QFileInfo(fileName).suffix().toLower();
+}
+
+void MdiWindow::closeEvent(QCloseEvent* /*e*/)
+{
+    debug_message("MdiWindow closeEvent()");
+    emit sendCloseMdiWin(this);
+}
+
+void MdiWindow::onWindowActivated()
+{
+    debug_message("MdiWindow onWindowActivated()");
+    gview->undoStack->setActive(true);
+    mainWin->setUndoCleanIcon(fileWasLoaded);
+    mainWin->statusbar->statusBarSnapButton->setChecked(gscene->property("ENABLE_SNAP").toBool());
+    mainWin->statusbar->statusBarGridButton->setChecked(gscene->property("ENABLE_GRID").toBool());
+    mainWin->statusbar->statusBarRulerButton->setChecked(gscene->property("ENABLE_RULER").toBool());
+    mainWin->statusbar->statusBarOrthoButton->setChecked(gscene->property("ENABLE_ORTHO").toBool());
+    mainWin->statusbar->statusBarPolarButton->setChecked(gscene->property("ENABLE_POLAR").toBool());
+    mainWin->statusbar->statusBarQSnapButton->setChecked(gscene->property("ENABLE_QSNAP").toBool());
+    mainWin->statusbar->statusBarQTrackButton->setChecked(gscene->property("ENABLE_QTRACK").toBool());
+    mainWin->statusbar->statusBarLwtButton->setChecked(gscene->property("ENABLE_LWT").toBool());
+    mainWin->prompt->setHistory(promptHistory);
+}
+
+QSize MdiWindow::sizeHint() const
+{
+    debug_message("MdiWindow sizeHint()");
+    return QSize(450, 300);
+}
+
+void MdiWindow::currentLayerChanged(const std::string& layer)
+{
+    curLayer = layer;
+}
+
+void MdiWindow::currentColorChanged(const unsigned int& color)
+{
+    curColor = color;
+}
+
+void MdiWindow::currentLinetypeChanged(const std::string& type)
+{
+    curLineType = type;
+}
+
+void MdiWindow::currentLineweightChanged(const std::string& weight)
+{
+    curLineWeight = weight;
+}
+
+void MdiWindow::updateColorLinetypeLineweight()
+{
+}
+
+void MdiWindow::deletePressed()
+{
+    gview->deletePressed();
+}
+
+void MdiWindow::escapePressed()
+{
+    gview->escapePressed();
+}
+
+void MdiWindow::showViewScrollBars(bool val)
+{
+    gview->showScrollBars(val);
+}
+
+void MdiWindow::setViewCrossHairColor(unsigned int color)
+{
+    gview->setCrossHairColor(color);
+}
+
+void MdiWindow::setViewBackgroundColor(unsigned int color)
+{
+    gview->setBackgroundColor(color);
+}
+
+void MdiWindow::setViewSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)
+{
+    gview->setSelectBoxColors(colorL, fillL, colorR, fillR, alpha);
+}
+
+void MdiWindow::setViewGridColor(unsigned int color)
+{
+    gview->setGridColor(color);
+}
+
+void MdiWindow::setViewRulerColor(unsigned int color)
+{
+    gview->setRulerColor(color);
+}
+
+void MdiWindow::promptHistoryAppended(const std::string& txt)
+{
+    promptHistory.append("<br/>" + txt);
+}
+
+void MdiWindow::logPromptInput(const std::string& txt)
+{
+    promptInputList << txt;
+    promptInputNum = promptInputList.size();
+}
+
+void MdiWindow::promptInputPrevious()
+{
+    promptInputPrevNext(true);
+}
+
+void MdiWindow::promptInputNext()
+{
+    promptInputPrevNext(false);
+}
+
+void MdiWindow::promptInputPrevNext(bool prev)
+{
+    if (promptInputList.isEmpty())
+    {
+        if (prev) QMessageBox::critical(this, translate("Prompt Previous Error"), translate("The prompt input is empty! Please report this as a bug!"));
+        else     QMessageBox::critical(this, translate("Prompt Next Error"),     translate("The prompt input is empty! Please report this as a bug!"));
+        debug_message("The prompt input is empty! Please report this as a bug!");
+    }
+    else
+    {
+        if (prev) promptInputNum--;
+        else     promptInputNum++;
+        int maxNum = promptInputList.size();
+        if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
+        else if (promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
+        else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+    }
 }
 
 #endif

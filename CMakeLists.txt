@@ -41,8 +41,6 @@ add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/data.cpp
 	${CMAKE_SOURCE_DIR}/src/dialogs.cpp
 	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
-	${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
-	${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
 	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
 	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp

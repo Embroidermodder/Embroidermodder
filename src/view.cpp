@@ -25,6 +25,9 @@
 std::vector<View> views;
 std::string current_view_state = "neutral";
 
+double zoomInLimit = 0.0000000001;
+double zoomOutLimit = 10000000000000.0;
+
 inline ImVec2 to_ImVec2(EmbVector v)
 {
     return ImVec2(v.x, v.y);
@@ -195,42 +198,42 @@ render_pattern(EmbPattern *p)
 void
 draw_rulers(void)
 {
+    EmbVector screen_size = {576.0, 1024.0};
+    EmbVector top_left = {100.0, 100.0};
+    unsigned int ruler_color = IM_COL32(150, 170, 0, 255);
+    unsigned int ticks_color = IM_COL32(0, 0, 0, 255);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     draw_list->AddRectFilled(
-        ImVec2(0, 100),
-        ImVec2(50, 640),
-        IM_COL32(150, 170, 0, 255)
+        to_ImVec2(top_left), ImVec2(150.0, screen_size.y), ruler_color
     );
     draw_list->AddRectFilled(
-        ImVec2(0, 100),
-        ImVec2(480, 150),
-        IM_COL32(150, 170, 0, 255)
+        to_ImVec2(top_left), ImVec2(screen_size.x, 150.0), ruler_color
     );
     for (int i=0; i<20; i++) {
-        draw_list->AddRectFilled(
-            ImVec2(50+40*i, 100),
-            ImVec2(50+40*i+1, 150),
-            IM_COL32(0, 0, 0, 255)
+        draw_list->AddLine(
+            ImVec2(100.0+40*i, 100),
+            ImVec2(100.0+40*i, 150),
+            ticks_color
         );
         for (int j=0; j<10; j++) {
-            draw_list->AddRectFilled(
-                ImVec2(50+40*i+4*j, 130),
-                ImVec2(50+40*i+4*j+1, 150),
-                IM_COL32(0, 0, 0, 255)
+            draw_list->AddLine(
+                ImVec2(100.0+40*i+4*j, 130),
+                ImVec2(100.0+40*i+4*j, 150),
+                ticks_color
             );
         }
     }
     for (int i=0; i<10; i++) {
-        draw_list->AddRectFilled(
-            ImVec2(0, 150+40*i),
-            ImVec2(50, 150+40*i+1),
-            IM_COL32(0, 0, 0, 255)
+        draw_list->AddLine(
+            ImVec2(100.0, 150+40*i),
+            ImVec2(150.0, 150+40*i),
+            ticks_color
         );
         for (int j=0; j<10; j++) {
-            draw_list->AddRectFilled(
-                ImVec2(30, 150+40*i+4*j),
-                ImVec2(50, 150+40*i+4*j+1),
-                IM_COL32(0, 0, 0, 255)
+            draw_list->AddLine(
+                ImVec2(130.0, 150+40*i+4*j),
+                ImVec2(150.0, 150+40*i+4*j),
+                ticks_color
             );
         }
     }
@@ -241,17 +244,23 @@ void
 draw_grid(void)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    int grid_color = IM_COL32(0, 0, 0, 255);
+    EmbVector top_left = {150.0, 150.0};
+    EmbVector bottom_right = {150.0, 640.0};
+    EmbVector horizontal_top_left = {150.0, 150.0};
+    EmbVector horizontal_bottom_right = {640.0, 150.0};
+    EmbVector grid_spacing = {40.0, 40.0};
     for (int i=0; i<10; i++) {
-        draw_list->AddRectFilled(
-            ImVec2(150+40*i, 150),
-            ImVec2(150+40*i+1, 640),
-            IM_COL32(0, 0, 0, 255)
-        );
-        draw_list->AddRectFilled(
-            ImVec2(50, 150+40*i),
-            ImVec2(640, 150+40*i+1),
-            IM_COL32(0, 0, 0, 255)
-        );
+        top_left.x += grid_spacing.x;
+        bottom_right.x += grid_spacing.x;
+        horizontal_top_left.y += grid_spacing.y;
+        horizontal_bottom_right.y += grid_spacing.y;
+        draw_list->AddLine(to_ImVec2(top_left),
+                           to_ImVec2(bottom_right),
+                           grid_color);
+        draw_list->AddLine(to_ImVec2(horizontal_top_left),
+                           to_ImVec2(horizontal_bottom_right), 
+                           grid_color);
     }
 }
 
@@ -284,14 +293,21 @@ View init_view(void)
     view.qtrack_mode = false;
     view.lwt_mode = false;
     view.metric = true;
+    view.text_font = "default";
+    view.text_size = 16;
+    view.text_angle = 0.0;
+    view.text_style_bold = false;
+    view.text_style_italic = false;
+    view.text_style_underline = false;
+    view.text_style_overline = false;
+    view.text_style_strikeout = false;
     view.filename = "Untitled.dst";
+    view.undo_history_position = 0;
+    
     return view;
 }
 
 #if 0
-double zoomInLimit = 0.0000000001;
-double zoomOutLimit = 10000000000000.0;
-
 ImageWidget::ImageWidget(const std::string &filename, QWidget* parent) : QWidget(parent)
 {
     debug_message("ImageWidget Constructor");
