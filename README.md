@@ -1,5 +1,7 @@
 # What is Embroidermodder ?
 
+(UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR THE BETA TEST BUILDS.)
+
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
 
