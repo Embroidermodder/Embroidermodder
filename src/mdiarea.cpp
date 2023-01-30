@@ -17,62 +17,17 @@
 
 #if 0
 
-MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
+void init_mdi_area(int i)
 {
-    setTabsClosable(true);
-
-    useLogo = false;
-    useTexture = false;
-    useColor = false;
+    mdi_area[i].useLogo = false;
+    mdi_area[i].useTexture = false;
+    mdi_area[i].useColor = false;
+    mdi_area[i].bgLogo = "";
+    mdi_area[i].bgTexture = "";
+    mdi_area[i].bgColor = IM_COL32(40, 20, 10, 255);
 }
 
-MdiArea::~MdiArea()
-{
-}
-
-void MdiArea::useBackgroundLogo(bool use)
-{
-    useLogo = use;
-    forceRepaint();
-}
-
-void MdiArea::useBackgroundTexture(bool use)
-{
-    useTexture = use;
-    forceRepaint();
-}
-
-void MdiArea::useBackgroundColor(bool use)
-{
-    useColor = use;
-    forceRepaint();
-}
-
-void MdiArea::setBackgroundLogo(const std::string& fileName)
-{
-    bgLogo.load(fileName);
-
-    forceRepaint();
-}
-
-void MdiArea::setBackgroundTexture(const std::string& fileName)
-{
-    bgTexture.load(fileName);
-
-    forceRepaint();
-}
-
-void MdiArea::setBackgroundColor(const QColor& color)
-{
-    if (!color.isValid())
-        bgColor = background().color();
-    else
-        bgColor = color;
-
-    forceRepaint();
-}
-
-void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
+void mdi_area_double_click(void)
 {
     mainWin->openFile();
 }
@@ -86,19 +41,19 @@ void MdiArea::paintEvent(QPaintEvent* /*e*/)
     painter.setRenderHint(QPainter::SmoothPixmapTransform);
 
     //Always fill with a solid color first
-    if (useColor) painter.fillRect(rect, bgColor);
-    else         painter.fillRect(rect, background());
+    if (useColor) 
+        painter.fillRect(rect, bgColor);
+    else
+        painter.fillRect(rect, background());
 
     //Then overlay the texture
-    if (useTexture)
-    {
+    if (useTexture) {
         QBrush bgBrush(bgTexture);
         painter.fillRect(rect, bgBrush);
     }
 
     //Overlay the logo last
-    if (useLogo)
-    {
+    if (useLogo) {
         //Center the pixmap
         int dx = (rect.width()-bgLogo.width())/2;
         int dy = (rect.height()-bgLogo.height())/2;
@@ -130,14 +85,6 @@ void MdiArea::zoomExtentsAllSubWindows()
             }
         }
     }
-}
-
-void MdiArea::forceRepaint()
-{
-    //HACK: Take that QMdiArea!
-    QSize hack = size();
-    resize(hack + QSize(1,1));
-    resize(hack);
 }
 
 #endif

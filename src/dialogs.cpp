@@ -154,8 +154,7 @@ void terminal()
     QApplication::restoreOverrideCursor();
 }
 
-
-CmdPrompt::CmdPrompt(QWidget* parent) : QWidget(parent)
+void CmdPrompt(void)
 {
     debug_message("CmdPrompt Constructor");
     setObjectName("Command Prompt");
@@ -393,10 +392,6 @@ CmdPromptHandle::CmdPromptHandle(Orientation orientation, QSplitter* parent) : Q
     connect(this, SIGNAL(handleMoved(int)),    parent, SIGNAL(moveResizeHistory(int)));
 }
 
-CmdPromptHandle::~CmdPromptHandle()
-{
-}
-
 void CmdPromptHandle::mousePressEvent(QMouseEvent* e)
 {
     pressY = e->globalY();
@@ -416,9 +411,7 @@ void CmdPromptHandle::mouseMoveEvent(QMouseEvent* e)
     emit handleMoved(dY);
 }
 
-//============================================================================================================
-
-CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
+void CmdPromptHistory(QWidget* parent)
 {
     debug_message("CmdPromptHistory Constructor");
     setObjectName("Command Prompt History");
@@ -430,10 +423,6 @@ CmdPromptHistory::CmdPromptHistory(QWidget* parent) : QTextBrowser(parent)
     this->setMinimumWidth(200); // TODO: use float/dock events to set minimum size so when floating, it isn't smooshed.
 
     this->setVerticalScrollBarPolicy(ScrollBarAlwaysOn);
-}
-
-CmdPromptHistory::~CmdPromptHistory()
-{
 }
 
 std::string CmdPromptHistory::applyFormatting(const std::string& txt, int prefixLength)

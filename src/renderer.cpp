@@ -277,10 +277,10 @@ void
 pattern_view(void)
 {
     EmbPattern *pattern = pattern_list[pattern_index];
-    if (show_rulers) {
+    if (views[pattern_index].ruler_mode) {
         draw_rulers();
     }
-    if (show_grid) {
+    if (views[pattern_index].grid_mode) {
         draw_grid();
     }
     render_pattern(pattern);

@@ -320,6 +320,15 @@ typedef struct GroupBox_ {
 typedef struct View_ {
     EmbVector origin;
     double scale;
+    std::string grid_type;
+    bool snap_mode;
+    bool grid_mode;
+    bool ruler_mode;
+    bool ortho_mode;
+    bool polar_mode;
+    bool qsnap_mode;
+    bool qtrack_mode;
+    bool lwt_mode;
 } View;
 
 typedef std::vector<std::vector<std::string>> string_matrix;
@@ -343,17 +352,33 @@ std::string translate(std::string string);
 void debug_message(std::string string);
 
 void pattern_view(void);
+void status_bar(void);
 
 /* Global variables.
  * -----------------------------------------------------------------------------
  */
 
+enum ArrowStyle
+{
+    NoArrow, //NOTE: Allow this enum to evaluate false
+    Open,
+    Closed,
+    Dot,
+    Box,
+    Tick
+};
+
+enum lineStyle
+{
+    NoLine, //NOTE: Allow this enum to evaluate false
+    Flared,
+    Fletching
+};
+
 extern bool running;
 extern bool debug_mode;
 extern bool show_about_dialog;
 extern bool show_editor;
-extern bool show_rulers;
-extern bool show_grid;
 extern int icon_size;
 extern std::string language;
 extern int pattern_index;
@@ -364,6 +389,7 @@ extern std::string assets_dir;
 extern EmbPattern* pattern_list[MAX_PATTERNS];
 extern string_matrix translation_table;
 extern std::unordered_map<std::string, string_matrix> menu_layout;
+extern std::unordered_map<std::string, std::string> global_settings;
 extern std::string os_seperator;
 extern std::string settings_general_language;
 extern std::string settings_general_icon_theme;

@@ -32,8 +32,6 @@ bool running = true;
 bool debug_mode = true;
 bool show_about_dialog = false;
 bool show_editor = false;
-bool show_rulers = true;
-bool show_grid = true;
 std::string language = "default";
 int icon_size = 16;
 ImFont *font;
@@ -193,8 +191,8 @@ set_style(void)
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
-    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
-    style.Colors[ImGuiCol_PopupBg] = ImVec4(0.55f, 0.55f, 0.55f, 1.00f);
+    style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.75f, 0.75f, 0.75f, 1.00f);
+    style.Colors[ImGuiCol_PopupBg] = ImVec4(0.85f, 0.85f, 0.85f, 1.00f);
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.65f, 0.65f, 0.65f, 1.00f);
     style.Colors[ImGuiCol_MenuBarBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
     style.Colors[ImGuiCol_ChildBg] = ImVec4(1.0f, 1.0f, 1.0f, 1.00f);
@@ -337,6 +335,8 @@ main(int argc, char* argv[])
         views[i].origin.x = 200.0;
         views[i].origin.y = 200.0;
         views[i].scale = 10.0;
+        views[i].ruler_mode = true;
+        views[i].grid_mode = true;
     }
 
     int width = 1080;

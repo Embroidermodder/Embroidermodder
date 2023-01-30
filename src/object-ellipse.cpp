@@ -349,11 +349,6 @@ EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseOb
     }
 }
 
-EllipseObject::~EllipseObject()
-{
-    debug_message("EllipseObject Destructor()");
-}
-
 void EllipseObject::init(double centerX, double centerY, double width, double height, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
