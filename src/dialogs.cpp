@@ -30,37 +30,10 @@ about_dialog(void)
     ImGui::Text("Embroidery formats by Josh Varga and Robin Swift.");
     ImGui::Text("User Interface by Jonathan Greig and Robin Swift.");
     ImGui::Text("Free under the zlib/libpng license.");
+    if (ImGui::Button("Oh, Yeah!")) {
+        show_about_dialog = false;
+    }
     ImGui::End();
-
-    /*
-    QApplication::setOverrideCursor(ArrowCursor);
-    std::string appDir = qApp->applicationDirPath();
-    std::string appName = QApplication::applicationName();
-    std::string title = "About " + appName;
-
-    QDialog dialog(this);
-    ImageWidget img(appDir + "/images/logo-small");
-
-    QDialogButtonBox buttonbox(Horizontal, &dialog);
-    QPushButton button(&dialog);
-    button.setText("Oh, Yeah!");
-    buttonbox.addButton(&button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
-
-    QVBoxLayout layout;
-    layout.setAlignment(AlignCenter);
-    layout.addWidget(&img);
-    layout.addWidget(&text);
-    layout.addWidget(&buttonbox);
-
-    dialog.setWindowTitle(title);
-    dialog.setMinimumWidth(img.minimumWidth()+30);
-    dialog.setMinimumHeight(img.minimumHeight()+50);
-    dialog.setLayout(&layout);
-    dialog.exec();
-    QApplication::restoreOverrideCursor();
-    */
 }
 
 void

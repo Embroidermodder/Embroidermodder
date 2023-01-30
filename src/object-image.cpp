@@ -16,28 +16,8 @@
 #include "embroidermodder.h"
 
 #if 0
-ImageObject::ImageObject(double x, double y, double w, double h, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ImageObject Constructor()");
-    init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
-}
 
-ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("ImageObject Constructor()");
-    if (obj) {
-        EmbVector ptl = obj->objectTopLeft();
-        init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-ImageObject::~ImageObject()
-{
-    debug_message("ImageObject Destructor()");
-}
-
-void ImageObject::init(double x, double y, double w, double h, unsigned int rgb, Qt::PenStyle lineType)
+void image_init(EmbRect rect, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Image");
@@ -47,11 +27,11 @@ void ImageObject::init(double x, double y, double w, double h, unsigned int rgb,
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    setObjectRect(x, y, w, h);
+    setObjectRect(rect);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
-    setPen(objectPen());
+    setPen(objPen);
 }
 
 void ImageObject::setObjectRect(double x, double y, double w, double h)

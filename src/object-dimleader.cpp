@@ -16,26 +16,7 @@
 #include "embroidermodder.h"
 
 #if 0
-DimLeaderObject::DimLeaderObject(double x1, double y1, double x2, double y2, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    init(x1, y1, x2, y2, rgb, SolidLine); //TODO: getCurrentLineType
-}
-
-DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("DimLeaderObject Constructor()");
-    if (obj) {
-        init(obj->objectX1(), obj->objectY1(), obj->objectX2(), obj->objectY2(), obj->objectColorRGB(), SolidLine); //TODO: getCurrentLineType
-    }
-}
-
-DimLeaderObject::~DimLeaderObject()
-{
-    debug_message("DimLeaderObject Destructor()");
-}
-
-void DimLeaderObject::init(double x1, double y1, double x2, double y2, unsigned int rgb, Qt::PenStyle lineType)
+void dim_leader_init(EmbLine line, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Leader Dimension");

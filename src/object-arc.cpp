@@ -23,12 +23,9 @@ void ArcObject::init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
 
     arc = arc_in;
 
-    //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
-    //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
-    calculateArcData(startX, startY, midX, midY, endX, endY);
+    calculateArcData(arc);
 
     setObjectColor(rgb);
     setObjectLineType(lineType);

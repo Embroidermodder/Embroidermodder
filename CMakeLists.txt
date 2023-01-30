@@ -43,20 +43,7 @@ add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
 	${CMAKE_SOURCE_DIR}/src/mdiarea.cpp
 	${CMAKE_SOURCE_DIR}/src/mdiwindow.cpp
-	${CMAKE_SOURCE_DIR}/src/object-arc.cpp
-	${CMAKE_SOURCE_DIR}/src/object-base.cpp
-	${CMAKE_SOURCE_DIR}/src/object-circle.cpp
-	${CMAKE_SOURCE_DIR}/src/object-ellipse.cpp
-	${CMAKE_SOURCE_DIR}/src/object-image.cpp
-	${CMAKE_SOURCE_DIR}/src/object-line.cpp
-	${CMAKE_SOURCE_DIR}/src/object-path.cpp
-	${CMAKE_SOURCE_DIR}/src/object-polygon.cpp
-	${CMAKE_SOURCE_DIR}/src/object-polyline.cpp
-	${CMAKE_SOURCE_DIR}/src/object-rect.cpp
-	${CMAKE_SOURCE_DIR}/src/object-save.cpp
-	${CMAKE_SOURCE_DIR}/src/object-textsingle.cpp
 	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
-	${CMAKE_SOURCE_DIR}/src/renderer.cpp
 	${CMAKE_SOURCE_DIR}/src/selectbox.cpp
 	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
 	${CMAKE_SOURCE_DIR}/src/statusbar.cpp

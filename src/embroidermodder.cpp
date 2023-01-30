@@ -42,6 +42,7 @@ std::string assets_dir = "../assets/";
 std::vector<Action> action_list;
 EmbPattern* pattern_list[MAX_PATTERNS];
 string_matrix translation_table;
+std::unordered_map<std::string, std::string> str_settings;
 std::unordered_map<std::string, GLuint> textures;
 std::unordered_map<std::string, string_matrix> menu_layout;
 std::string menu_action = "";
@@ -275,33 +276,33 @@ main_widget(void)
         actuator(menu_action);
     }
 
-    ImGui::Columns(2, "Undo History");
-    ImGui::SetColumnWidth(-1, 100);
-    ImGui::BeginChild("Undo History");
-    ImGui::Text("Undo History");
-    for (std::string undo_item : undo_history) {
-        ImGui::Text(undo_item.c_str());
-    }
-    ImGui::EndChild();
-    ImGui::NextColumn();
-    if (ImGui:: BeginTabBar("Tab Bar")) {
-        for (int i=0; i<n_patterns; i++) {
-            if (ImGui::BeginTabItem("Untitled.dst")) {
-                if (i == pattern_index) {
+    if (n_patterns > 0) {
+        if (ImGui:: BeginTabBar("Tab Bar")) {
+            for (View view : views) {
+                if (ImGui::BeginTabItem(view.filename.c_str())) {
+                    ImGui::Columns(2, "Undo History");
+                    ImGui::SetColumnWidth(-1, 100);
+                    ImGui::BeginChild("Undo History");
+                    ImGui::Text("Undo History");
+                    for (std::string undo_item : view.undo_history) {
+                        ImGui::Text(undo_item.c_str());
+                    }
+                    ImGui::EndChild();
+                    ImGui::NextColumn();
                     pattern_view();
+                    ImGui::Columns();
+                    ImGui::EndTabItem();
                 }
-                ImGui::EndTabItem();
             }
-        }
-        if (show_editor) {
-            if (ImGui::BeginTabItem("Text Editor")) {
-                editor.Render("Text Editor");
-                ImGui::EndTabItem();
+            if (show_editor) {
+                if (ImGui::BeginTabItem("Text Editor")) {
+                    editor.Render("Text Editor");
+                    ImGui::EndTabItem();
+                }
             }
+            ImGui::EndTabBar();
         }
-        ImGui::EndTabBar();
     }
-    ImGui::Columns();
 
     if (show_about_dialog) {
         about_dialog();
@@ -330,14 +331,6 @@ main(int argc, char* argv[])
     }
 
     load_configuration();
-
-    for (int i=0; i<MAX_PATTERNS; i++) {        
-        views[i].origin.x = 200.0;
-        views[i].origin.y = 200.0;
-        views[i].scale = 10.0;
-        views[i].ruler_mode = true;
-        views[i].grid_mode = true;
-    }
 
     int width = 1080;
     int height = 576;

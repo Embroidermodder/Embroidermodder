@@ -215,7 +215,9 @@ actuator(std::string command_line)
     std::string command = args[0];
     args.erase(args.begin());
 
-    undo_history.push_back(command_line);
+    if (n_patterns > 0) {
+        views[pattern_index].undo_history.push_back(command_line);
+    }
 
     /* Command/argument seperation is done in order to reduce the number of
      * checks on every click before an action can run.
@@ -240,9 +242,9 @@ actuator(std::string command_line)
     "editor"
         show_editor = true;
     "export"
-        embPattern_writeAuto(pattern_list[n_patterns], current_fname.c_str());
+        embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
     "open"
-        embPattern_readAuto(pattern_list[n_patterns], current_fname.c_str());
+        embPattern_readAuto(views[pattern_index].pattern, current_fname.c_str());
         n_patterns++;
     "print",
     "details",
@@ -257,12 +259,12 @@ actuator(std::string command_line)
     "rectangle",
     "save",
         if (n_patterns) {
-            embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
+            embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
         }
         return;
     "saveas",
         if (n_patterns) {
-            embPattern_writeAuto(pattern_list[pattern_index], current_fname.c_str());
+            embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
         }
         return;
     "donothing" debug_message("This action intentionally does nothing.");
@@ -1935,7 +1937,7 @@ arc_action(std::vector<std::string> args)
     arc.color.r = 0;
     arc.color.g = 0;
     arc.color.b = 0;
-    // embPattern_addArcAbs(pattern_list[pattern_index], arc);
+    // embPattern_addArcAbs(views[pattern_index].pattern, arc);
 }
 
 void
@@ -1948,7 +1950,7 @@ circle_action(std::vector<std::string> args)
     circle.color.r = 0;
     circle.color.g = 0;
     circle.color.b = 0;
-    embPattern_addCircleAbs(pattern_list[pattern_index], circle);
+    embPattern_addCircleAbs(views[pattern_index].pattern, circle);
 }
 
 void
@@ -2013,7 +2015,7 @@ icon_action(std::vector<std::string> args)
 void
 open_file_action(std::vector<std::string> args)
 {
-    embPattern_readAuto(pattern_list[pattern_index], current_fname.c_str());
+    embPattern_readAuto(views[pattern_index].pattern, current_fname.c_str());
     n_patterns++;
 }
 
@@ -2122,7 +2124,9 @@ zoom_action(std::vector<std::string> args)
 
 void new_file_action(std::vector<std::string> args)
 {
-    pattern_list[n_patterns] = embPattern_create();
+    View view = init_view();
+    view.pattern = embPattern_create();
+    views.push_back(view);
     pattern_index = n_patterns;
     n_patterns++;
 }

@@ -16,26 +16,6 @@
 #include "embroidermodder.h"
 
 #if 0
-PointObject::PointObject(double x, double y, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("PointObject Constructor()");
-    init(x, y, rgb, SolidLine); //TODO: getCurrentLineType
-}
-
-PointObject::PointObject(PointObject* obj, QGraphicsItem* parent) : BaseObject(parent)
-{
-    debug_message("PointObject Constructor()");
-    if (obj) {
-        init(obj->objectX(), obj->objectY(), obj->objectColorRGB(), SolidLine); //TODO: getCurrentLineType
-        setRotation(obj->rotation());
-    }
-}
-
-PointObject::~PointObject()
-{
-    debug_message("PointObject Destructor()");
-}
-
 void PointObject::init(double x, double y, unsigned int rgb, int lineType)
 {
     setData(OBJ_TYPE, type);
