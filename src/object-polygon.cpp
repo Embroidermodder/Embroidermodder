@@ -16,13 +16,13 @@
 #include "embroidermodder.h"
 
 #if 0
-PolygonObject::PolygonObject(double x, double y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+polygon_PolygonObject(double x, double y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("PolygonObject Constructor()");
     init(x, y, p, rgb, SolidLine); //TODO: getCurrentLineType
 }
 
-PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+polygon_PolygonObject(PolygonObject* obj, QGraphicsItem* parent)
 {
     debug_message("PolygonObject Constructor()");
     if (obj)
@@ -33,12 +33,12 @@ PolygonObject::PolygonObject(PolygonObject* obj, QGraphicsItem* parent) : BaseOb
     }
 }
 
-PolygonObject::~PolygonObject()
+polygon_~PolygonObject()
 {
     debug_message("PolygonObject Destructor()");
 }
 
-void PolygonObject::init(double x, double y, const QPainterPath& p, unsigned int rgb, PenStyle lineType)
+void polygon_init(double x, double y, const QPainterPath& p, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Polygon");
@@ -57,7 +57,7 @@ void PolygonObject::init(double x, double y, const QPainterPath& p, unsigned int
     setPen(objectPen());
 }
 
-void PolygonObject::updatePath(const QPainterPath& p)
+void polygon_updatePath(const QPainterPath& p)
 {
     normalPath = p;
     QPainterPath closedPath = normalPath;
@@ -67,7 +67,7 @@ void PolygonObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void polygon_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -88,7 +88,7 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     }
 }
 
-void PolygonObject::updateRubber(QPainter* painter)
+void polygon_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_POLYGON)
@@ -201,7 +201,7 @@ void PolygonObject::updateRubber(QPainter* painter)
     }
 }
 
-void PolygonObject::vulcanize()
+void polygon_vulcanize()
 {
     debug_message("PolygonObject vulcanize()");
     updateRubber();
@@ -213,7 +213,7 @@ void PolygonObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector PolygonObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector polygon_mouseSnapPoint(const EmbVector& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
@@ -231,7 +231,7 @@ EmbVector PolygonObject::mouseSnapPoint(const EmbVector& mousePoint)
     return closestPoint;
 }
 
-std::vector<EmbVector> PolygonObject::allGripPoints()
+std::vector<EmbVector> polygon_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     QPainterPath::Element element;
@@ -242,7 +242,7 @@ std::vector<EmbVector> PolygonObject::allGripPoints()
     return gripPoints;
 }
 
-int PolygonObject::findIndex(const EmbVector& point)
+int polygon_findIndex(const EmbVector& point)
 {
     int i = 0;
     int elemCount = normalPath.elementCount();
@@ -257,7 +257,7 @@ int PolygonObject::findIndex(const EmbVector& point)
     return -1;
 }
 
-void PolygonObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void polygon_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     gripIndex = findIndex(before);
     if (gripIndex == -1) return;
@@ -267,12 +267,12 @@ void PolygonObject::gripEdit(const EmbVector& before, const EmbVector& after)
     gripIndex = -1;
 }
 
-QPainterPath PolygonObject::objectCopyPath() const
+QPainterPath polygon_objectCopyPath() const
 {
     return normalPath;
 }
 
-QPainterPath PolygonObject::objectSavePath() const
+QPainterPath polygon_objectSavePath() const
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();

@@ -16,13 +16,13 @@
 #include "embroidermodder.h"
 
 #if 0
-PathObject::PathObject(double x, double y, const QPainterPath p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+path_PathObject(double x, double y, const QPainterPath p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+path_PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PathObject Constructor()");
     if (obj) {
@@ -32,12 +32,12 @@ PathObject::PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(pare
     }
 }
 
-PathObject::~PathObject()
+path_~PathObject()
 {
     debug_message("PathObject Destructor()");
 }
 
-void PathObject::init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
+void path_init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Path");
@@ -55,7 +55,7 @@ void PathObject::init(double x, double y, const QPainterPath& p, unsigned int rg
     setPen(objPen);
 }
 
-void PathObject::updatePath(const QPainterPath& p)
+void path_updatePath(const QPainterPath& p)
 {
     normalPath = p;
     QPainterPath reversePath = normalPath.toReversed();
@@ -63,7 +63,7 @@ void PathObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void path_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -78,7 +78,7 @@ void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawPath(objectPath());
 }
 
-void PathObject::updateRubber(QPainter* painter)
+void path_updateRubber(QPainter* painter)
 {
     //TODO: Path Rubber Modes
 
@@ -86,7 +86,7 @@ void PathObject::updateRubber(QPainter* painter)
 
 }
 
-void PathObject::vulcanize()
+void path_vulcanize()
 {
     debug_message("PathObject vulcanize()");
     updateRubber();
@@ -98,29 +98,29 @@ void PathObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector PathObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector path_mouseSnapPoint(const EmbVector& mousePoint)
 {
     return scenePos();
 }
 
-std::vector<EmbVector> PathObject::allGripPoints()
+std::vector<EmbVector> path_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << scenePos(); //TODO: loop thru all path Elements and return their points
     return gripPoints;
 }
 
-void PathObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void path_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     //TODO: gripEdit() for PathObject
 }
 
-QPainterPath PathObject::objectCopyPath() const
+QPainterPath path_objectCopyPath() const
 {
     return normalPath;
 }
 
-QPainterPath PathObject::objectSavePath() const
+QPainterPath path_objectSavePath() const
 {
     double s = scale();
     QTransform trans;

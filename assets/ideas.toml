@@ -349,3 +349,54 @@ Action action_list[] = {
     {ACTION_night, "night", "&Night", "Updates the current view using night vision settings."},
     {-1, "END", "END", "END"}
 };
+
+std::vector<LineEdit> geometry_circle_line_edits = {
+    {
+        .label = "Center X",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleCenterX",
+        .user_editable = false
+    },
+    {
+        .label = "Center Y",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleCenterY",
+        .user_editable = false
+    },
+    {
+        .label = "Radius",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleRadius",
+        .user_editable = false
+    },
+    {
+        .label = "Diameter",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleDiameter",
+        .user_editable = false
+    },
+    {
+        .label = "Area",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleArea",
+        .user_editable = false
+    },
+    {
+        .label = "Circumference",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleCircumference",
+        .user_editable = false
+    }
+};
+
+GroupBox geometry_circle = {
+    .title = "Geometry",
+    .line_edits = geometry_circle_line_edits,
+    .obj_type = OBJ_TYPE_CIRCLE
+};

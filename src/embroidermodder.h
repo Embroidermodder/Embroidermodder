@@ -113,6 +113,7 @@ void debug_message(std::string string);
 
 void pattern_view(void);
 void status_bar(void);
+void property_editor(void);
 
 std::string load_string(std::string s);
 std::string store_string(std::string s);

@@ -16,7 +16,7 @@
 #include "embroidermodder.h"
 
 #if 0
-BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
+Base_BaseObject(QGraphicsItem* parent)
 {
     debug_message("BaseObject Constructor()");
 
@@ -28,30 +28,30 @@ BaseObject::BaseObject(QGraphicsItem* parent) : QGraphicsPathItem(parent)
     objID = QDateTime::currentMSecsSinceEpoch();
 }
 
-BaseObject::~BaseObject()
+Base_~BaseObject()
 {
     debug_message("BaseObject Destructor()");
 }
 
-void BaseObject::setObjectColor(const QColor& color)
+void Base_setObjectColor(const QColor& color)
 {
     objPen.setColor(color);
     lwtPen.setColor(color);
 }
 
-void BaseObject::setObjectColorRGB(unsigned int rgb)
+void Base_setObjectColorRGB(unsigned int rgb)
 {
     objPen.setColor(QColor(rgb));
     lwtPen.setColor(QColor(rgb));
 }
 
-void BaseObject::setObjectLineType(PenStyle lineType)
+void Base_setObjectLineType(PenStyle lineType)
 {
     objPen.setStyle(lineType);
     lwtPen.setStyle(lineType);
 }
 
-void BaseObject::setObjectLineWeight(double lineWeight)
+void Base_setObjectLineWeight(double lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
@@ -80,7 +80,7 @@ void BaseObject::setObjectLineWeight(double lineWeight)
     }
 }
 
-EmbVector BaseObject::objectRubberPoint(const std::string& key) const
+EmbVector Base_objectRubberPoint(const std::string& key) const
 {
     if (objRubberPoints.contains(key))
         return objRubberPoints.value(key);
@@ -91,14 +91,14 @@ EmbVector BaseObject::objectRubberPoint(const std::string& key) const
     return EmbVector();
 }
 
-std::string BaseObject::objectRubberText(const std::string& key) const
+std::string Base_objectRubberText(const std::string& key) const
 {
     if (objRubberTexts.contains(key))
         return objRubberTexts.value(key);
     return std::string();
 }
 
-EmbRect BaseObject::boundingRect() const
+EmbRect Base_boundingRect() const
 {
     //If gripped, force this object to be drawn even if it is offscreen
     if (objectRubberMode() == OBJ_RUBBER_GRIP)
@@ -106,7 +106,7 @@ EmbRect BaseObject::boundingRect() const
     return path().boundingRect();
 }
 
-void BaseObject::drawRubberLine(const EmbLine& rubLine, QPainter* painter, const char* colorFromScene)
+void Base_drawRubberLine(const EmbLine& rubLine, QPainter* painter, const char* colorFromScene)
 {
     if (painter) {
         QGraphicsScene* objScene = scene();
@@ -119,7 +119,7 @@ void BaseObject::drawRubberLine(const EmbLine& rubLine, QPainter* painter, const
     }
 }
 
-void BaseObject::realRender(QPainter* painter, const QPainterPath& renderPath)
+void Base_realRender(QPainter* painter, const QPainterPath& renderPath)
 {
     QColor color1 = objectColor();       //lighter color
     QColor color2  = color1.darker(150); //darker color

@@ -140,7 +140,7 @@ parse_command(int argc, char *argv[], std::vector<std::string> files)
 }
 
 GLuint
-gen_gl_texture(uint8_t* data, int w, int h, char fmt)
+gen_gl_texture(uint8_t* data, int w, int h, int wrap)
 {
     GLuint texture;
 
@@ -148,8 +148,8 @@ gen_gl_texture(uint8_t* data, int w, int h, char fmt)
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 #if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
@@ -170,7 +170,7 @@ load_textures(std::vector<std::string> texture_list)
             return 1;
         }
 
-        GLuint texture_id = gen_gl_texture(data, width, height, 0);
+        GLuint texture_id = gen_gl_texture(data, width, height, GL_CLAMP_TO_EDGE);
         stbi_image_free(data);
 
         textures[icon] = texture_id;
@@ -184,7 +184,7 @@ load_textures(std::vector<std::string> texture_list)
             return 1;
         }
 
-        GLuint texture_id = gen_gl_texture(data, width, height, 0);
+        GLuint texture_id = gen_gl_texture(data, width, height, GL_REPEAT);
         stbi_image_free(data);
 
         textures["texture-spirals"] = texture_id;
@@ -254,6 +254,29 @@ load_toolbar(std::vector<std::string> toolbar)
 }
 
 void
+view_tab(View view)
+{
+    if (ImGui::BeginTabItem(view.filename.c_str())) {
+        ImGui::Columns(3, "Undo History");
+        ImGui::SetColumnWidth(-1, 100);
+        ImGui::BeginChild("Undo History");
+        ImGui::Text("Undo History");
+        for (std::string undo_item : view.undo_history) {
+            ImGui::Text(undo_item.c_str());
+        }
+        ImGui::EndChild();
+        ImGui::NextColumn();
+        ImGui::SetColumnWidth(-1, 600);
+        pattern_view();
+        ImGui::NextColumn();
+        ImGui::SetColumnWidth(-1, 200);
+        property_editor();
+        ImGui::Columns();
+        ImGui::EndTabItem();
+    }
+}
+
+void
 main_widget(void)
 {
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -293,20 +316,7 @@ main_widget(void)
     if (views.size() > 0) {
         if (ImGui:: BeginTabBar("Tab Bar")) {
             for (View view : views) {
-                if (ImGui::BeginTabItem(view.filename.c_str())) {
-                    ImGui::Columns(2, "Undo History");
-                    ImGui::SetColumnWidth(-1, 100);
-                    ImGui::BeginChild("Undo History");
-                    ImGui::Text("Undo History");
-                    for (std::string undo_item : view.undo_history) {
-                        ImGui::Text(undo_item.c_str());
-                    }
-                    ImGui::EndChild();
-                    ImGui::NextColumn();
-                    pattern_view();
-                    ImGui::Columns();
-                    ImGui::EndTabItem();
-                }
+                view_tab(view);
             }
             if (show_editor) {
                 if (ImGui::BeginTabItem("Text Editor")) {
@@ -319,7 +329,6 @@ main_widget(void)
     }
     else {
         ImVec2 size = {500, 300};
-        ImGui::Image((void*)(intptr_t)textures["texture-spirals"], size);
         ImGui::Image((void*)(intptr_t)textures["texture-spirals"], size);
     }
 
@@ -422,58 +431,6 @@ main(int argc, char* argv[])
 }
 
 #if 0
-std::vector<LineEdit> geometry_circle_line_edits = {
-    {
-        .label = "Center X",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleCenterX",
-        .user_editable = false
-    },
-    {
-        .label = "Center Y",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleCenterY",
-        .user_editable = false
-    },
-    {
-        .label = "Radius",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleRadius",
-        .user_editable = false
-    },
-    {
-        .label = "Diameter",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleDiameter",
-        .user_editable = false
-    },
-    {
-        .label = "Area",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleArea",
-        .user_editable = false
-    },
-    {
-        .label = "Circumference",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleCircumference",
-        .user_editable = false
-    }
-};
-
-GroupBox geometry_circle = {
-    .title = "Geometry",
-    .line_edits = geometry_circle_line_edits,
-    .obj_type = OBJ_TYPE_CIRCLE
-};
-
-
 double
 random_uniform(void)
 {
@@ -522,30 +479,26 @@ willOverflowInt32(int64_t a, int64_t b)
 }
 
 /* Whenever the code happens across a todo call,
- * write it in a log file. */
+ * write it in a log file.
+ */
 void
 todo(char *msg, int action)
 {
     if (debug_mode) {
-        FILE *f;
-        f = fopen("todo.txt", "w");
-        fseek(f, 0, SEEK_END);
-        fprintf(f, "%s: %d\n", msg, action);
-        fclose(f);
+        std::ofstream f("todo.txt", std::ios_base::app);
+        f << msg << " " << action << std::endl;
     }
 }
 
 /* Whenever the code happens across a todo call,
- * write it in a log file. */
+ * write it in a log file.
+ */
 void
 error(char *msg, int action)
 {
     if (debug_mode) {
-        FILE *f;
-        f = fopen("error.txt", "w");
-        fseek(f, 0, SEEK_END);
-        fprintf(f, "%s: %d\n", msg, action);
-        fclose(f);
+        std::ofstream f("error.txt", std::ios_base::app);
+        f << msg << " " << action << std::endl;
     }
 }
 
@@ -622,19 +575,7 @@ valid_rgb(int red, int green, int blue)
     return 1;
 }
 
-FILE *
-load_asset(std::string fname, char *mode)
-{
-    std::string asset = assets_directory + os_seperator + fname;
-    FILE *f = fopen((char*)asset.data(), mode);
-    if (!f) {
-        std::cout << "Failed to open asset file:"
-        << " could not open file " << asset << " in mode." << std::endl;
-    }
-    return f;
-}
-
-bool Application::event(QEvent *event)
+bool Application_event(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::FileOpen:
@@ -677,58 +618,6 @@ static void version()
     exitApp = true;
 }
 
-int main(int argc, char* argv[])
-{
-#if defined(Q_OS_MAC)
-    Application app(argc, argv);
-#else
-    QApplication app(argc, argv);
-#endif
-    app.setApplicationName(_appName_);
-    app.setApplicationVersion(_appVer_);
-
-    std::stringList filesToOpen;
-
-    for(int i = 1; i < argc; i++)
-    {
-        if     (!strcmp(argv[i], "-d") || !strcmp(argv[i], "--debug")  ) {  }
-        else if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")   ) { usage(); }
-        else if (!strcmp(argv[i], "-v") || !strcmp(argv[i], "--version")) { version(); }
-        else if (QFile::exists(argv[i]) && MainWindow::validFileFormat(argv[i]))
-        {
-            filesToOpen << argv[i];
-        }
-        else
-        {
-            usage();
-        }
-    }
-
-    if (exitApp)
-        return 1;
-
-    MainWindow* mainWin = new MainWindow();
-#if defined(Q_OS_MAC)
-    app.setMainWin(mainWin);
-#endif
-
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), mainWin, SLOT(quit()));
-
-    mainWin->setWindowTitle(app.applicationName() + " " + app.applicationVersion());
-    mainWin->show();
-
-    //NOTE: If openFilesSelected() is called from within the mainWin constructor, slot commands wont work and the window menu will be screwed
-    if (!filesToOpen.isEmpty())
-        mainWin->openFilesSelected(filesToOpen);
-
-    return app.exec();
-}
-
-#endif
-
-
-#if 0
-
 void init_mdi_area(int i)
 {
     mdi_area[i].useLogo = false;
@@ -744,7 +633,7 @@ void mdi_area_double_click(void)
     mainWin->openFile();
 }
 
-void MdiArea::paintEvent(QPaintEvent* /*e*/)
+void MdiArea_paintEvent(QPaintEvent* /*e*/)
 {
     QWidget* vport = viewport();
     QRect rect = vport->rect();
@@ -773,19 +662,19 @@ void MdiArea::paintEvent(QPaintEvent* /*e*/)
     }
 }
 
-void MdiArea::cascade()
+void MdiArea_cascade()
 {
     cascadeSubWindows();
     zoomExtentsAllSubWindows();
 }
 
-void MdiArea::tile()
+void MdiArea_tile()
 {
     tileSubWindows();
     zoomExtentsAllSubWindows();
 }
 
-void MdiArea::zoomExtentsAllSubWindows()
+void MdiArea_zoomExtentsAllSubWindows()
 {
     for (QMdiSubWindow* window : subWindowList()) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(window);
@@ -799,7 +688,7 @@ void MdiArea::zoomExtentsAllSubWindows()
     }
 }
 
-MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
+void init_MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags)
 {
     mainWin = mw;
     mdiArea = parent;
@@ -1120,21 +1009,61 @@ void MdiWindow::promptInputNext()
 
 void MdiWindow::promptInputPrevNext(bool prev)
 {
-    if (promptInputList.isEmpty())
-    {
-        if (prev) QMessageBox::critical(this, translate("Prompt Previous Error"), translate("The prompt input is empty! Please report this as a bug!"));
-        else     QMessageBox::critical(this, translate("Prompt Next Error"),     translate("The prompt input is empty! Please report this as a bug!"));
-        debug_message("The prompt input is empty! Please report this as a bug!");
+    if (promptInputList.isEmpty()) {
+        if (prev) {
+            critical_messagebox(translate("Prompt Previous Error"), translate("The prompt input is empty! Please report this as a bug!"));
+        }
+        else {
+            critical_messagebox(translate("Prompt Next Error"), translate("The prompt input is empty! Please report this as a bug!"));
+            debug_message("The prompt input is empty! Please report this as a bug!");
+        }
     }
-    else
-    {
-        if (prev) promptInputNum--;
-        else     promptInputNum++;
+    else {
+        if (prev) {
+            promptInputNum--;
+        }
+        else {
+            promptInputNum++;
+        }
         int maxNum = promptInputList.size();
-        if     (promptInputNum < 0)       { promptInputNum = 0;      mainWin->prompt->setCurrentText(""); }
-        else if (promptInputNum >= maxNum) { promptInputNum = maxNum; mainWin->prompt->setCurrentText(""); }
-        else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
+        if (promptInputNum < 0) {
+            promptInputNum = 0;
+            mainWin->prompt->setCurrentText("");
+        }
+        else if (promptInputNum >= maxNum) {
+            promptInputNum = maxNum;
+            mainWin->prompt->setCurrentText("");
+        }
+        else {
+            mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum));
+        }
     }
+}
+
+void PreviewDialog(QWidget* parent,
+                   std::string& caption,
+                   std::string& dir,
+                   std::string& filter) : QFileDialog(parent, caption, dir, filter)
+{
+    debug_message("PreviewDialog Constructor");
+
+    //TODO: get actual thumbnail image from file, lets also use a size of 128x128 for now...
+    //TODO: make thumbnail size adjustable thru settings dialog
+    imgWidget = new ImageWidget("icons/default/nopreview.png", this);
+
+    QLayout* lay = layout();
+    if (qobject_cast<QGridLayout*>(lay))
+    {
+        QGridLayout* grid = qobject_cast<QGridLayout*>(lay);
+        grid->addWidget(imgWidget, 0, grid->columnCount(), grid->rowCount(), 1);
+    }
+
+    setModal(true);
+    setOption(QFileDialog::DontUseNativeDialog);
+    setViewMode(QFileDialog::Detail);
+    setFileMode(QFileDialog::ExistingFiles);
+
+    //TODO: connect the currentChanged signal to update the preview imgWidget.
 }
 
 #endif

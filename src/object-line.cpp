@@ -137,7 +137,7 @@ prompt(std::string str)
     }
 }
 
-void LineObject::init(EmbLine line_in, unsigned int rgb, PenStyle lineType)
+void line_init(EmbLine line_in, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Line");
@@ -155,7 +155,7 @@ void LineObject::init(EmbLine line_in, unsigned int rgb, PenStyle lineType)
     setPen(objPen);
 }
 
-void LineObject::setObjectEndPoint1(EmbVector point1)
+void line_setObjectEndPoint1(EmbVector point1)
 {
     double dx = line.start.x - point1.x;
     double dy = line.start.y - point1.y;
@@ -165,7 +165,7 @@ void LineObject::setObjectEndPoint1(EmbVector point1)
     setPos(point1);
 }
 
-void LineObject::setObjectEndPoint2(EmbVector point1)
+void line_setObjectEndPoint2(EmbVector point1)
 {
     double dx = line.end.x - point1.x;
     double dy = line.end.y - point1.y;
@@ -175,7 +175,7 @@ void LineObject::setObjectEndPoint2(EmbVector point1)
     setPos(point1);
 }
 
-EmbVector LineObject::objectEndPoint2() const
+EmbVector line_objectEndPoint2() const
 {
     EmbLine lyne = line();
     double alpha = radians(rotation());
@@ -187,7 +187,7 @@ EmbVector LineObject::objectEndPoint2() const
     return scenePos() + rotEnd;
 }
 
-EmbVector LineObject::objectMidPoint() const
+EmbVector line_objectMidPoint() const
 {
     EmbLine lyne = line();
     EmbVector mp = lyne.pointAt(0.5) * scale();
@@ -197,12 +197,12 @@ EmbVector LineObject::objectMidPoint() const
     return scenePos() + rotMid;
 }
 
-double LineObject::objectAngle() const
+double line_objectAngle() const
 {
     return std::fmodf(line().angle() - rotation(), 360.0);
 }
 
-void LineObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void line_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -225,7 +225,7 @@ void LineObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWid
     }
 }
 
-void LineObject::updateRubber(QPainter* painter)
+void line_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_LINE) {
@@ -250,7 +250,7 @@ void LineObject::updateRubber(QPainter* painter)
     }
 }
 
-void LineObject::vulcanize()
+void line_vulcanize()
 {
     debug_message("LineObject vulcanize()");
     updateRubber();
@@ -259,7 +259,7 @@ void LineObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector LineObject::mouseSnapPoint(EmbVector& mousePoint)
+EmbVector line_mouseSnapPoint(EmbVector& mousePoint)
 {
     EmbVector endPoint1 = objectEndPoint1();
     EmbVector endPoint2 = objectEndPoint2();
@@ -278,21 +278,21 @@ EmbVector LineObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> LineObject::allGripPoints()
+std::vector<EmbVector> line_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2() << objectMidPoint();
     return gripPoints;
 }
 
-void LineObject::gripEdit(EmbVector& before, EmbVector& after)
+void line_gripEdit(EmbVector& before, EmbVector& after)
 {
     if     (before == objectEndPoint1()) { setObjectEndPoint1(after); }
     else if (before == objectEndPoint2()) { setObjectEndPoint2(after); }
     else if (before == objectMidPoint())  { EmbVector delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-QPainterPath LineObject::objectSavePath() const
+QPainterPath line_objectSavePath() const
 {
     QPainterPath path;
     path.lineTo(objectDeltaX(), objectDeltaY());

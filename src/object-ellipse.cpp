@@ -334,13 +334,13 @@ function prompt(str)
     }
 }
 
-EllipseObject::EllipseObject(double centerX, double centerY, double width, double height, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+ellipse_EllipseObject(double centerX, double centerY, double width, double height, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+ellipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("EllipseObject Constructor()");
     if (obj) {
@@ -349,7 +349,7 @@ EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseOb
     }
 }
 
-void EllipseObject::init(double centerX, double centerY, double width, double height, unsigned int rgb, Qt::PenStyle lineType)
+void ellipse_init(double centerX, double centerY, double width, double height, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Ellipse");
@@ -368,7 +368,7 @@ void EllipseObject::init(double centerX, double centerY, double width, double he
     updatePath();
 }
 
-void EllipseObject::setObjectSize(double width, double height)
+void ellipse_setObjectSize(double width, double height)
 {
     EmbRect elRect = rect();
     elRect.setWidth(width);
@@ -377,37 +377,37 @@ void EllipseObject::setObjectSize(double width, double height)
     setRect(elRect);
 }
 
-void EllipseObject::setObjectCenter(const EmbVector& center)
+void ellipse_setObjectCenter(const EmbVector& center)
 {
     setObjectCenter(center.x(), center.y());
 }
 
-void EllipseObject::setObjectCenter(double centerX, double centerY)
+void ellipse_setObjectCenter(double centerX, double centerY)
 {
     setPos(centerX, centerY);
 }
 
-void EllipseObject::setObjectCenterX(double centerX)
+void ellipse_setObjectCenterX(double centerX)
 {
     setX(centerX);
 }
 
-void EllipseObject::setObjectCenterY(double centerY)
+void ellipse_setObjectCenterY(double centerY)
 {
     setY(centerY);
 }
 
-void EllipseObject::setObjectRadiusMajor(double radius)
+void ellipse_setObjectRadiusMajor(double radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
-void EllipseObject::setObjectRadiusMinor(double radius)
+void ellipse_setObjectRadiusMinor(double radius)
 {
     setObjectDiameterMinor(radius*2.0);
 }
 
-void EllipseObject::setObjectDiameterMajor(double diameter)
+void ellipse_setObjectDiameterMajor(double diameter)
 {
     EmbRect elRect = rect();
     if (elRect.width() > elRect.height())
@@ -418,7 +418,7 @@ void EllipseObject::setObjectDiameterMajor(double diameter)
     setRect(elRect);
 }
 
-void EllipseObject::setObjectDiameterMinor(double diameter)
+void ellipse_setObjectDiameterMinor(double diameter)
 {
     EmbRect elRect = rect();
     if (elRect.width() < elRect.height())
@@ -429,7 +429,7 @@ void EllipseObject::setObjectDiameterMinor(double diameter)
     setRect(elRect);
 }
 
-EmbVector EllipseObject::objectQuadrant0() const
+EmbVector ellipse_objectQuadrant0() const
 {
     double halfW = objectWidth()/2.0;
     double rot = radians(rotation());
@@ -438,7 +438,7 @@ EmbVector EllipseObject::objectQuadrant0() const
     return objectCenter() + EmbVector(x,y);
 }
 
-EmbVector EllipseObject::objectQuadrant90() const
+EmbVector ellipse_objectQuadrant90() const
 {
     double halfH = objectHeight()/2.0;
     double rot = radians(rotation()+90.0);
@@ -447,7 +447,7 @@ EmbVector EllipseObject::objectQuadrant90() const
     return objectCenter() + EmbVector(x,y);
 }
 
-EmbVector EllipseObject::objectQuadrant180() const
+EmbVector ellipse_objectQuadrant180() const
 {
     double halfW = objectWidth()/2.0;
     double rot = radians(rotation()+180.0);
@@ -456,7 +456,7 @@ EmbVector EllipseObject::objectQuadrant180() const
     return objectCenter() + EmbVector(x,y);
 }
 
-EmbVector EllipseObject::objectQuadrant270() const
+EmbVector ellipse_objectQuadrant270() const
 {
     double halfH = objectHeight()/2.0;
     double rot = radians(rotation()+270.0);
@@ -465,7 +465,7 @@ EmbVector EllipseObject::objectQuadrant270() const
     return objectCenter() + EmbVector(x,y);
 }
 
-void EllipseObject::updatePath()
+void ellipse_updatePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -476,7 +476,7 @@ void EllipseObject::updatePath()
     setObjectPath(path);
 }
 
-void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void ellipse_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -491,7 +491,7 @@ void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     painter->drawEllipse(rect());
 }
 
-void EllipseObject::updateRubber(QPainter* painter)
+void ellipse_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
@@ -575,7 +575,7 @@ void EllipseObject::updateRubber(QPainter* painter)
     }
 }
 
-void EllipseObject::vulcanize()
+void ellipse_vulcanize()
 {
     debug_message("EllipseObject vulcanize()");
     updateRubber();
@@ -584,7 +584,7 @@ void EllipseObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector EllipseObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector ellipse_mouseSnapPoint(const EmbVector& mousePoint)
 {
     EmbVector center  = objectCenter();
     EmbVector quad0   = objectQuadrant0();
@@ -609,19 +609,19 @@ EmbVector EllipseObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> EllipseObject::allGripPoints()
+std::vector<EmbVector> ellipse_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
 }
 
-void EllipseObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void ellipse_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     //TODO: gripEdit() for EllipseObject
 }
 
-QPainterPath EllipseObject::objectSavePath() const
+QPainterPath ellipse_objectSavePath() const
 {
     QPainterPath path;
     EmbRect r = rect();

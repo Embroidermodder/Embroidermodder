@@ -16,13 +16,13 @@
 #include "embroidermodder.h"
 
 #if 0
-TextSingleObject::TextSingleObject(const std::string& str, double x, double y, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+text_single_TextSingleObject(const std::string& str, double x, double y, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+text_single_TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("TextSingleObject Constructor()");
     if (obj) {
@@ -37,12 +37,12 @@ TextSingleObject::TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
     }
 }
 
-TextSingleObject::~TextSingleObject()
+text_single_~TextSingleObject()
 {
     debug_message("TextSingleObject Destructor()");
 }
 
-void TextSingleObject::init(const std::string& str, double x, double y, unsigned int rgb, Qt::PenStyle lineType)
+void text_single_init(const std::string& str, double x, double y, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Single Line Text");
@@ -62,7 +62,7 @@ void TextSingleObject::init(const std::string& str, double x, double y, unsigned
     setPen(objPen);
 }
 
-std::stringList TextSingleObject::objectTextJustifyList() const
+std::stringList text_single_objectTextJustifyList() const
 {
     std::stringList justifyList;
     justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
@@ -72,7 +72,7 @@ std::stringList TextSingleObject::objectTextJustifyList() const
     return justifyList;
 }
 
-void TextSingleObject::setObjectText(const std::string& str)
+void text_single_setObjectText(const std::string& str)
 {
     objText = str;
     QPainterPath textPath;
@@ -162,13 +162,13 @@ void TextSingleObject::setObjectText(const std::string& str)
     setObjectPath(gripPath);
 }
 
-void TextSingleObject::setObjectTextFont(const std::string& font)
+void text_single_setObjectTextFont(const std::string& font)
 {
     objTextFont = font;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextJustify(const std::string& justify)
+void text_single_setObjectTextJustify(const std::string& justify)
 {
     //Verify the string is a valid option
     if     (justify == "Left")          { objTextJustify = justify; }
@@ -190,13 +190,13 @@ void TextSingleObject::setObjectTextJustify(const std::string& justify)
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextSize(double size)
+void text_single_setObjectTextSize(double size)
 {
     objTextSize = size;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
+void text_single_setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over)
 {
     objTextBold = bold;
     objTextItalic = italic;
@@ -206,49 +206,49 @@ void TextSingleObject::setObjectTextStyle(bool bold, bool italic, bool under, bo
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextBold(bool val)
+void text_single_setObjectTextBold(bool val)
 {
     objTextBold = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextItalic(bool val)
+void text_single_setObjectTextItalic(bool val)
 {
     objTextItalic = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextUnderline(bool val)
+void text_single_setObjectTextUnderline(bool val)
 {
     objTextUnderline = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextStrikeOut(bool val)
+void text_single_setObjectTextStrikeOut(bool val)
 {
     objTextStrikeOut = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextOverline(bool val)
+void text_single_setObjectTextOverline(bool val)
 {
     objTextOverline = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextBackward(bool val)
+void text_single_setObjectTextBackward(bool val)
 {
     objTextBackward = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextUpsideDown(bool val)
+void text_single_setObjectTextUpsideDown(bool val)
 {
     objTextUpsideDown = val;
     setObjectText(objText);
 }
 
-void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void text_single_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -263,7 +263,7 @@ void TextSingleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* 
     painter->drawPath(objTextPath);
 }
 
-void TextSingleObject::updateRubber(QPainter* painter)
+void text_single_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_TEXTSINGLE)
@@ -292,7 +292,7 @@ void TextSingleObject::updateRubber(QPainter* painter)
     }
 }
 
-void TextSingleObject::vulcanize()
+void text_single_vulcanize()
 {
     debug_message("TextSingleObject vulcanize()");
     updateRubber();
@@ -301,24 +301,24 @@ void TextSingleObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector TextSingleObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector text_single_mouseSnapPoint(const EmbVector& mousePoint)
 {
     return scenePos();
 }
 
-std::vector<EmbVector> TextSingleObject::allGripPoints()
+std::vector<EmbVector> text_single_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
 }
 
-void TextSingleObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void text_single_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     if (before == scenePos()) { EmbVector delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-std::vector<QPainterPath> TextSingleObject::subPathList() const
+std::vector<QPainterPath> text_single_subPathList() const
 {
     double s = scale();
     QTransform trans;

@@ -16,13 +16,13 @@
 #include "embroidermodder.h"
 
 #if 0
-PolylineObject::PolylineObject(double x, double y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+polyline_PolylineObject(double x, double y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PolylineObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+polyline_PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("PolylineObject Constructor()");
     if (obj)
@@ -33,12 +33,12 @@ PolylineObject::PolylineObject(PolylineObject* obj, QGraphicsItem* parent) : Bas
     }
 }
 
-PolylineObject::~PolylineObject()
+polyline_~PolylineObject()
 {
     debug_message("PolylineObject Destructor()");
 }
 
-void PolylineObject::init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
+void polyline_init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Polyline");
@@ -57,7 +57,7 @@ void PolylineObject::init(double x, double y, const QPainterPath& p, unsigned in
     setPen(objectPen());
 }
 
-void PolylineObject::updatePath(const QPainterPath& p)
+void polyline_updatePath(const QPainterPath& p)
 {
     normalPath = p;
     QPainterPath reversePath = normalPath.toReversed();
@@ -65,7 +65,7 @@ void PolylineObject::updatePath(const QPainterPath& p)
     setObjectPath(reversePath);
 }
 
-void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void polyline_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -82,7 +82,7 @@ void PolylineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* op
     if (objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, normalPath); }
 }
 
-void PolylineObject::updateRubber(QPainter* painter)
+void polyline_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_POLYLINE)
@@ -148,7 +148,7 @@ void PolylineObject::updateRubber(QPainter* painter)
     }
 }
 
-void PolylineObject::vulcanize()
+void polyline_vulcanize()
 {
     debug_message("PolylineObject vulcanize()");
     updateRubber();
@@ -160,7 +160,7 @@ void PolylineObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector PolylineObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector polyline_mouseSnapPoint(const EmbVector& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
@@ -180,7 +180,7 @@ EmbVector PolylineObject::mouseSnapPoint(const EmbVector& mousePoint)
     return closestPoint;
 }
 
-std::vector<EmbVector> PolylineObject::allGripPoints()
+std::vector<EmbVector> polyline_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     QPainterPath::Element element;
@@ -192,7 +192,7 @@ std::vector<EmbVector> PolylineObject::allGripPoints()
     return gripPoints;
 }
 
-int PolylineObject::findIndex(const EmbVector& point)
+int polyline_findIndex(const EmbVector& point)
 {
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
@@ -206,7 +206,7 @@ int PolylineObject::findIndex(const EmbVector& point)
     return -1;
 }
 
-void PolylineObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void polyline_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     gripIndex = findIndex(before);
     if (gripIndex == -1) return;
@@ -216,12 +216,12 @@ void PolylineObject::gripEdit(const EmbVector& before, const EmbVector& after)
     gripIndex = -1;
 }
 
-QPainterPath PolylineObject::objectCopyPath() const
+QPainterPath polyline_objectCopyPath() const
 {
     return normalPath;
 }
 
-QPainterPath PolylineObject::objectSavePath() const
+QPainterPath polyline_objectSavePath() const
 {
     double s = scale();
     QTransform trans;

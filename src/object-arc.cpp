@@ -16,7 +16,7 @@
 #include "embroidermodder.h"
 
 #if 0
-void ArcObject::init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
+void arc_init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Arc");
@@ -33,7 +33,7 @@ void ArcObject::init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
     setPen(objPen);
 }
 
-void ArcObject::calculateArcData(EmbArc arc)
+void calculate_arc_data(EmbArc arc)
 {
     EmbVector center;
     getArcCenter(arc, &center);
@@ -51,7 +51,7 @@ void ArcObject::calculateArcData(EmbArc arc)
     setScale(1);
 }
 
-void ArcObject::updateArcRect(double radius)
+void update_arc_rect(double radius)
 {
     EmbRect arcRect;
     arcRect.setWidth(radius*2.0);
@@ -60,12 +60,12 @@ void ArcObject::updateArcRect(double radius)
     setRect(arcRect);
 }
 
-void ArcObject::setObjectCenter(EmbVector point)
+void set_arc_center(EmbVector point)
 {
     setPos(point);
 }
 
-void ArcObject::setObjectRadius(double radius)
+void set_arc_radius(double radius)
 {
     double rad;
     if (radius <= 0) {
@@ -89,45 +89,45 @@ void ArcObject::setObjectRadius(double radius)
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
 }
 
-void ArcObject::setObjectStartAngle(double angle)
+void set_arc_start_angle(double angle)
 {
     //TODO: ArcObject setObjectStartAngle
 }
 
-void ArcObject::setObjectEndAngle(double angle)
+void set_arc_end_angle(double angle)
 {
     //TODO: ArcObject setObjectEndAngle
 }
 
-void ArcObject::setObjectStartPoint(EmbVector point)
+void set_arc_start_point(EmbVector point)
 {
     arc.start = point;
     calculateArcData(arc);
 }
 
-void ArcObject::setObjectMidPoint(EmbVector point)
+void set_arc_mid_point(EmbVector point)
 {
     arc.mid = point;
     calculateArcData(arc);
 }
 
-void ArcObject::setObjectEndPoint(EmbVector point)
+void set_object_end_point(EmbVector point)
 {
     arc.end = point;
     calculateArcData(arc);
 }
 
-double ArcObject::objectStartAngle() const
+double arc_start_angle()
 {
     return std::fmodf(EmbLine(scenePos(), objectStartPoint()).angle(), 360.0);;
 }
 
-double ArcObject::objectEndAngle() const
+double arc_end_angle()
 {
     return std::fmodf(EmbLine(scenePos(), objectEndPoint()).angle(), 360.0);
 }
 
-EmbVector ArcObject::objectStartPoint() const
+EmbVector arc_startPoint() const
 {
     double alpha = radians(rotation());
     EmbVector position = embVector_scale(arc.start, scale());
@@ -136,7 +136,7 @@ EmbVector ArcObject::objectStartPoint() const
     return scenePos() + rot;
 }
 
-EmbVector ArcObject::objectMidPoint() const
+EmbVector Arc_MidPoint() const
 {
     double alpha = radians(rotation());
     EmbVector position = embVector_scale(arc.mid, scale());
@@ -145,7 +145,7 @@ EmbVector ArcObject::objectMidPoint() const
     return scenePos() + rot;
 }
 
-EmbVector ArcObject::objectEndPoint() const
+EmbVector Arc_EndPoint() const
 {
     double alpha = radians(rotation());
     EmbVector position = embVector_scale(arc.end, scale());
@@ -154,7 +154,7 @@ EmbVector ArcObject::objectEndPoint() const
     return scenePos() + rot;
 }
 
-double ArcObject::objectArea() const
+double Arc_Area() const
 {
     //Area of a circular segment
     double r = objectRadius();
@@ -162,17 +162,17 @@ double ArcObject::objectArea() const
     return ((r*r)/2)*(theta - sin(theta));
 }
 
-double ArcObject::objectArcLength() const
+double Arc_ArcLength() const
 {
     return radians(objectIncludedAngle())*objectRadius();
 }
 
-double ArcObject::objectChord() const
+double Arc_Chord() const
 {
     return embVector_distance(arc.start, arc.end);
 }
 
-double ArcObject::objectIncludedAngle() const
+double Arc_IncludedAngle() const
 {
     double chord = objectChord();
     double rad = objectRadius();
@@ -186,7 +186,7 @@ double ArcObject::objectIncludedAngle() const
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
-bool ArcObject::objectClockwise() const
+bool Arc_Clockwise() const
 {
     // NOTE: Y values are inverted here on purpose
     EmbArc arc2 = arc;
@@ -197,7 +197,7 @@ bool ArcObject::objectClockwise() const
     return embArc_clockwise(arc2);
 }
 
-void ArcObject::updatePath()
+void Arc_updatePath()
 {
     double startAngle = (objectStartAngle() + rotation());
     double spanAngle = objectIncludedAngle();
@@ -214,7 +214,7 @@ void ArcObject::updatePath()
     setObjectPath(path);
 }
 
-void ArcObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void Arc_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -237,7 +237,7 @@ void ArcObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidg
     painter->drawArc(paintRect, startAngle, spanAngle);
 }
 
-void ArcObject::updateRubber(QPainter* painter)
+void Arc_updateRubber(QPainter* painter)
 {
     //TODO: Arc Rubber Modes
 
@@ -245,7 +245,7 @@ void ArcObject::updateRubber(QPainter* painter)
 
 }
 
-void ArcObject::vulcanize()
+void Arc_vulcanize()
 {
     debug_message("ArcObject vulcanize()");
     updateRubber();
@@ -254,7 +254,7 @@ void ArcObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector ArcObject::mouseSnapPoint(EmbVector& mousePoint)
+EmbVector Arc_mouseSnapPoint(EmbVector& mousePoint)
 {
     EmbVector center = objectCenter();
     EmbVector start  = objectStartPoint();
@@ -276,14 +276,14 @@ EmbVector ArcObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> ArcObject::allGripPoints()
+std::vector<EmbVector> Arc_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectCenter() << objectStartPoint() << objectMidPoint() << objectEndPoint();
     return gripPoints;
 }
 
-void ArcObject::gripEdit(EmbVector& before, EmbVector& after)
+void Arc_gripEdit(EmbVector& before, EmbVector& after)
 {
     //TODO: gripEdit() for ArcObject
 }

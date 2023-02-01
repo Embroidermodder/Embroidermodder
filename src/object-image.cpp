@@ -34,14 +34,14 @@ void image_init(EmbRect rect, unsigned int rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-void ImageObject::setObjectRect(double x, double y, double w, double h)
+void image_setObjectRect(double x, double y, double w, double h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
     updatePath();
 }
 
-EmbVector ImageObject::objectTopLeft() const
+EmbVector image_objectTopLeft() const
 {
     double alpha = radians(rotation());
     EmbVector tl = rect().topRight() * scale();
@@ -49,7 +49,7 @@ EmbVector ImageObject::objectTopLeft() const
     return scenePos() + ptlrot;
 }
 
-EmbVector ImageObject::objectTopRight() const
+EmbVector image_objectTopRight() const
 {
     double alpha = radians(rotation());
     EmbVector tr = rect().topRight() * scale();
@@ -57,7 +57,7 @@ EmbVector ImageObject::objectTopRight() const
     return scenePos() + ptrrot;
 }
 
-EmbVector ImageObject::objectBottomLeft() const
+EmbVector image_objectBottomLeft() const
 {
     double alpha = radians(rotation());
     EmbVector bl = rect().topRight() * scale();
@@ -65,7 +65,7 @@ EmbVector ImageObject::objectBottomLeft() const
     return scenePos() + pblrot;
 }
 
-EmbVector ImageObject::objectBottomRight() const
+EmbVector image_objectBottomRight() const
 {
     double alpha = radians(rotation());
     EmbVector br = rect().topRight() * scale();
@@ -73,7 +73,7 @@ EmbVector ImageObject::objectBottomRight() const
     return scenePos() + pbrrot;
 }
 
-void ImageObject::updatePath()
+void image_updatePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -90,7 +90,7 @@ void ImageObject::updatePath()
     setObjectPath(path);
 }
 
-void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void image_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -105,7 +105,7 @@ void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->drawRect(rect());
 }
 
-void ImageObject::updateRubber(QPainter* painter)
+void image_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_IMAGE)
@@ -125,7 +125,7 @@ void ImageObject::updateRubber(QPainter* painter)
     }
 }
 
-void ImageObject::vulcanize()
+void image_vulcanize()
 {
     debug_message("ImageObject vulcanize()");
     updateRubber();
@@ -134,7 +134,7 @@ void ImageObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector ImageObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector image_mouseSnapPoint(const EmbVector& mousePoint)
 {
     EmbVector ptl = objectTopLeft();     //Top Left Corner QSnap
     EmbVector ptr = objectTopRight();    //Top Right Corner QSnap
@@ -156,14 +156,14 @@ EmbVector ImageObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> ImageObject::allGripPoints()
+std::vector<EmbVector> image_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
 }
 
-void ImageObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void image_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     //TODO: gripEdit() for ImageObject
 }

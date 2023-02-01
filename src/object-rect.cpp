@@ -16,7 +16,7 @@
 #include "embroidermodder.h"
 
 #if 0
-void RectObject::init(EmbRect rect, unsigned int rgb, PenStyle lineType)
+void rect_init(EmbRect rect, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Rectangle");
@@ -33,14 +33,14 @@ void RectObject::init(EmbRect rect, unsigned int rgb, PenStyle lineType)
     setPen(objectPen());
 }
 
-void RectObject::setObjectRect(double x, double y, double w, double h)
+void rect_setObjectRect(double x, double y, double w, double h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
     updatePath();
 }
 
-EmbVector RectObject::objectTopLeft() const
+EmbVector rect_objectTopLeft() const
 {
     double alpha = radians(rotation());
     EmbVector tl = rect().topLeft() * scale();
@@ -48,7 +48,7 @@ EmbVector RectObject::objectTopLeft() const
     return scenePos() + ptlrot;
 }
 
-EmbVector RectObject::objectTopRight() const
+EmbVector rect_objectTopRight() const
 {
     double alpha = radians(rotation());
     EmbVector tr = rect().topRight() * scale();
@@ -56,7 +56,7 @@ EmbVector RectObject::objectTopRight() const
     return scenePos() + ptrrot;
 }
 
-EmbVector RectObject::objectBottomLeft() const
+EmbVector rect_objectBottomLeft() const
 {
     double alpha = radians(rotation());
     EmbVector bl = rect().bottomLeft() * scale();
@@ -64,7 +64,7 @@ EmbVector RectObject::objectBottomLeft() const
     return scenePos() + pblrot;
 }
 
-EmbVector RectObject::objectBottomRight() const
+EmbVector rect_objectBottomRight() const
 {
     double alpha = radians(rotation());
     EmbVector br = rect().bottomRight() * scale();
@@ -72,7 +72,7 @@ EmbVector RectObject::objectBottomRight() const
     return scenePos() + pbrrot;
 }
 
-void RectObject::updatePath()
+void rect_updatePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -89,7 +89,7 @@ void RectObject::updatePath()
     setObjectPath(path);
 }
 
-void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void rect_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -104,7 +104,7 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawRect(rect());
 }
 
-void RectObject::updateRubber(QPainter* painter)
+void rect_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_RECTANGLE)
@@ -146,7 +146,7 @@ void RectObject::updateRubber(QPainter* painter)
     }
 }
 
-void RectObject::vulcanize()
+void rect_vulcanize()
 {
     debug_message("RectObject vulcanize()");
     updateRubber();
@@ -155,7 +155,7 @@ void RectObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector RectObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector rect_mouseSnapPoint(const EmbVector& mousePoint)
 {
     EmbVector ptl = objectTopLeft();     //Top Left Corner QSnap
     EmbVector ptr = objectTopRight();    //Top Right Corner QSnap
@@ -177,14 +177,14 @@ EmbVector RectObject::mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> RectObject::allGripPoints()
+std::vector<EmbVector> rect_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
 }
 
-void RectObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void rect_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     EmbVector delta = after-before;
     if     (before == objectTopLeft())     { setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()); }
@@ -193,7 +193,7 @@ void RectObject::gripEdit(const EmbVector& before, const EmbVector& after)
     else if (before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
 }
 
-QPainterPath RectObject::objectSavePath() const
+QPainterPath rect_objectSavePath() const
 {
     QPainterPath path;
     EmbRect r = rect();

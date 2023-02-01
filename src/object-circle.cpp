@@ -387,13 +387,13 @@ function prompt(str)
     }
 }
 
-CircleObject::CircleObject(double centerX, double centerY, double radius, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+Circle_CircleObject(double centerX, double centerY, double radius, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+Circle_CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     debug_message("CircleObject Constructor()");
     if (obj) {
@@ -402,12 +402,12 @@ CircleObject::CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObjec
     }
 }
 
-CircleObject::~CircleObject()
+Circle_~CircleObject()
 {
     debug_message("CircleObject Destructor()");
 }
 
-void CircleObject::init(double centerX, double centerY, double radius, unsigned int rgb, Qt::PenStyle lineType)
+void Circle_init(double centerX, double centerY, double radius, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "CIRCLE");
@@ -426,32 +426,32 @@ void CircleObject::init(double centerX, double centerY, double radius, unsigned 
     updatePath();
 }
 
-void CircleObject::setObjectCenter(EmbVector& center)
+void Circle_setObjectCenter(EmbVector& center)
 {
     setObjectCenter(center.x(), center.y());
 }
 
-void CircleObject::setObjectCenter(double centerX, double centerY)
+void Circle_setObjectCenter(double centerX, double centerY)
 {
     setPos(centerX, centerY);
 }
 
-void CircleObject::setObjectCenterX(double centerX)
+void Circle_setObjectCenterX(double centerX)
 {
     setX(centerX);
 }
 
-void CircleObject::setObjectCenterY(double centerY)
+void Circle_setObjectCenterY(double centerY)
 {
     setY(centerY);
 }
 
-void CircleObject::setObjectRadius(double radius)
+void Circle_setObjectRadius(double radius)
 {
     setObjectDiameter(radius*2.0);
 }
 
-void CircleObject::setObjectDiameter(double diameter)
+void Circle_setObjectDiameter(double diameter)
 {
     EmbRect circRect;
     circRect.setWidth(diameter);
@@ -461,19 +461,19 @@ void CircleObject::setObjectDiameter(double diameter)
     updatePath();
 }
 
-void CircleObject::setObjectArea(double area)
+void Circle_setObjectArea(double area)
 {
     double radius = sqrt(area/pi());
     setObjectRadius(radius);
 }
 
-void CircleObject::setObjectCircumference(double circumference)
+void Circle_setObjectCircumference(double circumference)
 {
     double diameter = circumference/pi();
     setObjectDiameter(diameter);
 }
 
-void CircleObject::updatePath()
+void Circle_updatePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -487,7 +487,7 @@ void CircleObject::updatePath()
     setObjectPath(path);
 }
 
-void CircleObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void Circle_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -502,7 +502,7 @@ void CircleObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QW
     painter->drawEllipse(rect());
 }
 
-void CircleObject::updateRubber(QPainter* painter)
+void Circle_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_CIRCLE_1P_RAD)
@@ -587,7 +587,7 @@ void CircleObject::updateRubber(QPainter* painter)
     }
 }
 
-void CircleObject::vulcanize()
+void Circle_vulcanize()
 {
     debug_message("CircleObject vulcanize()");
     updateRubber();
@@ -596,7 +596,7 @@ void CircleObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector CircleObject::mouseSnapPoint(EmbVector& mousePoint)
+EmbVector Circle_mouseSnapPoint(EmbVector& mousePoint)
 {
     EmbVector center  = objectCenter();
     EmbVector quad0   = objectQuadrant0();
@@ -621,14 +621,14 @@ EmbVector CircleObject::mouseSnapPoint(EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> CircleObject::allGripPoints()
+std::vector<EmbVector> Circle_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
 }
 
-void CircleObject::gripEdit(EmbVector& before, EmbVector& after)
+void Circle_gripEdit(EmbVector& before, EmbVector& after)
 {
     if (before == objectCenter()) {
         EmbVector delta = after-before;
@@ -639,7 +639,7 @@ void CircleObject::gripEdit(EmbVector& before, EmbVector& after)
     }
 }
 
-QPainterPath CircleObject::objectSavePath() const
+QPainterPath Circle_objectSavePath() const
 {
     QPainterPath path;
     EmbRect r = rect();

@@ -36,12 +36,12 @@ void dim_leader_init(EmbLine line, unsigned int rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-void DimLeaderObject::setObjectEndPoint1(const EmbVector& endPt1)
+void dimleader_setObjectEndPoint1(const EmbVector& endPt1)
 {
     setObjectEndPoint1(endPt1.x(), endPt1.y());
 }
 
-void DimLeaderObject::setObjectEndPoint1(double x1, double y1)
+void dimleader_setObjectEndPoint1(double x1, double y1)
 {
     EmbVector endPt2 = objectEndPoint2();
     double x2 = endPt2.x();
@@ -54,12 +54,12 @@ void DimLeaderObject::setObjectEndPoint1(double x1, double y1)
     updateLeader();
 }
 
-void DimLeaderObject::setObjectEndPoint2(const EmbVector& endPt2)
+void dimleader_setObjectEndPoint2(const EmbVector& endPt2)
 {
     setObjectEndPoint2(endPt2.x(), endPt2.y());
 }
 
-void DimLeaderObject::setObjectEndPoint2(double x2, double y2)
+void dimleader_setObjectEndPoint2(double x2, double y2)
 {
     EmbVector endPt1 = scenePos();
     double x1 = endPt1.x();
@@ -72,12 +72,12 @@ void DimLeaderObject::setObjectEndPoint2(double x2, double y2)
     updateLeader();
 }
 
-EmbVector DimLeaderObject::objectEndPoint1() const
+EmbVector dimleader_objectEndPoint1() const
 {
     return scenePos();
 }
 
-EmbVector DimLeaderObject::objectEndPoint2() const
+EmbVector dimleader_objectEndPoint2() const
 {
     EmbLine lyne = line();
     double rot = radians(rotation());
@@ -89,7 +89,7 @@ EmbVector DimLeaderObject::objectEndPoint2() const
     return (scenePos() + rot);
 }
 
-EmbVector DimLeaderObject::objectMidPoint() const
+EmbVector dimleader_objectMidPoint() const
 {
     EmbVector mp = line().pointAt(0.5) * scale();
     double alpha = radians(rotation());
@@ -97,12 +97,12 @@ EmbVector DimLeaderObject::objectMidPoint() const
     return scenePos() + rotMid;
 }
 
-double DimLeaderObject::objectAngle() const
+double dimleader_objectAngle() const
 {
     return fmodf(line().angle() - rotation(), 360.0);
 }
 
-void DimLeaderObject::updateLeader()
+void dimleader_updateLeader()
 {
     int arrowStyle = Closed; //TODO: Make this customizable
     double arrowStyleAngle = 15.0; //TODO: Make this customizable
@@ -190,7 +190,7 @@ void DimLeaderObject::updateLeader()
     lineStylePath.lineTo(lp0);
 }
 
-void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void dimleader_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -209,7 +209,7 @@ void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
         painter->fillPath(arrowStylePath, objectColor());
 }
 
-void DimLeaderObject::updateRubber(QPainter* painter)
+void dimleader_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_DIMLEADER_LINE) {
@@ -232,7 +232,7 @@ void DimLeaderObject::updateRubber(QPainter* painter)
     }
 }
 
-void DimLeaderObject::vulcanize()
+void dimleader_vulcanize()
 {
     debug_message("DimLeaderObject vulcanize()");
     updateRubber();
@@ -241,7 +241,7 @@ void DimLeaderObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector DimLeaderObject::mouseSnapPoint(const EmbVector& mousePoint)
+EmbVector dimleader_mouseSnapPoint(const EmbVector& mousePoint)
 {
     EmbVector endPoint1 = objectEndPoint1();
     EmbVector endPoint2 = objectEndPoint2();
@@ -273,7 +273,7 @@ std::vector<EmbVector> DimLeaderObject_allGripPoints()
     return gripPoints;
 }
 
-void DimLeaderObject::gripEdit(const EmbVector& before, const EmbVector& after)
+void dimleader_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     if (before == objectEndPoint1()) {
         setObjectEndPoint1(after);

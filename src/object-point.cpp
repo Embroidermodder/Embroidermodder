@@ -16,7 +16,7 @@
 #include "embroidermodder.h"
 
 #if 0
-void PointObject::init(double x, double y, unsigned int rgb, int lineType)
+void point_init(double x, double y, unsigned int rgb, int lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Point");
@@ -34,7 +34,7 @@ void PointObject::init(double x, double y, unsigned int rgb, int lineType)
     setPen(objPen);
 }
 
-void PointObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void point_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -49,7 +49,7 @@ void PointObject::paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWi
     painter->drawPoint(0,0);
 }
 
-void PointObject::updateRubber(QPainter* painter)
+void point_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_GRIP) {
@@ -63,7 +63,7 @@ void PointObject::updateRubber(QPainter* painter)
     }
 }
 
-void PointObject::vulcanize()
+void point_vulcanize()
 {
     debug_message("PointObject vulcanize()");
     updateRubber();
@@ -72,24 +72,24 @@ void PointObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-EmbVector PointObject::mouseSnapPoint(EmbVector& mousePoint)
+EmbVector point_mouseSnapPoint(EmbVector& mousePoint)
 {
     return scenePos();
 }
 
-std::vector<EmbVector> PointObject::allGripPoints()
+std::vector<EmbVector> point_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << scenePos();
     return gripPoints;
 }
 
-void PointObject::gripEdit(EmbVector& before, EmbVector& after)
+void point_gripEdit(EmbVector& before, EmbVector& after)
 {
     if (before == scenePos()) { EmbVector delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-QPainterPath PointObject::objectSavePath()
+QPainterPath point_objectSavePath()
 {
     QPainterPath path;
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
