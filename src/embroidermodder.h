@@ -151,7 +151,6 @@ extern bool show_editor;
 extern int icon_size;
 extern std::string language;
 extern int pattern_index;
-extern std::string current_fname;
 extern std::string assets_dir;
 //extern std::vector<Action> action_list;
 extern string_matrix translation_table;

@@ -17,6 +17,8 @@
 
 #include "embroidermodder.h"
 
+#include <fstream>
+
 void
 about_dialog(void)
 {
@@ -47,40 +49,26 @@ void
 help_dialog(void)
 {
     ImGui::Begin("Help");
-    ImGui::End();    
 
-    /*
-    QApplication::setOverrideCursor(ArrowCursor);
-    debug_message("help()");
+    ImGui::Text("Help -- Embroidermodder 2");
 
-    std::string appDir = qApp->applicationDirPath();
-    QDialog dialog(this);
-    std::ifstream file("docs/manual.md");
+    /* Minimum size (600, 500). */
+
+    std::ifstream file;
+    file.open(assets_dir + "docs/manual.md");
     std::string s, line;
     while (std::getline(file, line)) {
         s += line + "\n";
     }
-    QPlainTextEdit text(std::string::fromLocal8Bit(s));
 
-    QDialogButtonBox buttonbox(Horizontal, &dialog);
-    QPushButton close_button(&dialog);
-    close_button.setText("Close");
-    buttonbox.addButton(&close_button, QDialogButtonBox::AcceptRole);
-    buttonbox.setCenterButtons(true);
-    connect(&buttonbox, SIGNAL(accepted()), &dialog, SLOT(accept()));
+    ImGui::TextWrapped(s.c_str());
 
-    QVBoxLayout layout;
-    layout.setAlignment(AlignCenter);
-    layout.addWidget(&text);
-    layout.addWidget(&buttonbox);
+    /* Center button */
+    if (ImGui::Button(translate("Close").c_str())) {
 
-    dialog.setWindowTitle("Help -- Embroidermodder 2");
-    dialog.setMinimumWidth(600);
-    dialog.setMinimumHeight(500);
-    dialog.setLayout(&layout);
-    dialog.exec();
-    QApplication::restoreOverrideCursor();
-    */
+    }
+
+    ImGui::End();    
 }
 
 void
@@ -100,7 +88,6 @@ details_dialog(void)
 #if 0
 void terminal()
 {
-    QApplication::setOverrideCursor(ArrowCursor);
     debug_message("terminal()");
 
     std::string appDir = qApp->applicationDirPath();
@@ -124,7 +111,6 @@ void terminal()
     dialog.setMinimumHeight(500);
     dialog.setLayout(&layout);
     dialog.exec();
-    QApplication::restoreOverrideCursor();
 }
 
 void CmdPrompt(void)
@@ -157,13 +143,13 @@ void CmdPrompt(void)
     this->setLayout(promptVBoxLayout);
 
     styleHash = new QHash<std::string, std::string>();
-    styleHash->insert("color",                      "#000000"); // Match -------|
-    styleHash->insert("background-color",           "#FFFFFF"); //              |
-    styleHash->insert("selection-color",            "#FFFFFF"); //              |
-    styleHash->insert("selection-background-color", "#000000"); // Match -------|
-    styleHash->insert("font-family",              "Monospace");
-    styleHash->insert("font-style",                  "normal");
-    styleHash->insert("font-size",                     "12px");
+    styleHash->insert("color", "#000000");
+    styleHash->insert("background-color", "#FFFFFF");
+    styleHash->insert("selection-color", "#FFFFFF");
+    styleHash->insert("selection-background-color", "#000000");
+    styleHash->insert("font-family", "Monospace");
+    styleHash->insert("font-style", "normal");
+    styleHash->insert("font-size", "12px");
 
     updateStyle();
 
@@ -180,34 +166,34 @@ void CmdPrompt(void)
     //For use outside of command prompt
     connect(promptInput, SIGNAL(startCommand(const std::string&)), this, SIGNAL(startCommand(const std::string&)));
     connect(promptInput, SIGNAL(runCommand(const std::string&, const std::string&)), this, SIGNAL(runCommand(const std::string&, const std::string&)));
-    connect(promptInput, SIGNAL(deletePressed()),    this, SIGNAL(deletePressed()));
-    connect(promptInput, SIGNAL(tabPressed()),       this, SIGNAL(tabPressed()));
-    connect(promptInput, SIGNAL(escapePressed()),    this, SIGNAL(escapePressed()));
-    connect(promptInput, SIGNAL(upPressed()),        this, SIGNAL(upPressed()));
-    connect(promptInput, SIGNAL(downPressed()),      this, SIGNAL(downPressed()));
-    connect(promptInput, SIGNAL(F1Pressed()),        this, SIGNAL(F1Pressed()));
-    connect(promptInput, SIGNAL(F2Pressed()),        this, SIGNAL(F2Pressed()));
-    connect(promptInput, SIGNAL(F3Pressed()),        this, SIGNAL(F3Pressed()));
-    connect(promptInput, SIGNAL(F4Pressed()),        this, SIGNAL(F4Pressed()));
-    connect(promptInput, SIGNAL(F5Pressed()),        this, SIGNAL(F5Pressed()));
-    connect(promptInput, SIGNAL(F6Pressed()),        this, SIGNAL(F6Pressed()));
-    connect(promptInput, SIGNAL(F7Pressed()),        this, SIGNAL(F7Pressed()));
-    connect(promptInput, SIGNAL(F8Pressed()),        this, SIGNAL(F8Pressed()));
-    connect(promptInput, SIGNAL(F9Pressed()),        this, SIGNAL(F9Pressed()));
-    connect(promptInput, SIGNAL(F10Pressed()),       this, SIGNAL(F10Pressed()));
-    connect(promptInput, SIGNAL(F11Pressed()),       this, SIGNAL(F11Pressed()));
-    connect(promptInput, SIGNAL(F12Pressed()),       this, SIGNAL(F12Pressed()));
-    connect(promptInput, SIGNAL(cutPressed()),       this, SIGNAL(cutPressed()));
-    connect(promptInput, SIGNAL(copyPressed()),      this, SIGNAL(copyPressed()));
-    connect(promptInput, SIGNAL(pastePressed()),     this, SIGNAL(pastePressed()));
+    connect(promptInput, SIGNAL(deletePressed()), this, SIGNAL(deletePressed()));
+    connect(promptInput, SIGNAL(tabPressed()), this, SIGNAL(tabPressed()));
+    connect(promptInput, SIGNAL(escapePressed()), this, SIGNAL(escapePressed()));
+    connect(promptInput, SIGNAL(upPressed()), this, SIGNAL(upPressed()));
+    connect(promptInput, SIGNAL(downPressed()), this, SIGNAL(downPressed()));
+    connect(promptInput, SIGNAL(F1Pressed()), this, SIGNAL(F1Pressed()));
+    connect(promptInput, SIGNAL(F2Pressed()), this, SIGNAL(F2Pressed()));
+    connect(promptInput, SIGNAL(F3Pressed()), this, SIGNAL(F3Pressed()));
+    connect(promptInput, SIGNAL(F4Pressed()), this, SIGNAL(F4Pressed()));
+    connect(promptInput, SIGNAL(F5Pressed()), this, SIGNAL(F5Pressed()));
+    connect(promptInput, SIGNAL(F6Pressed()), this, SIGNAL(F6Pressed()));
+    connect(promptInput, SIGNAL(F7Pressed()), this, SIGNAL(F7Pressed()));
+    connect(promptInput, SIGNAL(F8Pressed()), this, SIGNAL(F8Pressed()));
+    connect(promptInput, SIGNAL(F9Pressed()), this, SIGNAL(F9Pressed()));
+    connect(promptInput, SIGNAL(F10Pressed()), this, SIGNAL(F10Pressed()));
+    connect(promptInput, SIGNAL(F11Pressed()), this, SIGNAL(F11Pressed()));
+    connect(promptInput, SIGNAL(F12Pressed()), this, SIGNAL(F12Pressed()));
+    connect(promptInput, SIGNAL(cutPressed()), this, SIGNAL(cutPressed()));
+    connect(promptInput, SIGNAL(copyPressed()), this, SIGNAL(copyPressed()));
+    connect(promptInput, SIGNAL(pastePressed()), this, SIGNAL(pastePressed()));
     connect(promptInput, SIGNAL(selectAllPressed()), this, SIGNAL(selectAllPressed()));
-    connect(promptInput, SIGNAL(undoPressed()),      this, SIGNAL(undoPressed()));
-    connect(promptInput, SIGNAL(redoPressed()),      this, SIGNAL(redoPressed()));
+    connect(promptInput, SIGNAL(undoPressed()), this, SIGNAL(undoPressed()));
+    connect(promptInput, SIGNAL(redoPressed()), this, SIGNAL(redoPressed()));
 
-    connect(promptInput, SIGNAL(shiftPressed()),     this, SIGNAL(shiftPressed()));
-    connect(promptInput, SIGNAL(shiftReleased()),    this, SIGNAL(shiftReleased()));
+    connect(promptInput, SIGNAL(shiftPressed()), this, SIGNAL(shiftPressed()));
+    connect(promptInput, SIGNAL(shiftReleased()), this, SIGNAL(shiftReleased()));
 
-    connect(promptInput, SIGNAL(showSettings()),     this, SIGNAL(showSettings()));
+    connect(promptInput, SIGNAL(showSettings()), this, SIGNAL(showSettings()));
 
     connect(promptHistory, SIGNAL(historyAppended(const std::string&)), this, SIGNAL(historyAppended(const std::string&)));
 }
@@ -304,8 +290,7 @@ void CmdPrompt::updateStyle()
     std::string style = "QTextBrowser,QLineEdit{";
 
     QHashIterator<std::string, std::string> i(*styleHash);
-    while(i.hasNext())
-    {
+    while (i.hasNext()) {
         i.next();
         style.append(i.key() + ":" + i.value() + ";");
     }
@@ -432,10 +417,8 @@ std::string CmdPromptHistory::applyFormatting(const std::string& txt, int prefix
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if (start != -1 && stop != -1 && start < stop)
-    {
-        for(int i = stop; i >= start; i--)
-        {
+    if (start != -1 && stop != -1 && start < stop) {
+        for(int i = stop; i >= start; i--) {
             if (prefix.at(i) == '}')
                 prefix.insert(i, "</font>");
             if (prefix.at(i) == '{')
@@ -561,14 +544,12 @@ void CmdPromptInput::processInput(const int rapidChar)
                 clear();
                 return;
             }
-            else if (rapidChar == Key_Space)
-            {
+            else if (rapidChar == Key_Space) {
                 updateCurrentText(curText + " ");
                 emit runCommand(curCmd, cmdtxt + " ");
                 return;
             }
-            else
-            {
+            else {
                 emit runCommand(curCmd, cmdtxt);
                 return;
             }
@@ -701,22 +682,18 @@ void CmdPromptInput::applyFormatting()
     //Default Values
     start = prefix.indexOf('{');
     stop = prefix.lastIndexOf('}');
-    if (start != -1 && stop != -1 && start < stop)
-    {
+    if (start != -1 && stop != -1 && start < stop) {
         QTextCharFormat formatKeyword;
         formatKeyword.setFontWeight(QFont::Bold);
         formatKeyword.setForeground(QColor("#00AA00"));
 
         int rangeStart = -1;
         int rangeStop = -1;
-        for(int i = stop; i >= start; i--)
-        {
-            if (prefix.at(i) == '}')
-            {
+        for (int i = stop; i >= start; i--) {
+            if (prefix.at(i) == '}') {
                 rangeStop = i;
             }
-            if (prefix.at(i) == '{')
-            {
+            if (prefix.at(i) == '{') {
                 rangeStart = i;
 
                 QTextLayout::FormatRange rangeKeyword;
@@ -733,11 +710,10 @@ void CmdPromptInput::applyFormatting()
     changeFormatting(formats);
 }
 
-void CmdPromptInput::updateCurrentText(const std::string& txt)
+void CmdPromptInput::updateCurrentText(std::string txt)
 {
     int cursorPos = cursorPosition();
-    if (!txt.startsWith(prefix))
-    {
+    if (!txt.startsWith(prefix)) {
         if (txt.length() < prefix.length())
             this->setText(prefix);
         else if (txt.length() != prefix.length())
@@ -745,8 +721,7 @@ void CmdPromptInput::updateCurrentText(const std::string& txt)
         else
             this->setText(curText);
     }
-    else
-    {
+    else {
         // input is okay so update curText
         curText = txt;
         this->setText(curText);
@@ -829,46 +804,39 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
         //NOTE: These shortcuts need to be caught since QLineEdit uses them
-        if (pressedKey->matches(QKeySequence::Cut))
-        {
+        if (pressedKey->matches(QKeySequence::Cut)) {
             pressedKey->accept();
             emit cutPressed();
             return true;
         }
-        else if (pressedKey->matches(QKeySequence::Copy))
-        {
+        else if (pressedKey->matches(QKeySequence::Copy)) {
             pressedKey->accept();
             emit copyPressed();
             return true;
         }
-        else if (pressedKey->matches(QKeySequence::Paste))
-        {
+        else if (pressedKey->matches(QKeySequence::Paste)) {
             pressedKey->accept();
             emit pastePressed();
             return true;
         }
-        else if (pressedKey->matches(QKeySequence::SelectAll))
-        {
+        else if (pressedKey->matches(QKeySequence::SelectAll)) {
             pressedKey->accept();
             emit selectAllPressed();
             return true;
         }
-        else if (pressedKey->matches(QKeySequence::Undo))
-        {
+        else if (pressedKey->matches(QKeySequence::Undo)) {
             pressedKey->accept();
             emit undoPressed();
             return true;
         }
-        else if (pressedKey->matches(QKeySequence::Redo))
-        {
+        else if (pressedKey->matches(QKeySequence::Redo)) {
             pressedKey->accept();
             emit redoPressed();
             return true;
         }
 
         int key = pressedKey->key();
-        switch(key)
-        {
+        switch(key) {
             case Key_Enter:
             case Key_Return:
             case Key_Space:
@@ -991,8 +959,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
     return QObject::eventFilter(obj, event);
 }
 
-
-EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : QDialog(parent)
+void EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent)
 {
     setMinimumSize(750,550);
 
@@ -1008,13 +975,6 @@ EmbDetailsDialog::EmbDetailsDialog(QGraphicsScene* theScene, QWidget* parent) : 
     setLayout(vboxLayoutMain);
 
     setWindowTitle(tr("Embroidery Design Details"));
-
-    QApplication::setOverrideCursor(ArrowCursor);
-}
-
-EmbDetailsDialog::~EmbDetailsDialog()
-{
-    QApplication::restoreOverrideCursor();
 }
 
 void EmbDetailsDialog::getInfo()
@@ -1032,11 +992,8 @@ void EmbDetailsDialog::getInfo()
     boundingRect.setRect(0, 0, 50, 100); //TODO: embPattern_calcBoundingBox(pattern);
 }
 
-QWidget* EmbDetailsDialog::createMainWidget()
+void EmbDetailsDialog()
 {
-    QWidget* widget = new QWidget(this);
-
-    //Misc
     QGroupBox* groupBoxMisc = new QGroupBox(tr("General Information"), widget);
 
     QLabel* labelStitchesTotal = new QLabel(tr("Total Stitches:"), this);
@@ -1116,9 +1073,6 @@ QWidget* EmbDetailsDialog::createMainWidget()
 //TODO: Move majority of this code into libembroidery
 void designDetails()
 {
-    QApplication::setOverrideCursor(ArrowCursor);
-    debug_message("designDetails()");
-    std::string appName = QApplication::applicationName();
     std::string title = "Design Details";
 
     EmbPattern* pattern = 0;
@@ -1174,22 +1128,21 @@ void designDetails()
     double dx = 0.0, dy = 0.0;
     double length = 0.0;
 
-    num_colors = embThreadList_count(pattern->threadList);
-    num_stitches = embStitchList_count(pattern->stitchList);
-    if (num_stitches == 0)
-    {
+    num_colors = pattern->threads.count;
+    num_stitches = pattern->stitchList.count;
+    if (num_stitches == 0) {
         QMessageBox::warning(this, translate("No Design Loaded"), translate("<b>A design needs to be loaded or created before details can be determined.</b>"));
         return;
     }
-    QVector<double> stitchLengths;
+    std::vector<double> stitchLengths;
 
     double totalColorLength = 0.0;
-    for(int i = 0; i < num_stitches; i++)
-    {
-        dx = embStitchList_getAt(pattern->stitchList, i).xx - xx;
-        dy = embStitchList_getAt(pattern->stitchList, i).yy - yy;
-        xx = embStitchList_getAt(pattern->stitchList, i).xx;
-        yy = embStitchList_getAt(pattern->stitchList, i).yy;
+    for(int i = 0; i < num_stitches; i++) {
+        EmbStitch st = pattern->stitchList->stitch[i];
+        dx = st.x - xx;
+        dy = st.y - yy;
+        xx = st.x;
+        yy = st.y;
         length=sqrt(dx * dx + dy * dy);
         totalColorLength += length;
         if (i > 0 && embStitchList_getAt(pattern->stitchList, i-1).flags != NORMAL)
@@ -1317,7 +1270,6 @@ void designDetails()
     dialog.setMinimumHeight(50);
     dialog.setLayout(grid);
     dialog.exec();
-    QApplication::restoreOverrideCursor();
 
 }
 #endif

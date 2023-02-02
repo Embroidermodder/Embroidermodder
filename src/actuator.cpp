@@ -1845,7 +1845,7 @@ scale_selected_action(std::vector<std::string> args)
     double factor = stod(args[2]);
 
     if (factor <= 0.0) {
-        QMessageBox::critical(this, translate("ScaleFactor Error"),
+        critical_messagebox(this, translate("ScaleFactor Error"),
                                 translate("Hi there. If you are not a developer, report this as a bug. "
                                 "If you are a developer, your code needs examined, and possibly your head too."));
     }
@@ -2716,19 +2716,15 @@ std::string getCurrentLineWeight()
 void deletePressed()
 {
     debug_message("deletePressed()");
-    QApplication::setOverrideCursor(WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) { mdiWin->deletePressed(); }
-    QApplication::restoreOverrideCursor();
 }
 
 void escapePressed()
 {
     debug_message("escapePressed()");
-    QApplication::setOverrideCursor(WaitCursor);
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) { mdiWin->escapePressed(); }
-    QApplication::restoreOverrideCursor();
 
     nativeEndCommand();
 }
@@ -2963,11 +2959,11 @@ std::string nativePlatformString()
 void nativeMessageBox(const std::string& type, const std::string& title, const std::string& text)
 {
     std::string msgType = type.toLower();
-    if     (msgType == "critical")    { QMessageBox::critical   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
+    if     (msgType == "critical")    { critical_messagebox   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
     else if (msgType == "information") { information_messagebox(this, translate(qPrintable(title)), translate(qPrintable(text))); }
     else if (msgType == "question")    { QMessageBox::question   (this, translate(qPrintable(title)), translate(qPrintable(text))); }
     else if (msgType == "warning")     { QMessageBox::warning    (this, translate(qPrintable(title)), translate(qPrintable(text))); }
-    else                              { QMessageBox::critical   (this, translate("Native MessageBox Error"), translate("Incorrect use of the native messageBox function.")); }
+    else                              { critical_messagebox   (this, translate("Native MessageBox Error"), translate("Incorrect use of the native messageBox function.")); }
 }
 
 void nativePrintArea(double x, double y, double w, double h)
@@ -3793,7 +3789,7 @@ check_load_file(std::string path)
     std::string appDir = qApp->applicationDirPath();
     QFileInfo check(appDir + std::string::fromLocal8Bit(path));
     if (!check.exists()) {
-        QMessageBox::critical(this, translate("Path Error"), translate("Cannot locate: ")
+        critical_messagebox(this, translate("Path Error"), translate("Cannot locate: ")
                               + check.absoluteFilePath());
     }
 }
@@ -4040,8 +4036,6 @@ void openFile(bool recent, const std::string& recentFile)
 {
     debug_message("openFile()");
 
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
-
     std::stringList files;
     bool preview = settings_opensave_open_thumbnail;
     openFilesPath = settings_opensave_recent_directory;
@@ -4064,8 +4058,6 @@ void openFile(bool recent, const std::string& recentFile)
             openDialog->exec();
         }
     }
-
-    QApplication::restoreOverrideCursor();
 }
 
 void openFilesSelected(const std::stringList& filesToOpen)

@@ -36,6 +36,7 @@ bool show_editor = false;
 std::string language = "default";
 int icon_size = 16;
 ImFont *font;
+ImFont *header_font;
 int pattern_index = 0;
 std::string current_fname = "Untitled.dst";
 std::string assets_dir = "../assets/";
@@ -202,6 +203,7 @@ set_style(void)
     config.OversampleH = 2;
     config.OversampleV = 2;
     font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 16, &config);
+    header_font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 24, &config);
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
@@ -254,14 +256,17 @@ load_toolbar(std::vector<std::string> toolbar)
 }
 
 void
-view_tab(View view)
+view_tab(int i)
 {
-    if (ImGui::BeginTabItem(view.filename.c_str())) {
+    if (ImGui::BeginTabItem(views[i].filename.c_str())) {
+        pattern_index = i;
         ImGui::Columns(3, "Undo History");
         ImGui::SetColumnWidth(-1, 100);
         ImGui::BeginChild("Undo History");
-        ImGui::Text("Undo History");
-        for (std::string undo_item : view.undo_history) {
+        ImGui::PushFont(header_font);
+        ImGui::Text(translate("Undo History").c_str());
+        ImGui::PopFont();
+        for (std::string undo_item : views[i].undo_history) {
             ImGui::Text(undo_item.c_str());
         }
         ImGui::EndChild();
@@ -315,8 +320,8 @@ main_widget(void)
 
     if (views.size() > 0) {
         if (ImGui:: BeginTabBar("Tab Bar")) {
-            for (View view : views) {
-                view_tab(view);
+            for (int i=0; i<views.size(); i++) {
+                view_tab(i);
             }
             if (show_editor) {
                 if (ImGui::BeginTabItem("Text Editor")) {
@@ -768,8 +773,6 @@ bool MdiWindow::loadFile(const std::string &fileName)
         return false;
     }
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
     std::string ext = fileExtension(fileName);
     debug_message("ext: %s", qPrintable(ext));
 
@@ -793,7 +796,6 @@ bool MdiWindow::loadFile(const std::string &fileName)
     }
     if (!readSuccessful) {
         QMessageBox::warning(this, translate("Error reading pattern"), translate(qPrintable(readError)));
-        QApplication::restoreOverrideCursor();
         QMessageBox::warning(this, translate("Error reading pattern"), translate("Cannot read pattern"));
     }
     else {
@@ -810,8 +812,6 @@ bool MdiWindow::loadFile(const std::string &fileName)
         if (settings_grid_load_from_file) {
             //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
         }
-
-        QApplication::restoreOverrideCursor();
     }
     embPattern_free(p);
 

@@ -209,7 +209,7 @@ void polygon_vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 
     if (!normalPath.elementCount())
-        QMessageBox::critical(0, translate("Empty Polygon Error"), translate("The polygon added contains no points. The command that created this object has flawed logic."));
+        critical_messagebox(0, translate("Empty Polygon Error"), translate("The polygon added contains no points. The command that created this object has flawed logic."));
 }
 
 // Returns the closest snap point to the mouse point

@@ -24,60 +24,61 @@
 
 std::vector<View> views;
 std::string current_view_state = "neutral";
-
-double zoomInLimit = 0.0000000001;
-double zoomOutLimit = 10000000000000.0;
+unsigned int ruler_color = IM_COL32(150, 170, 0, 255);
+unsigned int ticks_color = IM_COL32(0, 0, 0, 255);
+unsigned int grid_color = IM_COL32(0, 0, 0, 255);
+double zoomInLimit = 1.0e-10;
+double zoomOutLimit = 1.0e10;
+EmbVector grid_spacing = {40.0, 40.0};
 
 inline ImVec2 to_ImVec2(EmbVector v)
 {
     return ImVec2(v.x, v.y);
 }
 
-/* Description is a a simple string table of path instructions,
- * 
- */
+inline int embColor_to_int(EmbColor c)
+{
+    return IM_COL32(c.r, c.g, c.b, 255);
+}
+
 int
 render_pattern(EmbPattern *p)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    View view = views[pattern_index];
     if (p->circles) {
         for (int i=0; i<p->circles->count; i++) {
             EmbCircle c = p->circles->circle[i];
-            //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-            // , false, OBJ_RUBBER_OFF
-            int color = IM_COL32(c.color.r, c.color.g, c.color.b, 255);
+            int color = embColor_to_int(c.color);
             EmbVector scene_center;
-            embVector_add(c.center, views[pattern_index].origin, &scene_center);
-            double scene_radius = c.radius * views[pattern_index].scale;
-            std::cout << scene_center.x << scene_center.y << scene_radius << std::endl;
-            draw_list->AddCircleFilled(to_ImVec2(scene_center), scene_radius, color);
+            embVector_add(c.center, view.origin, &scene_center);
+            double scene_radius = c.radius * view.scale;
+            draw_list->AddCircle(to_ImVec2(scene_center), scene_radius, color);
             // TODO: fill
         }
     }
     if (p->ellipses) {
         for (int i=0; i<p->ellipses->count; i++) {
             EmbEllipse e = p->ellipses->ellipse[i];
-            int color = IM_COL32(e.color.r, e.color.g, e.color.b, 255);
-            // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-            //draw_list->AddEllipse(e.center.x, e.center.y, e.radius.x, e.radius.y, 0, false, OBJ_RUBBER_OFF);
-            // TODO: rotation and fill
+            int color = embColor_to_int(e.color);
+            //draw_list->AddEllipse(e.center.x, e.center.y, e.radius.x, e.radius.y, color);
         }
     }
     if (p->lines) {
         for (int i=0; i<p->lines->count; i++) {
+            EmbVector scene_start, scene_end;
             EmbLine li = p->lines->line[i];
-            int color = IM_COL32(li.color.r, li.color.g, li.color.b, 255);
-            // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-            //draw_list->AddLine(ImVec2(li.start.x, li.start.y), ImVec2(li.end.x, li.end.y), 0, OBJ_RUBBER_OFF);
-            // TODO: rotation
+            int color = embColor_to_int(li.color);
+            embVector_add(li.start, view.origin, &scene_start);
+            embVector_add(li.end, view.origin, &scene_end);
+            draw_list->AddLine(to_ImVec2(scene_start), to_ImVec2(scene_end), color);
         }
     }
     if (p->paths) {
-        //TODO: This is unfinished. It needs more work
         for (int i=0; i<p->paths->count; i++) {
-            //QPainterPath pathPath;
-            EmbArray *curPointList = p->paths->path[i].pointList;
-            EmbColor thisColor = p->paths->path[i].color;
+            EmbPath path;
+            EmbArray *curPointList = path.pointList;
+            int color = embColor_to_int(path.color);
             /*
             if (curPointList) {
                 EmbPoint pp = curPointList->point[0];
@@ -92,8 +93,8 @@ render_pattern(EmbPattern *p)
 
             QPen loadPen(qRgb(thisColor.r, thisColor.g, thisColor.b));
             loadPen.setWidthF(0.35);
-            loadPen.setCapStyle(Qt::RoundCap);
-            loadPen.setJoinStyle(Qt::RoundJoin);
+            loadPen.setCapStyle(RoundCap);
+            loadPen.setJoinStyle(RoundJoin);
 
             PathObject* obj = new PathObject(0,0, pathPath, loadPen.color().rgb());
             obj->setObjectRubberMode(OBJ_RUBBER_OFF);
@@ -104,56 +105,56 @@ render_pattern(EmbPattern *p)
     if (p->points) {
         for (int i=0; i<p->points->count; i++) {
             EmbPoint po = p->points->point[i];
-            EmbColor thisColor = po.color;
-            //setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-            // NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
+            int color = embColor_to_int(po.color);
             double point_size = 10.0;
-            draw_list->AddCircle(ImVec2(po.position.x, po.position.y), point_size, IM_COL32(0, 0, 0, 255));
+            draw_list->AddCircle(to_ImVec2(po.position), point_size, color);
         }
     }
     if (p->polygons) {
         for (int i=0; i<p->polygons->count; i++) {
-            //QPainterPath polygonPath;
+            // QPainterPath polygonPath;
+            EmbPolygon polygon = p->polygons->polygon[i];
             bool firstPoint = false;
-            double startX = 0, startY = 0;
-            double x = 0, y = 0;
-            /*
-            EmbArray *curPointList = p->polygons->polygon[i].pointList;
-            EmbColor thisColor = p->polygons->polygon[i].color;
-            setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+            EmbVector start = {0.0, 0.0};
+            double x = 0.0, y = 0.0;
+            EmbArray *curPointList = polygon.pointList;
+            int color = embColor_to_int(polygon.color);
             for (int j=0; j<curPointList->count; j++) {
+                /*
                 EmbPoint pp = curPointList->point[j];
                 x = pp.position.x;
                 y = -pp.position.y;
-                // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
 
-                if (firstPoint) { polygonPath.lineTo(x,y); }
-                else           { polygonPath.moveTo(x,y); firstPoint = true; startX = x; startY = y; }
+                if (firstPoint) {
+                    polygonPath.lineTo(x,y);
+                }
+                else {
+                    polygonPath.moveTo(x,y);
+                    firstPoint = true;
+                    startX = x;
+                    startY = y;
+                }
+                */
             }
 
-            polygonPath.translate(-startX, -startY);
-            nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF);
-            */
+            /*polygonPath.translate(-startX, -startY);
+            nativeAddPolygon(startX, startY, polygonPath, OBJ_RUBBER_OFF); */
         }
     }
     /* NOTE: Polylines should only contain NORMAL stitches. */
     if (p->polylines) {
         for (int i=0; i<p->polylines->count; i++) {
-            /*
             EmbPolyline pl = p->polylines->polyline[i];
-            QPainterPath polylinePath;
             bool firstPoint = false;
             double startX = 0, startY = 0;
             double x = 0, y = 0;
             EmbArray *curPointList = pl.pointList;
-            EmbColor thisColor = pl.color;
-            setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
+            int color = embColor_to_int(pl.color);
             for (int j=0; j<curPointList->count; j++) {
                 EmbPoint pp = curPointList->point[j];
                 x = pp.position.x;
                 y = -pp.position.y;
-                // NOTE: Qt Y+ is down and libembroidery Y+ is up, so inverting the Y is needed.
-
+                /*
                 if (firstPoint) {
                     polylinePath.lineTo(x,y);
                 }
@@ -163,8 +164,10 @@ render_pattern(EmbPattern *p)
                     startX = x;
                     startY = y;
                 }
+                */
             }
 
+            /*
             polylinePath.translate(-startX, -startY);
             draw_list->AddPolyline(startX, startY, polylinePath, OBJ_RUBBER_OFF);
             */
@@ -172,12 +175,10 @@ render_pattern(EmbPattern *p)
     }
     if (p->rects) {
         for (int i=0; i<p->rects->count; i++) {
-            /*
             EmbRect r = p->rects->rect[i];
-            EmbColor thisColor = r.color;
-            setCurrentColor(qRgb(thisColor.r, thisColor.g, thisColor.b));
-            //NOTE: With natives, the Y+ is up and libembroidery Y+ is up, so inverting the Y is NOT needed.
-            draw_list->AddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, 0, false, OBJ_RUBBER_OFF); //TODO: rotation and fill
+            int color = embColor_to_int(r.color);
+            /*
+            draw_list->AddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, color); //TODO: rotation and fill
             */
         }
     }
@@ -188,20 +189,20 @@ render_pattern(EmbPattern *p)
             ImVec2 start = {prev.x, prev.y};
             ImVec2 end = {st.x, st.y};
             EmbThread thread = p->thread_list[st.color];
-            int color = IM_COL32(thread.color.r, thread.color.g, thread.color.b, 255);
+            int color = embColor_to_int(thread.color);
             draw_list->AddLine(start, end, color);
         }
     }
     return 0;
 }
 
+/* TODO: labels for measurements.
+ */
 void
 draw_rulers(void)
 {
     EmbVector screen_size = {576.0, 1024.0};
     EmbVector top_left = {100.0, 100.0};
-    unsigned int ruler_color = IM_COL32(150, 170, 0, 255);
-    unsigned int ticks_color = IM_COL32(0, 0, 0, 255);
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     draw_list->AddRectFilled(
         to_ImVec2(top_left), ImVec2(150.0, screen_size.y), ruler_color
@@ -244,12 +245,10 @@ void
 draw_grid(void)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    int grid_color = IM_COL32(0, 0, 0, 255);
     EmbVector top_left = {150.0, 150.0};
     EmbVector bottom_right = {150.0, 640.0};
     EmbVector horizontal_top_left = {150.0, 150.0};
     EmbVector horizontal_bottom_right = {640.0, 150.0};
-    EmbVector grid_spacing = {40.0, 40.0};
     for (int i=0; i<10; i++) {
         top_left.x += grid_spacing.x;
         bottom_right.x += grid_spacing.x;
@@ -302,13 +301,16 @@ View init_view(void)
     view.text_style_overline = false;
     view.text_style_strikeout = false;
     view.filename = "Untitled.dst";
+    if (views.size() > 0) {
+        view.filename = "Untitled" + std::to_string(views.size()) + ".dst";
+    }
     view.undo_history_position = 0;
     
     return view;
 }
 
 #if 0
-ImageWidget::ImageWidget(const std::string &filename, QWidget* parent) : QWidget(parent)
+void ImageWidget(std::string filename)
 {
     debug_message("ImageWidget Constructor");
 
@@ -322,24 +324,19 @@ ImageWidget::ImageWidget(const std::string &filename, QWidget* parent) : QWidget
     this->show();
 }
 
-bool ImageWidget::load(const std::string &fileName)
+bool imageWidget_load(std::string fileName)
 {
     img.load(fileName);
     return true;
 }
 
-bool ImageWidget::save(const std::string &fileName)
+bool ImageWidget_save(std::string fileName)
 {
     img.save(fileName, "PNG");
     return true;
 }
 
-ImageWidget::~ImageWidget()
-{
-    debug_message("ImageWidget Destructor");
-}
-
-void ImageWidget::paintEvent(QPaintEvent*)
+void ImageWidget_paintEvent(void)
 {
     QPainter painter(this);
     painter.setViewport(0, 0, width(), height());
@@ -347,7 +344,7 @@ void ImageWidget::paintEvent(QPaintEvent*)
     painter.drawImage(0, 0, img);
 }
 
-LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
+void LayerManager(MainWindow* mw, QWidget* parent)
 {
     layerModel = new QStandardItemModel(0, 8, this);
 
@@ -360,7 +357,7 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
     treeView->setAlternatingRowColors(true);
     treeView->setModel(layerModelSorted);
     treeView->setSortingEnabled(true);
-    treeView->sortByColumn(0, Qt::AscendingOrder);
+    treeView->sortByColumn(0, AscendingOrder);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addWidget(treeView);
@@ -369,14 +366,14 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
     setWindowTitle(tr("Layer Manager"));
     setMinimumSize(750, 550);
 
-    layerModel->setHeaderData(0, Qt::Horizontal, translate("Name"));
-    layerModel->setHeaderData(1, Qt::Horizontal, translate("Visible"));
-    layerModel->setHeaderData(2, Qt::Horizontal, translate("Frozen"));
-    layerModel->setHeaderData(3, Qt::Horizontal, translate("Z Value"));
-    layerModel->setHeaderData(4, Qt::Horizontal, translate("Color"));
-    layerModel->setHeaderData(5, Qt::Horizontal, translate("Linetype"));
-    layerModel->setHeaderData(6, Qt::Horizontal, translate("Lineweight"));
-    layerModel->setHeaderData(7, Qt::Horizontal, translate("Print"));
+    layerModel->setHeaderData(0, Horizontal, translate("Name"));
+    layerModel->setHeaderData(1, Horizontal, translate("Visible"));
+    layerModel->setHeaderData(2, Horizontal, translate("Frozen"));
+    layerModel->setHeaderData(3, Horizontal, translate("Z Value"));
+    layerModel->setHeaderData(4, Horizontal, translate("Color"));
+    layerModel->setHeaderData(5, Horizontal, translate("Linetype"));
+    layerModel->setHeaderData(6, Horizontal, translate("Lineweight"));
+    layerModel->setHeaderData(7, Horizontal, translate("Print"));
 
     addLayer("0", true, false, 0.0, qRgb(0,0,0), "Continuous", "Default", true);
     addLayer("1", true, false, 1.0, qRgb(0,0,0), "Continuous", "Default", true);
@@ -389,25 +386,19 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
     addLayer("8", true, false, 8.0, qRgb(0,0,0), "Continuous", "Default", true);
     addLayer("9", true, false, 9.0, qRgb(0,0,0), "Continuous", "Default", true);
 
-    for(int i = 0; i < layerModel->columnCount(); ++i)
+    for (int i = 0; i < layerModel->columnCount(); ++i)
         treeView->resizeColumnToContents(i);
-
-    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
-LayerManager::~LayerManager()
-{
-    QApplication::restoreOverrideCursor();
-}
-
-void LayerManager::addLayer(const std::string& name,
-                            const bool visible,
-                            const bool frozen,
-                            const double zValue,
-                            const unsigned int color,
-                            const std::string& lineType,
-                            const std::string& lineWeight,
-                            const bool print)
+void LayerManager_addLayer(
+    std::string name,
+    bool visible,
+    bool frozen,
+    double zValue,
+    unsigned int color,
+    std::string lineType,
+    std::string lineWeight,
+    bool print)
 {
     layerModel->insertRow(0);
     layerModel->setData(layerModel->index(0, 0), name);
@@ -425,7 +416,7 @@ void LayerManager::addLayer(const std::string& name,
     layerModel->setData(layerModel->index(0, 7), print);
 }
 
-View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
+void View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent)
 {
     mainWin = mw;
     gscene = theScene;
@@ -448,13 +439,13 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
 
     // NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
     // NOTE: Qt renderer will not draw the foreground properly if it isnt set.
-    setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+    setViewportUpdateMode(QGraphicsview_FullViewportUpdate);
 
     panDistance = 10; // TODO: should there be a setting for this???
 
-    setCursor(Qt::BlankCursor);
-    horizontalScrollBar()->setCursor(Qt::ArrowCursor);
-    verticalScrollBar()->setCursor(Qt::ArrowCursor);
+    setCursor(BlankCursor);
+    horizontalScrollBar()->setCursor(ArrowCursor);
+    verticalScrollBar()->setCursor(ArrowCursor);
     qsnapLocatorColor = settings_qsnap_locator_color;
     qsnapLocatorSize = settings_qsnap_locator_size;
     qsnapApertureSize = settings_qsnap_aperture_size;
@@ -522,7 +513,7 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     connect(gscene, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
-View::~View()
+void view_free(void)
 {
     //Prevent memory leaks by deleting any objects that were removed from the scene
     qDeleteAll(hashDeletedObjects.begin(), hashDeletedObjects.end());
@@ -533,7 +524,7 @@ View::~View()
     previewObjectList.clear();
 }
 
-void View::enterEvent(QEvent* /*event*/)
+void view_enterEvent(QEvent* /*event*/)
 {
     QMdiSubWindow* mdiWin = qobject_cast<QMdiSubWindow*>(parent());
     if (mdiWin) {
@@ -541,14 +532,14 @@ void View::enterEvent(QEvent* /*event*/)
     }
 }
 
-void View::addObject(BaseObject* obj)
+void view_addObject(BaseObject* obj)
 {
     gscene->addItem(obj);
     gscene->update();
     hashDeletedObjects.remove(obj->objID);
 }
 
-void View::deleteObject(BaseObject* obj)
+void view_deleteObject(BaseObject* obj)
 {
     //NOTE: We really just remove the objects from the scene. deletion actually occurs in the destructor.
     obj->setSelected(false);
@@ -557,7 +548,7 @@ void View::deleteObject(BaseObject* obj)
     hashDeletedObjects.insert(obj->objID, obj);
 }
 
-void View::previewOn(int clone, int mode, double x, double y, double data)
+void view_previewOn(int clone, int mode, double x, double y, double data)
 {
     debug_message("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
@@ -591,7 +582,7 @@ void View::previewOn(int clone, int mode, double x, double y, double data)
     gscene->update();
 }
 
-void View::previewOff()
+void view_previewOff()
 {
     //Prevent memory leaks by deleting any unused instances
     qDeleteAll(previewObjectList.begin(), previewObjectList.end());
@@ -608,31 +599,31 @@ void View::previewOff()
     gscene->update();
 }
 
-void View::enableMoveRapidFire()
+void view_enableMoveRapidFire()
 {
     rapidMoveActive = true;
 }
 
-void View::disableMoveRapidFire()
+void view_disableMoveRapidFire()
 {
     rapidMoveActive = false;
 }
 
-bool View::allowRubber()
+bool view_allowRubber()
 {
     //if (!rubberRoomList.size()) //TODO: this check should be removed later
         return true;
     return false;
 }
 
-void View::addToRubberRoom(QGraphicsItem* item)
+void view_addToRubberRoom(QGraphicsItem* item)
 {
     rubberRoomList.append(item);
     item->show();
     gscene->update();
 }
 
-void View::vulcanizeRubberRoom()
+void view_vulcanizeRubberRoom()
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -643,7 +634,7 @@ void View::vulcanizeRubberRoom()
     gscene->update();
 }
 
-void View::vulcanizeObject(BaseObject* obj)
+void view_vulcanizeObject(BaseObject* obj)
 {
     if (!obj) return;
     gscene->removeItem(obj); //Prevent Qt Runtime Warning, QGraphicsScene::addItem: item has already been added to this scene
@@ -653,7 +644,7 @@ void View::vulcanizeObject(BaseObject* obj)
     if (cmd) undoStack->push(cmd);
 }
 
-void View::clearRubberRoom()
+void view_clearRubberRoom()
 {
     foreach (QGraphicsItem* item, rubberRoomList) {
         BaseObject* base = static_cast<BaseObject*>(item);
@@ -664,7 +655,7 @@ void View::clearRubberRoom()
                (type == OBJ_TYPE_POLYLINE && spareRubberList.contains(SPARE_RUBBER_POLYLINE)) ||
                (spareRubberList.contains(base->objID))) {
                 if (!base->objectPath().elementCount()) {
-                    QMessageBox::critical(this, translate("Empty Rubber Object Error"),
+                    critical_messagebox(this, translate("Empty Rubber Object Error"),
                                           translate("The rubber object added contains no points. "
                                           "The command that created this object has flawed logic. "
                                           "The object will be deleted."));
@@ -687,12 +678,12 @@ void View::clearRubberRoom()
     gscene->update();
 }
 
-void View::spareRubber(qint64 id)
+void view_spareRubber(qint64 id)
 {
     spareRubberList.append(id);
 }
 
-void View::setRubberMode(int mode)
+void view_setRubberMode(int mode)
 {
     foreach (QGraphicsItem* item, rubberRoomList) {
         BaseObject* base = static_cast<BaseObject*>(item);
@@ -701,7 +692,7 @@ void View::setRubberMode(int mode)
     gscene->update();
 }
 
-void View::setRubberPoint(const std::string& key, const EmbVector& point)
+void view_setRubberPoint(const std::string& key, const EmbVector& point)
 {
     foreach (QGraphicsItem* item, rubberRoomList) {
         BaseObject* base = static_cast<BaseObject*>(item);
@@ -712,7 +703,7 @@ void View::setRubberPoint(const std::string& key, const EmbVector& point)
     gscene->update();
 }
 
-void View::setRubberText(const std::string& key, const std::string& txt)
+void view_setRubberText(const std::string& key, const std::string& txt)
 {
     foreach(QGraphicsItem* item, rubberRoomList)
     {
@@ -722,7 +713,7 @@ void View::setRubberText(const std::string& key, const std::string& txt)
     gscene->update();
 }
 
-void View::setGridColor(unsigned int color)
+void view_setGridColor(unsigned int color)
 {
     gridColor = QColor(color);
     gscene->setProperty(VIEW_COLOR_GRID, color);
@@ -731,13 +722,13 @@ void View::setGridColor(unsigned int color)
     }
 }
 
-void View::setRulerColor(unsigned int color)
+void view_setRulerColor(unsigned int color)
 {
     rulerColor = QColor(color);
     gscene->update();
 }
 
-void View::createGrid(const std::string& gridType)
+void view_createGrid(const std::string& gridType)
 {
     if (gridType == "Rectangular") {
         createGridRect();
@@ -761,7 +752,7 @@ void View::createGrid(const std::string& gridType)
     gscene->update();
 }
 
-void View::createOrigin() //TODO: Make Origin Customizable
+void view_createOrigin() //TODO: Make Origin Customizable
 {
     originPath = QPainterPath();
 
@@ -779,7 +770,7 @@ void View::createOrigin() //TODO: Make Origin Customizable
     }
 }
 
-void View::createGridRect()
+void view_createGridRect()
 {
     EmbRect gr(0, 0, settings_grid_size_x, -settings_grid_size_y);
     //Ensure the loop will work correctly with negative numbers
@@ -814,7 +805,7 @@ void View::createGridRect()
     }
 }
 
-void View::createGridPolar()
+void view_createGridPolar()
 {
     double rad = settings_grid_size_radius;
 
@@ -833,7 +824,7 @@ void View::createGridPolar()
     }
 }
 
-void View::createGridIso()
+void view_createGridIso()
 {
     //Ensure the loop will work correctly with negative numbers
     double isoW = std::fabs(settings_grid_size_x);
@@ -878,116 +869,98 @@ void View::createGridIso()
     }
 }
 
-void View::toggleSnap(bool on)
+void view_toggleSnap(bool on)
 {
     debug_message("View toggleSnap()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_SNAP", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleGrid(bool on)
+void view_toggleGrid(bool on)
 {
     debug_message("View toggleGrid()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     if (on) {
         createGrid(settings_grid_type);
     }
     else {
         createGrid("");
     }
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleRuler(bool on)
+void view_toggleRuler(bool on)
 {
     debug_message("View toggleRuler()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     gscene->setProperty("ENABLE_RULER", on);
     rulerMetric = settings_ruler_metric;
     rulerColor = QColor(settings_ruler_color);
     rulerPixelSize = settings_ruler_pixel_size;
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleOrtho(bool on)
+void view_toggleOrtho(bool on)
 {
     debug_message("View toggleOrtho()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_ORTHO", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::togglePolar(bool on)
+void view_togglePolar(bool on)
 {
     debug_message("View togglePolar()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_POLAR", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQSnap(bool on)
+void view_toggleQSnap(bool on)
 {
     debug_message("View toggleQSnap()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     qSnapToggle = on;
     gscene->setProperty("ENABLE_QSNAP", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleQTrack(bool on)
+void view_toggleQTrack(bool on)
 {
     debug_message("View toggleQTrack()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
     gscene->setProperty("ENABLE_QTRACK", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleLwt(bool on)
+void view_toggleLwt(bool on)
 {
     debug_message("View toggleLwt()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_LWT, on);
+    gscene->setProperty("ENABLE_LWT", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-void View::toggleReal(bool on)
+void view_toggleReal(bool on)
 {
     debug_message("View toggleReal()");
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_REAL, on);
+    gscene->setProperty("ENABLE_REAL", on);
     gscene->update();
-    QApplication::restoreOverrideCursor();
 }
 
-bool View::isLwtEnabled()
+bool view_isLwtEnabled()
 {
-    return gscene->property(ENABLE_LWT).toBool();
+    return gscene->property("ENABLE_LWT").toBool();
 }
 
-bool View::isRealEnabled()
+bool view_isRealEnabled()
 {
-    return gscene->property(ENABLE_REAL).toBool();
+    return gscene->property("ENABLE_REAL").toBool();
 }
 
-void View::drawBackground(QPainter* painter, const EmbRect& rect)
+void view_drawBackground(QPainter* painter, const EmbRect& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
     if (gscene->property("ENABLE_GRID").toBool() && rect.intersects(gridPath.controlPointRect())) {
         QPen gridPen(gridColor);
-        gridPen.setJoinStyle(Qt::MiterJoin);
+        gridPen.setJoinStyle(MiterJoin);
         gridPen.setCosmetic(true);
         painter->setPen(gridPen);
         painter->drawPath(gridPath);
@@ -996,7 +969,7 @@ void View::drawBackground(QPainter* painter, const EmbRect& rect)
     }
 }
 
-void View::drawForeground(QPainter* painter, const EmbRect& rect)
+void view_drawForeground(QPainter* painter, const EmbRect& rect)
 {
     //==================================================
     //Draw grip points for all selected objects
@@ -1004,7 +977,7 @@ void View::drawForeground(QPainter* painter, const EmbRect& rect)
 
     QPen gripPen(QColor::fromRgb(gripColorCool));
     gripPen.setWidth(2);
-    gripPen.setJoinStyle(Qt::MiterJoin);
+    gripPen.setJoinStyle(MiterJoin);
     gripPen.setCosmetic(true);
     painter->setPen(gripPen);
     EmbVector gripOffset(gripSize, gripSize);
@@ -1040,7 +1013,7 @@ void View::drawForeground(QPainter* painter, const EmbRect& rect)
     if (!selectingActive) {
         QPen qsnapPen(QColor::fromRgb(qsnapLocatorColor));
         qsnapPen.setWidth(2);
-        qsnapPen.setJoinStyle(Qt::MiterJoin);
+        qsnapPen.setJoinStyle(MiterJoin);
         qsnapPen.setCosmetic(true);
         painter->setPen(qsnapPen);
         EmbVector qsnapOffset(qsnapLocatorSize, qsnapLocatorSize);
@@ -1305,7 +1278,7 @@ void View::drawForeground(QPainter* painter, const EmbRect& rect)
     //==================================================
 
     if (!selectingActive) {
-        //painter->setBrush(Qt::NoBrush);
+        //painter->setBrush(NoBrush);
         QPen crosshairPen(QColor::fromRgb(crosshairColor));
         crosshairPen.setCosmetic(true);
         painter->setPen(crosshairPen);
@@ -1319,7 +1292,7 @@ void View::drawForeground(QPainter* painter, const EmbRect& rect)
 }
 
 
-void View::updateMouseCoords(int x, int y)
+void view_updateMouseCoords(int x, int y)
 {
     viewMousePoint = EmbVector(x, y);
     sceneMousePoint = mapToScene(viewMousePoint);
@@ -1329,7 +1302,7 @@ void View::updateMouseCoords(int x, int y)
     mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
-void View::setCrossHairSize(quint8 percent)
+void view_setCrossHairSize(quint8 percent)
 {
     //NOTE: crosshairSize is in pixels and is a percentage of your screen width
     //NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
@@ -1343,7 +1316,7 @@ void View::setCrossHairSize(quint8 percent)
     }
 }
 
-void View::setCornerButton()
+void view_setCornerButton()
 {
     int num = settings_display_scrollbar_widget_num;
     if (num) {
@@ -1359,7 +1332,7 @@ void View::setCornerButton()
             cornerButton->setIcon(act->icon());
             connect(cornerButton, SIGNAL(clicked()), this, SLOT(cornerButtonClicked()));
             setCornerWidget(cornerButton);
-            cornerButton->setCursor(Qt::ArrowCursor);
+            cornerButton->setCursor(ArrowCursor);
         }
     }
     else {
@@ -1367,50 +1340,45 @@ void View::setCornerButton()
     }
 }
 
-void View::cornerButtonClicked()
+void view_cornerButtonClicked()
 {
     debug_message("Corner Button Clicked.");
     mainWin->actionHash.value(settings_display_scrollbar_widget_num)->trigger();
 }
 
-void View::zoomIn()
+void view_zoomIn()
 {
     debug_message("View zoomIn()");
     if (!allowZoomIn()) {
         return;
     }
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     EmbVector cntr = mapToScene(EmbVector(width()/2,height()/2));
     scale(settings_display_zoomscale_in, settings_display_zoomscale_in);
 
     centerOn(cntr);
-    QApplication::restoreOverrideCursor();
 }
 
-void View::zoomOut()
+void view_zoomOut()
 {
     debug_message("View zoomOut()");
     if (!allowZoomOut()) {
         return;
     }
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     EmbVector cntr = mapToScene(EmbVector(width()/2,height()/2));
     scale(settings_display_zoomscale_out, settings_display_zoomscale_out);
 
     centerOn(cntr);
-    QApplication::restoreOverrideCursor();
 }
 
-void View::zoomWindow()
+void view_zoomWindow()
 {
     zoomWindowActive = true;
     selectingActive = false;
     clearSelection();
 }
 
-void View::zoomSelected()
+void view_zoomSelected()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     QPainterPath selectedRectPath;
     foreach (QGraphicsItem* item, itemList) {
@@ -1421,68 +1389,65 @@ void View::zoomSelected()
         information_messagebox(this, translate("ZoomSelected Preselect"), translate("Preselect objects before invoking the zoomSelected command."));
         //TODO: Support Post selection of objects
     }
-    fitInView(selectedRect, Qt::KeepAspectRatio);
-    QApplication::restoreOverrideCursor();
+    fitInView(selectedRect, KeepAspectRatio);
 }
 
-void View::zoomExtents()
+void view_zoomExtents()
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     EmbRect extents = gscene->itemsBoundingRect();
     if (extents.isNull()) {
         extents.setWidth(settings_grid_size_x);
         extents.setHeight(settings_grid_size_y);
         extents.moveCenter(EmbVector(0,0));
     }
-    fitInView(extents, Qt::KeepAspectRatio);
-    QApplication::restoreOverrideCursor();
+    fitInView(extents, KeepAspectRatio);
 }
 
-void View::panLeft()
+void view_panLeft()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + panDistance);
     updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
-void View::panRight()
+void view_panRight()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() - panDistance);
     updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
-void View::panUp()
+void view_panUp()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() + panDistance);
     updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
-void View::panDown()
+void view_panDown()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() - panDistance);
     updateMouseCoords(viewMousePoint);
     gscene->update();
 }
 
-void View::selectAll()
+void view_selectAll()
 {
     QPainterPath allPath;
     allPath.addRect(gscene->sceneRect());
-    /* gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform()); */
+    /* gscene->setSelectionArea(allPath, IntersectsItemShape, this->transform()); */
 }
 
-void View::selectionChanged()
+void view_selectionChanged()
 {
     if (mainWin->dockPropEdit->isVisible()) {
         mainWin->dockPropEdit->setSelectedItems(gscene->selectedItems());
     }
 }
 
-void View::mouseDoubleClickEvent(QMouseEvent* event)
+void view_mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == LeftButton) {
         QGraphicsItem* item = gscene->itemAt(mapToScene(event->pos()), QTransform());
         if (item) {
             mainWin->dockPropEdit->show();
@@ -1490,10 +1455,10 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void View::mousePressEvent(QMouseEvent* event)
+void view_mousePressEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->x(), event->y());
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == LeftButton) {
         if (mainWin->isCommandActive()) {
             EmbVector cmdPoint = mapToScene(event->pos());
             mainWin->runCommandClick(mainWin->activeCommand(), cmdPoint.x(), cmdPoint.y());
@@ -1561,19 +1526,19 @@ void View::mousePressEvent(QMouseEvent* event)
             if (sceneReleasePoint.x() > scenePressPoint.x()) {
                 if (settings_selection_mode_pickadd) {
                     if (mainWin->isShiftPressed()) {
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (mainWin->isShiftPressed()) {
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, ContainsItemShape);
                         if (!itemList.size())
                             clearSelection();
                         else {
@@ -1583,7 +1548,7 @@ void View::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         clearSelection();
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::ContainsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, ContainsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1592,19 +1557,19 @@ void View::mousePressEvent(QMouseEvent* event)
             else {
                 if (settings_selection_mode_pickadd) {
                     if (mainWin->isShiftPressed()) {
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(false);
                     }
                     else {
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
                 }
                 else {
                     if (mainWin->isShiftPressed()) {
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, IntersectsItemShape);
                         if (!itemList.size())
                             clearSelection();
                         else {
@@ -1614,7 +1579,7 @@ void View::mousePressEvent(QMouseEvent* event)
                     }
                     else {
                         clearSelection();
-                        std::vector<QGraphicsItem*> itemList = gscene->items(path, Qt::IntersectsItemShape);
+                        std::vector<QGraphicsItem*> itemList = gscene->items(path, IntersectsItemShape);
                         foreach(QGraphicsItem* item, itemList)
                             item->setSelected(true);
                     }
@@ -1644,11 +1609,11 @@ void View::mousePressEvent(QMouseEvent* event)
             selectingActive = false;
         }
         if (zoomWindowActive) {
-            fitInView(path.boundingRect(), Qt::KeepAspectRatio);
+            fitInView(path.boundingRect(), KeepAspectRatio);
             clearSelection();
         }
     }
-    if (event->button() == Qt::MiddleButton) {
+    if (event->button() == MiddleButton) {
         panStart(event->pos());
         //The Undo command will record the spot where the pan started.
         UndoableNavCommand* cmd = new UndoableNavCommand("PanStart", this, 0);
@@ -1658,7 +1623,7 @@ void View::mousePressEvent(QMouseEvent* event)
     gscene->update();
 }
 
-void View::panStart(const EmbVector& point)
+void view_panStart(const EmbVector& point)
 {
     recalculateLimits();
 
@@ -1669,7 +1634,7 @@ void View::panStart(const EmbVector& point)
     panStartY = point.y();
 }
 
-void View::recalculateLimits()
+void view_recalculateLimits()
 {
     //NOTE: Increase the sceneRect limits if the point we want to go to lies outside of sceneRect's limits
     //      If the sceneRect limits aren't increased, you cannot pan past its limits
@@ -1684,7 +1649,7 @@ void View::recalculateLimits()
     }
 }
 
-void View::centerAt(const EmbVector& centerPoint)
+void view_centerAt(const EmbVector& centerPoint)
 {
     //centerOn also updates the scrollbars, which shifts things out of wack o_O
     centerOn(centerPoint);
@@ -1694,7 +1659,7 @@ void View::centerAt(const EmbVector& centerPoint)
     centerOn(newCenter);
 }
 
-void View::alignScenePointWithViewPoint(const EmbVector& scenePoint, const EmbVector& viewPoint)
+void view_alignScenePointWithViewPoint(const EmbVector& scenePoint, const EmbVector& viewPoint)
 {
     EmbVector viewCenter = center();
     EmbVector pointBefore = scenePoint;
@@ -1707,7 +1672,7 @@ void View::alignScenePointWithViewPoint(const EmbVector& scenePoint, const EmbVe
     centerOn(newCenter);
 }
 
-void View::mouseMoveEvent(QMouseEvent* event)
+void view_mouseMoveEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->position().x(), event->position().y());
     movePoint = event->pos();
@@ -1744,7 +1709,7 @@ void View::mouseMoveEvent(QMouseEvent* event)
             previewObjectItemGroup->setPos(0,0);
 
             if (scaleFactor <= 0.0) {
-                QMessageBox::critical(this, translate("ScaleFactor Error"),
+                critical_messagebox(this, translate("ScaleFactor Error"),
                                     translate("Hi there. If you are not a developer, report this as a bug. "
                                     "If you are a developer, your code needs examined, and possibly your head too."));
             }
@@ -1789,10 +1754,10 @@ void View::mouseMoveEvent(QMouseEvent* event)
     gscene->update();
 }
 
-void View::mouseReleaseEvent(QMouseEvent* event)
+void view_mouseReleaseEvent(QMouseEvent* event)
 {
     updateMouseCoords(event->x(), event->y());
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == LeftButton) {
         if (movingActive) {
             previewOff();
             double dx = sceneMousePoint.x()-scenePressPoint.x();
@@ -1803,19 +1768,19 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         }
         event->accept();
     }
-    if (event->button() == Qt::MiddleButton) {
+    if (event->button() == MiddleButton) {
         panningActive = false;
         //The Undo command will record the spot where the pan completed.
         UndoableNavCommand* cmd = new UndoableNavCommand("PanStop", this, 0);
         undoStack->push(cmd);
         event->accept();
     }
-    if (event->button() == Qt::XButton1) {
+    if (event->button() == XButton1) {
         debug_message("XButton1");
         mainWin->undo(); //TODO: Make this customizable
         event->accept();
     }
-    if (event->button() == Qt::XButton2) {
+    if (event->button() == XButton2) {
         debug_message("XButton2");
         mainWin->redo(); //TODO: Make this customizable
         event->accept();
@@ -1823,7 +1788,7 @@ void View::mouseReleaseEvent(QMouseEvent* event)
     gscene->update();
 }
 
-bool View::allowZoomIn()
+bool view_allowZoomIn()
 {
     EmbVector origin  = mapToScene(0,0);
     EmbVector corner  = mapToScene(width(), height());
@@ -1838,7 +1803,7 @@ bool View::allowZoomIn()
     return true;
 }
 
-bool View::allowZoomOut()
+bool view_allowZoomOut()
 {
     EmbVector origin  = mapToScene(0,0);
     EmbVector corner  = mapToScene(width(), height());
@@ -1853,7 +1818,7 @@ bool View::allowZoomOut()
     return true;
 }
 
-void View::wheelEvent(QWheelEvent* event)
+void view_wheelEvent(QWheelEvent* event)
 {
     int zoomDir = 1; /* TODO: event->delta(); */
     EmbVector mousePoint = event->position();
@@ -1869,7 +1834,7 @@ void View::wheelEvent(QWheelEvent* event)
     }
 }
 
-void View::zoomToPoint(const EmbVector& mousePoint, int zoomDir)
+void view_zoomToPoint(const EmbVector& mousePoint, int zoomDir)
 {
     EmbVector pointBeforeScale(mapToScene(mousePoint));
 
@@ -1903,7 +1868,7 @@ void View::zoomToPoint(const EmbVector& mousePoint, int zoomDir)
     gscene->update();
 }
 
-void View::contextMenuEvent(QContextMenuEvent* event)
+void view_contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu menu;
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
@@ -1977,7 +1942,7 @@ void View::contextMenuEvent(QContextMenuEvent* event)
     menu.exec(event->globalPos());
 }
 
-void View::deletePressed()
+void view_deletePressed()
 {
     debug_message("View deletePressed()");
     if (pastingActive)
@@ -1993,7 +1958,7 @@ void View::deletePressed()
     deleteSelected();
 }
 
-void View::escapePressed()
+void view_escapePressed()
 {
     debug_message("View escapePressed()");
     if (pastingActive)
@@ -2009,7 +1974,7 @@ void View::escapePressed()
     else clearSelection();
 }
 
-void View::startGripping(BaseObject* obj)
+void view_startGripping(BaseObject* obj)
 {
     if (!obj) return;
     grippingActive = true;
@@ -2019,7 +1984,7 @@ void View::startGripping(BaseObject* obj)
     gripBaseObj->setObjectRubberMode(OBJ_RUBBER_GRIP);
 }
 
-void View::stopGripping(bool accept)
+void view_stopGripping(bool accept)
 {
     grippingActive = false;
     if (gripBaseObj)
@@ -2037,12 +2002,12 @@ void View::stopGripping(bool accept)
     sceneGripPoint = sceneRect().topLeft();
 }
 
-void View::clearSelection()
+void view_clearSelection()
 {
     gscene->clearSelection();
 }
 
-void View::deleteSelected()
+void view_deleteSelected()
 {
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2065,7 +2030,7 @@ void View::deleteSelected()
         undoStack->endMacro();
 }
 
-void View::cut()
+void view_cut()
 {
     if (gscene->selectedItems().isEmpty())
     {
@@ -2079,7 +2044,7 @@ void View::cut()
     undoStack->endMacro();
 }
 
-void View::copy()
+void view_copy()
 {
     if (gscene->selectedItems().isEmpty())
     {
@@ -2091,7 +2056,7 @@ void View::copy()
     clearSelection();
 }
 
-void View::copySelected()
+void view_copySelected()
 {
     std::vector<QGraphicsItem*> selectedList = gscene->selectedItems();
 
@@ -2105,7 +2070,7 @@ void View::copySelected()
     mainWin->cutCopyObjectList = createObjectList(selectedList);
 }
 
-void View::paste()
+void view_paste()
 {
     if (pastingActive)
     {
@@ -2122,7 +2087,7 @@ void View::paste()
     mainWin->cutCopyObjectList = createObjectList(mainWin->cutCopyObjectList);
 }
 
-std::vector<QGraphicsItem*> View::createObjectList(std::vector<QGraphicsItem*> list)
+std::vector<QGraphicsItem*> view_createObjectList(std::vector<QGraphicsItem*> list)
 {
     std::vector<QGraphicsItem*> copyList;
 
@@ -2286,21 +2251,21 @@ std::vector<QGraphicsItem*> View::createObjectList(std::vector<QGraphicsItem*> l
     return copyList;
 }
 
-void View::repeatAction()
+void view_repeatAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText(mainWin->prompt->lastCommand());
-    mainWin->prompt->processInput(Qt::Key_Return);
+    mainWin->prompt->processInput(Key_Return);
 }
 
-void View::moveAction()
+void view_moveAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText("move");
-    mainWin->prompt->processInput(Qt::Key_Return);
+    mainWin->prompt->processInput(Key_Return);
 }
 
-void View::moveSelected(double dx, double dy)
+void view_moveSelected(double dx, double dy)
 {
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2322,14 +2287,14 @@ void View::moveSelected(double dx, double dy)
     gscene->clearSelection();
 }
 
-void View::rotateAction()
+void view_rotateAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText("rotate");
-    mainWin->prompt->processInput(Qt::Key_Return);
+    mainWin->prompt->processInput(Key_Return);
 }
 
-void View::rotateSelected(double x, double y, double rot)
+void view_rotateSelected(double x, double y, double rot)
 {
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2351,7 +2316,7 @@ void View::rotateSelected(double x, double y, double rot)
     gscene->clearSelection();
 }
 
-void View::mirrorSelected(double x1, double y1, double x2, double y2)
+void view_mirrorSelected(double x1, double y1, double x2, double y2)
 {
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2373,14 +2338,14 @@ void View::mirrorSelected(double x1, double y1, double x2, double y2)
     gscene->clearSelection();
 }
 
-void View::scaleAction()
+void view_scaleAction()
 {
     mainWin->prompt->endCommand();
     mainWin->prompt->setCurrentText("scale");
-    mainWin->prompt->processInput(Qt::Key_Return);
+    mainWin->prompt->processInput(Key_Return);
 }
 
-void View::scaleSelected(double x, double y, double factor)
+void view_scaleSelected(double x, double y, double factor)
 {
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2402,40 +2367,38 @@ void View::scaleSelected(double x, double y, double factor)
     gscene->clearSelection();
 }
 
-int View::numSelected()
+int view_numSelected()
 {
     return gscene->selectedItems().size();
 }
 
-void View::showScrollBars(bool val)
+void view_showScrollBars(bool val)
 {
-    if (val)
-    {
-        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    if (val) {
+        setHorizontalScrollBarPolicy(ScrollBarAlwaysOn);
+        setVerticalScrollBarPolicy(ScrollBarAlwaysOn);
     }
-    else
-    {
-        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    else {
+        setHorizontalScrollBarPolicy(ScrollBarAlwaysOff);
+        setVerticalScrollBarPolicy(ScrollBarAlwaysOff);
     }
 }
 
-void View::setCrossHairColor(unsigned int color)
+void view_setCrossHairColor(unsigned int color)
 {
     crosshairColor = color;
     gscene->setProperty(VIEW_COLOR_CROSSHAIR, color);
     if (gscene) gscene->update();
 }
 
-void View::setBackgroundColor(unsigned int color)
+void view_setBackgroundColor(unsigned int color)
 {
     setBackgroundBrush(QColor(color));
     gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
     if (gscene) gscene->update();
 }
 
-void View::setSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)
+void view_setSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)
 {
     selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }

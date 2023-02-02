@@ -17,51 +17,54 @@
 
 #include "imgui.h"
 
+#include <sstream>
+
+/* Need validation for the input number before applying to object.
+ & and to add to undo history
+ */
 void show_double(std::string label, double data);
 
 void create_group_box_general(void);
-void create_group_box_geometry_arc(int index);
-void create_group_box_misc_arc(int index);
-void create_group_box_geometry_block(int index);
-void create_group_box_geometry_circle(int index);
-void create_group_box_geometry_dim_aligned(int index);
-void create_group_box_geometry_dim_angular(int index);
-void create_group_box_geometry_dim_arc_length(int index);
-void create_group_box_geometry_dim_diameter(int index);
-void create_group_box_geometry_dim_leader(int index);
-void create_group_box_geometry_dim_linear(int index);
-void create_group_box_geometry_dim_ordinate(int index);
-void create_group_box_geometry_dim_radius(int index);
-void create_group_box_geometry_ellipse(int index);
-void create_group_box_geometry_image(int index);
+void create_group_box_arc(int id, EmbArc *arc);
+void create_group_box_block(int id);
+void create_group_box_circle(int id, EmbCircle *circle);
+void create_group_box_dim_aligned(int id);
+void create_group_box_dim_angular(int id);
+void create_group_box_dim_arc_length(int id);
+void create_group_box_dim_diameter(int id);
+void create_group_box_dim_leader(int id);
+void create_group_box_dim_linear(int id);
+void create_group_box_dim_ordinate(int id);
+void create_group_box_dim_radius(int id);
+void create_group_box_ellipse(int id);
+void create_group_box_image(int id);
 void create_group_box_misc_image(int image_index);
-void create_group_box_geometry_infinite_line(int infinite_line_index);
-void create_group_box_geometry_line(int index);
-void create_group_box_geometry_path(int index);
-void create_group_box_misc_path(int index);
-void create_group_box_geometry_point(int index);
-void create_group_box_geometry_polygon(int index);
-void create_group_box_geometry_polyline(int index);
-void create_group_box_misc_polyline(int index);
-void create_group_box_geometry_ray(int index);
-void create_group_box_geometry_rectangle(int index);
-void create_group_box_geometry_text_multi(int index);
-void create_group_box_text_text_single(int index);
-void create_group_box_geometry_text_single(int index);
-void create_group_box_misc_text_single(int index);
+void create_group_box_infinite_line(int infinite_line_index);
+void create_group_box_line(EmbLine *line);
+void create_group_box_path(int id);
+void create_group_box_misc_path(int id);
+void create_group_box_point(int id);
+void create_group_box_polygon(int id);
+void create_group_box_polyline(int id);
+void create_group_box_misc_polyline(int id);
+void create_group_box_ray(int id);
+void create_group_box_rectangle(int id);
+void create_group_box_text_multi(int id);
+void create_group_box_text_single(int id);
 
 void
 property_editor(void)
 {
+    if (views.size() == 0) {
+        return;
+    }
+
+    EmbPattern *pattern = views[pattern_index].pattern;
+
     ImGui::BeginChild(translate("Property Editor").c_str());
-    ImGui::Text(translate("Property Editor").c_str());
-    ImGui::EndChild();
-    return;
+    ImGui::Text(translate("Properties").c_str());
     /*
-    iconDir = iconDirectory;
-    iconSize = 16;
     propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable
-    setMinimumSize(100,100);
 
     pickAdd = pickAddMode;
 
@@ -90,36 +93,112 @@ property_editor(void)
     QScrollArea* scrollProperties = new QScrollArea(this);
     QWidget* widgetProperties = new QWidget(this);
     */
-    create_group_box_general();
-    create_group_box_geometry_arc(0);
-    create_group_box_misc_arc(0);
-    create_group_box_geometry_block(0);
-    create_group_box_geometry_circle(0);
-    create_group_box_geometry_dim_aligned(0);
-    create_group_box_geometry_dim_angular(0);
-    create_group_box_geometry_dim_arc_length(0);
-    create_group_box_geometry_dim_diameter(0);
-    create_group_box_geometry_dim_leader(0);
-    create_group_box_geometry_dim_linear(0);
-    create_group_box_geometry_dim_ordinate(0);
-    create_group_box_geometry_dim_radius(0);
-    create_group_box_geometry_ellipse(0);
-    create_group_box_geometry_image(0);
-    create_group_box_misc_image(0);
-    create_group_box_geometry_infinite_line(0);
-    create_group_box_geometry_line(0);
-    create_group_box_geometry_path(0);
-    create_group_box_misc_path(0);
-    create_group_box_geometry_point(0);
-    create_group_box_geometry_polygon(0);
-    create_group_box_geometry_polyline(0);
-    create_group_box_misc_polyline(0);
-    create_group_box_geometry_ray(0);
-    create_group_box_geometry_rectangle(0);
-    create_group_box_geometry_text_multi(0);
-    create_group_box_text_text_single(0);
-    create_group_box_geometry_text_single(0);
-    create_group_box_misc_text_single(0);
+    if (0) {
+        create_group_box_general();
+    }
+
+    if (pattern->arcs) {
+        for (int i=0; i<pattern->arcs->count; i++) {
+            EmbArc *arc = &(pattern->arcs->arc[i]);
+            create_group_box_arc(i, arc);
+        }
+    }
+
+    if (0) {
+        create_group_box_block(0);
+    }
+
+    if (pattern->circles) {
+        for (int i=0; i<pattern->circles->count; i++) {
+            EmbCircle *circle = &(pattern->circles->circle[i]);
+            create_group_box_circle(i, circle);
+        }
+    }
+
+    if (0) {
+        create_group_box_dim_aligned(0);
+    }
+
+    if (0) {
+        create_group_box_dim_angular(0);
+    }
+
+    if (0) {
+        create_group_box_dim_arc_length(0);
+    }
+
+    if (0) {
+        create_group_box_dim_diameter(0);
+    }
+
+    if (0) {
+        create_group_box_dim_leader(0);
+    }
+
+    if (0) {
+        create_group_box_dim_linear(0);
+    }
+
+    if (0) {
+        create_group_box_dim_ordinate(0);
+    }
+
+    if (0) {
+        create_group_box_dim_radius(0);
+    }
+
+    if (0) {
+        create_group_box_ellipse(0);
+    }
+
+    if (0) {
+        create_group_box_image(0);
+    }
+
+    if (0) {
+        create_group_box_infinite_line(0);
+    }
+
+    if (pattern->lines) {
+        for (int i=0; i<pattern->lines->count; i++) {
+            EmbLine *line = &(pattern->lines->line[i]);
+            create_group_box_line(line);
+        }
+    }
+
+    if (0) {
+        create_group_box_path(0);
+        create_group_box_misc_path(0);
+    }
+
+    if (0) {
+        create_group_box_point(0);
+    }
+
+    if (0) {
+        create_group_box_polygon(0);
+    }
+
+    if (0) {
+        create_group_box_polyline(0);
+        create_group_box_misc_polyline(0);
+    }
+
+    if (0) {
+        create_group_box_ray(0);
+    }
+
+    if (0) {
+        create_group_box_rectangle(0);
+    }
+
+    if (0) {
+        create_group_box_text_multi(0);
+    }
+
+    if (0) {
+        create_group_box_text_single(0);
+    }
 
     /*
     vboxLayoutProperties->addStretch(1);
@@ -132,17 +211,14 @@ property_editor(void)
     vboxLayoutMain->addWidget(scrollProperties);
     widgetMain->setLayout(vboxLayoutMain);
 
-    setWidget(widgetMain);
-    setWindowTitle(translate("Properties"));
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
-    hideAllGroups();
 
     connect(signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(fieldEdited(QObject*)));
 
     focusWidget = widgetToFocus;
     this->installEventFilter(this);
     */
+    ImGui::EndChild();
 }
 
 bool property_editor_eventFilter(void)
@@ -198,16 +274,14 @@ QToolButton* property_editor_createToolButtonPickAdd()
 void property_editor_updatePickAddModeButton(bool pickAddMode)
 {
     pickAdd = pickAddMode;
-    if (pickAdd)
-    {
+    if (pickAdd) {
         toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "pickadd" + ".png"));
         toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
         toolButtonPickAdd->setText("PickAdd");
         toolButtonPickAdd->setToolTip("PickAdd Mode - Add to current selection.\nClick to switch to PickNew Mode.");
         toolButtonPickAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
     }
-    else
-    {
+    else {
         toolButtonPickAdd->setIcon(QIcon(iconDir + "/" + "picknew" + ".png"));
         toolButtonPickAdd->setIconSize(QSize(iconSize, iconSize));
         toolButtonPickAdd->setText("PickNew");
@@ -238,8 +312,7 @@ void property_editor_setSelectedItems(std::vector<QGraphicsItem*> itemList)
     hideAllGroups();
     comboBoxSelected->clear();
 
-    if (itemList.isEmpty())
-    {
+    if (itemList.isEmpty()) {
         comboBoxSelected->addItem(translate("No Selection"));
         return;
     }
@@ -272,8 +345,7 @@ void property_editor_setSelectedItems(std::vector<QGraphicsItem*> itemList)
     int numTextSingle = 0;
     int numUnknown    = 0;
 
-    foreach(QGraphicsItem* item, itemList)
-    {
+    foreach (QGraphicsItem* item, itemList) {
         if (!item) continue;
 
         int objType = item->type();
@@ -329,8 +401,10 @@ void property_editor_setSelectedItems(std::vector<QGraphicsItem*> itemList)
             comboBoxStr = translate("Angular Dimension") + " (" + itos(numDimAngular) + ")";
         else if (objType == OBJ_TYPE_DIMARCLENGTH)
             comboBoxStr = translate("Arclength Dimension") + " (" + itos(numDimArcLen) + ")";
-        else if (objType == OBJ_TYPE_DIMDIAMETER)  comboBoxStr = translate("Diameter Dimension") + " (" + itos(numDimDiam) + ")";
-        else if (objType == OBJ_TYPE_DIMLEADER)    comboBoxStr = translate("Leader Dimension") + " (" + itos(numDimLeader) + ")";
+        else if (objType == OBJ_TYPE_DIMDIAMETER)
+            comboBoxStr = translate("Diameter Dimension") + " (" + itos(numDimDiam) + ")";
+        else if (objType == OBJ_TYPE_DIMLEADER)
+            comboBoxStr = translate("Leader Dimension") + " (" + itos(numDimLeader) + ")";
         else if (objType == OBJ_TYPE_DIMLINEAR)
             comboBoxStr = translate("Linear Dimension") + " (" + itos(numDimLinear) + ")";
         else if (objType == OBJ_TYPE_DIMORDINATE)
@@ -351,12 +425,21 @@ void property_editor_setSelectedItems(std::vector<QGraphicsItem*> itemList)
             comboBoxStr = translate("Point") + " (" + itos(numPoint) + ")";
         else if (objType == OBJ_TYPE_POLYGON)
             comboBoxStr = translate("Polygon") + " (" + itos(numPolygon) + ")";
-        else if (objType == OBJ_TYPE_POLYLINE)     comboBoxStr = translate("Polyline") + " (" + itos(numPolyline) + ")";
-        else if (objType == OBJ_TYPE_RAY)          comboBoxStr = translate("Ray") + " (" + itos(numRay) + ")";
-        else if (objType == OBJ_TYPE_RECTANGLE)    comboBoxStr = translate("Rectangle") + " (" + itos(numRect) + ")";
-        else if (objType == OBJ_TYPE_TEXTMULTI)    comboBoxStr = translate("Multiline Text") + " (" + itos(numTextMulti) + ")";
-        else if (objType == OBJ_TYPE_TEXTSINGLE)   comboBoxStr = translate("Text") + " (" + itos(numTextSingle) + ")";
-        else                                      comboBoxStr = translate("Unknown") + " (" + itos(numUnknown) + ")";
+        else if (objType == OBJ_TYPE_POLYLINE)
+            comboBoxStr = translate("Polyline") + " (" + itos(numPolyline) + ")";
+        else if (objType == OBJ_TYPE_RAY)
+            comboBoxStr = translate("Ray") + " (" + itos(numRay) + ")";
+        else if (objType == OBJ_TYPE_RECTANGLE)
+            comboBoxStr = translate("Rectangle") + " (" + itos(numRect) + ")";
+        else if (objType == OBJ_TYPE_TEXTMULTI) {
+            comboBoxStr = translate("Multiline Text") + " (" + itos(numTextMulti) + ")";
+        }
+        else if (objType == OBJ_TYPE_TEXTSINGLE) {
+            comboBoxStr = translate("Text") + " (" + itos(numTextSingle) + ")";
+        }
+        else {
+            comboBoxStr = translate("Unknown") + " (" + itos(numUnknown) + ")";
+        }
 
         comboBoxSelected->addItem(comboBoxStr, objType);
     }
@@ -368,8 +451,7 @@ void property_editor_setSelectedItems(std::vector<QGraphicsItem*> itemList)
     //Clear fields first so if the selected data varies, the comparison is simple
     clearAllFields();
 
-    foreach(QGraphicsItem* item, itemList)
-    {
+    foreach (QGraphicsItem* item, itemList) {
         if (!item) continue;
 
         //TODO: load data into the General field
@@ -594,14 +676,13 @@ void property_editor_updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, 
     fieldOldText = fontComboBox->property("FontFamily").toString();
     fieldNewText = str;
     //debug_message("old: %d %s, new: %d %s", oldIndex, qPrintable(fontComboBox->currentText()), newIndex, qPrintable(str));
-    if (fieldOldText.isEmpty())
-    {
+    if (fieldOldText.isEmpty()) {
         fontComboBox->setCurrentFont(QFont(fieldNewText));
         fontComboBox->setProperty("FontFamily", fieldNewText);
     }
-    else if (fieldOldText != fieldNewText)
-    {
-        if (fontComboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
+    else if (fieldOldText != fieldNewText) {
+        // Prevent multiple entries
+        if (fontComboBox->findText(fieldVariesText) == -1)
             fontComboBox->addItem(fieldVariesText);
         fontComboBox->setCurrentIndex(fontComboBox->findText(fieldVariesText));
     }
@@ -612,16 +693,13 @@ void property_editor_updateComboBoxStrIfVaries(QComboBox* comboBox, const std::s
     fieldOldText = comboBox->currentText();
     fieldNewText = str;
 
-    if (fieldOldText.isEmpty())
-    {
-        foreach(std::string s, strList)
-        {
+    if (fieldOldText.isEmpty()) {
+        foreach (std::string s, strList) {
             comboBox->addItem(s, s);
         }
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
     }
-    else if (fieldOldText != fieldNewText)
-    {
+    else if (fieldOldText != fieldNewText) {
         if (comboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
             comboBox->addItem(fieldVariesText);
         comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
@@ -631,33 +709,27 @@ void property_editor_updateComboBoxStrIfVaries(QComboBox* comboBox, const std::s
 void property_editor_updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText)
 {
     fieldOldText = comboBox->currentText();
-    if (yesOrNoText)
-    {
+    if (yesOrNoText) {
         if (val) fieldNewText = fieldYesText;
         else    fieldNewText = fieldNoText;
     }
-    else
-    {
+    else {
         if (val) fieldNewText = fieldOnText;
         else    fieldNewText = fieldOffText;
     }
 
-    if (fieldOldText.isEmpty())
-    {
-        if (yesOrNoText)
-        {
+    if (fieldOldText.isEmpty()) {
+        if (yesOrNoText) {
             comboBox->addItem(fieldYesText, true);
             comboBox->addItem(fieldNoText, false);
         }
-        else
-        {
+        else {
             comboBox->addItem(fieldOnText, true);
             comboBox->addItem(fieldOffText, false);
         }
         comboBox->setCurrentIndex(comboBox->findText(fieldNewText));
     }
-    else if (fieldOldText != fieldNewText)
-    {
+    else if (fieldOldText != fieldNewText) {
         if (comboBox->findText(fieldVariesText) == -1) //Prevent multiple entries
             comboBox->addItem(fieldVariesText);
         comboBox->setCurrentIndex(comboBox->findText(fieldVariesText));
@@ -666,35 +738,87 @@ void property_editor_updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, b
 
 void property_editor_showGroups(int objType)
 {
-    if     (objType == OBJ_TYPE_ARC)          { groupBoxGeometryArc->show(); groupBoxMiscArc->show(); }
-    else if (objType == OBJ_TYPE_BLOCK)        { groupBoxGeometryBlock->show(); }
-    else if (objType == OBJ_TYPE_CIRCLE)       { groupBoxGeometryCircle->show(); }
-    else if (objType == OBJ_TYPE_DIMALIGNED)   { groupBoxGeometryDimAligned->show(); }
-    else if (objType == OBJ_TYPE_DIMANGULAR)   { groupBoxGeometryDimAngular->show(); }
-    else if (objType == OBJ_TYPE_DIMARCLENGTH) { groupBoxGeometryDimArcLength->show(); }
-    else if (objType == OBJ_TYPE_DIMDIAMETER)  { groupBoxGeometryDimDiameter->show(); }
-    else if (objType == OBJ_TYPE_DIMLEADER)    { groupBoxGeometryDimLeader->show(); }
-    else if (objType == OBJ_TYPE_DIMLINEAR)    { groupBoxGeometryDimLinear->show(); }
-    else if (objType == OBJ_TYPE_DIMORDINATE)  { groupBoxGeometryDimOrdinate->show(); }
-    else if (objType == OBJ_TYPE_DIMRADIUS)    { groupBoxGeometryDimRadius->show(); }
-    else if (objType == OBJ_TYPE_ELLIPSE)      { groupBoxGeometryEllipse->show(); }
-    else if (objType == OBJ_TYPE_IMAGE)        { groupBoxGeometryImage->show(); groupBoxMiscImage->show(); }
-    else if (objType == OBJ_TYPE_INFINITELINE) { groupBoxGeometryInfiniteLine->show(); }
-    else if (objType == OBJ_TYPE_LINE)         { groupBoxGeometryLine->show(); }
-    else if (objType == OBJ_TYPE_PATH)         { groupBoxGeometryPath->show(); groupBoxMiscPath->show(); }
-    else if (objType == OBJ_TYPE_POINT)        { groupBoxGeometryPoint->show(); }
-    else if (objType == OBJ_TYPE_POLYGON)      { groupBoxGeometryPolygon->show(); }
-    else if (objType == OBJ_TYPE_POLYLINE)     { groupBoxGeometryPolyline->show(); groupBoxMiscPolyline->show(); }
-    else if (objType == OBJ_TYPE_RAY)          { groupBoxGeometryRay->show(); }
-    else if (objType == OBJ_TYPE_RECTANGLE)    { groupBoxGeometryRectangle->show(); }
-    else if (objType == OBJ_TYPE_TEXTMULTI)    { groupBoxGeometryTextMulti->show(); }
-    else if (objType == OBJ_TYPE_TEXTSINGLE)   { groupBoxTextTextSingle->show(); groupBoxGeometryTextSingle->show(); groupBoxMiscTextSingle->show(); }
+    if (objType == OBJ_TYPE_ARC) {
+        groupBoxGeometryArc->show();
+        groupBoxMiscArc->show();
+    }
+    else if (objType == OBJ_TYPE_BLOCK) {
+        groupBoxGeometryBlock->show();
+    }
+    else if (objType == OBJ_TYPE_CIRCLE) {
+        groupBoxGeometryCircle->show();
+    }
+    else if (objType == OBJ_TYPE_DIMALIGNED) {
+        groupBoxGeometryDimAligned->show();
+    }
+    else if (objType == OBJ_TYPE_DIMANGULAR) {
+        groupBoxGeometryDimAngular->show();
+    }
+    else if (objType == OBJ_TYPE_DIMARCLENGTH) {
+        groupBoxGeometryDimArcLength->show();
+    }
+    else if (objType == OBJ_TYPE_DIMDIAMETER) {
+        groupBoxGeometryDimDiameter->show();
+    }
+    else if (objType == OBJ_TYPE_DIMLEADER) {
+        groupBoxGeometryDimLeader->show();
+    }
+    else if (objType == OBJ_TYPE_DIMLINEAR) {
+        groupBoxGeometryDimLinear->show();
+    }
+    else if (objType == OBJ_TYPE_DIMORDINATE) {
+        groupBoxGeometryDimOrdinate->show();
+    }
+    else if (objType == OBJ_TYPE_DIMRADIUS) {
+        groupBoxGeometryDimRadius->show();
+    }
+    else if (objType == OBJ_TYPE_ELLIPSE) {
+        groupBoxGeometryEllipse->show();
+    }
+    else if (objType == OBJ_TYPE_IMAGE) {
+        groupBoxGeometryImage->show();
+        groupBoxMiscImage->show();
+    }
+    else if (objType == OBJ_TYPE_INFINITELINE) {
+        groupBoxGeometryInfiniteLine->show();
+    }
+    else if (objType == OBJ_TYPE_LINE) {
+        groupBoxGeometryLine->show();
+    }
+    else if (objType == OBJ_TYPE_PATH) {
+        groupBoxGeometryPath->show();
+        groupBoxMiscPath->show();
+    }
+    else if (objType == OBJ_TYPE_POINT) {
+        groupBoxGeometryPoint->show();
+    }
+    else if (objType == OBJ_TYPE_POLYGON) {
+        groupBoxGeometryPolygon->show();
+    }
+    else if (objType == OBJ_TYPE_POLYLINE) {
+        groupBoxGeometryPolyline->show();
+        groupBoxMiscPolyline->show();
+    }
+    else if (objType == OBJ_TYPE_RAY) {
+        groupBoxGeometryRay->show();
+    }
+    else if (objType == OBJ_TYPE_RECTANGLE) {
+        groupBoxGeometryRectangle->show();
+    }
+    else if (objType == OBJ_TYPE_TEXTMULTI) {
+        groupBoxGeometryTextMulti->show();
+    }
+    else if (objType == OBJ_TYPE_TEXTSINGLE) {
+        groupBoxTextTextSingle->show();
+        groupBoxGeometryTextSingle->show();
+        groupBoxMiscTextSingle->show();
+    }
 }
 
-void property_editor_showOneType(int index)
+void property_editor_showOneType(int id)
 {
     hideAllGroups();
-    showGroups(comboBoxSelected->itemData(index).toInt());
+    showGroups(comboBoxSelected->itemData(id).toInt());
 }
 
 void property_editor_hideAllGroups()
@@ -730,375 +854,267 @@ void property_editor_hideAllGroups()
     groupBoxGeometryTextSingle->hide();
     groupBoxMiscTextSingle->hide();
 }
-
-void property_editor_clearAllFields()
-{
-    /*
-    //General
-    comboBoxGeneralLayer->clear();
-    comboBoxGeneralColor->clear();
-    comboBoxGeneralLineType->clear();
-    comboBoxGeneralLineWeight->clear();
-
-    //Arc
-    lineEditArcCenterX->clear();
-    lineEditArcCenterY->clear();
-    lineEditArcRadius->clear();
-    lineEditArcStartAngle->clear();
-    lineEditArcEndAngle->clear();
-    lineEditArcStartX->clear();
-    lineEditArcStartY->clear();
-    lineEditArcEndX->clear();
-    lineEditArcEndY->clear();
-    lineEditArcArea->clear();
-    lineEditArcLength->clear();
-    lineEditArcChord->clear();
-    lineEditArcIncAngle->clear();
-    comboBoxArcClockwise->clear();
-
-    //Block
-    lineEditBlockX->clear();
-    lineEditBlockY->clear();
-
-    //Circle
-    for (int i=0; i<6; i++) {
-        lineEditCircle[i]->clear();
-    }
-
-    //TODO: DimAligned
-    //TODO: DimAngular
-    //TODO: DimArcLength
-    //TODO: DimDiameter
-    //TODO: DimLeader
-    //TODO: DimLinear
-    //TODO: DimOrdinate
-    //TODO: DimRadius
-
-    //Ellipse
-    lineEditEllipseCenterX->clear();
-    lineEditEllipseCenterY->clear();
-    lineEditEllipseRadiusMajor->clear();
-    lineEditEllipseRadiusMinor->clear();
-    lineEditEllipseDiameterMajor->clear();
-    lineEditEllipseDiameterMinor->clear();
-
-    //Image
-    lineEditImageX->clear();
-    lineEditImageY->clear();
-    lineEditImageWidth->clear();
-    lineEditImageHeight->clear();
-
-    //Infinite Line
-    lineEditInfiniteLineX1->clear();
-    lineEditInfiniteLineY1->clear();
-    lineEditInfiniteLineX2->clear();
-    lineEditInfiniteLineY2->clear();
-    lineEditInfiniteLineVectorX->clear();
-    lineEditInfiniteLineVectorY->clear();
-
-    //Line
-    lineEditLineStartX->clear();
-    lineEditLineStartY->clear();
-    lineEditLineEndX->clear();
-    lineEditLineEndY->clear();
-    lineEditLineDeltaX->clear();
-    lineEditLineDeltaY->clear();
-    lineEditLineAngle->clear();
-    lineEditLineLength->clear();
-
-    //Path
-    comboBoxPathVertexNum->clear();
-    lineEditPathVertexX->clear();
-    lineEditPathVertexY->clear();
-    lineEditPathArea->clear();
-    lineEditPathLength->clear();
-    comboBoxPathClosed->clear();
-
-    //Point
-    lineEditPointX->clear();
-    lineEditPointY->clear();
-
-    //Polygon
-    lineEditPolygonCenterX->clear();
-    lineEditPolygonCenterY->clear();
-    lineEditPolygonRadiusVertex->clear();
-    lineEditPolygonRadiusSide->clear();
-    lineEditPolygonDiameterVertex->clear();
-    lineEditPolygonDiameterSide->clear();
-    lineEditPolygonInteriorAngle->clear();
-
-    //Polyline
-    comboBoxPolylineVertexNum->clear();
-    lineEditPolylineVertexX->clear();
-    lineEditPolylineVertexY->clear();
-    lineEditPolylineArea->clear();
-    lineEditPolylineLength->clear();
-    comboBoxPolylineClosed->clear();
-
-    //Ray
-    lineEditRayX1->clear();
-    lineEditRayY1->clear();
-    lineEditRayX2->clear();
-    lineEditRayY2->clear();
-    lineEditRayVectorX->clear();
-    lineEditRayVectorY->clear();
-
-    //Rectangle
-    line_edit("rectangle-corner-1x")->clear();
-    lineEditRectangleCorner1Y->clear();
-    lineEditRectangleCorner2X->clear();
-    lineEditRectangleCorner2Y->clear();
-    lineEditRectangleCorner3X->clear();
-    lineEditRectangleCorner3Y->clear();
-    lineEditRectangleCorner4X->clear();
-    lineEditRectangleCorner4Y->clear();
-    lineEditRectangleWidth->clear();
-    lineEditRectangleHeight->clear();
-    lineEditRectangleArea->clear();
-
-    //Text Multi
-    lineEditTextMultiX->clear();
-    lineEditTextMultiY->clear();
-
-    //Text Single
-    lineEditTextSingleContents->clear();
-    comboBoxTextSingleFont->removeItem(comboBoxTextSingleFont->findText(fieldVariesText)); //NOTE: Do not clear comboBoxTextSingleFont
-    comboBoxTextSingleFont->setProperty("FontFamily", "");
-    comboBoxTextSingleJustify->clear();
-    lineEditTextSingleHeight->clear();
-    lineEditTextSingleRotation->clear();
-    lineEditTextSingleX->clear();
-    lineEditTextSingleY->clear();
-    comboBoxTextSingleBackward->clear();
-    comboBoxTextSingleUpsideDown->clear();
-    */
-}
 #endif
+
+void edit_double(std::string label, double *data)
+{
+    ImGui::InputDouble(translate(label).c_str(), data, *data);
+}
 
 void create_group_box_general(void)
 {
-    ImGui::Text(translate("General").c_str());
-
-    /*
-    toolButtonGeneralLayer      = createToolButton("blank", translate("Layer"));
-    toolButtonGeneralColor      = createToolButton("blank", translate("Color"));      
-    toolButtonGeneralLineType   = createToolButton("blank", translate("LineType"));   
-    toolButtonGeneralLineWeight = createToolButton("blank", translate("LineWeight")); 
-
-    comboBoxGeneralLayer      = createComboBox(false);
-    comboBoxGeneralColor      = createComboBox(false);
-    comboBoxGeneralLineType   = createComboBox(false);
-    comboBoxGeneralLineWeight = createComboBox(false);*/
-}
-
-void create_group_box_geometry_arc(int index)
-{
-    ImGui::Text(translate("Geometry").c_str());
-
-    /*
-    toolButtonArcCenterX    = createToolButton("blank", translate("Center X"));       
-    toolButtonArcCenterY    = createToolButton("blank", translate("Center Y"));       
-    toolButtonArcRadius     = createToolButton("blank", translate("Radius"));         
-    toolButtonArcStartAngle = createToolButton("blank", translate("Start Angle"));    
-    toolButtonArcEndAngle   = createToolButton("blank", translate("End Angle"));      
-    toolButtonArcStartX     = createToolButton("blank", translate("Start X"));        
-    toolButtonArcStartY     = createToolButton("blank", translate("Start Y"));        
-    toolButtonArcEndX       = createToolButton("blank", translate("End X"));          
-    toolButtonArcEndY       = createToolButton("blank", translate("End Y"));          
-    toolButtonArcArea       = createToolButton("blank", translate("Area"));           
-    toolButtonArcLength     = createToolButton("blank", translate("Arc Length"));     
-    toolButtonArcChord      = createToolButton("blank", translate("Chord"));          
-    toolButtonArcIncAngle   = createToolButton("blank", translate("Included Angle")); 
-
-    lineEditArcCenterX    = createLineEdit("double", false);
-    lineEditArcCenterY    = createLineEdit("double", false);
-    lineEditArcRadius     = createLineEdit("double", false);
-    lineEditArcStartAngle = createLineEdit("double", false);
-    lineEditArcEndAngle   = createLineEdit("double", false);
-    lineEditArcStartX     = createLineEdit("double", true);
-    lineEditArcStartY     = createLineEdit("double", true);
-    lineEditArcEndX       = createLineEdit("double", true);
-    lineEditArcEndY       = createLineEdit("double", true);
-    lineEditArcArea       = createLineEdit("double", true);
-    lineEditArcLength     = createLineEdit("double", true);
-    lineEditArcChord      = createLineEdit("double", true);
-    lineEditArcIncAngle   = createLineEdit("double", true);
-    */
-}
-
-void create_group_box_misc_arc(int index)
-{
-    ImGui::Text(translate("Misc").c_str());
-
-    /*
-    toolButtonArcClockwise = createToolButton("blank", translate("Clockwise")); 
-
-    comboBoxArcClockwise = createComboBox(true);
-
-    QFormLayout* formLayout = new QFormLayout(this);
-    formLayout->addRow(toolButtonArcClockwise,  comboBoxArcClockwise);
-    groupBoxMiscArc->setLayout(formLayout);
-*/
-}
-
-void create_group_box_geometry_block(int index)
-{
-    ImGui::Text(translate("Geometry").c_str());
-
-/*
-    toolButtonBlockX = createToolButton("blank", translate("Position X")); 
-    toolButtonBlockY = createToolButton("blank", translate("Position Y")); 
-
-    lineEditBlockX = createLineEdit("double", false);
-    lineEditBlockY = createLineEdit("double", false);*/
-}
-
-
-void create_group_box_geometry_circle(int index)
-{
-    ImGui::Text(translate("Geometry").c_str());
-
-/*
-    toolButtonBlockX = createToolButton("blank", translate("Position X")); 
-    toolButtonBlockY = createToolButton("blank", translate("Position Y")); 
-
-    lineEditBlockX = createLineEdit("double", false);
-    lineEditBlockY = createLineEdit("double", false);*/
-}
-
-/*
-void create_group_box_(
-        GroupBox gb, QToolButton *toolButton[],
-        QLineEdit *lineEdit[])
-{
-    QGroupBox *groupBox = new QGroupBox(gb.title, this);
-    QFormLayout* formLayout = new QFormLayout(this);
-    for (std::vector<LineEdit>::size_type i=0;
-         i<gb.line_edits.size(); i++) {
-        toolButton[i] = createToolButton(
-                    gb.line_edits[i].icon,
-                    gb.line_edits[i].label);
-        lineEdit[i] = createLineEdit(
-                    gb.line_edits[i].type,
-                    gb.line_edits[i].user_editable);
-        if (!gb.line_edits[i].user_editable) {
-            mapSignal(lineEdit[i], gb.line_edits[i].signal,
-                gb.obj_type);
+    std::string label = translate("General");
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        /*
+        if (ImGui::ComboBox("Layer")) {
+            for (int i=0; i<) {
+                
+            }
         }
-        formLayout->addRow(toolButton[i], lineEdit[i]);
+        if (ImGui::ComboBox("Color")) {
+            for () {
+
+            }
+        }
+        if (ImGui::ComboBox("LineType")) {
+            for () {
+
+            }
+        }
+        if (ImGui::ComboBox("LineWeight")) {
+            for () {
+
+            }
+        }
+        */
     }
-    groupBox->setLayout(formLayout);
-
-    return groupBox;
 }
-*/
 
-void create_group_box_geometry_dim_aligned(int index)
+void create_group_box_arc(int id, EmbArc *arc)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    std::string label = translate("Arc") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
 
-    //TODO: toolButtons and lineEdits for DimAligned
+        show_double("Start X", arc->end.x);
+        show_double("Start Y", arc->end.y);
+        show_double("Mid X", arc->end.x);
+        show_double("Mid Y", arc->end.y);
+        show_double("End X", arc->end.x);
+        show_double("End Y", arc->end.y);
+
+        /*
+        toolButtonArcCenterX    = createToolButton("blank", translate("Center X"));       
+        toolButtonArcCenterY    = createToolButton("blank", translate("Center Y"));       
+        toolButtonArcRadius     = createToolButton("blank", translate("Radius"));         
+        toolButtonArcStartAngle = createToolButton("blank", translate("Start Angle"));    
+        toolButtonArcEndAngle   = createToolButton("blank", translate("End Angle"));      
+        toolButtonArcStartX     = createToolButton("blank", translate("Start X"));        
+        toolButtonArcStartY     = createToolButton("blank", translate("Start Y"));        
+        toolButtonArcEndX       = createToolButton("blank", translate("End X"));          
+        toolButtonArcEndY       = createToolButton("blank", translate("End Y"));          
+        toolButtonArcArea       = createToolButton("blank", translate("Area"));           
+        toolButtonArcLength     = createToolButton("blank", translate("Arc Length"));     
+        toolButtonArcChord      = createToolButton("blank", translate("Chord"));          
+        toolButtonArcIncAngle   = createToolButton("blank", translate("Included Angle")); 
+
+        lineEditArcCenterX    = createLineEdit("double", false);
+        lineEditArcCenterY    = createLineEdit("double", false);
+        lineEditArcRadius     = createLineEdit("double", false);
+        lineEditArcStartAngle = createLineEdit("double", false);
+        lineEditArcEndAngle   = createLineEdit("double", false);
+        lineEditArcStartX     = createLineEdit("double", true);
+        lineEditArcStartY     = createLineEdit("double", true);
+        lineEditArcEndX       = createLineEdit("double", true);
+        lineEditArcEndY       = createLineEdit("double", true);
+        lineEditArcArea       = createLineEdit("double", true);
+        lineEditArcLength     = createLineEdit("double", true);
+        lineEditArcChord      = createLineEdit("double", true);
+        lineEditArcIncAngle   = createLineEdit("double", true);
+
+        show_double("Area", embArc);
+        show_double("Chord", embVector_angle(delta));
+        show_double("Included Angle", embVector_length(delta));
+        */
+
+        ImGui::Text(translate("Misc").c_str());
+
+        /*
+        toolButtonArcClockwise = createToolButton("blank", translate("Clockwise")); 
+
+        comboBoxArcClockwise = createComboBox(true);
+
+        QFormLayout* formLayout = new QFormLayout(this);
+        formLayout->addRow(toolButtonArcClockwise,  comboBoxArcClockwise);
+        groupBoxMiscArc->setLayout(formLayout);
+        */
+    }
 }
 
-void create_group_box_geometry_dim_angular(int index)
+/* TODO: editors for blocks.
+ */
+void create_group_box_block(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    std::string label = translate("Block") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+        /*
+        toolButtonBlockX = createToolButton("blank", translate("Position X")); 
+        toolButtonBlockY = createToolButton("blank", translate("Position Y")); 
 
-    //TODO: toolButtons and lineEdits for DimAngular
+        lineEditBlockX = createLineEdit("double", false);
+        lineEditBlockY = createLineEdit("double", false);*/
+    }
 }
 
-void create_group_box_geometry_dim_arc_length(int index)
+/* BUG: when the user selects multiple entries across different circles
+ * then edits the program throws an error.
+ */
+void create_group_box_circle(int id, EmbCircle *circle)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    std::string label = translate("Circle") + " ID:" + std::to_string(pattern_index*1000+(id+1));
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
 
-    //TODO: toolButtons and lineEdits for DimArcLength
+        edit_double("Center X", &(circle->center.x));
+        edit_double("Center Y", &(circle->center.y));
+        edit_double("Radius", &(circle->radius));
+    }
 }
 
-void create_group_box_geometry_dim_diameter(int index)
+/* TODO: editors for aligned dimension.
+ */
+void create_group_box_dim_aligned(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    //TODO: toolButtons and lineEdits for DimDiameter
+    std::string label = translate("Aligned Dimension") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_dim_leader(int index)
+/* TODO: editors for angular dimension.
+ */
+void create_group_box_dim_angular(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    //TODO: toolButtons and lineEdits for DimLeader
+    std::string label = translate("Angular Dimension") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_dim_linear(int index)
+/* TODO: editors for arc length dimension.
+ */
+void create_group_box_dim_arc_length(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    //TODO: toolButtons and lineEdits for DimLinear
+    std::string label = translate("Arc Length Dimension") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_dim_ordinate(int index)
+/* TODO: editors for diameter dimension.
+ */
+void create_group_box_dim_diameter(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    //TODO: toolButtons and lineEdits for DimOrdinate
+    std::string label = translate("Diameter Dimension") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_dim_radius(int index)
+/* TODO: editors for dimension leader.
+ */
+void create_group_box_dim_leader(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    //TODO: toolButtons and lineEdits for DimRadius
+    std::string label = translate("Dimension Leader") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_ellipse(int index)
+/* TODO: editors for linear dimension.
+ */
+void create_group_box_dim_linear(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    /*
-    toolButtonEllipseCenterX       = createToolButton("blank", translate("Center X"));       
-    toolButtonEllipseCenterY       = createToolButton("blank", translate("Center Y"));       
-    toolButtonEllipseRadiusMajor   = createToolButton("blank", translate("Major Radius"));   
-    toolButtonEllipseRadiusMinor   = createToolButton("blank", translate("Minor Radius"));   
-    toolButtonEllipseDiameterMajor = createToolButton("blank", translate("Major Diameter")); 
-    toolButtonEllipseDiameterMinor = createToolButton("blank", translate("Minor Diameter")); 
-
-    lineEditEllipseCenterX       = createLineEdit("double", false);
-    lineEditEllipseCenterY       = createLineEdit("double", false);
-    lineEditEllipseRadiusMajor   = createLineEdit("double", false);
-    lineEditEllipseRadiusMinor   = createLineEdit("double", false);
-    lineEditEllipseDiameterMajor = createLineEdit("double", false);
-    lineEditEllipseDiameterMinor = createLineEdit("double", false);
-    */
+    std::string label = translate("Dimension Leader") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_image(int index)
+/* TODO: editors for linear dimension.
+ */
+void create_group_box_dim_ordinate(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
-
-    /*
-    toolButtonImageX      = createToolButton("blank", translate("Position X")); 
-    toolButtonImageY      = createToolButton("blank", translate("Position Y")); 
-    toolButtonImageWidth  = createToolButton("blank", translate("Width"));      
-    toolButtonImageHeight = createToolButton("blank", translate("Height"));     
-
-    lineEditImageX      = createLineEdit("double", false);
-    lineEditImageY      = createLineEdit("double", false);
-    lineEditImageWidth  = createLineEdit("double", false);
-    lineEditImageHeight = createLineEdit("double", false);*/
+    std::string label = translate("Ordinate Dimension") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_misc_image(int index)
+/* TODO: editors for radius dimension.
+ */
+void create_group_box_dim_radius(int id)
 {
-    ImGui::Text(translate("Misc").c_str());
-
-    /*
-    toolButtonImageName = createToolButton("blank", translate("Name")); 
-    toolButtonImagePath = createToolButton("blank", translate("Path")); 
-
-    lineEditImageName = createLineEdit("double", true);
-    lineEditImagePath = createLineEdit("double", true);*/
+    std::string label = translate("Radius Dimension") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+    }
 }
 
-void create_group_box_geometry_infinite_line(int index)
+void create_group_box_ellipse(int id)
+{
+    std::string label = translate("Ellipse") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+
+        /*
+        toolButtonEllipseCenterX       = createToolButton("blank", translate("Center X"));       
+        toolButtonEllipseCenterY       = createToolButton("blank", translate("Center Y"));       
+        toolButtonEllipseRadiusMajor   = createToolButton("blank", translate("Major Radius"));   
+        toolButtonEllipseRadiusMinor   = createToolButton("blank", translate("Minor Radius"));   
+        toolButtonEllipseDiameterMajor = createToolButton("blank", translate("Major Diameter")); 
+        toolButtonEllipseDiameterMinor = createToolButton("blank", translate("Minor Diameter")); 
+
+        lineEditEllipseCenterX       = createLineEdit("double", false);
+        lineEditEllipseCenterY       = createLineEdit("double", false);
+        lineEditEllipseRadiusMajor   = createLineEdit("double", false);
+        lineEditEllipseRadiusMinor   = createLineEdit("double", false);
+        lineEditEllipseDiameterMajor = createLineEdit("double", false);
+        lineEditEllipseDiameterMinor = createLineEdit("double", false);
+        */
+    }
+}
+
+void create_group_box_image(int id)
+{
+    std::string label = translate("Image") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+
+        /*
+        toolButtonImageX      = createToolButton("blank", translate("Position X")); 
+        toolButtonImageY      = createToolButton("blank", translate("Position Y")); 
+        toolButtonImageWidth  = createToolButton("blank", translate("Width"));      
+        toolButtonImageHeight = createToolButton("blank", translate("Height"));     
+
+        lineEditImageX      = createLineEdit("double", false);
+        lineEditImageY      = createLineEdit("double", false);
+        lineEditImageWidth  = createLineEdit("double", false);
+        lineEditImageHeight = createLineEdit("double", false);*/
+
+        ImGui::Text(translate("Misc").c_str());
+
+        /*
+        toolButtonImageName = createToolButton("blank", translate("Name")); 
+        toolButtonImagePath = createToolButton("blank", translate("Path")); 
+
+        lineEditImageName = createLineEdit("double", true);
+        lineEditImagePath = createLineEdit("double", true);*/
+    }
+}
+
+void create_group_box_infinite_line(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1119,8 +1135,6 @@ void create_group_box_geometry_infinite_line(int index)
     */
 }
 
-#include <sstream>
-
 void show_double(std::string label, double data)
 {
     ImGui::Text(translate(label).c_str());
@@ -1128,14 +1142,8 @@ void show_double(std::string label, double data)
     ImGui::Text(std::to_string(data).c_str());
 }
 
-void create_group_box_geometry_line(int line_index)
+void create_group_box_line(EmbLine *line)
 {
-    EmbPattern *pattern = views[pattern_index].pattern;
-    if (pattern->lines->count <= line_index) {
-        debug_message("line_index is beyond the end of the lines array.");
-    }
-    EmbLine *line = &(pattern->lines->line[line_index]);
-
     ImGui::Text(translate("Geometry").c_str());
 
     // TODO: icons
@@ -1156,11 +1164,11 @@ void create_group_box_geometry_line(int line_index)
     show_double("Length", embVector_length(delta));
 }
 
-void create_group_box_geometry_path(int index)
+void create_group_box_path(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
-/*
+    /*
     toolButtonPathVertexNum = createToolButton("blank", translate("Vertex #")); 
     toolButtonPathVertexX   = createToolButton("blank", translate("Vertex X")); 
     toolButtonPathVertexY   = createToolButton("blank", translate("Vertex Y")); 
@@ -1172,13 +1180,10 @@ void create_group_box_geometry_path(int index)
     lineEditPathVertexY   = createLineEdit("double", false);
     lineEditPathArea      = createLineEdit("double", true);
     lineEditPathLength    = createLineEdit("double", true);*/
-}
 
-void create_group_box_misc_path(int index)
-{
     ImGui::Text(translate("Misc").c_str());
 
-/*
+    /*
     toolButtonPathClosed = createToolButton("blank", translate("Closed")); 
 
     comboBoxPathClosed = createComboBox(false);
@@ -1188,26 +1193,27 @@ void create_group_box_misc_path(int index)
     QFormLayout* formLayout = new QFormLayout(this);
     formLayout->addRow(toolButtonPathClosed, comboBoxPathClosed);
     groupBoxMiscPath->setLayout(formLayout);
-*/
+    */
 }
 
-void create_group_box_geometry_point(int index)
+void create_group_box_point(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
-/*
+    /*
     toolButtonPointX = createToolButton("blank", translate("Position X")); 
     toolButtonPointY = createToolButton("blank", translate("Position Y")); 
 
     lineEditPointX = createLineEdit("double", false);
-    lineEditPointY = createLineEdit("double", false);*/
+    lineEditPointY = createLineEdit("double", false);
+    */
 }
 
-void create_group_box_geometry_polygon(int index)
+void create_group_box_polygon(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
-/*
+    /*
     toolButtonPolygonCenterX        = createToolButton("blank", translate("Center X"));        
     toolButtonPolygonCenterY        = createToolButton("blank", translate("Center Y"));        
     toolButtonPolygonRadiusVertex   = createToolButton("blank", translate("Vertex Radius"));   
@@ -1223,14 +1229,14 @@ void create_group_box_geometry_polygon(int index)
     lineEditPolygonDiameterVertex = createLineEdit("double", false);
     lineEditPolygonDiameterSide   = createLineEdit("double", false);
     lineEditPolygonInteriorAngle  = createLineEdit("double", true);
-*/
+    */
 }
 
-void create_group_box_geometry_polyline(int index)
+void create_group_box_polyline(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
-/*
+    /*
     toolButtonPolylineVertexNum = createToolButton("blank", translate("Vertex #")); 
     toolButtonPolylineVertexX   = createToolButton("blank", translate("Vertex X")); 
     toolButtonPolylineVertexY   = createToolButton("blank", translate("Vertex Y")); 
@@ -1242,14 +1248,11 @@ void create_group_box_geometry_polyline(int index)
     lineEditPolylineVertexY   = createLineEdit("double", false);
     lineEditPolylineArea      = createLineEdit("double", true);
     lineEditPolylineLength    = createLineEdit("double", true);
-*/
-}
+    */
 
-void create_group_box_misc_polyline(int index)
-{
     ImGui::Text(translate("Misc").c_str());
 
-/*
+    /*
     toolButtonPolylineClosed = createToolButton("blank", translate("Closed")); 
 
     comboBoxPolylineClosed = createComboBox(false);
@@ -1262,7 +1265,7 @@ void create_group_box_misc_polyline(int index)
 */
 }
 
-void create_group_box_geometry_ray(int index)
+void create_group_box_ray(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1282,7 +1285,7 @@ void create_group_box_geometry_ray(int index)
     lineEditRayVectorY = createLineEdit("double", true);*/
 }
 
-void create_group_box_geometry_rectangle(int index)
+void create_group_box_rectangle(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1312,7 +1315,7 @@ void create_group_box_geometry_rectangle(int index)
     lineEditRectangleArea     = createLineEdit("double", true);*/
 }
 
-void create_group_box_geometry_text_multi(int index)
+void create_group_box_text_multi(int id)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1324,7 +1327,7 @@ void create_group_box_geometry_text_multi(int index)
     lineEditTextMultiY = createLineEdit("double", false);*/
 }
 
-void create_group_box_text_text_single(int index)
+void create_group_box_text_single(int id)
 {
     ImGui::Text(translate("Text").c_str());
 
@@ -1340,10 +1343,7 @@ void create_group_box_text_text_single(int index)
     comboBoxTextSingleJustify  = createComboBox(false);
     lineEditTextSingleHeight   = createLineEdit("double", false);
     lineEditTextSingleRotation = createLineEdit("double", false);*/
-}
 
-void create_group_box_geometry_text_single(int index)
-{
     ImGui::Text(translate("Geometry").c_str());
 
 /*
@@ -1352,10 +1352,7 @@ void create_group_box_geometry_text_single(int index)
 
     lineEditTextSingleX = createLineEdit("double", false);
     lineEditTextSingleY = createLineEdit("double", false);*/
-}
 
-void create_group_box_misc_text_single(int index)
-{
     ImGui::Text(translate("Misc").c_str());
 
 /*
@@ -1367,50 +1364,7 @@ void create_group_box_misc_text_single(int index)
 }
 
 /*
-QToolButton* property_editor_create_tool_button(const std::string& iconName, const std::string& txt)
-{
-    QToolButton* tb = new QToolButton(this);
-    tb->setIcon(QIcon(iconDir + "/" + iconName + ".png"));
-    tb->setIconSize(QSize(iconSize, iconSize));
-    tb->setText(txt);
-    tb->setToolButtonStyle(propertyEditorButtonStyle);
-    tb->setStyleSheet("border:none;");
-    return tb;
-}
 
-QLineEdit* property_editor_createLineEdit(const std::string& validatorType, bool readOnly)
-{
-    QLineEdit* le = new QLineEdit(this);
-    if     (validatorType == "int")    le->setValidator(new QIntValidator(le));
-    else if (validatorType == "double") le->setValidator(new QDoubleValidator(le));
-    le->setReadOnly(readOnly);
-    return le;
-}
-
-QComboBox* property_editor_createComboBox(bool disable)
-{
-    QComboBox* cb = new QComboBox(this);
-    cb->setDisabled(disable);
-    return cb;
-}
-
-QFontComboBox* property_editor_createFontComboBox(bool disable)
-{
-    QFontComboBox* fcb = new QFontComboBox(this);
-    fcb->setDisabled(disable);
-    return fcb;
-}
-
-void property_editor_mapSignal(QObject* fieldObj, const std::string& name, QVariant value)
-{
-    fieldObj->setObjectName(name);
-    fieldObj->setProperty(qPrintable(name), value);
-
-    if     (name.startsWith("lineEdit")) connect(fieldObj, SIGNAL(editingFinished()), signalMapper, SLOT(map()));
-    else if (name.startsWith("comboBox")) connect(fieldObj, SIGNAL(activated(const std::string&)), signalMapper, SLOT(map()));
-
-    signalMapper->setMapping(fieldObj, fieldObj);
-}
 
 void property_editor_fieldEdited(QObject* fieldObj)
 {
