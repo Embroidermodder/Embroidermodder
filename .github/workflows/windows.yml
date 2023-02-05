@@ -10,8 +10,7 @@ jobs:
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        .\scripts\build_deps.bat
-        .\scripts\build.bat
+        .\build.bat
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:

@@ -1,19 +1,21 @@
-name: Mac OS
+name: GNU/Linux
 
 on: [push]
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
+  build-linux:
+    runs-on: ubuntu-latest
     steps:
     - name: build the linux version
       run: |
+        sudo apt-get update
+        sudo apt-get install libglew-dev cmake git build-essential libxrandr-dev libxinerama-dev libgl1-mesa-dev libxcursor-dev
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        sh scripts/brew_deps.sh
-        sh scripts/build.sh
+        bash build.sh
+        cp -r assets/ build
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-linux
-        path: Embroidermodder
+        path: embroidermodder/build
