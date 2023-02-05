@@ -103,10 +103,10 @@ std::vector<std::string> texture_list = {
 };
 int testing = 0;
 
-
-int
-parse_command(int argc, char *argv[], std::vector<std::string> files)
+std::vector<std::string>
+parse_command(int argc, char *argv[])
 {
+    std::vector<std::string> files;
     for (int i=1; i<argc; i++) {
         std::string s(argv[i]);
         if ((s == "--local-boot") || (s == "-L")) {
@@ -124,12 +124,12 @@ parse_command(int argc, char *argv[], std::vector<std::string> files)
             /* Store internally so we don't need to load
              * the global state before parsing the command.
             print_string_list(help_message); */
-            return 0;
+            running = 0;
         }
         if ((s == "--version") || (s == "-v")) {
             /* For scripts that need the version string */
             std::cout << VERSION << std::endl;
-            return 0;
+            running = 0;
         }
         if (s == "--test") {
             testing = 1;
@@ -137,7 +137,7 @@ parse_command(int argc, char *argv[], std::vector<std::string> files)
         }
         files.push_back(s);
     }
-    return 1;
+    return files;
 }
 
 GLuint
@@ -362,8 +362,8 @@ load_text_file(std::string fname)
 int
 main(int argc, char* argv[])
 {
-    std::vector<std::string> files;
-    if (!parse_command(argc, argv, files)) {
+    std::vector<std::string> files = parse_command(argc, argv);
+    if (!running) {
         return 0;
     }
 

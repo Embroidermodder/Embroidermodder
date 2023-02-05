@@ -186,8 +186,14 @@ render_pattern(EmbPattern *p)
         for (int i = 1; i<p->stitchList->count; i++) {
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
-            ImVec2 start = {prev.x, prev.y};
-            ImVec2 end = {st.x, st.y};
+            ImVec2 start = {
+                view.scale * prev.x + view.origin.x,
+                - view.scale * prev.y + view.origin.y
+            };
+            ImVec2 end = {
+                view.scale * st.x + view.origin.x,
+                - view.scale * st.y + view.origin.y
+            };
             EmbThread thread = p->thread_list[st.color];
             int color = embColor_to_int(thread.color);
             draw_list->AddLine(start, end, color);
@@ -201,39 +207,45 @@ render_pattern(EmbPattern *p)
 void
 draw_rulers(void)
 {
+    float offset_x = 100.0f;
+    float offset_y = 150.0f;
+    float ruler_width = 50.0f;
     EmbVector screen_size = {576.0, 1024.0};
-    EmbVector top_left = {100.0, 100.0};
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     draw_list->AddRectFilled(
-        to_ImVec2(top_left), ImVec2(150.0, screen_size.y), ruler_color
+        ImVec2(offset_x, offset_y),
+        ImVec2(offset_x+ruler_width, screen_size.y),
+        ruler_color
     );
     draw_list->AddRectFilled(
-        to_ImVec2(top_left), ImVec2(screen_size.x, 150.0), ruler_color
+        ImVec2(offset_x, offset_y),
+        ImVec2(screen_size.x, offset_y+ruler_width),
+        ruler_color
     );
     for (int i=0; i<20; i++) {
         draw_list->AddLine(
-            ImVec2(100.0+40*i, 100),
-            ImVec2(100.0+40*i, 150),
+            ImVec2(offset_x+40.0f*i, offset_y),
+            ImVec2(offset_x+40.0f*i, offset_y+50.0f),
             ticks_color
         );
         for (int j=0; j<10; j++) {
             draw_list->AddLine(
-                ImVec2(100.0+40*i+4*j, 130),
-                ImVec2(100.0+40*i+4*j, 150),
+                ImVec2(offset_x+40*i+4*j, offset_y + 30.0f),
+                ImVec2(offset_x+40*i+4*j, offset_y + 50.0f),
                 ticks_color
             );
         }
     }
     for (int i=0; i<10; i++) {
         draw_list->AddLine(
-            ImVec2(100.0, 150+40*i),
-            ImVec2(150.0, 150+40*i),
+            ImVec2(offset_x, offset_y + 50.0f + 40*i),
+            ImVec2(offset_x+50.0, offset_y + 50.0f + 40*i),
             ticks_color
         );
         for (int j=0; j<10; j++) {
             draw_list->AddLine(
-                ImVec2(130.0, 150+40*i+4*j),
-                ImVec2(150.0, 150+40*i+4*j),
+                ImVec2(offset_x+30.0, offset_y + 50.0f + 40.0f * i+4*j),
+                ImVec2(offset_x+50.0, offset_y + 50.0f + 40.0f * i+4*j),
                 ticks_color
             );
         }
@@ -279,9 +291,9 @@ pattern_view(void)
 View init_view(void)
 {
     View view;
-    view.origin.x = 200.0;
-    view.origin.y = 200.0;
-    view.scale = 10.0;
+    view.origin.x = 400.0;
+    view.origin.y = 300.0;
+    view.scale = 5.0;
     view.grid_type = "RECTANGULAR";
     view.snap_mode = true;
     view.grid_mode = true;
@@ -305,6 +317,7 @@ View init_view(void)
         view.filename = "Untitled" + std::to_string(views.size()) + ".dst";
     }
     view.undo_history_position = 0;
+    view.pattern = embPattern_create();
     
     return view;
 }
