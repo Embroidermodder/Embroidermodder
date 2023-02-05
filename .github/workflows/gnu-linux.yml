@@ -9,7 +9,7 @@ jobs:
     - name: build the linux version
       run: |
         sudo apt-get update
-        sudo apt-get install libglew-dev cmake git build-essential libxrandr-dev libxinerama-dev libgl1-mesa-dev libxcursor-dev
+        sudo apt-get install libglew-dev cmake git build-essential libxrandr-dev libxinerama-dev libgl1-mesa-dev libxcursor-dev libxi-dev
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
         bash build.sh
