@@ -124,25 +124,27 @@ void about_action(std::vector<std::string> args);
 void alert_action(std::vector<std::string> args);
 void arc_action(std::vector<std::string> args);
 void circle_action(std::vector<std::string> args);
+void close_action(std::vector<std::string> args);
+void cut_action(std::vector<std::string> args);
 void day_vision_action(std::vector<std::string> args);
 void debug_action(std::vector<std::string> args);
+void editor_action(std::vector<std::string> args);
 void error_action(std::vector<std::string> args);
-void open_file_action(std::vector<std::string> args);
-void todo_action(std::vector<std::string> args);
 void exit_action(std::vector<std::string> args);
-void icon_action(std::vector<std::string> args);
 void new_file_action(std::vector<std::string> args);
 void night_vision_action(std::vector<std::string> args);
+void open_file_action(std::vector<std::string> args);
+void icon_action(std::vector<std::string> args);
 void pan_action(std::vector<std::string> args);
-void zoom_action(std::vector<std::string> args);
 void settings_editor_action(std::vector<std::string> args);
+void todo_action(std::vector<std::string> args);
+void zoom_action(std::vector<std::string> args);
 
 /* Global variables.
  * -----------------------------------------------------------------------------
  */
 
 extern std::unordered_map<std::string, std::string> str_settings;
-
 extern bool running;
 extern bool debug_mode;
 extern bool show_about_dialog;

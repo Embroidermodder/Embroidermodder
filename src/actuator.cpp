@@ -27,9 +27,14 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"alert", error_action},
     {"arc", arc_action},
     {"circle", circle_action},
+    {"close", close_action},
+    {"cut", cut_action},
+    {"day", day_vision_action},
     {"debug", debug_action},
+    {"editor", editor_action},
     {"error", error_action},
-    {"todo", error_action},
+    {"exit", exit_action},
+    {"todo", todo_action},
     {"blinkPrompt", error_action},
     {"setPromptPrefix", error_action},
     {"appendPromptHistory", error_action},
@@ -41,7 +46,6 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"endCommand", error_action},
     {"new", new_file_action},
     {"openFile", error_action},
-    {"exit", exit_action},
     {"quit", exit_action},
     {"help", error_action},
     {"tip-of-the-day", error_action},
@@ -223,13 +227,24 @@ void settings_editor_action(std::vector<std::string> args)
     show_settings_editor = true;
 }
 
+void close_action(std::vector<std::string> args)
+{
+}
+
+void editor_action(std::vector<std::string> args)
+{
+    show_editor = true;
+}
+
+void todo_action(std::vector<std::string> args)
+{
+
+}
+
 #if 0
-    "close"
-    "cut"
-    "day"
-    "editor"
+    {"editor"}
         show_editor = true;
-    "export"
+    {"export"}
         embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
     "open"
         embPattern_readAuto(views[pattern_index].pattern, current_fname.c_str());
@@ -266,19 +281,19 @@ void settings_editor_action(std::vector<std::string> args)
     {"windownext") nativeWindowNext();
     {"windowprevious") nativeWindowPrevious();
     {"platform") std::cout << nativePlatformString().toStdString() << std::endl;
-    if (command == "save") savefile();
-    if (command == "saveas") saveasfile();
-    if (command == "print") print();
-    if (command == "designdetails") designDetails();
-    if (command == "copy") copy();
-    if (command == "paste") paste();
-    if (command == "changelog") changelog();
-    if (command == "whatsthis") whatsThisContextHelp();
-    if (command == "makelayercurrent") {
+    {"save") savefile();
+    {"saveas") saveasfile();
+    {"print") print();
+    {"designdetails") designDetails();
+    {"copy") copy();
+    {"paste") paste();
+    {"changelog") changelog();
+    {"whatsthis") whatsThisContextHelp();
+    {"makelayercurrent") {
         makeLayerActive();
-    if (command == "layers") {
+    {"layers") {
         layerManager();
-    if (command == "layerprevious") {
+    {"layerprevious") {
         layerPrevious();
     "textbold") setTextBold(bool);
     "textitalic") setTextItalic(bool);
@@ -293,249 +308,96 @@ void settings_editor_action(std::vector<std::string> args)
     "clearSelection") {
         nativeClearSelection();
     }
-    if ((command == "deleteSelected")) {
-        nativeDeleteSelected();
-    }
-    if (command == "qsnapX") {
-        nativeQSnapY();
-    }
-    if (command == "qsnapY") {
-        nativeQSnapY();
-    }
-    if (command == "mouseX") {
-        nativeMouseX();
-    }
-    if (command == "mouseY") {
-        nativeMouseY();
-    }
+    {"deleteSelected", nativeDeleteSelected},
+    {"qsnapX", nativeQSnapX},
+    {"qsnapY", nativeQSnapY},
+    {"mouseX", nativeMouseX},
+    {"mouseY", nativeMouseY},
 
-    if (command == "debug-message") {
+    {"debug-message") {
         debug_message(command.substr(13, command.size()-13));
         return 0;
     }
 
-    if (command == "add") {
-        if (command == "circle") {
-            debug_message("TODO: add circle action.");
-            return 0;
-        }
-        if (command == "ellipse") {
-            debug_message("TODO: add ellipse action.");
-            return 0;
-        }
+    {"circle"},
+        {"ellipse") {
         if (command =="path") {
-            debug_message("TODO: add path action.");
-            return 0;
-        }
         if (command =="heart") {
-            debug_message("TODO: add heart action.");
-            return 0;
-        }
         if (command =="treble clef") {
-            debug_message("TODO: add treble clef action.");
-            return 0;
-        }
-        if (command =="line") {
-            debug_message("TODO: add line action.");
-            return 0;
-        }
-        if (command =="dolphin") {
-            debug_message("TODO: add dolphin action.");
-            return 0;
-        }
-        return 0;
-    }
-
-    if (command =="tab") {
-        if (command =="snap") {
-            debug_message("TODO: open the snap tab action.");
-            window->tab_index = 0;
-            return 0;
-        }
-        if (command =="grid") {
-            debug_message("TODO: open the grid tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        if ((command =="ruler")) {
-            debug_message("TODO: open the ruler tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        if ((command =="ortho")) {
-            debug_message("TODO: open the ortho tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        if ((command =="polar")) {
-            debug_message("TODO: open the polar tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        if ((command =="snap")) {
-            debug_message("TODO: open the qsnap tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        if ((command =="track")) {
-            debug_message("TODO: open the track tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        if ((command =="lwt")) {
-            debug_message("TODO: open the lwt tab action.");
-            window->tab_index = 1;
-            return 0;
-        }
-        return 0;
-    }
-
-    if ((command =="save")) {
-        save_file();
-        return 0;
-    }
-    if ((command =="save-as")) {
-        save_file_as();
-        return 0;
-    }
-    if ((command =="check-for-updates")) {
+    {"line"},
+    {"dolphin", dolphin},
+    {"tab"},
+    {"toggle"},
+    {"enable"},
+    {"disable"},
+    {"save", save_file},
+    {"save-as", save_file_as},
+    {"check-for-updates")) {
         puts("Visit https://libembroidery.org for information about new releases.");
         puts("Your version is: " VERSION);
-        return 0;
-    }
-    if ((command =="select-all")) {
-        select_all();
-        return 0;
-    }
-    if ((command =="whats-this")) {
-        whats_this();
-        return 0;
-    }
-    if ((command =="design-details")) {
-        design_details();
-        return 0;
-    }
-    if ((command =="print-pattern")) {
-        print_pattern();
-        return 0;
-    }
-
-    if ((command =="copy-object")) {
-        copy();
-        return 0;
-    }
-    if (command =="paste-object") {
-        paste();
-        return 0;
-    }
-    if (command =="help") {
-        help();
-        return 0;
-    }
+    {"select-all", select_all();
+    {"whats-this", whats_this();
+    {"design-details", design_details();
+    {"print-pattern", print_pattern();
+    {"copy-object", copy();
+    if (command =="paste-object", paste();
+    if (command =="help", help();
     if (command =="changelog-dialog") {
         changelog();
-        return 0;
-    }
     if (command =="tip-of-the-day-dialog") {
         tip_of_the_day();
-        return 0;
-    }
-    if ((command =="settings-dialog")) {
-        settings_dialog();
-        return 0;
-    }
-    if ((command =="make-layer-current")) {
-        debug_message("make_layer_current()");
-        return 0;
-    }
-    if ((command =="layer-manager")) {
-        debug_message("layers()");
-        return 0;
-    }
-    if ((command =="layer-selector")) {
-        debug_message("layer_selector()");
-        return 0;
-    }
-    if ((command =="color-selector")) {
-        color_selector();
-        return 0;
-    }
-    if ((command =="line-type-selector")) {
-        line_type_selector();
-        return 0;
-    }
-
-    if ((command =="line-weight-selector")) {
-        line_weight_selector();
-        return 0;
-    }
-
-    if ((command =="layer-previous")) {
-        debug_message("layer_previous()");
-        return 0;
-    }
-    if ((command =="hide-all-layers")) {
-        debug_message("hide_all_layers()");
-        return 0;
-    }
-    if ((command =="show-all-layers")) {
-        debug_message("showAllLayers()");
-        return 0;
-    }
-    if ((command =="freeze-all-layers")) {
-        debug_message("freezeAllLayers()");
-        return 0;
-    }
-    if ((command =="thaw-all-layers")) {
-        debug_message("thawAllLayers()");
-        return 0;
-    }
-    if ((command =="lock-all-layers")) {
-        debug_message("lock_all_layers()");
-        return 0;
-    }
-    if ((command =="unlock-all-layers")) {
-        debug_message("unlock_all_layers()");
-        return 0;
-    }
-    if ((command =="enable")) {
+    {"settings-dialog"},
+    {"make-layer-current"},
+    {"layer-manager"},
+    {"layer-selector"},
+    {"color-selector"},
+    {"line-type-selector"},
+    {"line-weight-selector"},
+    {"layer-previous"},
+    {"hide-all-layers"},
+    {"show-all-layers"},
+    {"freeze-all-layers"},
+    {"thaw-all-layers"},
+    {"lock-all-layers"},
+    {"unlock-all-layers"},
+    {"enable")) {
         EmbWidget *panel = widget_list + window->tab_index;
-        if ((command =="grid")) {
+        {"grid")) {
             debug_message("Show grid");
             panel->view_state |= VIEW_STATE_GRID;
             return 0;
         }
-        if ((command =="real")) {
+        {"real")) {
             debug_message("Enable real render in this tab.");
             panel->view_state |= VIEW_STATE_REAL;
             return 0;
         }
-        if ((command =="ruler")) {
+        {"ruler")) {
             debug_message("Show rulers in this tab.");
             panel->view_state |= VIEW_STATE_RULER;
             return 0;
         }
-        if ((command =="ortho")) {
+        {"ortho")) {
             debug_message("Show orthogonal grid in this tab.");
             panel->view_state |= VIEW_STATE_ORTHO;
             return 0;
         }
-        if ((command =="qsnap")) {
+        {"qsnap")) {
             debug_message("Activate QSnap mode in this tab.");
             panel->view_state |= VIEW_STATE_SNAP;
             return 0;
         }
-        if ((command =="polar")) {
+        {"polar")) {
             debug_message("Activate polar grid in this tab.");
             panel->view_state |= VIEW_STATE_POLAR;
             return 0;
         }
-        if ((command =="track")) {
+        {"track")) {
             debug_message("Activate QTrack mode in this tab.");
             panel->view_state |= VIEW_STATE_QTRACK;
             return 0;
         }
-        if ((command =="lwt")) {
+        {"lwt")) {
             debug_message("Show Lineweight in this tab.");
             panel->view_state |= VIEW_STATE_LWT;
             return 0;
@@ -589,22 +451,22 @@ void settings_editor_action(std::vector<std::string> args)
 
     if (command =="toggle") {
         EmbWidget *panel = widget_list + window->tab_index;
-        if ((command =="grid")) {
+        {"grid")) {
             panel->view_state ^= VIEW_STATE_GRID;
         }
-        if ((command =="real")) {
+        {"real")) {
             panel->view_state ^= VIEW_STATE_REAL;
         }
-        if ((command =="ruler")) {
+        {"ruler")) {
             panel->view_state ^= VIEW_STATE_RULER;
         }
-        if ((command =="ortho")) {
+        {"ortho")) {
             panel->view_state ^= VIEW_STATE_ORTHO;
         }
-        if ((command =="qsnap")) {
+        {"qsnap")) {
             panel->view_state ^= VIEW_STATE_SNAP;
         }
-        if ((command =="polar")) {
+        {"polar")) {
             panel->view_state ^= VIEW_STATE_POLAR;
         }
         if (command =="track") {
@@ -616,37 +478,37 @@ void settings_editor_action(std::vector<std::string> args)
     }
 
     if (command =="text") {
-        if ((command =="bold")) {
+        {"bold")) {
             text_style.bold = !text_style.bold;
         }
         if (command =="italic") {
             text_style.italic = !text_style.italic;
         }
-        if ((command =="underline")) {
+        {"underline")) {
             text_style.underline = !text_style.underline;
         }
-        if ((command =="strikeout")) {
+        {"strikeout")) {
             text_style.strikeout = !text_style.strikeout;
         }
-        if ((command =="overline")) {
+        {"overline")) {
             text_style.overline = !text_style.overline;
         }
     }
 
-    if ((command =="zoom")) {
+    {"zoom")) {
         EmbWidget *panel = widget_list + window->active_panel;
         char *arguments = action + strlen("zoom") + 1;
-        if ((command =="real-time")) {
+        {"real-time")) {
             debug_message("action: zoom-real-time");
             debug_message("Implement zoomRealtime.");
             return 0;
         }
-        if ((command =="previous")) {
+        {"previous")) {
             debug_message("action: zoom-previous");
             debug_message("Implement zoomPrevious.");
             return 0;
         }
-        if ((command =="window")) {
+        {"window")) {
             debug_message("zoom_window()");
             /*
             active_view = active_view();
@@ -691,7 +553,7 @@ void settings_editor_action(std::vector<std::string> args)
             restore_override_cursor();
             return 0;
         }
-        if ((command =="out")) {
+        {"out")) {
             debug_message("zoom_out()");
             debug_message("View zoom_out()");
             if (!allow_zoom_out(panel)) {
@@ -709,7 +571,7 @@ void settings_editor_action(std::vector<std::string> args)
             restore_override_cursor();
             return 0;
         }
-        if ((command =="selected")) {
+        {"selected")) {
             debug_message("zoom_selected()");
             set_override_cursor(window, "Wait Cursor");
             /*
@@ -732,12 +594,12 @@ void settings_editor_action(std::vector<std::string> args)
             restore_override_cursor();
             return 0;
         }
-        if ((command =="all")) {
+        {"all")) {
             debug_message("zoom_all()");
             debug_message("Implement zoom_all.");
             return 0;
         }
-        if ((command =="extents")) {
+        {"extents")) {
             debug_message("zoom_extents()");
             /*
             set_override_cursor("WaitCursor")
@@ -754,51 +616,11 @@ void settings_editor_action(std::vector<std::string> args)
         }
     }
 
-    if ((command =="distance")) {
-        distance();
-        return 0;
-    }
-    if (command =="delete-object") {
-        delete_object(window, 0);
-        return 0;
-    }
-    if (command =="locate_point") {
-        locate_point();
-        return 0;
-    }
-    if (command =="move") {
-        move();
-        return 0;
-    }
-    if (command =="export") {
-        export_();
-        return 0;
-    }
-
-    if ((command == "create-ui-rect")) {
-        puts("create-ui-rect as an action hasn't been implimented.");
-        return 0;
-    }
-    if ((command == "create-label")) {
-        puts("create-label as an action hasn't been implimented.");
-        return 0;
-    }
-    if ((command == "create-widget")) {
-        puts("create-widget as an action hasn't been implimented.");
-        return 0;
-    }
-    if ((command == "create-icon")) {
-        puts("create-icon as an action hasn't been implimented.");
-        return 0;
-    }
-    if ((command == "set-visibility")) {
-        puts("set-visibility as an action hasn't been implimented.");
-        return 0;
-    }
-
-    puts("Failed to identify action.");
-    return 0;
-}
+    {"distance", distance},
+    {"delete-object", delete_object},
+    {"locate_point", locate_point},
+    {"move", move}
+    {"export", export_},
 
 void
 include_script(std::vector<std::string> args)
@@ -894,7 +716,7 @@ AppendPromptHistory()
     nativeDisableMoveRapidFire();
     nativeInitCommand();
 
-    if (command == "end-command") {
+    {"end-command") {
         nativeEndCommand();
     }
 
