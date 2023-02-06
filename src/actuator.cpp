@@ -137,7 +137,8 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"mouseX", error_action},
     {"mouseY", error_action},
     {"include", error_action},
-    {"open", open_file_action}
+    {"open", open_file_action},
+    {"simulate", simulate_action}
 };
 
 /* SCRIPTING
@@ -239,6 +240,12 @@ void editor_action(std::vector<std::string> args)
 void todo_action(std::vector<std::string> args)
 {
 
+}
+
+void simulate_action(std::vector<std::string> args)
+{
+    views[pattern_index].simulate = true;
+    views[pattern_index].simulation_start = std::chrono::system_clock::now();
 }
 
 #if 0

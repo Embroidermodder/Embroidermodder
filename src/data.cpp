@@ -32,7 +32,7 @@ std::unordered_map<std::string, std::string> settings_str;
 
 /* The actuator changes the program state via these global variables.
  */
-double output;
+float output;
 int settings_general_icon_size;
 bool settings_general_mdi_bg_use_logo;
 bool settings_general_mdi_bg_use_texture;
@@ -59,8 +59,8 @@ unsigned int  settings_display_selectbox_left_fill;
 unsigned int  settings_display_selectbox_right_color;
 unsigned int  settings_display_selectbox_right_fill;
 unsigned char  settings_display_selectbox_alpha;
-double settings_display_zoomscale_in;
-double settings_display_zoomscale_out;
+float settings_display_zoomscale_in;
+float settings_display_zoomscale_out;
 unsigned char  settings_display_crosshair_percent;
 std::string settings_display_units;
 unsigned int  settings_prompt_text_color;
@@ -90,15 +90,15 @@ unsigned int  settings_grid_color;
 bool settings_grid_load_from_file;
 std::string settings_grid_type;
 bool settings_grid_center_on_origin;
-double settings_grid_center_x;
-double settings_grid_center_y;
-double settings_grid_size_x;
-double settings_grid_size_y;
-double settings_grid_spacing_x;
-double settings_grid_spacing_y;
-double settings_grid_size_radius;
-double settings_grid_spacing_radius;
-double settings_grid_spacing_angle;
+float settings_grid_center_x;
+float settings_grid_center_y;
+float settings_grid_size_x;
+float settings_grid_size_y;
+float settings_grid_spacing_x;
+float settings_grid_spacing_y;
+float settings_grid_size_radius;
+float settings_grid_spacing_radius;
+float settings_grid_spacing_angle;
 bool settings_ruler_show_on_load;
 bool settings_ruler_metric;
 unsigned int  settings_ruler_color;
@@ -122,7 +122,7 @@ bool settings_qsnap_apparent;
 bool settings_qsnap_parallel;
 bool settings_lwt_show_lwt;
 bool settings_lwt_real_render;
-double settings_lwt_default_lwt;
+float settings_lwt_default_lwt;
 bool settings_selection_mode_pickfirst;
 bool settings_selection_mode_pickadd;
 bool settings_selection_mode_pickdrag;
@@ -201,7 +201,7 @@ std::string load_string(std::string s)
     return settings_str[s];
 }
 
-double load_double(std::string s)
+float load_float(std::string s)
 {
     std::unordered_map<std::string, Setting>::const_iterator result = settings.find(s);
     if (settings.end() == result) {
@@ -242,7 +242,7 @@ void store_string(std::string key, std::string value)
     }
 }
 
-void store_double(std::string key, double value)
+void store_float(std::string key, float value)
 {
     std::unordered_map<std::string, Setting>::const_iterator result = settings.find(key);
     if (settings.end() != result) {

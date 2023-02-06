@@ -20,15 +20,78 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
 #include <unordered_map>
 
 #include <embroidery.h>
 
 #include <GL/glew.h>
 
+/* DEFINES FOR JUMP TABLES/MODES
+ */
+#define CIRCLE_MODE_1P_RAD              0
+#define CIRCLE_MODE_1P_DIA              1
+#define CIRCLE_MODE_2P                  2
+#define CIRCLE_MODE_3P                  3
+#define CIRCLE_MODE_TTR                 4
+
+#define ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS   0
+#define ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS     1
+#define ELLIPSE_MODE_ELLIPSE_ROTATION            2
+
+#define DOLPHIN_MODE_NUM_POINTS         0
+#define DOLPHIN_MODE_XSCALE             1
+#define DOLPHIN_MODE_YSCALE             2
+
+#define HEART_MODE_NUM_POINTS           0
+#define HEART_MODE_STYLE                1
+#define HEART_MODE_XSCALE               2
+#define HEART_MODE_YSCALE               3
+
+#define SCALE_MODE_NORMAL               0
+#define SCALE_MODE_REFERENCE            1
+
+#define SINGLE_LINE_TEXT_MODE_JUSTIFY   0
+#define SINGLE_LINE_TEXT_MODE_SETFONT   1
+#define SINGLE_LINE_TEXT_MODE_SETGEOM   2
+#define SINGLE_LINE_TEXT_MODE_RAPID     3
+
+#define STAR_MODE_NUM_POINTS            0
+#define STAR_MODE_CENTER_PT             1
+#define STAR_MODE_RAD_OUTER             2
+#define STAR_MODE_RAD_INNER             3
+
 /* TYPEDEFS
  * -----------------------------------------------------------------------------
  */
+typedef struct CircleUi_ {
+    EmbVector point1, point2, point3, center;
+    float radius;
+    float diameter;
+    int mode;
+} CircleUi;
+
+typedef struct EllipseUi_ {
+    EmbVector point1, point2, point3, center;
+    float width, height, rot;
+    unsigned int mode;
+} EllipseUi;
+
+typedef struct SingleLineTextUi_ {
+    std::string text;
+    EmbVector position;
+    std::string textJustify;
+    std::string textFont;
+    float textHeight;
+    float textRotation;
+    unsigned int mode;
+} SingleLineTextUi;
+
+typedef struct StarUi_ {
+    unsigned int numPoints;
+    EmbVector center, point1, point2;
+    unsigned int mode;
+} StarUi;
 
 typedef struct Action_ {
     std::string command;
@@ -44,7 +107,7 @@ typedef struct Icon_ {
 
 typedef struct Setting_ {
     bool bool_value;
-    double real_value;
+    float real_value;
     int int_value;
     std::string string_value;
     int type;
@@ -67,7 +130,7 @@ typedef struct GroupBox_ {
 typedef struct View_ {
     EmbPattern *pattern;
     EmbVector origin;
-    double scale;
+    float scale;
     std::string grid_type;
     bool snap_mode;
     bool grid_mode;
@@ -78,9 +141,11 @@ typedef struct View_ {
     bool qtrack_mode;
     bool lwt_mode;
     bool metric;
+    bool simulate;
+    std::chrono::time_point<std::chrono::system_clock> simulation_start;
     std::string text_font;
-    double text_size;
-    double text_angle;
+    float text_size;
+    float text_angle;
     bool text_style_bold;
     bool text_style_italic;
     bool text_style_underline;
@@ -137,6 +202,7 @@ void open_file_action(std::vector<std::string> args);
 void icon_action(std::vector<std::string> args);
 void pan_action(std::vector<std::string> args);
 void settings_editor_action(std::vector<std::string> args);
+void simulate_action(std::vector<std::string> args);
 void todo_action(std::vector<std::string> args);
 void zoom_action(std::vector<std::string> args);
 
@@ -186,8 +252,8 @@ extern unsigned int settings_display_selectbox_left_fill;
 extern unsigned int settings_display_selectbox_right_color;
 extern unsigned int settings_display_selectbox_right_fill;
 extern unsigned char settings_display_selectbox_alpha;
-extern double settings_display_zoomscale_in;
-extern double settings_display_zoomscale_out;
+extern float settings_display_zoomscale_in;
+extern float settings_display_zoomscale_out;
 extern unsigned char settings_display_crosshair_percent;
 extern std::string settings_display_units;
 extern unsigned int settings_prompt_text_color;
@@ -217,15 +283,15 @@ extern unsigned int settings_grid_color;
 extern bool settings_grid_load_from_file;
 extern std::string settings_grid_type;
 extern bool settings_grid_center_on_origin;
-extern double settings_grid_center_x;
-extern double settings_grid_center_y;
-extern double settings_grid_size_x;
-extern double settings_grid_size_y;
-extern double settings_grid_spacing_x;
-extern double settings_grid_spacing_y;
-extern double settings_grid_size_radius;
-extern double settings_grid_spacing_radius;
-extern double settings_grid_spacing_angle;
+extern float settings_grid_center_x;
+extern float settings_grid_center_y;
+extern float settings_grid_size_x;
+extern float settings_grid_size_y;
+extern float settings_grid_spacing_x;
+extern float settings_grid_spacing_y;
+extern float settings_grid_size_radius;
+extern float settings_grid_spacing_radius;
+extern float settings_grid_spacing_angle;
 extern bool settings_ruler_show_on_load;
 extern bool settings_ruler_metric;
 extern unsigned int settings_ruler_color;
@@ -249,7 +315,7 @@ extern bool settings_qsnap_apparent;
 extern bool settings_qsnap_parallel;
 extern bool settings_lwt_show_lwt;
 extern bool settings_lwt_real_render;
-extern double settings_lwt_default_lwt;
+extern float settings_lwt_default_lwt;
 extern bool settings_selection_mode_pickfirst;
 extern bool settings_selection_mode_pickadd;
 extern bool settings_selection_mode_pickdrag;

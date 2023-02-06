@@ -44,14 +44,14 @@ void calculate_arc_data(EmbArc arc)
 
     setPos(center);
 
-    double radius = EmbLine(center, arc.mid).length();
+    float radius = EmbLine(center, arc.mid).length();
     updateArcRect(radius);
     updatePath();
     setRotation(0);
     setScale(1);
 }
 
-void update_arc_rect(double radius)
+void update_arc_rect(float radius)
 {
     EmbRect arcRect;
     arcRect.setWidth(radius*2.0);
@@ -65,9 +65,9 @@ void set_arc_center(EmbVector point)
     setPos(point);
 }
 
-void set_arc_radius(double radius)
+void set_arc_radius(float radius)
 {
-    double rad;
+    float rad;
     if (radius <= 0) {
         rad = 0.0000001;
     }
@@ -89,12 +89,12 @@ void set_arc_radius(double radius)
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
 }
 
-void set_arc_start_angle(double angle)
+void set_arc_start_angle(float angle)
 {
     //TODO: ArcObject setObjectStartAngle
 }
 
-void set_arc_end_angle(double angle)
+void set_arc_end_angle(float angle)
 {
     //TODO: ArcObject setObjectEndAngle
 }
@@ -117,19 +117,19 @@ void set_object_end_point(EmbVector point)
     calculateArcData(arc);
 }
 
-double arc_start_angle()
+float arc_start_angle()
 {
     return std::fmodf(EmbLine(scenePos(), objectStartPoint()).angle(), 360.0);;
 }
 
-double arc_end_angle()
+float arc_end_angle()
 {
     return std::fmodf(EmbLine(scenePos(), objectEndPoint()).angle(), 360.0);
 }
 
 EmbVector arc_startPoint() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector position = embVector_scale(arc.start, scale());
     EmbVector rot = embVector_rotate(postion, alpha);
 
@@ -138,7 +138,7 @@ EmbVector arc_startPoint() const
 
 EmbVector Arc_MidPoint() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector position = embVector_scale(arc.mid, scale());
     EmbVector rot = embVector_rotate(postion, alpha);
 
@@ -147,40 +147,40 @@ EmbVector Arc_MidPoint() const
 
 EmbVector Arc_EndPoint() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector position = embVector_scale(arc.end, scale());
     EmbVector rot = embVector_rotate(postion, alpha);
 
     return scenePos() + rot;
 }
 
-double Arc_Area() const
+float Arc_Area() const
 {
     //Area of a circular segment
-    double r = objectRadius();
-    double theta = radians(objectIncludedAngle());
+    float r = objectRadius();
+    float theta = radians(objectIncludedAngle());
     return ((r*r)/2)*(theta - sin(theta));
 }
 
-double Arc_ArcLength() const
+float Arc_ArcLength() const
 {
     return radians(objectIncludedAngle())*objectRadius();
 }
 
-double Arc_Chord() const
+float Arc_Chord() const
 {
     return embVector_distance(arc.start, arc.end);
 }
 
-double Arc_IncludedAngle() const
+float Arc_IncludedAngle() const
 {
-    double chord = objectChord();
-    double rad = objectRadius();
+    float chord = objectChord();
+    float rad = objectRadius();
     if (chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
 
     //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
     //      If the quotient is out of that range, then the result of asin() will be NaN.
-    double quotient = chord/(2.0*rad);
+    float quotient = chord/(2.0*rad);
     if (quotient > 1.0) quotient = 1.0;
     if (quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
@@ -199,8 +199,8 @@ bool Arc_Clockwise() const
 
 void Arc_updatePath()
 {
-    double startAngle = (objectStartAngle() + rotation());
-    double spanAngle = objectIncludedAngle();
+    float startAngle = (objectStartAngle() + rotation());
+    float spanAngle = objectIncludedAngle();
 
     if (objectClockwise()) {
         spanAngle = -spanAngle;
@@ -226,13 +226,13 @@ void Arc_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*w
     if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
-    double startAngle = (objectStartAngle() + rotation())*16;
-    double spanAngle = objectIncludedAngle()*16;
+    float startAngle = (objectStartAngle() + rotation())*16;
+    float spanAngle = objectIncludedAngle()*16;
 
     if (objectClockwise())
         spanAngle = -spanAngle;
 
-    double rad = objectRadius();
+    float rad = objectRadius();
     EmbRect paintRect(-rad, -rad, rad*2.0, rad*2.0);
     painter->drawArc(paintRect, startAngle, spanAngle);
 }
@@ -261,12 +261,12 @@ EmbVector Arc_mouseSnapPoint(EmbVector& mousePoint)
     EmbVector mid    = objectMidPoint();
     EmbVector end    = objectEndPoint();
 
-    double cntrDist  = EmbLine(mousePoint, center).length();
-    double startDist = EmbLine(mousePoint, start).length();
-    double midDist   = EmbLine(mousePoint, mid).length();
-    double endDist   = EmbLine(mousePoint, end).length();
+    float cntrDist  = EmbLine(mousePoint, center).length();
+    float startDist = EmbLine(mousePoint, start).length();
+    float midDist   = EmbLine(mousePoint, mid).length();
+    float endDist   = EmbLine(mousePoint, end).length();
 
-    double minDist = std::min(std::min(cntrDist, startDist), std::min(midDist, endDist));
+    float minDist = std::min(std::min(cntrDist, startDist), std::min(midDist, endDist));
 
     if     (minDist == cntrDist)  return center;
     else if (minDist == startDist) return start;
@@ -323,22 +323,18 @@ void Base_setObjectLineType(PenStyle lineType)
     lwtPen.setStyle(lineType);
 }
 
-void Base_setObjectLineWeight(double lineWeight)
+void Base_setObjectLineWeight(float lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 
-    if (lineWeight < 0)
-    {
-        if (lineWeight == OBJ_LWT_BYLAYER)
-        {
+    if (lineWeight < 0) {
+        if (lineWeight == OBJ_LWT_BYLAYER) {
             lwtPen.setWidthF(0.35); //TODO: getLayerLineWeight
         }
-        else if (lineWeight == OBJ_LWT_BYBLOCK)
-        {
+        else if (lineWeight == OBJ_LWT_BYBLOCK) {
             lwtPen.setWidthF(0.35); //TODO: getBlockLineWeight
         }
-        else
-        {
+        else {
             QMessageBox::warning(0, translate("Error - Negative Lineweight"),
                                     translate("Lineweight: %1")
                                     .arg(std::string().setNum(lineWeight)));
@@ -346,20 +342,21 @@ void Base_setObjectLineWeight(double lineWeight)
             lwtPen.setWidthF(-lineWeight);
         }
     }
-    else
-    {
+    else {
         lwtPen.setWidthF(lineWeight);
     }
 }
 
 EmbVector Base_objectRubberPoint(const std::string& key) const
 {
-    if (objRubberPoints.contains(key))
+    if (objRubberPoints.contains(key)) {
         return objRubberPoints.value(key);
+    }
 
     QGraphicsScene* gscene = scene();
-    if (gscene)
+    if (gscene) {
         return scene()->property("SCENE_QSNAP_POINT").toPointF();
+    }
     return EmbVector();
 }
 
@@ -437,33 +434,16 @@ void Base_realRender(QPainter* painter, const QPainterPath& renderPath)
     }
 }
 
-EmbVector point1, point2, point3, center;
-double radius;
-int mode;
-
-var global = {};
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-global.x3;
-global.y3;
-global.rad;
-global.dia;
-global.cx;
-global.cy;
-global.mode;
-
-//enums
-global.mode_1P_RAD = 0;
-global.mode_1P_DIA = 1;
-global.mode_2P     = 2;
-global.mode_3P     = 3;
-global.mode_TTR    = 4;
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
-void main()
+//
+//NOTE: click() is run only for left clicks.
+//      Middle clicks are used for panning.
+//      Right clicks bring up the context menu.
+//
+
+void circle_main()
 {
     initCommand();
     clearSelection();
@@ -477,15 +457,10 @@ void main()
     setPromptPrefix(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-void click(float x, float y)
+void circle_click(float x, float y)
 {
-    if (global.mode == global.mode_1P_RAD)
-    {
-        if (isNaN(global.x1))
-        {
+    if (global.mode == global.mode_1P_RAD) {
+        if (isNaN(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             global.cx = x;
@@ -496,8 +471,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify radius of circle or [Diameter]: "));
         }
-        else
-        {
+        else {
             global.x2 = x;
             global.y2 = y;
             setRubberPoint("CIRCLE_RADIUS", global.x2, global.y2);
@@ -506,7 +480,7 @@ void click(float x, float y)
             endCommand();
         }
     }
-    else if (global.mode == global.mode_1P_DIA)
+    else if (global.mode == CIRCLE_MODE_1P_DIA)
     {
         if (isNaN(global.x1))
         {
@@ -522,10 +496,8 @@ void click(float x, float y)
             endCommand();
         }
     }
-    else if (global.mode == global.mode_2P)
-    {
-        if (isNaN(global.x1))
-        {
+    else if (global.mode == CIRCLE_MODE_2P) {
+        if (isNaN(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             addRubber("CIRCLE");
@@ -534,8 +506,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify second end point of circle's diameter: "));
         }
-        else if (isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
@@ -543,22 +514,18 @@ void click(float x, float y)
             appendPromptHistory();
             endCommand();
         }
-        else
-        {
+        else {
             error("CIRCLE", translate("This should never happen."));
         }
     }
-    else if (global.mode == global.mode_3P)
-    {
-        if (isNaN(global.x1))
-        {
+    else if (global.mode == CIRCLE_MODE_3P) {
+        if (isNaN(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify second point on circle: "));
         }
-        else if (isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             addRubber("CIRCLE");
@@ -568,8 +535,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify third point on circle: "));
         }
-        else if (isNaN(global.x3))
-        {
+        else if (isNaN(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
@@ -577,77 +543,66 @@ void click(float x, float y)
             appendPromptHistory();
             endCommand();
         }
-        else
-        {
+        else {
             error("CIRCLE", translate("This should never happen."));
         }
     }
-    else if (global.mode == global.mode_TTR)
-    {
-        if (isNaN(global.x1))
-        {
+    else if (global.mode == CIRCLE_MODE_TTR) {
+        if (isNaN(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify point on object for second tangent of circle: "));
         }
-        else if (isNaN(global.x2))
-        {
+        else if (isNaN(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify radius of circle: "));
         }
-        else if (isNaN(global.x3))
-        {
+        else if (isNaN(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify second point: "));
         }
-        else
-        {
+        else {
             todo("CIRCLE", "click() for TTR");
         }
     }
 }
 
-void context(std::string str)
+void circle_context(std::string str)
 {
     todo("CIRCLE", "context()");
 }
 
-void prompt(std::string str)
+void circle_prompt(std::string str)
 {
-    if (global.mode == global.mode_1P_RAD)
-    {
-        if (isNaN(global.x1))
-        {
-            if (str == "2P") //TODO: Probably should add additional qsTr calls here.
-            {
-                global.mode = global.mode_2P;
+    if (global.mode == global.mode_1P_RAD) {
+        if (isNaN(global.x1)) {
+            if (str == "2P") {
+                //TODO: Probably should add additional qsTr calls here.
+                global.mode = CIRCLE_MODE_2P;
                 setPromptPrefix(translate("Specify first end point of circle's diameter: "));
             }
             else if (str == "3P") //TODO: Probably should add additional qsTr calls here.
             {
-                global.mode = global.mode_3P;
+                global.mode = CIRCLE_MODE_3P;
                 setPromptPrefix(translate("Specify first point of circle: "));
             }
             else if (str == "T" || str == "TTR") //TODO: Probably should add additional qsTr calls here.
             {
-                global.mode = global.mode_TTR;
+                global.mode = CIRCLE_MODE_TTR;
                 setPromptPrefix(translate("Specify point on object for first tangent of circle: "));
             }
-            else
-            {
+            else {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
-                else
-                {
+                else {
                     global.x1 = Number(strList[0]);
                     global.y1 = Number(strList[1]);
                     global.cx = global.x1;
@@ -659,24 +614,20 @@ void prompt(std::string str)
                 }
             }
         }
-        else
-        {
-            if (str == "D" || str == "DIAMETER") //TODO: Probably should add additional qsTr calls here.
-            {
+        else {
+            if (str == "D" || str == "DIAMETER") {
+                //TODO: Probably should add additional translate calls here.
                 global.mode = global.mode_1P_DIA;
                 setRubberMode("CIRCLE_1P_DIA");
                 setPromptPrefix(translate("Specify diameter of circle: "));
             }
-            else
-            {
+            else {
                 var num = Number(str);
-                if (isNaN(num))
-                {
+                if (isNaN(num)) {
                     alert(translate("Requires numeric radius, point on circumference, or \"D\"."));
                     setPromptPrefix(translate("Specify radius of circle or [Diameter]: "));
                 }
-                else
-                {
+                else {
                     global.rad = num;
                     global.x2 = global.x1 + global.rad;
                     global.y2 = global.y1;
@@ -687,22 +638,17 @@ void prompt(std::string str)
             }
         }
     }
-    else if (global.mode == global.mode_1P_DIA)
-    {
-        if (isNaN(global.x1))
-        {
+    else if (global.mode == global.mode_1P_DIA) {
+        if (isNaN(global.x1)) {
             error("CIRCLE", translate("This should never happen."));
         }
-        if (isNaN(global.x2))
-        {
+        if (isNaN(global.x2)) {
             var num = Number(str);
-            if (isNaN(num))
-            {
+            if (isNaN(num)) {
                 alert(translate("Requires numeric distance or second point."));
                 setPromptPrefix(translate("Specify diameter of circle: "));
             }
-            else
-            {
+            else {
                 global.dia = num;
                 global.x2 = global.x1 + global.dia;
                 global.y2 = global.y1;
@@ -711,18 +657,14 @@ void prompt(std::string str)
                 endCommand();
             }
         }
-        else
-        {
+        else {
             error("CIRCLE", translate("This should never happen."));
         }
     }
-    else if (global.mode == global.mode_2P)
-    {
-        if (isNaN(global.x1))
-        {
+    else if (global.mode == global.mode_2P) {
+        if (isNaN(global.x1)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
-            {
+            if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first end point of circle's diameter: "));
             }
@@ -749,8 +691,7 @@ void prompt(std::string str)
                 endCommand();
             }
         }
-        else
-        {
+        else {
             error("CIRCLE", translate("This should never happen."));
         }
     }
@@ -807,13 +748,13 @@ void prompt(std::string str)
     }
 }
 
-Circle_CircleObject(double centerX, double centerY, double radius, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+Circle_CircleObject(float centerX, float centerY, float radius, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-Circle_CircleObject(CircleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+Circle_CircleObject(CircleObject* obj, QGraphicsItem* parent)
 {
     debug_message("CircleObject Constructor()");
     if (obj) {
@@ -827,13 +768,13 @@ Circle_~CircleObject()
     debug_message("CircleObject Destructor()");
 }
 
-void Circle_init(double centerX, double centerY, double radius, unsigned int rgb, Qt::PenStyle lineType)
+void Circle_init(float centerX, float centerY, float radius, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "CIRCLE");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -851,27 +792,27 @@ void Circle_setObjectCenter(EmbVector& center)
     setObjectCenter(center.x(), center.y());
 }
 
-void Circle_setObjectCenter(double centerX, double centerY)
+void Circle_setObjectCenter(float centerX, float centerY)
 {
     setPos(centerX, centerY);
 }
 
-void Circle_setObjectCenterX(double centerX)
+void Circle_setObjectCenterX(float centerX)
 {
     setX(centerX);
 }
 
-void Circle_setObjectCenterY(double centerY)
+void Circle_setObjectCenterY(float centerY)
 {
     setY(centerY);
 }
 
-void Circle_setObjectRadius(double radius)
+void Circle_setObjectRadius(float radius)
 {
     setObjectDiameter(radius*2.0);
 }
 
-void Circle_setObjectDiameter(double diameter)
+void Circle_setObjectDiameter(float diameter)
 {
     EmbRect circRect;
     circRect.setWidth(diameter);
@@ -881,15 +822,15 @@ void Circle_setObjectDiameter(double diameter)
     updatePath();
 }
 
-void Circle_setObjectArea(double area)
+void Circle_setObjectArea(float area)
 {
-    double radius = sqrt(area/pi());
+    float radius = sqrt(area/pi());
     setObjectRadius(radius);
 }
 
-void Circle_setObjectCircumference(double circumference)
+void Circle_setObjectCircumference(float circumference)
 {
-    double diameter = circumference/pi();
+    float diameter = circumference/pi();
     setObjectDiameter(diameter);
 }
 
@@ -934,7 +875,7 @@ void Circle_updateRubber(QPainter* painter)
         EmbLine itemLine(itemCenterPoint, itemQSnapPoint);
         setObjectCenter(sceneCenterPoint);
         EmbLine sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        double radius = sceneLine.length();
+        float radius = sceneLine.length();
         setObjectRadius(radius);
         if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
@@ -947,7 +888,7 @@ void Circle_updateRubber(QPainter* painter)
         EmbLine itemLine(itemCenterPoint, itemQSnapPoint);
         setObjectCenter(sceneCenterPoint);
         EmbLine sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        double diameter = sceneLine.length();
+        float diameter = sceneLine.length();
         setObjectDiameter(diameter);
         if (painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
@@ -958,7 +899,7 @@ void Circle_updateRubber(QPainter* painter)
         EmbVector sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
         EmbLine sceneLine(sceneTan1Point, sceneQSnapPoint);
         setObjectCenter(sceneLine.pointAt(0.5));
-        double diameter = sceneLine.length();
+        float diameter = sceneLine.length();
         setObjectDiameter(diameter);
         updatePath();
     }
@@ -968,8 +909,8 @@ void Circle_updateRubber(QPainter* painter)
         EmbVector sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         EmbVector sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
-        double sceneCenterX;
-        double sceneCenterY;
+        float sceneCenterX;
+        float sceneCenterY;
         EmbArc arc;
         EmbVector sceneCenter;
         arc.start.x = sceneTan1Point.x();
@@ -982,7 +923,7 @@ void Circle_updateRubber(QPainter* painter)
         EmbVector sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         EmbLine sceneLine(sceneCenterPoint, sceneTan3Point);
         setObjectCenter(sceneCenterPoint);
-        double radius = sceneLine.length();
+        float radius = sceneLine.length();
         setObjectRadius(radius);
         updatePath();
     }
@@ -997,7 +938,7 @@ void Circle_updateRubber(QPainter* painter)
             }
             else
             {
-                double gripRadius = EmbLine(objectCenter(), objectRubberPoint(std::string())).length();
+                float gripRadius = EmbLine(objectCenter(), objectRubberPoint(std::string())).length();
                 painter->drawEllipse(EmbVector(), gripRadius, gripRadius);
             }
 
@@ -1024,13 +965,13 @@ EmbVector Circle_mouseSnapPoint(EmbVector& mousePoint)
     EmbVector quad180 = objectQuadrant180();
     EmbVector quad270 = objectQuadrant270();
 
-    double cntrDist = EmbLine(mousePoint, center).length();
-    double q0Dist   = EmbLine(mousePoint, quad0).length();
-    double q90Dist  = EmbLine(mousePoint, quad90).length();
-    double q180Dist = EmbLine(mousePoint, quad180).length();
-    double q270Dist = EmbLine(mousePoint, quad270).length();
+    float cntrDist = EmbLine(mousePoint, center).length();
+    float q0Dist   = EmbLine(mousePoint, quad0).length();
+    float q90Dist  = EmbLine(mousePoint, quad90).length();
+    float q180Dist = EmbLine(mousePoint, quad180).length();
+    float q270Dist = EmbLine(mousePoint, quad270).length();
 
-    double minDist = std::min(std::min(std::min(q0Dist, q90Dist), std::min(q180Dist, q270Dist)), cntrDist);
+    float minDist = std::min(std::min(std::min(q0Dist, q90Dist), std::min(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
     else if (minDist == q0Dist)   return quad0;
@@ -1066,7 +1007,7 @@ QPainterPath Circle_objectSavePath() const
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -1079,7 +1020,7 @@ void dim_leader_init(EmbLine line, unsigned int rgb, Qt::PenStyle lineType)
     setData(OBJ_NAME, "Leader Dimension");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -1093,39 +1034,27 @@ void dim_leader_init(EmbLine line, unsigned int rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-void dimleader_setObjectEndPoint1(const EmbVector& endPt1)
+void dimleader_setObjectEndPoint1(EmbVector endPt1)
 {
-    setObjectEndPoint1(endPt1.x(), endPt1.y());
-}
-
-void dimleader_setObjectEndPoint1(double x1, double y1)
-{
+    EmbVector delta;
     EmbVector endPt2 = objectEndPoint2();
-    double x2 = endPt2.x();
-    double y2 = endPt2.y();
-    double dx = x2 - x1;
-    double dy = y2 - y1;
+    delta.x = endPt2.x - endPt1.x;
+    delta.y = endPt2.y - endPt1.y;
     setRotation(0);
     setLine(0, 0, dx, dy);
-    setPos(x1, y1);
+    setPos(endPt1);
     updateLeader();
 }
 
-void dimleader_setObjectEndPoint2(const EmbVector& endPt2)
+void dimleader_setObjectEndPoint2(EmbVector endPt2)
 {
-    setObjectEndPoint2(endPt2.x(), endPt2.y());
-}
-
-void dimleader_setObjectEndPoint2(double x2, double y2)
-{
+    EmbVector delta;
     EmbVector endPt1 = scenePos();
-    double x1 = endPt1.x();
-    double y1 = endPt1.y();
-    double dx = x2 - x1;
-    double dy = y2 - y1;
+    delta.x = endPt2.x - endPt1.x;
+    delta.y = endPt2.y - endPt1.y;
     setRotation(0);
-    setLine(0, 0, dx, dy);
-    setPos(x1, y1);
+    setLine(0, 0, delta.x, delta.y);
+    setPos(endPt1);
     updateLeader();
 }
 
@@ -1137,7 +1066,7 @@ EmbVector dimleader_objectEndPoint1() const
 EmbVector dimleader_objectEndPoint2() const
 {
     EmbLine lyne = line();
-    double rot = radians(rotation());
+    float rot = radians(rotation());
     EmbVector point2;
     point2.x = lyne.x2()*scale();
     point2.y = lyne.y2()*scale();
@@ -1149,12 +1078,12 @@ EmbVector dimleader_objectEndPoint2() const
 EmbVector dimleader_objectMidPoint() const
 {
     EmbVector mp = line().pointAt(0.5) * scale();
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector rotMid = embVector_rotate(mp, alpha);
     return scenePos() + rotMid;
 }
 
-double dimleader_objectAngle() const
+float dimleader_objectAngle() const
 {
     return fmodf(line().angle() - rotation(), 360.0);
 }
@@ -1162,13 +1091,13 @@ double dimleader_objectAngle() const
 void dimleader_updateLeader()
 {
     int arrowStyle = Closed; //TODO: Make this customizable
-    double arrowStyleAngle = 15.0; //TODO: Make this customizable
-    double arrowStyleLength = 1.0; //TODO: Make this customizable
-    double lineStyleAngle = 45.0; //TODO: Make this customizable
-    double lineStyleLength = 1.0; //TODO: Make this customizable
+    float arrowStyleAngle = 15.0; //TODO: Make this customizable
+    float arrowStyleLength = 1.0; //TODO: Make this customizable
+    float lineStyleAngle = 45.0; //TODO: Make this customizable
+    float lineStyleLength = 1.0; //TODO: Make this customizable
 
     EmbLine lyne = line();
-    double angle = lyne.angle();
+    float angle = lyne.angle();
     EmbVector ap0 = lyne.p1();
     EmbVector lp0 = lyne.p2();
 
@@ -1208,8 +1137,7 @@ void dimleader_updateLeader()
     //                \|                         \|
     //                 .(ap2)                     .(lp2)
 
-    if (arrowStyle == Open)
-    {
+    if (arrowStyle == Open) {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
         arrowStylePath.lineTo(ap0);
@@ -1217,29 +1145,25 @@ void dimleader_updateLeader()
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap1);
     }
-    else if (arrowStyle == Closed)
-    {
+    else if (arrowStyle == Closed) {
         arrowStylePath = QPainterPath();
         arrowStylePath.moveTo(ap1);
         arrowStylePath.lineTo(ap0);
         arrowStylePath.lineTo(ap2);
         arrowStylePath.lineTo(ap1);
     }
-    else if (arrowStyle == Dot)
-    {
+    else if (arrowStyle == Dot) {
         arrowStylePath = QPainterPath();
         arrowStylePath.addEllipse(ap0, arrowStyleLength, arrowStyleLength);
     }
-    else if (arrowStyle == Box)
-    {
+    else if (arrowStyle == Box) {
         arrowStylePath = QPainterPath();
-        double side = EmbLine(ap1, ap2).length();
+        float side = EmbLine(ap1, ap2).length();
         EmbRect ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
     }
-    else if (arrowStyle == Tick)
-    {
+    else if (arrowStyle == Tick) {
     }
 
     lineStylePath = QPainterPath();
@@ -1250,20 +1174,27 @@ void dimleader_updateLeader()
 void dimleader_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if (!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if (option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if (objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property("ENABLE_LWT").toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     painter->drawPath(lineStylePath);
     painter->drawPath(arrowStylePath);
 
-    if (filled)
+    if (filled) {
         painter->fillPath(arrowStylePath, objectColor());
+    }
 }
 
 void dimleader_updateRubber(QPainter* painter)
@@ -1304,11 +1235,11 @@ EmbVector dimleader_mouseSnapPoint(const EmbVector& mousePoint)
     EmbVector endPoint2 = objectEndPoint2();
     EmbVector midPoint  = objectMidPoint();
 
-    double end1Dist = EmbLine(mousePoint, endPoint1).length();
-    double end2Dist = EmbLine(mousePoint, endPoint2).length();
-    double midDist  = EmbLine(mousePoint, midPoint).length();
+    float end1Dist = EmbLine(mousePoint, endPoint1).length();
+    float end2Dist = EmbLine(mousePoint, endPoint2).length();
+    float midDist  = EmbLine(mousePoint, midPoint).length();
 
-    double minDist = std::min(end1Dist, end2Dist);
+    float minDist = std::min(end1Dist, end2Dist);
 
     if (curved)
         minDist = std::min(minDist, midDist);
@@ -1344,33 +1275,9 @@ void dimleader_gripEdit(const EmbVector& before, const EmbVector& after)
     }
 }
 
-EmbVector point1, point2, point3, center;
-double width, height, rot;
-int mode;
-
-
-var global = {}; //Required
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-global.x3;
-global.y3;
-global.cx;
-global.cy;
-global.width;
-global.height;
-global.rot;
-global.mode;
-
-//enums
-global.mode_MAJORDIAMETER_MINORRADIUS = 0;
-global.mode_MAJORRADIUS_MINORRADIUS   = 1;
-global.mode_ELLIPSE_ROTATION          = 2;
-
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
-void main()
+void ellipse_main()
 {
     initCommand();
     clearSelection();
@@ -1662,13 +1569,13 @@ void prompt(std::string str)
     }
 }
 
-ellipse_EllipseObject(double centerX, double centerY, double width, double height, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+ellipse_EllipseObject(float centerX, float centerY, float width, float height, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-ellipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+ellipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent)
 {
     debug_message("EllipseObject Constructor()");
     if (obj) {
@@ -1677,13 +1584,13 @@ ellipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(pa
     }
 }
 
-void ellipse_init(double centerX, double centerY, double width, double height, unsigned int rgb, Qt::PenStyle lineType)
+void ellipse_init(float centerX, float centerY, float width, float height, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Ellipse");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -1696,7 +1603,7 @@ void ellipse_init(double centerX, double centerY, double width, double height, u
     updatePath();
 }
 
-void ellipse_setObjectSize(double width, double height)
+void ellipse_setObjectSize(float width, float height)
 {
     EmbRect elRect = rect();
     elRect.setWidth(width);
@@ -1710,32 +1617,32 @@ void ellipse_setObjectCenter(const EmbVector& center)
     setObjectCenter(center.x(), center.y());
 }
 
-void ellipse_setObjectCenter(double centerX, double centerY)
+void ellipse_setObjectCenter(float centerX, float centerY)
 {
     setPos(centerX, centerY);
 }
 
-void ellipse_setObjectCenterX(double centerX)
+void ellipse_setObjectCenterX(float centerX)
 {
     setX(centerX);
 }
 
-void ellipse_setObjectCenterY(double centerY)
+void ellipse_setObjectCenterY(float centerY)
 {
     setY(centerY);
 }
 
-void ellipse_setObjectRadiusMajor(double radius)
+void ellipse_setObjectRadiusMajor(float radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
-void ellipse_setObjectRadiusMinor(double radius)
+void ellipse_setObjectRadiusMinor(float radius)
 {
     setObjectDiameterMinor(radius*2.0);
 }
 
-void ellipse_setObjectDiameterMajor(double diameter)
+void ellipse_setObjectDiameterMajor(float diameter)
 {
     EmbRect elRect = rect();
     if (elRect.width() > elRect.height())
@@ -1746,7 +1653,7 @@ void ellipse_setObjectDiameterMajor(double diameter)
     setRect(elRect);
 }
 
-void ellipse_setObjectDiameterMinor(double diameter)
+void ellipse_setObjectDiameterMinor(float diameter)
 {
     EmbRect elRect = rect();
     if (elRect.width() < elRect.height())
@@ -1759,37 +1666,37 @@ void ellipse_setObjectDiameterMinor(double diameter)
 
 EmbVector ellipse_objectQuadrant0() const
 {
-    double halfW = objectWidth()/2.0;
-    double rot = radians(rotation());
-    double x = halfW*cos(rot);
-    double y = halfW*sin(rot);
+    float halfW = objectWidth()/2.0;
+    float rot = radians(rotation());
+    float x = halfW*cos(rot);
+    float y = halfW*sin(rot);
     return objectCenter() + EmbVector(x,y);
 }
 
 EmbVector ellipse_objectQuadrant90() const
 {
-    double halfH = objectHeight()/2.0;
-    double rot = radians(rotation()+90.0);
-    double x = halfH * cos(rot);
-    double y = halfH * sin(rot);
+    float halfH = objectHeight()/2.0;
+    float rot = radians(rotation()+90.0);
+    float x = halfH * cos(rot);
+    float y = halfH * sin(rot);
     return objectCenter() + EmbVector(x,y);
 }
 
 EmbVector ellipse_objectQuadrant180() const
 {
-    double halfW = objectWidth()/2.0;
-    double rot = radians(rotation()+180.0);
-    double x = halfW*cos(rot);
-    double y = halfW*sin(rot);
+    float halfW = objectWidth()/2.0;
+    float rot = radians(rotation()+180.0);
+    float x = halfW*cos(rot);
+    float y = halfW*sin(rot);
     return objectCenter() + EmbVector(x,y);
 }
 
 EmbVector ellipse_objectQuadrant270() const
 {
-    double halfH = objectHeight()/2.0;
-    double rot = radians(rotation()+270.0);
-    double x = halfH*cos(rot);
-    double y = halfH*sin(rot);
+    float halfH = objectHeight()/2.0;
+    float rot = radians(rotation()+270.0);
+    float x = halfH*cos(rot);
+    float y = halfH*sin(rot);
     return objectCenter() + EmbVector(x,y);
 }
 
@@ -1838,22 +1745,22 @@ void ellipse_updateRubber(QPainter* painter)
         EmbVector sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         EmbVector sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         EmbVector sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+        float ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        float ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
 
         //TODO: incorporate perpendicularDistance() into libcgeometry
-        double px = sceneAxis2Point2.x();
-        double py = sceneAxis2Point2.y();
-        double x1 = sceneAxis1Point1.x();
-        double y1 = sceneAxis1Point1.y();
+        float px = sceneAxis2Point2.x();
+        float py = sceneAxis2Point2.y();
+        float x1 = sceneAxis1Point1.x();
+        float y1 = sceneAxis1Point1.y();
         EmbLine line(sceneAxis1Point1, sceneAxis1Point2);
         EmbLine norm = line.normalVector();
-        double dx = px-x1;
-        double dy = py-y1;
+        float dx = px-x1;
+        float dy = py-y1;
         norm.translate(dx, dy);
         EmbVector iPoint;
         norm.intersects(line, &iPoint);
-        double ellipseHeight = EmbLine(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        float ellipseHeight = EmbLine(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
         setObjectSize(ellipseWidth, ellipseHeight);
@@ -1870,22 +1777,22 @@ void ellipse_updateRubber(QPainter* painter)
         EmbVector sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         EmbVector sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         EmbVector sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        double ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        double ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+        float ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        float ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
 
         //TODO: incorporate perpendicularDistance() into libcgeometry
-        double px = sceneAxis2Point2.x();
-        double py = sceneAxis2Point2.y();
-        double x1 = sceneCenterPoint.x();
-        double y1 = sceneCenterPoint.y();
+        float px = sceneAxis2Point2.x();
+        float py = sceneAxis2Point2.y();
+        float x1 = sceneCenterPoint.x();
+        float y1 = sceneCenterPoint.y();
         EmbLine line(sceneCenterPoint, sceneAxis1Point2);
         EmbLine norm = line.normalVector();
-        double dx = px-x1;
-        double dy = py-y1;
+        float dx = px-x1;
+        float dy = py-y1;
         norm.translate(dx, dy);
         EmbVector iPoint;
         norm.intersects(line, &iPoint);
-        double ellipseHeight = EmbLine(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        float ellipseHeight = EmbLine(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
         setObjectSize(ellipseWidth, ellipseHeight);
@@ -1920,13 +1827,13 @@ EmbVector ellipse_mouseSnapPoint(const EmbVector& mousePoint)
     EmbVector quad180 = objectQuadrant180();
     EmbVector quad270 = objectQuadrant270();
 
-    double cntrDist = EmbLine(mousePoint, center).length();
-    double q0Dist   = EmbLine(mousePoint, quad0).length();
-    double q90Dist  = EmbLine(mousePoint, quad90).length();
-    double q180Dist = EmbLine(mousePoint, quad180).length();
-    double q270Dist = EmbLine(mousePoint, quad270).length();
+    float cntrDist = EmbLine(mousePoint, center).length();
+    float q0Dist   = EmbLine(mousePoint, quad0).length();
+    float q90Dist  = EmbLine(mousePoint, quad90).length();
+    float q180Dist = EmbLine(mousePoint, quad180).length();
+    float q270Dist = EmbLine(mousePoint, quad270).length();
 
-    double minDist = std::min(std::min(std::min(q0Dist, q90Dist), std::min(q180Dist, q270Dist)), cntrDist);
+    float minDist = std::min(std::min(std::min(q0Dist, q90Dist), std::min(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
     else if (minDist == q0Dist)   return quad0;
@@ -1956,7 +1863,7 @@ QPainterPath ellipse_objectSavePath() const
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -1969,7 +1876,7 @@ void image_init(EmbRect rect, unsigned int rgb, Qt::PenStyle lineType)
     setData(OBJ_NAME, "Image");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -1980,7 +1887,7 @@ void image_init(EmbRect rect, unsigned int rgb, Qt::PenStyle lineType)
     setPen(objPen);
 }
 
-void image_setObjectRect(double x, double y, double w, double h)
+void image_setObjectRect(float x, float y, float w, float h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
@@ -1989,7 +1896,7 @@ void image_setObjectRect(double x, double y, double w, double h)
 
 EmbVector image_objectTopLeft() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector tl = rect().topRight() * scale();
     EmbVector ptlrot = embVector_rotate(tl, alpha);
     return scenePos() + ptlrot;
@@ -1997,7 +1904,7 @@ EmbVector image_objectTopLeft() const
 
 EmbVector image_objectTopRight() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector tr = rect().topRight() * scale();
     EmbVector ptrrot = embVector_rotate(tr, alpha);
     return scenePos() + ptrrot;
@@ -2005,7 +1912,7 @@ EmbVector image_objectTopRight() const
 
 EmbVector image_objectBottomLeft() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector bl = rect().topRight() * scale();
     EmbVector pblrot = embVector_rotate(bl, alpha);
     return scenePos() + pblrot;
@@ -2013,7 +1920,7 @@ EmbVector image_objectBottomLeft() const
 
 EmbVector image_objectBottomRight() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector br = rect().topRight() * scale();
     EmbVector pbrrot = embVector_rotate(br, alpha);
     return scenePos() + pbrrot;
@@ -2058,10 +1965,10 @@ void image_updateRubber(QPainter* painter)
     {
         EmbVector sceneStartPoint = objectRubberPoint("IMAGE_START");
         EmbVector sceneEndPoint = objectRubberPoint("IMAGE_END");
-        double x = sceneStartPoint.x();
-        double y = sceneStartPoint.y();
-        double w = sceneEndPoint.x() - sceneStartPoint.x();
-        double h = sceneEndPoint.y() - sceneStartPoint.y();
+        float x = sceneStartPoint.x();
+        float y = sceneStartPoint.y();
+        float w = sceneEndPoint.x() - sceneStartPoint.x();
+        float h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
     }
@@ -2087,12 +1994,12 @@ EmbVector image_mouseSnapPoint(const EmbVector& mousePoint)
     EmbVector pbl = objectBottomLeft();  //Bottom Left Corner QSnap
     EmbVector pbr = objectBottomRight(); //Bottom Right Corner QSnap
 
-    double ptlDist = EmbLine(mousePoint, ptl).length();
-    double ptrDist = EmbLine(mousePoint, ptr).length();
-    double pblDist = EmbLine(mousePoint, pbl).length();
-    double pbrDist = EmbLine(mousePoint, pbr).length();
+    float ptlDist = EmbLine(mousePoint, ptl).length();
+    float ptrDist = EmbLine(mousePoint, ptr).length();
+    float pblDist = EmbLine(mousePoint, pbl).length();
+    float pbrDist = EmbLine(mousePoint, pbr).length();
 
-    double minDist = std::min(std::min(ptlDist, ptrDist), std::min(pblDist, pbrDist));
+    float minDist = std::min(std::min(ptlDist, ptrDist), std::min(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
     else if (minDist == ptrDist) return ptr;
@@ -2243,7 +2150,7 @@ void line_init(EmbLine line_in, unsigned int rgb, PenStyle lineType)
     line = line_in;
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -2255,8 +2162,8 @@ void line_init(EmbLine line_in, unsigned int rgb, PenStyle lineType)
 
 void line_setObjectEndPoint1(EmbVector point1)
 {
-    double dx = line.start.x - point1.x;
-    double dy = line.start.y - point1.y;
+    float dx = line.start.x - point1.x;
+    float dy = line.start.y - point1.y;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
@@ -2265,8 +2172,8 @@ void line_setObjectEndPoint1(EmbVector point1)
 
 void line_setObjectEndPoint2(EmbVector point1)
 {
-    double dx = line.end.x - point1.x;
-    double dy = line.end.y - point1.y;
+    float dx = line.end.x - point1.x;
+    float dy = line.end.y - point1.y;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
@@ -2276,7 +2183,7 @@ void line_setObjectEndPoint2(EmbVector point1)
 EmbVector line_objectEndPoint2() const
 {
     EmbLine lyne = line();
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector point2;
     point2.x = lyne.x2()*scale();
     point2.y = lyne.y2()*scale();
@@ -2289,13 +2196,13 @@ EmbVector line_objectMidPoint() const
 {
     EmbLine lyne = line();
     EmbVector mp = lyne.pointAt(0.5) * scale();
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector rotMid = embVector_rotate(mp, alpha);
 
     return scenePos() + rotMid;
 }
 
-double line_objectAngle() const
+float line_objectAngle() const
 {
     return std::fmodf(line().angle() - rotation(), 360.0);
 }
@@ -2363,11 +2270,11 @@ EmbVector line_mouseSnapPoint(EmbVector& mousePoint)
     EmbVector endPoint2 = objectEndPoint2();
     EmbVector midPoint  = objectMidPoint();
 
-    double end1Dist = EmbLine(mousePoint, endPoint1).length();
-    double end2Dist = EmbLine(mousePoint, endPoint2).length();
-    double midDist  = EmbLine(mousePoint, midPoint).length();
+    float end1Dist = EmbLine(mousePoint, endPoint1).length();
+    float end2Dist = EmbLine(mousePoint, endPoint2).length();
+    float midDist  = EmbLine(mousePoint, midPoint).length();
 
-    double minDist = std::min(std::min(end1Dist, end2Dist), midDist);
+    float minDist = std::min(std::min(end1Dist, end2Dist), midDist);
 
     if     (minDist == end1Dist) return endPoint1;
     else if (minDist == end2Dist) return endPoint2;
@@ -2397,13 +2304,13 @@ QPainterPath line_objectSavePath() const
     return path;
 }
 
-path_PathObject(double x, double y, const QPainterPath p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+path_PathObject(float x, float y, const QPainterPath p, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-path_PathObject(PathObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+path_PathObject(PathObject* obj, QGraphicsItem* parent)
 {
     debug_message("PathObject Constructor()");
     if (obj) {
@@ -2418,13 +2325,13 @@ path_~PathObject()
     debug_message("PathObject Destructor()");
 }
 
-void path_init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
+void path_init(float x, float y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Path");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -2503,20 +2410,20 @@ QPainterPath path_objectCopyPath() const
 
 QPainterPath path_objectSavePath() const
 {
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
     return trans.map(normalPath);
 }
 
-void point_init(double x, double y, unsigned int rgb, int lineType)
+void point_init(float x, float y, unsigned int rgb, int lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Point");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -2590,7 +2497,7 @@ QPainterPath point_objectSavePath()
     return path;
 }
 
-void polygon_PolygonObject(double x, double y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent)
+void polygon_PolygonObject(float x, float y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("PolygonObject Constructor()");
     init(x, y, p, rgb, SolidLine); //TODO: getCurrentLineType
@@ -2612,13 +2519,13 @@ polygon_~PolygonObject()
     debug_message("PolygonObject Destructor()");
 }
 
-void polygon_init(double x, double y, const QPainterPath& p, unsigned int rgb, PenStyle lineType)
+void polygon_init(float x, float y, const QPainterPath& p, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Polygon");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -2698,8 +2605,8 @@ void polygon_updateRubber(QPainter* painter)
 
         EmbVector inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
         EmbLine inscribeLine = EmbLine(EmbVector(0,0), inscribePoint);
-        double inscribeAngle = inscribeLine.angle();
-        double inscribeInc = 360.0/numSides;
+        float inscribeAngle = inscribeLine.angle();
+        float inscribeInc = 360.0/numSides;
 
         if (painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
@@ -2722,8 +2629,8 @@ void polygon_updateRubber(QPainter* painter)
 
         EmbVector circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
         EmbLine circumscribeLine = EmbLine(EmbVector(0,0), circumscribePoint);
-        double circumscribeAngle = circumscribeLine.angle();
-        double circumscribeInc = 360.0/numSides;
+        float circumscribeAngle = circumscribeLine.angle();
+        float circumscribeInc = 360.0/numSides;
 
         if (painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
@@ -2791,12 +2698,12 @@ EmbVector polygon_mouseSnapPoint(const EmbVector& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
-    double closestDist = EmbLine(mousePoint, closestPoint).length();
+    float closestDist = EmbLine(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
     for (int i = 0; i < elemCount; ++i) {
         element = normalPath.elementAt(i);
         EmbVector elemPoint = mapToScene(element.x, element.y);
-        double elemDist = EmbLine(mousePoint, elemPoint).length();
+        float elemDist = EmbLine(mousePoint, elemPoint).length();
         if (elemDist < closestDist) {
             closestPoint = elemPoint;
             closestDist = elemDist;
@@ -2850,14 +2757,14 @@ QPainterPath polygon_objectSavePath() const
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
     return trans.map(closedPath);
 }
 
-void polyline_PolylineObject(double x, double y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+void polyline_PolylineObject(float x, float y, const QPainterPath& p, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("PolylineObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -2879,13 +2786,13 @@ polyline_~PolylineObject()
     debug_message("PolylineObject Destructor()");
 }
 
-void polyline_init(double x, double y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
+void polyline_init(float x, float y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Polyline");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -3005,13 +2912,13 @@ EmbVector polyline_mouseSnapPoint(const EmbVector& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
-    double closestDist = EmbLine(mousePoint, closestPoint).length();
+    float closestDist = EmbLine(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
     for(int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         EmbVector elemPoint = mapToScene(element.x, element.y);
-        double elemDist = EmbLine(mousePoint, elemPoint).length();
+        float elemDist = EmbLine(mousePoint, elemPoint).length();
         if (elemDist < closestDist)
         {
             closestPoint = elemPoint;
@@ -3064,7 +2971,7 @@ QPainterPath polyline_objectCopyPath() const
 
 QPainterPath polyline_objectSavePath() const
 {
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -3077,7 +2984,7 @@ void rect_init(EmbRect rect, unsigned int rgb, PenStyle lineType)
     setData(OBJ_NAME, "Rectangle");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -3088,7 +2995,7 @@ void rect_init(EmbRect rect, unsigned int rgb, PenStyle lineType)
     setPen(objectPen());
 }
 
-void rect_setObjectRect(double x, double y, double w, double h)
+void rect_setObjectRect(float x, float y, float w, float h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
@@ -3097,7 +3004,7 @@ void rect_setObjectRect(double x, double y, double w, double h)
 
 EmbVector rect_objectTopLeft() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector tl = rect().topLeft() * scale();
     EmbVector ptlrot = embVector_rotate(t1, alpha);
     return scenePos() + ptlrot;
@@ -3105,7 +3012,7 @@ EmbVector rect_objectTopLeft() const
 
 EmbVector rect_objectTopRight() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector tr = rect().topRight() * scale();
     EmbVector ptlrot = embVector_rotate(t1, alpha);
     return scenePos() + ptrrot;
@@ -3113,7 +3020,7 @@ EmbVector rect_objectTopRight() const
 
 EmbVector rect_objectBottomLeft() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector bl = rect().bottomLeft() * scale();
     EmbVector pblrot = embVector_rotate(b1, alpha);
     return scenePos() + pblrot;
@@ -3121,7 +3028,7 @@ EmbVector rect_objectBottomLeft() const
 
 EmbVector rect_objectBottomRight() const
 {
-    double alpha = radians(rotation());
+    float alpha = radians(rotation());
     EmbVector br = rect().bottomRight() * scale();
     EmbVector pbrrot = embVector_rotate(br, alpha);
     return scenePos() + pbrrot;
@@ -3166,10 +3073,10 @@ void rect_updateRubber(QPainter* painter)
     {
         EmbVector sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         EmbVector sceneEndPoint = objectRubberPoint("RECTANGLE_END");
-        double x = sceneStartPoint.x();
-        double y = sceneStartPoint.y();
-        double w = sceneEndPoint.x() - sceneStartPoint.x();
-        double h = sceneEndPoint.y() - sceneStartPoint.y();
+        float x = sceneStartPoint.x();
+        float y = sceneStartPoint.y();
+        float w = sceneEndPoint.x() - sceneStartPoint.x();
+        float h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
     }
@@ -3217,12 +3124,12 @@ EmbVector rect_mouseSnapPoint(const EmbVector& mousePoint)
     EmbVector pbl = objectBottomLeft();  //Bottom Left Corner QSnap
     EmbVector pbr = objectBottomRight(); //Bottom Right Corner QSnap
 
-    double ptlDist = EmbLine(mousePoint, ptl).length();
-    double ptrDist = EmbLine(mousePoint, ptr).length();
-    double pblDist = EmbLine(mousePoint, pbl).length();
-    double pbrDist = EmbLine(mousePoint, pbr).length();
+    float ptlDist = EmbLine(mousePoint, ptl).length();
+    float ptrDist = EmbLine(mousePoint, ptr).length();
+    float pblDist = EmbLine(mousePoint, pbl).length();
+    float pbrDist = EmbLine(mousePoint, pbr).length();
 
-    double minDist = std::min(std::min(ptlDist, ptrDist), std::min(pblDist, pbrDist));
+    float minDist = std::min(std::min(ptlDist, ptrDist), std::min(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
     else if (minDist == ptrDist) return ptr;
@@ -3258,7 +3165,7 @@ QPainterPath rect_objectSavePath() const
     path.lineTo(r.topLeft());
     path.lineTo(r.bottomLeft());
 
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -3323,9 +3230,9 @@ void save_addCircle(EmbPattern* pattern, QGraphicsItem* item)
         }
         else {
             EmbCircle circle;
-            circle.center.x = (double)obj->objectCenterX();
-            circle.center.y = (double)obj->objectCenterY();
-            circle.radius = (double)obj->objectRadius();
+            circle.center.x = (float)obj->objectCenterX();
+            circle.center.y = (float)obj->objectCenterY();
+            circle.radius = (float)obj->objectRadius();
             embPattern_addCircleAbs(pattern, circle);
         }
     }
@@ -3342,10 +3249,10 @@ void save_addEllipse(EmbPattern* pattern, QGraphicsItem* item)
         else {
             //TODO: ellipse rotation
             EmbEllipse ellipse;
-            ellipse.center.x = (double)obj->objectCenterX();
-            ellipse.center.y = (double)obj->objectCenterY();
-            ellipse.radius.x = (double)obj->objectWidth()/2.0;
-            ellipse.radius.y = (double)obj->objectHeight()/2.0;
+            ellipse.center.x = (float)obj->objectCenterX();
+            ellipse.center.y = (float)obj->objectCenterY();
+            ellipse.radius.x = (float)obj->objectWidth()/2.0;
+            ellipse.radius.y = (float)obj->objectHeight()/2.0;
             embPattern_addEllipseAbs(pattern, ellipse);
         }
     }
@@ -3360,10 +3267,10 @@ void save_addLine(EmbPattern* pattern, QGraphicsItem* item)
         }
         else {
             EmbLine line;
-            line.start.x = (double)obj->objectX1();
-            line.start.y = (double)obj->objectY1();
-            line.end.x = (double)obj->objectX2();
-            line.end.y = (double)obj->objectY2();
+            line.start.x = (float)obj->objectX1();
+            line.start.y = (float)obj->objectY1();
+            line.end.x = (float)obj->objectX2();
+            line.end.y = (float)obj->objectY2();
             embPattern_addLineAbs(pattern, line);
         }
     }
@@ -3379,8 +3286,8 @@ void save_addPath(EmbPattern* pattern, QGraphicsItem* item)
     {
         QPainterPath path = polylineItem->path();
         EmbVector pos = polylineItem->pos();
-        double startX = pos.x();
-        double startY = pos.y();
+        float startX = pos.x();
+        float startY = pos.y();
 
         QPainterPath::Element element;
         QPainterPath::Element P1;
@@ -3426,8 +3333,8 @@ void save_addPoint(EmbPattern* pattern, QGraphicsItem* item)
         }
         else {
             EmbPoint point;
-            point.position.x = (double)obj->objectX();
-            point.position.y = (double)obj->objectY();
+            point.position.x = (float)obj->objectX();
+            point.position.y = (float)obj->objectY();
             embPattern_addPointAbs(pattern, point);
         }
     }
@@ -3460,10 +3367,10 @@ void save_addRectangle(EmbPattern* pattern, QGraphicsItem* item)
             //TODO: Review this at some point
             EmbVector topLeft = obj->objectTopLeft();
             EmbRect rect;
-            rect.left = (double)topLeft.x();
-            rect.top = (double)topLeft.y();
-            rect.bottom = rect.top + (double)obj->objectHeight();
-            rect.right = rect.left + (double)obj->objectWidth();
+            rect.left = (float)topLeft.x();
+            rect.top = (float)topLeft.y();
+            rect.bottom = rect.top + (float)obj->objectHeight();
+            rect.right = rect.left + (float)obj->objectWidth();
             embPattern_addRectAbs(pattern, rect);
         }
     }
@@ -3503,8 +3410,8 @@ void save_addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 //NOTE: This void should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void save_toPolyline(EmbPattern* pattern, const EmbVector& objPos, const QPainterPath& objPath, const std::string& layer, const QColor& color, const std::string& lineType, const std::string& lineWeight)
 {
-    double startX = objPos.x();
-    double startY = objPos.y();
+    float startX = objPos.x();
+    float startY = objPos.y();
     EmbArray *pointList = embArray_create(EMB_POINT);
     EmbPoint lastPoint;
     QPainterPath::Element element;
@@ -3530,13 +3437,13 @@ void save_toPolyline(EmbPattern* pattern, const EmbVector& objPos, const QPainte
     embPattern_addPolylineAbs(pattern, polyObject);
 }
 
-text_single_TextSingleObject(const std::string& str, double x, double y, unsigned int rgb, QGraphicsItem* parent) : BaseObject(parent)
+void text_single_TextSingleObject(const std::string& str, float x, float y, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-text_single_TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent) : BaseObject(parent)
+void text_single_TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
 {
     debug_message("TextSingleObject Constructor()");
     if (obj) {
@@ -3556,13 +3463,13 @@ text_single_~TextSingleObject()
     debug_message("TextSingleObject Destructor()");
 }
 
-void text_single_init(const std::string& str, double x, double y, unsigned int rgb, Qt::PenStyle lineType)
+void text_single_init(const std::string& str, float x, float y, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Single Line Text");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
-    //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
+    //WARNING: and the item is float clicked, the scene will erratically move the item while zooming.
     //WARNING: All movement has to be handled explicitly by us, not by the scene.
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
@@ -3611,8 +3518,11 @@ void text_single_setObjectText(const std::string& str)
     else if (objTextJustify == "Right") {
         textPath.translate(-jRect.right(), 0);
     }
-    else if (objTextJustify == "Aligned")       { } //TODO: TextSingleObject Aligned Justification
-    else if (objTextJustify == "Middle")        { textPath.translate(-jRect.center()); }
+    else if (objTextJustify == "Aligned") {
+        
+    } //TODO: TextSingleObject Aligned Justification
+    else if (objTextJustify == "Middle") {
+        textPath.translate(-jRect.center()); }
     else if (objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
     else if (objTextJustify == "Top Left") {
         textPath.translate(-jRect.topLeft());
@@ -3632,8 +3542,8 @@ void text_single_setObjectText(const std::string& str)
 
     //Backward or Upside Down
     if (objTextBackward || objTextUpsideDown) {
-        double horiz = 1.0;
-        double vert = 1.0;
+        float horiz = 1.0;
+        float vert = 1.0;
         if (objTextBackward) horiz = -1.0;
         if (objTextUpsideDown) vert = -1.0;
 
@@ -3685,8 +3595,9 @@ void text_single_setObjectTextFont(const std::string& font)
 void text_single_setObjectTextJustify(const std::string& justify)
 {
     //Verify the string is a valid option
-    if     (justify == "Left")          { objTextJustify = justify; }
-    else if (justify == "Center")        { objTextJustify = justify; }
+    if (justify == "Left") {
+        objTextJustify = justify; }
+    else if (justify == "Center") { objTextJustify = justify; }
     else if (justify == "Right")         { objTextJustify = justify; }
     else if (justify == "Aligned")       { objTextJustify = justify; }
     else if (justify == "Middle")        { objTextJustify = justify; }
@@ -3704,7 +3615,7 @@ void text_single_setObjectTextJustify(const std::string& justify)
     setObjectText(objText);
 }
 
-void text_single_setObjectTextSize(double size)
+void text_single_setObjectTextSize(float size)
 {
     objTextSize = size;
     setObjectText(objText);
@@ -3790,13 +3701,10 @@ void text_single_updateRubber(QPainter* painter)
         setRotation(hr.y());
         setObjectText(objectRubberText("TEXT_RAPID"));
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
-        if (painter)
-        {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
+        if (painter) {
             EmbVector gripPoint = objectRubberPoint("GRIP_POINT");
-            if (gripPoint == scenePos())
-            {
+            if (gripPoint == scenePos()) {
                 painter->drawPath(objectPath().translated(mapFromScene(objectRubberPoint(std::string()))-mapFromScene(gripPoint)));
             }
 
@@ -3834,7 +3742,7 @@ void text_single_gripEdit(const EmbVector& before, const EmbVector& after)
 
 std::vector<QPainterPath> text_single_subPathList() const
 {
-    double s = scale();
+    float s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
@@ -3847,11 +3755,9 @@ std::vector<QPainterPath> text_single_subPathList() const
     std::vector<int> pathMoves;
     int numMoves = 0;
 
-    for(int i = 0; i < path.elementCount(); i++)
-    {
+    for(int i = 0; i < path.elementCount(); i++) {
         element = path.elementAt(i);
-        if (element.isMoveTo())
-        {
+        if (element.isMoveTo()) {
             pathMoves << i;
             numMoves++;
         }
@@ -3882,18 +3788,17 @@ std::vector<QPainterPath> text_single_subPathList() const
 }
 
 /*
+ * NOTE: main() is run every time the command is started.
+ *      Use it to reset variables so they are ready to go.
  *
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
+ * NOTE: click() is run only for left clicks.
+ *      Middle clicks are used for panning.
+ *      Right clicks bring up the context menu.
  *
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
- *
-//NOTE: move() is optional. It is run only after
-//      enableMoveRapidFire() is called. It
-//      will be called every time the mouse moves until
-//      disableMoveRapidFire() is called.
+ * NOTE: move() is optional. It is run only after
+ *      enableMoveRapidFire() is called. It
+ *      will be called every time the mouse moves until
+ *      disableMoveRapidFire() is called.
  *
  * NOTE: prompt() is run when Enter is pressed.
  *      appendPromptHistory is automatically called before prompt()
@@ -3903,23 +3808,18 @@ std::vector<QPainterPath> text_single_subPathList() const
  * NOTE: context() is run when a context menu entry is chosen.
  */
 
+typedef struct DolphinUi_ {
+    int numPoints;
+    EmbVector center, scale;
+    unsigned int mode;
+} DolphinUi;
 
-dolphin_script = """
-var global = {}; //Required
-global.numPoints = 512; //Default //TODO: min:64 max:8192
-global.cx;
-global.cy;
+ //Default //TODO: min:64 max:8192
+numPoints = 512;
 global.sx = 0.04; //Default
 global.sy = 0.04; //Default
-global.numPoints;
-global.mode;
 
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_XSCALE     = 1;
-global.mode_YSCALE     = 2;
-
-void main()
+void dolphin_main()
 {
     initCommand();
     clearSelection();
@@ -3951,17 +3851,14 @@ void prompt(std::string str)
 {
 }
 
-void updateDolphin(numPts, xScale, yScale)
+void updateDolphin(int numPts, float xScale, float yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*Math.PI;
+    float xx = NaN;
+    float yy = NaN;
+    float two_pi = 2*Math.PI;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for (int i = 0; i <= numPts; i++) {
+        float t = two_pi/numPts*i; 
 
         xx = 4/23*sin(62/33-58*t)+
         8/11*sin(10/9-56*t)+
@@ -4088,33 +3985,23 @@ void updateDolphin(numPts, xScale, yScale)
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
 }
-"""
 
-heart_script = """
-//Command: Heart
+typedef struct HeartUi_ {
+    int numPoints;
+    EmbVector center, scale;
+    unsigned int mode;
+} HeartUi;
 
-var global = {}; //Required
-global.numPoints = 512; //Default //TODO: min:64 max:8192
-global.cx;
-global.cy;
-global.sx = 1.0;
-global.sy = 1.0;
-global.numPoints;
-global.mode;
-
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_STYLE      = 1;
-global.mode_XSCALE     = 2;
-global.mode_YSCALE     = 3;
-
-void main()
+void heart_main()
 {
     initCommand();
     clearSelection();
+    global.numPoints = 512; //Default //TODO: min:64 max:8192
+    global.sx = 1.0;
+    global.sy = 1.0;
     global.cx = NaN;
     global.cy = NaN;
-    global.mode = global.mode_NUM_POINTS;
+    global.mode = HEART_MODE_NUM_POINTS;
 
     //Heart4: 10.0 / 512
     //Heart5: 1.0 / 512
@@ -4143,25 +4030,20 @@ void prompt(std::string str)
 {
 }
 
-void updateHeart(style, numPts, xScale, yScale)
+void updateHeart(int style, int numPts, float xScale, float yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*Math.PI;
+    float xx = NaN;
+    float yy = NaN;
+    float two_pi = 2*Math.PI;
 
-    for(i = 0; i <= numPts; i++)
-    {
-        t = two_pi/numPts*i; 
+    for (int i = 0; i <= numPts; i++) {
+        float t = two_pi/numPts*i; 
 
-        if (style == "HEART4")
-        {
-            xx = cos(t)*((sin(t)*Math.sqrt(Math.abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
-            yy = sin(t)*((sin(t)*Math.sqrt(Math.abs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+        if (style == "HEART4") {
+            xx = cos(t)*((sin(t)*sqrt(fabs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
+            yy = sin(t)*((sin(t)*sqrt(fabs(cos(t))))/(sin(t)+7/5) - 2*sin(t) + 2);
         }
-        else if (style == "HEART5")
-        {
+        else if (style == "HEART5") {
             xx = 16*Math.pow(sin(t), 3);
             yy = 13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t);
         }
@@ -4172,36 +4054,26 @@ void updateHeart(style, numPts, xScale, yScale)
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
 }
 
-"""
+typedef struct PathUi_ {
+    bool firstRun;
+    EmbVector first;
+    EmbVector prev;
+} PathUi;
 
-path_script = """
-//Command: Path
-
-//TODO: The path command is currently broken
-
-var global = {}; //Required
-global.firstRun;
-global.firstX;
-global.firstY;
-global.prevX;
-global.prevY;
-
-void main()
+void path_main(void)
 {
+    PathUi global;
     initCommand();
     clearSelection();
     global.firstRun = true;
-    global.firstX = NaN;
-    global.firstY = NaN;
-    global.prevX = NaN;
-    global.prevY = NaN;
+    global.first = {NaN, NaN};
+    global.prev = {NaN, NaN};
     setPromptPrefix(translate("Specify start point: "));
 }
 
 void click(float x, float y)
 {
-    if (global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
         global.firstX = x;
         global.firstY = y;
@@ -4211,8 +4083,7 @@ void click(float x, float y)
         appendPromptHistory();
         setPromptPrefix(translate("Specify next point or [Arc/Undo]: "));
     }
-    else
-    {
+    else {
         appendPromptHistory();
         appendLineToPath(x,y);
         global.prevX = x;
@@ -4227,28 +4098,24 @@ void context(std::string str)
 
 void prompt(std::string str)
 {
-    if (str == "A" || str == "ARC")//TODO: Probably should add additional qsTr calls here.
-    {
+    if (str == "A" || str == "ARC") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("PATH", "prompt() for ARC");
     }
-    else if (str == "U" || str == "UNDO") //TODO: Probably should add additional qsTr calls here.
-    {
+    else if (str == "U" || str == "UNDO") {
+        //TODO: Probably should add additional qsTr calls here.
         todo("PATH", "prompt() for UNDO");
     }
-    else
-    {
+    else {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
-        {
+        if (isNaN(strList[0]) || isNaN(strList[1])) {
             alert(translate("Point or option keyword required."));
             setPromptPrefix(translate("Specify next point or [Arc/Undo]: "));
         }
-        else
-        {
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
-            if (global.firstRun)
-            {
+        else {
+            float x = Number(strList[0]);
+            float y = Number(strList[1]);
+            if (global.firstRun) {
                 global.firstRun = false;
                 global.firstX = x;
                 global.firstY = y;
@@ -4257,8 +4124,7 @@ void prompt(std::string str)
                 addPath(x,y);
                 setPromptPrefix(translate("Specify next point or [Arc/Undo]: "));
             }
-            else
-            {
+            else {
                 appendLineToPath(x,y);
                 global.prevX = x;
                 global.prevY = y;
@@ -4648,9 +4514,7 @@ void prompt(std::string str)
         todo("POLYGON", "Sidelength mode");
     }
 }
-"""
 
-polyline_script = """
 //Command: Polyline
 
 var global = {}; //Required
@@ -4756,13 +4620,10 @@ void polyline_prompt(std::string str)
         }
     }
 }
-"""
 
-
-locate_point_script = """
 //Command: Locate Point
 
-void main()
+void locate_point_main()
 {
     initCommand();
     clearSelection();
@@ -4810,7 +4671,6 @@ typedef struct move_script_global_ {
     float deltaY;
 } move_script_global;
 
-move_script = """
 void move_main()
 {
     initCommand();
@@ -4908,9 +4768,8 @@ void prompt(std::string str)
         }
     }
 }
-"""
 
-quickleader_script = """
+quickleader
 var global = {}; //Required
 global.x1;
 global.y1;
@@ -4995,9 +4854,9 @@ void prompt(std::string str)
         }
     }
 }
-"""
 
-rectangle_script = """
+rectangle
+
 var global = {}; //Required
 global.newRect;
 global.x1;
@@ -5088,9 +4947,7 @@ void prompt(std::string str)
         }
     }
 }
-"""
 
-rgb_script = """
 //Command: RGB
 
 var global = {}; //Required
@@ -5195,9 +5052,7 @@ void validRGB(r, g, b)
     if (b < 0 || b > 255) return false;
     return true;
 }
-"""
 
-rotate_script = """
 //Command: Rotate
 
 var global = {}; //Required
@@ -5456,17 +5311,13 @@ void prompt(std::string str)
         }
     }
 }
-"""
 
-
-sandbox_script = """
-//Command: Sandbox
 
 var global = {}; //Required
 global.test1;
 global.test2;
 
-void main()
+void sandbox_main()
 {
     initCommand();
     
@@ -5541,34 +5392,25 @@ void prompt(std::string str)
 {
 }
 
-"""
+typedef struct ScaleUi_ {
+    global.firstRun;
+    global.baseX;
+    global.baseY;
+    global.destX;
+    global.destY;
+    global.factor;
 
-scale_script = """
+    global.baseRX;
+    global.baseRY;
+    global.destRX;
+    global.destRY;
+    global.factorRef;
+    global.factorNew;
 
-//Command: Scale
+    global.mode;
+} ScaleUi;
 
-var global = {}; //Required
-global.firstRun;
-global.baseX;
-global.baseY;
-global.destX;
-global.destY;
-global.factor;
-
-global.baseRX;
-global.baseRY;
-global.destRX;
-global.destRY;
-global.factorRef;
-global.factorNew;
-
-global.mode;
-
-//enums
-global.mode_NORMAL    = 0;
-global.mode_REFERENCE = 1;
-
-void main()
+void scale_main()
 {
     initCommand();
     global.mode = global.mode_NORMAL;
@@ -5586,20 +5428,18 @@ void main()
     global.factorRef = NaN;
     global.factorNew = NaN;
 
-    if (numSelected() <= 0)
-    {
+    if (numSelected() <= 0) {
         //TODO: Prompt to select objects if nothing is preselected
         alert(translate("Preselect objects before invoking the scale command."));
         endCommand();
         messageBox("information", translate("Scale Preselect"), translate("Preselect objects before invoking the scale command."));
     }
-    else
-    {
+    else {
         setPromptPrefix(translate("Specify base point: "));
     }
 }
 
-void click(float x, float y)
+void scale_click(float x, float y)
 {
     if (global.mode == global.mode_NORMAL)
     {
@@ -5683,18 +5523,14 @@ void context(std::string str)
 
 void prompt(std::string str)
 {
-    if (global.mode == global.mode_NORMAL)
-    {
-        if (global.firstRun)
-        {
+    if (global.mode == global.mode_NORMAL) {
+        if (global.firstRun) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
-            {
+            if (isNaN(strList[0]) || isNaN(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify base point: "));
             }
-            else
-            {
+            else {
                 global.firstRun = false;
                 global.baseX = Number(strList[0]);
                 global.baseY = Number(strList[1]);
@@ -5782,23 +5618,18 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isNaN(global.destRX))
-        {
-            if (isNaN(str))
-            {
+        else if (isNaN(global.destRX)) {
+            if (isNaN(str)) {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(translate("Requires valid numeric distance or two points."));
                     setPromptPrefix(translate("Specify second point: "));
                 }
-                else
-                {
+                else {
                     global.destRX = Number(strList[0]);
                     global.destRY = Number(strList[1]);
                     global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
-                    if (global.factorRef <= 0.0)
-                    {
+                    if (global.factorRef <= 0.0) {
                         global.destRX    = NaN;
                         global.destRY    = NaN;
                         global.factorRef = NaN;
@@ -5813,8 +5644,7 @@ void prompt(std::string str)
                     }
                 }
             }
-            else
-            {
+            else {
                 //The base and dest values are only set here to advance the command.
                 global.baseRX = 0.0;
                 global.baseRY = 0.0;
@@ -5838,18 +5668,14 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isNaN(global.factorNew))
-        {
-            if (isNaN(str))
-            {
+        else if (isNaN(global.factorNew)) {
+            if (isNaN(str)) {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
-                {
+                if (isNaN(strList[0]) || isNaN(strList[1])) {
                     alert(translate("Requires valid numeric distance or second point."));
                     setPromptPrefix(translate("Specify new length: "));
                 }
-                else
-                {
+                else {
                     var x = Number(strList[0]);
                     var y = Number(strList[1]);
                     global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
@@ -5867,17 +5693,14 @@ void prompt(std::string str)
                     }
                 }
             }
-            else
-            {
+            else {
                 global.factorNew = Number(str);
-                if (global.factorNew <= 0.0)
-                {
+                if (global.factorNew <= 0.0) {
                     global.factorNew = NaN;
                     alert(translate("Value must be positive and nonzero."));
                     setPromptPrefix(translate("Specify new length: "));
                 }
-                else
-                {
+                else {
                     scaleSelected(global.baseX, global.baseY, global.factorNew/global.factorRef);
                     previewOff();
                     endCommand();
@@ -5886,39 +5709,19 @@ void prompt(std::string str)
         }
     }
 }
-"""
-single_line_text_script = """
 
-//Command: Single Line Text
 
-var global = {}; //Required
-global.text;
-global.textX;
-global.textY;
-global.textJustify;
-global.textFont;
-global.textHeight;
-global.textRotation;
-global.mode;
-
-//enums
-global.mode_JUSTIFY = 0;
-global.mode_SETFONT = 1;
-global.mode_SETGEOM = 2;
-global.mode_RAPID   = 3;
-
-void main()
+void single_line_text_main()
 {
     initCommand();
     clearSelection();
     global.text = "";
-    global.textX = NaN;
-    global.textY = NaN;
+    global.position = {NaN, NaN};
     global.textJustify = "Left";
     global.textFont = textFont();
     global.textHeight = NaN;
     global.textRotation = NaN;
-    global.mode = global.mode_SETGEOM;
+    global.mode = SINGLE_LINE_TEXT_MODE_SETGEOM;
     setPromptPrefix(translate("Current font: ") + "{" + global.textFont + "} " + translate("Text height: ") + "{" +  textSize() + "}");
     appendPromptHistory();
     setPromptPrefix(translate("Specify start point of text or [Justify/Setfont]: "));
@@ -6090,10 +5893,8 @@ void prompt(std::string str)
         setTextFont(global.textFont);
         setPromptPrefix(translate("Specify start point of text or [Justify/Setfont]: "));
     }
-    else if (global.mode == global.mode_SETGEOM)
-    {
-        if (isNaN(global.textX))
-        {
+    else if (global.mode == global.mode_SETGEOM) {
+        if (isNaN(global.textX)) {
             if (str == "J" || str == "JUSTIFY") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_JUSTIFY;
@@ -6104,16 +5905,14 @@ void prompt(std::string str)
                 global.mode = global.mode_SETFONT;
                 setPromptPrefix(translate("Specify font name: "));
             }
-            else
-            {
+            else {
                 var strList = str.split(",");
                 if (isNaN(strList[0]) || isNaN(strList[1]))
                 {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify start point of text or [Justify/Setfont]: "));
                 }
-                else
-                {
+                else {
                     global.textX = Number(strList[0]);
                     global.textY = Number(strList[1]);
                     addRubber("LINE");
@@ -6186,16 +5985,12 @@ void prompt(std::string str)
             //Do nothing, as we are in rapidFire mode now.
         }
     }
-    else if (global.mode == global.mode_RAPID)
-    {
-        if (str == "RAPID_ENTER")
-        {
-            if (global.text == "")
-            {
+    else if (global.mode == global.mode_RAPID) {
+        if (str == "RAPID_ENTER") {
+            if (global.text == "") {
                 endCommand();
             }
-            else
-            {
+            else {
                 vulcanize();
                 endCommand(); //TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
             }
@@ -6207,11 +6002,7 @@ void prompt(std::string str)
         }
     }
 }
-"""
 
-snowflake_script = """
-
-//Command: Snowflake
 
 var global = {}; //Required
 global.numPoints = 2048; //Default //TODO: min:64 max:8192
@@ -6227,7 +6018,7 @@ global.mode_NUM_POINTS = 0;
 global.mode_XSCALE     = 1;
 global.mode_YSCALE     = 2;
 
-void main()
+void snowflake_main()
 {
     initCommand();
     clearSelection();
@@ -6242,20 +6033,20 @@ void main()
     endCommand();
 }
 
-void click(float x, float y)
+void snowflake_click(float x, float y)
 {
 }
 
-void move(x, y)
+void snowflake_move(x, y)
 {
 }
 
-void context(std::string str)
+void snowflake_context(std::string str)
 {
     todo("SNOWFLAKE", "context()");
 }
 
-void prompt(std::string str)
+void snowflake_prompt(std::string str)
 {
 }
 
@@ -6916,31 +6707,12 @@ sin(263*t+2/7)-
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
 }
-"""
 
-star_script = """
-//Command: Star
-
-var global = {}; //Required
-global.numPoints = 5; //Default
-global.cx;
-global.cy;
-global.x1;
-global.y1;
-global.x2;
-global.y2;
-global.mode;
-
-//enums
-global.mode_NUM_POINTS = 0;
-global.mode_CENTER_PT  = 1;
-global.mode_RAD_OUTER  = 2;
-global.mode_RAD_INNER  = 3;
-
-void main()
+void star_main()
 {
     initCommand();
     clearSelection();
+    ui.numPoints = 5;
     global.cx = NaN;
     global.cy = NaN;
     global.x1 = NaN;
@@ -6951,7 +6723,7 @@ void main()
     setPromptPrefix(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
 }
 
-void click(float x, float y)
+void star_click(float x, float y)
 {
     if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
@@ -6985,7 +6757,7 @@ void click(float x, float y)
     }
 }
 
-void move(x, y)
+void star_move(x, y)
 {
     if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
@@ -7001,30 +6773,26 @@ void move(x, y)
     }
 }
 
-void context(std::string str)
+void star_context(std::string str)
 {
     todo("STAR", "context()");
 }
 
-void prompt(std::string str)
+void star_prompt(std::string str)
 {
-    if (global.mode == global.mode_NUM_POINTS)
-    {
+    if (global.mode == global.mode_NUM_POINTS) {
         if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024)
         {
             setPromptPrefix(translate("Specify center point: "));
             global.mode = global.mode_CENTER_PT;
         }
-        else
-        {
+        else {
             var tmp = Number(str);
-            if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
-            {
+            if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(translate("Requires an integer between 3 and 1024."));
                 setPromptPrefix(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
             }
-            else
-            {
+            else {
                 global.numPoints = tmp;
                 setPromptPrefix(translate("Specify center point: "));
                 global.mode = global.mode_CENTER_PT;
@@ -7048,33 +6816,27 @@ void prompt(std::string str)
             enableMoveRapidFire();
         }
     }
-    else if (global.mode == global.mode_RAD_OUTER)
-    {
+    else if (global.mode == global.mode_RAD_OUTER) {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
-        {
+        if (isNaN(strList[0]) || isNaN(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify outer radius of star: "));
         }
-        else
-        {
-            global.x1 = Number(strList[0]);
-            global.y1 = Number(strList[1]);
+        else {
+            global.point1.x = Number(strList[0]);
+            global.point1.y = Number(strList[1]);
             global.mode = global.mode_RAD_INNER;
             setPromptPrefix(translate("Specify inner radius of star: "));
             updateStar(qsnapX(), qsnapY());
         }
     }
-    else if (global.mode == global.mode_RAD_INNER)
-    {
+    else if (global.mode == global.mode_RAD_INNER) {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
-        {
+        if (isNaN(strList[0]) || isNaN(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify inner radius of star: "));
         }
-        else
-        {
+        else {
             global.x2 = Number(strList[0]);
             global.y2 = Number(strList[1]);
             disableMoveRapidFire();
@@ -7084,21 +6846,20 @@ void prompt(std::string str)
         }
     }
 }
+"""
 
-void updateStar(x, y)
+void updateStar(float x, float y)
 {
     var distOuter;
     var distInner;
     var angOuter;
 
-    if (global.mode == global.mode_RAD_OUTER)
-    {
+    if (global.mode == STAR_MODE_RAD_OUTER) {
         angOuter = calculateAngle(global.cx, global.cy, x, y);
         distOuter = calculateDistance(global.cx, global.cy, x, y);
         distInner = distOuter/2.0;
     }
-    else if (global.mode == global.mode_RAD_INNER)
-    {
+    else if (global.mode == STAR_MODE_RAD_INNER) {
         angOuter = calculateAngle(global.cx, global.cy, global.x1, global.y1);
         distOuter = calculateDistance(global.cx, global.cy, global.x1, global.y1);
         distInner = calculateDistance(global.cx, global.cy, x, y);
@@ -7123,8 +6884,6 @@ void updateStar(x, y)
     }
     setRubberText("POLYGON_NUM_POINTS", (global.numPoints*2 - 1).toString());
 }
-
-"""
 
 void syswindows_main()
 {

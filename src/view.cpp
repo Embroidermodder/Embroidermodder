@@ -34,7 +34,7 @@ float ruler_width = 50.0f;
 float tick_depth = 30.0f;
 float major_tick_seperation = 40.0f;
 float minor_tick_seperation = 4.0f;
-float needle_velocity = 1.0;
+float needle_speed = 100.0;
 float stitch_time = 0.1;
 
 inline ImVec2 to_ImVec2(EmbVector v)
@@ -241,12 +241,14 @@ real_render_pattern(EmbPattern *p)
 void
 simulate_pattern(EmbPattern *p)
 {
-    ImGui::Begin(("Simulation of " + views[pattern_index].filename).c_str());
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     View view = views[pattern_index];
-    view.origin.x = ImGui::GetWindowPos().x;
-    view.origin.y = ImGui::GetWindowPos().y;
+    std::chrono::duration<float> duration = std::chrono::system_clock::now() - view.simulation_start;
+    float time_passed = duration.count();
+    ImVec2 offset = ImGui::GetWindowPos();
+    int stitches = 0;
     if (p->stitchList->count > 1) {
+        float current_time = 0.0;
         for (int i = 1; i<p->stitchList->count; i++) {
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
@@ -260,11 +262,32 @@ simulate_pattern(EmbPattern *p)
             };
             EmbThread thread = p->thread_list[st.color];
             int color = embColor_to_int(thread.color);
-            draw_list->AddLine(start, end, color);
+            EmbVector delta = {prev.x-st.x, prev.y-st.y};
+            float time_for_stitch = stitch_time + embVector_length(delta)/needle_speed;
+            current_time += time_for_stitch;
+            stitches = i;
+            if (current_time > time_passed) {
+                end = {
+                    start.x - (current_time-time_passed-time_for_stitch)*(end.x-start.x),
+                    start.y - (current_time-time_passed-time_for_stitch)*(end.y-start.y)
+                };
+                draw_list->AddLine(offset + start, offset + end, color);
+                break;
+            }
+            else {
+                draw_list->AddLine(offset + start, offset + end, color);
+            }
         }
     }
 
-    ImGui::BeginChild("Controls");
+    ImGui::Begin("Controls");
+    ImGui::SetWindowFontScale(2.0);
+    ImGui::Text(("Stitch: " + std::to_string(stitches) + "/"
+        + std::to_string(p->stitchList->count)).c_str());
+    ImGui::Text(("Needle Speed: " + std::to_string(needle_speed)).c_str());
+    ImGui::Text(("Stitch Time: " + std::to_string(stitch_time)).c_str());
+    ImGui::Text(("Time Passed: " + std::to_string(time_passed)).c_str());
+
     if (ImGui::Button("Slower")) {
         
     }
@@ -288,7 +311,6 @@ simulate_pattern(EmbPattern *p)
     if (ImGui::Button("End")) {
 
     }
-    ImGui::EndChild();
     ImGui::End();
 }
 
@@ -428,7 +450,12 @@ pattern_view(void)
     if (views[pattern_index].grid_mode) {
         draw_grid();
     }
-    render_pattern(pattern);
+    if (views[pattern_index].simulate) {
+        simulate_pattern(pattern);
+    }
+    else {
+        render_pattern(pattern);
+    }
     if (views[pattern_index].ruler_mode) {
         draw_rulers();
     }
@@ -451,6 +478,8 @@ View init_view(void)
     view.qtrack_mode = false;
     view.lwt_mode = false;
     view.metric = true;
+    view.simulate = false;
+    view.simulation_start = std::chrono::system_clock::now();
     view.text_font = "default";
     view.text_size = 16;
     view.text_angle = 0.0;
