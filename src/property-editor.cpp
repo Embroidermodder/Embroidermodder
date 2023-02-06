@@ -59,9 +59,10 @@ property_editor(void)
         return;
     }
 
-    EmbPattern *pattern = views[pattern_index].pattern;
+    EmbPattern *pattern = views[settings.pattern_index].pattern;
 
-    ImGui::BeginChild((translate("Property Editor") + views[pattern_index].filename).c_str());
+    ImGui::BeginChild((translate("Property Editor") + views[settings.pattern_index].filename).c_str());
+    ImGui::SetWindowFontScale(1.5);
     ImGui::Text(translate("Properties").c_str());
     /*
     propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable
@@ -972,7 +973,7 @@ void create_group_box_block(int id)
  */
 void create_group_box_circle(int id, EmbCircle *circle)
 {
-    std::string label = translate("Circle") + " ID:" + std::to_string(pattern_index*1000+(id+1));
+    std::string label = translate("Circle") + " ID:" + std::to_string(settings.pattern_index*1000+(id+1));
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 

@@ -4132,11 +4132,10 @@ void prompt(std::string str)
         }
     }
 }
-"""
 
-typedef struct point_global_ {
+typedef struct PointUi_ {
     bool firstRun;
-} point_global;
+} PointUi;
 
 void point_main()
 {
@@ -4208,8 +4207,6 @@ void point_prompt(std::string str)
         }
     }
 }
-
-polygon = """
 
 //Command: Polygon
 
@@ -4659,9 +4656,8 @@ void prompt(std::string str)
         endCommand();
     }
 }
-"""
 
-typedef struct move_script_global_ {
+typedef struct MoveUi_ {
     bool firstRun;
     float baseX;
     float baseY;
@@ -4669,7 +4665,7 @@ typedef struct move_script_global_ {
     float destY;
     float deltaX;
     float deltaY;
-} move_script_global;
+} MoveUi;
 
 void move_main()
 {
@@ -4695,10 +4691,9 @@ void move_main()
     }
 }
 
-void click(float x, float y)
+void move_click(float x, float y)
 {
-    if (global.firstRun)
-    {
+    if (global.firstRun) {
         global.firstRun = false;
         global.baseX = x;
         global.baseY = y;
@@ -4709,8 +4704,7 @@ void click(float x, float y)
         appendPromptHistory();
         setPromptPrefix(translate("Specify destination point: "));
     }
-    else
-    {
+    else {
         global.destX = x;
         global.destY = y;
         global.deltaX = global.destX - global.baseX;
@@ -6846,7 +6840,6 @@ void star_prompt(std::string str)
         }
     }
 }
-"""
 
 void updateStar(float x, float y)
 {

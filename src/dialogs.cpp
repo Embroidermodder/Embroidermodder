@@ -33,7 +33,7 @@ about_dialog(void)
     ImGui::Text("User Interface by Jonathan Greig and Robin Swift.");
     ImGui::Text("Free under the zlib/libpng license.");
     if (ImGui::Button("Oh, Yeah!")) {
-        show_about_dialog = false;
+        settings.show_about_dialog = false;
     }
     ImGui::End();
 }
@@ -55,7 +55,7 @@ help_dialog(void)
     /* Minimum size (600, 500). */
 
     std::ifstream file;
-    file.open(assets_dir + "docs/manual.md");
+    file.open(settings.assets_dir + "docs/manual.md");
     std::string s, line;
     while (std::getline(file, line)) {
         s += line + "\n";
@@ -86,7 +86,7 @@ details_dialog(void)
 }
 
 #if 0
-void terminal()
+void terminal(void)
 {
     debug_message("terminal()");
 
@@ -331,10 +331,6 @@ CmdPromptSplitter::CmdPromptSplitter(QWidget* parent) : QSplitter(parent)
     connect(this, SIGNAL(moveResizeHistory(int)),    parent, SLOT(resizeTheHistory(int)));
 }
 
-CmdPromptSplitter::~CmdPromptSplitter()
-{
-}
-
 QSplitterHandle* CmdPromptSplitter::createHandle()
 {
     return new CmdPromptHandle(orientation(), this);
@@ -398,16 +394,13 @@ std::string CmdPromptHistory::applyFormatting(const std::string& txt, int prefix
     //Keywords
     start = prefix.indexOf('[');
     stop = prefix.lastIndexOf(']');
-    if (start != -1 && stop != -1 && start < stop)
-    {
-        for(int i = stop; i >= start; i--)
-        {
+    if (start != -1 && stop != -1 && start < stop) {
+        for (int i = stop; i >= start; i--) {
             if (prefix.at(i) == ']')
                 prefix.insert(i, "</font>");
             if (prefix.at(i) == '[')
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
-            if (prefix.at(i) == '/')
-            {
+            if (prefix.at(i) == '/') {
                 prefix.insert(i+1, "<font color=\"#0095FF\">");
                 prefix.insert(i, "</font>");
             }
@@ -500,11 +493,6 @@ CmdPromptInput::CmdPromptInput(QWidget* parent) : QLineEdit(parent)
     applyFormatting();
 }
 
-CmdPromptInput::~CmdPromptInput()
-{
-    delete aliasHash;
-}
-
 void CmdPromptInput::addCommand(const std::string& alias, const std::string& cmd)
 {
     aliasHash->insert(alias.toLower(), cmd.toLower());
@@ -574,13 +562,6 @@ void CmdPromptInput::processInput(const int rapidChar)
             emit startCommand(lastCmd);
         }
         else {
-            /* TODO: this crashes because it's using the mainWin pointer,
-             * Which is only an issue because the actuator needs to act on
-             * the data in that class.
-             *
-             * Since this is a dev console now we may be
-             * able to capture input from the parent shell instead?
-             */
             mainWin->actuator(cmdtxt.toLocal8Bit().data());
             /*
             emit appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>", prefix.length());
@@ -836,7 +817,7 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         }
 
         int key = pressedKey->key();
-        switch(key) {
+        switch (key) {
             case Key_Enter:
             case Key_Return:
             case Key_Space:

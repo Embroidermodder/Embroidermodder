@@ -22,7 +22,7 @@
 
 /* File-scope variables.
  */
-std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
+static std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
     {"about", about_action},
     {"alert", error_action},
     {"arc", arc_action},
@@ -58,8 +58,6 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"platformString", error_action},
     {"message-box", error_action},
     {"isInt", error_action},
-    {"undo", error_action},
-    {"redo", error_action},
     {"icon", icon_action},
     {"pan", pan_action},
     {"zoom", zoom_action},
@@ -138,6 +136,9 @@ std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_tab
     {"mouseY", error_action},
     {"include", error_action},
     {"open", open_file_action},
+    {"undo", undo_action},
+    {"redo", redo_action},
+    {"donothing", do_nothing_action},
     {"simulate", simulate_action}
 };
 
@@ -191,8 +192,7 @@ run_script(std::string filename)
  * line works: seperated by spaces we have a function followed
  * by arguments.
  */
-void
-actuator(std::string command_line)
+void actuator(std::string command_line)
 {
     std::vector<std::string> args;
     std::stringstream check1(command_line);
@@ -204,7 +204,7 @@ actuator(std::string command_line)
     args.erase(args.begin());
 
     if (views.size() > 0) {
-        views[pattern_index].undo_history.push_back(command_line);
+        views[settings.pattern_index].undo_history.push_back(command_line);
     }
 
     /* Command/argument seperation is done in order to reduce the number of
@@ -223,18 +223,261 @@ actuator(std::string command_line)
     }
 }
 
-void settings_editor_action(std::vector<std::string> args)
+/* Actions */
+void about_action(std::vector<std::string> args)
 {
-    show_settings_editor = true;
+    settings.show_about_dialog = true;
+}
+
+void arc_action(std::vector<std::string> args)
+{
+    EmbArc arc;
+    arc.start.x = 0.0;
+    arc.start.x = 0.0;
+    arc.mid.x = 50.0;
+    arc.mid.x = 50.0;
+    arc.end.x = 100.0;
+    arc.end.x = 0.0;
+    arc.color.r = 0;
+    arc.color.g = 0;
+    arc.color.b = 0;
+    // embPattern_addArcAbs(views[settings.pattern_index].pattern, arc);
+}
+
+void changelog_action(std::vector<std::string> args)
+{
+    
+}
+
+void check_for_updates_action(std::vector<std::string> args)
+{
+    puts("Visit https://libembroidery.org for information about new releases.");
+    puts("Your version is: " VERSION);
+}
+
+void circle_action(std::vector<std::string> args)
+{
+    EmbCircle circle;
+    circle.center.x = 0.0;
+    circle.center.y = 0.0;
+    circle.radius = 10.0;
+    circle.color.r = 0;
+    circle.color.g = 0;
+    circle.color.b = 0;
+    embPattern_addCircleAbs(views[settings.pattern_index].pattern, circle);
 }
 
 void close_action(std::vector<std::string> args)
 {
+
+}
+
+void copy_action(std::vector<std::string> args)
+{
+    
+}
+
+void cut_action(std::vector<std::string> args)
+{
+    
+}
+
+void day_vision_action(std::vector<std::string> args)
+{
+    /*
+    View* active_view = activeView();
+    if (active_view) {
+        active_view->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
+        active_view->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
+        active_view->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
+    }
+    */
+}
+
+void debug_action(std::vector<std::string> args)
+{
+    debug_message(args[0]);
+}
+
+void do_nothing_action(std::vector<std::string> args)
+{
+    debug_message("This action intentionally does nothing.");
 }
 
 void editor_action(std::vector<std::string> args)
 {
-    show_editor = true;
+    settings.show_editor = true;
+}
+
+void error_action(std::vector<std::string> args)
+{
+
+}
+
+void exit_action(std::vector<std::string> args)
+{
+    debug_message("Closing Embroidermodder 2.0.");
+    settings.running = false;
+    /*
+    if (settings_prompt_save_history) {
+        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html);
+        // TODO: get filename from settings
+    }
+    qApp->closeAllWindows();
+    */
+}
+
+void export_action(std::vector<std::string> args)
+{
+    if (views.size() > 0) {
+        embPattern_writeAuto(views[settings.pattern_index].pattern, args[0].c_str());
+    }
+}
+
+void icon_action(std::vector<std::string> args)
+{
+    if (args.size() < 1) {
+        debug_message("ERROR: icon action requires 1 argument.");
+        return;
+    }
+
+    int new_size = std::stoi(args[0]);
+
+    if (settings.icon_size >= 16 && settings.icon_size <= 128) {
+        settings.icon_size = new_size;
+    }
+}
+
+void new_file_action(std::vector<std::string> args)
+{
+    View view = init_view();
+    view.pattern = embPattern_create();
+    views.push_back(view);
+    settings.pattern_index = views.size() - 1;
+}
+
+void night_vision_action(std::vector<std::string> args)
+{
+    /*
+    View* active_view = activeView();
+    if (active_view) {
+        active_view->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
+        active_view->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
+        active_view->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
+    }
+    */
+}
+
+void open_file_action(std::vector<std::string> args)
+{
+    for (std::string file : args) {
+        View view = init_view();
+        view.filename = file;
+        embPattern_readAuto(view.pattern, view.filename.c_str());
+        views.push_back(view);
+    }
+}
+
+void redo_action(std::vector<std::string> args)
+{
+    /*
+    std::string prefix = prompt->getPrefix();
+    if (dockUndoEdit->canRedo()) {
+        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
+        prompt->appendHistory(std::string());
+        dockUndoEdit->redo();
+        prompt->setPrefix(prefix);
+    }
+    else {
+        prompt->alert("Nothing to redo");
+        prompt->setPrefix(prefix);
+    }
+    */
+}
+
+void pan_action(std::vector<std::string> args)
+{
+    if (args.size() < 1) {
+        debug_message("ERROR: pan action requires 1 argument.");
+        return;
+    }
+    /*
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack) {
+        if (args[0] == "realtime") {
+            active_view->panningRealTimeActive = true;
+            return;
+        }
+        if (args[0] == "point") {
+            active_view->panningPointActive = true;
+            return;
+        }
+        if (args[0] == "left") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+        if (args[0] == "right") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+        if (args[0] == "up") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+        if (args[0] == "down") {
+            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", active_view, 0);
+            stack->push(cmd);
+            return;
+        }
+    }
+    */
+}
+
+void paste_action(std::vector<std::string> args)
+{
+    
+}
+
+void platform_action(std::vector<std::string> args)
+{
+    std::cout << platform_string() << std::endl;
+}
+
+void save_file_action(std::vector<std::string> args)
+{
+    if (views.size() > 0) {
+        embPattern_writeAuto(views[settings.pattern_index].pattern, views[settings.pattern_index].filename.c_str());
+    }
+}
+
+void save_as_file_action(std::vector<std::string> args)
+{
+    if (args.size() < 1) {
+        debug_message("save-as action requires exactly one argument.");
+        return;
+    }
+
+    if (views.size() > 0) {
+        embPattern_writeAuto(views[settings.pattern_index].pattern, args[0].c_str());
+        /*
+        openFilesPath = settings_opensave_recent_directory;
+        file = QFileDialog::getSaveFileName(this, translate("Save As"), openFilesPath, formatFilterSave);
+        */
+    }
+}
+
+void settings_editor_action(std::vector<std::string> args)
+{
+    settings.show_settings_editor = true;
+}
+
+void simulate_action(std::vector<std::string> args)
+{
+    views[settings.pattern_index].simulate = true;
+    views[settings.pattern_index].simulation_start = std::chrono::system_clock::now();
 }
 
 void todo_action(std::vector<std::string> args)
@@ -242,117 +485,147 @@ void todo_action(std::vector<std::string> args)
 
 }
 
-void simulate_action(std::vector<std::string> args)
+void undo_action(std::vector<std::string> args)
 {
-    views[pattern_index].simulate = true;
-    views[pattern_index].simulation_start = std::chrono::system_clock::now();
+    /*
+    std::string prefix = prompt->getPrefix();
+    if (dockUndoEdit->canUndo()) {
+        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
+        prompt->appendHistory(std::string());
+        dockUndoEdit->undo();
+        prompt->setPrefix(prefix);
+    }
+    else {
+        prompt->alert("Nothing to undo");
+        prompt->setPrefix(prefix);
+    }
+    */
+}
+
+void zoom_action(std::vector<std::string> args)
+{
+    if (args.size() < 1) {
+        debug_message("ERROR: zoom action requires 1 argument.");
+        return;
+    }
+
+    if (args[0] == "previous") {
+        /* zoomPrevious(); */
+        return;
+    }
+    if (args[0] == "window") {
+        /* zoomWindow(); */
+        return;
+    }
+    if (args[0] == "dynamic") {
+        /* zoomDynamic(); */
+        return;
+    }
+    if (args[0] == "scale") {
+        /* zoomScale(); */
+        return;
+    }
+    if (args[0] == "realtime") {
+        /* zoomRealtime(); */
+        return;
+    }
+    if (args[0] == "center") {
+        /* zoomCenter(); */
+        return;
+    }
+    if (args[0] == "in") {
+        views[settings.pattern_index].scale *= 2.0;
+        return;
+    }
+    if (args[0] == "out") {
+        views[settings.pattern_index].scale *= 0.5;
+        return;
+    }
+    if (args[0] == "selected") {
+        /* zoomSelected(); */
+        return;
+    }
+    if (args[0] == "all") {
+        /* zoomAll(); */
+        return;
+    }
+    if (args[0] == "extents") {
+        /* zoomExtents(); */
+        return;
+    }
 }
 
 #if 0
-    {"editor"}
-        show_editor = true;
-    {"export"}
-        embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
-    "open"
-        embPattern_readAuto(views[pattern_index].pattern, current_fname.c_str());
-        n_patterns++;
-    "print",
-    "details",
-    "undo",
-    "redo",
-    "paste",
-    "night",
-    "open",
-    "ellipse",
-    "polygon",
-    "polyline",
-    "rectangle",
-    "save",
-        if (n_patterns) {
-            embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
-        }
-        return;
-    "saveas",
-        if (n_patterns) {
-            embPattern_writeAuto(views[pattern_index].pattern, current_fname.c_str());
-        }
-        return;
-    "donothing" debug_message("This action intentionally does nothing.");
-    {"undo", undo_action},
-    {"redo", redo_action},
+    {"details", details_action},
+    {"paste", paste_action},
+    {"night", night_vision_action},
+    {"open", open_file_action},
+    {"ellipse", ellipse_action},
+    {"polygon", polygon_action},
+    {"polyline", polyline_action},
+    {"rectangle", rectangle_action},
     {"help", help_action},
     {"windowcascade", window_cascade_action},
-    {"windowtile", nativeWindowTile_action},
-    {"windowcloseall") nativeWindowCloseAll();
-    {"windowclose") nativeWindowClose();
-    {"windownext") nativeWindowNext();
-    {"windowprevious") nativeWindowPrevious();
-    {"platform") std::cout << nativePlatformString().toStdString() << std::endl;
-    {"save") savefile();
-    {"saveas") saveasfile();
-    {"print") print();
-    {"designdetails") designDetails();
-    {"copy") copy();
-    {"paste") paste();
-    {"changelog") changelog();
-    {"whatsthis") whatsThisContextHelp();
-    {"makelayercurrent") {
-        makeLayerActive();
-    {"layers") {
-        layerManager();
-    {"layerprevious") {
-        layerPrevious();
-    "textbold") setTextBold(bool);
-    "textitalic") setTextItalic(bool);
-    "textunderline") setTextUnderline(bool);
-    "textstrikeout") setTextStrikeOut(bool);
-    "textoverline") setTextOverline(bool);
-    "numSelected") nativeNumSelected());
-    "selectAll") nativeSelectAll();
-    "addToSelection") {
-        // TODO: finish
-    }
-    "clearSelection") {
-        nativeClearSelection();
-    }
-    {"deleteSelected", nativeDeleteSelected},
-    {"qsnapX", nativeQSnapX},
-    {"qsnapY", nativeQSnapY},
-    {"mouseX", nativeMouseX},
-    {"mouseY", nativeMouseY},
+    {"windowtile", window_tile_action},
+    {"windowcloseall", window_close_all_action},
+    {"windowclose", window_close_action},
+    {"windownext", window_next_action},
+    {"windowprevious", window_previous_action},
+    {"platform", platform_action},
+    {"save", save_file_action},
+    {"saveas", save_file_as_action},
+    {"print", print_action},
+    {"designdetails", designDetails_action},
+    {"copy", copy_action},
+    {"paste", paste_action},
+    {"changelog", changelog_action},
+    {"whatsthis", whatsThisContextHelp_action},
+    {"makelayercurrent", makeLayerActive_action},
+    {"layers", layerManager_action},
+    {"layerprevious", layerPrevious_action},
+    {"textbold", setTextBold_action},
+    {"textitalic", setTextItalic_action},
+    {"textunderline", setTextUnderline_action},
+    {"textstrikeout", setTextStrikeOut_action},
+    {"textoverline", setTextOverline_action},
+    {"numSelected", nativeNumSelected_action},
+    {"selectAll", nativeSelectAll_action},
+    {"addToSelection", add_to_selection_action},
+    {"clearSelection", nativeClearSelection_action},
+    {"deleteSelected", nativeDeleteSelected_action},
+    {"qsnapX", nativeQSnapX_action},
+    {"qsnapY", nativeQSnapY_action},
+    {"mouseX", nativeMouseX_action},
+    {"mouseY", nativeMouseY_action},
 
     {"debug-message") {
         debug_message(command.substr(13, command.size()-13));
         return 0;
     }
 
-    {"circle"},
-        {"ellipse") {
-        if (command =="path") {
-        if (command =="heart") {
-        if (command =="treble clef") {
-    {"line"},
-    {"dolphin", dolphin},
-    {"tab"},
-    {"toggle"},
-    {"enable"},
-    {"disable"},
-    {"save", save_file},
-    {"save-as", save_file_as},
-    {"check-for-updates")) {
-        puts("Visit https://libembroidery.org for information about new releases.");
-        puts("Your version is: " VERSION);
-    {"select-all", select_all();
-    {"whats-this", whats_this();
-    {"design-details", design_details();
-    {"print-pattern", print_pattern();
-    {"copy-object", copy();
-    if (command =="paste-object", paste();
-    if (command =="help", help();
-    if (command =="changelog-dialog") {
-        changelog();
-    if (command =="tip-of-the-day-dialog") {
-        tip_of_the_day();
+    {"circle", circle_action},
+    {"ellipse", ellipse_action},
+    {"path", path_action},
+    {"heart", heart_action},
+    {"treble clef", treble_clef_action},
+    {"line", line_action},
+    {"dolphin", dolphin_action},
+    {"tab", tab_action},
+    {"toggle", toggle_action},
+    {"enable", enable_action},
+    {"disable", disable_action},
+    {"save", save_file_action},
+    {"save-as", save_file_as_action},
+    {"check-for-updates", check_for_updates_action},
+    {"select-all", select_all},
+    {"whats-this", whats_this},
+    {"design-details", design_details},
+    {"print-pattern", print_pattern},
+    {"copy-object", copy},
+    {"paste-object", paste_action},
+    {"help", help_action},
+    {"changelog-dialog", changelog},
+    {"tip-of-the-day-dialog", tip_of_the_day},
     {"settings-dialog"},
     {"make-layer-current"},
     {"layer-manager"},
@@ -367,270 +640,23 @@ void simulate_action(std::vector<std::string> args)
     {"thaw-all-layers"},
     {"lock-all-layers"},
     {"unlock-all-layers"},
-    {"enable")) {
-        EmbWidget *panel = widget_list + window->tab_index;
-        {"grid")) {
-            debug_message("Show grid");
-            panel->view_state |= VIEW_STATE_GRID;
-            return 0;
-        }
-        {"real")) {
-            debug_message("Enable real render in this tab.");
-            panel->view_state |= VIEW_STATE_REAL;
-            return 0;
-        }
-        {"ruler")) {
-            debug_message("Show rulers in this tab.");
-            panel->view_state |= VIEW_STATE_RULER;
-            return 0;
-        }
-        {"ortho")) {
-            debug_message("Show orthogonal grid in this tab.");
-            panel->view_state |= VIEW_STATE_ORTHO;
-            return 0;
-        }
-        {"qsnap")) {
-            debug_message("Activate QSnap mode in this tab.");
-            panel->view_state |= VIEW_STATE_SNAP;
-            return 0;
-        }
-        {"polar")) {
-            debug_message("Activate polar grid in this tab.");
-            panel->view_state |= VIEW_STATE_POLAR;
-            return 0;
-        }
-        {"track")) {
-            debug_message("Activate QTrack mode in this tab.");
-            panel->view_state |= VIEW_STATE_QTRACK;
-            return 0;
-        }
-        {"lwt")) {
-            debug_message("Show Lineweight in this tab.");
-            panel->view_state |= VIEW_STATE_LWT;
-            return 0;
-        }
-        return 0;
-    }
-
-    if (command =="disable") {
-        EmbWidget *panel = widget_list + window->tab_index;
-        if (command =="grid") {
-            if (panel->view_state | VIEW_STATE_GRID) {
-                panel->view_state -= VIEW_STATE_GRID;
-            }
-        }
-        if (command =="real") {
-            if (panel->view_state | VIEW_STATE_REAL) {
-                panel->view_state -= VIEW_STATE_REAL;
-            }
-        }
-        if (command =="ruler") {
-            if (panel->view_state | VIEW_STATE_RULER) {
-                panel->view_state -= VIEW_STATE_RULER;
-            }
-        }
-        if (command =="ortho") {
-            if (panel->view_state | VIEW_STATE_ORTHO) {
-                panel->view_state -= VIEW_STATE_ORTHO;
-            }
-        }
-        if (command =="qsnap") {
-            if (panel->view_state | VIEW_STATE_SNAP) {
-                panel->view_state -= VIEW_STATE_SNAP;
-            }
-        }
-        if (command =="polar") {
-            if (panel->view_state | VIEW_STATE_POLAR) {
-                panel->view_state -= VIEW_STATE_POLAR;
-            }
-        }
-        if (command =="track") {
-            if (panel->view_state | VIEW_STATE_QTRACK) {
-                panel->view_state -= VIEW_STATE_QTRACK;
-            }
-        }
-        if (command =="lwt") {
-            if (panel->view_state | VIEW_STATE_LWT) {
-                panel->view_state -= VIEW_STATE_LWT;
-            }
-        }
-    }
-
-    if (command =="toggle") {
-        EmbWidget *panel = widget_list + window->tab_index;
-        {"grid")) {
-            panel->view_state ^= VIEW_STATE_GRID;
-        }
-        {"real")) {
-            panel->view_state ^= VIEW_STATE_REAL;
-        }
-        {"ruler")) {
-            panel->view_state ^= VIEW_STATE_RULER;
-        }
-        {"ortho")) {
-            panel->view_state ^= VIEW_STATE_ORTHO;
-        }
-        {"qsnap")) {
-            panel->view_state ^= VIEW_STATE_SNAP;
-        }
-        {"polar")) {
-            panel->view_state ^= VIEW_STATE_POLAR;
-        }
-        if (command =="track") {
-            panel->view_state ^= VIEW_STATE_QTRACK;
-        }
-        if (command =="lwt") {
-            panel->view_state ^= VIEW_STATE_LWT;
-        }
-    }
-
-    if (command =="text") {
-        {"bold")) {
-            text_style.bold = !text_style.bold;
-        }
-        if (command =="italic") {
-            text_style.italic = !text_style.italic;
-        }
-        {"underline")) {
-            text_style.underline = !text_style.underline;
-        }
-        {"strikeout")) {
-            text_style.strikeout = !text_style.strikeout;
-        }
-        {"overline")) {
-            text_style.overline = !text_style.overline;
-        }
-    }
-
-    {"zoom")) {
-        EmbWidget *panel = widget_list + window->active_panel;
-        char *arguments = action + strlen("zoom") + 1;
-        {"real-time")) {
-            debug_message("action: zoom-real-time");
-            debug_message("Implement zoomRealtime.");
-            return 0;
-        }
-        {"previous")) {
-            debug_message("action: zoom-previous");
-            debug_message("Implement zoomPrevious.");
-            return 0;
-        }
-        {"window")) {
-            debug_message("zoom_window()");
-            /*
-            active_view = active_view();
-            if (active_view) {
-                active_view->zoom_window();
-            } */
-
-            zoom_window_active = 1;
-            selecting_active = 0;
-            n_selected = 0;
-            return 0;
-        }
-        if (command =="dynamic") {
-            debug_message("zoom_dynamic()");
-            debug_message("Implement zoom_dynamic.");
-            return 0;
-        }
-        if (command =="scale") {
-            debug_message("zoom_scale()");
-            debug_message("Implement zoom_scale.");
-            return 0;
-        }
-        if (command =="center") {
-            debug_message("zoom_center()");
-            debug_message("Implement zoom_center.");
-            return 0;
-        }
-        if (command =="in") {
-            debug_message("zoom_in()");
-            debug_message("View zoom_in()");
-            if (!allow_zoom_in(panel)) {
-                return 0;
-            }
-
-            set_override_cursor(window, "Wait Cursor");
-            /*cntr = map_to_scene(Vector(width()/2, height()/2));
-            s = display_zoom_scale_in;
-            scale(s, s);
-
-            center_on(cntr);
-            */
-            restore_override_cursor();
-            return 0;
-        }
-        {"out")) {
-            debug_message("zoom_out()");
-            debug_message("View zoom_out()");
-            if (!allow_zoom_out(panel)) {
-                return 0;
-            }
-
-            set_override_cursor(window, "Wait Cursor");
-            /*
-            cntr = map_to_scene(Vector(width()/2, height()/2));
-            s = display_zoom_scale_out;
-            scale(s, s);
-
-            center_on(cntr);
-            */
-            restore_override_cursor();
-            return 0;
-        }
-        {"selected")) {
-            debug_message("zoom_selected()");
-            set_override_cursor(window, "Wait Cursor");
-            /*
-            item_list = gscene.selected_items();
-            selected_rect_path = Path();
-            for (item in item_list) {
-                selected_rect_path.add_polygon(item.map_to_scene(item.bounding_rect();
-            }
-
-            selected_rect = selected_rectPath.bounding_rect()
-            if (selected_rect) {
-                message = translate("Preselect objects before invoking the zoom_selected command.")
-                information(translate("zoom_selected Preselect"), message) */
-                /* TODO: Support Post selection of objects */
-                /*
-            }
-
-            fit_in_view(selected_rect, "KeepAspectRatio");
-            */
-            restore_override_cursor();
-            return 0;
-        }
-        {"all")) {
-            debug_message("zoom_all()");
-            debug_message("Implement zoom_all.");
-            return 0;
-        }
-        {"extents")) {
-            debug_message("zoom_extents()");
-            /*
-            set_override_cursor("WaitCursor")
-            extents = gscene.items_bounding_rect()
-            if extents:
-                extents.set_width(grid_size_x)
-                extents.set_height(grid_size_y)
-                extents.move_center(Vector(0, 0))
-
-            fit_in_view(extents, "KeepAspectRatio")
-            restore_override_cursor();
-            */
-            return 0;
-        }
-    }
-
+    {"enable"},
+        {"grid","real","ruler","ortho","qsnap","polar","track","lwt"},
+    {"disable"},
+        {"grid","real","ruler","ortho","qsnap","polar","track","lwt"},
+    {"toggle"},
+        {"grid","real","ruler","ortho","qsnap","polar","track","lwt"},
+    {"text"}
+        {"bold","italic","underline","strikeout","overline"},
+    {"zoom"}
+        {"real-time","previous","window","dynamic","scale","center","in","out","selected","all","extents"},
     {"distance", distance},
     {"delete-object", delete_object},
     {"locate_point", locate_point},
     {"move", move}
     {"export", export_},
 
-void
-include_script(std::vector<std::string> args)
+void run_action(std::vector<std::string> args)
 {
     if (args.size < 1) {
         return 0;
@@ -638,20 +664,16 @@ include_script(std::vector<std::string> args)
     run_script(args[0]);
 }
 
-void
-Debug()
+void debug_action(std::vector<std::string> args)
 {
     if (args.size() < 1) {
         debug_message("debug() requires one argument");
     }
-    if (!args[0).isString())
-        return debug_message("debug(): first argument is not a string");
 
     debug_message("%s", qPrintable(args[0).toString();
 }
 
-void
-Error()
+void error_action(std::vector<std::string> args)
 {
     if (args.size() < 2)    debug_message("error() requires two arguments");
     if (!args[0).isString()) return debug_message("error(): first argument is not a string");
@@ -661,12 +683,11 @@ Error()
     std::string strErr = args[1).toString();
 
     nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
-    nativeAppendPromptHistory(std::string());
+    appendPromptHistory(std::string());
     nativeEndCommand();
 }
 
-void
-Todo()
+void todo_action(std::vector<std::string> args)
 {
     if (args.size() < 2)    debug_message("todo() requires two arguments");
     if (!args[0).isString()) return debug_message("todo(): first argument is not a string");
@@ -675,23 +696,21 @@ Todo()
     std::string strCmd  = args[0).toString();
     std::string strTodo = args[1).toString();
 
-    nativeAlert("TODO: (" + strCmd + ") " + strTodo);
+    alert("TODO: (" + strCmd + ") " + strTodo);
     nativeEndCommand();
 }
 
-void
-Alert()
+void alert_action(std::vector<std::string> args)
 {
     if (args.size() < 1)    debug_message("alert() requires one argument");
     if (!args[0).isString()) return debug_message("alert(): first argument is not a string");
 
-    nativeAlert(args[0).toString());
+    alert(args[0).toString());
 }
 
     nativeBlinkPrompt();
 
-void
-SetPromptPrefix()
+void set_prompt_prefix_action(std::vector<std::string> args)
 {
     if (args.size() < 1)    debug_message("setPromptPrefix() requires one argument");
     if (!args[0).isString()) return debug_message("setPromptPrefix(): first argument is not a string");
@@ -699,20 +718,16 @@ SetPromptPrefix()
     nativeSetPromptPrefix(args[0).toString());
 }
 
-void
-AppendPromptHistory()
+void AppendPromptHistory_action(std::vector<std::string> args)
 {
     int args = engine->argumentCount();
-    if (args == 0)
-    {
-        nativeAppendPromptHistory(std::string());
+    if (args == 0) {
+        appendPromptHistory(std::string());
     }
-    else if (args == 1)
-    {
-        nativeAppendPromptHistory(args[0).toString());
+    else if (args == 1) {
+        appendPromptHistory(args[0).toString());
     }
-    else
-    {
+    else {
         debug_message("appendPromptHistory() requires one or zero arguments");
     }
 }
@@ -723,13 +738,10 @@ AppendPromptHistory()
     nativeDisableMoveRapidFire();
     nativeInitCommand();
 
-    {"end-command") {
-        nativeEndCommand();
-    }
+    {"end-command", nativeEndCommand}
 
 
-void
-MessageBox()
+void messagebox_action(std::vector<std::string> args)
 {
     if (args.size() < 3)    debug_message("messageBox() requires three arguments");
     if (!args[0).isString()) return debug_message("messageBox(): first argument is not a string");
@@ -746,8 +758,7 @@ MessageBox()
     nativeMessageBox(type, title, text);
 }
 
-void
-IsInt()
+void IsInt_action(std::vector<std::string> args)
 {
     if (args.size() < 1)    debug_message("isInt() requires one argument");
     if (!args[0).isNumber()) return debug_message("isInt(): first argument is not a number");
@@ -761,10 +772,7 @@ IsInt()
         return QJSValue(true);
 }
 
-    nativeUndo();
-    nativeRedo();
-
-PrintArea()
+void print_area_action(std::vector<std::string> args)
 {
     if (args.size() < 4)    debug_message("printArea() requires four arguments");
     if (!args[0).isNumber()) return debug_message("printArea(): first argument is not a number");
@@ -786,8 +794,7 @@ PrintArea()
     nativePrintArea(x, y, w, h);
 }
 
-void
-SetBackgroundColor()
+void SetBackgroundColor_action(std::vector<std::string> args)
 {
     if (args.size() < 3)    debug_message("setBackgroundColor() requires three arguments");
     if (!args[0).isNumber()) return debug_message("setBackgroundColor(): first argument is not a number");
@@ -810,15 +817,13 @@ SetBackgroundColor()
     nativeSetBackgroundColor(r, g, b);
 }
 
-void
-SetCrossHairColor()
+void SetCrossHairColor_action(std::vector<std::string> args)
 {
     if (args.size() < 3)    debug_message("setCrossHairColor() requires three arguments");
 
     double r = args[0];
     double g = args[1];
     double b = args[2];
-
 
     if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
@@ -827,8 +832,7 @@ SetCrossHairColor()
     nativeSetCrossHairColor(r, g, b);
 }
 
-void
-SetGridColor()
+void SetGridColor_action(std::vector<std::string> args)
 {
     if (args.size() < 3)    debug_message("setGridColor() requires three arguments");
     if (!args[0).isNumber()) return debug_message("setGridColor(): first argument is not a number");
@@ -851,16 +855,14 @@ SetGridColor()
     nativeSetGridColor(r, g, b);
 }
 
-void
-SetTextFont()
+void SetTextFont_action(std::vector<std::string> args)
 {
     if (args.size() < 1)    debug_message("setTextFont() requires one argument");
 
     settings_text_font = args[0];
 }
 
-void
-SetTextSize()
+void SetTextSize_action(std::vector<std::string> args)
 {
     if (args.size() < 1)    debug_message("setTextSize() requires one argument");
     if (!args[0).isNumber()) return debug_message("setTextSize(): first argument is not a number");
@@ -873,8 +875,7 @@ SetTextSize()
     nativeSetTextSize(num);
 }
 
-void
-SetTextAngle()
+void set_text_angle_action(std::vector<std::string> args)
 {
     if (args.size() < 1)    debug_message("setTextAngle() requires one argument");
     if (!args[0).isNumber()) return debug_message("setTextAngle(): first argument is not a number");
@@ -887,35 +888,43 @@ SetTextAngle()
     nativeSetTextAngle(num);
 }
 
-void
-SetTextBold()
+void SetTextBold_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("setTextBold() requires one argument");
+    if (args.size() < 1) {
+        debug_message("setTextBold() requires one argument");
+        return;
+    }
+
     if (!args[0).isBool()) return debug_message("setTextBold(): first argument is not a bool");
 
     nativeSetTextBold(args[0).toBool());
 }
 
-void
-SetTextItalic()
+void SetTextItalic()
 {
-    if (args.size() < 1)    debug_message("setTextItalic() requires one argument");
+    if (args.size() < 1) {
+        debug_message("setTextItalic() requires one argument");
+        return;
+    }
+
     if (!args[0).isBool()) return debug_message("setTextItalic(): first argument is not a bool");
 
     nativeSetTextItalic(args[0).toBool());
 }
 
-void
-SetTextUnderline()
+void SetTextUnderline()
 {
-    if (args.size() < 1)    debug_message("setTextUnderline() requires one argument");
+    if (args.size() < 1) {
+        debug_message("setTextUnderline() requires one argument");
+        return;
+    }
+
     if (!args[0).isBool()) return debug_message("setTextUnderline(): first argument is not a bool");
 
     nativeSetTextUnderline(args[0).toBool());
 }
 
-void
-SetTextStrikeOut()
+void SetTextStrikeOut()
 {
     if (args.size() < 1)    debug_message("setTextStrikeOut() requires one argument");
     if (!args[0).isBool()) return debug_message("setTextStrikeOut(): first argument is not a bool");
@@ -923,8 +932,7 @@ SetTextStrikeOut()
     nativeSetTextStrikeOut(args[0).toBool());
 }
 
-void
-SetTextOverline()
+void SetTextOverline()
 {
     if (args.size() < 1)    debug_message("setTextOverline() requires one argument");
     if (!args[0).isBool()) return debug_message("setTextOverline(): first argument is not a bool");
@@ -956,14 +964,12 @@ void PreviewOn()
     nativePreviewOn(clone, mode, x, y, data);
 }
 
-void
-PreviewOff()
+void PreviewOff()
 {
     nativePreviewOff();
 }
 
-void
-Vulcanize()
+void Vulcanize()
 {
     nativeVulcanize();
 }
@@ -1070,7 +1076,7 @@ void add_rubber_action(std::vector<std::string> args)
 
     std::string objType = args[0).toString().toUpper();
 
-    if (!nativeAllowRubber())
+    if (!allowRubber())
         debug_message(QScriptengine::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     double mx = nativeMouseX();
@@ -1083,7 +1089,7 @@ void add_rubber_action(std::vector<std::string> args)
 
     }
     else if (objType == "CIRCLE") {
-        nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON);
+        addCircle(mx, my, 0, false, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMALIGNED") {
 
@@ -1098,7 +1104,7 @@ void add_rubber_action(std::vector<std::string> args)
 
     } //TODO: handle this type
     else if (objType == "DIMLEADER")    {
-        nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
+        addDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON);
     }
     else if (objType == "DIMLINEAR")    {
 
@@ -1107,18 +1113,18 @@ void add_rubber_action(std::vector<std::string> args)
 
     } //TODO: handle this type
     else if (objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if (objType == "ELLIPSE")      { nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "ELLIPSE")      { addEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "ELLIPSEARC")   {} //TODO: handle this type
     else if (objType == "HATCH")        {} //TODO: handle this type
     else if (objType == "IMAGE")        {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
-    else if (objType == "LINE")         { nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "LINE")         { addLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "PATH")         {} //TODO: handle this type
     else if (objType == "POINT")        {} //TODO: handle this type
-    else if (objType == "POLYGON")      { nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE")     { nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON")      { addPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYLINE")     { addPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
     else if (objType == "RAY")          {} //TODO: handle this type
-    else if (objType == "RECTANGLE")    { nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "RECTANGLE")    { addRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
     else if (objType == "SPLINE") {
 
     }
@@ -1126,13 +1132,13 @@ void add_rubber_action(std::vector<std::string> args)
 
     }
     else if (objType == "TEXTSINGLE") {
-        nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
+        addTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON);
     }
 }
 
     nativeClearRubber();
 
-void spare_rubber_action()
+void spare_rubber_action(std::vector<std::string> args)
 {
     if (args.size() < 1) {
         debug_message("spareRubber() requires one argument");
@@ -1158,7 +1164,7 @@ void spare_rubber_action()
     }
 }
 
-void add_text_multi_action()
+void add_text_multi_action(std::vector<std::string> args)
 {
     if (args.size() < 5) {
         debug_message("addTextMulti() requires five arguments");
@@ -1171,11 +1177,10 @@ void add_text_multi_action()
     double   rot   = args[3];
     bool   fill  = args[4).toBool();
 
-    nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    addTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
 
-void
-AddTextSingle()
+void AddTextSingle_action(std::vector<std::string> args)
 {
     if (args.size() < 5) {
         debug_message("addTextSingle() requires five arguments");
@@ -1188,25 +1193,22 @@ AddTextSingle()
     double   rot   = args[3];
     bool   fill  = args[4).toBool();
 
-    nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
+    addTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
 
-void
-AddInfiniteLine()
+void AddInfiniteLine_action(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addInfiniteLine command");
 }
 
-void
-AddRay()
+void AddRay_action(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRay command");
 }
 
-void
-add_line_action(std::vector<std::string> args)
+void add_line_action(std::vector<std::string> args)
 {
     if (args.size() < 5)    debug_message("addLine() requires five arguments");
 
@@ -1216,46 +1218,43 @@ add_line_action(std::vector<std::string> args)
     double y2  = args[3];
     double rot = args[4];
 
-    nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    addLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
 }
 
-void
-add_triangle_action(std::vector<std::string> args)
+void add_triangle_action(std::vector<std::string> args)
 {
     if (args.size() < 8)    debug_message("addTriangle() requires eight arguments");
 
-    double x1     = args[0];
-    double y1     = args[1];
-    double x2     = args[2];
-    double y2     = args[3];
-    double x3     = args[4];
-    double y3     = args[5];
-    double rot    = args[6];
-    bool fill   = args[7).toBool();
+    double x1 = args[0];
+    double y1 = args[1];
+    double x2 = args[2];
+    double y2 = args[3];
+    double x3 = args[4];
+    double y3 = args[5];
+    double rot = args[6];
+    bool fill = args[7).toBool();
 
-    nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
+    addTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
 }
 
-void
-add_rectangle_action(std::vector<std::string> args)
+void add_rectangle_action(std::vector<std::string> args)
 {
     if (args.size() < 6) {
         debug_message("addRectangle() requires six arguments");
         return;
     }
 
-    double x    = args[0];
-    double y    = args[1];
-    double w    = args[2];
-    double h    = args[3];
-    double rot  = args[4];
+    double x = args[0];
+    double y = args[1];
+    double w = args[2];
+    double h = args[3];
+    double rot = args[4];
     bool fill = args[5).toBool();
 
-    nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    addRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
 }
 
-void
-add_rounded_rectangle_action(std::vector<std::string> args)
+void add_rounded_rectangle_action(std::vector<std::string> args)
 {
     if (args.size() < 7) {
         debug_message("addRoundedRectangle() requires seven arguments");
@@ -1270,11 +1269,10 @@ add_rounded_rectangle_action(std::vector<std::string> args)
     double rot = args[5].toNumber();
     bool fill = args[6].toBool();
 
-    nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
+    addRoundedRectangle(x, y, w, h, rad, rot, fill);
 }
 
-void
-add_arc_action(std::vector<std::string> args)
+void add_arc_action(std::vector<std::string> args)
 {
     if (args.size() < 6) {
         debug_message("addArc() requires six arguments");
@@ -1291,10 +1289,10 @@ add_arc_action(std::vector<std::string> args)
     arc.color = getCurrentColor();
 
     if (active_view && active_scene) {
-        embPattern_addArc(patterns[pattern_index], arc);
+        embPattern_addArc(patterns[settings.pattern_index], arc);
         std::string name;
         name  = "pattern" + stoi(pattern_index);
-        name += ".arc" + stoi(patterns[pattern_index]->arcs->count);
+        name += ".arc" + stoi(patterns[settings.pattern_index]->arcs->count);
         rubber_points_mode[name] = OBJ_RUBBER_OFF;
         if (OBJ_RUBBER_OFF) {
             active_view->addToRubberRoom(arcObj);
@@ -1302,19 +1300,19 @@ add_arc_action(std::vector<std::string> args)
     }
 }
 
-void
-add_circle_action(std::vector<std::string> args)
+void add_circle_action(std::vector<std::string> args)
 {
-    if (args.size() < 4)    debug_message("addCircle() requires four arguments");
+    if (args.size() < 4) {
+        debug_message("addCircle() requires four arguments");
+        return;
+    }
 
     double centerX = args[0];
     double centerY = args[1];
     double radius  = args[2];
     bool fill = args[3];
     
-    View* active_view = activeView();
-    QGraphicsScene* gscene = active_view->scene();
-    QUndoStack* stack = active_view->undoStack;
+    View view = views[settings.pattern_index];
     if (active_view && active_scene && stack) {
         CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
@@ -1331,8 +1329,7 @@ add_circle_action(std::vector<std::string> args)
     }
 }
 
-void
-add_slot_action(std::vector<std::string> args)
+void add_slot_action(std::vector<std::string> args)
 {
     if (args.size() < 6) {
         debug_message("addSlot() requires six arguments");
@@ -1357,8 +1354,7 @@ add_slot_action(std::vector<std::string> args)
     scene->update();
 }
 
-void
-add_ellipse_action()
+void add_ellipse_action()
 {
     if (args.size() < 6)    debug_message("addEllipse() requires six arguments");
 
@@ -1369,11 +1365,10 @@ add_ellipse_action()
     double rot = stod(args[4]);
     bool fill = args[5];
 
-    nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
+    addEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
 }
 
-void
-add_point_action(std::vector<std::string> args)
+void add_point_action(std::vector<std::string> args)
 {
     if (args.size() < 2) {
         debug_message("addPoint() requires two arguments");
@@ -1383,11 +1378,10 @@ add_point_action(std::vector<std::string> args)
     double x = stod(args[0]);
     double y = stod(args[1]);
 
-    nativeAddPoint(x, y);
+    addPoint(x, y);
 }
 
-void
-add_polygon_action(std::vector<std::string> args)
+void add_polygon_action(std::vector<std::string> args)
 {
     if (args.size() < 1)   debug_message("addPolygon() requires one argument");
     if (!args[0).isArray()) return debug_message("addPolygon(): first argument is not an array");
@@ -1431,11 +1425,10 @@ add_polygon_action(std::vector<std::string> args)
 
     path.translate(-startX, -startY);
 
-    nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
+    addPolygon(startX, startY, path, OBJ_RUBBER_OFF);
 }
 
-void
-add_polyline_action(std::vector<std::string> args)
+void add_polyline_action(std::vector<std::string> args)
 {
     if (args.size() < 1)   debug_message("addPolyline() requires one argument");
     if (!args[0).isArray()) return debug_message("addPolyline(): first argument is not an array");
@@ -1476,11 +1469,10 @@ add_polyline_action(std::vector<std::string> args)
 
     path.translate(-startX, -startY);
 
-    nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
+    addPolyline(startX, startY, path, OBJ_RUBBER_OFF);
 }
 
-void
-add_dim_leader_action(std::vector<std::string> args)
+void add_dim_leader_action(std::vector<std::string> args)
 {
     if (args.size() < 5) {
         debug_message("addDimLeader() requires five arguments");
@@ -1492,11 +1484,10 @@ add_dim_leader_action(std::vector<std::string> args)
     double y2  = args[3];
     double rot = args[4];
 
-    nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    addDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
 }
 
-void
-set_cursor_shape_action(std::vector<std::string> args)
+void set_cursor_shape_action(std::vector<std::string> args)
 {
     if (args.size() < 1) {
         debug_message("setCursorShape() requires one argument");
@@ -1544,8 +1535,7 @@ set_cursor_shape_action(std::vector<std::string> args)
     }
 }
 
-void
-calculate_angle_action(std::vector<std::string> args)
+void calculate_angle_action(std::vector<std::string> args)
 {
     if (args.size() < 4) {
         debug_message("calculateAngle() requires four arguments");
@@ -1560,8 +1550,7 @@ calculate_angle_action(std::vector<std::string> args)
     output = nativeCalculateAngle(x1, y1, x2, y2);
 }
 
-void
-calculate_distance_action(std::vector<std::string> args)
+void calculate_distance_action(std::vector<std::string> args)
 {
     if (args.size() < 4)    debug_message("calculateDistance() requires four arguments");
 
@@ -1573,8 +1562,7 @@ calculate_distance_action(std::vector<std::string> args)
     return QJSValue(nativeCalculateDistance(x1, y1, x2, y2));
 }
 
-void
-PerpendicularDistance()
+void PerpendicularDistance()
 {
     if (args.size() < 6) {
         debug_message("perpendicularDistance() requires six arguments");
@@ -1591,8 +1579,7 @@ PerpendicularDistance()
     output = nativePerpendicularDistance(px, py, x1, y1, x2, y2);
 }
 
-void
-cut_selected(std::vector<std::string> args)
+void cut_selected(std::vector<std::string> args)
 {
     if (args.size() < 2) {
         debug_message("cutSelected() requires two arguments");
@@ -1622,8 +1609,7 @@ string_to_double(std::vector<std::string> args, int n, double *result)
     return 0;
 }
 
-void
-CopySelected(std::vector<std::string> args)
+void CopySelected(std::vector<std::string> args)
 {
     if (args.size() < 2)
         debug_message("copySelected() requires two arguments");
@@ -1634,8 +1620,7 @@ CopySelected(std::vector<std::string> args)
     nativeCopySelected(x, y);
 }
 
-void
-PasteSelected(std::vector<std::string> args)
+void PasteSelected(std::vector<std::string> args)
 {
     double x, y;
     if (args.size() < 2)    debug_message("pasteSelected() requires two arguments");
@@ -1650,8 +1635,7 @@ PasteSelected(std::vector<std::string> args)
     nativePasteSelected(x, y);
 }
 
-void
-move_selected_action(std::vector<std::string> args)
+void move_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 2)
         debug_message("moveSelected() requires two arguments");
@@ -1662,8 +1646,7 @@ move_selected_action(std::vector<std::string> args)
     nativeMoveSelected(dx, dy);
 }
 
-void
-scale_selected_action(std::vector<std::string> args)
+void scale_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 3) {
         debug_message("scaleSelected() requires three arguments");
@@ -1684,8 +1667,7 @@ scale_selected_action(std::vector<std::string> args)
     }
 }
 
-void
-rotate_selected_action(std::vector<std::string> args)
+void rotate_selected_action(std::vector<std::string> args)
 {
     if (args.size() < 3) {
         debug_message("rotateSelected() requires three arguments");
@@ -1717,228 +1699,6 @@ void mirror_selected_action(std::vector<std::string> args)
     }
 }
 
-
-#endif
-
-
-void
-about_action(std::vector<std::string> args)
-{
-    show_about_dialog = true;
-}
-
-void
-arc_action(std::vector<std::string> args)
-{
-    EmbArc arc;
-    arc.start.x = 0.0;
-    arc.start.x = 0.0;
-    arc.mid.x = 50.0;
-    arc.mid.x = 50.0;
-    arc.end.x = 100.0;
-    arc.end.x = 0.0;
-    arc.color.r = 0;
-    arc.color.g = 0;
-    arc.color.b = 0;
-    // embPattern_addArcAbs(views[pattern_index].pattern, arc);
-}
-
-void
-circle_action(std::vector<std::string> args)
-{
-    EmbCircle circle;
-    circle.center.x = 0.0;
-    circle.center.y = 0.0;
-    circle.radius = 10.0;
-    circle.color.r = 0;
-    circle.color.g = 0;
-    circle.color.b = 0;
-    embPattern_addCircleAbs(views[pattern_index].pattern, circle);
-}
-
-void
-debug_action(std::vector<std::string> args)
-{
-    debug_message(args[0]);
-}
-
-void
-error_action(std::vector<std::string> args)
-{
-
-}
-
-void
-exit_action(std::vector<std::string> args)
-{
-    debug_message("Closing Embroidermodder 2.0.");
-    running = false;
-    /*
-    if (settings_prompt_save_history) {
-        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html);
-        // TODO: get filename from settings
-    }
-    qApp->closeAllWindows();
-    */
-}
-
-void
-changelog_action(std::vector<std::string> args)
-{
-    
-}
-
-void
-copy_action(std::vector<std::string> args)
-{
-    
-}
-
-void
-cut_action(std::vector<std::string> args)
-{
-    
-}
-
-void
-icon_action(std::vector<std::string> args)
-{
-    if (args.size() < 1) {
-        debug_message("ERROR: icon action requires 1 argument.");
-        return;
-    }
-
-    int new_size = std::stoi(args[0]);
-
-    if (icon_size >= 16 && icon_size <= 128) {
-        icon_size = new_size;
-    }
-}
-
-void
-open_file_action(std::vector<std::string> args)
-{
-    for (std::string file : args) {
-        View view = init_view();
-        view.filename = file;
-        embPattern_readAuto(view.pattern, view.filename.c_str());
-        views.push_back(view);
-    }
-}
-
-void
-pan_action(std::vector<std::string> args)
-{
-    if (args.size() < 1) {
-        debug_message("ERROR: pan action requires 1 argument.");
-        return;
-    }
-    #if 0
-
-    QUndoStack* stack = active_view->undoStack;
-    if (active_view && stack) {
-        if (args[0] == "realtime") {
-            active_view->panningRealTimeActive = true;
-            return;
-        }
-        if (args[0] == "point") {
-            active_view->panningPointActive = true;
-            return;
-        }
-        if (args[0] == "left") {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanLeft", active_view, 0);
-            stack->push(cmd);
-            return;
-        }
-        if (args[0] == "right") {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanRight", active_view, 0);
-            stack->push(cmd);
-            return;
-        }
-        if (args[0] == "up") {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanUp", active_view, 0);
-            stack->push(cmd);
-            return;
-        }
-        if (args[0] == "down") {
-            UndoableNavCommand* cmd = new UndoableNavCommand("PanDown", active_view, 0);
-            stack->push(cmd);
-            return;
-        }
-    }
-    #endif
-}
-
-void
-paste_action(std::vector<std::string> args)
-{
-    
-}
-
-void
-zoom_action(std::vector<std::string> args)
-{
-    if (args.size() < 1) {
-        debug_message("ERROR: zoom action requires 1 argument.");
-        return;
-    }
-
-    if (args[0] == "previous") {
-        /* zoomPrevious(); */
-        return;
-    }
-    if (args[0] == "window") {
-        /* zoomWindow(); */
-        return;
-    }
-    if (args[0] == "dynamic") {
-        /* zoomDynamic(); */
-        return;
-    }
-    if (args[0] == "scale") {
-        /* zoomScale(); */
-        return;
-    }
-    if (args[0] == "realtime") {
-        /* zoomRealtime(); */
-        return;
-    }
-    if (args[0] == "center") {
-        /* zoomCenter(); */
-        return;
-    }
-    if (args[0] == "in") {
-        views[pattern_index].scale *= 2.0;
-        return;
-    }
-    if (args[0] == "out") {
-        views[pattern_index].scale *= 0.5;
-        return;
-    }
-    if (args[0] == "selected") {
-        /* zoomSelected(); */
-        return;
-    }
-    if (args[0] == "all") {
-        /* zoomAll(); */
-        return;
-    }
-    if (args[0] == "extents") {
-        /* zoomExtents(); */
-        return;
-    }
-}
-
-void new_file_action(std::vector<std::string> args)
-{
-    View view = init_view();
-    view.pattern = embPattern_create();
-    views.push_back(view);
-    pattern_index = views.size() - 1;
-}
-
-
-#if 0
 void stub_implement_action(std::string txt)
 {
     debug_message("TODO: %s", qPrintable(txt));
@@ -1987,17 +1747,6 @@ void select_all_action()
     }
 }
 
-std::string platformString()
-{
-    std::string os;
-    #if _WIN32
-    os = "Windows";
-    #else
-    os = uname();
-    #endif
-    debug_message("Platform: %s", qPrintable(os));
-    return os;
-}
 
 void design_details_action()
 {
@@ -2103,39 +1852,6 @@ void button_tip_of_the_day_clicked(int button)
     else if (button == QWizard::CustomButton3)
     {
         wizardTipOfTheDay->close();
-    }
-}
-
-// Standard Slots
-void undo_action()
-{
-    debug_message("undo()");
-    std::string prefix = prompt->getPrefix();
-    if (dockUndoEdit->canUndo()) {
-        prompt->setPrefix("Undo " + dockUndoEdit->undoText());
-        prompt->appendHistory(std::string());
-        dockUndoEdit->undo();
-        prompt->setPrefix(prefix);
-    }
-    else {
-        prompt->alert("Nothing to undo");
-        prompt->setPrefix(prefix);
-    }
-}
-
-void redo_action()
-{
-    debug_message("redo()");
-    std::string prefix = prompt->getPrefix();
-    if (dockUndoEdit->canRedo()) {
-        prompt->setPrefix("Redo " + dockUndoEdit->redoText());
-        prompt->appendHistory(std::string());
-        dockUndoEdit->redo();
-        prompt->setPrefix(prefix);
-    }
-    else {
-        prompt->alert("Nothing to redo");
-        prompt->setPrefix(prefix);
     }
 }
 
@@ -2345,39 +2061,7 @@ void zoomExtents()
         stack->push(cmd);
     }
 }
-#endif
 
-void day_vision_action(std::vector<std::string> args)
-{
-    /*
-    View* active_view = activeView();
-    if (active_view) {
-        active_view->setBackgroundColor(qRgb(255,255,255)); //TODO: Make day vision color settings.
-        active_view->setCrossHairColor(qRgb(0,0,0));        //TODO: Make day vision color settings.
-        active_view->setGridColor(qRgb(0,0,0));             //TODO: Make day vision color settings.
-    }
-    */
-}
-
-void night_vision_action(std::vector<std::string> args)
-{
-    /*
-    View* active_view = activeView();
-    if (active_view) {
-        active_view->setBackgroundColor(qRgb(0,0,0));      //TODO: Make night vision color settings.
-        active_view->setCrossHairColor(qRgb(255,255,255)); //TODO: Make night vision color settings.
-        active_view->setGridColor(qRgb(255,255,255));      //TODO: Make night vision color settings.
-    }
-    */
-}
-
-void do_nothing_action(std::vector<std::string> args)
-{
-    //This function intentionally does nothing.
-    debug_message("doNothing()");
-}
-
-#if 0
 void layerSelectorIndexChanged(int index)
 {
     debug_message("layerSelectorIndexChanged(%d)", index);
@@ -2677,7 +2361,7 @@ void runCommandPrompt(const std::string& cmd, const std::string& str)
     */
 }
 
-void nativeAlert(const std::string& txt)
+void alert(const std::string& txt)
 {
     prompt->alert(txt);
 }
@@ -2692,7 +2376,7 @@ void nativeSetPromptPrefix(const std::string& txt)
     prompt->setPrefix(txt);
 }
 
-void nativeAppendPromptHistory(const std::string& txt)
+void appendPromptHistory(const std::string& txt)
 {
     prompt->appendHistory(txt);
 }
@@ -2740,7 +2424,7 @@ void nativeHelp()
     help();
 }
 
-void nativeAbout()
+void about()
 {
     about();
 }
@@ -2924,7 +2608,7 @@ void nativeClearRubber()
     if (active_view) active_view->clearRubberRoom();
 }
 
-bool nativeAllowRubber()
+bool allowRubber()
 {
     View* active_view = activeView();
     if (active_view) return active_view->allowRubber();
@@ -2946,11 +2630,11 @@ void nativeSetRubberText(const std::string& key, const std::string& txt)
     if (active_view) active_view->setRubberText(key, txt);
 }
 
-void nativeAddTextMulti(const std::string& str, double x, double y, double rot, bool fill, int rubberMode)
+void addTextMulti(const std::string& str, double x, double y, double rot, bool fill, int rubberMode)
 {
 }
 
-void nativeAddTextSingle(const std::string& str, double x, double y, double rot, bool fill, int rubberMode)
+void addTextSingle(const std::string& str, double x, double y, double rot, bool fill, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -2984,15 +2668,15 @@ void nativeAddTextSingle(const std::string& str, double x, double y, double rot,
     }
 }
 
-void nativeAddInfiniteLine(double x1, double y1, double x2, double y2, double rot)
+void addInfiniteLine(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
-void nativeAddRay(double x1, double y1, double x2, double y2, double rot)
+void addRay(double x1, double y1, double x2, double y2, double rot)
 {
 }
 
-void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+void addLine(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -3016,11 +2700,11 @@ void nativeAddLine(double x1, double y1, double x2, double y2, double rot, int r
     }
 }
 
-void nativeAddTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
+void addTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
 {
 }
 
-void nativeAddRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
+void addRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -3045,11 +2729,11 @@ void nativeAddRectangle(double x, double y, double w, double h, double rot, bool
     }
 }
 
-void nativeAddRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
+void addRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
 {
 }
 
-void nativeAddEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
+void addEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -3071,7 +2755,7 @@ void nativeAddEllipse(double centerX, double centerY, double width, double heigh
     }
 }
 
-void nativeAddPoint(double x, double y)
+void addPoint(double x, double y)
 {
     View* active_view = activeView();
     QUndoStack* stack = active_view->undoStack;
@@ -3082,28 +2766,25 @@ void nativeAddPoint(double x, double y)
     }
 }
 
-void nativeAddRegularPolygon(double centerX, double centerY, quint16 sides, quint8 mode, double rad, double rot, bool fill)
+void addRegularPolygon(double centerX, double centerY, quint16 sides, quint8 mode, double rad, double rot, bool fill)
 {
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+void addPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
     QUndoStack* stack = active_view->undoStack;
-    if (active_view && gscene && stack)
-    {
+    if (active_view && gscene && stack) {
         PolygonObject* obj = new PolygonObject(startX, startY, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
-        if (rubberMode)
-        {
+        if (rubberMode) {
             active_view->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
             stack->push(cmd);
         }
@@ -3111,7 +2792,7 @@ void nativeAddPolygon(double startX, double startY, const QPainterPath& p, int r
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+void addPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -3119,14 +2800,12 @@ void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int 
     if (active_view && gscene && stack) {
         PolylineObject* obj = new PolylineObject(startX, startY, p, getCurrentColor());
         obj->setObjectRubberMode(rubberMode);
-        if (rubberMode)
-        {
+        if (rubberMode) {
             active_view->addToRubberRoom(obj);
             gscene->addItem(obj);
             gscene->update();
         }
-        else
-        {
+        else {
             UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
             stack->push(cmd);
         }
@@ -3134,23 +2813,23 @@ void nativeAddPolyline(double startX, double startY, const QPainterPath& p, int 
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void nativeAddPath(double startX, double startY, const QPainterPath& p, int rubberMode)
+void addPath(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
 }
 
-void nativeAddHorizontalDimension(double x1, double y1, double x2, double y2, double legHeight)
+void addHorizontalDimension_action(std::vector<std::string> args)
 {
 }
 
-void nativeAddVerticalDimension(double x1, double y1, double x2, double y2, double legHeight)
+void addVerticalDimension_action(std::vector<std::string> args)
 {
 }
 
-void nativeAddImage(const std::string& img, double x, double y, double w, double h, double rot)
+void addImage_action(std::vector<std::string> args)
 {
 }
 
-void nativeAddDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+void addDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -3196,14 +2875,14 @@ double nativePerpendicularDistance(double px, double py, double x1, double y1, d
     return EmbLine(px, py, iPoint.x(), iPoint.y()).length();
 }
 
-int nativeNumSelected()
+int nativeNumSelected_action(std::vector<std::string> args)
 {
     View* active_view = activeView();
     if (active_view) { return active_view->numSelected(); }
     return 0;
 }
 
-void nativeSelectAll()
+void selectAll_action(std::vector<std::string> args)
 {
     View* active_view = activeView();
     if (active_view) {
@@ -3211,7 +2890,7 @@ void nativeSelectAll()
     }
 }
 
-void nativeAddToSelection(const QPainterPath path, ItemSelectionMode mode)
+void addToSelection_action(std::vector<std::string> args)
 {
 
 }
@@ -3228,18 +2907,6 @@ void nativeDeleteSelected()
     if (active_view) {
         active_view->deleteSelected();
     }
-}
-
-void nativeCutSelected(double x, double y)
-{
-}
-
-void nativeCopySelected(double x, double y)
-{
-}
-
-void nativePasteSelected(double x, double y)
-{
 }
 
 void nativeMoveSelected(double dx, double dy)
@@ -3612,8 +3279,7 @@ void createAllMenus()
     create_menu(actionHash, helpMenu, help_menu_data, true);
 }
 
-void
-check_load_file(std::string path)
+void check_load_file(std::string path)
 {
     std::string appDir = qApp->applicationDirPath();
     QFileInfo check(appDir + std::string::fromLocal8Bit(path));
@@ -3957,27 +3623,6 @@ void openrecentfile()
     }
 }
 
-void savefile()
-{
-    debug_message("savefile()");
-}
-
-void saveasfile()
-{
-    debug_message("saveasfile()");
-    // need to find the activeSubWindow before it loses focus to the FileDialog
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (!mdiWin) {
-        return;
-    }
-
-    std::string file;
-    openFilesPath = settings_opensave_recent_directory;
-    file = QFileDialog::getSaveFileName(this, translate("Save As"), openFilesPath, formatFilterSave);
-
-    mdiWin->saveFile(file);
-}
-
 QMdiSubWindow* findMdiWindow(const std::string& fileName)
 {
     debug_message("findMdiWindow(" + fileName.toStdString() + ")");
@@ -3994,14 +3639,14 @@ QMdiSubWindow* findMdiWindow(const std::string& fileName)
     return 0;
 }
 
-void closeEvent(QCloseEvent* event)
+void close_event(QCloseEvent* event)
 {
     mdiArea->closeAllSubWindows();
     writeSettings();
     event->accept();
 }
 
-void onCloseWindow()
+void on_close_window()
 {
     debug_message("onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
@@ -4010,7 +3655,7 @@ void onCloseWindow()
     }
 }
 
-void onCloseMdiWin(MdiWindow* theMdiWin)
+void on_close_mdiwin(MdiWindow* theMdiWin)
 {
     debug_message("onCloseMdiWin()");
     numOfDocs--;
@@ -4031,7 +3676,7 @@ void onCloseMdiWin(MdiWindow* theMdiWin)
     }
 }
 
-void onWindowActivated(QMdiSubWindow* w)
+void on_window_activated(QMdiSubWindow* w)
 {
     debug_message("onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
@@ -4040,7 +3685,7 @@ void onWindowActivated(QMdiSubWindow* w)
     }
 }
 
-void resizeEvent(QResizeEvent* e)
+void resize_event(QResizeEvent* e)
 {
     debug_message("resizeEvent()");
     QresizeEvent(e);
@@ -4053,7 +3698,7 @@ QAction* getFileSeparator()
     return myFileSeparator;
 }
 
-void updateMenuToolbarStatusbar()
+void update_menu_toolbar_statusbar()
 {
     debug_message("updateMenuToolbarStatusbar()");
 
@@ -4153,15 +3798,9 @@ void updateMenuToolbarStatusbar()
         statusbar->statusBarQTrackButton->hide();
         statusbar->statusBarLwtButton->hide();
     }
-    hideUnimplemented();
 }
 
-void hideUnimplemented()
-{
-    debug_message("hideUnimplemented()");
-}
-
-bool validFileFormat(const std::string& fileName)
+bool valid_file_format(const std::string& fileName)
 {
     /* TODO: need to extract the extention */
     if (emb_identify_format(qPrintable(fileName))) {
@@ -4170,7 +3809,7 @@ bool validFileFormat(const std::string& fileName)
     return false;
 }
 
-void loadFormats()
+void load_formats()
 {
     char stable, unstable;
     std::string supportedReaders  = "All Supported Files (";
@@ -4234,7 +3873,7 @@ void loadFormats()
     */
 }
 
-void closeToolBar(QAction* action)
+void close_toolbar_action(QAction* action)
 {
     if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
@@ -4245,7 +3884,7 @@ void closeToolBar(QAction* action)
     }
 }
 
-void floatingChangedToolBar(bool isFloating)
+void floating_changed_toolBar_action(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
     if (tb) {
@@ -4262,14 +3901,11 @@ void floatingChangedToolBar(bool isFloating)
             tb->addAction(ACTION);
             connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
         }
-        else
-        {
+        else {
             std::vector<QAction*> actList = tb->actions();
-            for(int i = 0; i < actList.size(); ++i)
-            {
+            for (int i = 0; i < actList.size(); ++i) {
                 QAction* ACTION = actList.value(i);
-                if (ACTION->objectName() == "toolbarclose")
-                {
+                if (ACTION->objectName() == "toolbarclose") {
                     tb->removeAction(ACTION);
                     disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
                     delete ACTION;

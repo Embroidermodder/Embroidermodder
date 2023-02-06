@@ -34,9 +34,10 @@ void create_tab_selection(void);
 void
 settings_editor(void)
 {
-    /* minimum size 750, 550*/
-    // ImGuiTabItemFlags_SetSelected
+    // ImGuiTabItemFlags_SetSelected   
+    ImGui::SetNextWindowSize(ImVec2(750, 550));
     ImGui::Begin("Settings");
+    ImGui::SetWindowFontScale(1.5);
     if (ImGui:: BeginTabBar("Tab Bar")) {
         if (ImGui::BeginTabItem("General")) {
             create_tab_general();
@@ -87,85 +88,31 @@ settings_editor(void)
     }
     ImGui::SameLine();
     if (ImGui::Button("Cancel")) {
-        show_settings_editor = false;
+        settings.show_settings_editor = false;
     }
     ImGui::End();
 }
 
-void
-create_tab_general()
+std::vector<std::string> languages = {
+    "default",
+    "spanish",
+    "french"
+};
+
+void create_tab_general(void)
 {
-    
-}
-void
-create_tab_files_paths()
-{
-    
-}
+    ImGui::Text("Language");
 
-void create_tab_display(void)
-{
-
-}
-
-void create_tab_prompt(void)
-{
-
-}
-
-void create_tab_open_save(void)
-{
-
-}
-
-void create_tab_printing(void)
-{
-
-}
-
-void create_tab_snap(void)
-{
-    
-}
-
-void create_tab_grid_ruler(void)
-{
-    
-}
-
-void create_tab_ortho_polar(void)
-{
-    
-}
-
-void create_tab_quicksnap(void)
-{
-    
-}
-
-void create_tab_quicktrack(void)
-{
-    
-}
-
-void create_tab_lineweight(void)
-{
-    
-}
-
-void create_tab_selection(void)
-{
-
-}
-
-#if 0
-QWidget* Settings_Dialog::createTabGeneral()
-{
-    QWidget* widget = new QWidget(this);
-
-    //Language
-    QGroupBox* groupBoxLanguage = new QGroupBox(tr("Language"), widget);
-
+    if (ImGui::BeginCombo("Language", settings.language.c_str())) {
+        for (std::string lang : languages) {
+            bool current_language = (settings.language == lang);
+            if (ImGui::Selectable(lang.c_str(), current_language)) {
+                settings.language = lang;
+            }
+        }
+        ImGui::EndCombo();
+    }
+    /*
     QLabel* labelLanguage = new QLabel(tr("Language (Requires Restart)"), groupBoxLanguage);
     QComboBox* comboBoxLanguage = new QComboBox(groupBoxLanguage);
     dialog_general_language = settings_general_language;
@@ -230,7 +177,6 @@ QWidget* Settings_Dialog::createTabGeneral()
 
     //Mdi Background
     QGroupBox* groupBoxMdiBG = new QGroupBox(tr("Background"), widget);
-
 
     QCheckBox* checkBoxMdiBGUseLogo = new QCheckBox(tr("Use Logo"), groupBoxMdiBG);
     dialog_general_mdi_bg_use_logo = settings_general_mdi_bg_use_logo;
@@ -323,26 +269,23 @@ QWidget* Settings_Dialog::createTabGeneral()
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabFilesPaths()
+void create_tab_files_paths(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */ 
 }
 
-QWidget* Settings_Dialog::createTabDisplay()
+void create_tab_display(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     //Rendering
     //TODO: Review OpenGL and Rendering settings for future inclusion
-    /*
     QGroupBox* groupBoxRender = new QGroupBox(tr("Rendering"), widget);
 
     QCheckBox* checkBoxUseOpenGL = new QCheckBox(tr("Use OpenGL"), groupBoxRender);
@@ -383,7 +326,6 @@ QWidget* Settings_Dialog::createTabDisplay()
     vboxLayoutRender->addWidget(checkBoxRenderHintHighAA);
     vboxLayoutRender->addWidget(checkBoxRenderHintNonCosmetic);
     groupBoxRender->setLayout(vboxLayoutRender);
-    */
 
     //ScrollBars
     QGroupBox* groupBoxScrollBars = new QGroupBox(tr("ScrollBars"), widget);
@@ -538,14 +480,12 @@ QWidget* Settings_Dialog::createTabDisplay()
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */
 }
 
-//TODO: finish prompt options
-QWidget* Settings_Dialog::createTabPrompt()
+void create_tab_prompt(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     //Colors
     QGroupBox* groupBoxColor = new QGroupBox(tr("Colors"), widget);
 
@@ -638,21 +578,11 @@ QWidget* Settings_Dialog::createTabPrompt()
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */
 }
 
-//TODO: finish open/save options
-QWidget* Settings_Dialog::createTabOpenSave()
+void create_tab_open_save(void)
 {
-    QWidget* widget = new QWidget(this);
-
-    //Custom Filter
-    QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
-    groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
-
-    dialog_opensave_custom_filter = settings_opensave_custom_filter;
-
-    QCheckBox* checkBoxCustomFilter[200];
     std::vector<std::string> extensions = {
         "100", "10o", "ART", "BMC", "BRO", "CND", "COL", "CSD",
         "CSV", "DAT", "DEM", "DSB", "DST", "DSZ", "DXF", "EDR",
@@ -662,6 +592,15 @@ QWidget* Settings_Dialog::createTabOpenSave()
         "SST", "STX", "SVG", "T09", "TAP", "THR", "TXT",
         "U00", "U01", "VIP", "VP3", "XXX", "ZSK"
     };
+
+    /*
+    //Custom Filter
+    QGroupBox* groupBoxCustomFilter = new QGroupBox(tr("Custom Filter"), widget);
+    groupBoxCustomFilter->setEnabled(false); //TODO: Fixup custom filter
+
+    dialog_opensave_custom_filter = settings_opensave_custom_filter;
+
+    QCheckBox* checkBoxCustomFilter[200];
 
     for (std::vector<std::string>::size_type i=0; i<extensions.size(); i++) {
         checkBoxCustomFilter[i] = new QCheckBox(extensions[i],
@@ -778,13 +717,12 @@ QWidget* Settings_Dialog::createTabOpenSave()
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabPrinting()
+void create_tab_printing(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     //Default Printer
     QGroupBox* groupBoxDefaultPrinter = new QGroupBox(tr("Default Printer"), widget);
 
@@ -828,25 +766,23 @@ QWidget* Settings_Dialog::createTabPrinting()
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabSnap()
+void create_tab_snap(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     //TODO: finish this
 
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */   
 }
 
-QWidget* Settings_Dialog::createTabGridRuler()
+void create_tab_grid_ruler(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     //Grid Misc
     QGroupBox* groupBoxGridMisc = new QGroupBox(tr("Grid Misc"), widget);
 
@@ -1153,24 +1089,23 @@ QWidget* Settings_Dialog::createTabGridRuler()
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
     return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabOrthoPolar()
+void create_tab_ortho_polar(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     //TODO: finish this
 
     QScrollArea* scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
-    return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabQuickSnap()
+void create_tab_quicksnap(void)
 {
-    QWidget* widget = new QWidget(this);
-
+    /*
     std::string iconTheme = settings_general_icon_theme;
 
     //QSnap Locators
@@ -1356,10 +1291,12 @@ QWidget* Settings_Dialog::createTabQuickSnap()
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
     return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabQuickTrack()
+void create_tab_quicktrack(void)
 {
+    /*
     QWidget* widget = new QWidget(this);
 
     //TODO: finish this
@@ -1368,10 +1305,12 @@ QWidget* Settings_Dialog::createTabQuickTrack()
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
     return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabLineWeight()
+void create_tab_lineweight(void)
 {
+    /*
     QWidget* widget = new QWidget(this);
 
     //TODO: finish this
@@ -1430,10 +1369,12 @@ QWidget* Settings_Dialog::createTabLineWeight()
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
     return scrollArea;
+    */
 }
 
-QWidget* Settings_Dialog::createTabSelection()
+void create_tab_selection(void)
 {
+    /*
     QWidget* widget = new QWidget(this);
 
     //Selection Modes
@@ -1522,12 +1463,14 @@ QWidget* Settings_Dialog::createTabSelection()
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(widget);
     return scrollArea;
+    */
 }
 
+#if 0
 void Settings_Dialog::addColorsToComboBox(QComboBox* comboBox)
 {
-    comboBox->addItem(mainWin->load_icon("colorred"),     translate("Red"),     qRgb(255,  0,  0));
-    comboBox->addItem(mainWin->load_icon("coloryellow"),  translate("Yellow"),  qRgb(255,255,  0));
+    comboBox->addItem(mainWin->load_icon("colorred"), translate("Red"), qRgb(255, 0, 0));
+    comboBox->addItem(mainWin->load_icon("coloryellow"), translate("Yellow"),  qRgb(255,255,  0));
     comboBox->addItem(mainWin->load_icon("colorgreen"),   translate("Green"),   qRgb(  0,255,  0));
     comboBox->addItem(mainWin->load_icon("colorcyan"),    translate("Cyan"),    qRgb(  0,255,255));
     comboBox->addItem(mainWin->load_icon("colorblue"),    translate("Blue"),    qRgb(  0,  0,255));

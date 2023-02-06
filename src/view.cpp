@@ -56,7 +56,7 @@ int
 render_pattern(EmbPattern *p)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    View view = views[pattern_index];
+    View view = views[settings.pattern_index];
     if (p->circles) {
         for (int i=0; i<p->circles->count; i++) {
             EmbCircle c = p->circles->circle[i];
@@ -218,7 +218,7 @@ void
 real_render_pattern(EmbPattern *p)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    View view = views[pattern_index];
+    View view = views[settings.pattern_index];
     if (p->stitchList->count > 1) {
         for (int i = 1; i<p->stitchList->count; i++) {
             EmbStitch prev = p->stitchList->stitch[i-1];
@@ -242,7 +242,7 @@ void
 simulate_pattern(EmbPattern *p)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    View view = views[pattern_index];
+    View view = views[settings.pattern_index];
     std::chrono::duration<float> duration = std::chrono::system_clock::now() - view.simulation_start;
     float time_passed = duration.count();
     ImVec2 offset = ImGui::GetWindowPos();
@@ -281,7 +281,7 @@ simulate_pattern(EmbPattern *p)
     }
 
     ImGui::Begin("Controls");
-    ImGui::SetWindowFontScale(2.0);
+    ImGui::SetWindowFontScale(1.5);
     ImGui::Text(("Stitch: " + std::to_string(stitches) + "/"
         + std::to_string(p->stitchList->count)).c_str());
     ImGui::Text(("Needle Speed: " + std::to_string(needle_speed)).c_str());
@@ -333,7 +333,7 @@ draw_rulers(void)
         offset + ImVec2(screen_size.x, ruler_width),
         ruler_color
     );
-    if (views[pattern_index].metric) {
+    if (views[settings.pattern_index].metric) {
         int repeats = 100;
         for (int i=0; i<repeats; i++) {
             float ruler_pos = ruler_width + major_tick_seperation*i;
@@ -445,18 +445,18 @@ draw_grid(void)
 void
 pattern_view(void)
 {
-    EmbPattern *pattern = views[pattern_index].pattern;
-    ImGui::BeginChild(views[pattern_index].filename.c_str());
-    if (views[pattern_index].grid_mode) {
+    EmbPattern *pattern = views[settings.pattern_index].pattern;
+    ImGui::BeginChild(views[settings.pattern_index].filename.c_str());
+    if (views[settings.pattern_index].grid_mode) {
         draw_grid();
     }
-    if (views[pattern_index].simulate) {
+    if (views[settings.pattern_index].simulate) {
         simulate_pattern(pattern);
     }
     else {
         render_pattern(pattern);
     }
-    if (views[pattern_index].ruler_mode) {
+    if (views[settings.pattern_index].ruler_mode) {
         draw_rulers();
     }
     ImGui::EndChild();

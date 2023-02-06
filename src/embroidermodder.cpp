@@ -22,31 +22,23 @@
 
 #include "embroidermodder.h"
 
+#ifdef __linux__
+#include <sys/utsname.h>
+#endif
+
 #include <iostream>
 #include <fstream>
 
 #include <GLFW/glfw3.h>
 #include <embroidery.h>
 
-bool running = true;
-bool debug_mode = true;
-bool show_about_dialog = false;
-bool show_settings_editor = false;
-bool show_editor = false;
-std::string language = "default";
-int icon_size = 16;
 ImFont *font;
 ImFont *header_font;
-int pattern_index = 0;
-std::string current_fname = "Untitled.dst";
-std::string assets_dir = "../assets/";
-std::vector<Action> action_list;
 string_matrix translation_table;
 std::unordered_map<std::string, std::string> str_settings;
 std::unordered_map<std::string, GLuint> textures;
 std::unordered_map<std::string, string_matrix> menu_layout;
 std::string menu_action = "";
-std::string current_pattern = "";
 TextEditor editor;
 std::vector<std::string> file_toolbar = {
     "new",
@@ -103,33 +95,52 @@ std::vector<std::string> texture_list = {
 };
 int testing = 0;
 
-std::vector<std::string>
-parse_command(int argc, char *argv[])
+static void usage(void)
+{
+    fprintf(stderr,
+    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
+    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
+    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
+    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
+    " _____________________________________________________________________________ "           "\n"
+    "|                                                                             | "          "\n"
+    "|                   http://embroidermodder.github.io                          | "          "\n"
+    "|_____________________________________________________________________________| "          "\n"
+    "                                                                               "           "\n"
+    "Usage: embroidermodder [options] files ..."                                      "\n"
+   //80CHARS======================================================================MAX
+    "Options:"                                                                        "\n"
+    "  -d, --debug      Print lots of debugging information."                         "\n"
+    "  -h, --help       Print this message and exit."                                 "\n"
+    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
+    "\n"
+           );
+    settings.running = false;
+}
+
+std::vector<std::string> parse_command(int argc, char *argv[])
 {
     std::vector<std::string> files;
     for (int i=1; i<argc; i++) {
         std::string s(argv[i]);
         if ((s == "--local-boot") || (s == "-L")) {
-            assets_dir = argv[i+1];
-            std::cout << "Booting from \"" << assets_dir << "\"." << std::endl;
+            settings.assets_dir = argv[i+1];
+            std::cout << "Booting from \"" << settings.assets_dir << "\"." << std::endl;
             i++;
             continue;
         }
         if ((s == "--debug") || (s == "-d")) {
-            debug_mode = 1;
+            settings.debug_mode = 1;
             printf("DEBUG MODE\n");
             continue;
         }
         if ((s == "--help") || (s == "-h")) {
-            /* Store internally so we don't need to load
-             * the global state before parsing the command.
-            print_string_list(help_message); */
-            running = 0;
+            usage();
         }
         if ((s == "--version") || (s == "-v")) {
             /* For scripts that need the version string */
             std::cout << VERSION << std::endl;
-            running = 0;
+            settings.running = false;
         }
         if (s == "--test") {
             testing = 1;
@@ -165,7 +176,7 @@ load_textures(std::vector<std::string> texture_list)
 {
     for (std::string icon : texture_list) {
         int width, height;
-        std::string fname = assets_dir + "icons/default/" + icon + ".png";
+        std::string fname = settings.assets_dir + "icons/default/" + icon + ".png";
         uint8_t* data = stbi_load(fname.c_str(), &width, &height, NULL, 4);
         if (!data) {
             return 1;
@@ -179,7 +190,7 @@ load_textures(std::vector<std::string> texture_list)
 
     {
         int width, height;
-        std::string fname = assets_dir + "images/texture-spirals.png";
+        std::string fname = settings.assets_dir + "images/texture-spirals.png";
         uint8_t* data = stbi_load(fname.c_str(), &width, &height, NULL, 4);
         if (!data) {
             return 1;
@@ -197,7 +208,7 @@ load_textures(std::vector<std::string> texture_list)
 void
 set_style(void)
 {
-    std::string font_file = assets_dir + "fonts/SourceSans3-regular.ttf";
+    std::string font_file = settings.assets_dir + "fonts/SourceSans3-regular.ttf";
     ImGuiIO& io = ImGui::GetIO();
     ImFontConfig config;
     config.OversampleH = 2;
@@ -245,7 +256,7 @@ load_toolbar(std::vector<std::string> toolbar)
             ImGui::Separator();
             continue;
         }
-        ImVec2 size = {icon_size, icon_size};
+        ImVec2 size = {settings.icon_size, settings.icon_size};
     	if (ImGui::ImageButton((void*)(intptr_t)textures[icon], size)) {
             menu_action = icon;
         }
@@ -258,11 +269,11 @@ load_toolbar(std::vector<std::string> toolbar)
 void
 undo_history_viewer(void)
 {
-    ImGui::BeginChild(("Undo History " + views[pattern_index].filename).c_str());
+    ImGui::BeginChild(("Undo History " + views[settings.pattern_index].filename).c_str());
     ImGui::PushFont(header_font);
     ImGui::Text(translate("Undo History").c_str());
     ImGui::PopFont();
-    for (std::string undo_item : views[pattern_index].undo_history) {
+    for (std::string undo_item : views[settings.pattern_index].undo_history) {
         ImGui::Text(undo_item.c_str());
     }
     ImGui::EndChild();
@@ -273,8 +284,8 @@ view_tab(int i)
 {
     ImGuiIO& io = ImGui::GetIO();
     if (ImGui::BeginTabItem(views[i].filename.c_str())) {
-        pattern_index = i;
-        ImGui::Columns(3, ("Undo History" + views[pattern_index].filename).c_str());
+        settings.pattern_index = i;
+        ImGui::Columns(3, ("Undo History" + views[settings.pattern_index].filename).c_str());
         ImGui::SetColumnWidth(-1, 200);
         undo_history_viewer();
         ImGui::NextColumn();
@@ -330,7 +341,7 @@ main_widget(void)
             for (int i=0; i<views.size(); i++) {
                 view_tab(i);
             }
-            if (show_editor) {
+            if (settings.show_editor) {
                 if (ImGui::BeginTabItem("Text Editor")) {
                     editor.Render("Text Editor");
                     ImGui::EndTabItem();
@@ -344,13 +355,14 @@ main_widget(void)
         ImGui::Image((void*)(intptr_t)textures["texture-spirals"], size);
     }
 
-    if (show_about_dialog) {
+    if (settings.show_about_dialog) {
         about_dialog();
     }
 
-    if (show_settings_editor) {
+    if (settings.show_settings_editor) {
         settings_editor();
     }
+
     status_bar();
 
     ImGui::End();
@@ -371,7 +383,7 @@ int
 main(int argc, char* argv[])
 {
     std::vector<std::string> files = parse_command(argc, argv);
-    if (!running) {
+    if (!settings.running) {
         return 0;
     }
 
@@ -431,7 +443,7 @@ main(int argc, char* argv[])
 
         glfwMakeContextCurrent(window);
         glfwSwapBuffers(window);
-        if (!running) {
+        if (!settings.running) {
             break;
         }
     }
@@ -542,15 +554,6 @@ valid_file_format(char *fname)
     return 0;
 }
 
-/*
- *  Testing.
- *  Mostly tests for actions not causing crashes that shut the program.
- *
- *  Testing actual correct application of the action would be harder.
- */
-
-/* stores what the current error would be, should one occur */
-
 /* Check that the translate call can return an entry from the table.
  */
 int
@@ -563,16 +566,14 @@ test_translate(void)
 
 /* .
  */
-double
-emb_clamp(double lower, double x, double upper)
+double emb_clamp(double lower, double x, double upper)
 {
     return std::max(std::min(upper, x), lower);
 }
 
 /* .
  */
-int
-valid_rgb(int red, int green, int blue)
+int valid_rgb(int red, int green, int blue)
 {
     if ((red < 0) || (red > 255)) {
         return 0;
@@ -598,35 +599,6 @@ bool Application_event(QEvent *event)
     default:
         return QApplication::event(event);
     }
-}
-
-static void usage(void)
-{
-    fprintf(stderr,
-    " ___ _____ ___  ___   __  _ ___  ___ ___   _____  __  ___  ___  ___ ___    ___ "           "\n"
-    "| __|     | _ \\| _ \\ /  \\| |   \\| __| _ \\ |     |/  \\|   \\|   \\| __| _ \\  |__ \\" "\n"
-    "| __| | | | _ <|   /| () | | |) | __|   / | | | | () | |) | |) | __|   /  / __/"           "\n"
-    "|___|_|_|_|___/|_|\\_\\\\__/|_|___/|___|_|\\_\\|_|_|_|\\__/|___/|___/|___|_|\\_\\ |___|"   "\n"
-    " _____________________________________________________________________________ "           "\n"
-    "|                                                                             | "          "\n"
-    "|                   http://embroidermodder.github.io                          | "          "\n"
-    "|_____________________________________________________________________________| "          "\n"
-    "                                                                               "           "\n"
-    "Usage: embroidermodder [options] files ..."                                      "\n"
-   //80CHARS======================================================================MAX
-    "Options:"                                                                        "\n"
-    "  -d, --debug      Print lots of debugging information."                         "\n"
-    "  -h, --help       Print this message and exit."                                 "\n"
-    "  -v, --version    Print the version number of embroidermodder and exit."        "\n"
-    "\n"
-           );
-    exitApp = true;
-}
-
-static void version()
-{
-    fprintf(stdout, "%s %s\n", _appName_, _appVer_);
-    exitApp = true;
 }
 
 void init_mdi_area(int i)
@@ -784,7 +756,10 @@ bool MdiWindow::loadFile(const std::string &fileName)
 
     //Read
     EmbPattern* p = embPattern_create();
-    if (!p) { printf("Could not allocate memory for embroidery pattern\n"); exit(1); }
+    if (!p) {
+        printf("Could not allocate memory for embroidery pattern\n");
+        exit(1);
+    }
     int readSuccessful = 0;
     std::string readError;
     int reader = emb_identify_format(qPrintable(fileName));
@@ -1082,36 +1057,36 @@ void status_bar(void)
     // ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x, io.DisplaySize.y - 50));
     //ImGui::BeginChild("Statusbar");
     if (ImGui::Button("SNAP")) {
-        views[pattern_index].snap_mode = !views[pattern_index].snap_mode;
+        views[settings.pattern_index].snap_mode = !views[settings.pattern_index].snap_mode;
         /* change button depressed state */
     }
     ImGui::SameLine();
     if (ImGui::Button("GRID")) {
-        views[pattern_index].grid_mode = !views[pattern_index].grid_mode;
+        views[settings.pattern_index].grid_mode = !views[settings.pattern_index].grid_mode;
     }
     ImGui::SameLine();
     if (ImGui::Button("RULER")) {
-        views[pattern_index].ruler_mode = !views[pattern_index].ruler_mode;
+        views[settings.pattern_index].ruler_mode = !views[settings.pattern_index].ruler_mode;
     }
     ImGui::SameLine();
     if (ImGui::Button("ORTHO")) {
-        views[pattern_index].ortho_mode = !views[pattern_index].ortho_mode;
+        views[settings.pattern_index].ortho_mode = !views[settings.pattern_index].ortho_mode;
     }
     ImGui::SameLine();
     if (ImGui::Button("POLAR")) {
-        views[pattern_index].polar_mode = !views[pattern_index].polar_mode;
+        views[settings.pattern_index].polar_mode = !views[settings.pattern_index].polar_mode;
     }
     ImGui::SameLine();
     if (ImGui::Button("QSNAP")) {
-        views[pattern_index].qsnap_mode = !views[pattern_index].qsnap_mode;
+        views[settings.pattern_index].qsnap_mode = !views[settings.pattern_index].qsnap_mode;
     }
     ImGui::SameLine();
     if (ImGui::Button("QTRACK")) {
-        views[pattern_index].qtrack_mode = !views[pattern_index].qtrack_mode;
+        views[settings.pattern_index].qtrack_mode = !views[settings.pattern_index].qtrack_mode;
     }
     ImGui::SameLine();
     if (ImGui::Button("LWT")) {
-        views[pattern_index].lwt_mode = !views[pattern_index].lwt_mode;
+        views[settings.pattern_index].lwt_mode = !views[settings.pattern_index].lwt_mode;
     }
     ImGui::SameLine();
     ImGui::Text("TODO: Mouse co-ordinates here.");
@@ -1231,3 +1206,21 @@ void StatusBarButton::settingsLwt()
     mainWin->settingsDialog("LineWeight");
 }
 #endif
+
+std::string platform_string(void)
+{
+    std::string os = "Unknown plaform.";
+    #if _WIN32
+    os = "Windows";
+    #endif
+    #ifdef __linux__
+    struct utsname buffer;
+    uname(&buffer);
+    os = std::to_string(buffer.sysname);
+    os += " " + std::to_string(buffer.nodename);
+    os += " " + std::to_string(buffer.release);
+    os += " " + std::to_string(buffer.version);
+    os += " " + std::to_string(buffer.machine);
+    #endif
+    return os;
+}
