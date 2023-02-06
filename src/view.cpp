@@ -30,6 +30,12 @@ unsigned int grid_color = IM_COL32(0, 0, 0, 255);
 double zoomInLimit = 1.0e-10;
 double zoomOutLimit = 1.0e10;
 EmbVector grid_spacing = {40.0, 40.0};
+float ruler_width = 50.0f;
+float tick_depth = 30.0f;
+float major_tick_seperation = 40.0f;
+float minor_tick_seperation = 4.0f;
+float needle_velocity = 1.0;
+float stitch_time = 0.1;
 
 inline ImVec2 to_ImVec2(EmbVector v)
 {
@@ -39,6 +45,11 @@ inline ImVec2 to_ImVec2(EmbVector v)
 inline int embColor_to_int(EmbColor c)
 {
     return IM_COL32(c.r, c.g, c.b, 255);
+}
+
+ImVec2 operator+(const ImVec2 a, const ImVec2 b)
+{
+    return ImVec2(a.x+b.x, a.y+b.y);
 }
 
 int
@@ -184,6 +195,32 @@ render_pattern(EmbPattern *p)
     }
     if (p->stitchList->count > 1) {
         for (int i = 1; i<p->stitchList->count; i++) {
+            ImVec2 offset = ImGui::GetWindowPos();
+            EmbStitch prev = p->stitchList->stitch[i-1];
+            EmbStitch st = p->stitchList->stitch[i];
+            ImVec2 start = {
+                view.scale * prev.x + view.origin.x,
+                - view.scale * prev.y + view.origin.y
+            };
+            ImVec2 end = {
+                view.scale * st.x + view.origin.x,
+                - view.scale * st.y + view.origin.y
+            };
+            EmbThread thread = p->thread_list[st.color];
+            int color = embColor_to_int(thread.color);
+            draw_list->AddLine(offset + start, offset + end, color);
+        }
+    }
+    return 0;
+}
+
+void
+real_render_pattern(EmbPattern *p)
+{
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    View view = views[pattern_index];
+    if (p->stitchList->count > 1) {
+        for (int i = 1; i<p->stitchList->count; i++) {
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
             ImVec2 start = {
@@ -199,7 +236,60 @@ render_pattern(EmbPattern *p)
             draw_list->AddLine(start, end, color);
         }
     }
-    return 0;
+}
+
+void
+simulate_pattern(EmbPattern *p)
+{
+    ImGui::Begin(("Simulation of " + views[pattern_index].filename).c_str());
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    View view = views[pattern_index];
+    view.origin.x = ImGui::GetWindowPos().x;
+    view.origin.y = ImGui::GetWindowPos().y;
+    if (p->stitchList->count > 1) {
+        for (int i = 1; i<p->stitchList->count; i++) {
+            EmbStitch prev = p->stitchList->stitch[i-1];
+            EmbStitch st = p->stitchList->stitch[i];
+            ImVec2 start = {
+                view.scale * prev.x + view.origin.x,
+                - view.scale * prev.y + view.origin.y
+            };
+            ImVec2 end = {
+                view.scale * st.x + view.origin.x,
+                - view.scale * st.y + view.origin.y
+            };
+            EmbThread thread = p->thread_list[st.color];
+            int color = embColor_to_int(thread.color);
+            draw_list->AddLine(start, end, color);
+        }
+    }
+
+    ImGui::BeginChild("Controls");
+    if (ImGui::Button("Slower")) {
+        
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Faster")) {
+
+    }
+ 
+    if (ImGui::Button("Start")) {
+
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Previous Stitch")) {
+
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Next Stitch")) {
+
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("End")) {
+
+    }
+    ImGui::EndChild();
+    ImGui::End();
 }
 
 /* TODO: labels for measurements.
@@ -207,71 +297,126 @@ render_pattern(EmbPattern *p)
 void
 draw_rulers(void)
 {
-    float offset_x = 100.0f;
-    float offset_y = 150.0f;
-    float ruler_width = 50.0f;
-    EmbVector screen_size = {576.0, 1024.0};
+    ImGuiIO &io = ImGui::GetIO();
+    ImVec2 offset = ImGui::GetWindowPos();
+    ImVec2 screen_size = io.DisplaySize;
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     draw_list->AddRectFilled(
-        ImVec2(offset_x, offset_y),
-        ImVec2(offset_x+ruler_width, screen_size.y),
+        offset,
+        offset + ImVec2(ruler_width, screen_size.y),
         ruler_color
     );
     draw_list->AddRectFilled(
-        ImVec2(offset_x, offset_y),
-        ImVec2(screen_size.x, offset_y+ruler_width),
+        offset,
+        offset + ImVec2(screen_size.x, ruler_width),
         ruler_color
     );
-    for (int i=0; i<20; i++) {
-        draw_list->AddLine(
-            ImVec2(offset_x+40.0f*i, offset_y),
-            ImVec2(offset_x+40.0f*i, offset_y+50.0f),
-            ticks_color
-        );
-        for (int j=0; j<10; j++) {
+    if (views[pattern_index].metric) {
+        int repeats = 100;
+        for (int i=0; i<repeats; i++) {
+            float ruler_pos = ruler_width + major_tick_seperation*i;
             draw_list->AddLine(
-                ImVec2(offset_x+40*i+4*j, offset_y + 30.0f),
-                ImVec2(offset_x+40*i+4*j, offset_y + 50.0f),
+                offset + ImVec2(ruler_pos, 0.0),
+                offset + ImVec2(ruler_pos, ruler_width),
                 ticks_color
             );
+            draw_list->AddText(
+                offset+ImVec2(ruler_pos + 5.0, 0.0),
+                ticks_color,
+                std::to_string(i).c_str());
+            for (int j=0; j<10; j++) {
+                ruler_pos += major_tick_seperation/10.0;
+                draw_list->AddLine(
+                    offset + ImVec2(ruler_pos, tick_depth),
+                    offset + ImVec2(ruler_pos, ruler_width),
+                    ticks_color
+                );
+            }
         }
-    }
-    for (int i=0; i<10; i++) {
-        draw_list->AddLine(
-            ImVec2(offset_x, offset_y + 50.0f + 40*i),
-            ImVec2(offset_x+50.0, offset_y + 50.0f + 40*i),
-            ticks_color
-        );
-        for (int j=0; j<10; j++) {
+        for (int i=0; i<repeats; i++) {
+            float ruler_pos = ruler_width + major_tick_seperation*i;
             draw_list->AddLine(
-                ImVec2(offset_x+30.0, offset_y + 50.0f + 40.0f * i+4*j),
-                ImVec2(offset_x+50.0, offset_y + 50.0f + 40.0f * i+4*j),
+                offset + ImVec2(0.0, ruler_pos),
+                offset + ImVec2(ruler_width, ruler_pos),
                 ticks_color
             );
+            draw_list->AddText(
+                offset+ImVec2(5.0, ruler_pos),
+                ticks_color,
+                std::to_string(i).c_str());
+            for (int j=0; j<10; j++) {
+                ruler_pos += major_tick_seperation/10.0;
+                draw_list->AddLine(
+                    offset + ImVec2(tick_depth, ruler_pos),
+                    offset + ImVec2(ruler_width, ruler_pos),
+                    ticks_color
+                );
+            }
         }
     }
-    /* draw_list->AddText(ImVec2(x, y), 0xFFFFFFFF, str); */
+    else {
+        int repeats = 100;
+        for (int i=0; i<repeats; i++) {
+            float ruler_pos = ruler_width + major_tick_seperation*i;
+            draw_list->AddLine(
+                offset + ImVec2(ruler_pos, 0.0),
+                offset + ImVec2(ruler_pos, ruler_width),
+                ticks_color
+            );
+            draw_list->AddText(
+                offset+ImVec2(ruler_pos + 5.0, 0.0),
+                ticks_color,
+                std::to_string(i).c_str());
+            for (int j=0; j<16; j++) {
+                ruler_pos += major_tick_seperation/16.0;
+                draw_list->AddLine(
+                    offset + ImVec2(ruler_pos, tick_depth),
+                    offset + ImVec2(ruler_pos, ruler_width),
+                    ticks_color
+                );
+            }
+        }
+        for (int i=0; i<repeats; i++) {
+            float ruler_pos = ruler_width + major_tick_seperation*i;
+            draw_list->AddLine(
+                offset + ImVec2(0.0, ruler_pos),
+                offset + ImVec2(ruler_width, ruler_pos),
+                ticks_color
+            );
+            draw_list->AddText(
+                offset+ImVec2(0.0, ruler_pos),
+                ticks_color,
+                std::to_string(i).c_str());
+            for (int j=0; j<16; j++) {
+                ruler_pos += major_tick_seperation/16.0;
+                draw_list->AddLine(
+                    offset + ImVec2(tick_depth, ruler_pos),
+                    offset + ImVec2(ruler_width, ruler_pos),
+                    ticks_color
+                );
+            }
+        }
+    }
 }
 
 void
 draw_grid(void)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-    EmbVector top_left = {150.0, 150.0};
-    EmbVector bottom_right = {150.0, 640.0};
-    EmbVector horizontal_top_left = {150.0, 150.0};
-    EmbVector horizontal_bottom_right = {640.0, 150.0};
-    for (int i=0; i<10; i++) {
-        top_left.x += grid_spacing.x;
-        bottom_right.x += grid_spacing.x;
-        horizontal_top_left.y += grid_spacing.y;
-        horizontal_bottom_right.y += grid_spacing.y;
-        draw_list->AddLine(to_ImVec2(top_left),
-                           to_ImVec2(bottom_right),
-                           grid_color);
-        draw_list->AddLine(to_ImVec2(horizontal_top_left),
-                           to_ImVec2(horizontal_bottom_right), 
-                           grid_color);
+    ImGuiIO &io = ImGui::GetIO();
+    ImVec2 offset = ImGui::GetWindowPos();
+    ImVec2 screen_size = io.DisplaySize;
+    for (float x=offset.x; x<screen_size.x; x+=grid_spacing.x) {
+        draw_list->AddLine(
+            ImVec2(x, offset.y),
+            ImVec2(x, screen_size.y),
+            grid_color);
+    }
+    for (float y=offset.y; y<screen_size.y; y+=grid_spacing.y) {
+        draw_list->AddLine(
+            ImVec2(offset.x, y),
+            ImVec2(screen_size.x, y),
+            grid_color);
     }
 }
 
@@ -279,13 +424,15 @@ void
 pattern_view(void)
 {
     EmbPattern *pattern = views[pattern_index].pattern;
+    ImGui::BeginChild(views[pattern_index].filename.c_str());
     if (views[pattern_index].grid_mode) {
         draw_grid();
     }
+    render_pattern(pattern);
     if (views[pattern_index].ruler_mode) {
         draw_rulers();
     }
-    render_pattern(pattern);
+    ImGui::EndChild();
 }
 
 View init_view(void)
@@ -442,13 +589,6 @@ void View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent)
     //     debug_message("Using OpenGL...");
     //     setViewport(new QGLWidget(QGLFormat(QGL::DoubleBuffer)));
     // }
-
-    // TODO: Review RenderHints later
-    // setRenderHint(QPainter::Antialiasing, settings_display_render_hint_aa);
-    // setRenderHint(QPainter::TextAntialiasing, settings_display_renderHintText_aa);
-    // setRenderHint(QPainter::SmoothPixmapTransform, settings_display_renderHintSmoothPix());
-    // setRenderHint(QPainter::HighQualityAntialiasing, settings_display_renderHintHighAA());
-    // setRenderHint(QPainter::NonCosmeticDefaultPen, settings_display_renderHintNonCosmetic());
 
     // NOTE: FullViewportUpdate MUST be used for both the GL and Qt renderers.
     // NOTE: Qt renderer will not draw the foreground properly if it isnt set.
@@ -1047,242 +1187,6 @@ void view_drawForeground(QPainter* painter, const EmbRect& rect)
             EmbVector p1 = mapFromScene(asp) - qsnapOffset;
             EmbVector q1 = mapFromScene(asp) + qsnapOffset;
             painter->drawRect(EmbRect(mapToScene(p1), mapToScene(q1)));
-        }
-    }
-
-    // ==================================================
-    // Draw horizontal and vertical rulers
-    // ==================================================
-
-    if (gscene->property("ENABLE_RULER").toBool()) {
-        bool proceed = true;
-
-        int vw = width();  //View Width
-        int vh = height(); //View Height
-        EmbVector origin = mapToScene(0,0);
-        EmbVector rulerHoriz = mapToScene(vw,rulerPixelSize);
-        EmbVector rulerVert  = mapToScene(rulerPixelSize,vh);
-
-        double ox = origin.x();
-        double oy = origin.y();
-
-        double rhx = rulerHoriz.x();
-        double rhy = rulerHoriz.y();
-        double rhw = rhx - ox;
-        double rhh = rhy - oy;
-
-        double rvx = rulerVert.x();
-        double rvy = rulerVert.y();
-        double rvw = rvx - ox;
-        double rvh = rvy - oy;
-
-        //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
-        //      We will limit the maximum size the ruler can be shown at.
-        quint16 maxSize = -1; //Intentional underflow
-        if (rhw >= maxSize || rvh >= maxSize) proceed = false;
-
-        if (proceed) {
-            int distance = mapToScene(rulerPixelSize*3, 0).x() - ox;
-            std::string distStr = std::string().setNum(distance);
-            int distStrSize = distStr.size();
-            int msd = distStr.at(0).digitValue(); //Most Significant Digit
-
-            if (msd != -1) {
-
-                msd++;
-                if (msd == 10) {
-                    msd = 1;
-                    distStr.resize(distStrSize+1);
-                    distStrSize++;
-                }
-
-                distStr.replace(0, 1, std::string().setNum(msd));
-                for (int i = 1; i < distStrSize; ++i) {
-                    distStr.replace(i, 1, '0');
-                }
-                int unit = distStr.toInt();
-                double fraction;
-                bool feet = true;
-                if (rulerMetric) {
-                    if (unit < 10) unit = 10;
-                    fraction = unit/10;
-                }
-                else {
-                    if (unit <= 1) {
-                        unit = 1;
-                        feet = false;
-                        fraction = (double)(unit/16);
-                    }
-                    else {
-                        unit = roundToMultiple(true, unit, 12);
-                        fraction = unit/12;
-                    }
-                }
-
-                double little  = 0.20;
-                double medium = 0.40;
-                double rhTextOffset = mapToScene(3, 0).x() - ox;
-                double rvTextOffset = mapToScene(0, 3).y() - oy;
-                double textHeight = rhh*medium;
-
-                QVector<EmbLine> lines;
-                lines.append(EmbLine(ox, rhy, rhx, rhy));
-                lines.append(EmbLine(rvx, oy, rvx, rvy));
-
-                double mx = sceneMousePoint.x();
-                double my = sceneMousePoint.y();
-                lines.append(EmbLine(mx, rhy, mx, oy));
-                lines.append(EmbLine(rvx, my, ox, my));
-
-                QTransform transform;
-
-                QPen rulerPen(QColor(0,0,0));
-                rulerPen.setCosmetic(true);
-                painter->setPen(rulerPen);
-                painter->fillRect(EmbRect(ox, oy, rhw, rhh), rulerColor);
-                painter->fillRect(EmbRect(ox, oy, rvw, rvh), rulerColor);
-
-                int xFlow;
-                int xStart;
-                int yFlow;
-                int yStart;
-                if (willUnderflowInt32(ox, unit)) {
-                    proceed = false;
-                }
-                else {
-                    xFlow = roundToMultiple(false, ox, unit);
-                }
-                if (willUnderflowInt32(xFlow, unit)) {
-                    proceed = false;
-                }
-                else {
-                    xStart = xFlow - unit;
-                }
-                if (willUnderflowInt32(oy, unit)) {
-                    proceed = false;
-                }
-                else {
-                    yFlow = roundToMultiple(false, oy, unit);
-                }
-                if (willUnderflowInt32(yFlow, unit)) {
-                    proceed = false;
-                }
-                else {
-                    yStart = yFlow - unit;
-                }
-
-                if (proceed) {
-                    for (int x = xStart; x < rhx; x += unit) {
-                        transform.translate(x+rhTextOffset, rhy-rhh/2);
-                        QPainterPath rulerTextPath;
-                        if (rulerMetric) {
-                            rulerTextPath = transform.map(createRulerTextPath(0, 0, std::string().setNum(x), textHeight));
-                        }
-                        else {
-                            if (feet)
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, std::string().setNum(x/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, std::string().setNum(x).append('\"'), textHeight));
-                        }
-                        transform.reset();
-                        painter->drawPath(rulerTextPath);
-
-                        lines.append(EmbLine(x, rhy, x, oy));
-                        if (rulerMetric) {
-                            lines.append(EmbLine(x, rhy, x, oy));
-                            lines.append(EmbLine(x+fraction  , rhy, x+fraction,   rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*2, rhy, x+fraction*2, rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*3, rhy, x+fraction*3, rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*4, rhy, x+fraction*4, rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*5, rhy, x+fraction*5, rhy-rhh*medium)); //Half
-                            lines.append(EmbLine(x+fraction*6, rhy, x+fraction*6, rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*7, rhy, x+fraction*7, rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*8, rhy, x+fraction*8, rhy-rhh*little));
-                            lines.append(EmbLine(x+fraction*9, rhy, x+fraction*9, rhy-rhh*little));
-                        }
-                        else {
-                            if (feet) {
-                                for (int i = 0; i < 12; ++i) {
-                                    lines.append(EmbLine(x+fraction*i, rhy, x+fraction*i, rhy-rhh*medium));
-                                }
-                            }
-                            else {
-                                lines.append(EmbLine(x+fraction   , rhy, x+fraction,    rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction* 2, rhy, x+fraction* 2, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction* 3, rhy, x+fraction* 3, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction* 4, rhy, x+fraction* 4, rhy-rhh*medium)); //Quarter
-                                lines.append(EmbLine(x+fraction* 5, rhy, x+fraction* 5, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction* 6, rhy, x+fraction* 6, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction* 7, rhy, x+fraction* 7, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction* 8, rhy, x+fraction* 8, rhy-rhh*medium)); //Half
-                                lines.append(EmbLine(x+fraction* 9, rhy, x+fraction* 9, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction*10, rhy, x+fraction*10, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction*11, rhy, x+fraction*11, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction*12, rhy, x+fraction*12, rhy-rhh*medium)); //Quarter
-                                lines.append(EmbLine(x+fraction*13, rhy, x+fraction*13, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction*14, rhy, x+fraction*14, rhy-rhh*little));
-                                lines.append(EmbLine(x+fraction*15, rhy, x+fraction*15, rhy-rhh*little));
-                            }
-                        }
-                    }
-                    for (int y = yStart; y < rvy; y += unit) {
-                        transform.translate(rvx-rvw/2, y-rvTextOffset);
-                        transform.rotate(-90);
-                        QPainterPath rulerTextPath;
-                        if (rulerMetric) {
-                            rulerTextPath = transform.map(createRulerTextPath(0, 0, std::string().setNum(-y), textHeight));
-                        }
-                        else {
-                            if (feet)
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, std::string().setNum(-y/12).append('\''), textHeight));
-                            else
-                                rulerTextPath = transform.map(createRulerTextPath(0, 0, std::string().setNum(-y).append('\"'), textHeight));
-                        }
-                        transform.reset();
-                        painter->drawPath(rulerTextPath);
-
-                        lines.append(EmbLine(rvx, y, ox, y));
-                        if (rulerMetric) {
-                            lines.append(EmbLine(rvx, y+fraction  , rvx-rvw*little, y+fraction));
-                            lines.append(EmbLine(rvx, y+fraction*2, rvx-rvw*little, y+fraction*2));
-                            lines.append(EmbLine(rvx, y+fraction*3, rvx-rvw*little, y+fraction*3));
-                            lines.append(EmbLine(rvx, y+fraction*4, rvx-rvw*little, y+fraction*4));
-                            lines.append(EmbLine(rvx, y+fraction*5, rvx-rvw*medium, y+fraction*5)); //Half
-                            lines.append(EmbLine(rvx, y+fraction*6, rvx-rvw*little, y+fraction*6));
-                            lines.append(EmbLine(rvx, y+fraction*7, rvx-rvw*little, y+fraction*7));
-                            lines.append(EmbLine(rvx, y+fraction*8, rvx-rvw*little, y+fraction*8));
-                            lines.append(EmbLine(rvx, y+fraction*9, rvx-rvw*little, y+fraction*9));
-                        }
-                        else {
-                            if (feet) {
-                                for (int i = 0; i < 12; ++i) {
-                                    lines.append(EmbLine(rvx, y+fraction*i, rvx-rvw*medium, y+fraction*i));
-                                }
-                            }
-                            else {
-                                lines.append(EmbLine(rvx, y+fraction   , rvx-rvw*little, y+fraction));
-                                lines.append(EmbLine(rvx, y+fraction* 2, rvx-rvw*little, y+fraction* 2));
-                                lines.append(EmbLine(rvx, y+fraction* 3, rvx-rvw*little, y+fraction* 3));
-                                lines.append(EmbLine(rvx, y+fraction* 4, rvx-rvw*medium, y+fraction* 4)); //Quarter
-                                lines.append(EmbLine(rvx, y+fraction* 5, rvx-rvw*little, y+fraction* 5));
-                                lines.append(EmbLine(rvx, y+fraction* 6, rvx-rvw*little, y+fraction* 6));
-                                lines.append(EmbLine(rvx, y+fraction* 7, rvx-rvw*little, y+fraction* 7));
-                                lines.append(EmbLine(rvx, y+fraction* 8, rvx-rvw*medium, y+fraction* 8)); //Half
-                                lines.append(EmbLine(rvx, y+fraction* 9, rvx-rvw*little, y+fraction* 9));
-                                lines.append(EmbLine(rvx, y+fraction*10, rvx-rvw*little, y+fraction*10));
-                                lines.append(EmbLine(rvx, y+fraction*11, rvx-rvw*little, y+fraction*11));
-                                lines.append(EmbLine(rvx, y+fraction*12, rvx-rvw*medium, y+fraction*12)); //Quarter
-                                lines.append(EmbLine(rvx, y+fraction*13, rvx-rvw*little, y+fraction*13));
-                                lines.append(EmbLine(rvx, y+fraction*14, rvx-rvw*little, y+fraction*14));
-                                lines.append(EmbLine(rvx, y+fraction*15, rvx-rvw*little, y+fraction*15));
-                            }
-                        }
-                    }
-                }
-
-                painter->drawLines(lines);
-                painter->fillRect(EmbRect(ox, oy, rvw, rhh), rulerColor);
-            }
         }
     }
 
@@ -2415,10 +2319,6 @@ void view_setSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned i
 {
     selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
-#endif
-
-
-#if 0
 
 SelectBox::SelectBox(Shape s, QWidget* parent) : QRubberBand(s, parent)
 {

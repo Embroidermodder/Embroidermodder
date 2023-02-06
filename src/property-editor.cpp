@@ -61,7 +61,7 @@ property_editor(void)
 
     EmbPattern *pattern = views[pattern_index].pattern;
 
-    ImGui::BeginChild(translate("Property Editor").c_str());
+    ImGui::BeginChild((translate("Property Editor") + views[pattern_index].filename).c_str());
     ImGui::Text(translate("Properties").c_str());
     /*
     propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable

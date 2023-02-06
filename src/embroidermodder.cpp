@@ -256,22 +256,29 @@ load_toolbar(std::vector<std::string> toolbar)
 }
 
 void
+undo_history_viewer(void)
+{
+    ImGui::BeginChild(("Undo History " + views[pattern_index].filename).c_str());
+    ImGui::PushFont(header_font);
+    ImGui::Text(translate("Undo History").c_str());
+    ImGui::PopFont();
+    for (std::string undo_item : views[pattern_index].undo_history) {
+        ImGui::Text(undo_item.c_str());
+    }
+    ImGui::EndChild();
+}
+
+void
 view_tab(int i)
 {
+    ImGuiIO& io = ImGui::GetIO();
     if (ImGui::BeginTabItem(views[i].filename.c_str())) {
         pattern_index = i;
-        ImGui::Columns(3, "Undo History");
-        ImGui::SetColumnWidth(-1, 100);
-        ImGui::BeginChild("Undo History");
-        ImGui::PushFont(header_font);
-        ImGui::Text(translate("Undo History").c_str());
-        ImGui::PopFont();
-        for (std::string undo_item : views[i].undo_history) {
-            ImGui::Text(undo_item.c_str());
-        }
-        ImGui::EndChild();
+        ImGui::Columns(3, ("Undo History" + views[pattern_index].filename).c_str());
+        ImGui::SetColumnWidth(-1, 200);
+        undo_history_viewer();
         ImGui::NextColumn();
-        ImGui::SetColumnWidth(-1, 600);
+        ImGui::SetColumnWidth(-1, io.DisplaySize.x - 405);
         pattern_view();
         ImGui::NextColumn();
         ImGui::SetColumnWidth(-1, 200);
@@ -344,6 +351,7 @@ main_widget(void)
     if (show_settings_editor) {
         settings_editor();
     }
+    status_bar();
 
     ImGui::End();
 }
@@ -369,9 +377,7 @@ main(int argc, char* argv[])
 
     load_configuration();
 
-    for (std::string file : files) {
-        open_file_action(files);
-    }
+    open_file_action(files);
 
     int width = 1080;
     int height = 576;
@@ -1072,9 +1078,9 @@ void PreviewDialog(QWidget* parent,
 void status_bar(void)
 {
     ImGuiIO &io = ImGui::GetIO();
-    ImGui::SetNextWindowSize(ImVec2(io.DisplaySize.x, 50));
-    ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x, io.DisplaySize.y - 50));
-    ImGui::BeginChild("Statusbar");
+    //ImGui::SetNextWindowSize(ImVec2(50, 100));
+    // ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x, io.DisplaySize.y - 50));
+    //ImGui::BeginChild("Statusbar");
     if (ImGui::Button("SNAP")) {
         views[pattern_index].snap_mode = !views[pattern_index].snap_mode;
         /* change button depressed state */
@@ -1112,7 +1118,7 @@ void status_bar(void)
 
     // statusBarMouseCoord->setMinimumWidth(300); // Must fit this text always
     // statusBarMouseCoord->setMaximumWidth(300); // "+1.2345E+99, +1.2345E+99, +1.2345E+99"
-    ImGui::EndChild();
+    //ImGui::EndChild();
 }
 
 
