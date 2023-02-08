@@ -20,37 +20,41 @@
 #include <sstream>
 
 /* Need validation for the input number before applying to object.
- & and to add to undo history
+ * and to add to undo history
  */
 void show_double(std::string label, double data);
 
-void create_group_box_general(void);
+void create_group_box_general(EmbPattern *pattern);
 void create_group_box_arc(int id, EmbArc *arc);
-void create_group_box_block(int id);
+void create_group_box_block(int id, EmbBlock *block);
 void create_group_box_circle(int id, EmbCircle *circle);
-void create_group_box_dim_aligned(int id);
-void create_group_box_dim_angular(int id);
-void create_group_box_dim_arc_length(int id);
-void create_group_box_dim_diameter(int id);
-void create_group_box_dim_leader(int id);
-void create_group_box_dim_linear(int id);
-void create_group_box_dim_ordinate(int id);
-void create_group_box_dim_radius(int id);
-void create_group_box_ellipse(int id);
-void create_group_box_image(int id);
-void create_group_box_misc_image(int image_index);
-void create_group_box_infinite_line(int infinite_line_index);
-void create_group_box_line(EmbLine *line);
-void create_group_box_path(int id);
-void create_group_box_misc_path(int id);
-void create_group_box_point(int id);
-void create_group_box_polygon(int id);
-void create_group_box_polyline(int id);
-void create_group_box_misc_polyline(int id);
-void create_group_box_ray(int id);
-void create_group_box_rectangle(int id);
-void create_group_box_text_multi(int id);
-void create_group_box_text_single(int id);
+void create_group_box_dim_aligned(int id, EmbAlignedDim *dim_aligned);
+void create_group_box_dim_angular(int id, EmbAngularDim *dim_angular);
+void create_group_box_dim_arc_length(int id, EmbArcLengthDim *dim_arc_length);
+void create_group_box_dim_diameter(int id, EmbDiameterDim *dim_diameter);
+void create_group_box_dim_leader(int id, EmbLeaderDim *dim_leader);
+void create_group_box_dim_linear(int id, EmbLinearDim *dim_linear);
+void create_group_box_dim_ordinate(int id, EmbOrdinateDim *dim_ordinate);
+void create_group_box_dim_radius(int id, EmbRadiusDim *dim_radius);
+void create_group_box_ellipse(int id, EmbEllipse *ellipse);
+void create_group_box_image(int id, EmbImage *image);
+void create_group_box_infinite_line(int id, EmbInfiniteLine *infinite_line);
+void create_group_box_line(int id, EmbLine *line);
+void create_group_box_path(int id, EmbPath *path);
+void create_group_box_point(int id, EmbPoint *point);
+void create_group_box_polygon(int id, EmbPolygon *polygon);
+void create_group_box_polyline(int id, EmbPolyline *polyline);
+void create_group_box_ray(int id, EmbRay *ray);
+void create_group_box_rectangle(int id, EmbRect *rect);
+void create_group_box_text_multi(int id, EmbTextMulti *text_multi);
+void create_group_box_text_single(int id, EmbTextSingle *text_single);
+
+void show_double(std::string label, double data)
+{
+    ImGui::Text(translate(label).c_str());
+    ImGui::SameLine();
+    ImGui::Text(std::to_string(data).c_str());
+}
 
 void
 property_editor(void)
@@ -62,7 +66,6 @@ property_editor(void)
     EmbPattern *pattern = views[settings.pattern_index].pattern;
 
     ImGui::BeginChild((translate("Property Editor") + views[settings.pattern_index].filename).c_str());
-    ImGui::SetWindowFontScale(1.5);
     ImGui::Text(translate("Properties").c_str());
     /*
     propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable
@@ -71,31 +74,10 @@ property_editor(void)
 
     precisionAngle  = 0; //TODO: Load this from settings and provide function for updating from settings
     precisionLength = 4; //TODO: Load this from settings and provide function for updating from settings
-
-    signalMapper = new QSignalMapper(this);
-
-    fieldOldText    = "";
-    fieldNewText    = "";
-    fieldVariesText = "*Varies*";
-    fieldYesText = "Yes";
-    fieldNoText = "No";
-    fieldOnText = "On";
-    fieldOffText = "Off";
-
-    QWidget* widgetMain = new QWidget(this);
-
-    QWidget* widgetSelection = new QWidget(this);
-    QHBoxLayout* hboxLayoutSelection = new QHBoxLayout(this);
-    hboxLayoutSelection->addWidget(createComboBoxSelected());
-    hboxLayoutSelection->addWidget(createToolButtonQSelect());
-    hboxLayoutSelection->addWidget(createToolButtonPickAdd());
-    widgetSelection->setLayout(hboxLayoutSelection);
-
-    QScrollArea* scrollProperties = new QScrollArea(this);
-    QWidget* widgetProperties = new QWidget(this);
     */
+
     if (0) {
-        create_group_box_general();
+        create_group_box_general(pattern);
     }
 
     if (pattern->arcs) {
@@ -106,7 +88,7 @@ property_editor(void)
     }
 
     if (0) {
-        create_group_box_block(0);
+        create_group_box_block(0, NULL);
     }
 
     if (pattern->circles) {
@@ -117,108 +99,106 @@ property_editor(void)
     }
 
     if (0) {
-        create_group_box_dim_aligned(0);
+        create_group_box_dim_aligned(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_angular(0);
+        create_group_box_dim_angular(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_arc_length(0);
+        create_group_box_dim_arc_length(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_diameter(0);
+        create_group_box_dim_diameter(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_leader(0);
+        create_group_box_dim_leader(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_linear(0);
+        create_group_box_dim_linear(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_ordinate(0);
+        create_group_box_dim_ordinate(0, NULL);
     }
 
     if (0) {
-        create_group_box_dim_radius(0);
+        create_group_box_dim_radius(0, NULL);
+    }
+
+    if (pattern->ellipses) {
+        for (int i=0; i<pattern->ellipses->count; i++) {
+            EmbEllipse *ellipse = &(pattern->ellipses->ellipse[i]);
+            create_group_box_ellipse(i, ellipse);
+        }
     }
 
     if (0) {
-        create_group_box_ellipse(0);
+        create_group_box_image(0, NULL);
     }
 
     if (0) {
-        create_group_box_image(0);
-    }
-
-    if (0) {
-        create_group_box_infinite_line(0);
+        create_group_box_infinite_line(0, NULL);
     }
 
     if (pattern->lines) {
         for (int i=0; i<pattern->lines->count; i++) {
             EmbLine *line = &(pattern->lines->line[i]);
-            create_group_box_line(line);
+            create_group_box_line(i, line);
+        }
+    }
+
+    if (pattern->paths) {
+        for (int i=0; i<pattern->paths->count; i++) {
+            EmbPath *path = &(pattern->paths->path[i]);
+            create_group_box_path(i, path);
+        }
+    }
+
+    if (pattern->points) {
+        for (int i=0; i<pattern->points->count; i++) {
+            EmbPoint *point = &(pattern->points->point[i]);
+            create_group_box_point(i, point);
+        }
+    }
+
+    if (pattern->polygons) {
+        for (int i=0; i<pattern->polygons->count; i++) {
+            EmbPolygon *polygon = &(pattern->polygons->polygon[i]);
+            create_group_box_polygon(i, polygon);
+        }
+    }
+
+    if (pattern->polylines) {
+        for (int i=0; i<pattern->polylines->count; i++) {
+            EmbPolyline *polyline = &(pattern->polylines->polyline[i]);
+            create_group_box_polyline(i, polyline);
         }
     }
 
     if (0) {
-        create_group_box_path(0);
-        create_group_box_misc_path(0);
+        create_group_box_ray(0, NULL);
+    }
+
+    if (pattern->rects) {
+        for (int i=0; i<pattern->rects->count; i++) {
+            EmbRect *rect = &(pattern->rects->rect[i]);
+            create_group_box_rectangle(i, rect);
+        }
     }
 
     if (0) {
-        create_group_box_point(0);
+        create_group_box_text_multi(0, NULL);
     }
 
     if (0) {
-        create_group_box_polygon(0);
+        create_group_box_text_single(0, NULL);
     }
 
-    if (0) {
-        create_group_box_polyline(0);
-        create_group_box_misc_polyline(0);
-    }
-
-    if (0) {
-        create_group_box_ray(0);
-    }
-
-    if (0) {
-        create_group_box_rectangle(0);
-    }
-
-    if (0) {
-        create_group_box_text_multi(0);
-    }
-
-    if (0) {
-        create_group_box_text_single(0);
-    }
-
-    /*
-    vboxLayoutProperties->addStretch(1);
-    widgetProperties->setLayout(vboxLayoutProperties);
-    scrollProperties->setWidget(widgetProperties);
-    scrollProperties->setWidgetResizable(true);
-
-    QVBoxLayout* vboxLayoutMain = new QVBoxLayout(this);
-    vboxLayoutMain->addWidget(widgetSelection);
-    vboxLayoutMain->addWidget(scrollProperties);
-    widgetMain->setLayout(vboxLayoutMain);
-
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-
-    connect(signalMapper, SIGNAL(mapped(QObject*)), this, SLOT(fieldEdited(QObject*)));
-
-    focusWidget = widgetToFocus;
-    this->installEventFilter(this);
-    */
     ImGui::EndChild();
 }
 
@@ -897,10 +877,10 @@ void create_group_box_arc(int id, EmbArc *arc)
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        show_double("Start X", arc->end.x);
-        show_double("Start Y", arc->end.y);
-        show_double("Mid X", arc->end.x);
-        show_double("Mid Y", arc->end.y);
+        show_double("Start X", arc->start.x);
+        show_double("Start Y", arc->start.y);
+        show_double("Mid X", arc->mid.x);
+        show_double("Mid Y", arc->mid.y);
         show_double("End X", arc->end.x);
         show_double("End Y", arc->end.y);
 
@@ -944,10 +924,6 @@ void create_group_box_arc(int id, EmbArc *arc)
         toolButtonArcClockwise = createToolButton("blank", translate("Clockwise")); 
 
         comboBoxArcClockwise = createComboBox(true);
-
-        QFormLayout* formLayout = new QFormLayout(this);
-        formLayout->addRow(toolButtonArcClockwise,  comboBoxArcClockwise);
-        groupBoxMiscArc->setLayout(formLayout);
         */
     }
 }
@@ -1063,109 +1039,94 @@ void create_group_box_dim_radius(int id)
     }
 }
 
-void create_group_box_ellipse(int id)
+void create_group_box_ellipse(int id, EmbEllipse *ellipse)
 {
     std::string label = translate("Ellipse") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        /*
-        toolButtonEllipseCenterX       = createToolButton("blank", translate("Center X"));       
-        toolButtonEllipseCenterY       = createToolButton("blank", translate("Center Y"));       
-        toolButtonEllipseRadiusMajor   = createToolButton("blank", translate("Major Radius"));   
-        toolButtonEllipseRadiusMinor   = createToolButton("blank", translate("Minor Radius"));   
-        toolButtonEllipseDiameterMajor = createToolButton("blank", translate("Major Diameter")); 
-        toolButtonEllipseDiameterMinor = createToolButton("blank", translate("Minor Diameter")); 
-
-        lineEditEllipseCenterX       = createLineEdit("double", false);
-        lineEditEllipseCenterY       = createLineEdit("double", false);
-        lineEditEllipseRadiusMajor   = createLineEdit("double", false);
-        lineEditEllipseRadiusMinor   = createLineEdit("double", false);
-        lineEditEllipseDiameterMajor = createLineEdit("double", false);
-        lineEditEllipseDiameterMinor = createLineEdit("double", false);
-        */
+        edit_double(translate("Center X"), &(ellipse->center.x));
+        edit_double(translate("Center Y"), &(ellipse->center.y));
+        edit_double(translate("Major Radius"), &(ellipse->radius.x));
+        edit_double(translate("Minor Radius"), &(ellipse->radius.y));
+        show_double(translate("Major Diameter"), 2.0*ellipse->radius.x);
+        show_double(translate("Minor Diameter"), 2.0*ellipse->radius.y);
     }
 }
 
-void create_group_box_image(int id)
+void create_group_box_image(int id, EmbImage *image)
 {
     std::string label = translate("Image") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        /*
-        toolButtonImageX      = createToolButton("blank", translate("Position X")); 
-        toolButtonImageY      = createToolButton("blank", translate("Position Y")); 
-        toolButtonImageWidth  = createToolButton("blank", translate("Width"));      
-        toolButtonImageHeight = createToolButton("blank", translate("Height"));     
-
-        lineEditImageX      = createLineEdit("double", false);
-        lineEditImageY      = createLineEdit("double", false);
-        lineEditImageWidth  = createLineEdit("double", false);
-        lineEditImageHeight = createLineEdit("double", false);*/
+        edit_double(translate("Position X"), &(image->position.x));
+        edit_double(translate("Position Y"), &(image->position.y));
+        //edit_double(translate("Width"), &(image->width));
+        //edit_double(translate("Height"), &(image->height));
 
         ImGui::Text(translate("Misc").c_str());
 
-        /*
-        toolButtonImageName = createToolButton("blank", translate("Name")); 
-        toolButtonImagePath = createToolButton("blank", translate("Path")); 
+        ImGui::Text(translate("Name").c_str());
+        ImGui::SameLine();
+        ImGui::Text(image->name);
 
-        lineEditImageName = createLineEdit("double", true);
-        lineEditImagePath = createLineEdit("double", true);*/
+        ImGui::Text(translate("Path").c_str());
+        ImGui::SameLine();
+        ImGui::Text(image->path);
     }
 }
 
 void create_group_box_infinite_line(int id)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    std::string label = translate("Infinite Line") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
 
-    /*
-    toolButtonInfiniteLineX1      = createToolButton("blank", translate("Start X"));  
-    toolButtonInfiniteLineY1      = createToolButton("blank", translate("Start Y"));  
-    toolButtonInfiniteLineX2      = createToolButton("blank", translate("2nd X"));    
-    toolButtonInfiniteLineY2      = createToolButton("blank", translate("2nd Y"));    
-    toolButtonInfiniteLineVectorX = createToolButton("blank", translate("Vector X")); 
-    toolButtonInfiniteLineVectorY = createToolButton("blank", translate("Vector Y")); 
+        /*
+        toolButtonInfiniteLineX1      = createToolButton("blank", translate("Start X"));  
+        toolButtonInfiniteLineY1      = createToolButton("blank", translate("Start Y"));  
+        toolButtonInfiniteLineX2      = createToolButton("blank", translate("2nd X"));    
+        toolButtonInfiniteLineY2      = createToolButton("blank", translate("2nd Y"));    
+        toolButtonInfiniteLineVectorX = createToolButton("blank", translate("Vector X")); 
+        toolButtonInfiniteLineVectorY = createToolButton("blank", translate("Vector Y")); 
 
-    lineEditInfiniteLineX1      = createLineEdit("double", false);
-    lineEditInfiniteLineY1      = createLineEdit("double", false);
-    lineEditInfiniteLineX2      = createLineEdit("double", false);
-    lineEditInfiniteLineY2      = createLineEdit("double", false);
-    lineEditInfiniteLineVectorX = createLineEdit("double", true);
-    lineEditInfiniteLineVectorY = createLineEdit("double", true);
-    */
+        lineEditInfiniteLineX1      = createLineEdit("double", false);
+        lineEditInfiniteLineY1      = createLineEdit("double", false);
+        lineEditInfiniteLineX2      = createLineEdit("double", false);
+        lineEditInfiniteLineY2      = createLineEdit("double", false);
+        lineEditInfiniteLineVectorX = createLineEdit("double", true);
+        lineEditInfiniteLineVectorY = createLineEdit("double", true);
+        */
+    }
 }
 
-void show_double(std::string label, double data)
+void create_group_box_line(int id, EmbLine *line)
 {
-    ImGui::Text(translate(label).c_str());
-    ImGui::SameLine();
-    ImGui::Text(std::to_string(data).c_str());
+    std::string label = translate("Line") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::Text(translate("Geometry").c_str());
+
+        // TODO: icons
+        ImGui::Text(translate("Start X").c_str());
+        ImGui::InputDouble("Start X", &(line->start.x), line->start.x);
+        ImGui::Text(translate("Start Y").c_str());
+        ImGui::InputDouble("Start Y", &(line->start.y), line->start.y);
+        ImGui::Text(translate("End X").c_str());
+        ImGui::InputDouble("End Y", &(line->end.y), line->end.y);
+        ImGui::Text(translate("End Y").c_str());
+        ImGui::InputDouble("End Y", &(line->end.y), line->end.y);
+
+        EmbVector delta;
+        embVector_subtract(line->end, line->start, &delta);
+        show_double("Delta X", delta.x);
+        show_double("Delta Y", delta.y);
+        show_double("Angle", embVector_angle(delta));
+        show_double("Length", embVector_length(delta));
+    }
 }
 
-void create_group_box_line(EmbLine *line)
-{
-    ImGui::Text(translate("Geometry").c_str());
-
-    // TODO: icons
-    ImGui::Text(translate("Start X").c_str());
-    ImGui::InputDouble("Start X", &(line->start.x), line->start.x);
-    ImGui::Text(translate("Start Y").c_str());
-    ImGui::InputDouble("Start Y", &(line->start.y), line->start.y);
-    ImGui::Text(translate("End X").c_str());
-    ImGui::InputDouble("End Y", &(line->end.y), line->end.y);
-    ImGui::Text(translate("End Y").c_str());
-    ImGui::InputDouble("End Y", &(line->end.y), line->end.y);
-
-    EmbVector delta;
-    embVector_subtract(line->end, line->start, &delta);
-    show_double("Delta X", delta.x);
-    show_double("Delta Y", delta.y);
-    show_double("Angle", embVector_angle(delta));
-    show_double("Length", embVector_length(delta));
-}
-
-void create_group_box_path(int id)
+void create_group_box_path(int id, EmbPath *path)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1188,16 +1149,10 @@ void create_group_box_path(int id)
     toolButtonPathClosed = createToolButton("blank", translate("Closed")); 
 
     comboBoxPathClosed = createComboBox(false);
-
-    //TODO: mapSignal for paths
-
-    QFormLayout* formLayout = new QFormLayout(this);
-    formLayout->addRow(toolButtonPathClosed, comboBoxPathClosed);
-    groupBoxMiscPath->setLayout(formLayout);
     */
 }
 
-void create_group_box_point(int id)
+void create_group_box_point(int id, EmbPoint *point)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1210,7 +1165,7 @@ void create_group_box_point(int id)
     */
 }
 
-void create_group_box_polygon(int id)
+void create_group_box_polygon(int id, EmbPolygon *polygon)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1233,7 +1188,7 @@ void create_group_box_polygon(int id)
     */
 }
 
-void create_group_box_polyline(int id)
+void create_group_box_polyline(int id, EmbPolyline *polyline)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1257,16 +1212,10 @@ void create_group_box_polyline(int id)
     toolButtonPolylineClosed = createToolButton("blank", translate("Closed")); 
 
     comboBoxPolylineClosed = createComboBox(false);
-
-    //TODO: mapSignal for polylines
-
-    QFormLayout* formLayout = new QFormLayout(this);
-    formLayout->addRow(toolButtonPolylineClosed, comboBoxPolylineClosed);
-    groupBoxMiscPolyline->setLayout(formLayout);
-*/
+    */
 }
 
-void create_group_box_ray(int id)
+void create_group_box_ray(int id, EmbRay *ray)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1286,7 +1235,7 @@ void create_group_box_ray(int id)
     lineEditRayVectorY = createLineEdit("double", true);*/
 }
 
-void create_group_box_rectangle(int id)
+void create_group_box_rectangle(int id, EmbRect *rect)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1316,7 +1265,7 @@ void create_group_box_rectangle(int id)
     lineEditRectangleArea     = createLineEdit("double", true);*/
 }
 
-void create_group_box_text_multi(int id)
+void create_group_box_text_multi(int id, EmbTextMulti *text_multi)
 {
     ImGui::Text(translate("Geometry").c_str());
 
@@ -1328,7 +1277,7 @@ void create_group_box_text_multi(int id)
     lineEditTextMultiY = createLineEdit("double", false);*/
 }
 
-void create_group_box_text_single(int id)
+void create_group_box_text_single(int id, EmbTextSingle *text_single)
 {
     ImGui::Text(translate("Text").c_str());
 
