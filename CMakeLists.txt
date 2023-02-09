@@ -82,7 +82,7 @@ set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
 set(EXEC_DIR "C:/Program Files/embroidermodder")
 set(ASSETS_DIR "C:/ProgramData/embroidermodder")
 else (WIN32)
-target_link_libraries(imgui_embroidermodder PUBLIC m)
+target_link_libraries(embroidermodder PUBLIC m)
 
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 set(EXEC_DIR "/usr/bin")
