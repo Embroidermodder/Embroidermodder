@@ -2,9 +2,7 @@
 
 (UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR THE BETA TEST BUILDS.)
 
-[![GNU/Linux](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/gnu-linux.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/gnu-linux.yml)
-[![MacOS](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/macos.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/macos.yml)
-[![Windows](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/windows.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/windows.yml)
+[![Build](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml/badge.svg)](https://github.com/Embroidermodder/Embroidermodder/actions/workflows/build.yml)
 
 http://www.libembroidery.org
 
