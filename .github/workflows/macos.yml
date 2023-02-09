@@ -6,7 +6,7 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-    - name: build the linux version
+    - name: build the mac os version
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
@@ -14,5 +14,5 @@ jobs:
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: embroidermodder-2.0.0-alpha-linux
-        path: Embroidermodder
+        name: embroidermodder-2.0.0-alpha-macos
+        path: embroidermodder
