@@ -18,19 +18,15 @@
 #include <toml.hpp>
 
 /*
-#if defined(Q_OS_UNIX) || defined(Q_OS_MAC)
 std::string settingsDir = QDir::homePath() + "/.embroidermodder2/";
-#else
-std::string settingsDir = "";
-#endif
-std::string defaultsPath = "./defaults.toml";
-std::string settingsPath = settingsDir + "settings.toml";
 */
+
+// This file needs to be read from the users home directory to ensure it is writable
+std::string settings_dir = "./";
+std::string settings_file = settings_dir + "settings.toml";
 
 /* The actuator changes the program state via these global variables.
  */
-float output;
-
 Settings settings = {
     .running = true,
     .debug_mode = true,
@@ -38,6 +34,7 @@ Settings settings = {
     .show_settings_editor = false,
     .show_editor = false,
     .icon_size = 16,
+    .icon_theme = "default",
     .pattern_index = 0,
     .assets_dir = "../assets/",
     .use_translation = false,
@@ -45,8 +42,158 @@ Settings settings = {
     .mdi_bg_use_logo = true,
     .mdi_bg_use_texture = true,
     .mdi_bg_use_color = true,
-    .tip_of_the_day = 0
+    .general_mdi_bg_logo = "./images/logo-spirals.png",
+    .general_mdi_bg_texture = "./images/texture-spirals.png",
+    .general_mdi_bg_color = 0xAAAAAAFF,
+    .tip_of_the_day = true,
+    .general_current_tip = 0,
+    .general_system_help_browser = true,
+    .display_use_opengl = false,
+    .display_renderhint_aa = false,
+    .display_renderhint_text_aa = false,
+    .display_renderhint_smooth_pix = false,
+    .display_renderhint_high_aa = false,
+    .display_renderhint_noncosmetic = false,
+    .display_show_scrollbars = true,
+    .display_scrollbar_widget_num = 0,
+    .display_crosshair_color = 0x000000FF,
+    .display_bg_color = 0xEEEEEEFF,
+    .display_selectbox_left_color = 0x008000FF,
+    .display_selectbox_left_fill = 0x00FF00FF,
+    .display_selectbox_right_color = 0x000080FF,
+    .display_selectbox_right_fill = 0x0000FFFF,
+    .display_selectbox_alpha = 32,
+    .display_zoomscale_in = 2.0,
+    .display_zoomscale_out = 0.5,
+    .display_crosshair_percent = 5,
+    .display_units = "mm",
+    .prompt_text_color = 0x000000FF,
+    .prompt_bg_color = 0xFFFFFFFF,
+    .prompt_font_family = "Monospace",
+    .prompt_font_style = "normal",
+    .prompt_font_size = 12,
+    .prompt_save_history = true,
+    .prompt_save_history_as_html = false,
+    .prompt_save_history_filename = settings_dir + "prompt.log",
+    .opensave_custom_filter = "supported",
+    .opensave_open_format = "*.*",
+    .opensave_open_thumbnail = false,
+    .opensave_save_format = "*.*",
+    .opensave_save_thumbnail = false,
+    .opensave_recent_max_files = 10,
+    // .opensave_recent_list_of_files = {},
+    .opensave_recent_directory = "./samples",
+    .opensave_trim_dst_num_jumps = 5,
+    .printing_default_device = "",
+    .printing_use_last_device = false,
+    .printing_disable_bg = true,
+    .grid_show_on_load = true,
+    .grid_show_origin = true,
+    .grid_color_match_crosshair = true,
+    .grid_color = 0x000000FF,
+    .grid_load_from_file = true,
+    .grid_type = "Rectangular",
+    .grid_center_on_origin = true,
+    .grid_center_x = 0.0,
+    .grid_center_y = 0.0,
+    .grid_size_x = 100.0,
+    .grid_size_y = 100.0,
+    .grid_spacing_x = 25.0,
+    .grid_spacing_y = 25.0,
+    .grid_size_radius = 50.0,
+    .grid_spacing_radius = 25.0,
+    .grid_spacing_angle = 45.0,
+    .ruler_show_on_load = true,
+    .ruler_metric = true,
+    .ruler_color = 0xAAAA55FF, //qRgb(210,210, 50);
+    .ruler_pixel_size = 20,
+    .qsnap_enabled = true,
+    .qsnap_locator_color = 0xFFFF00FF,
+    .qsnap_locator_size = 4,
+    .qsnap_aperture_size = 10,
+    .qsnap_endpoint = true,
+    .qsnap_midpoint = true,
+    .qsnap_center = true,
+    .qsnap_node = true,
+    .qsnap_quadrant = true,
+    .qsnap_intersection = true,
+    .qsnap_extension = true,
+    .qsnap_insertion = false,
+    .qsnap_perpendicular = true,
+    .qsnap_tangent = true,
+    .qsnap_nearest = false,
+    .qsnap_apparent = false,
+    .qsnap_parallel = false,
+    .lwt_show_lwt = false,
+    .lwt_real_render = true,
+    .lwt_default_lwt = 0,
+    .selection_mode_pickfirst = true,
+    .selection_mode_pickadd = true,
+    .selection_mode_pickdrag = false,
+    .selection_coolgrip_color = 0x0000FFFF,
+    .selection_hotgrip_color = 0xFF0000FF,
+    .selection_grip_size = 4,
+    .selection_pickbox_size = 4,
+    .text_font  = "Arial",
+    .text_size = 12,
+    .text_angle = 0,
+    .text_style_bold = false,
+    .text_style_italic = false,
+    .text_style_underline = false,
+    .text_style_overline = false,
+    .text_style_strikeout = false
 };
+
+void read_setting(toml::value table, std::string key, std::string *s)
+{
+    if (table.contains(key)) {
+        *s = toml::find<std::string>(table, key);
+    }
+}
+
+void read_setting(toml::value table, std::string key, int *i)
+{
+    if (table.contains(key)) {
+        *i = toml::find<int>(table, key);
+    }
+}
+
+void read_setting(toml::value table, std::string key, bool *b)
+{
+    if (table.contains(key)) {
+        *b = toml::find<bool>(table, key);
+    }
+}
+
+void write_setting(FILE *file, std::string key, float value)
+{
+    fprintf(file, "%s=%f\n", key.c_str(), value);
+}
+
+void write_setting(FILE *file, std::string key, int value)
+{
+    fprintf(file, "%s=%d\n", key.c_str(), value);
+}
+
+void write_setting(FILE *file, std::string key, unsigned int value)
+{
+    fprintf(file, "%s=%u\n", key.c_str(), value);
+}
+
+void write_setting(FILE *file, std::string key, std::string value)
+{
+    fprintf(file, "%s=\"%s\"\n", key.c_str(), value.c_str());
+}
+
+void write_setting(FILE *file, std::string key, bool value)
+{
+    if (value) {
+        fprintf(file, "%s=true\n", key.c_str());
+    }
+    else {
+        fprintf(file, "%s=false\n", key.c_str());
+    }    
+}
 
 string_matrix
 load_string_matrix(toml::value config, std::string menu_name)
@@ -106,14 +253,8 @@ load_configuration(void)
         if (s == "menu-item") {
         }
     }
-}
 
-#if 0
-
-void load_configuration(void)
-{
-    auto config = toml::parse("config.toml");
-
+    /*
     for (auto &[i, j] : config.as_table()) {
         if (!config[i].is_table()) {
             continue;
@@ -159,8 +300,6 @@ void load_configuration(void)
         }
     }
 
-    /*
-
     if (toolbarName.toUpper() != "NONE") {
         //If the toolbar doesn't exist, create it.
         if (!toolbarHash.value(toolbarName)) {
@@ -178,136 +317,17 @@ void load_configuration(void)
     */
 }
 
-void readSettings()
+void read_settings(void)
 {
-    load_configuration();
-
     debug_message("Reading Settings...");
-    // This file needs to be read from the users home directory to ensure it is writable
+    /*
     EmbVector pos(0,0);
     QSize size(800,600);
 
-    /* some layout state recording? */
-    settings.general_language = "default";
-    settings.general_icon_theme = "default";
-    settings.general_icon_size = 16;
-    settings.general_mdi_bg_use_logo = true;
-    settings.general_mdi_bg_use_texture = true;
-    settings.general_mdi_bg_use_color = true;
-    settings.general_mdi_bg_logo = "./images/logo-spirals.png";
-    settings.general_mdi_bg_texture = "./images/texture-spirals.png";
-    settings.general_mdi_bg_color = qRgb(192,192,192);
-    settings.general_tip_of_the_day = true;
-    settings.general_current_tip = 0;
-    settings.general_system_help_browser = true;
-    //Display
-    settings.display_use_opengl = false;
-    settings.display_renderhint_aa = false;
-    settings.display_renderhint_text_aa = false;
-    settings.display_renderhint_smooth_pix = false;
-    settings.display_renderhint_high_aa = false;
-    settings.display_renderhint_noncosmetic = false;
-    settings.display_show_scrollbars = true;
-    settings.display_scrollbar_widget_num = 0;
-    settings.display_crosshair_color = qRgb(  0, 0, 0) ;
-    settings.display_bg_color = qRgb(235,235,235) ;
-    settings.display_selectbox_left_color = qRgb(  0,128, 0) ;
-    settings.display_selectbox_left_fill = qRgb(  0,255, 0) ;
-    settings.display_selectbox_right_color = qRgb(  0, 0,128) ;
-    settings.display_selectbox_right_fill = qRgb(  0, 0,255) ;
-    settings.display_selectbox_alpha = 32;
-    settings.display_zoomscale_in = 2.0;
-    settings.display_zoomscale_out = 0.5;
-    settings.display_crosshair_percent = 5;
-    settings.display_units = "mm";
-    //Prompt
-    settings.prompt_text_color = qRgb(  0, 0, 0) ;
-    settings.prompt_bg_color = qRgb(255,255,255) ;
-    settings.prompt_font_family = "Monospace";
-    settings.prompt_font_style = "normal";
-    settings.prompt_font_size = 12;
-    settings.prompt_save_history = true;
-    settings.prompt_save_history_as_html = false;
-    settings.prompt_save_history_filename = settingsDir + "prompt.log";
-    //OpenSave
-    settings.opensave_custom_filter = "supported";
-    settings.opensave_open_format = "*.*";
-    settings.opensave_open_thumbnail = false;
-    settings.opensave_save_format = "*.*";
-    settings.opensave_save_thumbnail = false;
-    //Recent
-    settings.opensave_recent_max_files = 10;
-    settings.opensave_recent_list_of_files = {};
-    settings.opensave_recent_directory = "./samples";
-    //Trimming
-    settings.opensave_trim_dst_num_jumps = 5;
-    //Printing
-    settings.printing_default_device = "";
-    settings.printing_use_last_device = false;
-    settings.printing_disable_bg = true;
-    //Grid
-    settings.grid_show_on_load = true;
-    settings.grid_show_origin = true;
-    settings.grid_color_match_crosshair = true;
-    settings.grid_color = qRgb(  0, 0, 0);
-    settings.grid_load_from_file = true;
-    settings.grid_type = "Rectangular";
-    settings.grid_center_on_origin = true;
-    settings.grid_center_x = 0.0;
-    settings.grid_center_y = 0.0;
-    settings.grid_size_x = 100.0;
-    settings.grid_size_y = 100.0;
-    settings.grid_spacing_x = 25.0;
-    settings.grid_spacing_y = 25.0;
-    settings.grid_size_radius = 50.0;
-    settings.grid_spacing_radius = 25.0;
-    settings.grid_spacing_angle = 45.0;
-    //Ruler
-    settings.ruler_show_on_load = true;
-    settings.ruler_metric = true;
-    settings.ruler_color = qRgb(210,210, 50);
-    settings.ruler_pixel_size = 20;
-    //Quick Snap
-    settings.qsnap_enabled = true;
-    settings.qsnap_locator_color = qRgb(255,255, 0);
-    settings.qsnap_locator_size = 4;
-    settings.qsnap_aperture_size = 10;
-    settings.qsnap_endpoint = true;
-    settings.qsnap_midpoint = true;
-    settings.qsnap_center = true;
-    settings.qsnap_node = true;
-    settings.qsnap_quadrant = true;
-    settings.qsnap_intersection = true;
-    settings.qsnap_extension = true;
-    settings.qsnap_insertion = false;
-    settings.qsnap_perpendicular = true;
-    settings.qsnap_tangent = true;
-    settings.qsnap_nearest = false;
-    settings.qsnap_apparent = false;
-    settings.qsnap_parallel = false;
-    //LineWeight
-    settings.lwt_show_lwt = false;
-    settings.lwt_real_render = true;
-    settings.lwt_default_lwt = 0;
-    //Selection
-    settings.selection_mode_pickfirst = true;
-    settings.selection_mode_pickadd = true;
-    settings.selection_mode_pickdrag = false;
-    settings.selection_coolgrip_color = qRgb(  0, 0,255);
-    settings.selection_hotgrip_color = qRgb(255, 0, 0);
-    settings.selection_grip_size = 4;
-    settings.selection_pickbox_size = 4;
-    //Text
-    settings.text_font  = "Arial";
-    settings.text_size = 12;
-    settings.text_angle = 0;
-    settings.text_style_bold = false;
-    settings.text_style_italic = false;
-    settings.text_style_underline = false;
-    settings.text_style_strikeout = false;
-    settings.text_style_overline = false;
+    some layout state recording? */
 
-    auto setting_toml = toml::parse(defaultsPath);
+    toml::value setting_toml = toml::parse(settings_file);
+    /*
     if (setting_toml.contains("window")) {
         toml::value table = toml::find<toml::value>(setting_toml, "window");
         if (table.contains("position-x")) {
@@ -323,149 +343,286 @@ void readSettings()
             size.setHeight(toml::find<int>(table, "size_y"));
         }
     }
+    */
 
     if (setting_toml.contains("general")) {
         toml::value table = toml::find<toml::value>(setting_toml, "general");
-        settings.general_language = std::string::fromStdString(toml::find<std::string>(table, "language"));
-        settings.general_icon_theme = std::string::fromStdString(toml::find<std::string>(table, "icon_theme"));
+        read_setting(table, "language", &(settings.language));
+        read_setting(table, "icon_size", &(settings.icon_size));
+        read_setting(table, "icon_theme", &(settings.icon_theme));
+        read_setting(table, "use_translation", &(settings.use_translation));
+        read_setting(table, "mdi_bg_use_logo", &(settings.mdi_bg_use_logo));
+        read_setting(table, "mdi_bg_use_texture", &(settings.mdi_bg_use_texture));
+        read_setting(table, "mdi_bg_use_color", &(settings.mdi_bg_use_color));
+        /*
+        settings.general_mdi_bg_logo = toml::find<std::string>(table, "mdi_bg_logo");
+        settings.general_mdi_bg_texture = toml::find<std::string>(table, "mdi_bg_texture");
+        settings.general_mdi_bg_color = toml::find<int>(table, "mdi_bg_color");
+        settings.tip_of_the_day = toml::find<bool>(table, "tip_of_the_day");
+        settings.general_current_tip = toml::find<bool>(table, "current_tip");
+        settings.general_system_help_browser = toml::find<bool>(table, "general_system_help_browser");
+        */
     }
 
+    /*
+    if (setting_toml.contains("display")) {
+        toml::value table = toml::find<toml::value>(setting_toml, "display");
+    }
+    */
+
+    /*
+    .display_use_opengl = false,
+    .display_renderhint_aa = false,
+    .display_renderhint_text_aa = false,
+    .display_renderhint_smooth_pix = false,
+    .display_renderhint_high_aa = false,
+    .display_renderhint_noncosmetic = false,
+    .display_show_scrollbars = true,
+    .display_scrollbar_widget_num = 0,
+    .display_crosshair_color = 0x000000FF,
+    .display_bg_color = 0xEEEEEEFF,
+    .display_selectbox_left_color = 0x008000FF,
+    .display_selectbox_left_fill = 0x00FF00FF,
+    .display_selectbox_right_color = 0x000080FF,
+    .display_selectbox_right_fill = 0x0000FFFF,
+    .display_selectbox_alpha = 32,
+    .display_zoomscale_in = 2.0,
+    .display_zoomscale_out = 0.5,
+    .display_crosshair_percent = 5,
+    .display_units = "mm",
+    .prompt_text_color = 0x000000FF,
+    .prompt_bg_color = 0xFFFFFFFF,
+    .prompt_font_family = "Monospace",
+    .prompt_font_style = "normal",
+    .prompt_font_size = 12,
+    .prompt_save_history = true,
+    .prompt_save_history_as_html = false,
+    .prompt_save_history_filename = settings_dir + "prompt.log",
+    .opensave_custom_filter = "supported",
+    .opensave_open_format = "*.*",
+    .opensave_open_thumbnail = false,
+    .opensave_save_format = "*.*",
+    .opensave_save_thumbnail = false,
+    .opensave_recent_max_files = 10,
+    // .opensave_recent_list_of_files = {},
+    .opensave_recent_directory = "./samples",
+    .opensave_trim_dst_num_jumps = 5,
+    .printing_default_device = "",
+    .printing_use_last_device = false,
+    .printing_disable_bg = true,
+    .grid_show_on_load = true,
+    .grid_show_origin = true,
+    .grid_color_match_crosshair = true,
+    .grid_color = 0x000000FF,
+    .grid_load_from_file = true,
+    .grid_type = "Rectangular",
+    .grid_center_on_origin = true,
+    .grid_center_x = 0.0,
+    .grid_center_y = 0.0,
+    .grid_size_x = 100.0,
+    .grid_size_y = 100.0,
+    .grid_spacing_x = 25.0,
+    .grid_spacing_y = 25.0,
+    .grid_size_radius = 50.0,
+    .grid_spacing_radius = 25.0,
+    .grid_spacing_angle = 45.0,
+    .ruler_show_on_load = true,
+    .ruler_metric = true,
+    .ruler_color = 0xAAAA55FF, //qRgb(210,210, 50);
+    .ruler_pixel_size = 20,
+    .qsnap_enabled = true,
+    .qsnap_locator_color = 0xFFFF00FF,
+    .qsnap_locator_size = 4,
+    .qsnap_aperture_size = 10,
+    .qsnap_endpoint = true,
+    .qsnap_midpoint = true,
+    .qsnap_center = true,
+    .qsnap_node = true,
+    .qsnap_quadrant = true,
+    .qsnap_intersection = true,
+    .qsnap_extension = true,
+    .qsnap_insertion = false,
+    .qsnap_perpendicular = true,
+    .qsnap_tangent = true,
+    .qsnap_nearest = false,
+    .qsnap_apparent = false,
+    .qsnap_parallel = false,
+    .lwt_show_lwt = false,
+    .lwt_real_render = true,
+    .lwt_default_lwt = 0,
+    .selection_mode_pickfirst = true,
+    .selection_mode_pickadd = true,
+    .selection_mode_pickdrag = false,
+    .selection_coolgrip_color = 0x0000FFFF,
+    .selection_hotgrip_color = 0xFF0000FF,
+    .selection_grip_size = 4,
+    .selection_pickbox_size = 4,
+    .text_font  = "Arial",
+    .text_size = 12,
+    .text_angle = 0,
+    .text_style_bold = false,
+    .text_style_italic = false,
+    .text_style_underline = false,
+    .text_style_overline = false,
+    .text_style_strikeout = false
+
     move(pos);
-    resize(size);
+    resize(size);*/
 }
 
-void writeSettings()
+void write_settings(void)
 {
     debug_message("Writing Settings...");
-    // This file needs to be read from the users home directory to ensure it is writable
-    QSettings settings(settingsPath, QSettings::IniFormat);
-    std::string tmp;
-    settings.setValue("Window/Position", pos());
-    settings.setValue("Window/Size", size());
+    FILE *file = fopen(settings_file.c_str(), "w");
 
-    //General
-    settings.setValue("LayoutState", layoutState);
-    settings.setValue("Language", settings.general_language);
-    settings.setValue("IconTheme", settings.general_icon_theme);
-    settings.setValue("IconSize", tmp.setNum(settings.general_icon_size));
-    settings.setValue("MdiBGUseLogo", settings.general_mdi_bg_use_logo);
-    settings.setValue("MdiBGUseTexture", settings.general_mdi_bg_use_texture);
-    settings.setValue("MdiBGUseColor", settings.general_mdi_bg_use_color);
-    settings.setValue("MdiBGLogo", settings.general_mdi_bg_logo);
-    settings.setValue("MdiBGTexture", settings.general_mdi_bg_texture);
-    settings.setValue("MdiBGColor", tmp.setNum(settings.general_mdi_bg_color));
-    settings.setValue("TipOfTheDay", settings.general_tip_of_the_day);
-    settings.setValue("CurrentTip", tmp.setNum(settings.general_current_tip + 1));
-    settings.setValue("SystemHelpBrowser", settings.general_system_help_browser);
-    //Display
-    settings.setValue("Display/UseOpenGL", settings.display_use_opengl);
-    settings.setValue("Display/RenderHintAntiAlias", settings.display_renderhint_aa);
-    settings.setValue("Display/RenderHintTextAntiAlias", settings.display_renderhint_text_aa);
-    settings.setValue("Display/RenderHintSmoothPixmap", settings.display_renderhint_smooth_pix);
-    settings.setValue("Display/RenderHintHighQualityAntiAlias", settings.display_renderhint_high_aa);
-    settings.setValue("Display/RenderHintNonCosmetic", settings.display_renderhint_noncosmetic);
-    settings.setValue("Display/ShowScrollBars", settings.display_show_scrollbars);
-    settings.setValue("Display/ScrollBarWidgetNum", tmp.setNum(settings.display_scrollbar_widget_num));
-    settings.setValue("Display/CrossHairColor", tmp.setNum(settings.display_crosshair_color));
-    settings.setValue("Display/BackgroundColor", tmp.setNum(settings.display_bg_color));
-    settings.setValue("Display/SelectBoxLeftColor", tmp.setNum(settings.display_selectbox_left_color));
-    settings.setValue("Display/SelectBoxLeftFill", tmp.setNum(settings.display_selectbox_left_fill));
-    settings.setValue("Display/SelectBoxRightColor", tmp.setNum(settings.display_selectbox_right_color));
-    settings.setValue("Display/SelectBoxRightFill", tmp.setNum(settings.display_selectbox_right_fill));
-    settings.setValue("Display/SelectBoxAlpha", tmp.setNum(settings.display_selectbox_alpha));
-    settings.setValue("Display/ZoomScaleIn", tmp.setNum(settings.display_zoomscale_in));
-    settings.setValue("Display/ZoomScaleOut", tmp.setNum(settings.display_zoomscale_out));
-    settings.setValue("Display/CrossHairPercent", tmp.setNum(settings.display_crosshair_percent));
-    settings.setValue("Display/Units", settings.display_units);
-    //Prompt
-    settings.setValue("Prompt/TextColor", tmp.setNum(settings.prompt_text_color));
-    settings.setValue("Prompt/BackgroundColor", tmp.setNum(settings.prompt_bg_color));
-    settings.setValue("Prompt/FontFamily", settings.prompt_font_family);
-    settings.setValue("Prompt/FontStyle", settings.prompt_font_style);
-    settings.setValue("Prompt/FontSize", tmp.setNum(settings.prompt_font_size));
-    settings.setValue("Prompt/SaveHistory", settings.prompt_save_history);
-    settings.setValue("Prompt/SaveHistoryAsHtml", settings.prompt_save_history_as_html);
-    settings.setValue("Prompt/SaveHistoryFilename", settings.prompt_save_history_filename);
-    //OpenSave
-    settings.setValue("OpenSave/CustomFilter", settings.opensave_custom_filter);
-    settings.setValue("OpenSave/OpenFormat", settings.opensave_open_format);
-    settings.setValue("OpenSave/OpenThumbnail", settings.opensave_open_thumbnail);
-    settings.setValue("OpenSave/SaveFormat", settings.opensave_save_format);
-    settings.setValue("OpenSave/SaveThumbnail", settings.opensave_save_thumbnail);
-    //Recent
-    settings.setValue("OpenSave/RecentMax", tmp.setNum(settings.opensave_recent_max_files));
-    settings.setValue("OpenSave/RecentFiles", settings.opensave_recent_list_of_files);
-    settings.setValue("OpenSave/RecentDirectory", settings.opensave_recent_directory);
-    //Trimming
-    settings.setValue("OpenSave/TrimDstNumJumps", tmp.setNum(settings.opensave_trim_dst_num_jumps));
-    //Printing
-    settings.setValue("Printing/DefaultDevice", settings.printing_default_device);
-    settings.setValue("Printing/UseLastDevice", settings.printing_use_last_device);
-    settings.setValue("Printing/DisableBG", settings.printing_disable_bg);
-    //Grid
-    settings.setValue("Grid/ShowOnLoad", settings.grid_show_on_load);
-    settings.setValue("Grid/ShowOrigin", settings.grid_show_origin);
-    settings.setValue("Grid/ColorMatchCrossHair", settings.grid_color_match_crosshair);
-    settings.setValue("Grid/Color", tmp.setNum(settings.grid_color));
-    settings.setValue("Grid/LoadFromFile", settings.grid_load_from_file);
-    settings.setValue("Grid/Type", settings.grid_type);
-    settings.setValue("Grid/CenterOnOrigin", settings.grid_center_on_origin);
-    settings.setValue("Grid/CenterX", tmp.setNum(settings.grid_center_x));
-    settings.setValue("Grid/CenterY", tmp.setNum(settings.grid_center_y));
-    settings.setValue("Grid/SizeX", tmp.setNum(settings.grid_size_x));
-    settings.setValue("Grid/SizeY", tmp.setNum(settings.grid_size_y));
-    settings.setValue("Grid/SpacingX", tmp.setNum(settings.grid_spacing_x));
-    settings.setValue("Grid/SpacingY", tmp.setNum(settings.grid_spacing_y));
-    settings.setValue("Grid/SizeRadius", tmp.setNum(settings.grid_size_radius));
-    settings.setValue("Grid/SpacingRadius", tmp.setNum(settings.grid_spacing_radius));
-    settings.setValue("Grid/SpacingAngle", tmp.setNum(settings.grid_spacing_angle));
-    //Ruler
-    settings.setValue("Ruler/ShowOnLoad", settings.ruler_show_on_load);
-    settings.setValue("Ruler/Metric", settings.ruler_metric);
-    settings.setValue("Ruler/Color", tmp.setNum(settings.ruler_color));
-    settings.setValue("Ruler/PixelSize", tmp.setNum(settings.ruler_pixel_size));
-    //Quick Snap
-    settings.setValue("QuickSnap/Enabled", settings.qsnap_enabled);
-    settings.setValue("QuickSnap/LocatorColor", tmp.setNum(settings.qsnap_locator_color));
-    settings.setValue("QuickSnap/LocatorSize", tmp.setNum(settings.qsnap_locator_size));
-    settings.setValue("QuickSnap/ApertureSize", tmp.setNum(settings.qsnap_aperture_size));
-    settings.setValue("QuickSnap/EndPoint", settings.qsnap_endpoint);
-    settings.setValue("QuickSnap/MidPoint", settings.qsnap_midpoint);
-    settings.setValue("QuickSnap/Center", settings.qsnap_center);
-    settings.setValue("QuickSnap/Node", settings.qsnap_node);
-    settings.setValue("QuickSnap/Quadrant", settings.qsnap_quadrant);
-    settings.setValue("QuickSnap/Intersection", settings.qsnap_intersection);
-    settings.setValue("QuickSnap/Extension", settings.qsnap_extension);
-    settings.setValue("QuickSnap/Insertion", settings.qsnap_insertion);
-    settings.setValue("QuickSnap/Perpendicular", settings.qsnap_perpendicular);
-    settings.setValue("QuickSnap/Tangent", settings.qsnap_tangent);
-    settings.setValue("QuickSnap/Nearest", settings.qsnap_nearest);
-    settings.setValue("QuickSnap/Apparent", settings.qsnap_apparent);
-    settings.setValue("QuickSnap/Parallel", settings.qsnap_parallel);
-    //LineWeight
-    settings.setValue("LineWeight/ShowLineWeight", settings.lwt_show_lwt);
-    settings.setValue("LineWeight/RealRender", settings.lwt_real_render);
-    settings.setValue("LineWeight/DefaultLineWeight", tmp.setNum(settings.lwt_default_lwt));
-    //Selection
-    settings.setValue("Selection/PickFirst", settings.selection_mode_pickfirst);
-    settings.setValue("Selection/PickAdd", settings.selection_mode_pickadd);
-    settings.setValue("Selection/PickDrag", settings.selection_mode_pickdrag);
-    settings.setValue("Selection/CoolGripColor", tmp.setNum(settings.selection_coolgrip_color));
-    settings.setValue("Selection/HotGripColor", tmp.setNum(settings.selection_hotgrip_color));
-    settings.setValue("Selection/GripSize", tmp.setNum(settings.selection_grip_size));
-    settings.setValue("Selection/PickBoxSize", tmp.setNum(settings.selection_pickbox_size));
-    //Text
-    settings.setValue("Text/Font", settings.text_font);
-    settings.setValue("Text/Size", tmp.setNum(settings.text_size));
-    settings.setValue("Text/Angle", tmp.setNum(settings.text_angle));
-    settings.setValue("Text/StyleBold", settings.text_style_bold);
-    settings.setValue("Text/StyleItalic", settings.text_style_italic);
-    settings.setValue("Text/StyleUnderline", settings.text_style_underline);
-    settings.setValue("Text/StyleStrikeOut", settings.text_style_strikeout);
-    settings.setValue("Text/StyleOverline", settings.text_style_overline);
+    fprintf(file, "[Window]\n");
+    /*
+    write_setting(file, "PositionX", pos().x);
+    write_setting(file, "PositionY", pos().y);
+    write_setting(file, "SizeX", size().x);
+    write_setting(file, "SizeX", size().y);
+    */
 
+    fprintf(file, "[general]\n");
+    //write_setting(file, "LayoutState", layoutState);
+    write_setting(file, "language", settings.language);
+    write_setting(file, "icon_theme", settings.icon_theme);
+    write_setting(file, "icon_size", settings.icon_size);
+    write_setting(file, "mdi_bg_use_logo", settings.mdi_bg_use_logo);
+    write_setting(file, "mdi_bg_use_texture", settings.mdi_bg_use_texture);
+    write_setting(file, "mdi_bg_use_color", settings.mdi_bg_use_color);
+    write_setting(file, "mdi_bg_logo", settings.general_mdi_bg_logo);
+    write_setting(file, "mdi_bg_texture", settings.general_mdi_bg_texture);
+    write_setting(file, "mdi_bg_color", settings.general_mdi_bg_color);
+    write_setting(file, "tip_of_the_day", settings.tip_of_the_day);
+    write_setting(file, "current_tip", settings.general_current_tip + 1);
+    write_setting(file, "system_help_browser", settings.general_system_help_browser);
+    fprintf(file, "\n");
+
+    fprintf(file, "[display]\n");
+    write_setting(file, "UseOpenGL", settings.display_use_opengl);
+    write_setting(file, "RenderHintAntiAlias", settings.display_renderhint_aa);
+    write_setting(file, "RenderHintTextAntiAlias", settings.display_renderhint_text_aa);
+    write_setting(file, "RenderHintSmoothPixmap", settings.display_renderhint_smooth_pix);
+    write_setting(file, "RenderHintHighQualityAntiAlias", settings.display_renderhint_high_aa);
+    write_setting(file, "RenderHintNonCosmetic", settings.display_renderhint_noncosmetic);
+    write_setting(file, "ShowScrollBars", settings.display_show_scrollbars);
+    write_setting(file, "ScrollBarWidgetNum", settings.display_scrollbar_widget_num);
+    write_setting(file, "CrossHairColor", settings.display_crosshair_color);
+    write_setting(file, "BackgroundColor", settings.display_bg_color);
+    write_setting(file, "SelectBoxLeftColor", settings.display_selectbox_left_color);
+    write_setting(file, "SelectBoxLeftFill", settings.display_selectbox_left_fill);
+    write_setting(file, "SelectBoxRightColor", settings.display_selectbox_right_color);
+    write_setting(file, "SelectBoxRightFill", settings.display_selectbox_right_fill);
+    write_setting(file, "SelectBoxAlpha", settings.display_selectbox_alpha);
+    write_setting(file, "ZoomScaleIn", settings.display_zoomscale_in);
+    write_setting(file, "ZoomScaleOut", settings.display_zoomscale_out);
+    write_setting(file, "CrossHairPercent", settings.display_crosshair_percent);
+    write_setting(file, "Units", settings.display_units);
+    fprintf(file, "\n");
+ 
+    fprintf(file, "[Prompt]\n");
+    write_setting(file, "TextColor", settings.prompt_text_color);
+    write_setting(file, "BackgroundColor", settings.prompt_bg_color);
+    write_setting(file, "FontFamily", settings.prompt_font_family);
+    write_setting(file, "FontStyle", settings.prompt_font_style);
+    write_setting(file, "FontSize", settings.prompt_font_size);
+    write_setting(file, "SaveHistory", settings.prompt_save_history);
+    write_setting(file, "SaveHistoryAsHtml", settings.prompt_save_history_as_html);
+    write_setting(file, "SaveHistoryFilename", settings.prompt_save_history_filename);
+    fprintf(file, "\n");
+
+    fprintf(file, "[OpenSave]\n");
+    write_setting(file, "CustomFilter", settings.opensave_custom_filter);
+    write_setting(file, "OpenFormat", settings.opensave_open_format);
+    write_setting(file, "OpenThumbnail", settings.opensave_open_thumbnail);
+    write_setting(file, "SaveFormat", settings.opensave_save_format);
+    write_setting(file, "SaveThumbnail", settings.opensave_save_thumbnail);
+    write_setting(file, "RecentMax", settings.opensave_recent_max_files);
+    //write_setting(file, "RecentFiles", settings.opensave_recent_list_of_files);
+    write_setting(file, "RecentDirectory", settings.opensave_recent_directory);
+    write_setting(file, "TrimDstNumJumps", settings.opensave_trim_dst_num_jumps);
+    fprintf(file, "\n");
+
+    fprintf(file, "[Printing]\n");
+    write_setting(file, "DefaultDevice", settings.printing_default_device);
+    write_setting(file, "UseLastDevice", settings.printing_use_last_device);
+    write_setting(file, "DisableBG", settings.printing_disable_bg);
+    fprintf(file, "\n");
+
+    fprintf(file, "[Grid]\n");
+    write_setting(file, "ShowOnLoad", settings.grid_show_on_load);
+    write_setting(file, "ShowOrigin", settings.grid_show_origin);
+    write_setting(file, "ColorMatchCrossHair", settings.grid_color_match_crosshair);
+    write_setting(file, "Color", settings.grid_color);
+    write_setting(file, "LoadFromFile", settings.grid_load_from_file);
+    write_setting(file, "Type", settings.grid_type);
+    write_setting(file, "CenterOnOrigin", settings.grid_center_on_origin);
+    write_setting(file, "CenterX", settings.grid_center_x);
+    write_setting(file, "CenterY", settings.grid_center_y);
+    write_setting(file, "SizeX", settings.grid_size_x);
+    write_setting(file, "SizeY", settings.grid_size_y);
+    write_setting(file, "SpacingX", settings.grid_spacing_x);
+    write_setting(file, "SpacingY", settings.grid_spacing_y);
+    write_setting(file, "SizeRadius", settings.grid_size_radius);
+    write_setting(file, "SpacingRadius", settings.grid_spacing_radius);
+    write_setting(file, "SpacingAngle", settings.grid_spacing_angle);
+    fprintf(file, "\n");
+
+    fprintf(file, "[Ruler]\n");
+    write_setting(file, "ShowOnLoad", settings.ruler_show_on_load);
+    write_setting(file, "Metric", settings.ruler_metric);
+    write_setting(file, "Color", settings.ruler_color);
+    write_setting(file, "PixelSize", settings.ruler_pixel_size);
+    fprintf(file, "\n");
+
+    fprintf(file, "[QuickSnap]\n");
+    write_setting(file, "Enabled", settings.qsnap_enabled);
+    write_setting(file, "LocatorColor", settings.qsnap_locator_color);
+    write_setting(file, "LocatorSize", settings.qsnap_locator_size);
+    write_setting(file, "ApertureSize", settings.qsnap_aperture_size);
+    write_setting(file, "EndPoint", settings.qsnap_endpoint);
+    write_setting(file, "MidPoint", settings.qsnap_midpoint);
+    write_setting(file, "Center", settings.qsnap_center);
+    write_setting(file, "Node", settings.qsnap_node);
+    write_setting(file, "Quadrant", settings.qsnap_quadrant);
+    write_setting(file, "Intersection", settings.qsnap_intersection);
+    write_setting(file, "Extension", settings.qsnap_extension);
+    write_setting(file, "Insertion", settings.qsnap_insertion);
+    write_setting(file, "Perpendicular", settings.qsnap_perpendicular);
+    write_setting(file, "Tangent", settings.qsnap_tangent);
+    write_setting(file, "Nearest", settings.qsnap_nearest);
+    write_setting(file, "Apparent", settings.qsnap_apparent);
+    write_setting(file, "Parallel", settings.qsnap_parallel);
+    fprintf(file, "\n");
+
+    fprintf(file, "[LineWeight]\n");
+    write_setting(file, "ShowLineWeight", settings.lwt_show_lwt);
+    write_setting(file, "RealRender", settings.lwt_real_render);
+    write_setting(file, "DefaultLineWeight", settings.lwt_default_lwt);
+    fprintf(file, "\n");
+
+    fprintf(file, "[Selection]\n");
+    write_setting(file, "PickFirst", settings.selection_mode_pickfirst);
+    write_setting(file, "PickAdd", settings.selection_mode_pickadd);
+    write_setting(file, "PickDrag", settings.selection_mode_pickdrag);
+    write_setting(file, "CoolGripColor", settings.selection_coolgrip_color);
+    write_setting(file, "HotGripColor", settings.selection_hotgrip_color);
+    write_setting(file, "GripSize", settings.selection_grip_size);
+    write_setting(file, "PickBoxSize", settings.selection_pickbox_size);
+    fprintf(file, "\n");
+
+    fprintf(file, "[Text]\n");
+    write_setting(file, "Font", settings.text_font);
+    write_setting(file, "Size", settings.text_size);
+    write_setting(file, "Angle", settings.text_angle);
+    write_setting(file, "StyleBold", settings.text_style_bold);
+    write_setting(file, "StyleItalic", settings.text_style_italic);
+    write_setting(file, "StyleUnderline", settings.text_style_underline);
+    write_setting(file, "StyleStrikeOut", settings.text_style_strikeout);
+    write_setting(file, "StyleOverline", settings.text_style_overline);
+    fclose(file);
 }
-#endif
 
 std::string translate(std::string string)
 {

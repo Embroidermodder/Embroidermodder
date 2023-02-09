@@ -163,6 +163,7 @@ typedef struct Settings_ {
     bool show_settings_editor;
     bool show_editor;
     int icon_size;
+    std::string icon_theme;
     int pattern_index;
     std::string assets_dir;
     bool use_translation;
@@ -170,10 +171,10 @@ typedef struct Settings_ {
     bool mdi_bg_use_logo;
     bool mdi_bg_use_texture;
     bool mdi_bg_use_color;
-    bool tip_of_the_day;
     std::string general_mdi_bg_logo;
     std::string general_mdi_bg_texture;
     unsigned int  general_mdi_bg_color;
+    bool tip_of_the_day;
     unsigned int general_current_tip;
     bool general_system_help_browser;
     bool general_check_for_updates;
@@ -259,10 +260,18 @@ typedef struct Settings_ {
     bool selection_mode_pickfirst;
     bool selection_mode_pickadd;
     bool selection_mode_pickdrag;
-    unsigned int  selection_coolgrip_color;
-    unsigned int  selection_hotgrip_color;
-    unsigned char  selection_grip_size;
-    unsigned char  selection_pickbox_size;
+    unsigned int selection_coolgrip_color;
+    unsigned int selection_hotgrip_color;
+    unsigned char selection_grip_size;
+    unsigned char selection_pickbox_size;
+    std::string text_font;
+    float text_size;
+    float text_angle;
+    bool text_style_bold;
+    bool text_style_italic;
+    bool text_style_underline;
+    bool text_style_overline;
+    bool text_style_strikeout;
 } Settings;
 
 typedef std::vector<std::vector<std::string>> string_matrix;
@@ -292,6 +301,9 @@ void property_editor(void);
 std::string platform_string(void);
 
 View init_view(void);
+
+void read_settings(void);
+void write_settings(void);
 
 void about_action(std::vector<std::string> args);
 void alert_action(std::vector<std::string> args);

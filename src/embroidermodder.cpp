@@ -388,6 +388,7 @@ main(int argc, char* argv[])
     }
 
     load_configuration();
+    read_settings();
 
     open_file_action(files);
 

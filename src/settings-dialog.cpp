@@ -31,9 +31,12 @@ void create_tab_quicktrack(void);
 void create_tab_lineweight(void);
 void create_tab_selection(void);
 
+Settings dialog;
+
 void
 settings_editor(void)
 {
+    dialog = settings;
     // ImGuiTabItemFlags_SetSelected   
     ImGui::SetNextWindowSize(ImVec2(750, 550));
     ImGui::Begin("Settings");
@@ -84,7 +87,9 @@ settings_editor(void)
     }
 
     if (ImGui::Button("Accept")) {
-        
+        write_settings();
+        settings = dialog;
+        settings.show_settings_editor = false;
     }
     ImGui::SameLine();
     if (ImGui::Button("Cancel")) {
