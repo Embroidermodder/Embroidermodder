@@ -144,6 +144,8 @@ Settings settings = {
     .text_style_strikeout = false
 };
 
+bool show_details_dialog = false;
+
 void read_setting(toml::value table, std::string key, std::string *s)
 {
     if (table.contains(key)) {

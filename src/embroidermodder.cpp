@@ -359,6 +359,10 @@ main_widget(void)
         about_dialog();
     }
 
+    if (show_details_dialog) {
+        details_dialog();
+    }
+
     if (settings.show_settings_editor) {
         settings_editor();
     }
@@ -390,7 +394,11 @@ main(int argc, char* argv[])
     load_configuration();
     read_settings();
 
-    open_file_action(files);
+    std::string command = "open";
+    for (std::string file : files) {
+        command += " " + file;
+    }
+    actuator(command);
 
     int width = 1080;
     int height = 576;

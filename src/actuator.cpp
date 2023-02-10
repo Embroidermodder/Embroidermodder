@@ -20,6 +20,31 @@
 #include <unordered_map>
 #include <iostream>
 
+void about_action(std::vector<std::string> args);
+void alert_action(std::vector<std::string> args);
+void arc_action(std::vector<std::string> args);
+void circle_action(std::vector<std::string> args);
+void close_action(std::vector<std::string> args);
+void cut_action(std::vector<std::string> args);
+void day_vision_action(std::vector<std::string> args);
+void debug_action(std::vector<std::string> args);
+void design_details_action(std::vector<std::string> args);
+void do_nothing_action(std::vector<std::string> args);
+void editor_action(std::vector<std::string> args);
+void error_action(std::vector<std::string> args);
+void exit_action(std::vector<std::string> args);
+void new_file_action(std::vector<std::string> args);
+void night_vision_action(std::vector<std::string> args);
+void open_file_action(std::vector<std::string> args);
+void icon_action(std::vector<std::string> args);
+void pan_action(std::vector<std::string> args);
+void redo_action(std::vector<std::string> args);
+void settings_editor_action(std::vector<std::string> args);
+void simulate_action(std::vector<std::string> args);
+void todo_action(std::vector<std::string> args);
+void undo_action(std::vector<std::string> args);
+void zoom_action(std::vector<std::string> args);
+
 /* File-scope variables.
  */
 static std::unordered_map<std::string, void (*)(std::vector<std::string>)> function_table = {
@@ -31,6 +56,7 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"cut", cut_action},
     {"day", day_vision_action},
     {"debug", debug_action},
+    {"designdetails", design_details_action},
     {"editor", editor_action},
     {"error", error_action},
     {"exit", exit_action},
@@ -297,6 +323,11 @@ void day_vision_action(std::vector<std::string> args)
 void debug_action(std::vector<std::string> args)
 {
     debug_message(args[0]);
+}
+
+void design_details_action(std::vector<std::string> args)
+{
+    show_details_dialog = true;
 }
 
 void do_nothing_action(std::vector<std::string> args)
@@ -575,7 +606,6 @@ void zoom_action(std::vector<std::string> args)
     {"save", save_file_action},
     {"saveas", save_file_as_action},
     {"print", print_action},
-    {"designdetails", designDetails_action},
     {"copy", copy_action},
     {"paste", paste_action},
     {"changelog", changelog_action},
@@ -619,7 +649,6 @@ void zoom_action(std::vector<std::string> args)
     {"check-for-updates", check_for_updates_action},
     {"select-all", select_all},
     {"whats-this", whats_this},
-    {"design-details", design_details},
     {"print-pattern", print_pattern},
     {"copy-object", copy},
     {"paste-object", paste_action},
@@ -1744,15 +1773,6 @@ void select_all_action()
     debug_message("selectAll()");
     if (active_view) {
         active_view->selectAll();
-    }
-}
-
-
-void design_details_action()
-{
-    if (active_scene) {
-        EmbDetailsDialog dialog(active_scene, this);
-        dialog.exec();
     }
 }
 

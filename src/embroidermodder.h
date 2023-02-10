@@ -289,7 +289,8 @@ void settings_editor(void);
 void about_dialog(void);
 void changelog_dialog(void);
 void help_dialog(void);
-void alert(void);
+void details_dialog(void);
+void alert(std::string title, std::string msg);
 
 std::string translate(std::string string);
 void debug_message(std::string string);
@@ -305,30 +306,6 @@ View init_view(void);
 void read_settings(void);
 void write_settings(void);
 
-void about_action(std::vector<std::string> args);
-void alert_action(std::vector<std::string> args);
-void arc_action(std::vector<std::string> args);
-void circle_action(std::vector<std::string> args);
-void close_action(std::vector<std::string> args);
-void cut_action(std::vector<std::string> args);
-void day_vision_action(std::vector<std::string> args);
-void debug_action(std::vector<std::string> args);
-void do_nothing_action(std::vector<std::string> args);
-void editor_action(std::vector<std::string> args);
-void error_action(std::vector<std::string> args);
-void exit_action(std::vector<std::string> args);
-void new_file_action(std::vector<std::string> args);
-void night_vision_action(std::vector<std::string> args);
-void open_file_action(std::vector<std::string> args);
-void icon_action(std::vector<std::string> args);
-void pan_action(std::vector<std::string> args);
-void redo_action(std::vector<std::string> args);
-void settings_editor_action(std::vector<std::string> args);
-void simulate_action(std::vector<std::string> args);
-void todo_action(std::vector<std::string> args);
-void undo_action(std::vector<std::string> args);
-void zoom_action(std::vector<std::string> args);
-
 /* Global variables.
  * -----------------------------------------------------------------------------
  */
@@ -337,5 +314,6 @@ extern string_matrix translation_table;
 extern std::unordered_map<std::string, string_matrix> menu_layout;
 extern std::string os_seperator;
 extern std::vector<View> views;
+extern bool show_details_dialog;
 
 #endif /* EMBROIDERMODDER_H */
