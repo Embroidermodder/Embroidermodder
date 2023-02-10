@@ -140,6 +140,7 @@ typedef struct View_ {
     bool qsnap_mode;
     bool qtrack_mode;
     bool lwt_mode;
+    bool real_render;
     bool metric;
     bool simulate;
     std::chrono::time_point<std::chrono::system_clock> simulation_start;

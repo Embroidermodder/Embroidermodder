@@ -52,6 +52,11 @@ ImVec2 operator+(const ImVec2 a, const ImVec2 b)
     return ImVec2(a.x+b.x, a.y+b.y);
 }
 
+ImVec2 operator-(const ImVec2 a, const ImVec2 b)
+{
+    return ImVec2(a.x-b.x, a.y-b.y);
+}
+
 int
 render_pattern(EmbPattern *p)
 {
@@ -215,25 +220,58 @@ render_pattern(EmbPattern *p)
 }
 
 void
+render_shine(ImVec2 start, ImVec2 end, ImVec2 normal, float start_frac, float end_frac)
+{
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    ImVec2 delta = end-start;
+    ImVec2 shine_start = start + ImVec2(start_frac*delta.x, start_frac*delta.y);
+    ImVec2 shine_end = start + ImVec2(end_frac*delta.x, end_frac*delta.y);
+    draw_list->AddQuadFilled(
+        shine_start+normal, shine_start-normal,
+        shine_end-normal, shine_end+normal,
+        IM_COL32(255, 255, 255, 20));    
+}
+
+void
 real_render_pattern(EmbPattern *p)
 {
     ImDrawList* draw_list = ImGui::GetWindowDrawList();
     View view = views[settings.pattern_index];
     if (p->stitchList->count > 1) {
         for (int i = 1; i<p->stitchList->count; i++) {
+            ImVec2 offset = ImGui::GetWindowPos();
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
-            ImVec2 start = {
-                view.scale * prev.x + view.origin.x,
-                - view.scale * prev.y + view.origin.y
-            };
-            ImVec2 end = {
-                view.scale * st.x + view.origin.x,
-                - view.scale * st.y + view.origin.y
-            };
+            ImVec2 start = offset + to_ImVec2(view.origin) + ImVec2(
+                view.scale * prev.x,
+                - view.scale * prev.y
+            );
+            ImVec2 end = offset + to_ImVec2(view.origin) + ImVec2(
+                view.scale * st.x,
+                - view.scale * st.y
+            );
+
+            float lwt = 2.0;
+            EmbVector delta;
+            delta.x = prev.y - st.y;
+            delta.y = prev.x - st.x;
+            double length = embVector_length(delta);
+            EmbVector normal_;
+            embVector_normalize(delta, &normal_);
+            normal_.x *= lwt;
+            normal_.y *= lwt;
+            ImVec2 normal = to_ImVec2(normal_);
+
             EmbThread thread = p->thread_list[st.color];
             int color = embColor_to_int(thread.color);
-            draw_list->AddLine(start, end, color);
+            draw_list->AddQuadFilled(start+normal, start-normal,
+                end-normal, end+normal, color);
+            render_shine(start, end, normal, 0.333*0.3, 0.333*0.7);
+            render_shine(start, end, normal, 0.333*0.1, 0.333*0.9);
+            render_shine(start, end, normal, 0.333*1.3, 0.333*1.7);
+            render_shine(start, end, normal, 0.333*1.1, 0.333*1.9);
+            render_shine(start, end, normal, 0.333*2.3, 0.333*2.7);
+            render_shine(start, end, normal, 0.333*2.1, 0.333*2.9);
         }
     }
 }
@@ -450,11 +488,16 @@ pattern_view(void)
     if (views[settings.pattern_index].grid_mode) {
         draw_grid();
     }
-    if (views[settings.pattern_index].simulate) {
-        simulate_pattern(pattern);
+    if (views[settings.pattern_index].lwt_mode) {
+        real_render_pattern(pattern);
     }
     else {
-        render_pattern(pattern);
+        if (views[settings.pattern_index].simulate) {
+            simulate_pattern(pattern);
+        }
+        else {
+            render_pattern(pattern);
+        }
     }
     if (views[settings.pattern_index].ruler_mode) {
         draw_rulers();
