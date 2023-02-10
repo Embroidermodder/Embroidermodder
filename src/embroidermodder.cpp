@@ -1435,11 +1435,11 @@ std::string platform_string(void)
     #ifdef __linux__
     struct utsname buffer;
     uname(&buffer);
-    os = std::to_string(buffer.sysname);
-    os += " " + std::to_string(buffer.nodename);
-    os += " " + std::to_string(buffer.release);
-    os += " " + std::to_string(buffer.version);
-    os += " " + std::to_string(buffer.machine);
+    os = std::string(buffer.sysname);
+    os += " " + std::string(buffer.nodename);
+    os += " " + std::string(buffer.release);
+    os += " " + std::string(buffer.version);
+    os += " " + std::string(buffer.machine);
     #endif
     return os;
 }
