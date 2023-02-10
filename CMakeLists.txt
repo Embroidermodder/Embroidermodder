@@ -39,12 +39,10 @@ set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/actuator.cpp
 	${CMAKE_SOURCE_DIR}/src/data.cpp
-	${CMAKE_SOURCE_DIR}/src/dialogs.cpp
 	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
 	${CMAKE_SOURCE_DIR}/src/objects.cpp
 	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp
-	${CMAKE_SOURCE_DIR}/src/undo-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/view.cpp
 	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit/TextEditor.cpp
 	${CMAKE_SOURCE_DIR}/extern/imgui/imgui.cpp
