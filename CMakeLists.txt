@@ -65,23 +65,26 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 )
 
-target_link_libraries(embroidermodder PRIVATE
-	glfw
-	embroidery_static
-	opengl32)
-
 set_target_properties(embroidermodder PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
 )
 
 if (WIN32)
+target_link_libraries(embroidermodder PRIVATE
+	glfw
+	embroidery_static
+	opengl32)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
 set(EXEC_DIR "C:/Program Files/embroidermodder")
 set(ASSETS_DIR "C:/ProgramData/embroidermodder")
-else (WIN32)
-target_link_libraries(embroidermodder PUBLIC m)
 
+else (WIN32)
+target_link_libraries(embroidermodder PRIVATE
+	glfw
+	embroidery_static
+	GL
+	m)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 set(EXEC_DIR "/usr/bin")
 set(ASSETS_DIR "/usr/share/embroidermodder")
