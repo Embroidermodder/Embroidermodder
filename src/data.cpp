@@ -15,6 +15,8 @@
 
 #include "embroidermodder.h"
 
+#include <fstream>
+
 #include <toml.hpp>
 
 /*
@@ -319,6 +321,13 @@ load_configuration(void)
     */
 }
 
+int file_exists(std::string s)
+{
+    std::ifstream f(s);
+    return f.good();
+}
+
+
 void read_settings(void)
 {
     debug_message("Reading Settings...");
@@ -327,6 +336,9 @@ void read_settings(void)
     QSize size(800,600);
 
     some layout state recording? */
+    if (!file_exists(settings_file)) {
+        return;
+    }
 
     toml::value setting_toml = toml::parse(settings_file);
     /*
