@@ -316,5 +316,6 @@ extern std::unordered_map<std::string, string_matrix> menu_layout;
 extern std::string os_seperator;
 extern std::vector<View> views;
 extern bool show_details_dialog;
+extern bool show_open_file_dialog;
 
 #endif /* EMBROIDERMODDER_H */

@@ -59,6 +59,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/extern/glfw/include
 	${CMAKE_SOURCE_DIR}/extern/imgui
 	${CMAKE_SOURCE_DIR}/extern/toml11
+	${CMAKE_SOURCE_DIR}/extern/tinydir
 	${CMAKE_SOURCE_DIR}/extern/ImGuiColorTextEdit
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb

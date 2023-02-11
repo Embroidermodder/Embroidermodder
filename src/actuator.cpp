@@ -424,11 +424,16 @@ void night_vision_action(std::vector<std::string> args)
 
 void open_file_action(std::vector<std::string> args)
 {
-    for (std::string file : args) {
-        View view = init_view();
-        view.filename = file;
-        embPattern_readAuto(view.pattern, view.filename.c_str());
-        views.push_back(view);
+    if (args.size() == 0) {
+        show_open_file_dialog = true;
+    }
+    else {
+        for (std::string file : args) {
+            View view = init_view();
+            view.filename = file;
+            embPattern_readAuto(view.pattern, view.filename.c_str());
+            views.push_back(view);
+        }
     }
 }
 

@@ -31,11 +31,13 @@
 #include <iostream>
 #include <fstream>
 
+#include <tinydir.h>
 #include <GLFW/glfw3.h>
 #include <embroidery.h>
 
 ImFont *font;
 ImFont *header_font;
+bool show_open_file_dialog = false;
 string_matrix translation_table;
 std::unordered_map<std::string, std::string> str_settings;
 std::unordered_map<std::string, GLuint> textures;
@@ -156,6 +158,56 @@ void alert(std::string title, std::string message)
     ImGui::End();
 }
 
+std::string to_open = "";
+std::string current_directory = ".";
+
+void open_file_dialog(void)
+{
+    char typed_filename[400];
+    ImGui::Begin("Open File");
+    ImGui::SetWindowFontScale(1.5);
+    tinydir_dir dir;
+    if (tinydir_open_sorted(&dir, current_directory.c_str()) == -1) {
+        ImGui::Text("Failed to open directory.");
+        ImGui::End();
+        return;
+    }
+    int n_columns = 1 + dir.n_files/5;
+    ImGui::Columns(n_columns, "files");
+    for (int i=0; i<dir.n_files; i++) {
+        tinydir_file file;
+        tinydir_readfile_n(&dir, &file, i);
+        if (ImGui::Button(file.name)) {
+            if (file.is_dir) {
+                /* TODO: this could lead to nonsense like "dir/../dir/../dir"
+                 * rather than just "dir".
+                 */
+                current_directory = current_directory + "/" + std::string(file.name);
+            }
+            else {
+                to_open = current_directory + "/" + std::string(file.name);
+            }
+        }
+        tinydir_next(&dir);
+        if (i%5 == 4) {
+            ImGui::NextColumn();
+        }
+    }
+    ImGui::Columns();
+    ImGui::Text(to_open.c_str());
+    //ImGui::InputText("", typed_filename, 100);
+    ImGui::SameLine();
+    if (ImGui::Button("Open")) {
+        actuator("open " + to_open);
+        show_open_file_dialog = false;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel")) {
+        show_open_file_dialog = false;
+    }
+    tinydir_close(&dir);
+    ImGui::End();
+}
 
 /* TODO: Move majority of the calculation code into libembroidery
  *
@@ -573,6 +625,10 @@ main_widget(void)
         details_dialog();
     }
 
+    if (show_open_file_dialog) {
+        open_file_dialog();
+    }
+
     if (settings.show_settings_editor) {
         settings_editor();
     }
@@ -608,7 +664,9 @@ main(int argc, char* argv[])
     for (std::string file : files) {
         command += " " + file;
     }
-    actuator(command);
+    if (command != "open") {
+        actuator(command);
+    }
 
     int width = 1080;
     int height = 576;
