@@ -1,0 +1,2287 @@
+\documentclass{report}
+
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{mathpazo}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{makeidx}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage[hyperref,svgnames]{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=Teal,
+    filecolor=magenta,
+    urlcolor=cyan
+}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize
+}
+
+\title{Embroidermodder 2.0.0-alpha}
+\author{The Embroidermodder Team}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\pagebreak
+
+\section*{The Embroidermodder Team}
+
+\emph{The Embroidermodder Team} consists of:
+
+\begin{itemize}
+\item \textbf{Jonathan Greig} \texttt{redteam316} \url{https://github.com/redteam316} Core Developer, Artwork, Documentation, Designs, Commands
+\item \textbf{Josh Varga} \texttt{JoshVarga} \url{https://github.com/JoshVarga} Core Developer
+\item \textbf{Jens Diemer} \texttt{jedie} \url{https://github.com/jedie} Documentation
+\item \textbf{Kim Howard} \texttt{turbokim} \url{https://github.com/turbokim} BugFixes
+\item \textbf{Martin Schneider} \texttt{craftoid} \url{https://github.com/craftoid} Documentation
+\item \textbf{Edward Greig} \texttt{Metallicow} \url{https://github.com/Metallicow} Artwork, BugFixes, Commands \emph{"It is a sin to wear the band's shirt on concert night, Unless you buy it @t the show."}
+\item \textbf{Sonia Entzinger} Translation
+\item \textbf{SushiTee} \texttt{SushiTee} \url{https://github.com/SushiTee} BugFixes
+\item \textbf{Vathonie Lufh} \texttt{x2nie} \url{https://github.com/x2nie} BugFixes, Bindings
+\item \textbf{Nina Paley} Designs
+\item \textbf{Theodore Gray} Designs
+\item \textbf{Jens-Wolfhard Schicke-Uffmann} \texttt{Drahflow} BugFixes
+ \emph{Emmett Lauren Garlitz - Some Little Sandy Rd, Elkview, West by GOD Virginia} [`Oll Em`] \emph{I have a nice cherry chess-top(Glass). "But remember, I NEVER played on it."}
+\item \textbf{Robin Swift} \texttt{robin-swift} \url{https://github.com/robin-swift} Core Developer, Documentation
+\end{itemize}
+
+The up-to date version of this list is maintained as part of the source code in the file \texttt{CREDITS.md}.
+
+\chapter{Introduction}
+
+(UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR VERSION 2)
+
+\url{http://www.libembroidery.org}
+
+Embroidermodder is a free machine embroidery application.
+The newest version, Embroidermodder 2 can:
+
+\begin{itemize}
+\item edit and create embroidery designs
+\item estimate the amount of thread and machine time needed to stitch a design
+\item convert embroidery files to a variety of formats
+\item upscale or downscale designs
+\item run on Windows, Mac and Linux
+\end{itemize}
+
+Embroidermodder 2 is very much a work in progress since we're doing a ground
+up rewrite to an interface in C using the GUI toolkit SDL2.
+The reasoning for this is detailed in the issues tab.
+
+For a more in-depth look at what we are developing read
+our [website]\url{https://www.libembroidery.org} which includes these docs as well as the up-to date printer-friendly versions.
+These discuss recent changes, plans and has user and developer guides for all the Embroidermodder projects.
+
+To see what we're focussing on right now, see the [Open Collective News]\url{https://opencollective.com/embroidermodder}.
+
+The current printer-friendly version of the manual: \url{https://www.libembroidery.org/embroidermodder_2.0.0-alpha_manual.pdf}.
+
+\section{License}
+
+The source code is under the terms of the zlib license: see \texttt{LICENSE.md} in the source code directory.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
+
+A copy of the license is included in the section entitled ``GNU Free Documentation License''.
+
+
+\section{The Embroidermodder Project and Team}
+
+The \textit{Embroidermodder 2} project is a collection of small software utilities for
+manipulating, converting and creating embroidery files in all major embroidery
+machine formats. The program \textit{Embroidermodder 2} itself is a larger graphical
+user interface (GUI) which is at the heart of the project.
+
+The tools and associated documents are:
+
+\begin{itemize}
+\item This manual.
+\item The website ([`www.libembroidery.org`](https://www.libembroidery.org)), which is maintained [here]\url{https://github.com/Embroidermodder/embroidermodder.github.io}.
+\item Mobile embroidery format viewers and tools (`EmbroideryMobile`).
+\item The core library of functions (`libembroidery`) and its manual.
+\item The Python version of the library of functions (`libembroidery-python`) which is part of [libembroidery]\url{https://github.com/Embroidermodder/libembroidery}.
+\item The CLI (`embroider`) which is part of [libembroidery]\url{https://github.com/Embroidermodder/libembroidery}.
+\item Specs for an open hardware embroidery machine called Embroiderbot (not started yet) which is part of [libembroidery]\url{https://github.com/Embroidermodder/libembroidery} and its manual.
+\item The GUI (`embroidermodder`), this repository.
+\end{itemize}
+
+They all tools to make the standard
+user experience of working with an embroidery machine better without expensive
+software which is locked to specific manufacturers and formats. But ultimately
+we hope that the core \emph{Embroidermodder 2} is a practical, ever-present tool in
+larger workshops, small cottage industry workshops and personal hobbyist's
+bedrooms.
+
+Embroidermodder 2 is licensed under the zlib license and we aim to keep all of
+our tools open source and free of charge. If you would like to support the
+project check out our [Open Collective](https://opencollective.com/embroidermodder) group. If you would like to help, please
+join us on GitHub. This document is written as developer training as well
+helping new users (see the last sections) so this is the place to learn how
+to start changing the code.
+
+The Embroidermodder Team is the collection of people who've submitted
+patches, artwork and documentation to our three projects.
+The team was established by Jonathan Greig and Josh Varga.
+The full list is actively maintained below.
+
+\section{Credits for Embroidermodder 2, libembroidery and all other related code}
+
+If you have contributed and wish to be added to this list, alter the [README on Embroidermodder github page]\url{https://github.com/Embroidermodder/Embroidermodder} and we'll copy it to the libembroidery source code since that is credited to "The Embroidermodder Team".
+
+\section{Embroidermodder 1}
+
+The Embroidermodder Team is also inspired by the original Embroidermodder that was built by Mark Pontius and the same Josh Varga on SourceForge which unfortunately appears to have died from linkrot. We may create a distribution on here to be the official "legacy" Embroidermodder code but likely in a seperate repository because it's GNU GPL v3 and this code is written to be zlib (that is, permissive licensed) all the way down.
+
+One reason why this is useful is that the rewrite by Jonathan Greig, John Varga and Robin Swift for Embroidermodder 2 should have no regressions: no features present in v1 should be missing in v2.
+
+\chapter{Features}
+
+Embroidermodder 2 has many advanced features that enable you to create awesome designs quicker, tweak existing designs to perfection, and can be fully customized to fit your workflow.
+
+A summary of these features:
+
+\begin{itemize}
+\item Cross Platform
+\item Realistic rendering
+\item Various grid types and auto-adjusting rulers
+\item Many measurement tools
+\item Add text to any design
+\item Supports many formats
+\item Batch Conversion
+\item Scripting API
+\end{itemize}
+
+\section{Cross Platform}
+
+If you use multiple operating systems, it's important to choose software that works on all of them.
+
+Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let's not forget the Raspberry Pi (\url{http://www.raspberrypi.org}).
+
+\includegraphics[width=0.9\textwidth]{images/features-platforms-1.png}
+
+\section{Realistic Rendering}
+
+It is important to be able to visualize what a design will look like when stitched and our pseudo ``3D'' realistic rendering helps achieve this.
+
+Realistic rendering sample \#1:
+
+\includegraphics[width=0.9\textwidth]{images/features-realrender-1.png}
+
+Realistic rendering sample \#2:
+
+\includegraphics[width=0.9\textwidth]{images/features-realrender-2.png}
+
+Realistic rendering sample \#3:
+
+\includegraphics[width=0.9\textwidth]{images/features-realrender-3.png}
+
+Various grid types and auto-adjusting rulers
+
+Making use of the automatically adjusting ruler in conjunction with the grid will ensure your design is properly sized and fits within your embroidery hoop area.
+
+Use rectangular, circular or isometric grids to construct your masterpiece!
+
+Multiple grids and rulers in action:
+
+\includegraphics[width=0.9\textwidth]{images/features-grid-ruler-1.png}
+
+\section{Many measurement tools}
+
+Taking measurements is a critical part of creating great designs. Whether you are designing mission critical embroidered space suits for NASA or some other far out design for your next meet-up, you will have precise measurement tools at your command to make it happen. You can locate individual points or find distances between any 2 points anywhere in the design!
+
+Take quick and accurate measurements:
+
+\includegraphics[width=0.9\textwidth]{images/features-measure-1.png}
+
+\section{Add text to any design}
+
+Need to make company apparel for all of your employees with individual names on them? No sweat. Just simply add text to your existing design or create one from scratch, quickly and easily.
+Didn't get it the right size or made a typo? No problem. Just select the text and update it with the property editor.
+
+Add text and adjust its properties quickly:
+
+\includegraphics[width=0.9\textwidth]{images/features-text-1.png}
+
+\section{Supports many formats}
+
+Embroidery machines all accept different formats. There are so many formats available that it can sometimes be confusing whether a design will work with your machine.
+
+Embroidermodder 2 supports a wide variety of embroidery formats as well as several vector formats, such as SVG and DXF. This allows you to worry less about which designs you can use.
+
+\section{Batch Conversion}
+
+Need to send a client several different formats? Just use libembroidery-convert, our command line utility which supports batch file conversion.
+
+There are a multitude of formats to choose from:
+
+\includegraphics[width=0.9\textwidth]{images/features-formats-1.png}
+
+\section{Scripting API}
+
+If you've got programming skills and there is a feature that isn't currently available that you absolutely cannot live without, you have the capability to create your own custom commands for Embroidermodder 2. We provide an QtScript API which exposes various application functionality so that it is possible to extend the application without requiring a new release. If you have created a command that you think is worth including in the next release, just <a href=``contact.html``>contact us</a> and we will review it for functionality, bugs, and finally inclusion.
+
+An Embroidermodder 2 command excerpt:
+
+\includegraphics[width=0.9\textwidth]{images/features-scripting-1.png}
+
+\chapter{Design}
+
+Embroidermodder 2 was written in C++/Qt5 and it was far too complex. We had issues with people
+not able to build from source because the Qt5 libraries were so ungainly. So I decided to do a
+rewrite in C/SDL2 (originally FreeGLUT, but that was a mistake) with data stored as YAML. This
+means linking 4-7 libraries depending on your system which are all well supported and widely available.
+
+This is going well, although it's slow progress as I'm trying to keep track of the design while
+also doing a ground up rewrite. I don't want to throw away good ideas. Since I also write code
+for libembroidery my time is divided.
+Overview of the UI rewrite
+
+(Problems to be solved in brackets.)
+
+It's not much to look at because I'm trying to avoid using an external widgets system, which
+in turn means writing things like toolbars and menubars over. If you want to get the design
+the actuator is the heart of it.
+
+Without Qt5 we need a way of assigning signals with actions, so this is what I've got: the user interacts with a UI element, this sends an integer to the actuator that does the thing using the current state of the mainwindow struct of which we expect there to be exactly one instance. The action is taken out by a jump table that calls the right function (most of which are missing in action and not connected up properly). It also logs the number, along with key parts of the main struct in the undo history (an unsolved problem because we need to decide how much data to copy over per action). This means undo, redo and repeat actions can refer to this data.
+
+\section{To Do}
+
+\subsection{For 2.0.0-alpha1}
+
+\begin{itemize}
+\item WIP - Statistics from 1.0, needs histogram
+\item WIP - Saving DST/PES/JEF (varga)
+\item WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
+\end{itemize}
+
+\subsection{For 2.0.0-alpha2}
+
+\begin{itemize}
+\item TODO - Notify user of data loss if not saving to an object format.
+\item TODO - Import Raster Image
+\item TODO - SNAP/ORTHO/POLAR
+\item TODO - Layer Manager + LayerSwitcher DockWidget
+\item TODO - Reading DXF
+\end{itemize}
+
+\subsection{For 2.0.0-alpha3}
+
+\begin{itemize}
+\item TODO - Writing DXF
+\item DONE - Up and Down keys cycle thru commands in the command prompt
+\item TODO - Amount of Thread \& Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
+\item TODO - Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
+\item TODO - embroidermodder2.ico 16 x 16 looks horrible
+\end{itemize}
+
+\subsection{For 2.0.0-alpha4}
+
+\begin{itemize}
+\item WIP - CAD Command: Arc (rt)
+\item TODO - automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="\url{https://github.com/Embroidermodder/Embroidermodder/commit/%H}">%s</a>'
+\end{itemize}
+
+\subsection{For 2.0.0-beta1}
+
+\begin{itemize}
+\item TODO - Custom Filter Bug - doesn't save changes in some cases
+\item TODO - Cannot open file with \# in name when opening multiple files (works fine when opening the single file)
+\item TODO - Closing Settings Dialog with the X in the window saves settings rather than discards them
+\item WIP - Advanced Printing
+\item TODO - Filling Algorithms (varga)
+\item TODO - Otto Theme Icons - beta (rt) - Units, Render, Selectors
+\end{itemize}
+
+\subsection{For 2.0.0-rc1}
+
+\begin{itemize}
+\item TODO - QDoc Comments
+\item TODO - Review KDE4 Thumbnailer
+\item TODO - Documentation for libembroidery \& formats
+\item TODO - HTML Help files
+\item TODO - Update language translations
+\item TODO - CAD Command review: line
+\item TODO - CAD Command review: circle
+\item TODO - CAD Command review: rectangle
+\item TODO - CAD Command review: polygon
+\item TODO - CAD Command review: polyline
+\item TODO - CAD Command review: point
+\item TODO - CAD Command review: ellipse
+\item TODO - CAD Command review: arc
+\item TODO - CAD Command review: distance
+\item TODO - CAD Command review: locatepoint
+\item TODO - CAD Command review: move
+\item TODO - CAD Command review: rgb
+\item TODO - CAD Command review: rotate
+\item TODO - CAD Command review: scale
+\item TODO - CAD Command review: singlelinetext
+\item TODO - CAD Command review: star
+\item TODO - Clean up all compiler warning messages, right now theres plenty :P
+\end{itemize}
+
+\subsection{For 2.0 release}
+
+\begin{itemize}
+\item TODO - tar.gz archive
+\item TODO - zip archive
+\item TODO - Debian Package (rt)
+\item TODO - NSIS Installer (rt)
+\item TODO - Mac Bundle?
+\item TODO - press release
+\end{itemize}
+
+\subsection{For 2.x/Ideas}
+
+\begin{itemize}
+\item TODO - libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
+\item TODO - libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
+\item TODO - Cut/Copy - Allow Post-selection
+\item TODO - CAD Command: Array
+\item TODO - CAD Command: Offset
+\item TODO - CAD Command: Extend
+\item TODO - CAD Command: Trim
+\item TODO - CAD Command: BreakAtPoint
+\item TODO - CAD Command: Break2Points
+\item TODO - CAD Command: Fillet
+\item TODO - CAD Command: Chamfer
+\item TODO - CAD Command: Split
+\item TODO - CAD Command: Area
+\item TODO - CAD Command: Time
+\item TODO - CAD Command: PickAdd
+\item TODO - CAD Command: Product
+\item TODO - CAD Command: Program
+\item TODO - CAD Command: ZoomFactor
+\item TODO - CAD Command: GripHot
+\item TODO - CAD Command: GripColor \& GripCool
+\item TODO - CAD Command: GripSize
+\item TODO - CAD Command: Highlight
+\item TODO - CAD Command: Units
+\item TODO - CAD Command: Grid
+\item TODO - CAD Command: Find
+\item TODO - CAD Command: Divide
+\item TODO - CAD Command: ZoomWindow (Move out of view.cpp)
+\item TODO - Command: Web (Generates Spiderweb patterns)
+\item TODO - Command: Guilloche (Generates Guilloche patterns)
+\item TODO - Command: Celtic Knots
+\item TODO - Command: Knotted Wreath
+\item TODO - Lego Mindstorms NXT/EV3 ports and/or commands.
+\item TODO - native function that flashes the command prompt to get users attention when using the prompt is required for a command.
+\item TODO - libembroidery-composer like app that combines multiple files into one.
+\item TODO - Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. 
+\item TODO - Keyboard Zooming/Panning
+\item TODO - G-Code format?
+\item TODO - 3D Raised Embroidery
+\item TODO - Gradient Filling Algorithms
+\item TODO - Stitching Simulation
+\item TODO - RPM packages?
+\item TODO - Reports?
+\item TODO - Record and Playback Commands
+\item TODO - Settings option for reversing zoom scrolling direction
+\item TODO - Qt GUI for libembroidery-convert
+\item TODO - EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
+\item TODO - optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
+\item TODO - Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item TODO - Stippling Fill
+\item TODO - User Designed Custom Fill
+\item TODO - Honeycomb Fill
+\item TODO - Hilburt Curve Fill
+\item TODO - Sierpinski Triangle fill
+\item TODO - Circle Grid Fill
+\item TODO - Spiral Fill
+\item TODO - Offset Fill
+\item TODO - Brick Fill
+\item TODO - Trim jumps over a certain length.
+\item TODO - FAQ about setting high number of jumps for more controlled trimming.
+\item TODO - Minimum stitch length option. (Many machines also have this option too)
+\item TODO - Add 'Design Details' functionality to libembroidery-convert
+\item TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
+\item TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\end{itemize}
+
+\chapter{Libembroidery}
+
+\section{To Do}
+
+\subsection{For Arduino}
+
+\begin{itemize}
+\item TODO - Fix emb-outline files
+\item TODO - Fix thread-color files
+\item TODO - Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
+\item TODO - inotool.org - seems like the logical solution for Nightly/CI builds
+\item TODO - Smoothieboard experiments
+\end{itemize}
+
+\subsection{Testing}
+
+\begin{itemize}
+\item TODO - looping test that reads 10 times while running valgrind. See \texttt{embPattern\_loadExternalColorFile()} Arduino leak note for more info.
+\end{itemize}
+
+\section{DXF File Format}
+
+\index{DXF}
+\cite{dxf_reference}
+
+\chapter{Ideas}
+
+
+\section{Problems to be fixed before the Beta Release}
+
+\begin{enumerate}
+\item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item Get undo history widget back (BUG).
+\item Mac Bundle, .tar.gz and .zip source archive.
+\item NSIS installer for Windows, Debian package, RPM package
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Keyboard zooming, panning
+\item  New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Saving dst, pes, jef.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\item Update language translations.
+\item Replace KDE4 thumbnailer.
+\item Import raster image.
+\item Statistics from 1.0, needs histogram.
+\item SNAP/ORTHO/POLAR.
+\item Cut/copy allow post-selection.
+\item Layout into config.
+\item Notify user of data loss if not saving to an object format.
+\item Add which formats to work with to preferences.
+\item Cannot open file with \# in the name when opening multiple files but works with opening a single file.
+\item Closing settings dialog with the X in the window saves settings rather than discarding them.
+\item Otto theme icons: units, render, selectors, what's this icon doesn't scale.
+\item Layer manager and Layer switcher dock widget.
+\item Test that all formats read data in correct scale (format details should match other programs).
+\item Custom filter bug -- doesn't save changes in some cases.
+\item Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.
+\item Converting Qt C++ version to native GUI C throughout.
+\item OpenGL Rendering: ``Real`` rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.
+\item Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So `Ellipse` has `EmbEllipse` as public data within it.
+\item Move calculations of rotation and scaling into `EmbVector` calls.
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Keyboard zooming, panning
+\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+\item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\end{enumerate}
+
+\subsection{Get the Development Build going}
+
+When we switch to releases we recommend using them, unless you're reporting a bug in which case you can check the development build for whether it has been patched. If this applies to you, the current development build is:
+
+\begin{itemize}
+\item [Linux](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005099)
+\item [Mac OS](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005101)
+\item [Windows](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005102)
+\end{itemize}
+
+\section{Problems to be fixed during Beta and before 2.0.0}
+
+\begin{enumerate}
+\item Libembroidery 1.0.
+\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+\item EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\item Custom filter bug -- doesn't save changes in some cases.
+\item Advanced printing.
+\item Stitching simulation.
+\end{enumerate}
+
+\section{Problems to be fixed eventually}
+
+\begin{enumerate}
+\item User designed custom fill.
+\end{enumerate}
+
+\chapter{Build and Install Advice}
+
+Assuming you already have the SDL2 libraries you can proceed to using the fast build, which assumes you want to build and test locally.
+
+The fast build should be:
+
+\begin{lstlisting}
+    bash scripts/build.sh
+\end{lstlisting}
+
+or, on Windows:
+
+\begin{lstlisting}
+    .\scripts\build.bat
+\end{lstlisting}
+
+Then run using the `run.bat` or `run.sh` scripts in the build/ directory.
+
+Otherwise, follow the instructions below.
+
+If you plan to install the dev version to your system (we recommend you wait for the official installers and beta release first) then use the CMake build instead.
+
+\section{Install on Desktop}
+
+We recommend that if you want to install the development version you use the CMake build. Like this:
+
+\begin{lstlisting}
+    git submodule init
+    git submodule update
+
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build .
+    sudo cmake --install .
+\end{lstlisting}
+
+These lines are written into the file:
+
+\begin{lstlisting}
+    .\scripts\build_install.sh
+\end{lstlisting}
+
+On Windows use the next section.
+
+\chapter{Development}
+
+If you wish to develop with us you can chat via the contact email
+on the [website]\url{https://libembroidery.org} or in the issues tab on the
+[github page]\url{https://github.com/Embroidermodder/Embroidermodder/issues}.
+People have been polite and friendly in these conversations and I (Robin)
+have really enjoyed them.
+If we do have any arguments please note we have a
+[Code of Conduct] CODE\_OF\_CONDUCT.md so there is a consistent policy to
+enforce when dealing with these arguments.
+
+The first thing you should try is building from source using the [build advice](build)
+above. Then read some of the [manual] \url{https://libembroidery.org/embroidermodder_2.0_manual.pdf} to get the general
+layout of the source code and what we are currently planning.
+
+\section{Testing}
+
+To find unfixed errors run the tests by launching from the command line with:
+
+\begin{lstlisting}
+    $ embroidermodder --test
+\end{lstlisting}
+
+then dig through the output. It's currently not worth reporting the errors, since
+there are so many but if you can fix anything reported here you can submit a PR.
+
+\section{Contributing}
+
+\subsection{Funding}
+
+The easiest way to help is to fund development (see the Donate button above),
+since we can't afford to spend a lot of time developing and only have limited
+kit to test out libembroidery on.
+
+\subsection{Programming and Engineering}
+
+Should you want to get into the code itself:
+
+\begin{itemize}
+\item Low level C developers are be needed for the base library `libembroidery`.
+\item Low level assembly programmers are needed for translating some of `libembroidery` to `EmbroiderBot`.
+\item Hardware Engineers to help design our own kitbashed embroidery machine `EmbroiderBot`, one of the original project aims in 2013.
+\item Scheme developers and C/SDL developers to help build the GUI.
+\item Scheme developers to help add designs for generating of custom stitch-filled emblems like the heart or dolphi. Note that this happens in Embroidermodder not libembroidery (which assumes that you already have a function available).
+\end{itemize}
+
+\subsection{Writing}
+
+We also need people familiar with the software and the general
+machine embroidery ecosystem to contribute to the
+[documentation](https://github.com/Embroidermodder/docs).
+
+We need researchers to find references for the documentation: colour tables,
+machine specifications etc. The history is murky and often very poorly maintained
+so if you know anything from working in the industry that you can share: it'd be
+appreciated!
+
+\section{Design}
+
+These are key bits of reasoning behind why the software is built the way it is.
+
+\section{Translation of the user interface}
+
+In a given table the left column is the default symbol
+and the right string is the translation. If the translate
+function fails to find a translation it returns the default
+symbol.
+
+So in US English it is an empty table, but in UK English
+only the dialectical differences are present.
+
+Ideally, we should support at least the 6 languages spoken at the UN. Quoting www.un.org:
+
+\begin{quote}
+\emph{There are six official languages of the UN. These are Arabic, Chinese, English, French, Russian and Spanish.}
+\end{quote}
+
+We're adding Hindi, on the grounds that it is one of the most commonly spoken languages and at least one of the Indian languages should be present.
+
+Written Chinese is generally supported as two different symbol sets and we follow that convension.
+
+English is supported as two dialects to ensure that the development team is aware of what those differences are. The code base is written by a mixture of US and UK native English speakers meaning that only the variable names are consistently one dialect: US English. As for documentation: it is whatever dialect the writer prefers (but they should maintain consistency within a text block like this one).
+
+Finally, we have ``default'', which is the dominant language
+of the internals of the software. Practically, this is
+just US English, but in terms of programming history this
+is the ``C locale''. 
+
+\section{Old action system notes}
+
+NO LONGER HOW ACTION SYSTEM WORKS, MOVE TO DOCS.
+
+Action: the basic system to encode all user input.
+
+This typedef gives structure to the data associated with each action
+which, in the code, is referred to by the action id (an int from
+the define table above).
+
+\section{DESCRIPTION OF STRUCT CONTENTS}
+
+\subsection{label}
+
+What is called from Scheme to run the function.
+It is always in US English, lowercase,
+seperated with hyphens.
+
+For example: new-file.
+
+\subsection{function}
+
+The function pointer, always starts with the prefix scm,
+in US English, lowercase, seperated with underscores.
+
+The words should match those of the label otherwise.
+
+For example: scm\_new\_file.
+
+\subsection{flags}
+
+The bit based flags all collected into a 32-bit integer.
+
+\begin{tabular}{l l}
+bit(s) & description \\
+\hline
+0 & User (0) or system (1) permissions. \\
+1-3 & The mode of input.                         |
+| 4-8    | The object classes that this action        |
+|        | can be applied to.                         |
+| 9-10   | What menu (if any) should it be present in.|
+| 11-12  | What                                       |
+\end{tabular}
+
+\subsection{description}
+
+The string placed in the tooltip describing the action.
+
+\chapter{Contributing}
+
+\section{Version Control}
+
+Being an open source project, developers can grab the latest code at any time
+and attempt to build it themselves. We try our best to ensure that it will build smoothly
+at any time, although occasionally we do break the build. In these instances,
+please provide a patch, pull request which fixes the issue or open an issue and
+notify us of the problem, as we may not be aware of it and we can build fine.
+
+Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
+
+See the coding style [here](coding-style)
+
+\chapter{Tutorials}
+
+\section{Basic Features}
+
+\subsection{Move a single stitch in an existing pattern}
+
+\begin{enumerate}
+\item In the `File' menu, click `Open...'. When the open dialog appears find
+  and select your file by double clicking the name of the file. Alternatively,
+  left click the file once then click the `Open` button.
+\item
+\item In the `File' menu
+\end{enumerate}
+
+TIP: For users who prefer
+
+\subsection{Convert one pattern to another format}
+
+\begin{enumerate}
+\item In the `File` menu, click `Open...`.
+\item The 
+\item In the dropdown menu within the save dialog select the 
+\end{enumerate}
+
+\section{Advanced Features}
+
+
+\section{Planning}
+
+To see what's planned open the [Projects](https://github.com/Embroidermodder/Embroidermodder/projects/1) tab which sorts all of the GitHub Issues into columns.
+
+\section{Format Support}
+
+\begin{tabular}{l l l l}
+FORMAT & READ & WRITE & NOTES \\
+\hline
+\end{tabular}
+
+| `10o` | YES   |  | read (need to fix external color loading) (maybe find out what ctrl | code flags of 0x10, 0x08, 0x04, and 0x02 mean) |
+| `100` |  |  | none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x | y (signed char) |
+| `art` |  |  | none |
+| `bro` | YES   |  | read (complete)(maybe figure out detail of header) |
+| `cnd` |  |  | none |
+| `col` |  |  | (color file no design) read(final) write(final) |
+| `csd` | YES   |  | read (complete) |
+| `dat` |  |  | read () |
+| `dem` |  |  | none (looks like just encrypted cnd) |
+| `dsb` | YES   |  | read (unknown how well) (stitch data looks same as 10o) |
+| `dst` | YES   |  | read (complete) / write(unknown) |
+| `dsz` | YES   |  | read (unknown) |
+| `dxf` |  |  | read (Port to C. needs refactored) |
+| `edr` |  |  | read (C version is broken) / write (complete) |
+| `emd` |  |  | read (unknown) |
+| `exp` | YES   |  | read (unknown) / write(unknown) |
+| `exy` | YES   |  | read (need to fix external color loading) |
+| `fxy` | YES   |  | read (need to fix external color loading) |
+| `gnc` |  |  | none |
+| `gt`     |  |  | read (need to fix external color loading) |
+| `hus` | YES   |  | read (unknown) / write (C version is broken) |
+| `inb` | YES   |  | read (buggy?) |
+| `jef` | YES   |  | write (need to fix the offsets when it is moving to another spot) |
+| `ksm` | YES   |  | read (unknown) / write (unknown) |
+| `pcd` |  |  |  |
+| `pcm` |  |  | |
+| `pcq` |  |  | read (Port to C)|
+| `pcs` | BUGGY |  | read (buggy / colors are not correct / after reading, writing any other format is messed up)|
+| `pec` |  |  | read / write (without embedded images, sometimes overlooks some stitches leaving a gap)|
+| `pel` |  |  | none|
+| `pem` |  |  | none|
+| `pes` | YES   |  | |
+| `phb` |  |  | |
+| `phc` |  |  | |
+| `rgb` |  |  | |
+| `sew` | YES   |  | |
+| `shv` |  |  | read (C version is broken)|
+| `sst` |  |  | none|
+| `svg` |  | YES   | |
+| `tap` | YES   |  | read (unknown)|
+| `u01` |  |  | |
+| `vip` | YES   |  | |
+| `vp3` | YES   |  | |
+| `xxx` | YES   |  | |
+| `zsk` |  |  | read (complete) |
+
+Support for Singer FHE, CHE (Compucon) formats?
+
+\section{Embroidermodder Project Coding Standards}
+
+A basic set of guidelines to use when submitting code.
+
+Code structure is mre important than style, so
+first we advise you read ``Design'' and experimenting
+before getting into the specifics of code style.
+
+\subsection{Where Code Goes}
+
+Anything that deals with the specifics of embroidery file formats, threads, rendering to images, embroidery machinery or command line interfaces should go in `libembroidery` not here.
+
+Should your idea pass this test:
+
+\begin{enumerate}
+\item A new kind of GUI structure it goes in `src/ui.c`.
+\item If it's something the user can do, make a section of the `actuator` function (which lives in `src/actuator.c`) using the guide "The Actuator's Behaviour".
+\item Potentially variable data that is global goes in `src/data.c`.
+\item If the data will not vary declare it as a compiler definition using the "Compiler definitions" section and put it in `src/em2.h`.
+\item All other C code goes in `src/em2.c`.
+\end{enumerate}
+
+\subsection{Where Non-compiled Files Go}
+
+TODO: Like most user interfaces Embroidermodder is mostly data, so here we will have a list describing where each CSV goes.
+
+\subsection{Ways in which we break style on purpose}
+
+Most style guides advise you to keep functions short. We make a few pointed exceptions to this where the overall health and functionality of the source code should benefit.
+
+The `actuator' function will always be a mess
+and it should be: we're keeping the total source
+lines of code down by encoding all user action into
+a descrete sequence of strings that are all below
+`\_STRING\_LENGTH` in length. See the section on
+the actuator (TODO) describing why any other solution
+we could think  here would mean more more code without
+a payoff in speed of execution or clarity.
+
+\subsection{Naming Conventions}
+
+Name variables and functions intelligently to minimize the need for comments.
+It should be immediately obvious what information it represents.
+Short names such as `x` and `y` are fine when referring to coordinates.
+Short names such as `i` and `j` are fine when doing loops.
+
+Variable names should be `camelCase`, starting with a lowercase word followed by uppercase word(s).
+C Functions that attempt to simulate namespacing, should be `nameSpace\_camelCase`.
+
+All files and directories shall be lowercase and contain no spaces.
+
+\section{Code Style}
+
+Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.
+
+\subsection{Braces}
+
+For functions: please put each brace on a new line.
+
+\begin{verbatim}
+void function_definition(int argument)
+{
+    /* code block */
+}
+\end{verbatim}
+
+For control statements: please put the first brace on the same line.
+
+\begin{verbatim}
+if (condition) {
+    /* code block */    
+}
+\end{verbatim}
+
+Use exceptions sparingly.
+
+Do not use ternary operator `(?:)` in place of if/else.
+
+Do not repeat a variable name that already occurs in an outer scope.
+
+\section{Version Control}
+
+Being an open source project, developers can grab the latest code at any time
+and attempt to build it themselves. We try our best to ensure that it will build smoothly
+at any time, although occasionally we do break the build. In these instances,
+please provide a patch, pull request which fixes the issue or open an issue and
+notify us of the problem, as we may not be aware of it and we can build fine.
+
+Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
+
+\section{Donations}
+
+Creating software that interfaces with hardware is costly. A summary of some of the costs involved:
+
+1. Developer time for 2 core developers
+2. Computer equipment and parts
+3. Embroidery machinery
+4. Various electronics for kitbashing Embroiderbot
+5. Consumable materials (thread, fabric, stabilizer, etc...)
+
+If you have found our software useful, please consider funding further development by donating to the project [on Open Collective](https://opencollective.com/embroidermodder).
+
+\chapter{Introduction}
+
+\emph{(UNDER MAJOR RESTRUCTURING, PLEASE WAIT FOR VERSION 2)}
+
+Embroidermodder is a free machine embroidery application.
+The newest version, Embroidermodder 2 can:
+
+\begin{itemize}
+\item edit and create embroidery designs
+\item estimate the amount of thread and machine time needed to stitch a design
+\item convert embroidery files to a variety of formats
+\item upscale or downscale designs
+\item run on Windows, Mac and Linux
+\end{itemize}
+
+For more information, see our website \cite{thewebsite}.
+
+Embroidermodder 2 is very much a work in progress since we're doing a ground up rewrite to an interface in Python using the GUI toolkit Tk. The reasoning for this is detailed in the issues tab.
+
+For a more in-depth look at what we are developing read the developer notes (link to dev notes section). This discusses recent changes in a less formal way than a changelog (since this software is in development) and covers what we are about to try.
+
+Documentation
+
+The documentation is in the form of the website (included in the `docs/`
+directory) and the printed docs in this file.
+
+\subsection{Development}
+
+If you wish to develop with us you can chat via the contact email
+on the [website]\url{https://www.libembroidery.org} or in the issues tab on the
+[github page]\url{https://github.com/Embroidermodder/Embroidermodder/issues}.
+People have been polite and friendly in these conversations and I (Robin)
+have really enjoyed them.
+If we do have any arguments please note we have a
+[Code of Conduct](CODE\_OF\_CONDUCT.md) so there is a consistent policy to
+enforce when dealing with these arguments.
+
+The first thing you should try is building from source using the [build advice](link to build)
+above. Then read some of the [development notes](link to dev notes.md) to get the general
+layout of the source code and what we are currently planning.
+
+\subsection{Testing}
+
+To find unfixed errors run the tests by launching from the command line with:
+
+\begin{lstlisting}
+$ embroidermodder --test
+\end{lstlisting}
+
+then dig through the output. It's currently not worth reporting the errors, since
+there are so many but if you can fix anything reported here you can submit a PR.
+
+\section{Code Optimisations and Simplifications}
+
+\subsection{Current}
+
+What Robin is currently doing.
+
+Getting the code to pass PyLint, that involves getting all source files
+under 1000 lines, renaming all variables to be in snake case.
+
+Changing the seperation of code between EM and libembroidery.
+
+Translating the Qt widget framework to Tk.
+
+\subsection{Geometry}
+
+The geometry is stored, processed and altered via libembroidery. See the Python specific part of the documentation for libembroidery for this. What the code in Embroidermodder does is make the GUI widgets to change and view this information graphically.
+
+For example if we create a circle with radius 10mm and center at (20mm, 30mm) then fill it with stitches the commands would be
+
+\begin{lstlisting}
+from libembroidery import Pattern, Circle, Vector, satin
+circle = Circle(Vector(20, 30), 10)
+pattern = Pattern()
+pattern.add_circle(circle, fill=satin)
+pattern.to_stitches()
+\end{lstlisting}
+
+but the user would do this through a series of GUI actions:
+
+\begin{enumerate}
+\item Create new file
+\item Click add circle
+\item Use the Settings dialog to alter the radius and center
+\item Use the fill tool on circle
+\item Select satin from the drop down menu
+\end{enumerate}
+
+So EM2 does the job of bridging that gap.
+
+
+\subsection{Postscript Support}
+
+In order to safely support user contributed/shared data that can
+define, for example, double to double functions we need a consistent
+processor for these descriptions.
+
+Embroidermodder backends to the postscript interpreter included
+in libembroidery to accomplish this.
+
+For example the string:
+
+\begin{verbatim}
+5 2 t mul add
+\end{verbatim}
+
+is equivalent to the expression:
+
+\begin{verbatim}
+2*t + 5
+\end{verbatim}
+
+The benefit of not allowing this to simply be a Python expression
+is that it is safe against malicious use, or accidental misuse.
+The program can identify whether the output is of the appropriate
+form and give finitely many calculations before declaring the
+function to have run too long (stopping equations that hang).
+
+To see examples of this see the `assets/shapes/*.ps` files.
+
+\subsection{SVG Icons}
+
+To make the images easier to alter and restyle we could
+switch to svg icons. There's some code in the git history
+to help with this.
+
+\subsection{The Actions System}
+
+In order to simplify the development of a GUI that is flexible and
+easy to understand to new developers we have a custom action system that all
+user actions will go via an `actuator` that takes a string argument. By using a
+string argument the undo history is just an array of strings.
+
+The C `action\_hash\_data` struct will contain: the icon used, the labels for the
+menus and tooltips and the function pointer for that action.
+There will be an accompanying argument for this function call, currently being
+drafted as `action\_call`. So when the user makes a function call it should
+contain information like the mouse position, whether special key is pressed
+etc.
+
+\subsection{Accessibility}
+
+Software can be more or less friendly to people with dylexia, partial sightedness, reduced mobility and those who don't speak English. Embroidermodder 2 has, in its design, the following features to help:
+
+\begin{itemize}
+\item icons for everything to reduce the amount of reading required
+\item the system font is configurable: if you have a dyslexia-friendly font you can load it
+\item the interface rescales to help with partial-sightedness
+\item the system language is configurable, unfortunately the docs will only be in English but we can try to supply lots of images of the interface to make it easier to understand as a second language
+\item buttons are remappable: XBox controllers are known for being good for people with reduced mobility so remapping the buttons to whatever setup you have should help
+\end{itemize}
+
+Note that most of these features will be released with version 2.1, which is planned for around early 2023.
+
+\subsection{Sample Files}
+
+Various sample embroidery design files can be found in the embroidermodder2/samples folder.
+
+\subsection{Shortcuts}
+
+A shortcut can be made up of zero or more modifier keys and at least one non-modifier key pressed at once.
+
+To make this list quickly assessable, we can produce a list of hashes which are simply the flags ORed together.
+
+The shortcuts are stored in the csv file "shortcuts.csv"
+as a 5-column table with the first 4 columns describing
+the key combination. This is loaded into the shortcuts
+`TABLE`. Each tick the program checks the input state for
+this combination by first translating the key names into
+indices for the key state, then checking for whether all
+of them are set to true.
+
+\subsection{CAD command review}
+
+\begin{tabular}{l l l l}
+\textbf{ID} & \textbf{name} & \textbf{arguments} & \textbf{description} \\
+\hline
+0 & newfile & none & Create a new EmbPattern with a new tab in the GUI. \\
+1 & openfile & filename string & Open an EmbPattern with the supplied filename `fname`.  \\
+2 & savefile & filename string & Save the current loaded EmbPattern to the supplied filname `fname`. \\
+3 & scale & selected objects, 1 float & Scale all selected objects by the number supplied, without selection scales the entire design \\
+4 & circle & mouse co-ords & Adds a circle to the design based on the supplied numbers, converts to stitches on save for stitch only formats. \\
+5 & offset & mouse co-ords & Shifts the selected objects by the amount given by the mouse co-ordinates.  \\
+6 & extend & & \\
+7 & trim & & \\
+8 & break\_at\_point & & \\
+9 & break\_2\_points & & \\
+10 & fillet & & \\
+11 & star & & \\
+12 & singlelinetext & & \\
+13 & chamfer & & \\
+14 & split & & \\
+15 & area & & \\
+16 & time & & \\
+17 & pickadd & & \\
+16 & zoomfactor & & \\
+17 & product & & \\
+18 & program & & \\
+19 & zoomwindow & & \\
+20 & divide & & \\
+21 & find & & \\
+22 & record & & \\
+23 & playback & & \\
+24 & rotate & & \\
+25 & rgb & & \\
+26 & move & & \\
+27 & grid & & \\
+28 & griphot &  &  \\
+29 & gripcolor & & \\
+30 & gripcool &  &  \\
+31 & gripsize &  &  \\
+32 & highlight &  &  \\
+33 & units &  &  \\
+34 & locatepoint &  &  \\
+35 & distance &  &  \\
+36 & arc &  &  \\
+37 & ellipse &  &  \\
+38 & array &  &  \\
+39 & point &  &  \\
+40 & polyline &  &  \\
+41 & polygon &  &  \\
+42 & rectangle &  &  \\
+43 & line &  &  \\
+44 & arc (rt) &  &  \\
+45 & dolphin &  &  \\
+46 & heart  & &
+\end{tabular}
+
+\subsection{Removed Elements}
+
+So I've had a few pieces of web infrastructure fail me recently and
+I think it's worth noting. An issue that affects us is an issue that
+can effect people who use our software.
+
+\subsection{Qt and dependencies}
+
+Downloading and installing Qt has been a pain for some users
+(46Gb on possibly slow connections).
+
+I'm switching to FreeGLUT 3 (which is a whole other conversation) which means we
+can ship it with the source code package meaning only a basic build
+environment is necessary to build it.
+
+\subsection{Social Platform}
+
+Github is giving me a server offline (500) error and is still giving a bad ping.
+
+So... all the issues and project boards etc. being on Github is all well and good assuming that we have our own copies. But we don't if Github goes down or some other major player takes over the space and we have to move (again, since this started on SourceForge).
+
+This file is a backup for that which is why I'm repeating myself between them.
+
+\subsection{Pandoc Documentation}
+
+The documentation is, well better in that it's housed in the main repository,
+but I'm not a fan of the ``write once build many'' approach as it means
+trying to weigh up how 3 versions are going to render.
+
+Can we treat the website being a duplicate of the docs a non-starter?
+I'd be happier with tex/pdf only and (I know this is counter-intuitive) one
+per project.
+
+\subsection{OpenGL}
+
+OpenGL rendering within the application. This will allow for
+Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+
+This should backend to a C renderer or something.
+
+\subsection{Configuration Data Ideas}
+
+embroidermodder should boot from the command line
+regardless of whether it is or is not installed (this helps with testing and
+running on machines without root). Therefore, it can create an initiation file
+but it won't rely on its existence to boot: `~/.embroidermodder/config.json`.
+
+\begin{itemize}
+\item Switch colors to be stored as 6 digit hexcodes with a \texttt{\#}.
+\item We've got close to a hand implemented ini read/write setup in `settings.py`.
+\end{itemize}
+
+\subsection{Distribution}
+
+When we release the new pip wheel we should also package:
+
+* `.tar.gz` and `.zip` source archive.
+* Debian package
+* RPM package
+
+Only do this once per minor version number.
+
+\subsection{Scripting Overhaul}
+
+Originally Embroidermodder had a terminal widget, this is why we removed it.
+
+\begin{quote}
+> ROBIN: I think supporting scripting within Embroidermodder doesn't make sense.
+
+> All features that use scripting can be part of libembroidery instead.
+> Users who are capable of using scripting won't need it, they can alter their embroidery files in CSV format, or import pyembroidery to get access.
+> It makes maintaining the code a lot more complicated, especially if we move away from Qt.
+> Users who don't want the scripting feature will likely be confused by it, since we say that's what libembroidery, embroider and pyembroidery are for.
+
+> How about a simpler ``call user shell`` feature? Similar to texmaker we just call system on a batch or shell script supplied by the user and it processes the file directly then the software reloads the file. Then we aren't parsing it directly.
+
+> I don't want to change this without Josh's support because it's a fairly major change.
+
+> JOSH: I totally agree.
+
+> I like the idea of scripting just so people that know how to code could write their own designs without needing to fully build the app. Scripting would be a very advanced feature that most users would be confused by. Libembroidery would be a good fit for advanced features.
+
+> Now we are using Python (again, sort of) this would be a lot more natural,
+> perhaps we could boot the software without blocking the shell so they can
+> interact? TODO: Screenshot a working draft to demonstrate.
+\end{quote}
+
+\subsection{Perennial Jobs}
+
+\begin{enumerate}
+\item Check for memory leaks
+\item Clear compiler warnings on `-Wall -ansi -pedantic` for C.
+\item Write new tests for new code.
+\item Get Embroidermodder onto the current version of libembroidery.
+\item PEP7 compliance.
+\item Better documentation with more photos/screencaps.
+\end{enumerate}
+
+\subsection{Full Test Suite}
+
+(This needs a hook from Embroidermodder to embroider's full test suite.)
+
+The flag `--full-test-suite` runs all the tests that have been written.
+Since this results in a lot of output the details are both to stdout
+and to a text file called `test\_matrix.txt`.
+
+Patches that strictly improve the results in the `test\_matrix.txt` over
+the current version will likely be accepted and it'll be a good place
+to go digging for contributions. (Note: strictly improve means that
+the testing result for each test is as good a result, if not better.
+Sacrificing one critera for another would require some design work
+before we would consider it.)
+
+\subsection{Symbols}
+
+Symbols use the SVG path syntax.
+
+In theory, we could combine the icons and symbols systems, since they could be rendered once and stored as icons in Qt. (Or as textures in FreeGLUT.)
+
+Also we want to render the patterns themselves using SVG syntax, so it would save on repeated work overall.
+
+\chapter{Tutorials}
+
+\section{Basic Features}
+
+\subsection{Move a single stitch in an existing pattern}
+
+\begin{enumerate}
+\item In the `File` menu, click `Open...`. When the open dialog appears find and select your file by double clicking the name of the file. Alternatively, left click the file once then click the `Open` button.
+\item
+\item In the `File` menu
+\end{enumerate}
+
+TIP: For users who prefer
+
+\subsection{Convert one pattern to another}
+
+\begin{enumerate}
+\item In the `File` menu, click `Open...`.
+\item The
+\item In the dropdown menu within the save dialog select the
+\end{enumerate}
+
+\subsection{Advanced Features}
+
+
+\subsection{Format Support}
+
+Support for Singer FHE, CHE (Compucon) formats?
+
+\section{Embroidermodder Project Coding Standards}
+
+A basic set of guidelines to use when submitting code.
+
+\subsection{Naming Conventions}
+
+Name variables and functions intelligently to minimize the need for
+comments. It should be immediately obvious what information it
+represents. Short names such as x and y are fine when referring to
+coordinates. Short names such as i and j are fine when doing loops.
+
+Variable names should be "camelCase", starting with a lowercase word
+followed by uppercase word(s). C++ Class Names should be "CamelCase",
+using all uppercase word(s). C Functions that attempt to simulate namespacing, should be "nameSpace\_camelCase".
+
+All files and directories shall be lowercase and contain no spaces.
+
+\section{Code Style}
+
+Tabs should not be used when indenting. Setup your IDE or text editor to
+use 4 spaces.
+
+\subsection{Braces}
+
+For functions: please put each brace on a new line.
+
+\begin{verbatim}
+void function_definition(int argument)
+{
+
+}
+\end{verbatim}
+
+For control statements: please put the first brace on the same line.
+
+\begin{verbatim}
+if (condition) {
+
+}
+\end{verbatim}
+
+Use exceptions sparingly.
+
+Do not use ternary operator (?:) in place of if/else.
+
+Do not repeat a variable name that already occurs in an outer scope.
+
+\subsection{Version Control}
+
+Being an open source project, developers can grab the latest code at any
+time and attempt to build it themselves. We try our best to ensure that
+it will build smoothly at any time, although occasionally we do break
+the build. In these instances, please provide a patch, pull request
+which fixes the issue or open an issue and notify us of the problem, as
+we may not be aware of it and we can build fine.
+
+Try to group commits based on what they are related to:
+features/bugs/comments/graphics/commands/etc...
+
+\subsection{Comments}
+
+When writing code, sometimes there are items that we know can be
+improved, incomplete or need special clarification. In these cases, use
+the types of comments shown below. They are pretty standard and are
+highlighted by many editors to make reviewing code easier. We also use
+shell scripts to parse the code to find all of these occurrences so
+someone wanting to go on a bug hunt will be able to easily see which
+areas of the code need more love.
+
+libembroidery and Embroidermodder are written in C and adheres to C89 standards. This means
+that any C99 or C++ comments will show up as errors when compiling with
+gcc. In any C code, you must use:
+
+\begin{lstlisting}
+/* C Style Comments */
+/* TODO: This code clearly needs more work or further review. */
+/* BUG: This code is definitely wrong. It needs fixed. */
+/* HACK: This code shouldn't be written this way or I don't feel right about it. There may a better solution */
+/* WARNING: Think twice (or more times) before changing this code. I put this here for a good reason. */
+/* NOTE: This comment is much more important than lesser comments. */
+\end{lstlisting}
+
+\section{Ideas}
+
+\subsection{Why this document}
+
+I've been trying to make this document indirectly through the Github
+issues page and the website we're building but I think a
+straightforward, plain-text file needs to be the ultimate backup for
+this. Then I can have a printout while I'm working on the project.
+
+\subsection{googletests}
+
+gtests are non-essential, testing is for developers not users so we can
+choose our own framework. I think the in-built testing for libembroidery
+was good and I want to re-instate it.
+
+\subsection{Qt and dependencies}
+
+I'm switching to SDL2 (which is a whole other conversation) which means
+we can ship it with the source code package meaning only a basic build
+environment is necessary to build it.
+
+\subsection{Documentation}
+
+Can we treat the website being a duplicate of the docs a non-starter?
+I'd be happier with tex/pdf only and (I know this is counter-intuitive)
+one per project.
+
+\subsection{Social Platform}
+
+So... all the issues and project boards etc. being on Github is all
+well and good assuming that we have our own copies. But we don't if
+Github goes down or some other major player takes over the space and we
+have to move (again, since this started on SourceForge).
+
+This file is a backup for that which is why I'm repeating myself between
+them.
+
+\subsection{Identify the meaning of these TODO items}
+
+\begin{itemize}
+\item Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug \#179
+\item Lego Mindstorms NXT/EV3 ports and/or commands
+\end{itemize}
+
+\subsection{Progress Chart}
+
+The chart of successful from-to conversions (previously a separate issue)
+is something that should appear in the README.
+
+\subsection{Style}
+
+Rather than maintain our own standard for style, please defer to
+the Python's PEP 7 ([12](\#12)) for C style.
+If it passes the linters for that we consider it well styled
+for a pull request.
+
+As for other languages we have no house style other than whatever
+``major`` styles exist, for example Java in
+Google style ([13](\#13))
+would be acceptable. We'll elect specific standards if it becomes
+an issue.
+
+\subsection{Standard}
+
+The criteria for a good Pull Request from an outside developer has these properties, from most to least important:
+
+\begin{itemize}
+\item No regressions on testing.
+\item Add a feature, bug fix or documentation that is already agreed on through GitHub issues or some other way with a core developer.
+\item No GUI specific code should be in libembroidery, that's for Embroidermodder.
+\item Pedantic/ansi C unless there's a good reason to use another language.
+\item Meet the style above (i.e. [PEP 7, Code Lay-out](\url{https://peps.python.org/pep-0007/#code-lay-out})). We'll just fix the style if the code's good and it's not a lot of work.
+\item `embroider` should be in POSIX style as a command line program.
+\item No dependancies that aren't ``standard'', i.e. use only the C Standard Library.
+\end{itemize}
+
+\subsection{Image Fitting}
+
+A currently unsolved problem in development that warrants further research is
+the scenario where a user wants to feed embroider an image that can then be .
+
+\subsection{To Place}
+
+A \emph{right-handed coordinate system} is one where up is positive and right is
+positive. Left-handed is up is positive, left is positive. Screens often use
+down is positive, right is positive, including the OpenGL standard so when
+switching between graphics formats and stitch formats we need to use a vertical
+flip (`embPattern\_flip`).
+
+`0x20` is the space symbol, so when padding either 0 or space is preferred and in the case of space use the literal ' '.
+
+\subsection{To Do}
+
+We currently need help with:
+
+\begin{itemize}
+\item Thorough descriptions of each embroidery format.
+\item Finding resources for each of the branded thread libraries (along with a full citation for documentation).
+\item Finding resources for each geometric algorithm used (along with a full citation for documentation).
+\item Completing the full `--full-test-suite`  with no segfaults and at least a clear error message (for example ``not implemented yet``).
+\item Identifying ``best guesses`` for filling in missing information when going from, say `.csv` to a late `.pes` version. What should the default be when the data doesn't clarify?
+\item Improving the written documentation.
+\item Funding, see the Sponsor button above. We can treat this as ``work`` and put far more hours in with broad support in small donations from people who want specific features.
+\end{itemize}
+
+Beyond this the development targets are categories sorted into:
+
+\begin{itemize}
+\item Basic Features
+\item Code quality and user friendliness
+\item embroider CLI
+\item Documentation
+\item GUI
+\item electronics development
+\end{itemize}
+
+\subsection{Basic features}
+
+\begin{itemize}
+\item Incorporate `\#if 0`ed parts of `libembroidery.c`.
+\item Interpret how to write formats that have a read mode from the source code and vice versa.
+\item Document the specifics of the file formats here for embroidery machine specific formats. Find websites and other sources that break down the binary formats we currently don't understand.
+\item Find more and better documentation of the structure of the headers for the formats we do understand.
+\end{itemize}
+
+\subsection{Code quality and user friendliness}
+
+\begin{itemize}
+\item Document all structs, macros and functions (will contribute directly
+   on the web version).
+\item Incorporate experimental code, improve support for language bindings.
+\item Make stitch x, y into an EmbVector.
+\end{itemize}
+
+\subsection{embroider CLI}
+
+\begin{itemize}
+\item Make `-circle` flag to add a circle to the current pattern.
+\item Make `-rect` flag to add a rectangle to the current pattern.
+\item Make `-fill` flag to set the current satin fill algorithm for the current geometry. (for example `-fill crosses -circle 11,13,10` fills a circle with center 11mm, 13mm with radius 10mm with crosses).
+\item Make `-ellipse` flag to add to ellipse to the current pattern.
+\item Make `-bezier` flag to add a bezier curve to the current pattern.
+\end{itemize}
+
+\subsection{Embroider pipeline}
+
+Adjectives apply to every following noun so
+
+\begin{lstlisting}
+embroider --satin 0.3,0.6 --thickness 2 --circle 10,20,5 \
+    --border 3 --disc 30,40,10 --arc 30,50,10,60 output.pes
+\end{lstlisting}
+
+Creates:
+
+\begin{itemize}
+\item a circle with properties: thickness 2, satin 0.3,0.6
+\item a disc with properties: 
+\item an arc with properties:
+\end{itemize}
+
+in that order then writes them to the output file `output.pes`.
+
+\subsection{Documentation}
+
+\begin{enumerate}
+\item Create csv data files for thread tables.
+\item Convert tex to markdown, make tex an output of `build.bash`.
+\item Run `sloccount` on `extern/` and `.` (and ) so we know the current scale of the project, aim to get this number low. Report the total as part of the documentation.
+\item Try to get as much of the source code that we maintain into C as possible so new developers don't need to learn multiple languages to have an effect. This bars the embedded parts of the code. 
+\end{enumerate}
+
+\subsection{GUI}
+
+\begin{enumerate}
+\item Make EmbroideryMobile (Android) also backend to `libembroidery` with a Java wrapper.
+\item Make EmbroideryMobile (iOS) also backend to `libembroidery` with a Swift wrapper.
+\item Share some of the MobileViewer and iMobileViewer layout with the main EM2. Perhaps combine those 3 into the Embroidermodder repository so there are 4 repositories total.
+\item Convert layout data to JSON format and use cJSON for parsing.
+\end{enumerate}
+
+\section{Electronics development}
+
+\begin{itemize}
+\item Currently experimenting with Fritzing[8](8), upload netlists to embroiderbot when they can run simulations using the asm in `libembroidery`.
+\item Create a common assembly for data that is the same across chipsets `libembrodiery\_data\_internal.s`.
+\item Make the defines part of `embroidery.h` all systems and the function list `c code only`. That way we can share some development between assembly and C versions.
+\end{itemize}
+
+\section{Development}
+
+\subsection{Contributing}
+
+If you're interested in getting involved, here's some guidance
+for new developers. Currently The Embroidermodder Team is all
+hobbyists with an interest in making embroidery machines more
+open and user friendly. If you'd like to support us in some other way
+you can donate to our Open Collective page (click the Donate button) so
+we can spend more time working on the project.
+
+All code written for libembroidery should be ANSI C89 compliant
+if it is C. Using other languages should only be used where
+necessary to support bindings.
+
+\subsection{Debug}
+
+If you wish to help with development, run this debug script and send us the error log.
+
+\begin{lstlisting}
+#!/bin/bash
+
+rm -fr libembroidery-debug
+
+git clone http://github.com/embroidermodder/libembroidery libembroidery-debug
+cd libembroidery-debug
+
+cmake -DCMAKE_BUILD_TYPE=DEBUG .
+cmake --build . --config=DEBUG
+
+valgrind ./embroider --full-test-suite
+\end{lstlisting}
+
+While we will attempt to maintain good results from this script as part of normal development it should be the first point of failure on any system we haven't tested or format we understand less.
+
+\subsection{Binary download}
+
+We need a current `embroider` command line program download, so people can update
+without building.
+
+\chapter{Formats}
+
+\section{Overview}
+
+\section{Read/Write Support Levels}
+
+The table of read/write format support levels uses the status levels described here:
+
+\begin{tabular}{l l}
+Status Label & Description \\
+\hline
+`rw-none` & Either the format produces no output, reporting an error. Or it produces a Tajima dst file as an alternative. \\
+`rw-poor` & A file somewhat similar to our examples is produced. We don't know how well it runs on machines in practice as we don't have any user reports or personal tests. \\
+`rw-basic` & Simple files in this format run well on machines that use this format. \\
+`rw-standard` & Files with non-standard features work on machines and we have good documentation on the format. \\
+`rw-reliable` & All known features don't cause crashes. Almost all work as expected. \\
+`rw-complete` & All known features of the format work on machines that use this format. Translations from and to this format preserve all features present in both.
+\end{tabular}
+
+These can be split into `r-basic w-none`, for example, if they don't match.
+
+So all formats can, in principle, have good read and good write support, because it's defined in relation to files that we have described the formats for.
+
+\subsection{Test Support Levels}
+
+\begin{tabular}{l l}
+Status Label & Description \\
+\hline
+test-none & No tests have been written to test the specifics of the format. \\
+test-basic & Stitch Lists and/or colors have read/write tests. \\
+test-thorough & All features of that format has at least one test. \\
+test-fuzz & Can test the format for uses of features that we haven't thought of by feeding in nonsense that is designed to push possibly dangerous weaknesses to reveal themselves. \\
+test-complete & Both thorough and fuzz testing is covered.
+\end{tabular}
+
+So all formats can, in principle, have complete testing support, because it's defined in relation to files that we have described the formats for.
+
+\subsection{Documentation Support Levels}
+
+\begin{tabular}{l l}
+Status Label & Description \\
+\hline
+\end{tabular}
+
+| `doc-none` | We haven't researched this beyond finding example files. |
+| `doc-basic` | We have a rough sketch of the size and contents of the header if there is one. We know the basic stitch encoding (if there is one), but not necessarily all stitch features. |
+| `doc-standard` | We know some good sources and/or have tested all the features that appear to exist. They mostly work the way we have described. |
+| `doc-good` | All features that were described somewhere have been covered here or we have thoroughly tested our ideas against other softwares and hardwares and they work as expected. |
+| `doc-complete` | There is a known official description and our description covers all the same features. |
+
+Not all formats can have complete documentation because it's based on what 
+information is publically available. So the total score is reported in the table
+below based on what level we think is available.
+
+\subsection{Overall Support}
+
+Since the overall support level is the combination of these
+4 factors, but rather than summing up their values it's an 
+issue of the minimum support of the 4.
+
+| Status Label(s) | Description |
+|---|---|
+| `read-only` | If write support is none and read support is not none. |
+| `write-only` | If read support is none and write support is not none. |
+| `unstable` | If both read and write support are not none but testing or documentation is none. |
+| `basic` | If all ratings are better than none. |
+| `reliable` | If all ratings are better than basic. |
+| `complete` | If all ratings could not reasonably be better (for example any improvements rely on information that we may never have access to). This is the only status that can be revoked, since if the format changes or new documentation is released it is no longer complete. |
+| `experimental` | For all other scenarios. |
+
+\subsection{Table of Format Support Levels}
+
+Overview of documentation support by format.
+
+\begin{tabular}{l l l}
+Format & Ratings & Score \\
+\hline
+Toyota Embroidery Format (.100) & rw-basic doc-none test-none & unstable \\
+Toyota Embroidery Format (.10o) & rw-basic doc-none test-none & unstable \\
+Bernina Embroidery Format (.art) & rw-none doc-none test-none & experimental \\
+Bitmap Cache Embroidery Format (.bmc) & r-basic w-none doc-none test-none & unstable \\
+Bits and Volts Embroidery Format (.bro) & rw-none doc-none test-none & experimental \\
+Melco Embroidery Format (.cnd) & rw-none doc-none test-none & experimental \\
+Embroidery Thread Color Format (.col) & rw-basic doc-none test-none & `experimental` \\
+Singer Embroidery Format (.csd) & rw-none doc-none test-none & experimental \\
+Comma Separated Values (.csv) & rw-none doc-none test-none & experimental \\
+Barudan Embroidery Format (.dat) & rw-none doc-none test-none & experimental \end{tabular}
+
+| Melco Embroidery Format (.dem) | `rw-none doc-none test-none` | `experimental` |
+| Barudan Embroidery Format (.dsb) | `rw-none doc-none test-none` | `experimental` |
+| Tajima Embroidery Format (.dst) | `rw-none doc-none test-none` | `experimental` |
+| ZSK USA Embroidery Format (.dsz) | `rw-none doc-none test-none` | `experimental` |
+| Drawing Exchange Format (.dxf) | `rw-none doc-none test-none` | `experimental` |
+| Embird Embroidery Format (.edr) | `rw-none doc-none test-none` | `experimental` |
+| Elna Embroidery Format (.emd) | `rw-none doc-none test-none` | `experimental` |
+| Melco Embroidery Format (.exp) | `rw-none doc-none test-none` | `experimental` |
+| Eltac Embroidery Format (.exy) | `rw-none doc-none test-none` | `experimental` |
+| Sierra Expanded Embroidery Format (.eys) | `rw-none doc-none test-none` | `experimental` |
+| Fortron Embroidery Format (.fxy) | `rw-none doc-none test-none` | `experimental` |
+| Smoothie G-Code Embroidery Format (.gc) | `rw-none doc-none test-none` | `experimental` |
+| Great Notions Embroidery Format (.gnc) | `rw-none doc-none test-none` | `experimental` |
+| Gold Thread Embroidery Format (.gt) | `rw-none doc-none test-none` | `experimental` |
+| Husqvarna Viking Embroidery Format (.hus) | `rw-none doc-none test-none` | `experimental` |
+| Inbro Embroidery Format (.inb) | `rw-none doc-none test-none` | `experimental` |
+| Embroidery Color Format (.inf) | `rw-none doc-none test-none` | `experimental` |
+| Janome Embroidery Format (.jef) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.ksm) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.max) | `rw-none doc-none test-none` | `experimental` |
+| Mitsubishi Embroidery Format (.mit) | `rw-none doc-none test-none` | `experimental` |
+| Ameco Embroidery Format (.new) | `rw-none doc-none test-none` | `experimental` |
+| Melco Embroidery Format (.ofm) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.pcd) |  `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.pcm) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.pcq) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.pcs) | `rw-none doc-none test-none` | `experimental` |
+| Brother Embroidery Format (.pec) | `rw-none doc-none test-none` | `experimental` |
+| Brother Embroidery Format (.pel) | `rw-none doc-none test-none` | `experimental` |
+| Brother Embroidery Format (.pem) | `rw-none doc-none test-none` | `experimental` |
+| Brother Embroidery Format (.pes) | `rw-none doc-none test-none` | `experimental` |
+| Brother Embroidery Format (.phb) | `rw-none doc-none test-none` | `experimental` |
+| Brother Embroidery Format (.phc) | `rw-none doc-none test-none` | `experimental` |
+| AutoCAD Embroidery Format (.plt) | `rw-none doc-none test-none` | `experimental` |
+| RGB Embroidery Format (.rgb) | `rw-none doc-none test-none` | `experimental` |
+| Janome Embroidery Format (.sew) | `rw-none doc-none test-none` | `experimental` |
+| Husqvarna Viking Embroidery Format (.shv) | `rw-none doc-none test-none` | `experimental` |
+| Sunstar Embroidery Format (.sst) | `rw-none doc-none test-none` | `experimental` |
+| Data Stitch Embroidery Format (.stx) | `rw-none doc-none test-none` | `experimental` |
+| Scalable Vector Graphics (.svg) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.t01) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.t09) | `rw-none doc-none test-none` | `experimental` |
+| Happy Embroidery Format (.tap) | `rw-none doc-none test-none` | `experimental` |
+| ThredWorks Embroidery Format (.thr) | `rw-none doc-none test-none` | `experimental` |
+Text File (.txt) | `rw-none doc-none test-none` | `experimental` |
+| Barudan Embroidery Format (.u00) | `rw-none doc-none test-none` | `experimental` |
+| Barudan Embroidery Format (.u01) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.vip) | `rw-none doc-none test-none` | `experimental` |
+| Pfaff Embroidery Format (.vp3) | `rw-none doc-none test-none` | `experimental` |
+| Singer Embroidery Format (.xxx) | `rw-none doc-none test-none` | `experimental` |
+| [ZSK USA Embroidery Format (.zsk)](zsk-usa-embroidery-format-zsk) | `rw-none doc-none test-none` | `experimental` |
+
+\subsection{Toyota Embroidery Format (.100)}
+
+The Toyota 100 format is a stitch-only format that uses an external color file.
+
+The stitch encoding is in 4 byte chunks.
+
+\subsection{Toyota Embroidery Format (.10o)}
+
+The Toyota 10o format is a stitch-only format that uses an external color file.
+
+The stitch encoding is in 3 byte chunks.
+
+\subsection{Bernina Embroidery Format (.art)}
+
+We don't know much about this format. TODO: Find a source.
+
+\subsection{Bitmap Cache Embroidery Format (.bmc)}
+
+We don't know much about this format. TODO: Find a source.
+
+\subsection{Bits and Volts Embroidery Format (.bro)}
+
+The Bits and Volts bro format is a stitch-only format that uses an external color file.
+
+The header is 256 bytes. There's a series of unknown variables in the header.
+
+The stitch list uses a variable length encoding which is 2 bytes for any stitch
+
+\section{Melco Embroidery Format (.cnd)}
+
+The Melco cnd format is a stitch-only format.
+
+We don't know much about this format. TODO: Find a source.
+
+\section{Embroidery Thread Color Format (.col)}
+
+An external color file format for formats that do not record their own colors. 
+
+It is a human-readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break `\textbackslash{}r\textbackslash{}n`.
+
+Then the rest of the file is a comma seperated value list of all threads with 4 values per line: the index of the thread then the red, green and blue channels of the color in that order.
+
+\subsection{Example}
+
+If we had a pattern called "example" with four colors: black, red, magenta and cyan in that order then the file is (with the white space written out):
+
+example.col
+
+\begin{verbatim}
+4\r\n
+0,0,0,0\r\n
+1,255,0,0\r\n
+2,0,255,0\r\n
+3,0,0,255\r\n
+\end{verbatim}
+
+\section{Singer Embroidery Format (.csd)}
+
+Stitch Only Format
+
+\section{Comma Separated Values (.csv)}
+
+Comma Seperated Values files aren't a universal system, here we aim to
+offer a broad support.
+
+\begin{tabular}{l l l}
+Control Symbol & Type & Description \\
+\hline
+\end{tabular}
+
+| `\#` | COMMENT | |
+| `>` | VARIABLE | To store records of a pattern's width, height etc. This means that data stored in the header of say a `.dst` file is preserved. |
+| `\$` | THREAD | |
+| `*` | STITCH | |
+| `*` | JUMP | |
+| `*` | COLOR | To change a color: used for trim as well |
+| `*` | END | To end a pattern. |
+| `*` | UNKNOWN | For any feature that we can't identify. |
+
+\section{Barudan Embroidery Format (.dat)}
+
+Stitch Only Format
+
+\section{Melco Embroidery Format (.dem)}
+
+Stitch Only Format
+
+\section{Barudan Embroidery Format (.dsb)}
+
+* Stitch Only Format.
+* [X] Basic Read Support
+* [ ] Basic Write Support
+* [ ] Well Tested Read
+* [ ] Well Tested Write
+
+\section{Tajima Embroidery Format (.dst)}
+
+\begin{itemize}
+\item Stitch Only Format.
+\item [X] Basic Read Support
+\item [X] Basic Write Support
+\item [ ] Well Tested Read
+\item [ ] Well Tested Write
+\end{itemize}
+
+.DST (Tajima) embroidery file read/write routines
+Format comments are thanks to \url{tspilman@dalcoathletic.com} who's
+notes appeared at [http://www.wotsit.org](http://www.wotsit.org) under Tajima Format.
+
+\section{Header}
+
+The header seems to contain information about the design.
+Seems to be ASCII text delimited by 0x0D (carriage returns).
+This must be in the file for most new software or hardware
+to consider it a good file! This is much more important
+than I originally believed. The header is 125 bytes in
+length and padded out by 0x20 to 512 bytes total.
+All entries in the header seem to be 2 ASCII characters
+followed by a colon, then it's value trailed by a carriage return.
+
+\begin{tabular}{l l}
+ *C memory* & *Description* |
+|---|---|
+| `char LA[16+1];` | First is the 'LA' entry, which is the design name with no path or extension information. The blank is 16 characters in total, but the name must not be longer that 8 characters and padded out with spaces (0x20). |
+| `char ST[7+1];` | Next is the stitch count ST, this is a 7 digit number padded by leading zeros. This is the total stitch count including color changes, jumps, nups, and special records. |
+| `char CO[3+1];` | Next, is CO or colors, a 3 digit number padded by leading zeros. This is the number of color change records in the file. |
+| `char POSX[5+1];` | Next is +X or the positive X extent in centimeters, a 5 digit non-decimal number padded by leading zeros. |
+| `char NEGX[5+1];` | Following is the -X or the negative X extent in millimeters, a 5 digit non-decimal number padded by leading zeros. |
+| `char POSY[5+1];` | Again, the +Y extents. |
+| `char NEGY[5+1];` | Again, the -Y extents. |
+| `char AX[6+1]; char AY[6+1];` | AX and AY should express the relative coordinates of the last point from the start point in 0.1 mm. If the start and last points are the same, the coordinates are (0,0). |
+| `char MX[6+1];` `char MY[6+1];` | MX and MY should express coordinates of the last point of the previous file for a multi-volume design. A multi-volume design means a design consisted of two or more files. This was used for huge designs that can not be stored in a single paper tape roll. It is not used so much (almost never) nowadays. |
+| `char PD[9+1];` | PD is also storing some information for multi-volume design. |
+\end{tabular}
+
+Uses 3 byte per stitch encoding with the format as follows:
+
+The 3 byte encoding for the dxf format.
+
+| *Bit* | *7* | *6* | *5* | *4* | *3* | *2* | *1* | *0* |
+|----|----|----|----|----|----|----|----|----|
+| Byte 0 | y+1 | y-1 | y+9 | y-9 | x-9 | x+9 | x-1 | x+1 |
+| Byte 1 | y+3 | y-3 | y+27 | y-27 | x-27 | x+27 | x-3 | x+3 |
+| Byte 2 | jump | color change | y+81 | y-81 | x-81 | x+81 | set | set |
+
+T01 and Tap appear to use Tajima Ternary.
+ 
+Where the stitch type is determined as:
+
+\begin{itemize}
+\item Normal Stitch `00000011 0x03`
+\item Jump Stitch `10000011 0x83`
+\item Stop/Change Color `11000011 0xC3`
+\item End Design `11110011 0xF3`
+\end{itemize}
+
+Inclusive or'ed with the last byte.
+
+Note that:
+
+  1. The max stitch length is the largest sum of `1+3+9+27+81=121` where the unit length is 0.1mm so 12.1mm.
+  2. The coordinate system is right handed.
+
+\section{ZSK USA Embroidery Format (.dsz)}
+
+The ZSK USA dsz format is stitch-only.
+
+\section{Drawing Exchange Format (.dxf)}
+
+Graphics format.
+
+\section{Embird Embroidery Format (.edr)}
+
+Stitch Only Format
+
+\section{Elna Embroidery Format (.emd)}
+
+Stitch Only Format.
+
+\section{Melco Embroidery Format (.exp)}
+
+Stitch Only Format.
+
+\section{Eltac Embroidery Format (.exy)}
+
+Stitch Only Format.
+
+\section{Sierra Expanded Embroidery Format (.eys)}
+
+Stitch Only Format.
+
+Smoothie G-Code Embroidery Format (.fxy)?
+
+\section{Fortron Embroidery Format (.fxy)}
+
+Stitch Only Format.
+
+\section{Great Notions Embroidery Format (.gnc)}
+
+Stitch Only Format.
+
+\section{Gold Thread Embroidery Format (.gt)}
+
+Stitch Only Format.
+
+\section{Husqvarna Viking Embroidery Format (.hus)}
+
+Stitch Only Format.
+
+\section{Inbro Embroidery Format (.inb)}
+
+Stitch Only Format.
+
+\section{Embroidery Color Format (.inf)}
+
+Stitch Only Format.
+
+\section{Janome Embroidery Format (.jef)}
+
+Stitch Only Format.
+
+\section{Pfaff professional Design format (.ksm)}
+
+Stitch Only Format.
+
+\section{Pfaff Embroidery Format (.max)}
+
+Stitch Only Format.
+
+\section{Mitsubishi Embroidery Format (.mit)}
+
+Stitch Only Format.
+
+\section{Ameco Embroidery Format (.new)}
+
+Stitch Only Format.
+
+\section{Melco Embroidery Format (.ofm)}
+
+Stitch Only Format.
+
+\section{Pfaff PCD File Format}
+
+Stitch Only Format.
+
+The format uses a signed 3 byte-length number type.
+
+See the description here ([5](5)) for the overview of the format.
+
+For an example of the format see ([11](11)).
+
+\section{Pfaff Embroidery Format (.pcm)}
+
+The Pfaff pcm format is stitch-only.
+
+\section{Pfaff Embroidery Format (.pcq)}
+
+The Pfaff pcq format is stitch-only.
+
+\section{Pfaff Embroidery Format (.pcs)}
+
+The Pfaff pcs format is stitch-only.
+
+\section{Brother Embroidery Format (.pec)}
+
+The Brother pec format is stitch-only.
+
+\section{Brother Embroidery Format (.pel)}
+
+The Brother pel format is stitch-only.
+
+\section{Brother Embroidery Format (.pem)}
+
+The Brother pem format is stitch-only.
+
+\section{Brother Embroidery Format (.pes)}
+
+The Brother pes format is stitch-only.
+
+\section{Brother Embroidery Format (.phb)}
+
+The Brother phb format is stitch-only.
+
+\section{Brother Embroidery Format (.phc)}
+
+The Brother phc format is stitch-only.
+
+\section{AutoCAD Embroidery Format (.plt)}
+
+The AutoCAD plt format is stitch-only.
+
+\section{RGB Embroidery Format (.rgb)}
+
+The RGB format is a color-only format to act as an external color file for other formats.
+
+\section{Janome Embroidery Format (.sew)}
+
+The Janome sew format is stitch-only.
+
+\section{Husqvarna Viking Embroidery Format (.shv)}
+
+The Husqvarna Viking shv format is stitch-only.
+
+\section{Sunstar Embroidery Format (.sst)}
+
+The Sunstar sst format is stitch-only.
+
+\section{Data Stitch Embroidery Format (.stx)}
+
+The Data Stitch stx format is stitch-only.
+
+\section{Scalable Vector Graphics (.svg)}
+
+The scalable vector graphics (SVG) format is a graphics format
+maintained by ...
+
+\section{Pfaff Embroidery Format (.t01)}
+
+The Pfaff t01 format is stitch-only.
+
+\subsection{Pfaff Embroidery Format (.t09)}
+
+The Pfaff t09 format is stitch-only.
+
+\section{Happy Embroidery Format (.tap)}
+
+The Happy tap format is stitch-only.
+
+\section{ThredWorks Embroidery Format (.thr)}
+
+The ThreadWorks thr format is stitch-only.
+
+\section{Text File (.txt)}
+
+The txt format is stitch-only and isn't associated with a specific company.
+
+\section{Barudan Embroidery Format (.u00)}
+
+The Barudan u00 format is stitch-only.
+
+\section{Barudan Embroidery Format (.u01)}
+
+The Barudan u01 format is stitch-only.
+
+\section{Pfaff Embroidery Format (.vip)}
+
+The Pfaff vip format is stitch-only.
+
+\section{Pfaff Embroidery Format (.vp3)}
+
+The Pfaff vp3 format is stitch-only.
+
+\section{Singer Embroidery Format (.xxx)}
+
+The Singer xxx format is stitch-only.
+
+\section{ZSK USA Embroidery Format (.zsk)}
+
+The ZSK USA zsk format is stitch-only.
+  
+\section{On Embedded Systems}
+
+The library is designed to support embedded environments, so it can
+be used in CNC applications.
+
+\section{Compatible Boards}
+
+We recommend using an Arduino Mega 2560 or another board with equal or
+greater specs. That being said, we have had success using an Arduino Uno
+R3 but this will likely require further optimization and other
+improvements to ensure continued compatibility with the Uno. See below
+for more information.
+
+\section{Arduino Considerations}
+
+There are two main concerns here: Flash Storage and SRAM.
+
+libembroidery continually outgrows the 32KB of Flash storage on the
+Arduino Uno and every time this occurs, a decision has to be made as to
+what capabilities should be included or omitted. While reading files is
+the main focus on arduino, writing files may also play a bigger role in
+the future. Long term, it would be most practical to handle the
+inclusion or omission of any feature via a single configuration header
+file that the user can modify to suit their needs.
+
+SRAM is in extremely limited supply and it will deplete quickly so any
+dynamic allocation should occur early during the setup phase of the
+sketch and sparingly or not at all later in the sketch. To help minimize
+SRAM consumption on Arduino and ensure libembroidery can be used in any
+way the sketch creator desires, it is required that any sketch using
+libembroidery must implement event handlers. See the ino-event source
+and header files for more information.
+
+There is also an excellent article by Bill Earl on the Adafruit Learning
+System which covers these topics in more depth:
+[http://learn.adafruit.com/memories-of-an-arduino?view=all](http://learn.adafruit.com/memories-of-an-arduino?view=all).
+
+\section{Space}
+
+Since a stitch takes 3 bytes of storage and many patterns use more than
+10k stitches, we can't assume that the pattern will fit in memory. Therefore
+we will need to buffer the current pattern on and off storage in small
+chunks. By the same reasoning, we can't load all of one struct beore
+looping so we will need functions similar to binaryReadInt16 for each
+struct.
+
+This means the EmbArray approach won't work since we need to load
+each element and dynamic memory management is unnecessary because
+the arrays lie in storage.
+
+TODO: Replace EmbArray functions with embPattern load functions.
+
+\section{Tables}
+
+All thread tables and large text blocks are too big to compile directly
+into the source code. Instead we can package the library with a data packet
+that is compiled from an assembly program in raw format so the specific
+padding can be controlled.
+
+In the user section above we will make it clear that this file
+needs to be loaded on the pattern USB/SD card or the program won't function.
+
+TODO: Start file with a list of offsets to data with a corresponding table
+to load into with macro constants for each label needed.
+
+\section{Current Pattern Memory Management}
+
+It will be simpler to make one file per EmbArray so we keep an EmbFile*
+and a length, so no malloc call is necessary. So there needs to be a consistent
+tmpfile naming scheme.
+
+TODO: For each pattern generate a random string of hexadecimal and append it
+to the filenames like `stitchList\_A16F.dat`. Need to check for a file
+which indicates that this string has been used already.
+
+\section{Special Notes}
+
+Due to historical reasons and to remain compatible with the Arduino 1.0
+IDE, this folder must be called ``utility''. Refer to the arduino build
+process for more info:
+[https://arduino.github.io/arduino-cli/0.19/sketch-build-process/](https://arduino.github.io/arduino-cli/0.19/sketch-build-process/).
+
+libembroidery relies on the Arduino SD library for reading files. See
+the ino-file source and header files for more information.
+
+\section{The Assembly Split}
+
+One problem to the problem of supporting both systems with abundant memory
+(such as a 2010s or later desktop) and with scarce memory (such as embedded
+systems) is that they don't share the same assembly language. To deal with
+this: there will be two equivalent software which are hand engineered to be
+similar but one will be in C and the other in the assembly dialects we support.
+
+All assembly will be intended for embedded systems only, since a slightly
+smaller set of features will be supported. However, we will write a
+`x86` version since that can be tested.
+
+That way the work that has been done to simplify the C code can be applied to
+the assembly versions.
+
+\section{Build}
+
+To build the documentation run `make`. This should run no problem on a normal Unix-like environment
+assuming pandoc is available.
+
+* Pandoc creates the content of the page by converting the markdown to html.
+* Pandoc also creates the printer-friendly documentation from the same markdown.
+* Markdown acts as a go-between because it is easy to alter directly in the GH editor.
+
+This way:
+
+* We write one set of documents for all projects.
+* The website can be simple and static, supporting machines that don't run javascript.
+* We control the styling of each version independently of our editing (Markdown) version
+* The printer-friendly documentation can have nicely rendered fonts and well placed figures.
+
+\section{Features}
+
+\section{Bindings}
+
+Bindings for libembroidery are maintained for the languages we use internally in the project, for other languages we consider that the responsibility of other teams using the library.
+
+So libembroidery is going to be supported on:
+
+  * C (by default)
+  * C++ (also by default)
+  * Java (for the Android application MobileViewer)
+  * Swift (for the iOS application iMobileViewer)
+
+For C\# we recommend directly calling the function directly
+using the DllImport feature:
+
+```
+[DllImport("libembroidery.so", EntryPoint="readCsv")]
+```
+
+see this StackOverflow discussion [for help](\url{https://stackoverflow.com/questions/11425202/is-it-possible-to-call-a-c-function-from-c-net}).
+
+For Python you can do the same using [ctypes](\url{https://www.geeksforgeeks.org/how-to-call-a-c-function-in-python/}).
+
+\section{Other Supported Thread Brands}
+
+The thread lists that aren't preprogrammed into formats but
+are indexed in the data file for the purpose of conversion
+or fitting to images/graphics.
+
+\begin{itemize}
+\item Arc Polyester
+\item Arc Rayon
+\item Coats and Clark Rayon
+\item Exquisite Polyester
+\item Fufu Polyester
+\item Fufu Rayon
+\item Hemingworth Polyester
+\item Isacord Polyester
+\item Isafil Rayon
+\item Marathon Polyester
+\item Marathon Rayon
+\item Madeira Polyester
+\item Madeira Rayon
+\item Metro Polyester
+\item Pantone
+\item Robison Anton Polyester
+\item Robison Anton Rayon
+\item Sigma Polyester
+\item Sulky Rayon
+\item ThreadArt Rayon
+\item ThreadArt Polyester
+\item ThreaDelight Polyester
+\item Z102 Isacord Polyester
+\end{itemize}
+
+\section{Bibliography}
+
+\begin{enumerate}
+\item Rudolf \emph{Technical Info} [http://www.achatina.de/sewing/main/TECHNICL.HTM](http://www.achatina.de/sewing/main/TECHNICL.HTM)
+(Accessed 25 November 2021)
+\item fineEmbStudio2021
+\item Edutech format description (eduTechWikiDST)
+\item KDE Liberty Description (libertyTajima)
+\item The Sewing Witch \emph{PCD2FMT} [http://www.sewingwitch.com/sewing/bin/pcd2fmt.html](http://www.sewingwitch.com/sewing/bin/pcd2fmt.html) (Accessed November 2021)
+\item [http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html] \url{http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html}
+\item [https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result] \url{https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result}
+\item Fritzing [https://github.com/fritzing/fritzing-app] \url{https://github.com/fritzing/fritzing-app}
+\item Sahoo, P., Wilkins, C., and Yeager, J., “Threshold selection using Renyi's entropy”, \emph{Pattern Recognition}, vol. 30, no. 1, pp. 71–84, 1997. doi:10.1016/S0031-3203(96)00065-9.
+\item [http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php]
+\url{http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php} (Accessed 12 Dec 2021)
+\item FINDME
+\item G. van Rossum and B. Warsaw "Python PEP 7" \url{https://peps.python.org/pep-0007/} (Accessed April 2020)
+\item Google et al. \emph{Google Java Style Guide} \url{https://google.github.io/styleguide/javaguide.html} (Accessed April 2022)
+\end{enumerate}
+
+
+\bibliographystyle{plainnat}
+\bibliography{embroidermodder.bib}
+
+\appendix
+
+\include{fdl-1.3.tex}
+
+\printindex
+
+\end{document}
