@@ -1,6 +1,8 @@
 \documentclass{report}
 
 \usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{mathpazo}
 \usepackage{natbib}
 \usepackage{graphicx}
@@ -731,49 +733,45 @@ TIP: For users who prefer
 \section{Advanced Features}
 
 
-\section{Planning}
-
-To see what's planned open the [Projects](https://github.com/Embroidermodder/Embroidermodder/projects/1) tab which sorts all of the GitHub Issues into columns.
-
 \section{Format Support}
 
 \begin{longtable}{l l l p{8cm}}
 \textbf{FORMAT} & \textbf{READ} & \textbf{WRITE} & \textbf{NOTES} \\
 \hline
-\index{.10o}\texttt{10o} & YES &  & read (need to fix external color loading) (maybe find out what ctrl | code flags of 0x10, 0x08, 0x04, and 0x02 mean) \\
-\index{.100}\texttt{100} &  &  & none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x | y (signed char) \\
-\index{.art}`art` |  &  & none \\
-\index{.bro}`bro` & YES &  & read (complete)(maybe figure out detail of header) \\
-\index{.cnd}\texttt{cnd} &  &  & none \\
-\index{.col}\texttt{col} &  &  & (color file no design) read(final) write(final) \\
-\index{.csd}\texttt{csd} | YES   &  & read (complete) \\
-\index{.dat}\texttt{dat} &  &  & read () \\
-\index{.dem}`dem` &  &  & none (looks like just encrypted cnd) \\
-\index{.dsb}\texttt{dsb} & YES   &  & read (unknown how well) (stitch data looks same as 10o) \\
-\index{.dst}\texttt{dst} & YES   &  & read (complete) / write(unknown) \\
-`dsz` & YES   &  & read (unknown) \\
-`dxf` &  &  & read (Port to C. needs refactored) \\
-`edr` &  &  & read (C version is broken) / write (complete) \\
-`emd` &  &  & read (unknown) \\
-`exp` & YES   &  & read (unknown) / write(unknown) \\
-`exy` & YES   &  & read (need to fix external color loading) \\
-`fxy` & YES   &  & read (need to fix external color loading) \\
-`gnc` &  &  & none \\
-`gt` &  &  & read (need to fix external color loading) \\
-`hus` & YES   &  & read (unknown) / write (C version is broken) \\
-`inb` & YES   &  & read (buggy?) \\
-`jef` & YES   &  & write (need to fix the offsets when it is moving to another spot) \\
-`ksm` & YES   &  & read (unknown) / write (unknown) \\
-`pcd` &  &  &  \\
-`pcm` &  &  & \\
-`pcq` &  &  & read (Port to C) \\
-`pcs` & BUGGY &  & read (buggy / colors are not correct / after reading, writing any other format is messed up) \\
-`pec` &  &  & read / write (without embedded images, sometimes overlooks some stitches leaving a gap) \\
-`pel` &  &  & none \\
-`pem` &  &  & none \\
-`pes` & YES   &  & \\
-`phb` &  &  & \\
-`phc` &  &  & \\
+\index{10o}\texttt{10o} & YES &  & read (need to fix external color loading) (maybe find out what ctrl | code flags of 0x10, 0x08, 0x04, and 0x02 mean) \\
+\index{100}\texttt{100} &  &  & none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x | y (signed char) \\
+\index{art}\texttt{art} |  &  & none \\
+\index{bro}\texttt{bro} & YES &  & read (complete)(maybe figure out detail of header) \\
+\index{cnd}\texttt{cnd} &  &  & none \\
+\index{col}\texttt{col} &  &  & (color file no design) read(final) write(final) \\
+\index{csd}\texttt{csd} | YES   &  & read (complete) \\
+\index{dat}\texttt{dat} &  &  & read () \\
+\index{dem}`dem` &  &  & none (looks like just encrypted cnd) \\
+\index{dsb}\texttt{dsb} & YES   &  & read (unknown how well) (stitch data looks same as 10o) \\
+\index{dst}\texttt{dst} & YES   &  & read (complete) / write(unknown) \\
+\index{dsz}dsz & YES   &  & read (unknown) \\
+\index{dxf}dxf &  &  & read (Port to C. needs refactored) \\
+\index{edr}edr &  &  & read (C version is broken) / write (complete) \\
+\index{emd}emd &  &  & read (unknown) \\
+\index{exp}exp & YES   &  & read (unknown) / write(unknown) \\
+\index{exy}exy & YES   &  & read (need to fix external color loading) \\
+\index{fxy}fxy & YES   &  & read (need to fix external color loading) \\
+\index{gnc}gnc &  &  & none \\
+\index{gt}gt &  &  & read (need to fix external color loading) \\
+\index{hus}hus & YES   &  & read (unknown) / write (C version is broken) \\
+\index{inb}inb & YES   &  & read (buggy?) \\
+\index{jef}jef & YES   &  & write (need to fix the offsets when it is moving to another spot) \\
+\index{ksm}ksm & YES   &  & read (unknown) / write (unknown) \\
+\index{pcd}pcd &  &  &  \\
+\index{pcm}pcm &  &  & \\
+\index{pcq}pcq &  &  & read (Port to C) \\
+\index{pcs}pcs & BUGGY &  & read (buggy / colors are not correct / after reading, writing any other format is messed up) \\
+\index{pec}pec &  &  & read / write (without embedded images, sometimes overlooks some stitches leaving a gap) \\
+\index{pel}pel &  &  & none \\
+\index{pem}pem &  &  & none \\
+\index{pes}pes & YES   &  & \\
+\index{phb}phb &  &  & \\
+\index{phc}phc &  &  & \\
 `rgb` &  &  & \\
 `sew` & YES   &  & \\
 `shv` &  &  & read (C version is broken) \\
@@ -793,9 +791,7 @@ Support for Singer FHE, CHE (Compucon) formats?
 
 A basic set of guidelines to use when submitting code.
 
-Code structure is mre important than style, so
-first we advise you read ``Design'' and experimenting
-before getting into the specifics of code style.
+Code structure is mre important than style, so first we advise you read ``Design'' and experimenting before getting into the specifics of code style.
 
 \subsection{Where Code Goes}
 
@@ -819,24 +815,13 @@ TODO: Like most user interfaces Embroidermodder is mostly data, so here we will 
 
 Most style guides advise you to keep functions short. We make a few pointed exceptions to this where the overall health and functionality of the source code should benefit.
 
-The `actuator' function will always be a mess
-and it should be: we're keeping the total source
-lines of code down by encoding all user action into
-a descrete sequence of strings that are all below
-`\_STRING\_LENGTH` in length. See the section on
-the actuator (TODO) describing why any other solution
-we could think  here would mean more more code without
-a payoff in speed of execution or clarity.
+The `actuator' function will always be a mess and it should be: we're keeping the total source lines of code down by encoding all user action into a descrete sequence of strings that are all below \texttt{\_STRING\_LENGTH} in length. See the section on the actuator (TODO) describing why any other solution we could think  here would mean more more code without a payoff in speed of execution or clarity.
 
 \subsection{Naming Conventions}
 
-Name variables and functions intelligently to minimize the need for comments.
-It should be immediately obvious what information it represents.
-Short names such as `x` and `y` are fine when referring to coordinates.
-Short names such as `i` and `j` are fine when doing loops.
+Name variables and functions intelligently to minimize the need for comments. It should be immediately obvious what information it represents. Short names such as \texttt{x} and \texttt{y} are fine when referring to coordinates. Short names such as \texttt{i} and \texttt{j} are fine when doing loops.
 
-Variable names should be `camelCase`, starting with a lowercase word followed by uppercase word(s).
-C Functions that attempt to simulate namespacing, should be `nameSpace\_camelCase`.
+Variable names should be `camelCase`, starting with a lowercase word followed by uppercase word(s). C Functions that attempt to simulate namespacing, should be \texttt{nameSpace\_camelCase}.
 
 All files and directories shall be lowercase and contain no spaces.
 
@@ -848,20 +833,20 @@ Tabs should not be used when indenting. Setup your IDE or text editor to use 4 s
 
 For functions: please put each brace on a new line.
 
-\begin{verbatim}
+\begin{lstlisting}
 void function_definition(int argument)
 {
     /* code block */
 }
-\end{verbatim}
+\end{lstlisting}
 
 For control statements: please put the first brace on the same line.
 
-\begin{verbatim}
+\begin{lstlisting}
 if (condition) {
     /* code block */    
 }
-\end{verbatim}
+\end{lstlisting}
 
 Use exceptions sparingly.
 
@@ -871,11 +856,7 @@ Do not repeat a variable name that already occurs in an outer scope.
 
 \section{Version Control}
 
-Being an open source project, developers can grab the latest code at any time
-and attempt to build it themselves. We try our best to ensure that it will build smoothly
-at any time, although occasionally we do break the build. In these instances,
-please provide a patch, pull request which fixes the issue or open an issue and
-notify us of the problem, as we may not be aware of it and we can build fine.
+Being an open source project, developers can grab the latest code at any time and attempt to build it themselves. We try our best to ensure that it will build smoothly at any time, although occasionally we do break the build. In these instances, please provide a patch, pull request which fixes the issue or open an issue and notify us of the problem, as we may not be aware of it and we can build fine.
 
 Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
 
@@ -975,9 +956,7 @@ So EM2 does the job of bridging that gap.
 
 \subsection{Postscript Support}
 
-In order to safely support user contributed/shared data that can
-define, for example, double to double functions we need a consistent
-processor for these descriptions.
+In order to safely support user contributed/shared data that can define, for example, double to double functions we need a consistent processor for these descriptions.
 
 Embroidermodder backends to the postscript interpreter included
 in libembroidery to accomplish this.
@@ -994,33 +973,19 @@ is equivalent to the expression:
 2*t + 5
 \end{verbatim}
 
-The benefit of not allowing this to simply be a Python expression
-is that it is safe against malicious use, or accidental misuse.
-The program can identify whether the output is of the appropriate
-form and give finitely many calculations before declaring the
-function to have run too long (stopping equations that hang).
+The benefit of not allowing this to simply be a Python expression is that it is safe against malicious use, or accidental misuse. The program can identify whether the output is of the appropriate form and give finitely many calculations before declaring the function to have run too long (stopping equations that hang).
 
 To see examples of this see the `assets/shapes/*.ps` files.
 
 \subsection{SVG Icons}
 
-To make the images easier to alter and restyle we could
-switch to svg icons. There's some code in the git history
-to help with this.
+To make the images easier to alter and restyle we could switch to svg icons. There's some code in the git history to help with this.
 
 \subsection{The Actions System}
 
-In order to simplify the development of a GUI that is flexible and
-easy to understand to new developers we have a custom action system that all
-user actions will go via an `actuator` that takes a string argument. By using a
-string argument the undo history is just an array of strings.
+In order to simplify the development of a GUI that is flexible and easy to understand to new developers we have a custom action system that all user actions will go via an `actuator` that takes a string argument. By using a string argument the undo history is just an array of strings.
 
-The C `action\_hash\_data` struct will contain: the icon used, the labels for the
-menus and tooltips and the function pointer for that action.
-There will be an accompanying argument for this function call, currently being
-drafted as `action\_call`. So when the user makes a function call it should
-contain information like the mouse position, whether special key is pressed
-etc.
+The C `action\_hash\_data` struct will contain: the icon used, the labels for the menus and tooltips and the function pointer for that action. There will be an accompanying argument for this function call, currently being drafted as `action\_call`. So when the user makes a function call it should contain information like the mouse position, whether special key is pressed etc.
 
 \subsection{Accessibility}
 
@@ -1046,17 +1011,11 @@ A shortcut can be made up of zero or more modifier keys and at least one non-mod
 
 To make this list quickly assessable, we can produce a list of hashes which are simply the flags ORed together.
 
-The shortcuts are stored in the csv file ``shortcuts.csv''
-as a 5-column table with the first 4 columns describing
-the key combination. This is loaded into the shortcuts
-`TABLE`. Each tick the program checks the input state for
-this combination by first translating the key names into
-indices for the key state, then checking for whether all
-of them are set to true.
+The shortcuts are stored in the csv file ``shortcuts.csv'' as a 5-column table with the first 4 columns describing the key combination. This is loaded into the shortcuts `TABLE`. Each tick the program checks the input state for this combination by first translating the key names into indices for the key state, then checking for whether all of them are set to true.
 
 \subsection{CAD command review}
 
-\begin{longtable}{l l l p{3.5cm}}
+\begin{longtable}{l l l p{8cm}}
 \textbf{ID} & \textbf{name} & \textbf{arguments} & \textbf{description} \\
 \hline
 0 & \index{newfile}newfile & none & Create a new EmbPattern with a new tab in the GUI. \\
@@ -1086,28 +1045,28 @@ of them are set to true.
 22 & \index{record}record & & \\
 23 & \index{playback}playback & & \\
 24 & \index{rotate}rotate & & \\
-25 & rgb & & \\
-26 & move & & \\
-27 & grid & & \\
-28 & griphot &  &  \\
-29 & gripcolor & & \\
-30 & gripcool &  &  \\
-31 & gripsize &  &  \\
-32 & highlight &  &  \\
-33 & units &  &  \\
-34 & locatepoint &  &  \\
-35 & distance &  &  \\
-36 & arc &  &  \\
-37 & ellipse &  &  \\
-38 & array &  &  \\
-39 & point &  &  \\
-40 & polyline &  &  \\
-41 & polygon &  &  \\
-42 & rectangle &  &  \\
-43 & line &  &  \\
-44 & arc (rt) &  &  \\
-45 & dolphin &  &  \\
-46 & heart  & &
+25 & \index{rgb}rgb & & \\
+26 & \index{move}move & & \\
+27 & \index{grid}grid & & \\
+28 & \index{griphot}griphot &  &  \\
+29 & \index{gripcolor}gripcolor & & \\
+30 & \index{gripcool}gripcool &  &  \\
+31 & \index{gripsize}gripsize &  &  \\
+32 & \index{highlight}highlight &  &  \\
+33 & \index{units}units &  &  \\
+34 & \index{locatepoint}locatepoint &  &  \\
+35 & \index{distance}distance &  &  \\
+36 & \index{arc}arc &  &  \\
+37 & \index{ellipse}ellipse &  &  \\
+38 & \index{array}array &  &  \\
+39 & \index{point}point &  &  \\
+40 & \index{polyline}polyline &  &  \\
+41 & \index{polygon}polygon &  &  \\
+42 & \index{rectangle}rectangle &  &  \\
+43 & \index{line}line &  &  \\
+44 & \index{arc-rt}arc (rt) &  &  \\
+45 & \index{dolphin}dolphin &  &  \\
+46 & \index{heart}heart  & &
 \end{longtable}
 
 \subsection{Removed Elements}
@@ -1886,87 +1845,127 @@ Where the stitch type is determined as:
 
 Inclusive or'ed with the last byte.
 
-Note that the max stitch length is the largest sum of `1+3+9+27+81=121` where the unit length is 0.1mm so 12.1mm. The coordinate system is right handed.
+Note that the max stitch length is the largest sum of $1+3+9+27+81=121$ where the unit length is 0.1mm so 12.1mm. The coordinate system is right handed.
 
 \section{ZSK USA Embroidery Format (.dsz)}
+\index{dsz}
+\index{ZSK USA}
 
 The ZSK USA dsz format is stitch-only.
 
 \section{Drawing Exchange Format (.dxf)}
+\index{dxf}
+\index{AutoCAD}
+\index{AutoDesk}
 
 Graphics format.
 
 \section{Embird Embroidery Format (.edr)}
+\index{edr}
+\index{Embird}
 
 Stitch Only Format
 
 \section{Elna Embroidery Format (.emd)}
+\index{emd}
+\index{Elna}
 
 Stitch Only Format.
 
 \section{Melco Embroidery Format (.exp)}
+\index{exp}
+\index{Melco}
 
 Stitch Only Format.
 
 \section{Eltac Embroidery Format (.exy)}
+\index{exy}
+\index{Eltac}
 
 Stitch Only Format.
 
 \section{Sierra Expanded Embroidery Format (.eys)}
+\index{eys}
+\index{Sierra Expanded}
 
 Stitch Only Format.
 
 Smoothie G-Code Embroidery Format (.fxy)?
 
 \section{Fortron Embroidery Format (.fxy)}
+\index{fxy}
+\index{Fortron}
 
 Stitch Only Format.
 
 \section{Great Notions Embroidery Format (.gnc)}
+\index{gnc}
+\index{Great Notions}
 
 Stitch Only Format.
 
 \section{Gold Thread Embroidery Format (.gt)}
+\index{gt}
+\index{Gold Thread}
 
 Stitch Only Format.
 
 \section{Husqvarna Viking Embroidery Format (.hus)}
+\index{hus}
+\index{Husqvarna Viking}
 
 Stitch Only Format.
 
 \section{Inbro Embroidery Format (.inb)}
+\index{inb}
+\index{Inbro}
 
 Stitch Only Format.
 
 \section{Embroidery Color Format (.inf)}
+\index{inf}
 
 Stitch Only Format.
 
 \section{Janome Embroidery Format (.jef)}
+\index{jef}
+\index{Janome}
 
 Stitch Only Format.
 
 \section{Pfaff professional Design format (.ksm)}
+\index{ksm}
+\index{Pfaff}
 
 Stitch Only Format.
 
 \section{Pfaff Embroidery Format (.max)}
+\index{max}
+\index{Pfaff}
 
 Stitch Only Format.
 
 \section{Mitsubishi Embroidery Format (.mit)}
+\index{mit}
+\index{Mitsubishi}
 
 Stitch Only Format.
 
 \section{Ameco Embroidery Format (.new)}
+\index{new}
+\index{Ameco}
 
 Stitch Only Format.
 
 \section{Melco Embroidery Format (.ofm)}
+\index{ofm}
+\index{Melco}
 
 Stitch Only Format.
 
-\section{Pfaff PCD File Format}
+\section{Pfaff PCD File Format (.pcd)}
+\index{pcd}
+\index{Pfaff}
 
 Stitch Only Format.
 
@@ -1977,111 +1976,161 @@ See the description here ([5](5)) for the overview of the format.
 For an example of the format see ([11](11)).
 
 \section{Pfaff Embroidery Format (.pcm)}
+\index{pcm}
+\index{Pfaff}
 
 The Pfaff pcm format is stitch-only.
 
 \section{Pfaff Embroidery Format (.pcq)}
+\index{pcq}
+\index{Pfaff}
 
 The Pfaff pcq format is stitch-only.
 
 \section{Pfaff Embroidery Format (.pcs)}
+\index{pcs}
+\index{Pfaff}
 
 The Pfaff pcs format is stitch-only.
 
 \section{Brother Embroidery Format (.pec)}
+\index{pec}
+\index{Brother}
 
 The Brother pec format is stitch-only.
 
 \section{Brother Embroidery Format (.pel)}
+\index{pel}
+\index{Brother}
 
 The Brother pel format is stitch-only.
 
 \section{Brother Embroidery Format (.pem)}
+\index{pem}
+\index{Brother}
 
 The Brother pem format is stitch-only.
 
 \section{Brother Embroidery Format (.pes)}
+\index{pes}
+\index{Brother}
 
 The Brother pes format is stitch-only.
 
 \section{Brother Embroidery Format (.phb)}
+\index{phb}
+\index{Brother}
 
 The Brother phb format is stitch-only.
 
 \section{Brother Embroidery Format (.phc)}
+\index{phc}
+\index{Brother}
 
 The Brother phc format is stitch-only.
 
 \section{AutoCAD Embroidery Format (.plt)}
+\index{plt}
+\index{AutoCAD}
 
 The AutoCAD plt format is stitch-only.
 
-\section{RGB Embroidery Format (.rgb)}
+\section{RGB Color File (.rgb)}
+\index{rgb}
 
 The RGB format is a color-only format to act as an external color file for other formats.
 
 \section{Janome Embroidery Format (.sew)}
+\index{sew}
+\index{Janome}
 
 The Janome sew format is stitch-only.
 
 \section{Husqvarna Viking Embroidery Format (.shv)}
+\index{shv}
+\index{Husqvarna Viking}
 
 The Husqvarna Viking shv format is stitch-only.
 
 \section{Sunstar Embroidery Format (.sst)}
+\index{sst}
+\index{Sunstar}
 
 The Sunstar sst format is stitch-only.
 
 \section{Data Stitch Embroidery Format (.stx)}
+\index{stx}
 
 The Data Stitch stx format is stitch-only.
 
 \section{Scalable Vector Graphics (.svg)}
+\index{svg}
 
 The scalable vector graphics (SVG) format is a graphics format
 maintained by ...
 
 \section{Pfaff Embroidery Format (.t01)}
+\index{t01}
+\index{Pfaff}
 
 The Pfaff t01 format is stitch-only.
 
 \subsection{Pfaff Embroidery Format (.t09)}
+\index{t09}
+\index{Pfaff}
 
 The Pfaff t09 format is stitch-only.
 
 \section{Happy Embroidery Format (.tap)}
+\index{tap}
+\index{Happy}
 
 The Happy tap format is stitch-only.
 
 \section{ThredWorks Embroidery Format (.thr)}
+\index{thr}
+\index{ThreadWorks}
 
 The ThreadWorks thr format is stitch-only.
 
 \section{Text File (.txt)}
+\index{txt}
 
 The txt format is stitch-only and isn't associated with a specific company.
 
 \section{Barudan Embroidery Format (.u00)}
+\index{u00}
+\index{Barudan}
 
 The Barudan u00 format is stitch-only.
 
 \section{Barudan Embroidery Format (.u01)}
+\index{u01}
+\index{Barudan}
 
 The Barudan u01 format is stitch-only.
 
 \section{Pfaff Embroidery Format (.vip)}
+\index{vip}
+\index{Pfaff}
 
 The Pfaff vip format is stitch-only.
 
 \section{Pfaff Embroidery Format (.vp3)}
+\index{vp3}
+\index{Pfaff}
 
 The Pfaff vp3 format is stitch-only.
 
 \section{Singer Embroidery Format (.xxx)}
+\index{xxx}
+\index{Singer}
 
 The Singer xxx format is stitch-only.
 
 \section{ZSK USA Embroidery Format (.zsk)}
+\index{zsk}
+\index{ZSK USA}
 
 The ZSK USA zsk format is stitch-only.
   
@@ -2092,7 +2141,7 @@ be used in CNC applications.
 
 \section{Compatible Boards}
 
-We recommend using an Arduino Mega 2560 or another board with equal or
+We recommend using an Arduino\index{Arduino} Mega 2560 or another board with equal or
 greater specs. That being said, we have had success using an Arduino Uno
 R3 but this will likely require further optimization and other
 improvements to ensure continued compatibility with the Uno. See below
@@ -2102,21 +2151,9 @@ for more information.
 
 There are two main concerns here: Flash Storage and SRAM.
 
-libembroidery continually outgrows the 32KB of Flash storage on the
-Arduino Uno and every time this occurs, a decision has to be made as to
-what capabilities should be included or omitted. While reading files is
-the main focus on arduino, writing files may also play a bigger role in
-the future. Long term, it would be most practical to handle the
-inclusion or omission of any feature via a single configuration header
-file that the user can modify to suit their needs.
+libembroidery continually outgrows the 32KB of Flash storage on the Arduino Uno and every time this occurs, a decision has to be made as to what capabilities should be included or omitted. While reading files is the main focus on arduino, writing files may also play a bigger role in the future. Long term, it would be most practical to handle the inclusion or omission of any feature via a single configuration header file that the user can modify to suit their needs.
 
-SRAM is in extremely limited supply and it will deplete quickly so any
-dynamic allocation should occur early during the setup phase of the
-sketch and sparingly or not at all later in the sketch. To help minimize
-SRAM consumption on Arduino and ensure libembroidery can be used in any
-way the sketch creator desires, it is required that any sketch using
-libembroidery must implement event handlers. See the ino-event source
-and header files for more information.
+SRAM is in extremely limited supply and it will deplete quickly so any dynamic allocation should occur early during the setup phase of the sketch and sparingly or not at all later in the sketch. To help minimize SRAM consumption on Arduino and ensure libembroidery can be used in any way the sketch creator desires, it is required that any sketch using libembroidery must implement event handlers. See the ino-event source and header files for more information.
 
 There is also an excellent article by Bill Earl on the Adafruit Learning
 System which covers these topics in more depth:
@@ -2185,22 +2222,6 @@ smaller set of features will be supported. However, we will write a
 That way the work that has been done to simplify the C code can be applied to
 the assembly versions.
 
-\section{Build}
-
-To build the documentation run `make`. This should run no problem on a normal Unix-like environment
-assuming pandoc is available.
-
-* Pandoc creates the content of the page by converting the markdown to html.
-* Pandoc also creates the printer-friendly documentation from the same markdown.
-* Markdown acts as a go-between because it is easy to alter directly in the GH editor.
-
-This way:
-
-* We write one set of documents for all projects.
-* The website can be simple and static, supporting machines that don't run javascript.
-* We control the styling of each version independently of our editing (Markdown) version
-* The printer-friendly documentation can have nicely rendered fonts and well placed figures.
-
 \section{Features}
 
 \section{Bindings}
@@ -2209,27 +2230,27 @@ Bindings for libembroidery are maintained for the languages we use internally in
 
 So libembroidery is going to be supported on:
 
-  * C (by default)
-  * C++ (also by default)
-  * Java (for the Android application MobileViewer)
-  * Swift (for the iOS application iMobileViewer)
+\begin{itemize}
+\item C (by default)
+\item C++ (also by default)
+\item Java (for the Android application MobileViewer)
+\item Swift (for the iOS application iMobileViewer)
+\end{itemize}
 
 For C\# we recommend directly calling the function directly
 using the DllImport feature:
 
-```
+\begin{lstlisting}
 [DllImport("libembroidery.so", EntryPoint="readCsv")]
-```
+\end{lstlisting}
 
-see this StackOverflow discussion [for help](\url{https://stackoverflow.com/questions/11425202/is-it-possible-to-call-a-c-function-from-c-net}).
+see this StackOverflow discussion for help: \url{https://stackoverflow.com/questions/11425202/is-it-possible-to-call-a-c-function-from-c-net}.
 
-For Python you can do the same using [ctypes](\url{https://www.geeksforgeeks.org/how-to-call-a-c-function-in-python/}).
+For Python you can do the same using ctypes: \url{https://www.geeksforgeeks.org/how-to-call-a-c-function-in-python/}.
 
 \section{Other Supported Thread Brands}
 
-The thread lists that aren't preprogrammed into formats but
-are indexed in the data file for the purpose of conversion
-or fitting to images/graphics.
+The thread lists that aren't preprogrammed into formats but are indexed in the data file for the purpose of conversion or fitting to images/graphics.
 
 \begin{itemize}
 \item Arc Polyester
@@ -2256,6 +2277,10 @@ or fitting to images/graphics.
 \item ThreaDelight Polyester
 \item Z102 Isacord Polyester
 \end{itemize}
+
+\include{actuator.tex}
+
+\include{libembroidery_api.tex}
 
 \bibliographystyle{plainnat}
 \bibliography{embroidermodder.bib}

@@ -1,0 +1,105 @@
+
+\chapter{Libembroidery API}
+
+\section{EmbVector}
+
+The basic vector type for libembroidery is:
+
+\begin{lstlisting}
+typedef struct EmbVector_ {
+    float x;
+    float y;
+} EmbVector;
+\end{lstlisting}
+
+Equivalent to:
+
+\begin{equation}
+    \begin{pmatrix}
+    a_x \\ a_y
+    \end{pmatrix}
+\end{equation}
+
+\subsection{embVector\_add(EmbVector a, EmbVector b) $\to$ EmbVector}
+\index{\texttt{embVector\_add}}
+
+Takes two arguments, both EmbVectors and adds them together, returning the result.
+
+Equivalent to:
+
+\begin{equation}
+    \begin{pmatrix}
+    c_x \\ c_y
+    \end{pmatrix} =
+    \begin{pmatrix}
+    a_x \\ a_y
+    \end{pmatrix} +
+    \begin{pmatrix}
+    b_x \\ b_y
+    \end{pmatrix}
+\end{equation}
+
+\subsection{embVector\_subtract(EmbVector a, EmbVector b) $\to$ EmbVector}
+\index{\texttt{embVector\_subtract}}
+
+Takes two arguments, both EmbVectors and adds them together, returning the result.
+
+Equivalent to:
+
+\begin{equation}
+    \begin{pmatrix}
+    c_x \\ c_y
+    \end{pmatrix} =
+    \begin{pmatrix}
+    a_x \\ a_y
+    \end{pmatrix} -
+    \begin{pmatrix}
+    b_x \\ b_y
+    \end{pmatrix}
+\end{equation}
+
+\section{EmbCircle}
+
+\begin{lstlisting}
+typedef struct EmbVector_ {
+    EmbVector center;
+    float radius;
+    EmbColor color;
+} EmbVector;
+\end{lstlisting}
+
+\section{EmbEllipse}
+
+\begin{lstlisting}
+typedef struct EmbEllipse_ {
+    float x;
+    float y;
+} EmbEllipse;
+\end{lstlisting}
+
+\section{EmbRect}
+
+\begin{lstlisting}
+typedef struct EmbRect_ {
+    float top;
+    float bottom;
+    float left;
+    float right;
+} EmbRect;
+\end{lstlisting}
+
+\subsection{embRect\_width}
+
+\subsection{embRect\_height}
+
+\section{EmbArray}
+
+\begin{lstlisting}
+    typedef struct EmbArray_ {
+
+    } EmbArray;
+\end{lstlisting}
+
+\subsection{embArray\_addCircle}
+
+\subsection{embArray\_addRect}
