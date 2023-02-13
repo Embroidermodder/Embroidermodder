@@ -6,7 +6,7 @@ cd build
 cmake -G"MinGW Makefiles" .
 cmake --build .
 
-./embroidermodder.exe \
+./embroidermodder \
   ../assets/samples/embroidermodder_logo/conflicts/Embroidermodder.DST \
   ../assets/samples/shamrockin/shamrockin.dst \
   ../assets/samples/spiral/spiral5.csv \
