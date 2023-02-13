@@ -8,6 +8,8 @@
 \usepackage{color}
 \usepackage{listings}
 \usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{booktabs}
 \usepackage[hyperref,svgnames]{xcolor}
 
 \hypersetup{
@@ -237,6 +239,51 @@ An Embroidermodder 2 command excerpt:
 
 \includegraphics[width=0.9\textwidth]{images/features-scripting-1.png}
 
+\section{Build and Install}
+
+Assuming you already have the SDL2 libraries you can proceed to using the fast build, which assumes you want to build and test locally.
+
+The fast build should be:
+
+\begin{lstlisting}
+    bash build.sh
+\end{lstlisting}
+
+or, on Windows:
+
+\begin{lstlisting}
+    .\build.bat
+\end{lstlisting}
+
+Then run using the `run.bat` or `run.sh` scripts in the build/ directory.
+
+Otherwise, follow the instructions below.
+
+If you plan to install the dev version to your system (we recommend you wait for the official installers and beta release first) then use the CMake build instead.
+
+\subsection{Install on Desktop}
+
+We recommend that if you want to install the development version you use the CMake build. Like this:
+
+\begin{lstlisting}
+    git submodule init
+    git submodule update
+
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build .
+    sudo cmake --install .
+\end{lstlisting}
+
+These lines are written into the file:
+
+\begin{lstlisting}
+    ./build_install.sh
+\end{lstlisting}
+
+On Windows use the next section.
+
 \chapter{Design}
 
 Embroidermodder 2 was written in C++/Qt5 and it was far too complex. We had issues with people
@@ -411,34 +458,6 @@ Without Qt5 we need a way of assigning signals with actions, so this is what I'v
 \item TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
 \end{itemize}
 
-\chapter{Libembroidery}
-
-\section{To Do}
-
-\subsection{For Arduino}
-
-\begin{itemize}
-\item TODO - Fix emb-outline files
-\item TODO - Fix thread-color files
-\item TODO - Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
-\item TODO - inotool.org - seems like the logical solution for Nightly/CI builds
-\item TODO - Smoothieboard experiments
-\end{itemize}
-
-\subsection{Testing}
-
-\begin{itemize}
-\item TODO - looping test that reads 10 times while running valgrind. See \texttt{embPattern\_loadExternalColorFile()} Arduino leak note for more info.
-\end{itemize}
-
-\section{DXF File Format}
-
-\index{DXF}
-\cite{dxf_reference}
-
-\chapter{Ideas}
-
-
 \section{Problems to be fixed before the Beta Release}
 
 \begin{enumerate}
@@ -482,6 +501,20 @@ Without Qt5 we need a way of assigning signals with actions, so this is what I'v
 \item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
 \end{enumerate}
 
+\section{Contributing}
+
+\section{Version Control}
+
+Being an open source project, developers can grab the latest code at any time
+and attempt to build it themselves. We try our best to ensure that it will build smoothly
+at any time, although occasionally we do break the build. In these instances,
+please provide a patch, pull request which fixes the issue or open an issue and
+notify us of the problem, as we may not be aware of it and we can build fine.
+
+Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
+
+See the coding style [here](coding-style)
+
 \subsection{Get the Development Build going}
 
 When we switch to releases we recommend using them, unless you're reporting a bug in which case you can check the development build for whether it has been patched. If this applies to you, the current development build is:
@@ -509,52 +542,32 @@ When we switch to releases we recommend using them, unless you're reporting a bu
 \item User designed custom fill.
 \end{enumerate}
 
-\chapter{Build and Install Advice}
+\chapter{Libembroidery}
 
-Assuming you already have the SDL2 libraries you can proceed to using the fast build, which assumes you want to build and test locally.
+\section{To Do}
 
-The fast build should be:
+\subsection{For Arduino}
 
-\begin{lstlisting}
-    bash scripts/build.sh
-\end{lstlisting}
+\begin{itemize}
+\item TODO - Fix emb-outline files
+\item TODO - Fix thread-color files
+\item TODO - Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
+\item TODO - inotool.org - seems like the logical solution for Nightly/CI builds
+\item TODO - Smoothieboard experiments
+\end{itemize}
 
-or, on Windows:
+\subsection{Testing}
 
-\begin{lstlisting}
-    .\scripts\build.bat
-\end{lstlisting}
+\begin{itemize}
+\item TODO - looping test that reads 10 times while running valgrind. See \texttt{embPattern\_loadExternalColorFile()} Arduino leak note for more info.
+\end{itemize}
 
-Then run using the `run.bat` or `run.sh` scripts in the build/ directory.
+\section{DXF File Format}
 
-Otherwise, follow the instructions below.
+\index{DXF}
+\cite{dxf_reference}
 
-If you plan to install the dev version to your system (we recommend you wait for the official installers and beta release first) then use the CMake build instead.
-
-\section{Install on Desktop}
-
-We recommend that if you want to install the development version you use the CMake build. Like this:
-
-\begin{lstlisting}
-    git submodule init
-    git submodule update
-
-    mkdir build
-    cd build
-    cmake ..
-    cmake --build .
-    sudo cmake --install .
-\end{lstlisting}
-
-These lines are written into the file:
-
-\begin{lstlisting}
-    .\scripts\build_install.sh
-\end{lstlisting}
-
-On Windows use the next section.
-
-\chapter{Development}
+\section{Development}
 
 If you wish to develop with us you can chat via the contact email
 on the [website]\url{https://libembroidery.org} or in the issues tab on the
@@ -675,7 +688,7 @@ For example: scm\_new\_file.
 
 The bit based flags all collected into a 32-bit integer.
 
-\begin{tabular}{l l}
+\begin{longtable}{l l}
 bit(s) & description \\
 \hline
 0 & User (0) or system (1) permissions. \\
@@ -684,25 +697,12 @@ bit(s) & description \\
 |        | can be applied to.                         |
 | 9-10   | What menu (if any) should it be present in.|
 | 11-12  | What                                       |
-\end{tabular}
+\end{longtable}
 
 \subsection{description}
 
 The string placed in the tooltip describing the action.
 
-\chapter{Contributing}
-
-\section{Version Control}
-
-Being an open source project, developers can grab the latest code at any time
-and attempt to build it themselves. We try our best to ensure that it will build smoothly
-at any time, although occasionally we do break the build. In these instances,
-please provide a patch, pull request which fixes the issue or open an issue and
-notify us of the problem, as we may not be aware of it and we can build fine.
-
-Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
-
-See the coding style [here](coding-style)
 
 \chapter{Tutorials}
 
@@ -737,56 +737,55 @@ To see what's planned open the [Projects](https://github.com/Embroidermodder/Emb
 
 \section{Format Support}
 
-\begin{tabular}{l l l l}
-FORMAT & READ & WRITE & NOTES \\
+\begin{longtable}{l l l p{8cm}}
+\textbf{FORMAT} & \textbf{READ} & \textbf{WRITE} & \textbf{NOTES} \\
 \hline
-\end{tabular}
-
-| `10o` | YES   |  | read (need to fix external color loading) (maybe find out what ctrl | code flags of 0x10, 0x08, 0x04, and 0x02 mean) |
-| `100` |  |  | none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x | y (signed char) |
-| `art` |  |  | none |
-| `bro` | YES   |  | read (complete)(maybe figure out detail of header) |
-| `cnd` |  |  | none |
-| `col` |  |  | (color file no design) read(final) write(final) |
-| `csd` | YES   |  | read (complete) |
-| `dat` |  |  | read () |
-| `dem` |  |  | none (looks like just encrypted cnd) |
-| `dsb` | YES   |  | read (unknown how well) (stitch data looks same as 10o) |
-| `dst` | YES   |  | read (complete) / write(unknown) |
-| `dsz` | YES   |  | read (unknown) |
-| `dxf` |  |  | read (Port to C. needs refactored) |
-| `edr` |  |  | read (C version is broken) / write (complete) |
-| `emd` |  |  | read (unknown) |
-| `exp` | YES   |  | read (unknown) / write(unknown) |
-| `exy` | YES   |  | read (need to fix external color loading) |
-| `fxy` | YES   |  | read (need to fix external color loading) |
-| `gnc` |  |  | none |
-| `gt`     |  |  | read (need to fix external color loading) |
-| `hus` | YES   |  | read (unknown) / write (C version is broken) |
-| `inb` | YES   |  | read (buggy?) |
-| `jef` | YES   |  | write (need to fix the offsets when it is moving to another spot) |
-| `ksm` | YES   |  | read (unknown) / write (unknown) |
-| `pcd` |  |  |  |
-| `pcm` |  |  | |
-| `pcq` |  |  | read (Port to C)|
-| `pcs` | BUGGY |  | read (buggy / colors are not correct / after reading, writing any other format is messed up)|
-| `pec` |  |  | read / write (without embedded images, sometimes overlooks some stitches leaving a gap)|
-| `pel` |  |  | none|
-| `pem` |  |  | none|
-| `pes` | YES   |  | |
-| `phb` |  |  | |
-| `phc` |  |  | |
-| `rgb` |  |  | |
-| `sew` | YES   |  | |
-| `shv` |  |  | read (C version is broken)|
-| `sst` |  |  | none|
-| `svg` |  | YES   | |
-| `tap` | YES   |  | read (unknown)|
-| `u01` |  |  | |
-| `vip` | YES   |  | |
-| `vp3` | YES   |  | |
-| `xxx` | YES   |  | |
-| `zsk` |  |  | read (complete) |
+\index{.10o}\texttt{10o} & YES &  & read (need to fix external color loading) (maybe find out what ctrl | code flags of 0x10, 0x08, 0x04, and 0x02 mean) \\
+\index{.100}\texttt{100} &  &  & none (4 byte codes) 61 00 10 09 (type, type2, x, y ?) x | y (signed char) \\
+\index{.art}`art` |  &  & none \\
+\index{.bro}`bro` & YES &  & read (complete)(maybe figure out detail of header) \\
+\index{.cnd}\texttt{cnd} &  &  & none \\
+\index{.col}\texttt{col} &  &  & (color file no design) read(final) write(final) \\
+\index{.csd}\texttt{csd} | YES   &  & read (complete) \\
+\index{.dat}\texttt{dat} &  &  & read () \\
+\index{.dem}`dem` &  &  & none (looks like just encrypted cnd) \\
+\index{.dsb}\texttt{dsb} & YES   &  & read (unknown how well) (stitch data looks same as 10o) \\
+\index{.dst}\texttt{dst} & YES   &  & read (complete) / write(unknown) \\
+`dsz` & YES   &  & read (unknown) \\
+`dxf` &  &  & read (Port to C. needs refactored) \\
+`edr` &  &  & read (C version is broken) / write (complete) \\
+`emd` &  &  & read (unknown) \\
+`exp` & YES   &  & read (unknown) / write(unknown) \\
+`exy` & YES   &  & read (need to fix external color loading) \\
+`fxy` & YES   &  & read (need to fix external color loading) \\
+`gnc` &  &  & none \\
+`gt` &  &  & read (need to fix external color loading) \\
+`hus` & YES   &  & read (unknown) / write (C version is broken) \\
+`inb` & YES   &  & read (buggy?) \\
+`jef` & YES   &  & write (need to fix the offsets when it is moving to another spot) \\
+`ksm` & YES   &  & read (unknown) / write (unknown) \\
+`pcd` &  &  &  \\
+`pcm` &  &  & \\
+`pcq` &  &  & read (Port to C) \\
+`pcs` & BUGGY &  & read (buggy / colors are not correct / after reading, writing any other format is messed up) \\
+`pec` &  &  & read / write (without embedded images, sometimes overlooks some stitches leaving a gap) \\
+`pel` &  &  & none \\
+`pem` &  &  & none \\
+`pes` & YES   &  & \\
+`phb` &  &  & \\
+`phc` &  &  & \\
+`rgb` &  &  & \\
+`sew` & YES   &  & \\
+`shv` &  &  & read (C version is broken) \\
+`sst` &  &  & none \\
+`svg` &  & YES   & \\
+`tap` & YES   &  & read (unknown) \\
+`u01` &  &  & \\
+`vip` & YES   &  & \\
+`vp3` & YES   &  & \\
+`xxx` & YES   &  & \\
+`zsk` &  &  & read (complete)
+\end{longtable}
 
 Support for Singer FHE, CHE (Compucon) formats?
 
@@ -884,13 +883,15 @@ Try to group commits based on what they are related to: features/bugs/comments/g
 
 Creating software that interfaces with hardware is costly. A summary of some of the costs involved:
 
-1. Developer time for 2 core developers
-2. Computer equipment and parts
-3. Embroidery machinery
-4. Various electronics for kitbashing Embroiderbot
-5. Consumable materials (thread, fabric, stabilizer, etc...)
+\begin{enumerate}
+\item Developer time for 2 core developers
+\item Computer equipment and parts
+\item Embroidery machinery
+\item Various electronics for kitbashing Embroiderbot
+\item Consumable materials (thread, fabric, stabilizer, etc...)
+\end{enumerate}
 
-If you have found our software useful, please consider funding further development by donating to the project [on Open Collective](https://opencollective.com/embroidermodder).
+If you have found our software useful, please consider funding further development by donating to the project on Open Collective (\url{https://opencollective.com/embroidermodder}).
 
 \chapter{Introduction}
 
@@ -946,17 +947,6 @@ there are so many but if you can fix anything reported here you can submit a PR.
 
 \section{Code Optimisations and Simplifications}
 
-\subsection{Current}
-
-What Robin is currently doing.
-
-Getting the code to pass PyLint, that involves getting all source files
-under 1000 lines, renaming all variables to be in snake case.
-
-Changing the seperation of code between EM and libembroidery.
-
-Translating the Qt widget framework to Tk.
-
 \subsection{Geometry}
 
 The geometry is stored, processed and altered via libembroidery. See the Python specific part of the documentation for libembroidery for this. What the code in Embroidermodder does is make the GUI widgets to change and view this information graphically.
@@ -982,7 +972,6 @@ but the user would do this through a series of GUI actions:
 \end{enumerate}
 
 So EM2 does the job of bridging that gap.
-
 
 \subsection{Postscript Support}
 
@@ -1057,7 +1046,7 @@ A shortcut can be made up of zero or more modifier keys and at least one non-mod
 
 To make this list quickly assessable, we can produce a list of hashes which are simply the flags ORed together.
 
-The shortcuts are stored in the csv file "shortcuts.csv"
+The shortcuts are stored in the csv file ``shortcuts.csv''
 as a 5-column table with the first 4 columns describing
 the key combination. This is loaded into the shortcuts
 `TABLE`. Each tick the program checks the input state for
@@ -1067,36 +1056,36 @@ of them are set to true.
 
 \subsection{CAD command review}
 
-\begin{tabular}{l l l l}
+\begin{longtable}{l l l p{3.5cm}}
 \textbf{ID} & \textbf{name} & \textbf{arguments} & \textbf{description} \\
 \hline
-0 & newfile & none & Create a new EmbPattern with a new tab in the GUI. \\
-1 & openfile & filename string & Open an EmbPattern with the supplied filename `fname`.  \\
-2 & savefile & filename string & Save the current loaded EmbPattern to the supplied filname `fname`. \\
-3 & scale & selected objects, 1 float & Scale all selected objects by the number supplied, without selection scales the entire design \\
-4 & circle & mouse co-ords & Adds a circle to the design based on the supplied numbers, converts to stitches on save for stitch only formats. \\
-5 & offset & mouse co-ords & Shifts the selected objects by the amount given by the mouse co-ordinates.  \\
-6 & extend & & \\
-7 & trim & & \\
-8 & break\_at\_point & & \\
-9 & break\_2\_points & & \\
-10 & fillet & & \\
-11 & star & & \\
-12 & singlelinetext & & \\
-13 & chamfer & & \\
-14 & split & & \\
-15 & area & & \\
-16 & time & & \\
-17 & pickadd & & \\
-16 & zoomfactor & & \\
-17 & product & & \\
-18 & program & & \\
-19 & zoomwindow & & \\
-20 & divide & & \\
-21 & find & & \\
-22 & record & & \\
-23 & playback & & \\
-24 & rotate & & \\
+0 & \index{newfile}newfile & none & Create a new EmbPattern with a new tab in the GUI. \\
+1 & \index{openfile}openfile & filename string & Open an EmbPattern with the supplied filename `fname`.  \\
+2 & \index{savefile}savefile & filename string & Save the current loaded EmbPattern to the supplied filname `fname`. \\
+3 & \index{scale}scale & selected objects, 1 float & Scale all selected objects by the number supplied, without selection scales the entire design \\
+4 & \index{circle}circle & mouse co-ords & Adds a circle to the design based on the supplied numbers, converts to stitches on save for stitch only formats. \\
+5 & \index{offset}offset & mouse co-ords & Shifts the selected objects by the amount given by the mouse co-ordinates.  \\
+6 & \index{extend}extend & & \\
+7 & \index{trim}trim & & \\
+8 & \index{break-at-point}break\_at\_point & & \\
+9 & \index{break-2-points}break\_2\_points & & \\
+10 & \index{fillet}fillet & & \\
+11 & \index{star}star & & \\
+12 & \index{singlelinetext}singlelinetext & & \\
+13 & \index{chamfer}chamfer & & \\
+14 & \index{split}split & & \\
+15 & \index{area}area & & \\
+16 & \index{time}time & & \\
+17 & \index{pickadd}pickadd & & \\
+16 & \index{zoomfactor}zoomfactor & & \\
+17 & \index{product}product & & \\
+18 & \index{program}program & & \\
+19 & \index{zoomwindow}zoomwindow & & \\
+20 & \index{divide}divide & & \\
+21 & \index{find}find & & \\
+22 & \index{record}record & & \\
+23 & \index{playback}playback & & \\
+24 & \index{rotate}rotate & & \\
 25 & rgb & & \\
 26 & move & & \\
 27 & grid & & \\
@@ -1119,7 +1108,7 @@ of them are set to true.
 44 & arc (rt) &  &  \\
 45 & dolphin &  &  \\
 46 & heart  & &
-\end{tabular}
+\end{longtable}
 
 \subsection{Removed Elements}
 
@@ -1163,7 +1152,7 @@ This should backend to a C renderer or something.
 
 \subsection{Configuration Data Ideas}
 
-embroidermodder should boot from the command line
+Embroidermodder should boot from the command line
 regardless of whether it is or is not installed (this helps with testing and
 running on machines without root). Therefore, it can create an initiation file
 but it won't rely on its existence to boot: `~/.embroidermodder/config.json`.
@@ -1188,24 +1177,28 @@ Only do this once per minor version number.
 Originally Embroidermodder had a terminal widget, this is why we removed it.
 
 \begin{quote}
-> ROBIN: I think supporting scripting within Embroidermodder doesn't make sense.
+\textbf{ROBIN}
 
-> All features that use scripting can be part of libembroidery instead.
-> Users who are capable of using scripting won't need it, they can alter their embroidery files in CSV format, or import pyembroidery to get access.
-> It makes maintaining the code a lot more complicated, especially if we move away from Qt.
-> Users who don't want the scripting feature will likely be confused by it, since we say that's what libembroidery, embroider and pyembroidery are for.
+I think supporting scripting within Embroidermodder doesn't make sense.
 
-> How about a simpler ``call user shell`` feature? Similar to texmaker we just call system on a batch or shell script supplied by the user and it processes the file directly then the software reloads the file. Then we aren't parsing it directly.
+All features that use scripting can be part of libembroidery instead.
+Users who are capable of using scripting won't need it, they can alter their embroidery files in CSV format, or import pyembroidery to get access.
+It makes maintaining the code a lot more complicated, especially if we move away from Qt.
+Users who don't want the scripting feature will likely be confused by it, since we say that's what libembroidery, embroider and pyembroidery are for.
 
-> I don't want to change this without Josh's support because it's a fairly major change.
+How about a simpler ``call user shell`` feature? Similar to texmaker we just call system on a batch or shell script supplied by the user and it processes the file directly then the software reloads the file. Then we aren't parsing it directly.
 
-> JOSH: I totally agree.
+I don't want to change this without Josh's support because it's a fairly major change.
 
-> I like the idea of scripting just so people that know how to code could write their own designs without needing to fully build the app. Scripting would be a very advanced feature that most users would be confused by. Libembroidery would be a good fit for advanced features.
+\textbf{JOSH}
 
-> Now we are using Python (again, sort of) this would be a lot more natural,
-> perhaps we could boot the software without blocking the shell so they can
-> interact? TODO: Screenshot a working draft to demonstrate.
+I totally agree.
+
+I like the idea of scripting just so people that know how to code could write their own designs without needing to fully build the app. Scripting would be a very advanced feature that most users would be confused by. Libembroidery would be a good fit for advanced features.
+
+Now we are using Python (again, sort of) this would be a lot more natural,
+perhaps we could boot the software without blocking the shell so they can
+interact? TODO: Screenshot a working draft to demonstrate.
 \end{quote}
 
 \subsection{Perennial Jobs}
@@ -1590,7 +1583,7 @@ without building.
 
 The table of read/write format support levels uses the status levels described here:
 
-\begin{tabular}{l l}
+\begin{longtable}{l p{8cm}}
 Status Label & Description \\
 \hline
 `rw-none` & Either the format produces no output, reporting an error. Or it produces a Tajima dst file as an alternative. \\
@@ -1599,7 +1592,7 @@ Status Label & Description \\
 `rw-standard` & Files with non-standard features work on machines and we have good documentation on the format. \\
 `rw-reliable` & All known features don't cause crashes. Almost all work as expected. \\
 `rw-complete` & All known features of the format work on machines that use this format. Translations from and to this format preserve all features present in both.
-\end{tabular}
+\end{longtable}
 
 These can be split into `r-basic w-none`, for example, if they don't match.
 
@@ -1607,7 +1600,7 @@ So all formats can, in principle, have good read and good write support, because
 
 \subsection{Test Support Levels}
 
-\begin{tabular}{l l}
+\begin{longtable}{l p{8cm}}
 Status Label & Description \\
 \hline
 test-none & No tests have been written to test the specifics of the format. \\
@@ -1615,16 +1608,16 @@ test-basic & Stitch Lists and/or colors have read/write tests. \\
 test-thorough & All features of that format has at least one test. \\
 test-fuzz & Can test the format for uses of features that we haven't thought of by feeding in nonsense that is designed to push possibly dangerous weaknesses to reveal themselves. \\
 test-complete & Both thorough and fuzz testing is covered.
-\end{tabular}
+\end{longtable}
 
 So all formats can, in principle, have complete testing support, because it's defined in relation to files that we have described the formats for.
 
 \subsection{Documentation Support Levels}
 
-\begin{tabular}{l l}
+\begin{longtable}{l p{8cm}}
 Status Label & Description \\
 \hline
-\end{tabular}
+\end{longtable}
 
 | `doc-none` | We haven't researched this beyond finding example files. |
 | `doc-basic` | We have a rough sketch of the size and contents of the header if there is one. We know the basic stitch encoding (if there is one), but not necessarily all stitch features. |
@@ -1642,8 +1635,11 @@ Since the overall support level is the combination of these
 4 factors, but rather than summing up their values it's an 
 issue of the minimum support of the 4.
 
-| Status Label(s) | Description |
-|---|---|
+\begin{longtable}{l p{8cm}}
+Status Label & Description \\
+\hline
+\end{longtable}
+
 | `read-only` | If write support is none and read support is not none. |
 | `write-only` | If read support is none and write support is not none. |
 | `unstable` | If both read and write support are not none but testing or documentation is none. |
@@ -1656,7 +1652,7 @@ issue of the minimum support of the 4.
 
 Overview of documentation support by format.
 
-\begin{tabular}{l l l}
+\begin{longtable}{l l l}
 Format & Ratings & Score \\
 \hline
 Toyota Embroidery Format (.100) & rw-basic doc-none test-none & unstable \\
@@ -1668,59 +1664,58 @@ Melco Embroidery Format (.cnd) & rw-none doc-none test-none & experimental \\
 Embroidery Thread Color Format (.col) & rw-basic doc-none test-none & `experimental` \\
 Singer Embroidery Format (.csd) & rw-none doc-none test-none & experimental \\
 Comma Separated Values (.csv) & rw-none doc-none test-none & experimental \\
-Barudan Embroidery Format (.dat) & rw-none doc-none test-none & experimental \end{tabular}
-
-| Melco Embroidery Format (.dem) | `rw-none doc-none test-none` | `experimental` |
-| Barudan Embroidery Format (.dsb) | `rw-none doc-none test-none` | `experimental` |
-| Tajima Embroidery Format (.dst) | `rw-none doc-none test-none` | `experimental` |
-| ZSK USA Embroidery Format (.dsz) | `rw-none doc-none test-none` | `experimental` |
-| Drawing Exchange Format (.dxf) | `rw-none doc-none test-none` | `experimental` |
-| Embird Embroidery Format (.edr) | `rw-none doc-none test-none` | `experimental` |
-| Elna Embroidery Format (.emd) | `rw-none doc-none test-none` | `experimental` |
-| Melco Embroidery Format (.exp) | `rw-none doc-none test-none` | `experimental` |
-| Eltac Embroidery Format (.exy) | `rw-none doc-none test-none` | `experimental` |
-| Sierra Expanded Embroidery Format (.eys) | `rw-none doc-none test-none` | `experimental` |
-| Fortron Embroidery Format (.fxy) | `rw-none doc-none test-none` | `experimental` |
-| Smoothie G-Code Embroidery Format (.gc) | `rw-none doc-none test-none` | `experimental` |
-| Great Notions Embroidery Format (.gnc) | `rw-none doc-none test-none` | `experimental` |
-| Gold Thread Embroidery Format (.gt) | `rw-none doc-none test-none` | `experimental` |
-| Husqvarna Viking Embroidery Format (.hus) | `rw-none doc-none test-none` | `experimental` |
-| Inbro Embroidery Format (.inb) | `rw-none doc-none test-none` | `experimental` |
-| Embroidery Color Format (.inf) | `rw-none doc-none test-none` | `experimental` |
-| Janome Embroidery Format (.jef) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.ksm) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.max) | `rw-none doc-none test-none` | `experimental` |
-| Mitsubishi Embroidery Format (.mit) | `rw-none doc-none test-none` | `experimental` |
-| Ameco Embroidery Format (.new) | `rw-none doc-none test-none` | `experimental` |
-| Melco Embroidery Format (.ofm) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.pcd) |  `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.pcm) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.pcq) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.pcs) | `rw-none doc-none test-none` | `experimental` |
-| Brother Embroidery Format (.pec) | `rw-none doc-none test-none` | `experimental` |
-| Brother Embroidery Format (.pel) | `rw-none doc-none test-none` | `experimental` |
-| Brother Embroidery Format (.pem) | `rw-none doc-none test-none` | `experimental` |
-| Brother Embroidery Format (.pes) | `rw-none doc-none test-none` | `experimental` |
-| Brother Embroidery Format (.phb) | `rw-none doc-none test-none` | `experimental` |
-| Brother Embroidery Format (.phc) | `rw-none doc-none test-none` | `experimental` |
-| AutoCAD Embroidery Format (.plt) | `rw-none doc-none test-none` | `experimental` |
-| RGB Embroidery Format (.rgb) | `rw-none doc-none test-none` | `experimental` |
-| Janome Embroidery Format (.sew) | `rw-none doc-none test-none` | `experimental` |
-| Husqvarna Viking Embroidery Format (.shv) | `rw-none doc-none test-none` | `experimental` |
-| Sunstar Embroidery Format (.sst) | `rw-none doc-none test-none` | `experimental` |
-| Data Stitch Embroidery Format (.stx) | `rw-none doc-none test-none` | `experimental` |
-| Scalable Vector Graphics (.svg) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.t01) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.t09) | `rw-none doc-none test-none` | `experimental` |
-| Happy Embroidery Format (.tap) | `rw-none doc-none test-none` | `experimental` |
-| ThredWorks Embroidery Format (.thr) | `rw-none doc-none test-none` | `experimental` |
-Text File (.txt) | `rw-none doc-none test-none` | `experimental` |
-| Barudan Embroidery Format (.u00) | `rw-none doc-none test-none` | `experimental` |
-| Barudan Embroidery Format (.u01) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.vip) | `rw-none doc-none test-none` | `experimental` |
-| Pfaff Embroidery Format (.vp3) | `rw-none doc-none test-none` | `experimental` |
-| Singer Embroidery Format (.xxx) | `rw-none doc-none test-none` | `experimental` |
-| [ZSK USA Embroidery Format (.zsk)](zsk-usa-embroidery-format-zsk) | `rw-none doc-none test-none` | `experimental` |
+Barudan Embroidery Format (.dat) & rw-none doc-none test-none & experimental \\ Melco Embroidery Format (.dem) & rw-none doc-none test-none & experimental \\
+Barudan Embroidery Format (.dsb) & rw-none doc-none test-none & experimental \\
+Tajima Embroidery Format (.dst) & rw-none doc-none test-none & experimental \\
+ZSK USA Embroidery Format (.dsz) & rw-none doc-none test-none & experimental \\
+Drawing Exchange Format (.dxf) & rw-none doc-none test-none & experimental \\
+Embird Embroidery Format (.edr) & rw-none doc-none test-none & experimental \\
+Elna Embroidery Format (.emd) & rw-none doc-none test-none & experimental \\
+Melco Embroidery Format (.exp) & rw-none doc-none test-none & experimental \\
+Eltac Embroidery Format (.exy) & rw-none doc-none test-none & experimental \\
+Sierra Expanded Embroidery Format (.eys) & rw-none doc-none test-none & experimental \\
+Fortron Embroidery Format (.fxy) & rw-none doc-none test-none & experimental \\
+Smoothie G-Code Embroidery Format (.gc) & rw-none doc-none test-none & experimental \\
+Great Notions Embroidery Format (.gnc) & rw-none doc-none test-none & experimental \\
+Gold Thread Embroidery Format (.gt) & rw-none doc-none test-none & experimental \\
+Husqvarna Viking Embroidery Format (.hus) & rw-none doc-none test-none & experimental \\
+Inbro Embroidery Format (.inb) & rw-none doc-none test-none & experimental \\
+Embroidery Color Format (.inf) & rw-none doc-none test-none & experimental \\
+Janome Embroidery Format (.jef) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.ksm) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.max) & rw-none doc-none test-none & experimental \\
+Mitsubishi Embroidery Format (.mit) & rw-none doc-none test-none & experimental \\
+Ameco Embroidery Format (.new) & rw-none doc-none test-none & experimental \\
+Melco Embroidery Format (.ofm) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.pcd) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.pcm) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.pcq) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.pcs) & rw-none doc-none test-none & experimental \\
+Brother Embroidery Format (.pec) & rw-none doc-none test-none & experimental \\
+Brother Embroidery Format (.pel) & rw-none doc-none test-none & experimental \\
+Brother Embroidery Format (.pem) & rw-none doc-none test-none & experimental \\
+Brother Embroidery Format (.pes) & rw-none doc-none test-none & experimental \\
+Brother Embroidery Format (.phb) & rw-none doc-none test-none & experimental \\
+Brother Embroidery Format (.phc) & rw-none doc-none test-none & experimental \\
+AutoCAD Embroidery Format (.plt) & rw-none doc-none test-none & experimental \\
+RGB Embroidery Format (.rgb) & rw-none doc-none test-none & experimental \\
+Janome Embroidery Format (.sew) & rw-none doc-none test-none & experimental \\
+Husqvarna Viking Embroidery Format (.shv) & rw-none doc-none test-none & experimental \\
+Sunstar Embroidery Format (.sst) & rw-none doc-none test-none & experimental \\
+Data Stitch Embroidery Format (.stx) & rw-none doc-none test-none & experimental \\
+Scalable Vector Graphics (.svg) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.t01) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.t09) & rw-none doc-none test-none & experimental \\
+Happy Embroidery Format (.tap) & rw-none doc-none test-none & experimental \\
+ThredWorks Embroidery Format (.thr) & rw-none doc-none test-none & experimental \\
+Text File (.txt) & rw-none doc-none test-none & experimental \\
+Barudan Embroidery Format (.u00) & rw-none doc-none test-none & experimental \\
+Barudan Embroidery Format (.u01) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.vip) & rw-none doc-none test-none & experimental \\
+Pfaff Embroidery Format (.vp3) & rw-none doc-none test-none & experimental \\
+Singer Embroidery Format (.xxx) & rw-none doc-none test-none & experimental \\
+ZSK USA Embroidery Format (.zsk) & rw-none doc-none test-none & experimental 
+\end{longtable}
 
 \subsection{Toyota Embroidery Format (.100)}
 
@@ -1760,7 +1755,7 @@ We don't know much about this format. TODO: Find a source.
 
 An external color file format for formats that do not record their own colors. 
 
-It is a human-readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break `\textbackslash{}r\textbackslash{}n`.
+It is a human-readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break \texttt{\textbackslash{}r\textbackslash{}n}.
 
 Then the rest of the file is a comma seperated value list of all threads with 4 values per line: the index of the thread then the red, green and blue channels of the color in that order.
 
@@ -1785,21 +1780,27 @@ Stitch Only Format
 \section{Comma Separated Values (.csv)}
 
 Comma Seperated Values files aren't a universal system, here we aim to
-offer a broad support.
+offer a broad support. The dialect is detected based on the opening lines,
+as each manufacturer should label their CSV files there.
 
-\begin{tabular}{l l l}
+\subsection{Embroidermodder 2.0 CSV Dialect}
+
+Our own version has the identifier comment line:
+
+\begin{longtable}{l l p{8cm}}
 Control Symbol & Type & Description \\
 \hline
-\end{tabular}
+\texttt{\#} & \texttt{COMMENT} & \\
+\texttt{>} & \texttt{VARIABLE} & To store records of a pattern's width, height etc. This means that data stored in the header of say a .dst file is preserved. \\
+\$ & THREAD & \\
+* & STITCH & \\
+* & JUMP & \\
+* & COLOR & To change a color: used for trim as well \\
+* & END & To end a pattern. \\
+* & UNKNOWN & For any feature that we can't identify.
+\end{longtable}
 
-| `\#` | COMMENT | |
-| `>` | VARIABLE | To store records of a pattern's width, height etc. This means that data stored in the header of say a `.dst` file is preserved. |
-| `\$` | THREAD | |
-| `*` | STITCH | |
-| `*` | JUMP | |
-| `*` | COLOR | To change a color: used for trim as well |
-| `*` | END | To end a pattern. |
-| `*` | UNKNOWN | For any feature that we can't identify. |
+\subsection{EmBird CSV Dialect}
 
 \section{Barudan Embroidery Format (.dat)}
 
@@ -1811,11 +1812,13 @@ Stitch Only Format
 
 \section{Barudan Embroidery Format (.dsb)}
 
-* Stitch Only Format.
-* [X] Basic Read Support
-* [ ] Basic Write Support
-* [ ] Well Tested Read
-* [ ] Well Tested Write
+\begin{itemize}
+\item Stitch Only Format.
+\item [X] Basic Read Support
+\item [o] Basic Write Support
+\item [o] Well Tested Read
+\item [o] Well Tested Write
+\end{itemize}
 
 \section{Tajima Embroidery Format (.dst)}
 
@@ -1831,48 +1834,51 @@ Stitch Only Format
 Format comments are thanks to \url{tspilman@dalcoathletic.com} who's
 notes appeared at [http://www.wotsit.org](http://www.wotsit.org) under Tajima Format.
 
-\section{Header}
+Other references: \cite{kde_tajima}, \cite{acatina}.
 
-The header seems to contain information about the design.
-Seems to be ASCII text delimited by 0x0D (carriage returns).
-This must be in the file for most new software or hardware
-to consider it a good file! This is much more important
-than I originally believed. The header is 125 bytes in
-length and padded out by 0x20 to 512 bytes total.
-All entries in the header seem to be 2 ASCII characters
-followed by a colon, then it's value trailed by a carriage return.
+\subsection{Header}
 
-\begin{tabular}{l l}
- *C memory* & *Description* |
-|---|---|
-| `char LA[16+1];` | First is the 'LA' entry, which is the design name with no path or extension information. The blank is 16 characters in total, but the name must not be longer that 8 characters and padded out with spaces (0x20). |
-| `char ST[7+1];` | Next is the stitch count ST, this is a 7 digit number padded by leading zeros. This is the total stitch count including color changes, jumps, nups, and special records. |
-| `char CO[3+1];` | Next, is CO or colors, a 3 digit number padded by leading zeros. This is the number of color change records in the file. |
-| `char POSX[5+1];` | Next is +X or the positive X extent in centimeters, a 5 digit non-decimal number padded by leading zeros. |
-| `char NEGX[5+1];` | Following is the -X or the negative X extent in millimeters, a 5 digit non-decimal number padded by leading zeros. |
-| `char POSY[5+1];` | Again, the +Y extents. |
-| `char NEGY[5+1];` | Again, the -Y extents. |
-| `char AX[6+1]; char AY[6+1];` | AX and AY should express the relative coordinates of the last point from the start point in 0.1 mm. If the start and last points are the same, the coordinates are (0,0). |
-| `char MX[6+1];` `char MY[6+1];` | MX and MY should express coordinates of the last point of the previous file for a multi-volume design. A multi-volume design means a design consisted of two or more files. This was used for huge designs that can not be stored in a single paper tape roll. It is not used so much (almost never) nowadays. |
-| `char PD[9+1];` | PD is also storing some information for multi-volume design. |
-\end{tabular}
+The header contains general information about the design. It is in lines of ASCII, so if you open a DST file as a text file, it's the only part that's easy to read. The line ending symbol is \texttt{0x0D}. The header is necessary for the file to be read by most softwares and hardwares.
+
+The header is 125 bytes of data followed by padding spaces to make it 512 bytes in total.
+
+The lines are as follows.
+
+\begin{longtable}{l l p{8cm} l}
+\textbf{Label} & \textbf{Size} & \textbf{Description} & \textbf{Example} \\
+\hline
+\texttt{"LA:"} & 17 & The design name with no path or extension. The space reserved is 16 characters, but the name must not be longer than 8 and be padded to 16 with spaces (0x20). & \texttt{"LA:Star            "} \\
+\texttt{ST:} & 8 & The stitch count. An integer in the format \texttt{\%07d}, that is: a 7 digit number padded by leading zeros. This is the total accross all possible stitch flags. & \\
+\texttt{CO:} & 4 & The number of color changes (not to be confused with thread count, an all black design we would have the record \textbf{000}). An integer in the format \texttt{\%03d}, that is: a 3 digit number padded by leading zeros. \\
+\texttt{+X:} & 6 & The extent of the pattern in the postitive x direction in millimeters. An integer in the format \texttt{\%05d}, that is: a 5 digit number padded by leading zeros. \\
+\texttt{-X:} & 6 & The extent of the pattern in the negative x direction in millimeters. An integer in the format \texttt{\%05d}, that is: a 5 digit integer padded by leading zeros. \\
+\texttt{+Y:} & 6 & The extent of the pattern in the postitive y direction in millimeters. An integer in the format \texttt{\%05d}, that is: a 5 digit integer padded by leading zeros. \\
+\texttt{-Y:} & 6 & The extent of the pattern in the negative y direction in millimeters. An integer in the format \texttt{\%05d}, that is: a 5 digit integer padded by leading zeros. \\
+\texttt{AX:} & 7 & The difference of the end from the start in the x direction in 0.1mm, the first char should be the sign, followed by an integer in the format \texttt{\%05d}, that is: a 5 digit integer padded by leading zeros. \\
+\texttt{AY:} & 7 & The difference of the end from the start in the y direction in 0.1mm, the first char should be the sign, followed by an integer in the format \texttt{\%05d}, that is: a 5 digit integer padded by leading zeros. \\
+\texttt{MX:} & 7 & The x co-ordinate of the last point in the previous file should the design span multiple files. Like AX, it is the sign, followed by a 5 digit integer. If we have a one file design set it to zero. \\
+\texttt{MY:} & 7 & The y co-ordinate of the last point in the previous file should the design span multiple files. Like AY, it is the sign, followed by a 5 digit integer. If we have a one file design set it to zero. \\
+\texttt{PD:} & 10 & Information about multivolume designs.
+\end{longtable}
+
+\subsection{Stitch Data}
 
 Uses 3 byte per stitch encoding with the format as follows:
 
-The 3 byte encoding for the dxf format.
-
-| *Bit* | *7* | *6* | *5* | *4* | *3* | *2* | *1* | *0* |
-|----|----|----|----|----|----|----|----|----|
-| Byte 0 | y+1 | y-1 | y+9 | y-9 | x-9 | x+9 | x-1 | x+1 |
-| Byte 1 | y+3 | y-3 | y+27 | y-27 | x-27 | x+27 | x-3 | x+3 |
-| Byte 2 | jump | color change | y+81 | y-81 | x-81 | x+81 | set | set |
+\begin{tabular}{l l l l l l l l l}
+\textbf{Bit} & *7* & *6* & *5* & *4* & *3* & *2* & *1* & *0* \\
+\hline
+Byte 0 & y+1 & y-1 & y+9 & y-9 & x-9 & x+9 & x-1 & x+1 \\
+Byte 1 & y+3 & y-3 & y+27 & y-27 & x-27 & x+27 & x-3 & x+3 \\
+Byte 2 & jump & color change & y+81 & y-81 & x-81 & x+81 & set & set
+\end{tabular}
 
 T01 and Tap appear to use Tajima Ternary.
  
 Where the stitch type is determined as:
 
 \begin{itemize}
-\item Normal Stitch `00000011 0x03`
+\item Normal Stitch 00000011 0x03
 \item Jump Stitch `10000011 0x83`
 \item Stop/Change Color `11000011 0xC3`
 \item End Design `11110011 0xF3`
@@ -1880,10 +1886,7 @@ Where the stitch type is determined as:
 
 Inclusive or'ed with the last byte.
 
-Note that:
-
-  1. The max stitch length is the largest sum of `1+3+9+27+81=121` where the unit length is 0.1mm so 12.1mm.
-  2. The coordinate system is right handed.
+Note that the max stitch length is the largest sum of `1+3+9+27+81=121` where the unit length is 0.1mm so 12.1mm. The coordinate system is right handed.
 
 \section{ZSK USA Embroidery Format (.dsz)}
 
@@ -2253,27 +2256,6 @@ or fitting to images/graphics.
 \item ThreaDelight Polyester
 \item Z102 Isacord Polyester
 \end{itemize}
-
-\section{Bibliography}
-
-\begin{enumerate}
-\item Rudolf \emph{Technical Info} [http://www.achatina.de/sewing/main/TECHNICL.HTM](http://www.achatina.de/sewing/main/TECHNICL.HTM)
-(Accessed 25 November 2021)
-\item fineEmbStudio2021
-\item Edutech format description (eduTechWikiDST)
-\item KDE Liberty Description (libertyTajima)
-\item The Sewing Witch \emph{PCD2FMT} [http://www.sewingwitch.com/sewing/bin/pcd2fmt.html](http://www.sewingwitch.com/sewing/bin/pcd2fmt.html) (Accessed November 2021)
-\item [http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html] \url{http://steve-jansen.github.io/guides/windows-batch-scripting/part-7-functions.html}
-\item [https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result] \url{https://stackoverflow.com/questions/16286134/imagemagick-how-can-i-work-with-histogram-result}
-\item Fritzing [https://github.com/fritzing/fritzing-app] \url{https://github.com/fritzing/fritzing-app}
-\item Sahoo, P., Wilkins, C., and Yeager, J., “Threshold selection using Renyi's entropy”, \emph{Pattern Recognition}, vol. 30, no. 1, pp. 71–84, 1997. doi:10.1016/S0031-3203(96)00065-9.
-\item [http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php]
-\url{http://www.fmwconcepts.com/imagemagick/sahoothresh/index.php} (Accessed 12 Dec 2021)
-\item FINDME
-\item G. van Rossum and B. Warsaw "Python PEP 7" \url{https://peps.python.org/pep-0007/} (Accessed April 2020)
-\item Google et al. \emph{Google Java Style Guide} \url{https://google.github.io/styleguide/javaguide.html} (Accessed April 2022)
-\end{enumerate}
-
 
 \bibliographystyle{plainnat}
 \bibliography{embroidermodder.bib}
