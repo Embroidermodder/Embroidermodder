@@ -475,8 +475,13 @@ set_style(void)
     ImFontConfig config;
     config.OversampleH = 2;
     config.OversampleV = 2;
-    font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 16, &config);
-    header_font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 24, &config);
+    if (file_exists(font_file)) {
+        font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 16, &config);
+        header_font = io.Fonts->AddFontFromFileTTF(font_file.c_str(), 24, &config);
+    }
+    else {
+        std::cout << "ERROR: Failed to load font file." << std::endl;
+    }
 
     ImGuiStyle& style = ImGui::GetStyle();
     style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);

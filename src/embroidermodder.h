@@ -307,6 +307,8 @@ View init_view(void);
 void read_settings(void);
 void write_settings(void);
 
+int file_exists(std::string fname);
+
 /* Global variables.
  * -----------------------------------------------------------------------------
  */
