@@ -1,0 +1,331 @@
+\chapter{GUI Design}
+
+Embroidermodder 2 was written in C++/Qt5 and it was far too complex. We had issues with people
+not able to build from source because the Qt5 libraries were so ungainly. So I decided to do a
+rewrite in C/SDL2 (originally FreeGLUT, but that was a mistake) with data stored as YAML. This
+means linking 4-7 libraries depending on your system which are all well supported and widely available.
+
+This is going well, although it's slow progress as I'm trying to keep track of the design while
+also doing a ground up rewrite. I don't want to throw away good ideas. Since I also write code
+for libembroidery my time is divided.
+Overview of the UI rewrite
+
+(Problems to be solved in brackets.)
+
+It's not much to look at because I'm trying to avoid using an external widgets system, which
+in turn means writing things like toolbars and menubars over. If you want to get the design
+the actuator is the heart of it.
+
+Without Qt5 we need a way of assigning signals with actions, so this is what I've got: the user interacts with a UI element, this sends an integer to the actuator that does the thing using the current state of the mainwindow struct of which we expect there to be exactly one instance. The action is taken out by a jump table that calls the right function (most of which are missing in action and not connected up properly). It also logs the number, along with key parts of the main struct in the undo history (an unsolved problem because we need to decide how much data to copy over per action). This means undo, redo and repeat actions can refer to this data.
+
+\section{To Do}
+
+\subsection{For 2.0.0-alpha1}
+
+\begin{itemize}
+\item WIP - Statistics from 1.0, needs histogram
+\item WIP - Saving DST/PES/JEF (varga)
+\item WIP - Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug
+\end{itemize}
+
+\subsection{For 2.0.0-alpha2}
+
+\begin{itemize}
+\item TODO - Notify user of data loss if not saving to an object format.
+\item TODO - Import Raster Image
+\item TODO - SNAP/ORTHO/POLAR
+\item TODO - Layer Manager + LayerSwitcher DockWidget
+\item TODO - Reading DXF
+\end{itemize}
+
+\subsection{For 2.0.0-alpha3}
+
+\begin{itemize}
+\item TODO - Writing DXF
+\item DONE - Up and Down keys cycle thru commands in the command prompt
+\item TODO - Amount of Thread \& Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)
+\item TODO - Otto Theme Icons - whatsthis icon doesn't scale well, needs redone
+\item TODO - embroidermodder2.ico 16 x 16 looks horrible
+\end{itemize}
+
+\subsection{For 2.0.0-alpha4}
+
+\begin{itemize}
+\item WIP - CAD Command: Arc (rt)
+\item TODO - automate changelog and write to a javascript file for the docs: git log --pretty=tformat:'<a href="\url{https://github.com/Embroidermodder/Embroidermodder/commit/%H}">%s</a>'
+\end{itemize}
+
+\subsection{For 2.0.0-beta1}
+
+\begin{itemize}
+\item TODO - Custom Filter Bug - doesn't save changes in some cases
+\item TODO - Cannot open file with \# in name when opening multiple files (works fine when opening the single file)
+\item TODO - Closing Settings Dialog with the X in the window saves settings rather than discards them
+\item WIP - Advanced Printing
+\item TODO - Filling Algorithms (varga)
+\item TODO - Otto Theme Icons - beta (rt) - Units, Render, Selectors
+\end{itemize}
+
+\subsection{For 2.0.0-rc1}
+
+\begin{itemize}
+\item TODO - QDoc Comments
+\item TODO - Review KDE4 Thumbnailer
+\item TODO - Documentation for libembroidery \& formats
+\item TODO - HTML Help files
+\item TODO - Update language translations
+\item TODO - CAD Command review: line
+\item TODO - CAD Command review: circle
+\item TODO - CAD Command review: rectangle
+\item TODO - CAD Command review: polygon
+\item TODO - CAD Command review: polyline
+\item TODO - CAD Command review: point
+\item TODO - CAD Command review: ellipse
+\item TODO - CAD Command review: arc
+\item TODO - CAD Command review: distance
+\item TODO - CAD Command review: locatepoint
+\item TODO - CAD Command review: move
+\item TODO - CAD Command review: rgb
+\item TODO - CAD Command review: rotate
+\item TODO - CAD Command review: scale
+\item TODO - CAD Command review: singlelinetext
+\item TODO - CAD Command review: star
+\item TODO - Clean up all compiler warning messages, right now theres plenty :P
+\end{itemize}
+
+\subsection{For 2.0 release}
+
+\begin{itemize}
+\item TODO - tar.gz archive
+\item TODO - zip archive
+\item TODO - Debian Package (rt)
+\item TODO - NSIS Installer (rt)
+\item TODO - Mac Bundle?
+\item TODO - press release
+\end{itemize}
+
+\subsection{For 2.x/Ideas}
+
+\begin{itemize}
+\item TODO - libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)
+\item TODO - libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.
+\item TODO - Cut/Copy - Allow Post-selection
+\item TODO - CAD Command: Array
+\item TODO - CAD Command: Offset
+\item TODO - CAD Command: Extend
+\item TODO - CAD Command: Trim
+\item TODO - CAD Command: BreakAtPoint
+\item TODO - CAD Command: Break2Points
+\item TODO - CAD Command: Fillet
+\item TODO - CAD Command: Chamfer
+\item TODO - CAD Command: Split
+\item TODO - CAD Command: Area
+\item TODO - CAD Command: Time
+\item TODO - CAD Command: PickAdd
+\item TODO - CAD Command: Product
+\item TODO - CAD Command: Program
+\item TODO - CAD Command: ZoomFactor
+\item TODO - CAD Command: GripHot
+\item TODO - CAD Command: GripColor \& GripCool
+\item TODO - CAD Command: GripSize
+\item TODO - CAD Command: Highlight
+\item TODO - CAD Command: Units
+\item TODO - CAD Command: Grid
+\item TODO - CAD Command: Find
+\item TODO - CAD Command: Divide
+\item TODO - CAD Command: ZoomWindow (Move out of view.cpp)
+\item TODO - Command: Web (Generates Spiderweb patterns)
+\item TODO - Command: Guilloche (Generates Guilloche patterns)
+\item TODO - Command: Celtic Knots
+\item TODO - Command: Knotted Wreath
+\item TODO - Lego Mindstorms NXT/EV3 ports and/or commands.
+\item TODO - native function that flashes the command prompt to get users attention when using the prompt is required for a command.
+\item TODO - libembroidery-composer like app that combines multiple files into one.
+\item TODO - Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. 
+\item TODO - Keyboard Zooming/Panning
+\item TODO - G-Code format?
+\item TODO - 3D Raised Embroidery
+\item TODO - Gradient Filling Algorithms
+\item TODO - Stitching Simulation
+\item TODO - RPM packages?
+\item TODO - Reports?
+\item TODO - Record and Playback Commands
+\item TODO - Settings option for reversing zoom scrolling direction
+\item TODO - Qt GUI for libembroidery-convert
+\item TODO - EPS format? Look at using Ghostscript as an optional add-on to libembroidery...
+\item TODO - optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.
+\item TODO - Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item TODO - Stippling Fill
+\item TODO - User Designed Custom Fill
+\item TODO - Honeycomb Fill
+\item TODO - Hilburt Curve Fill
+\item TODO - Sierpinski Triangle fill
+\item TODO - Circle Grid Fill
+\item TODO - Spiral Fill
+\item TODO - Offset Fill
+\item TODO - Brick Fill
+\item TODO - Trim jumps over a certain length.
+\item TODO - FAQ about setting high number of jumps for more controlled trimming.
+\item TODO - Minimum stitch length option. (Many machines also have this option too)
+\item TODO - Add 'Design Details' functionality to libembroidery-convert
+\item TODO - Add 'Batch convert many to one format' functionality to libembroidery-convert
+\item TODO - EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\end{itemize}
+
+\section{Problems to be fixed before the Beta Release}
+
+\begin{enumerate}
+\item Realistic Visualization - Bump Mapping/OpenGL/Gradients?
+\item Get undo history widget back (BUG).
+\item Mac Bundle, .tar.gz and .zip source archive.
+\item NSIS installer for Windows, Debian package, RPM package
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Keyboard zooming, panning
+\item  New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Saving dst, pes, jef.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\item Update language translations.
+\item Replace KDE4 thumbnailer.
+\item Import raster image.
+\item Statistics from 1.0, needs histogram.
+\item SNAP/ORTHO/POLAR.
+\item Cut/copy allow post-selection.
+\item Layout into config.
+\item Notify user of data loss if not saving to an object format.
+\item Add which formats to work with to preferences.
+\item Cannot open file with \# in the name when opening multiple files but works with opening a single file.
+\item Closing settings dialog with the X in the window saves settings rather than discarding them.
+\item Otto theme icons: units, render, selectors, what's this icon doesn't scale.
+\item Layer manager and Layer switcher dock widget.
+\item Test that all formats read data in correct scale (format details should match other programs).
+\item Custom filter bug -- doesn't save changes in some cases.
+\item Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.
+\item Converting Qt C++ version to native GUI C throughout.
+\item OpenGL Rendering: ``Real`` rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.
+\item Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So `Ellipse` has `EmbEllipse` as public data within it.
+\item Move calculations of rotation and scaling into `EmbVector` calls.
+\item GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table
+\item Update all formats without color to check for edr or rgb files.
+\item Setting for reverse scrolling direction (for zoom, vertical pan)
+\item Keyboard zooming, panning
+\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+\item New embroidermodder2.ico 16x16 logo that looks good at that scale.
+\item Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.
+\end{enumerate}
+
+\section{Contributing}
+
+\section{Version Control}
+
+Being an open source project, developers can grab the latest code at any time
+and attempt to build it themselves. We try our best to ensure that it will build smoothly
+at any time, although occasionally we do break the build. In these instances,
+please provide a patch, pull request which fixes the issue or open an issue and
+notify us of the problem, as we may not be aware of it and we can build fine.
+
+Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...
+
+See the coding style [here](coding-style)
+
+\subsection{Get the Development Build going}
+
+When we switch to releases we recommend using them, unless you're reporting a bug in which case you can check the development build for whether it has been patched. If this applies to you, the current development build is:
+
+\begin{itemize}
+\item [Linux](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005099)
+\item [Mac OS](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005101)
+\item [Windows](https://github.com/Embroidermodder/Embroidermodder/suites/8882922866/artifacts/406005102)
+\end{itemize}
+
+\section{Problems to be fixed during Beta and before 2.0.0}
+
+\begin{enumerate}
+\item Libembroidery 1.0.
+\item Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.
+\item EmbroideryFLOSS - Color picker that displays catalog numbers and names.
+\item Custom filter bug -- doesn't save changes in some cases.
+\item Advanced printing.
+\item Stitching simulation.
+\end{enumerate}
+
+\section{Problems to be fixed eventually}
+
+\begin{enumerate}
+\item User designed custom fill.
+\end{enumerate}
+
+These are key bits of reasoning behind why the GUI is built the way it is.
+
+\section{Translation of the user interface}
+
+In a given table the left column is the default symbol and the right string is the translation. If the translate function fails to find a translation it returns the default symbol.
+
+So in US English it is an empty table, but in UK English
+only the dialectical differences are present.
+
+Ideally, we should support at least the 6 languages spoken at the UN. Quoting www.un.org:
+
+\begin{quote}
+\emph{There are six official languages of the UN. These are Arabic, Chinese, English, French, Russian and Spanish.}
+\end{quote}
+
+We're adding Hindi, on the grounds that it is one of the most commonly spoken languages and at least one of the Indian languages should be present.
+
+Written Chinese is generally supported as two different symbol sets and we follow that convension.
+
+English is supported as two dialects to ensure that the development team is aware of what those differences are. The code base is written by a mixture of US and UK native English speakers meaning that only the variable names are consistently one dialect: US English. As for documentation: it is whatever dialect the writer prefers (but they should maintain consistency within a text block like this one).
+
+Finally, we have ``default'', which is the dominant language
+of the internals of the software. Practically, this is
+just US English, but in terms of programming history this
+is the ``C locale''. 
+
+\section{Old action system notes}
+
+NO LONGER HOW ACTION SYSTEM WORKS, MOVE TO DOCS.
+
+Action: the basic system to encode all user input.
+
+This typedef gives structure to the data associated with each action
+which, in the code, is referred to by the action id (an int from
+the define table above).
+
+\section{DESCRIPTION OF STRUCT CONTENTS}
+
+\subsection{label}
+
+What is called from Scheme to run the function.
+It is always in US English, lowercase,
+seperated with hyphens.
+
+For example: new-file.
+
+\subsection{function}
+
+The function pointer, always starts with the prefix scm,
+in US English, lowercase, seperated with underscores.
+
+The words should match those of the label otherwise.
+
+For example: scm\_new\_file.
+
+\subsection{flags}
+
+The bit based flags all collected into a 32-bit integer.
+
+\begin{longtable}{l l}
+bit(s) & description \\
+\hline
+0 & User (0) or system (1) permissions. \\
+1-3 & The mode of input.                         |
+| 4-8    | The object classes that this action        |
+|        | can be applied to.                         |
+| 9-10   | What menu (if any) should it be present in.|
+| 11-12  | What                                       |
+\end{longtable}
+
+\subsection{description}
+
+The string placed in the tooltip describing the action.

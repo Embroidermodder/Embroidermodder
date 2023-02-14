@@ -1,10 +1,69 @@
 \chapter{Actuator}
 
-\section{ARC}
+
+\subsection{CAD command review}
+
+\begin{longtable}{l l l p{8cm}}
+\textbf{ID} & \textbf{name} & \textbf{arguments} & \textbf{description} \\
+\hline
+0 & \index{newfile}newfile & none & Create a new EmbPattern with a new tab in the GUI. \\
+1 & \index{openfile}openfile & filename string & Open an EmbPattern with the supplied filename `fname`.  \\
+2 & \index{savefile}savefile & filename string & Save the current loaded EmbPattern to the supplied filname `fname`. \\
+3 & \index{scale}scale & selected objects, 1 float & Scale all selected objects by the number supplied, without selection scales the entire design \\
+4 & \index{circle}circle & mouse co-ords & Adds a circle to the design based on the supplied numbers, converts to stitches on save for stitch only formats. \\
+5 & \index{offset}offset & mouse co-ords & Shifts the selected objects by the amount given by the mouse co-ordinates.  \\
+6 & \index{extend}extend & & \\
+7 & \index{trim}trim & & \\
+8 & \index{break-at-point}break\_at\_point & & \\
+9 & \index{break-2-points}break\_2\_points & & \\
+10 & \index{fillet}fillet & & \\
+11 & \index{star}star & & \\
+12 & \index{singlelinetext}singlelinetext & & \\
+13 & \index{chamfer}chamfer & & \\
+14 & \index{split}split & & \\
+15 & \index{area}area & & \\
+16 & \index{time}time & & \\
+17 & \index{pickadd}pickadd & & \\
+16 & \index{zoomfactor}zoomfactor & & \\
+17 & \index{product}product & & \\
+18 & \index{program}program & & \\
+19 & \index{zoomwindow}zoomwindow & & \\
+20 & \index{divide}divide & & \\
+21 & \index{find}find & & \\
+22 & \index{record}record & & \\
+23 & \index{playback}playback & & \\
+24 & \index{rotate}rotate & & \\
+25 & \index{rgb}rgb & & \\
+26 & \index{move}move & & \\
+27 & \index{grid}grid & & \\
+28 & \index{griphot}griphot &  &  \\
+29 & \index{gripcolor}gripcolor & & \\
+30 & \index{gripcool}gripcool &  &  \\
+31 & \index{gripsize}gripsize &  &  \\
+32 & \index{highlight}highlight &  &  \\
+33 & \index{units}units &  &  \\
+34 & \index{locatepoint}locatepoint &  &  \\
+35 & \index{distance}distance &  &  \\
+36 & \index{arc}arc &  &  \\
+37 & \index{ellipse}ellipse &  &  \\
+38 & \index{array}array &  &  \\
+39 & \index{point}point &  &  \\
+40 & \index{polyline}polyline &  &  \\
+41 & \index{polygon}polygon &  &  \\
+42 & \index{rectangle}rectangle &  &  \\
+43 & \index{line}line &  &  \\
+44 & \index{arc-rt}arc (rt) &  &  \\
+45 & \index{dolphin}dolphin &  &  \\
+46 & \index{heart}heart  & &
+\end{longtable}
+
+\section{Actions}
+
+\subsection{ARC}
 \index{arc}
 
-\section{CIRCLE}
+\subsection{CIRCLE}
 \index{circle}
 
-\section{OPEN}
+\subsection{OPEN}
 \index{open}
