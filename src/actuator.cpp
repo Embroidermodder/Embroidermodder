@@ -15,10 +15,10 @@
 
 #include "embroidermodder.h"
 
-#include <bits/stdc++.h>
 #include <fstream>
 #include <unordered_map>
 #include <iostream>
+#include <sstream>
 
 void about_action(std::vector<std::string> args);
 void alert_action(std::vector<std::string> args);
