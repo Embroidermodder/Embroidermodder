@@ -25,6 +25,7 @@ jobs:
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
+        sh scripts/dependencies_brew.sh
         sh scripts/package.sh
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
