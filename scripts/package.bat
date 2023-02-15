@@ -9,6 +9,6 @@ cmake --build .
 cd ..
 
 xcopy assets build\ /E/H
-copy LICENSE.md build\assets\docs
-copy README.md build\assets\docs
+copy LICENSE.md build\
+copy README.md build\
 
