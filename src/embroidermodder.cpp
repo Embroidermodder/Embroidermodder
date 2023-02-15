@@ -99,6 +99,11 @@ std::vector<std::string> texture_list = {
 };
 int testing = 0;
 
+void translated_text(std::string str)
+{
+    ImGui::Text("%s", translate(str).c_str());
+}
+
 void about_dialog(void)
 {
     debug_message("about_dialog()");
@@ -151,7 +156,7 @@ void help_dialog(void)
 void alert(std::string title, std::string message)
 {
     ImGui::Begin(title.c_str());
-    ImGui::Text(message.c_str());
+    translated_text(message);
     if (ImGui::Button(translate("Ok").c_str())) {
         
     }
@@ -163,7 +168,7 @@ std::string current_directory = ".";
 
 void open_file_dialog(void)
 {
-    char typed_filename[400];
+    // char typed_filename[400];
     ImGui::Begin("Open File");
     ImGui::SetWindowFontScale(1.5);
     tinydir_dir dir;
@@ -174,7 +179,7 @@ void open_file_dialog(void)
     }
     int n_columns = 1 + dir.n_files/5;
     ImGui::Columns(n_columns, "files");
-    for (int i=0; i<dir.n_files; i++) {
+    for (size_t i=0; i<dir.n_files; i++) {
         tinydir_file file;
         tinydir_readfile_n(&dir, &file, i);
         if (ImGui::Button(file.name)) {
@@ -194,7 +199,7 @@ void open_file_dialog(void)
         }
     }
     ImGui::Columns();
-    ImGui::Text(to_open.c_str());
+    ImGui::Text("%s", to_open.c_str());
     //ImGui::InputText("", typed_filename, 100);
     ImGui::SameLine();
     if (ImGui::Button("Open")) {
@@ -233,7 +238,6 @@ void details_dialog(void)
     }
 
     std::vector<double> stitchLengths;
-    EmbArray *sts = view.pattern->stitchList;
 
     /*
     int colors = 0;
@@ -266,9 +270,9 @@ void details_dialog(void)
         str += " mm: " +  std::to_string(bin[i]) + "\n\n";
     }
 
-    ImGui::Text(translate("Stitch Distribution:").c_str());
-    ImGui::Text(str.c_str());
-    ImGui::Text(translate("Thread Length By Color:").c_str());
+    translated_text("Stitch Distribution:");
+    ImGui::Text("%s", str.c_str());
+    translated_text("Thread Length By Color:");
     int currentRow = 12;
 
     for (int i = 0; i < pattern->n_threads; i++) {
@@ -289,57 +293,57 @@ void details_dialog(void)
     /* setMinimumSize(750,550); */
 
     /* Collapsing header? */
-    ImGui::Text(translate("General Information").c_str());
+    translated_text("General Information");
 
-    ImGui::Text(translate("Total Stitches:").c_str());
+    translated_text("Total Stitches:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(view.pattern->stitchList->count).c_str());
+    ImGui::Text("%s", std::to_string(view.pattern->stitchList->count).c_str());
 
-    ImGui::Text(translate("Total Stitch Length:").c_str());
+    translated_text("Total Stitch Length:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(embPattern_totalStitchLength(view.pattern)).c_str());
+    ImGui::Text("%s", std::to_string(embPattern_totalStitchLength(view.pattern)).c_str());
 
-    ImGui::Text(translate("Real Stitches:").c_str());
+    translated_text("Real Stitches:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(embPattern_realStitches(view.pattern)).c_str());
 
-    ImGui::Text(translate("Jump Stitches:").c_str());
+    translated_text("Jump Stitches:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(embPattern_jumpStitches(view.pattern)).c_str());
 
-    ImGui::Text(translate("Trim Stitches:").c_str());
+    translated_text("Trim Stitches:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(embPattern_trimStitches(view.pattern)).c_str());
 
-    ImGui::Text(translate("Total Colors:").c_str());
+    translated_text("Total Colors:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(view.pattern->n_threads).c_str());
 
-    ImGui::Text(translate("Color Changes:").c_str());
+    translated_text("Color Changes:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(colorChanges).c_str());
 
-    ImGui::Text(translate("Left:").c_str());
+    translated_text("Left:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.left) + " mm").c_str());
 
-    ImGui::Text(translate("Top:").c_str());
+    translated_text("Top:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.top) + " mm").c_str());
 
-    ImGui::Text(translate("Right:").c_str());
+    translated_text("Right:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.right)  + " mm").c_str());
 
-    ImGui::Text(translate("Bottom:").c_str());
+    translated_text("Bottom:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.bottom) + " mm").c_str());
 
-    ImGui::Text(translate("Width:").c_str());
+    translated_text("Width:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.right - boundingRect.left)  + " mm").c_str());
 
-    ImGui::Text(translate("Height:").c_str());
+    translated_text("Height:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.bottom - boundingRect.top) + " mm").c_str());
 
@@ -523,7 +527,7 @@ load_toolbar(std::vector<std::string> toolbar)
             ImGui::Separator();
             continue;
         }
-        ImVec2 size = {settings.icon_size, settings.icon_size};
+        ImVec2 size = {1.0f*settings.icon_size, 1.0f*settings.icon_size};
     	if (ImGui::ImageButton((void*)(intptr_t)textures[icon], size)) {
             menu_action = icon;
         }
@@ -538,10 +542,10 @@ undo_history_viewer(void)
 {
     ImGui::BeginChild(("Undo History " + views[settings.pattern_index].filename).c_str());
     ImGui::PushFont(header_font);
-    ImGui::Text(translate("Undo History").c_str());
+    translated_text("Undo History");
     ImGui::PopFont();
     for (std::string undo_item : views[settings.pattern_index].undo_history) {
-        ImGui::Text(undo_item.c_str());
+        translated_text(undo_item);
     }
     ImGui::EndChild();
 }
@@ -605,7 +609,8 @@ main_widget(void)
 
     if (views.size() > 0) {
         if (ImGui:: BeginTabBar("Tab Bar")) {
-            for (int i=0; i<views.size(); i++) {
+            int n_views = views.size();
+            for (int i=0; i<n_views; i++) {
                 view_tab(i);
             }
             if (settings.show_editor) {
@@ -695,7 +700,7 @@ main(int argc, char* argv[])
     ImGui_ImplOpenGL2_Init();
 
     glfwGetFramebufferSize(window, &width, &height);
-    ImVec2 v = {width, height};
+    ImVec2 v = {1.0f*width, 1.0f*height};
     ImGui::SetNextWindowPos({0.0, 0.0});
     ImGui::SetNextWindowSize(v);
 
@@ -1334,7 +1339,7 @@ void PreviewDialog(QWidget* parent,
 
 void status_bar(void)
 {
-    ImGuiIO &io = ImGui::GetIO();
+    //ImGuiIO &io = ImGui::GetIO();
     //ImGui::SetNextWindowSize(ImVec2(50, 100));
     // ImGui::SetNextWindowPos(ImVec2(io.DisplaySize.x, io.DisplaySize.y - 50));
     //ImGui::BeginChild("Statusbar");
