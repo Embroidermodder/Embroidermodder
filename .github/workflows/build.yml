@@ -8,16 +8,15 @@ jobs:
     steps:
     - name: build the linux version
       run: |
-        sudo apt-get update
-        sudo apt-get install libglew-dev cmake git build-essential libxrandr-dev libxinerama-dev libgl1-mesa-dev libxcursor-dev libxi-dev
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        bash build.sh
+        sh scripts/dependencies_apt.sh
+        sh scripts/package.sh
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-linux
-        path: embroidermodder
+        path: embroidermodder/build
 
   build-macos:
     runs-on: macos-latest
@@ -26,12 +25,12 @@ jobs:
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        sh build.sh
+        sh scripts/package.sh
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-macos
-        path: embroidermodder
+        path: embroidermodder/build
 
   build-windows:
     runs-on: windows-latest
@@ -40,9 +39,9 @@ jobs:
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        .\build.bat
+        .\scripts\package.bat
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: embroidermodder-2.0.0-alpha-windows
-        path: embroidermodder
+        path: embroidermodder/build
