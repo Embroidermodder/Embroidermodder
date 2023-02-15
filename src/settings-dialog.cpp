@@ -15,7 +15,7 @@
 
 #include "embroidermodder.h"
 
-#include "imgui.h"
+#include "imgui_ext.h"
 
 void create_tab_general(void);
 void create_tab_files_paths(void);
@@ -32,18 +32,6 @@ void create_tab_lineweight(void);
 void create_tab_selection(void);
 
 static Settings dialog, preview, accept;
-
-void label(std::string str)
-{
-    ImGui::Text(translate(str).c_str());
-}
-
-void checkbox(std::string label, bool *stor, bool *value)
-{
-    *stor = *value;
-    ImGui::Checkbox(translate(label).c_str(), stor);
-    *value = *stor;
-}
 
 bool just_opened = true;
 
@@ -135,7 +123,7 @@ std::vector<std::string> languages = {
 
 void create_tab_general(void)
 {
-    label("Language");
+    ImGui::TranslatedText("Language");
 
     /* TODO: Detect what the system language is, so we can default
      *     to that when it can be detected. */
@@ -167,7 +155,7 @@ void create_tab_general(void)
     current[0] = current[0].toUpper();
     comboBoxLanguage->setCurrentIndex(comboBoxLanguage->findText(current));
 
-    label("Icons");
+    ImGui::TranslatedText("Icons");
 
     if (ImGui::BeginCombo(translate("Icon Theme"), settings.icon_size)) {
         QDir dir(qApp->applicationDirPath());
@@ -198,8 +186,8 @@ void create_tab_general(void)
         ImGui::EndCombo();
     }
 
-    label("Background");
-    checkbox("Use Logo", &(dialog.general_mdi_bg_use_logo));
+    ImGui::TranslatedText("Background");
+    ImGui::CheckboxData("Use Logo", &(dialog.general_mdi_bg_use_logo));
 
     if (ImGui::Button("Choose") {
         buttonMdiBGLogo->setEnabled(dialog.general_mdi_bg_use_logo);
@@ -209,7 +197,7 @@ void create_tab_general(void)
         connect(checkBoxMdiBGUseLogo, SIGNAL(toggled(bool)), buttonMdiBGLogo, SLOT(setEnabled(bool)));
     }
 
-    checkbox("Use Texture", &(dialog.general_mdi_bg_use_texture));
+    ImGui::CheckboxData("Use Texture", &(dialog.general_mdi_bg_use_texture));
     
     if (ImGui::Button("Choose")) {
         buttonMdiBGTexture->setEnabled(dialog.general_mdi_bg_use_texture);
@@ -219,7 +207,7 @@ void create_tab_general(void)
         connect(checkBoxMdiBGUseTexture, SIGNAL(toggled(bool)), buttonMdiBGTexture, SLOT(setEnabled(bool)));
     }
 
-    checkbox("Use Color", &(dialog.general_mdi_bg_use_color));
+    ImGui::CheckboxData("Use Color", &(dialog.general_mdi_bg_use_color));
 
     if (ImGui::Button("Choose")) {
         buttonMdiBGColor->setEnabled(dialog.general_mdi_bg_use_color);
@@ -242,11 +230,11 @@ void create_tab_general(void)
     gridLayoutMdiBG->addWidget(buttonMdiBGColor,        2, 1, Qt::AlignRight);
     groupBoxMdiBG->setLayout(gridLayoutMdiBG);
 
-    label("Tips");
+    ImGui::TranslatedText("Tips");
 
-    checkbox("Show Tip of the Day on startup", &(dialog.general_tip_of_the_day));
+    ImGui::CheckboxData("Show Tip of the Day on startup", &(dialog.general_tip_of_the_day));
 
-    label("Help Browser");
+    ImGui::TranslatedText("Help Browser");
 
     QRadioButton* radioButtonSystemHelpBrowser = new QRadioButton(tr("System"), groupBoxHelpBrowser);
     radioButtonSystemHelpBrowser->setChecked(settings_general_system_help_browser);
@@ -279,7 +267,7 @@ void create_tab_files_paths(void)
 void create_tab_display(void)
 {
     //TODO: Review OpenGL and Rendering settings for future inclusion
-    label("Rendering");
+    ImGui::TranslatedText("Rendering");
 
     static bool dialog_display_use_opengl;
     static bool dialog_display_renderhint_aa;
@@ -290,16 +278,16 @@ void create_tab_display(void)
 
     static bool dialog_display_show_scrollbars;
 
-    checkbox("Use OpenGL", &dialog_display_use_opengl, &(dialog.display_use_opengl));
-    checkbox("Antialias", &dialog_display_renderhint_aa, &(dialog.display_renderhint_aa));
-    checkbox("Antialias Text", &dialog_display_renderhint_text_aa, &(dialog.display_renderhint_text_aa));
-    checkbox("Smooth Pixmap", &dialog_display_renderhint_smooth_pix, &(dialog.display_renderhint_smooth_pix));
-    checkbox("High Quality Antialiasing (OpenGL)", &dialog_display_renderhint_high_aa, &(dialog.display_renderhint_high_aa));
-    checkbox("Non Cosmetic", &dialog_display_renderhint_noncosmetic, &(dialog.display_renderhint_noncosmetic));
+    ImGui::CheckboxData("Use OpenGL", &dialog_display_use_opengl, &(dialog.display_use_opengl));
+    ImGui::CheckboxData("Antialias", &dialog_display_renderhint_aa, &(dialog.display_renderhint_aa));
+    ImGui::CheckboxData("Antialias Text", &dialog_display_renderhint_text_aa, &(dialog.display_renderhint_text_aa));
+    ImGui::CheckboxData("Smooth Pixmap", &dialog_display_renderhint_smooth_pix, &(dialog.display_renderhint_smooth_pix));
+    ImGui::CheckboxData("High Quality Antialiasing (OpenGL)", &dialog_display_renderhint_high_aa, &(dialog.display_renderhint_high_aa));
+    ImGui::CheckboxData("Non Cosmetic", &dialog_display_renderhint_noncosmetic, &(dialog.display_renderhint_noncosmetic));
 
-    label("Scroll Bars");
+    ImGui::TranslatedText("Scroll Bars");
 
-    checkbox("Show ScrollBars", &dialog_display_show_scrollbars, &(dialog.display_show_scrollbars));
+    ImGui::CheckboxData("Show ScrollBars", &dialog_display_show_scrollbars, &(dialog.display_show_scrollbars));
     /*
     QLabel* labelScrollBarWidget = new QLabel(tr("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
@@ -319,9 +307,9 @@ void create_tab_display(void)
     vboxLayoutScrollBars->addWidget(comboBoxScrollBarWidget);
     groupBoxScrollBars->setLayout(vboxLayoutScrollBars);
 
-    label("Colors");
+    ImGui::TranslatedText("Colors");
 
-    label("Crosshair Color");
+    ImGui::TranslatedText("Crosshair Color");
     QPushButton* buttonCrossHairColor = new QPushButton(tr("Choose"), groupBoxColor);
     dialog.display_crosshair_color = settings_display_crosshair_color;
     preview_display_crosshair_color = dialog.display_crosshair_color;
@@ -331,7 +319,7 @@ void create_tab_display(void)
     buttonCrossHairColor->setIcon(QIcon(crosshairPix));
     connect(buttonCrossHairColor, SIGNAL(clicked()), this, SLOT(chooseDisplayCrossHairColor()));
 
-    label("Background Color");
+    ImGui::TranslatedText("Background Color");
     QPushButton* buttonBGColor = new QPushButton(tr("Choose"), groupBoxColor);
     dialog.display_bg_color = settings_display_bg_color;
     preview_display_bg_color = dialog.display_bg_color;
@@ -341,7 +329,7 @@ void create_tab_display(void)
     buttonBGColor->setIcon(QIcon(bgPix));
     connect(buttonBGColor, SIGNAL(clicked()), this, SLOT(chooseDisplayBackgroundColor()));
 
-    label("Selection Box Color (Crossing)");
+    ImGui::TranslatedText("Selection Box Color (Crossing)");
     QPushButton* buttonSelectBoxLeftColor = new QPushButton(tr("Choose"), groupBoxColor);
     dialog.display_selectbox_left_color = settings_display_selectbox_left_color;
     preview_display_selectbox_left_color = dialog.display_selectbox_left_color;
@@ -351,7 +339,7 @@ void create_tab_display(void)
     buttonSelectBoxLeftColor->setIcon(QIcon(sBoxLCPix));
     connect(buttonSelectBoxLeftColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftColor()));
 
-    label("Selection Box Fill (Crossing)");
+    ImGui::TranslatedText("Selection Box Fill (Crossing)");
     QPushButton* buttonSelectBoxLeftFill = new QPushButton(tr("Choose"), groupBoxColor);
     dialog.display_selectbox_left_fill = settings_display_selectbox_left_fill;
     preview_display_selectbox_left_fill = dialog.display_selectbox_left_fill;
@@ -361,7 +349,7 @@ void create_tab_display(void)
     buttonSelectBoxLeftFill->setIcon(QIcon(sBoxLFPix));
     connect(buttonSelectBoxLeftFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxLeftFill()));
 
-    label("Selection Box Color (Window)");
+    ImGui::TranslatedText("Selection Box Color (Window)");
     ImGui::Button(tr("Choose"), groupBoxColor);
     dialog.display_selectbox_right_color = settings_display_selectbox_right_color;
     preview_display_selectbox_right_color = dialog.display_selectbox_right_color;
@@ -371,7 +359,7 @@ void create_tab_display(void)
     buttonSelectBoxRightColor->setIcon(QIcon(sBoxRCPix));
     connect(buttonSelectBoxRightColor, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightColor()));
 
-    label("Selection Box Fill (Window)"));
+    ImGui::TranslatedText("Selection Box Fill (Window)"));
     ImGui::Button(tr("Choose"), groupBoxColor);
     dialog.display_selectbox_right_fill = settings_display_selectbox_right_fill;
     preview_display_selectbox_right_fill = dialog.display_selectbox_right_fill;
@@ -381,7 +369,7 @@ void create_tab_display(void)
     buttonSelectBoxRightFill->setIcon(QIcon(sBoxRFPix));
     connect(buttonSelectBoxRightFill, SIGNAL(clicked()), this, SLOT(chooseDisplaySelectBoxRightFill()));
 
-    label("Selection Box Fill Alpha");
+    ImGui::TranslatedText("Selection Box Fill Alpha");
     QSpinBox* spinBoxSelectBoxAlpha = new QSpinBox(groupBoxColor);
     spinBoxSelectBoxAlpha->setRange(0, 255);
     dialog.display_selectbox_alpha = settings_display_selectbox_alpha;
@@ -406,9 +394,9 @@ void create_tab_display(void)
     gridLayoutColor->addWidget(spinBoxSelectBoxAlpha,     6, 1, Qt::AlignRight);
     groupBoxColor->setLayout(gridLayoutColor);
 
-    label("Zoom");
+    ImGui::TranslatedText("Zoom");
 
-    label(tr("Zoom In Scale"), groupBoxZoom);
+    ImGui::TranslatedText(tr("Zoom In Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleIn = new QDoubleSpinBox(groupBoxZoom);
     dialog.display_zoomscale_in = settings_display_zoomscale_in;
     spinBoxZoomScaleIn->setValue(dialog.display_zoomscale_in);
@@ -416,7 +404,7 @@ void create_tab_display(void)
     spinBoxZoomScaleIn->setRange(1.01, 10.00);
     connect(spinBoxZoomScaleIn, SIGNAL(valueChanged(double)), this, SLOT(spinBoxZoomScaleInValueChanged(double)));
 
-    label(tr("Zoom Out Scale"), groupBoxZoom);
+    ImGui::TranslatedText(tr("Zoom Out Scale"), groupBoxZoom);
     QDoubleSpinBox* spinBoxZoomScaleOut = new QDoubleSpinBox(groupBoxZoom);
     dialog.display_zoomscale_out = settings_display_zoomscale_out;
     spinBoxZoomScaleOut->setValue(dialog.display_zoomscale_out);
@@ -436,7 +424,7 @@ void create_tab_display(void)
 void create_tab_prompt(void)
 {
     /*
-    label("Colors");
+    ImGui::TranslatedText("Colors");
 
     QLabel* labelTextColor = new QLabel(tr("Text Color"), groupBoxColor);
     QPushButton* buttonTextColor = new QPushButton(tr("Choose"), groupBoxColor);
@@ -502,10 +490,10 @@ void create_tab_prompt(void)
     static bool dialog_prompt_save_history,
         dialog_prompt_save_history_as_html;
 
-    label("History");
+    ImGui::TranslatedText("History");
 
-    checkbox("Save History", &(dialog_prompt_save_history), &(dialog.prompt_save_history));
-    checkbox("Save As HTML", &(dialog_prompt_save_history_as_html), &(dialog.prompt_save_history_as_html));
+    ImGui::CheckboxData("Save History", &(dialog_prompt_save_history), &(dialog.prompt_save_history));
+    ImGui::CheckboxData("Save As HTML", &(dialog_prompt_save_history_as_html), &(dialog.prompt_save_history_as_html));
 }
 
 void create_tab_open_save(void)
@@ -595,7 +583,7 @@ void create_tab_open_save(void)
     vboxLayoutOpening->addWidget(frameRecent);
     groupBoxOpening->setLayout(vboxLayoutOpening);
 
-    label("File Save");
+    ImGui::TranslatedText("File Save");
 
     QComboBox* comboBoxSaveFormat = new QComboBox(groupBoxSaving);
 
@@ -635,7 +623,7 @@ void create_tab_open_save(void)
 
 void create_tab_printing(void)
 {
-    label("Default Printer");
+    ImGui::TranslatedText("Default Printer");
     /*
     int checked;
     ImGui::RadioButton(tr("Use as default device"), &checked);
@@ -647,8 +635,8 @@ void create_tab_printing(void)
         comboBoxDefaultDevice->addItem(mainWin->load_icon("print"), info.printerName());
     }
 
-    label("Save Ink");
-    checkbox("Disable Background", &(dialog.printing_disable_bg));
+    ImGui::TranslatedText("Save Ink");
+    ImGui::CheckboxData("Disable Background", &(dialog.printing_disable_bg));
     */
 }
 
@@ -659,7 +647,7 @@ void create_tab_snap(void)
 
 void create_tab_grid_ruler(void)
 {
-    label("Grid Misc");
+    ImGui::TranslatedText("Grid Misc");
     /*
 
     checkBox(tr("Initially show grid when loading a file"), groupBoxGridMisc);

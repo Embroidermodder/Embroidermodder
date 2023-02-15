@@ -826,11 +826,6 @@ void property_editor_hideAllGroups()
 }
 #endif
 
-void edit_double(std::string label, double *data)
-{
-    ImGui::InputDouble(translate(label).c_str(), data, *data);
-}
-
 void create_group_box_general(void)
 {
     std::string label = translate("General");
@@ -942,9 +937,9 @@ void create_group_box_circle(int id, EmbCircle *circle)
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        edit_double("Center X", &(circle->center.x));
-        edit_double("Center Y", &(circle->center.y));
-        edit_double("Radius", &(circle->radius));
+        ImGui::EditDouble("Center X", &(circle->center.x));
+        ImGui::EditDouble("Center Y", &(circle->center.y));
+        ImGui::EditDouble("Radius", &(circle->radius));
     }
 }
 
@@ -1034,10 +1029,10 @@ void create_group_box_ellipse(int id, EmbEllipse *ellipse)
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        edit_double(translate("Center X"), &(ellipse->center.x));
-        edit_double(translate("Center Y"), &(ellipse->center.y));
-        edit_double(translate("Major Radius"), &(ellipse->radius.x));
-        edit_double(translate("Minor Radius"), &(ellipse->radius.y));
+        ImGui::EditDouble(translate("Center X"), &(ellipse->center.x));
+        ImGui::EditDouble(translate("Center Y"), &(ellipse->center.y));
+        ImGui::EditDouble(translate("Major Radius"), &(ellipse->radius.x));
+        ImGui::EditDouble(translate("Minor Radius"), &(ellipse->radius.y));
         ImGui::ShowDouble(translate("Major Diameter"), 2.0*ellipse->radius.x);
         ImGui::ShowDouble(translate("Minor Diameter"), 2.0*ellipse->radius.y);
     }
@@ -1049,10 +1044,10 @@ void create_group_box_image(int id, EmbImage *image)
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        edit_double(translate("Position X"), &(image->position.x));
-        edit_double(translate("Position Y"), &(image->position.y));
-        //edit_double(translate("Width"), &(image->width));
-        //edit_double(translate("Height"), &(image->height));
+        ImGui::EditDouble(translate("Position X"), &(image->position.x));
+        ImGui::EditDouble(translate("Position Y"), &(image->position.y));
+        //ImGui::EditDouble(translate("Width"), &(image->width));
+        //ImGui::EditDouble(translate("Height"), &(image->height));
 
         ImGui::Text(translate("Misc").c_str());
 

@@ -20,23 +20,11 @@
 
 #include "imgui.h"
 
-std::string translate(std::string string);
-
 namespace ImGui {
-    /* Need validation for the input number before applying to object.
-    * and to add to undo history
-    */
-    inline void ShowDouble(std::string label, double data)
-    {
-        ImGui::Text("%s", translate(label).c_str());
-        ImGui::SameLine();
-        ImGui::Text("%s", std::to_string(data).c_str());
-    }
-
-    inline void TranslatedText(std::string str)
-    {
-        ImGui::Text("%s", translate(str).c_str());
-    }
+    void ShowDouble(std::string label, double data);
+    void TranslatedText(std::string str);
+    void CheckboxData(std::string str, bool *stor, bool *value);
+    void EditDouble(std::string str, double *data);
 }
 
 #endif

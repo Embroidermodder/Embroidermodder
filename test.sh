@@ -3,7 +3,7 @@
 sh build.sh
 
 cd build
-./embroidermodder -L ../assets \
+./embroidermodder -L ../assets/ \
   ../assets/samples/embroidermodder_logo/conflicts/Embroidermodder.DST \
   ../assets/samples/shamrockin/shamrockin.dst \
   ../assets/samples/spiral/spiral5.csv \

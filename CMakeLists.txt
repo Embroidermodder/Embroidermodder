@@ -40,6 +40,7 @@ add_executable(embroidermodder
 	${CMAKE_SOURCE_DIR}/src/actuator.cpp
 	${CMAKE_SOURCE_DIR}/src/data.cpp
 	${CMAKE_SOURCE_DIR}/src/embroidermodder.cpp
+	${CMAKE_SOURCE_DIR}/src/imgui_ext.cpp
 	${CMAKE_SOURCE_DIR}/src/objects.cpp
 	${CMAKE_SOURCE_DIR}/src/property-editor.cpp
 	${CMAKE_SOURCE_DIR}/src/settings-dialog.cpp

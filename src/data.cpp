@@ -651,9 +651,40 @@ std::string translate(std::string string)
     return string;
 }
 
+/*
+ * Guards against debug messages coming up during normal operation.
+ *
+ * Just change debug_mode to 1 to activate it. We could have a toggle
+ * in the program to turn it on during operation for when something starts
+ * acting weird.
+ */
 void debug_message(std::string string)
 {
     if (settings.debug_mode) {
         std::cout << string << std::endl;
+    }
+}
+
+/* Whenever the code happens across a todo call,
+ * write it in a log file.
+ */
+void
+todo(char *msg, int action)
+{
+    if (settings.debug_mode) {
+        std::ofstream f("todo.txt", std::ios_base::app);
+        f << msg << " " << action << std::endl;
+    }
+}
+
+/* Whenever the code happens across a todo call,
+ * write it in a log file.
+ */
+void
+error(char *msg, int action)
+{
+    if (settings.debug_mode) {
+        std::ofstream f("error.txt", std::ios_base::app);
+        f << msg << " " << action << std::endl;
     }
 }

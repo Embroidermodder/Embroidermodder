@@ -300,47 +300,47 @@ void details_dialog(void)
 
     ImGui::TranslatedText("Real Stitches:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(embPattern_realStitches(view.pattern)).c_str());
+    ImGui::Text("%s", std::to_string(embPattern_realStitches(view.pattern)).c_str());
 
     ImGui::TranslatedText("Jump Stitches:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(embPattern_jumpStitches(view.pattern)).c_str());
+    ImGui::Text("%s", std::to_string(embPattern_jumpStitches(view.pattern)).c_str());
 
     ImGui::TranslatedText("Trim Stitches:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(embPattern_trimStitches(view.pattern)).c_str());
+    ImGui::Text("%s", std::to_string(embPattern_trimStitches(view.pattern)).c_str());
 
     ImGui::TranslatedText("Total Colors:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(view.pattern->n_threads).c_str());
+    ImGui::Text("%s", std::to_string(view.pattern->n_threads).c_str());
 
     ImGui::TranslatedText("Color Changes:");
     ImGui::SameLine();
-    ImGui::Text(std::to_string(colorChanges).c_str());
+    ImGui::Text("%s", std::to_string(colorChanges).c_str());
 
     ImGui::TranslatedText("Left:");
     ImGui::SameLine();
-    ImGui::Text((std::to_string(boundingRect.left) + " mm").c_str());
+    ImGui::Text("%s", (std::to_string(boundingRect.left) + " mm").c_str());
 
     ImGui::TranslatedText("Top:");
     ImGui::SameLine();
-    ImGui::Text((std::to_string(boundingRect.top) + " mm").c_str());
+    ImGui::Text("%s", (std::to_string(boundingRect.top) + " mm").c_str());
 
     ImGui::TranslatedText("Right:");
     ImGui::SameLine();
-    ImGui::Text((std::to_string(boundingRect.right)  + " mm").c_str());
+    ImGui::Text("%s", (std::to_string(boundingRect.right)  + " mm").c_str());
 
     ImGui::TranslatedText("Bottom:");
     ImGui::SameLine();
-    ImGui::Text((std::to_string(boundingRect.bottom) + " mm").c_str());
+    ImGui::Text("%s", (std::to_string(boundingRect.bottom) + " mm").c_str());
 
     ImGui::TranslatedText("Width:");
     ImGui::SameLine();
-    ImGui::Text((std::to_string(boundingRect.right - boundingRect.left)  + " mm").c_str());
+    ImGui::Text("%s", (std::to_string(boundingRect.right - boundingRect.left)  + " mm").c_str());
 
     ImGui::TranslatedText("Height:");
     ImGui::SameLine();
-    ImGui::Text((std::to_string(boundingRect.bottom - boundingRect.top) + " mm").c_str());
+    ImGui::Text("%s", (std::to_string(boundingRect.bottom - boundingRect.top) + " mm").c_str());
 
     if (ImGui::Button("Ok")) {
         show_details_dialog = false;
@@ -469,7 +469,7 @@ load_textures(std::vector<std::string> texture_list)
 void
 set_style(void)
 {
-    std::string font_file = settings.assets_dir + "fonts/SourceSans3-regular.ttf";
+    std::string font_file = settings.assets_dir + "fonts/SourceSans3-Regular.ttf";
     ImGuiIO& io = ImGui::GetIO();
     ImFontConfig config;
     config.OversampleH = 2;
@@ -781,45 +781,6 @@ willOverflowInt32(int64_t a, int64_t b)
     assert(LLONG_MAX>INT_MAX);
     int64_t c = (int64_t)a+b;
     return c < INT_MIN || c > INT_MAX;
-}
-
-/* Whenever the code happens across a todo call,
- * write it in a log file.
- */
-void
-todo(char *msg, int action)
-{
-    if (debug_mode) {
-        std::ofstream f("todo.txt", std::ios_base::app);
-        f << msg << " " << action << std::endl;
-    }
-}
-
-/* Whenever the code happens across a todo call,
- * write it in a log file.
- */
-void
-error(char *msg, int action)
-{
-    if (debug_mode) {
-        std::ofstream f("error.txt", std::ios_base::app);
-        f << msg << " " << action << std::endl;
-    }
-}
-
-/*
- * Guards against debug messages coming up during normal operation.
- *
- * Just change debug_mode to 1 to activate it. We could have a toggle
- * in the program to turn it on during operation for when something starts
- * acting weird.
- */
-void
-debug_message(std::string msg)
-{
-    if (debug_mode) {
-        std::cout << msg << std::endl;
-    }
 }
 
 /* .
