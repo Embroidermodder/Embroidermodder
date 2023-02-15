@@ -14,7 +14,7 @@
  */
 
 
-#include "imgui.h"
+#include "imgui_ext.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl2.h"
 #include "TextEditor.h"
@@ -99,11 +99,6 @@ std::vector<std::string> texture_list = {
 };
 int testing = 0;
 
-void translated_text(std::string str)
-{
-    ImGui::Text("%s", translate(str).c_str());
-}
-
 void about_dialog(void)
 {
     debug_message("about_dialog()");
@@ -156,7 +151,7 @@ void help_dialog(void)
 void alert(std::string title, std::string message)
 {
     ImGui::Begin(title.c_str());
-    translated_text(message);
+    ImGui::TranslatedText(message);
     if (ImGui::Button(translate("Ok").c_str())) {
         
     }
@@ -270,9 +265,9 @@ void details_dialog(void)
         str += " mm: " +  std::to_string(bin[i]) + "\n\n";
     }
 
-    translated_text("Stitch Distribution:");
+    ImGui::TranslatedText("Stitch Distribution:");
     ImGui::Text("%s", str.c_str());
-    translated_text("Thread Length By Color:");
+    ImGui::TranslatedText("Thread Length By Color:");
     int currentRow = 12;
 
     for (int i = 0; i < pattern->n_threads; i++) {
@@ -293,57 +288,57 @@ void details_dialog(void)
     /* setMinimumSize(750,550); */
 
     /* Collapsing header? */
-    translated_text("General Information");
+    ImGui::TranslatedText("General Information");
 
-    translated_text("Total Stitches:");
+    ImGui::TranslatedText("Total Stitches:");
     ImGui::SameLine();
     ImGui::Text("%s", std::to_string(view.pattern->stitchList->count).c_str());
 
-    translated_text("Total Stitch Length:");
+    ImGui::TranslatedText("Total Stitch Length:");
     ImGui::SameLine();
     ImGui::Text("%s", std::to_string(embPattern_totalStitchLength(view.pattern)).c_str());
 
-    translated_text("Real Stitches:");
+    ImGui::TranslatedText("Real Stitches:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(embPattern_realStitches(view.pattern)).c_str());
 
-    translated_text("Jump Stitches:");
+    ImGui::TranslatedText("Jump Stitches:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(embPattern_jumpStitches(view.pattern)).c_str());
 
-    translated_text("Trim Stitches:");
+    ImGui::TranslatedText("Trim Stitches:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(embPattern_trimStitches(view.pattern)).c_str());
 
-    translated_text("Total Colors:");
+    ImGui::TranslatedText("Total Colors:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(view.pattern->n_threads).c_str());
 
-    translated_text("Color Changes:");
+    ImGui::TranslatedText("Color Changes:");
     ImGui::SameLine();
     ImGui::Text(std::to_string(colorChanges).c_str());
 
-    translated_text("Left:");
+    ImGui::TranslatedText("Left:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.left) + " mm").c_str());
 
-    translated_text("Top:");
+    ImGui::TranslatedText("Top:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.top) + " mm").c_str());
 
-    translated_text("Right:");
+    ImGui::TranslatedText("Right:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.right)  + " mm").c_str());
 
-    translated_text("Bottom:");
+    ImGui::TranslatedText("Bottom:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.bottom) + " mm").c_str());
 
-    translated_text("Width:");
+    ImGui::TranslatedText("Width:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.right - boundingRect.left)  + " mm").c_str());
 
-    translated_text("Height:");
+    ImGui::TranslatedText("Height:");
     ImGui::SameLine();
     ImGui::Text((std::to_string(boundingRect.bottom - boundingRect.top) + " mm").c_str());
 
@@ -542,10 +537,10 @@ undo_history_viewer(void)
 {
     ImGui::BeginChild(("Undo History " + views[settings.pattern_index].filename).c_str());
     ImGui::PushFont(header_font);
-    translated_text("Undo History");
+    ImGui::TranslatedText("Undo History");
     ImGui::PopFont();
     for (std::string undo_item : views[settings.pattern_index].undo_history) {
-        translated_text(undo_item);
+        ImGui::TranslatedText(undo_item);
     }
     ImGui::EndChild();
 }

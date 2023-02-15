@@ -15,14 +15,9 @@
 
 #include "embroidermodder.h"
 
-#include "imgui.h"
+#include "imgui_ext.h"
 
 #include <sstream>
-
-/* Need validation for the input number before applying to object.
- * and to add to undo history
- */
-void show_double(std::string label, double data);
 
 void create_group_box_general(EmbPattern *pattern);
 void create_group_box_arc(int id, EmbArc *arc);
@@ -49,13 +44,6 @@ void create_group_box_rectangle(int id, EmbRect *rect);
 void create_group_box_text_multi(int id, EmbTextMulti *text_multi);
 void create_group_box_text_single(int id, EmbTextSingle *text_single);
 
-void show_double(std::string label, double data)
-{
-    ImGui::Text(translate(label).c_str());
-    ImGui::SameLine();
-    ImGui::Text(std::to_string(data).c_str());
-}
-
 void
 property_editor(void)
 {
@@ -66,7 +54,7 @@ property_editor(void)
     EmbPattern *pattern = views[settings.pattern_index].pattern;
 
     ImGui::BeginChild((translate("Property Editor") + views[settings.pattern_index].filename).c_str());
-    ImGui::Text(translate("Properties").c_str());
+    ImGui::TranslatedText("Properties");
     /*
     propertyEditorButtonStyle = Qt::ToolButtonTextBesideIcon; //TODO: Make customizable
 
@@ -222,6 +210,7 @@ bool property_editor_eventFilter(void)
     }
     return QObject::eventFilter(obj, event);
     */
+    return true;
 }
 
 #if 0
@@ -877,12 +866,12 @@ void create_group_box_arc(int id, EmbArc *arc)
     if (ImGui::CollapsingHeader(label.c_str())) {
         ImGui::Text(translate("Geometry").c_str());
 
-        show_double("Start X", arc->start.x);
-        show_double("Start Y", arc->start.y);
-        show_double("Mid X", arc->mid.x);
-        show_double("Mid Y", arc->mid.y);
-        show_double("End X", arc->end.x);
-        show_double("End Y", arc->end.y);
+        ImGui::ShowDouble("Start X", arc->start.x);
+        ImGui::ShowDouble("Start Y", arc->start.y);
+        ImGui::ShowDouble("Mid X", arc->mid.x);
+        ImGui::ShowDouble("Mid Y", arc->mid.y);
+        ImGui::ShowDouble("End X", arc->end.x);
+        ImGui::ShowDouble("End Y", arc->end.y);
 
         /*
         toolButtonArcCenterX    = createToolButton("blank", translate("Center X"));       
@@ -913,9 +902,9 @@ void create_group_box_arc(int id, EmbArc *arc)
         lineEditArcChord      = createLineEdit("double", true);
         lineEditArcIncAngle   = createLineEdit("double", true);
 
-        show_double("Area", embArc);
-        show_double("Chord", embVector_angle(delta));
-        show_double("Included Angle", embVector_length(delta));
+        ImGui::ShowDouble("Area", embArc);
+        ImGui::ShowDouble("Chord", embVector_angle(delta));
+        ImGui::ShowDouble("Included Angle", embVector_length(delta));
         */
 
         ImGui::Text(translate("Misc").c_str());
@@ -1049,8 +1038,8 @@ void create_group_box_ellipse(int id, EmbEllipse *ellipse)
         edit_double(translate("Center Y"), &(ellipse->center.y));
         edit_double(translate("Major Radius"), &(ellipse->radius.x));
         edit_double(translate("Minor Radius"), &(ellipse->radius.y));
-        show_double(translate("Major Diameter"), 2.0*ellipse->radius.x);
-        show_double(translate("Minor Diameter"), 2.0*ellipse->radius.y);
+        ImGui::ShowDouble(translate("Major Diameter"), 2.0*ellipse->radius.x);
+        ImGui::ShowDouble(translate("Minor Diameter"), 2.0*ellipse->radius.y);
     }
 }
 
@@ -1105,24 +1094,24 @@ void create_group_box_line(int id, EmbLine *line)
 {
     std::string label = translate("Line") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
 
         // TODO: icons
-        ImGui::Text(translate("Start X").c_str());
+        ImGui::TranslatedText("Start X");
         ImGui::InputDouble("Start X", &(line->start.x), line->start.x);
-        ImGui::Text(translate("Start Y").c_str());
+        ImGui::TranslatedText("Start Y");
         ImGui::InputDouble("Start Y", &(line->start.y), line->start.y);
-        ImGui::Text(translate("End X").c_str());
+        ImGui::TranslatedText("End X");
         ImGui::InputDouble("End Y", &(line->end.y), line->end.y);
-        ImGui::Text(translate("End Y").c_str());
+        ImGui::TranslatedText("End Y");
         ImGui::InputDouble("End Y", &(line->end.y), line->end.y);
 
         EmbVector delta;
         embVector_subtract(line->end, line->start, &delta);
-        show_double("Delta X", delta.x);
-        show_double("Delta Y", delta.y);
-        show_double("Angle", embVector_angle(delta));
-        show_double("Length", embVector_length(delta));
+        ImGui::ShowDouble("Delta X", delta.x);
+        ImGui::ShowDouble("Delta Y", delta.y);
+        ImGui::ShowDouble("Angle", embVector_angle(delta));
+        ImGui::ShowDouble("Length", embVector_length(delta));
     }
 }
 
