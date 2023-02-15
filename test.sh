@@ -1,11 +1,8 @@
-git submodule init
-git submodule update
+#!/bin/sh
 
-mkdir build
+sh build.sh
+
 cd build
-cmake -G"MinGW Makefiles" .
-cmake --build .
-
 ./embroidermodder \
   ../assets/samples/embroidermodder_logo/conflicts/Embroidermodder.DST \
   ../assets/samples/shamrockin/shamrockin.dst \
