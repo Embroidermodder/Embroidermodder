@@ -735,7 +735,6 @@ main(int argc, char* argv[])
     return 0;
 }
 
-#if 0
 double
 random_uniform(void)
 {
@@ -830,6 +829,7 @@ int valid_rgb(int red, int green, int blue)
     return 1;
 }
 
+/*
 bool Application_event(QEvent *event)
 {
     switch (event->type()) {
@@ -859,7 +859,7 @@ void mdi_area_double_click(void)
     mainWin->openFile();
 }
 
-void MdiArea_paintEvent(QPaintEvent* /*e*/)
+void MdiArea_paintEvent(QPaintEvent* e)
 {
     QWidget* vport = viewport();
     QRect rect = vport->rect();
@@ -1014,7 +1014,7 @@ std::string MdiWindow::fileExtension(const std::string& fileName)
     return QFileInfo(fileName).suffix().toLower();
 }
 
-void MdiWindow::closeEvent(QCloseEvent* /*e*/)
+void MdiWindow::closeEvent(QCloseEvent* e)
 {
     debug_message("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
@@ -1185,9 +1185,7 @@ void PreviewDialog(QWidget* parent,
 
     //TODO: connect the currentChanged signal to update the preview imgWidget.
 }
-
-#endif
-
+*/
 
 void status_bar(void)
 {
@@ -1247,7 +1245,7 @@ void setMouseCoord(double x, double y)
     //statusBarMouseCoord->setText(std::string().setNum(x, 'E', 4) + ", " + std::string().setNum(y, 'E', 4)); //TODO: use precision from unit settings
 }
 
-#if 0
+/*
 void status_bar_context_menu(void)
 {
     QMenu menu(this);
@@ -1344,7 +1342,7 @@ void StatusBarButton::settingsLwt()
 {
     mainWin->settingsDialog("LineWeight");
 }
-#endif
+*/
 
 std::string platform_string(void)
 {

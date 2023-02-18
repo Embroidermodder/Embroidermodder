@@ -19,6 +19,13 @@
 #include <unordered_map>
 #include <iostream>
 #include <sstream>
+#include <cmath>
+
+typedef struct Arguments_ {
+    std::string str_data;
+    int int_data;
+    double double_data;
+} Arguments;
 
 void about_action(std::vector<std::string> args);
 void alert_action(std::vector<std::string> args);
@@ -47,6 +54,52 @@ void simulate_action(std::vector<std::string> args);
 void todo_action(std::vector<std::string> args);
 void undo_action(std::vector<std::string> args);
 void zoom_action(std::vector<std::string> args);
+
+int parse_args(std::string caller, Arguments *result, std::vector<std::string> args, std::string type_str)
+{
+    if (args.size() < type_str.length()) {
+        debug_message(caller + " requires "
+            + std::to_string(type_str.length()) + " arguments.");
+        return 0;
+    }
+
+    const char *type_str_data = type_str.c_str();
+    int n_args = type_str.length();
+    for (int i=0; i<n_args; i++) {
+        if (type_str_data[i] == 's') {
+            result[i].str_data = args[i];
+            continue;
+        }
+        if (type_str_data[i] == 'i') {
+            /*
+            if (!args[i].isNumber()) {
+                debug_message(caller + ": argument " + std::to_string(i) + "is not an integer.");
+                return 0;
+            }
+            */
+            result[i].int_data = stoi(args[i]);
+            if (std::isnan(result[i].int_data)) {
+                debug_message(caller + ": argument " + std::to_string(i) + "failed is_nan check. There is an error in your code.");
+                return 0;
+            }
+            continue;
+        }
+        if (type_str_data[i] == 'd') {
+            /*
+            if (!args[i].isNumber()) {
+                debug_message(caller + ": argument " + std::to_string(i) + "is not an integer.");
+                return 0;
+            }
+            */
+            result[i].double_data = stod(args[i]);
+            if (std::isnan(result[i].double_data)) {
+                debug_message(caller + ": argument " + std::to_string(i) + "failed is_nan check. There is an error in your code.");
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
 
 /* For these transformations, we need to store the relavant data that isn't
  * in the command itself. For example if you delete an object then reference
@@ -189,8 +242,6 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"mirror", error_action},
     {"qsnapX", error_action},
     {"qsnapY", error_action},
-    {"mouseX", error_action},
-    {"mouseY", error_action},
     {"include", error_action},
     {"donothing", do_nothing_action},
     {"simulate", simulate_action}
@@ -926,8 +977,6 @@ void zoom_action(std::vector<std::string> args)
     {"deleteSelected", nativeDeleteSelected_action},
     {"qsnapX", nativeQSnapX_action},
     {"qsnapY", nativeQSnapY_action},
-    {"mouseX", nativeMouseX_action},
-    {"mouseY", nativeMouseY_action},
 
     {"debug-message") {
         debug_message(command.substr(13, command.size()-13));
@@ -1070,207 +1119,197 @@ void AppendPromptHistory_action(std::vector<std::string> args)
 
 void messagebox_action(std::vector<std::string> args)
 {
-    if (args.size() < 3)    debug_message("messageBox() requires three arguments");
-    if (!args[0).isString()) return debug_message("messageBox(): first argument is not a string");
-    if (!args[1).isString()) return debug_message("messageBox(): second argument is not a string");
-    if (!args[2).isString()) return debug_message("messageBox(): third argument is not a string");
+    Arguments results[3];
+    if (!parse_args(results, args, "sss")) {
+        return;
+    }
 
-    std::string type  = args[0).toString().toLower();
-    std::string title = args[1).toString();
-    std::string text  = args[2).toString();
+    std::string type = args[0];
+    std::string title = args[1];
+    std::string text = args[2];
 
-    if (type != "critical" && type != "information" && type != "question" && type != "warning")
-        debug_message(QScriptengine::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+    if (type != "critical" && type != "information" && type != "question" && type != "warning") {
+        debug_message("messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
+    }
 
     nativeMessageBox(type, title, text);
 }
 
-void IsInt_action(std::vector<std::string> args)
-{
-    if (args.size() < 1)    debug_message("isInt() requires one argument");
-    if (!args[0).isNumber()) return debug_message("isInt(): first argument is not a number");
-
-    double num = args[0];
-
-    //isNaN check
-    if (qIsNaN(num)) return debug_message("isInt(): first argument failed isNaN check. There is an error in your code.");
-
-    if (fmod(num, 1) == 0)
-        return QJSValue(true);
-}
-
 void print_area_action(std::vector<std::string> args)
 {
-    if (args.size() < 4)    debug_message("printArea() requires four arguments");
-    if (!args[0).isNumber()) return debug_message("printArea(): first argument is not a number");
-    if (!args[1).isNumber()) return debug_message("printArea(): second argument is not a number");
-    if (!args[2).isNumber()) return debug_message("printArea(): third argument is not a number");
-    if (!args[3).isNumber()) return debug_message("printArea(): fourth argument is not a number");
+    Arguments results[4];
+    if (!parse_args(results, args, "iiii")) {
+        return;
+    }
 
-    double x = args[0];
-    double y = args[1];
-    double w = args[2];
-    double h = args[3];
-
-    //isNaN check
-    if (qIsNaN(x)) return debug_message("printArea(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(y)) return debug_message("printArea(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(w)) return debug_message("printArea(): third argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(h)) return debug_message("printArea(): fourth argument failed isNaN check. There is an error in your code.");
+    int x = results[0].int_data;
+    int y = results[1].int_data;
+    int w = results[2].int_data;
+    int h = results[3].int_data;
 
     nativePrintArea(x, y, w, h);
 }
 
 void SetBackgroundColor_action(std::vector<std::string> args)
 {
-    if (args.size() < 3)    debug_message("setBackgroundColor() requires three arguments");
-    if (!args[0).isNumber()) return debug_message("setBackgroundColor(): first argument is not a number");
-    if (!args[1).isNumber()) return debug_message("setBackgroundColor(): second argument is not a number");
-    if (!args[2).isNumber()) return debug_message("setBackgroundColor(): third argument is not a number");
+    Arguments results[3];
+    if (!parse_args(results, args, "iii")) {
+        return;
+    }
 
-    double r = args[0];
-    double g = args[1];
-    double b = args[2];
+    int r = results[0].int_data;
+    int g = results[1].int_data;
+    int b = results[2].int_data;
 
-    //isNaN check
-    if (qIsNaN(r)) return debug_message("setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return debug_message("setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return debug_message("setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { debug_message(QScriptengine::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) {
+        debug_message("setBackgroundColor(): r value must be in range 0-255");
+        return;
+    }
+    if (g < 0 || g > 255) {
+        debug_message("setBackgroundColor(): g value must be in range 0-255");
+        return;
+    }
+    if (b < 0 || b > 255) {
+        debug_message("setBackgroundColor(): b value must be in range 0-255");
+        return;
+    }
 
     nativeSetBackgroundColor(r, g, b);
 }
 
 void SetCrossHairColor_action(std::vector<std::string> args)
 {
-    if (args.size() < 3)    debug_message("setCrossHairColor() requires three arguments");
+    Arguments results[3];
+    if (!parse_args(results, args, "iii")) {
+        return;
+    }
 
-    double r = args[0];
-    double g = args[1];
-    double b = args[2];
+    int r = results[0].int_data;
+    int g = results[1].int_data;
+    int b = results[2].int_data;
 
-    if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { debug_message(QScriptengine::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) {
+        debug_message("setCrossHairColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { debug_message("setCrossHairColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { debug_message("setCrossHairColor(): b value must be in range 0-255"); }
 
     nativeSetCrossHairColor(r, g, b);
 }
 
-void SetGridColor_action(std::vector<std::string> args)
+void set_grid_color_action(std::vector<std::string> args)
 {
-    if (args.size() < 3)    debug_message("setGridColor() requires three arguments");
-    if (!args[0).isNumber()) return debug_message("setGridColor(): first argument is not a number");
-    if (!args[1).isNumber()) return debug_message("setGridColor(): second argument is not a number");
-    if (!args[2).isNumber()) return debug_message("setGridColor(): third argument is not a number");
+    Arguments results[3];
+    if (!parse_args(results, args, "iii")) {
+        return;
+    }
 
-    double r = args[0];
-    double g = args[1];
-    double b = args[2];
+    int r = results[0].int_data;
+    int g = results[1].int_data;
+    int b = results[2].int_data;
 
-    //isNaN check
-    if (qIsNaN(r)) return debug_message("setGridColor(): first argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(g)) return debug_message("setGridColor(): second argument failed isNaN check. There is an error in your code.");
-    if (qIsNaN(b)) return debug_message("setGridColor(): third argument failed isNaN check. There is an error in your code.");
-
-    if (r < 0 || r > 255) { debug_message(QScriptengine::UnknownError, "setGridColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { debug_message(QScriptengine::UnknownError, "setGridColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { debug_message(QScriptengine::UnknownError, "setGridColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) {
+        debug_message("setGridColor(): r value must be in range 0-255");
+        return;
+    }
+    if (g < 0 || g > 255) {
+        debug_message("setGridColor(): g value must be in range 0-255");
+        return;
+    }
+    if (b < 0 || b > 255) {
+        debug_message("setGridColor(): b value must be in range 0-255");
+        return;
+    }
 
     nativeSetGridColor(r, g, b);
 }
 
 void SetTextFont_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("setTextFont() requires one argument");
+    Arguments results[3];
+    if (!parse_args(results, args, "s")) {
+        return;
+    }
 
-    settings_text_font = args[0];
+    settings_text_font = results[0].string_value;
 }
 
-void SetTextSize_action(std::vector<std::string> args)
+void set_text_size_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("setTextSize() requires one argument");
-    if (!args[0).isNumber()) return debug_message("setTextSize(): first argument is not a number");
+    Arguments results[3];
+    if (!parse_args(results, args, "d")) {
+        return;
+    }
 
-    double num = args[0];
-
-    //isNaN check
-    if (qIsNaN(num)) return debug_message("setTextSize(): first argument failed isNaN check. There is an error in your code.");
-
-    nativeSetTextSize(num);
+    settings_text_size = results[0].double_data;
 }
 
 void set_text_angle_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("setTextAngle() requires one argument");
-    if (!args[0).isNumber()) return debug_message("setTextAngle(): first argument is not a number");
+    Arguments results[3];
+    if (!parse_args(results, args, "d")) {
+        return;
+    }
 
-    double num = args[0];
-
-    //isNaN check
-    if (qIsNaN(num)) return debug_message("setTextAngle(): first argument failed isNaN check. There is an error in your code.");
-
-    nativeSetTextAngle(num);
+    settings_text_angle = results[0].double_data;
 }
 
 void SetTextBold_action(std::vector<std::string> args)
 {
-    if (args.size() < 1) {
-        debug_message("setTextBold() requires one argument");
+    Arguments results[3];
+    if (!parse_args(results, args, "i")) {
         return;
     }
 
-    if (!args[0).isBool()) return debug_message("setTextBold(): first argument is not a bool");
-
-    nativeSetTextBold(args[0).toBool());
+    settings_text_bold = results[0].int_data;
 }
 
-void SetTextItalic()
+void SetTextItalic_action(std::vector<std::string> args)
 {
-    if (args.size() < 1) {
-        debug_message("setTextItalic() requires one argument");
+    Arguments results[3];
+    if (!parse_args(results, args, "i")) {
         return;
     }
 
-    if (!args[0).isBool()) return debug_message("setTextItalic(): first argument is not a bool");
-
-    nativeSetTextItalic(args[0).toBool());
+    settings_text_italic = results[0].int_data;
 }
 
-void SetTextUnderline()
+void SetTextUnderline_action(std::vector<std::string> args)
 {
-    if (args.size() < 1) {
-        debug_message("setTextUnderline() requires one argument");
+    Arguments results[3];
+    if (!parse_args(results, args, "i")) {
         return;
     }
 
-    if (!args[0).isBool()) return debug_message("setTextUnderline(): first argument is not a bool");
-
-    nativeSetTextUnderline(args[0).toBool());
+    settings_text_underline = results[0].int_data;
 }
 
-void SetTextStrikeOut()
+void SetTextStrikeOut_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("setTextStrikeOut() requires one argument");
-    if (!args[0).isBool()) return debug_message("setTextStrikeOut(): first argument is not a bool");
+    Arguments results[3];
+    if (!parse_args(results, args, "i")) {
+        return;
+    }
 
     nativeSetTextStrikeOut(args[0).toBool());
 }
 
-void SetTextOverline()
+void SetTextOverline_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("setTextOverline() requires one argument");
-    if (!args[0).isBool()) return debug_message("setTextOverline(): first argument is not a bool");
+    Arguments results[3];
+    if (!parse_args(results, args, "i")) {
+        return;
+    }
 
     nativeSetTextOverline(args[0).toBool());
 }
 
-void PreviewOn()
+void PreviewOn_action(std::vector<std::string> args)
 {
-    if (args.size() < 5)    debug_message("previewOn() requires five arguments");
-
+    Arguments results[5];
+    if (!parse_args(results, args, "ssddd")) {
+        return;
+    }
+    
     std::string cloneStr = args[0).toString().toUpper();
     std::string modeStr  = args[1).toString().toUpper();
     double x          = args[2];
@@ -1281,12 +1320,12 @@ void PreviewOn()
     int mode = PREVIEW_MODE_NULL;
     if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
     else if (cloneStr == "RUBBER")   { clone = PREVIEW_CLONE_RUBBER;   }
-    else                            { debug_message(QScriptengine::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
+    else                            { debug_message("previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
 
     if     (modeStr == "MOVE")   { mode = PREVIEW_MODE_MOVE;   }
     else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
     else if (modeStr == "SCALE")  { mode = PREVIEW_MODE_SCALE;  }
-    else                         { debug_message(QScriptengine::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
+    else                         { debug_message("previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
     nativePreviewOn(clone, mode, x, y, data);
 }
@@ -1303,11 +1342,12 @@ void Vulcanize()
 
 void set_rubber_mode_action(std::vector<std::string> args)
 {
-    if (args.size() < 1) {
-        debug_message("setRubberMode() requires one argument");
+    Arguments results[3];
+    if (!parse_args(results, args, "s")) {
+        return;
     }
 
-    std::string mode = args[0].toString().toUpper();
+    std::string mode = results[0].toString().toUpper();
 
     View* active_view = activeView();
     if (active_view) {
@@ -1373,8 +1413,9 @@ void set_rubber_mode_action(std::vector<std::string> args)
 
 void set_rubber_point_action(std::vector<std::string> args)
 {
-    if (args.size() < 3) {
-        debug_message("setRubberPoint() requires three arguments");
+    Arguments results[3];
+    if (!parse_args(results, args, "sdd")) {
+        return;
     }
 
     std::string key = args[0].toUpper();
@@ -1386,8 +1427,9 @@ void set_rubber_point_action(std::vector<std::string> args)
 
 void set_rubber_text_action(std::vector<std::string> args)
 {
-    if (args.size() < 2) {
-        debug_message("setRubberText() requires two arguments");
+    Arguments results[3];
+    if (!parse_args(results, args, "ss")) {
+        return;
     }
 
     std::string key = args[0].toUpper();
@@ -1398,13 +1440,15 @@ void set_rubber_text_action(std::vector<std::string> args)
 
 void add_rubber_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("addRubber() requires one argument");
-    if (!args[0).isString()) return debug_message("addRubber(): first argument is not a string");
+    Arguments results[3];
+    if (!parse_args(results, args, "s")) {
+        return;
+    }
 
     std::string objType = args[0).toString().toUpper();
 
     if (!allowRubber())
-        debug_message(QScriptengine::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
+        debug_message("addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     double mx = nativeMouseX();
     double my = nativeMouseY();
@@ -1448,10 +1492,18 @@ void add_rubber_action(std::vector<std::string> args)
     else if (objType == "LINE")         { addLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
     else if (objType == "PATH")         {} //TODO: handle this type
     else if (objType == "POINT")        {} //TODO: handle this type
-    else if (objType == "POLYGON")      { addPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "POLYLINE")     { addPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if (objType == "RAY")          {} //TODO: handle this type
-    else if (objType == "RECTANGLE")    { addRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "POLYGON") {
+        addPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+    }
+    else if (objType == "POLYLINE") {
+        addPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON);
+    }
+    else if (objType == "RAY") {
+
+    } //TODO: handle this type
+    else if (objType == "RECTANGLE") {
+        addRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON);
+    }
     else if (objType == "SPLINE") {
 
     }
@@ -1467,8 +1519,8 @@ void add_rubber_action(std::vector<std::string> args)
 
 void spare_rubber_action(std::vector<std::string> args)
 {
-    if (args.size() < 1) {
-        debug_message("spareRubber() requires one argument");
+    Arguments results[3];
+    if (!parse_args(results, args, "s")) {
         return;
     }
 
@@ -1493,8 +1545,8 @@ void spare_rubber_action(std::vector<std::string> args)
 
 void add_text_multi_action(std::vector<std::string> args)
 {
-    if (args.size() < 5) {
-        debug_message("addTextMulti() requires five arguments");
+    Arguments results[5];
+    if (!parse_args(results, args, "sdddi")) {
         return;
     }
 
@@ -1509,8 +1561,8 @@ void add_text_multi_action(std::vector<std::string> args)
 
 void AddTextSingle_action(std::vector<std::string> args)
 {
-    if (args.size() < 5) {
-        debug_message("addTextSingle() requires five arguments");
+    Arguments results[5];
+    if (!parse_args(results, args, "sdddi")) {
         return;
     }
 
@@ -1537,7 +1589,10 @@ void AddRay_action(std::vector<std::string> args)
 
 void add_line_action(std::vector<std::string> args)
 {
-    if (args.size() < 5)    debug_message("addLine() requires five arguments");
+    Arguments results[5];
+    if (!parse_args(results, args, "ddddd")) {
+        return;
+    }
 
     double x1  = args[0];
     double y1  = args[1];
@@ -1550,7 +1605,10 @@ void add_line_action(std::vector<std::string> args)
 
 void add_triangle_action(std::vector<std::string> args)
 {
-    if (args.size() < 8)    debug_message("addTriangle() requires eight arguments");
+    Arguments results[8];
+    if (!parse_args(results, args, "dddddddi")) {
+        return;
+    }
 
     double x1 = args[0];
     double y1 = args[1];
@@ -1566,8 +1624,8 @@ void add_triangle_action(std::vector<std::string> args)
 
 void add_rectangle_action(std::vector<std::string> args)
 {
-    if (args.size() < 6) {
-        debug_message("addRectangle() requires six arguments");
+    Arguments results[6];
+    if (!parse_args(results, args, "dddddi")) {
         return;
     }
 
@@ -1583,8 +1641,8 @@ void add_rectangle_action(std::vector<std::string> args)
 
 void add_rounded_rectangle_action(std::vector<std::string> args)
 {
-    if (args.size() < 7) {
-        debug_message("addRoundedRectangle() requires seven arguments");
+    Arguments results[7];
+    if (!parse_args(results, args, "ddddddi")) {
         return;
     }
 
@@ -1601,8 +1659,8 @@ void add_rounded_rectangle_action(std::vector<std::string> args)
 
 void add_slot_action(std::vector<std::string> args)
 {
-    if (args.size() < 6) {
-        debug_message("addSlot() requires six arguments");
+    Arguments results[6];
+    if (!parse_args(results, args, "dddddii")) {
         return;
     }
 
@@ -1626,8 +1684,8 @@ void add_slot_action(std::vector<std::string> args)
 
 void add_point_action(std::vector<std::string> args)
 {
-    if (args.size() < 2) {
-        debug_message("addPoint() requires two arguments");
+    Arguments results[2];
+    if (!parse_args(results, args, "dd")) {
         return;
     }
 
@@ -1639,8 +1697,10 @@ void add_point_action(std::vector<std::string> args)
 
 void add_polygon_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)   debug_message("addPolygon() requires one argument");
-    if (!args[0).isArray()) return debug_message("addPolygon(): first argument is not an array");
+    Arguments results[2];
+    if (!parse_args(results, args, "s")) {
+        return;
+    }
 
     QVariantList varList = args[0).toVariant().toList();
     int varSize = varList.size();
@@ -1724,8 +1784,9 @@ void add_polyline_action(std::vector<std::string> args)
 
 void add_dim_leader_action(std::vector<std::string> args)
 {
-    if (args.size() < 5) {
-        debug_message("addDimLeader() requires five arguments");
+    Arguments results[5];
+    if (!parse_args(results, args, "ddddd")) {
+        return;
     }
 
     double x1  = args[0];
@@ -1787,8 +1848,8 @@ void set_cursor_shape_action(std::vector<std::string> args)
 
 void calculate_angle_action(std::vector<std::string> args)
 {
-    if (args.size() < 4) {
-        debug_message("calculateAngle() requires four arguments");
+    Arguments results[4];
+    if (!parse_args(results, args, "dddd")) {
         return;
     }
 
@@ -1802,7 +1863,10 @@ void calculate_angle_action(std::vector<std::string> args)
 
 void calculate_distance_action(std::vector<std::string> args)
 {
-    if (args.size() < 4)    debug_message("calculateDistance() requires four arguments");
+    Arguments results[5];
+    if (!parse_args(results, args, "dddd")) {
+        return;
+    }
 
     double x1 = args[0];
     double y1 = args[1];
@@ -1814,8 +1878,8 @@ void calculate_distance_action(std::vector<std::string> args)
 
 void PerpendicularDistance()
 {
-    if (args.size() < 6) {
-        debug_message("perpendicularDistance() requires six arguments");
+    Arguments results[6];
+    if (!parse_args(results, args, "dddddd")) {
         return;
     }
 
@@ -1831,8 +1895,9 @@ void PerpendicularDistance()
 
 void cut_selected(std::vector<std::string> args)
 {
-    if (args.size() < 2) {
-        debug_message("cutSelected() requires two arguments");
+    Arguments results[2];
+    if (!parse_args(results, args, "dd")) {
+        return;
     }
 
     double x = stod("cutSelected()", args, 0);
@@ -1841,28 +1906,12 @@ void cut_selected(std::vector<std::string> args)
     nativeCutSelected(x, y);
 }
 
-int
-string_to_double(std::vector<std::string> args, int n, double *result)
-{
-    if (!args[n].isNumber()) {
-        debug_message(function + ": argument " + n + " is not a number.");
-        return 1;
-    }
-
-    *result = args[n].toNumber();
-
-    if (qIsNaN(*result)) {
-        debug_message(function + ": argument " + n + "failed isNaN check. There is an error in your code.");
-        return 1;
-    }
-
-    return 0;
-}
-
 void CopySelected(std::vector<std::string> args)
 {
-    if (args.size() < 2)
-        debug_message("copySelected() requires two arguments");
+    Arguments results[3];
+    if (!parse_args(results, args, "dd")) {
+        return;
+    }
 
     double x = stod("copySelected()", args, 0);
     double y = stod("copySelected()", args, 1);
@@ -1872,15 +1921,13 @@ void CopySelected(std::vector<std::string> args)
 
 void PasteSelected(std::vector<std::string> args)
 {
-    double x, y;
-    if (args.size() < 2)    debug_message("pasteSelected() requires two arguments");
+    Arguments results[3];
+    if (!parse_args(results, args, "dd")) {
+        return;
+    }
 
-    if (!stod("pasteSelected()", args, 0, &x)) {
-        return;
-    }
-    if (!stod("pasteSelected()", args, 1, &y)) {
-        return;
-    }
+    double x = results[0];
+    double y = results[1];
 
     nativePasteSelected(x, y);
 }
@@ -1987,7 +2034,7 @@ void tipOfTheDay()
 
     wizardTipOfTheDay = new QWizard(this);
     wizardTipOfTheDay->setAttribute(WA_DeleteOnClose);
-    wizardTipOfTheDay->setWizardStyle(QWizard::ModernStyle);
+    wizardTipOfTheDay->setWizardStyle(ModernStyle);
     wizardTipOfTheDay->setMinimumSize(550, 400);
 
     QWizardPage* page = new QWizardPage(wizardTipOfTheDay);
@@ -2016,19 +2063,19 @@ void tipOfTheDay()
 
     wizardTipOfTheDay->setWindowTitle("Tip of the Day");
 
-    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonPrevious)
-    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonNext)
-    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(QWizard::CustomButton1, buttonClose)
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton1, translate("&Previous"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton2, translate("&Next"));
-    wizardTipOfTheDay->setButtonText(QWizard::CustomButton3, translate("&Close"));
-    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton1, true);
-    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton2, true);
-    wizardTipOfTheDay->setOption(QWizard::HaveCustomButton3, true);
+    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(CustomButton1, buttonPrevious)
+    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(CustomButton1, buttonNext)
+    //TODO: Add icons to buttons by using wizardTipOfTheDay->setButton(CustomButton1, buttonClose)
+    wizardTipOfTheDay->setButtonText(CustomButton1, translate("&Previous"));
+    wizardTipOfTheDay->setButtonText(CustomButton2, translate("&Next"));
+    wizardTipOfTheDay->setButtonText(CustomButton3, translate("&Close"));
+    wizardTipOfTheDay->setOption(HaveCustomButton1, true);
+    wizardTipOfTheDay->setOption(HaveCustomButton2, true);
+    wizardTipOfTheDay->setOption(HaveCustomButton3, true);
     connect(wizardTipOfTheDay, SIGNAL(customButtonClicked(int)), this, SLOT(buttonTipOfTheDayClicked(int)));
 
-    std::vector<QWizard::WizardButton> listTipOfTheDayButtons;
-    listTipOfTheDayButtons << QWizard::Stretch << QWizard::CustomButton1 << QWizard::CustomButton2 << QWizard::CustomButton3;
+    std::vector<WizardButton> listTipOfTheDayButtons;
+    listTipOfTheDayButtons << Stretch << CustomButton1 << CustomButton2 << CustomButton3;
     wizardTipOfTheDay->setButtonLayout(listTipOfTheDayButtons);
 
     wizardTipOfTheDay->exec();
@@ -2042,7 +2089,7 @@ void checkBoxTipOfTheDayStateChanged(int checked)
 void button_tip_of_the_day_clicked(int button)
 {
     debug_message("buttonTipOfTheDayClicked(%d)", button);
-    if (button == QWizard::CustomButton1)
+    if (button == CustomButton1)
     {
         if (settings_general_current_tip > 0)
             settings_general_current_tip--;
@@ -2050,14 +2097,14 @@ void button_tip_of_the_day_clicked(int button)
             settings_general_current_tip = listTipOfTheDay.size()-1;
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
     }
-    else if (button == QWizard::CustomButton2)
+    else if (button == CustomButton2)
     {
         settings_general_current_tip++;
         if (settings_general_current_tip >= listTipOfTheDay.size())
             settings_general_current_tip = 0;
         labelTipOfTheDay->setText(listTipOfTheDay.value(settings_general_current_tip));
     }
-    else if (button == QWizard::CustomButton3)
+    else if (button == CustomButton3)
     {
         wizardTipOfTheDay->close();
     }
@@ -2099,18 +2146,18 @@ void setUndoCleanIcon(bool opened)
 void updateAllViewScrollBars(bool val)
 {
     std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
-        if (mdiWin) { mdiWin->showViewScrollBars(val); }
+        if (mdiWin) {
+            mdiWin->showViewScrollBars(val);
+        }
     }
 }
 
 void updateAllViewCrossHairColors(unsigned int color)
 {
     std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) { mdiWin->setViewCrossHairColor(color); }
     }
@@ -2119,8 +2166,7 @@ void updateAllViewCrossHairColors(unsigned int color)
 void updateAllViewBackgroundColors(unsigned int color)
 {
     std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) { mdiWin->setViewBackgroundColor(color); }
     }
@@ -2129,8 +2175,7 @@ void updateAllViewBackgroundColors(unsigned int color)
 void updateAllViewSelectBoxColors(unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)
 {
     std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) { mdiWin->setViewSelectBoxColors(colorL, fillL, colorR, fillR, alpha); }
     }
@@ -2139,8 +2184,7 @@ void updateAllViewSelectBoxColors(unsigned int colorL, unsigned int fillL, unsig
 void updateAllViewGridColors(unsigned int color)
 {
     std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) { mdiWin->setViewGridColor(color); }
     }
@@ -2149,8 +2193,7 @@ void updateAllViewGridColors(unsigned int color)
 void updateAllViewRulerColors(unsigned int color)
 {
     std::vector<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if (mdiWin) { mdiWin->setViewRulerColor(color); }
     }
@@ -2281,16 +2324,15 @@ void colorSelectorIndexChanged(int index)
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(sender());
     unsigned int newColor;
-    if (comboBox)
-    {
+    if (comboBox) {
         bool ok = 0;
         //TODO: Handle ByLayer and ByBlock and Other...
         newColor = comboBox->itemData(index).toUInt(&ok);
         if (!ok)
-            QMessageBox::warning(this, translate("Color Selector Conversion Error"), translate("<b>An error has occured while changing colors.</b>"));
+            QMessageBox::warning(translate("Color Selector Conversion Error"), translate("<b>An error has occured while changing colors.</b>"));
     }
     else
-        QMessageBox::warning(this, translate("Color Selector Pointer Error"), translate("<b>An error has occured while changing colors.</b>"));
+        QMessageBox::warning(translate("Color Selector Pointer Error"), translate("<b>An error has occured while changing colors.</b>"));
 
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) { mdiWin->currentColorChanged(newColor); }
@@ -2318,46 +2360,6 @@ void textSizeSelectorIndexChanged(int index)
     settings_text_size = qFabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
 }
 
-std::string textFont()
-{
-    return settings_text_font;
-}
-
-double textSize()
-{
-    return settings_text_size;
-}
-
-double textAngle()
-{
-    return settings_text_angle;
-}
-
-bool textBold()
-{
-    return settings_text_style_bold;
-}
-
-bool textItalic()
-{
-    return settings_text_style_italic;
-}
-
-bool textUnderline()
-{
-    return settings_text_style_underline;
-}
-
-bool textStrikeOut()
-{
-    return settings_text_style_strikeout;
-}
-
-bool textOverline()
-{
-    return settings_text_style_overline;
-}
-
 void setTextFont(const std::string& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
@@ -2374,36 +2376,6 @@ void setTextSize(double num)
     index = textSizeSelector->findText("Custom", MatchContains);
     if (index != -1)
         textSizeSelector->setCurrentIndex(index);
-}
-
-void setTextAngle(double num)
-{
-    settings_text_angle = num;
-}
-
-void setTextBold(bool val)
-{
-    settings_text_style_bold = val;
-}
-
-void setTextItalic(bool val)
-{
-    settings_text_style_italic = val;
-}
-
-void setTextUnderline(bool val)
-{
-    settings_text_style_underline = val;
-}
-
-void setTextStrikeOut(bool val)
-{
-    settings_text_style_strikeout = val;
-}
-
-void setTextOverline(bool val)
-{
-    settings_text_style_overline = val;
 }
 
 std::string getCurrentLayer()
@@ -2512,61 +2484,6 @@ void promptInputNext()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
     if (mdiWin) mdiWin->promptInputNext();
-}
-
-void runCommand()
-{
-    /* TODO. */
-    QAction* act = qobject_cast<QAction*>(sender());
-    if (act) {
-        debug_message("runCommand(%s)", qPrintable(act->objectName()));
-        prompt->endCommand();
-        prompt->setCurrentText(act->objectName());
-        prompt->processInput(Key_Return);
-    }
-}
-
-void runCommandMain(const std::string& cmd)
-{
-    debug_message("runCommandMain(%s)", qPrintable(cmd));
-    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
-    // if (!getSettingsSelectionModePickFirst()) { nativeClearSelection(); } //TODO: Uncomment this line when post-selection is available
-    // engine->evaluate(cmd + "_main()", fileName);
-}
-
-void runCommandClick(const std::string& cmd, double x, double y)
-{
-    debug_message("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
-    // engine->evaluate(cmd + "_click(" + std::string().setNum(x) + "," + std::string().setNum(-y) + ")", fileName);
-}
-
-void runCommandMove(const std::string& cmd, double x, double y)
-{
-    debug_message("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
-    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
-    // engine->evaluate(cmd + "_move(" + std::string().setNum(x) + "," + std::string().setNum(-y) + ")", fileName);
-}
-
-void runCommandContext(const std::string& cmd, const std::string& str)
-{
-    debug_message("runCommandContext(%s, %s)", qPrintable(cmd), qPrintable(str));
-    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
-    // engine->evaluate(cmd + "_context('" + str.toUpper() + "')", fileName);
-}
-
-void runCommandPrompt(const std::string& cmd, const std::string& str)
-{
-    debug_message("runCommandPrompt(%s, %s)", qPrintable(cmd), qPrintable(str));
-    std::string fileName = "commands/" + cmd + "/" + cmd + ".js";
-    //NOTE: Replace any special characters that will cause a syntax error
-    std::string safeStr = str;
-    safeStr.replace("\\", "\\\\");
-    safeStr.replace("\'", "\\\'");
-    /*
-    if (prompt->isRapidFireEnabled()) { engine->evaluate(cmd + "_prompt('" + safeStr + "')", fileName); }
-    else                             { engine->evaluate(cmd + "_prompt('" + safeStr.toUpper() + "')", fileName); }
-    */
 }
 
 void alert(const std::string& txt)
@@ -2710,86 +2627,6 @@ void nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
     settings_grid_color = qRgb(r,g,b);
     updateAllViewGridColors(qRgb(r,g,b));
-}
-
-std::string nativeTextFont()
-{
-    return textFont();
-}
-
-double nativeTextSize()
-{
-    return textSize();
-}
-
-double nativeTextAngle()
-{
-    return textAngle();
-}
-
-bool nativeTextBold()
-{
-    return textBold();
-}
-
-bool nativeTextItalic()
-{
-    return textItalic();
-}
-
-bool nativeTextUnderline()
-{
-    return textUnderline();
-}
-
-bool nativeTextStrikeOut()
-{
-    return textStrikeOut();
-}
-
-bool nativeTextOverline()
-{
-    return textOverline();
-}
-
-void nativeSetTextFont(const std::string& str)
-{
-    setTextFont(str);
-}
-
-void nativeSetTextSize(double num)
-{
-    setTextSize(num);
-}
-
-void nativeSetTextAngle(double num)
-{
-    setTextAngle(num);
-}
-
-void nativeSetTextBold(bool val)
-{
-    setTextBold(val);
-}
-
-void nativeSetTextItalic(bool val)
-{
-    setTextItalic(val);
-}
-
-void nativeSetTextUnderline(bool val)
-{
-    setTextUnderline(val);
-}
-
-void nativeSetTextStrikeOut(bool val)
-{
-    setTextStrikeOut(val);
-}
-
-void nativeSetTextOverline(bool val)
-{
-    setTextOverline(val);
 }
 
 void nativePreviewOn(int clone, int mode, double x, double y, double data)
@@ -3139,29 +2976,6 @@ double nativeQSnapY()
     return 0.0;
 }
 
-double nativeMouseX()
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        debug_message("mouseX: %.50f", scene->property("SCENE_MOUSE_POINT").toPointF().x());
-        return scene->property("SCENE_MOUSE_POINT").toPointF().x();
-    }
-    return 0.0;
-}
-
-double nativeMouseY()
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        debug_message("mouseY: %.50f", -scene->property("SCENE_MOUSE_POINT").toPointF().y());
-        return -scene->property("SCENE_MOUSE_POINT").toPointF().y();
-    }
-    return 0.0;
-}
-
-MainWindow *mainWin;
-std::string settings_general_language;
-std::string settings_general_icon_theme;
 
 void createAllActions()
 {
@@ -3695,7 +3509,7 @@ void windowMenuAboutToShow()
 {
     debug_message("windowMenuAboutToShow()");
     std::vector<QMdiSubWindow*> windows = mdiArea->subWindowList();
-    for(int i = 0; i < windows.count(); ++i)
+    for (int i = 0; i < windows.count(); ++i)
     {
         QAction* aAction = new QAction(windows.at(i)->windowTitle(), this);
         aAction->setCheckable(true);
