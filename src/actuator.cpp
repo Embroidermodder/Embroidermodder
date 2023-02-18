@@ -25,12 +25,14 @@ void alert_action(std::vector<std::string> args);
 void arc_action(std::vector<std::string> args);
 void circle_action(std::vector<std::string> args);
 void close_action(std::vector<std::string> args);
+void copy_action(std::vector<std::string> args);
 void cut_action(std::vector<std::string> args);
 void day_vision_action(std::vector<std::string> args);
 void debug_action(std::vector<std::string> args);
 void design_details_action(std::vector<std::string> args);
 void do_nothing_action(std::vector<std::string> args);
 void editor_action(std::vector<std::string> args);
+void ellipse_action(std::vector<std::string> args);
 void error_action(std::vector<std::string> args);
 void exit_action(std::vector<std::string> args);
 void new_file_action(std::vector<std::string> args);
@@ -38,6 +40,7 @@ void night_vision_action(std::vector<std::string> args);
 void open_file_action(std::vector<std::string> args);
 void icon_action(std::vector<std::string> args);
 void pan_action(std::vector<std::string> args);
+void print_action(std::vector<std::string> args);
 void redo_action(std::vector<std::string> args);
 void settings_editor_action(std::vector<std::string> args);
 void simulate_action(std::vector<std::string> args);
@@ -76,14 +79,28 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"arc", arc_action},
     {"circle", circle_action},
     {"close", close_action},
+    {"copy", copy_action},
     {"cut", cut_action},
     {"day", day_vision_action},
     {"debug", debug_action},
     {"designdetails", design_details_action},
     {"editor", editor_action},
+    {"ellipse", ellipse_action},
     {"error", error_action},
     {"exit", exit_action},
+    {"help", error_action},
+    {"icon", icon_action},
+    {"new", new_file_action},
+    {"night", night_vision_action},
+    {"open", open_file_action},
+    {"pan", pan_action},
+    {"print", print_action},
+    {"quit", exit_action},
+    {"redo", redo_action},
     {"todo", todo_action},
+    {"undo", undo_action},
+    {"zoom", zoom_action},
+
     {"blinkPrompt", error_action},
     {"setPromptPrefix", error_action},
     {"appendPromptHistory", error_action},
@@ -93,10 +110,6 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"disableMoveRapidFire", error_action},
     {"initCommand", error_action},
     {"endCommand", error_action},
-    {"new", new_file_action},
-    {"openFile", error_action},
-    {"quit", exit_action},
-    {"help", error_action},
     {"tip-of-the-day", error_action},
     {"windowCascade", error_action},
     {"windowTile", error_action},
@@ -107,12 +120,7 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"platformString", error_action},
     {"message-box", error_action},
     {"isInt", error_action},
-    {"icon", icon_action},
-    {"pan", pan_action},
-    {"zoom", zoom_action},
     {"print-area", error_action},
-    {"day", day_vision_action},
-    {"night", night_vision_action},
     {"setBackgroundColor", error_action},
     {"setCrossHairColor", error_action},
     {"setGridColor", error_action},
@@ -171,22 +179,19 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"selectAll", error_action},
     {"addToSelection", error_action},
     {"clearSelection", error_action},
-    {"deleteSelected", error_action},
-    {"cutSelected", error_action},
-    {"copySelected", error_action},
-    {"pasteSelected", error_action},
-    {"moveSelected", error_action},
-    {"scaleSelected", error_action},
-    {"rotateSelected", error_action},
-    {"mirrorSelected", error_action},
+    {"delete", error_action},
+    {"cut", error_action},
+    {"copy", error_action},
+    {"paste", error_action},
+    {"move", error_action},
+    {"scale", error_action},
+    {"rotate", error_action},
+    {"mirror", error_action},
     {"qsnapX", error_action},
     {"qsnapY", error_action},
     {"mouseX", error_action},
     {"mouseY", error_action},
     {"include", error_action},
-    {"open", open_file_action},
-    {"undo", undo_action},
-    {"redo", redo_action},
     {"donothing", do_nothing_action},
     {"simulate", simulate_action}
 };
@@ -290,6 +295,32 @@ void arc_action(std::vector<std::string> args)
     arc.color.r = 0;
     arc.color.g = 0;
     arc.color.b = 0;
+    /*
+    if (args.size() < 6) {
+        debug_message("addArc() requires six arguments");
+        return;
+    }
+
+    EmbArc arc;
+    arc.start.x = stod(args[0]);
+    arc.start.y = -stod(args[1]);
+    arc.mid.x = stod(args[2]);
+    arc.mid.y = -stod(args[3]);
+    arc.end.x = stod(args[4]);
+    arc.end.y = -stod(args[5]);
+    arc.color = getCurrentColor();
+
+    if (active_view && active_scene) {
+        embPattern_addArc(patterns[settings.pattern_index], arc);
+        std::string name;
+        name  = "pattern" + stoi(pattern_index);
+        name += ".arc" + stoi(patterns[settings.pattern_index]->arcs->count);
+        rubber_points_mode[name] = OBJ_RUBBER_OFF;
+        if (OBJ_RUBBER_OFF) {
+            active_view->addToRubberRoom(arcObj);
+        }
+    }
+    */
     // embPattern_addArcAbs(views[settings.pattern_index].pattern, arc);
 }
 
@@ -313,6 +344,33 @@ void circle_action(std::vector<std::string> args)
     circle.color.r = 0;
     circle.color.g = 0;
     circle.color.b = 0;
+    /*
+    if (args.size() < 4) {
+        debug_message("addCircle() requires four arguments");
+        return;
+    }
+
+    double centerX = args[0];
+    double centerY = args[1];
+    double radius  = args[2];
+    bool fill = args[3];
+    
+    View view = views[settings.pattern_index];
+    if (active_view && active_scene && stack) {
+        CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: circle fill
+        if (rubber_mode) {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
+        }
+    }
+    */
     embPattern_addCircleAbs(views[settings.pattern_index].pattern, circle);
 }
 
@@ -363,6 +421,31 @@ void editor_action(std::vector<std::string> args)
     settings.show_editor = true;
 }
 
+void ellipse_action(std::vector<std::string> args)
+{
+    EmbEllipse ellipse;
+    /*
+    if (args.size() < 6)    debug_message("addEllipse() requires six arguments");
+
+    double centerX = stod(args[0]);
+    double centerY = stod(args[1]);
+    double radX = stod(args[2]);
+    double radY = stod(args[3]);
+    double rot = stod(args[4]);
+    bool fill = args[5];
+
+    addEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
+    */
+    ellipse.center.x = 0.0;
+    ellipse.center.y = 0.0;
+    ellipse.radius.x = 10.0;
+    ellipse.radius.y = 20.0;
+    ellipse.color.r = 0;
+    ellipse.color.g = 0;
+    ellipse.color.b = 0;
+    embPattern_addEllipseAbs(views[settings.pattern_index].pattern, ellipse);
+}
+
 void error_action(std::vector<std::string> args)
 {
 
@@ -408,6 +491,22 @@ void new_file_action(std::vector<std::string> args)
     view.pattern = embPattern_create();
     views.push_back(view);
     settings.pattern_index = views.size() - 1;
+    /*
+    debug_message("newFile()");
+    pattern_index++;
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
+    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+
+    updateMenuToolbarStatusbar();
+    windowMenuAboutToShow();
+
+    View* v = mdiWin->gview;
+    if (v) {
+        v->recalculateLimits();
+        v->zoomExtents();
+    }
+    */
 }
 
 void night_vision_action(std::vector<std::string> args)
@@ -435,6 +534,155 @@ void open_file_action(std::vector<std::string> args)
             views.push_back(view);
         }
     }
+    /*
+    debug_message("openFile()");
+
+    std::stringList files;
+    bool preview = settings_opensave_open_thumbnail;
+    openFilesPath = settings_opensave_recent_directory;
+
+    // Check to see if this from the recent files list
+    if (recent) {
+        files.append(recentFile);
+        openFilesSelected(files);
+    }
+    else {
+        if (!preview) {
+            // TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
+            files = QFileDialog::getOpenFileNames(this, translate("Open"), openFilesPath, formatFilterOpen);
+            openFilesSelected(files);
+        }
+        else {
+            PreviewDialog* openDialog = new PreviewDialog(this, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
+            //TODO: set openDialog->selectNameFilter(const std::string& filter) from settings_opensave_open_format
+            connect(openDialog, SIGNAL(filesSelected(const std::stringList&)), this, SLOT(openFilesSelected(const std::stringList&)));
+            openDialog->exec();
+        }
+    }
+
+    openFileSelected
+
+    bool doOnce = true;
+
+    if (filesToOpen.count()) {
+        for (int i = 0; i < filesToOpen.count(); i++) {
+            if (!validFileFormat(filesToOpen[i])) {
+                continue;
+            }
+
+            QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
+            if (existing) {
+                mdiArea->setActiveSubWindow(existing);
+                continue;
+            }
+
+            //The docIndex doesn't need increased as it is only used for unnamed files
+            numOfDocs++;
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
+            connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
+
+            //Make sure the toolbars/etc... are shown before doing their zoomExtents
+            if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+
+            if (mdiWin->loadFile(filesToOpen.at(i))) {
+                statusbar->showMessage(tr("File(s) loaded"), 2000);
+                mdiWin->show();
+                mdiWin->showMaximized();
+                //Prevent duplicate entries in the recent files list
+                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
+                {
+                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                }
+                //Move the recent file to the top of the list
+                else
+                {
+                    settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
+                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
+                }
+                settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
+
+                View* v = mdiWin->gview;
+                if (v) {
+                    v->recalculateLimits();
+                    v->zoomExtents();
+                }
+            }
+            else {
+                mdiWin->close();
+            }
+        }
+    }
+
+    windowMenuAboutToShow();
+
+   debug_message("MdiWindow loadFile()");
+
+    unsigned int tmpColor = getCurrentColor();
+
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        warning_messagebox(translate("Error reading file"),
+                             translate("Cannot read file %1:\n%2.")
+                             .arg(fileName)
+                             .arg(file.errorString()));
+        return false;
+    }
+
+    std::string ext = fileExtension(fileName);
+    debug_message("ext: %s", qPrintable(ext));
+
+    //Read
+    EmbPattern* p = embPattern_create();
+    if (!p) {
+        printf("Could not allocate memory for embroidery pattern\n");
+        exit(1);
+    }
+    int readSuccessful = 0;
+    std::string readError;
+    int reader = emb_identify_format(qPrintable(fileName));
+    if (reader < 0) {
+        readSuccessful = 0;
+        readError = "Unsupported read file type: " + fileName;
+        debug_message("Unsupported read file type: " + fileName.toStdString());
+    }
+    else {
+        readSuccessful = embPattern_read(p, qPrintable(fileName), reader);
+        if (!readSuccessful) {
+            readError = "Reading file was unsuccessful: " + fileName;
+            debug_message("Reading file was unsuccessful: " + fileName.toStdString());
+        }
+    }
+    if (!readSuccessful) {
+        warning_messagebox(translate("Error reading pattern"), translate(qPrintable(readError)));
+        warning_messagebox(translate("Error reading pattern"), translate("Cannot read pattern"));
+    }
+    else {
+        embPattern_moveStitchListToPolylines(p); //TODO: Test more
+        int stitchCount = p->stitchList->count;
+        QPainterPath path;
+
+
+        setCurrentFile(fileName);
+        mainWin->statusbar->showMessage("File loaded.");
+        std::string stitches;
+        stitches.setNum(stitchCount);
+
+        if (settings_grid_load_from_file) {
+            //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
+        }
+    }
+    embPattern_free(p);
+
+    //Clear the undo stack so it is not possible to undo past this point.
+    gview->undoStack->clear();
+
+    setCurrentColor(tmpColor);
+
+    fileWasLoaded = true;
+    mainWin->setUndoCleanIcon(fileWasLoaded);
+    return fileWasLoaded;
+    */
 }
 
 void redo_action(std::vector<std::string> args)
@@ -503,6 +751,36 @@ void paste_action(std::vector<std::string> args)
 void platform_action(std::vector<std::string> args)
 {
     std::cout << platform_string() << std::endl;
+}
+
+void print_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("print()");
+    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
+    if (active_sub_window) {
+        active_sub_window->print();
+    }
+
+    QPrintDialog dialog(&printer, this);
+    if (dialog.exec() == QDialog::Accepted) {
+        QPainter painter(&printer);
+        if (settings_printing_disable_bg) {
+            //Save current bg
+            QBrush brush = gview->backgroundBrush();
+            //Save ink by not printing the bg at all
+            gview->setBackgroundBrush(Qt::NoBrush);
+            //Print, fitting the viewport contents into a full page
+            gview->render(&painter);
+            //Restore the bg
+            gview->setBackgroundBrush(brush);
+        }
+        else {
+            //Print, fitting the viewport contents into a full page
+            gview->render(&painter);
+        }
+    }
+    */
 }
 
 void save_file_action(std::vector<std::string> args)
@@ -618,8 +896,6 @@ void zoom_action(std::vector<std::string> args)
     {"details", details_action},
     {"paste", paste_action},
     {"night", night_vision_action},
-    {"open", open_file_action},
-    {"ellipse", ellipse_action},
     {"polygon", polygon_action},
     {"polyline", polyline_action},
     {"rectangle", rectangle_action},
@@ -633,9 +909,6 @@ void zoom_action(std::vector<std::string> args)
     {"platform", platform_action},
     {"save", save_file_action},
     {"saveas", save_file_as_action},
-    {"print", print_action},
-    {"copy", copy_action},
-    {"paste", paste_action},
     {"changelog", changelog_action},
     {"whatsthis", whatsThisContextHelp_action},
     {"makelayercurrent", makeLayerActive_action},
@@ -661,8 +934,6 @@ void zoom_action(std::vector<std::string> args)
         return 0;
     }
 
-    {"circle", circle_action},
-    {"ellipse", ellipse_action},
     {"path", path_action},
     {"heart", heart_action},
     {"treble clef", treble_clef_action},
@@ -754,7 +1025,6 @@ void todo_action(std::vector<std::string> args)
     std::string strTodo = args[1).toString();
 
     alert("TODO: (" + strCmd + ") " + strTodo);
-    nativeEndCommand();
 }
 
 void alert_action(std::vector<std::string> args)
@@ -1228,11 +1498,11 @@ void add_text_multi_action(std::vector<std::string> args)
         return;
     }
 
-    std::string str   = args[0).toString();
+    std::string str   = args[0].toString();
     double   x     = args[1];
     double   y     = args[2];
     double   rot   = args[3];
-    bool   fill  = args[4).toBool();
+    bool   fill  = args[4].toBool();
 
     addTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
@@ -1289,7 +1559,7 @@ void add_triangle_action(std::vector<std::string> args)
     double x3 = args[4];
     double y3 = args[5];
     double rot = args[6];
-    bool fill = args[7).toBool();
+    bool fill = args[7].toBool();
 
     addTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
 }
@@ -1306,7 +1576,7 @@ void add_rectangle_action(std::vector<std::string> args)
     double w = args[2];
     double h = args[3];
     double rot = args[4];
-    bool fill = args[5).toBool();
+    bool fill = args[5].toBool();
 
     addRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
 }
@@ -1327,63 +1597,6 @@ void add_rounded_rectangle_action(std::vector<std::string> args)
     bool fill = args[6].toBool();
 
     addRoundedRectangle(x, y, w, h, rad, rot, fill);
-}
-
-void add_arc_action(std::vector<std::string> args)
-{
-    if (args.size() < 6) {
-        debug_message("addArc() requires six arguments");
-        return;
-    }
-
-    EmbArc arc;
-    arc.start.x = stod(args[0]);
-    arc.start.y = -stod(args[1]);
-    arc.mid.x = stod(args[2]);
-    arc.mid.y = -stod(args[3]);
-    arc.end.x = stod(args[4]);
-    arc.end.y = -stod(args[5]);
-    arc.color = getCurrentColor();
-
-    if (active_view && active_scene) {
-        embPattern_addArc(patterns[settings.pattern_index], arc);
-        std::string name;
-        name  = "pattern" + stoi(pattern_index);
-        name += ".arc" + stoi(patterns[settings.pattern_index]->arcs->count);
-        rubber_points_mode[name] = OBJ_RUBBER_OFF;
-        if (OBJ_RUBBER_OFF) {
-            active_view->addToRubberRoom(arcObj);
-        }
-    }
-}
-
-void add_circle_action(std::vector<std::string> args)
-{
-    if (args.size() < 4) {
-        debug_message("addCircle() requires four arguments");
-        return;
-    }
-
-    double centerX = args[0];
-    double centerY = args[1];
-    double radius  = args[2];
-    bool fill = args[3];
-    
-    View view = views[settings.pattern_index];
-    if (active_view && active_scene && stack) {
-        CircleObject* obj = new CircleObject(centerX, -centerY, radius, getCurrentColor());
-        obj->setObjectRubberMode(rubberMode);
-        //TODO: circle fill
-        if (rubber_mode) {
-            active_view->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
-            stack->push(cmd);
-        }
-    }
 }
 
 void add_slot_action(std::vector<std::string> args)
@@ -1409,20 +1622,6 @@ void add_slot_action(std::vector<std::string> args)
     scene->addItem(slotObj);
     //TODO: slot fill
     scene->update();
-}
-
-void add_ellipse_action()
-{
-    if (args.size() < 6)    debug_message("addEllipse() requires six arguments");
-
-    double centerX = stod(args[0]);
-    double centerY = stod(args[1]);
-    double radX = stod(args[2]);
-    double radY = stod(args[3]);
-    double rot = stod(args[4]);
-    bool fill = args[5];
-
-    addEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
 }
 
 void add_point_action(std::vector<std::string> args)
@@ -1455,17 +1654,13 @@ void add_polygon_action(std::vector<std::string> args)
     double startX = 0;
     double startY = 0;
     QPainterPath path;
-    foreach(QVariant var, varList)
-    {
-        if (var.canConvert(QVariant::Double))
-        {
-            if (xCoord)
-            {
+    for (QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
                 xCoord = false;
                 x = var.toReal();
             }
-            else
-            {
+            else {
                 xCoord = true;
                 y = -var.toReal();
 
@@ -1487,8 +1682,10 @@ void add_polygon_action(std::vector<std::string> args)
 
 void add_polyline_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)   debug_message("addPolyline() requires one argument");
-    if (!args[0).isArray()) return debug_message("addPolyline(): first argument is not an array");
+    if (args.size() < 1)
+        debug_message("addPolyline() requires one argument");
+    if (!args[0).isArray())
+        return debug_message("addPolyline(): first argument is not an array");
 
     QVariantList varList = args[0).toVariant().toList();
     int varSize = varList.size();
@@ -1502,17 +1699,13 @@ void add_polyline_action(std::vector<std::string> args)
     double startX = 0;
     double startY = 0;
     QPainterPath path;
-    foreach(QVariant var, varList)
-    {
-        if (var.canConvert(QVariant::Double))
-        {
-            if (xCoord)
-            {
+    for (QVariant var, varList) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
                 xCoord = false;
                 x = var.toReal();
             }
-            else
-            {
+            else {
                 xCoord = true;
                 y = -var.toReal();
 
@@ -1761,9 +1954,9 @@ void stub_implement_action(std::string txt)
     debug_message("TODO: %s", qPrintable(txt));
 }
 
-void stub_testing_action()
+void stub_testing_action(std::vector<std::string> args)
 {
-    QMessageBox::warning(this, translate("Testing Feature"), translate("<b>This feature is in testing.</b>"));
+    warning_messagebox(translate("Testing Feature"), translate("<b>This feature is in testing.</b>"));
 }
 
 void checkForUpdates()
@@ -1772,31 +1965,7 @@ void checkForUpdates()
     //TODO: Check website for new versions, commands, etc...
 }
 
-void cut()
-{
-    debug_message("cut()");
-    if (active_view) {
-        active_view->cut();
-    }
-}
-
-void copy()
-{
-    debug_message("copy()");
-    if (active_view) {
-        active_view->copy();
-    }
-}
-
-void paste()
-{
-    debug_message("paste()");
-    if (active_view) {
-        active_view->paste();
-    }
-}
-
-void select_all_action()
+void select_all_action(std::vector<std::string> args)
 {
     debug_message("selectAll()");
     if (active_view) {
@@ -1804,19 +1973,10 @@ void select_all_action()
     }
 }
 
-void whats_this_context_help_action()
+void whats_this_context_help_action(std::vector<std::string> args)
 {
     debug_message("whatsThisContextHelp()");
     whats_this_active = true;
-}
-
-void print_action()
-{
-    debug_message("print()");
-    MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if (active_sub_window) {
-        active_sub_window->print();
-    }
 }
 
 void tipOfTheDay()
@@ -3555,109 +3715,6 @@ void windowMenuActivated(bool checked)
     QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
     if (w && checked)
         w->setFocus();
-}
-
-void newFile()
-{
-    debug_message("newFile()");
-    pattern_index++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
-    connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
-
-    updateMenuToolbarStatusbar();
-    windowMenuAboutToShow();
-
-    View* v = mdiWin->gview;
-    if (v) {
-        v->recalculateLimits();
-        v->zoomExtents();
-    }
-}
-
-void openFile(bool recent, const std::string& recentFile)
-{
-    debug_message("openFile()");
-
-    std::stringList files;
-    bool preview = settings_opensave_open_thumbnail;
-    openFilesPath = settings_opensave_recent_directory;
-
-    // Check to see if this from the recent files list
-    if (recent) {
-        files.append(recentFile);
-        openFilesSelected(files);
-    }
-    else {
-        if (!preview) {
-            // TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
-            files = QFileDialog::getOpenFileNames(this, translate("Open"), openFilesPath, formatFilterOpen);
-            openFilesSelected(files);
-        }
-        else {
-            PreviewDialog* openDialog = new PreviewDialog(this, translate("Open w/Preview"), openFilesPath, formatFilterOpen);
-            //TODO: set openDialog->selectNameFilter(const std::string& filter) from settings_opensave_open_format
-            connect(openDialog, SIGNAL(filesSelected(const std::stringList&)), this, SLOT(openFilesSelected(const std::stringList&)));
-            openDialog->exec();
-        }
-    }
-}
-
-void openFilesSelected(const std::stringList& filesToOpen)
-{
-    bool doOnce = true;
-
-    if (filesToOpen.count()) {
-        for (int i = 0; i < filesToOpen.count(); i++) {
-            if (!validFileFormat(filesToOpen[i])) {
-                continue;
-            }
-
-            QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if (existing) {
-                mdiArea->setActiveSubWindow(existing);
-                continue;
-            }
-
-            //The docIndex doesn't need increased as it is only used for unnamed files
-            numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
-            connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
-            connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
-
-            //Make sure the toolbars/etc... are shown before doing their zoomExtents
-            if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
-
-            if (mdiWin->loadFile(filesToOpen.at(i))) {
-                statusbar->showMessage(tr("File(s) loaded"), 2000);
-                mdiWin->show();
-                mdiWin->showMaximized();
-                //Prevent duplicate entries in the recent files list
-                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
-                {
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
-                }
-                //Move the recent file to the top of the list
-                else
-                {
-                    settings_opensave_recent_list_of_files.removeAll(filesToOpen.at(i));
-                    settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
-                }
-                settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
-
-                View* v = mdiWin->gview;
-                if (v) {
-                    v->recalculateLimits();
-                    v->zoomExtents();
-                }
-            }
-            else {
-                mdiWin->close();
-            }
-        }
-    }
-
-    windowMenuAboutToShow();
 }
 
 void openrecentfile()
