@@ -82,8 +82,8 @@ set(EXEC_DIR "C:/Program Files/embroidermodder")
 set(ASSETS_DIR "C:/ProgramData/embroidermodder")
 
 elseif(APPLE)
-target_link_options(embroidermodder
-	-framework OpenGL
+target_link_libraries(embroidermodder
+	"-framework OpenGL"
 )
 target_link_libraries(embroidermodder PRIVATE
 	glfw
