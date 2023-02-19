@@ -138,7 +138,7 @@ void help_dialog(void)
         s += line + "\n";
     }
 
-    ImGui::TextWrapped(s.c_str());
+    ImGui::TextWrapped("%s", s.c_str());
 
     /* Center button */
     if (ImGui::Button(translate("Close").c_str())) {

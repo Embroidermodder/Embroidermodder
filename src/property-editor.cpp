@@ -1051,11 +1051,11 @@ void create_group_box_image(int id, EmbImage *image)
 
         ImGui::TranslatedText("Misc");
 
-        ImGui::Text(translate("Name").c_str());
+        ImGui::TranslatedText("Name");
         ImGui::SameLine();
         ImGui::Text(image->name);
 
-        ImGui::Text(translate("Path").c_str());
+        ImGui::TranslatedText("Path");
         ImGui::SameLine();
         ImGui::Text(image->path);
     }
@@ -1263,7 +1263,7 @@ void create_group_box_text_multi(int id, EmbTextMulti *text_multi)
 
 void create_group_box_text_single(int id, EmbTextSingle *text_single)
 {
-    ImGui::Text(translate("Text").c_str());
+    ImGui::TranslatedText("Text");
 
 /*
     toolButtonTextSingleContents = createToolButton("blank", translate("Contents")); 

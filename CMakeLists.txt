@@ -17,6 +17,11 @@ add_compile_options(
 	-O2
 	-Wall
 )
+if(APPLE)
+target_link_options(embroidermodder
+	-framework OpenGL
+)
+endif(APPLE)
 
 set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
@@ -81,7 +86,16 @@ set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
 set(EXEC_DIR "C:/Program Files/embroidermodder")
 set(ASSETS_DIR "C:/ProgramData/embroidermodder")
 
-else (WIN32)
+elseif(APPLE)
+target_link_libraries(embroidermodder PRIVATE
+	glfw
+	embroidery_static
+	m)
+set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
+set(EXEC_DIR "/usr/bin")
+set(ASSETS_DIR "/usr/share/embroidermodder")
+
+elseif(UNIX)
 target_link_libraries(embroidermodder PRIVATE
 	glfw
 	embroidery_static
@@ -90,7 +104,7 @@ target_link_libraries(embroidermodder PRIVATE
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 set(EXEC_DIR "/usr/bin")
 set(ASSETS_DIR "/usr/share/embroidermodder")
-endif (WIN32)
+endif()
 
 install(
 	FILES ${EXEC}

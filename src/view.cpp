@@ -313,11 +313,11 @@ simulate_pattern(EmbPattern *p)
 
     ImGui::Begin("Controls");
     ImGui::SetWindowFontScale(1.5);
-    ImGui::Text(("Stitch: " + std::to_string(stitches) + "/"
-        + std::to_string(p->stitchList->count)).c_str());
-    ImGui::Text(("Needle Speed: " + std::to_string(needle_speed)).c_str());
-    ImGui::Text(("Stitch Time: " + std::to_string(stitch_time)).c_str());
-    ImGui::Text(("Time Passed: " + std::to_string(time_passed)).c_str());
+    ImGui::Text("Stitch: " + std::to_string(stitches) + "/"
+        + std::to_string(p->stitchList->count));
+    ImGui::Text("Needle Speed: " + std::to_string(needle_speed));
+    ImGui::Text("Stitch Time: " + std::to_string(stitch_time));
+    ImGui::Text("Time Passed: " + std::to_string(time_passed));
 
     if (ImGui::Button("Slower")) {
         
