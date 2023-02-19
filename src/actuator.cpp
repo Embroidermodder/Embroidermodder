@@ -53,11 +53,18 @@ void rectangle_action(std::vector<std::string> args);
 void redo_action(std::vector<std::string> args);
 void settings_editor_action(std::vector<std::string> args);
 void simulate_action(std::vector<std::string> args);
+void text_angle_action(std::vector<std::string> args);
+void text_bold_action(std::vector<std::string> args);
+void text_italic_action(std::vector<std::string> args);
+void text_font_action(std::vector<std::string> args);
+void text_overline_action(std::vector<std::string> args);
+void text_size_action(std::vector<std::string> args);
+void text_strikeout_action(std::vector<std::string> args);
+void text_underline_action(std::vector<std::string> args);
 void todo_action(std::vector<std::string> args);
 void undo_action(std::vector<std::string> args);
 void window_cascade_action(std::vector<std::string> args);
 void window_tile_action(std::vector<std::string> args);
-void zoom_action(std::vector<std::string> args);
 void zoom_in_action(std::vector<std::string> args);
 void zoom_out_action(std::vector<std::string> args);
 
@@ -162,7 +169,6 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"undo", undo_action},
     {"windowcascade", window_cascade_action},
     {"windowtile", window_tile_action},
-    {"zoom", zoom_action},
     {"zoomin", zoom_in_action},
     {"zoomout", zoom_out_action},
 
@@ -463,6 +469,10 @@ void day_vision_action(std::vector<std::string> args)
 
 void debug_action(std::vector<std::string> args)
 {
+    if (args.size() < 1) {
+        debug_message("debug() requires one argument");
+    }
+
     debug_message(args[0]);
 }
 
@@ -508,7 +518,16 @@ void ellipse_action(std::vector<std::string> args)
 
 void error_action(std::vector<std::string> args)
 {
+    Arguments results[3];
+    if (!parse_args("error_action", results, args, "ss")) {
+        return;
+    }
 
+    /*
+    nativeSetPromptPrefix("ERROR: (" + results[0].str_data + ") " + results[1].str_data);
+    appendPromptHistory(std::string());
+    nativeEndCommand();
+    */
 }
 
 void exit_action(std::vector<std::string> args)
@@ -917,9 +936,94 @@ void simulate_action(std::vector<std::string> args)
     views[settings.pattern_index].simulation_start = std::chrono::system_clock::now();
 }
 
+void text_font_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_font", results, args, "s")) {
+        return;
+    }
+
+    settings.text_font = results[0].str_data;
+}
+
+void text_size_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_size", results, args, "d")) {
+        return;
+    }
+
+    settings.text_size = results[0].double_data;
+}
+
+void text_angle_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_angle", results, args, "d")) {
+        return;
+    }
+
+    settings.text_angle = results[0].double_data;
+}
+
+void text_bold_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_bold", results, args, "i")) {
+        return;
+    }
+
+    settings.text_style_bold = results[0].int_data;
+}
+
+void text_italic_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_italic", results, args, "i")) {
+        return;
+    }
+
+    settings.text_style_italic = results[0].int_data;
+}
+
+void text_underline_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_underline", results, args, "i")) {
+        return;
+    }
+
+    settings.text_style_underline = results[0].int_data;
+}
+
+void text_strikeout_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_strikeout", results, args, "i")) {
+        return;
+    }
+
+    settings.text_style_strikeout = results[0].int_data;
+}
+
+void text_overline_action(std::vector<std::string> args)
+{
+    Arguments results[3];
+    if (!parse_args("text_overline", results, args, "i")) {
+        return;
+    }
+
+    settings.text_style_overline = results[0].int_data;
+}
+
 void todo_action(std::vector<std::string> args)
 {
+    Arguments results[3];
+    if (!parse_args("todo_action", results, args, "ss")) {
+        return;
+    }
 
+    /* alert("TODO: (" + results[0].str_data + ") " + results[1].str_data); */
 }
 
 void triangle_action(std::vector<std::string> args)
@@ -968,12 +1072,93 @@ void window_tile_action(std::vector<std::string> args)
 
 }
 
+void zoom_all_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("zoomAll()");
+    stub_implement("Implement zoomAll.");
+    */
+}
+
+void zoom_center_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("zoomCenter()");
+    stub_implement("Implement zoomCenter.");
+    */
+}
+
+void zoom_dynamic_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("zoomDynamic()");
+    stub_implement("Implement zoomDynamic.");
+    */
+}
+
+void zoom_extents_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("zoomExtents()");
+    View* active_view = activeView();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack) {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", active_view, 0);
+        stack->push(cmd);
+    }
+    */
+}
+
 void zoom_in_action(std::vector<std::string> args)
 {
     if (views.size() == 0) {
         return;
     }
     views[settings.pattern_index].scale *= 2.0;
+    
+    /*
+    debug_message("zoomIn()");
+    View* active_view = activeView();
+    if (active_view) { active_view->zoomIn(); }
+    */
+}
+
+void zoom_previous_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("zoomPrevious()");
+    stub_implement("Implement zoomPrevious.");
+    */
+}
+
+void zoom_realtime_action()
+{
+    /*
+    debug_message("zoomRealtime()");
+    stub_implement("Implement zoomRealtime.");
+    */
+}
+
+void zoom_scale_action()
+{
+    /*
+    debug_message("zoomScale()");
+    stub_implement("Implement zoomScale.");
+    */
+}
+
+void zoom_selected_action(std::vector<std::string> args)
+{
+    /*
+    debug_message("zoomSelected()");
+    View* active_view = activeView();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && stack)
+    {
+        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", active_view, 0);
+        stack->push(cmd);
+    }
+    */
 }
 
 void zoom_out_action(std::vector<std::string> args)
@@ -982,60 +1167,23 @@ void zoom_out_action(std::vector<std::string> args)
         return;
     }
     views[settings.pattern_index].scale *= 0.5;
+
+    /*
+    debug_message("zoomOut()");
+    View* active_view = activeView();
+    if (active_view) { active_view->zoomOut(); }
+    */
 }
 
-void zoom_action(std::vector<std::string> args)
+void zoom_window_action(std::vector<std::string> args)
 {
-    if (args.size() < 1) {
-        debug_message("ERROR: zoom action requires 1 argument.");
-        return;
-    }
-
-    if (args[0] == "previous") {
-        /* zoomPrevious(); */
-        return;
-    }
-    if (args[0] == "window") {
-        /* zoomWindow(); */
-        return;
-    }
-    if (args[0] == "dynamic") {
-        /* zoomDynamic(); */
-        return;
-    }
-    if (args[0] == "scale") {
-        /* zoomScale(); */
-        return;
-    }
-    if (args[0] == "realtime") {
-        /* zoomRealtime(); */
-        return;
-    }
-    if (args[0] == "center") {
-        /* zoomCenter(); */
-        return;
-    }
-    if (args[0] == "in") {
-        views[settings.pattern_index].scale *= 2.0;
-        return;
-    }
-    if (args[0] == "out") {
-        views[settings.pattern_index].scale *= 0.5;
-        return;
-    }
-    if (args[0] == "selected") {
-        /* zoomSelected(); */
-        return;
-    }
-    if (args[0] == "all") {
-        /* zoomAll(); */
-        return;
-    }
-    if (args[0] == "extents") {
-        /* zoomExtents(); */
-        return;
-    }
+    /*
+    debug_message("zoomWindow()");
+    View* active_view = activeView();
+    if (active_view) { active_view->zoomWindow(); }
+    */
 }
+
 
 #if 0
     {"details", details_action},
@@ -1057,11 +1205,11 @@ void zoom_action(std::vector<std::string> args)
     {"layerprevious", layerPrevious_action},
     {"textbold", setTextBold_action},
     {"textitalic", setTextItalic_action},
-    {"textunderline", setTextUnderline_action},
-    {"textstrikeout", setTextStrikeOut_action},
-    {"textoverline", setTextOverline_action},
-    {"numSelected", nativeNumSelected_action},
-    {"selectAll", nativeSelectAll_action},
+    {"textunderline", text_underline_action},
+    {"textstrikeout", text_strikeOut_action},
+    {"textoverline", text_overline_action},
+    {"numSelected", num_selected_action},
+    {"selectAll", select_all_action},
     {"addToSelection", add_to_selection_action},
     {"clearSelection", nativeClearSelection_action},
     {"deleteSelected", nativeDeleteSelected_action},
@@ -1126,50 +1274,18 @@ void run_action(std::vector<std::string> args)
     if (args.size < 1) {
         return 0;
     }
+
     run_script(args[0]);
-}
-
-void debug_action(std::vector<std::string> args)
-{
-    if (args.size() < 1) {
-        debug_message("debug() requires one argument");
-    }
-
-    debug_message("%s", qPrintable(args[0).toString();
-}
-
-void error_action(std::vector<std::string> args)
-{
-    if (args.size() < 2)    debug_message("error() requires two arguments");
-    if (!args[0).isString()) return debug_message("error(): first argument is not a string");
-    if (!args[1).isString()) return debug_message("error(): second argument is not a string");
-
-    std::string strCmd = args[0).toString();
-    std::string strErr = args[1).toString();
-
-    nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
-    appendPromptHistory(std::string());
-    nativeEndCommand();
-}
-
-void todo_action(std::vector<std::string> args)
-{
-    if (args.size() < 2)    debug_message("todo() requires two arguments");
-    if (!args[0).isString()) return debug_message("todo(): first argument is not a string");
-    if (!args[1).isString()) return debug_message("todo(): second argument is not a string");
-
-    std::string strCmd  = args[0).toString();
-    std::string strTodo = args[1).toString();
-
-    alert("TODO: (" + strCmd + ") " + strTodo);
 }
 
 void alert_action(std::vector<std::string> args)
 {
-    if (args.size() < 1)    debug_message("alert() requires one argument");
-    if (!args[0).isString()) return debug_message("alert(): first argument is not a string");
+    Arguments results[3];
+    if (!parse_args("alert_action", results, args, "s")) {
+        return;
+    }
 
-    alert(args[0).toString());
+    alert(results[0].str_data);
 }
 
     nativeBlinkPrompt();
@@ -1226,7 +1342,7 @@ void messagebox_action(std::vector<std::string> args)
 void print_area_action(std::vector<std::string> args)
 {
     Arguments results[4];
-    if (!parse_args(results, args, "iiii")) {
+    if (!parse_args("print_area", results, args, "iiii")) {
         return;
     }
 
@@ -1238,7 +1354,7 @@ void print_area_action(std::vector<std::string> args)
     nativePrintArea(x, y, w, h);
 }
 
-void SetBackgroundColor_action(std::vector<std::string> args)
+void background_color_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "iii")) {
@@ -1265,7 +1381,7 @@ void SetBackgroundColor_action(std::vector<std::string> args)
     nativeSetBackgroundColor(r, g, b);
 }
 
-void SetCrossHairColor_action(std::vector<std::string> args)
+void crosshair_color_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "iii")) {
@@ -1277,14 +1393,22 @@ void SetCrossHairColor_action(std::vector<std::string> args)
     int b = results[2].int_data;
 
     if (r < 0 || r > 255) {
-        debug_message("setCrossHairColor(): r value must be in range 0-255"); }
-    if (g < 0 || g > 255) { debug_message("setCrossHairColor(): g value must be in range 0-255"); }
-    if (b < 0 || b > 255) { debug_message("setCrossHairColor(): b value must be in range 0-255"); }
+        debug_message("setCrossHairColor(): r value must be in range 0-255");
+        return;
+    }
+    if (g < 0 || g > 255) {
+        debug_message("setCrossHairColor(): g value must be in range 0-255");
+        return;
+    }
+    if (b < 0 || b > 255) {
+        debug_message("setCrossHairColor(): b value must be in range 0-255");
+        return;
+    }
 
     nativeSetCrossHairColor(r, g, b);
 }
 
-void set_grid_color_action(std::vector<std::string> args)
+void grid_color_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "iii")) {
@@ -1309,86 +1433,6 @@ void set_grid_color_action(std::vector<std::string> args)
     }
 
     nativeSetGridColor(r, g, b);
-}
-
-void SetTextFont_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "s")) {
-        return;
-    }
-
-    settings_text_font = results[0].string_value;
-}
-
-void text_size_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "d")) {
-        return;
-    }
-
-    settings_text_size = results[0].double_data;
-}
-
-void text_angle_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "d")) {
-        return;
-    }
-
-    settings_text_angle = results[0].double_data;
-}
-
-void text_bold_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "i")) {
-        return;
-    }
-
-    settings_text_bold = results[0].int_data;
-}
-
-void text_italic_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "i")) {
-        return;
-    }
-
-    settings_text_italic = results[0].int_data;
-}
-
-void SetTextUnderline_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "i")) {
-        return;
-    }
-
-    settings_text_underline = results[0].int_data;
-}
-
-void text_strikeout_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "i")) {
-        return;
-    }
-
-    settings_text_strikeout = results[0].int_data;
-}
-
-void text_overline_action(std::vector<std::string> args)
-{
-    Arguments results[3];
-    if (!parse_args(results, args, "i")) {
-        return;
-    }
-
-    settings_text_overline = results[0].int_data;
 }
 
 void PreviewOn_action(std::vector<std::string> args)
@@ -1499,7 +1543,7 @@ void set_rubber_mode_action(std::vector<std::string> args)
     }
 }
 
-void set_rubber_point_action(std::vector<std::string> args)
+void rubber_point_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "sdd")) {
@@ -1513,7 +1557,7 @@ void set_rubber_point_action(std::vector<std::string> args)
     nativeSetRubberPoint(key, x, y);
 }
 
-void set_rubber_text_action(std::vector<std::string> args)
+void rubber_text_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "ss")) {
@@ -1968,34 +2012,34 @@ void cut_selected(std::vector<std::string> args)
         return;
     }
 
-    double x = stod("cutSelected()", args, 0);
-    double y = stod("cutSelected()", args, 1);
+    double x = results[0].double_data;
+    double y = results[1].double_data;
 
     nativeCutSelected(x, y);
 }
 
-void CopySelected(std::vector<std::string> args)
+void copy_selected(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "dd")) {
         return;
     }
 
-    double x = stod("copySelected()", args, 0);
-    double y = stod("copySelected()", args, 1);
+    double x = results[0].double_data;
+    double y = results[1].double_data;
 
     nativeCopySelected(x, y);
 }
 
-void PasteSelected(std::vector<std::string> args)
+void paste_selected(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "dd")) {
         return;
     }
 
-    double x = results[0];
-    double y = results[1];
+    double x = results[0].double_data;
+    double y = results[1].double_data;
 
     nativePasteSelected(x, y);
 }
@@ -2005,8 +2049,8 @@ void move_selected_action(std::vector<std::string> args)
     if (args.size() < 2)
         debug_message("moveSelected() requires two arguments");
 
-    double dx = stod(args[0]);
-    double dy = stod(args[1]);
+    double dx = results[0].double_data;
+    double dy = results[1].double_data;
 
     nativeMoveSelected(dx, dy);
 }
@@ -2017,14 +2061,14 @@ void scale_selected_action(std::vector<std::string> args)
         debug_message("scaleSelected() requires three arguments");
     }
 
-    double x = stod(args[0]);
-    double y = stod(args[1]);
+    double x = results[0].double_data;
+    double y = results[1].double_data;
     double factor = stod(args[2]);
 
     if (factor <= 0.0) {
-        critical_messagebox(this, translate("ScaleFactor Error"),
-                                translate("Hi there. If you are not a developer, report this as a bug. "
-                                "If you are a developer, your code needs examined, and possibly your head too."));
+        critical_messagebox(translate("ScaleFactor Error"),
+                            translate("Hi there. If you are not a developer, report this as a bug. "
+                            "If you are a developer, your code needs examined, and possibly your head too."));
     }
 
     if (active_view) {
@@ -2039,8 +2083,8 @@ void rotate_selected_action(std::vector<std::string> args)
         return;
     }
 
-    double x = stod(args[0]);
-    double y = stod(args[1]);
+    double x = results[0].double_data;
+    double y = results[1].double_data;
     double rot = stod(args[2]);
 
     if (active_view) {
@@ -2054,10 +2098,10 @@ void mirror_selected_action(std::vector<std::string> args)
         debug_message("mirror_selected_action() requires 4 arguments");
     }
 
-    double x1 = stod(args[0]);
-    double y1 = stod(args[1]);
-    double x2 = stod(args[2]);
-    double y2 = stod(args[3]);
+    double x1 = results[0].double_data;
+    double y1 = results[1].double_data;
+    double x2 = results[2].double_data;
+    double y2 = results[3].double_data;
 
     if (active_view) {
         active_view->mirrorSelected(x1, -y1, x2, -y2);
@@ -2288,87 +2332,6 @@ void layerPrevious()
 {
     debug_message("layerPrevious()");
     stub_implement("Implement layerPrevious.");
-}
-
-// Zoom ToolBar
-void zoomRealtime()
-{
-    debug_message("zoomRealtime()");
-    stub_implement("Implement zoomRealtime.");
-}
-
-void zoomPrevious()
-{
-    debug_message("zoomPrevious()");
-    stub_implement("Implement zoomPrevious.");
-}
-
-void zoomWindow()
-{
-    debug_message("zoomWindow()");
-    View* active_view = activeView();
-    if (active_view) { active_view->zoomWindow(); }
-}
-
-void zoomDynamic()
-{
-    debug_message("zoomDynamic()");
-    stub_implement("Implement zoomDynamic.");
-}
-
-void zoomScale()
-{
-    debug_message("zoomScale()");
-    stub_implement("Implement zoomScale.");
-}
-
-void zoomCenter()
-{
-    debug_message("zoomCenter()");
-    stub_implement("Implement zoomCenter.");
-}
-
-void zoomIn()
-{
-    debug_message("zoomIn()");
-    View* active_view = activeView();
-    if (active_view) { active_view->zoomIn(); }
-}
-
-void zoomOut()
-{
-    debug_message("zoomOut()");
-    View* active_view = activeView();
-    if (active_view) { active_view->zoomOut(); }
-}
-
-void zoomSelected()
-{
-    debug_message("zoomSelected()");
-    View* active_view = activeView();
-    QUndoStack* stack = active_view->undoStack;
-    if (active_view && stack)
-    {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomSelected", active_view, 0);
-        stack->push(cmd);
-    }
-}
-
-void zoomAll()
-{
-    debug_message("zoomAll()");
-    stub_implement("Implement zoomAll.");
-}
-
-void zoomExtents()
-{
-    debug_message("zoomExtents()");
-    View* active_view = activeView();
-    QUndoStack* stack = active_view->undoStack;
-    if (active_view && stack) {
-        UndoableNavCommand* cmd = new UndoableNavCommand("ZoomExtents", active_view, 0);
-        stack->push(cmd);
-    }
 }
 
 void layerSelectorIndexChanged(int index)

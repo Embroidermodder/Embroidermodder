@@ -555,10 +555,10 @@ view_tab(int i)
         ImGui::SetColumnWidth(-1, 200);
         undo_history_viewer();
         ImGui::NextColumn();
-        ImGui::SetColumnWidth(-1, io.DisplaySize.x - 405);
+        ImGui::SetColumnWidth(-1, io.DisplaySize.x - 605);
         pattern_view();
         ImGui::NextColumn();
-        ImGui::SetColumnWidth(-1, 200);
+        ImGui::SetColumnWidth(-1, 400);
         property_editor();
         ImGui::Columns();
         ImGui::EndTabItem();

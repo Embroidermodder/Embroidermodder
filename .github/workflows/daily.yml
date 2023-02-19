@@ -1,0 +1,15 @@
+name: daily
+
+on:
+  workflow_dispatch:
+
+jobs:
+  daily_build:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+    - name: Get Python script from the GH repository
+      run: curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/scripts/make_daily.py > make_daily.py
+    - name: Run daily build release script
+      run: python3 make_daily.py

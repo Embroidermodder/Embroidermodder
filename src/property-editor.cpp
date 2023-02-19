@@ -41,6 +41,8 @@ void create_group_box_polygon(int id, EmbPolygon *polygon);
 void create_group_box_polyline(int id, EmbPolyline *polyline);
 void create_group_box_ray(int id, EmbRay *ray);
 void create_group_box_rectangle(int id, EmbRect *rect);
+void create_group_box_stitch(int id, EmbStitch *stitch);
+void create_group_box_stitch_list(int id, EmbArray *stitchList);
 void create_group_box_text_multi(int id, EmbTextMulti *text_multi);
 void create_group_box_text_single(int id, EmbTextSingle *text_single);
 
@@ -177,6 +179,10 @@ property_editor(void)
             EmbRect *rect = &(pattern->rects->rect[i]);
             create_group_box_rectangle(i, rect);
         }
+    }
+    
+    if (pattern->stitchList->count > 0) {
+        create_group_box_stitch_list(settings.pattern_index, pattern->stitchList);
     }
 
     if (0) {
@@ -1112,141 +1118,209 @@ void create_group_box_line(int id, EmbLine *line)
 
 void create_group_box_path(int id, EmbPath *path)
 {
-    ImGui::TranslatedText("Geometry");
+    std::string label = translate("Path") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::TranslatedText("Geometry");
 
-    /*
-    toolButtonPathVertexNum = createToolButton("blank", translate("Vertex #")); 
-    toolButtonPathVertexX   = createToolButton("blank", translate("Vertex X")); 
-    toolButtonPathVertexY   = createToolButton("blank", translate("Vertex Y")); 
-    toolButtonPathArea      = createToolButton("blank", translate("Area"));     
-    toolButtonPathLength    = createToolButton("blank", translate("Length"));   
+        /*
+        toolButtonPathVertexNum = createToolButton("blank", translate("Vertex #"));
+        toolButtonPathVertexX   = createToolButton("blank", translate("Vertex X"));
+        toolButtonPathVertexY   = createToolButton("blank", translate("Vertex Y"));
+        toolButtonPathArea      = createToolButton("blank", translate("Area")); 
+        toolButtonPathLength    = createToolButton("blank", translate("Length"));
 
-    comboBoxPathVertexNum = createComboBox(false);
-    lineEditPathVertexX   = createLineEdit("double", false);
-    lineEditPathVertexY   = createLineEdit("double", false);
-    lineEditPathArea      = createLineEdit("double", true);
-    lineEditPathLength    = createLineEdit("double", true);*/
+        comboBoxPathVertexNum = createComboBox(false);
+        lineEditPathVertexX   = createLineEdit("double", false);
+        lineEditPathVertexY   = createLineEdit("double", false);
+        lineEditPathArea      = createLineEdit("double", true);
+        lineEditPathLength    = createLineEdit("double", true);*/
 
-    ImGui::TranslatedText("Misc");
+        ImGui::TranslatedText("Misc");
 
-    /*
-    toolButtonPathClosed = createToolButton("blank", translate("Closed")); 
+        /*
+        toolButtonPathClosed = createToolButton("blank", translate("Closed")); 
 
-    comboBoxPathClosed = createComboBox(false);
-    */
+        comboBoxPathClosed = createComboBox(false);
+        */
+    }
 }
 
 void create_group_box_point(int id, EmbPoint *point)
 {
-    ImGui::TranslatedText("Geometry");
+    std::string label = translate("Point") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::TranslatedText("Geometry");
 
-    /*
-    toolButtonPointX = createToolButton("blank", translate("Position X")); 
-    toolButtonPointY = createToolButton("blank", translate("Position Y")); 
+        /*
+        toolButtonPointX = createToolButton("blank", translate("Position X")); 
+        toolButtonPointY = createToolButton("blank", translate("Position Y")); 
 
-    lineEditPointX = createLineEdit("double", false);
-    lineEditPointY = createLineEdit("double", false);
-    */
+        lineEditPointX = createLineEdit("double", false);
+        lineEditPointY = createLineEdit("double", false);
+        */
+    }
 }
 
 void create_group_box_polygon(int id, EmbPolygon *polygon)
 {
-    ImGui::TranslatedText("Geometry");
+    std::string label = translate("Polygon") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::TranslatedText("Geometry");
 
-    /*
-    toolButtonPolygonCenterX        = createToolButton("blank", translate("Center X"));        
-    toolButtonPolygonCenterY        = createToolButton("blank", translate("Center Y"));        
-    toolButtonPolygonRadiusVertex   = createToolButton("blank", translate("Vertex Radius"));   
-    toolButtonPolygonRadiusSide     = createToolButton("blank", translate("Side Radius"));     
-    toolButtonPolygonDiameterVertex = createToolButton("blank", translate("Vertex Diameter")); 
-    toolButtonPolygonDiameterSide   = createToolButton("blank", translate("Side Diameter"));   
-    toolButtonPolygonInteriorAngle  = createToolButton("blank", translate("Interior Angle"));  
+        /*
+        toolButtonPolygonCenterX        = createToolButton("blank", translate("Center X"));
+        toolButtonPolygonCenterY        = createToolButton("blank", translate("Center Y"));
+        toolButtonPolygonRadiusVertex   = createToolButton("blank", translate("Vertex Radius"));
+        toolButtonPolygonRadiusSide     = createToolButton("blank", translate("Side Radius"));
+        toolButtonPolygonDiameterVertex = createToolButton("blank", translate("Vertex Diameter"));
+        toolButtonPolygonDiameterSide   = createToolButton("blank", translate("Side Diameter"));
+        toolButtonPolygonInteriorAngle  = createToolButton("blank", translate("Interior Angle"));  
 
-    lineEditPolygonCenterX        = createLineEdit("double", false);
-    lineEditPolygonCenterY        = createLineEdit("double", false);
-    lineEditPolygonRadiusVertex   = createLineEdit("double", false);
-    lineEditPolygonRadiusSide     = createLineEdit("double", false);
-    lineEditPolygonDiameterVertex = createLineEdit("double", false);
-    lineEditPolygonDiameterSide   = createLineEdit("double", false);
-    lineEditPolygonInteriorAngle  = createLineEdit("double", true);
-    */
+        lineEditPolygonCenterX        = createLineEdit("double", false);
+        lineEditPolygonCenterY        = createLineEdit("double", false);
+        lineEditPolygonRadiusVertex   = createLineEdit("double", false);
+        lineEditPolygonRadiusSide     = createLineEdit("double", false);
+        lineEditPolygonDiameterVertex = createLineEdit("double", false);
+        lineEditPolygonDiameterSide   = createLineEdit("double", false);
+        lineEditPolygonInteriorAngle  = createLineEdit("double", true);
+        */
+    }
 }
 
 void create_group_box_polyline(int id, EmbPolyline *polyline)
 {
-    ImGui::TranslatedText("Geometry");
+    std::string label = translate("Polyline") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::TranslatedText("Geometry");
 
-    /*
-    toolButtonPolylineVertexNum = createToolButton("blank", translate("Vertex #")); 
-    toolButtonPolylineVertexX   = createToolButton("blank", translate("Vertex X")); 
-    toolButtonPolylineVertexY   = createToolButton("blank", translate("Vertex Y")); 
-    toolButtonPolylineArea      = createToolButton("blank", translate("Area"));     
-    toolButtonPolylineLength    = createToolButton("blank", translate("Length"));   
+        /*
+        toolButtonPolylineVertexNum = createToolButton("blank", translate("Vertex #")); 
+        toolButtonPolylineVertexX   = createToolButton("blank", translate("Vertex X")); 
+        toolButtonPolylineVertexY   = createToolButton("blank", translate("Vertex Y")); 
+        toolButtonPolylineArea      = createToolButton("blank", translate("Area"));     
+        toolButtonPolylineLength    = createToolButton("blank", translate("Length"));   
 
-    comboBoxPolylineVertexNum = createComboBox(false);
-    lineEditPolylineVertexX   = createLineEdit("double", false);
-    lineEditPolylineVertexY   = createLineEdit("double", false);
-    lineEditPolylineArea      = createLineEdit("double", true);
-    lineEditPolylineLength    = createLineEdit("double", true);
-    */
+        comboBoxPolylineVertexNum = createComboBox(false);
+        lineEditPolylineVertexX   = createLineEdit("double", false);
+        lineEditPolylineVertexY   = createLineEdit("double", false);
+        lineEditPolylineArea      = createLineEdit("double", true);
+        lineEditPolylineLength    = createLineEdit("double", true);
+        */
 
-    ImGui::TranslatedText("Misc");
+        ImGui::TranslatedText("Misc");
 
-    /*
-    toolButtonPolylineClosed = createToolButton("blank", translate("Closed")); 
+        /*
+        toolButtonPolylineClosed = createToolButton("blank", translate("Closed")); 
 
-    comboBoxPolylineClosed = createComboBox(false);
-    */
+        comboBoxPolylineClosed = createComboBox(false);
+        */
+    }
 }
 
 void create_group_box_ray(int id, EmbRay *ray)
 {
-    ImGui::TranslatedText("Geometry");
+    std::string label = translate("Ray") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::TranslatedText("Geometry");
 
-/*
-    toolButtonRayX1      = createToolButton("blank", translate("Start X"));  
-    toolButtonRayY1      = createToolButton("blank", translate("Start Y"));  
-    toolButtonRayX2      = createToolButton("blank", translate("2nd X"));    
-    toolButtonRayY2      = createToolButton("blank", translate("2nd Y"));    
-    toolButtonRayVectorX = createToolButton("blank", translate("Vector X")); 
-    toolButtonRayVectorY = createToolButton("blank", translate("Vector Y")); 
+        /*
+        toolButtonRayX1      = createToolButton("blank", translate("Start X"));  
+        toolButtonRayY1      = createToolButton("blank", translate("Start Y"));  
+        toolButtonRayX2      = createToolButton("blank", translate("2nd X"));    
+        toolButtonRayY2      = createToolButton("blank", translate("2nd Y"));    
+        toolButtonRayVectorX = createToolButton("blank", translate("Vector X")); 
+        toolButtonRayVectorY = createToolButton("blank", translate("Vector Y")); 
 
-    lineEditRayX1      = createLineEdit("double", false);
-    lineEditRayY1      = createLineEdit("double", false);
-    lineEditRayX2      = createLineEdit("double", false);
-    lineEditRayY2      = createLineEdit("double", false);
-    lineEditRayVectorX = createLineEdit("double", true);
-    lineEditRayVectorY = createLineEdit("double", true);*/
+        lineEditRayX1      = createLineEdit("double", false);
+        lineEditRayY1      = createLineEdit("double", false);
+        lineEditRayX2      = createLineEdit("double", false);
+        lineEditRayY2      = createLineEdit("double", false);
+        lineEditRayVectorX = createLineEdit("double", true);
+        lineEditRayVectorY = createLineEdit("double", true);*/
+    }
 }
 
 void create_group_box_rectangle(int id, EmbRect *rect)
 {
-    ImGui::TranslatedText("Geometry");
+    std::string label = translate("Rectangle") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::TranslatedText("Geometry");
 
-/*
-    toolButtonRectangleCorner1X = createToolButton("blank", translate("Corner 1 X")); 
-    toolButtonRectangleCorner1Y = createToolButton("blank", translate("Corner 1 Y")); 
-    toolButtonRectangleCorner2X = createToolButton("blank", translate("Corner 2 X")); 
-    toolButtonRectangleCorner2Y = createToolButton("blank", translate("Corner 2 Y")); 
-    toolButtonRectangleCorner3X = createToolButton("blank", translate("Corner 3 X")); 
-    toolButtonRectangleCorner3Y = createToolButton("blank", translate("Corner 3 Y")); 
-    toolButtonRectangleCorner4X = createToolButton("blank", translate("Corner 4 X")); 
-    toolButtonRectangleCorner4Y = createToolButton("blank", translate("Corner 4 Y")); 
-    toolButtonRectangleWidth    = createToolButton("blank", translate("Width"));      
-    toolButtonRectangleHeight   = createToolButton("blank", translate("Height"));     
-    toolButtonRectangleArea     = createToolButton("blank", translate("Area"));       
+        /*
+        toolButtonRectangleCorner1X = createToolButton("blank", translate("Corner 1 X")); 
+        toolButtonRectangleCorner1Y = createToolButton("blank", translate("Corner 1 Y")); 
+        toolButtonRectangleCorner2X = createToolButton("blank", translate("Corner 2 X")); 
+        toolButtonRectangleCorner2Y = createToolButton("blank", translate("Corner 2 Y")); 
+        toolButtonRectangleCorner3X = createToolButton("blank", translate("Corner 3 X")); 
+        toolButtonRectangleCorner3Y = createToolButton("blank", translate("Corner 3 Y")); 
+        toolButtonRectangleCorner4X = createToolButton("blank", translate("Corner 4 X")); 
+        toolButtonRectangleCorner4Y = createToolButton("blank", translate("Corner 4 Y")); 
+        toolButtonRectangleWidth    = createToolButton("blank", translate("Width"));      
+        toolButtonRectangleHeight   = createToolButton("blank", translate("Height"));     
+        toolButtonRectangleArea     = createToolButton("blank", translate("Area"));       
 
-    lineEdits["rectangle-corner-1x"] = createLineEdit("double", false);
-    lineEditRectangleCorner1Y = createLineEdit("double", false);
-    lineEditRectangleCorner2X = createLineEdit("double", false);
-    lineEditRectangleCorner2Y = createLineEdit("double", false);
-    lineEditRectangleCorner3X = createLineEdit("double", false);
-    lineEditRectangleCorner3Y = createLineEdit("double", false);
-    lineEditRectangleCorner4X = createLineEdit("double", false);
-    lineEditRectangleCorner4Y = createLineEdit("double", false);
-    lineEditRectangleWidth    = createLineEdit("double", false);
-    lineEditRectangleHeight   = createLineEdit("double", false);
-    lineEditRectangleArea     = createLineEdit("double", true);*/
+        lineEdits["rectangle-corner-1x"] = createLineEdit("double", false);
+        lineEditRectangleCorner1Y = createLineEdit("double", false);
+        lineEditRectangleCorner2X = createLineEdit("double", false);
+        lineEditRectangleCorner2Y = createLineEdit("double", false);
+        lineEditRectangleCorner3X = createLineEdit("double", false);
+        lineEditRectangleCorner3Y = createLineEdit("double", false);
+        lineEditRectangleCorner4X = createLineEdit("double", false);
+        lineEditRectangleCorner4Y = createLineEdit("double", false);
+        lineEditRectangleWidth    = createLineEdit("double", false);
+        lineEditRectangleHeight   = createLineEdit("double", false);
+        lineEditRectangleArea     = createLineEdit("double", true);*/
+    }
+}
+
+static bool stor[10];
+
+void create_group_box_stitch(int i, EmbStitch *st)
+{
+    std::string decorator = "##stitch" + std::to_string(settings.pattern_index) + " " + std::to_string(i);
+    std::string label = "Stitch " + std::to_string(i) + decorator;
+    if (ImGui::CollapsingHeader(label.c_str())) { 
+        ImGui::EditDouble("X" + decorator, &(st->x));
+        ImGui::EditDouble("Y" + decorator, &(st->y));
+        /* TODO: checkboxes for individual flags */
+        ImGui::Text("Flags");
+
+        /* The stors need to be distinct memory locations. */
+        stor[0] = st->flags & TRIM;
+        ImGui::Checkbox(translate("TRIM" + decorator).c_str(), stor);
+
+        stor[1] = st->flags & NORMAL;
+        ImGui::Checkbox(translate("NORMAL" + decorator).c_str(), stor+1);
+
+        stor[2] = st->flags & END;
+        ImGui::Checkbox(translate("END" + decorator).c_str(), stor+2);
+
+        st->flags = stor[0] & TRIM + stor[1] & NORMAL + stor[2] & END;
+
+        ImGui::EditInt("Thread Index##stitch" + std::to_string(i), &(st->color));
+    }
+}
+
+static int from_ = 0;
+static int to_ = 10;
+
+void create_group_box_stitch_list(int id, EmbArray *stitchList)
+{
+    std::string label = translate("Stitch List") + " ID:" + std::to_string(id+1);
+    if (ImGui::CollapsingHeader(label.c_str())) {
+        ImGui::EditInt("From##" + std::to_string(id+1), &from_);
+        ImGui::EditInt("To##" + std::to_string(id+1), &to_);
+        if (to_ < from_) {
+            to_ = from_;
+        }
+        if (to_ > stitchList->count) {
+            to_ = stitchList->count;
+        }
+        for (int i=from_; i<to_; i++) {
+            EmbStitch *st = &(stitchList->stitch[i]);
+            create_group_box_stitch(i, st);
+        }
+    }
 }
 
 void create_group_box_text_multi(int id, EmbTextMulti *text_multi)
@@ -1298,8 +1372,6 @@ void create_group_box_text_single(int id, EmbTextSingle *text_single)
 }
 
 /*
-
-
 void property_editor_fieldEdited(QObject* fieldObj)
 {
     static bool blockSignals = false;

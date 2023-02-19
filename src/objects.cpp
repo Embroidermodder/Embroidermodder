@@ -24,6 +24,11 @@ void embArc_setEndAngle(EmbArc *arc, float angle);
 float embArc_startAngle(EmbArc arc);
 float embArc_endAngle(EmbArc arc);
 
+void embCircle_setArea(EmbCircle *circle, float area);
+void embCircle_setCircumference(EmbCircle *circle, float circumference);
+
+static float emb_constant_pi = 3.14159265359f;
+
 /*
 void arc_init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
 {
@@ -205,7 +210,7 @@ void Arc_updatePath()
 */
 
 #if 0
-void Arc_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void Arc_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -279,7 +284,7 @@ void Arc_gripEdit(EmbVector& before, EmbVector& after)
     //TODO: gripEdit() for ArcObject
 }
 
-Base_BaseObject(QGraphicsItem* parent)
+void Base_BaseObject(QGraphicsItem* parent)
 {
     debug_message("BaseObject Constructor()");
 
@@ -574,7 +579,7 @@ void embCircle_prompt(std::string str)
                 setPromptPrefix(translate("Specify point on object for first tangent of circle: "));
             }
             else {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
@@ -599,7 +604,7 @@ void embCircle_prompt(std::string str)
                 setPromptPrefix(translate("Specify diameter of circle: "));
             }
             else {
-                var num = Number(str);
+                float num = Number(str);
                 if (isnan(num)) {
                     alert(translate("Requires numeric radius, point on circumference, or \"D\"."));
                     setPromptPrefix(translate("Specify radius of circle or [Diameter]: "));
@@ -620,7 +625,7 @@ void embCircle_prompt(std::string str)
             error("CIRCLE", translate("This should never happen."));
         }
         if (isnan(global.x2)) {
-            var num = Number(str);
+            float num = Number(str);
             if (isnan(num)) {
                 alert(translate("Requires numeric distance or second point."));
                 setPromptPrefix(translate("Specify diameter of circle: "));
@@ -640,7 +645,7 @@ void embCircle_prompt(std::string str)
     }
     else if (global.mode == global.mode_2P) {
         if (isnan(global.x1)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first end point of circle's diameter: "));
@@ -655,7 +660,7 @@ void embCircle_prompt(std::string str)
             }
         }
         else if (isnan(global.x2)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify second end point of circle's diameter: "));
@@ -674,7 +679,7 @@ void embCircle_prompt(std::string str)
     }
     else if (global.mode == global.mode_3P) {
         if (isnan(global.x1)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first point of circle: "));
@@ -686,7 +691,7 @@ void embCircle_prompt(std::string str)
             }
         }
         else if (isnan(global.x2)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify second point of circle: "));
@@ -702,7 +707,7 @@ void embCircle_prompt(std::string str)
             }
         }
         else if (isnan(global.x3)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify third point of circle: "));
@@ -731,7 +736,7 @@ void embCircle_CircleObject(float centerX, float centerY, float radius, unsigned
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-void embCircle_CircleObject(CircleObject* obj, QGraphicsItem* parent)
+void embCircle_CircleObject(EmbCircle* obj, QGraphicsItem* parent)
 {
     debug_message("CircleObject Constructor()");
     if (obj) {
@@ -740,7 +745,7 @@ void embCircle_CircleObject(CircleObject* obj, QGraphicsItem* parent)
     }
 }
 
-void embCircle_init(float centerX, float centerY, float radius, unsigned int rgb, Qt::PenStyle lineType)
+void embCircle_init(EmbVector center, float radius, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "CIRCLE");
@@ -759,16 +764,6 @@ void embCircle_init(float centerX, float centerY, float radius, unsigned int rgb
     updatePath();
 }
 
-void embCircle_setObjectCenter(EmbVector& center)
-{
-    setObjectCenter(center.x(), center.y());
-}
-
-void embCircle_setObjectCenter(float centerX, float centerY)
-{
-    setPos(centerX, centerY);
-}
-
 void embCircle_setObjectDiameter(EmbCircle *circle, float diameter)
 {
     circle->radius = diameter*0.5;
@@ -779,18 +774,19 @@ void embCircle_setObjectDiameter(EmbCircle *circle, float diameter)
     setRect(circRect);
     updatePath();
 }
+#endif
 
-void embCircle_setObjectArea(float area)
+void embCircle_setArea(EmbCircle *circle, float area)
 {
-    float radius = sqrt(area/pi());
-    setObjectRadius(radius);
+    circle->radius = sqrt(area / emb_constant_pi);
 }
 
-void embCircle_setObjectCircumference(float circumference)
+void embCircle_setCircumference(EmbCircle *circle, float circumference)
 {
-    float diameter = circumference/pi();
-    setObjectDiameter(diameter);
+    circle->radius = circumference / (2.0*emb_constant_pi);
 }
+
+#if 0
 
 void embCircle_updatePath()
 {
@@ -1209,7 +1205,7 @@ EmbVector dimleader_mouseSnapPoint(const EmbVector& mousePoint)
     return scenePos();
 }
 
-std::vector<EmbVector> DimLeaderObject_allGripPoints()
+std::vector<EmbVector> embDimLeader_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     gripPoints << objectEndPoint1() << objectEndPoint2();
@@ -1219,7 +1215,7 @@ std::vector<EmbVector> DimLeaderObject_allGripPoints()
     return gripPoints;
 }
 
-void dimleader_gripEdit(const EmbVector& before, const EmbVector& after)
+void embDimLeader_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     if (before == objectEndPoint1()) {
         setObjectEndPoint1(after);
@@ -1233,25 +1229,20 @@ void dimleader_gripEdit(const EmbVector& before, const EmbVector& after)
     }
 }
 
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
 void embEllipse_main()
 {
     initCommand();
     clearSelection();
     global.mode = global.mode_MAJORDIAMETER_MINORRADIUS;
-    global.x1      = NaN;
-    global.y1      = NaN;
-    global.x2      = NaN;
-    global.y2      = NaN;
-    global.x3      = NaN;
-    global.y3      = NaN;
+    global.x1 = NaN;
+    global.y1 = NaN;
+    global.x2 = NaN;
+    global.y2 = NaN;
+    global.x3 = NaN;
+    global.y3 = NaN;
     setPromptPrefix(translate("Specify first axis start point or [Center]: "));
 }
 
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
 void click(float x, float y)
 {
     if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS) {
@@ -1289,15 +1280,12 @@ void click(float x, float y)
             appendPromptHistory();
             endCommand();
         }
-        else
-        {
+        else {
             error("ELLIPSE", translate("This should never happen."));
         }
     }
-    else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS)
-    {
-        if (isnan(global.x1))
-        {
+    else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS) {
+        if (isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             global.cx = global.x1;
@@ -1342,7 +1330,7 @@ void click(float x, float y)
             error("ELLIPSE", translate("This should never happen."));
         }
         else if (isnan(global.x3)) {
-            var angle = calculateAngle(global.cx, global.cy, x, y);
+            float angle = calculateAngle(global.cx, global.cy, x, y);
             global.height = cos(angle*Math.PI/180.0)*global.width;
             addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
             appendPromptHistory();
@@ -1359,23 +1347,19 @@ void context(std::string str)
 void prompt(std::string str)
 {
     if (mode == MAJORDIAMETER_MINORRADIUS) {
-        if (isnan(global.x1))
-        {
+        if (isnan(global.x1)) {
             if (str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_MAJORRADIUS_MINORRADIUS;
                 setPromptPrefix(translate("Specify center point: "));
             }
-            else
-            {
-                var strList = str.split(",");
-                if (isnan(strList[0]) || isnan(strList[1]))
-                {
+            else {
+                std::vector<std::string> strList = str.split(",");
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify first axis start point or [Center]: "));
                 }
-                else
-                {
+                else {
                     global.x1 = Number(strList[0]);
                     global.y1 = Number(strList[1]);
                     addRubber("ELLIPSE");
@@ -1386,7 +1370,7 @@ void prompt(std::string str)
             }
         }
         else if (isnan(global.x2)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first axis end point: "));
@@ -1413,7 +1397,7 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify rotation: "));
             }
             else {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
@@ -1431,7 +1415,7 @@ void prompt(std::string str)
     }
     else if (mode == MAJORRADIUS_MINORRADIUS) {
         if (isnan(global.x1)) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify center point: "));
@@ -1450,14 +1434,13 @@ void prompt(std::string str)
         }
         else if (isnan(global.x2))
         {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first axis end point: "));
             }
-            else
-            {
+            else {
                 global.x2 = Number(strList[0]);
                 global.y2 = Number(strList[1]);
                 global.width = calculateDistance(global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -1478,7 +1461,7 @@ void prompt(std::string str)
             }
             else
             {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Point or option keyword required."));
@@ -1508,7 +1491,7 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify rotation: "));
             }
             else {
-                var angle = Number(str);
+                float angle = Number(str);
                 global.height = cos(angle*Math.PI/180.0)*global.width;
                 addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
                 endCommand();
@@ -1558,26 +1541,6 @@ void embEllipse_setObjectSize(float width, float height)
     elRect.setHeight(height);
     elRect.moveCenter(EmbVector(0,0));
     setRect(elRect);
-}
-
-void embEllipse_setObjectCenter(const EmbVector& center)
-{
-    setObjectCenter(center.x(), center.y());
-}
-
-void embEllipse_setObjectCenter(float centerX, float centerY)
-{
-    setPos(centerX, centerY);
-}
-
-void embEllipse_setObjectCenterX(float centerX)
-{
-    setX(centerX);
-}
-
-void embEllipse_setObjectCenterY(float centerY)
-{
-    setY(centerY);
 }
 
 void embEllipse_setObjectRadiusMajor(float radius)
@@ -1986,7 +1949,7 @@ Alias=L, LINE
 
 //Command: Line
 
-var global = {}; //Required
+float global = {}; //Required
 global.firstRun;
 global.firstX;
 global.firstY;
@@ -2045,7 +2008,7 @@ prompt(std::string str)
 {
     if (global.firstRun)
     {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
@@ -2068,15 +2031,15 @@ prompt(std::string str)
             todo("LINE", "prompt() for UNDO");
         }
         else {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
                 setPromptPrefix(translate("Specify next point or [Undo]: "));
             }
             else {
-                var x = Number(strList[0]);
-                var y = Number(strList[1]);
+                float x = Number(strList[0]);
+                float y = Number(strList[1]);
                 setRubberPoint("LINE_END", x, y);
                 vulcanize();
                 addRubber("LINE");
@@ -3860,7 +3823,7 @@ void prompt(std::string str)
         todo("PATH", "prompt() for UNDO");
     }
     else {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Point or option keyword required."));
             setPromptPrefix(translate("Specify next point or [Arc/Undo]: "));
@@ -3931,7 +3894,7 @@ void point_prompt(std::string str)
         {
             todo("POINT", "prompt() for PDSIZE");
         }
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
@@ -3940,21 +3903,21 @@ void point_prompt(std::string str)
         else
         {
             global.firstRun = false;
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
+            float x = Number(strList[0]);
+            float y = Number(strList[1]);
             setPromptPrefix(translate("Specify next point: "));
             addPoint(x,y);
         }
     }
     else {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify next point: "));
         }
         else {
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
+            float x = Number(strList[0]);
+            float y = Number(strList[1]);
             setPromptPrefix(translate("Specify next point: "));
             addPoint(x,y);
         }
@@ -3963,7 +3926,7 @@ void point_prompt(std::string str)
 
 //Command: Polygon
 
-var global = {}; //Required
+float global = {}; //Required
 global.centerX;
 global.centerY;
 global.sideX1;
@@ -4067,7 +4030,7 @@ void prompt(std::string str)
         }
         else
         {
-            var tmp = Number(str);
+            float tmp = Number(str);
             if (isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
                 alert(translate("Requires an integer between 3 and 1024."));
@@ -4090,7 +4053,7 @@ void prompt(std::string str)
         }
         else
         {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
@@ -4187,7 +4150,7 @@ void prompt(std::string str)
         }
         else
         {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
@@ -4212,7 +4175,7 @@ void prompt(std::string str)
         }
         else
         {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
@@ -4267,7 +4230,7 @@ void prompt(std::string str)
 
 //Command: Polyline
 
-var global = {}; //Required
+float global = {}; //Required
 global.firstRun;
 global.firstX;
 global.firstY;
@@ -4322,7 +4285,7 @@ void polyline_prompt(std::string str)
 {
     if (global.firstRun)
     {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
@@ -4349,7 +4312,7 @@ void polyline_prompt(std::string str)
         }
         else
         {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
@@ -4357,8 +4320,8 @@ void polyline_prompt(std::string str)
             }
             else
             {
-                var x = Number(strList[0]);
-                var y = Number(strList[1]);
+                float x = Number(strList[0]);
+                float y = Number(strList[1]);
                 global.num++;
                 setRubberPoint("POLYLINE_POINT_" + global.num.toString(), x, y);
                 setRubberText("POLYLINE_NUM_POINTS", global.num.toString());
@@ -4395,7 +4358,7 @@ void context(std::string str)
 
 void prompt(std::string str)
 {
-    var strList = str.split(",");
+    std::vector<std::string> strList = str.split(",");
     if (isnan(strList[0]) || isnan(strList[1]))
     {
         alert(translate("Invalid point."));
@@ -4477,7 +4440,7 @@ void prompt(std::string str)
 {
     if (global.firstRun)
     {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
@@ -4497,7 +4460,7 @@ void prompt(std::string str)
     }
     else
     {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
@@ -4517,7 +4480,7 @@ void prompt(std::string str)
 }
 
 quickleader
-var global = {}; //Required
+float global = {}; //Required
 global.x1;
 global.y1;
 global.x2;
@@ -4566,7 +4529,7 @@ void context(std::string str)
 
 void prompt(std::string str)
 {
-    var strList = str.split(",");
+    std::vector<std::string> strList = str.split(",");
     if (isnan(global.x1))
     {
         if (isnan(strList[0]) || isnan(strList[1]))
@@ -4604,7 +4567,7 @@ void prompt(std::string str)
 
 rectangle
 
-var global = {}; //Required
+float global = {}; //Required
 global.newRect;
 global.x1;
 global.y1;
@@ -4666,14 +4629,14 @@ void prompt(std::string str)
         todo("RECTANGLE", "prompt() for FILLET");
     }
     else {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify first point: "));
         }
         else {
-            var x = Number(strList[0]);
-            var y = Number(strList[1]);
+            float x = Number(strList[0]);
+            float y = Number(strList[1]);
             if (global.newRect) {
                 global.newRect = false;
                 global.x1 = x;
@@ -4697,7 +4660,7 @@ void prompt(std::string str)
 
 //Command: RGB
 
-var global = {}; //Required
+float global = {}; //Required
 global.mode;
 
 //enums
@@ -4737,10 +4700,10 @@ void prompt(std::string str)
             setPromptPrefix(translate("Specify grid color: "));
         }
         else {
-            var strList = str.split(",");
-            var r = Number(strList[0]);
-            var g = Number(strList[1]);
-            var b = Number(strList[2]);
+            std::vector<std::string> strList = str.split(",");
+            float r = Number(strList[0]);
+            float g = Number(strList[1]);
+            float b = Number(strList[2]);
             if (!validRGB(r,g,b))
             {
                 alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
@@ -4755,10 +4718,10 @@ void prompt(std::string str)
     }
     else if (global.mode == global.mode_CROSSHAIR)
     {
-        var strList = str.split(",");
-        var r = Number(strList[0]);
-        var g = Number(strList[1]);
-        var b = Number(strList[2]);
+        std::vector<std::string> strList = str.split(",");
+        float r = Number(strList[0]);
+        float g = Number(strList[1]);
+        float b = Number(strList[2]);
         if (!validRGB(r,g,b))
         {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
@@ -4772,10 +4735,10 @@ void prompt(std::string str)
     }
     else if (global.mode == global.mode_GRID)
     {
-        var strList = str.split(",");
-        var r = Number(strList[0]);
-        var g = Number(strList[1]);
-        var b = Number(strList[2]);
+        std::vector<std::string> strList = str.split(",");
+        float r = Number(strList[0]);
+        float g = Number(strList[1]);
+        float b = Number(strList[2]);
         if (!validRGB(r,g,b))
         {
             alert(translate("Invalid color. R,G,B values must be in the range of 0-255."));
@@ -4802,7 +4765,7 @@ void validRGB(r, g, b)
 
 //Command: Rotate
 
-var global = {}; //Required
+float global = {}; //Required
 global.firstRun;
 global.baseX;
 global.baseY;
@@ -4916,7 +4879,7 @@ void prompt(std::string str)
     {
         if (global.firstRun)
         {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Invalid point."));
@@ -4966,7 +4929,7 @@ void prompt(std::string str)
         {
             if (isnan(str))
             {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Requires valid numeric angle or two points."));
@@ -5002,7 +4965,7 @@ void prompt(std::string str)
         {
             if (isnan(str))
             {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Requires valid numeric angle or two points."));
@@ -5033,15 +4996,15 @@ void prompt(std::string str)
         }
         else if (isnan(global.angleNew)) {
             if (isnan(str)) {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Requires valid numeric angle or second point."));
                     setPromptPrefix(translate("Specify the new angle: "));
                 }
                 else
                 {
-                    var x = Number(strList[0]);
-                    var y = Number(strList[1]);
+                    float x = Number(strList[0]);
+                    float y = Number(strList[1]);
                     global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
                     rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
                     previewOff();
@@ -5060,7 +5023,7 @@ void prompt(std::string str)
 }
 
 
-var global = {}; //Required
+float global = {}; //Required
 global.test1;
 global.test2;
 
@@ -5079,10 +5042,10 @@ void sandbox_main()
     
     //Polyline & Polygon Testing
     
-    var offsetX = 0.0;
-    var offsetY = 0.0;
+    float offsetX = 0.0;
+    float offsetY = 0.0;
     
-    var polylineArray = [];
+    float polylineArray = [];
     polylineArray.push(1.0 + offsetX);
     polylineArray.push(1.0 + offsetY);
     polylineArray.push(1.0 + offsetX);
@@ -5104,7 +5067,7 @@ void sandbox_main()
     offsetX = 5.0;
     offsetY = 0.0;
     
-    var polygonArray = [];
+    float polygonArray = [];
     polygonArray.push(1.0 + offsetX);
     polygonArray.push(1.0 + offsetY);
     polygonArray.push(1.0 + offsetX);
@@ -5272,7 +5235,7 @@ void prompt(std::string str)
 {
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
-            var strList = str.split(",");
+            std::vector<std::string> strList = str.split(",");
             if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify base point: "));
@@ -5320,7 +5283,7 @@ void prompt(std::string str)
         {
             if (isnan(str))
             {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Requires valid numeric distance or two points."));
@@ -5367,7 +5330,7 @@ void prompt(std::string str)
         }
         else if (isnan(global.destRX)) {
             if (isnan(str)) {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Requires valid numeric distance or two points."));
                     setPromptPrefix(translate("Specify second point: "));
@@ -5417,14 +5380,14 @@ void prompt(std::string str)
         }
         else if (isnan(global.factorNew)) {
             if (isnan(str)) {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Requires valid numeric distance or second point."));
                     setPromptPrefix(translate("Specify new length: "));
                 }
                 else {
-                    var x = Number(strList[0]);
-                    var y = Number(strList[1]);
+                    float x = Number(strList[0]);
+                    float y = Number(strList[1]);
                     global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
                     if (global.factorNew <= 0.0)
                     {
@@ -5476,10 +5439,8 @@ void single_line_text_main()
 
 void click(float x, float y)
 {
-    if (global.mode == global.mode_SETGEOM)
-    {
-        if (isnan(global.textX))
-        {
+    if (global.mode == global.mode_SETGEOM) {
+        if (isnan(global.textX)) {
             global.textX = x;
             global.textY = y;
             addRubber("LINE");
@@ -5488,15 +5449,13 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify text height") + " {" + textSize() + "}: ");
         }
-        else if (isnan(global.textHeight))
-        {
+        else if (isnan(global.textHeight)) {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
             setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
         }
-        else if (isnan(global.textRotation))
-        {
+        else if (isnan(global.textRotation)) {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setTextAngle(global.textRotation);
             appendPromptHistory();
@@ -5512,8 +5471,7 @@ void click(float x, float y)
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setRubberText("TEXT_RAPID", global.text);
         }
-        else
-        {
+        else {
             //Do nothing, as we are in rapidFire mode now.
         }
     }
@@ -5526,8 +5484,7 @@ void context(std::string str)
 
 void prompt(std::string str)
 {
-    if (global.mode == global.mode_JUSTIFY)
-    {
+    if (global.mode == global.mode_JUSTIFY) {
         if (str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
         {
             global.mode = global.mode_SETGEOM;
@@ -5626,14 +5583,12 @@ void prompt(std::string str)
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             setPromptPrefix(translate("Specify bottom-right point of text or [Justify/Setfont]: "));
         }
-        else
-        {
+        else {
             alert(translate("Invalid option keyword."));
             setPromptPrefix(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
         }
     }
-    else if (global.mode == global.mode_SETFONT)
-    {
+    else if (global.mode == global.mode_SETFONT) {
         global.mode = global.mode_SETGEOM;
         global.textFont = str;
         setRubberText("TEXT_FONT", global.textFont);
@@ -5653,7 +5608,7 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify font name: "));
             }
             else {
-                var strList = str.split(",");
+                std::vector<std::string> strList = str.split(",");
                 if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Point or option keyword required."));
@@ -5669,29 +5624,23 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isnan(global.textHeight))
-        {
-            if (str == "")
-            {
+        else if (isnan(global.textHeight)) {
+            if (str == "") {
                 global.textHeight = textSize();
                 setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
-            else if (isnan(str))
-            {
+            else if (isnan(str)) {
                 alert(translate("Requires valid numeric distance or second point."));
                 setPromptPrefix(translate("Specify text height") + " {" + textSize() + "}: ");
             }
-            else
-            {
+            else {
                 global.textHeight = Number(str);
                 setTextSize(global.textHeight);
                 setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
-        else if (isnan(global.textRotation))
-        {
-            if (str == "")
-            {
+        else if (isnan(global.textRotation)) {
+            if (str == "") {
                 global.textRotation = textAngle();
                 setPromptPrefix(translate("Enter text: "));
                 global.mode = global.mode_RAPID;
@@ -5705,13 +5654,11 @@ void prompt(std::string str)
                 setRubberText("TEXT_JUSTIFY", global.textJustify);
                 setRubberText("TEXT_RAPID", global.text);
             }
-            else if (isnan(str))
-            {
+            else if (isnan(str)) {
                 alert(translate("Requires valid numeric angle or second point."));
                 setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
-            else
-            {
+            else {
                 global.textRotation = Number(str);
                 setTextAngle(global.textRotation);
                 setPromptPrefix(translate("Enter text: "));
@@ -5727,8 +5674,7 @@ void prompt(std::string str)
                 setRubberText("TEXT_RAPID", global.text);
             }
         }
-        else
-        {
+        else {
             //Do nothing, as we are in rapidFire mode now.
         }
     }
@@ -5742,8 +5688,7 @@ void prompt(std::string str)
                 endCommand(); //TODO: Rather than ending the command, calculate where the next line would be and modify the x/y to the new point
             }
         }
-        else
-        {
+        else {
             global.text = str;
             setRubberText("TEXT_RAPID", global.text);
         }
@@ -5751,7 +5696,7 @@ void prompt(std::string str)
 }
 
 
-var global = {}; //Required
+float global = {}; //Required
 global.numPoints = 2048; //Default //TODO: min:64 max:8192
 global.cx;
 global.cy;
@@ -5780,30 +5725,51 @@ void snowflake_main()
     endCommand();
 }
 
+#endif
+
+void snowflake_click(float x, float y);
+void snowflake_move(float x, float y);
+void snowflake_context(std::string str);
+void snowflake_prompt(std::string str);
+void updateSnowflake(int numPts, double xScale, double yScale);
+
+void star_main();
+void star_click(float x, float y);
+void star_move(float x, float y);
+void star_context(std::string str);
+void star_prompt(std::string str);
+void updateStar(float x, float y);
+
+void syswindows_main();
+void syswindows_prompt(std::string str);
+
 void snowflake_click(float x, float y)
 {
 }
 
-void snowflake_move(x, y)
+void snowflake_move(float x, float y)
 {
 }
 
 void snowflake_context(std::string str)
 {
+    /*
     todo("SNOWFLAKE", "context()");
+    */
 }
 
 void snowflake_prompt(std::string str)
 {
 }
 
-void updateSnowflake(numPts, xScale, yScale)
+void updateSnowflake(int numPts, double xScale, double yScale)
 {
-    var i;
-    var t;
-    var xx = NaN;
-    var yy = NaN;
-    var two_pi = 2*Math.PI;
+    /*
+    float i;
+    float t;
+    float xx = NaN;
+    float yy = NaN;
+    float two_pi = 2*Math.PI;
 
     for (i = 0; i <= numPts; i++)
     {
@@ -6453,10 +6419,12 @@ sin(263*t+2/7)-
     }
 
     setRubberText("POLYGON_NUM_POINTS", numPts.toString());
+    */
 }
 
 void star_main()
 {
+    /*
     initCommand();
     clearSelection();
     ui.numPoints = 5;
@@ -6468,10 +6436,12 @@ void star_main()
     global.y2 = NaN;
     global.mode = global.mode_NUM_POINTS;
     setPromptPrefix(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
+    */
 }
 
 void star_click(float x, float y)
 {
+    /*
     if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
@@ -6502,10 +6472,12 @@ void star_click(float x, float y)
         spareRubber("POLYGON");
         endCommand();
     }
+    */
 }
 
-void star_move(x, y)
+void star_move(float x, float y)
 {
+    /*
     if (global.mode == global.mode_NUM_POINTS) {
         //Do nothing, the prompt controls this.
     }
@@ -6518,15 +6490,19 @@ void star_move(x, y)
     else if (global.mode == global.mode_RAD_INNER) {
         updateStar(x, y);
     }
+    */
 }
 
 void star_context(std::string str)
 {
+    /*
     todo("STAR", "context()");
+    */
 }
 
 void star_prompt(std::string str)
 {
+    /*
     if (global.mode == global.mode_NUM_POINTS) {
         if (str == "" && global.numPoints >= 3 && global.numPoints <= 1024)
         {
@@ -6534,7 +6510,7 @@ void star_prompt(std::string str)
             global.mode = global.mode_CENTER_PT;
         }
         else {
-            var tmp = Number(str);
+            float tmp = Number(str);
             if (isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(translate("Requires an integer between 3 and 1024."));
                 setPromptPrefix(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
@@ -6547,7 +6523,7 @@ void star_prompt(std::string str)
         }
     }
     else if (global.mode == global.mode_CENTER_PT) {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify center point: "));
@@ -6564,7 +6540,7 @@ void star_prompt(std::string str)
         }
     }
     else if (global.mode == global.mode_RAD_OUTER) {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify outer radius of star: "));
@@ -6578,7 +6554,7 @@ void star_prompt(std::string str)
         }
     }
     else if (global.mode == global.mode_RAD_INNER) {
-        var strList = str.split(",");
+        std::vector<std::string> strList = str.split(",");
         if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify inner radius of star: "));
@@ -6592,13 +6568,15 @@ void star_prompt(std::string str)
             endCommand();
         }
     }
+    */
 }
 
 void updateStar(float x, float y)
 {
-    var distOuter;
-    var distInner;
-    var angOuter;
+    /*
+    float distOuter;
+    float distInner;
+    float angOuter;
 
     if (global.mode == STAR_MODE_RAD_OUTER) {
         angOuter = calculateAngle(global.cx, global.cy, x, y);
@@ -6612,11 +6590,11 @@ void updateStar(float x, float y)
     }
 
     //Calculate the Star Points
-    var angInc = 360.0/(global.numPoints*2);
-    var odd = true;
-    for (var i = 0; i < global.numPoints*2; i++) {
-        var xx;
-        var yy;
+    float angInc = 360.0/(global.numPoints*2);
+    float odd = true;
+    for (float i = 0; i < global.numPoints*2; i++) {
+        float xx;
+        float yy;
         if (odd) {
             xx = distOuter*cos((angOuter+(angInc*i))*Math.PI/180.0);
             yy = distOuter*sin((angOuter+(angInc*i))*Math.PI/180.0);
@@ -6629,17 +6607,21 @@ void updateStar(float x, float y)
         setRubberPoint("POLYGON_POINT_" + i.toString(), global.cx + xx, global.cy + yy);
     }
     setRubberText("POLYGON_NUM_POINTS", (global.numPoints*2 - 1).toString());
+    */
 }
 
 void syswindows_main()
 {
+    /*
     initCommand();
     clearSelection();
     setPromptPrefix(translate("Enter an option [Cascade/Tile]: "));
+    */
 }
 
 void syswindows_prompt(std::string str)
 {
+    /*
     if (str == "C" || str == "CASCADE") {
         windowCascade();
         endCommand();
@@ -6652,6 +6634,5 @@ void syswindows_prompt(std::string str)
         alert(translate("Invalid option keyword."));
         setPromptPrefix(translate("Enter an option [Cascade/Tile]: "));
     }
+    */
 }
-
-#endif

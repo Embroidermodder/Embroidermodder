@@ -33,6 +33,13 @@ namespace ImGui {
         ImGui::Text("%s", std::to_string(data).c_str());
     }
 
+    void ShowInt(std::string label, int data)
+    {
+        ImGui::Text("%s", translate(label).c_str());
+        ImGui::SameLine();
+        ImGui::Text("%s", std::to_string(data).c_str());
+    }
+
     void TranslatedText(std::string str)
     {
         ImGui::Text("%s", translate(str).c_str());
@@ -48,5 +55,10 @@ namespace ImGui {
     void EditDouble(std::string label, double *data)
     {
         ImGui::InputDouble(translate(label).c_str(), data, *data);
+    }
+
+    void EditInt(std::string label, int *data)
+    {
+        ImGui::InputInt(translate(label).c_str(), data, *data);
     }
 }
