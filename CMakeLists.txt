@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
+find_package(OpenGL REQUIRED)
+
 set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/extern/glew/include)
 set(CMAKE_LIBRARY_PATH ${CMAKE_SOURCE_DIR}/extern/glew/lib/Release/x64)
 find_package(GLEW REQUIRED)
@@ -72,36 +74,22 @@ set_target_properties(embroidermodder PROPERTIES
     MACOSX_BUNDLE ON
 )
 
-if (WIN32)
 target_link_libraries(embroidermodder PRIVATE
 	glfw
 	embroidery_static
-	opengl32)
+	${OPENGL_LIBRARIES})
+
+if (WIN32)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
 set(EXEC_DIR "C:/Program Files/embroidermodder")
 set(ASSETS_DIR "C:/ProgramData/embroidermodder")
 
-elseif(APPLE)
-target_link_libraries(embroidermodder
-	"-framework OpenGL"
-)
-target_link_libraries(embroidermodder PRIVATE
-	glfw
-	embroidery_static
-	m)
+else(WIN32)
+target_link_libraries(embroidermodder PRIVATE m)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 set(EXEC_DIR "/usr/bin")
 set(ASSETS_DIR "/usr/share/embroidermodder")
 
-elseif(UNIX)
-target_link_libraries(embroidermodder PRIVATE
-	glfw
-	embroidery_static
-	GL
-	m)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
-set(EXEC_DIR "/usr/bin")
-set(ASSETS_DIR "/usr/share/embroidermodder")
 endif()
 
 install(
