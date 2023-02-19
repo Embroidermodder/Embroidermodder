@@ -632,7 +632,7 @@ void property_editor_updateLineEditNumIfVaries(QLineEdit* lineEdit, double num, 
 
     //Prevent negative zero :D
     std::string negativeZero = "-0.";
-    for(int i = 0; i < precision; ++i)
+    for (int i = 0; i < precision; ++i)
         negativeZero.append('0');
     if (fieldNewText == negativeZero)
         fieldNewText = negativeZero.replace("-", "");
@@ -859,7 +859,7 @@ void create_group_box_arc(int id, EmbArc *arc)
 {
     std::string label = translate("Arc") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
 
         ImGui::ShowDouble("Start X", arc->start.x);
         ImGui::ShowDouble("Start Y", arc->start.y);
@@ -902,7 +902,7 @@ void create_group_box_arc(int id, EmbArc *arc)
         ImGui::ShowDouble("Included Angle", embVector_length(delta));
         */
 
-        ImGui::Text(translate("Misc").c_str());
+        ImGui::TranslatedText("Misc");
 
         /*
         toolButtonArcClockwise = createToolButton("blank", translate("Clockwise")); 
@@ -918,7 +918,7 @@ void create_group_box_block(int id)
 {
     std::string label = translate("Block") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
         /*
         toolButtonBlockX = createToolButton("blank", translate("Position X")); 
         toolButtonBlockY = createToolButton("blank", translate("Position Y")); 
@@ -935,7 +935,7 @@ void create_group_box_circle(int id, EmbCircle *circle)
 {
     std::string label = translate("Circle") + " ID:" + std::to_string(settings.pattern_index*1000+(id+1));
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
 
         ImGui::EditDouble("Center X", &(circle->center.x));
         ImGui::EditDouble("Center Y", &(circle->center.y));
@@ -949,7 +949,7 @@ void create_group_box_dim_aligned(int id)
 {
     std::string label = translate("Aligned Dimension") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -959,7 +959,7 @@ void create_group_box_dim_angular(int id)
 {
     std::string label = translate("Angular Dimension") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -969,7 +969,7 @@ void create_group_box_dim_arc_length(int id)
 {
     std::string label = translate("Arc Length Dimension") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -979,7 +979,7 @@ void create_group_box_dim_diameter(int id)
 {
     std::string label = translate("Diameter Dimension") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -989,7 +989,7 @@ void create_group_box_dim_leader(int id)
 {
     std::string label = translate("Dimension Leader") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -999,7 +999,7 @@ void create_group_box_dim_linear(int id)
 {
     std::string label = translate("Dimension Leader") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -1009,7 +1009,7 @@ void create_group_box_dim_ordinate(int id)
 {
     std::string label = translate("Ordinate Dimension") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -1019,7 +1019,7 @@ void create_group_box_dim_radius(int id)
 {
     std::string label = translate("Radius Dimension") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
     }
 }
 
@@ -1027,7 +1027,7 @@ void create_group_box_ellipse(int id, EmbEllipse *ellipse)
 {
     std::string label = translate("Ellipse") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
 
         ImGui::EditDouble(translate("Center X"), &(ellipse->center.x));
         ImGui::EditDouble(translate("Center Y"), &(ellipse->center.y));
@@ -1042,14 +1042,14 @@ void create_group_box_image(int id, EmbImage *image)
 {
     std::string label = translate("Image") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
 
         ImGui::EditDouble(translate("Position X"), &(image->position.x));
         ImGui::EditDouble(translate("Position Y"), &(image->position.y));
         //ImGui::EditDouble(translate("Width"), &(image->width));
         //ImGui::EditDouble(translate("Height"), &(image->height));
 
-        ImGui::Text(translate("Misc").c_str());
+        ImGui::TranslatedText("Misc");
 
         ImGui::Text(translate("Name").c_str());
         ImGui::SameLine();
@@ -1065,7 +1065,7 @@ void create_group_box_infinite_line(int id)
 {
     std::string label = translate("Infinite Line") + " ID:" + std::to_string(id+1);
     if (ImGui::CollapsingHeader(label.c_str())) {
-        ImGui::Text(translate("Geometry").c_str());
+        ImGui::TranslatedText("Geometry");
 
         /*
         toolButtonInfiniteLineX1      = createToolButton("blank", translate("Start X"));  
@@ -1112,7 +1112,7 @@ void create_group_box_line(int id, EmbLine *line)
 
 void create_group_box_path(int id, EmbPath *path)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
     /*
     toolButtonPathVertexNum = createToolButton("blank", translate("Vertex #")); 
@@ -1127,7 +1127,7 @@ void create_group_box_path(int id, EmbPath *path)
     lineEditPathArea      = createLineEdit("double", true);
     lineEditPathLength    = createLineEdit("double", true);*/
 
-    ImGui::Text(translate("Misc").c_str());
+    ImGui::TranslatedText("Misc");
 
     /*
     toolButtonPathClosed = createToolButton("blank", translate("Closed")); 
@@ -1138,7 +1138,7 @@ void create_group_box_path(int id, EmbPath *path)
 
 void create_group_box_point(int id, EmbPoint *point)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
     /*
     toolButtonPointX = createToolButton("blank", translate("Position X")); 
@@ -1151,7 +1151,7 @@ void create_group_box_point(int id, EmbPoint *point)
 
 void create_group_box_polygon(int id, EmbPolygon *polygon)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
     /*
     toolButtonPolygonCenterX        = createToolButton("blank", translate("Center X"));        
@@ -1174,7 +1174,7 @@ void create_group_box_polygon(int id, EmbPolygon *polygon)
 
 void create_group_box_polyline(int id, EmbPolyline *polyline)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
     /*
     toolButtonPolylineVertexNum = createToolButton("blank", translate("Vertex #")); 
@@ -1190,7 +1190,7 @@ void create_group_box_polyline(int id, EmbPolyline *polyline)
     lineEditPolylineLength    = createLineEdit("double", true);
     */
 
-    ImGui::Text(translate("Misc").c_str());
+    ImGui::TranslatedText("Misc");
 
     /*
     toolButtonPolylineClosed = createToolButton("blank", translate("Closed")); 
@@ -1201,7 +1201,7 @@ void create_group_box_polyline(int id, EmbPolyline *polyline)
 
 void create_group_box_ray(int id, EmbRay *ray)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
 /*
     toolButtonRayX1      = createToolButton("blank", translate("Start X"));  
@@ -1221,7 +1221,7 @@ void create_group_box_ray(int id, EmbRay *ray)
 
 void create_group_box_rectangle(int id, EmbRect *rect)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
 /*
     toolButtonRectangleCorner1X = createToolButton("blank", translate("Corner 1 X")); 
@@ -1251,7 +1251,7 @@ void create_group_box_rectangle(int id, EmbRect *rect)
 
 void create_group_box_text_multi(int id, EmbTextMulti *text_multi)
 {
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
 /*
     toolButtonTextMultiX = createToolButton("blank", translate("Position X")); 
@@ -1278,7 +1278,7 @@ void create_group_box_text_single(int id, EmbTextSingle *text_single)
     lineEditTextSingleHeight   = createLineEdit("double", false);
     lineEditTextSingleRotation = createLineEdit("double", false);*/
 
-    ImGui::Text(translate("Geometry").c_str());
+    ImGui::TranslatedText("Geometry");
 
 /*
     toolButtonTextSingleX = createToolButton("blank", translate("Position X")); 
@@ -1287,7 +1287,7 @@ void create_group_box_text_single(int id, EmbTextSingle *text_single)
     lineEditTextSingleX = createLineEdit("double", false);
     lineEditTextSingleY = createLineEdit("double", false);*/
 
-    ImGui::Text(translate("Misc").c_str());
+    ImGui::TranslatedText("Misc");
 
 /*
     toolButtonTextSingleBackward   = createToolButton("blank", translate("Backward"));   
@@ -1309,12 +1309,10 @@ void property_editor_fieldEdited(QObject* fieldObj)
     std::string objName = fieldObj->objectName();
     int objType = fieldObj->property(qPrintable(objName)).toInt();
 
-    foreach(QGraphicsItem* item, selectedItemList)
-    {
+    for (QGraphicsItem* item, selectedItemList) {
         if (item->type() != objType) continue;
 
-        switch(objType)
-        {
+        switch (objType) {
             case OBJ_TYPE_ARC:
                 if (objName == "lineEditArcCenterX") {
                     tempArcObj = static_cast<ArcObject*>(item);

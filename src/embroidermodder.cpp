@@ -566,6 +566,112 @@ view_tab(int i)
 }
 
 void
+create_toolbars(void)
+{
+    load_toolbar(file_toolbar);
+    ImGui::SameLine();
+    load_toolbar(edit_toolbar);
+    ImGui::SameLine();
+    load_toolbar(draw_toolbar);
+
+    load_toolbar(view_toolbar);
+    /*
+    debug_message("MainWindow createAllToolbars()");
+
+    add_to_toolbar(toolbarFile, "toolbarFile", toolbar_file_entries);
+    add_to_toolbar(toolbarEdit, "toolbarEdit", toolbar_edit_entries);
+    add_to_toolbar(toolbarView, "toolbarView", toolbar_view_entries);
+    add_to_toolbar(toolbarZoom, "toolbarZoom", toolbar_zoom_entries);
+    add_to_toolbar(toolbarPan, "toolbarPan", toolbar_pan_entries);
+    add_to_toolbar(toolbarIcon, "toolbarIcon", toolbar_icon_entries);
+    add_to_toolbar(toolbarHelp, "toolbarHelp", toolbar_help_entries);
+
+    createLayerToolbar();
+    createPropertiesToolbar();
+    createTextToolbar();
+    createPromptToolbar();
+
+    // Horizontal
+    toolbarView->setOrientation(Horizontal);
+    toolbarZoom->setOrientation(Horizontal);
+    toolbarLayer->setOrientation(Horizontal);
+    toolbarProperties->setOrientation(Horizontal);
+    toolbarText->setOrientation(Horizontal);
+    toolbarPrompt->setOrientation(Horizontal);
+    // Top
+    addToolBarBreak(TopToolBarArea);
+    addToolBar(TopToolBarArea, toolbarFile);
+    addToolBar(TopToolBarArea, toolbarEdit);
+    addToolBar(TopToolBarArea, toolbarHelp);
+    addToolBar(TopToolBarArea, toolbarIcon);
+    addToolBarBreak(TopToolBarArea);
+    addToolBar(TopToolBarArea, toolbarZoom);
+    addToolBar(TopToolBarArea, toolbarPan);
+    addToolBar(TopToolBarArea, toolbarView);
+    addToolBarBreak(TopToolBarArea);
+    addToolBar(TopToolBarArea, toolbarLayer);
+    addToolBar(TopToolBarArea, toolbarProperties);
+    addToolBarBreak(TopToolBarArea);
+    addToolBar(TopToolBarArea, toolbarText);
+    // Bottom
+    addToolBar(BottomToolBarArea, toolbarPrompt);
+
+    //zoomToolBar->setToolButtonStyle(ToolButtonTextOnly);
+    */
+}
+
+void create_menus(void)
+{
+    if (ImGui::BeginMenuBar()) {
+        load_menu("File");
+        load_menu("Edit");
+        load_menu("View");
+        load_menu("Tools");
+        load_menu("Draw");
+        load_menu("Window");
+        load_menu("Settings");
+        load_menu("Help");
+        ImGui::EndMenuBar();
+    }
+    /*
+    menuBar()->addMenu(fileMenu);
+    fileMenu->addAction(actionHash.value(ACTION_new));
+    fileMenu->addSeparator();
+    fileMenu->addAction(actionHash.value(ACTION_open));
+
+    fileMenu->addMenu(recentMenu);
+    connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
+    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
+    recentMenu->setTearOffEnabled(false);
+    create_menu(actionHash, fileMenu, file_menu_data, false);
+
+    menuBar()->addMenu(editMenu);
+    create_menu(actionHash, editMenu, edit_menu_data, true);
+
+    menuBar()->addMenu(viewMenu);
+    viewMenu->addSeparator();
+    viewMenu->addMenu(zoomMenu);
+    zoomMenu->setIcon(load_icon("zoom"));
+    create_menu(actionHash, zoomMenu, zoom_menu_data, true);
+    viewMenu->addMenu(panMenu);
+    panMenu->setIcon(load_icon("pan"));
+    create_menu(actionHash, panMenu, pan_menu_data, true);
+    create_menu(actionHash, viewMenu, view_menu_data, true);
+
+    menuBar()->addMenu(settingsMenu);
+    create_menu(actionHash, settingsMenu, settings_menu_data, true);
+
+    menuBar()->addMenu(windowMenu);
+    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
+    // Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
+    windowMenu->setTearOffEnabled(false);
+
+    menuBar()->addMenu(helpMenu);
+    create_menu(actionHash, helpMenu, help_menu_data, true);
+    */
+}
+
+void
 main_widget(void)
 {
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -578,25 +684,9 @@ main_widget(void)
 
     menu_action = "";
 
-    if (ImGui::BeginMenuBar()) {
-        load_menu("File");
-        load_menu("Edit");
-        load_menu("View");
-        load_menu("Tools");
-        load_menu("Draw");
-        load_menu("Window");
-        load_menu("Settings");
-        load_menu("Help");
-        ImGui::EndMenuBar();
-    }
+    create_menus();
 
-    load_toolbar(file_toolbar);
-    ImGui::SameLine();
-    load_toolbar(edit_toolbar);
-    ImGui::SameLine();
-    load_toolbar(draw_toolbar);
-
-    load_toolbar(view_toolbar);
+    create_toolbars();
 
     if (menu_action != "") {
         actuator(menu_action);

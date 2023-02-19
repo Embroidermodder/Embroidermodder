@@ -47,6 +47,11 @@ inline int embColor_to_int(EmbColor c)
     return IM_COL32(c.r, c.g, c.b, 255);
 }
 
+ImVec2 operator*(const ImVec2 a, const float c)
+{
+    return ImVec2(c * a.x, c * a.y);
+}
+
 ImVec2 operator+(const ImVec2 a, const ImVec2 b)
 {
     return ImVec2(a.x+b.x, a.y+b.y);
@@ -162,25 +167,24 @@ render_pattern(EmbPattern *p)
         for (int i=0; i<p->polylines->count; i++) {
             EmbPolyline pl = p->polylines->polyline[i];
             bool firstPoint = false;
-            double startX = 0, startY = 0;
-            double x = 0, y = 0;
+            EmbVector start;
+            EmbVector pos;
+            start.x = 0.0;
+            start.y = 0.0;
             EmbArray *curPointList = pl.pointList;
             int color = embColor_to_int(pl.color);
             for (int j=0; j<curPointList->count; j++) {
                 EmbPoint pp = curPointList->point[j];
-                x = pp.position.x;
-                y = -pp.position.y;
-                /*
+                pos.x = pp.position.x;
+                pos.y = -pp.position.y;
                 if (firstPoint) {
-                    polylinePath.lineTo(x,y);
+                    /* polylinePath.lineTo(x,y); */
                 }
                 else {
-                    polylinePath.moveTo(x,y);
-                    firstPoint = true;
-                    startX = x;
-                    startY = y;
+                    /* polylinePath.moveTo(x,y);
+                    firstPoint = true; */
+                    start = pos;
                 }
-                */
             }
 
             /*
@@ -193,9 +197,9 @@ render_pattern(EmbPattern *p)
         for (int i=0; i<p->rects->count; i++) {
             EmbRect r = p->rects->rect[i];
             int color = embColor_to_int(r.color);
-            /*
-            draw_list->AddRectangle(r.left, r.top, r.right - r.left, r.bottom - r.top, color); //TODO: rotation and fill
-            */
+            ImVec2 position1 = {(float)r.left, (float)r.top};
+            ImVec2 position2 = {(float)r.right, (float)r.bottom};
+            draw_list->AddRect(position1, position2, color); //TODO: rotation and fill
         }
     }
     if (p->stitchList->count > 1) {
@@ -203,17 +207,13 @@ render_pattern(EmbPattern *p)
             ImVec2 offset = ImGui::GetWindowPos();
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
-            ImVec2 start = {
-                view.scale * prev.x + view.origin.x,
-                - view.scale * prev.y + view.origin.y
-            };
-            ImVec2 end = {
-                view.scale * st.x + view.origin.x,
-                - view.scale * st.y + view.origin.y
-            };
+            ImVec2 prev_ = {(float)prev.x, (float)(-prev.y)};
+            ImVec2 st_ = {(float)st.x, (float)(-st.y)};
+            ImVec2 start = offset + to_ImVec2(view.origin) + prev_ * view.scale;
+            ImVec2 end = offset + to_ImVec2(view.origin) + st_ * view.scale;
             EmbThread thread = p->thread_list[st.color];
             int color = embColor_to_int(thread.color);
-            draw_list->AddLine(offset + start, offset + end, color);
+            draw_list->AddLine(start, end, color);
         }
     }
     return 0;
@@ -242,14 +242,10 @@ real_render_pattern(EmbPattern *p)
             ImVec2 offset = ImGui::GetWindowPos();
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
-            ImVec2 start = offset + to_ImVec2(view.origin) + ImVec2(
-                view.scale * prev.x,
-                - view.scale * prev.y
-            );
-            ImVec2 end = offset + to_ImVec2(view.origin) + ImVec2(
-                view.scale * st.x,
-                - view.scale * st.y
-            );
+            ImVec2 prev_ = {(float)prev.x, (float)(-prev.y)};
+            ImVec2 st_ = {(float)st.x, (float)(-st.y)};
+            ImVec2 start = offset + to_ImVec2(view.origin) + prev_ * view.scale;
+            ImVec2 end = offset + to_ImVec2(view.origin) + st_ * view.scale;
 
             float lwt = 2.0;
             EmbVector delta;
@@ -290,14 +286,11 @@ simulate_pattern(EmbPattern *p)
         for (int i = 1; i<p->stitchList->count; i++) {
             EmbStitch prev = p->stitchList->stitch[i-1];
             EmbStitch st = p->stitchList->stitch[i];
-            ImVec2 start = {
-                view.scale * prev.x + view.origin.x,
-                - view.scale * prev.y + view.origin.y
-            };
-            ImVec2 end = {
-                view.scale * st.x + view.origin.x,
-                - view.scale * st.y + view.origin.y
-            };
+            ImVec2 prev_ = {(float)prev.x, (float)(-prev.y)};
+            ImVec2 st_ = {(float)st.x, (float)(-st.y)};
+            ImVec2 start = to_ImVec2(view.origin) + prev_ * view.scale;
+            ImVec2 end = to_ImVec2(view.origin) + st_ * view.scale;
+
             EmbThread thread = p->thread_list[st.color];
             int color = embColor_to_int(thread.color);
             EmbVector delta = {prev.x-st.x, prev.y-st.y};
@@ -1863,29 +1856,24 @@ void view_contextMenuEvent(QContextMenuEvent* event)
     std::vector<QGraphicsItem*> itemList = gscene->selectedItems();
     bool selectionEmpty = itemList.isEmpty();
 
-    for(int i = 0; i < itemList.size(); i++)
-    {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
-        {
+    for (int i = 0; i < itemList.size(); i++) {
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             selectionEmpty = false;
             break;
         }
     }
 
-    if (pastingActive)
-    {
+    if (pastingActive) {
         return;
     }
-    if (!mainWin->prompt->isCommandActive())
-    {
+    if (!mainWin->prompt->isCommandActive()) {
         std::string lastCmd = mainWin->prompt->lastCommand();
         QAction* repeatAction = new QAction(mainWin->load_icon(lastCmd), "Repeat " + lastCmd, this);
         repeatAction->setStatusTip("Repeats the previously issued command.");
         connect(repeatAction, SIGNAL(triggered()), this, SLOT(repeatAction()));
         menu.addAction(repeatAction);
     }
-    if (zoomWindowActive)
-    {
+    if (zoomWindowActive) {
         QAction* cancelZoomWinAction = new QAction("&Cancel (ZoomWindow)", this);
         cancelZoomWinAction->setStatusTip("Cancels the ZoomWindow Command.");
         connect(cancelZoomWinAction, SIGNAL(triggered()), this, SLOT(escapePressed()));
@@ -1898,8 +1886,7 @@ void view_contextMenuEvent(QContextMenuEvent* event)
     menu.addAction(mainWin->actionHash.value(ACTION_paste));
     menu.addSeparator();
 
-    if (!selectionEmpty)
-    {
+    if (!selectionEmpty) {
         QAction* deleteAction = new QAction(mainWin->load_icon("erase"), "D&elete", this);
         deleteAction->setStatusTip("Removes objects from a drawing.");
         connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
@@ -2002,13 +1989,10 @@ void view_deleteSelected()
     int numSelected = itemList.size();
     if (numSelected > 1)
         undoStack->beginMacro("Delete " + std::string().setNum(itemList.size()));
-    for(int i = 0; i < itemList.size(); i++)
-    {
-        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL)
-        {
+    for (int i = 0; i < itemList.size(); i++) {
+        if (itemList.at(i)->data(OBJ_TYPE) != OBJ_TYPE_NULL) {
             BaseObject* base = static_cast<BaseObject*>(itemList.at(i));
-            if (base)
-            {
+            if (base) {
                 UndoableDeleteCommand* cmd = new UndoableDeleteCommand(tr("Delete 1 ") + base->data(OBJ_NAME).toString(), base, this, 0);
                 if (cmd)
                 undoStack->push(cmd);
@@ -2021,8 +2005,7 @@ void view_deleteSelected()
 
 void view_cut()
 {
-    if (gscene->selectedItems().isEmpty())
-    {
+    if (gscene->selectedItems().isEmpty()) {
         information_messagebox(this, translate("Cut Preselect"), translate("Preselect objects before invoking the cut command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
@@ -2035,8 +2018,7 @@ void view_cut()
 
 void view_copy()
 {
-    if (gscene->selectedItems().isEmpty())
-    {
+    if (gscene->selectedItems().isEmpty()) {
         information_messagebox(this, translate("Copy Preselect"), translate("Preselect objects before invoking the copy command."));
         return; //TODO: Prompt to select objects if nothing is preselected
     }
@@ -2061,8 +2043,7 @@ void view_copySelected()
 
 void view_paste()
 {
-    if (pastingActive)
-    {
+    if (pastingActive) {
         gscene->removeItem(pasteObjectItemGroup);
         delete pasteObjectItemGroup;
     }
@@ -2080,16 +2061,14 @@ std::vector<QGraphicsItem*> view_createObjectList(std::vector<QGraphicsItem*> li
 {
     std::vector<QGraphicsItem*> copyList;
 
-    for(int i = 0; i < list.size(); i++)
-    {
+    for (int i = 0; i < list.size(); i++) {
         QGraphicsItem* item = list.at(i);
         if (!item)
             continue;
 
         int objType = item->data(OBJ_TYPE).toInt();
 
-        if (objType == OBJ_TYPE_ARC)
-        {
+        if (objType == OBJ_TYPE_ARC) {
             ArcObject* arcObj = static_cast<ArcObject*>(item);
             if (arcObj)
             {

@@ -15,7 +15,16 @@
 
 #include "embroidermodder.h"
 
-#if 0
+#include <math.h>
+
+void embArc_setCenter(EmbArc *arc, EmbVector point);
+void embArc_setRadius(EmbArc *arc, float radius);
+void embArc_setStartAngle(EmbArc *arc, float angle);
+void embArc_setEndAngle(EmbArc *arc, float angle);
+float embArc_startAngle(EmbArc arc);
+float embArc_endAngle(EmbArc arc);
+
+/*
 void arc_init(EmbArc arc_in, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
@@ -59,120 +68,100 @@ void update_arc_rect(float radius)
     arcRect.moveCenter(EmbVector(0,0));
     setRect(arcRect);
 }
+*/
 
-void set_arc_center(EmbVector point)
+void embArc_setCenter(EmbArc *arc, EmbVector point)
 {
-    setPos(point);
+    EmbVector delta;
+    EmbVector old_center;
+    getArcCenter(*arc, &old_center);
+    embVector_subtract(point, old_center, &delta);
+    embVector_add(arc->start, delta,  &(arc->start));
+    embVector_add(arc->mid, delta,  &(arc->mid));
+    embVector_add(arc->end, delta,  &(arc->end));
 }
 
-void set_arc_radius(float radius)
+void embArc_setRadius(EmbArc *arc, float radius)
 {
+    EmbVector delta;
     float rad;
-    if (radius <= 0) {
-        rad = 0.0000001;
+    if (radius <= 0.0f) {
+        rad = 0.0000001f;
     }
     else {
         rad = radius;
     }
 
-    EmbVector center = scenePos();
-    EmbLine startLine = EmbLine(center, objectStartPoint());
-    EmbLine midLine   = EmbLine(center, objectMidPoint());
-    EmbLine endLine   = EmbLine(center, objectEndPoint());
-    startLine.setLength(rad);
-    midLine.setLength(rad);
-    endLine.setLength(rad);
-    arcStartPoint = startLine.p2();
-    arcMidPoint = midLine.p2();
-    arcEndPoint = endLine.p2();
+    EmbVector center;
+    getArcCenter(*arc, &center);
+    double delta_length;
 
-    calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), arcEndPoint.x(), arcEndPoint.y());
+    embVector_subtract(arc->start, center, &delta);
+    delta_length = embVector_length(delta);
+    embVector_multiply(delta, rad/delta_length, &delta);
+    embVector_add(center, delta, &(arc->start));
+
+    embVector_subtract(arc->mid, center, &delta);
+    delta_length = embVector_length(delta);
+    embVector_multiply(delta, rad/delta_length, &delta);
+    embVector_add(center, delta, &(arc->mid));
+
+    embVector_subtract(arc->end, center, &delta);
+    delta_length = embVector_length(delta);
+    embVector_multiply(delta, rad/delta_length, &delta);
+    embVector_add(center, delta, &(arc->end));
 }
 
-void set_arc_start_angle(float angle)
+void embArc_startAngle(EmbArc *arc, float angle)
 {
     //TODO: ArcObject setObjectStartAngle
 }
 
-void set_arc_end_angle(float angle)
+void embAarc_endAngle(EmbArc *arc, float angle)
 {
     //TODO: ArcObject setObjectEndAngle
 }
 
-void set_arc_start_point(EmbVector point)
+float embArc_startAngle(EmbArc arc)
 {
-    arc.start = point;
-    calculateArcData(arc);
+    EmbVector delta;
+    EmbVector center;
+    getArcCenter(arc, &center);
+    embVector_subtract(arc.end, center, &delta);
+    float angle = embVector_angle(delta);
+    return fmodf(angle, 360.0);
 }
 
-void set_arc_mid_point(EmbVector point)
+float embArc_endAngle(EmbArc arc)
 {
-    arc.mid = point;
-    calculateArcData(arc);
+    EmbVector delta;
+    EmbVector center;
+    getArcCenter(arc, &center);
+    embVector_subtract(arc.end, center, &delta);
+    float angle = embVector_angle(delta);
+    return fmodf(angle, 360.0);
 }
 
-void set_object_end_point(EmbVector point)
+/*
+float embArc_area(EmbArc arc)
 {
-    arc.end = point;
-    calculateArcData(arc);
-}
-
-float arc_start_angle()
-{
-    return std::fmodf(EmbLine(scenePos(), objectStartPoint()).angle(), 360.0);;
-}
-
-float arc_end_angle()
-{
-    return std::fmodf(EmbLine(scenePos(), objectEndPoint()).angle(), 360.0);
-}
-
-EmbVector arc_startPoint() const
-{
-    float alpha = radians(rotation());
-    EmbVector position = embVector_scale(arc.start, scale());
-    EmbVector rot = embVector_rotate(postion, alpha);
-
-    return scenePos() + rot;
-}
-
-EmbVector Arc_MidPoint() const
-{
-    float alpha = radians(rotation());
-    EmbVector position = embVector_scale(arc.mid, scale());
-    EmbVector rot = embVector_rotate(postion, alpha);
-
-    return scenePos() + rot;
-}
-
-EmbVector Arc_EndPoint() const
-{
-    float alpha = radians(rotation());
-    EmbVector position = embVector_scale(arc.end, scale());
-    EmbVector rot = embVector_rotate(postion, alpha);
-
-    return scenePos() + rot;
-}
-
-float Arc_Area() const
-{
-    //Area of a circular segment
+    // Area of a circular segment
     float r = objectRadius();
     float theta = radians(objectIncludedAngle());
     return ((r*r)/2)*(theta - sin(theta));
 }
 
-float Arc_ArcLength() const
+float embArc_arcLength(EmbArc arc)
 {
     return radians(objectIncludedAngle())*objectRadius();
 }
 
-float Arc_Chord() const
+float embArc_chord()
 {
     return embVector_distance(arc.start, arc.end);
 }
 
-float Arc_IncludedAngle() const
+float Arc_IncludedAngle()
 {
     float chord = objectChord();
     float rad = objectRadius();
@@ -186,7 +175,7 @@ float Arc_IncludedAngle() const
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
-bool Arc_Clockwise() const
+bool Arc_Clockwise()
 {
     // NOTE: Y values are inverted here on purpose
     EmbArc arc2 = arc;
@@ -213,7 +202,9 @@ void Arc_updatePath()
     path.arcTo(rect(), startAngle+spanAngle, -spanAngle);
     setObjectPath(path);
 }
+*/
 
+#if 0
 void Arc_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
@@ -300,11 +291,6 @@ Base_BaseObject(QGraphicsItem* parent)
     objID = QDateTime::currentMSecsSinceEpoch();
 }
 
-Base_~BaseObject()
-{
-    debug_message("BaseObject Destructor()");
-}
-
 void Base_setObjectColor(const QColor& color)
 {
     objPen.setColor(color);
@@ -367,7 +353,7 @@ std::string Base_objectRubberText(const std::string& key) const
     return std::string();
 }
 
-EmbRect Base_boundingRect() const
+EmbRect Base_boundingRect()
 {
     //If gripped, force this object to be drawn even if it is offscreen
     if (objectRubberMode() == OBJ_RUBBER_GRIP)
@@ -404,7 +390,7 @@ void Base_realRender(QPainter* painter, const QPainterPath& renderPath)
     }
 
     int count = renderPath.elementCount();
-    for(int i = 0; i < count-1; ++i)
+    for (int i = 0; i < count-1; ++i)
     {
         QPainterPath::Element elem = renderPath.elementAt(i);
         QPainterPath::Element next = renderPath.elementAt(i+1);
@@ -434,16 +420,7 @@ void Base_realRender(QPainter* painter, const QPainterPath& renderPath)
     }
 }
 
-
-//NOTE: main() is run every time the command is started.
-//      Use it to reset variables so they are ready to go.
-//
-//NOTE: click() is run only for left clicks.
-//      Middle clicks are used for panning.
-//      Right clicks bring up the context menu.
-//
-
-void circle_main()
+void embCircle_main()
 {
     initCommand();
     clearSelection();
@@ -457,10 +434,10 @@ void circle_main()
     setPromptPrefix(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
 }
 
-void circle_click(float x, float y)
+void embCircle_click(float x, float y)
 {
     if (global.mode == global.mode_1P_RAD) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             global.cx = x;
@@ -482,7 +459,7 @@ void circle_click(float x, float y)
     }
     else if (global.mode == CIRCLE_MODE_1P_DIA)
     {
-        if (isNaN(global.x1))
+        if (isnan(global.x1))
         {
             error("CIRCLE", translate("This should never happen."));
         }
@@ -497,7 +474,7 @@ void circle_click(float x, float y)
         }
     }
     else if (global.mode == CIRCLE_MODE_2P) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             addRubber("CIRCLE");
@@ -506,7 +483,7 @@ void circle_click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify second end point of circle's diameter: "));
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             setRubberPoint("CIRCLE_TAN2", global.x2, global.y2);
@@ -519,13 +496,13 @@ void circle_click(float x, float y)
         }
     }
     else if (global.mode == CIRCLE_MODE_3P) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify second point on circle: "));
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             addRubber("CIRCLE");
@@ -535,7 +512,7 @@ void circle_click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify third point on circle: "));
         }
-        else if (isNaN(global.x3)) {
+        else if (isnan(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             setRubberPoint("CIRCLE_TAN3", global.x3, global.y3);
@@ -548,19 +525,19 @@ void circle_click(float x, float y)
         }
     }
     else if (global.mode == CIRCLE_MODE_TTR) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify point on object for second tangent of circle: "));
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             appendPromptHistory();
             setPromptPrefix(translate("Specify radius of circle: "));
         }
-        else if (isNaN(global.x3)) {
+        else if (isnan(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             appendPromptHistory();
@@ -572,15 +549,15 @@ void circle_click(float x, float y)
     }
 }
 
-void circle_context(std::string str)
+void embCircle_context(std::string str)
 {
     todo("CIRCLE", "context()");
 }
 
-void circle_prompt(std::string str)
+void embCircle_prompt(std::string str)
 {
     if (global.mode == global.mode_1P_RAD) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             if (str == "2P") {
                 //TODO: Probably should add additional qsTr calls here.
                 global.mode = CIRCLE_MODE_2P;
@@ -598,7 +575,7 @@ void circle_prompt(std::string str)
             }
             else {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify center point for circle or [3P/2P/Ttr (tan tan radius)]: "));
                 }
@@ -623,7 +600,7 @@ void circle_prompt(std::string str)
             }
             else {
                 var num = Number(str);
-                if (isNaN(num)) {
+                if (isnan(num)) {
                     alert(translate("Requires numeric radius, point on circumference, or \"D\"."));
                     setPromptPrefix(translate("Specify radius of circle or [Diameter]: "));
                 }
@@ -639,12 +616,12 @@ void circle_prompt(std::string str)
         }
     }
     else if (global.mode == global.mode_1P_DIA) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             error("CIRCLE", translate("This should never happen."));
         }
-        if (isNaN(global.x2)) {
+        if (isnan(global.x2)) {
             var num = Number(str);
-            if (isNaN(num)) {
+            if (isnan(num)) {
                 alert(translate("Requires numeric distance or second point."));
                 setPromptPrefix(translate("Specify diameter of circle: "));
             }
@@ -662,9 +639,9 @@ void circle_prompt(std::string str)
         }
     }
     else if (global.mode == global.mode_2P) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first end point of circle's diameter: "));
             }
@@ -677,9 +654,9 @@ void circle_prompt(std::string str)
                 setPromptPrefix(translate("Specify second end point of circle's diameter: "));
             }
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify second end point of circle's diameter: "));
             }
@@ -696,9 +673,9 @@ void circle_prompt(std::string str)
         }
     }
     else if (global.mode == global.mode_3P) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first point of circle: "));
             }
@@ -708,9 +685,9 @@ void circle_prompt(std::string str)
                 setPromptPrefix(translate("Specify second point of circle: "));
             }
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify second point of circle: "));
             }
@@ -724,9 +701,9 @@ void circle_prompt(std::string str)
                 setPromptPrefix(translate("Specify third point of circle: "));
             }
         }
-        else if (isNaN(global.x3)) {
+        else if (isnan(global.x3)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify third point of circle: "));
             }
@@ -748,13 +725,13 @@ void circle_prompt(std::string str)
     }
 }
 
-Circle_CircleObject(float centerX, float centerY, float radius, unsigned int rgb, QGraphicsItem* parent)
+void embCircle_CircleObject(float centerX, float centerY, float radius, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-Circle_CircleObject(CircleObject* obj, QGraphicsItem* parent)
+void embCircle_CircleObject(CircleObject* obj, QGraphicsItem* parent)
 {
     debug_message("CircleObject Constructor()");
     if (obj) {
@@ -763,12 +740,7 @@ Circle_CircleObject(CircleObject* obj, QGraphicsItem* parent)
     }
 }
 
-Circle_~CircleObject()
-{
-    debug_message("CircleObject Destructor()");
-}
-
-void Circle_init(float centerX, float centerY, float radius, unsigned int rgb, Qt::PenStyle lineType)
+void embCircle_init(float centerX, float centerY, float radius, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "CIRCLE");
@@ -787,33 +759,19 @@ void Circle_init(float centerX, float centerY, float radius, unsigned int rgb, Q
     updatePath();
 }
 
-void Circle_setObjectCenter(EmbVector& center)
+void embCircle_setObjectCenter(EmbVector& center)
 {
     setObjectCenter(center.x(), center.y());
 }
 
-void Circle_setObjectCenter(float centerX, float centerY)
+void embCircle_setObjectCenter(float centerX, float centerY)
 {
     setPos(centerX, centerY);
 }
 
-void Circle_setObjectCenterX(float centerX)
+void embCircle_setObjectDiameter(EmbCircle *circle, float diameter)
 {
-    setX(centerX);
-}
-
-void Circle_setObjectCenterY(float centerY)
-{
-    setY(centerY);
-}
-
-void Circle_setObjectRadius(float radius)
-{
-    setObjectDiameter(radius*2.0);
-}
-
-void Circle_setObjectDiameter(float diameter)
-{
+    circle->radius = diameter*0.5;
     EmbRect circRect;
     circRect.setWidth(diameter);
     circRect.setHeight(diameter);
@@ -822,19 +780,19 @@ void Circle_setObjectDiameter(float diameter)
     updatePath();
 }
 
-void Circle_setObjectArea(float area)
+void embCircle_setObjectArea(float area)
 {
     float radius = sqrt(area/pi());
     setObjectRadius(radius);
 }
 
-void Circle_setObjectCircumference(float circumference)
+void embCircle_setObjectCircumference(float circumference)
 {
     float diameter = circumference/pi();
     setObjectDiameter(diameter);
 }
 
-void Circle_updatePath()
+void embCircle_updatePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -848,7 +806,7 @@ void Circle_updatePath()
     setObjectPath(path);
 }
 
-void Circle_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void embCircle_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -863,7 +821,7 @@ void Circle_paint(QPainter* painter, QStyleOptionGraphicsItem* option, QWidget* 
     painter->drawEllipse(rect());
 }
 
-void Circle_updateRubber(QPainter* painter)
+void embCircle_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_CIRCLE_1P_RAD)
@@ -948,7 +906,7 @@ void Circle_updateRubber(QPainter* painter)
     }
 }
 
-void Circle_vulcanize()
+void embCircle_vulcanize()
 {
     debug_message("CircleObject vulcanize()");
     updateRubber();
@@ -989,7 +947,7 @@ std::vector<EmbVector> Circle_allGripPoints()
     return gripPoints;
 }
 
-void Circle_gripEdit(EmbVector& before, EmbVector& after)
+void embCircle_gripEdit(EmbVector& before, EmbVector& after)
 {
     if (before == objectCenter()) {
         EmbVector delta = after-before;
@@ -1000,7 +958,7 @@ void Circle_gripEdit(EmbVector& before, EmbVector& after)
     }
 }
 
-QPainterPath Circle_objectSavePath() const
+QPainterPath Circle_objectSavePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -1058,12 +1016,12 @@ void dimleader_setObjectEndPoint2(EmbVector endPt2)
     updateLeader();
 }
 
-EmbVector dimleader_objectEndPoint1() const
+EmbVector dimleader_objectEndPoint1()
 {
     return scenePos();
 }
 
-EmbVector dimleader_objectEndPoint2() const
+EmbVector dimleader_objectEndPoint2()
 {
     EmbLine lyne = line();
     float rot = radians(rotation());
@@ -1075,7 +1033,7 @@ EmbVector dimleader_objectEndPoint2() const
     return (scenePos() + rot);
 }
 
-EmbVector dimleader_objectMidPoint() const
+EmbVector dimleader_objectMidPoint()
 {
     EmbVector mp = line().pointAt(0.5) * scale();
     float alpha = radians(rotation());
@@ -1083,7 +1041,7 @@ EmbVector dimleader_objectMidPoint() const
     return scenePos() + rotMid;
 }
 
-float dimleader_objectAngle() const
+float dimleader_objectAngle()
 {
     return fmodf(line().angle() - rotation(), 360.0);
 }
@@ -1277,7 +1235,7 @@ void dimleader_gripEdit(const EmbVector& before, const EmbVector& after)
 
 //NOTE: main() is run every time the command is started.
 //      Use it to reset variables so they are ready to go.
-void ellipse_main()
+void embEllipse_main()
 {
     initCommand();
     clearSelection();
@@ -1297,7 +1255,7 @@ void ellipse_main()
 void click(float x, float y)
 {
     if (global.mode == global.mode_MAJORDIAMETER_MINORRADIUS) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             global.x1 = x;
             global.y1 = y;
             addRubber("ELLIPSE");
@@ -1306,7 +1264,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify first axis end point: "));
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             global.cx = (global.x1 + global.x2)/2.0;
@@ -1322,7 +1280,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
         }
-        else if (isNaN(global.x3)) {
+        else if (isnan(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -1338,7 +1296,7 @@ void click(float x, float y)
     }
     else if (global.mode == global.mode_MAJORRADIUS_MINORRADIUS)
     {
-        if (isNaN(global.x1))
+        if (isnan(global.x1))
         {
             global.x1 = x;
             global.y1 = y;
@@ -1351,8 +1309,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify first axis end point: "));
         }
-        else if (isNaN(global.x2))
-        {
+        else if (isnan(global.x2)) {
             global.x2 = x;
             global.y2 = y;
             global.width = calculateDistance(global.cx, global.cy, global.x2, global.y2)*2.0;
@@ -1364,8 +1321,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
         }
-        else if (isNaN(global.x3))
-        {
+        else if (isnan(global.x3)) {
             global.x3 = x;
             global.y3 = y;
             global.height = perpendicularDistance(global.x3, global.y3, global.cx, global.cy, global.x2, global.y2)*2.0;
@@ -1374,19 +1330,18 @@ void click(float x, float y)
             appendPromptHistory();
             endCommand();
         }
-        else
-        {
+        else {
             error("ELLIPSE", translate("This should never happen."));
         }
     }
     else if (global.mode == global.mode_ELLIPSE_ROTATION) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             error("ELLIPSE", translate("This should never happen."));
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             error("ELLIPSE", translate("This should never happen."));
         }
-        else if (isNaN(global.x3)) {
+        else if (isnan(global.x3)) {
             var angle = calculateAngle(global.cx, global.cy, x, y);
             global.height = cos(angle*Math.PI/180.0)*global.width;
             addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
@@ -1404,7 +1359,7 @@ void context(std::string str)
 void prompt(std::string str)
 {
     if (mode == MAJORDIAMETER_MINORRADIUS) {
-        if (isNaN(global.x1))
+        if (isnan(global.x1))
         {
             if (str == "C" || str == "CENTER") //TODO: Probably should add additional qsTr calls here.
             {
@@ -1414,7 +1369,7 @@ void prompt(std::string str)
             else
             {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
+                if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify first axis start point or [Center]: "));
@@ -1430,9 +1385,9 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isNaN(global.x2)) {
+        else if (isnan(global.x2)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first axis end point: "));
             }
@@ -1452,14 +1407,14 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
             }
         }
-        else if (isNaN(global.x3)) {
+        else if (isnan(global.x3)) {
             if (str == "R" || str == "ROTATION") {//TODO: Probably should add additional qsTr calls here.
                 global.mode = global.mode_ELLIPSE_ROTATION;
                 setPromptPrefix(translate("Specify rotation: "));
             }
             else {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
                 }
@@ -1475,9 +1430,9 @@ void prompt(std::string str)
         }
     }
     else if (mode == MAJORRADIUS_MINORRADIUS) {
-        if (isNaN(global.x1)) {
+        if (isnan(global.x1)) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify center point: "));
             }
@@ -1493,10 +1448,10 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify first axis end point: "));
             }
         }
-        else if (isNaN(global.x2))
+        else if (isnan(global.x2))
         {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify first axis end point: "));
@@ -1514,7 +1469,7 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
             }
         }
-        else if (isNaN(global.x3))
+        else if (isnan(global.x3))
         {
             if (str == "R" || str == "ROTATION") //TODO: Probably should add additional qsTr calls here.
             {
@@ -1524,13 +1479,12 @@ void prompt(std::string str)
             else
             {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
+                if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify second axis end point or [Rotation]: "));
                 }
-                else
-                {
+                else {
                     global.x3 = Number(strList[0]);
                     global.y3 = Number(strList[1]);
                     global.height = perpendicularDistance(global.x3, global.y3, global.x1, global.y1, global.x2, global.y2)*2.0;
@@ -1541,25 +1495,19 @@ void prompt(std::string str)
             }
         }
     }
-    else if (global.mode == global.mode_ELLIPSE_ROTATION)
-    {
-        if (isNaN(global.x1))
-        {
+    else if (global.mode == global.mode_ELLIPSE_ROTATION) {
+        if (isnan(global.x1)) {
             error("ELLIPSE", translate("This should never happen."));
         }
-        else if (isNaN(global.x2))
-        {
+        else if (isnan(global.x2)) {
             error("ELLIPSE", translate("This should never happen."));
         }
-        else if (isNaN(global.x3))
-        {
-            if (isNaN(str))
-            {
+        else if (isnan(global.x3)) {
+            if (isnan(str)) {
                 alert(translate("Invalid angle. Input a numeric angle or pick a point."));
                 setPromptPrefix(translate("Specify rotation: "));
             }
-            else
-            {
+            else {
                 var angle = Number(str);
                 global.height = cos(angle*Math.PI/180.0)*global.width;
                 addEllipse(global.cx, global.cy, global.width, global.height, global.rot, false);
@@ -1569,13 +1517,13 @@ void prompt(std::string str)
     }
 }
 
-ellipse_EllipseObject(float centerX, float centerY, float width, float height, unsigned int rgb, QGraphicsItem* parent)
+void embEllipse_EllipseObject(float centerX, float centerY, float width, float height, unsigned int rgb, QGraphicsItem* parent)
 {
     debug_message("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
-ellipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent)
+void embEllipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent)
 {
     debug_message("EllipseObject Constructor()");
     if (obj) {
@@ -1584,7 +1532,7 @@ ellipse_EllipseObject(EllipseObject* obj, QGraphicsItem* parent)
     }
 }
 
-void ellipse_init(float centerX, float centerY, float width, float height, unsigned int rgb, Qt::PenStyle lineType)
+void embEllipse_init(float centerX, float centerY, float width, float height, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
     setData(OBJ_NAME, "Ellipse");
@@ -1603,7 +1551,7 @@ void ellipse_init(float centerX, float centerY, float width, float height, unsig
     updatePath();
 }
 
-void ellipse_setObjectSize(float width, float height)
+void embEllipse_setObjectSize(float width, float height)
 {
     EmbRect elRect = rect();
     elRect.setWidth(width);
@@ -1612,37 +1560,37 @@ void ellipse_setObjectSize(float width, float height)
     setRect(elRect);
 }
 
-void ellipse_setObjectCenter(const EmbVector& center)
+void embEllipse_setObjectCenter(const EmbVector& center)
 {
     setObjectCenter(center.x(), center.y());
 }
 
-void ellipse_setObjectCenter(float centerX, float centerY)
+void embEllipse_setObjectCenter(float centerX, float centerY)
 {
     setPos(centerX, centerY);
 }
 
-void ellipse_setObjectCenterX(float centerX)
+void embEllipse_setObjectCenterX(float centerX)
 {
     setX(centerX);
 }
 
-void ellipse_setObjectCenterY(float centerY)
+void embEllipse_setObjectCenterY(float centerY)
 {
     setY(centerY);
 }
 
-void ellipse_setObjectRadiusMajor(float radius)
+void embEllipse_setObjectRadiusMajor(float radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
-void ellipse_setObjectRadiusMinor(float radius)
+void embEllipse_setObjectRadiusMinor(float radius)
 {
     setObjectDiameterMinor(radius*2.0);
 }
 
-void ellipse_setObjectDiameterMajor(float diameter)
+void embEllipse_setObjectDiameterMajor(float diameter)
 {
     EmbRect elRect = rect();
     if (elRect.width() > elRect.height())
@@ -1653,7 +1601,7 @@ void ellipse_setObjectDiameterMajor(float diameter)
     setRect(elRect);
 }
 
-void ellipse_setObjectDiameterMinor(float diameter)
+void embEllipse_setObjectDiameterMinor(float diameter)
 {
     EmbRect elRect = rect();
     if (elRect.width() < elRect.height())
@@ -1664,7 +1612,7 @@ void ellipse_setObjectDiameterMinor(float diameter)
     setRect(elRect);
 }
 
-EmbVector ellipse_objectQuadrant0() const
+EmbVector ellipse_objectQuadrant0()
 {
     float halfW = objectWidth()/2.0;
     float rot = radians(rotation());
@@ -1673,7 +1621,7 @@ EmbVector ellipse_objectQuadrant0() const
     return objectCenter() + EmbVector(x,y);
 }
 
-EmbVector ellipse_objectQuadrant90() const
+EmbVector ellipse_objectQuadrant90()
 {
     float halfH = objectHeight()/2.0;
     float rot = radians(rotation()+90.0);
@@ -1682,7 +1630,7 @@ EmbVector ellipse_objectQuadrant90() const
     return objectCenter() + EmbVector(x,y);
 }
 
-EmbVector ellipse_objectQuadrant180() const
+EmbVector ellipse_objectQuadrant180()
 {
     float halfW = objectWidth()/2.0;
     float rot = radians(rotation()+180.0);
@@ -1691,7 +1639,7 @@ EmbVector ellipse_objectQuadrant180() const
     return objectCenter() + EmbVector(x,y);
 }
 
-EmbVector ellipse_objectQuadrant270() const
+EmbVector ellipse_objectQuadrant270()
 {
     float halfH = objectHeight()/2.0;
     float rot = radians(rotation()+270.0);
@@ -1700,7 +1648,7 @@ EmbVector ellipse_objectQuadrant270() const
     return objectCenter() + EmbVector(x,y);
 }
 
-void ellipse_updatePath()
+void embEllipse_updatePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -1711,7 +1659,7 @@ void ellipse_updatePath()
     setObjectPath(path);
 }
 
-void ellipse_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+void embEllipse_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if (!objScene) return;
@@ -1726,7 +1674,7 @@ void ellipse_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     painter->drawEllipse(rect());
 }
 
-void ellipse_updateRubber(QPainter* painter)
+void embEllipse_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if (rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
@@ -1810,7 +1758,7 @@ void ellipse_updateRubber(QPainter* painter)
     }
 }
 
-void ellipse_vulcanize()
+void embEllipse_vulcanize()
 {
     debug_message("EllipseObject vulcanize()");
     updateRubber();
@@ -1851,12 +1799,12 @@ std::vector<EmbVector> ellipse_allGripPoints()
     return gripPoints;
 }
 
-void ellipse_gripEdit(const EmbVector& before, const EmbVector& after)
+void embEllipse_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     //TODO: gripEdit() for EllipseObject
 }
 
-QPainterPath ellipse_objectSavePath() const
+QPainterPath ellipse_objectSavePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -1894,7 +1842,7 @@ void image_setObjectRect(float x, float y, float w, float h)
     updatePath();
 }
 
-EmbVector image_objectTopLeft() const
+EmbVector image_objectTopLeft()
 {
     float alpha = radians(rotation());
     EmbVector tl = rect().topRight() * scale();
@@ -1902,7 +1850,7 @@ EmbVector image_objectTopLeft() const
     return scenePos() + ptlrot;
 }
 
-EmbVector image_objectTopRight() const
+EmbVector image_objectTopRight()
 {
     float alpha = radians(rotation());
     EmbVector tr = rect().topRight() * scale();
@@ -1910,7 +1858,7 @@ EmbVector image_objectTopRight() const
     return scenePos() + ptrrot;
 }
 
-EmbVector image_objectBottomLeft() const
+EmbVector image_objectBottomLeft()
 {
     float alpha = radians(rotation());
     EmbVector bl = rect().topRight() * scale();
@@ -1918,7 +1866,7 @@ EmbVector image_objectBottomLeft() const
     return scenePos() + pblrot;
 }
 
-EmbVector image_objectBottomRight() const
+EmbVector image_objectBottomRight()
 {
     float alpha = radians(rotation());
     EmbVector br = rect().topRight() * scale();
@@ -2098,7 +2046,7 @@ prompt(std::string str)
     if (global.firstRun)
     {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify first point: "));
@@ -2121,7 +2069,7 @@ prompt(std::string str)
         }
         else {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
                 setPromptPrefix(translate("Specify next point or [Undo]: "));
@@ -2180,7 +2128,7 @@ void line_setObjectEndPoint2(EmbVector point1)
     setPos(point1);
 }
 
-EmbVector line_objectEndPoint2() const
+EmbVector line_objectEndPoint2()
 {
     EmbLine lyne = line();
     float alpha = radians(rotation());
@@ -2192,7 +2140,7 @@ EmbVector line_objectEndPoint2() const
     return scenePos() + rotEnd;
 }
 
-EmbVector line_objectMidPoint() const
+EmbVector line_objectMidPoint()
 {
     EmbLine lyne = line();
     EmbVector mp = lyne.pointAt(0.5) * scale();
@@ -2202,7 +2150,7 @@ EmbVector line_objectMidPoint() const
     return scenePos() + rotMid;
 }
 
-float line_objectAngle() const
+float line_objectAngle()
 {
     return std::fmodf(line().angle() - rotation(), 360.0);
 }
@@ -2297,7 +2245,7 @@ void line_gripEdit(EmbVector& before, EmbVector& after)
     else if (before == objectMidPoint())  { EmbVector delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-QPainterPath line_objectSavePath() const
+QPainterPath line_objectSavePath()
 {
     QPainterPath path;
     path.lineTo(objectDeltaX(), objectDeltaY());
@@ -2318,11 +2266,6 @@ path_PathObject(PathObject* obj, QGraphicsItem* parent)
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
-}
-
-path_~PathObject()
-{
-    debug_message("PathObject Destructor()");
 }
 
 void path_init(float x, float y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
@@ -2403,12 +2346,12 @@ void path_gripEdit(const EmbVector& before, const EmbVector& after)
     //TODO: gripEdit() for PathObject
 }
 
-QPainterPath path_objectCopyPath() const
+QPainterPath path_objectCopyPath()
 {
     return normalPath;
 }
 
-QPainterPath path_objectSavePath() const
+QPainterPath path_objectSavePath()
 {
     float s = scale();
     QTransform trans;
@@ -2514,11 +2457,6 @@ void polygon_PolygonObject(PolygonObject* obj, QGraphicsItem* parent)
     }
 }
 
-polygon_~PolygonObject()
-{
-    debug_message("PolygonObject Destructor()");
-}
-
 void polygon_init(float x, float y, const QPainterPath& p, unsigned int rgb, PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
@@ -2585,7 +2523,7 @@ void polygon_updateRubber(QPainter* painter)
         std::string appendStr;
         QPainterPath rubberPath;
         rubberPath.moveTo(mapFromScene(objectRubberPoint("POLYGON_POINT_0")));
-        for(int i = 1; i <= num; i++)
+        for (int i = 1; i <= num; i++)
         {
             appendStr = "POLYGON_POINT_" + std::string().setNum(i);
             EmbVector appendPoint = mapFromScene(objectRubberPoint(appendStr));
@@ -2614,7 +2552,7 @@ void polygon_updateRubber(QPainter* painter)
         //First Point
         inscribePath.moveTo(inscribePoint);
         //Remaining Points
-        for(int i = 1; i < numSides; i++)
+        for (int i = 1; i < numSides; i++)
         {
             inscribeLine.setAngle(inscribeAngle + inscribeInc*i);
             inscribePath.lineTo(inscribeLine.p2());
@@ -2645,7 +2583,7 @@ void polygon_updateRubber(QPainter* painter)
         perp.intersects(prev, &iPoint);
         circumscribePath.moveTo(iPoint);
         //Remaining Points
-        for(int i = 2; i <= numSides; i++)
+        for (int i = 2; i <= numSides; i++)
         {
             prev = perp;
             circumscribeLine.setAngle(circumscribeAngle + circumscribeInc*i);
@@ -2729,7 +2667,7 @@ int polygon_findIndex(const EmbVector& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     EmbVector itemPoint = mapFromScene(point);
-    for(i = 0; i < elemCount; i++)
+    for (i = 0; i < elemCount; i++)
     {
         QPainterPath::Element e = normalPath.elementAt(i);
         EmbVector elemPoint = EmbVector(e.x, e.y);
@@ -2748,12 +2686,12 @@ void polygon_gripEdit(const EmbVector& before, const EmbVector& after)
     gripIndex = -1;
 }
 
-QPainterPath polygon_objectCopyPath() const
+QPainterPath polygon_objectCopyPath()
 {
     return normalPath;
 }
 
-QPainterPath polygon_objectSavePath() const
+QPainterPath polygon_objectSavePath()
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();
@@ -2779,11 +2717,6 @@ void polyline_PolylineObject(PolylineObject* obj, QGraphicsItem* parent)
         setRotation(obj->rotation());
         setScale(obj->scale());
     }
-}
-
-polyline_~PolylineObject()
-{
-    debug_message("PolylineObject Destructor()");
 }
 
 void polyline_init(float x, float y, const QPainterPath& p, unsigned int rgb, Qt::PenStyle lineType)
@@ -2848,7 +2781,7 @@ void polyline_updateRubber(QPainter* painter)
 
         std::string appendStr;
         QPainterPath rubberPath;
-        for(int i = 1; i <= num; i++)
+        for (int i = 1; i <= num; i++)
         {
             appendStr = "POLYLINE_POINT_" + std::string().setNum(i);
             EmbVector appendPoint = mapFromScene(objectRubberPoint(appendStr));
@@ -2914,7 +2847,7 @@ EmbVector polyline_mouseSnapPoint(const EmbVector& mousePoint)
     EmbVector closestPoint = mapToScene(EmbVector(element.x, element.y));
     float closestDist = EmbLine(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
-    for(int i = 0; i < elemCount; ++i)
+    for (int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         EmbVector elemPoint = mapToScene(element.x, element.y);
@@ -2932,7 +2865,7 @@ std::vector<EmbVector> polyline_allGripPoints()
 {
     std::vector<EmbVector> gripPoints;
     QPainterPath::Element element;
-    for(int i = 0; i < normalPath.elementCount(); ++i)
+    for (int i = 0; i < normalPath.elementCount(); ++i)
     {
         element = normalPath.elementAt(i);
         gripPoints << mapToScene(element.x, element.y);
@@ -2945,8 +2878,7 @@ int polyline_findIndex(const EmbVector& point)
     int elemCount = normalPath.elementCount();
     //NOTE: Points here are in item coordinates
     EmbVector itemPoint = mapFromScene(point);
-    for(int i = 0; i < elemCount; i++)
-    {
+    for (int i = 0; i < elemCount; i++) {
         QPainterPath::Element e = normalPath.elementAt(i);
         EmbVector elemPoint = EmbVector(e.x, e.y);
         if (itemPoint == elemPoint) return i;
@@ -2964,12 +2896,12 @@ void polyline_gripEdit(const EmbVector& before, const EmbVector& after)
     gripIndex = -1;
 }
 
-QPainterPath polyline_objectCopyPath() const
+QPainterPath polyline_objectCopyPath()
 {
     return normalPath;
 }
 
-QPainterPath polyline_objectSavePath() const
+QPainterPath polyline_objectSavePath()
 {
     float s = scale();
     QTransform trans;
@@ -3002,7 +2934,7 @@ void rect_setObjectRect(float x, float y, float w, float h)
     updatePath();
 }
 
-EmbVector rect_objectTopLeft() const
+EmbVector rect_objectTopLeft()
 {
     float alpha = radians(rotation());
     EmbVector tl = rect().topLeft() * scale();
@@ -3010,7 +2942,7 @@ EmbVector rect_objectTopLeft() const
     return scenePos() + ptlrot;
 }
 
-EmbVector rect_objectTopRight() const
+EmbVector rect_objectTopRight()
 {
     float alpha = radians(rotation());
     EmbVector tr = rect().topRight() * scale();
@@ -3018,7 +2950,7 @@ EmbVector rect_objectTopRight() const
     return scenePos() + ptrrot;
 }
 
-EmbVector rect_objectBottomLeft() const
+EmbVector rect_objectBottomLeft()
 {
     float alpha = radians(rotation());
     EmbVector bl = rect().bottomLeft() * scale();
@@ -3026,7 +2958,7 @@ EmbVector rect_objectBottomLeft() const
     return scenePos() + pblrot;
 }
 
-EmbVector rect_objectBottomRight() const
+EmbVector rect_objectBottomRight()
 {
     float alpha = radians(rotation());
     EmbVector br = rect().bottomRight() * scale();
@@ -3069,8 +3001,7 @@ void rect_paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidg
 void rect_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_RECTANGLE)
-    {
+    if (rubberMode == OBJ_RUBBER_RECTANGLE) {
         EmbVector sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         EmbVector sceneEndPoint = objectRubberPoint("RECTANGLE_END");
         float x = sceneStartPoint.x();
@@ -3080,8 +3011,7 @@ void rect_updateRubber(QPainter* painter)
         setObjectRect(x,y,w,h);
         updatePath();
     }
-    else if (rubberMode == OBJ_RUBBER_GRIP)
-    {
+    else if (rubberMode == OBJ_RUBBER_GRIP) {
         if (painter)
         {
             //TODO: Make this work with rotation & scaling
@@ -3149,13 +3079,21 @@ std::vector<EmbVector> rect_allGripPoints()
 void rect_gripEdit(const EmbVector& before, const EmbVector& after)
 {
     EmbVector delta = after-before;
-    if     (before == objectTopLeft())     { setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y()); }
-    else if (before == objectTopRight())    { setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y()); }
-    else if (before == objectBottomLeft())  { setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y()); }
-    else if (before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
+    if (before == objectTopLeft()) {
+        setObjectRect(after.x(), after.y(), objectWidth()-delta.x(), objectHeight()-delta.y());
+    }
+    else if (before == objectTopRight()) {
+        setObjectRect(objectTopLeft().x(), objectTopLeft().y()+delta.y(), objectWidth()+delta.x(), objectHeight()-delta.y());
+    }
+    else if (before == objectBottomLeft()) {
+        setObjectRect(objectTopLeft().x()+delta.x(), objectTopLeft().y(), objectWidth()-delta.x(), objectHeight()+delta.y());
+    }
+    else if (before == objectBottomRight()) {
+        setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y());
+    }
 }
 
-QPainterPath rect_objectSavePath() const
+QPainterPath rect_objectSavePath()
 {
     QPainterPath path;
     EmbRect r = rect();
@@ -3220,193 +3158,6 @@ bool save_save(const std::string &fileName)
     return writeSuccessful;
 }
 
-void save_addCircle(EmbPattern* pattern, QGraphicsItem* item)
-{
-    CircleObject* obj = static_cast<CircleObject*>(item);
-    if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            QPainterPath path = obj->objectSavePath();
-            toPolyline(pattern, obj->objectCenter(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
-        }
-        else {
-            EmbCircle circle;
-            circle.center.x = (float)obj->objectCenterX();
-            circle.center.y = (float)obj->objectCenterY();
-            circle.radius = (float)obj->objectRadius();
-            embPattern_addCircleAbs(pattern, circle);
-        }
-    }
-}
-
-void save_addEllipse(EmbPattern* pattern, QGraphicsItem* item)
-{
-    EllipseObject* obj = static_cast<EllipseObject*>(item);
-    if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            QPainterPath path = obj->objectSavePath();
-            toPolyline(pattern, obj->objectCenter(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
-        }
-        else {
-            //TODO: ellipse rotation
-            EmbEllipse ellipse;
-            ellipse.center.x = (float)obj->objectCenterX();
-            ellipse.center.y = (float)obj->objectCenterY();
-            ellipse.radius.x = (float)obj->objectWidth()/2.0;
-            ellipse.radius.y = (float)obj->objectHeight()/2.0;
-            embPattern_addEllipseAbs(pattern, ellipse);
-        }
-    }
-}
-
-void save_addLine(EmbPattern* pattern, QGraphicsItem* item)
-{
-    LineObject* obj = static_cast<LineObject*>(item);
-    if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(pattern, obj->objectEndPoint1(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
-        }
-        else {
-            EmbLine line;
-            line.start.x = (float)obj->objectX1();
-            line.start.y = (float)obj->objectY1();
-            line.end.x = (float)obj->objectX2();
-            line.end.y = (float)obj->objectY2();
-            embPattern_addLineAbs(pattern, line);
-        }
-    }
-}
-
-void save_addPath(EmbPattern* pattern, QGraphicsItem* item)
-{
-    //TODO: Reimplement addPolyline() using the libembroidery C API
-    /*
-    debug_message("addPolyline()");
-    QGraphicsPathItem* polylineItem = (QGraphicsPathItem*)item;
-    if (polylineItem)
-    {
-        QPainterPath path = polylineItem->path();
-        EmbVector pos = polylineItem->pos();
-        float startX = pos.x();
-        float startY = pos.y();
-
-        QPainterPath::Element element;
-        QPainterPath::Element P1;
-        QPainterPath::Element P2;
-        QPainterPath::Element P3;
-        QPainterPath::Element P4;
-
-        for(int i = 0; i < path.elementCount()-1; ++i)
-        {
-            element = path.elementAt(i);
-            if (element.isMoveTo())
-            {
-                pattern.AddStitchAbs((element.x + startX), -(element.y + startY), TRIM);
-            }
-            else if (element.isLineTo())
-            {
-                pattern.AddStitchAbs((element.x + startX), -(element.y + startY), NORMAL);
-            }
-            else if (element.isCurveTo())
-            {
-                P1 = path.elementAt(i-1); // start point
-                P2 = path.elementAt(i);   // control point
-                P3 = path.elementAt(i+1); // control point
-                P4 = path.elementAt(i+2); // end point
-
-                pattern.AddStitchAbs(P4.x, -P4.y, NORMAL); //TODO: This is temporary
-                //TODO: Curved Polyline segments are always arcs
-            }
-        }
-        pattern.AddStitchRel(0, 0, STOP);
-        QColor c= polylineItem->pen().color();
-        pattern.AddColor(c.red(), c.green(), c.blue(), "", "");
-    }
-    */
-}
-
-void save_addPoint(EmbPattern* pattern, QGraphicsItem* item)
-{
-    PointObject* obj = static_cast<PointObject*>(item);
-    if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
-        }
-        else {
-            EmbPoint point;
-            point.position.x = (float)obj->objectX();
-            point.position.y = (float)obj->objectY();
-            embPattern_addPointAbs(pattern, point);
-        }
-    }
-}
-
-void save_addPolygon(EmbPattern* pattern, QGraphicsItem* item)
-{
-    PolygonObject* obj = static_cast<PolygonObject*>(item);
-    if (obj) {
-        toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
-    }
-}
-
-void save_addPolyline(EmbPattern* pattern, QGraphicsItem* item)
-{
-    PolylineObject* obj = static_cast<PolylineObject*>(item);
-    if (obj) {
-        toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
-    }
-}
-
-void save_addRectangle(EmbPattern* pattern, QGraphicsItem* item)
-{
-    RectObject* obj = static_cast<RectObject*>(item);
-    if (obj) {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            toPolyline(pattern, obj->objectPos(), obj->objectSavePath(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight
-        }
-        else {
-            //TODO: Review this at some point
-            EmbVector topLeft = obj->objectTopLeft();
-            EmbRect rect;
-            rect.left = (float)topLeft.x();
-            rect.top = (float)topLeft.y();
-            rect.bottom = rect.top + (float)obj->objectHeight();
-            rect.right = rect.left + (float)obj->objectWidth();
-            embPattern_addRectAbs(pattern, rect);
-        }
-    }
-}
-
-void save_addSpline(EmbPattern* pattern, QGraphicsItem* item)
-{
-    //TODO: abstract bezier into geom-bezier... cubicBezierMagic(P1, P2, P3, P4, 0.0, 1.0, tPoints);
-}
-
-void save_addTextMulti(EmbPattern* pattern, QGraphicsItem* item)
-{
-    //TODO: saving polygons, polylines and paths must be stable before we go here.
-}
-
-void save_addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
-{
-    //TODO: saving polygons, polylines and paths must be stable before we go here.
-
-    //TODO: This needs to work like a path, not a polyline. Improve this
-    TextSingleObject* obj = static_cast<TextSingleObject*>(item);
-    if (obj)
-    {
-        if (formatType == EMBFORMAT_STITCHONLY) {
-            std::vector<QPainterPath> pathList = obj->objectSavePathList();
-            foreach(QPainterPath path, pathList)
-            {
-                toPolyline(pattern, obj->objectPos(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
-            }
-        }
-        else {
-
-        }
-    }
-}
-
 //NOTE: This void should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void save_toPolyline(EmbPattern* pattern, const EmbVector& objPos, const QPainterPath& objPath, const std::string& layer, const QColor& color, const std::string& lineType, const std::string& lineWeight)
 {
@@ -3458,11 +3209,6 @@ void text_single_TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent)
     }
 }
 
-text_single_~TextSingleObject()
-{
-    debug_message("TextSingleObject Destructor()");
-}
-
 void text_single_init(const std::string& str, float x, float y, unsigned int rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type);
@@ -3483,7 +3229,7 @@ void text_single_init(const std::string& str, float x, float y, unsigned int rgb
     setPen(objPen);
 }
 
-std::stringList text_single_objectTextJustifyList() const
+std::stringList text_single_objectTextJustifyList()
 {
     std::stringList justifyList;
     justifyList << "Left" << "Center" << "Right" /* TODO: << "Aligned" */ << "Middle" /* TODO: << "Fit" */ ;
@@ -3523,7 +3269,9 @@ void text_single_setObjectText(const std::string& str)
     } //TODO: TextSingleObject Aligned Justification
     else if (objTextJustify == "Middle") {
         textPath.translate(-jRect.center()); }
-    else if (objTextJustify == "Fit")           { } //TODO: TextSingleObject Fit Justification
+    else if (objTextJustify == "Fit") {
+        
+    } //TODO: TextSingleObject Fit Justification
     else if (objTextJustify == "Top Left") {
         textPath.translate(-jRect.topLeft());
     }
@@ -3553,8 +3301,7 @@ void text_single_setObjectText(const std::string& str)
         QPainterPath::Element P2;
         QPainterPath::Element P3;
         QPainterPath::Element P4;
-        for(int i = 0; i < textPath.elementCount(); ++i)
-        {
+        for (int i = 0; i < textPath.elementCount(); ++i) {
             element = textPath.elementAt(i);
             if (element.isMoveTo()) {
                 flippedPath.moveTo(horiz * element.x, vert * element.y);
@@ -3596,10 +3343,17 @@ void text_single_setObjectTextJustify(const std::string& justify)
 {
     //Verify the string is a valid option
     if (justify == "Left") {
-        objTextJustify = justify; }
-    else if (justify == "Center") { objTextJustify = justify; }
-    else if (justify == "Right")         { objTextJustify = justify; }
-    else if (justify == "Aligned")       { objTextJustify = justify; }
+        objTextJustify = justify;
+    }
+    else if (justify == "Center") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Right") {
+        objTextJustify = justify;
+    }
+    else if (justify == "Aligned") {
+        objTextJustify = justify;
+    }
     else if (justify == "Middle")        { objTextJustify = justify; }
     else if (justify == "Fit")           { objTextJustify = justify; }
     else if (justify == "Top Left")      { objTextJustify = justify; }
@@ -3691,8 +3445,7 @@ void text_single_paint(QPainter* painter, const QStyleOptionGraphicsItem* option
 void text_single_updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
-    if (rubberMode == OBJ_RUBBER_TEXTSINGLE)
-    {
+    if (rubberMode == OBJ_RUBBER_TEXTSINGLE) {
         setObjectTextFont(objectRubberText("TEXT_FONT"));
         setObjectTextJustify(objectRubberText("TEXT_JUSTIFY"));
         setObjectPos(objectRubberPoint("TEXT_POINT"));
@@ -3740,7 +3493,7 @@ void text_single_gripEdit(const EmbVector& before, const EmbVector& after)
     if (before == scenePos()) { EmbVector delta = after-before; moveBy(delta.x(), delta.y()); }
 }
 
-std::vector<QPainterPath> text_single_subPathList() const
+std::vector<QPainterPath> text_single_subPathList()
 {
     float s = scale();
     QTransform trans;
@@ -3755,7 +3508,7 @@ std::vector<QPainterPath> text_single_subPathList() const
     std::vector<int> pathMoves;
     int numMoves = 0;
 
-    for(int i = 0; i < path.elementCount(); i++) {
+    for (int i = 0; i < path.elementCount(); i++) {
         element = path.elementAt(i);
         if (element.isMoveTo()) {
             pathMoves << i;
@@ -4108,7 +3861,7 @@ void prompt(std::string str)
     }
     else {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
+        if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Point or option keyword required."));
             setPromptPrefix(translate("Specify next point or [Arc/Undo]: "));
         }
@@ -4179,7 +3932,7 @@ void point_prompt(std::string str)
             todo("POINT", "prompt() for PDSIZE");
         }
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify first point: "));
@@ -4195,7 +3948,7 @@ void point_prompt(std::string str)
     }
     else {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
+        if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify next point: "));
         }
@@ -4315,7 +4068,7 @@ void prompt(std::string str)
         else
         {
             var tmp = Number(str);
-            if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
+            if (isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024)
             {
                 alert(translate("Requires an integer between 3 and 1024."));
                 setPromptPrefix(translate("Enter number of sides") + " {" + global.numSides.toString() + "}: ");
@@ -4338,7 +4091,7 @@ void prompt(std::string str)
         else
         {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
                 setPromptPrefix(translate("Specify center point or [Sidelength]: "));
@@ -4435,7 +4188,7 @@ void prompt(std::string str)
         else
         {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
                 setPromptPrefix(translate("Specify polygon corner point or [Distance]: "));
@@ -4460,7 +4213,7 @@ void prompt(std::string str)
         else
         {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
                 setPromptPrefix(translate("Specify polygon side point or [Distance]: "));
@@ -4477,7 +4230,7 @@ void prompt(std::string str)
     }
     else if (global.mode == global.mode_DISTANCE)
     {
-        if (isNaN(str))
+        if (isnan(str))
         {
             alert(translate("Requires valid numeric distance."));
             setPromptPrefix(translate("Specify distance: "));
@@ -4570,7 +4323,7 @@ void polyline_prompt(std::string str)
     if (global.firstRun)
     {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify first point: "));
@@ -4597,7 +4350,7 @@ void polyline_prompt(std::string str)
         else
         {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Point or option keyword required."));
                 setPromptPrefix(translate("Specify next point or [Undo]: "));
@@ -4643,7 +4396,7 @@ void context(std::string str)
 void prompt(std::string str)
 {
     var strList = str.split(",");
-    if (isNaN(strList[0]) || isNaN(strList[1]))
+    if (isnan(strList[0]) || isnan(strList[1]))
     {
         alert(translate("Invalid point."));
         setPromptPrefix(translate("Specify point: "));
@@ -4725,7 +4478,7 @@ void prompt(std::string str)
     if (global.firstRun)
     {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify base point: "));
@@ -4745,7 +4498,7 @@ void prompt(std::string str)
     else
     {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify destination point: "));
@@ -4785,7 +4538,7 @@ void main()
 
 void click(float x, float y)
 {
-    if (isNaN(global.x1))
+    if (isnan(global.x1))
     {
         global.x1 = x;
         global.y1 = y;
@@ -4814,9 +4567,9 @@ void context(std::string str)
 void prompt(std::string str)
 {
     var strList = str.split(",");
-    if (isNaN(global.x1))
+    if (isnan(global.x1))
     {
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Requires two points."));
             setPromptPrefix(translate("Specify first point: "));
@@ -4833,7 +4586,7 @@ void prompt(std::string str)
     }
     else
     {
-        if (isNaN(strList[0]) || isNaN(strList[1]))
+        if (isnan(strList[0]) || isnan(strList[1]))
         {
             alert(translate("Requires two points."));
             setPromptPrefix(translate("Specify second point: "));
@@ -4914,7 +4667,7 @@ void prompt(std::string str)
     }
     else {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
+        if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify first point: "));
         }
@@ -5038,9 +4791,9 @@ void prompt(std::string str)
 
 void validRGB(r, g, b)
 {
-    if (isNaN(r)) return false;
-    if (isNaN(g)) return false;
-    if (isNaN(b)) return false;
+    if (isnan(r)) return false;
+    if (isnan(g)) return false;
+    if (isnan(b)) return false;
     if (r < 0 || r > 255) return false;
     if (g < 0 || g > 255) return false;
     if (b < 0 || b > 255) return false;
@@ -5124,7 +4877,7 @@ void click(float x, float y)
         }
     }
     else if (global.mode == global.mode_REFERENCE) {
-        if (isNaN(global.baseRX)) {
+        if (isnan(global.baseRX)) {
             global.baseRX = x;
             global.baseRY = y;
             appendPromptHistory();
@@ -5133,7 +4886,7 @@ void click(float x, float y)
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
             setPromptPrefix(translate("Specify second point: "));
         }
-        else if (isNaN(global.destRX)) {
+        else if (isnan(global.destRX)) {
             global.destRX = x;
             global.destRY = y;
             global.angleRef = calculateAngle(global.baseRX, global.baseRY, global.destRX, global.destRY);
@@ -5142,7 +4895,7 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify the new angle: "));
         }
-        else if (isNaN(global.angleNew))
+        else if (isnan(global.angleNew))
         {
             global.angleNew = calculateAngle(global.baseX, global.baseY, x, y);
             rotateSelected(global.baseX, global.baseY, global.angleNew - global.angleRef);
@@ -5164,7 +4917,7 @@ void prompt(std::string str)
         if (global.firstRun)
         {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1]))
+            if (isnan(strList[0]) || isnan(strList[1]))
             {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify base point: "));
@@ -5192,7 +4945,7 @@ void prompt(std::string str)
             }
             else
             {
-                if (isNaN(str))
+                if (isnan(str))
                 {
                     alert(translate("Requires valid numeric angle, second point, or option keyword."));
                     setPromptPrefix(translate("Specify rotation angle or [Reference]: "));
@@ -5209,12 +4962,12 @@ void prompt(std::string str)
     }
     else if (global.mode == global.mode_REFERENCE)
     {
-        if (isNaN(global.baseRX))
+        if (isnan(global.baseRX))
         {
-            if (isNaN(str))
+            if (isnan(str))
             {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
+                if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Requires valid numeric angle or two points."));
                     setPromptPrefix(translate("Specify the reference angle") + " {0.00}: ");
@@ -5245,12 +4998,12 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify the new angle: "));
             }
         }
-        else if (isNaN(global.destRX))
+        else if (isnan(global.destRX))
         {
-            if (isNaN(str))
+            if (isnan(str))
             {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
+                if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Requires valid numeric angle or two points."));
                     setPromptPrefix(translate("Specify second point: "));
@@ -5278,10 +5031,10 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify the new angle: "));
             }
         }
-        else if (isNaN(global.angleNew)) {
-            if (isNaN(str)) {
+        else if (isnan(global.angleNew)) {
+            if (isnan(str)) {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Requires valid numeric angle or second point."));
                     setPromptPrefix(translate("Specify the new angle: "));
                 }
@@ -5461,7 +5214,7 @@ void scale_click(float x, float y)
         }
     }
     else if (global.mode == global.mode_REFERENCE) {
-        if (isNaN(global.baseRX)) {
+        if (isnan(global.baseRX)) {
             global.baseRX = x;
             global.baseRY = y;
             appendPromptHistory();
@@ -5470,7 +5223,7 @@ void scale_click(float x, float y)
             setRubberPoint("LINE_START", global.baseRX, global.baseRY);
             setPromptPrefix(translate("Specify second point: "));
         }
-        else if (isNaN(global.destRX)) {
+        else if (isnan(global.destRX)) {
             global.destRX = x;
             global.destRY = y;
             global.factorRef = calculateDistance(global.baseRX, global.baseRY, global.destRX, global.destRY);
@@ -5490,7 +5243,7 @@ void scale_click(float x, float y)
                 setPromptPrefix(translate("Specify new length: "));
             }
         }
-        else if (isNaN(global.factorNew))
+        else if (isnan(global.factorNew))
         {
             global.factorNew = calculateDistance(global.baseX, global.baseY, x, y);
             if (global.factorNew <= 0.0)
@@ -5520,7 +5273,7 @@ void prompt(std::string str)
     if (global.mode == global.mode_NORMAL) {
         if (global.firstRun) {
             var strList = str.split(",");
-            if (isNaN(strList[0]) || isNaN(strList[1])) {
+            if (isnan(strList[0]) || isnan(strList[1])) {
                 alert(translate("Invalid point."));
                 setPromptPrefix(translate("Specify base point: "));
             }
@@ -5546,7 +5299,7 @@ void prompt(std::string str)
             }
             else
             {
-                if (isNaN(str))
+                if (isnan(str))
                 {
                     alert(translate("Requires valid numeric distance, second point, or option keyword."));
                     setPromptPrefix(translate("Specify scale factor or [Reference]: "));
@@ -5563,12 +5316,12 @@ void prompt(std::string str)
     }
     else if (global.mode == global.mode_REFERENCE)
     {
-        if (isNaN(global.baseRX))
+        if (isnan(global.baseRX))
         {
-            if (isNaN(str))
+            if (isnan(str))
             {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
+                if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Requires valid numeric distance or two points."));
                     setPromptPrefix(translate("Specify reference length") + " {1}: ");
@@ -5612,10 +5365,10 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isNaN(global.destRX)) {
-            if (isNaN(str)) {
+        else if (isnan(global.destRX)) {
+            if (isnan(str)) {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Requires valid numeric distance or two points."));
                     setPromptPrefix(translate("Specify second point: "));
                 }
@@ -5662,10 +5415,10 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isNaN(global.factorNew)) {
-            if (isNaN(str)) {
+        else if (isnan(global.factorNew)) {
+            if (isnan(str)) {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1])) {
+                if (isnan(strList[0]) || isnan(strList[1])) {
                     alert(translate("Requires valid numeric distance or second point."));
                     setPromptPrefix(translate("Specify new length: "));
                 }
@@ -5725,7 +5478,7 @@ void click(float x, float y)
 {
     if (global.mode == global.mode_SETGEOM)
     {
-        if (isNaN(global.textX))
+        if (isnan(global.textX))
         {
             global.textX = x;
             global.textY = y;
@@ -5735,14 +5488,14 @@ void click(float x, float y)
             appendPromptHistory();
             setPromptPrefix(translate("Specify text height") + " {" + textSize() + "}: ");
         }
-        else if (isNaN(global.textHeight))
+        else if (isnan(global.textHeight))
         {
             global.textHeight = calculateDistance(global.textX, global.textY, x, y);
             setTextSize(global.textHeight);
             appendPromptHistory();
             setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
         }
-        else if (isNaN(global.textRotation))
+        else if (isnan(global.textRotation))
         {
             global.textRotation = calculateAngle(global.textX, global.textY, x, y);
             setTextAngle(global.textRotation);
@@ -5888,7 +5641,7 @@ void prompt(std::string str)
         setPromptPrefix(translate("Specify start point of text or [Justify/Setfont]: "));
     }
     else if (global.mode == global.mode_SETGEOM) {
-        if (isNaN(global.textX)) {
+        if (isnan(global.textX)) {
             if (str == "J" || str == "JUSTIFY") //TODO: Probably should add additional qsTr calls here.
             {
                 global.mode = global.mode_JUSTIFY;
@@ -5901,7 +5654,7 @@ void prompt(std::string str)
             }
             else {
                 var strList = str.split(",");
-                if (isNaN(strList[0]) || isNaN(strList[1]))
+                if (isnan(strList[0]) || isnan(strList[1]))
                 {
                     alert(translate("Point or option keyword required."));
                     setPromptPrefix(translate("Specify start point of text or [Justify/Setfont]: "));
@@ -5916,14 +5669,14 @@ void prompt(std::string str)
                 }
             }
         }
-        else if (isNaN(global.textHeight))
+        else if (isnan(global.textHeight))
         {
             if (str == "")
             {
                 global.textHeight = textSize();
                 setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
-            else if (isNaN(str))
+            else if (isnan(str))
             {
                 alert(translate("Requires valid numeric distance or second point."));
                 setPromptPrefix(translate("Specify text height") + " {" + textSize() + "}: ");
@@ -5935,7 +5688,7 @@ void prompt(std::string str)
                 setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
         }
-        else if (isNaN(global.textRotation))
+        else if (isnan(global.textRotation))
         {
             if (str == "")
             {
@@ -5952,7 +5705,7 @@ void prompt(std::string str)
                 setRubberText("TEXT_JUSTIFY", global.textJustify);
                 setRubberText("TEXT_RAPID", global.text);
             }
-            else if (isNaN(str))
+            else if (isnan(str))
             {
                 alert(translate("Requires valid numeric angle or second point."));
                 setPromptPrefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
@@ -6052,7 +5805,7 @@ void updateSnowflake(numPts, xScale, yScale)
     var yy = NaN;
     var two_pi = 2*Math.PI;
 
-    for(i = 0; i <= numPts; i++)
+    for (i = 0; i <= numPts; i++)
     {
         t = two_pi/numPts*i; 
 
@@ -6782,7 +6535,7 @@ void star_prompt(std::string str)
         }
         else {
             var tmp = Number(str);
-            if (isNaN(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
+            if (isnan(tmp) || !isInt(tmp) || tmp < 3 || tmp > 1024) {
                 alert(translate("Requires an integer between 3 and 1024."));
                 setPromptPrefix(translate("Enter number of star points") + " {" + global.numPoints.toString() + "}: ");
             }
@@ -6795,7 +6548,7 @@ void star_prompt(std::string str)
     }
     else if (global.mode == global.mode_CENTER_PT) {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
+        if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify center point: "));
         }
@@ -6812,7 +6565,7 @@ void star_prompt(std::string str)
     }
     else if (global.mode == global.mode_RAD_OUTER) {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
+        if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify outer radius of star: "));
         }
@@ -6826,7 +6579,7 @@ void star_prompt(std::string str)
     }
     else if (global.mode == global.mode_RAD_INNER) {
         var strList = str.split(",");
-        if (isNaN(strList[0]) || isNaN(strList[1])) {
+        if (isnan(strList[0]) || isnan(strList[1])) {
             alert(translate("Invalid point."));
             setPromptPrefix(translate("Specify inner radius of star: "));
         }

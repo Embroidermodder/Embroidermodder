@@ -257,6 +257,7 @@ typedef struct Settings_ {
     bool qsnap_parallel;
     bool lwt_show_lwt;
     bool lwt_real_render;
+    bool shift_held;
     float lwt_default_lwt;
     bool selection_mode_pickfirst;
     bool selection_mode_pickadd;

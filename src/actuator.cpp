@@ -47,13 +47,19 @@ void night_vision_action(std::vector<std::string> args);
 void open_file_action(std::vector<std::string> args);
 void icon_action(std::vector<std::string> args);
 void pan_action(std::vector<std::string> args);
+void paste_action(std::vector<std::string> args);
 void print_action(std::vector<std::string> args);
+void rectangle_action(std::vector<std::string> args);
 void redo_action(std::vector<std::string> args);
 void settings_editor_action(std::vector<std::string> args);
 void simulate_action(std::vector<std::string> args);
 void todo_action(std::vector<std::string> args);
 void undo_action(std::vector<std::string> args);
+void window_cascade_action(std::vector<std::string> args);
+void window_tile_action(std::vector<std::string> args);
 void zoom_action(std::vector<std::string> args);
+void zoom_in_action(std::vector<std::string> args);
+void zoom_out_action(std::vector<std::string> args);
 
 int parse_args(std::string caller, Arguments *result, std::vector<std::string> args, std::string type_str)
 {
@@ -147,12 +153,18 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"night", night_vision_action},
     {"open", open_file_action},
     {"pan", pan_action},
+    {"paste", paste_action},
     {"print", print_action},
     {"quit", exit_action},
+    {"rectangle", rectangle_action},
     {"redo", redo_action},
     {"todo", todo_action},
     {"undo", undo_action},
+    {"windowcascade", window_cascade_action},
+    {"windowtile", window_tile_action},
     {"zoom", zoom_action},
+    {"zoomin", zoom_in_action},
+    {"zoomout", zoom_out_action},
 
     {"blinkPrompt", error_action},
     {"setPromptPrefix", error_action},
@@ -216,10 +228,10 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"addCircle", error_action},
     {"addEllipse", error_action},
     {"addPoint", error_action},
-    {"addRegularPolygon", error_action},
-    {"addPolygon", error_action},
-    {"addPolyline", error_action},
-    {"addPath", error_action},
+    {"regularPolygon", error_action},
+    {"polygon", error_action},
+    {"polyline", error_action},
+    {"path", error_action},
     {"addHorizontalDimension", error_action},
     {"addVerticalDimension", error_action},
     {"addImage", error_action},
@@ -233,9 +245,6 @@ static std::unordered_map<std::string, void (*)(std::vector<std::string>)> funct
     {"addToSelection", error_action},
     {"clearSelection", error_action},
     {"delete", error_action},
-    {"cut", error_action},
-    {"copy", error_action},
-    {"paste", error_action},
     {"move", error_action},
     {"scale", error_action},
     {"rotate", error_action},
@@ -545,7 +554,7 @@ void new_file_action(std::vector<std::string> args)
     /*
     debug_message("newFile()");
     pattern_index++;
-    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+    MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, SubWindow);
     connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
     connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -629,7 +638,7 @@ void open_file_action(std::vector<std::string> args)
 
             //The docIndex doesn't need increased as it is only used for unnamed files
             numOfDocs++;
-            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, Qt::SubWindow);
+            MdiWindow* mdiWin = new MdiWindow(docIndex, mainWin, mdiArea, SubWindow);
             connect(mdiWin, SIGNAL(sendCloseMdiWin(MdiWindow*)), this, SLOT(onCloseMdiWin(MdiWindow*)));
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
@@ -641,7 +650,7 @@ void open_file_action(std::vector<std::string> args)
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
+                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), CaseInsensitive))
                 {
                     settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
@@ -820,7 +829,7 @@ void print_action(std::vector<std::string> args)
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
-            gview->setBackgroundBrush(Qt::NoBrush);
+            gview->setBackgroundBrush(NoBrush);
             //Print, fitting the viewport contents into a full page
             gview->render(&painter);
             //Restore the bg
@@ -829,6 +838,46 @@ void print_action(std::vector<std::string> args)
         else {
             //Print, fitting the viewport contents into a full page
             gview->render(&painter);
+        }
+    }
+    */
+}
+
+void rectangle_action(std::vector<std::string> args)
+{
+    Arguments results[6];
+    if (!parse_args("rectangle_action", results, args, "dddddi")) {
+        return;
+    }
+
+    double x = results[0].double_data;
+    double y = results[1].double_data;
+    double w = results[2].double_data;
+    double h = results[3].double_data;
+    double rot = results[4].double_data;
+    /* bool fill = args[5].toBool();
+
+    addRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
+    
+    View* active_view = activeView();
+    QGraphicsScene* gscene = active_view->scene();
+    QUndoStack* stack = active_view->undoStack;
+    if (active_view && gscene && stack)
+    {
+        RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
+        obj->setRotation(-rot);
+        obj->setObjectRubberMode(rubberMode);
+        //TODO: rect fill
+        if (rubberMode)
+        {
+            active_view->addToRubberRoom(obj);
+            gscene->addItem(obj);
+            gscene->update();
+        }
+        else
+        {
+            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
+            stack->push(cmd);
         }
     }
     */
@@ -873,6 +922,25 @@ void todo_action(std::vector<std::string> args)
 
 }
 
+void triangle_action(std::vector<std::string> args)
+{
+    Arguments results[8];
+    if (!parse_args("triangle_action", results, args, "dddddddi")) {
+        return;
+    }
+
+    double x1 = results[0].double_data;
+    double y1 = results[1].double_data;
+    double x2 = results[2].double_data;
+    double y2 = results[3].double_data;
+    double x3 = results[4].double_data;
+    double y3 = results[5].double_data;
+    double rot = results[6].double_data;
+    int fill = results[7].int_data;
+
+    /* addTriangle(x1, y1, x2, y2, x3, y3, rot, fill); */
+}
+
 void undo_action(std::vector<std::string> args)
 {
     /*
@@ -888,6 +956,32 @@ void undo_action(std::vector<std::string> args)
         prompt->setPrefix(prefix);
     }
     */
+}
+
+void window_cascade_action(std::vector<std::string> args)
+{
+
+}
+
+void window_tile_action(std::vector<std::string> args)
+{
+
+}
+
+void zoom_in_action(std::vector<std::string> args)
+{
+    if (views.size() == 0) {
+        return;
+    }
+    views[settings.pattern_index].scale *= 2.0;
+}
+
+void zoom_out_action(std::vector<std::string> args)
+{
+    if (views.size() == 0) {
+        return;
+    }
+    views[settings.pattern_index].scale *= 0.5;
 }
 
 void zoom_action(std::vector<std::string> args)
@@ -946,13 +1040,9 @@ void zoom_action(std::vector<std::string> args)
 #if 0
     {"details", details_action},
     {"paste", paste_action},
-    {"night", night_vision_action},
     {"polygon", polygon_action},
     {"polyline", polyline_action},
-    {"rectangle", rectangle_action},
     {"help", help_action},
-    {"windowcascade", window_cascade_action},
-    {"windowtile", window_tile_action},
     {"windowcloseall", window_close_all_action},
     {"windowclose", window_close_action},
     {"windownext", window_next_action},
@@ -975,8 +1065,6 @@ void zoom_action(std::vector<std::string> args)
     {"addToSelection", add_to_selection_action},
     {"clearSelection", nativeClearSelection_action},
     {"deleteSelected", nativeDeleteSelected_action},
-    {"qsnapX", nativeQSnapX_action},
-    {"qsnapY", nativeQSnapY_action},
 
     {"debug-message") {
         debug_message(command.substr(13, command.size()-13));
@@ -1120,7 +1208,7 @@ void AppendPromptHistory_action(std::vector<std::string> args)
 void messagebox_action(std::vector<std::string> args)
 {
     Arguments results[3];
-    if (!parse_args(results, args, "sss")) {
+    if (!parse_args("messagebox_action", results, args, "sss")) {
         return;
     }
 
@@ -1233,7 +1321,7 @@ void SetTextFont_action(std::vector<std::string> args)
     settings_text_font = results[0].string_value;
 }
 
-void set_text_size_action(std::vector<std::string> args)
+void text_size_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "d")) {
@@ -1243,7 +1331,7 @@ void set_text_size_action(std::vector<std::string> args)
     settings_text_size = results[0].double_data;
 }
 
-void set_text_angle_action(std::vector<std::string> args)
+void text_angle_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "d")) {
@@ -1253,7 +1341,7 @@ void set_text_angle_action(std::vector<std::string> args)
     settings_text_angle = results[0].double_data;
 }
 
-void SetTextBold_action(std::vector<std::string> args)
+void text_bold_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "i")) {
@@ -1263,7 +1351,7 @@ void SetTextBold_action(std::vector<std::string> args)
     settings_text_bold = results[0].int_data;
 }
 
-void SetTextItalic_action(std::vector<std::string> args)
+void text_italic_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "i")) {
@@ -1283,24 +1371,24 @@ void SetTextUnderline_action(std::vector<std::string> args)
     settings_text_underline = results[0].int_data;
 }
 
-void SetTextStrikeOut_action(std::vector<std::string> args)
+void text_strikeout_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "i")) {
         return;
     }
 
-    nativeSetTextStrikeOut(args[0).toBool());
+    settings_text_strikeout = results[0].int_data;
 }
 
-void SetTextOverline_action(std::vector<std::string> args)
+void text_overline_action(std::vector<std::string> args)
 {
     Arguments results[3];
     if (!parse_args(results, args, "i")) {
         return;
     }
 
-    nativeSetTextOverline(args[0).toBool());
+    settings_text_overline = results[0].int_data;
 }
 
 void PreviewOn_action(std::vector<std::string> args)
@@ -1483,9 +1571,15 @@ void add_rubber_action(std::vector<std::string> args)
     else if (objType == "DIMORDINATE")  {
 
     } //TODO: handle this type
-    else if (objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if (objType == "ELLIPSE")      { addEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
-    else if (objType == "ELLIPSEARC")   {} //TODO: handle this type
+    else if (objType == "DIMRADIUS") {
+
+    } //TODO: handle this type
+    else if (objType == "ELLIPSE") {
+        addEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON);
+    }
+    else if (objType == "ELLIPSEARC") {
+
+    } //TODO: handle this type
     else if (objType == "HATCH")        {} //TODO: handle this type
     else if (objType == "IMAGE")        {} //TODO: handle this type
     else if (objType == "INFINITELINE") {} //TODO: handle this type
@@ -1543,23 +1637,23 @@ void spare_rubber_action(std::vector<std::string> args)
     }
 }
 
-void add_text_multi_action(std::vector<std::string> args)
+void text_multi_action(std::vector<std::string> args)
 {
     Arguments results[5];
     if (!parse_args(results, args, "sdddi")) {
         return;
     }
 
-    std::string str   = args[0].toString();
-    double   x     = args[1];
-    double   y     = args[2];
-    double   rot   = args[3];
-    bool   fill  = args[4].toBool();
+    std::string str = args[0].toString();
+    double x = args[1];
+    double y = args[2];
+    double rot = args[3];
+    bool fill = args[4].toBool();
 
     addTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
 
-void AddTextSingle_action(std::vector<std::string> args)
+void text_single_action(std::vector<std::string> args)
 {
     Arguments results[5];
     if (!parse_args(results, args, "sdddi")) {
@@ -1575,19 +1669,19 @@ void AddTextSingle_action(std::vector<std::string> args)
     addTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
 }
 
-void AddInfiniteLine_action(std::vector<std::string> args)
+void infinite_line_action(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addInfiniteLine command");
 }
 
-void AddRay_action(std::vector<std::string> args)
+void ray_action(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     debug_message("TODO: finish addRay command");
 }
 
-void add_line_action(std::vector<std::string> args)
+void line_action(std::vector<std::string> args)
 {
     Arguments results[5];
     if (!parse_args(results, args, "ddddd")) {
@@ -1600,46 +1694,11 @@ void add_line_action(std::vector<std::string> args)
     double y2  = args[3];
     double rot = args[4];
 
-    addLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    embPattern_addLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
 }
 
-void add_triangle_action(std::vector<std::string> args)
-{
-    Arguments results[8];
-    if (!parse_args(results, args, "dddddddi")) {
-        return;
-    }
 
-    double x1 = args[0];
-    double y1 = args[1];
-    double x2 = args[2];
-    double y2 = args[3];
-    double x3 = args[4];
-    double y3 = args[5];
-    double rot = args[6];
-    bool fill = args[7].toBool();
-
-    addTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
-}
-
-void add_rectangle_action(std::vector<std::string> args)
-{
-    Arguments results[6];
-    if (!parse_args(results, args, "dddddi")) {
-        return;
-    }
-
-    double x = args[0];
-    double y = args[1];
-    double w = args[2];
-    double h = args[3];
-    double rot = args[4];
-    bool fill = args[5].toBool();
-
-    addRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-}
-
-void add_rounded_rectangle_action(std::vector<std::string> args)
+void rounded_rectangle_action(std::vector<std::string> args)
 {
     Arguments results[7];
     if (!parse_args(results, args, "ddddddi")) {
@@ -1695,7 +1754,7 @@ void add_point_action(std::vector<std::string> args)
     addPoint(x, y);
 }
 
-void add_polygon_action(std::vector<std::string> args)
+void polygon_action(std::vector<std::string> args)
 {
     Arguments results[2];
     if (!parse_args(results, args, "s")) {
@@ -1740,7 +1799,7 @@ void add_polygon_action(std::vector<std::string> args)
     addPolygon(startX, startY, path, OBJ_RUBBER_OFF);
 }
 
-void add_polyline_action(std::vector<std::string> args)
+void polyline_action(std::vector<std::string> args)
 {
     if (args.size() < 1)
         debug_message("addPolyline() requires one argument");
@@ -1782,7 +1841,7 @@ void add_polyline_action(std::vector<std::string> args)
     addPolyline(startX, startY, path, OBJ_RUBBER_OFF);
 }
 
-void add_dim_leader_action(std::vector<std::string> args)
+void dim_leader_action(std::vector<std::string> args)
 {
     Arguments results[5];
     if (!parse_args(results, args, "ddddd")) {
@@ -1795,7 +1854,7 @@ void add_dim_leader_action(std::vector<std::string> args)
     double y2  = args[3];
     double rot = args[4];
 
-    addDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
+    /* embPattern_addDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF); */
 }
 
 void set_cursor_shape_action(std::vector<std::string> args)
@@ -1822,15 +1881,24 @@ void set_cursor_shape_action(std::vector<std::string> args)
             active_view->setCursor(QCursor(SizeVerCursor));
         else if (shape == "resizehoriz")
             active_view->setCursor(QCursor(SizeHorCursor));
-        else if (shape == "resizediagleft")  active_view->setCursor(QCursor(SizeBDiagCursor));
-        else if (shape == "resizediagright") active_view->setCursor(QCursor(SizeFDiagCursor));
-        else if (shape == "move")            active_view->setCursor(QCursor(SizeAllCursor));
-        else if (shape == "blank")           active_view->setCursor(QCursor(BlankCursor));
-        else if (shape == "splitvert")       active_view->setCursor(QCursor(SplitVCursor));
-        else if (shape == "splithoriz")      active_view->setCursor(QCursor(SplitHCursor));
-        else if (shape == "handpointing")    active_view->setCursor(QCursor(PointingHandCursor));
-        else if (shape == "forbidden")       active_view->setCursor(QCursor(ForbiddenCursor));
-        else if (shape == "handopen")        active_view->setCursor(QCursor(OpenHandCursor));
+        else if (shape == "resizediagleft")
+            active_view->setCursor(QCursor(SizeBDiagCursor));
+        else if (shape == "resizediagright")
+            active_view->setCursor(QCursor(SizeFDiagCursor));
+        else if (shape == "move")
+            active_view->setCursor(QCursor(SizeAllCursor));
+        else if (shape == "blank")
+            active_view->setCursor(QCursor(BlankCursor));
+        else if (shape == "splitvert")
+            active_view->setCursor(QCursor(SplitVCursor));
+        else if (shape == "splithoriz")
+            active_view->setCursor(QCursor(SplitHCursor));
+        else if (shape == "handpointing")
+            active_view->setCursor(QCursor(PointingHandCursor));
+        else if (shape == "forbidden")
+            active_view->setCursor(QCursor(ForbiddenCursor));
+        else if (shape == "handopen")
+            active_view->setCursor(QCursor(OpenHandCursor));
         else if (shape == "handclosed")
             active_view->setCursor(QCursor(ClosedHandCursor));
         else if (shape == "whatsthis")
@@ -1876,7 +1944,7 @@ void calculate_distance_action(std::vector<std::string> args)
     return QJSValue(nativeCalculateDistance(x1, y1, x2, y2));
 }
 
-void PerpendicularDistance()
+void perpendicular_distance()
 {
     Arguments results[6];
     if (!parse_args(results, args, "dddddd")) {
@@ -2108,16 +2176,6 @@ void button_tip_of_the_day_clicked(int button)
     {
         wizardTipOfTheDay->close();
     }
-}
-
-void set_shift_pressed()
-{
-    shiftKeyPressedState = true;
-}
-
-void set_shift_released()
-{
-    shiftKeyPressedState = false;
 }
 
 void iconResize(int iconSize)
@@ -2745,39 +2803,6 @@ void addLine(double x1, double y1, double x2, double y2, double rot, int rubberM
     }
 }
 
-void addTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double rot, bool fill)
-{
-}
-
-void addRectangle(double x, double y, double w, double h, double rot, bool fill, int rubberMode)
-{
-    View* active_view = activeView();
-    QGraphicsScene* gscene = active_view->scene();
-    QUndoStack* stack = active_view->undoStack;
-    if (active_view && gscene && stack)
-    {
-        RectObject* obj = new RectObject(x, -y, w, -h, getCurrentColor());
-        obj->setRotation(-rot);
-        obj->setObjectRubberMode(rubberMode);
-        //TODO: rect fill
-        if (rubberMode)
-        {
-            active_view->addToRubberRoom(obj);
-            gscene->addItem(obj);
-            gscene->update();
-        }
-        else
-        {
-            UndoableAddCommand* cmd = new UndoableAddCommand(obj->data(OBJ_NAME).toString(), obj, active_view, 0);
-            stack->push(cmd);
-        }
-    }
-}
-
-void addRoundedRectangle(double x, double y, double w, double h, double rad, double rot, bool fill)
-{
-}
-
 void addEllipse(double centerX, double centerY, double width, double height, double rot, bool fill, int rubberMode)
 {
     View* active_view = activeView();
@@ -2815,9 +2840,9 @@ void addRegularPolygon(double centerX, double centerY, quint16 sides, quint8 mod
 {
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void addPolygon(double startX, double startY, const QPainterPath& p, int rubberMode)
+void polygon_action()
 {
+    /* double startX, double startY, const QPainterPath& p, int rubberMode */
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
     QUndoStack* stack = active_view->undoStack;
@@ -2837,7 +2862,7 @@ void addPolygon(double startX, double startY, const QPainterPath& p, int rubberM
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void addPolyline(double startX, double startY, const QPainterPath& p, int rubberMode)
+void polyline_action(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
@@ -2857,25 +2882,25 @@ void addPolyline(double startX, double startY, const QPainterPath& p, int rubber
     }
 }
 
-//NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void addPath(double startX, double startY, const QPainterPath& p, int rubberMode)
+void path_action(double startX, double startY, const QPainterPath& p, int rubberMode)
 {
 }
 
-void addHorizontalDimension_action(std::vector<std::string> args)
+void horizontal_dimension_action(std::vector<std::string> args)
 {
 }
 
-void addVerticalDimension_action(std::vector<std::string> args)
+void vertical_dimension_action(std::vector<std::string> args)
 {
 }
 
-void addImage_action(std::vector<std::string> args)
+void image_action(std::vector<std::string> args)
 {
 }
 
-void addDimLeader(double x1, double y1, double x2, double y2, double rot, int rubberMode)
+void dim_leader_action(void)
 {
+    /* double x1, double y1, double x2, double y2, double rot, int rubberMode */
     View* active_view = activeView();
     QGraphicsScene* gscene = active_view->scene();
     QUndoStack* stack = active_view->undoStack;
@@ -2960,22 +2985,7 @@ void nativeMoveSelected(double dx, double dy)
     if (active_view) { active_view->moveSelected(dx, -dy); }
 }
 
-double nativeQSnapX()
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) return scene->property("SCENE_QSNAP_POINT").toPointF().x();
-    return 0.0;
-}
-
-double nativeQSnapY()
-{
-    QGraphicsScene* scene = activeScene();
-    if (scene) {
-        return -scene->property("SCENE_QSNAP_POINT").toPointF().y();
-    }
-    return 0.0;
-}
-
+/* SCENE_QSNAP_POINT for each scene */
 
 void createAllActions()
 {
@@ -3212,93 +3222,8 @@ void createPromptToolbar()
 
     toolbarPrompt->setObjectName("toolbarPrompt");
     toolbarPrompt->addWidget(prompt);
-    toolbarPrompt->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
+    toolbarPrompt->setAllowedAreas(TopToolBarArea | BottomToolBarArea);
     connect(toolbarPrompt, SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
-}
-
-void createAllToolbars()
-{
-    debug_message("MainWindow createAllToolbars()");
-
-    add_to_toolbar(toolbarFile, "toolbarFile", toolbar_file_entries);
-    add_to_toolbar(toolbarEdit, "toolbarEdit", toolbar_edit_entries);
-    add_to_toolbar(toolbarView, "toolbarView", toolbar_view_entries);
-    add_to_toolbar(toolbarZoom, "toolbarZoom", toolbar_zoom_entries);
-    add_to_toolbar(toolbarPan, "toolbarPan", toolbar_pan_entries);
-    add_to_toolbar(toolbarIcon, "toolbarIcon", toolbar_icon_entries);
-    add_to_toolbar(toolbarHelp, "toolbarHelp", toolbar_help_entries);
-
-    createLayerToolbar();
-    createPropertiesToolbar();
-    createTextToolbar();
-    createPromptToolbar();
-
-    // Horizontal
-    toolbarView->setOrientation(Qt::Horizontal);
-    toolbarZoom->setOrientation(Qt::Horizontal);
-    toolbarLayer->setOrientation(Qt::Horizontal);
-    toolbarProperties->setOrientation(Qt::Horizontal);
-    toolbarText->setOrientation(Qt::Horizontal);
-    toolbarPrompt->setOrientation(Qt::Horizontal);
-    // Top
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarFile);
-    addToolBar(Qt::TopToolBarArea, toolbarEdit);
-    addToolBar(Qt::TopToolBarArea, toolbarHelp);
-    addToolBar(Qt::TopToolBarArea, toolbarIcon);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarZoom);
-    addToolBar(Qt::TopToolBarArea, toolbarPan);
-    addToolBar(Qt::TopToolBarArea, toolbarView);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarLayer);
-    addToolBar(Qt::TopToolBarArea, toolbarProperties);
-    addToolBarBreak(Qt::TopToolBarArea);
-    addToolBar(Qt::TopToolBarArea, toolbarText);
-    // Bottom
-    addToolBar(Qt::BottomToolBarArea, toolbarPrompt);
-
-    //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
-}
-
-void createAllMenus()
-{
-    debug_message("MainWindow createAllMenus()");
-
-    menuBar()->addMenu(fileMenu);
-    fileMenu->addAction(actionHash.value(ACTION_new));
-    fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_open));
-
-    fileMenu->addMenu(recentMenu);
-    connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
-    //Do not allow the Recent Menu to be torn off. It's a pain in the ass to maintain.
-    recentMenu->setTearOffEnabled(false);
-    create_menu(actionHash, fileMenu, file_menu_data, false);
-
-    menuBar()->addMenu(editMenu);
-    create_menu(actionHash, editMenu, edit_menu_data, true);
-
-    menuBar()->addMenu(viewMenu);
-    viewMenu->addSeparator();
-    viewMenu->addMenu(zoomMenu);
-    zoomMenu->setIcon(load_icon("zoom"));
-    create_menu(actionHash, zoomMenu, zoom_menu_data, true);
-    viewMenu->addMenu(panMenu);
-    panMenu->setIcon(load_icon("pan"));
-    create_menu(actionHash, panMenu, pan_menu_data, true);
-    create_menu(actionHash, viewMenu, view_menu_data, true);
-
-    menuBar()->addMenu(settingsMenu);
-    create_menu(actionHash, settingsMenu, settings_menu_data, true);
-
-    menuBar()->addMenu(windowMenu);
-    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(windowMenuAboutToShow()));
-    // Do not allow the Window Menu to be torn off. It's a pain in the ass to maintain.
-    windowMenu->setTearOffEnabled(false);
-
-    menuBar()->addMenu(helpMenu);
-    create_menu(actionHash, helpMenu, help_menu_data, true);
 }
 
 void check_load_file(std::string path)
@@ -3360,15 +3285,15 @@ MainWindow() : QMainWindow(0)
     mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
     mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
-    mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    mdiArea->setHorizontalScrollBarPolicy(ScrollBarAsNeeded);
+    mdiArea->setVerticalScrollBarPolicy(ScrollBarAsNeeded);
     mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     layout->addWidget(mdiArea);
     setCentralWidget(vbox);
 
     //create the Command Prompt
     prompt = new CmdPrompt(this);
-    prompt->setFocus(Qt::OtherFocusReason);
+    prompt->setFocus(OtherFocusReason);
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
@@ -3414,12 +3339,12 @@ MainWindow() : QMainWindow(0)
     //create the Object Property Editor
     std::string s = appDir + "/icons/" + settings_general_icon_theme;
     dockPropEdit = new PropertyEditor(s, settings_selection_mode_pickadd, prompt, this);
-    addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
+    addDockWidget(LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
     dockUndoEdit = new UndoEditor(s, prompt, this);
-    addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
+    addDockWidget(LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QAnimatedDocks | QAllowTabbedDocks | QVerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
@@ -3781,9 +3706,9 @@ void load_formats()
     //TODO: Fixup custom filter
     /*
     std::string custom = getSettingsCustomFilter();
-    if (custom.contains("supported", Qt::CaseInsensitive))
+    if (custom.contains("supported", CaseInsensitive))
         custom = ""; //This will hide it
-    else if (!custom.contains("*", Qt::CaseInsensitive))
+    else if (!custom.contains("*", CaseInsensitive))
         custom = ""; //This will hide it
     else
         custom = "Custom Filter(" + custom + ");;";
@@ -3847,7 +3772,7 @@ void UndoEditor(std::string iconDirectory,
 
     setWidget(undoView);
     setWindowTitle(translate("History"));
-    setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    setAllowedAreas(LeftDockWidgetArea | RightDockWidgetArea);
 
     this->setFocusProxy(widgetToFocus);
     undoView->setFocusProxy(widgetToFocus);

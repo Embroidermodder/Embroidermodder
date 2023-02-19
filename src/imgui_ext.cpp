@@ -18,6 +18,11 @@
 #include "imgui.h"
 
 namespace ImGui {
+    void Text(std::string str)
+    {
+        ImGui::Text("%s", str.c_str());
+    }
+
     /* Need validation for the input number before applying to object.
     * and to add to undo history
     */

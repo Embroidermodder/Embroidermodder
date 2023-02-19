@@ -22,6 +22,7 @@
 
 namespace ImGui {
     void ShowDouble(std::string label, double data);
+    void Text(std::string str);
     void TranslatedText(std::string str);
     void CheckboxData(std::string str, bool *stor, bool *value);
     void EditDouble(std::string str, double *data);
