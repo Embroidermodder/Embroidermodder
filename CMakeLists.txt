@@ -17,11 +17,6 @@ add_compile_options(
 	-O2
 	-Wall
 )
-if(APPLE)
-target_link_options(embroidermodder
-	-framework OpenGL
-)
-endif(APPLE)
 
 set(GLFW_BUILD_EXAMPLES OFF)
 set(GLFW_BUILD_TESTS OFF)
@@ -87,6 +82,9 @@ set(EXEC_DIR "C:/Program Files/embroidermodder")
 set(ASSETS_DIR "C:/ProgramData/embroidermodder")
 
 elseif(APPLE)
+target_link_options(embroidermodder
+	-framework OpenGL
+)
 target_link_libraries(embroidermodder PRIVATE
 	glfw
 	embroidery_static
