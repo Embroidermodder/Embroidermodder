@@ -30,6 +30,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 #include <tinydir.h>
 #include <GLFW/glfw3.h>
@@ -159,10 +160,55 @@ void alert(std::string title, std::string message)
 }
 
 std::string to_open = "";
-std::string current_directory = ".";
+std::string current_directory = std::filesystem::current_path();
 
-void open_file_dialog(void)
+std::vector<std::string>
+split(const std::string &s, char delim) {
+    std::vector<std::string> result;
+    std::stringstream ss (s);
+    std::string item;
+    while (getline (ss, item, delim)) {
+        result.push_back (item);
+    }
+    return result;
+}
+
+std::string
+simplify_path(std::string path) {
+    std::deque<std::string> s;
+    std::string result = "/";
+    char separator = '/';
+    #if _WIN32
+    separator = '\\';
+    result = "";
+    #endif
+    std::vector<std::string> p = split(path, separator);
+
+    for (auto &dir : p) {
+        if (!s.empty() && dir == "..") {
+            s.pop_back();
+        }
+        else if (dir != "" && dir != "." && dir != "..") {
+            s.push_back(dir);
+        }
+    }
+    if (s.empty()) {
+        return "/";
+    }
+    while (!s.empty()) {
+        result = result + s.front() + separator;
+        s.pop_front();
+    }
+    return result;
+}
+
+void
+open_file_dialog(void)
 {
+    char separator = '/';
+    #if _WIN32
+    separator = '\\';
+    #endif
     // char typed_filename[400];
     ImGui::Begin("Open File");
     ImGui::SetWindowFontScale(1.5);
@@ -179,13 +225,10 @@ void open_file_dialog(void)
         tinydir_readfile_n(&dir, &file, i);
         if (ImGui::Button(file.name)) {
             if (file.is_dir) {
-                /* TODO: this could lead to nonsense like "dir/../dir/../dir"
-                 * rather than just "dir".
-                 */
-                current_directory = current_directory + "/" + std::string(file.name);
+                current_directory = simplify_path(current_directory + separator + std::string(file.name));
             }
             else {
-                to_open = current_directory + "/" + std::string(file.name);
+                to_open = current_directory + std::string(file.name);
             }
         }
         tinydir_next(&dir);
