@@ -28,20 +28,29 @@ windows_fname = stub + "windows.zip"
 def download_gh(url, fname):
     TOKEN = os.getenv("GH_TOKEN")
     curl_cmd = """curl \
-        -H "Accept: application/vnd.github+json" \
+        -H "Accept: application/octet-stream" \
         -H "Authorization: Bearer %s"\
-        -H "X-GitHub-Api-Version: 2022-11-28" """ % (TOKEN)
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        %s > %s""" % (TOKEN, url, fname)
 
     with open("command.sh", "w") as f:
-        f.write(curl_cmd + url + " > " + fname + "\n")
-        f.write("echo \"Success\"")
+        f.write(curl_cmd + "\n")
+        f.write("echo \"Success\"\n")
     time.sleep(1)
 
     os.system("sh command.sh")
     time.sleep(1)
 
 def load_gh_json(url, fname):
-    download_gh(url, fname)
+    TOKEN = os.getenv("GH_TOKEN")
+    curl_cmd = """curl \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer %s"\
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        %s > %s """ % (TOKEN, url, fname)
+    os.system(curl_cmd)
+    time.sleep(1)
+
     d = {}
     with open(fname, "r") as f:
         d = json.load(f)
