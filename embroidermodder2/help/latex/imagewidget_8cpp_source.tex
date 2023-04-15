@@ -1,0 +1,49 @@
+\hypertarget{imagewidget_8cpp_source}{}\doxysubsection{imagewidget.\+cpp}
+\label{imagewidget_8cpp_source}\index{embroidermodder2/imagewidget.cpp@{embroidermodder2/imagewidget.cpp}}
+\mbox{\hyperlink{imagewidget_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <QDebug>}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{imagewidget_8h}{imagewidget.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00004}\mbox{\hyperlink{class_image_widget_a93cac33abda904dda2e559d97ddf37a6}{00004}}\ \mbox{\hyperlink{class_image_widget_a93cac33abda904dda2e559d97ddf37a6}{ImageWidget::ImageWidget}}(\textcolor{keyword}{const}\ QString\ \&filename,\ QWidget*\ parent)\ :\ QWidget(parent)}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00005}00005\ \{}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00006}00006\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}ImageWidget\ Constructor"{}});}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00008}00008\ \ \ \ \ img.load(filename);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00010}00010\ \ \ \ \ setMinimumWidth(img.width());}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00011}00011\ \ \ \ \ setMinimumHeight(img.height());}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00012}00012\ \ \ \ \ setMaximumWidth(img.width());}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00013}00013\ \ \ \ \ setMaximumHeight(img.height());}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00015}00015\ \ \ \ \ this-\/>show();}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00016}00016\ \}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00018}\mbox{\hyperlink{class_image_widget_a1faac0b745a9246fe8143620261f1bb0}{00018}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_image_widget_a1faac0b745a9246fe8143620261f1bb0}{ImageWidget::load}}(\textcolor{keyword}{const}\ QString\ \&fileName)}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00019}00019\ \{}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00020}00020\ \ \ \ \ img.load(fileName);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00022}00022\ \}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00024}\mbox{\hyperlink{class_image_widget_a15bdf578a20c1c1cb630dc8264448484}{00024}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_image_widget_a15bdf578a20c1c1cb630dc8264448484}{ImageWidget::save}}(\textcolor{keyword}{const}\ QString\ \&fileName)}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00025}00025\ \{}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00026}00026\ \ \ \ \ img.save(fileName,\ \textcolor{stringliteral}{"{}PNG"{}});}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00027}00027\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00028}00028\ \}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00030}\mbox{\hyperlink{class_image_widget_a913dec5b2dba322a203652f793dc3ec3}{00030}}\ \mbox{\hyperlink{class_image_widget_a913dec5b2dba322a203652f793dc3ec3}{ImageWidget::\string~ImageWidget}}()}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00031}00031\ \{}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00032}00032\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}ImageWidget\ Destructor"{}});}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00033}00033\ \}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00035}\mbox{\hyperlink{class_image_widget_accfb24f32254fb98c049727597a53956}{00035}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_widget_accfb24f32254fb98c049727597a53956}{ImageWidget::paintEvent}}(QPaintEvent*)}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00036}00036\ \{}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00037}00037\ \ \ \ \ QPainter\ painter(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00038}00038\ \ \ \ \ painter.setViewport(0,\ 0,\ width(),\ height());}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00039}00039\ \ \ \ \ painter.setWindow(0,\ 0,\ width(),\ height());}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00040}00040\ \ \ \ \ painter.drawImage(0,\ 0,\ img);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00041}00041\ \}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8cpp_source_l00043}00043\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,402 @@
+#define WIDGET_MODE_BLOCK             0
+#define WIDGET_MODE_TEXT              1
+#define WIDGET_MODE_IMAGE             2
+#define WIDGET_MODE_SVG               3
+#define WIDGET_MODE_BACKGROUND        4
+#define WIDGET_MODE_SPINBOX           5
+#define WIDGET_MODE_COMBOBOX          6
+#define WIDGET_MODE_CONTAINER         7
+#define WIDGET_MODE_PANEL             8
+#define WIDGET_MODE_VIEW              9
+#define WIDGET_MODE_ROOT             10
+
+#define VIEW_STATE_SNAP          0x0000
+#define VIEW_STATE_GRIP          0x0001
+#define VIEW_STATE_RULER         0x0002
+#define VIEW_STATE_ORTHO         0x0004
+#define VIEW_STATE_POLAR         0x0008
+#define VIEW_STATE_QSNAP         0x0010
+#define VIEW_STATE_QTRACK        0x0020
+#define VIEW_STATE_LWT           0x0040
+#define VIEW_STATE_REAL          0x0080
+#define VIEW_STATE_CLOSEABLE     0x0100
+#define VIEW_STATE_USE_LOGO      0x0200
+#define VIEW_STATE_USE_TEXTURE   0x0400
+#define VIEW_STATE_USE_COLOR     0x0800
+#define VIEW_STATE_GRID          0x1000
+
+/* Permissions System(Not implemented)
+ * ------------------------------------
+ *
+ * The permissions flag determines whether the user or the system can run this
+ * action.
+ */
+#define PERMISSIONS_USER              0
+#define PERMISSIONS_SYSTEM            1
+
+#define MITER_JOIN                    0
+
+#define LINE_STYLE_DASHED             0
+#define LINE_STYLE_SOLID              1
+
+#define BRUSH_STYLE_DASHED            0
+#define BRUSH_STYLE_SOLID             1
+
+#define DIRECTION_RIGHT               0
+#define DIRECTION_LEFT                1
+
+#define RENDER_UI                     0
+#define RENDER_TEXT_EDITOR            1
+
+/* object values
+ * -------------
+ *
+ * The object flag describing which object
+ * the action is intended for or "Null" for global effects
+ * like duplicating a pattern.
+ */
+/* NOTE: Allow this enum to evaluate false */
+#define OBJ_TYPE_NULL                 0
+/* NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
+#define OBJ_TYPE_BASE                 0
+#define OBJ_TYPE_ARC                  1
+#define OBJ_TYPE_BLOCK                2
+#define OBJ_TYPE_CIRCLE               3
+#define OBJ_TYPE_DIMALIGNED           4
+#define OBJ_TYPE_DIMANGULAR           5
+#define OBJ_TYPE_DIMARCLENGTH         6
+#define OBJ_TYPE_DIMDIAMETER          7
+#define OBJ_TYPE_DIMLEADER            8
+#define OBJ_TYPE_DIMLINEAR            9
+#define OBJ_TYPE_DIMORDINATE         10
+#define OBJ_TYPE_DIMRADIUS           11
+#define OBJ_TYPE_ELLIPSE             12
+#define OBJ_TYPE_ELLIPSEARC          13
+#define OBJ_TYPE_RUBBER              14
+#define OBJ_TYPE_GRID                15
+#define OBJ_TYPE_HATCH               16
+#define OBJ_TYPE_IMAGE               17
+#define OBJ_TYPE_INFINITELINE        18
+#define OBJ_TYPE_LINE                19
+#define OBJ_TYPE_PATH                20
+#define OBJ_TYPE_POINT               21
+#define OBJ_TYPE_POLYGON             22
+#define OBJ_TYPE_POLYLINE            23
+#define OBJ_TYPE_RAY                 24
+#define OBJ_TYPE_RECTANGLE           25
+#define OBJ_TYPE_SLOT                26
+#define OBJ_TYPE_SPLINE              27
+#define OBJ_TYPE_TEXTMULTI           28
+#define OBJ_TYPE_TEXTSINGLE          29
+#define OBJ_TYPE_UNKNOWN             30
+
+/* CAD Linetypes
+ *(CONT, CENTER, DOT, HIDDEN, PHANTOM, ZIGZAG)
+ *
+ * Embroidery Stitchtypes
+ * RUNNING  ---------
+ * SATIN    VVVVVVVVV
+ * FISHBONE >>>>>>>>>
+ */
+#define OBJ_LTYPE_CONT                0
+#define OBJ_LTYPE_CENTER              1
+#define OBJ_LTYPE_DOT                 2
+#define OBJ_LTYPE_HIDDEN              3
+#define OBJ_LTYPE_PHANTOM             4
+#define OBJ_LTYPE_ZIGZAG              5
+#define OBJ_LTYPE_RUNNING             6
+#define OBJ_LTYPE_SATIN               7
+#define OBJ_LTYPE_FISHBONE            8
+
+/* OBJ_LWT_VALUES
+ * --------------
+ */
+#define OBJ_LWT_BYLAYER            (-2)
+#define OBJ_LWT_BYBLOCK            (-1)
+#define OBJ_LWT_DEFAULT               0
+#define OBJ_LWT_01                    1
+#define OBJ_LWT_02                    2
+#define OBJ_LWT_03                    3
+#define OBJ_LWT_04                    4
+#define OBJ_LWT_05                    5
+#define OBJ_LWT_06                    6
+#define OBJ_LWT_07                    7
+#define OBJ_LWT_08                    8
+#define OBJ_LWT_09                    9
+#define OBJ_LWT_10                   10
+#define OBJ_LWT_11                   11
+#define OBJ_LWT_12                   12
+#define OBJ_LWT_13                   13
+#define OBJ_LWT_14                   14
+#define OBJ_LWT_15                   15
+#define OBJ_LWT_16                   16
+#define OBJ_LWT_17                   17
+#define OBJ_LWT_18                   18
+#define OBJ_LWT_19                   19
+#define OBJ_LWT_20                   20
+#define OBJ_LWT_21                   21
+#define OBJ_LWT_22                   22
+#define OBJ_LWT_23                   23
+#define OBJ_LWT_24                   24
+
+/* OBJ_SNAP_VALUES
+ * ---------------
+ * NOTE: _allow this enum to evaluate false
+ */
+#define OBJ_SNAP_NULL                 0
+#define OBJ_SNAP_ENDPOINT             1
+#define OBJ_SNAP_MIDPOINT             2
+#define OBJ_SNAP_CENTER               3
+#define OBJ_SNAP_NODE                 4
+#define OBJ_SNAP_QUADRANT             5
+#define OBJ_SNAP_INTERSECTION         6
+#define OBJ_SNAP_EXTENSION            7
+#define OBJ_SNAP_INSERTION            8
+#define OBJ_SNAP_PERPENDICULAR        9
+#define OBJ_SNAP_TANGENT             10
+#define OBJ_SNAP_NEAREST             11
+#define OBJ_SNAP_APPINTERSECTION     12
+#define OBJ_SNAP_PARALLEL            13
+#define SNAP_TYPES                   14
+
+/* OBJ_RUBBER_VALUES
+ * -----------------
+ * NOTE: Allow this enum to evaluate false and true
+ */
+#define OBJ_RUBBER_OFF                0
+#define OBJ_RUBBER_ON                 1
+#define OBJ_RUBBER_CIRCLE_1P_RAD      2
+#define OBJ_RUBBER_CIRCLE_1P_DIA      3
+#define OBJ_RUBBER_CIRCLE_2P          4
+#define OBJ_RUBBER_CIRCLE_3P          5
+#define OBJ_RUBBER_CIRCLE_TTR         6
+#define OBJ_RUBBER_CIRCLE_TTT         7
+#define OBJ_RUBBER_DIMLEADER_LINE     8
+#define OBJ_RUBBER_ELLIPSE_LINE       9
+#define OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS    10
+#define OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS      11
+#define OBJ_RUBBER_ELLIPSE_ROTATION  12
+#define OBJ_RUBBER_GRIP              13
+#define OBJ_RUBBER_LINE              14
+#define OBJ_RUBBER_POLYGON           15
+#define OBJ_RUBBER_POLYGON_INSCRIBE  16
+#define OBJ_RUBBER_POLYGON_CIRCUMSCRIBE 17
+#define OBJ_RUBBER_POLYLINE          18
+#define OBJ_RUBBER_IMAGE             19
+#define OBJ_RUBBER_RECTANGLE         20
+#define OBJ_RUBBER_TEXTSINGLE        21
+#define RUBBER_MODES                 22
+
+/* SPARE_RUBBER_VALUES
+ * -------------------
+ * NOTE: Allow this enum to evaluate false.
+ */
+#define SPARE_RUBBER_OFF              0
+#define SPARE_RUBBER_PATH             1
+#define SPARE_RUBBER_POLYGON          2
+#define SPARE_RUBBER_POLYLINE         3
+
+/* PREVIEW_CLONE_VALUES
+ * --------------------
+ * NOTE: Allow this enum to evaluate false.
+ */
+#define PREVIEW_CLONE_NULL            0
+#define PREVIEW_CLONE_SELECTED        1
+#define PREVIEW_CLONE_RUBBER          2
+
+/* PREVIEW_MODE_VALUES
+ * -------------------
+ */
+#define PREVIEW_MODE_NULL             0
+#define PREVIEW_MODE_OFF              0
+#define PREVIEW_MODE_MOVE             1
+#define PREVIEW_MODE_ROTATE           2
+#define PREVIEW_MODE_SCALE            3
+
+#define NUMBER_ARCHITECTURAL          0
+#define NUMBER_DECIMAL                1
+#define NUMBER_ENGINEERING            2
+#define NUMBER_FRACTIONAL             3
+#define NUMBER_SCIENTIFIC             4
+
+#define DISABLE_GRID                  0
+#define RECTANGULAR_GRID              1
+#define CIRCULAR_GRID                 2
+#define ISOMETRIC_GRID                3
+
+// Custom Data used in QGraphicsItems
+
+//(int, QVariant)
+// I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
+// I.E. object.setData(OBJ_LAYER, "OUTLINE");
+// I.E. object.setData(OBJ_COLOR, 123);
+// I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
+
+// Keys
+enum OBJ_KEYS {
+OBJ_TYPE   = 0, //value type - int: See OBJ_TYPE_VALUES
+OBJ_NAME   = 1, //value type - str: See OBJ_NAME_VALUES
+OBJ_LAYER  = 2, //value type - str: "USER", "DEFINED", "STRINGS", etc...
+OBJ_COLOR  = 3, //value type - int: 0-255 //TODO: Use color chart in formats/format-dxf.h for this
+OBJ_LTYPE  = 4, //value type - int: See OBJ_LTYPE_VALUES
+OBJ_LWT    = 5, //value type - int: 0-27
+OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
+};
+
+#define  ENABLE_LWT         "ENABLE_LWT"
+#define  ENABLE_REAL       "ENABLE_REAL"
+
+#define  VIEW_COLOR_CROSSHAIR   "VIEW_COLOR_CROSSHAIR"
+#define  VIEW_COLOR_GRID        "VIEW_COLOR_GRID"
+
+
+enum ArrowStyle
+{
+    NoArrow, //NOTE: Allow this enum to evaluate false
+    Open,
+    Closed,
+    Dot,
+    Box,
+    Tick
+};
+
+enum lineStyle
+{
+    NoLine, //NOTE: Allow this enum to evaluate false
+    Flared,
+    Fletching
+};
+
+Action action_list[] = {
+    {"donothing", "&Do Nothing", "Does Nothing"},
+    {ACTION_windowcascade, "windowcascade", "&Cascade", "Cascade the windows."},
+    {ACTION_windowtile, "windowtile", "&Tile", "Tile the windows."},
+    {ACTION_windowclose, "windowclose", "Cl&ose", "Close the active window."},
+    {ACTION_windowcloseall, "windowcloseall", "Close &All", "Close all the windows."},
+    {ACTION_windownext, "windownext", "Ne&xt", "Move the focus to the next window."},
+    {ACTION_windowprevious, "windowprevious", "Pre&vious", "Move the focus to the previous window."},
+
+    {ACTION_new, "new", "&New", "Create a new file."},
+    {ACTION_open, "open", "&Open", "Open an existing file."},
+    {ACTION_save, "save", "&Save", "Save the design to disk."},
+    {ACTION_saveas, "saveas", "Save &As", "Save the design under a new name."},
+    {ACTION_print, "print", "&Print", "Print the design."},
+    {ACTION_designdetails, "designdetails", "&Details", "Details of the current design."},
+    {ACTION_exit, "exit", "E&xit", "Exit the application."},
+
+    {ACTION_cut, "cut", "Cu&t", "Cut the current selection's contents to the clipboard."},
+    {ACTION_copy, "copy", "&Copy", "Copy the current selection's contents to the clipboard."},
+    {ACTION_paste, "paste", "&Paste", "Paste the clipboard's contents into the current selection."},
+
+    {ACTION_help, "help", "&Help", "Displays help."},
+    {ACTION_changelog, "changelog", "&Changelog", "Describes new features in this product."},
+    {ACTION_tipoftheday, "tipoftheday", "&Tip Of The Day", "Displays a dialog with useful tips"},
+    {ACTION_about, "about", "&About Embroidermodder " VERSION, "Displays information about this product."},
+    {ACTION_whatsthis, "whatsthis", "&What's This?", "What's This? Context Help!"},
+
+    {ACTION_undo, "undo", "&Undo", "Reverses the most recent action."},
+    {ACTION_redo, "redo", "&Redo", "Reverses the effects of the previous undo action."},
+
+    {ACTION_icon16, "icon16", "Icon&16", "Sets the toolbar icon size to 16x16."},
+    {ACTION_icon24, "icon24", "Icon&24", "Sets the toolbar icon size to 24x24."},
+    {ACTION_icon32, "icon32", "Icon&32", "Sets the toolbar icon size to 32x32."},
+    {ACTION_icon48, "icon48", "Icon&48", "Sets the toolbar icon size to 48x48."},
+    {ACTION_icon64, "icon64", "Icon&64", "Sets the toolbar icon size to 64x64."},
+    {ACTION_icon128, "icon128", "Icon12&8", "Sets the toolbar icon size to 128x128."},
+
+    {ACTION_settingsdialog, "settingsdialog", "&Settings", "Configure settings specific to this product."},
+
+    {ACTION_makelayercurrent, "makelayercurrent", "&Make Layer Active", "Makes the layer of a selected object the active layer"},
+    {ACTION_layers, "layers", "&Layers", "Manages layers and layer properties:  LAYER"},
+    {ACTION_layerselector, "layerselector", "&Layer Selector", "Dropdown selector for changing the current layer"},
+    {ACTION_layerprevious, "layerprevious", "&Layer Previous", "Restores the previous layer settings:  LAYERP"},
+    {ACTION_colorselector, "colorselector", "&Color Selector", "Dropdown selector for changing the current thread color"},
+    {ACTION_linetypeselector, "linetypeselector", "&Stitchtype Selector", "Dropdown selector for changing the current stitch type"},
+    {ACTION_lineweightselector, "lineweightselector", "&Threadweight Selector", "Dropdown selector for changing the current thread weight"},
+    {ACTION_hidealllayers, "hidealllayers", "&Hide All Layers", "Turns the visibility off for all layers in the current drawing:  HIDEALL"},
+    {ACTION_showalllayers, "showalllayers", "&Show All Layers", "Turns the visibility on for all layers in the current drawing:  SHOWALL"},
+    {ACTION_freezealllayers, "freezealllayers", "&Freeze All Layers", "Freezes all layers in the current drawing:  FREEZEALL"},
+    {ACTION_thawalllayers, "thawalllayers", "&Thaw All Layers", "Thaws all layers in the current drawing:  THAWALL"},
+    {ACTION_lockalllayers, "lockalllayers", "&Lock All Layers", "Locks all layers in the current drawing:  LOCKALL"},
+    {ACTION_unlockalllayers, "unlockalllayers", "&Unlock All Layers", "Unlocks all layers in the current drawing:  UNLOCKALL"},
+
+    {ACTION_textbold, "textbold", "&Bold Text", "Sets text to be bold."},
+    {ACTION_textitalic, "textitalic", "&Italic Text", "Sets text to be italic."},
+    {ACTION_textunderline, "textunderline", "&Underline Text", "Sets text to be underlined."},
+    {ACTION_textstrikeout, "textstrikeout", "&StrikeOut Text", "Sets text to be striked out."},
+    {ACTION_textoverline, "textoverline", "&Overline Text", "Sets text to be overlined."},
+
+    {ACTION_zoomrealtime, "zoomrealtime", "Zoom &Realtime", "Zooms to increase or decrease the apparent size of objects in the current viewport."},
+    {ACTION_zoomprevious, "zoomprevious", "Zoom &Previous", "Zooms to display the previous view."},
+    {ACTION_zoomwindow, "zoomwindow", "Zoom &Window", "Zooms to display an area specified by a rectangular window."},
+    {ACTION_zoomdynamic, "zoomdynamic", "Zoom &Dynamic", "Zooms to display the generated portion of the drawing."},
+    {ACTION_zoomscale, "zoomscale", "Zoom &Scale", "Zooms the display using a specified scale factor."},
+    {ACTION_zoomcenter, "zoomcenter", "Zoom &Center", "Zooms to display a view specified by a center point and magnification or height."},
+    {ACTION_zoomin, "zoomin", "Zoom &In", "Zooms to increase the apparent size of objects."},
+    {ACTION_zoomout, "zoomout", "Zoom &Out", "Zooms to decrease the apparent size of objects."},
+    {ACTION_zoomselected, "zoomselected", "Zoom Selec&ted", "Zooms to display the selected objects."},
+    {ACTION_zoomall, "zoomall", "Zoom &All", "Zooms to display the drawing extents or the grid limits."},
+    {ACTION_zoomextents, "zoomextents", "Zoom &Extents", "Zooms to display the drawing extents."},
+
+    {ACTION_panrealtime, "panrealtime", "&Pan Realtime", "Moves the view in the current viewport."},
+    {ACTION_panpoint, "panpoint", "&Pan Point", "Moves the view by the specified distance."},
+    {ACTION_panleft, "panleft", "&Pan Left", "Moves the view to the left."},
+    {ACTION_panright, "panright", "&Pan Right", "Moves the view to the right."},
+    {ACTION_panup, "panup", "&Pan Up", "Moves the view up."},
+    {ACTION_pandown, "pandown", "&Pan Down", "Moves the view down."},
+
+    {ACTION_day, "day", "&Day", "Updates the current view using day vision settings."},
+    {ACTION_night, "night", "&Night", "Updates the current view using night vision settings."},
+    {-1, "END", "END", "END"}
+};
+
+std::vector<LineEdit> geometry_circle_line_edits = {
+    {
+        .label = "Center X",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleCenterX",
+        .user_editable = false
+    },
+    {
+        .label = "Center Y",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleCenterY",
+        .user_editable = false
+    },
+    {
+        .label = "Radius",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleRadius",
+        .user_editable = false
+    },
+    {
+        .label = "Diameter",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleDiameter",
+        .user_editable = false
+    },
+    {
+        .label = "Area",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleArea",
+        .user_editable = false
+    },
+    {
+        .label = "Circumference",
+        .icon = "blank",
+        .type = "double",
+        .signal = "lineEditCircleCircumference",
+        .user_editable = false
+    }
+};
+
+GroupBox geometry_circle = {
+    .title = "Geometry",
+    .line_edits = geometry_circle_line_edits,
+    .obj_type = OBJ_TYPE_CIRCLE
+};

@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['jef_5fthread_0',['jef_thread',['../embroidery_8h.html#a007d16b8f9e075b446c0845273dc4868',1,'embroidery.h']]],
+  ['jefdecode_1',['jefDecode',['../format__jef_8c.html#a5a786535b6161d47786b154225277772',1,'format_jef.c']]],
+  ['jefencode_2',['jefEncode',['../format__jef_8c.html#a1e908dbc1516b1a6ddca42140a91bc60',1,'format_jef.c']]],
+  ['jefgethoopsize_3',['jefGetHoopSize',['../format__jef_8c.html#ae5f72fdf0b3aec855a9b6324cc9aaab0',1,'format_jef.c']]],
+  ['jefsethoopfromid_4',['jefSetHoopFromId',['../format__jef_8c.html#a3eaf5dddc01c4443a6dbd9e8fba29955',1,'format_jef.c']]],
+  ['jefthreads_5',['jefThreads',['../embroidery_8h.html#a0f3d1df26f83f13f6ee95eeaf44c0cec',1,'jefThreads():&#160;thread-color.c'],['../thread-color_8c.html#a0f3d1df26f83f13f6ee95eeaf44c0cec',1,'jefThreads():&#160;thread-color.c']]],
+  ['jump_6',['JUMP',['../embroidery_8h.html#aee551d17fffb6235cc7123499dbf7d65',1,'embroidery.h']]],
+  ['just_5fopened_7',['just_opened',['../src_2main_8c.html#a3e6926ae65525832ed3c1ba9d8df636e',1,'main.c']]],
+  ['justify_5f_5f_8',['JUSTIFY__',['../src_2main_8c.html#acf4a59ca012b99a9941218ff7557f350',1,'main.c']]],
+  ['justify_5falign_9',['JUSTIFY_ALIGN',['../src_2main_8c.html#aedd12ac3014582e039b6c8771ebd30df',1,'main.c']]],
+  ['justify_5fbottomcenter_10',['JUSTIFY_BOTTOMCENTER',['../src_2main_8c.html#ab62d8b7cf5de69084058ce17882bc252',1,'main.c']]],
+  ['justify_5fbottomleft_11',['JUSTIFY_BOTTOMLEFT',['../src_2main_8c.html#a141e6a60e6aaf465fe244b39b6a102c8',1,'main.c']]],
+  ['justify_5fbottomright_12',['JUSTIFY_BOTTOMRIGHT',['../src_2main_8c.html#aa366944f47c5cb022194682c5c116a03',1,'main.c']]],
+  ['justify_5fleft_13',['JUSTIFY_LEFT',['../src_2main_8c.html#aea3758ebedef824873c207f6bd47e24c',1,'main.c']]],
+  ['justify_5fmiddle_14',['JUSTIFY_MIDDLE',['../src_2main_8c.html#ad4418045303954487b9316ef4d9a28d7',1,'main.c']]],
+  ['justify_5fmiddlecenter_15',['JUSTIFY_MIDDLECENTER',['../src_2main_8c.html#af01f2c75c637cfc6b94983739df9dff3',1,'main.c']]],
+  ['justify_5fmiddleleft_16',['JUSTIFY_MIDDLELEFT',['../src_2main_8c.html#a283c4381f09ad516549e1ec41fe739a3',1,'main.c']]],
+  ['justify_5fmiddleright_17',['JUSTIFY_MIDDLERIGHT',['../src_2main_8c.html#a1b85bea13bb087a9da77b219cd58573b',1,'main.c']]],
+  ['justify_5fright_18',['JUSTIFY_RIGHT',['../src_2main_8c.html#ae3dc0c37e15dada43d73b30a39700525',1,'main.c']]],
+  ['justify_5ftopcenter_19',['JUSTIFY_TOPCENTER',['../src_2main_8c.html#a236ccbb437674a19f27dd40a44ac36c0',1,'main.c']]],
+  ['justify_5ftopleft_20',['JUSTIFY_TOPLEFT',['../src_2main_8c.html#a775e053fa1f41d3f23790c68113c8fd3',1,'main.c']]],
+  ['justify_5ftopright_21',['JUSTIFY_TOPRIGHT',['../src_2main_8c.html#a1152fcd774da8f72f0dd3caf291d6185',1,'main.c']]]
+];

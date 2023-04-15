@@ -1,0 +1,1126 @@
+\hypertarget{format__svg_8c_source}{}\doxysubsection{format\+\_\+svg.\+c}
+\label{format__svg_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_svg.c@{embroidermodder2/extern/libembroidery/src/formats/format\_svg.c}}
+\mbox{\hyperlink{format__svg_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00002}00002\ \textcolor{comment}{\ *\ SVG\ FORMAT}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00003}00003\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ libembroidery.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00004}00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00005}00005\ \textcolor{comment}{\ *\ Copyright\ 2018-\/2023\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00006}00006\ \textcolor{comment}{\ *\ Licensed\ under\ the\ terms\ of\ the\ zlib\ license.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00007}00007\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}../embroidery\_internal.h"{}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00014}\mbox{\hyperlink{format__svg_8c_a261a5202706a19aed19915ea00584287}{00014}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{format__svg_8c_a261a5202706a19aed19915ea00584287}{svgCreator}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00016}\mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{00016}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00017}\mbox{\hyperlink{format__svg_8c_af2739a92493016586a36d41c67c9e9e4}{00017}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{format__svg_8c_af2739a92493016586a36d41c67c9e9e4}{svgMultiValue}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00019}\mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{00019}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{current\_element\_id}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00020}\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{00020}}\ \mbox{\hyperlink{struct_svg_attribute__}{SvgAttribute}}\ \mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[1000];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00021}\mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{00021}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00022}00022\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00023}\mbox{\hyperlink{format__svg_8c_a5ca69064432e28b0b57f5272cfa089a6}{00023}}\ \mbox{\hyperlink{format__svg_8c_a5ca69064432e28b0b57f5272cfa089a6}{currentAttribute}}[1000];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00024}00024\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00025}\mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{00025}}\ \mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}}[1000];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00027}00027\ \textcolor{preprocessor}{\#if\ 0}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00028}00028\ \textcolor{keywordtype}{int}\ svg\_identify\_element(\textcolor{keywordtype}{char}\ *buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00030}00030\ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ svgColorToEmbColor(\textcolor{keywordtype}{char}*\ colorString)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00031}00031\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00032}00032\ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00033}00033\ \ \ \ \ \textcolor{keywordtype}{char}*\ pEnd\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00034}00034\ \ \ \ \ \textcolor{keywordtype}{char}*\ colorStr\ =\ \mbox{\hyperlink{embroidery__internal_8h_a5d7bf5f964ae87921bab916b871ea2dd}{copy\_trim}}(colorString);\ \textcolor{comment}{/*\ Trim\ out\ any\ junk\ spaces\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00035}00035\ \ \ \ \ \textcolor{keywordtype}{int}\ length\ =\ strlen(colorStr);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00036}00036\ \ \ \ \ \textcolor{keywordtype}{int}\ tableColor;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00038}00038\ \ \ \ \ \textcolor{comment}{/*\ SVGTiny1.2\ Spec\ Section\ 11.13.1\ syntax\ for\ color\ values\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00039}00039\ \ \ \ \ \textcolor{keywordflow}{if}\ (length\ ==\ 7\ \&\&\ colorStr[0]\ ==\ \textcolor{charliteral}{'\#'})\ \textcolor{comment}{/*\ Six\ digit\ hex\ —\ \#rrggbb\ */}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (*colorStr==\textcolor{charliteral}{'\#'}\ \&\&\ *colorStr!=0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ \ \ \ \ colorStr++;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00043}00043\ \ \ \ \ \ \ \ \ c\ =\ \mbox{\hyperlink{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}{embColor\_fromHexStr}}(colorStr);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00044}00044\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00045}00045\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (length\ ==\ 4\ \&\&\ colorStr[0]\ ==\ \textcolor{charliteral}{'\#'})\ \textcolor{comment}{/*\ Three\ digit\ hex\ —\ \#rgb\ */}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00046}00046\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Convert\ the\ 3\ digit\ hex\ to\ a\ six\ digit\ hex\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00047}00047\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ hex[7];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00048}00048\ \ \ \ \ \ \ \ \ sprintf(hex,\ \textcolor{stringliteral}{"{}\%c\%c\%c\%c\%c\%c"{}},\ colorStr[1],\ colorStr[1],\ colorStr[2],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ colorStr[2],\ colorStr[3],\ colorStr[3]);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00051}00051\ \ \ \ \ \ \ \ \ c\ =\ \mbox{\hyperlink{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}{embColor\_fromHexStr}}(hex);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00052}00052\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (strstr(colorStr,\ \textcolor{stringliteral}{"{}\%"{}}))\ \textcolor{comment}{/*\ Float\ functional\ —\ rgb(R\%,\ G\%,\ B\%)\ */}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *s\ =\ colorStr;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ replace\ characters\ we\ aren't\ using\ with\ spaces\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ *s;\ s++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*s\ ==\ \textcolor{charliteral}{'r'}\ ||\ *s\ ==\ \textcolor{charliteral}{'g'}\ ||\ *s\ ==\ \textcolor{charliteral}{'b'}\ ||\ *s\ ==\ \textcolor{charliteral}{','}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ||\ *s\ ==\ \textcolor{charliteral}{'('}\ ||\ *s\ ==\ \textcolor{charliteral}{')'}\ ||\ *s\ ==\ \textcolor{charliteral}{'\%'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *s\ =\ \textcolor{charliteral}{'\ '};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}}\ =\ (\textcolor{keywordtype}{unsigned}\ char)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(255.0/100.0\ *\ strtod(colorStr,\ \&pEnd));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}}\ =\ (\textcolor{keywordtype}{unsigned}\ char)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(255.0/100.0\ *\ strtod(pEnd,\ \ \ \ \ \&pEnd));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}}\ =\ (\textcolor{keywordtype}{unsigned}\ char)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(255.0/100.0\ *\ strtod(pEnd,\ \ \ \ \ \&pEnd));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00065}00065\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00066}00066\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (length\ >\ 3\ \&\&\ colorStr[0]\ ==\ \textcolor{charliteral}{'r'}\ \&\&\ colorStr[1]\ ==\ \textcolor{charliteral}{'g'}\ \&\&\ colorStr[2]\ ==\ \textcolor{charliteral}{'b'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Integer\ functional\ —\ rgb(rrr,\ ggg,\ bbb)\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ *s\ =\ colorStr;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ replace\ characters\ we\ aren't\ using\ with\ spaces\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ *s;\ s++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (*s\ ==\ \textcolor{charliteral}{'r'}\ ||\ *s\ ==\ \textcolor{charliteral}{'g'}\ ||\ *s\ ==\ \textcolor{charliteral}{'b'}\ ||\ *s\ ==\ \textcolor{charliteral}{','}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ||\ *s\ ==\ \textcolor{charliteral}{'('}\ ||\ *s\ ==\ \textcolor{charliteral}{')'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *s\ =\ \textcolor{charliteral}{'\ '};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00075}00075\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00076}00076\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}}\ =\ (\textcolor{keywordtype}{unsigned}\ char)strtol(colorStr,\ \&pEnd,\ 10);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00077}00077\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}}\ =\ (\textcolor{keywordtype}{unsigned}\ char)strtol(pEnd,\ \ \ \ \ \&pEnd,\ 10);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00078}00078\ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}}\ =\ (\textcolor{keywordtype}{unsigned}\ char)strtol(pEnd,\ \ \ \ \ \&pEnd,\ 10);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00079}00079\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00080}00080\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{comment}{/*\ Color\ keyword\ */}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00081}00081\ \ \ \ \ \ \ \ \ tableColor\ =\ \mbox{\hyperlink{embroidery_8h_a22b614f435550f386b2fcfef48848e23}{threadColor}}(colorStr,\ \mbox{\hyperlink{embroidery_8h_a435440ff87d1825deb18f41303846058}{SVG\_Colors}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (tableColor\ <\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}SVG\ color\ string\ not\ found:\ \%s.\(\backslash\)n"{}},\ colorStr);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00087}00087\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00088}00088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}}\ =\ (tableColor\ >>\ 16)\ \&\ 0xFF;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00090}00090\ \ \ \ \ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}}\ =\ (tableColor\ >>\ 8)\ \&\ 0xFF;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00091}00091\ \ \ \ \ \ \ \ \ \ \ \ \ c.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}}\ =\ tableColor\ \&\ 0xFF;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00093}00093\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00095}00095\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(colorStr);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00096}00096\ \ \ \ \ \textcolor{comment}{/*\ Returns\ black\ if\ all\ else\ fails\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00097}00097\ \ \ \ \ \textcolor{keywordflow}{return}\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00098}00098\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00100}00100\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00101}00101\ toUpper(\textcolor{keywordtype}{char}\ cmd)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00102}00102\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd\ >=\ \textcolor{charliteral}{'a'}\ \&\&\ cmd\ <=\ \textcolor{charliteral}{'z'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00104}00104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ cmd\ -\/\ \textcolor{charliteral}{'a'}\ +\ \textcolor{charliteral}{'A'};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00105}00105\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00106}00106\ \ \ \ \ \textcolor{keywordflow}{return}\ cmd;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00107}00107\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00109}00109\ \textcolor{keywordtype}{int}\ svgPathCmdToEmbPathFlag(\textcolor{keywordtype}{char}\ cmd)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00110}00110\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00111}00111\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ This\ function\ needs\ some\ work\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (toUpper(cmd)\ ==\ \textcolor{charliteral}{'M'})\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery__internal_8h_aa5aaf586798b90ce013afceef182aa97}{MOVETO}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00113}00113\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (toUpper(cmd)\ ==\ \textcolor{charliteral}{'L'})\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery__internal_8h_a2feb78f58cdc6ede886c84a21404f9e0}{LINETO}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00114}00114\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00115}00115\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'C')\ return\ CUBICTOCONTROL1;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00116}00116\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'CC')\ return\ CUBICTOCONTROL2;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00117}00117\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'CCC')\ return\ CUBICTOEND;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00118}00118\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'A')\ return\ ELLIPSETORAD;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00119}00119\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'AA')\ return\ ELLIPSETOEND;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00120}00120\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'Q')\ return\ QUADTOCONTROL;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00121}00121\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'QQ')\ return\ QUADTOEND;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00122}00122\ \textcolor{comment}{\ \ \ \ else\ if\ (toUpper(cmd)\ ==\ 'Z')\ return\ LINETO;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00123}00123\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00125}00125\ \ \ \ \ \textcolor{comment}{/*else\ if\ (toUpper(cmd)\ ==\ 'B')\ return\ BULGETOCONTROL;\ */}\ \textcolor{comment}{/*\ NOTE:\ This\ is\ not\ part\ of\ the\ SVG\ spec,\ but\ hopefully\ Bulges\ will\ be\ added\ to\ the\ SVG\ spec\ someday\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00126}00126\ \ \ \ \ \textcolor{comment}{/*else\ if\ (toUpper(cmd)\ ==\ 'BB')\ return\ BULGETOEND;\ */}\ \ \ \textcolor{comment}{/*\ NOTE:\ This\ is\ not\ part\ of\ the\ SVG\ spec,\ but\ hopefully\ Bulges\ will\ be\ added\ to\ the\ SVG\ spec\ someday\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00127}00127\ \ \ \ \ \textcolor{comment}{/*else\ \{\ printf("{}ERROR:\ svgPathCmdToEmbPathFlag(),\ unknown\ command\ '\%c'\(\backslash\)n"{},\ cmd);\ return\ MOVETO;\ \}\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00129}00129\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery__internal_8h_a2feb78f58cdc6ede886c84a21404f9e0}{LINETO}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00130}00130\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00132}00132\ \textcolor{keywordtype}{char}*\ svgAttribute\_getValue(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ name)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00133}00133\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00134}00134\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ i<\mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00135}00135\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!strcmp(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[i].name,\ name))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00136}00136\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[i].\mbox{\hyperlink{struct_svg_attribute___a4e9aec275e566b978a3ccb4e043d8c61}{value}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00137}00137\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00138}00138\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00139}00139\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}none"{}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00140}00140\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00142}00142\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00143}00143\ parse\_circle(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00144}00144\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00145}00145\ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00146}00146\ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}cx"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00147}00147\ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}cy"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00148}00148\ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}r"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00149}00149\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}{embPattern\_addCircleAbs}}(p,\ circle);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00150}00150\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00152}00152\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00153}00153\ parse\_ellipse(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00154}00154\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00155}00155\ \ \ \ \ \mbox{\hyperlink{struct_emb_ellipse__}{EmbEllipse}}\ ellipse;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00156}00156\ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}cx"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00157}00157\ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}cy"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00158}00158\ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___af1d62e5365cadfab859168c15b726de5}{radius}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}rx"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00159}00159\ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___af1d62e5365cadfab859168c15b726de5}{radius}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}ry"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00160}00160\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_abe0e2b92cd0e0e514c63e2eda5968f9f}{embPattern\_addEllipseAbs}}(p,\ ellipse);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00161}00161\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00163}00163\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00164}00164\ parse\_line(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00165}00165\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00166}00166\ \ \ \ \ \textcolor{keywordtype}{char}\ *x1,\ *x2,\ *y1,\ *y2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00167}00167\ \ \ \ \ x1\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}x1"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00168}00168\ \ \ \ \ y1\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}y1"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00169}00169\ \ \ \ \ x2\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}x2"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00170}00170\ \ \ \ \ y2\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}y2"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00172}00172\ \ \ \ \ \textcolor{comment}{/*\ If\ the\ starting\ and\ ending\ points\ are\ the\ same,\ it\ is\ a\ point\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00173}00173\ \ \ \ \ \textcolor{keywordflow}{if}\ (!strcmp(x1,\ x2)\ \&\&\ !strcmp(y1,\ y2))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00174}00174\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_point__}{EmbPoint}}\ point;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00175}00175\ \ \ \ \ \ \ \ \ point.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ atof(x1);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00176}00176\ \ \ \ \ \ \ \ \ point.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ atof(y1);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00177}00177\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a177816da32581f8737a1825391d44f84}{embPattern\_addPointAbs}}(p,\ point);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00178}00178\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00179}00179\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ line;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ atof(x1);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00182}00182\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ atof(y1);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00183}00183\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ atof(x2);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00184}00184\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ atof(y2);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00185}00185\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_af85d9e191f5c09f877fad0f1605a66f4}{embPattern\_addLineAbs}}(p,\ line);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00186}00186\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00188}00188\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00190}00190\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00191}00191\ parse\_path(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00192}00192\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00193}00193\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ finish\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00194}00194\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ position,\ f\_point,\ l\_point,\ c1\_point,\ c2\_point;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00195}00195\ \ \ \ \ \textcolor{keywordtype}{int}\ cmd,\ i,\ pos,\ reset,\ trip;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00196}00196\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ pathData[7];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00197}00197\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ numMoves;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00198}00198\ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ color;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00199}00199\ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}*\ flagList\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00200}00200\ \ \ \ \ \mbox{\hyperlink{struct_emb_path__}{EmbPath}}\ path;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00201}00201\ \ \ \ \ \textcolor{keywordtype}{char}*\ pointStr\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}d"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00202}00202\ \ \ \ \ \textcolor{keywordtype}{char}*\ mystrok\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}stroke"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00203}00203\ \ \ \ \ \textcolor{keywordtype}{int}\ last\ =\ strlen(pointStr);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00204}00204\ \ \ \ \ \textcolor{keywordtype}{int}\ size\ =\ 32;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00205}00205\ \ \ \ \ \textcolor{keywordtype}{int}\ pendingTask\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00206}00206\ \ \ \ \ \textcolor{keywordtype}{int}\ relative\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00207}00207\ \ \ \ \ \textcolor{keywordtype}{char}*\ pathbuff\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00209}00209\ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}*\ pointList\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00210}00210\ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00211}00211\ \ \ \ \ \textcolor{comment}{/*\ An\ odometer\ aka\ 'tripometer'\ used\ for\ stepping\ thru\ the\ pathData\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00212}00212\ \ \ \ \ trip\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00213}00213\ \ \ \ \ \textcolor{comment}{/*\ count\ of\ float[]\ that\ has\ been\ filled.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00214}00214\ \textcolor{comment}{\ \ \ \ \ *\ 0\ =\ first\ item\ of\ array}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00215}00215\ \textcolor{comment}{\ \ \ \ \ *\ -\/1\ =\ not\ filled\ =\ empty\ array}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00216}00216\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00217}00217\ \ \ \ \ reset\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00218}00218\ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00219}00219\ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00220}00220\ \ \ \ \ f\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00221}00221\ \ \ \ \ f\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00222}00222\ \ \ \ \ l\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00223}00223\ \ \ \ \ l\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00224}00224\ \ \ \ \ c1\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00225}00225\ \ \ \ \ c1\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00226}00226\ \ \ \ \ c2\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00227}00227\ \ \ \ \ c2\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00228}00228\ \ \ \ \ cmd\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00229}00229\ \ \ \ \ numMoves\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00231}00231\ \ \ \ \ pathbuff\ =\ (\textcolor{keywordtype}{char}*)malloc(size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00232}00232\ \ \ \ \ \textcolor{keywordflow}{if}\ (!pathbuff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00233}00233\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ svgAddToPattern(),\ cannot\ allocate\ memory\ for\ pathbuff\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00234}00234\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00235}00235\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00236}00236\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00237}00237\ \ \ \ \ printf(\textcolor{stringliteral}{"{}stroke:\%s\(\backslash\)n"{}},\ mystrok);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00239}00239\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ last;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00240}00240\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ pointStr[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00241}00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}>1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}relative\ \%d\(\backslash\)n"{}},\ relative);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}c1.x\ \%f\(\backslash\)n"{}},\ c1\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}c2.x\ \%f\(\backslash\)n"{}},\ c2\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00245}00245\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00246}00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (c)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00247}00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'0'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'1'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'2'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'3'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'4'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'5'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'6'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00254}00254\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'7'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'8'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'9'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'.'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[pos++]\ =\ (char)c;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ add\ a\ more\ char\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\ '}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{','}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*printf("{}\ \ \ \ ,'\%s'\ \ \ \ \string~POS=\%d\ \ \string~TRIP=\%d\ \ \string~[pos]=\%d\(\backslash\)n"{},\ pathbuff,pos,trip,\ pathbuff[pos]);*/}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >\ 0)\ \{\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ append\ float\ to\ array,\ if\ it\ not\ yet\ stored\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[pos]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\ \ \ \ ,val:\%s\(\backslash\)n"{}},\ pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[++trip]\ =\ atof(pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'-\/'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ append\ float\ to\ array,\ if\ it\ not\ yet\ stored\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[pos]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\ \ \ \ -\/val:\%s\(\backslash\)n"{}},\ pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00280}00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[++trip]\ =\ atof(pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[pos++]\ =\ (char)c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00283}00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ add\ a\ more\ char\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00287}00287\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /***\ ASSUMED\ ANY\ COMMAND\ FOUND\ ***/}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00291}00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ just\ make\ sure:\ append\ float\ to\ array,}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00292}00292\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ if\ it\ not\ yet\ stored}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00293}00293\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[pos]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\ \ \ \ >val:\%s\(\backslash\)n"{}},\ pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[++trip]\ =\ atof(pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00299}00299\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00300}00300\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /****\ Compose\ Point\ List\ ****/}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00301}00301\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ below\ "{}while"{}\ is\ for\ avoid\ losing\ last\ 'z'}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00303}00303\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ command\ that\ maybe\ never\ accommodated.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00304}00304\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pendingTask\ =\ 1;\ \textcolor{keywordflow}{if}\ (i==last-\/1)\ \{pendingTask\ =\ 2;\}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00306}00306\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (pendingTask\ >\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pendingTask\ -\/=\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00309}00309\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00310}00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Check\ whether\ prior\ command\ need\ to\ be\ saved\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00311}00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (trip>=0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00312}00312\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_point__}{EmbPoint}}\ test;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00313}00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trip\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00314}00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00315}00315\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00316}00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ relative\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00317}00317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ relative\ to\ prior\ coordinate\ point}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00318}00318\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ or\ absolute\ coordinate?\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd\ >=\ \textcolor{charliteral}{'a'}\ \&\&\ cmd\ <=\ \textcolor{charliteral}{'z'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00321}00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ relative\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00322}00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00323}00323\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00324}00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (cmd\ ==\ \textcolor{charliteral}{'M'}\ ||\ cmd\ ==\ \textcolor{charliteral}{'m'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00325}00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ pathData[0];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00326}00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ pathData[1];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00327}00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f\_point\ =\ position;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (cmd\ ==\ \textcolor{charliteral}{'L'}\ ||\ cmd\ ==\ \textcolor{charliteral}{'l'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00330}00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ pathData[0];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00331}00331\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ pathData[1];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00332}00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00333}00333\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (cmd\ ==\ \textcolor{charliteral}{'H'}\ ||\ cmd\ ==\ \textcolor{charliteral}{'h'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00334}00334\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ pathData[0];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00335}00335\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ l\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00336}00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00337}00337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (cmd\ ==\ \textcolor{charliteral}{'V'}\ \ ||\ cmd\ ==\ \textcolor{charliteral}{'v'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00338}00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ l\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00339}00339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ pathData[1];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00340}00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00341}00341\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (cmd\ ==\ \textcolor{charliteral}{'C'}\ ||\ cmd\ ==\ \textcolor{charliteral}{'c'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00342}00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ pathData[4];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00343}00343\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ pathData[5];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00344}00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ c1\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ pathData[0];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00345}00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ c1\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ pathData[1];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00346}00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ c2\_point.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ pathData[2];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00347}00347\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ c2\_point.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ pathData[3];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00348}00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00349}00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00350}00350\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 'S')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00351}00351\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00352}00352\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00353}00353\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00354}00354\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 's')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00355}00355\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00356}00356\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00357}00357\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00358}00358\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 'Q')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00359}00359\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00360}00360\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00361}00361\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00362}00362\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 'q')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00363}00363\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00364}00364\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00365}00365\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00366}00366\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 'T')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00367}00367\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00368}00368\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00369}00369\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00370}00370\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 't')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00371}00371\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00372}00372\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00373}00373\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00374}00374\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 'A')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00375}00375\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00376}00376\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00377}00377\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00378}00378\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ else\ if\ (cmd\ ==\ 'a')\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00379}00379\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.x\ =\ pathData[0];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00380}00380\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position.y\ =\ pathData[1];}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00381}00381\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00382}00382\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (cmd\ ==\ \textcolor{charliteral}{'Z'}\ ||\ cmd\ ==\ \textcolor{charliteral}{'z'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ position\ =\ f\_point;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00386}00386\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00387}00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!pointList\ \&\&\ !flagList)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00388}00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pointList\ =\ \mbox{\hyperlink{array_8c_a67090c780a2818616877fb42b3a42e5c}{embArray\_create}}(\mbox{\hyperlink{embroidery_8h_a20f029cd78225bfeec66da1b3745311a}{EMB\_POINT}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00389}00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flagList\ =\ \mbox{\hyperlink{array_8c_a67090c780a2818616877fb42b3a42e5c}{embArray\_create}}(\mbox{\hyperlink{embroidery_8h_a9fd22b852192b4b65fa6323ccd4c94f4}{EMB\_FLAG}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00390}00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00391}00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ test.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}\ =\ position;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00392}00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_a5adb6549f01b7f271bf8acd2cdc5da33}{embArray\_addPoint}}(pointList,\ test);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00393}00393\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_a4dfd8819459125dcf1cdadca56a9ffa9}{embArray\_addFlag}}(flagList,\ svgPathCmdToEmbPathFlag(cmd));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00394}00394\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ l\_point\ =\ position;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00395}00395\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00396}00396\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[0]\ =\ (char)cmd;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ set\ the\ command\ for\ compare\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00397}00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[1]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00398}00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00399}00399\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00400}00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}*prior:\%s\ (\%f,\ \%f,\ \ \%f,\ \%f,\ \ \ \ \ \%f,\%f,\ \ \%f)\ \(\backslash\)n"{}},\ pathbuff,}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00401}00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[0],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00402}00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[1],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00403}00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[2],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00404}00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[3],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00405}00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[4],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00406}00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[5],}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00407}00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathData[6]}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00408}00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00409}00409\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00410}00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00411}00411\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00412}00412\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ assign\ new\ command\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00413}00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (trip\ ==\ -\/1\ \&\&\ reset\ ==\ -\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00414}00414\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ set\ the\ command\ for\ compare\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00415}00415\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[0]\ =\ (char)c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00416}00416\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff[1]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00417}00417\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00418}00418\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}cmd:\%s\(\backslash\)n"{}},\ pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00419}00419\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'M'}\ ||\ c\ ==\ \textcolor{charliteral}{'m'}\ ||\ c\ ==\ \textcolor{charliteral}{'L'}\ ||\ c\ ==\ \textcolor{charliteral}{'l'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00420}00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00421}00421\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00422}00422\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ numMoves++;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00424}00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'C'}\ ||\ c\ ==\ \textcolor{charliteral}{'c'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00425}00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00426}00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 6;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00427}00427\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00428}00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'H'}\ ||\ c\ ==\ \textcolor{charliteral}{'h'}\ ||\ c\ ==\ \textcolor{charliteral}{'V'}\ ||\ c\ ==\ \textcolor{charliteral}{'v'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00429}00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00430}00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00431}00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00432}00432\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'S'}\ ||\ c\ ==\ \textcolor{charliteral}{'s'}\ ||\ c\ ==\ \textcolor{charliteral}{'Q'}\ ||\ c\ ==\ \textcolor{charliteral}{'q'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00433}00433\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00434}00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 4;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00435}00435\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00436}00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'T'}\ ||\ c\ ==\ \textcolor{charliteral}{'t'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00437}00437\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00438}00438\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00439}00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00440}00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'A'}\ ||\ c\ ==\ \textcolor{charliteral}{'a'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00441}00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 7;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00444}00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'Z'}\ ||\ c\ ==\ \textcolor{charliteral}{'z'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00445}00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ cmd\ =\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00446}00446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00447}00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00448}00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00449}00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ svgAddToPattern(),\ \%s\ is\ not\ a\ valid\ svg\ path\ command,\ skipping...\(\backslash\)n"{}},\ pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00450}00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trip\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00451}00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ reset\ =\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00452}00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00453}00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00454}00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ avoid\ losing\ 'z'\ command\ that\ maybe\ never\ accommodated.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00455}00455\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i==last-\/1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00456}00456\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ trip\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00457}00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00458}00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{comment}{/*\ while\ pendingTask\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00459}00459\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00460}00460\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00461}00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00462}00462\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00463}00463\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >=\ size\ -\/\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00464}00464\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ increase\ pathbuff\ length\ -\/\ leave\ room\ for\ 0\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00465}00465\ \ \ \ \ \ \ \ \ \ \ \ \ size\ *=\ 2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00466}00466\ \ \ \ \ \ \ \ \ \ \ \ \ pathbuff\ =\ (\textcolor{keywordtype}{char}*)realloc(pathbuff,\ size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00467}00467\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!pathbuff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00468}00468\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ svgAddToPattern(),\ cannot\ re-\/allocate\ memory\ for\ pathbuff\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00469}00469\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00470}00470\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00471}00471\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00472}00472\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00473}00473\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(pathbuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00474}00474\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00475}00475\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ subdivide\ numMoves\ >\ 1\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00476}00476\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00477}00477\ \ \ \ \ color\ =\ svgColorToEmbColor(svgAttribute\_getValue(\textcolor{stringliteral}{"{}stroke"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00478}00478\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00479}00479\ \ \ \ \ path.\mbox{\hyperlink{struct_emb_path___ae745585ab1bd333341d4502e19f92b0e}{pointList}}\ =\ pointList;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00480}00480\ \ \ \ \ path.\mbox{\hyperlink{struct_emb_path___ab771a5850d7096a7e4c0c406c721bef5}{flagList}}\ =\ flagList;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00481}00481\ \ \ \ \ path.\mbox{\hyperlink{struct_emb_path___a5b70f2bf502560229b7fecf8984e33e9}{color}}\ =\ color;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00482}00482\ \ \ \ \ path.\mbox{\hyperlink{struct_emb_path___a2c9095113c375b0d647be2da7e1b2eb3}{lineType}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00483}00483\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a173b673741f42aba5463fe6f32fb3b32}{embPattern\_addPathAbs}}(p,\ path);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00484}00484\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00485}00485\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00486}00486\ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *parse\_pointlist(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00487}00487\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00488}00488\ \ \ \ \ \textcolor{keywordtype}{char}*\ pointStr\ =\ svgAttribute\_getValue(\textcolor{stringliteral}{"{}points"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00489}00489\ \ \ \ \ \textcolor{keywordtype}{int}\ last\ =\ strlen(pointStr);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00490}00490\ \ \ \ \ \textcolor{keywordtype}{int}\ size\ =\ 32;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00491}00491\ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00492}00492\ \ \ \ \ \textcolor{keywordtype}{int}\ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00493}00493\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ odd\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00494}00494\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ xx\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00495}00495\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ yy\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00496}00496\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00497}00497\ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}*\ pointList\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00498}00498\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00499}00499\ \ \ \ \ \textcolor{keywordtype}{char}*\ polybuff\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00500}00500\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00501}00501\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}\ >\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00502}00502\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Called\ with\ \%p\(\backslash\)n"{}},\ (\textcolor{keywordtype}{void}*)p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00503}00503\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00504}00504\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00505}00505\ \ \ \ \ polybuff\ =\ (\textcolor{keywordtype}{char}*)malloc(size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00506}00506\ \ \ \ \ \textcolor{keywordflow}{if}\ (!polybuff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00507}00507\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ svgAddToPattern(),\ cannot\ allocate\ memory\ for\ polybuff\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00508}00508\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ pointList;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00509}00509\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00510}00510\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ last;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00511}00511\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ c\ =\ pointStr[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00512}00512\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (c)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00513}00513\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\ '}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00514}00514\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00515}00515\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00516}00516\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00517}00517\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ polybuff[pos]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00518}00518\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00519}00519\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*Compose\ Point\ List\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00520}00520\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (odd)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00521}00521\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ odd\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00522}00522\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ xx\ =\ atof(polybuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00523}00523\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00524}00524\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00525}00525\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_point__}{EmbPoint}}\ a;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00526}00526\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ odd\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00527}00527\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ yy\ =\ atof(polybuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00528}00528\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00529}00529\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!pointList)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00530}00530\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pointList\ =\ \mbox{\hyperlink{array_8c_a67090c780a2818616877fb42b3a42e5c}{embArray\_create}}(\mbox{\hyperlink{embroidery_8h_a20f029cd78225bfeec66da1b3745311a}{EMB\_POINT}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00531}00531\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00532}00532\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ a.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ xx;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00533}00533\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ a.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ yy;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00534}00534\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_a5adb6549f01b7f271bf8acd2cdc5da33}{embArray\_addPoint}}(pointList,\ a);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00535}00535\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00536}00536\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00537}00537\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00538}00538\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00539}00539\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ polybuff[pos++]\ =\ (char)c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00540}00540\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00541}00541\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00542}00542\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >=\ size\ -\/\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00543}00543\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ increase\ polybuff\ length\ -\/\ leave\ room\ for\ 0\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00544}00544\ \ \ \ \ \ \ \ \ \ \ \ \ \ size\ *=\ 2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00545}00545\ \ \ \ \ \ \ \ \ \ \ \ \ \ polybuff\ =\ (\textcolor{keywordtype}{char}*)realloc(polybuff,\ size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00546}00546\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!polybuff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00547}00547\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ svgAddToPattern(),\ cannot\ re-\/allocate\ memory\ for\ polybuff\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00548}00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ NULL;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00549}00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00550}00550\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00551}00551\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00552}00552\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(polybuff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00553}00553\ \ \ \ \ \textcolor{keywordflow}{return}\ pointList;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00554}00554\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00555}00555\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00556}00556\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00557}00557\ parse\_polygon(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00558}00558\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00559}00559\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}\ >\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00560}00560\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Called\ with\ \%p\(\backslash\)n"{}},\ (\textcolor{keywordtype}{void}*)p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00561}00561\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00562}00562\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00563}00563\ \textcolor{comment}{\ \ \ \ EmbPolygonObject\ polygonObj;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00564}00564\ \textcolor{comment}{\ \ \ \ polygonObj.pointList\ =\ embArray\_create(EMB\_POINT);}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00565}00565\ \textcolor{comment}{\ \ \ \ BROKEN:\ polygonObj.pointList\ =\ parse\_pointlist(p);}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00566}00566\ \textcolor{comment}{\ \ \ \ polygonObj.color\ =\ svgColorToEmbColor(svgAttribute\_getValue("{}stroke"{}));}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00567}00567\ \textcolor{comment}{\ \ \ \ polygonObj.lineType\ =\ 1;\ TODO:\ use\ lineType\ enum}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00568}00568\ \textcolor{comment}{\ \ \ \ embPattern\_addPolygonObjectAbs(p,\ \&polygonObj);}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00569}00569\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00570}00570\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00571}00571\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00572}00572\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00573}00573\ parse\_polyline(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00574}00574\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00575}00575\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}\ >\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00576}00576\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Called\ with\ \%p\(\backslash\)n"{}},\ (\textcolor{keywordtype}{void}*)p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00577}00577\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00578}00578\ \ \ \ \ \textcolor{comment}{/*\ BROKEN}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00579}00579\ \textcolor{comment}{\ \ \ \ EmbPolylineObject*\ polylineObj;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00580}00580\ \textcolor{comment}{\ \ \ \ polylineObj\ =\ (EmbPolylineObject*)malloc(sizeof(EmbPolylineObject));}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00581}00581\ \textcolor{comment}{\ \ \ \ polylineObj-\/>pointList\ =\ parse\_pointlist(p);}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00582}00582\ \textcolor{comment}{\ \ \ \ polylineObj-\/>color\ =\ svgColorToEmbColor(svgAttribute\_getValue("{}stroke"{}));}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00583}00583\ \textcolor{comment}{\ \ \ \ polylineObj-\/>lineType\ =\ 1;\ TODO:\ use\ lineType\ enum}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00584}00584\ \textcolor{comment}{\ \ \ \ embPattern\_addPolylineObjectAbs(p,\ polylineObj);}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00585}00585\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00586}00586\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00587}00587\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00588}00588\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00589}00589\ parse\_rect(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00590}00590\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00591}00591\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ rect;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00592}00592\ \ \ \ \ \textcolor{keywordtype}{float}\ width,\ height;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00593}00593\ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}x"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00594}00594\ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}y"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00595}00595\ \ \ \ \ width\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}width"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00596}00596\ \ \ \ \ height\ =\ atof(svgAttribute\_getValue(\textcolor{stringliteral}{"{}height"{}}));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00597}00597\ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ =\ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ +\ width;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00598}00598\ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ =\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ +\ height;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00599}00599\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a8546c80481f4b1cf3b7da896f729a800}{embPattern\_addRectAbs}}(p,\ rect);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00600}00600\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00601}00601\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00602}00602\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00603}00603\ svgAddToPattern(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ p)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00604}00604\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00605}00605\ \ \ \ \ \textcolor{keywordflow}{if}\ (!p)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00606}00606\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ svgAddToPattern(),\ p\ argument\ is\ null\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00607}00607\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00608}00608\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00609}00609\ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{current\_element\_id}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00610}00610\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a5fb9ed4e9ab0cfce79ede2043d02f48b}{ELEMENT\_CIRCLE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00611}00611\ \ \ \ \ \ \ \ \ parse\_circle(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00612}00612\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00613}00613\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_afd637ce764259b8b918d921446dd28b8}{ELEMENT\_ELLIPSE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00614}00614\ \ \ \ \ \ \ \ \ parse\_ellipse(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00615}00615\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00616}00616\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a91de74d7d1f6b16968ac604f266e77c8}{ELEMENT\_LINE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00617}00617\ \ \ \ \ \ \ \ \ parse\_line(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00618}00618\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00619}00619\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a54b2a34ef5294b1ee2a8eb672066a95a}{ELEMENT\_PATH}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00620}00620\ \ \ \ \ \ \ \ \ parse\_path(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00621}00621\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00622}00622\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a941372ad92a13884ce59de3fa7dab493}{ELEMENT\_POLYGON}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00623}00623\ \ \ \ \ \ \ \ \ parse\_polygon(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00624}00624\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00625}00625\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ab86c3b1ab6c50eb9c1c42a7d965f993a}{ELEMENT\_POLYLINE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00626}00626\ \ \ \ \ \ \ \ \ parse\_polygon(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00627}00627\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00628}00628\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a3accad2af847bcaf9fa0688b164e58d5}{ELEMENT\_RECT}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00629}00629\ \ \ \ \ \ \ \ \ parse\_rect(p);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00630}00630\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00631}00631\ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00632}00632\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00633}00633\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00634}00634\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00635}00635\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00636}00636\ \textcolor{keywordtype}{int}\ svg\_identify\_element(\textcolor{keywordtype}{char}\ *buff)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00637}00637\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00638}00638\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00639}00639\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ svg\_element\_tokens[i][0];\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00640}00640\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!strcmp(buff,\ svg\_element\_tokens[i]))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00641}00641\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ i;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00642}00642\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00643}00643\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00644}00644\ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00645}00645\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00646}00646\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00647}00647\ \textcolor{keywordtype}{int}\ svgIsElement(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ buff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00648}00648\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}{stringInArray}}(buff,\ svg\_element\_tokens))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00649}00649\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery__internal_8h_a563b75add7577f84db0814116be86edf}{SVG\_ELEMENT}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00650}00650\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00651}00651\ \ \ \ \ \textcolor{comment}{/*\ Attempt\ to\ identify\ the\ program\ that\ created\ the\ SVG\ file.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00652}00652\ \textcolor{comment}{\ \ \ \ \ *\ This\ should\ be\ in\ a\ comment\ at\ that\ occurs\ before\ the\ svg\ element.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00653}00653\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (!strcmp(buff,\ \textcolor{stringliteral}{"{}Embroidermodder"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00654}00654\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a261a5202706a19aed19915ea00584287}{svgCreator}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a025223ba9047cd83a4dadfb1ccef0b88}{SVG\_CREATOR\_EMBROIDERMODDER}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00655}00655\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00656}00656\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (!strcmp(buff,\ \textcolor{stringliteral}{"{}Illustrator"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00657}00657\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a261a5202706a19aed19915ea00584287}{svgCreator}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a920646175307efa23ccbfa07ec29362d}{SVG\_CREATOR\_ILLUSTRATOR}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00658}00658\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00659}00659\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (!strcmp(buff,\ \textcolor{stringliteral}{"{}Inkscape"{}}))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00660}00660\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a261a5202706a19aed19915ea00584287}{svgCreator}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a0d27c445b067fe39f6c1fc133c2cd6ac}{SVG\_CREATOR\_INKSCAPE}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00661}00661\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00662}00662\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00663}00663\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery__internal_8h_a1a474564639ae4c32937f04aa1ee8fa9}{SVG\_NULL}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00664}00664\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00665}00665\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00666}00666\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00667}00667\ \textcolor{comment}{int\ svgIsSvgAttribute(const\ char*\ buff)\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00668}00668\ \textcolor{comment}{\ \ \ \ const\ char\ *inkscape\_tokens[]\ =\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00669}00669\ \textcolor{comment}{\ \ \ \ \ \ \ \ "{}xmlns:dc"{},\ "{}xmlns:cc"{},\ "{}xmlns:rdf"{},\ "{}xmlns:svg"{},\ "{}xmlns"{},\ "{}\(\backslash\)0"{}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00670}00670\ \textcolor{comment}{\ \ \ \ \};}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00671}00671\ \textcolor{comment}{\ \ \ \ if\ (stringInArray(buff,\ svg\_attribute\_tokens))\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00672}00672\ \textcolor{comment}{\ \ \ \ \ \ \ \ return\ SVG\_ATTRIBUTE;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00673}00673\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00674}00674\ \textcolor{comment}{\ \ \ \ if\ (svgCreator\ ==\ SVG\_CREATOR\_INKSCAPE)\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00675}00675\ \textcolor{comment}{\ \ \ \ \ \ \ \ if\ (stringInArray(buff,\ inkscape\_tokens))\ \{}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00676}00676\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ return\ SVG\_ATTRIBUTE;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00677}00677\ \textcolor{comment}{\ \ \ \ \ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00678}00678\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00679}00679\ \textcolor{comment}{\ \ \ \ printf("{}svgIsSvgAttribute(),\ unknown:\ \%s\(\backslash\)n"{},\ buff);}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00680}00680\ \textcolor{comment}{\ \ \ \ return\ SVG\_NULL;}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00681}00681\ \textcolor{comment}{\}}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00682}00682\ \textcolor{comment}{*/}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00683}00683\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00684}00684\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00685}00685\ svgProcess(\textcolor{keywordtype}{int}\ c,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ buff)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00686}00686\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00687}00687\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ ==\ \mbox{\hyperlink{embroidery__internal_8h_aedc806e8df709f3b8c99f8ad93cc257c}{SVG\_EXPECT\_ELEMENT}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00688}00688\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ advance\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00689}00689\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (buff[0]\ ==\ \textcolor{charliteral}{'/'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00690}00690\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00691}00691\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00692}00692\ \ \ \ \ \ \ \ \ advance\ =\ (char)svgIsElement(buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00693}00693\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (advance)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00694}00694\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ELEMENT:\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00695}00695\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a5dd24c7adfc9ad25346f0b34308bc110}{SVG\_EXPECT\_ATTRIBUTE}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00696}00696\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{current\_element\_id}}\ =\ svg\_identify\_element((\textcolor{keywordtype}{char}*)buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00697}00697\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00698}00698\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00699}00699\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00700}00700\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ ==\ \mbox{\hyperlink{embroidery__internal_8h_a5dd24c7adfc9ad25346f0b34308bc110}{SVG\_EXPECT\_ATTRIBUTE}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00701}00701\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ advance\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00702}00702\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{current\_element\_id}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00703}00703\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ad960b73060c0a0a98aa9715184864a96}{ELEMENT\_A}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00704}00704\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a5fb9ed4e9ab0cfce79ede2043d02f48b}{ELEMENT\_CIRCLE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00705}00705\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a71ebcd9892ec032c014e3bc6c9ab34e9}{ELEMENT\_DEFS}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00706}00706\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_afd637ce764259b8b918d921446dd28b8}{ELEMENT\_ELLIPSE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00707}00707\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a8b04716c0189f8020af08853263e4510}{ELEMENT\_FOREIGN\_OBJECT}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00708}00708\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ac4422447b520fefbf45d4015ae206f6a}{ELEMENT\_G}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00709}00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a91de74d7d1f6b16968ac604f266e77c8}{ELEMENT\_LINE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00710}00710\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a2f40910f26ff9a257ca8da789cda8c56}{ELEMENT\_LINEAR\_GRADIENT}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00711}00711\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a54b2a34ef5294b1ee2a8eb672066a95a}{ELEMENT\_PATH}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00712}00712\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a941372ad92a13884ce59de3fa7dab493}{ELEMENT\_POLYGON}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00713}00713\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ab86c3b1ab6c50eb9c1c42a7d965f993a}{ELEMENT\_POLYLINE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00714}00714\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ad40a95eb63778df42b90048dd6f2f4be}{ELEMENT\_RADIAL\_GRADIENT}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00715}00715\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a3accad2af847bcaf9fa0688b164e58d5}{ELEMENT\_RECT}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00716}00716\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a56480f01ef40188cc1223b1bb3600838}{ELEMENT\_SOLID\_COLOR}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00717}00717\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_afd27318050c1b5315c2399a3bafb5796}{ELEMENT\_STOP}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00718}00718\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a3e4e3a91832bc51071c7f04268e9c171}{ELEMENT\_SVG}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00719}00719\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_aacdc26f779e328c39adf39e8cad85e7a}{ELEMENT\_SWITCH}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00720}00720\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_aac8668dca68d8646591295ac691fce34}{ELEMENT\_TEXT}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00721}00721\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a436e9fa734e138278aebf43aa3be2b3c}{ELEMENT\_TEXT\_AREA}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00722}00722\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ad5a141137c3e23d56b6c9a141752bc32}{ELEMENT\_TSPAN}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00723}00723\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a1be2ab18fb1ede19654054a2d04dd9c8}{ELEMENT\_USE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00724}00724\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}{stringInArray}}(buff,\ svg\_property\_tokens))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00725}00725\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ advance\ =\ \mbox{\hyperlink{embroidery__internal_8h_a1208b48b1ac91ed9b44e171310860742}{SVG\_PROPERTY}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00726}00726\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00727}00727\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00728}00728\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a7a9f6ad971860ff8a2eda99be180cb55}{ELEMENT\_ANIMATION}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00729}00729\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a57e400eae656543b3d1d83e59bf7a36b}{ELEMENT\_AUDIO}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00730}00730\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a3dda55ff936ae8da9396ef6ec85d4dd6}{ELEMENT\_DESC}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00731}00731\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ade776334307e96ef2b46c50b1467502d}{ELEMENT\_IMAGE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00732}00732\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a909bf52bff3bacbc8300c0a758f08c77}{ELEMENT\_METADATA}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00733}00733\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_a04ea80b19e5ae6cf3e41dd79f036f8a0}{ELEMENT\_TITLE}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00734}00734\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery__internal_8h_ad541a7b99e1441d1d75e72428eb7056f}{ELEMENT\_VIDEO}}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00735}00735\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}{stringInArray}}(buff,\ svg\_media\_property\_tokens))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00736}00736\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ advance\ =\ \mbox{\hyperlink{embroidery__internal_8h_ad3c2d0eda62d943896aefca8948fa72e}{SVG\_MEDIA\_PROPERTY}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00737}00737\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00738}00738\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00739}00739\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00740}00740\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00741}00741\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!advance)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00742}00742\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery__internal_8h_aa08223cd2dd75ce77baf8d5e7f139e1a}{stringInArray}}(buff,\ (\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ **)svg\_attribute\_table[\mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{current\_element\_id}}]))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00743}00743\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ advance\ =\ \mbox{\hyperlink{embroidery__internal_8h_a6a6401b8187f4f15675176357ee39800}{SVG\_ATTRIBUTE}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00744}00744\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00745}00745\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR\ \%s\ not\ found\ in\ svg\_attribute\_table[\%d].\(\backslash\)n"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00746}00746\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ buff,\ \mbox{\hyperlink{format__svg_8c_a3732a0819af92d41ba15d1e843912baa}{current\_element\_id}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00747}00747\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00748}00748\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (advance)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00749}00749\ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ATTRIBUTE:\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00750}00750\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a49bd936a30ecda3f0cc879fbae10ec25}{SVG\_EXPECT\_VALUE}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00751}00751\ \ \ \ \ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{format__svg_8c_a5ca69064432e28b0b57f5272cfa089a6}{currentAttribute}},\ buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00752}00752\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00753}00753\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ ==\ \mbox{\hyperlink{embroidery__internal_8h_a49bd936a30ecda3f0cc879fbae10ec25}{SVG\_EXPECT\_VALUE}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00754}00754\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ last\ =\ strlen(buff)\ -\/\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00755}00755\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}VALUE:\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00756}00756\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00757}00757\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ single-\/value\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00758}00758\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ ((buff[0]\ ==\ \textcolor{charliteral}{'"{}'}\ ||\ buff[0]\ ==\ \textcolor{charliteral}{'\(\backslash\)''})\ \&\&\ (buff[last]\ ==\ \textcolor{charliteral}{'/'}\ ||\ buff[last]\ ==\ \textcolor{charliteral}{'"{}'}\ ||\ buff[last]\ ==\ \textcolor{charliteral}{'\(\backslash\)''})\ \&\&\ !\mbox{\hyperlink{format__svg_8c_af2739a92493016586a36d41c67c9e9e4}{svgMultiValue}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00759}00759\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a5dd24c7adfc9ad25346f0b34308bc110}{SVG\_EXPECT\_ATTRIBUTE}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00760}00760\ \ \ \ \ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[\mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}].name,\ \mbox{\hyperlink{format__svg_8c_a5ca69064432e28b0b57f5272cfa089a6}{currentAttribute}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00761}00761\ \ \ \ \ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[\mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}].value,\ buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00762}00762\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}++;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00763}00763\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{\ \textcolor{comment}{/*\ multi-\/value\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00764}00764\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_af2739a92493016586a36d41c67c9e9e4}{svgMultiValue}}\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00765}00765\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (strlen(\mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}})==0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00766}00766\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}},\ buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00767}00767\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00768}00768\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00769}00769\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strcat(\mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}},\ \textcolor{stringliteral}{"{}\ "{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00770}00770\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strcat(\mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}},\ buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00771}00771\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00772}00772\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (buff[last]\ ==\ \textcolor{charliteral}{'/'}\ ||\ buff[last]\ ==\ \textcolor{charliteral}{'"{}'}\ ||\ buff[last]\ ==\ \textcolor{charliteral}{'\(\backslash\)''})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00773}00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_af2739a92493016586a36d41c67c9e9e4}{svgMultiValue}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00774}00774\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a5dd24c7adfc9ad25346f0b34308bc110}{SVG\_EXPECT\_ATTRIBUTE}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00775}00775\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[\mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}].name,\ \mbox{\hyperlink{format__svg_8c_a5ca69064432e28b0b57f5272cfa089a6}{currentAttribute}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00776}00776\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strcpy(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[\mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}].value,\ \mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00777}00777\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_aedc757fedd30c5470f56f7c9efed4112}{n\_attributes}}++;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00778}00778\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00779}00779\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00780}00780\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00781}00781\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ !=\ \mbox{\hyperlink{embroidery__internal_8h_a32edb444f2be7c9c0197e1107c4064b4}{SVG\_EXPECT\_NULL}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00782}00782\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}\%s\(\backslash\)n"{}},\ buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00783}00783\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00784}00784\ \ \ \ \ \textcolor{keywordflow}{if}\ (c\ ==\ \textcolor{charliteral}{'>'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00785}00785\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a32edb444f2be7c9c0197e1107c4064b4}{SVG\_EXPECT\_NULL}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00786}00786\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00787}00787\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00788}00788\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00789}00789\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00790}00790\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00791}00791\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00792}\mbox{\hyperlink{embroidery__internal_8h_a77e72b493a82e1f636b8b83bea0cb206}{00792}}\ \mbox{\hyperlink{format__svg_8c_a77e72b493a82e1f636b8b83bea0cb206}{readSvg}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00793}00793\ \ \ \ \ \textcolor{keywordtype}{int}\ size,\ pos,\ i;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00794}00794\ \ \ \ \ \textcolor{keywordtype}{char}*\ buff\ =\ 0,\ c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00795}00795\ \ \ \ \ size\ =\ 1024;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00796}00796\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00797}00797\ \ \ \ \ puts(\textcolor{stringliteral}{"{}Deactived\ readSvg\ for\ testing."{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00798}00798\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00799}00799\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00800}00800\ \textcolor{preprocessor}{\#if\ 0}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00801}00801\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ i<1000;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00802}00802\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[i].\mbox{\hyperlink{struct_svg_attribute___a5ac083a645d964373f022d03df4849c8}{name}}\ =\ (\textcolor{keywordtype}{char}*)malloc(size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00803}00803\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[i].\mbox{\hyperlink{struct_svg_attribute___a4e9aec275e566b978a3ccb4e043d8c61}{value}}\ =\ (\textcolor{keywordtype}{char}*)malloc(size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00804}00804\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00805}00805\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00806}00806\ \ \ \ \ buff\ =\ (\textcolor{keywordtype}{char}*)malloc(size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00807}00807\ \ \ \ \ \textcolor{keywordflow}{if}\ (!buff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00808}00808\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ readSvg(),\ cannot\ allocate\ memory\ for\ buff\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00809}00809\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00810}00810\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00811}00811\ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a261a5202706a19aed19915ea00584287}{svgCreator}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a3333e84ae9c0570ccfb3fe2774f10bc2}{SVG\_CREATOR\_NULL}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00812}00812\ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_a32edb444f2be7c9c0197e1107c4064b4}{SVG\_EXPECT\_NULL}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00813}00813\ \ \ \ \ \mbox{\hyperlink{format__svg_8c_af2739a92493016586a36d41c67c9e9e4}{svgMultiValue}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00814}00814\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00815}00815\ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a5ca69064432e28b0b57f5272cfa089a6}{currentAttribute}}[0]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00816}00816\ \ \ \ \ \mbox{\hyperlink{format__svg_8c_a0a91524923521a7df3f7be107218dbf2}{currentValue}}[0]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00817}00817\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00818}00818\ \ \ \ \ \textcolor{comment}{/*\ Pre-\/flip\ in\ case\ of\ multiple\ reads\ on\ the\ same\ pattern\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00819}00819\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}{embPattern\_flipVertical}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00820}00820\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00821}00821\ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00822}00822\ \ \ \ \ \textcolor{keywordflow}{while}\ (fread(\&c,\ 1,\ 1,\ file))\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00823}00823\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (c)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00824}00824\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'<'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00825}00825\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ ==\ \mbox{\hyperlink{embroidery__internal_8h_a32edb444f2be7c9c0197e1107c4064b4}{SVG\_EXPECT\_NULL}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00826}00826\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ svgAddToPattern(pattern);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00827}00827\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_aedc806e8df709f3b8c99f8ad93cc257c}{SVG\_EXPECT\_ELEMENT}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00828}00828\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00829}00829\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00830}00830\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'>'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00831}00831\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ abnormal\ case\ that\ may\ occur\ in\ svg\ element\ where\ '>'\ is\ all\ by\ itself\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00832}00832\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ ==\ 0)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00833}00833\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*TODO:\ log\ a\ warning\ about\ this\ absurdity!\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00834}00834\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__svg_8c_afb24cd37a6361ef4102b790bfb04795a}{svgExpect}}\ =\ \mbox{\hyperlink{embroidery__internal_8h_aedc806e8df709f3b8c99f8ad93cc257c}{SVG\_EXPECT\_ELEMENT}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00835}00835\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00836}00836\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00837}00837\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\ '}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00838}00838\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\(\backslash\)t'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00839}00839\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\(\backslash\)r'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00840}00840\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\(\backslash\)n'}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00841}00841\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'='}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00842}00842\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00843}00843\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00844}00844\ \ \ \ \ \ \ \ \ \ \ \ \ buff[pos]\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00845}00845\ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00846}00846\ \ \ \ \ \ \ \ \ \ \ \ \ svgProcess(c,\ buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00847}00847\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00848}00848\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00849}00849\ \ \ \ \ \ \ \ \ \ \ \ \ buff[pos++]\ =\ (char)c;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00850}00850\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00851}00851\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00852}00852\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pos\ >=\ size\ -\/\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00853}00853\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ increase\ buff\ length\ -\/\ leave\ room\ for\ 0\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00854}00854\ \ \ \ \ \ \ \ \ \ \ \ \ size\ *=\ 2;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00855}00855\ \ \ \ \ \ \ \ \ \ \ \ \ buff\ =\ (\textcolor{keywordtype}{char}*)realloc(buff,\ size);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00856}00856\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!buff)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00857}00857\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ readSvg(),\ cannot\ re-\/allocate\ memory\ for\ buff\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00858}00858\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00859}00859\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00860}00860\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00861}00861\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00862}00862\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00863}00863\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(buff);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00864}00864\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00865}00865\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}>1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00866}00866\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}OBJECT\ SUMMARY:\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00867}00867\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>circles)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00868}00868\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>circles-\/>count;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00869}00869\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ c\ =\ pattern-\/>circles-\/>circle[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00870}00870\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}circle\ \%f\ \%f\ \%f\(\backslash\)n"{}},\ c.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ c.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ c.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00871}00871\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00872}00872\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00873}00873\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>ellipses)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00874}00874\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>ellipses-\/>count;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00875}00875\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_ellipse__}{EmbEllipse}}\ e\ =\ pattern-\/>ellipses-\/>ellipse[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00876}00876\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ellipse\ \%f\ \%f\ \%f\ \%f\(\backslash\)n"{}},\ e.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ e.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ e.\mbox{\hyperlink{struct_emb_ellipse___af1d62e5365cadfab859168c15b726de5}{radius}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ e.\mbox{\hyperlink{struct_emb_ellipse___af1d62e5365cadfab859168c15b726de5}{radius}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00877}00877\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00878}00878\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00879}00879\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00880}00880\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00881}00881\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ li\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a82bfa90ca01e79040dffe8ed965c2f9a}{line}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00882}00882\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}line\ \%f\ \%f\ \%f\ \%f\(\backslash\)n"{}},\ li.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ li.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ li.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ li.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00883}00883\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00884}00884\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00885}00885\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>points)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00886}00886\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>points-\/>count;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00887}00887\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ po\ =\ pattern-\/>points-\/>point[i].position;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00888}00888\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}point\ \%f\ \%f\(\backslash\)n"{}},\ po.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ po.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00889}00889\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00890}00890\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00891}00891\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>polygons)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00892}00892\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>polygons-\/>count;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00893}00893\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *verts\ =\ pattern-\/>polygons-\/>polygon[i].pointList;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00894}00894\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}polygon\ \%d\(\backslash\)n"{}},\ verts-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00895}00895\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00896}00896\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00897}00897\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>polylines)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00898}00898\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>polylines-\/>count;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00899}00899\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *\ verts\ =\ pattern-\/>polylines-\/>polyline[i].pointList;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00900}00900\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}polyline\ \%d\(\backslash\)n"{}},\ verts-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00901}00901\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00902}00902\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00903}00903\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (pattern-\/>rects)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00904}00904\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>rects-\/>count;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00905}00905\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ r\ =\ pattern-\/>rects-\/>rect[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00906}00906\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ width\ =\ r.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ r.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00907}00907\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ height\ =\ r.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ r.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00908}00908\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}rect\ \%f\ \%f\ \%f\ \%f\(\backslash\)n"{}},\ r.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},\ r.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}},\ width,\ height);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00909}00909\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00910}00910\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00911}00911\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00912}00912\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00913}00913\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ i<1000;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00914}00914\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[i].name);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00915}00915\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(\mbox{\hyperlink{format__svg_8c_af9d04983989935651b54a928660024e7}{attributeList}}[i].value);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00916}00916\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00917}00917\ \ \ \ \ \textcolor{comment}{/*\ Flip\ the\ pattern\ since\ SVG\ Y+\ is\ down\ and\ libembroidery\ Y+\ is\ up.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00918}00918\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}{embPattern\_flipVertical}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00919}00919\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00920}00920\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;\ \textcolor{comment}{/*TODO:\ finish\ readSvg\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00921}00921\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00922}00922\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00925}00925\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00926}\mbox{\hyperlink{embroidery__internal_8h_a8ca7313902787e9ed94a23630033bee4}{00926}}\ \mbox{\hyperlink{format__svg_8c_a8ca7313902787e9ed94a23630033bee4}{writeSvg}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE\ *file)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00927}00927\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00928}00928\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ boundingRect;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00929}00929\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ rect;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00930}00930\ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ color;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00931}00931\ \ \ \ \ \textcolor{keywordtype}{int}\ i,\ j;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00932}00932\ \ \ \ \ \textcolor{keywordtype}{char}\ isNormal,\ tmpX[32],\ tmpY[32];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00933}00933\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ border;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00934}00934\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00935}00935\ \ \ \ \ \textcolor{comment}{/*\ Pre-\/flip\ the\ pattern\ since\ SVG\ Y+\ is\ down\ and\ libembroidery\ Y+\ is\ up.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00936}00936\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}{embPattern\_flipVertical}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00937}00937\ \ \ \ \ boundingRect\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00938}00938\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}<?xml\ version=\(\backslash\)"{}1.0\(\backslash\)"{}?>\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00939}00939\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}<!-\/-\/\ Embroidermodder\ 2\ SVG\ Embroidery\ File\ -\/-\/>\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00940}00940\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}<!-\/-\/\ http://embroidermodder.github.io\ -\/-\/>\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00941}00941\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}<svg\ "{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00942}00942\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00943}00943\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ See\ the\ SVG\ Tiny\ Version\ 1.2\ Specification\ Section\ 7.14.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00944}00944\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ \ Until\ all\ of\ the\ formats\ and\ API\ is\ stable,\ the\ width,\ height\ and\ viewBox\ attributes\ need\ to\ be\ left\ unspecified.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00945}00945\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ \ If\ the\ attribute\ values\ are\ incorrect,\ some\ applications\ wont\ open\ it\ at\ all.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00946}00946\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00947}00947\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00948}00948\ \ \ \ \ \textcolor{comment}{/*\ Add\ a\ margin\ of\ 10\%.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00949}00949\ \ \ \ \ border\ =\ boundingRect;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00950}00950\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ *=\ 10.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00951}00951\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *=\ 10.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00952}00952\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ *=\ 10.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00953}00953\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *=\ 10.0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00954}00954\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ -\/=\ 0.1*(border.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ border.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00955}00955\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ +=\ 0.1*(border.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ border.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00956}00956\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ -\/=\ 0.1*(border.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ border.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00957}00957\ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ +=\ 0.1*(border.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ border.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00958}00958\ \ \ \ \ \textcolor{comment}{/*\ Sanity\ check\ here?\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00959}00959\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}viewBox=\(\backslash\)"{}\%f\ \%f\ \%f\ \%f\(\backslash\)"{}\ "{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00960}00960\ \ \ \ \ \ \ \ \ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},\ border.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00961}00961\ \ \ \ \ \ \ \ \ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ border.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00962}00962\ \ \ \ \ \ \ \ \ \ \ \ \ border.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ border.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00963}00963\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00964}00964\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}xmlns=\(\backslash\)"{}http://www.w3.org/2000/svg\(\backslash\)"{}\ version=\(\backslash\)"{}1.2\(\backslash\)"{}\ baseProfile=\(\backslash\)"{}tiny\(\backslash\)"{}>"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00965}00965\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<g\ transform=\(\backslash\)"{}scale(10)\(\backslash\)"{}>"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00966}00966\ \ \ \ \ \textcolor{comment}{/*TODO:\ Low\ Priority\ Optimization:}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00967}00967\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ Using\ \%g\ in\ embFile\_printf\ just\ doesn't\ work\ good\ enough\ at\ trimming\ trailing\ zeroes.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00968}00968\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ It's\ precision\ refers\ to\ significant\ digits,\ not\ decimal\ places\ (which\ is\ what\ we\ want).}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00969}00969\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ We\ need\ to\ roll\ our\ own\ function\ for\ trimming\ trailing\ zeroes\ to\ keep}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00970}00970\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ the\ precision\ as\ high\ as\ possible\ if\ needed,\ but\ help\ reduce\ file\ size\ also.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00971}00971\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00972}00972\ \ \ \ \ \textcolor{comment}{/*TODO:\ Low\ Priority\ Optimization:}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00973}00973\ \textcolor{comment}{\ \ \ \ *\ \ \ \ \ \ Make\ sure\ that\ the\ line\ length\ that\ is\ output\ doesn't\ exceed\ 1000\ characters.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00974}00974\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00975}00975\ \ \ \ \ \textcolor{comment}{/*TODO:\ Low\ Priority:\ Indent\ output\ properly.\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00976}00976\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00977}00977\ \ \ \ \ \textcolor{comment}{/*\ write\ circles,\ ellipses\ and\ lines\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00978}00978\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00979}00979\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_geometry__}{EmbGeometry}}\ g\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00980}00980\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (g.\mbox{\hyperlink{struct_emb_geometry___ac765329451135abec74c45e1897abf26}{type}})\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00981}00981\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a360a30eda3be6c003bc6aff56be7be37}{EMB\_CIRCLE}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00982}00982\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a266384774724ffa486e4512821606c8b}{circle}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00983}00983\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather\ than\ just\ 0.2\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00984}00984\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<circle\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ cx=\(\backslash\)"{}\%f\(\backslash\)"{}\ cy=\(\backslash\)"{}\%f\(\backslash\)"{}\ r=\(\backslash\)"{}\%f\(\backslash\)"{}\ />"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00985}00985\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ g.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00986}00986\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ g.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00987}00987\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ g.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00988}00988\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00989}00989\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00990}00990\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00991}00991\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00992}00992\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00993}00993\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a09ebf481eb0c684537b863663e40ede8}{EMB\_ELLIPSE}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00994}00994\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_ellipse__}{EmbEllipse}}\ ellipse\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a21524733115b114333b98bba4ba8ec13}{ellipse}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00995}00995\ \ \ \ \ \ \ \ \ \ \ \ \ color\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00996}00996\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather\ than\ just\ 0.2\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00997}00997\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<ellipse\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ cx=\(\backslash\)"{}\%f\(\backslash\)"{}\ cy=\(\backslash\)"{}\%f\(\backslash\)"{}\ rx=\(\backslash\)"{}\%f\(\backslash\)"{}\ ry=\(\backslash\)"{}\%f\(\backslash\)"{}\ />"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00998}00998\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l00999}00999\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01000}01000\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01001}01001\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01002}01002\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01003}01003\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___af1d62e5365cadfab859168c15b726de5}{radius}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01004}01004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ellipse.\mbox{\hyperlink{struct_emb_ellipse___af1d62e5365cadfab859168c15b726de5}{radius}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01005}01005\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01006}01006\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01007}01007\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a702fd238ea210e97017fd4b709528f0f}{EMB\_LINE}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01008}01008\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ line\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a82bfa90ca01e79040dffe8ed965c2f9a}{line}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01009}01009\ \ \ \ \ \ \ \ \ \ \ \ \ color\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01010}01010\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather\ than\ just\ 0.2\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01011}01011\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01012}01012\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)n<line\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ x1=\(\backslash\)"{}\%f\(\backslash\)"{}\ y1=\(\backslash\)"{}\%f\(\backslash\)"{}\ x2=\(\backslash\)"{}\%f\(\backslash\)"{}\ y2=\(\backslash\)"{}\%f\(\backslash\)"{}\ />"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01013}01013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},\ color.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},\ color.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01014}01014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01015}01015\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01016}01016\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01017}01017\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a20f029cd78225bfeec66da1b3745311a}{EMB\_POINT}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01018}01018\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_point__}{EmbPoint}}\ p\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01019}01019\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ See\ SVG\ Tiny\ 1.2\ Spec:}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01020}01020\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ *\ Section\ 9.5\ The\ 'line'\ element}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01021}01021\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ *\ Section\ C.6\ 'path'\ element\ implementation\ notes\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01022}01022\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather\ than\ just\ 0.2\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01023}01023\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01024}01024\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}\(\backslash\)n<line\ stroke-\/linecap=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ x1=\(\backslash\)"{}\%f\(\backslash\)"{}\ y1=\(\backslash\)"{}\%f\(\backslash\)"{}\ x2=\(\backslash\)"{}\%f\(\backslash\)"{}\ y2=\(\backslash\)"{}\%f\(\backslash\)"{}\ />"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01025}01025\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p.\mbox{\hyperlink{struct_emb_point___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},\ p.\mbox{\hyperlink{struct_emb_point___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},\ p.\mbox{\hyperlink{struct_emb_point___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01026}01026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ p.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ p.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ p.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ p.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01027}01027\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01028}01028\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01029}01029\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a8f03220a91565e1239055ed73ec6f7a4}{EMB\_POLYGON}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01030}01030\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *pointList\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a4dcfd5f48f00c93fee416603b2b62357}{polygon}}.\mbox{\hyperlink{struct_emb_path___ae745585ab1bd333341d4502e19f92b0e}{pointList}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01031}01031\ \ \ \ \ \ \ \ \ \ \ \ \ color\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01032}01032\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather\ than\ just\ 0.2\ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01033}01033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<polygon\ stroke-\/linejoin=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/linecap=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ points=\(\backslash\)"{}\%s,\%s"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01034}01034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},\ color.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},\ color.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01035}01035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[0].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ tmpX),}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01036}01036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[0].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ tmpY));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01037}01037\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (j=1;\ j\ <\ pointList-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ j++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01038}01038\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\ \%s,\%s"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01039}01039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[j].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ tmpX),}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01040}01040\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[j].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ tmpY));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01041}01041\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01042}01042\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)"{}/>"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01043}01043\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01044}01044\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01045}01045\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a70437221e34443b9b272d5cac835de0c}{EMB\_POLYLINE}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01046}01046\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *pointList\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___acbbcfd31759b8939a8b585eba631da7c}{polyline}}.\mbox{\hyperlink{struct_emb_path___ae745585ab1bd333341d4502e19f92b0e}{pointList}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01047}01047\ \ \ \ \ \ \ \ \ \ \ \ \ color\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___acbbcfd31759b8939a8b585eba631da7c}{polyline}}.\mbox{\hyperlink{struct_emb_path___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01048}01048\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01049}01049\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ *\ than\ just\ 0.2.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01050}01050\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01051}01051\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<polyline\ stroke-\/linejoin=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/linecap=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ points=\(\backslash\)"{}\%s,\%s"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01052}01052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01053}01053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01054}01054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01055}01055\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[0].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ tmpX),}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01056}01056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[0].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ tmpY));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01057}01057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (j=1;\ j\ <\ pointList-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ j++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01058}01058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\ \%s,\%s"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01059}01059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[j].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ tmpX),}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01060}01060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(pointList-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[j].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a7de8c8929f3c778c502ed070fc15ff60}{point}}.\mbox{\hyperlink{struct_emb_point___a15a2229bf7033fb362667fa4f5fa94ff}{position}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ tmpY));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01061}01061\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01062}01062\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)"{}/>"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01063}01063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01064}01064\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01065}01065\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a2fcee7ad80543768ad9578ca4ec02ada}{EMB\_RECT}}:\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01066}01066\ \ \ \ \ \ \ \ \ \ \ \ \ rect\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___abbe981e36903877bff823bb13928ae38}{rect}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01067}01067\ \ \ \ \ \ \ \ \ \ \ \ \ color\ =\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01068}01068\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01069}01069\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ *\ than\ just\ 0.2.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01070}01070\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01071}01071\ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<rect\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ x=\(\backslash\)"{}\%f\(\backslash\)"{}\ y=\(\backslash\)"{}\%f\(\backslash\)"{}\ width=\(\backslash\)"{}\%f\(\backslash\)"{}\ height=\(\backslash\)"{}\%f\(\backslash\)"{}\ />"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01072}01072\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},\ color.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},\ color.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01073}01073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01074}01074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01075}01075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01076}01076\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01077}01077\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01078}01078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01079}01079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01080}01080\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01081}01081\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01082}01082\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01083}01083\ \ \ \ \ isNormal\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01084}01084\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01085}01085\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_stitch__}{EmbStitch}}\ st\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a4d06a0868c91ec35c5c0e2e5661ddfa2}{stitch}}[i];}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01086}01086\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01087}01087\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ \#ifdef\ SVG\_DEBUG\ for\ Josh\ which\ outputs}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01088}01088\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ *\ JUMPS/TRIMS\ instead\ of\ chopping\ them\ out.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01089}01089\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01090}01090\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (st.\mbox{\hyperlink{struct_emb_stitch___ac8bf36fe0577cba66bccda3a6f7e80a4}{flags}}\ ==\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}}\ \&\&\ !isNormal)\ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01091}01091\ \ \ \ \ \ \ \ \ \ \ \ \ isNormal\ =\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01092}01092\ \ \ \ \ \ \ \ \ \ \ \ \ color\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a87dbedfa066778e08311fe1bbb89b302}{thread}}[st.\mbox{\hyperlink{struct_emb_stitch___a0fd02fb9277ffcb35a75066ffe95e8c7}{color}}].\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01093}01093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ use\ proper\ thread\ width\ for\ stoke-\/width\ rather}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01094}01094\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ *\ than\ just\ 0.2.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01095}01095\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01096}01096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n<polyline\ stroke-\/linejoin=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/linecap=\(\backslash\)"{}round\(\backslash\)"{}\ stroke-\/width=\(\backslash\)"{}0.2\(\backslash\)"{}\ stroke=\(\backslash\)"{}\#\%02x\%02x\%02x\(\backslash\)"{}\ fill=\(\backslash\)"{}none\(\backslash\)"{}\ points=\(\backslash\)"{}\%s,\%s"{}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01097}01097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01098}01098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01099}01099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ color.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01100}01100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(st.\mbox{\hyperlink{struct_emb_stitch___ae1a3958205104364b97172da19628db7}{x}},\ tmpX),}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01101}01101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(st.\mbox{\hyperlink{struct_emb_stitch___ac696d7e3434ae029d180ef550e61af2d}{y}},\ tmpY));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01102}01102\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01103}01103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (st.\mbox{\hyperlink{struct_emb_stitch___ac8bf36fe0577cba66bccda3a6f7e80a4}{flags}}\ ==\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}}\ \&\&\ isNormal)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01104}01104\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01105}01105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\ \%s,\%s"{}},\ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(st.\mbox{\hyperlink{struct_emb_stitch___ae1a3958205104364b97172da19628db7}{x}},\ tmpX),\ \mbox{\hyperlink{embroidery__internal_8h_a3f13f5d30ef64bf1f316f1cc5174b28b}{emb\_optOut}}(st.\mbox{\hyperlink{struct_emb_stitch___ac696d7e3434ae029d180ef550e61af2d}{y}},\ tmpY));}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01106}01106\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01107}01107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (st.\mbox{\hyperlink{struct_emb_stitch___ac8bf36fe0577cba66bccda3a6f7e80a4}{flags}}\ !=\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}}\ \&\&\ isNormal)}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01108}01108\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01109}01109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ isNormal\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01110}01110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)"{}/>"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01111}01111\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01112}01112\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01113}01113\ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\(\backslash\)n</g>\(\backslash\)n</svg>\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01114}01114\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01115}01115\ \ \ \ \ \textcolor{comment}{/*\ Reset\ the\ pattern\ so\ future\ writes(regardless\ of\ format)}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01116}01116\ \textcolor{comment}{\ \ \ \ \ *\ are\ not\ flipped.}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01117}01117\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01118}01118\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}{embPattern\_flipVertical}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01119}01119\ }
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01120}01120\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01121}01121\ \}}
+\DoxyCodeLine{\Hypertarget{format__svg_8c_source_l01122}01122\ }
+
+\end{DoxyCode}

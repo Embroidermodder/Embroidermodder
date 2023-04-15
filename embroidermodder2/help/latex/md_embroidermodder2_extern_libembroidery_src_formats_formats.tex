@@ -1,0 +1,261 @@
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md48}{}\doxysubsection{Overview}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md48}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md49}{}\doxysubsection{Read/\+Write Support Levels}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md49}
+The table of read/write format support levels uses the status levels described here\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endhead
+{\ttfamily rw-\/none}   &Either the format produces no output, reporting an error. Or it produces a Tajima dst file as an alternative.    \\\cline{1-2}
+{\ttfamily rw-\/poor}   &A file somewhat similar to our examples is produced. We don\textquotesingle{}t know how well it runs on machines in practice as we don\textquotesingle{}t have any user reports or personal tests.    \\\cline{1-2}
+{\ttfamily rw-\/basic}   &Simple files in this format run well on machines that use this format.    \\\cline{1-2}
+{\ttfamily rw-\/standard}   &Files with non-\/standard features work on machines and we have good documentation on the format.    \\\cline{1-2}
+{\ttfamily rw-\/reliable}   &All known features don\textquotesingle{}t cause crashes. Almost all work as expected.    \\\cline{1-2}
+{\ttfamily rw-\/complete}   &All known features of the format work on machines that use this format. Translations from and to this format preserve all features present in both.   \\\cline{1-2}
+\end{longtabu}
+
+
+These can be split into {\ttfamily r-\/basic w-\/none}, for example, if they don\textquotesingle{}t match.
+
+So all formats can, in principle, have good read and good write support, because it\textquotesingle{}s defined in relation to files that we have described the formats for.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md50}{}\doxysubsubsection{Test Support Levels}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md50}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endhead
+{\ttfamily test-\/none}   &No tests have been written to test the specifics of the format.    \\\cline{1-2}
+{\ttfamily test-\/basic}   &Stitch Lists and/or colors have read/write tests.    \\\cline{1-2}
+{\ttfamily test-\/thorough}   &All features of that format has at least one test.    \\\cline{1-2}
+{\ttfamily test-\/fuzz}   &Can test the format for uses of features that we haven\textquotesingle{}t thought of by feeding in nonsense that is designed to push possibly dangerous weaknesses to reveal themselves.    \\\cline{1-2}
+{\ttfamily test-\/complete}   &Both thorough and fuzz testing is covered.   \\\cline{1-2}
+\end{longtabu}
+
+
+So all formats can, in principle, have complete testing support, because it\textquotesingle{}s defined in relation to files that we have described the formats for.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md51}{}\doxysubsubsection{Documentation Support Levels}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md51}
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endhead
+{\ttfamily doc-\/none}   &We haven\textquotesingle{}t researched this beyond finding example files.    \\\cline{1-2}
+{\ttfamily doc-\/basic}   &We have a rough sketch of the size and contents of the header if there is one. We know the basic stitch encoding (if there is one), but not necessarily all stitch features.    \\\cline{1-2}
+{\ttfamily doc-\/standard}   &We know some good sources and/or have tested all the features that appear to exist. They mostly work the way we have described.    \\\cline{1-2}
+{\ttfamily doc-\/good}   &All features that were described somewhere have been covered here or we have thoroughly tested our ideas against other softwares and hardwares and they work as expected.    \\\cline{1-2}
+{\ttfamily doc-\/complete}   &There is a known official description and our description covers all the same features.   \\\cline{1-2}
+\end{longtabu}
+
+
+Not all formats can have complete documentation because it\textquotesingle{}s based on what information is publically available. So the total score is reported in the table below based on what level we think is available.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md52}{}\doxysubsubsection{Overall Support}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md52}
+Since the overall support level is the combination of these 4 factors, but rather than summing up their values it\textquotesingle{}s an issue of the minimum support of the 4.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{2}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Status Label   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description    }\\\cline{1-2}
+\endhead
+{\ttfamily read-\/only}   &If write support is none and read support is not none.    \\\cline{1-2}
+{\ttfamily write-\/only}   &If read support is none and write support is not none.    \\\cline{1-2}
+{\ttfamily unstable}   &If both read and write support are not none but testing or documentation is none.    \\\cline{1-2}
+{\ttfamily basic}   &If all ratings are better than none.    \\\cline{1-2}
+{\ttfamily reliable}   &If all ratings are better than basic.    \\\cline{1-2}
+{\ttfamily complete}   &If all ratings could not reasonably be better (for example any improvements rely on information that we may never have access to). This is the only status that can be revoked, since if the format changes or new documentation is released it is no longer complete.    \\\cline{1-2}
+{\ttfamily experimental}   &For all other scenarios.   \\\cline{1-2}
+\end{longtabu}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md53}{}\doxysubsubsection{Table of Format Support Levels}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md53}
+Overview of documentation support by format.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Format   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Ratings   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Score    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Format   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Ratings   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Score    }\\\cline{1-3}
+\endhead
+Toyota Embroidery Format (.100)   &rw-\/basic doc-\/none test-\/none   &unstable    \\\cline{1-3}
+Toyota Embroidery Format (.10o)   &rw-\/basic doc-\/none test-\/none   &unstable    \\\cline{1-3}
+Bernina Embroidery Format (.art)   &rw-\/none doc-\/none test-\/none   &experimental    \\\cline{1-3}
+Bitmap Cache Embroidery Format (.bmc)   &r-\/basic w-\/none doc-\/none test-\/none   &unstable    \\\cline{1-3}
+Bits and Volts Embroidery Format (.bro)   &rw-\/none doc-\/none test-\/none   &experimental    \\\cline{1-3}
+Melco Embroidery Format (.cnd)   &rw-\/none doc-\/none test-\/none   &experimental    \\\cline{1-3}
+Embroidery Thread Color Format (.col)   &rw-\/basic doc-\/none test-\/none   &{\ttfamily experimental}    \\\cline{1-3}
+Singer Embroidery Format (.csd)   &rw-\/none doc-\/none test-\/none   &experimental    \\\cline{1-3}
+Comma Separated Values (.csv)   &rw-\/none doc-\/none test-\/none   &experimental   \\\cline{1-3}
+\end{longtabu}
+$\vert$ Barudan Embroidery Format (.dat) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ Melco Embroidery Format (.dem) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Barudan Embroidery Format (.dsb) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Tajima Embroidery Format (.dst) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ ZSK USA Embroidery Format (.dsz) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Drawing Exchange Format (.dxf) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Embird Embroidery Format (.edr) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Elna Embroidery Format (.emd) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Melco Embroidery Format (.exp) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Eltac Embroidery Format (.exy) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Sierra Expanded Embroidery Format (.eys) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Fortron Embroidery Format (.fxy) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Smoothie G-\/\+Code Embroidery Format (.gc) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Great Notions Embroidery Format (.gnc) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Gold Thread Embroidery Format (.gt) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Husqvarna Viking Embroidery Format (.hus) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Inbro Embroidery Format (.inb) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Embroidery Color Format (.inf) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Janome Embroidery Format (.jef) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.ksm) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.max) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Mitsubishi Embroidery Format (.mit) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Ameco Embroidery Format (.new) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Melco Embroidery Format (.ofm) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.pcd) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.pcm) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.pcq) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.pcs) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Brother Embroidery Format (.pec) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Brother Embroidery Format (.pel) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Brother Embroidery Format (.pem) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Brother Embroidery Format (.pes) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Brother Embroidery Format (.phb) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Brother Embroidery Format (.phc) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Auto\+CAD Embroidery Format (.plt) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ RGB Embroidery Format (.rgb) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Janome Embroidery Format (.sew) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Husqvarna Viking Embroidery Format (.shv) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Sunstar Embroidery Format (.sst) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Data Stitch Embroidery Format (.stx) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Scalable Vector Graphics (.svg) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.t01) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.t09) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Happy Embroidery Format (.tap) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Thred\+Works Embroidery Format (.thr) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Text File (.txt) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Barudan Embroidery Format (.u00) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Barudan Embroidery Format (.u01) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.vip) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Pfaff Embroidery Format (.vp3) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ Singer Embroidery Format (.xxx) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental $\vert$ $\vert$ ZSK USA Embroidery Format (.zsk) $\vert$ rw-\/none doc-\/none test-\/none $\vert$ experimental\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md54}{}\doxysubsection{Toyota Embroidery Format (.\+100)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md54}
+\textbackslash{}index 100 \textbackslash{}index Toyota
+
+The Toyota 100 format is a stitch-\/only format that uses an external color file.
+
+The stitch encoding is in 4 byte chunks.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md55}{}\doxysubsubsection{Toyota Embroidery Format (.\+10o)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md55}
+\textbackslash{}index 10o \textbackslash{}index Toyota
+
+The Toyota 10o format is a stitch-\/only format that uses an external color file.
+
+The stitch encoding is in 3 byte chunks.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md56}{}\doxysubsection{Bernina Embroidery Format (.\+art)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md56}
+\textbackslash{}index art \textbackslash{}index Bernina
+
+We don\textquotesingle{}t know much about this format. \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000040}{Todo}}]Find a source.\end{DoxyRefDesc}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md57}{}\doxysubsection{Bitmap Cache Embroidery Format (.\+bmc)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md57}
+\textbackslash{}index bmc \textbackslash{}index Bitmap Cache
+
+We don\textquotesingle{}t know much about this format. \begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000041}{Todo}}]Find a source.\end{DoxyRefDesc}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md58}{}\doxysubsection{Bits and Volts Embroidery Format (.\+bro)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md58}
+\textbackslash{}index bro \textbackslash{}index Bits and Volts
+
+The Bits and Volts bro format is a stitch-\/only format that uses an external color file.
+
+The header is 256 bytes. There\textquotesingle{}s a series of unknown variables in the header.
+
+The stitch list uses a variable length encoding which is 2 bytes for any stitch\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md59}{}\doxysubsection{Melco Embroidery Format (.\+cnd)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md59}
+\textbackslash{}index cnd \textbackslash{}index Melco
+
+The Melco cnd format is a stitch-\/only format.
+
+We don\textquotesingle{}t know much about this format.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000042}{Todo}}]Find a source.\end{DoxyRefDesc}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md60}{}\doxysubsection{Embroidery Thread Color Format (.\+col)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md60}
+\textbackslash{}index col
+
+An external color file format for formats that do not record their own colors.
+
+It is a human-\/readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break \`{}\textbackslash{}textbackslash\{\}r\textbackslash{}textbackslash\{\}n\}.
+
+Then the rest of the file is a comma seperated value list of all threads with 4 values per line\+: the index of the thread then the red, green and blue channels of the color in that order.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md61}{}\doxysubsubsection{Example}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md61}
+If we had a pattern called \char`\"{}example\char`\"{} with four colors\+: black, red, magenta and cyan in that order then the file is (with the white space written out)\+: \begin{DoxyVerb}example.col
+
+4\r\n
+0,0,0,0\r\n
+1,255,0,0\r\n
+2,0,255,0\r\n
+3,0,0,255\r\n
+\end{DoxyVerb}
+ \hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md62}{}\doxysubsection{Singer Embroidery Format (.\+csd)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md62}
+\textbackslash{}index csd \textbackslash{}index Singer
+
+Stitch Only Format\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md63}{}\doxysubsection{Comma Separated Values (.\+csv)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md63}
+\textbackslash{}index csv
+
+Comma Seperated Values files aren\textquotesingle{}t a universal system, here we aim to offer a broad support. The dialect is detected based on the opening lines, as each manufacturer should label their CSV files there.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md64}{}\doxysubsubsection{Embroidermodder 2.\+0 CSV Dialect}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md64}
+Our own version has the identifier comment line\+:
+
+$\vert$ Control Symbol $\vert$ Type $\vert$ Description $\vert$ $\vert$---$\vert$---$\vert$ $\vert$ {\ttfamily \#} $\vert$ {\ttfamily COMMENT} $\vert$ $\vert$ $\vert$ {\ttfamily \texorpdfstring{$>$}{>}} $\vert$ {\ttfamily VARIABLE} $\vert$ To store records of a pattern\textquotesingle{}s width, height etc. This means that data stored in the header of say a .dst file is preserved. $\vert$ $\vert$ {\ttfamily \$} $\vert$ {\ttfamily THREAD} $\vert$ $\vert$ $\vert$ {\ttfamily $\ast$} $\vert$ {\ttfamily STITCH} $\vert$ $\vert$ $\vert$ {\ttfamily $\ast$} $\vert$ {\ttfamily JUMP} $\vert$ $\vert$ $\vert$ {\ttfamily $\ast$} $\vert$ {\ttfamily COLOR} $\vert$ To change a color\+: used for trim as well $\vert$ $\vert$ {\ttfamily $\ast$} $\vert$ {\ttfamily END} $\vert$ To end a pattern. $\vert$ $\vert$ {\ttfamily $\ast$} $\vert$ {\ttfamily UNKNOWN} $\vert$ For any feature that we can\textquotesingle{}t identify.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md65}{}\doxysubsubsection{Em\+Bird CSV Dialect}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md65}
+\textbackslash{}index Embird\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md66}{}\doxysubsection{Barudan Embroidery Format (.\+dat)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md66}
+\textbackslash{}index dat \textbackslash{}index Barudan
+
+Stitch Only Format\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md67}{}\doxysubsection{Melco Embroidery Format (.\+dem)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md67}
+\textbackslash{}index dem \textbackslash{}index Melco
+
+Stitch Only Format\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md68}{}\doxysubsection{Barudan Embroidery Format (.\+dsb)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md68}
+\textbackslash{}index dsb \textbackslash{}index Barudan
+
+
+\begin{DoxyItemize}
+\item Stitch Only Format.
+\item \mbox{[}X\mbox{]} Basic Read Support
+\item \mbox{[}o\mbox{]} Basic Write Support
+\item \mbox{[}o\mbox{]} Well Tested Read
+\item \mbox{[}o\mbox{]} Well Tested Write
+\end{DoxyItemize}\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md69}{}\doxysubsection{Tajima Embroidery Format (.\+dst)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md69}
+\textbackslash{}index dst \textbackslash{}index Tajima
+
+
+\begin{DoxyItemize}
+\item Stitch Only Format.
+\item \mbox{[}X\mbox{]} Basic Read Support
+\item \mbox{[}X\mbox{]} Basic Write Support
+\item \mbox{[} \mbox{]} Well Tested Read
+\item \mbox{[} \mbox{]} Well Tested Write
+\end{DoxyItemize}
+
+.DST (Tajima) embroidery file read/write routines Format comments are thanks to \href{tspilman@dalcoathletic.com}{\texttt{ tspilman@dalcoathletic.\+com}} who\textquotesingle{}s notes appeared at \href{http://www.wotsit.org}{\texttt{ http\+://www.\+wotsit.\+org}} under Tajima Format.
+
+Other references\+: {\bfseries [kde\+\_\+tajima]} , {\bfseries [acatina]} .\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md70}{}\doxysubsubsection{Header}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md70}
+The header contains general information about the design. It is in lines of ASCII, so if you open a DST file as a text file, it\textquotesingle{}s the only part that\textquotesingle{}s easy to read. The line ending symbol is \`{}0x0D\}. The header is necessary for the file to be read by most softwares and hardwares.
+
+The header is 125 bytes of data followed by padding spaces to make it 512 bytes in total.
+
+The lines are as follows.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Label}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Size}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Description}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Example}    }\\\cline{1-4}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Label}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Size}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Description}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Example}    }\\\cline{1-4}
+\endhead
+{\ttfamily LA\+:}   &17   &The design name with no path or extension. The space reserved is 16 characters, but the name must not be longer than 8 and be padded to 16 with spaces (0x20).   &{\ttfamily \char`\"{}\+LA\+:\+Star            \char`\"{}}    \\\cline{1-4}
+{\ttfamily ST\+:}   &8   &The stitch count. An integer in the format {\ttfamily \textbackslash{}\%07d\}, that is\+: a 7 digit number padded by leading zeros. This is the total accross all possible stitch flags. \textbackslash{}ilinebr \texorpdfstring{$<$}{<}/td\texorpdfstring{$>$}{>} \texorpdfstring{$<$}{<}td class=\char`\"{}markdown\+Table\+Body\+None\char`\"{}\texorpdfstring{$>$}{>} \textbackslash{}ilinebr \texorpdfstring{$<$}{<}/td\texorpdfstring{$>$}{>} \texorpdfstring{$<$}{<}/tr\texorpdfstring{$>$}{>}\texorpdfstring{$<$}{<}/table\texorpdfstring{$>$}{>} $\vert$}CO\+:{\ttfamily $\vert$ 4 $\vert$ The number of color changes (not to be confused with thread count, an all black design we would have the record \textbackslash{}textbf\{000\}). An integer in the format}\%03d\}, that is\+: a 3 digit number padded by leading zeros. $\vert$ $\vert$ {\ttfamily +X\+:} $\vert$ 6 $\vert$ The extent of the pattern in the postitive x direction in millimeters. An integer in the format {\ttfamily \textbackslash{}\%05d\}, that is\+: a 5 digit number padded by leading zeros. $\vert$ $\vert$}-\/X\+:{\ttfamily $\vert$ 6 $\vert$ The extent of the pattern in the negative x direction in millimeters. An integer in the format}\%05d\}, that is\+: a 5 digit integer padded by leading zeros. $\vert$ $\vert$ {\ttfamily +Y\+:} $\vert$ 6 $\vert$ The extent of the pattern in the postitive y direction in millimeters. An integer in the format {\ttfamily \textbackslash{}\%05d\}, that is\+: a 5 digit integer padded by leading zeros. $\vert$ $\vert$}-\/Y\+:{\ttfamily $\vert$ 6 $\vert$ The extent of the pattern in the negative y direction in millimeters. An integer in the format}\%05d\}, that is\+: a 5 digit integer padded by leading zeros. $\vert$ $\vert$ {\ttfamily AX\+:} $\vert$ 7 $\vert$ The difference of the end from the start in the x direction in 0.\+1mm, the first char should be the sign, followed by an integer in the format {\ttfamily \%05d}, that is\+: a 5 digit integer padded by leading zeros. $\vert$ $\vert$ {\ttfamily AY\+:} $\vert$ 7 $\vert$ The difference of the end from the start in the y direction in 0.\+1mm, the first char should be the sign, followed by an integer in the format {\ttfamily \%05d}, that is\+: a 5 digit integer padded by leading zeros. $\vert$ $\vert$ {\ttfamily MX\+:} $\vert$ 7 $\vert$ The x co-\/ordinate of the last point in the previous file should the design span multiple files. Like AX, it is the sign, followed by a 5 digit integer. If we have a one file design set it to zero. $\vert$ $\vert$ {\ttfamily MY\+:} $\vert$ 7 $\vert$ The y co-\/ordinate of the last point in the previous file should the design span multiple files. Like AY, it is the sign, followed by a 5 digit integer. If we have a one file design set it to zero. $\vert$ $\vert$ {\ttfamily PD\+:} $\vert$ 10 $\vert$ Information about multivolume designs.
+
+\\\cline{1-4}
+\end{longtabu}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md71}{}\doxysubsubsection{Stitch Data}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md71}
+Uses 3 byte per stitch encoding with the format as follows\+:
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{9}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Bit}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 7}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 6}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 5}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 4}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 3}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 2}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 1}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 0}    }\\\cline{1-9}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape Bit}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 7}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 6}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 5}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 4}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 3}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 2}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 1}   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ {\itshape 0}    }\\\cline{1-9}
+\endhead
+Byte 0   &y+1   &y-\/1   &y+9   &y-\/9   &x-\/9   &x+9   &x-\/1   &x+1    \\\cline{1-9}
+Byte 1   &y+3   &y-\/3   &y+27   &y-\/27   &x-\/27   &x+27   &x-\/3   &x+3    \\\cline{1-9}
+Byte 2   &jump   &color change   &y+81   &y-\/81   &x-\/81   &x+81   &set   &set   \\\cline{1-9}
+\end{longtabu}
+
+
+T01 and Tap appear to use Tajima Ternary.
+
+Where the stitch type is determined as\+:
+
+
+\begin{DoxyItemize}
+\item Normal Stitch {\ttfamily 0b00000011 0x03}
+\item Jump Stitch {\ttfamily 0b10000011 0x83}
+\item Stop/\+Change Color {\ttfamily 0b11000011 0x\+C3}
+\item End Design {\ttfamily 0b11110011 0x\+F3}
+\end{DoxyItemize}
+
+Inclusive or\textquotesingle{}ed with the last byte.
+
+Note that the max stitch length is the largest sum of \$1+3+9+27+81=121\$ where the unit length is 0.\+1mm so 12.\+1mm. The coordinate system is right handed.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md72}{}\doxysubsection{ZSK USA Embroidery Format (.\+dsz)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md72}
+\textbackslash{}index dsz \textbackslash{}index ZSK USA
+
+The ZSK USA dsz format is stitch-\/only.\hypertarget{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md73}{}\doxysubsection{Drawing Exchange Format (.\+dxf)}\label{md_embroidermodder2_extern_libembroidery_src_formats_formats_autotoc_md73}
+\textbackslash{}index dxf \textbackslash{}index Auto\+CAD \textbackslash{}index Auto\+Desk
+
+Graphics format for drawing files designed and used by Audo\+Desk for their Auto\+CAD program. 

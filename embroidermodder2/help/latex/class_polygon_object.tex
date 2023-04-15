@@ -1,0 +1,392 @@
+\hypertarget{class_polygon_object}{}\doxysubsection{Polygon\+Object Class Reference}
+\label{class_polygon_object}\index{PolygonObject@{PolygonObject}}
+
+
+{\ttfamily \#include $<$object-\/polygon.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \mbox{\hyperlink{class_polygon_object_ab04a0655cd1e3bcac5e8f48c18df1a57a56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+POLYGON
+ \}
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Types inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \mbox{\hyperlink{class_base_object_adf764cbdea00d65edcd07bb9953ad2b7a56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_polygon_object_a8ed4ad1f5c25582a04c1baad30b59bb3}{Polygon\+Object}} (qreal x, qreal y, const QPainter\+Path \&p, QRgb rgb, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_polygon_object_a877c5597554ecd42de1e6f3d45be2261}{Polygon\+Object}} (\mbox{\hyperlink{class_polygon_object}{Polygon\+Object}} $\ast$obj, QGraphics\+Item $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_polygon_object_a7ca2c6fa22770b1cd4a22f1296f7da61}{$\sim$\+Polygon\+Object}} ()
+\item 
+virtual int \mbox{\hyperlink{class_polygon_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}} () const
+\item 
+QPainter\+Path \mbox{\hyperlink{class_polygon_object_ae792daf964109ba44609cfb75a02c0e2}{object\+Copy\+Path}} () const
+\item 
+QPainter\+Path \mbox{\hyperlink{class_polygon_object_ac103a3e4474b084a48281e9409087272}{object\+Save\+Path}} () const
+\item 
+QPointF \mbox{\hyperlink{class_polygon_object_a1a830f5a31e400da1680895d92f8b763}{object\+Pos}} () const
+\item 
+qreal \mbox{\hyperlink{class_polygon_object_a5accd51fbc75b1a14a56c2f20b57769e}{objectX}} () const
+\item 
+qreal \mbox{\hyperlink{class_polygon_object_a672f9e4f77a92bb4211be8bbb3981634}{objectY}} () const
+\item 
+void \mbox{\hyperlink{class_polygon_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{set\+Object\+Pos}} (const QPointF \&point)
+\item 
+void \mbox{\hyperlink{class_polygon_object_a3462477d59b303adaec6a9cb98a10313}{set\+Object\+Pos}} (qreal x, qreal y)
+\item 
+void \mbox{\hyperlink{class_polygon_object_a5827c1605b3f62a56fa5008b498fc7b0}{set\+ObjectX}} (qreal x)
+\item 
+void \mbox{\hyperlink{class_polygon_object_abf77d0df0a021f2d033e1be15580edb5}{set\+ObjectY}} (qreal y)
+\item 
+void \mbox{\hyperlink{class_polygon_object_add4e11623be9bc6e02557c67674564ed}{update\+Rubber}} (QPainter $\ast$painter=0)
+\item 
+virtual void \mbox{\hyperlink{class_polygon_object_a814830f38fd2c36b3f96252ee65d7617}{vulcanize}} ()
+\item 
+virtual QPointF \mbox{\hyperlink{class_polygon_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{mouse\+Snap\+Point}} (const QPointF \&mouse\+Point)
+\item 
+virtual QList$<$ QPointF $>$ \mbox{\hyperlink{class_polygon_object_acfde9da59c0bbaaab7decdc222aa38a3}{all\+Grip\+Points}} ()
+\item 
+virtual void \mbox{\hyperlink{class_polygon_object_af377b9b2e3594940757c25610899c02b}{grip\+Edit}} (const QPointF \&before, const QPointF \&after)
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Member Functions inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_base_object_a70db6372f447287d6eefb1e2cf8d7c84}{Base\+Object}} (QGraphics\+Item $\ast$parent=0)
+\item 
+virtual \mbox{\hyperlink{class_base_object_ad9dbd034ff0aeb2ee2f3127bd821534b}{$\sim$\+Base\+Object}} ()
+\item 
+virtual int \mbox{\hyperlink{class_base_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}} () const
+\item 
+qint64 \mbox{\hyperlink{class_base_object_a85aa2174069992b415678af8007969c6}{object\+ID}} () const
+\item 
+QPen \mbox{\hyperlink{class_base_object_adbe2cb871eda436257a2f9140a62dffa}{object\+Pen}} () const
+\item 
+QColor \mbox{\hyperlink{class_base_object_adcce6670a3760ad7c3014f73d26ade81}{object\+Color}} () const
+\item 
+QRgb \mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{object\+Color\+RGB}} () const
+\item 
+Qt\+::\+Pen\+Style \mbox{\hyperlink{class_base_object_ae0a604004cfeb357f0548b2f6e57b598}{object\+Line\+Type}} () const
+\item 
+qreal \mbox{\hyperlink{class_base_object_a35cd00e428fb7d678fdf3910a24a42d6}{object\+Line\+Weight}} () const
+\item 
+QPainter\+Path \mbox{\hyperlink{class_base_object_a412eb69dc8fcb917011df8514ca2ffdd}{object\+Path}} () const
+\item 
+int \mbox{\hyperlink{class_base_object_a59c34db9a64b2204bace685dd3dd74e7}{object\+Rubber\+Mode}} () const
+\item 
+QPointF \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{object\+Rubber\+Point}} (const QString \&key) const
+\item 
+QString \mbox{\hyperlink{class_base_object_abde4bc1ba52dda6ce2c750727b3d1c17}{object\+Rubber\+Text}} (const QString \&key) const
+\item 
+QRectF \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{set\+Rect}} (const QRectF \&r)
+\item 
+void \mbox{\hyperlink{class_base_object_af2b0fbb979971d15e5f2b02a2a7d1abf}{set\+Rect}} (qreal x, qreal y, qreal w, qreal h)
+\item 
+QLineF \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_a321d2d38e3176c39656090d311ea753e}{set\+Line}} (const QLineF \&li)
+\item 
+void \mbox{\hyperlink{class_base_object_ade461de6393f7953c6f2e5167cca5be7}{set\+Line}} (qreal x1, qreal y1, qreal x2, qreal y2)
+\item 
+void \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{set\+Object\+Color}} (const QColor \&color)
+\item 
+void \mbox{\hyperlink{class_base_object_aa67b1eed03b12bc06fbca3db567eb56d}{set\+Object\+Color\+RGB}} (QRgb rgb)
+\item 
+void \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{set\+Object\+Line\+Type}} (Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{set\+Object\+Line\+Weight}} (qreal line\+Weight)
+\item 
+void \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{set\+Object\+Path}} (const QPainter\+Path \&p)
+\item 
+void \mbox{\hyperlink{class_base_object_abc43b57468707e683827a13958f02f90}{set\+Object\+Rubber\+Mode}} (int mode)
+\item 
+void \mbox{\hyperlink{class_base_object_a5f47dcbde6380a129d86b049e9c5f404}{set\+Object\+Rubber\+Point}} (const QString \&key, const QPointF \&point)
+\item 
+void \mbox{\hyperlink{class_base_object_ac840367d4bfa6695c44c527ca20c9ad3}{set\+Object\+Rubber\+Text}} (const QString \&key, const QString \&txt)
+\item 
+virtual QRectF \mbox{\hyperlink{class_base_object_ad2234cf1af355b9366330950ef257a65}{bounding\+Rect}} () const
+\item 
+virtual QPainter\+Path \mbox{\hyperlink{class_base_object_a2ec45682e5f3ee845760e82a986efd8a}{shape}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{draw\+Rubber\+Line}} (const QLineF \&rub\+Line, QPainter $\ast$painter=0, const char $\ast$color\+From\+Scene=0)
+\item 
+virtual void \mbox{\hyperlink{class_base_object_ac256400a6f25c6c8af7e18e1ac1a0181}{vulcanize}} ()=0
+\item 
+virtual QPointF \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}{mouse\+Snap\+Point}} (const QPointF \&mouse\+Point)=0
+\item 
+virtual QList$<$ QPointF $>$ \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}{all\+Grip\+Points}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{grip\+Edit}} (const QPointF \&before, const QPointF \&after)=0
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_polygon_object_a8c124c843504f6971f6677f12ac9247f}{paint}} (QPainter $\ast$, const QStyle\+Option\+Graphics\+Item $\ast$, QWidget $\ast$)
+\end{DoxyCompactItemize}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+QPen \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{line\+Weight\+Pen}} () const
+\item 
+qreal \mbox{\hyperlink{class_base_object_ab5ad5bd82be7c0e997b240dc84a41f2a}{pi}} () const
+\item 
+qreal \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}} (qreal degree) const
+\item 
+qreal \mbox{\hyperlink{class_base_object_af1174f0ca1609e6e5efc8078b0170962}{degrees}} (qreal radian) const
+\item 
+void \mbox{\hyperlink{class_base_object_a7f8405662dc85ae3f3e257c36a065c8d}{real\+Render}} (QPainter $\ast$painter, const QPainter\+Path \&render\+Path)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00006}{6}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+
+
+\doxysubsubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_polygon_object_ab04a0655cd1e3bcac5e8f48c18df1a57}\label{class_polygon_object_ab04a0655cd1e3bcac5e8f48c18df1a57}} 
+\doxyparagraph{\texorpdfstring{anonymous enum}{anonymous enum}}
+{\footnotesize\ttfamily anonymous enum}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Type@{Type}!PolygonObject@{PolygonObject}}\index{PolygonObject@{PolygonObject}!Type@{Type}}}\mbox{\Hypertarget{class_polygon_object_ab04a0655cd1e3bcac5e8f48c18df1a57a56205085b8e5cc892bead298d181fae6}\label{class_polygon_object_ab04a0655cd1e3bcac5e8f48c18df1a57a56205085b8e5cc892bead298d181fae6}} 
+Type&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00013}{13}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_polygon_object_a8ed4ad1f5c25582a04c1baad30b59bb3}\label{class_polygon_object_a8ed4ad1f5c25582a04c1baad30b59bb3}} 
+\index{PolygonObject@{PolygonObject}!PolygonObject@{PolygonObject}}
+\index{PolygonObject@{PolygonObject}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{PolygonObject()}{PolygonObject()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_polygon_object}{Polygon\+Object}} (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{const QPainter\+Path \&}]{p,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00009}{9}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a877c5597554ecd42de1e6f3d45be2261}\label{class_polygon_object_a877c5597554ecd42de1e6f3d45be2261}} 
+\index{PolygonObject@{PolygonObject}!PolygonObject@{PolygonObject}}
+\index{PolygonObject@{PolygonObject}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{PolygonObject()}{PolygonObject()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_polygon_object}{Polygon\+Object}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_polygon_object}{Polygon\+Object}} $\ast$}]{obj,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00015}{15}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a7ca2c6fa22770b1cd4a22f1296f7da61}\label{class_polygon_object_a7ca2c6fa22770b1cd4a22f1296f7da61}} 
+\index{PolygonObject@{PolygonObject}!````~PolygonObject@{$\sim$PolygonObject}}
+\index{````~PolygonObject@{$\sim$PolygonObject}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{$\sim$PolygonObject()}{~PolygonObject()}}
+{\footnotesize\ttfamily $\sim$\mbox{\hyperlink{class_polygon_object}{Polygon\+Object}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00026}{26}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_polygon_object_acfde9da59c0bbaaab7decdc222aa38a3}\label{class_polygon_object_acfde9da59c0bbaaab7decdc222aa38a3}} 
+\index{PolygonObject@{PolygonObject}!allGripPoints@{allGripPoints}}
+\index{allGripPoints@{allGripPoints}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{allGripPoints()}{allGripPoints()}}
+{\footnotesize\ttfamily QList$<$ QPointF $>$ all\+Grip\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}{Base\+Object}}.
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00228}{228}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_af377b9b2e3594940757c25610899c02b}\label{class_polygon_object_af377b9b2e3594940757c25610899c02b}} 
+\index{PolygonObject@{PolygonObject}!gripEdit@{gripEdit}}
+\index{gripEdit@{gripEdit}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{gripEdit()}{gripEdit()}}
+{\footnotesize\ttfamily void grip\+Edit (\begin{DoxyParamCaption}\item[{const QPointF \&}]{before,  }\item[{const QPointF \&}]{after }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{Base\+Object}}.
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00255}{255}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a71dcd474d5a8c0e5fdc137b48da18a0c}\label{class_polygon_object_a71dcd474d5a8c0e5fdc137b48da18a0c}} 
+\index{PolygonObject@{PolygonObject}!mouseSnapPoint@{mouseSnapPoint}}
+\index{mouseSnapPoint@{mouseSnapPoint}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{mouseSnapPoint()}{mouseSnapPoint()}}
+{\footnotesize\ttfamily QPointF mouse\+Snap\+Point (\begin{DoxyParamCaption}\item[{const QPointF \&}]{mouse\+Point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}{Base\+Object}}.
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00208}{208}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_ae792daf964109ba44609cfb75a02c0e2}\label{class_polygon_object_ae792daf964109ba44609cfb75a02c0e2}} 
+\index{PolygonObject@{PolygonObject}!objectCopyPath@{objectCopyPath}}
+\index{objectCopyPath@{objectCopyPath}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{objectCopyPath()}{objectCopyPath()}}
+{\footnotesize\ttfamily QPainter\+Path object\+Copy\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00265}{265}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a1a830f5a31e400da1680895d92f8b763}\label{class_polygon_object_a1a830f5a31e400da1680895d92f8b763}} 
+\index{PolygonObject@{PolygonObject}!objectPos@{objectPos}}
+\index{objectPos@{objectPos}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{objectPos()}{objectPos()}}
+{\footnotesize\ttfamily QPointF object\+Pos (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00019}{19}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_ac103a3e4474b084a48281e9409087272}\label{class_polygon_object_ac103a3e4474b084a48281e9409087272}} 
+\index{PolygonObject@{PolygonObject}!objectSavePath@{objectSavePath}}
+\index{objectSavePath@{objectSavePath}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{objectSavePath()}{objectSavePath()}}
+{\footnotesize\ttfamily QPainter\+Path object\+Save\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00270}{270}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a5accd51fbc75b1a14a56c2f20b57769e}\label{class_polygon_object_a5accd51fbc75b1a14a56c2f20b57769e}} 
+\index{PolygonObject@{PolygonObject}!objectX@{objectX}}
+\index{objectX@{objectX}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{objectX()}{objectX()}}
+{\footnotesize\ttfamily qreal objectX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00020}{20}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_a672f9e4f77a92bb4211be8bbb3981634}\label{class_polygon_object_a672f9e4f77a92bb4211be8bbb3981634}} 
+\index{PolygonObject@{PolygonObject}!objectY@{objectY}}
+\index{objectY@{objectY}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{objectY()}{objectY()}}
+{\footnotesize\ttfamily qreal objectY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00021}{21}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_a8c124c843504f6971f6677f12ac9247f}\label{class_polygon_object_a8c124c843504f6971f6677f12ac9247f}} 
+\index{PolygonObject@{PolygonObject}!paint@{paint}}
+\index{paint@{paint}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{paint()}{paint()}}
+{\footnotesize\ttfamily void paint (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QStyle\+Option\+Graphics\+Item $\ast$}]{option,  }\item[{QWidget $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00060}{60}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a4c60e3a9a4952f0780a652dfbc2d5c38}\label{class_polygon_object_a4c60e3a9a4952f0780a652dfbc2d5c38}} 
+\index{PolygonObject@{PolygonObject}!setObjectPos@{setObjectPos}}
+\index{setObjectPos@{setObjectPos}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{setObjectPos()}{setObjectPos()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{const QPointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00023}{23}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_a3462477d59b303adaec6a9cb98a10313}\label{class_polygon_object_a3462477d59b303adaec6a9cb98a10313}} 
+\index{PolygonObject@{PolygonObject}!setObjectPos@{setObjectPos}}
+\index{setObjectPos@{setObjectPos}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{setObjectPos()}{setObjectPos()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00024}{24}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_a5827c1605b3f62a56fa5008b498fc7b0}\label{class_polygon_object_a5827c1605b3f62a56fa5008b498fc7b0}} 
+\index{PolygonObject@{PolygonObject}!setObjectX@{setObjectX}}
+\index{setObjectX@{setObjectX}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{setObjectX()}{setObjectX()}}
+{\footnotesize\ttfamily void set\+ObjectX (\begin{DoxyParamCaption}\item[{qreal}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00025}{25}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_abf77d0df0a021f2d033e1be15580edb5}\label{class_polygon_object_abf77d0df0a021f2d033e1be15580edb5}} 
+\index{PolygonObject@{PolygonObject}!setObjectY@{setObjectY}}
+\index{setObjectY@{setObjectY}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{setObjectY()}{setObjectY()}}
+{\footnotesize\ttfamily void set\+ObjectY (\begin{DoxyParamCaption}\item[{qreal}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00026}{26}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_a67b824a3d6f5f8dc7b9f435353c62676}\label{class_polygon_object_a67b824a3d6f5f8dc7b9f435353c62676}} 
+\index{PolygonObject@{PolygonObject}!type@{type}}
+\index{type@{type}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{type()}{type()}}
+{\footnotesize\ttfamily virtual int type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{class_base_object_a67b824a3d6f5f8dc7b9f435353c62676}{Base\+Object}}.
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8h_source_l00014}{14}} of file \mbox{\hyperlink{object-polygon_8h_source}{object-\/polygon.\+h}}.
+
+\mbox{\Hypertarget{class_polygon_object_add4e11623be9bc6e02557c67674564ed}\label{class_polygon_object_add4e11623be9bc6e02557c67674564ed}} 
+\index{PolygonObject@{PolygonObject}!updateRubber@{updateRubber}}
+\index{updateRubber@{updateRubber}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{updateRubber()}{updateRubber()}}
+{\footnotesize\ttfamily void update\+Rubber (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00081}{81}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+\mbox{\Hypertarget{class_polygon_object_a814830f38fd2c36b3f96252ee65d7617}\label{class_polygon_object_a814830f38fd2c36b3f96252ee65d7617}} 
+\index{PolygonObject@{PolygonObject}!vulcanize@{vulcanize}}
+\index{vulcanize@{vulcanize}!PolygonObject@{PolygonObject}}
+\doxyparagraph{\texorpdfstring{vulcanize()}{vulcanize()}}
+{\footnotesize\ttfamily void vulcanize (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_base_object_ac256400a6f25c6c8af7e18e1ac1a0181}{Base\+Object}}.
+
+
+
+Definition at line \mbox{\hyperlink{object-polygon_8cpp_source_l00196}{196}} of file \mbox{\hyperlink{object-polygon_8cpp_source}{object-\/polygon.\+cpp}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+embroidermodder2/\mbox{\hyperlink{object-polygon_8h}{object-\/polygon.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{object-polygon_8cpp}{object-\/polygon.\+cpp}}\end{DoxyCompactItemize}

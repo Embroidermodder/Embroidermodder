@@ -1,0 +1,51 @@
+\hypertarget{statusbar_8cpp_source}{}\doxysubsection{statusbar.\+cpp}
+\label{statusbar_8cpp_source}\index{embroidermodder2/statusbar.cpp@{embroidermodder2/statusbar.cpp}}
+\mbox{\hyperlink{statusbar_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow_8h}{mainwindow.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{statusbar_8h}{statusbar.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{statusbar-button_8h}{statusbar-\/button.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QLabel>}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00006}\mbox{\hyperlink{class_status_bar_a5e944a4cb4b2ee6143f6072d4549cdf6}{00006}}\ \mbox{\hyperlink{class_status_bar_a5e944a4cb4b2ee6143f6072d4549cdf6}{StatusBar::StatusBar}}(\mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QWidget\ *parent)\ :\ QStatusBar(parent)}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00007}00007\ \{}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00008}00008\ \ \ \ \ this-\/>setObjectName(\textcolor{stringliteral}{"{}StatusBar"{}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00010}00010\ \ \ \ \ \mbox{\hyperlink{class_status_bar_ae93001d2d1582a15c49b8b73ed46ba99}{statusBarSnapButton}}\ \ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}SNAP"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00011}00011\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a3e7e9026381a02026fe601ceb98f53fb}{statusBarGridButton}}\ \ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}GRID"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00012}00012\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a704817f2732f65207c7a515da9ff7765}{statusBarRulerButton}}\ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}RULER"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00013}00013\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a0aa377963d0188e2a4babbf96651f312}{statusBarOrthoButton}}\ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}ORTHO"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00014}00014\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a7957e98ec7ee90c0dc7f2cd8ec3cccc1}{statusBarPolarButton}}\ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}POLAR"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00015}00015\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a4274bdf2b93b039a710ffbdce2ff275f}{statusBarQSnapButton}}\ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}QSNAP"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00016}00016\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a45f64bc3508ddf9d606d66922d4e1753}{statusBarQTrackButton}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}QTRACK"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{class_status_bar_af9209259021ca32ed190297a08b35fdf}{statusBarLwtButton}}\ \ \ \ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar_button}{StatusBarButton}}(\textcolor{stringliteral}{"{}LWT"{}},\ mw,\ \textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00018}00018\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}}\ \ \ =\ \textcolor{keyword}{new}\ QLabel(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00020}00020\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}}-\/>setMinimumWidth(300);\ \textcolor{comment}{//\ Must\ fit\ this\ text\ always}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00021}00021\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}}-\/>setMaximumWidth(300);\ \textcolor{comment}{//\ "{}+1.2345E+99,\ +1.2345E+99,\ +1.2345E+99"{}}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00023}00023\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00024}00024\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_ae93001d2d1582a15c49b8b73ed46ba99}{statusBarSnapButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00025}00025\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a3e7e9026381a02026fe601ceb98f53fb}{statusBarGridButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00026}00026\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a704817f2732f65207c7a515da9ff7765}{statusBarRulerButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00027}00027\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a0aa377963d0188e2a4babbf96651f312}{statusBarOrthoButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00028}00028\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a7957e98ec7ee90c0dc7f2cd8ec3cccc1}{statusBarPolarButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00029}00029\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a4274bdf2b93b039a710ffbdce2ff275f}{statusBarQSnapButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00030}00030\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_a45f64bc3508ddf9d606d66922d4e1753}{statusBarQTrackButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00031}00031\ \ \ \ \ this-\/>addWidget(\mbox{\hyperlink{class_status_bar_af9209259021ca32ed190297a08b35fdf}{statusBarLwtButton}});}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00032}00032\ \}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00034}\mbox{\hyperlink{class_status_bar_af356828ffac401dce071275d9aaf7896}{00034}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_status_bar_af356828ffac401dce071275d9aaf7896}{StatusBar::setMouseCoord}}(qreal\ x,\ qreal\ y)}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00035}00035\ \{}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{comment}{//TODO:\ set\ format\ from\ settings\ (Architectural,\ Decimal,\ Engineering,\ Fractional,\ Scientific)}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//Decimal}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}}-\/>setText(QString().setNum(x,\ \textcolor{charliteral}{'F'},\ 4)\ +\ \textcolor{stringliteral}{"{},\ "{}}\ +\ QString().setNum(y,\ \textcolor{charliteral}{'F'},\ 4));\ \textcolor{comment}{//TODO:\ use\ precision\ from\ unit\ settings}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00041}00041\ \ \ \ \ \textcolor{comment}{//Scientific}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00042}00042\ \ \ \ \ \textcolor{comment}{//statusBarMouseCoord-\/>setText(QString().setNum(x,\ 'E',\ 4)\ +\ "{},\ "{}\ +\ QString().setNum(y,\ 'E',\ 4));\ //TODO:\ use\ precision\ from\ unit\ settings}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00043}00043\ \}}
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{statusbar_8cpp_source_l00045}00045\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

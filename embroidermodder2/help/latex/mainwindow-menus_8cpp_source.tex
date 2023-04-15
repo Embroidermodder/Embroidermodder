@@ -1,0 +1,146 @@
+\hypertarget{mainwindow-menus_8cpp_source}{}\doxysubsection{mainwindow-\/menus.cpp}
+\label{mainwindow-menus_8cpp_source}\index{embroidermodder2/mainwindow-\/menus.cpp@{embroidermodder2/mainwindow-\/menus.cpp}}
+\mbox{\hyperlink{mainwindow-menus_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow_8h}{mainwindow.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <QDebug>}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <QMenu>}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QMenuBar>}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QAction>}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00007}00007\ \textcolor{keywordtype}{void}\ MainWindow::createFileMenu()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00008}00008\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00009}00009\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createFileMenu()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00010}00010\ \ \ \ \ menuBar()-\/>addMenu(fileMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00011}00011\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcacb2da4cdfeb397e732f994fad63ab942}{ACTION\_new}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00012}00012\ \ \ \ \ fileMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00013}00013\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcade0b3b59fcad2b4b7b156154ff9f94ff}{ACTION\_open}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00015}00015\ \ \ \ \ fileMenu-\/>addMenu(recentMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00016}00016\ \ \ \ \ connect(recentMenu,\ SIGNAL(aboutToShow()),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_af34dcd9bed5b28c4445ae18a963ff5f0}{recentMenuAboutToShow}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00017}00017\ \ \ \ \ \textcolor{comment}{//Do\ not\ allow\ the\ Recent\ Menu\ to\ be\ torn\ off.\ It's\ a\ pain\ in\ the\ ass\ to\ maintain.}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00018}00018\ \ \ \ \ recentMenu-\/>setTearOffEnabled(\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00020}00020\ \ \ \ \ fileMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00021}00021\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca430bdbedb85eb3dcfec72b6ead638754}{ACTION\_save}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00022}00022\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca556f60fb8daadb84f9ada6c8506e557b}{ACTION\_saveas}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00023}00023\ \ \ \ \ fileMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00024}00024\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcac86eb9bcc79759d13c34dfd81216db94}{ACTION\_print}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00025}00025\ \ \ \ \ fileMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00026}00026\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}{ACTION\_windowclose}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00027}00027\ \ \ \ \ fileMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00028}00028\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca4c7beb9e84f92596e4db8b7977192e54}{ACTION\_designdetails}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00029}00029\ \ \ \ \ fileMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00031}00031\ \ \ \ \ fileMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca2b626ae3e9176cfc878a2411e27b708c}{ACTION\_exit}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00032}00032\ \ \ \ \ fileMenu-\/>setTearOffEnabled(\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00033}00033\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00035}00035\ \textcolor{keywordtype}{void}\ MainWindow::createEditMenu()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00036}00036\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00037}00037\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createEditMenu()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00038}00038\ \ \ \ \ menuBar()-\/>addMenu(editMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00039}00039\ \ \ \ \ editMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca5022df9896de87a368de8fd336c31cb1}{ACTION\_undo}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00040}00040\ \ \ \ \ editMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca58fdd6c905ccf8c47e95c4b193142eea}{ACTION\_redo}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00041}00041\ \ \ \ \ editMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00042}00042\ \ \ \ \ editMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca52afe49d8e6f4c88054d260ee970fafe}{ACTION\_cut}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00043}00043\ \ \ \ \ editMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcaca93d90e3e32f904b31ffffdb54fbe3c}{ACTION\_copy}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00044}00044\ \ \ \ \ editMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcafc522f5ec2f40c9f772873a1c3992552}{ACTION\_paste}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00045}00045\ \ \ \ \ editMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00046}00046\ \ \ \ \ editMenu-\/>setTearOffEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00049}00049\ \textcolor{keywordtype}{void}\ MainWindow::createViewMenu()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00050}00050\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00051}00051\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createViewMenu()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00053}00053\ \ \ \ \ QString\ appDir\ =\ qApp-\/>applicationDirPath();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00054}00054\ \ \ \ \ QString\ icontheme\ =\ \mbox{\hyperlink{class_main_window_a4e54b61fc4e1fa6d92155424668c971d}{getSettingsGeneralIconTheme}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00056}00056\ \ \ \ \ menuBar()-\/>addMenu(viewMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00057}00057\ \ \ \ \ viewMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00058}00058\ \ \ \ \ viewMenu-\/>addMenu(zoomMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00059}00059\ \ \ \ \ zoomMenu-\/>setIcon(QIcon(appDir\ +\ \textcolor{stringliteral}{"{}/icons/"{}}\ +\ icontheme\ +\ \textcolor{stringliteral}{"{}/zoom"{}}\ +\ \textcolor{stringliteral}{"{}.png"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00060}00060\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcae4754789e1213f158ec4325ec476d6d4}{ACTION\_zoomrealtime}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00061}00061\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcaf710dc46c9302b5911aae568ca5023fd}{ACTION\_zoomprevious}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00062}00062\ \ \ \ \ zoomMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00063}00063\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca20ad3c49d1709a42907f6d7f93b326e5}{ACTION\_zoomwindow}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00064}00064\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcaaf9e0709998469f1adcb1435641c8f07}{ACTION\_zoomdynamic}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00065}00065\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca2b976385f59b0a1bbd7f5602cdaa7016}{ACTION\_zoomscale}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00066}00066\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcabe9bf51f0a59aac29a933ced4c52ad88}{ACTION\_zoomcenter}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00067}00067\ \ \ \ \ zoomMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00068}00068\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcaf3d35153f13b01147b801c2e63fe4026}{ACTION\_zoomin}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00069}00069\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcad801d0a5fc8e631bd089b06fc47e0212}{ACTION\_zoomout}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00070}00070\ \ \ \ \ zoomMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00071}00071\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca16abb899231ae1c330fbb8a43be61a4a}{ACTION\_zoomselected}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00072}00072\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca9b1f4eeb2a8bbf418e627d03280a4659}{ACTION\_zoomall}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00073}00073\ \ \ \ \ zoomMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca9042f7bafc6661507f777636cdab4cae}{ACTION\_zoomextents}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00074}00074\ \ \ \ \ viewMenu-\/>addMenu(panMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00075}00075\ \ \ \ \ panMenu-\/>setIcon(QIcon(appDir\ +\ \textcolor{stringliteral}{"{}/icons/"{}}\ +\ icontheme\ +\ \textcolor{stringliteral}{"{}/pan"{}}\ +\ \textcolor{stringliteral}{"{}.png"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00076}00076\ \ \ \ \ panMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcab9757c634c299cfc92dde1b39f500f19}{ACTION\_panrealtime}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00077}00077\ \ \ \ \ panMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcaa55cf7437564e98f664af5beed45fc3f}{ACTION\_panpoint}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00078}00078\ \ \ \ \ panMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00079}00079\ \ \ \ \ panMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca3193769fd709b04909e493e57e6b117e}{ACTION\_panleft}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00080}00080\ \ \ \ \ panMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcac3c40b2fa87b1136fdbe8bf337c3606f}{ACTION\_panright}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00081}00081\ \ \ \ \ panMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca88f2c014326529783342b8a3361c9e3d}{ACTION\_panup}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00082}00082\ \ \ \ \ panMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcae42b7d8134942d3d7c63a099242d2fbb}{ACTION\_pandown}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00083}00083\ \ \ \ \ viewMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00084}00084\ \ \ \ \ viewMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca1768fb32e41df33c8556fa810a2ef32f}{ACTION\_day}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00085}00085\ \ \ \ \ viewMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca0de25f3dd0ea6cd01e3f783530529630}{ACTION\_night}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00086}00086\ \ \ \ \ viewMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00088}00088\ \ \ \ \ viewMenu-\/>setTearOffEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00089}00089\ \ \ \ \ zoomMenu-\/>setTearOffEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00090}00090\ \ \ \ \ panMenu-\/>setTearOffEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00091}00091\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00093}00093\ \textcolor{keywordtype}{void}\ MainWindow::createSettingsMenu()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00094}00094\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00095}00095\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createSettingsMenu()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00096}00096\ \ \ \ \ menuBar()-\/>addMenu(settingsMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00097}00097\ \ \ \ \ settingsMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca4cd540a02c6b64a329cae7dda6e73b91}{ACTION\_settingsdialog}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00098}00098\ \ \ \ \ settingsMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00099}00099\ \ \ \ \ settingsMenu-\/>setTearOffEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00100}00100\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00102}00102\ \textcolor{keywordtype}{void}\ MainWindow::createWindowMenu()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00103}00103\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00104}00104\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createWindowMenu()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00105}00105\ \ \ \ \ menuBar()-\/>addMenu(windowMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00106}00106\ \ \ \ \ connect(windowMenu,\ SIGNAL(aboutToShow()),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a7e239d260b236e5b0fa4952532bc60fc}{windowMenuAboutToShow}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00107}00107\ \ \ \ \ \textcolor{comment}{//Do\ not\ allow\ the\ Window\ Menu\ to\ be\ torn\ off.\ It's\ a\ pain\ in\ the\ ass\ to\ maintain.}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00108}00108\ \ \ \ \ windowMenu-\/>setTearOffEnabled(\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00110}00110\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00112}00112\ \textcolor{keywordtype}{void}\ MainWindow::createHelpMenu()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00113}00113\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00114}00114\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createHelpMenu()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00115}00115\ \ \ \ \ menuBar()-\/>addMenu(helpMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00116}00116\ \ \ \ \ helpMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca36905f2da38a5838600e0e627248b42f}{ACTION\_help}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00117}00117\ \ \ \ \ helpMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00118}00118\ \ \ \ \ helpMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca0c5e7b093f656c5546c68eda1d53dca8}{ACTION\_changelog}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00119}00119\ \ \ \ \ helpMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00120}00120\ \ \ \ \ helpMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca7ba76ac73667f38a73d1deb09b816d13}{ACTION\_tipoftheday}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00121}00121\ \ \ \ \ helpMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00122}00122\ \ \ \ \ helpMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca37aab16936775ab5dc5b9505aabd0729}{ACTION\_about}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00123}00123\ \ \ \ \ helpMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00124}00124\ \ \ \ \ helpMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca9af65589ea79fe08dddfd3f7e2b9e0bc}{ACTION\_whatsthis}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00125}00125\ \ \ \ \ helpMenu-\/>setTearOffEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00126}00126\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00128}00128\ \textcolor{keywordtype}{void}\ MainWindow::createAllMenus()}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00129}00129\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00130}00130\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow\ createAllMenus()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00131}00131\ \ \ \ \ createFileMenu();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00132}00132\ \ \ \ \ createEditMenu();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00133}00133\ \ \ \ \ createViewMenu();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00134}00134\ \ \ \ \ createSettingsMenu();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00135}00135\ \ \ \ \ createWindowMenu();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00136}00136\ \ \ \ \ createHelpMenu();}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00138}00138\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{mainwindow-menus_8cpp_source_l00140}00140\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

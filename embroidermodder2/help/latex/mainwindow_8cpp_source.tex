@@ -1,0 +1,829 @@
+\hypertarget{mainwindow_8cpp_source}{}\doxysubsection{mainwindow.\+cpp}
+\label{mainwindow_8cpp_source}\index{embroidermodder2/mainwindow.cpp@{embroidermodder2/mainwindow.cpp}}
+\mbox{\hyperlink{mainwindow_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow_8h}{mainwindow.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow-actions_8h}{mainwindow-\/actions.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{statusbar_8h}{statusbar.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{statusbar-button_8h}{statusbar-\/button.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{view_8h}{view.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{cmdprompt_8h}{cmdprompt.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00010}00010\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{property-editor_8h}{property-\/editor.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00011}00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{undo-editor_8h}{undo-\/editor.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00013}00013\ \textcolor{comment}{//\#include\ "{}native-\/scripting.h"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00014}00014\ \textcolor{comment}{//\#include\ "{}native-\/javascript.h"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{preview-dialog_8h}{preview-\/dialog.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00018}00018\ \textcolor{preprocessor}{\#include\ "{}emb-\/format.h"{}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00020}00020\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00022}00022\ \textcolor{preprocessor}{\#include\ <QDebug>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <QFrame>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <QVBoxLayout>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00025}00025\ \textcolor{preprocessor}{\#include\ <QMenu>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00026}00026\ \textcolor{preprocessor}{\#include\ <QMenuBar>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00027}00027\ \textcolor{preprocessor}{\#include\ <QStatusBar>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00028}00028\ \textcolor{preprocessor}{\#include\ <QMdiArea>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00029}00029\ \textcolor{preprocessor}{\#include\ <QWidget>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00030}00030\ \textcolor{preprocessor}{\#include\ <QMdiSubWindow>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00031}00031\ \textcolor{preprocessor}{\#include\ <QMessageBox>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00032}00032\ \textcolor{preprocessor}{\#include\ <QToolBar>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00033}00033\ \textcolor{preprocessor}{\#include\ <QFileDialog>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00034}00034\ \textcolor{preprocessor}{\#include\ <QApplication>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00035}00035\ \textcolor{preprocessor}{\#include\ <QDate>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00036}00036\ \textcolor{preprocessor}{\#include\ <QFileInfo>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00037}00037\ \textcolor{preprocessor}{\#include\ <QLabel>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00038}00038\ \textcolor{preprocessor}{\#include\ <QComboBox>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00039}00039\ \textcolor{preprocessor}{\#include\ <QCloseEvent>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00040}00040\ \textcolor{preprocessor}{\#include\ <QMetaObject>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00041}00041\ \textcolor{preprocessor}{\#include\ <QLocale>}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00043}\mbox{\hyperlink{class_main_window_aeb676574b78bda84d687fdcfd65d84a6}{00043}}\ \mbox{\hyperlink{class_main_window_aeb676574b78bda84d687fdcfd65d84a6}{MainWindow::MainWindow}}()\ :\ QMainWindow(0)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00044}00044\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{class_main_window_a4a0f747e87cdc5ab3de03f4bb18cd75c}{readSettings}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00047}00047\ \ \ \ \ QString\ appDir\ =\ qApp-\/>applicationDirPath();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00048}00048\ \ \ \ \ \textcolor{comment}{//Verify\ that\ files/directories\ needed\ are\ actually\ present.}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00049}00049\ \ \ \ \ QFileInfo\ check(appDir\ +\ \textcolor{stringliteral}{"{}/commands"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00050}00050\ \ \ \ \ \textcolor{keywordflow}{if}(!check.exists())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00051}00051\ \ \ \ \ \ \ \ \ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Path\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Cannot\ locate:\ "{}})\ +\ check.absoluteFilePath());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00052}00052\ \ \ \ \ check\ =\ QFileInfo(appDir\ +\ \textcolor{stringliteral}{"{}/help"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{if}(!check.exists())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00054}00054\ \ \ \ \ \ \ \ \ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Path\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Cannot\ locate:\ "{}})\ +\ check.absoluteFilePath());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00055}00055\ \ \ \ \ check\ =\ QFileInfo(appDir\ +\ \textcolor{stringliteral}{"{}/icons"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00056}00056\ \ \ \ \ \textcolor{keywordflow}{if}(!check.exists())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00057}00057\ \ \ \ \ \ \ \ \ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Path\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Cannot\ locate:\ "{}})\ +\ check.absoluteFilePath());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00058}00058\ \ \ \ \ check\ =\ QFileInfo(appDir\ +\ \textcolor{stringliteral}{"{}/images"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00059}00059\ \ \ \ \ \textcolor{keywordflow}{if}(!check.exists())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00060}00060\ \ \ \ \ \ \ \ \ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Path\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Cannot\ locate:\ "{}})\ +\ check.absoluteFilePath());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00061}00061\ \ \ \ \ check\ =\ QFileInfo(appDir\ +\ \textcolor{stringliteral}{"{}/samples"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00062}00062\ \ \ \ \ \textcolor{keywordflow}{if}(!check.exists())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00063}00063\ \ \ \ \ \ \ \ \ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Path\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Cannot\ locate:\ "{}})\ +\ check.absoluteFilePath());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00064}00064\ \ \ \ \ check\ =\ QFileInfo(appDir\ +\ \textcolor{stringliteral}{"{}/translations"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00065}00065\ \ \ \ \ \textcolor{keywordflow}{if}(!check.exists())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00066}00066\ \ \ \ \ \ \ \ \ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Path\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Cannot\ locate:\ "{}})\ +\ check.absoluteFilePath());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00068}00068\ \ \ \ \ QString\ lang\ =\ \mbox{\hyperlink{class_main_window_a0a7d5b0a8ee30e7c3117adfcf24d5d39}{getSettingsGeneralLanguage}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00069}00069\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}language:\ \%s"{}},\ qPrintable(lang));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{if}(lang\ ==\ \textcolor{stringliteral}{"{}system"{}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00071}00071\ \ \ \ \ \ \ \ \ lang\ =\ QLocale::system().languageToString(QLocale::system().language()).toLower();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00072}00072\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00073}00073\ \ \ \ \ \textcolor{comment}{//Load\ translations\ for\ the\ Embroidermodder\ 2\ GUI}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00074}00074\ \ \ \ \ QTranslator\ translatorEmb;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00075}00075\ \ \ \ \ translatorEmb.load(appDir\ +\ \textcolor{stringliteral}{"{}/translations/"{}}\ +\ lang\ +\ \textcolor{stringliteral}{"{}/embroidermodder2\_"{}}\ +\ lang);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00076}00076\ \ \ \ \ qApp-\/>installTranslator(\&translatorEmb);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00078}00078\ \ \ \ \ \textcolor{comment}{//Load\ translations\ for\ the\ commands}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00079}00079\ \ \ \ \ QTranslator\ translatorCmd;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00080}00080\ \ \ \ \ translatorCmd.load(appDir\ +\ \textcolor{stringliteral}{"{}/translations/"{}}\ +\ lang\ +\ \textcolor{stringliteral}{"{}/commands\_"{}}\ +\ lang);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00081}00081\ \ \ \ \ qApp-\/>installTranslator(\&translatorCmd);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00083}00083\ \ \ \ \ \textcolor{comment}{//Load\ translations\ provided\ by\ Qt\ -\/\ this\ covers\ dialog\ buttons\ and\ other\ common\ things.}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00084}00084\ \ \ \ \ QTranslator\ translatorQt;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00085}00085\ \ \ \ \ translatorQt.load(\textcolor{stringliteral}{"{}qt\_"{}}\ +\ QLocale::system().name(),\ QLibraryInfo::location(QLibraryInfo::TranslationsPath));\ \textcolor{comment}{//TODO:\ ensure\ this\ always\ loads,\ ship\ a\ copy\ of\ this\ with\ the\ app}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00086}00086\ \ \ \ \ qApp-\/>installTranslator(\&translatorQt);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00088}00088\ \ \ \ \ \textcolor{comment}{//Init}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00089}00089\ \ \ \ \ \mbox{\hyperlink{class_main_window_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{mainWin}}\ =\ \textcolor{keyword}{this};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00090}00090\ \ \ \ \ \textcolor{comment}{//Menus}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00091}00091\ \ \ \ \ fileMenu\ \ \ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&File"{}}),\ \ \ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00092}00092\ \ \ \ \ editMenu\ \ \ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&Edit"{}}),\ \ \ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00093}00093\ \ \ \ \ viewMenu\ \ \ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&View"{}}),\ \ \ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00094}00094\ \ \ \ \ settingsMenu\ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&Settings"{}}),\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00095}00095\ \ \ \ \ windowMenu\ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&Window"{}}),\ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00096}00096\ \ \ \ \ helpMenu\ \ \ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&Help"{}}),\ \ \ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00097}00097\ \ \ \ \ \textcolor{comment}{//SubMenus}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00098}00098\ \ \ \ \ recentMenu\ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}Open\ \&Recent"{}}),\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00099}00099\ \ \ \ \ zoomMenu\ \ \ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&Zoom"{}}),\ \ \ \ \ \ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00100}00100\ \ \ \ \ panMenu\ \ \ \ \ \ =\ \textcolor{keyword}{new}\ QMenu(tr(\textcolor{stringliteral}{"{}\&Pan"{}}),\ \ \ \ \ \ \ \ \ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{comment}{//Toolbars}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00102}00102\ \ \ \ \ toolbarFile\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}File"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00103}00103\ \ \ \ \ toolbarEdit\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Edit"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00104}00104\ \ \ \ \ toolbarView\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}View"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00105}00105\ \ \ \ \ toolbarZoom\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Zoom"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00106}00106\ \ \ \ \ toolbarPan\ \ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Pan"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00107}00107\ \ \ \ \ toolbarIcon\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Icon"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00108}00108\ \ \ \ \ toolbarHelp\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Help"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00109}00109\ \ \ \ \ toolbarLayer\ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Layer"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00110}00110\ \ \ \ \ toolbarProperties\ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Properties"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00111}00111\ \ \ \ \ toolbarText\ \ \ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Text"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00112}00112\ \ \ \ \ toolbarPrompt\ \ \ \ \ =\ addToolBar(tr(\textcolor{stringliteral}{"{}Command\ Prompt"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00113}00113\ \ \ \ \ \textcolor{comment}{//Selectors}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00114}00114\ \ \ \ \ layerSelector\ \ \ \ \ \ =\ \textcolor{keyword}{new}\ QComboBox(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00115}00115\ \ \ \ \ colorSelector\ \ \ \ \ \ =\ \textcolor{keyword}{new}\ QComboBox(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00116}00116\ \ \ \ \ linetypeSelector\ \ \ =\ \textcolor{keyword}{new}\ QComboBox(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00117}00117\ \ \ \ \ lineweightSelector\ =\ \textcolor{keyword}{new}\ QComboBox(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00118}00118\ \ \ \ \ textFontSelector\ \ \ =\ \textcolor{keyword}{new}\ QFontComboBox(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00119}00119\ \ \ \ \ textSizeSelector\ \ \ =\ \textcolor{keyword}{new}\ QComboBox(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00121}00121\ \ \ \ \ numOfDocs\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00122}00122\ \ \ \ \ docIndex\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00124}00124\ \ \ \ \ shiftKeyPressedState\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00126}00126\ \ \ \ \ setWindowIcon(QIcon(appDir\ +\ \textcolor{stringliteral}{"{}/icons/"{}}\ +\ \mbox{\hyperlink{class_main_window_a4e54b61fc4e1fa6d92155424668c971d}{getSettingsGeneralIconTheme}}()\ +\ \textcolor{stringliteral}{"{}/"{}}\ +\ \textcolor{stringliteral}{"{}app"{}}\ +\ \textcolor{stringliteral}{"{}.png"{}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00127}00127\ \ \ \ \ setMinimumSize(800,\ 480);\ \textcolor{comment}{//Require\ Minimum\ WVGA}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00129}00129\ \ \ \ \ \mbox{\hyperlink{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}{loadFormats}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00131}00131\ \ \ \ \ \textcolor{comment}{//create\ the\ mdiArea}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00132}00132\ \ \ \ \ QFrame*\ vbox\ =\ \textcolor{keyword}{new}\ QFrame(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00133}00133\ \ \ \ \ QVBoxLayout*\ layout\ =\ \textcolor{keyword}{new}\ QVBoxLayout(vbox);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00134}00134\ \ \ \ \ \textcolor{comment}{//layout-\/>setMargin(0);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00135}00135\ \ \ \ \ vbox-\/>setFrameStyle(QFrame::StyledPanel\ |\ QFrame::Sunken);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00136}00136\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_mdi_area}{MdiArea}}(\textcolor{keyword}{this},\ vbox);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00137}00137\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>\mbox{\hyperlink{class_mdi_area_a51320500372fafd1b4752e986aefd5e5}{useBackgroundLogo}}(\mbox{\hyperlink{class_main_window_ac2ac4fcf7410c650f3fa46ccdb46cfd9}{getSettingsGeneralMdiBGUseLogo}}());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00138}00138\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>\mbox{\hyperlink{class_mdi_area_a4e52adca7532608b02f316555022d30c}{useBackgroundTexture}}(\mbox{\hyperlink{class_main_window_ac75fcf901a4030d3201586622f75fecc}{getSettingsGeneralMdiBGUseTexture}}());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00139}00139\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>\mbox{\hyperlink{class_mdi_area_a3efe3a03c1f43d8371d59a12e9d72ed2}{useBackgroundColor}}(\mbox{\hyperlink{class_main_window_afeff163772f630f3e8d1c3911af959d8}{getSettingsGeneralMdiBGUseColor}}());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00140}00140\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>\mbox{\hyperlink{class_mdi_area_a038af0082e21b09ddfc6fbf0b87e8e01}{setBackgroundLogo}}(\mbox{\hyperlink{class_main_window_a5f3e02d5ead4471c27402fdd538e99ee}{getSettingsGeneralMdiBGLogo}}());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00141}00141\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>\mbox{\hyperlink{class_mdi_area_a16b27111c3952c10671bdf60eeaac481}{setBackgroundTexture}}(\mbox{\hyperlink{class_main_window_ab99b56c4efd63f172d15df0ce689f62d}{getSettingsGeneralMdiBGTexture}}());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00142}00142\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>\mbox{\hyperlink{class_mdi_area_a70d4e21190fdc47edd88f078dd2037cb}{setBackgroundColor}}(QColor(\mbox{\hyperlink{class_main_window_afc288a3d3e7eb6f4251cabfe761fe7a2}{getSettingsGeneralMdiBGColor}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00143}00143\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>setViewMode(QMdiArea::TabbedView);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00144}00144\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00145}00145\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00146}00146\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>setActivationOrder(QMdiArea::ActivationHistoryOrder);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00147}00147\ \ \ \ \ layout-\/>addWidget(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00148}00148\ \ \ \ \ setCentralWidget(vbox);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00150}00150\ \ \ \ \ \textcolor{comment}{//create\ the\ Command\ Prompt}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00151}00151\ \ \ \ \ \mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_cmd_prompt}{CmdPrompt}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00152}00152\ \ \ \ \ \mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}}-\/>setFocus(Qt::OtherFocusReason);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00153}00153\ \ \ \ \ this-\/>setFocusProxy(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00154}00154\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>setFocusProxy(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00156}00156\ \ \ \ \ \mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}}-\/>\mbox{\hyperlink{class_cmd_prompt_ac63cf69e844a2a5dcb33afe706867c13}{setPromptTextColor}}(QColor(\mbox{\hyperlink{class_main_window_aeea62181620f0a4e7e56d9424bceddc4}{getSettingsPromptTextColor}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00157}00157\ \ \ \ \ \mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}}-\/>\mbox{\hyperlink{class_cmd_prompt_a61f43684e26e3b18d69f6654b7890ece}{setPromptBackgroundColor}}(QColor(\mbox{\hyperlink{class_main_window_ab31183f46414525284ee89cddfecacd6}{getSettingsPromptBGColor}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00159}00159\ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(startCommand(\textcolor{keyword}{const}\ QString\&)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a296e76dd335d1cd0981a002e1342a2aa}{logPromptInput}}(\textcolor{keyword}{const}\ QString\&)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00161}00161\ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(startCommand(\textcolor{keyword}{const}\ QString\&)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a891c7e7c4d1bb8dadcf4167991acddba}{runCommandMain}}(\textcolor{keyword}{const}\ QString\&)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00162}00162\ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(\mbox{\hyperlink{class_main_window_af2ad04921a585dd627999e819d0d6293}{runCommand}}(\textcolor{keyword}{const}\ QString\&,\ \textcolor{keyword}{const}\ QString\&)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a84f61e8c71801a0def7baa55b3fe224b}{runCommandPrompt}}(\textcolor{keyword}{const}\ QString\&,\ \textcolor{keyword}{const}\ QString\&)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00164}00164\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(\mbox{\hyperlink{class_main_window_a74af558a825ac72754085696d893671d}{deletePressed}}()),\ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a74af558a825ac72754085696d893671d}{deletePressed}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00165}00165\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(tabPressed()),\ \ \ \ \ \ \ this,\ SLOT(someUnknownSlot()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00166}00166\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(\mbox{\hyperlink{class_main_window_abb2c9654968151943c6068652051fe73}{escapePressed}}()),\ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_abb2c9654968151943c6068652051fe73}{escapePressed}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(upPressed()),\ \ \ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_adb1cb792f8d7dffaa9a8ecbea1a3b517}{promptInputPrevious}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00168}00168\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(downPressed()),\ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_aa183f50daf2ba1bed0068f7eae87f6a4}{promptInputNext}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(F1Pressed()),\ \ \ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a97ee70a8770dc30d06c744b24eb2fcfc}{help}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00170}00170\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F2Pressed()),\ \ \ \ \ \ \ \ this,\ SLOT(floatHistory()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00171}00171\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F3Pressed()),\ \ \ \ \ \ \ \ this,\ SLOT(toggleQSNAP()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(F4Pressed()),\ \ \ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a1fe73b9637f883f7b08f4952a123183d}{toggleLwt}}()));\ \textcolor{comment}{//TODO:\ typically\ this\ is\ toggleTablet(),\ make\ F-\/Keys\ customizable\ thru\ settings}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00173}00173\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F5Pressed()),\ \ \ \ \ \ \ \ this,\ SLOT(toggleISO()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00174}00174\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F6Pressed()),\ \ \ \ \ \ \ \ this,\ SLOT(toggleCoords()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(F7Pressed()),\ \ \ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_aa15caab05970ae4433a9d8ad40a0d7b1}{toggleGrid}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00176}00176\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F8Pressed()),\ \ \ \ \ \ \ \ this,\ SLOT(toggleORTHO()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00177}00177\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F9Pressed()),\ \ \ \ \ \ \ \ this,\ SLOT(toggleSNAP()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00178}00178\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F10Pressed()),\ \ \ \ \ \ \ this,\ SLOT(togglePOLAR()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00179}00179\ \ \ \ \ \textcolor{comment}{//TODO:\ connect(prompt,\ SIGNAL(F11Pressed()),\ \ \ \ \ \ \ this,\ SLOT(toggleQTRACK()));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(F12Pressed()),\ \ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a60f67853a7e075153ccbc1ed51322419}{toggleRuler}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(cutPressed()),\ \ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ada01f65675afbbc0b8006d58df5acb81}{cut}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(copyPressed()),\ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_aaa6c087511a52e64fc9ad92820c7c0a8}{copy}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(pastePressed()),\ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ad7f58047731e9a1b735aa142811c70e8}{paste}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(selectAllPressed()),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ab6658ed404200bd7aaca5629db064645}{selectAll}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(undoPressed()),\ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(redoPressed()),\ \ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a93c48d6ed036e1a381be53ac67643284}{redo}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00188}00188\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(shiftPressed()),\ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a3c3d9c344e5c250c88c74effe57d28e9}{setShiftPressed}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(shiftReleased()),\ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a2284e3b024b9a7ce20ae49ae04d7a7a5}{setShiftReleased}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00190}00190\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(showSettings()),\ \ \ \ \ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a66b1feefbf15fb9e1a1389435d68007e}{settingsPrompt}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00192}00192\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ SIGNAL(historyAppended(\textcolor{keyword}{const}\ QString\&)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a19bdabe257073caa0f70f6cb617e6211}{promptHistoryAppended}}(\textcolor{keyword}{const}\ QString\&)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00194}00194\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00195}00195\ \ \ \ \ \textcolor{comment}{//create\ the\ Object\ Property\ Editor}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00196}00196\ \ \ \ \ \mbox{\hyperlink{class_main_window_aab786bd954c5177fc10dacf1150767eb}{dockPropEdit}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_property_editor}{PropertyEditor}}(appDir\ +\ \textcolor{stringliteral}{"{}/icons/"{}}\ +\ \mbox{\hyperlink{class_main_window_a4e54b61fc4e1fa6d92155424668c971d}{getSettingsGeneralIconTheme}}(),\ \mbox{\hyperlink{class_main_window_abf5506021170b17da3ed2ea21339cc03}{getSettingsSelectionModePickAdd}}(),\ \mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00197}00197\ \ \ \ \ addDockWidget(Qt::LeftDockWidgetArea,\ \mbox{\hyperlink{class_main_window_aab786bd954c5177fc10dacf1150767eb}{dockPropEdit}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00198}00198\ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_aab786bd954c5177fc10dacf1150767eb}{dockPropEdit}},\ SIGNAL(\mbox{\hyperlink{class_main_window_aaf5a022104e1ce97c51424fbcda97e31}{pickAddModeToggled}}()),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_aaf5a022104e1ce97c51424fbcda97e31}{pickAddModeToggled}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00200}00200\ \ \ \ \ \textcolor{comment}{//create\ the\ Command\ History\ Undo\ Editor}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00201}00201\ \ \ \ \ \mbox{\hyperlink{class_main_window_a1ca7f462fb503628fcffef7f97f510ba}{dockUndoEdit}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_undo_editor}{UndoEditor}}(appDir\ +\ \textcolor{stringliteral}{"{}/icons/"{}}\ +\ \mbox{\hyperlink{class_main_window_a4e54b61fc4e1fa6d92155424668c971d}{getSettingsGeneralIconTheme}}(),\ \mbox{\hyperlink{class_main_window_a3feb7af27315977b60f90345cb45064f}{prompt}},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00202}00202\ \ \ \ \ addDockWidget(Qt::LeftDockWidgetArea,\ \mbox{\hyperlink{class_main_window_a1ca7f462fb503628fcffef7f97f510ba}{dockUndoEdit}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00203}00203\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00204}00204\ \ \ \ \ \textcolor{comment}{//setDockOptions(QMainWindow::AnimatedDocks\ |\ QMainWindow::AllowTabbedDocks\ |\ QMainWindow::VerticalTabs);\ //TODO:\ Load\ these\ from\ settings}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00205}00205\ \ \ \ \ \textcolor{comment}{//tabifyDockWidget(dockPropEdit,\ dockUndoEdit);\ //TODO:\ load\ this\ from\ settings}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00207}00207\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00208}00208\ \textcolor{comment}{\ \ \ \ //Javascript}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00209}00209\ \textcolor{comment}{\ \ \ \ initMainWinPointer(this);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00210}00210\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00211}00211\ \textcolor{comment}{\ \ \ \ engine\ =\ new\ QScriptEngine(this);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00212}00212\ \textcolor{comment}{\ \ \ \ engine-\/>installTranslatorFunctions();}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00213}00213\ \textcolor{comment}{\ \ \ \ debugger\ =\ new\ QScriptEngineDebugger(this);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00214}00214\ \textcolor{comment}{\ \ \ \ debugger-\/>attachTo(engine);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00215}00215\ \textcolor{comment}{\ \ \ \ javaInitNatives(engine);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00216}00216\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00217}00217\ \textcolor{comment}{\ \ \ \ //Load\ all\ commands\ in\ a\ loop}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00218}00218\ \textcolor{comment}{\ \ \ \ QDir\ commandDir(appDir\ +\ "{}/commands"{});}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00219}00219\ \textcolor{comment}{\ \ \ \ QStringList\ cmdList\ =\ commandDir.entryList(QDir::Dirs\ |\ QDir::NoDotAndDotDot);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00220}00220\ \textcolor{comment}{\ \ \ \ foreach(QString\ cmdName,\ cmdList)}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00221}00221\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00222}00222\ \textcolor{comment}{\ \ \ \ \ \ \ \ javaLoadCommand(cmdName);}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00223}00223\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00224}00224\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00226}00226\ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_status_bar}{StatusBar}}(\textcolor{keyword}{this},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00227}00227\ \ \ \ \ this-\/>setStatusBar(\mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00229}00229\ \ \ \ \ createAllActions();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00230}00230\ \ \ \ \ createAllMenus();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00231}00231\ \ \ \ \ createAllToolbars();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00232}00232\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00233}00233\ \ \ \ \ \mbox{\hyperlink{class_main_window_a471e9cc1bc5ed7d431363e74962aede5}{iconResize}}(\mbox{\hyperlink{class_main_window_a8669faa45f92bfc73ed9419a7682326d}{getSettingsGeneralIconSize}}());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00234}00234\ \ \ \ \ \mbox{\hyperlink{class_main_window_a0e4a797eb016dd2a282c6977b42b1e00}{updateMenuToolbarStatusbar}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00235}00235\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00236}00236\ \ \ \ \ \textcolor{comment}{//Show\ date\ in\ statusbar\ after\ it\ has\ been\ updated}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00237}00237\ \ \ \ \ QDate\ date\ =\ QDate::currentDate();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00238}00238\ \ \ \ \ QString\ datestr\ =\ date.toString(\textcolor{stringliteral}{"{}MMMM\ d,\ yyyy"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00239}00239\ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>showMessage(datestr);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00241}00241\ \ \ \ \ showNormal();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00242}00242\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00243}00243\ \ \ \ \ \textcolor{comment}{//Load\ tips\ from\ external\ file}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00244}00244\ \ \ \ \ QFile\ tipFile(appDir\ +\ \textcolor{stringliteral}{"{}/tips.txt"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00245}00245\ \ \ \ \ \textcolor{keywordflow}{if}(tipFile.open(QFile::ReadOnly))}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00246}00246\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00247}00247\ \ \ \ \ \ \ \ \ QTextStream\ stream(\&tipFile);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00248}00248\ \ \ \ \ \ \ \ \ QString\ tipLine;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00249}00249\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00250}00250\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ tipLine\ =\ stream.readLine();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!tipLine.isEmpty())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00253}00253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ listTipOfTheDay\ <<\ tipLine;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00254}00254\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(!tipLine.isNull());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00256}00256\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00257}00257\ \ \ \ \ \textcolor{keywordflow}{if}(\mbox{\hyperlink{class_main_window_a9db13eae2d19fd4bdc2fb5bdbdaf551d}{getSettingsGeneralTipOfTheDay}}())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00258}00258\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a207b350101148d624020eeb0e15b059c}{tipOfTheDay}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00259}00259\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00261}\mbox{\hyperlink{class_main_window_aa33fa7d45aa34b9ede5cb69ab574a1b2}{00261}}\ \mbox{\hyperlink{class_main_window_aa33fa7d45aa34b9ede5cb69ab574a1b2}{MainWindow::\string~MainWindow}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00262}00262\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00263}00263\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::Destructor()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00264}00264\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00265}00265\ \ \ \ \ \textcolor{comment}{//Prevent\ memory\ leaks\ by\ deleting\ any\ unpasted\ objects}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00266}00266\ \ \ \ \ qDeleteAll(\mbox{\hyperlink{class_main_window_a276dcd5c212e859718950f79d05c0bba}{cutCopyObjectList}}.begin(),\ \mbox{\hyperlink{class_main_window_a276dcd5c212e859718950f79d05c0bba}{cutCopyObjectList}}.end());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00267}00267\ \ \ \ \ \mbox{\hyperlink{class_main_window_a276dcd5c212e859718950f79d05c0bba}{cutCopyObjectList}}.clear();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00268}00268\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00270}\mbox{\hyperlink{class_main_window_ac4b0d8bb747b8104c877795e09009bfa}{00270}}\ QAction*\ \mbox{\hyperlink{class_main_window_ac4b0d8bb747b8104c877795e09009bfa}{MainWindow::getAction}}(\textcolor{keywordtype}{int}\ actionEnum)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00271}00271\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00272}00272\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(actionEnum);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00273}00273\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00275}\mbox{\hyperlink{class_main_window_af34dcd9bed5b28c4445ae18a963ff5f0}{00275}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_af34dcd9bed5b28c4445ae18a963ff5f0}{MainWindow::recentMenuAboutToShow}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00276}00276\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00277}00277\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::recentMenuAboutToShow()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00278}00278\ \ \ \ \ recentMenu-\/>clear();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00280}00280\ \ \ \ \ QFileInfo\ recentFileInfo;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00281}00281\ \ \ \ \ QString\ recentValue;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00282}00282\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ settings\_opensave\_recent\_list\_of\_files.size();\ ++i)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00283}00283\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ \ \textcolor{comment}{//If\ less\ than\ the\ max\ amount\ of\ entries\ add\ to\ menu}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00285}00285\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(i\ <\ settings\_opensave\_recent\_max\_files)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00286}00286\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00287}00287\ \ \ \ \ \ \ \ \ \ \ \ \ recentFileInfo\ =\ QFileInfo(settings\_opensave\_recent\_list\_of\_files.at(i));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(recentFileInfo.exists()\ \&\&\ \mbox{\hyperlink{class_main_window_af95b9b8dba27d822373f4424074bfde7}{validFileFormat}}(recentFileInfo.fileName()))}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ recentValue.setNum(i+1);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00291}00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QAction*\ rAction;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00292}00292\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (recentValue.toInt()\ >=\ 1\ \&\&\ recentValue.toInt()\ <=\ 9)\ rAction\ =\ \textcolor{keyword}{new}\ QAction(\textcolor{stringliteral}{"{}\&"{}}\ +\ recentValue\ +\ \textcolor{stringliteral}{"{}\ "{}}\ +\ recentFileInfo.fileName(),\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00293}00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(recentValue.toInt()\ ==\ 10)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rAction\ =\ \textcolor{keyword}{new}\ QAction(\textcolor{stringliteral}{"{}1\&0\ "{}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ +\ recentFileInfo.fileName(),\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rAction\ =\ \textcolor{keyword}{new}\ QAction(\ \ \ \ \ \ recentValue\ +\ \textcolor{stringliteral}{"{}\ "{}}\ +\ recentFileInfo.fileName(),\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rAction-\/>setCheckable(\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ rAction-\/>setData(settings\_opensave\_recent\_list\_of\_files.at(i));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ recentMenu-\/>addAction(rAction);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ connect(rAction,\ SIGNAL(triggered()),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ab3ef02a683bbf703fdb8282c9bf4cd23}{openrecentfile}}()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00300}00300\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00301}00301\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00302}00302\ \ \ \ \ \textcolor{comment}{//Ensure\ the\ list\ only\ has\ max\ amount\ of\ entries}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00303}00303\ \ \ \ \ \textcolor{keywordflow}{while}(settings\_opensave\_recent\_list\_of\_files.size()\ >\ settings\_opensave\_recent\_max\_files)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00304}00304\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00305}00305\ \ \ \ \ \ \ \ \ settings\_opensave\_recent\_list\_of\_files.removeLast();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00306}00306\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00307}00307\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00308}00308\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00309}\mbox{\hyperlink{class_main_window_a7e239d260b236e5b0fa4952532bc60fc}{00309}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a7e239d260b236e5b0fa4952532bc60fc}{MainWindow::windowMenuAboutToShow}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00310}00310\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00311}00311\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::windowMenuAboutToShow()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00312}00312\ \ \ \ \ windowMenu-\/>clear();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00313}00313\ \ \ \ \ windowMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}{ACTION\_windowclose}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00314}00314\ \ \ \ \ windowMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca208373333309d3abf119f0d06d610b45}{ACTION\_windowcloseall}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00315}00315\ \ \ \ \ windowMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00316}00316\ \ \ \ \ windowMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca600eae75160b3ae8290a72d8ddc5cec3}{ACTION\_windowcascade}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00317}00317\ \ \ \ \ windowMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca0ceac5c9a6fc1c34c2aa590abc424675}{ACTION\_windowtile}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00318}00318\ \ \ \ \ windowMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00319}00319\ \ \ \ \ windowMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca2428793a68ce0a47d5f93f8af1d29de0}{ACTION\_windownext}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00320}00320\ \ \ \ \ windowMenu-\/>addAction(\mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca454c6f2182b849ef732d1b261bb1e992}{ACTION\_windowprevious}}));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00321}00321\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00322}00322\ \ \ \ \ windowMenu-\/>addSeparator();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00323}00323\ \ \ \ \ QList<QMdiSubWindow*>\ windows\ =\ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>subWindowList();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00324}00324\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ windows.count();\ ++i)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00325}00325\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00326}00326\ \ \ \ \ \ \ \ \ QAction*\ aAction\ =\ \textcolor{keyword}{new}\ QAction(windows.at(i)-\/>windowTitle(),\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00327}00327\ \ \ \ \ \ \ \ \ aAction-\/>setCheckable(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00328}00328\ \ \ \ \ \ \ \ \ aAction-\/>setData(i);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00329}00329\ \ \ \ \ \ \ \ \ windowMenu-\/>addAction(aAction);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00330}00330\ \ \ \ \ \ \ \ \ connect(aAction,\ SIGNAL(toggled(\textcolor{keywordtype}{bool})),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_af9615468720e0536112f05700d7995b1}{windowMenuActivated}}(\textcolor{keywordtype}{bool})));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00331}00331\ \ \ \ \ \ \ \ \ aAction-\/>setChecked(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>activeSubWindow()\ ==\ windows.at(i));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00332}00332\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00333}00333\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00334}00334\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00335}\mbox{\hyperlink{class_main_window_af9615468720e0536112f05700d7995b1}{00335}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_af9615468720e0536112f05700d7995b1}{MainWindow::windowMenuActivated}}(\textcolor{keywordtype}{bool}\ checked)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00336}00336\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00337}00337\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::windowMenuActivated()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00338}00338\ \ \ \ \ QAction*\ aSender\ =\ qobject\_cast<QAction*>(sender());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00339}00339\ \ \ \ \ \textcolor{keywordflow}{if}(!aSender)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00340}00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00341}00341\ \ \ \ \ QWidget*\ w\ =\ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>subWindowList().at(aSender-\/>data().toInt());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00342}00342\ \ \ \ \ \textcolor{keywordflow}{if}(w\ \&\&\ checked)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00343}00343\ \ \ \ \ \ \ \ \ w-\/>setFocus();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00344}00344\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00345}00345\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00346}\mbox{\hyperlink{class_main_window_a166f5123da14e187f6830c4c10cd57d6}{00346}}\ \mbox{\hyperlink{class_mdi_area}{MdiArea}}*\ \mbox{\hyperlink{class_main_window_a166f5123da14e187f6830c4c10cd57d6}{MainWindow::getMdiArea}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00347}00347\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00348}00348\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::getMdiArea()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00349}00349\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00350}00350\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00351}00351\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00352}\mbox{\hyperlink{class_main_window_af8e658ffc58c5f50f51c5ce72c381747}{00352}}\ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ \mbox{\hyperlink{class_main_window_af8e658ffc58c5f50f51c5ce72c381747}{MainWindow::getApplication}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00353}00353\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00354}00354\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::getApplication()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00355}00355\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_main_window_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{mainWin}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00356}00356\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00357}00357\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00358}\mbox{\hyperlink{class_main_window_aa0dead754b2f95ea58fced448afed464}{00358}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_aa0dead754b2f95ea58fced448afed464}{MainWindow::newFile}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00359}00359\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00360}00360\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::newFile()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00361}00361\ \ \ \ \ docIndex++;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00362}00362\ \ \ \ \ numOfDocs++;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00363}00363\ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}(docIndex,\ \mbox{\hyperlink{class_main_window_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{mainWin}},\ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}},\ Qt::SubWindow);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00364}00364\ \ \ \ \ connect(mdiWin,\ SIGNAL(sendCloseMdiWin(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ab3e0e552834026cc1e93952559a29a89}{onCloseMdiWin}}(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00365}00365\ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}},\ SIGNAL(subWindowActivated(QMdiSubWindow*)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a0e137af32b5d2d86725f915020e7d0e6}{onWindowActivated}}(QMdiSubWindow*)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00366}00366\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00367}00367\ \ \ \ \ \mbox{\hyperlink{class_main_window_a0e4a797eb016dd2a282c6977b42b1e00}{updateMenuToolbarStatusbar}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00368}00368\ \ \ \ \ \mbox{\hyperlink{class_main_window_a7e239d260b236e5b0fa4952532bc60fc}{windowMenuAboutToShow}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00369}00369\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00370}00370\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ v\ =\ mdiWin-\/>\mbox{\hyperlink{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}{getView}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00371}00371\ \ \ \ \ \textcolor{keywordflow}{if}(v)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00372}00372\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00373}00373\ \ \ \ \ \ \ \ \ v-\/>\mbox{\hyperlink{class_view_ac6217db074fb196b438586032cce55e2}{recalculateLimits}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00374}00374\ \ \ \ \ \ \ \ \ v-\/>\mbox{\hyperlink{class_view_a68ccbc27a011c2b3ed99cea7cba7f66e}{zoomExtents}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00375}00375\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00376}00376\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00377}00377\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00378}\mbox{\hyperlink{class_main_window_aaaeacf4ff46ac4857ebdf69ad7005b00}{00378}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_aaaeacf4ff46ac4857ebdf69ad7005b00}{MainWindow::openFile}}(\textcolor{keywordtype}{bool}\ recent,\ \textcolor{keyword}{const}\ QString\&\ recentFile)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00379}00379\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00380}00380\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::openFile()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00381}00381\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00382}00382\ \ \ \ \ QApplication::setOverrideCursor(Qt::ArrowCursor);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00383}00383\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00384}00384\ \ \ \ \ QStringList\ files;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00385}00385\ \ \ \ \ \textcolor{keywordtype}{bool}\ preview\ =\ \mbox{\hyperlink{class_main_window_a6cd83e52cf380083adb6f319f26beabe}{getSettingsOpenThumbnail}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00386}00386\ \ \ \ \ openFilesPath\ =\ settings\_opensave\_recent\_directory;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00387}00387\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00388}00388\ \ \ \ \ \textcolor{comment}{//Check\ to\ see\ if\ this\ from\ the\ recent\ files\ list}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00389}00389\ \ \ \ \ \textcolor{keywordflow}{if}(recent)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00390}00390\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00391}00391\ \ \ \ \ \ \ \ \ files.append(recentFile);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00392}00392\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a9de873bb2aacfc81086b5a5d54e9e600}{openFilesSelected}}(files);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00393}00393\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00394}00394\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(!preview)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00395}00395\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00396}00396\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ set\ getOpenFileNames'\ selectedFilter\ parameter\ from\ settings\_opensave\_open\_format}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00397}00397\ \ \ \ \ \ \ \ \ files\ =\ QFileDialog::getOpenFileNames(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Open"{}}),\ openFilesPath,\ \mbox{\hyperlink{class_main_window_a749d21a703c165811b326e851463a69c}{formatFilterOpen}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00398}00398\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a9de873bb2aacfc81086b5a5d54e9e600}{openFilesSelected}}(files);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00399}00399\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00400}00400\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(preview)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00401}00401\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00402}00402\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_preview_dialog}{PreviewDialog}}*\ openDialog\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_preview_dialog}{PreviewDialog}}(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Open\ w/Preview"{}}),\ openFilesPath,\ \mbox{\hyperlink{class_main_window_a749d21a703c165811b326e851463a69c}{formatFilterOpen}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00403}00403\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ set\ openDialog-\/>selectNameFilter(const\ QString\&\ filter)\ from\ settings\_opensave\_open\_format}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00404}00404\ \ \ \ \ \ \ \ \ connect(openDialog,\ SIGNAL(filesSelected(\textcolor{keyword}{const}\ QStringList\&)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a9de873bb2aacfc81086b5a5d54e9e600}{openFilesSelected}}(\textcolor{keyword}{const}\ QStringList\&)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00405}00405\ \ \ \ \ \ \ \ \ openDialog-\/>exec();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00406}00406\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00407}00407\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00408}00408\ \ \ \ \ QApplication::restoreOverrideCursor();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00409}00409\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00410}00410\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00411}\mbox{\hyperlink{class_main_window_a9de873bb2aacfc81086b5a5d54e9e600}{00411}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a9de873bb2aacfc81086b5a5d54e9e600}{MainWindow::openFilesSelected}}(\textcolor{keyword}{const}\ QStringList\&\ filesToOpen)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00412}00412\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00413}00413\ \ \ \ \ \textcolor{keywordtype}{bool}\ doOnce\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00414}00414\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00415}00415\ \ \ \ \ \textcolor{keywordflow}{if}(filesToOpen.count())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00416}00416\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00417}00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ filesToOpen.count();\ i++)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00418}00418\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00419}00419\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\mbox{\hyperlink{class_main_window_af95b9b8dba27d822373f4424074bfde7}{validFileFormat}}(filesToOpen[i]))}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00420}00420\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00421}00421\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00422}00422\ \ \ \ \ \ \ \ \ \ \ \ \ QMdiSubWindow*\ existing\ =\ findMdiWindow(filesToOpen[i]);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00423}00423\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(existing)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00424}00424\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00425}00425\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>setActiveSubWindow(existing);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00426}00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00427}00427\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00428}00428\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00429}00429\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//The\ docIndex\ doesn't\ need\ increased\ as\ it\ is\ only\ used\ for\ unnamed\ files}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00430}00430\ \ \ \ \ \ \ \ \ \ \ \ \ numOfDocs++;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00431}00431\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ \textcolor{keyword}{new}\ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}(docIndex,\ \mbox{\hyperlink{class_main_window_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{mainWin}},\ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}},\ Qt::SubWindow);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00432}00432\ \ \ \ \ \ \ \ \ \ \ \ \ connect(mdiWin,\ SIGNAL(sendCloseMdiWin(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ab3e0e552834026cc1e93952559a29a89}{onCloseMdiWin}}(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00433}00433\ \ \ \ \ \ \ \ \ \ \ \ \ connect(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}},\ SIGNAL(subWindowActivated(QMdiSubWindow*)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_a0e137af32b5d2d86725f915020e7d0e6}{onWindowActivated}}(QMdiSubWindow*)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00434}00434\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00435}00435\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Make\ sure\ the\ toolbars/etc...\ are\ shown\ before\ doing\ their\ zoomExtents}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00436}00436\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(doOnce)\ \{\ \mbox{\hyperlink{class_main_window_a0e4a797eb016dd2a282c6977b42b1e00}{updateMenuToolbarStatusbar}}();\ doOnce\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00437}00437\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00438}00438\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(mdiWin-\/>\mbox{\hyperlink{class_mdi_window_a8437f8fd71bcf6da5de2a49cbd0b105b}{loadFile}}(filesToOpen.at(i)))}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00439}00439\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00440}00440\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>showMessage(tr(\textcolor{stringliteral}{"{}File(s)\ loaded"{}}),\ 2000);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00441}00441\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mdiWin-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00442}00442\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mdiWin-\/>showMaximized();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00443}00443\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Prevent\ duplicate\ entries\ in\ the\ recent\ files\ list}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00444}00444\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!settings\_opensave\_recent\_list\_of\_files.contains(filesToOpen.at(i),\ Qt::CaseInsensitive))}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00445}00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00446}00446\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ settings\_opensave\_recent\_list\_of\_files.prepend(filesToOpen.at(i));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00447}00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00448}00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Move\ the\ recent\ file\ to\ the\ top\ of\ the\ list}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00449}00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00450}00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00451}00451\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ settings\_opensave\_recent\_list\_of\_files.removeAll(filesToOpen.at(i));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00452}00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ settings\_opensave\_recent\_list\_of\_files.prepend(filesToOpen.at(i));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00453}00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00454}00454\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ settings\_opensave\_recent\_directory\ =\ QFileInfo(filesToOpen.at(i)).absolutePath();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00455}00455\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00456}00456\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ v\ =\ mdiWin-\/>\mbox{\hyperlink{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}{getView}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00457}00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(v)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00458}00458\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00459}00459\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ v-\/>\mbox{\hyperlink{class_view_ac6217db074fb196b438586032cce55e2}{recalculateLimits}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00460}00460\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ v-\/>\mbox{\hyperlink{class_view_a68ccbc27a011c2b3ed99cea7cba7f66e}{zoomExtents}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00461}00461\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00462}00462\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00463}00463\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00464}00464\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00465}00465\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mdiWin-\/>close();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00466}00466\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00467}00467\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00468}00468\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00469}00469\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00470}00470\ \ \ \ \ \mbox{\hyperlink{class_main_window_a7e239d260b236e5b0fa4952532bc60fc}{windowMenuAboutToShow}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00471}00471\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00472}00472\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00473}\mbox{\hyperlink{class_main_window_ab3ef02a683bbf703fdb8282c9bf4cd23}{00473}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_ab3ef02a683bbf703fdb8282c9bf4cd23}{MainWindow::openrecentfile}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00474}00474\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00475}00475\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::openrecentfile()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00476}00476\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00477}00477\ \ \ \ \ \textcolor{comment}{//Check\ to\ see\ if\ this\ from\ the\ recent\ files\ list}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00478}00478\ \ \ \ \ QAction*\ recentSender\ =\ qobject\_cast<QAction*>(sender());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00479}00479\ \ \ \ \ \textcolor{keywordflow}{if}(recentSender)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00480}00480\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00481}00481\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_aaaeacf4ff46ac4857ebdf69ad7005b00}{openFile}}(\textcolor{keyword}{true},\ recentSender-\/>data().toString());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00482}00482\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00483}00483\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00484}00484\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00485}\mbox{\hyperlink{class_main_window_a75a7ffc0ec5b7348f2f45dd78c128349}{00485}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a75a7ffc0ec5b7348f2f45dd78c128349}{MainWindow::savefile}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00486}00486\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00487}00487\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::savefile()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00488}00488\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00489}00489\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00490}\mbox{\hyperlink{class_main_window_aa88d1b17efaf513e4a2608bc5f0a21db}{00490}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_aa88d1b17efaf513e4a2608bc5f0a21db}{MainWindow::saveasfile}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00491}00491\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00492}00492\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::saveasfile()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00493}00493\ \ \ \ \ \textcolor{comment}{//\ need\ to\ find\ the\ activeSubWindow\ before\ it\ loses\ focus\ to\ the\ FileDialog}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00494}00494\ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ qobject\_cast<MdiWindow*>(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>activeSubWindow());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00495}00495\ \ \ \ \ \textcolor{keywordflow}{if}(!mdiWin)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00496}00496\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00497}00497\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00498}00498\ \ \ \ \ QString\ file;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00499}00499\ \ \ \ \ openFilesPath\ =\ settings\_opensave\_recent\_directory;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00500}00500\ \ \ \ \ file\ =\ QFileDialog::getSaveFileName(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Save\ As"{}}),\ openFilesPath,\ \mbox{\hyperlink{class_main_window_ab9244d24146b5107c23f1143a3e0acef}{formatFilterSave}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00501}00501\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00502}00502\ \ \ \ \ mdiWin-\/>\mbox{\hyperlink{class_mdi_window_aee368b2e953c4f7588e5da35d944cb0e}{saveFile}}(file);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00503}00503\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00504}00504\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00505}00505\ QMdiSubWindow*\ MainWindow::findMdiWindow(\textcolor{keyword}{const}\ QString\&\ fileName)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00506}00506\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00507}00507\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::findMdiWindow(\%s)"{}},\ qPrintable(fileName));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00508}00508\ \ \ \ \ QString\ canonicalFilePath\ =\ QFileInfo(fileName).canonicalFilePath();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00509}00509\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00510}00510\ \ \ \ \ \textcolor{keywordflow}{foreach}(QMdiSubWindow*\ subWindow,\ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>subWindowList())}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00511}00511\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00512}00512\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ qobject\_cast<MdiWindow*>(subWindow);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00513}00513\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(mdiWin)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00514}00514\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00515}00515\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(mdiWin-\/>\mbox{\hyperlink{class_mdi_window_aef74298226065865a13b44697d122a18}{getCurrentFile}}()\ ==\ canonicalFilePath)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00516}00516\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00517}00517\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ subWindow;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00518}00518\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00519}00519\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00520}00520\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00521}00521\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00522}00522\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00523}00523\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00524}\mbox{\hyperlink{class_main_window_a5de2bd09256045c0b96e5a0be780fa85}{00524}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a5de2bd09256045c0b96e5a0be780fa85}{MainWindow::closeEvent}}(QCloseEvent*\ event)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00525}00525\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00526}00526\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>closeAllSubWindows();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00527}00527\ \ \ \ \ \mbox{\hyperlink{class_main_window_a82ee1fab763ad7e0f0898aff8a7f0735}{writeSettings}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00528}00528\ \ \ \ \ \textcolor{keyword}{event}-\/>accept();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00529}00529\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00530}00530\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00531}\mbox{\hyperlink{class_main_window_af4469ef58823461896f457363b3736e2}{00531}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_af4469ef58823461896f457363b3736e2}{MainWindow::onCloseWindow}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00532}00532\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00533}00533\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::onCloseWindow()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00534}00534\ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ qobject\_cast<MdiWindow*>(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>activeSubWindow());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00535}00535\ \ \ \ \ \textcolor{keywordflow}{if}(mdiWin)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00536}00536\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00537}00537\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_ab3e0e552834026cc1e93952559a29a89}{onCloseMdiWin}}(mdiWin);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00538}00538\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00539}00539\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00540}00540\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00541}\mbox{\hyperlink{class_main_window_ab3e0e552834026cc1e93952559a29a89}{00541}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_ab3e0e552834026cc1e93952559a29a89}{MainWindow::onCloseMdiWin}}(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ theMdiWin)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00542}00542\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00543}00543\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::onCloseMdiWin()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00544}00544\ \ \ \ \ numOfDocs-\/-\/;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00545}00545\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00546}00546\ \ \ \ \ \textcolor{keywordtype}{bool}\ keepMaximized;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00547}00547\ \ \ \ \ \textcolor{keywordflow}{if}(theMdiWin)\ \{\ keepMaximized\ =\ theMdiWin-\/>isMaximized();\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00548}00548\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00549}00549\ \ \ \ \ \mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>removeSubWindow(theMdiWin);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00550}00550\ \ \ \ \ theMdiWin-\/>deleteLater();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00551}00551\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00552}00552\ \ \ \ \ \mbox{\hyperlink{class_main_window_a0e4a797eb016dd2a282c6977b42b1e00}{updateMenuToolbarStatusbar}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00553}00553\ \ \ \ \ \mbox{\hyperlink{class_main_window_a7e239d260b236e5b0fa4952532bc60fc}{windowMenuAboutToShow}}();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00554}00554\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00555}00555\ \ \ \ \ \textcolor{keywordflow}{if}(keepMaximized)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00556}00556\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00557}00557\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ qobject\_cast<MdiWindow*>(\mbox{\hyperlink{class_main_window_a66e281cfd154b14af0793d81367287fe}{mdiArea}}-\/>activeSubWindow());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00558}00558\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(mdiWin)\ \{\ mdiWin-\/>showMaximized();\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00559}00559\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00560}00560\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00561}00561\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00562}\mbox{\hyperlink{class_main_window_a0e137af32b5d2d86725f915020e7d0e6}{00562}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a0e137af32b5d2d86725f915020e7d0e6}{MainWindow::onWindowActivated}}(QMdiSubWindow*\ w)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00563}00563\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00564}00564\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::onWindowActivated()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00565}00565\ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}*\ mdiWin\ =\ qobject\_cast<MdiWindow*>(w);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00566}00566\ \ \ \ \ \textcolor{keywordflow}{if}(mdiWin)\ \{\ mdiWin-\/>\mbox{\hyperlink{class_mdi_window_abe8de8cccec92139e7b920659a38a62d}{onWindowActivated}}();\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00567}00567\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00568}00568\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00569}\mbox{\hyperlink{class_main_window_aafa66cd3e7e9f8b8302cdfe69a5230f3}{00569}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_aafa66cd3e7e9f8b8302cdfe69a5230f3}{MainWindow::resizeEvent}}(QResizeEvent*\ e)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00570}00570\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00571}00571\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::resizeEvent()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00572}00572\ \ \ \ \ QMainWindow::resizeEvent(e);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00573}00573\ \ \ \ \ statusBar()-\/>setSizeGripEnabled(!isMaximized());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00574}00574\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00575}00575\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00576}\mbox{\hyperlink{class_main_window_a41967bf0f2d3867febf665aff291fcd7}{00576}}\ QAction*\ \mbox{\hyperlink{class_main_window_a41967bf0f2d3867febf665aff291fcd7}{MainWindow::getFileSeparator}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00577}00577\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00578}00578\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::getFileSeparator()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00579}00579\ \ \ \ \ \textcolor{keywordflow}{return}\ myFileSeparator;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00580}00580\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00581}00581\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00582}\mbox{\hyperlink{class_main_window_a0e4a797eb016dd2a282c6977b42b1e00}{00582}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a0e4a797eb016dd2a282c6977b42b1e00}{MainWindow::updateMenuToolbarStatusbar}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00583}00583\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00584}00584\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::updateMenuToolbarStatusbar()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00585}00585\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00586}00586\ \ \ \ \ \mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcac86eb9bcc79759d13c34dfd81216db94}{ACTION\_print}})-\/>setEnabled(numOfDocs\ >\ 0);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00587}00587\ \ \ \ \ \mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}{ACTION\_windowclose}})-\/>setEnabled(numOfDocs\ >\ 0);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00588}00588\ \ \ \ \ \mbox{\hyperlink{class_main_window_ad15a4e6012537a86835b5148b5a547aa}{actionHash}}.value(\mbox{\hyperlink{mainwindow-actions_8h_a94040e008b74f73f2d2955f5f3c121fca4c7beb9e84f92596e4db8b7977192e54}{ACTION\_designdetails}})-\/>setEnabled(numOfDocs\ >\ 0);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00589}00589\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00590}00590\ \ \ \ \ \textcolor{keywordflow}{if}(numOfDocs)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00591}00591\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00592}00592\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Toolbars}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00593}00593\ \ \ \ \ \ \ \ \ toolbarView-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00594}00594\ \ \ \ \ \ \ \ \ toolbarZoom-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00595}00595\ \ \ \ \ \ \ \ \ toolbarPan-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00596}00596\ \ \ \ \ \ \ \ \ toolbarIcon-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00597}00597\ \ \ \ \ \ \ \ \ toolbarHelp-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00598}00598\ \ \ \ \ \ \ \ \ toolbarLayer-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00599}00599\ \ \ \ \ \ \ \ \ toolbarText-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00600}00600\ \ \ \ \ \ \ \ \ toolbarProperties-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00601}00601\ \ \ \ \ \ \ \ \ toolbarPrompt-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00602}00602\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00603}00603\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}(QToolBar*\ tb,\ \mbox{\hyperlink{class_main_window_a76ea9ee344c2545133538313c7f78652}{toolbarHash}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00604}00604\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00605}00605\ \ \ \ \ \ \ \ \ \ \ \ \ tb-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00606}00606\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00607}00607\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00608}00608\ \ \ \ \ \ \ \ \ \textcolor{comment}{//DockWidgets}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00609}00609\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_aab786bd954c5177fc10dacf1150767eb}{dockPropEdit}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00610}00610\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a1ca7f462fb503628fcffef7f97f510ba}{dockUndoEdit}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00611}00611\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00612}00612\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Menus}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00613}00613\ \ \ \ \ \ \ \ \ menuBar()-\/>clear();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00614}00614\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(fileMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00615}00615\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(editMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00616}00616\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(viewMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00617}00617\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00618}00618\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}(QMenu*\ menu,\ \mbox{\hyperlink{class_main_window_aa9162323a01f7716dc95bcd52ea23e6c}{menuHash}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00619}00619\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00620}00620\ \ \ \ \ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(menu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00621}00621\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00622}00622\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00623}00623\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(settingsMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00624}00624\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(windowMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00625}00625\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(helpMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00626}00626\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00627}00627\ \ \ \ \ \ \ \ \ windowMenu-\/>setEnabled(\textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00628}00628\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00629}00629\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Statusbar}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00630}00630\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>clearMessage();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00631}00631\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00632}00632\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_ae93001d2d1582a15c49b8b73ed46ba99}{statusBarSnapButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00633}00633\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a3e7e9026381a02026fe601ceb98f53fb}{statusBarGridButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00634}00634\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a704817f2732f65207c7a515da9ff7765}{statusBarRulerButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00635}00635\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a0aa377963d0188e2a4babbf96651f312}{statusBarOrthoButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00636}00636\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a7957e98ec7ee90c0dc7f2cd8ec3cccc1}{statusBarPolarButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00637}00637\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a4274bdf2b93b039a710ffbdce2ff275f}{statusBarQSnapButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00638}00638\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a45f64bc3508ddf9d606d66922d4e1753}{statusBarQTrackButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00639}00639\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_af9209259021ca32ed190297a08b35fdf}{statusBarLwtButton}}-\/>show();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00640}00640\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00641}00641\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00642}00642\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00643}00643\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Toolbars}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00644}00644\ \ \ \ \ \ \ \ \ toolbarView-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00645}00645\ \ \ \ \ \ \ \ \ toolbarZoom-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00646}00646\ \ \ \ \ \ \ \ \ toolbarPan-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00647}00647\ \ \ \ \ \ \ \ \ toolbarIcon-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00648}00648\ \ \ \ \ \ \ \ \ toolbarHelp-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00649}00649\ \ \ \ \ \ \ \ \ toolbarLayer-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00650}00650\ \ \ \ \ \ \ \ \ toolbarText-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00651}00651\ \ \ \ \ \ \ \ \ toolbarProperties-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00652}00652\ \ \ \ \ \ \ \ \ toolbarPrompt-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00653}00653\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{foreach}(QToolBar*\ tb,\ \mbox{\hyperlink{class_main_window_a76ea9ee344c2545133538313c7f78652}{toolbarHash}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00654}00654\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00655}00655\ \ \ \ \ \ \ \ \ \ \ \ \ tb-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00656}00656\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00657}00657\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00658}00658\ \ \ \ \ \ \ \ \ \textcolor{comment}{//DockWidgets}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00659}00659\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_aab786bd954c5177fc10dacf1150767eb}{dockPropEdit}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00660}00660\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a1ca7f462fb503628fcffef7f97f510ba}{dockUndoEdit}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00661}00661\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00662}00662\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Menus}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00663}00663\ \ \ \ \ \ \ \ \ menuBar()-\/>clear();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00664}00664\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(fileMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00665}00665\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(editMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00666}00666\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(settingsMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00667}00667\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(windowMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00668}00668\ \ \ \ \ \ \ \ \ menuBar()-\/>addMenu(helpMenu);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00669}00669\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00670}00670\ \ \ \ \ \ \ \ \ windowMenu-\/>setEnabled(\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00671}00671\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00672}00672\ \ \ \ \ \ \ \ \ \textcolor{comment}{//Statusbar}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00673}00673\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>clearMessage();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00674}00674\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a36c40c8eb2881aade55c413f3ee41f25}{statusBarMouseCoord}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00675}00675\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_ae93001d2d1582a15c49b8b73ed46ba99}{statusBarSnapButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00676}00676\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a3e7e9026381a02026fe601ceb98f53fb}{statusBarGridButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00677}00677\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a704817f2732f65207c7a515da9ff7765}{statusBarRulerButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00678}00678\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a0aa377963d0188e2a4babbf96651f312}{statusBarOrthoButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00679}00679\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a7957e98ec7ee90c0dc7f2cd8ec3cccc1}{statusBarPolarButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00680}00680\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a4274bdf2b93b039a710ffbdce2ff275f}{statusBarQSnapButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00681}00681\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_a45f64bc3508ddf9d606d66922d4e1753}{statusBarQTrackButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00682}00682\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_main_window_a5cab0ad2192beefe7d07056cc4b3825b}{statusbar}}-\/>\mbox{\hyperlink{class_status_bar_af9209259021ca32ed190297a08b35fdf}{statusBarLwtButton}}-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00683}00683\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00684}00684\ \ \ \ \ hideUnimplemented();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00685}00685\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00686}00686\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00687}00687\ \textcolor{keywordtype}{void}\ MainWindow::hideUnimplemented()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00688}00688\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00689}00689\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}MainWindow::hideUnimplemented()"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00690}00690\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00691}00691\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00692}\mbox{\hyperlink{class_main_window_af95b9b8dba27d822373f4424074bfde7}{00692}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_main_window_af95b9b8dba27d822373f4424074bfde7}{MainWindow::validFileFormat}}(\textcolor{keyword}{const}\ QString\&\ fileName)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00693}00693\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00694}00694\ \ \ \ \ \textcolor{keywordflow}{if}(embFormat\_typeFromName(qPrintable(fileName)))}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00695}00695\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00696}00696\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00697}00697\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00698}00698\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00699}\mbox{\hyperlink{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}{00699}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a6aa1c7938d00887e99affda74e8d2f7e}{MainWindow::loadFormats}}()}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00700}00700\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00701}00701\ \ \ \ \ \textcolor{keywordtype}{char}\ stable,\ unstable;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00702}00702\ \ \ \ \ QString\ supportedReaders\ \ =\ \textcolor{stringliteral}{"{}All\ Supported\ Files\ ("{}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00703}00703\ \ \ \ \ QString\ individualReaders\ =\ \textcolor{stringliteral}{"{}All\ Files\ (*);;"{}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00704}00704\ \ \ \ \ QString\ supportedWriters\ \ =\ \textcolor{stringliteral}{"{}All\ Supported\ Files\ ("{}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00705}00705\ \ \ \ \ QString\ individualWriters\ =\ \textcolor{stringliteral}{"{}All\ Files\ (*);;"{}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00706}00706\ \ \ \ \ QString\ supportedStr;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00707}00707\ \ \ \ \ QString\ individualStr;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00708}00708\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00709}00709\ \ \ \ \ \textcolor{comment}{//TODO:\ Stable\ Only\ (Settings\ Option)}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00710}00710\ \ \ \ \ \textcolor{comment}{//stable\ =\ 'S';\ unstable\ =\ 'S';}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00711}00711\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00712}00712\ \ \ \ \ \textcolor{comment}{//Stable\ +\ Unstable}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00713}00713\ \ \ \ \ stable\ =\ \textcolor{charliteral}{'S'};\ unstable\ =\ \textcolor{charliteral}{'U'};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00714}00714\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00715}00715\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ extension\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00716}00716\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ description\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00717}00717\ \ \ \ \ \textcolor{keywordtype}{char}\ readerState;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00718}00718\ \ \ \ \ \textcolor{keywordtype}{char}\ writerState;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00719}00719\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00720}00720\ \ \ \ \ \mbox{\hyperlink{struct_emb_format_list__}{EmbFormatList}}*\ curFormat\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00721}00721\ \ \ \ \ \mbox{\hyperlink{struct_emb_format_list__}{EmbFormatList}}*\ formatList\ =\ embFormatList\_create();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00722}00722\ \ \ \ \ \textcolor{keywordflow}{if}(!formatList)\ \{\ QMessageBox::critical(\textcolor{keyword}{this},\ tr(\textcolor{stringliteral}{"{}Format\ Loading\ Error"{}}),\ tr(\textcolor{stringliteral}{"{}Unable\ to\ load\ formats\ from\ libembroidery."{}}));\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00723}00723\ \ \ \ \ curFormat\ =\ formatList;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00724}00724\ \ \ \ \ \textcolor{keywordflow}{while}(curFormat)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00725}00725\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00726}00726\ \ \ \ \ \ \ \ \ extension\ =\ embFormat\_extension(curFormat);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00727}00727\ \ \ \ \ \ \ \ \ description\ =\ embFormat\_description(curFormat);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00728}00728\ \ \ \ \ \ \ \ \ readerState\ =\ embFormat\_readerState(curFormat);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00729}00729\ \ \ \ \ \ \ \ \ writerState\ =\ embFormat\_writerState(curFormat);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00730}00730\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00731}00731\ \ \ \ \ \ \ \ \ QString\ upperExt\ =\ QString(extension).toUpper();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00732}00732\ \ \ \ \ \ \ \ \ supportedStr\ =\ \textcolor{stringliteral}{"{}*"{}}\ +\ upperExt\ +\ \textcolor{stringliteral}{"{}\ "{}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00733}00733\ \ \ \ \ \ \ \ \ individualStr\ =\ upperExt.replace(\textcolor{stringliteral}{"{}."{}},\ \textcolor{stringliteral}{"{}"{}})\ +\ \textcolor{stringliteral}{"{}\ -\/\ "{}}\ +\ description\ +\ \textcolor{stringliteral}{"{}\ (*"{}}\ +\ extension\ +\ \textcolor{stringliteral}{"{});;"{}};}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00734}00734\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(readerState\ ==\ stable\ ||\ readerState\ ==\ unstable)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00735}00735\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00736}00736\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Exclude\ color\ file\ formats\ from\ open\ dialogs}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00737}00737\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(upperExt\ !=\ \textcolor{stringliteral}{"{}COL"{}}\ \&\&\ upperExt\ !=\ \textcolor{stringliteral}{"{}EDR"{}}\ \&\&\ upperExt\ !=\ \textcolor{stringliteral}{"{}INF"{}}\ \&\&\ upperExt\ !=\ \textcolor{stringliteral}{"{}RGB"{}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00738}00738\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00739}00739\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ supportedReaders.append(supportedStr);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00740}00740\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ individualReaders.append(individualStr);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00741}00741\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00742}00742\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00743}00743\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(writerState\ ==\ stable\ ||\ writerState\ ==\ unstable)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00744}00744\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00745}00745\ \ \ \ \ \ \ \ \ \ \ \ \ supportedWriters.append(supportedStr);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00746}00746\ \ \ \ \ \ \ \ \ \ \ \ \ individualWriters.append(individualStr);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00747}00747\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00748}00748\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00749}00749\ \ \ \ \ \ \ \ \ curFormat\ =\ curFormat-\/>next;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00750}00750\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00751}00751\ \ \ \ \ embFormatList\_free(formatList);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00752}00752\ \ \ \ \ formatList\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00753}00753\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00754}00754\ \ \ \ \ supportedReaders.append(\textcolor{stringliteral}{"{});;"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00755}00755\ \ \ \ \ supportedWriters.append(\textcolor{stringliteral}{"{});;"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00756}00756\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00757}00757\ \ \ \ \ \mbox{\hyperlink{class_main_window_a749d21a703c165811b326e851463a69c}{formatFilterOpen}}\ =\ supportedReaders\ +\ individualReaders;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00758}00758\ \ \ \ \ \mbox{\hyperlink{class_main_window_ab9244d24146b5107c23f1143a3e0acef}{formatFilterSave}}\ =\ supportedWriters\ +\ individualWriters;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00759}00759\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00760}00760\ \ \ \ \ \textcolor{comment}{//TODO:\ Fixup\ custom\ filter}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00761}00761\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00762}00762\ \textcolor{comment}{\ \ \ \ QString\ custom\ =\ getSettingsCustomFilter();}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00763}00763\ \textcolor{comment}{\ \ \ \ if(custom.contains("{}supported"{},\ Qt::CaseInsensitive))}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00764}00764\ \textcolor{comment}{\ \ \ \ \ \ \ \ custom\ =\ "{}"{};\ //This\ will\ hide\ it}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00765}00765\ \textcolor{comment}{\ \ \ \ else\ if(!custom.contains("{}*"{},\ Qt::CaseInsensitive))}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00766}00766\ \textcolor{comment}{\ \ \ \ \ \ \ \ custom\ =\ "{}"{};\ //This\ will\ hide\ it}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00767}00767\ \textcolor{comment}{\ \ \ \ else}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00768}00768\ \textcolor{comment}{\ \ \ \ \ \ \ \ custom\ =\ "{}Custom\ Filter("{}\ +\ custom\ +\ "{});;"{};}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00769}00769\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00770}00770\ \textcolor{comment}{\ \ \ \ return\ tr(qPrintable(custom\ +\ supported\ +\ all));}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00771}00771\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00772}00772\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00773}00773\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00774}\mbox{\hyperlink{class_main_window_ad7344b94947c454a53a17b9c89d41735}{00774}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_ad7344b94947c454a53a17b9c89d41735}{MainWindow::closeToolBar}}(QAction*\ action)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00775}00775\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00776}00776\ \ \ \ \ \textcolor{keywordflow}{if}(action-\/>objectName()\ ==\ \textcolor{stringliteral}{"{}toolbarclose"{}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00777}00777\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00778}00778\ \ \ \ \ \ \ \ \ QToolBar*\ tb\ =\ qobject\_cast<QToolBar*>(sender());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00779}00779\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tb)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00780}00780\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00781}00781\ \ \ \ \ \ \ \ \ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}\%s\ closed."{}},\ qPrintable(tb-\/>objectName()));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00782}00782\ \ \ \ \ \ \ \ \ \ \ \ \ tb-\/>hide();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00783}00783\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00784}00784\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00785}00785\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00786}00786\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00787}\mbox{\hyperlink{class_main_window_a28ec6469829af8e91ecc19119e6bfed0}{00787}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_main_window_a28ec6469829af8e91ecc19119e6bfed0}{MainWindow::floatingChangedToolBar}}(\textcolor{keywordtype}{bool}\ isFloating)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00788}00788\ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00789}00789\ \ \ \ \ QToolBar*\ tb\ =\ qobject\_cast<QToolBar*>(sender());}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00790}00790\ \ \ \ \ \textcolor{keywordflow}{if}(tb)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00791}00791\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00792}00792\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(isFloating)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00793}00793\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00794}00794\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00795}00795\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ //TODO:\ Determine\ best\ suited\ close\ button\ on\ various\ platforms.}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00796}00796\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ QStyle::SP\_DockWidgetCloseButton}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00797}00797\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ QStyle::SP\_TitleBarCloseButton}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00798}00798\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ QStyle::SP\_DialogCloseButton}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00799}00799\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00800}00800\ \ \ \ \ \ \ \ \ \ \ \ \ QAction\ *ACTION\ =\ \textcolor{keyword}{new}\ QAction(tb-\/>style()-\/>standardIcon(QStyle::SP\_DialogCloseButton),\ \textcolor{stringliteral}{"{}Close"{}},\ \textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00801}00801\ \ \ \ \ \ \ \ \ \ \ \ \ ACTION-\/>setStatusTip(\textcolor{stringliteral}{"{}Close\ the\ "{}}\ +\ tb-\/>windowTitle()\ +\ \textcolor{stringliteral}{"{}\ Toolbar"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00802}00802\ \ \ \ \ \ \ \ \ \ \ \ \ ACTION-\/>setObjectName(\textcolor{stringliteral}{"{}toolbarclose"{}});}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00803}00803\ \ \ \ \ \ \ \ \ \ \ \ \ tb-\/>addAction(ACTION);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00804}00804\ \ \ \ \ \ \ \ \ \ \ \ \ connect(tb,\ SIGNAL(actionTriggered(QAction*)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ad7344b94947c454a53a17b9c89d41735}{closeToolBar}}(QAction*)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00805}00805\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00806}00806\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00807}00807\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00808}00808\ \ \ \ \ \ \ \ \ \ \ \ \ QList<QAction*>\ actList\ =\ tb-\/>actions();}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00809}00809\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ actList.size();\ ++i)}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00810}00810\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00811}00811\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ QAction*\ ACTION\ =\ actList.value(i);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00812}00812\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(ACTION-\/>objectName()\ ==\ \textcolor{stringliteral}{"{}toolbarclose"{}})}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00813}00813\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00814}00814\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tb-\/>removeAction(ACTION);}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00815}00815\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ disconnect(tb,\ SIGNAL(actionTriggered(QAction*)),\ \textcolor{keyword}{this},\ SLOT(\mbox{\hyperlink{class_main_window_ad7344b94947c454a53a17b9c89d41735}{closeToolBar}}(QAction*)));}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00816}00816\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ ACTION;}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00817}00817\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00818}00818\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00819}00819\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00820}00820\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00821}00821\ \}}
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00822}00822\ }
+\DoxyCodeLine{\Hypertarget{mainwindow_8cpp_source_l00823}00823\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

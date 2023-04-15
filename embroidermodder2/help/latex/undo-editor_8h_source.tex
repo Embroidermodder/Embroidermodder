@@ -1,0 +1,53 @@
+\hypertarget{undo-editor_8h_source}{}\doxysubsection{undo-\/editor.h}
+\label{undo-editor_8h_source}\index{embroidermodder2/undo-\/editor.h@{embroidermodder2/undo-\/editor.h}}
+\mbox{\hyperlink{undo-editor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ UNDO\_EDITOR\_H}}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ UNDO\_EDITOR\_H}}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QDockWidget>}}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00006}00006\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00007}00007\ \textcolor{keyword}{class\ }QUndoGroup;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00008}00008\ \textcolor{keyword}{class\ }QUndoStack;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00009}00009\ \textcolor{keyword}{class\ }QUndoView;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00010}00010\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00012}\mbox{\hyperlink{class_undo_editor}{00012}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undo_editor}{UndoEditor}}\ :\ \textcolor{keyword}{public}\ QDockWidget}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00013}00013\ \{}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00014}00014\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00016}00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{class_undo_editor}{UndoEditor}}(\textcolor{keyword}{const}\ QString\&\ iconDirectory\ =\ QString(),\ QWidget*\ widgetToFocus\ =\ 0,\ QWidget*\ parent\ =\ 0);\ \textcolor{comment}{//,\ Qt::WindowFlags\ flags\ =\ 0);}}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00018}00018\ \ \ \ \ \mbox{\hyperlink{class_undo_editor_a7115b468cec0a911d696ff5289956150}{\string~UndoEditor}}();}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00020}00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_a49792429b8a973f9badbfac692426ff0}{addStack}}(QUndoStack*\ stack);}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_undo_editor_a9d3be6f39301a723f28d3f53f36323f2}{canUndo}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00023}00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_undo_editor_a381a2a326e444a8571ea40e480c25afe}{canRedo}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00025}00025\ \ \ \ \ QString\ \mbox{\hyperlink{class_undo_editor_ab552a1360ec65ef0163b22c15ba196a0}{undoText}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00026}00026\ \ \ \ \ QString\ \mbox{\hyperlink{class_undo_editor_a69e660c2803ec7de1a3294e22ae32f53}{redoText}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00027}00027\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00029}00029\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00030}00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00031}00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00033}00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_ac7d2d3d1e6f3e2030551a50729cd2687}{updateCleanIcon}}(\textcolor{keywordtype}{bool}\ opened);}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00035}00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00036}00036\ \ \ \ \ QWidget*\ \ \ \ focusWidget;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00038}00038\ \ \ \ \ QString\ \ \ \ \ iconDir;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00039}00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ iconSize;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00041}00041\ \ \ \ \ QUndoGroup*\ undoGroup;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00042}00042\ \ \ \ \ QUndoView*\ \ undoView;}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00043}00043\ \};}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00045}00045\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{undo-editor_8h_source_l00047}00047\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

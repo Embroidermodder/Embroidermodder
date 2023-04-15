@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['icon_5fsize_0',['icon_size',['../struct_settings__.html#aaaf21a61dc90e2ca7736cfd769817f46',1,'Settings_']]],
+  ['icon_5ftheme_1',['icon_theme',['../struct_settings__.html#af5ae0063dd0322540c6de6d3025545f7',1,'Settings_']]],
+  ['id_2',['id',['../struct_ui_object__.html#a4f071f39e69a703ee35a2dc313b928f0',1,'UiObject_']]],
+  ['image_2ec_3',['image.c',['../image_8c.html',1,'']]],
+  ['image_5fbutton_4',['image_button',['../gui__backend_8cpp.html#a4959b847d964ce421c816ee571d2d1a0',1,'image_button(char *texture_label, EmbVector size):&#160;gui_backend.cpp'],['../gui__backend_8h.html#a4959b847d964ce421c816ee571d2d1a0',1,'image_button(char *texture_label, EmbVector size):&#160;gui_backend.cpp']]],
+  ['image_5fdiff_5',['image_diff',['../image_8c.html#ac932a13030ae86a36da67dde06da0917',1,'image.c']]],
+  ['image_5fwidget_5fload_6',['image_widget_load',['../src_2main_8c.html#a5a25564cabfc33382c5bacf1bd2aee70',1,'main.c']]],
+  ['image_5fwidget_5fsave_7',['image_widget_save',['../src_2main_8c.html#a581bf061c50b7d132b5f2b31f1fd5841',1,'main.c']]],
+  ['imagewithframe_8',['imageWithFrame',['../embroidery__internal_8h.html#a659abd7fd70a37a200df2665e35c7c89',1,'imageWithFrame():&#160;formats.c'],['../formats_8c.html#a659abd7fd70a37a200df2665e35c7c89',1,'imageWithFrame():&#160;formats.c']]],
+  ['imgui_5fnew_5fframe_9',['imgui_new_frame',['../gui__backend_8cpp.html#a1408578c63bcf39c371ede8e2e56c3ea',1,'imgui_new_frame(void):&#160;gui_backend.cpp'],['../gui__backend_8h.html#a1408578c63bcf39c371ede8e2e56c3ea',1,'imgui_new_frame(void):&#160;gui_backend.cpp']]],
+  ['imgui_5frender_10',['imgui_render',['../gui__backend_8cpp.html#ae19012ad0f0292d0cf6923d14f0d0f44',1,'imgui_render(GLFWwindow *window):&#160;gui_backend.cpp'],['../gui__backend_8h.html#ae19012ad0f0292d0cf6923d14f0d0f44',1,'imgui_render(GLFWwindow *window):&#160;gui_backend.cpp']]],
+  ['index_11',['Index',['../src_2main_8c.html#a6e4c300aad52822a324a91edae2235b6',1,'main.c']]],
+  ['index_5f_12',['Index_',['../struct_index__.html',1,'']]],
+  ['index_5finit_13',['index_init',['../src_2main_8c.html#a5033d2f53319398a4123fb7d9de39d46',1,'main.c']]],
+  ['indexentry_14',['IndexEntry',['../src_2main_8c.html#ac4aeb4daa04ff262b2f2fd479dc0e98f',1,'main.c']]],
+  ['indexentry_5f_15',['IndexEntry_',['../struct_index_entry__.html',1,'']]],
+  ['init_5fview_16',['init_view',['../src_2main_8c.html#a5bf845222a9932ec353859701d62474b',1,'main.c']]],
+  ['input_5fdata_17',['input_data',['../struct_compress.html#a7774b2ee169ce1208e518dc2f2037c9e',1,'Compress']]],
+  ['input_5flength_18',['input_length',['../struct_compress.html#aef51813d994b02af22f9303c398c2f1a',1,'Compress']]],
+  ['isacord_5fpolyester_19',['Isacord_Polyester',['../embroidery_8h.html#a998fc646741524f4f3fffb9454f304f8',1,'embroidery.h']]],
+  ['isafil_5frayon_20',['Isafil_Rayon',['../embroidery_8h.html#a03dbb997ba155dc4c6212d0094107ae7',1,'embroidery.h']]],
+  ['isometric_5fgrid_21',['ISOMETRIC_GRID',['../src_2main_8c.html#af1b257cb30e3774f5651fe4c78b1dea7',1,'main.c']]]
+];

@@ -1,0 +1,333 @@
+\hypertarget{build_8sh_source}{}\doxysubsection{build.\+sh}
+\mbox{\hyperlink{build_8sh}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00001}00001\ \#!/bin/bash}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00003}00003\ BUILD\_DIR="{}build"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00004}00004\ BUILD\_TYPE="{}Release"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00005}00005\ GENERATOR="{}Unix\ Makefiles"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00007}00007\ read\ -\/r\ -\/d\ ''\ FLAG\_USAGE\ <<-\/'EOF'}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00008}00008\ Usage:\ ./build.sh\ [options]}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00009}00009\ A\ script\ to\ build,\ debug\ and\ package\ Embroidermodder\ 2\ and\ its\ documentation.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00011}00011\ Options:}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00012}00012\ \ \ -\/D,-\/-\/docs\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Run\ doxygen\ and\ build\ pdf\ docs.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00013}00013\ \ \ -\/d,-\/-\/debug\ \ \ \ \ \ \ \ \ \ \ \ \ \ Build\ embroidermodder\ with\ warnings\ as\ errors}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00014}00014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ run\ in\ a\ debugger.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00015}00015\ \ \ -\/m,-\/-\/package-\/macos\ \ \ \ \ \ Build\ and\ package\ the\ result\ for\ Mac\ OS.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00016}00016\ \ \ -\/l,-\/-\/package-\/linux\ \ \ \ \ \ Build\ and\ package\ the\ result\ for\ generic\ GNU/Linux.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00017}00017\ \ \ \ \ \ -\/-\/package-\/windows\ \ \ \ Build\ and\ package\ the\ result\ for\ Windows\ 10\ or\ higher.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00018}00018\ \ \ -\/g,-\/-\/gcov\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Compile\ together\ gcov\ output\ for\ optimization\ analysis.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00019}00019\ \ \ -\/b,-\/-\/dependencies-\/brew\ \ Install\ dependencies\ for\ Mac\ OS.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00020}00020\ \ \ -\/a,-\/-\/dependencies-\/apt\ \ \ Install\ dependencies\ for\ systems\ with\ the}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00021}00021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ aptitude\ package\ manager.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00022}00022\ \ \ -\/h,-\/-\/help\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Describe\ how\ to\ use\ this\ script\ with\ paging.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00023}00023\ \ \ \ \ \ -\/-\/windows-\/latest\ \ \ \ \ Prepare\ GitHub\ artifact\ for\ Windows\ release.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00024}00024\ \ \ \ \ \ -\/-\/macos-\/latest\ \ \ \ \ \ \ Prepare\ GitHub\ artifact\ for\ MacOS\ release.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00025}00025\ \ \ \ \ \ -\/-\/linux-\/latest\ \ \ \ \ \ \ Prepare\ GitHub\ artifact\ for\ GNU/Linux\ release.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00026}00026\ \ \ -\/G,-\/-\/generator\ \ \ \ \ \ \ \ \ \ Accepts\ argument\ to\ override\ the\ GENERATOR\ variable.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00027}00027\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00029}00029\ read\ -\/r\ -\/d\ ''\ OVERVIEW\ <<-\/'EOF'}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00031}00031\ EMBROIDERMODDER\ 2\ DEVELOPER'S\ SCRIPT}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00033}00033\ Overview}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00034}00034\ -\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00036}00036\ If\ you're\ building\ the\ alpha\ of\ Embroidermodder\ in\ order\ to\ try\ it\ before\ the}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00037}00037\ beta\ release\ use:}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00039}00039\ \ \ \ \ ./build.sh\ -\/-\/windows}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00040}00040\ \ \ \ \ ./build.sh\ -\/-\/macos}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00041}00041\ \ \ \ \ ./build.sh\ -\/-\/gnu-\/linux}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00043}00043\ depending\ on\ your\ system.\ Then\ run\ without\ installing\ using:}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00045}00045\ \ \ \ \ ./build/embroidermodder}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00047}00047\ If\ you're\ building\ as\ part\ of\ an\ effort\ to\ improve\ the\ software,\ build\ in\ the}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00048}00048\ debug\ mode\ then\ read\ the\ gcov\ output:}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00050}00050\ \ \ \ \ ./build.sh\ -\/-\/debug}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00051}00051\ \ \ \ \ \#\ do\ some\ user\ interactions}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00052}00052\ \ \ \ \ ./build.sh\ -\/-\/gcov}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00054}00054\ Then\ read\ the\ .gcov\ files\ and\ debug.txt\ for\ information\ about\ how\ your\ changes}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00055}00055\ have\ altered\ the\ performance\ of\ the\ software.\ Note\ that\ -\/-\/debug\ works\ without}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00056}00056\ very\ GCC\ specific\ features\ but\ -\/-\/gcov\ may\ not.\ At\ some\ point\ we'll\ add\ specific}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00057}00057\ callgrind/cachegrind\ support.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00059}00059\ For\ in-\/depth\ information\ about\ the\ software\ please\ read\ some\ of\ the\ PDF\ manual\ included}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00060}00060\ in\ the\ top\ level\ of\ the\ repository.\ Finishing\ the\ manual\ is\ the\ current\ top\ priority}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00061}00061\ in\ order\ to\ fascilitate\ new\ developers\ joining\ the\ project.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00063}00063\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00066}00066\ function\ help\_message\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00068}00068\ \ \ \ \ echo\ "{}\$FLAG\_USAGE"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00070}00070\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00072}00072\ function\ long\_help\_message\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00074}00074\ \ \ \ \ echo\ "{}\$OVERVIEW"{}\ |\ less}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00076}00076\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00078}00078\ function\ code\_style\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00080}00080\ \ \ \ \ \#\ Remove\ all\ trailing\ blank\ space.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00081}00081\ \ \ \ \ sed\ -\/i\ -\/r\ "{}s/[[:blank:]]*\$//g"{}\ src/main.c}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00082}00082\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00083}00083\ \ \ \ \ \#\ Tabs\ to\ 4\ space\ indentation.\ No\ tab\ symbol\ should\ appear\ in\ the\ code.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00084}00084\ \ \ \ \ sed\ -\/i\ -\/r\ "{}s/\(\backslash\)t/\ \ \ \ /g"{}\ src/main.c}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00085}00085\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00086}00086\ \ \ \ \ \#\ Do\ not\ use}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00087}00087\ \ \ \ \ \#\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00088}00088\ \ \ \ \ \#\ Internally\ we\ use\ snake\_case\ rather\ than\ camelCase\ for\ most\ tokens,}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00089}00089\ \ \ \ \ \#\ however\ this\ will\ be\ difficult\ to\ detect\ which\ non-\/conforming\ tokens\ have}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00090}00090\ \ \ \ \ \#\ to\ be\ present.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00091}00091\ \ \ \ \ \#\ s/\ \(\backslash\)([a-\/z0-\/9]\(\backslash\))\(\backslash\)([A-\/Z]\(\backslash\))/\ \(\backslash\)1\_\(\backslash\)L\(\backslash\)2/g}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00093}00093\ \ \ \ \ \#\ Use\ unix\ \(\backslash\)n\ line\ endings\ not\ Windows\ \(\backslash\)r\(\backslash\)n\ line\ endings\ for\ source\ code.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00094}00094\ \ \ \ \ \#\ All\ other\ uses\ of\ \(\backslash\)r\ should\ also\ be\ removed.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00095}00095\ \ \ \ \ sed\ -\/i\ -\/r\ "{}s/\(\backslash\)r//g"{}\ src/main.c}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00097}00097\ \ \ \ \ \#\ Remove\ all\ non\ printing\ characters\ in\ C\ source\ code.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00098}00098\ \ \ \ \ \#\ (Unicode\ only\ appears\ in\ the\ configuration\ files.)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00099}00099\ \ \ \ \ sed\ -\/i\ -\/r\ "{}s/[\string^[:print:]]//g"{}\ src/main.c}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00101}00101\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00103}00103\ function\ build\_release\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00105}00105\ \ \ \ \ rm\ -\/fr\ \$BUILD\_DIR}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00107}00107\ \ \ \ \ git\ submodule\ init}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00108}00108\ \ \ \ \ git\ submodule\ update}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00110}00110\ \ \ \ \ cmake\ -\/S\ .\ -\/B"{}\$BUILD\_DIR"{}\ -\/G"{}\$GENERATOR"{}\ -\/DCMAKE\_BUILD\_TYPE="{}\$BUILD\_TYPE"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00111}00111\ \ \ \ \ cmake\ -\/-\/build\ \$BUILD\_DIR\ \&>\ build.log}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00113}00113\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00115}00115\ function\ build\_docs\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00117}00117\ \ \ \ \ rm\ -\/fr\ assets/docs/latex\ assets/docs/html}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00119}00119\ \ \ \ \ doxygen}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00121}00121\ \ \ \ \ cd\ assets/docs/latex}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00123}00123\ \ \ \ \ pdflatex\ -\/interaction=nonstopmode\ refman.tex}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00124}00124\ \ \ \ \ makeindex\ refman.idx}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00125}00125\ \ \ \ \ bibtex\ refman.aux}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00126}00126\ \ \ \ \ pdflatex\ -\/interaction=nonstopmode\ refman.tex}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00127}00127\ \ \ \ \ pdflatex\ -\/interaction=nonstopmode\ refman.tex}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00128}00128\ \ \ \ \ pdflatex\ -\/interaction=nonstopmode\ refman.tex}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00130}00130\ \ \ \ \ mv\ refman.pdf\ ../../../embroidermodder\_2.0.0-\/alpha\_manual.pdf}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00132}00132\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00134}00134\ function\ build\_debug\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00136}00136\ \ \ \ \ BUILD\_DIR="{}build/debug"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00137}00137\ \ \ \ \ BUILD\_TYPE="{}Debug"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00138}00138\ \ \ \ \ build\_release}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00140}00140\ \ \ \ \ gdb\ -\/q\ -\/ex\ r\ -\/-\/args\ ./build/debug/embroidermodder\ \(\backslash\)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00141}00141\ \ \ \ \ \ \ assets/samples/spiral/spiral5.csv\ \(\backslash\)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00142}00142\ \ \ \ \ \ \ assets/samples/spiral/spiral6.csv\ \(\backslash\)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00143}00143\ \ \ \ \ \ \ assets/samples/embroidermodder\_logo/conflicts/Embroidermodder.DST\ \(\backslash\)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00144}00144\ \ \ \ \ \ \ assets/samples/shamrockin/shamrockin.dst}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00145}00145\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00146}00146\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00148}00148\ function\ gcoverage\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00150}00150\ \ \ \ \ cd\ build/debug/CMakeFiles/embroidermodder.dir/}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00151}00151\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00152}00152\ \ \ \ \ gcov\ src/*.gcno}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00154}00154\ \ \ \ \ mkdir\ results}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00155}00155\ \ \ \ \ mv\ *.gcov\ results}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00156}00156\ \ \ \ \ mv\ results\ ../../../..}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00157}00157\ \ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00158}00158\ \ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00160}00160\ function\ package\_for\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00161}00161\ \ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00162}00162\ \ \ \ \ build\_release}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00163}00163\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00164}00164\ \ \ \ \ mkdir\ \$\{1\}\_release}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00165}00165\ \ \ \ \ cp\ -\/r\ emb*.pdf\ LICENSE.md\ CREDITS.md\ build/emb*\ assets\ \$\{1\}\_release}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00166}00166\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00167}00167\ \ \ \ \ tar\ czf\ embroidermodder\_2.0.0\_alpha\_\$\{1\}.tar.gz\ \$\{1\}\_release}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00169}00169\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00171}00171\ function\ get\_apt\_packages\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00172}00172\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00173}00173\ \ \ \ \ sudo\ apt-\/get\ update}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00174}00174\ \ \ \ \ sudo\ apt-\/get\ install\ libglew-\/dev\ cmake\ git\ build-\/essential\ libxrandr-\/dev\ libxinerama-\/dev\ libgl1-\/mesa-\/dev\ libxcursor-\/dev\ libxi-\/dev}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00176}00176\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00177}00177\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00178}00178\ function\ get\_brew\_packages\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00180}00180\ \ \ \ \ brew\ install\ glew}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00181}00181\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00182}00182\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00184}00184\ function\ apt\_and\_package\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00186}00186\ \ \ \ \ get\_apt\_packages}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00188}00188\ \ \ \ \ package\_for\ linux}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00190}00190\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00192}00192\ function\ brew\_and\_package\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00193}00193\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00194}00194\ \ \ \ \ get\_brew\_packages}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00196}00196\ \ \ \ \ package\_for\ macos}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00197}00197\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00198}00198\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00200}00200\ function\ debian\_setup\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00201}00201\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00202}00202\ cat\ <<EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00203}00203\ Version\ Info}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00204}00204\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00206}00206\ *\ MAJOR.txt\ -\/\ Contains\ the\ major\ release\ version\ number.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00207}00207\ This\ will\ be\ updated\ to\ 2\ when\ Embroidermodder\ 2\ is\ final.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00208}00208\ Until\ then,\ it\ is\ set\ to\ 1\ while\ Embroidermodder\ 2\ is\ in\ development.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00210}00210\ *\ MINOR.txt\ -\/\ Contains\ the\ minor\ release\ version\ number.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00211}00211\ This\ file\ will\ be\ updated\ frequently\ when\ minor\ releases\ happen.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00212}00212\ It\ will\ be\ set\ to\ zero\ when\ Embroidermodder\ 2\ is\ final.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00213}00213\ Until\ then,\ it\ is\ set\ to\ 90+\ while\ Embroidermodder\ 2\ is\ in\ development.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00214}00214\ The\ number\ shall\ be\ 2\ digits,\ padded\ with\ a\ zero\ for\ single\ digit\ numbers.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00216}00216\ *\ PATCH.txt\ -\/\ Contains\ the\ patch\ release\ version\ number.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00217}00217\ This\ file\ will\ always\ be\ zero.\ Nightly\ builds\ will\ not\ use\ this\ file\ and}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00218}00218\ will\ use\ the\ build\ unix\ date\ as\ such:\ ```date\ +\%Y\%m\%d\%H\%M\%S```}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00219}00219\ This\ ensures\ that\ the\ latest\ build\ is\ always\ the\ highest\ number.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00220}00220\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00221}00221\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00222}00222\ \ \ \ \ mkdir\ version}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00223}00223\ \ \ \ \ echo\ 1\ >\ version/MAJOR.txt}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00224}00224\ \ \ \ \ echo\ 90\ >\ version/MINOR.txt}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00225}00225\ \ \ \ \ echo\ 0\ >\ version/PATCH.txt}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00227}00227\ \ \ \ \ mkdir\ DEBIAN}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00228}00228\ \ \ \ \ cat\ <<EOF\ >\ DEBIAN/control}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00229}00229\ Package:\ embroidermodder}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00230}00230\ Version:\ 2.0.0}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00231}00231\ Architecture:\ amd64}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00232}00232\ Maintainer:\ Embroidermodder\ Team}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00233}00233\ Installed-\/Size:\ 29576}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00234}00234\ Pre-\/Depends:\ dpkg\ (>=\ 1.15.4)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00235}00235\ Depends:\ libc6\ (>=\ 2.4),\ libgcc1\ (>=\ 1:4.1.1),\ libgl1-\/mesa-\/glx\ |\ libgl1,\ libglu1-\/mesa\ |\ libglu1,\ libqt4-\/help\ (>=\ 4.6.0),\ libqt4-\/opengl\ (>=\ 4.6.0),\ libqt4-\/svg\ (>=\ 4.6.0),\ libqt4-\/test\ (>=\ 4.6.0),\ libqtwebkit4\ (>=\ 2.3.0),\ libqtcore4\ (>=\ 4.6.0),\ libqtgui4\ (>=\ 4.6.0),\ libstdc++6\ (>=\ 4.1.1)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00236}00236\ Section:\ graphics}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00237}00237\ Priority:\ optional}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00238}00238\ Homepage:\ http://embroidermodder.org}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00239}00239\ Description:\ Embroidery\ modification\ software}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00240}00240\ \ Embroidermodder\ is\ a\ free\ software\ tool\ that\ allows\ the\ user\ to\ add\ custom\ modifications\ to\ their\ embroidery\ designs.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00241}00241\ \ .}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00242}00242\ \ This\ package\ contains\ the\ main\ application.}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00243}00243\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00244}00244\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00245}00245\ \ \ \ \ cat\ <<EOF\ >\ DEBIAN/postinst}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00246}00246\ \#!/bin/sh}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00247}00247\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00248}00248\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00249}00249\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00250}00250\ \ \ \ \ cat\ <<EOF\ >\ DEBIAN/postrm}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00251}00251\ \#!/bin/sh}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00253}00253\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00255}00255\ \ \ \ \ cat\ <<EOF\ >\ DEBIAN/prerm}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00256}00256\ \#!/bin/sh}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00258}00258\ EOF}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00260}00260\ \ \ \ \ chmod\ +x\ DEBIAN/postinst}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00261}00261\ \ \ \ \ chmod\ +x\ DEBIAN/postrm}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00262}00262\ \ \ \ \ chmod\ +x\ DEBIAN/prerm}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00264}00264\ \ \ \ \ DEB\_NAME="{}embroidermodder\_2.0.0-\/1\_amd64.deb"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00266}00266\ \ \ \ \ echo\ "{}Copying\ built\ binary\ from\ ../../embroidermodder2"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00267}00267\ \ \ \ \ mkdir\ -\/p\ usr/share/embroidermodder2}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00268}00268\ \ \ \ \ cp\ -\/r\ ../../embroidermodder2/\{embroidermodder2,commands,help,icons,images,samples,translations\}\ usr/share/embroidermodder2/}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00270}00270\ \ \ \ \ echo\ "{}Calculating\ installed\ size"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00271}00271\ \ \ \ \ INSTALL\_SIZE=\$(du\ -\/s\ -\/-\/block-\/size\ 1024\ .\ |\ sed\ "{}s/\(\backslash\)s.*//"{})}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00272}00272\ \ \ \ \ sed\ -\/i\ "{}s/Installed-\/Size:\ [0-\/9]*/Installed-\/Size:\ \$INSTALL\_SIZE/"{}\ DEBIAN/control}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00274}00274\ \ \ \ \ echo\ "{}Building\ .deb\ file"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00275}00275\ \ \ \ \ dpkg-\/deb\ -\/b\ .\ "{}\$DEB\_NAME"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00277}00277\ \ \ \ \ echo\ "{}Done:\ \$DEB\_NAME"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00279}00279\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00281}00281\ function\ make\_windows\_installer\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00282}00282\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00283}00283\ \ \ \ \ \#GENERATOR="{}MinGW\ Makefiles"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00284}00284\ \ \ \ \ \#build\_release}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00285}00285\ \ \ \ \ cpack\ -\/G\ WIX\ -\/-\/config\ build/CPackConfig.cmake}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00286}00286\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00287}00287\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00289}00289\ function\ package\ ()\ \{}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00290}00290\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00291}00291\ \ \ \ \ uname\_="{}\$(uname\ -\/s)"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00292}00292\ \ \ \ \ case\ "{}\$\{uname\_\}"{}\ in}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00293}00293\ \ \ \ \ Linux*)\ package\_for\ linux;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00294}00294\ \ \ \ \ Darwin*)\ package\_for\ macos;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00295}00295\ \ \ \ \ *)\ GENERATOR="{}MinGW\ Makefiles"{}\ package\_for\ windows;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00296}00296\ \ \ \ \ esac}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00297}00297\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00298}00298\ \}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00299}00299\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00300}00300\ if\ [[\ "{}\$\#"{}\ -\/eq\ 0\ ]];\ then}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00301}00301\ \ \ help\_message}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00302}00302\ fi}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00303}00303\ }
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00304}00304\ for\ arg\ in\ \$@}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00305}00305\ do}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00306}00306\ \ \ case\ "{}\$1"{}\ in}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00307}00307\ \ \ \ \ -\/s\ |\ -\/-\/style)\ code\_style;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00308}00308\ \ \ \ \ -\/G\ |\ -\/-\/generator)}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00309}00309\ \ \ \ \ \ \ \#\ GENERATOR="{}\$OPTARG"{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00310}00310\ \ \ \ \ \ \ echo\ "{}This\ is\ currently\ broken:\ please\ change\ the\ script\ variable\ directly."{}}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00311}00311\ \ \ \ \ \ \ ;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00312}00312\ \ \ \ \ -\/D\ |\ -\/-\/docs)\ build\_docs;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00313}00313\ \ \ \ \ -\/d\ |\ -\/-\/debug)\ build\_debug;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00314}00314\ \ \ \ \ -\/m\ |\ -\/-\/package-\/macos)\ package\_for\ macos;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00315}00315\ \ \ \ \ -\/l\ |\ -\/-\/package-\/linux)\ package\_for\ linux;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00316}00316\ \ \ \ \ -\/-\/package-\/windows)\ GENERATOR="{}MinGW\ Makefiles"{}\ package\_for\ windows;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00317}00317\ \ \ \ \ -\/g\ |\ -\/-\/gcov)\ gcoverage;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00318}00318\ \ \ \ \ -\/b\ |\ -\/-\/dependencies-\/brew)\ get\_brew\_packages;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00319}00319\ \ \ \ \ -\/a\ |\ -\/-\/dependencies-\/apt)\ get\_apt\_packages;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00320}00320\ \ \ \ \ -\/-\/gnu-\/linux\ |\ -\/-\/linux\ |\ -\/-\/ubuntu\ |\ -\/-\/ubuntu-\/latest)\ apt\_and\_package;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00321}00321\ \ \ \ \ -\/-\/macos\ |\ -\/-\/macos-\/latest)\ brew\_and\_package;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00322}00322\ \ \ \ \ -\/-\/windows\ |\ -\/-\/windows-\/latest)\ GENERATOR="{}MinGW\ Makefiles"{}\ package\_for\ windows;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00323}00323\ \ \ \ \ -\/h\ |\ -\/-\/help)\ long\_help\_message;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00324}00324\ \ \ \ \ build.sh)\ ;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00325}00325\ \ \ \ \ -\/-\/windows-\/installer)\ make\_windows\_installer;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00326}00326\ \ \ \ \ *)\ help\_message;;}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00327}00327\ \ \ esac}
+\DoxyCodeLine{\Hypertarget{build_8sh_source_l00328}00328\ done}
+
+\end{DoxyCode}

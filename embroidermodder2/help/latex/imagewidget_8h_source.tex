@@ -1,0 +1,39 @@
+\hypertarget{imagewidget_8h_source}{}\doxysubsection{imagewidget.\+h}
+\label{imagewidget_8h_source}\index{embroidermodder2/imagewidget.h@{embroidermodder2/imagewidget.h}}
+\mbox{\hyperlink{imagewidget_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ IMAGEWIDGET\_H}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ IMAGEWIDGET\_H}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QImage>}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QWidget>}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00008}00008\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00009}00009\ \textcolor{keyword}{class\ }QPainter;}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00010}00010\ \textcolor{keyword}{class\ }QImage;}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00011}00011\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00013}\mbox{\hyperlink{class_image_widget}{00013}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_image_widget}{ImageWidget}}\ :\ \textcolor{keyword}{public}\ QWidget}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00014}00014\ \{}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00015}00015\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00017}00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00018}00018\ \ \ \ \ \mbox{\hyperlink{class_image_widget}{ImageWidget}}(\textcolor{keyword}{const}\ QString\ \&filename,\ QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00019}00019\ \ \ \ \ \mbox{\hyperlink{class_image_widget_a913dec5b2dba322a203652f793dc3ec3}{\string~ImageWidget}}();}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00021}00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_image_widget_a1faac0b745a9246fe8143620261f1bb0}{load}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_image_widget_a15bdf578a20c1c1cb630dc8264448484}{save}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00024}00024\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00025}00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_widget_accfb24f32254fb98c049727597a53956}{paintEvent}}(QPaintEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00027}00027\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00028}00028\ \ \ \ \ QImage\ img;}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00029}00029\ \};}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00031}00031\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{imagewidget_8h_source_l00033}00033\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

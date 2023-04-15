@@ -1,0 +1,123 @@
+\hypertarget{mdiwindow_8h_source}{}\doxysubsection{mdiwindow.\+h}
+\label{mdiwindow_8h_source}\index{embroidermodder2/mdiwindow.h@{embroidermodder2/mdiwindow.h}}
+\mbox{\hyperlink{mdiwindow_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ MDIWINDOW\_H}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ MDIWINDOW\_H}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00003}00003\ \textcolor{comment}{//Qt}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QObject>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QMainWindow>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QMdiSubWindow>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <QScrollBar>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <QGridLayout>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00010}00010\ \textcolor{preprocessor}{\#if\ QT\_VERSION\ >=\ 0x050000}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00011}00011\ \textcolor{comment}{//Qt5}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <QtPrintSupport>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00013}00013\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00014}00014\ \textcolor{comment}{//Qt4}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00015}00015\ \textcolor{preprocessor}{\#include\ <QPrinter>}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00016}00016\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00019}00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow_8h}{mainwindow.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00021}00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00022}00022\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_view}{View}};}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00024}00024\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00025}00025\ \textcolor{keyword}{class\ }QMdiArea;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00026}00026\ \textcolor{keyword}{class\ }QGraphicsScene;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00027}00027\ \textcolor{keyword}{class\ }QGraphicsView;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00028}00028\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00030}\mbox{\hyperlink{class_mdi_window}{00030}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_mdi_window}{MdiWindow}}:\ \textcolor{keyword}{public}\ QMdiSubWindow}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00031}00031\ \{}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00032}00032\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00034}00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ theIndex,\ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QMdiArea*\ parent,\ Qt::WindowFlags\ wflags);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00036}00036\ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a7dc5f33f85d9521df57d0b2b52a3925b}{\string~MdiWindow}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00038}00038\ \ \ \ \ \textcolor{keyword}{virtual}\ QSize\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ab811bd256b700b7e894cc3b62515bcec}{sizeHint}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00039}\mbox{\hyperlink{class_mdi_window_aef74298226065865a13b44697d122a18}{00039}}\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aef74298226065865a13b44697d122a18}{getCurrentFile}}()\ \ \ \{\ \textcolor{keywordflow}{return}\ curFile;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00040}00040\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a6865ed252723d09b16383afd88f55813}{getShortCurrentFile}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00041}\mbox{\hyperlink{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}{00041}}\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}{getView}}()\ \{\ \textcolor{keywordflow}{return}\ gview;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00042}\mbox{\hyperlink{class_mdi_window_a76ed9f15d95e5bce5609f6e0309a94a8}{00042}}\ \ \ \ \ QGraphicsScene*\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a76ed9f15d95e5bce5609f6e0309a94a8}{getScene}}()\ \{\ \textcolor{keywordflow}{return}\ gscene;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00043}\mbox{\hyperlink{class_mdi_window_a5e68b0a37f6d9b9056245336123e5425}{00043}}\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a5e68b0a37f6d9b9056245336123e5425}{getCurrentLayer}}()\ \{\ \textcolor{keywordflow}{return}\ curLayer;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00044}\mbox{\hyperlink{class_mdi_window_a7477f451c0364aac406b01938ba2770f}{00044}}\ \ \ \ \ QRgb\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a7477f451c0364aac406b01938ba2770f}{getCurrentColor}}()\ \{\ \textcolor{keywordflow}{return}\ curColor;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00045}\mbox{\hyperlink{class_mdi_window_a3cf7a99d1afce0afcf97c0fb22f11eb5}{00045}}\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a3cf7a99d1afce0afcf97c0fb22f11eb5}{getCurrentLineType}}()\ \{\ \textcolor{keywordflow}{return}\ curLineType;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00046}\mbox{\hyperlink{class_mdi_window_ac9c127dff59bfd141b4ba67221553134}{00046}}\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ac9c127dff59bfd141b4ba67221553134}{getCurrentLineWeight}}()\ \{\ \textcolor{keywordflow}{return}\ curLineWeight;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00047}\mbox{\hyperlink{class_mdi_window_a3a875b4b6d9e844f9597650e74899363}{00047}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a3a875b4b6d9e844f9597650e74899363}{setCurrentLayer}}(\textcolor{keyword}{const}\ QString\&\ layer)\ \{\ curLayer\ =\ layer;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00048}\mbox{\hyperlink{class_mdi_window_af25850fe78cf92350a21d616fd10f1e6}{00048}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_af25850fe78cf92350a21d616fd10f1e6}{setCurrentColor}}(\textcolor{keyword}{const}\ QRgb\&\ color)\ \{\ curColor\ =\ color;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00049}\mbox{\hyperlink{class_mdi_window_aa3a28893c0aa55d931d82ab8f8bc3207}{00049}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aa3a28893c0aa55d931d82ab8f8bc3207}{setCurrentLineType}}(\textcolor{keyword}{const}\ QString\&\ lineType)\ \{\ curLineType\ =\ lineType;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00050}\mbox{\hyperlink{class_mdi_window_a98db6b16f30a0e91912563e44d3f26a2}{00050}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a98db6b16f30a0e91912563e44d3f26a2}{setCurrentLineWeight}}(\textcolor{keyword}{const}\ QString\&\ lineWeight)\ \{\ curLineWeight\ =\ lineWeight;\ \}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00051}\mbox{\hyperlink{class_mdi_window_ab4cad34422175b633fa0d243cbc7bf42}{00051}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ab4cad34422175b633fa0d243cbc7bf42}{designDetails}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00052}00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a8437f8fd71bcf6da5de2a49cbd0b105b}{loadFile}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00053}00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aee368b2e953c4f7588e5da35d944cb0e}{saveFile}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00054}00054\ signals:}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00055}\mbox{\hyperlink{class_mdi_window_a2a3936fc781a9fdcb8793c8f2030834c}{00055}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a2a3936fc781a9fdcb8793c8f2030834c}{sendCloseMdiWin}}(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00057}00057\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00058}00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aa5274b1d2675c2d6e4883b8b77747e42}{closeEvent}}(QCloseEvent*\ e);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00059}00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_abe8de8cccec92139e7b920659a38a62d}{onWindowActivated}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00061}00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a235df8277a1ccfc4f132aa56be2a557b}{currentLayerChanged}}(\textcolor{keyword}{const}\ QString\&\ layer);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00062}00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a15ee00d06a62026ec2dd3ef83d76c3db}{currentColorChanged}}(\textcolor{keyword}{const}\ QRgb\&\ color);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00063}00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_af03668f2b1f4cb09fd499abe8c8548b2}{currentLinetypeChanged}}(\textcolor{keyword}{const}\ QString\&\ type);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00064}00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a5d8fea11d1b93dc1574f4c18080edf42}{currentLineweightChanged}}(\textcolor{keyword}{const}\ QString\&\ weight);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00066}00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a670ce2d87f6289083a1b4a1531f5be21}{updateColorLinetypeLineweight}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00067}00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a74af558a825ac72754085696d893671d}{deletePressed}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00068}00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_abb2c9654968151943c6068652051fe73}{escapePressed}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00070}00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a754be5f2a56472b04d88b98cdcac1caf}{showViewScrollBars}}(\textcolor{keywordtype}{bool}\ val);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00071}00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_add3eae5083efcf9079114646741288a9}{setViewCrossHairColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a19e3b1f8b485e29678f99d6df5bf7f61}{setViewBackgroundColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00073}00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a1bd06495bfd1d5c7b22997d61e08904f}{setViewSelectBoxColors}}(QRgb\ colorL,\ QRgb\ fillL,\ QRgb\ colorR,\ QRgb\ fillR,\ \textcolor{keywordtype}{int}\ alpha);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00074}00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ad3ef5fde0863f6e6b924cbbbf1627205}{setViewGridColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00075}00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a46c80c43b6ddf7cf2b1465af15f23226}{setViewRulerColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00077}00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a388f572c62279f839ee138a9afbdeeb5}{print}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00078}00078\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a2167cf71975c040208ae05b7b6b10a2f}{saveBMC}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00080}00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_a19bdabe257073caa0f70f6cb617e6211}{promptHistoryAppended}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00081}00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_a296e76dd335d1cd0981a002e1342a2aa}{logPromptInput}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00082}00082\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_adb1cb792f8d7dffaa9a8ecbea1a3b517}{promptInputPrevious}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00083}00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_aa183f50daf2ba1bed0068f7eae87f6a4}{promptInputNext}}();}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00085}00085\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00087}00087\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00088}00088\ \ \ \ \ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mainWin;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00089}00089\ \ \ \ \ QMdiArea*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ mdiArea;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00090}00090\ \ \ \ \ QGraphicsScene*\ \ \ \ \ \ \ \ \ \ \ \ gscene;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00091}00091\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ gview;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00092}00092\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00093}00093\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fileWasLoaded;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00095}00095\ \ \ \ \ QString\ promptHistory;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00096}00096\ \ \ \ \ QList<QString>\ promptInputList;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00097}00097\ \ \ \ \ \textcolor{keywordtype}{int}\ promptInputNum;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00099}00099\ \ \ \ \ QPrinter\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printer;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00101}00101\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curFile;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00102}00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ setCurrentFile(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00103}00103\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ fileExtension(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00105}00105\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ myIndex;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00107}00107\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curLayer;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00108}00108\ \ \ \ \ QRgb\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curColor;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00109}00109\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curLineType;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00110}00110\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curLineWeight;}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00112}00112\ \ \ \ \ \textcolor{keywordtype}{void}\ promptInputPrevNext(\textcolor{keywordtype}{bool}\ prev);}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00113}00113\ \};}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00115}00115\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{mdiwindow_8h_source_l00117}00117\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

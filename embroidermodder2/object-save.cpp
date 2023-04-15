@@ -30,25 +30,26 @@ SaveObject::~SaveObject()
     qDebug("SaveObject Destructor()");
 }
 
+/**
+ * Returns whether the save to file process was successful.
+ *
+ * \todo Before saving to a stitch only format, Embroidermodder needs
+ *       to calculate the optimal path to minimize jump stitches. Also
+ *       based upon which layer needs to be stitched first,
+ *       the path to the next object needs to be hidden beneath fills
+ *       that will come later. When finding the optimal path, we need
+ *       to take into account the color of the thread, as we do not want
+ *       to try to hide dark colored stitches beneath light colored fills.
+ */
 bool SaveObject::save(const QString &fileName)
 {
     qDebug("SaveObject save(%s)", qPrintable(fileName));
-
-    /* TODO: Before saving to a stitch only format, Embroidermodder needs
-     *       to calculate the optimal path to minimize jump stitches. Also
-     *       based upon which layer needs to be stitched first,
-     *       the path to the next object needs to be hidden beneath fills
-     *       that will come later. When finding the optimal path, we need
-     *       to take into account the color of the thread, as we do not want
-     *       to try to hide dark colored stitches beneath light colored fills.
-     */
 
     bool writeSuccessful = false;
     int i;
 
     formatType = embFormat_typeFromName(qPrintable(fileName));
-    if(formatType == EMBFORMAT_UNSUPPORTED)
-    {
+    if (formatType == EMBFORMAT_UNSUPPORTED) {
         return false;
     }
 

@@ -1,0 +1,27 @@
+\hypertarget{application_8h_source}{}\doxysubsection{application.\+h}
+\label{application_8h_source}\index{embroidermodder2/application.h@{embroidermodder2/application.h}}
+\mbox{\hyperlink{application_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ APPLICATION\_H}}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ APPLICATION\_H}}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QApplication>}}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00006}00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00008}00008\ \textcolor{comment}{//\ On\ Mac,\ if\ the\ user\ drops\ a\ file\ on\ the\ app's\ Dock\ icon,\ or\ uses\ Open\ As,\ then\ this\ is\ how\ the\ app\ actually\ opens\ the\ file.}}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00009}\mbox{\hyperlink{class_application}{00009}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_application}{Application}}\ :\ \textcolor{keyword}{public}\ QApplication}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00010}00010\ \{}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00011}00011\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00012}00012\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00013}00013\ \ \ \ \ \mbox{\hyperlink{class_application}{Application}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ **argv);}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00014}\mbox{\hyperlink{class_application_a0e84b2c11a2a8bd3bea6d06240b0977e}{00014}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_application_a0e84b2c11a2a8bd3bea6d06240b0977e}{setMainWin}}(\mbox{\hyperlink{class_main_window}{MainWindow}}*\ \mbox{\hyperlink{native-scripting_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}{mainWin}})\ \{\ \_mainWin\ =\ \mbox{\hyperlink{native-scripting_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}{mainWin}};\ \}}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00015}00015\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00016}00016\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_application_a9e3917c02592fd8067ab396fc8de92a2}{event}}(QEvent\ *e);}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00017}00017\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00018}00018\ \ \ \ \ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ \_mainWin;}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00019}00019\ \};}
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{application_8h_source_l00021}00021\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ APPLICATION\_H}}
+
+\end{DoxyCode}

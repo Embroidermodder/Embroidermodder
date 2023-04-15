@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['g_0',['g',['../struct_emb_color__.html#a83576af39a9f289a28c1263d61073508',1,'EmbColor_']]],
+  ['general_5fcheck_5ffor_5fupdates_1',['general_check_for_updates',['../struct_settings__.html#aedb4797f75850fb55335acb2dee52d45',1,'Settings_']]],
+  ['general_5fcurrent_5ftip_2',['general_current_tip',['../struct_settings__.html#a4f1704907a2130b0b865d3cdb063bab8',1,'Settings_']]],
+  ['general_5fmdi_5fbg_5fcolor_3',['general_mdi_bg_color',['../struct_settings__.html#ae8e716bee815775562c8d161b22d4935',1,'Settings_']]],
+  ['general_5fmdi_5fbg_5flogo_4',['general_mdi_bg_logo',['../struct_settings__.html#a9c814e9ec64de3aa36d54daa6ed6e1fa',1,'Settings_']]],
+  ['general_5fmdi_5fbg_5ftexture_5',['general_mdi_bg_texture',['../struct_settings__.html#a88ec628f1df5913ebfb145192baf1b33',1,'Settings_']]],
+  ['general_5fsystem_5fhelp_5fbrowser_6',['general_system_help_browser',['../struct_settings__.html#abe29d90072cde2e7298e2a5ad66fe5b8',1,'Settings_']]],
+  ['geometry_7',['geometry',['../struct_emb_array__.html#a53ed4a940a3d3011efefded128131523',1,'EmbArray_::geometry()'],['../struct_emb_layer__.html#aaddfa3a566bc153ef88a3106389e20d4',1,'EmbLayer_::geometry()'],['../struct_emb_pattern__.html#aaddfa3a566bc153ef88a3106389e20d4',1,'EmbPattern_::geometry()']]],
+  ['grid_5fcenter_8',['grid_center',['../struct_settings__.html#a3d8a5e343fe07b3b6ae190467bf6443b',1,'Settings_']]],
+  ['grid_5fcenter_5fon_5forigin_9',['grid_center_on_origin',['../struct_settings__.html#a55c7faa0c99439fcd4e04da1b69fe299',1,'Settings_']]],
+  ['grid_5fcolor_10',['grid_color',['../struct_settings__.html#a4b1173f47a3980966425c3422ae0182a',1,'Settings_']]],
+  ['grid_5fcolor_5fmatch_5fcrosshair_11',['grid_color_match_crosshair',['../struct_settings__.html#a51d6cfe586a89f25dc84bb537420b00b',1,'Settings_']]],
+  ['grid_5fload_5ffrom_5ffile_12',['grid_load_from_file',['../struct_settings__.html#ad38c3ebd32ebbbbe07730b4ae9af9b26',1,'Settings_']]],
+  ['grid_5fmode_13',['grid_mode',['../struct_view__.html#a7b9309a8010bf2383ac32e7ee71673f1',1,'View_']]],
+  ['grid_5fshow_5fon_5fload_14',['grid_show_on_load',['../struct_settings__.html#a314359e02a66cd971cec00e22b73b5d5',1,'Settings_']]],
+  ['grid_5fshow_5forigin_15',['grid_show_origin',['../struct_settings__.html#a87db92474746f8d18b3ce356b73897dc',1,'Settings_']]],
+  ['grid_5fsize_5fradius_16',['grid_size_radius',['../struct_settings__.html#a8468a7b358165db484a154060464346a',1,'Settings_']]],
+  ['grid_5fsize_5fx_17',['grid_size_x',['../struct_settings__.html#ab214fe2e8fe38a33d7845f53e9d65414',1,'Settings_']]],
+  ['grid_5fsize_5fy_18',['grid_size_y',['../struct_settings__.html#a39f7fa56594e8e83b97755d17103ea36',1,'Settings_']]],
+  ['grid_5fspacing_19',['grid_spacing',['../struct_settings__.html#ac7bdc1964a51c0ec0b34d214c8895073',1,'Settings_']]],
+  ['grid_5fspacing_5fangle_20',['grid_spacing_angle',['../struct_settings__.html#a0b295f90a1b59b96dd09cdc3a23e04ff',1,'Settings_']]],
+  ['grid_5fspacing_5fradius_21',['grid_spacing_radius',['../struct_settings__.html#ae5548779bad33d39d6849ba2ba5ba3a2',1,'Settings_']]],
+  ['grid_5fspacing_5fx_22',['grid_spacing_x',['../struct_settings__.html#a9d0535f4572239b8aa60ccacf32bfd85',1,'Settings_']]],
+  ['grid_5fspacing_5fy_23',['grid_spacing_y',['../struct_settings__.html#a1e6d9345229b6cb9dac01f111ed6f39c',1,'Settings_']]],
+  ['grid_5ftype_24',['grid_type',['../struct_view__.html#ae57616b4d70c48c75cc90798d3360d69',1,'View_::grid_type()'],['../struct_settings__.html#ae57616b4d70c48c75cc90798d3360d69',1,'Settings_::grid_type()']]]
+];

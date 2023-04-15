@@ -1,0 +1,46 @@
+\hypertarget{embdetails-dialog_8h_source}{}\doxysubsection{embdetails-\/dialog.h}
+\label{embdetails-dialog_8h_source}\index{embroidermodder2/embdetails-\/dialog.h@{embroidermodder2/embdetails-\/dialog.h}}
+\mbox{\hyperlink{embdetails-dialog_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ EMBDETAILS\_DIALOG\_H}}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ EMBDETAILS\_DIALOG\_H}}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QDialog>}}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00006}00006\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00007}00007\ \textcolor{keyword}{class\ }QDialogButtonBox;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00008}00008\ \textcolor{keyword}{class\ }QGraphicsScene;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00009}00009\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00011}\mbox{\hyperlink{class_emb_details_dialog}{00011}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_emb_details_dialog}{EmbDetailsDialog}}\ :\ \textcolor{keyword}{public}\ QDialog}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00012}00012\ \{}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00013}00013\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00015}00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00016}00016\ \ \ \ \ \mbox{\hyperlink{class_emb_details_dialog}{EmbDetailsDialog}}(QGraphicsScene*\ theScene,\ QWidget\ *parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{class_emb_details_dialog_aada68a615609af87392b03a185a8bf91}{\string~EmbDetailsDialog}}();}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00019}00019\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00020}00020\ \ \ \ \ QWidget*\ \ \ \ \ \ \ \ \ \ mainWidget;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ getInfo();}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00023}00023\ \ \ \ \ QWidget*\ \ \ \ \ \ \ \ \ \ createMainWidget();}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00024}00024\ \ \ \ \ QWidget*\ \ \ \ \ \ \ \ \ \ createHistogram();}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00026}00026\ \ \ \ \ QDialogButtonBox*\ buttonBox;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00028}00028\ \ \ \ \ quint32\ stitchesTotal;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00029}00029\ \ \ \ \ quint32\ stitchesReal;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00030}00030\ \ \ \ \ quint32\ stitchesJump;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00031}00031\ \ \ \ \ quint32\ stitchesTrim;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00032}00032\ \ \ \ \ quint32\ colorTotal;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00033}00033\ \ \ \ \ quint32\ colorChanges;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00035}00035\ \ \ \ \ QRectF\ boundingRect;}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00036}00036\ \};}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00038}00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{embdetails-dialog_8h_source_l00040}00040\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

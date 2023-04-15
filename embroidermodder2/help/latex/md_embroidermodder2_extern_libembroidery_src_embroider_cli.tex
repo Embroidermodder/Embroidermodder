@@ -1,0 +1,25 @@
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_embroider_cli_embroider}{}\doxysubsection{The $<$tt$>$embroider$<$/tt$>$ Command Line Program}\label{md_embroidermodder2_extern_libembroidery_src_embroider_cli_embroider}
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000006}{Todo}}]Move back to libembroidery now we have the combined docs build.\end{DoxyRefDesc}
+\hypertarget{md_embroidermodder2_extern_libembroidery_src_embroider_cli_pipeline}{}\doxysubsubsection{Embroider pipeline}\label{md_embroidermodder2_extern_libembroidery_src_embroider_cli_pipeline}
+Adjectives apply to every following noun so \begin{DoxyVerb}embroider --satin 0.3,0.6 --thickness 2 --circle 10,20,5 \
+    --border 3 --disc 30,40,10 --arc 30,50,10,60 output.pes
+\end{DoxyVerb}
+ Creates\+:
+
+
+\begin{DoxyItemize}
+\item a circle with properties\+: thickness 2, satin 0.\+3,0.\+6
+\item a disc with properties\+:
+\item an arc with properties\+:
+\end{DoxyItemize}
+
+in that order then writes them to the output file {\ttfamily output.\+pes}.\hypertarget{md_embroidermodder2_extern_libembroidery_src_embroider_cli_cli}{}\doxysubsubsection{embroider CLI}\label{md_embroidermodder2_extern_libembroidery_src_embroider_cli_cli}
+
+\begin{DoxyItemize}
+\item Make {\ttfamily -\/circle} flag to add a circle to the current pattern.
+\item Make {\ttfamily -\/rect} flag to add a rectangle to the current pattern.
+\item Make {\ttfamily -\/fill} flag to set the current satin fill algorithm for the current geometry. (for example {\ttfamily -\/fill crosses -\/circle 11,13,10} fills a circle with center 11mm, 13mm with radius 10mm with crosses).
+\item Make {\ttfamily -\/ellipse} flag to add to ellipse to the current pattern.
+\item Make {\ttfamily -\/bezier} flag to add a bezier curve to the current pattern. 
+\end{DoxyItemize}

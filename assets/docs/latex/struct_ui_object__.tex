@@ -1,0 +1,354 @@
+\hypertarget{struct_ui_object__}{}\doxysubsection{Ui\+Object\+\_\+ Struct Reference}
+\label{struct_ui_object__}\index{UiObject\_@{UiObject\_}}
+
+
+This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events.  
+
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+char \mbox{\hyperlink{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}{fname}} \mbox{[}200\mbox{]}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}{command}} \mbox{[}200\mbox{]}
+\item 
+bool \mbox{\hyperlink{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}{first\+Run}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}{control\+Points}} \mbox{[}10\mbox{]}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}{control\+Point\+Labels}} \mbox{[}10\mbox{]}\mbox{[}200\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}{n\+\_\+control\+Points}}
+\item 
+int \mbox{\hyperlink{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}{num\+Points}}
+\item 
+int \mbox{\hyperlink{struct_ui_object___a22e07bd217a8c33abb20a0bae57278b5}{min\+Points}}
+\item 
+int \mbox{\hyperlink{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}{max\+Points}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{struct_ui_object___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}{scale}}
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}{rotation}}
+\item 
+unsigned int \mbox{\hyperlink{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}{mode}}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}{path\+\_\+desc}} \mbox{[}1000\mbox{]}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}{text}} \mbox{[}200\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}{text\+Justify}}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}{text\+Font}} \mbox{[}200\mbox{]}
+\item 
+float \mbox{\hyperlink{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}{text\+Height}}
+\item 
+float \mbox{\hyperlink{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}{text\+Rotation}}
+\item 
+GLuint \mbox{\hyperlink{struct_ui_object___a0546d1993695b1dddda38ad4864782e5}{texture\+\_\+id}}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}{id}} \mbox{[}200\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}{pattern\+\_\+index}}
+\item 
+char \mbox{\hyperlink{struct_ui_object___a551374301513fdb71d8977304106af2c}{type}} \mbox{[}200\mbox{]}
+\item 
+int \mbox{\hyperlink{struct_ui_object___a8e14df78c97bad47c11f5d964634f1ad}{object\+\_\+index}}
+\item 
+bool \mbox{\hyperlink{struct_ui_object___a7a81b7e8dfdc640c03d8b7b1771ec773}{selectable}}
+\item 
+\mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} \mbox{\hyperlink{struct_ui_object___a5b70f2bf502560229b7fecf8984e33e9}{color}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events. 
+
+scale is how radii are stored if the object is a circle, or the semi-\/major and semi-\/minor axes if the object is an ellipse.
+
+center perhaps should be the \char`\"{}anchor\char`\"{} instead which is the center for some objects and top left for rectangular objects.
+
+Do angles need special storage? angle\+Ref, angle\+New
+
+This chapter details how the source code achieves the design detailed in the previous chapter. For the low-\/level details, read the later chapters.
+
+Dear Im\+Gui (CITATION NEEDED)\hypertarget{src_2main_8c_autotoc_md2}{}\doxyparagraph{Geometry Objects}\label{src_2main_8c_autotoc_md2}
+At all times the Emb\+Pattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.
+
+To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.
+
+Note that the editor state is seperate from this since that is per view, not per object.
+
+Selecting is done via this interface. 
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00589}{589}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+
+
+\doxysubsubsection{Field Documentation}
+\mbox{\Hypertarget{struct_ui_object___a68e2bdfeb187d1c5a46afffe5129aabf}\label{struct_ui_object___a68e2bdfeb187d1c5a46afffe5129aabf}} 
+\index{UiObject\_@{UiObject\_}!center@{center}}
+\index{center@{center}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{center}{center}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} center}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00605}{605}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a5b70f2bf502560229b7fecf8984e33e9}\label{struct_ui_object___a5b70f2bf502560229b7fecf8984e33e9}} 
+\index{UiObject\_@{UiObject\_}!color@{color}}
+\index{color@{color}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{color}{color}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}} color}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00624}{624}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}\label{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}} 
+\index{UiObject\_@{UiObject\_}!command@{command}}
+\index{command@{command}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{command}{command}}
+{\footnotesize\ttfamily char command\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00591}{591}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}\label{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}} 
+\index{UiObject\_@{UiObject\_}!controlPointLabels@{controlPointLabels}}
+\index{controlPointLabels@{controlPointLabels}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{controlPointLabels}{controlPointLabels}}
+{\footnotesize\ttfamily char control\+Point\+Labels\mbox{[}10\mbox{]}\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00596}{596}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}\label{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}} 
+\index{UiObject\_@{UiObject\_}!controlPoints@{controlPoints}}
+\index{controlPoints@{controlPoints}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{controlPoints}{controlPoints}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} control\+Points\mbox{[}10\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00594}{594}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}\label{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}} 
+\index{UiObject\_@{UiObject\_}!firstRun@{firstRun}}
+\index{firstRun@{firstRun}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{firstRun}{firstRun}}
+{\footnotesize\ttfamily bool first\+Run}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00592}{592}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}\label{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}} 
+\index{UiObject\_@{UiObject\_}!fname@{fname}}
+\index{fname@{fname}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{fname}{fname}}
+{\footnotesize\ttfamily char fname\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00590}{590}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}\label{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}} 
+\index{UiObject\_@{UiObject\_}!id@{id}}
+\index{id@{id}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily char id\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00619}{619}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}\label{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}} 
+\index{UiObject\_@{UiObject\_}!maxPoints@{maxPoints}}
+\index{maxPoints@{maxPoints}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{maxPoints}{maxPoints}}
+{\footnotesize\ttfamily int max\+Points}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00603}{603}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a22e07bd217a8c33abb20a0bae57278b5}\label{struct_ui_object___a22e07bd217a8c33abb20a0bae57278b5}} 
+\index{UiObject\_@{UiObject\_}!minPoints@{minPoints}}
+\index{minPoints@{minPoints}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{minPoints}{minPoints}}
+{\footnotesize\ttfamily int min\+Points}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00601}{601}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}\label{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}} 
+\index{UiObject\_@{UiObject\_}!mode@{mode}}
+\index{mode@{mode}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{mode}{mode}}
+{\footnotesize\ttfamily unsigned int mode}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00609}{609}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}\label{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}} 
+\index{UiObject\_@{UiObject\_}!n\_controlPoints@{n\_controlPoints}}
+\index{n\_controlPoints@{n\_controlPoints}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{n\_controlPoints}{n\_controlPoints}}
+{\footnotesize\ttfamily int n\+\_\+control\+Points}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00598}{598}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}\label{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}} 
+\index{UiObject\_@{UiObject\_}!numPoints@{numPoints}}
+\index{numPoints@{numPoints}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{numPoints}{numPoints}}
+{\footnotesize\ttfamily int num\+Points}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00600}{600}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a8e14df78c97bad47c11f5d964634f1ad}\label{struct_ui_object___a8e14df78c97bad47c11f5d964634f1ad}} 
+\index{UiObject\_@{UiObject\_}!object\_index@{object\_index}}
+\index{object\_index@{object\_index}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{object\_index}{object\_index}}
+{\footnotesize\ttfamily int object\+\_\+index}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00622}{622}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}\label{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}} 
+\index{UiObject\_@{UiObject\_}!path\_desc@{path\_desc}}
+\index{path\_desc@{path\_desc}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{path\_desc}{path\_desc}}
+{\footnotesize\ttfamily char path\+\_\+desc\mbox{[}1000\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00611}{611}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}\label{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}} 
+\index{UiObject\_@{UiObject\_}!pattern\_index@{pattern\_index}}
+\index{pattern\_index@{pattern\_index}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{pattern\_index}{pattern\_index}}
+{\footnotesize\ttfamily int pattern\+\_\+index}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00620}{620}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}\label{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}} 
+\index{UiObject\_@{UiObject\_}!rotation@{rotation}}
+\index{rotation@{rotation}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{rotation}{rotation}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rotation}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00608}{608}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}\label{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}} 
+\index{UiObject\_@{UiObject\_}!scale@{scale}}
+\index{scale@{scale}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{scale}{scale}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} scale}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00606}{606}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a7a81b7e8dfdc640c03d8b7b1771ec773}\label{struct_ui_object___a7a81b7e8dfdc640c03d8b7b1771ec773}} 
+\index{UiObject\_@{UiObject\_}!selectable@{selectable}}
+\index{selectable@{selectable}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{selectable}{selectable}}
+{\footnotesize\ttfamily bool selectable}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00623}{623}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}\label{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}} 
+\index{UiObject\_@{UiObject\_}!text@{text}}
+\index{text@{text}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{text}{text}}
+{\footnotesize\ttfamily char text\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00612}{612}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}\label{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}} 
+\index{UiObject\_@{UiObject\_}!textFont@{textFont}}
+\index{textFont@{textFont}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{textFont}{textFont}}
+{\footnotesize\ttfamily char text\+Font\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00615}{615}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}\label{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}} 
+\index{UiObject\_@{UiObject\_}!textHeight@{textHeight}}
+\index{textHeight@{textHeight}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{textHeight}{textHeight}}
+{\footnotesize\ttfamily float text\+Height}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00616}{616}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}\label{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}} 
+\index{UiObject\_@{UiObject\_}!textJustify@{textJustify}}
+\index{textJustify@{textJustify}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{textJustify}{textJustify}}
+{\footnotesize\ttfamily int text\+Justify}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00613}{613}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}\label{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}} 
+\index{UiObject\_@{UiObject\_}!textRotation@{textRotation}}
+\index{textRotation@{textRotation}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{textRotation}{textRotation}}
+{\footnotesize\ttfamily float text\+Rotation}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00617}{617}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a0546d1993695b1dddda38ad4864782e5}\label{struct_ui_object___a0546d1993695b1dddda38ad4864782e5}} 
+\index{UiObject\_@{UiObject\_}!texture\_id@{texture\_id}}
+\index{texture\_id@{texture\_id}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{texture\_id}{texture\_id}}
+{\footnotesize\ttfamily GLuint texture\+\_\+id}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00618}{618}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+\mbox{\Hypertarget{struct_ui_object___a551374301513fdb71d8977304106af2c}\label{struct_ui_object___a551374301513fdb71d8977304106af2c}} 
+\index{UiObject\_@{UiObject\_}!type@{type}}
+\index{type@{type}!UiObject\_@{UiObject\_}}
+\doxyparagraph{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily char type\mbox{[}200\mbox{]}}
+
+
+
+Definition at line \mbox{\hyperlink{src_2main_8c_source_l00621}{621}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{src_2main_8c}{main.\+c}}\end{DoxyCompactItemize}

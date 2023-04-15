@@ -1,0 +1,43 @@
+\hypertarget{functions_8c_source}{}\doxysubsection{functions.\+c}
+\label{functions_8c_source}\index{extern/libembroidery/src/geometry/functions.c@{extern/libembroidery/src/geometry/functions.c}}
+\mbox{\hyperlink{functions_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00002}00002\ \textcolor{comment}{\ *\ BASIC\ FUNCTIONS}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00003}00003\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ libembroidery.}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00004}00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00005}00005\ \textcolor{comment}{\ *\ Copyright\ 2018-\/2023\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00006}00006\ \textcolor{comment}{\ *\ Licensed\ under\ the\ terms\ of\ the\ zlib\ license.}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00007}00007\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}../embroidery.h"{}}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00015}00015\ \textcolor{comment}{/*\ round\ is\ C99\ and\ we're\ committed\ to\ C90\ so\ here's\ a\ replacement.}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00016}00016\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00017}00017\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00018}\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{00018}}\ \mbox{\hyperlink{functions_8c_abdd8bb46c68ebbc748db4d7408dde1b2}{emb\_round}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ x)}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00019}00019\ \{}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00020}00020\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ y\ =\ floor(x);}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{if}\ (fabs(x-\/y)\ >\ 0.5)\ \{}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00022}00022\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{int})ceil(x);}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00023}00023\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00024}00024\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{int})y;}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00025}00025\ \}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00027}00027\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00028}\mbox{\hyperlink{embroidery_8h_a0e589a7b4fd30698b359cd3e597fb0ec}{00028}}\ \mbox{\hyperlink{functions_8c_a64370c5330c6b14e0632383a5f24d9b0}{radians}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ degree)}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00029}00029\ \{}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00030}00030\ \ \ \ \ \textcolor{keywordflow}{return}\ degree*\mbox{\hyperlink{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}{embConstantPi}}/180.0;}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00031}00031\ \}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00033}00033\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00034}\mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{00034}}\ \mbox{\hyperlink{functions_8c_adcca277c330aa3d7c85b93894c16eb9a}{degrees}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ radian)}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00035}00035\ \{}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00036}00036\ \ \ \ \ \textcolor{keywordflow}{return}\ radian*180.0/\mbox{\hyperlink{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}{embConstantPi}};}
+\DoxyCodeLine{\Hypertarget{functions_8c_source_l00037}00037\ \}}
+
+\end{DoxyCode}

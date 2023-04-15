@@ -1,0 +1,284 @@
+\hypertarget{cmdprompt_8h_source}{}\doxysubsection{cmdprompt.\+h}
+\label{cmdprompt_8h_source}\index{embroidermodder2/cmdprompt.h@{embroidermodder2/cmdprompt.h}}
+\mbox{\hyperlink{cmdprompt_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ CMDPROMPT\_H}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ CMDPROMPT\_H}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QHash>}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QLineEdit>}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QTextBrowser>}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <QSplitter>}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00008}00008\ \textcolor{preprocessor}{\#include\ <QTextLayout>}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00010}00010\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00011}00011\ \textcolor{keyword}{class\ }QString;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00012}00012\ \textcolor{keyword}{class\ }QLineEdit;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00013}00013\ \textcolor{keyword}{class\ }QTextBrowser;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00014}00014\ \textcolor{keyword}{class\ }QVBoxLayout;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00015}00015\ \textcolor{keyword}{class\ }QAction;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00016}00016\ \textcolor{keyword}{class\ }QMenu;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00017}00017\ \textcolor{keyword}{class\ }QContextMenuEvent;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00018}00018\ \textcolor{keyword}{class\ }QSplitter;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00019}00019\ \textcolor{keyword}{class\ }QTimer;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00020}00020\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00022}\mbox{\hyperlink{class_cmd_prompt_input}{00022}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_cmd_prompt_input}{CmdPromptInput}}\ :\ \textcolor{keyword}{public}\ QLineEdit}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00023}00023\ \{}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00024}00024\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00026}00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00027}00027\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_input}{CmdPromptInput}}(QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00028}00028\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_input_a8c4c9cf079dd926513eb04799032cf2b}{\string~CmdPromptInput}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00030}\mbox{\hyperlink{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}{00030}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}{curText}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00031}\mbox{\hyperlink{class_cmd_prompt_input_acfede5c1376f63deaec7732d5484b411}{00031}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_input_acfede5c1376f63deaec7732d5484b411}{defaultPrefix}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00032}\mbox{\hyperlink{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}{00032}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}{prefix}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00034}\mbox{\hyperlink{class_cmd_prompt_input_aa2f6a10f9492ebff3e65caa000779258}{00034}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_input_aa2f6a10f9492ebff3e65caa000779258}{lastCmd}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00035}\mbox{\hyperlink{class_cmd_prompt_input_a252c1bea192e7d97caf8d3e0f8262240}{00035}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_input_a252c1bea192e7d97caf8d3e0f8262240}{curCmd}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00036}\mbox{\hyperlink{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}{00036}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}{cmdActive}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00038}\mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{00038}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{rapidFireEnabled}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00039}\mbox{\hyperlink{class_cmd_prompt_input_a2f7636df8b2a22914ee5e8a96139b655}{00039}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_cmd_prompt_input_a2f7636df8b2a22914ee5e8a96139b655}{isBlinking}};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00041}00041\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00042}00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a59701ebb47f7e2f55977543b6293ba47}{contextMenuEvent}}(QContextMenuEvent\ *event);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00043}00043\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_cmd_prompt_input_ad7452c5931d2f0c7f63a308d1ccccfc7}{eventFilter}}(QObject\ *obj,\ QEvent\ *event);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00045}00045\ signals:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00046}\mbox{\hyperlink{class_cmd_prompt_input_a629e6e8652ccd0ff78d08cb23b314f83}{00046}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a629e6e8652ccd0ff78d08cb23b314f83}{appendHistory}}(\textcolor{keyword}{const}\ QString\&\ txt,\ \textcolor{keywordtype}{int}\ prefixLength);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00048}00048\ \ \ \ \ \textcolor{comment}{//These\ connect\ to\ the\ CmdPrompt\ signals}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00049}\mbox{\hyperlink{class_cmd_prompt_input_afd6e69dc9fe1b076bbcc69fb3931da0e}{00049}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_afd6e69dc9fe1b076bbcc69fb3931da0e}{startCommand}}(\textcolor{keyword}{const}\ QString\&\ cmd);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00050}\mbox{\hyperlink{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}{00050}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}{runCommand}}(\textcolor{keyword}{const}\ QString\&\ cmd,\ \textcolor{keyword}{const}\ QString\&\ cmdtxt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00051}\mbox{\hyperlink{class_cmd_prompt_input_a74af558a825ac72754085696d893671d}{00051}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a74af558a825ac72754085696d893671d}{deletePressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00052}\mbox{\hyperlink{class_cmd_prompt_input_a5bdc9d7b57997bc3f69c9281e5a3caac}{00052}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a5bdc9d7b57997bc3f69c9281e5a3caac}{tabPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00053}\mbox{\hyperlink{class_cmd_prompt_input_abb2c9654968151943c6068652051fe73}{00053}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_abb2c9654968151943c6068652051fe73}{escapePressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00054}\mbox{\hyperlink{class_cmd_prompt_input_a3ac8ff7536eaff8c48297effe38dd49b}{00054}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a3ac8ff7536eaff8c48297effe38dd49b}{upPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00055}\mbox{\hyperlink{class_cmd_prompt_input_ac3465cb35ba356dc7b25316ebecf6418}{00055}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_ac3465cb35ba356dc7b25316ebecf6418}{downPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00056}\mbox{\hyperlink{class_cmd_prompt_input_a497fc0afaca5b0221a701d16c5669f6e}{00056}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a497fc0afaca5b0221a701d16c5669f6e}{F1Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00057}\mbox{\hyperlink{class_cmd_prompt_input_a22d931e95d5d4ee7ddcda464c3013da7}{00057}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a22d931e95d5d4ee7ddcda464c3013da7}{F2Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00058}\mbox{\hyperlink{class_cmd_prompt_input_aa7f4737767af0407b584d72d82eac575}{00058}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_aa7f4737767af0407b584d72d82eac575}{F3Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00059}\mbox{\hyperlink{class_cmd_prompt_input_ab40bffe5abc8e5bd0dd213c8d09f127f}{00059}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_ab40bffe5abc8e5bd0dd213c8d09f127f}{F4Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00060}\mbox{\hyperlink{class_cmd_prompt_input_adb19d80475373f5f04bb37915eebc52c}{00060}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_adb19d80475373f5f04bb37915eebc52c}{F5Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00061}\mbox{\hyperlink{class_cmd_prompt_input_a5f7be131042ab667dcf63b179648d836}{00061}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a5f7be131042ab667dcf63b179648d836}{F6Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00062}\mbox{\hyperlink{class_cmd_prompt_input_a4542ddd7f03d93e1818387c0cb0f8a63}{00062}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a4542ddd7f03d93e1818387c0cb0f8a63}{F7Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00063}\mbox{\hyperlink{class_cmd_prompt_input_a7a70f165bc38bf8a1659723bb69dd0f3}{00063}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a7a70f165bc38bf8a1659723bb69dd0f3}{F8Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00064}\mbox{\hyperlink{class_cmd_prompt_input_a1c30ad91ca91781a975712c361651d76}{00064}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a1c30ad91ca91781a975712c361651d76}{F9Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00065}\mbox{\hyperlink{class_cmd_prompt_input_aabd407a7f7f65e643a85e8e7ee6130bd}{00065}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_aabd407a7f7f65e643a85e8e7ee6130bd}{F10Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00066}\mbox{\hyperlink{class_cmd_prompt_input_a253b9a7a27ef5d7f3619362f60caf8b3}{00066}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a253b9a7a27ef5d7f3619362f60caf8b3}{F11Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00067}\mbox{\hyperlink{class_cmd_prompt_input_abcae88d050bd8c7cbf947b132db1ec82}{00067}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_abcae88d050bd8c7cbf947b132db1ec82}{F12Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00068}\mbox{\hyperlink{class_cmd_prompt_input_ac592ae9edd3e41debabc86083d818a0b}{00068}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_ac592ae9edd3e41debabc86083d818a0b}{cutPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00069}\mbox{\hyperlink{class_cmd_prompt_input_a6a6cf2771118274de46b15c22d5d0554}{00069}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a6a6cf2771118274de46b15c22d5d0554}{copyPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00070}\mbox{\hyperlink{class_cmd_prompt_input_a22d984256486e2ff46ad007399f8aaeb}{00070}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a22d984256486e2ff46ad007399f8aaeb}{pastePressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00071}\mbox{\hyperlink{class_cmd_prompt_input_a8c1995c536a85dfb8f66ecf9dcc0dc13}{00071}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a8c1995c536a85dfb8f66ecf9dcc0dc13}{selectAllPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00072}\mbox{\hyperlink{class_cmd_prompt_input_a05b431deab4716a1cd8d608c9c3d5503}{00072}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a05b431deab4716a1cd8d608c9c3d5503}{undoPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00073}\mbox{\hyperlink{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}{00073}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}{redoPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00075}\mbox{\hyperlink{class_cmd_prompt_input_addb9170c614df4078997f470a3adadbe}{00075}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_addb9170c614df4078997f470a3adadbe}{shiftPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00076}\mbox{\hyperlink{class_cmd_prompt_input_ad349219a6273ed0e7cd90523e06b6631}{00076}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_ad349219a6273ed0e7cd90523e06b6631}{shiftReleased}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00078}\mbox{\hyperlink{class_cmd_prompt_input_ac593ceea953da376d165ce31e3187767}{00078}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_ac593ceea953da376d165ce31e3187767}{showSettings}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00080}\mbox{\hyperlink{class_cmd_prompt_input_a13f2c0b5a7f1d4b33fc323e585f807b2}{00080}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a13f2c0b5a7f1d4b33fc323e585f807b2}{stopBlinking}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00082}00082\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00083}00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a82d2c8e6d18f2b014a2f650ff52c0a66}{addCommand}}(\textcolor{keyword}{const}\ QString\&\ alias,\ \textcolor{keyword}{const}\ QString\&\ cmd);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00084}00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a82aa679ad2c2cc3c5a2ad82d7564b0b6}{endCommand}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00085}00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}{processInput}}(\textcolor{keyword}{const}\ QChar\&\ rapidChar\ =\ QChar());}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00086}00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a4aa20ec4ce311f15fa1608b6d3928969}{checkSelection}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00087}00087\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a70f5bdb24323aa90f40e9442becd2e63}{updateCurrentText}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00088}00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_acbaf91bc62a9a35290b9661fe36b6d5f}{checkEditedText}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00089}00089\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_a8879ea019915d4e44d0256adb9be7f5c}{checkChangedText}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00090}00090\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_input_aaf3fa10595368733ad823e48b99ea808}{checkCursorPosition}}(\textcolor{keywordtype}{int}\ oldpos,\ \textcolor{keywordtype}{int}\ newpos);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00091}00091\ \textcolor{keyword}{private}\ slots:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00092}00092\ \ \ \ \ \textcolor{keywordtype}{void}\ copyClip();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00093}00093\ \ \ \ \ \textcolor{keywordtype}{void}\ pasteClip();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00094}00094\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00095}00095\ \ \ \ \ QHash<QString,\ QString>*\ \ aliasHash;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00097}00097\ \ \ \ \ \textcolor{keywordtype}{void}\ changeFormatting(\textcolor{keyword}{const}\ QList<QTextLayout::FormatRange>\&\ formats);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00098}00098\ \ \ \ \ \textcolor{keywordtype}{void}\ clearFormatting();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00099}00099\ \ \ \ \ \textcolor{keywordtype}{void}\ applyFormatting();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00100}00100\ \};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00102}00102\ \textcolor{comment}{//==========================================================================}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00104}\mbox{\hyperlink{class_cmd_prompt_history}{00104}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_cmd_prompt_history}{CmdPromptHistory}}\ :\ \textcolor{keyword}{public}\ QTextBrowser}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00105}00105\ \{}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00106}00106\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00108}00108\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00109}00109\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_history}{CmdPromptHistory}}(QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00110}00110\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_history_a43ca37891556f01f374633c81a43e8d4}{\string~CmdPromptHistory}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00112}00112\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00113}00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_history_a59701ebb47f7e2f55977543b6293ba47}{contextMenuEvent}}(QContextMenuEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00115}00115\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00116}00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_history_a629e6e8652ccd0ff78d08cb23b314f83}{appendHistory}}(\textcolor{keyword}{const}\ QString\&\ txt,\ \textcolor{keywordtype}{int}\ prefixLength);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00117}00117\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_history_a6f7d5d169c4b749614f641f03d60ac6c}{startResizeHistory}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00118}00118\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_history_a07f883a179efb9a482104055d57352a5}{stopResizeHistory}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00119}00119\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_history_a9c5b153d08b9883fddaa310357de4b3e}{resizeHistory}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00121}00121\ signals:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00122}\mbox{\hyperlink{class_cmd_prompt_history_a35bb9de8cb458ad631a618b3c9a03615}{00122}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_history_a35bb9de8cb458ad631a618b3c9a03615}{historyAppended}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00124}00124\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00125}00125\ \ \ \ \ \textcolor{keywordtype}{int}\ tmpHeight;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00126}00126\ \ \ \ \ QString\ applyFormatting(\textcolor{keyword}{const}\ QString\&\ txt,\ \textcolor{keywordtype}{int}\ prefixLength);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00127}00127\ \};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00129}00129\ \textcolor{comment}{//==========================================================================}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00131}\mbox{\hyperlink{class_cmd_prompt_splitter}{00131}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_cmd_prompt_splitter}{CmdPromptSplitter}}\ :\ \textcolor{keyword}{public}\ QSplitter}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00132}00132\ \{}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00133}00133\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00135}00135\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00136}00136\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_splitter}{CmdPromptSplitter}}(QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00137}00137\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_splitter_a5ce32e7e889a0955acbf9323c6b04a5e}{\string~CmdPromptSplitter}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00139}00139\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00140}00140\ \ \ \ \ QSplitterHandle*\ \mbox{\hyperlink{class_cmd_prompt_splitter_a9da42fda9d0692a90b03c185615279ef}{createHandle}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00142}00142\ signals:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00143}\mbox{\hyperlink{class_cmd_prompt_splitter_a4fb4443c07bf413fc615804d1c58ee2f}{00143}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_splitter_a4fb4443c07bf413fc615804d1c58ee2f}{pressResizeHistory}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00144}\mbox{\hyperlink{class_cmd_prompt_splitter_af48a8318183bd2eb37336fbf8100bc19}{00144}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_splitter_af48a8318183bd2eb37336fbf8100bc19}{releaseResizeHistory}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00145}\mbox{\hyperlink{class_cmd_prompt_splitter_a9c4590a8674c0cf256a7fccb2ac376fb}{00145}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_splitter_a9c4590a8674c0cf256a7fccb2ac376fb}{moveResizeHistory}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00146}00146\ \};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00148}00148\ \textcolor{comment}{//==========================================================================}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00150}\mbox{\hyperlink{class_cmd_prompt_handle}{00150}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_cmd_prompt_handle}{CmdPromptHandle}}\ :\ \textcolor{keyword}{public}\ QSplitterHandle}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00151}00151\ \{}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00152}00152\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00154}00154\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00155}00155\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_handle}{CmdPromptHandle}}(Qt::Orientation\ orientation,\ QSplitter*\ parent);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00156}00156\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_handle_a96bb905d13f0016887f2c124f4a0107b}{\string~CmdPromptHandle}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00158}00158\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00159}00159\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_handle_a3571373ca6fedac4299977ab5fa2b88a}{mousePressEvent}}(QMouseEvent*\ e);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00160}00160\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_handle_a6be117e92e9375a28092144242dd29a4}{mouseReleaseEvent}}(QMouseEvent*\ e);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00161}00161\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_handle_a69f8b856a74f015b817c36689f9aa18a}{mouseMoveEvent}}(QMouseEvent*\ e);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00163}00163\ signals:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00164}\mbox{\hyperlink{class_cmd_prompt_handle_a23fba8b5e3a4f4f2592042d04f77a11c}{00164}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_handle_a23fba8b5e3a4f4f2592042d04f77a11c}{handlePressed}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00165}\mbox{\hyperlink{class_cmd_prompt_handle_a5a7499e5887f9cf733be81f91d7e1985}{00165}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_handle_a5a7499e5887f9cf733be81f91d7e1985}{handleReleased}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00166}\mbox{\hyperlink{class_cmd_prompt_handle_ac6d7b359449dc4fc2797baa00f857a8f}{00166}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_handle_ac6d7b359449dc4fc2797baa00f857a8f}{handleMoved}}(\textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00168}00168\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00169}00169\ \ \ \ \ \textcolor{keywordtype}{int}\ pressY;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00170}00170\ \ \ \ \ \textcolor{keywordtype}{int}\ releaseY;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00171}00171\ \ \ \ \ \textcolor{keywordtype}{int}\ moveY;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00172}00172\ \};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00174}00174\ \textcolor{comment}{//==========================================================================}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00176}\mbox{\hyperlink{class_cmd_prompt}{00176}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_cmd_prompt}{CmdPrompt}}\ :\ \textcolor{keyword}{public}\ QWidget}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00177}00177\ \{}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00178}00178\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00179}00179\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00180}00180\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00181}00181\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt}{CmdPrompt}}(QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00182}00182\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_a407730564b90015caaf7b03173068207}{\string~CmdPrompt}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00184}00184\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00186}00186\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00187}\mbox{\hyperlink{class_cmd_prompt_acc38695faf64db66b9dfd5c57288b473}{00187}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_acc38695faf64db66b9dfd5c57288b473}{getHistory}}()\ \{\ \textcolor{keywordflow}{return}\ promptHistory-\/>toHtml();\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00188}\mbox{\hyperlink{class_cmd_prompt_a6f4a84042cdf7dbde9cb8991ffce301b}{00188}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_a6f4a84042cdf7dbde9cb8991ffce301b}{getPrefix}}()\ \{\ \textcolor{keywordflow}{return}\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}{prefix}};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00189}\mbox{\hyperlink{class_cmd_prompt_a404e05162cd7ab83102d7c470f005f99}{00189}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_a404e05162cd7ab83102d7c470f005f99}{getCurrentText}}()\ \{\ \textcolor{keywordflow}{return}\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}{curText}};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00190}\mbox{\hyperlink{class_cmd_prompt_adc28cc2cc9d41fe0000e49e4e53cd7ae}{00190}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_adc28cc2cc9d41fe0000e49e4e53cd7ae}{setCurrentText}}(\textcolor{keyword}{const}\ QString\&\ txt)\ \{\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}{curText}}\ =\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}{prefix}}\ +\ txt;\ promptInput-\/>setText(promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}{curText}});\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00191}\mbox{\hyperlink{class_cmd_prompt_ab6e057d5f761a80bb809661378f5a8af}{00191}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ab6e057d5f761a80bb809661378f5a8af}{setHistory}}(\textcolor{keyword}{const}\ QString\&\ txt)\ \{\ promptHistory-\/>setHtml(txt);\ promptHistory-\/>moveCursor(QTextCursor::End,\ QTextCursor::MoveAnchor);\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00192}00192\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a8e758fd51c296a9286b7b969ba0d503a}{setPrefix}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00193}00193\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a6f877a0db072df94d7ce493f2ec6f739}{appendHistory}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00194}\mbox{\hyperlink{class_cmd_prompt_aea73bf52c811a0543053ad2e6a82607f}{00194}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aea73bf52c811a0543053ad2e6a82607f}{startResizingTheHistory}}(\textcolor{keywordtype}{int}\ y)\ \{\ promptHistory-\/>\mbox{\hyperlink{class_cmd_prompt_history_a6f7d5d169c4b749614f641f03d60ac6c}{startResizeHistory}}(y);\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00195}\mbox{\hyperlink{class_cmd_prompt_a7e7703ae6d81c5cf0a523a89c16a582f}{00195}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a7e7703ae6d81c5cf0a523a89c16a582f}{stopResizingTheHistory}}(\textcolor{keywordtype}{int}\ y)\ \{\ promptHistory-\/>\mbox{\hyperlink{class_cmd_prompt_history_a07f883a179efb9a482104055d57352a5}{stopResizeHistory}}(y);\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00196}\mbox{\hyperlink{class_cmd_prompt_a1a85251672da82239cb28e7bf2765396}{00196}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a1a85251672da82239cb28e7bf2765396}{resizeTheHistory}}(\textcolor{keywordtype}{int}\ y)\ \{\ promptHistory-\/>\mbox{\hyperlink{class_cmd_prompt_history_a9c5b153d08b9883fddaa310357de4b3e}{resizeHistory}}(y);\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00197}\mbox{\hyperlink{class_cmd_prompt_a82d2c8e6d18f2b014a2f650ff52c0a66}{00197}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a82d2c8e6d18f2b014a2f650ff52c0a66}{addCommand}}(\textcolor{keyword}{const}\ QString\&\ alias,\ \textcolor{keyword}{const}\ QString\&\ cmd)\ \{\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a82d2c8e6d18f2b014a2f650ff52c0a66}{addCommand}}(alias,\ cmd);\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00198}\mbox{\hyperlink{class_cmd_prompt_a82aa679ad2c2cc3c5a2ad82d7564b0b6}{00198}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a82aa679ad2c2cc3c5a2ad82d7564b0b6}{endCommand}}()\ \{\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a82aa679ad2c2cc3c5a2ad82d7564b0b6}{endCommand}}();\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00199}\mbox{\hyperlink{class_cmd_prompt_a0e87e82e601411410bf336144df49cb8}{00199}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_cmd_prompt_a0e87e82e601411410bf336144df49cb8}{isCommandActive}}()\ \{\ \textcolor{keywordflow}{return}\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}{cmdActive}};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00200}\mbox{\hyperlink{class_cmd_prompt_afe5f5e39faa0282c02cd55531a39e7cf}{00200}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_afe5f5e39faa0282c02cd55531a39e7cf}{activeCommand}}()\ \{\ \textcolor{keywordflow}{return}\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_a252c1bea192e7d97caf8d3e0f8262240}{curCmd}};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00201}\mbox{\hyperlink{class_cmd_prompt_a70ab361f69e9d270d0524571bef8c7ca}{00201}}\ \ \ \ \ QString\ \mbox{\hyperlink{class_cmd_prompt_a70ab361f69e9d270d0524571bef8c7ca}{lastCommand}}()\ \{\ \textcolor{keywordflow}{return}\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_aa2f6a10f9492ebff3e65caa000779258}{lastCmd}};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00202}\mbox{\hyperlink{class_cmd_prompt_aab154b082dd58cba1ed43eb82adcf168}{00202}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aab154b082dd58cba1ed43eb82adcf168}{processInput}}()\ \{\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}{processInput}}();\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00203}\mbox{\hyperlink{class_cmd_prompt_a0f43405beb90b1536ce7ef36223ba78a}{00203}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a0f43405beb90b1536ce7ef36223ba78a}{enableRapidFire}}()\ \{\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{rapidFireEnabled}}\ =\ \textcolor{keyword}{true};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00204}\mbox{\hyperlink{class_cmd_prompt_ad20cc67342b56c2af63494a854534986}{00204}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ad20cc67342b56c2af63494a854534986}{disableRapidFire}}()\ \{\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{rapidFireEnabled}}\ =\ \textcolor{keyword}{false};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00205}\mbox{\hyperlink{class_cmd_prompt_a17df42318e4e6d5d7d5f07fd8e800cd2}{00205}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_cmd_prompt_a17df42318e4e6d5d7d5f07fd8e800cd2}{isRapidFireEnabled}}()\ \{\ \textcolor{keywordflow}{return}\ promptInput-\/>\mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{rapidFireEnabled}};\ \}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00207}00207\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aa9a821c974e611214dedd3798d44605d}{alert}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00209}00209\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a0d039951ed9c93adea5dea18bffc8755}{startBlinking}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00210}00210\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a13f2c0b5a7f1d4b33fc323e585f807b2}{stopBlinking}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00211}00211\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a5664bd38fc668253a0152e6b319aafbb}{blink}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00213}00213\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ac63cf69e844a2a5dcb33afe706867c13}{setPromptTextColor}}(\textcolor{keyword}{const}\ QColor\&);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00214}00214\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a61f43684e26e3b18d69f6654b7890ece}{setPromptBackgroundColor}}(\textcolor{keyword}{const}\ QColor\&);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00215}00215\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a3371361f0e83ddea7b5ea06d85b2cd22}{setPromptFontFamily}}(\textcolor{keyword}{const}\ QString\&);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00216}00216\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a74a3e2a35f9b22e3f84720b546b7ff07}{setPromptFontStyle}}(\textcolor{keyword}{const}\ QString\&);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00217}00217\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_af60a7ab36ef49a57042030213b0f7168}{setPromptFontSize}}(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00219}00219\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a908c22768132973965aa4b787f9ddaf8}{floatingChanged}}(\textcolor{keywordtype}{bool});}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00220}00220\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00221}00221\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a5f6b77748d3a4a864625ffc72fc021c6}{saveHistory}}(\textcolor{keyword}{const}\ QString\&\ fileName,\ \textcolor{keywordtype}{bool}\ html);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00223}00223\ \textcolor{keyword}{private}\ slots:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00224}00224\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00225}00225\ signals:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00226}\mbox{\hyperlink{class_cmd_prompt_aedbc4d674542f84a74f9d39f6b499791}{00226}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aedbc4d674542f84a74f9d39f6b499791}{appendTheHistory}}(\textcolor{keyword}{const}\ QString\&\ txt,\ \textcolor{keywordtype}{int}\ prefixLength);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00227}00227\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00228}00228\ \ \ \ \ \textcolor{comment}{//For\ connecting\ outside\ of\ command\ prompt}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00229}\mbox{\hyperlink{class_cmd_prompt_afd6e69dc9fe1b076bbcc69fb3931da0e}{00229}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_afd6e69dc9fe1b076bbcc69fb3931da0e}{startCommand}}(\textcolor{keyword}{const}\ QString\&\ cmd);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00230}\mbox{\hyperlink{class_cmd_prompt_aa506049eb78e7b035aa76af84f4ffcef}{00230}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aa506049eb78e7b035aa76af84f4ffcef}{runCommand}}(\textcolor{keyword}{const}\ QString\&\ cmd,\ \textcolor{keyword}{const}\ QString\&\ cmdtxt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00231}\mbox{\hyperlink{class_cmd_prompt_a74af558a825ac72754085696d893671d}{00231}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a74af558a825ac72754085696d893671d}{deletePressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00232}\mbox{\hyperlink{class_cmd_prompt_a5bdc9d7b57997bc3f69c9281e5a3caac}{00232}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a5bdc9d7b57997bc3f69c9281e5a3caac}{tabPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00233}\mbox{\hyperlink{class_cmd_prompt_abb2c9654968151943c6068652051fe73}{00233}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_abb2c9654968151943c6068652051fe73}{escapePressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00234}\mbox{\hyperlink{class_cmd_prompt_a3ac8ff7536eaff8c48297effe38dd49b}{00234}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a3ac8ff7536eaff8c48297effe38dd49b}{upPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00235}\mbox{\hyperlink{class_cmd_prompt_ac3465cb35ba356dc7b25316ebecf6418}{00235}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ac3465cb35ba356dc7b25316ebecf6418}{downPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00236}\mbox{\hyperlink{class_cmd_prompt_a497fc0afaca5b0221a701d16c5669f6e}{00236}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a497fc0afaca5b0221a701d16c5669f6e}{F1Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00237}\mbox{\hyperlink{class_cmd_prompt_a22d931e95d5d4ee7ddcda464c3013da7}{00237}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a22d931e95d5d4ee7ddcda464c3013da7}{F2Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00238}\mbox{\hyperlink{class_cmd_prompt_aa7f4737767af0407b584d72d82eac575}{00238}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aa7f4737767af0407b584d72d82eac575}{F3Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00239}\mbox{\hyperlink{class_cmd_prompt_ab40bffe5abc8e5bd0dd213c8d09f127f}{00239}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ab40bffe5abc8e5bd0dd213c8d09f127f}{F4Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00240}\mbox{\hyperlink{class_cmd_prompt_adb19d80475373f5f04bb37915eebc52c}{00240}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_adb19d80475373f5f04bb37915eebc52c}{F5Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00241}\mbox{\hyperlink{class_cmd_prompt_a5f7be131042ab667dcf63b179648d836}{00241}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a5f7be131042ab667dcf63b179648d836}{F6Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00242}\mbox{\hyperlink{class_cmd_prompt_a4542ddd7f03d93e1818387c0cb0f8a63}{00242}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a4542ddd7f03d93e1818387c0cb0f8a63}{F7Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00243}\mbox{\hyperlink{class_cmd_prompt_a7a70f165bc38bf8a1659723bb69dd0f3}{00243}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a7a70f165bc38bf8a1659723bb69dd0f3}{F8Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00244}\mbox{\hyperlink{class_cmd_prompt_a1c30ad91ca91781a975712c361651d76}{00244}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a1c30ad91ca91781a975712c361651d76}{F9Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00245}\mbox{\hyperlink{class_cmd_prompt_aabd407a7f7f65e643a85e8e7ee6130bd}{00245}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_aabd407a7f7f65e643a85e8e7ee6130bd}{F10Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00246}\mbox{\hyperlink{class_cmd_prompt_a253b9a7a27ef5d7f3619362f60caf8b3}{00246}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a253b9a7a27ef5d7f3619362f60caf8b3}{F11Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00247}\mbox{\hyperlink{class_cmd_prompt_abcae88d050bd8c7cbf947b132db1ec82}{00247}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_abcae88d050bd8c7cbf947b132db1ec82}{F12Pressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00248}\mbox{\hyperlink{class_cmd_prompt_ac592ae9edd3e41debabc86083d818a0b}{00248}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ac592ae9edd3e41debabc86083d818a0b}{cutPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00249}\mbox{\hyperlink{class_cmd_prompt_a6a6cf2771118274de46b15c22d5d0554}{00249}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a6a6cf2771118274de46b15c22d5d0554}{copyPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00250}\mbox{\hyperlink{class_cmd_prompt_a22d984256486e2ff46ad007399f8aaeb}{00250}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a22d984256486e2ff46ad007399f8aaeb}{pastePressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00251}\mbox{\hyperlink{class_cmd_prompt_a8c1995c536a85dfb8f66ecf9dcc0dc13}{00251}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a8c1995c536a85dfb8f66ecf9dcc0dc13}{selectAllPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00252}\mbox{\hyperlink{class_cmd_prompt_a05b431deab4716a1cd8d608c9c3d5503}{00252}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a05b431deab4716a1cd8d608c9c3d5503}{undoPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00253}\mbox{\hyperlink{class_cmd_prompt_a575fd1a60c16fe14f0a39ad9662b9ce2}{00253}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a575fd1a60c16fe14f0a39ad9662b9ce2}{redoPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00255}\mbox{\hyperlink{class_cmd_prompt_addb9170c614df4078997f470a3adadbe}{00255}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_addb9170c614df4078997f470a3adadbe}{shiftPressed}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00256}\mbox{\hyperlink{class_cmd_prompt_ad349219a6273ed0e7cd90523e06b6631}{00256}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ad349219a6273ed0e7cd90523e06b6631}{shiftReleased}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00258}\mbox{\hyperlink{class_cmd_prompt_ac593ceea953da376d165ce31e3187767}{00258}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_ac593ceea953da376d165ce31e3187767}{showSettings}}();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00260}\mbox{\hyperlink{class_cmd_prompt_a35bb9de8cb458ad631a618b3c9a03615}{00260}}\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_cmd_prompt_a35bb9de8cb458ad631a618b3c9a03615}{historyAppended}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00261}00261\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00262}00262\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00263}00263\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_input}{CmdPromptInput}}*\ \ \ \ promptInput;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00264}00264\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_history}{CmdPromptHistory}}*\ \ promptHistory;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00265}00265\ \ \ \ \ QVBoxLayout*\ \ \ \ \ \ \ promptVBoxLayout;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00266}00266\ \ \ \ \ QFrame*\ \ \ \ \ \ \ \ \ \ \ \ promptDivider;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00267}00267\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00268}00268\ \ \ \ \ \mbox{\hyperlink{class_cmd_prompt_splitter}{CmdPromptSplitter}}*\ promptSplitter;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00269}00269\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00270}00270\ \ \ \ \ QHash<QString,\ QString>*\ \ styleHash;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00271}00271\ \ \ \ \ \textcolor{keywordtype}{void}\ updateStyle();}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00272}00272\ \ \ \ \ QTimer*\ blinkTimer;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00273}00273\ \ \ \ \ \textcolor{keywordtype}{bool}\ blinkState;}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00274}00274\ \};}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00275}00275\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00276}00276\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00277}00277\ }
+\DoxyCodeLine{\Hypertarget{cmdprompt_8h_source_l00278}00278\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,46 @@
+\hypertarget{object-image_8h_source}{}\doxysubsection{object-\/image.h}
+\label{object-image_8h_source}\index{embroidermodder2/object-\/image.h@{embroidermodder2/object-\/image.h}}
+\mbox{\hyperlink{object-image_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ OBJECT\_IMAGE\_H}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ OBJECT\_IMAGE\_H}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-base_8h}{object-\/base.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00006}\mbox{\hyperlink{class_image_object}{00006}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_image_object}{ImageObject}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_base_object}{BaseObject}}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00007}00007\ \{}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00008}00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00009}00009\ \ \ \ \ \mbox{\hyperlink{class_image_object}{ImageObject}}(qreal\ x,\ qreal\ y,\ qreal\ w,\ qreal\ h,\ QRgb\ rgb,\ QGraphicsItem*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00010}00010\ \ \ \ \ \mbox{\hyperlink{class_image_object}{ImageObject}}(\mbox{\hyperlink{class_image_object}{ImageObject}}*\ obj,\ QGraphicsItem*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00011}00011\ \ \ \ \ \mbox{\hyperlink{class_image_object_aa85d5d06b39614fc27287bb93806ace3}{\string~ImageObject}}();}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00013}\mbox{\hyperlink{class_image_object_a61dadd085c1777f559549e05962b2c9ea56205085b8e5cc892bead298d181fae6}{00013}}\ \ \ \ \ \textcolor{keyword}{enum}\ \{\ \mbox{\hyperlink{class_image_object_a61dadd085c1777f559549e05962b2c9ea56205085b8e5cc892bead298d181fae6}{Type}}\ =\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a6a88937fa8fbf396850eb188d330091b}{OBJ\_TYPE\_IMAGE}}\ \};}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00014}\mbox{\hyperlink{class_image_object_a67b824a3d6f5f8dc7b9f435353c62676}{00014}}\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_image_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_image_object_a61dadd085c1777f559549e05962b2c9ea56205085b8e5cc892bead298d181fae6}{Type}};\ \}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00016}00016\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_image_object_a0ede5e2dd198c25a3934b9152ca4ba42}{objectTopLeft}}()\ \ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00017}00017\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_image_object_ad0c3f8b85530c746841a036a2257883f}{objectTopRight}}()\ \ \ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00018}00018\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_image_object_ac8c3db63cb3247b6357ed1af8a7318b4}{objectBottomLeft}}()\ \ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00019}00019\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_image_object_a84654865c2c15bd38694f05b6c6851d2}{objectBottomRight}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00020}\mbox{\hyperlink{class_image_object_a06947a77020f6b0ad9767647472817ff}{00020}}\ \ \ \ \ qreal\ \ \ \mbox{\hyperlink{class_image_object_a06947a77020f6b0ad9767647472817ff}{objectWidth}}()\textcolor{keyword}{\ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}().width()*scale();\ \}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00021}\mbox{\hyperlink{class_image_object_a732d1bafb2973d70809b7b4ffc490e53}{00021}}\ \ \ \ \ qreal\ \ \ \mbox{\hyperlink{class_image_object_a732d1bafb2973d70809b7b4ffc490e53}{objectHeight}}()\textcolor{keyword}{\ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}().height()*scale();\ \}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00022}\mbox{\hyperlink{class_image_object_a6a9647b133aed68fd071e92a50ec2177}{00022}}\ \ \ \ \ qreal\ \ \ \mbox{\hyperlink{class_image_object_a6a9647b133aed68fd071e92a50ec2177}{objectArea}}()\textcolor{keyword}{\ \ \ \ \ \ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ qAbs(\mbox{\hyperlink{class_image_object_a06947a77020f6b0ad9767647472817ff}{objectWidth}}()*\mbox{\hyperlink{class_image_object_a732d1bafb2973d70809b7b4ffc490e53}{objectHeight}}());\ \}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00024}00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_object_a481188f737da8ddec46ec5eb8007cb16}{setObjectRect}}(qreal\ x,\ qreal\ y,\ qreal\ w,\ qreal\ h);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00026}00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}(QPainter*\ painter\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00027}00027\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_object_a814830f38fd2c36b3f96252ee65d7617}{vulcanize}}();}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00028}00028\ \ \ \ \ \textcolor{keyword}{virtual}\ QPointF\ \mbox{\hyperlink{class_image_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{mouseSnapPoint}}(\textcolor{keyword}{const}\ QPointF\&\ mousePoint);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00029}00029\ \ \ \ \ \textcolor{keyword}{virtual}\ QList<QPointF>\ \mbox{\hyperlink{class_image_object_acfde9da59c0bbaaab7decdc222aa38a3}{allGripPoints}}();}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00030}00030\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_object_af377b9b2e3594940757c25610899c02b}{gripEdit}}(\textcolor{keyword}{const}\ QPointF\&\ before,\ \textcolor{keyword}{const}\ QPointF\&\ after);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00031}00031\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00032}00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_image_object_a8c124c843504f6971f6677f12ac9247f}{paint}}(QPainter*,\ \textcolor{keyword}{const}\ QStyleOptionGraphicsItem*,\ QWidget*);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00033}00033\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00034}00034\ \ \ \ \ \textcolor{keywordtype}{void}\ init(qreal\ x,\ qreal\ y,\ qreal\ w,\ qreal\ h,\ QRgb\ rgb,\ Qt::PenStyle\ lineType);}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00035}00035\ \ \ \ \ \textcolor{keywordtype}{void}\ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00036}00036\ \};}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00038}00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{object-image_8h_source_l00040}00040\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

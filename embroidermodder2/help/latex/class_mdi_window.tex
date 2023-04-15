@@ -1,0 +1,506 @@
+\hypertarget{class_mdi_window}{}\doxysubsection{Mdi\+Window Class Reference}
+\label{class_mdi_window}\index{MdiWindow@{MdiWindow}}
+
+
+{\ttfamily \#include $<$mdiwindow.\+h$>$}
+
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_mdi_window_aa5274b1d2675c2d6e4883b8b77747e42}{close\+Event}} (QClose\+Event $\ast$e)
+\item 
+void \mbox{\hyperlink{class_mdi_window_abe8de8cccec92139e7b920659a38a62d}{on\+Window\+Activated}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_a235df8277a1ccfc4f132aa56be2a557b}{current\+Layer\+Changed}} (const QString \&layer)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a15ee00d06a62026ec2dd3ef83d76c3db}{current\+Color\+Changed}} (const QRgb \&color)
+\item 
+void \mbox{\hyperlink{class_mdi_window_af03668f2b1f4cb09fd499abe8c8548b2}{current\+Linetype\+Changed}} (const QString \&type)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a5d8fea11d1b93dc1574f4c18080edf42}{current\+Lineweight\+Changed}} (const QString \&weight)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a670ce2d87f6289083a1b4a1531f5be21}{update\+Color\+Linetype\+Lineweight}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_a74af558a825ac72754085696d893671d}{delete\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_abb2c9654968151943c6068652051fe73}{escape\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_a754be5f2a56472b04d88b98cdcac1caf}{show\+View\+Scroll\+Bars}} (bool val)
+\item 
+void \mbox{\hyperlink{class_mdi_window_add3eae5083efcf9079114646741288a9}{set\+View\+Cross\+Hair\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a19e3b1f8b485e29678f99d6df5bf7f61}{set\+View\+Background\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a1bd06495bfd1d5c7b22997d61e08904f}{set\+View\+Select\+Box\+Colors}} (QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+\item 
+void \mbox{\hyperlink{class_mdi_window_ad3ef5fde0863f6e6b924cbbbf1627205}{set\+View\+Grid\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a46c80c43b6ddf7cf2b1465af15f23226}{set\+View\+Ruler\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a388f572c62279f839ee138a9afbdeeb5}{print}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_a2167cf71975c040208ae05b7b6b10a2f}{save\+BMC}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_a19bdabe257073caa0f70f6cb617e6211}{prompt\+History\+Appended}} (const QString \&txt)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a296e76dd335d1cd0981a002e1342a2aa}{log\+Prompt\+Input}} (const QString \&txt)
+\item 
+void \mbox{\hyperlink{class_mdi_window_adb1cb792f8d7dffaa9a8ecbea1a3b517}{prompt\+Input\+Previous}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_aa183f50daf2ba1bed0068f7eae87f6a4}{prompt\+Input\+Next}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_mdi_window_a2a3936fc781a9fdcb8793c8f2030834c}{send\+Close\+Mdi\+Win}} (\mbox{\hyperlink{class_mdi_window}{Mdi\+Window}} $\ast$)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_mdi_window_afd35fb0bc495cf9741f744f0714e3e8f}{Mdi\+Window}} (const int the\+Index, \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$mw, QMdi\+Area $\ast$parent, Qt\+::\+Window\+Flags wflags)
+\item 
+\mbox{\hyperlink{class_mdi_window_a7dc5f33f85d9521df57d0b2b52a3925b}{$\sim$\+Mdi\+Window}} ()
+\item 
+virtual QSize \mbox{\hyperlink{class_mdi_window_ab811bd256b700b7e894cc3b62515bcec}{size\+Hint}} () const
+\item 
+QString \mbox{\hyperlink{class_mdi_window_aef74298226065865a13b44697d122a18}{get\+Current\+File}} ()
+\item 
+QString \mbox{\hyperlink{class_mdi_window_a6865ed252723d09b16383afd88f55813}{get\+Short\+Current\+File}} ()
+\item 
+\mbox{\hyperlink{class_view}{View}} $\ast$ \mbox{\hyperlink{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}{get\+View}} ()
+\item 
+QGraphics\+Scene $\ast$ \mbox{\hyperlink{class_mdi_window_a76ed9f15d95e5bce5609f6e0309a94a8}{get\+Scene}} ()
+\item 
+QString \mbox{\hyperlink{class_mdi_window_a5e68b0a37f6d9b9056245336123e5425}{get\+Current\+Layer}} ()
+\item 
+QRgb \mbox{\hyperlink{class_mdi_window_a7477f451c0364aac406b01938ba2770f}{get\+Current\+Color}} ()
+\item 
+QString \mbox{\hyperlink{class_mdi_window_a3cf7a99d1afce0afcf97c0fb22f11eb5}{get\+Current\+Line\+Type}} ()
+\item 
+QString \mbox{\hyperlink{class_mdi_window_ac9c127dff59bfd141b4ba67221553134}{get\+Current\+Line\+Weight}} ()
+\item 
+void \mbox{\hyperlink{class_mdi_window_a3a875b4b6d9e844f9597650e74899363}{set\+Current\+Layer}} (const QString \&layer)
+\item 
+void \mbox{\hyperlink{class_mdi_window_af25850fe78cf92350a21d616fd10f1e6}{set\+Current\+Color}} (const QRgb \&color)
+\item 
+void \mbox{\hyperlink{class_mdi_window_aa3a28893c0aa55d931d82ab8f8bc3207}{set\+Current\+Line\+Type}} (const QString \&line\+Type)
+\item 
+void \mbox{\hyperlink{class_mdi_window_a98db6b16f30a0e91912563e44d3f26a2}{set\+Current\+Line\+Weight}} (const QString \&line\+Weight)
+\item 
+void \mbox{\hyperlink{class_mdi_window_ab4cad34422175b633fa0d243cbc7bf42}{design\+Details}} ()
+\item 
+bool \mbox{\hyperlink{class_mdi_window_a8437f8fd71bcf6da5de2a49cbd0b105b}{load\+File}} (const QString \&file\+Name)
+\item 
+bool \mbox{\hyperlink{class_mdi_window_aee368b2e953c4f7588e5da35d944cb0e}{save\+File}} (const QString \&file\+Name)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00030}{30}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_mdi_window_afd35fb0bc495cf9741f744f0714e3e8f}\label{class_mdi_window_afd35fb0bc495cf9741f744f0714e3e8f}} 
+\index{MdiWindow@{MdiWindow}!MdiWindow@{MdiWindow}}
+\index{MdiWindow@{MdiWindow}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{MdiWindow()}{MdiWindow()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_mdi_window}{Mdi\+Window}} (\begin{DoxyParamCaption}\item[{const int}]{the\+Index,  }\item[{\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$}]{mw,  }\item[{QMdi\+Area $\ast$}]{parent,  }\item[{Qt\+::\+Window\+Flags}]{wflags }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00030}{30}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a7dc5f33f85d9521df57d0b2b52a3925b}\label{class_mdi_window_a7dc5f33f85d9521df57d0b2b52a3925b}} 
+\index{MdiWindow@{MdiWindow}!````~MdiWindow@{$\sim$MdiWindow}}
+\index{````~MdiWindow@{$\sim$MdiWindow}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{$\sim$MdiWindow()}{~MdiWindow()}}
+{\footnotesize\ttfamily $\sim$\mbox{\hyperlink{class_mdi_window}{Mdi\+Window}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00081}{81}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_mdi_window_aa5274b1d2675c2d6e4883b8b77747e42}\label{class_mdi_window_aa5274b1d2675c2d6e4883b8b77747e42}} 
+\index{MdiWindow@{MdiWindow}!closeEvent@{closeEvent}}
+\index{closeEvent@{closeEvent}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{closeEvent}{closeEvent}}
+{\footnotesize\ttfamily void close\+Event (\begin{DoxyParamCaption}\item[{QClose\+Event $\ast$}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00409}{409}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a15ee00d06a62026ec2dd3ef83d76c3db}\label{class_mdi_window_a15ee00d06a62026ec2dd3ef83d76c3db}} 
+\index{MdiWindow@{MdiWindow}!currentColorChanged@{currentColorChanged}}
+\index{currentColorChanged@{currentColorChanged}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{currentColorChanged}{currentColorChanged}}
+{\footnotesize\ttfamily void current\+Color\+Changed (\begin{DoxyParamCaption}\item[{const QRgb \&}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00442}{442}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a235df8277a1ccfc4f132aa56be2a557b}\label{class_mdi_window_a235df8277a1ccfc4f132aa56be2a557b}} 
+\index{MdiWindow@{MdiWindow}!currentLayerChanged@{currentLayerChanged}}
+\index{currentLayerChanged@{currentLayerChanged}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{currentLayerChanged}{currentLayerChanged}}
+{\footnotesize\ttfamily void current\+Layer\+Changed (\begin{DoxyParamCaption}\item[{const QString \&}]{layer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00437}{437}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_af03668f2b1f4cb09fd499abe8c8548b2}\label{class_mdi_window_af03668f2b1f4cb09fd499abe8c8548b2}} 
+\index{MdiWindow@{MdiWindow}!currentLinetypeChanged@{currentLinetypeChanged}}
+\index{currentLinetypeChanged@{currentLinetypeChanged}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{currentLinetypeChanged}{currentLinetypeChanged}}
+{\footnotesize\ttfamily void current\+Linetype\+Changed (\begin{DoxyParamCaption}\item[{const QString \&}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00447}{447}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a5d8fea11d1b93dc1574f4c18080edf42}\label{class_mdi_window_a5d8fea11d1b93dc1574f4c18080edf42}} 
+\index{MdiWindow@{MdiWindow}!currentLineweightChanged@{currentLineweightChanged}}
+\index{currentLineweightChanged@{currentLineweightChanged}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{currentLineweightChanged}{currentLineweightChanged}}
+{\footnotesize\ttfamily void current\+Lineweight\+Changed (\begin{DoxyParamCaption}\item[{const QString \&}]{weight }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00452}{452}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a74af558a825ac72754085696d893671d}\label{class_mdi_window_a74af558a825ac72754085696d893671d}} 
+\index{MdiWindow@{MdiWindow}!deletePressed@{deletePressed}}
+\index{deletePressed@{deletePressed}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{deletePressed}{deletePressed}}
+{\footnotesize\ttfamily void delete\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00461}{461}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_ab4cad34422175b633fa0d243cbc7bf42}\label{class_mdi_window_ab4cad34422175b633fa0d243cbc7bf42}} 
+\index{MdiWindow@{MdiWindow}!designDetails@{designDetails}}
+\index{designDetails@{designDetails}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{designDetails()}{designDetails()}}
+{\footnotesize\ttfamily void design\+Details (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_mdi_window_abb2c9654968151943c6068652051fe73}\label{class_mdi_window_abb2c9654968151943c6068652051fe73}} 
+\index{MdiWindow@{MdiWindow}!escapePressed@{escapePressed}}
+\index{escapePressed@{escapePressed}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{escapePressed}{escapePressed}}
+{\footnotesize\ttfamily void escape\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00466}{466}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a7477f451c0364aac406b01938ba2770f}\label{class_mdi_window_a7477f451c0364aac406b01938ba2770f}} 
+\index{MdiWindow@{MdiWindow}!getCurrentColor@{getCurrentColor}}
+\index{getCurrentColor@{getCurrentColor}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getCurrentColor()}{getCurrentColor()}}
+{\footnotesize\ttfamily QRgb get\+Current\+Color (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00044}{44}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_aef74298226065865a13b44697d122a18}\label{class_mdi_window_aef74298226065865a13b44697d122a18}} 
+\index{MdiWindow@{MdiWindow}!getCurrentFile@{getCurrentFile}}
+\index{getCurrentFile@{getCurrentFile}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getCurrentFile()}{getCurrentFile()}}
+{\footnotesize\ttfamily QString get\+Current\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00039}{39}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a5e68b0a37f6d9b9056245336123e5425}\label{class_mdi_window_a5e68b0a37f6d9b9056245336123e5425}} 
+\index{MdiWindow@{MdiWindow}!getCurrentLayer@{getCurrentLayer}}
+\index{getCurrentLayer@{getCurrentLayer}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getCurrentLayer()}{getCurrentLayer()}}
+{\footnotesize\ttfamily QString get\+Current\+Layer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00043}{43}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a3cf7a99d1afce0afcf97c0fb22f11eb5}\label{class_mdi_window_a3cf7a99d1afce0afcf97c0fb22f11eb5}} 
+\index{MdiWindow@{MdiWindow}!getCurrentLineType@{getCurrentLineType}}
+\index{getCurrentLineType@{getCurrentLineType}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getCurrentLineType()}{getCurrentLineType()}}
+{\footnotesize\ttfamily QString get\+Current\+Line\+Type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00045}{45}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_ac9c127dff59bfd141b4ba67221553134}\label{class_mdi_window_ac9c127dff59bfd141b4ba67221553134}} 
+\index{MdiWindow@{MdiWindow}!getCurrentLineWeight@{getCurrentLineWeight}}
+\index{getCurrentLineWeight@{getCurrentLineWeight}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getCurrentLineWeight()}{getCurrentLineWeight()}}
+{\footnotesize\ttfamily QString get\+Current\+Line\+Weight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00046}{46}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a76ed9f15d95e5bce5609f6e0309a94a8}\label{class_mdi_window_a76ed9f15d95e5bce5609f6e0309a94a8}} 
+\index{MdiWindow@{MdiWindow}!getScene@{getScene}}
+\index{getScene@{getScene}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getScene()}{getScene()}}
+{\footnotesize\ttfamily QGraphics\+Scene $\ast$ get\+Scene (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00042}{42}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a6865ed252723d09b16383afd88f55813}\label{class_mdi_window_a6865ed252723d09b16383afd88f55813}} 
+\index{MdiWindow@{MdiWindow}!getShortCurrentFile@{getShortCurrentFile}}
+\index{getShortCurrentFile@{getShortCurrentFile}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getShortCurrentFile()}{getShortCurrentFile()}}
+{\footnotesize\ttfamily QString get\+Short\+Current\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00399}{399}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}\label{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}} 
+\index{MdiWindow@{MdiWindow}!getView@{getView}}
+\index{getView@{getView}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{getView()}{getView()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_view}{View}} $\ast$ get\+View (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00041}{41}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a8437f8fd71bcf6da5de2a49cbd0b105b}\label{class_mdi_window_a8437f8fd71bcf6da5de2a49cbd0b105b}} 
+\index{MdiWindow@{MdiWindow}!loadFile@{loadFile}}
+\index{loadFile@{loadFile}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{loadFile()}{loadFile()}}
+{\footnotesize\ttfamily bool load\+File (\begin{DoxyParamCaption}\item[{const QString \&}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00092}{92}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a296e76dd335d1cd0981a002e1342a2aa}\label{class_mdi_window_a296e76dd335d1cd0981a002e1342a2aa}} 
+\index{MdiWindow@{MdiWindow}!logPromptInput@{logPromptInput}}
+\index{logPromptInput@{logPromptInput}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{logPromptInput}{logPromptInput}}
+{\footnotesize\ttfamily void log\+Prompt\+Input (\begin{DoxyParamCaption}\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00506}{506}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_abe8de8cccec92139e7b920659a38a62d}\label{class_mdi_window_abe8de8cccec92139e7b920659a38a62d}} 
+\index{MdiWindow@{MdiWindow}!onWindowActivated@{onWindowActivated}}
+\index{onWindowActivated@{onWindowActivated}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{onWindowActivated}{onWindowActivated}}
+{\footnotesize\ttfamily void on\+Window\+Activated (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00415}{415}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a388f572c62279f839ee138a9afbdeeb5}\label{class_mdi_window_a388f572c62279f839ee138a9afbdeeb5}} 
+\index{MdiWindow@{MdiWindow}!print@{print}}
+\index{print@{print}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{print}{print}}
+{\footnotesize\ttfamily void print (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00336}{336}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a19bdabe257073caa0f70f6cb617e6211}\label{class_mdi_window_a19bdabe257073caa0f70f6cb617e6211}} 
+\index{MdiWindow@{MdiWindow}!promptHistoryAppended@{promptHistoryAppended}}
+\index{promptHistoryAppended@{promptHistoryAppended}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{promptHistoryAppended}{promptHistoryAppended}}
+{\footnotesize\ttfamily void prompt\+History\+Appended (\begin{DoxyParamCaption}\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00501}{501}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_aa183f50daf2ba1bed0068f7eae87f6a4}\label{class_mdi_window_aa183f50daf2ba1bed0068f7eae87f6a4}} 
+\index{MdiWindow@{MdiWindow}!promptInputNext@{promptInputNext}}
+\index{promptInputNext@{promptInputNext}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{promptInputNext}{promptInputNext}}
+{\footnotesize\ttfamily void prompt\+Input\+Next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00517}{517}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_adb1cb792f8d7dffaa9a8ecbea1a3b517}\label{class_mdi_window_adb1cb792f8d7dffaa9a8ecbea1a3b517}} 
+\index{MdiWindow@{MdiWindow}!promptInputPrevious@{promptInputPrevious}}
+\index{promptInputPrevious@{promptInputPrevious}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{promptInputPrevious}{promptInputPrevious}}
+{\footnotesize\ttfamily void prompt\+Input\+Previous (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00512}{512}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a2167cf71975c040208ae05b7b6b10a2f}\label{class_mdi_window_a2167cf71975c040208ae05b7b6b10a2f}} 
+\index{MdiWindow@{MdiWindow}!saveBMC@{saveBMC}}
+\index{saveBMC@{saveBMC}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{saveBMC}{saveBMC}}
+{\footnotesize\ttfamily void save\+BMC (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00366}{366}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_aee368b2e953c4f7588e5da35d944cb0e}\label{class_mdi_window_aee368b2e953c4f7588e5da35d944cb0e}} 
+\index{MdiWindow@{MdiWindow}!saveFile@{saveFile}}
+\index{saveFile@{saveFile}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{saveFile()}{saveFile()}}
+{\footnotesize\ttfamily bool save\+File (\begin{DoxyParamCaption}\item[{const QString \&}]{file\+Name }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00086}{86}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a2a3936fc781a9fdcb8793c8f2030834c}\label{class_mdi_window_a2a3936fc781a9fdcb8793c8f2030834c}} 
+\index{MdiWindow@{MdiWindow}!sendCloseMdiWin@{sendCloseMdiWin}}
+\index{sendCloseMdiWin@{sendCloseMdiWin}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{sendCloseMdiWin}{sendCloseMdiWin}}
+{\footnotesize\ttfamily void send\+Close\+Mdi\+Win (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_mdi_window}{Mdi\+Window}} $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_mdi_window_af25850fe78cf92350a21d616fd10f1e6}\label{class_mdi_window_af25850fe78cf92350a21d616fd10f1e6}} 
+\index{MdiWindow@{MdiWindow}!setCurrentColor@{setCurrentColor}}
+\index{setCurrentColor@{setCurrentColor}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setCurrentColor()}{setCurrentColor()}}
+{\footnotesize\ttfamily void set\+Current\+Color (\begin{DoxyParamCaption}\item[{const QRgb \&}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00048}{48}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a3a875b4b6d9e844f9597650e74899363}\label{class_mdi_window_a3a875b4b6d9e844f9597650e74899363}} 
+\index{MdiWindow@{MdiWindow}!setCurrentLayer@{setCurrentLayer}}
+\index{setCurrentLayer@{setCurrentLayer}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setCurrentLayer()}{setCurrentLayer()}}
+{\footnotesize\ttfamily void set\+Current\+Layer (\begin{DoxyParamCaption}\item[{const QString \&}]{layer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00047}{47}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_aa3a28893c0aa55d931d82ab8f8bc3207}\label{class_mdi_window_aa3a28893c0aa55d931d82ab8f8bc3207}} 
+\index{MdiWindow@{MdiWindow}!setCurrentLineType@{setCurrentLineType}}
+\index{setCurrentLineType@{setCurrentLineType}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setCurrentLineType()}{setCurrentLineType()}}
+{\footnotesize\ttfamily void set\+Current\+Line\+Type (\begin{DoxyParamCaption}\item[{const QString \&}]{line\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00049}{49}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a98db6b16f30a0e91912563e44d3f26a2}\label{class_mdi_window_a98db6b16f30a0e91912563e44d3f26a2}} 
+\index{MdiWindow@{MdiWindow}!setCurrentLineWeight@{setCurrentLineWeight}}
+\index{setCurrentLineWeight@{setCurrentLineWeight}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setCurrentLineWeight()}{setCurrentLineWeight()}}
+{\footnotesize\ttfamily void set\+Current\+Line\+Weight (\begin{DoxyParamCaption}\item[{const QString \&}]{line\+Weight }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8h_source_l00050}{50}} of file \mbox{\hyperlink{mdiwindow_8h_source}{mdiwindow.\+h}}.
+
+\mbox{\Hypertarget{class_mdi_window_a19e3b1f8b485e29678f99d6df5bf7f61}\label{class_mdi_window_a19e3b1f8b485e29678f99d6df5bf7f61}} 
+\index{MdiWindow@{MdiWindow}!setViewBackgroundColor@{setViewBackgroundColor}}
+\index{setViewBackgroundColor@{setViewBackgroundColor}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setViewBackgroundColor}{setViewBackgroundColor}}
+{\footnotesize\ttfamily void set\+View\+Background\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00481}{481}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_add3eae5083efcf9079114646741288a9}\label{class_mdi_window_add3eae5083efcf9079114646741288a9}} 
+\index{MdiWindow@{MdiWindow}!setViewCrossHairColor@{setViewCrossHairColor}}
+\index{setViewCrossHairColor@{setViewCrossHairColor}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setViewCrossHairColor}{setViewCrossHairColor}}
+{\footnotesize\ttfamily void set\+View\+Cross\+Hair\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00476}{476}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_ad3ef5fde0863f6e6b924cbbbf1627205}\label{class_mdi_window_ad3ef5fde0863f6e6b924cbbbf1627205}} 
+\index{MdiWindow@{MdiWindow}!setViewGridColor@{setViewGridColor}}
+\index{setViewGridColor@{setViewGridColor}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setViewGridColor}{setViewGridColor}}
+{\footnotesize\ttfamily void set\+View\+Grid\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00491}{491}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a46c80c43b6ddf7cf2b1465af15f23226}\label{class_mdi_window_a46c80c43b6ddf7cf2b1465af15f23226}} 
+\index{MdiWindow@{MdiWindow}!setViewRulerColor@{setViewRulerColor}}
+\index{setViewRulerColor@{setViewRulerColor}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setViewRulerColor}{setViewRulerColor}}
+{\footnotesize\ttfamily void set\+View\+Ruler\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00496}{496}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a1bd06495bfd1d5c7b22997d61e08904f}\label{class_mdi_window_a1bd06495bfd1d5c7b22997d61e08904f}} 
+\index{MdiWindow@{MdiWindow}!setViewSelectBoxColors@{setViewSelectBoxColors}}
+\index{setViewSelectBoxColors@{setViewSelectBoxColors}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{setViewSelectBoxColors}{setViewSelectBoxColors}}
+{\footnotesize\ttfamily void set\+View\+Select\+Box\+Colors (\begin{DoxyParamCaption}\item[{QRgb}]{colorL,  }\item[{QRgb}]{fillL,  }\item[{QRgb}]{colorR,  }\item[{QRgb}]{fillR,  }\item[{int}]{alpha }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00486}{486}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a754be5f2a56472b04d88b98cdcac1caf}\label{class_mdi_window_a754be5f2a56472b04d88b98cdcac1caf}} 
+\index{MdiWindow@{MdiWindow}!showViewScrollBars@{showViewScrollBars}}
+\index{showViewScrollBars@{showViewScrollBars}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{showViewScrollBars}{showViewScrollBars}}
+{\footnotesize\ttfamily void show\+View\+Scroll\+Bars (\begin{DoxyParamCaption}\item[{bool}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00471}{471}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_ab811bd256b700b7e894cc3b62515bcec}\label{class_mdi_window_ab811bd256b700b7e894cc3b62515bcec}} 
+\index{MdiWindow@{MdiWindow}!sizeHint@{sizeHint}}
+\index{sizeHint@{sizeHint}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{sizeHint()}{sizeHint()}}
+{\footnotesize\ttfamily QSize size\+Hint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00431}{431}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+\mbox{\Hypertarget{class_mdi_window_a670ce2d87f6289083a1b4a1531f5be21}\label{class_mdi_window_a670ce2d87f6289083a1b4a1531f5be21}} 
+\index{MdiWindow@{MdiWindow}!updateColorLinetypeLineweight@{updateColorLinetypeLineweight}}
+\index{updateColorLinetypeLineweight@{updateColorLinetypeLineweight}!MdiWindow@{MdiWindow}}
+\doxyparagraph{\texorpdfstring{updateColorLinetypeLineweight}{updateColorLinetypeLineweight}}
+{\footnotesize\ttfamily void update\+Color\+Linetype\+Lineweight (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{mdiwindow_8cpp_source_l00457}{457}} of file \mbox{\hyperlink{mdiwindow_8cpp_source}{mdiwindow.\+cpp}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+embroidermodder2/\mbox{\hyperlink{mdiwindow_8h}{mdiwindow.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{mdiwindow_8cpp}{mdiwindow.\+cpp}}\end{DoxyCompactItemize}

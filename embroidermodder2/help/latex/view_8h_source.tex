@@ -1,0 +1,222 @@
+\hypertarget{view_8h_source}{}\doxysubsection{view.\+h}
+\label{view_8h_source}\index{embroidermodder2/view.h@{embroidermodder2/view.h}}
+\mbox{\hyperlink{view_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ VIEW\_H}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ VIEW\_H}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QGraphicsView>}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QGraphicsScene>}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow_8h}{mainwindow.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00008}00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00009}00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_base_object}{BaseObject}};}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00010}00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_select_box}{SelectBox}};}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00012}00012\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00013}00013\ \textcolor{keyword}{class\ }QGraphicsScene;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00014}00014\ \textcolor{keyword}{class\ }QUndoStack;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00015}00015\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00017}\mbox{\hyperlink{class_view}{00017}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_view}{View}}\ :\ \textcolor{keyword}{public}\ QGraphicsView}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00018}00018\ \{}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00019}00019\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00021}00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00022}00022\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}(\mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QGraphicsScene*\ theScene,\ QWidget*\ parent);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00023}00023\ \ \ \ \ \mbox{\hyperlink{class_view_aca0fee82e5ee0d139ca4b895a4facdb2}{\string~View}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00025}00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_view_a45f3b6b99ab9b4af38b16e63b294ae90}{allowZoomIn}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00026}00026\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_view_a1ed4bf88acc7a3a6e55b22f842200daf}{allowZoomOut}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00028}00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ac6217db074fb196b438586032cce55e2}{recalculateLimits}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00029}00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a9399e75033763a468dbce886b3a2bef1}{zoomToPoint}}(\textcolor{keyword}{const}\ QPoint\&\ mousePoint,\ \textcolor{keywordtype}{int}\ zoomDir);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00030}00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a762bca22928e74a869759f7e19304496}{centerAt}}(\textcolor{keyword}{const}\ QPointF\&\ centerPoint);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00031}\mbox{\hyperlink{class_view_a410eee3fe77195bbe49197bd8a3929d9}{00031}}\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_view_a410eee3fe77195bbe49197bd8a3929d9}{center}}()\ \{\ \textcolor{keywordflow}{return}\ mapToScene(rect().\mbox{\hyperlink{class_view_a410eee3fe77195bbe49197bd8a3929d9}{center}}());\ \}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00033}\mbox{\hyperlink{class_view_aa987e8c7cd0567c751a38aba012b7ce7}{00033}}\ \ \ \ \ QUndoStack*\ \mbox{\hyperlink{class_view_aa987e8c7cd0567c751a38aba012b7ce7}{getUndoStack}}()\ \{\ \textcolor{keywordflow}{return}\ undoStack;\ \}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00034}00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aed9efd2a70381e9bf92ace0a97c32e6c}{addObject}}(\mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00035}00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a2cb8abcb40747af7daa5221c538eacd9}{deleteObject}}(\mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00036}00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a94df1b6af4e568bfe42441ec033a27b6}{vulcanizeObject}}(\mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00038}00038\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00039}00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a7d7e315e34a66d9a66022d31635e7aca}{zoomIn}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00040}00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a72d29d38d8dd2c091cdd7078e1364f25}{zoomOut}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00041}00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a8a61a1a0975cb8663e805361884df66d}{zoomWindow}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00042}00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a29304b5b8cae9c622a64491ebf5eafef}{zoomSelected}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00043}00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a68ccbc27a011c2b3ed99cea7cba7f66e}{zoomExtents}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00044}00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_afb3d0b673328efbf248d7d5ddf645895}{panRealTime}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00045}00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a7d1b5d673c621538459a144cddb31603}{panPoint}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00046}00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a619649963ef9ad898fe74cddbd1ad878}{panLeft}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00047}00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_add4363dde53b126aed7f72bc661b57ca}{panRight}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00048}00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_abffa3918b99a689552c01c11bbf0b175}{panUp}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00049}00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a5c9e7f314e3195e0f6db233ee8fed3ac}{panDown}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00050}00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ab6658ed404200bd7aaca5629db064645}{selectAll}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00051}00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a1d85de554564e69188e34457b463de1b}{selectionChanged}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00052}00052\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_abd07e172ccec6823a88289c21124a367}{clearSelection}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00053}00053\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_adc2fdeeaaaa3dde25a46a15a8815c3ac}{deleteSelected}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00054}00054\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ac51e16242e7caa854922c3d00e84cbe2}{moveSelected}}(qreal\ dx,\ qreal\ dy);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00055}00055\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ada01f65675afbbc0b8006d58df5acb81}{cut}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00056}00056\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aaa6c087511a52e64fc9ad92820c7c0a8}{copy}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00057}00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ad7f58047731e9a1b735aa142811c70e8}{paste}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00058}00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aaad9dded92c1d0bd14357bb8bc5a142d}{repeatAction}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00059}00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a08439dd91239f4e45fc585a9c6f2988a}{moveAction}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00060}00060\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ad0a1d907f075c38a1d34cf976a9527d8}{scaleAction}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00061}00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ae8656e711caf4f6d627411ba87f5507c}{scaleSelected}}(qreal\ x,\ qreal\ y,\ qreal\ factor);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00062}00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a99afe6ecc9412bcf50b8a8ba1836177f}{rotateAction}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00063}00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}{rotateSelected}}(qreal\ x,\ qreal\ y,\ qreal\ rot);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00064}00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a0d24c4e6576ba8a921fdccb9d89db887}{mirrorSelected}}(qreal\ x1,\ qreal\ y1,\ qreal\ x2,\ qreal\ y2);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00065}00065\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{class_view_a50f2a887aea481c21501f0ba17f1ec27}{numSelected}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00067}00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a74af558a825ac72754085696d893671d}{deletePressed}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00068}00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_abb2c9654968151943c6068652051fe73}{escapePressed}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00070}00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a1965f3faead77d69a1c0c6e2115e07c5}{cornerButtonClicked}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ae9693cc28c79625147187b1f453f5126}{showScrollBars}}(\textcolor{keywordtype}{bool}\ val);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00073}00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a42a33d19fc5d46b5c07b108f166b014e}{setCornerButton}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00074}00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ac7ddf091a5138a99250ac0bde26191de}{setCrossHairColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00075}00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}{setCrossHairSize}}(quint8\ percent);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00076}00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a0611092d52a93bb9ccb3cdcb09adaa55}{setBackgroundColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00077}00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a03cb6c65d4056ad02541f28450fed058}{setSelectBoxColors}}(QRgb\ colorL,\ QRgb\ fillL,\ QRgb\ colorR,\ QRgb\ fillR,\ \textcolor{keywordtype}{int}\ alpha);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00078}00078\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a8966d3c24ca080bc510137696930eabf}{toggleSnap}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00079}00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a801c2b151be4cd0bbca2e788957ae09b}{toggleGrid}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00080}00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aaeb8dbe2e5f6c268d42a3c0705388033}{toggleRuler}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00081}00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a1581551d50109dbe52aa0e37c7464115}{toggleOrtho}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00082}00082\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a383007f70259d129c2686bd8aa315840}{togglePolar}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00083}00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a7b7d2dc56a845dd3a20fadacdbd0c184}{toggleQSnap}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00084}00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_add2424e5e45c9e1442f2418bccecc224}{toggleQTrack}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00085}00085\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_afea870e2ddae286d6228523c39a581ee}{toggleLwt}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00086}00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a019cda5ece7dc25e96280e1859638a6d}{toggleReal}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00087}00087\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_view_ad4f95dfb8b4585faffcb4f1cadd8f746}{isLwtEnabled}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00088}00088\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_view_a860f6d3addef391bad0986536b4b93a0}{isRealEnabled}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00090}00090\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a51b34485435f5af679bc62ebf5492c44}{setGridColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00091}00091\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a935fdfc805caa4ece4930fff01b7aa39}{createGrid}}(\textcolor{keyword}{const}\ QString\&\ gridType);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00092}00092\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ade2a3a088253cd83dd64a0bd3fbb12bb}{setRulerColor}}(QRgb\ color);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00094}00094\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a2aaf2120aae14d65a869325c2b3e6179}{previewOn}}(\textcolor{keywordtype}{int}\ clone,\ \textcolor{keywordtype}{int}\ mode,\ qreal\ x,\ qreal\ y,\ qreal\ data);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00095}00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a70844daf87c63fdfb93c78436fb83215}{previewOff}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00097}00097\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ac85a07d654a28f7ba6fccddd0328d1a0}{enableMoveRapidFire}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00098}00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ab1b8d3117e804d31da3f538473d9bb68}{disableMoveRapidFire}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00100}00100\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_view_a03fe569d1119d2252ef8f547d0f5ef3b}{allowRubber}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00101}00101\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aa9ac21e89f642400a99275f5d4553fb3}{addToRubberRoom}}(QGraphicsItem*\ item);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00102}00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ac87acb2daa23a7cf69142589de87bfdc}{vulcanizeRubberRoom}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00103}00103\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aa59ad7673935c8a951a1722a343a139d}{clearRubberRoom}}();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00104}00104\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ad6cf4a66399bdc7751fd2a1da2983529}{spareRubber}}(qint64\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00105}00105\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_afe1ee601931b010c9d66040b0bb305f7}{setRubberMode}}(\textcolor{keywordtype}{int}\ mode);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00106}00106\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ac0470e16d6548ee03efeba7be219f72e}{setRubberPoint}}(\textcolor{keyword}{const}\ QString\&\ key,\ \textcolor{keyword}{const}\ QPointF\&\ point);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00107}00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a11a3932473113075fb90069a58c3a5bb}{setRubberText}}(\textcolor{keyword}{const}\ QString\&\ key,\ \textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00109}00109\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00110}00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ae04da8b5cfdee7755734bf7b4822aa58}{mouseDoubleClickEvent}}(QMouseEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00111}00111\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ad2272e344e46519f026cd02f419884f1}{mousePressEvent}}(QMouseEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00112}00112\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ae820c6a86f0a1908bf451f86db043489}{mouseMoveEvent}}(QMouseEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00113}00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a35226f6549add1ff837c65888fcd00fc}{mouseReleaseEvent}}(QMouseEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00114}00114\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_aca4aade13313c3deb599501abdd947f1}{wheelEvent}}(QWheelEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00115}00115\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a59701ebb47f7e2f55977543b6293ba47}{contextMenuEvent}}(QContextMenuEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00116}00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a862810f7e46922a88db3c1d8cca8a1eb}{drawBackground}}(QPainter*\ painter,\ \textcolor{keyword}{const}\ QRectF\&\ rect);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00117}00117\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_ab6f7e79f17cb13be6db60124a34591ca}{drawForeground}}(QPainter*\ painter,\ \textcolor{keyword}{const}\ QRectF\&\ rect);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00118}00118\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_view_a5edce8f98a7b7ab40e4c7b8787475e39}{enterEvent}}(QEvent*\ event);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00120}00120\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00121}00121\ \ \ \ \ QHash<qint64,\ QGraphicsItem*>\ hashDeletedObjects;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00123}00123\ \ \ \ \ QList<qint64>\ spareRubberList;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00125}00125\ \ \ \ \ QColor\ gridColor;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00126}00126\ \ \ \ \ QPainterPath\ gridPath;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00127}00127\ \ \ \ \ \textcolor{keywordtype}{void}\ createGridRect();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00128}00128\ \ \ \ \ \textcolor{keywordtype}{void}\ createGridPolar();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00129}00129\ \ \ \ \ \textcolor{keywordtype}{void}\ createGridIso();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00130}00130\ \ \ \ \ QPainterPath\ originPath;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00131}00131\ \ \ \ \ \textcolor{keywordtype}{void}\ createOrigin();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00133}00133\ \ \ \ \ \textcolor{keywordtype}{bool}\ rulerMetric;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00134}00134\ \ \ \ \ QColor\ rulerColor;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00135}00135\ \ \ \ \ quint8\ rulerPixelSize;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00136}00136\ \ \ \ \ \textcolor{keywordtype}{void}\ loadRulerSettings();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00138}00138\ \ \ \ \ \textcolor{keywordtype}{bool}\ willUnderflowInt32(qint64\ a,\ qint64\ b);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00139}00139\ \ \ \ \ \textcolor{keywordtype}{bool}\ willOverflowInt32(qint64\ a,\ qint64\ b);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00140}00140\ \ \ \ \ \textcolor{keywordtype}{int}\ roundToMultiple(\textcolor{keywordtype}{bool}\ roundUp,\ \textcolor{keywordtype}{int}\ numToRound,\ \textcolor{keywordtype}{int}\ multiple);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00141}00141\ \ \ \ \ QPainterPath\ createRulerTextPath(\textcolor{keywordtype}{float}\ x,\ \textcolor{keywordtype}{float}\ y,\ QString\ str,\ \textcolor{keywordtype}{float}\ height);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00143}00143\ \ \ \ \ QList<QGraphicsItem*>\ previewObjectList;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00144}00144\ \ \ \ \ QGraphicsItemGroup*\ previewObjectItemGroup;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00145}00145\ \ \ \ \ QPointF\ previewPoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00146}00146\ \ \ \ \ qreal\ \ \ previewData;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00147}00147\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ previewMode;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00148}00148\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00149}00149\ \ \ \ \ QList<QGraphicsItem*>\ createObjectList(QList<QGraphicsItem*>\ list);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00150}00150\ \ \ \ \ QPointF\ cutCopyMousePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00151}00151\ \ \ \ \ QGraphicsItemGroup*\ pasteObjectItemGroup;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00152}00152\ \ \ \ \ QPointF\ pasteDelta;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00153}00153\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00154}00154\ \ \ \ \ QList<QGraphicsItem*>\ rubberRoomList;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00156}00156\ \ \ \ \ \textcolor{keywordtype}{void}\ copySelected();}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00157}00157\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00158}00158\ \ \ \ \ \textcolor{keywordtype}{bool}\ grippingActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00159}00159\ \ \ \ \ \textcolor{keywordtype}{bool}\ rapidMoveActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00160}00160\ \ \ \ \ \textcolor{keywordtype}{bool}\ previewActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00161}00161\ \ \ \ \ \textcolor{keywordtype}{bool}\ pastingActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00162}00162\ \ \ \ \ \textcolor{keywordtype}{bool}\ movingActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00163}00163\ \ \ \ \ \textcolor{keywordtype}{bool}\ selectingActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00164}00164\ \ \ \ \ \textcolor{keywordtype}{bool}\ zoomWindowActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00165}00165\ \ \ \ \ \textcolor{keywordtype}{bool}\ panningRealTimeActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00166}00166\ \ \ \ \ \textcolor{keywordtype}{bool}\ panningPointActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00167}00167\ \ \ \ \ \textcolor{keywordtype}{bool}\ panningActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00168}00168\ \ \ \ \ \textcolor{keywordtype}{bool}\ qSnapActive;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00169}00169\ \ \ \ \ \textcolor{keywordtype}{bool}\ qSnapToggle;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00171}00171\ \ \ \ \ \textcolor{keywordtype}{void}\ startGripping(\mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00172}00172\ \ \ \ \ \textcolor{keywordtype}{void}\ stopGripping(\textcolor{keywordtype}{bool}\ accept\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00174}00174\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ gripBaseObj;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00175}00175\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ tempBaseObj;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00177}00177\ \ \ \ \ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ mainWin;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00178}00178\ \ \ \ \ QGraphicsScene*\ gscene;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00179}00179\ \ \ \ \ QUndoStack*\ undoStack;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00181}00181\ \ \ \ \ \mbox{\hyperlink{class_select_box}{SelectBox}}*\ selectBox;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00182}00182\ \ \ \ \ QPointF\ scenePressPoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00183}00183\ \ \ \ \ QPoint\ pressPoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00184}00184\ \ \ \ \ QPointF\ sceneMovePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00185}00185\ \ \ \ \ QPoint\ movePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00186}00186\ \ \ \ \ QPointF\ sceneReleasePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00187}00187\ \ \ \ \ QPoint\ releasePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00188}00188\ \ \ \ \ QPointF\ sceneGripPoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00190}00190\ \ \ \ \ \textcolor{keywordtype}{void}\ updateMouseCoords(\textcolor{keywordtype}{int}\ x,\ \textcolor{keywordtype}{int}\ y);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00191}00191\ \ \ \ \ QPoint\ \ viewMousePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00192}00192\ \ \ \ \ QPointF\ sceneMousePoint;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00193}00193\ \ \ \ \ QRgb\ qsnapLocatorColor;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00194}00194\ \ \ \ \ quint8\ qsnapLocatorSize;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00195}00195\ \ \ \ \ quint8\ qsnapApertureSize;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00196}00196\ \ \ \ \ QRgb\ gripColorCool;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00197}00197\ \ \ \ \ QRgb\ gripColorHot;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00198}00198\ \ \ \ \ quint8\ gripSize;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00199}00199\ \ \ \ \ quint8\ pickBoxSize;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00200}00200\ \ \ \ \ QRgb\ crosshairColor;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00201}00201\ \ \ \ \ quint32\ crosshairSize;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00203}00203\ \ \ \ \ \textcolor{keywordtype}{void}\ panStart(\textcolor{keyword}{const}\ QPoint\&\ point);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00204}00204\ \ \ \ \ \textcolor{keywordtype}{int}\ panDistance;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00205}00205\ \ \ \ \ \textcolor{keywordtype}{int}\ panStartX;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00206}00206\ \ \ \ \ \textcolor{keywordtype}{int}\ panStartY;}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00208}00208\ \ \ \ \ \textcolor{keywordtype}{void}\ alignScenePointWithViewPoint(\textcolor{keyword}{const}\ QPointF\&\ scenePoint,\ \textcolor{keyword}{const}\ QPoint\&\ viewPoint);}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00210}00210\ \ \ \ \ \textcolor{keyword}{inline}\ qreal\ pi()\ \{\ \textcolor{keywordflow}{return}\ (qAtan(1.0)*4.0);\ \};}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00211}00211\ \ \ \ \ \textcolor{keyword}{inline}\ qreal\ radians(qreal\ \mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{degrees}})\ \{\ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{degrees}}*pi()/180.0);\ \};}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00212}00212\ \};}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00214}00214\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{view_8h_source_l00216}00216\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

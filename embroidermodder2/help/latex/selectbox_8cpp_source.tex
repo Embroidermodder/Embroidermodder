@@ -1,0 +1,65 @@
+\hypertarget{selectbox_8cpp_source}{}\doxysubsection{selectbox.\+cpp}
+\label{selectbox_8cpp_source}\index{embroidermodder2/selectbox.cpp@{embroidermodder2/selectbox.cpp}}
+\mbox{\hyperlink{selectbox_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{selectbox_8h}{selectbox.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00004}\mbox{\hyperlink{class_select_box_a709c19852dd5b446f780128f533dda5b}{00004}}\ \mbox{\hyperlink{class_select_box_a709c19852dd5b446f780128f533dda5b}{SelectBox::SelectBox}}(Shape\ s,\ QWidget*\ parent)\ :\ QRubberBand(s,\ parent)}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00005}00005\ \{}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00006}00006\ \ \ \ \ \textcolor{comment}{//Default\ values}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00007}00007\ \ \ \ \ \mbox{\hyperlink{class_select_box_a340d927ba62648c3649048b0fa670427}{setColors}}(QColor(Qt::darkGreen),\ QColor(Qt::green),\ QColor(Qt::darkBlue),\ QColor(Qt::blue),\ 32);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00008}00008\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00010}\mbox{\hyperlink{class_select_box_a418e29947b0a8e46496b999cae4f3bdb}{00010}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_a418e29947b0a8e46496b999cae4f3bdb}{SelectBox::setDirection}}(\textcolor{keywordtype}{int}\ dir)}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00011}00011\ \{}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00012}00012\ \ \ \ \ \textcolor{keywordflow}{if}(!dir)\ \{\ dirPen\ =\ leftPen;\ \ dirBrush\ =\ leftBrush;\ \ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00013}00013\ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \{\ dirPen\ =\ rightPen;\ dirBrush\ =\ rightBrush;\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00014}00014\ \ \ \ \ boxDir\ =\ dir;}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00015}00015\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00017}\mbox{\hyperlink{class_select_box_a340d927ba62648c3649048b0fa670427}{00017}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_a340d927ba62648c3649048b0fa670427}{SelectBox::setColors}}(\textcolor{keyword}{const}\ QColor\&\ colorL,\ \textcolor{keyword}{const}\ QColor\&\ fillL,\ \textcolor{keyword}{const}\ QColor\&\ colorR,\ \textcolor{keyword}{const}\ QColor\&\ fillR,\ \textcolor{keywordtype}{int}\ newAlpha)}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00018}00018\ \{}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00019}00019\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}SelectBox\ setColors()"{}});}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00020}00020\ \ \ \ \ alpha\ =\ newAlpha;}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00022}00022\ \ \ \ \ leftPenColor\ =\ colorL;\ \textcolor{comment}{//TODO:\ allow\ customization}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00023}00023\ \ \ \ \ leftBrushColor\ =\ QColor(fillL.red(),\ fillL.green(),\ fillL.blue(),\ alpha);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00024}00024\ \ \ \ \ rightPenColor\ =\ colorR;\ \textcolor{comment}{//TODO:\ allow\ customization}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00025}00025\ \ \ \ \ rightBrushColor\ =\ QColor(fillR.red(),\ fillR.green(),\ fillR.blue(),\ alpha);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00027}00027\ \ \ \ \ leftPen.setColor(leftPenColor);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00028}00028\ \ \ \ \ leftPen.setStyle(Qt::DashLine);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00029}00029\ \ \ \ \ leftBrush.setStyle(Qt::SolidPattern);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00030}00030\ \ \ \ \ leftBrush.setColor(leftBrushColor);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00032}00032\ \ \ \ \ rightPen.setColor(rightPenColor);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00033}00033\ \ \ \ \ rightPen.setStyle(Qt::SolidLine);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00034}00034\ \ \ \ \ rightBrush.setStyle(Qt::SolidPattern);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00035}00035\ \ \ \ \ rightBrush.setColor(rightBrushColor);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{keywordflow}{if}(!boxDir)\ \{\ dirPen\ =\ leftPen;\ \ dirBrush\ =\ leftBrush;\ \ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \ \ \ \{\ dirPen\ =\ rightPen;\ dirBrush\ =\ rightBrush;\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00040}00040\ \ \ \ \ forceRepaint();}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00041}00041\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00043}\mbox{\hyperlink{class_select_box_ad06d035e601c42cc2a3b9d1229c73d36}{00043}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_ad06d035e601c42cc2a3b9d1229c73d36}{SelectBox::paintEvent}}(QPaintEvent*)}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00044}00044\ \{}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00045}00045\ \ \ \ \ QPainter\ painter(\textcolor{keyword}{this});}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00046}00046\ \ \ \ \ painter.setPen(dirPen);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00047}00047\ \ \ \ \ painter.fillRect(0,0,width()-\/1,\ height()-\/1,\ dirBrush);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00048}00048\ \ \ \ \ painter.drawRect(0,0,width()-\/1,\ height()-\/1);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00049}00049\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00050}00050\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00051}00051\ \textcolor{keywordtype}{void}\ SelectBox::forceRepaint()}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00052}00052\ \{}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{comment}{//HACK:\ Take\ that\ QRubberBand!}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00054}00054\ \ \ \ \ QSize\ hack\ =\ size();}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00055}00055\ \ \ \ \ resize(hack\ +\ QSize(1,1));}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00056}00056\ \ \ \ \ resize(hack);}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00057}00057\ \}}
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{selectbox_8cpp_source_l00059}00059\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,136 @@
+
+\begin{DoxyRefList}
+\item[Global \mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}} ]\label{todo__todo000008}%
+\Hypertarget{todo__todo000008}%
+possibly add a directory tree in the future.  
+\item[Global \mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} ]\label{todo__todo000009}%
+\Hypertarget{todo__todo000009}%
+CLSID should be a separate type.  
+\item[Global \mbox{\hyperlink{formats_8c_acaa069d2e820245be0f711415e2c297d}{binary\+Write\+Int}} (FILE $\ast$f, int data)]\label{todo__todo000024}%
+\Hypertarget{todo__todo000024}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_ad608ccee7fa2036aeba8500061ea0824}{binary\+Write\+Int\+BE}} (FILE $\ast$f, int data)]\label{todo__todo000025}%
+\Hypertarget{todo__todo000025}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binary\+Write\+Short}} (FILE $\ast$f, short data)]\label{todo__todo000021}%
+\Hypertarget{todo__todo000021}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_ad56027171faded451118350359c1e8ae}{binary\+Write\+UInt}} (FILE $\ast$f, unsigned int data)]\label{todo__todo000026}%
+\Hypertarget{todo__todo000026}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binary\+Write\+UInt\+BE}} (FILE $\ast$f, unsigned int data)]\label{todo__todo000027}%
+\Hypertarget{todo__todo000027}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_a760e806c16c1612a6b5ca5a26bc736d1}{binary\+Write\+UShort}} (FILE $\ast$f, unsigned short data)]\label{todo__todo000022}%
+\Hypertarget{todo__todo000022}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binary\+Write\+UShort\+BE}} (FILE $\ast$f, unsigned short data)]\label{todo__todo000023}%
+\Hypertarget{todo__todo000023}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}{Cmd\+Prompt\+Input\+::process\+Input}} (const QChar \&rapid\+Char=QChar())]\label{todo__todo000001}%
+\Hypertarget{todo__todo000001}%
+sort Qt\+::\+Return if(rapid\+Char == Qt\+::\+Key\+\_\+\+Enter $\vert$$\vert$ rapid\+Char == Qt\+::\+Key\+\_\+\+Return) \{ emit append\+History(cur\+Text, prefix.\+length()); emit run\+Command(cur\+Cmd, \char`\"{}\+RAPID\+\_\+\+ENTER\char`\"{}); cur\+Text.\+clear(); clear(); return; \} else if(rapid\+Char == Qt\+::\+Key\+\_\+\+Space) \{ update\+Current\+Text(cur\+Text + \char`\"{} \char`\"{}); emit run\+Command(cur\+Cmd, cmdtxt + \char`\"{} \char`\"{}); return; \} else \{ emit \mbox{\hyperlink{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}{run\+Command(cur\+Cmd, cmdtxt)}}; return; \}  
+\item[Global \mbox{\hyperlink{main_8c_a5d7bf5f964ae87921bab916b871ea2dd}{copy\+\_\+trim}} (char const $\ast$s)]\label{todo__todo000030}%
+\Hypertarget{todo__todo000030}%
+decription  
+\item[Global \mbox{\hyperlink{main_8c_a16e1e46c5c33874fc9a63476e70c0d66}{emb\+Arc\+\_\+print}} (Emb\+Arc arc)]\label{todo__todo000029}%
+\Hypertarget{todo__todo000029}%
+move to \mbox{\hyperlink{arc_8c}{arc.\+c}}  
+\item[Page \mbox{\hyperlink{md_embroidermodder2_extern_libembroidery_src_embedded}{embedded}} ]\label{todo__todo000003}%
+\Hypertarget{todo__todo000003}%
+Replace Emb\+Array functions with emb\+Pattern load functions.
+
+\label{todo__todo000004}%
+\Hypertarget{todo__todo000004}%
+Start file with a list of offsets to data with a corresponding table to load into with macro constants for each label needed.
+
+\label{todo__todo000005}%
+\Hypertarget{todo__todo000005}%
+For each pattern generate a random string of hexadecimal and append it to the filenames like {\ttfamily stitch\+List\textbackslash{}\+\_\+\+A16\+F.\+dat}. Need to check for a file which indicates that this string has been used already. 
+\item[Global \mbox{\hyperlink{geometry_8c_ae6461f57f08ce5992c70fa9897988644}{emb\+Geometry\+\_\+vulcanize}} (Emb\+Geometry $\ast$obj)]\label{todo__todo000028}%
+\Hypertarget{todo__todo000028}%
+Review. This could be controlled by a simple flag.  
+\item[Global \mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{emb\+Pattern\+\_\+stitch\+Ellipse}} (Emb\+Pattern $\ast$p, Emb\+Ellipse ellipse, int thread\+\_\+index, int style)]\label{todo__todo000014}%
+\Hypertarget{todo__todo000014}%
+finish stitch\+Ellipse  
+\item[Global \mbox{\hyperlink{fill_8c_a736fce5df010bbe74ea9ad2857be9bf4}{emb\+Pattern\+\_\+stitch\+Path}} (Emb\+Pattern $\ast$p, Emb\+Path path, int thread\+\_\+index, int style)]\label{todo__todo000015}%
+\Hypertarget{todo__todo000015}%
+finish stitch path  
+\item[Global \mbox{\hyperlink{fill_8c_a86f903495c0da7514294200680bd6414}{emb\+Pattern\+\_\+stitch\+Polygon}} (Emb\+Pattern $\ast$p, Emb\+Polygon polygon, int thread\+\_\+index, int style)]\label{todo__todo000016}%
+\Hypertarget{todo__todo000016}%
+finish stitch polygon  
+\item[Global \mbox{\hyperlink{fill_8c_a9ae9d5d7dfbb2ab361dc37970b7eb2f2}{emb\+Pattern\+\_\+stitch\+Polyline}} (Emb\+Pattern $\ast$p, Emb\+Polyline polyline, int thread\+\_\+index, int style)]\label{todo__todo000017}%
+\Hypertarget{todo__todo000017}%
+finish stitch polyline  
+\item[Page \mbox{\hyperlink{md_embroidermodder2_extern_libembroidery_src_embroider_cli}{embroider\+\_\+cli}} ]\label{todo__todo000006}%
+\Hypertarget{todo__todo000006}%
+Move back to libembroidery now we have the combined docs build. 
+\item[Global \mbox{\hyperlink{vector_8c_a0a4af07bfac410623cf77a35a11550b1}{emb\+Vector\+\_\+multiply}} (Emb\+Vector vector, Emb\+Real magnitude, Emb\+Vector $\ast$result)]\label{todo__todo000039}%
+\Hypertarget{todo__todo000039}%
+make result return argument.  
+\item[Global \mbox{\hyperlink{vector_8c_aaad72d90c58592e330de08139aee5077}{emb\+Vector\+\_\+normalize}} (Emb\+Vector vector, Emb\+Vector $\ast$result)]\label{todo__todo000038}%
+\Hypertarget{todo__todo000038}%
+make result return argument.  
+\item[Page \mbox{\hyperlink{md_embroidermodder2_extern_libembroidery_src_formats_formats}{Formats}} ]\label{todo__todo000042}%
+\Hypertarget{todo__todo000042}%
+Find a source.
+
+\label{todo__todo000040}%
+\Hypertarget{todo__todo000040}%
+Find a source.
+
+\label{todo__todo000041}%
+\Hypertarget{todo__todo000041}%
+Find a source. 
+\item[Global \mbox{\hyperlink{formats_8c_a8cb11404ce46501561f956d33f8dcf95}{format\+Table}} \mbox{[}number\+Of\+Formats\mbox{]}]\label{todo__todo000018}%
+\Hypertarget{todo__todo000018}%
+This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$  
+\item[Global \mbox{\hyperlink{formats_8c_a05fb50e7292226bc2947dd2b4da7a9bd}{fread\+\_\+int32\+\_\+be}} (FILE $\ast$f)]\label{todo__todo000020}%
+\Hypertarget{todo__todo000020}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{formats_8c_a2bcdb1e6bf6930d5c054ecdca9831eba}{fread\+\_\+uint16}} (FILE $\ast$f)]\label{todo__todo000019}%
+\Hypertarget{todo__todo000019}%
+replace with emb\+Int\+\_\+read  
+\item[Global \mbox{\hyperlink{fill_8c_ad02b5d945eacff708d2bf084c40044d8}{generate\+\_\+dragon\+\_\+curve}} (char $\ast$state, int iterations)]\label{todo__todo000013}%
+\Hypertarget{todo__todo000013}%
+find citation for paper folding method  
+\item[Page \mbox{\hyperlink{md_embroidermodder2_extern_libembroidery_src_geometry_geometry}{Geometry and Algorithms}} ]\label{todo__todo000031}%
+\Hypertarget{todo__todo000031}%
+(Arduino) Fix emb-\/outline files
+
+\label{todo__todo000033}%
+\Hypertarget{todo__todo000033}%
+(Arduino) Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework
+
+\label{todo__todo000034}%
+\Hypertarget{todo__todo000034}%
+(Arduino) inotool.\+org -\/ seems like the logical solution for Nightly/\+CI builds
+
+\label{todo__todo000035}%
+\Hypertarget{todo__todo000035}%
+(Arduino) Smoothieboard experiments
+
+\label{todo__todo000036}%
+\Hypertarget{todo__todo000036}%
+(testing) looping test that reads 10 times while running valgrind. See \textbackslash{}texttt\{\mbox{\hyperlink{embroidery_8h_a3bf191bd99e2da8d36465f454a4646f6}{emb\+Pattern\+\_\+load\+External\+Color\+File()}}\} Arduino leak note for more info.
+
+\label{todo__todo000032}%
+\Hypertarget{todo__todo000032}%
+(Arduino)Fix thread-\/color files
+
+\label{todo__todo000037}%
+\Hypertarget{todo__todo000037}%
+Like most user interfaces Embroidermodder is mostly data, so here we will have a list describing where each CSV goes. 
+\item[Global \mbox{\hyperlink{class_save_object_a15bdf578a20c1c1cb630dc8264448484}{Save\+Object\+::save}} (const QString \&file\+Name)]\label{todo__todo000002}%
+\Hypertarget{todo__todo000002}%
+Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills.  
+\item[Global \mbox{\hyperlink{struct_sub_descriptor___affb2c75b7f632338f368aafab49f678d}{Sub\+Descriptor\+\_\+\+::color\+Code}} ]\label{todo__todo000012}%
+\Hypertarget{todo__todo000012}%
+better variable naming  
+\item[Global \mbox{\hyperlink{struct_sub_descriptor___a0cfe04519ff6dab092ee7c002e55e520}{Sub\+Descriptor\+\_\+\+::some\+Int}} ]\label{todo__todo000010}%
+\Hypertarget{todo__todo000010}%
+better variable naming  
+\item[Global \mbox{\hyperlink{struct_sub_descriptor___a6154b0f4ec7815c6d26c71852506418e}{Sub\+Descriptor\+\_\+\+::some\+Other\+Int}} ]\label{todo__todo000011}%
+\Hypertarget{todo__todo000011}%
+better variable naming 
+\end{DoxyRefList}

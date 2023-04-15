@@ -1,0 +1,40 @@
+\hypertarget{format__gc_8c_source}{}\doxysubsection{format\+\_\+gc.\+c}
+\label{format__gc_8c_source}\index{extern/libembroidery/src/formats/format\_gc.c@{extern/libembroidery/src/formats/format\_gc.c}}
+\mbox{\hyperlink{format__gc_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00002}00002\ \textcolor{comment}{\ *\ 100\ FORMAT}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00003}00003\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ libembroidery.}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00004}00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00005}00005\ \textcolor{comment}{\ *\ Copyright\ 2018-\/2023\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00006}00006\ \textcolor{comment}{\ *\ Licensed\ under\ the\ terms\ of\ the\ zlib\ license.}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00007}00007\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}../embroidery\_internal.h"{}}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00014}00014\ \textcolor{comment}{/*\ Smoothie\ G-\/Code}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00015}00015\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00016}00016\ \textcolor{comment}{\ *\ Main\ Reference:}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00017}00017\ \textcolor{comment}{\ *\ \ \ \ \ Machinery's\ Handbook\ Guide}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00018}00018\ \textcolor{comment}{\ *\ \ \ \ \ A\ Guide\ to\ Tables,\ Formulas,\ \&\ More\ in\ the\ 31st\ Edition}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00019}00019\ \textcolor{comment}{\ *\ \ \ \ \ by\ John\ Milton\ Amiss,\ Franklin\ D.\ Jones\ and\ Henry\ Ryffel}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00020}00020\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00022}00022\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00023}\mbox{\hyperlink{embroidery__internal_8h_ae203b3932fa10a5da0fb787f435a33c6}{00023}}\ \mbox{\hyperlink{format__gc_8c_ae203b3932fa10a5da0fb787f435a33c6}{readGc}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)\ \{}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00024}00024\ \ \ \ \ puts(\textcolor{stringliteral}{"{}Overridden,\ defaulting\ to\ dst."{}});}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00025}00025\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab8db2805e9b776e2e9e2ffbcd05f4f90}{readDst}}(pattern,\ file);}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00026}00026\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;\ \textcolor{comment}{/*TODO:\ finish\ readGc\ */}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00027}00027\ \}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00029}00029\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00030}\mbox{\hyperlink{embroidery__internal_8h_a450ada808df38064c920c47b887ce918}{00030}}\ \mbox{\hyperlink{format__gc_8c_a450ada808df38064c920c47b887ce918}{writeGc}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)\ \{}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00031}00031\ \ \ \ \ puts(\textcolor{stringliteral}{"{}Overridden,\ defaulting\ to\ dst."{}});}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00032}00032\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a5b971603eb8cc707cfd0167659fd8aab}{writeDst}}(pattern,\ file);}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;\ \textcolor{comment}{/*TODO:\ finish\ writeGc\ */}}
+\DoxyCodeLine{\Hypertarget{format__gc_8c_source_l00034}00034\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,90 @@
+\hypertarget{format__dst_8c}{}\doxysubsection{embroidermodder2/extern/libembroidery/src/formats/format\+\_\+dst.c File Reference}
+\label{format__dst_8c}\index{embroidermodder2/extern/libembroidery/src/formats/format\_dst.c@{embroidermodder2/extern/libembroidery/src/formats/format\_dst.c}}
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}../embroidery\+\_\+internal.\+h\char`\"{}}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{format__dst_8c_a3a8b58c49032f7403303dd1bdabd8ead}{cci}}(c1,  c2)~(c1$\ast$256+c2)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{format__dst_8c_aa57ada775f74c81ecd2dd436aa442829}{decode\+\_\+record\+\_\+flags}} (unsigned char b2)
+\item 
+void \mbox{\hyperlink{format__dst_8c_a689bda45b58b2922d890a1ddf669463b}{encode\+\_\+record}} (FILE $\ast$file, int x, int y, int flags)
+\item 
+void \mbox{\hyperlink{format__dst_8c_aaa10e861e196d8f74ea00f21a4277e83}{set\+\_\+dst\+\_\+variable}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, char $\ast$var, char $\ast$val)
+\item 
+char \mbox{\hyperlink{format__dst_8c_ab8db2805e9b776e2e9e2ffbcd05f4f90}{read\+Dst}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, FILE $\ast$file)
+\item 
+char \mbox{\hyperlink{format__dst_8c_a5b971603eb8cc707cfd0167659fd8aab}{write\+Dst}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, FILE $\ast$file)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{format__dst_8c_a3a8b58c49032f7403303dd1bdabd8ead}\label{format__dst_8c_a3a8b58c49032f7403303dd1bdabd8ead}} 
+\index{format\_dst.c@{format\_dst.c}!cci@{cci}}
+\index{cci@{cci}!format\_dst.c@{format\_dst.c}}
+\doxyparagraph{\texorpdfstring{cci}{cci}}
+{\footnotesize\ttfamily \#define cci(\begin{DoxyParamCaption}\item[{}]{c1,  }\item[{}]{c2 }\end{DoxyParamCaption})~(c1$\ast$256+c2)}
+
+
+
+Definition at line \mbox{\hyperlink{format__dst_8c_source_l00124}{124}} of file \mbox{\hyperlink{format__dst_8c_source}{format\+\_\+dst.\+c}}.
+
+
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{format__dst_8c_aa57ada775f74c81ecd2dd436aa442829}\label{format__dst_8c_aa57ada775f74c81ecd2dd436aa442829}} 
+\index{format\_dst.c@{format\_dst.c}!decode\_record\_flags@{decode\_record\_flags}}
+\index{decode\_record\_flags@{decode\_record\_flags}!format\_dst.c@{format\_dst.c}}
+\doxyparagraph{\texorpdfstring{decode\_record\_flags()}{decode\_record\_flags()}}
+{\footnotesize\ttfamily int decode\+\_\+record\+\_\+flags (\begin{DoxyParamCaption}\item[{unsigned char}]{b2 }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{format__dst_8c_source_l00024}{24}} of file \mbox{\hyperlink{format__dst_8c_source}{format\+\_\+dst.\+c}}.
+
+\mbox{\Hypertarget{format__dst_8c_a689bda45b58b2922d890a1ddf669463b}\label{format__dst_8c_a689bda45b58b2922d890a1ddf669463b}} 
+\index{format\_dst.c@{format\_dst.c}!encode\_record@{encode\_record}}
+\index{encode\_record@{encode\_record}!format\_dst.c@{format\_dst.c}}
+\doxyparagraph{\texorpdfstring{encode\_record()}{encode\_record()}}
+{\footnotesize\ttfamily void encode\+\_\+record (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{file,  }\item[{int}]{x,  }\item[{int}]{y,  }\item[{int}]{flags }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{format__dst_8c_source_l00087}{87}} of file \mbox{\hyperlink{format__dst_8c_source}{format\+\_\+dst.\+c}}.
+
+\mbox{\Hypertarget{format__dst_8c_ab8db2805e9b776e2e9e2ffbcd05f4f90}\label{format__dst_8c_ab8db2805e9b776e2e9e2ffbcd05f4f90}} 
+\index{format\_dst.c@{format\_dst.c}!readDst@{readDst}}
+\index{readDst@{readDst}!format\_dst.c@{format\_dst.c}}
+\doxyparagraph{\texorpdfstring{readDst()}{readDst()}}
+{\footnotesize\ttfamily char read\+Dst (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{format__dst_8c_source_l00235}{235}} of file \mbox{\hyperlink{format__dst_8c_source}{format\+\_\+dst.\+c}}.
+
+\mbox{\Hypertarget{format__dst_8c_aaa10e861e196d8f74ea00f21a4277e83}\label{format__dst_8c_aaa10e861e196d8f74ea00f21a4277e83}} 
+\index{format\_dst.c@{format\_dst.c}!set\_dst\_variable@{set\_dst\_variable}}
+\index{set\_dst\_variable@{set\_dst\_variable}!format\_dst.c@{format\_dst.c}}
+\doxyparagraph{\texorpdfstring{set\_dst\_variable()}{set\_dst\_variable()}}
+{\footnotesize\ttfamily void set\+\_\+dst\+\_\+variable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{char $\ast$}]{var,  }\item[{char $\ast$}]{val }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{format__dst_8c_source_l00127}{127}} of file \mbox{\hyperlink{format__dst_8c_source}{format\+\_\+dst.\+c}}.
+
+\mbox{\Hypertarget{format__dst_8c_a5b971603eb8cc707cfd0167659fd8aab}\label{format__dst_8c_a5b971603eb8cc707cfd0167659fd8aab}} 
+\index{format\_dst.c@{format\_dst.c}!writeDst@{writeDst}}
+\index{writeDst@{writeDst}!format\_dst.c@{format\_dst.c}}
+\doxyparagraph{\texorpdfstring{writeDst()}{writeDst()}}
+{\footnotesize\ttfamily char write\+Dst (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{format__dst_8c_source_l00291}{291}} of file \mbox{\hyperlink{format__dst_8c_source}{format\+\_\+dst.\+c}}.
+

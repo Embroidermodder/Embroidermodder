@@ -1,0 +1,273 @@
+\hypertarget{object-circle_8cpp_source}{}\doxysubsection{object-\/circle.cpp}
+\label{object-circle_8cpp_source}\index{embroidermodder2/object-\/circle.cpp@{embroidermodder2/object-\/circle.cpp}}
+\mbox{\hyperlink{object-circle_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-circle_8h}{object-\/circle.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-data_8h}{object-\/data.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}geom-\/arc.h"{}}\ \textcolor{comment}{//TODO:\ make\ a\ geom-\/circle.h\ that\ simply\ includes\ arc.h\ so\ it's\ more\ intuitive}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QStyleOption>}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <QGraphicsScene>}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00009}\mbox{\hyperlink{class_circle_object_ac1ea2ae9315f7e6fbb8f3cfb73f1c3c1}{00009}}\ \mbox{\hyperlink{class_circle_object_ac1ea2ae9315f7e6fbb8f3cfb73f1c3c1}{CircleObject::CircleObject}}(qreal\ centerX,\ qreal\ centerY,\ qreal\ radius,\ QRgb\ rgb,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00010}00010\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00011}00011\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}CircleObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00012}00012\ \ \ \ \ init(centerX,\ centerY,\ radius,\ rgb,\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00013}00013\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00015}\mbox{\hyperlink{class_circle_object_a3331f01b3f94f768808871fd1e3d21e7}{00015}}\ \mbox{\hyperlink{class_circle_object_ac1ea2ae9315f7e6fbb8f3cfb73f1c3c1}{CircleObject::CircleObject}}(\mbox{\hyperlink{class_circle_object}{CircleObject}}*\ obj,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00016}00016\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00017}00017\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}CircleObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{keywordflow}{if}(obj)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00019}00019\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ init(obj-\/>\mbox{\hyperlink{class_circle_object_a38eb9c1ac0dba70c03c0aaf009b52359}{objectCenterX}}(),\ obj-\/>\mbox{\hyperlink{class_circle_object_ae515447aa537443a37150ebf9aa0dc9b}{objectCenterY}}(),\ obj-\/>\mbox{\hyperlink{class_circle_object_a18fea76687e79f46994700d7b8a4c35d}{objectRadius}}(),\ obj-\/>\mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objectColorRGB}}(),\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ setRotation(obj-\/>rotation());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00022}00022\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00023}00023\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00025}\mbox{\hyperlink{class_circle_object_adacc9f368d1db0746efd464bdcb8b4fe}{00025}}\ \mbox{\hyperlink{class_circle_object_adacc9f368d1db0746efd464bdcb8b4fe}{CircleObject::\string~CircleObject}}()}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00026}00026\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00027}00027\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}CircleObject\ Destructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00028}00028\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00030}00030\ \textcolor{keywordtype}{void}\ CircleObject::init(qreal\ centerX,\ qreal\ centerY,\ qreal\ radius,\ QRgb\ rgb,\ Qt::PenStyle\ lineType)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00031}00031\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00032}00032\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}{OBJ\_TYPE}},\ \mbox{\hyperlink{class_circle_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}}());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00033}00033\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b}{OBJ\_NAME}},\ \mbox{\hyperlink{object-data_8h_aa36fb08ad80238b8b2bb20b96582a3eb}{OBJ\_NAME\_CIRCLE}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00035}00035\ \ \ \ \ \textcolor{comment}{//WARNING:\ DO\ NOT\ enable\ QGraphicsItem::ItemIsMovable.\ If\ it\ is\ enabled,}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{comment}{//WARNING:\ and\ the\ item\ is\ double\ clicked,\ the\ scene\ will\ erratically\ move\ the\ item\ while\ zooming.}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//WARNING:\ All\ movement\ has\ to\ be\ handled\ explicitly\ by\ us,\ not\ by\ the\ scene.}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00038}00038\ \ \ \ \ setFlag(QGraphicsItem::ItemIsSelectable,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00040}00040\ \ \ \ \ \mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{setObjectRadius}}(radius);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00041}00041\ \ \ \ \ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(centerX,\ centerY);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{setObjectColor}}(rgb);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00043}00043\ \ \ \ \ \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{setObjectLineType}}(lineType);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00044}00044\ \ \ \ \ \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{setObjectLineWeight}}(0.35);\ \textcolor{comment}{//TODO:\ pass\ in\ proper\ lineweight}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00045}00045\ \ \ \ \ setPen(\mbox{\hyperlink{class_base_object_adbe2cb871eda436257a2f9140a62dffa}{objectPen}}());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00046}00046\ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00049}\mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{00049}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{CircleObject::setObjectCenter}}(\textcolor{keyword}{const}\ QPointF\&\ center)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00050}00050\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00051}00051\ \ \ \ \ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(center.x(),\ center.y());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00052}00052\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00054}\mbox{\hyperlink{class_circle_object_acaf966b0c2d06eec5f95ecceda481e52}{00054}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{CircleObject::setObjectCenter}}(qreal\ centerX,\ qreal\ centerY)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00055}00055\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00056}00056\ \ \ \ \ setPos(centerX,\ centerY);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00057}00057\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00059}\mbox{\hyperlink{class_circle_object_a147b2ff3561d389cbe579134f3080cf3}{00059}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a147b2ff3561d389cbe579134f3080cf3}{CircleObject::setObjectCenterX}}(qreal\ centerX)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00060}00060\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00061}00061\ \ \ \ \ setX(centerX);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00062}00062\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00064}\mbox{\hyperlink{class_circle_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}{00064}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}{CircleObject::setObjectCenterY}}(qreal\ centerY)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00065}00065\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00066}00066\ \ \ \ \ setY(centerY);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00067}00067\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00069}\mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{00069}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{CircleObject::setObjectRadius}}(qreal\ radius)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00070}00070\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00071}00071\ \ \ \ \ \mbox{\hyperlink{class_circle_object_a7cb7de34fcb1fcc13e1fb2721b924ada}{setObjectDiameter}}(radius*2.0);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00072}00072\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00073}00073\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00074}\mbox{\hyperlink{class_circle_object_a7cb7de34fcb1fcc13e1fb2721b924ada}{00074}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a7cb7de34fcb1fcc13e1fb2721b924ada}{CircleObject::setObjectDiameter}}(qreal\ diameter)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00075}00075\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00076}00076\ \ \ \ \ QRectF\ circRect;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00077}00077\ \ \ \ \ circRect.setWidth(diameter);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00078}00078\ \ \ \ \ circRect.setHeight(diameter);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00079}00079\ \ \ \ \ circRect.moveCenter(QPointF(0,0));}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00080}00080\ \ \ \ \ \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{setRect}}(circRect);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00081}00081\ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00082}00082\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00084}\mbox{\hyperlink{class_circle_object_a4903c9f330cef9e9d5503befee8fd4af}{00084}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a4903c9f330cef9e9d5503befee8fd4af}{CircleObject::setObjectArea}}(qreal\ area)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00085}00085\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00086}00086\ \ \ \ \ qreal\ radius\ =\ qSqrt(area/\mbox{\hyperlink{class_base_object_ab5ad5bd82be7c0e997b240dc84a41f2a}{pi}}());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00087}00087\ \ \ \ \ \mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{setObjectRadius}}(radius);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00088}00088\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00090}\mbox{\hyperlink{class_circle_object_ad7354d47bbdf55c793f852a35ca86c7b}{00090}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_ad7354d47bbdf55c793f852a35ca86c7b}{CircleObject::setObjectCircumference}}(qreal\ circumference)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00091}00091\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00092}00092\ \ \ \ \ qreal\ diameter\ =\ circumference/\mbox{\hyperlink{class_base_object_ab5ad5bd82be7c0e997b240dc84a41f2a}{pi}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00093}00093\ \ \ \ \ \mbox{\hyperlink{class_circle_object_a7cb7de34fcb1fcc13e1fb2721b924ada}{setObjectDiameter}}(diameter);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00094}00094\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00095}00095\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00096}00096\ \textcolor{keywordtype}{void}\ CircleObject::updatePath()}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00097}00097\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00098}00098\ \ \ \ \ QPainterPath\ path;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00099}00099\ \ \ \ \ QRectF\ r\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00100}00100\ \ \ \ \ \textcolor{comment}{//Add\ the\ center\ point}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00101}00101\ \ \ \ \ path.addRect(-\/0.00000001,\ -\/0.00000001,\ 0.00000002,\ 0.00000002);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{comment}{//Add\ the\ circle}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00103}00103\ \ \ \ \ path.arcMoveTo(r,\ 0);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00104}00104\ \ \ \ \ path.arcTo(r,\ 0,\ 360);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00105}00105\ \ \ \ \ \textcolor{comment}{//NOTE:\ Reverse\ the\ path\ so\ that\ the\ inside\ area\ isn't\ considered\ part\ of\ the\ circle}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00106}00106\ \ \ \ \ path.arcTo(r,\ 0,\ -\/360);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00107}00107\ \ \ \ \ \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{setObjectPath}}(path);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00108}00108\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00110}\mbox{\hyperlink{class_circle_object_a8c124c843504f6971f6677f12ac9247f}{00110}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a8c124c843504f6971f6677f12ac9247f}{CircleObject::paint}}(QPainter*\ painter,\ \textcolor{keyword}{const}\ QStyleOptionGraphicsItem*\ option,\ QWidget*\ \textcolor{comment}{/*widget*/})}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00111}00111\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00112}00112\ \ \ \ \ QGraphicsScene*\ objScene\ =\ scene();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00113}00113\ \ \ \ \ \textcolor{keywordflow}{if}(!objScene)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00115}00115\ \ \ \ \ QPen\ paintPen\ =\ pen();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00116}00116\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00117}00117\ \ \ \ \ \mbox{\hyperlink{class_circle_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}(painter);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00118}00118\ \ \ \ \ \textcolor{keywordflow}{if}(option-\/>state\ \&\ QStyle::State\_Selected)\ \ \{\ paintPen.setStyle(Qt::DashLine);\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{if}(objScene-\/>property(\mbox{\hyperlink{object-data_8h_a54e2373c95db640f15ef70c49de1d952}{ENABLE\_LWT}}).toBool())\ \{\ paintPen\ =\ \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{lineWeightPen}}();\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00120}00120\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00122}00122\ \ \ \ \ painter-\/>drawEllipse(\mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00123}00123\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00125}\mbox{\hyperlink{class_circle_object_add4e11623be9bc6e02557c67674564ed}{00125}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_add4e11623be9bc6e02557c67674564ed}{CircleObject::updateRubber}}(QPainter*\ painter)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00126}00126\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00127}00127\ \ \ \ \ \textcolor{keywordtype}{int}\ rubberMode\ =\ \mbox{\hyperlink{class_base_object_a59c34db9a64b2204bace685dd3dd74e7}{objectRubberMode}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00128}00128\ \ \ \ \ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18ab8fad77f1ceb6c1fdff7a723e7098206}{OBJ\_RUBBER\_CIRCLE\_1P\_RAD}})}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00129}00129\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00130}00130\ \ \ \ \ \ \ \ \ QPointF\ sceneCenterPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_CENTER"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00131}00131\ \ \ \ \ \ \ \ \ QPointF\ sceneQSnapPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_RADIUS"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00132}00132\ \ \ \ \ \ \ \ \ QPointF\ itemCenterPoint\ =\ mapFromScene(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00133}00133\ \ \ \ \ \ \ \ \ QPointF\ itemQSnapPoint\ =\ mapFromScene(sceneQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00134}00134\ \ \ \ \ \ \ \ \ QLineF\ itemLine(itemCenterPoint,\ itemQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00135}00135\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00136}00136\ \ \ \ \ \ \ \ \ QLineF\ sceneLine(sceneCenterPoint,\ sceneQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00137}00137\ \ \ \ \ \ \ \ \ qreal\ radius\ =\ sceneLine.length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00138}00138\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{setObjectRadius}}(radius);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)\ \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{drawRubberLine}}(itemLine,\ painter,\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00141}00141\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00142}00142\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aac53dfe4bc711588a984fed95cad9486}{OBJ\_RUBBER\_CIRCLE\_1P\_DIA}})}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00143}00143\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ QPointF\ sceneCenterPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_CENTER"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ QPointF\ sceneQSnapPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_DIAMETER"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ QPointF\ itemCenterPoint\ =\ mapFromScene(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ QPointF\ itemQSnapPoint\ =\ mapFromScene(sceneQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ QLineF\ itemLine(itemCenterPoint,\ itemQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00149}00149\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00150}00150\ \ \ \ \ \ \ \ \ QLineF\ sceneLine(sceneCenterPoint,\ sceneQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00151}00151\ \ \ \ \ \ \ \ \ qreal\ diameter\ =\ sceneLine.length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00152}00152\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_a7cb7de34fcb1fcc13e1fb2721b924ada}{setObjectDiameter}}(diameter);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00153}00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)\ \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{drawRubberLine}}(itemLine,\ painter,\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00154}00154\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00155}00155\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00156}00156\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a14fdfe581179ecdce01fcb772c31aada}{OBJ\_RUBBER\_CIRCLE\_2P}})}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00157}00157\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00158}00158\ \ \ \ \ \ \ \ \ QPointF\ sceneTan1Point\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_TAN1"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00159}00159\ \ \ \ \ \ \ \ \ QPointF\ sceneQSnapPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_TAN2"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00160}00160\ \ \ \ \ \ \ \ \ QLineF\ sceneLine(sceneTan1Point,\ sceneQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00161}00161\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(sceneLine.pointAt(0.5));}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00162}00162\ \ \ \ \ \ \ \ \ qreal\ diameter\ =\ sceneLine.length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00163}00163\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_a7cb7de34fcb1fcc13e1fb2721b924ada}{setObjectDiameter}}(diameter);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00164}00164\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00165}00165\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00166}00166\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a4ab10cf0b805e410a2d4c13126e92744}{OBJ\_RUBBER\_CIRCLE\_3P}})}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00167}00167\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00168}00168\ \ \ \ \ \ \ \ \ QPointF\ sceneTan1Point\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_TAN1"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00169}00169\ \ \ \ \ \ \ \ \ QPointF\ sceneTan2Point\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_TAN2"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00170}00170\ \ \ \ \ \ \ \ \ QPointF\ sceneTan3Point\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}CIRCLE\_TAN3"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00172}00172\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ sceneCenterX;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00173}00173\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ sceneCenterY;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00174}00174\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_abcb0a9723dfb5440894eb50cb219d993}{getArcCenter}}(sceneTan1Point.x(),\ sceneTan1Point.y(),}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00175}00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sceneTan2Point.x(),\ sceneTan2Point.y(),}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sceneTan3Point.x(),\ sceneTan3Point.y(),}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&sceneCenterX,\ \&sceneCenterY);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00178}00178\ \ \ \ \ \ \ \ \ QPointF\ sceneCenterPoint(sceneCenterX,\ sceneCenterY);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00179}00179\ \ \ \ \ \ \ \ \ QLineF\ sceneLine(sceneCenterPoint,\ sceneTan3Point);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00181}00181\ \ \ \ \ \ \ \ \ qreal\ radius\ =\ sceneLine.length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{setObjectRadius}}(radius);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00183}00183\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00184}00184\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00185}00185\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a596fc3b8f3fff512fb6b62bd32362747}{OBJ\_RUBBER\_GRIP}})}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00186}00186\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00188}00188\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00189}00189\ \ \ \ \ \ \ \ \ \ \ \ \ QPointF\ gripPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}GRIP\_POINT"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(gripPoint\ ==\ \mbox{\hyperlink{class_circle_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}())}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ painter-\/>drawEllipse(\mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}().translated(mapFromScene(\mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(QString()))-\/mapFromScene(gripPoint)));}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ qreal\ gripRadius\ =\ QLineF(\mbox{\hyperlink{class_circle_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}(),\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(QString())).length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ painter-\/>drawEllipse(QPointF(),\ gripRadius,\ gripRadius);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ QLineF\ rubLine(mapFromScene(gripPoint),\ mapFromScene(\mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(QString())));}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{drawRubberLine}}(rubLine,\ painter,\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00203}00203\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00204}00204\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00206}\mbox{\hyperlink{class_circle_object_a814830f38fd2c36b3f96252ee65d7617}{00206}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_a814830f38fd2c36b3f96252ee65d7617}{CircleObject::vulcanize}}()}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00207}00207\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00208}00208\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}CircleObject\ vulcanize()"{}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00209}00209\ \ \ \ \ \mbox{\hyperlink{class_circle_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00211}00211\ \ \ \ \ \mbox{\hyperlink{class_base_object_abc43b57468707e683827a13958f02f90}{setObjectRubberMode}}(\mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa35aded7b27be08a9939721598c550f6}{OBJ\_RUBBER\_OFF}});}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00212}00212\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00214}00214\ \textcolor{comment}{//\ Returns\ the\ closest\ snap\ point\ to\ the\ mouse\ point}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00215}\mbox{\hyperlink{class_circle_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{00215}}\ QPointF\ \mbox{\hyperlink{class_circle_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{CircleObject::mouseSnapPoint}}(\textcolor{keyword}{const}\ QPointF\&\ mousePoint)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00216}00216\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00217}00217\ \ \ \ \ QPointF\ center\ \ =\ \mbox{\hyperlink{class_circle_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00218}00218\ \ \ \ \ QPointF\ quad0\ \ \ =\ \mbox{\hyperlink{class_circle_object_a989f52950c0f699cd0b5bb863fd2eba1}{objectQuadrant0}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00219}00219\ \ \ \ \ QPointF\ quad90\ \ =\ \mbox{\hyperlink{class_circle_object_a9f6924403c5064c4c0bef05f4bc353e5}{objectQuadrant90}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00220}00220\ \ \ \ \ QPointF\ quad180\ =\ \mbox{\hyperlink{class_circle_object_a6f45a549f7ea8538c71e26e754d638da}{objectQuadrant180}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00221}00221\ \ \ \ \ QPointF\ quad270\ =\ \mbox{\hyperlink{class_circle_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{objectQuadrant270}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00223}00223\ \ \ \ \ qreal\ cntrDist\ =\ QLineF(mousePoint,\ center).length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00224}00224\ \ \ \ \ qreal\ q0Dist\ \ \ =\ QLineF(mousePoint,\ quad0).length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00225}00225\ \ \ \ \ qreal\ q90Dist\ \ =\ QLineF(mousePoint,\ quad90).length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00226}00226\ \ \ \ \ qreal\ q180Dist\ =\ QLineF(mousePoint,\ quad180).length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00227}00227\ \ \ \ \ qreal\ q270Dist\ =\ QLineF(mousePoint,\ quad270).length();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00229}00229\ \ \ \ \ qreal\ minDist\ =\ qMin(qMin(qMin(q0Dist,\ q90Dist),\ qMin(q180Dist,\ q270Dist)),\ cntrDist);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00231}00231\ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (minDist\ ==\ cntrDist)\ \textcolor{keywordflow}{return}\ center;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00232}00232\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q0Dist)\ \ \ \textcolor{keywordflow}{return}\ quad0;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00233}00233\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q90Dist)\ \ \textcolor{keywordflow}{return}\ quad90;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00234}00234\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q180Dist)\ \textcolor{keywordflow}{return}\ quad180;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q270Dist)\ \textcolor{keywordflow}{return}\ quad270;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00236}00236\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00237}00237\ \ \ \ \ \textcolor{keywordflow}{return}\ scenePos();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00238}00238\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00239}00239\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00240}\mbox{\hyperlink{class_circle_object_acfde9da59c0bbaaab7decdc222aa38a3}{00240}}\ QList<QPointF>\ \mbox{\hyperlink{class_circle_object_acfde9da59c0bbaaab7decdc222aa38a3}{CircleObject::allGripPoints}}()}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00241}00241\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00242}00242\ \ \ \ \ QList<QPointF>\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00243}00243\ \ \ \ \ gripPoints\ <<\ \mbox{\hyperlink{class_circle_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}()\ <<\ \mbox{\hyperlink{class_circle_object_a989f52950c0f699cd0b5bb863fd2eba1}{objectQuadrant0}}()\ <<\ \mbox{\hyperlink{class_circle_object_a9f6924403c5064c4c0bef05f4bc353e5}{objectQuadrant90}}()\ <<\ \mbox{\hyperlink{class_circle_object_a6f45a549f7ea8538c71e26e754d638da}{objectQuadrant180}}()\ <<\ \mbox{\hyperlink{class_circle_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{objectQuadrant270}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00244}00244\ \ \ \ \ \textcolor{keywordflow}{return}\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00245}00245\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00246}00246\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00247}\mbox{\hyperlink{class_circle_object_af377b9b2e3594940757c25610899c02b}{00247}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_circle_object_af377b9b2e3594940757c25610899c02b}{CircleObject::gripEdit}}(\textcolor{keyword}{const}\ QPointF\&\ before,\ \textcolor{keyword}{const}\ QPointF\&\ after)}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00248}00248\ \{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{if}(before\ ==\ \mbox{\hyperlink{class_circle_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}())\ \{\ QPointF\ delta\ =\ after-\/before;\ moveBy(delta.x(),\ delta.y());\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00250}00250\ \ \ \ \ \textcolor{keywordflow}{else}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \mbox{\hyperlink{class_circle_object_a8dfcf3786e6f5fe668cdaa7dd5b0a30a}{setObjectRadius}}(QLineF(\mbox{\hyperlink{class_circle_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}(),\ after).length());\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00251}00251\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00252}00252\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00253}\mbox{\hyperlink{class_circle_object_ac103a3e4474b084a48281e9409087272}{00253}}\ QPainterPath\ \mbox{\hyperlink{class_circle_object_ac103a3e4474b084a48281e9409087272}{CircleObject::objectSavePath}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00254}00254\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00255}00255\ \ \ \ \ QPainterPath\ path;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00256}00256\ \ \ \ \ QRectF\ r\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00257}00257\ \ \ \ \ path.arcMoveTo(r,\ 0);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00258}00258\ \ \ \ \ path.arcTo(r,\ 0,\ 360);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00260}00260\ \ \ \ \ qreal\ s\ =\ scale();}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00261}00261\ \ \ \ \ QTransform\ trans;}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00262}00262\ \ \ \ \ trans.rotate(rotation());}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00263}00263\ \ \ \ \ trans.scale(s,s);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00264}00264\ \ \ \ \ \textcolor{keywordflow}{return}\ trans.map(path);}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00265}00265\ \}}
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{object-circle_8cpp_source_l00267}00267\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

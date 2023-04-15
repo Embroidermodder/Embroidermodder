@@ -1,0 +1,129 @@
+\hypertarget{object-path_8cpp_source}{}\doxysubsection{object-\/path.cpp}
+\label{object-path_8cpp_source}\index{embroidermodder2/object-\/path.cpp@{embroidermodder2/object-\/path.cpp}}
+\mbox{\hyperlink{object-path_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-path_8h}{object-\/path.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-data_8h}{object-\/data.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QStyleOption>}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QGraphicsScene>}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <QMessageBox>}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00009}\mbox{\hyperlink{class_path_object_a95e7201274f7b9270702b89a74af50c9}{00009}}\ \mbox{\hyperlink{class_path_object_a95e7201274f7b9270702b89a74af50c9}{PathObject::PathObject}}(qreal\ x,\ qreal\ y,\ \textcolor{keyword}{const}\ QPainterPath\ p,\ QRgb\ rgb,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00010}00010\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00011}00011\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}PathObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00012}00012\ \ \ \ \ init(x,\ y,\ p,\ rgb,\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00013}00013\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00015}\mbox{\hyperlink{class_path_object_a88b99a258e7f7bc54e0542b6ac207086}{00015}}\ \mbox{\hyperlink{class_path_object_a95e7201274f7b9270702b89a74af50c9}{PathObject::PathObject}}(\mbox{\hyperlink{class_path_object}{PathObject}}*\ obj,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00016}00016\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00017}00017\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}PathObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00018}00018\ \ \ \ \ \textcolor{keywordflow}{if}(obj)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00019}00019\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ init(obj-\/>\mbox{\hyperlink{class_path_object_a5accd51fbc75b1a14a56c2f20b57769e}{objectX}}(),\ obj-\/>\mbox{\hyperlink{class_path_object_a672f9e4f77a92bb4211be8bbb3981634}{objectY}}(),\ obj-\/>\mbox{\hyperlink{class_path_object_ae792daf964109ba44609cfb75a02c0e2}{objectCopyPath}}(),\ obj-\/>\mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objectColorRGB}}(),\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00021}00021\ \ \ \ \ \ \ \ \ setRotation(obj-\/>rotation());}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00022}00022\ \ \ \ \ \ \ \ \ setScale(obj-\/>scale());}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00023}00023\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00024}00024\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00026}\mbox{\hyperlink{class_path_object_ade400e8d78d9fda6437481d0d4c27ffd}{00026}}\ \mbox{\hyperlink{class_path_object_ade400e8d78d9fda6437481d0d4c27ffd}{PathObject::\string~PathObject}}()}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00027}00027\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00028}00028\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}PathObject\ Destructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00029}00029\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00031}00031\ \textcolor{keywordtype}{void}\ PathObject::init(qreal\ x,\ qreal\ y,\ \textcolor{keyword}{const}\ QPainterPath\&\ p,\ QRgb\ rgb,\ Qt::PenStyle\ lineType)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00032}00032\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00033}00033\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}{OBJ\_TYPE}},\ \mbox{\hyperlink{class_path_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}}());}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00034}00034\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b}{OBJ\_NAME}},\ \mbox{\hyperlink{object-data_8h_a5b33994918e5741c06842e3f19f4e0fd}{OBJ\_NAME\_PATH}});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{comment}{//WARNING:\ DO\ NOT\ enable\ QGraphicsItem::ItemIsMovable.\ If\ it\ is\ enabled,}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00037}00037\ \ \ \ \ \textcolor{comment}{//WARNING:\ and\ the\ item\ is\ double\ clicked,\ the\ scene\ will\ erratically\ move\ the\ item\ while\ zooming.}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//WARNING:\ All\ movement\ has\ to\ be\ handled\ explicitly\ by\ us,\ not\ by\ the\ scene.}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00039}00039\ \ \ \ \ setFlag(QGraphicsItem::ItemIsSelectable,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00041}00041\ \ \ \ \ updatePath(p);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{class_path_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{setObjectPos}}(x,y);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00043}00043\ \ \ \ \ \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{setObjectColor}}(rgb);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00044}00044\ \ \ \ \ \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{setObjectLineType}}(lineType);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{setObjectLineWeight}}(0.35);\ \textcolor{comment}{//TODO:\ pass\ in\ proper\ lineweight}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00046}00046\ \ \ \ \ setPen(\mbox{\hyperlink{class_base_object_adbe2cb871eda436257a2f9140a62dffa}{objectPen}}());}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00049}00049\ \textcolor{keywordtype}{void}\ PathObject::updatePath(\textcolor{keyword}{const}\ QPainterPath\&\ p)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00050}00050\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00051}00051\ \ \ \ \ normalPath\ =\ p;}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00052}00052\ \ \ \ \ QPainterPath\ reversePath\ =\ normalPath.toReversed();}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00053}00053\ \ \ \ \ reversePath.connectPath(normalPath);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{setObjectPath}}(reversePath);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00055}00055\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00057}\mbox{\hyperlink{class_path_object_a8c124c843504f6971f6677f12ac9247f}{00057}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_path_object_a8c124c843504f6971f6677f12ac9247f}{PathObject::paint}}(QPainter*\ painter,\ \textcolor{keyword}{const}\ QStyleOptionGraphicsItem*\ option,\ QWidget*\ \textcolor{comment}{/*widget*/})}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00058}00058\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00059}00059\ \ \ \ \ QGraphicsScene*\ objScene\ =\ scene();}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00060}00060\ \ \ \ \ \textcolor{keywordflow}{if}(!objScene)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00062}00062\ \ \ \ \ QPen\ paintPen\ =\ pen();}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00063}00063\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00064}00064\ \ \ \ \ \mbox{\hyperlink{class_path_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}(painter);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00065}00065\ \ \ \ \ \textcolor{keywordflow}{if}(option-\/>state\ \&\ QStyle::State\_Selected)\ \ \{\ paintPen.setStyle(Qt::DashLine);\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00066}00066\ \ \ \ \ \textcolor{keywordflow}{if}(objScene-\/>property(\mbox{\hyperlink{object-data_8h_a54e2373c95db640f15ef70c49de1d952}{ENABLE\_LWT}}).toBool())\ \{\ paintPen\ =\ \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{lineWeightPen}}();\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00067}00067\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00069}00069\ \ \ \ \ painter-\/>drawPath(\mbox{\hyperlink{class_base_object_a412eb69dc8fcb917011df8514ca2ffdd}{objectPath}}());}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00070}00070\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00072}\mbox{\hyperlink{class_path_object_add4e11623be9bc6e02557c67674564ed}{00072}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_path_object_add4e11623be9bc6e02557c67674564ed}{PathObject::updateRubber}}(QPainter*\ painter)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00073}00073\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00074}00074\ \ \ \ \ \textcolor{comment}{//TODO:\ Path\ Rubber\ Modes}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00075}00075\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00076}00076\ \ \ \ \ \textcolor{comment}{//TODO:\ updateRubber()\ gripping\ for\ PathObject}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00078}00078\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00080}\mbox{\hyperlink{class_path_object_a814830f38fd2c36b3f96252ee65d7617}{00080}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_path_object_a814830f38fd2c36b3f96252ee65d7617}{PathObject::vulcanize}}()}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00081}00081\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00082}00082\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}PathObject\ vulcanize()"{}});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00083}00083\ \ \ \ \ \mbox{\hyperlink{class_path_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}();}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00085}00085\ \ \ \ \ \mbox{\hyperlink{class_base_object_abc43b57468707e683827a13958f02f90}{setObjectRubberMode}}(\mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa35aded7b27be08a9939721598c550f6}{OBJ\_RUBBER\_OFF}});}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00087}00087\ \ \ \ \ \textcolor{keywordflow}{if}(!normalPath.elementCount())}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00088}00088\ \ \ \ \ \ \ \ \ QMessageBox::critical(0,\ QObject::tr(\textcolor{stringliteral}{"{}Empty\ Path\ Error"{}}),\ QObject::tr(\textcolor{stringliteral}{"{}The\ path\ added\ contains\ no\ points.\ The\ command\ that\ created\ this\ object\ has\ flawed\ logic."{}}));}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00089}00089\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00090}00090\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00091}00091\ \textcolor{comment}{//\ Returns\ the\ closest\ snap\ point\ to\ the\ mouse\ point}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00092}\mbox{\hyperlink{class_path_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{00092}}\ QPointF\ \mbox{\hyperlink{class_path_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{PathObject::mouseSnapPoint}}(\textcolor{keyword}{const}\ QPointF\&\ mousePoint)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00093}00093\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00094}00094\ \ \ \ \ \textcolor{keywordflow}{return}\ scenePos();}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00095}00095\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00097}\mbox{\hyperlink{class_path_object_acfde9da59c0bbaaab7decdc222aa38a3}{00097}}\ QList<QPointF>\ \mbox{\hyperlink{class_path_object_acfde9da59c0bbaaab7decdc222aa38a3}{PathObject::allGripPoints}}()}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00098}00098\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00099}00099\ \ \ \ \ QList<QPointF>\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00100}00100\ \ \ \ \ gripPoints\ <<\ scenePos();\ \textcolor{comment}{//TODO:\ loop\ thru\ all\ path\ Elements\ and\ return\ their\ points}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{keywordflow}{return}\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00102}00102\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00104}\mbox{\hyperlink{class_path_object_af377b9b2e3594940757c25610899c02b}{00104}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_path_object_af377b9b2e3594940757c25610899c02b}{PathObject::gripEdit}}(\textcolor{keyword}{const}\ QPointF\&\ before,\ \textcolor{keyword}{const}\ QPointF\&\ after)}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00105}00105\ \{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00106}00106\ \ \ \ \ \textcolor{comment}{//TODO:\ gripEdit()\ for\ PathObject}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00107}00107\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00109}\mbox{\hyperlink{class_path_object_ae792daf964109ba44609cfb75a02c0e2}{00109}}\ QPainterPath\ \mbox{\hyperlink{class_path_object_ae792daf964109ba44609cfb75a02c0e2}{PathObject::objectCopyPath}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00110}00110\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00111}00111\ \ \ \ \ \textcolor{keywordflow}{return}\ normalPath;}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00112}00112\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00114}\mbox{\hyperlink{class_path_object_ac103a3e4474b084a48281e9409087272}{00114}}\ QPainterPath\ \mbox{\hyperlink{class_path_object_ac103a3e4474b084a48281e9409087272}{PathObject::objectSavePath}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00115}00115\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00116}00116\ \ \ \ \ qreal\ s\ =\ scale();}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00117}00117\ \ \ \ \ QTransform\ trans;}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00118}00118\ \ \ \ \ trans.rotate(rotation());}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00119}00119\ \ \ \ \ trans.scale(s,s);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00120}00120\ \ \ \ \ \textcolor{keywordflow}{return}\ trans.map(normalPath);}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00121}00121\ \}}
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{object-path_8cpp_source_l00123}00123\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

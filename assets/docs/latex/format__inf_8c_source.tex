@@ -1,0 +1,87 @@
+\hypertarget{format__inf_8c_source}{}\doxysubsection{format\+\_\+inf.\+c}
+\label{format__inf_8c_source}\index{extern/libembroidery/src/formats/format\_inf.c@{extern/libembroidery/src/formats/format\_inf.c}}
+\mbox{\hyperlink{format__inf_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00002}00002\ \textcolor{comment}{\ *\ 100\ FORMAT}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00003}00003\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ libembroidery.}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00004}00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00005}00005\ \textcolor{comment}{\ *\ Copyright\ 2018-\/2023\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00006}00006\ \textcolor{comment}{\ *\ Licensed\ under\ the\ terms\ of\ the\ zlib\ license.}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00007}00007\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}../embroidery\_internal.h"{}}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00016}00016\ \textcolor{comment}{/*\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00017}00017\ \textcolor{comment}{/*\ format\ inf\ */}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00019}00019\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00020}\mbox{\hyperlink{embroidery__internal_8h_a4f8e1fe00b6af083e611f0b77ec309e5}{00020}}\ \mbox{\hyperlink{format__inf_8c_a4f8e1fe00b6af083e611f0b77ec309e5}{readInf}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00021}00021\ \{}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{int}\ nColors,\ i;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00023}00023\ \ \ \ \ \textcolor{keywordtype}{char}\ colorType[50];}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00024}00024\ \ \ \ \ \textcolor{keywordtype}{char}\ colorDescription[50];}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00025}00025\ \ \ \ \ \mbox{\hyperlink{struct_emb_thread__}{EmbThread}}\ t;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00027}00027\ \ \ \ \ fseek(file,\ 12,\ SEEK\_CUR);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00028}00028\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}nColors"{}},\ \&nColors,\ \mbox{\hyperlink{embroidery__internal_8h_ae8f5c7474bf71afeefa19634f733c53f}{EMB\_INT32\_BIG}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00030}00030\ \ \ \ \ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00032}00032\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ nColors;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00033}00033\ \ \ \ \ \ \ \ \ fseek(file,\ 4,\ SEEK\_CUR);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00034}00034\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a7f539183b901a4c1d25adcb71c6fbdc9}{embColor\_read}}(file,\ \&(t.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}),\ 3);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00035}00035\ \ \ \ \ \ \ \ \ strcpy(t.\mbox{\hyperlink{struct_emb_thread___a078d3842e4fd90843020a4e39abb6822}{catalogNumber}},\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00036}00036\ \ \ \ \ \ \ \ \ strcpy(t.\mbox{\hyperlink{struct_emb_thread___a54075ac9418786f6ce2c360f8a90d85a}{description}},\ \textcolor{stringliteral}{"{}"{}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00037}00037\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}{embPattern\_addThread}}(pattern,\ t);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00038}00038\ \ \ \ \ \ \ \ \ fseek(file,\ 2,\ SEEK\_CUR);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00039}00039\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a0312900273cfed05bf6d7ed748940cdb}{binaryReadString}}(file,\ colorType,\ 50);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00040}00040\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a0312900273cfed05bf6d7ed748940cdb}{binaryReadString}}(file,\ colorDescription,\ 50);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00041}00041\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00042}00042\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00043}00043\ \}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00045}00045\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00046}\mbox{\hyperlink{embroidery__internal_8h_a0761079bd9431abb3af157aef06c3e7a}{00046}}\ \mbox{\hyperlink{format__inf_8c_a0761079bd9431abb3af157aef06c3e7a}{writeInf}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00047}00047\ \{}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00048}00048\ \ \ \ \ \textcolor{keywordtype}{int}\ i,\ bytesRemaining;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00049}00049\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00050}00050\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x01);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00051}00051\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x08);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00052}00052\ \ \ \ \ \textcolor{comment}{/*\ write\ place\ holder\ offset\ */}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x00);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00056}00056\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ buffer[50];}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short}\ record\_length,\ record\_number,\ needle\_number;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ c;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ c\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a87dbedfa066778e08311fe1bbb89b302}{thread}}[i].\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ sprintf(buffer,\ \textcolor{stringliteral}{"{}RGB(\%d,\%d,\%d)"{}},\ (\textcolor{keywordtype}{int})c.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},\ (\textcolor{keywordtype}{int})c.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},\ (\textcolor{keywordtype}{int})c.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ record\_length\ =\ 14\ +\ strlen(buffer);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ record\_number\ =\ i;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ needle\_number\ =\ i;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00065}00065\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}record\ length"{}},\ \&record\_length,\ \mbox{\hyperlink{embroidery__internal_8h_a39efbac4089158a93aa98348f6e65f99}{EMB\_INT16\_BIG}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00066}00066\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}record\ number"{}},\ \&record\_number,\ \mbox{\hyperlink{embroidery__internal_8h_a39efbac4089158a93aa98348f6e65f99}{EMB\_INT16\_BIG}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}{embColor\_write}}(file,\ c,\ 3);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00068}00068\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}needle\ number"{}},\ \&needle\_number,\ \mbox{\hyperlink{embroidery__internal_8h_a39efbac4089158a93aa98348f6e65f99}{EMB\_INT16\_BIG}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ fwrite(\textcolor{stringliteral}{"{}RGB\(\backslash\)0"{}},\ 1,\ 4,\ file);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ fprintf(file,\ \textcolor{stringliteral}{"{}\%s"{}},\ buffer);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ fwrite(\textcolor{stringliteral}{"{}\(\backslash\)0"{}},\ 1,\ 1,\ file);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00072}00072\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00073}00073\ \ \ \ \ \textcolor{comment}{/*\ It\ appears\ that\ there\ should\ be\ a\ pad\ here\ otherwise\ it\ clips\ into}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00074}00074\ \textcolor{comment}{\ \ \ \ \ *\ the\ color\ description.\ */}}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00075}00075\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a72e798e33c5912c4a540cc09d4dbed42}{fpad}}(file,\ 0,\ 8);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00076}00076\ \ \ \ \ fseek(file,\ -\/8,\ SEEK\_END);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00077}00077\ \ \ \ \ bytesRemaining\ =\ ftell(file);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00078}00078\ \ \ \ \ fseek(file,\ 8,\ SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ bytesRemaining);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00080}00080\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00081}00081\ \}}
+
+\end{DoxyCode}

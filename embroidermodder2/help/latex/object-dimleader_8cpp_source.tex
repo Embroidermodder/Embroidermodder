@@ -1,0 +1,309 @@
+\hypertarget{object-dimleader_8cpp_source}{}\doxysubsection{object-\/dimleader.cpp}
+\label{object-dimleader_8cpp_source}\index{embroidermodder2/object-\/dimleader.cpp@{embroidermodder2/object-\/dimleader.cpp}}
+\mbox{\hyperlink{object-dimleader_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-dimleader_8h}{object-\/dimleader.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-data_8h}{object-\/data.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QStyleOption>}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QGraphicsScene>}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00008}\mbox{\hyperlink{class_dim_leader_object_a5b8f2066cc4b3369397528d8d65bcfce}{00008}}\ \mbox{\hyperlink{class_dim_leader_object_a5b8f2066cc4b3369397528d8d65bcfce}{DimLeaderObject::DimLeaderObject}}(qreal\ x1,\ qreal\ y1,\ qreal\ x2,\ qreal\ y2,\ QRgb\ rgb,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00009}00009\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00010}00010\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}DimLeaderObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00011}00011\ \ \ \ \ init(x1,\ y1,\ x2,\ y2,\ rgb,\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00012}00012\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00014}\mbox{\hyperlink{class_dim_leader_object_a1b2da4c76607aaebca4c9631ae4ef79a}{00014}}\ \mbox{\hyperlink{class_dim_leader_object_a5b8f2066cc4b3369397528d8d65bcfce}{DimLeaderObject::DimLeaderObject}}(\mbox{\hyperlink{class_dim_leader_object}{DimLeaderObject}}*\ obj,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00015}00015\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00016}00016\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}DimLeaderObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00017}00017\ \ \ \ \ \textcolor{keywordflow}{if}(obj)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00018}00018\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ init(obj-\/>\mbox{\hyperlink{class_dim_leader_object_a3018efc99bfe59b1ca058a8b0cffbaa6}{objectX1}}(),\ obj-\/>\mbox{\hyperlink{class_dim_leader_object_a0ccbaeb85baa01d91fcbe3f4101789de}{objectY1}}(),\ obj-\/>\mbox{\hyperlink{class_dim_leader_object_a2ccdc8dcd9d1535f849134f55249eee2}{objectX2}}(),\ obj-\/>\mbox{\hyperlink{class_dim_leader_object_a71ea43a3131bb2257618c0d51221700f}{objectY2}}(),\ obj-\/>\mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objectColorRGB}}(),\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00020}00020\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00021}00021\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00023}\mbox{\hyperlink{class_dim_leader_object_a3acf1c56b9c5cacf2fcfe3c9656fe1c1}{00023}}\ \mbox{\hyperlink{class_dim_leader_object_a3acf1c56b9c5cacf2fcfe3c9656fe1c1}{DimLeaderObject::\string~DimLeaderObject}}()}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00024}00024\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00025}00025\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}DimLeaderObject\ Destructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00026}00026\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00028}00028\ \textcolor{keywordtype}{void}\ DimLeaderObject::init(qreal\ x1,\ qreal\ y1,\ qreal\ x2,\ qreal\ y2,\ QRgb\ rgb,\ Qt::PenStyle\ lineType)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00029}00029\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00030}00030\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}{OBJ\_TYPE}},\ \mbox{\hyperlink{class_dim_leader_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}}());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00031}00031\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b}{OBJ\_NAME}},\ \mbox{\hyperlink{object-data_8h_acb90d906a6ba1fd3604aee4b9f526165}{OBJ\_NAME\_DIMLEADER}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00033}00033\ \ \ \ \ \textcolor{comment}{//WARNING:\ DO\ NOT\ enable\ QGraphicsItem::ItemIsMovable.\ If\ it\ is\ enabled,}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//WARNING:\ and\ the\ item\ is\ double\ clicked,\ the\ scene\ will\ erratically\ move\ the\ item\ while\ zooming.}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00035}00035\ \ \ \ \ \textcolor{comment}{//WARNING:\ All\ movement\ has\ to\ be\ handled\ explicitly\ by\ us,\ not\ by\ the\ scene.}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00036}00036\ \ \ \ \ setFlag(QGraphicsItem::ItemIsSelectable,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00038}00038\ \ \ \ \ curved\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00039}00039\ \ \ \ \ filled\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00040}00040\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{setObjectEndPoint1}}(x1,\ y1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00041}00041\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{setObjectEndPoint2}}(x2,\ y2);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{setObjectColor}}(rgb);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00043}00043\ \ \ \ \ \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{setObjectLineType}}(lineType);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00044}00044\ \ \ \ \ \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{setObjectLineWeight}}(0.35);\ \textcolor{comment}{//TODO:\ pass\ in\ proper\ lineweight}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00045}00045\ \ \ \ \ setPen(\mbox{\hyperlink{class_base_object_adbe2cb871eda436257a2f9140a62dffa}{objectPen}}());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00046}00046\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00048}\mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{00048}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{DimLeaderObject::setObjectEndPoint1}}(\textcolor{keyword}{const}\ QPointF\&\ endPt1)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00049}00049\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00050}00050\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{setObjectEndPoint1}}(endPt1.x(),\ endPt1.y());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00051}00051\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00053}\mbox{\hyperlink{class_dim_leader_object_ab4deec9407c3d1a0f617bee02c817e18}{00053}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{DimLeaderObject::setObjectEndPoint1}}(qreal\ x1,\ qreal\ y1)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00054}00054\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00055}00055\ \ \ \ \ QPointF\ endPt2\ =\ \mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{objectEndPoint2}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00056}00056\ \ \ \ \ qreal\ x2\ =\ endPt2.x();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00057}00057\ \ \ \ \ qreal\ y2\ =\ endPt2.y();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00058}00058\ \ \ \ \ qreal\ dx\ =\ x2\ -\/\ x1;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00059}00059\ \ \ \ \ qreal\ dy\ =\ y2\ -\/\ y1;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00060}00060\ \ \ \ \ setRotation(0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00061}00061\ \ \ \ \ \mbox{\hyperlink{class_base_object_a321d2d38e3176c39656090d311ea753e}{setLine}}(0,\ 0,\ dx,\ dy);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00062}00062\ \ \ \ \ setPos(x1,\ y1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00063}00063\ \ \ \ \ updateLeader();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00066}\mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{00066}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{DimLeaderObject::setObjectEndPoint2}}(\textcolor{keyword}{const}\ QPointF\&\ endPt2)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00067}00067\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00068}00068\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{setObjectEndPoint2}}(endPt2.x(),\ endPt2.y());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00069}00069\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00071}\mbox{\hyperlink{class_dim_leader_object_aa7617ac709019d7a7a8446c165a47bc9}{00071}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{DimLeaderObject::setObjectEndPoint2}}(qreal\ x2,\ qreal\ y2)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00072}00072\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00073}00073\ \ \ \ \ QPointF\ endPt1\ =\ scenePos();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00074}00074\ \ \ \ \ qreal\ x1\ =\ endPt1.x();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00075}00075\ \ \ \ \ qreal\ y1\ =\ endPt1.y();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00076}00076\ \ \ \ \ qreal\ dx\ =\ x2\ -\/\ x1;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00077}00077\ \ \ \ \ qreal\ dy\ =\ y2\ -\/\ y1;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00078}00078\ \ \ \ \ setRotation(0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{class_base_object_a321d2d38e3176c39656090d311ea753e}{setLine}}(0,\ 0,\ dx,\ dy);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00080}00080\ \ \ \ \ setPos(x1,\ y1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00081}00081\ \ \ \ \ updateLeader();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00082}00082\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00084}\mbox{\hyperlink{class_dim_leader_object_a2ab9d9ac7926d9d0dbfdebbf28cd457b}{00084}}\ QPointF\ \mbox{\hyperlink{class_dim_leader_object_a2ab9d9ac7926d9d0dbfdebbf28cd457b}{DimLeaderObject::objectEndPoint1}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00085}00085\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00086}00086\ \ \ \ \ \textcolor{keywordflow}{return}\ scenePos();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00087}00087\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00089}\mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{00089}}\ QPointF\ \mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{DimLeaderObject::objectEndPoint2}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00090}00090\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00091}00091\ \ \ \ \ QLineF\ lyne\ =\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00092}00092\ \ \ \ \ qreal\ rot\ =\ \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}}(rotation());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00093}00093\ \ \ \ \ qreal\ cosRot\ =\ qCos(rot);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00094}00094\ \ \ \ \ qreal\ sinRot\ =\ qSin(rot);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00095}00095\ \ \ \ \ qreal\ x2\ =\ lyne.x2()*scale();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00096}00096\ \ \ \ \ qreal\ y2\ =\ lyne.y2()*scale();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00097}00097\ \ \ \ \ qreal\ rotEnd2X\ =\ x2*cosRot\ -\/\ y2*sinRot;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00098}00098\ \ \ \ \ qreal\ rotEnd2Y\ =\ x2*sinRot\ +\ y2*cosRot;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00100}00100\ \ \ \ \ \textcolor{keywordflow}{return}\ (scenePos()\ +\ QPointF(rotEnd2X,\ rotEnd2Y));}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00101}00101\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00103}\mbox{\hyperlink{class_dim_leader_object_a217ed70d285ec9368d95b0ca4790460f}{00103}}\ QPointF\ \mbox{\hyperlink{class_dim_leader_object_a217ed70d285ec9368d95b0ca4790460f}{DimLeaderObject::objectMidPoint}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00104}00104\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00105}00105\ \ \ \ \ QLineF\ lyne\ =\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00106}00106\ \ \ \ \ QPointF\ mp\ =\ lyne.pointAt(0.5);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00107}00107\ \ \ \ \ qreal\ rot\ =\ \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}}(rotation());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00108}00108\ \ \ \ \ qreal\ cosRot\ =\ qCos(rot);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00109}00109\ \ \ \ \ qreal\ sinRot\ =\ qSin(rot);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00110}00110\ \ \ \ \ qreal\ mx\ =\ mp.x()*scale();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00111}00111\ \ \ \ \ qreal\ my\ =\ mp.y()*scale();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00112}00112\ \ \ \ \ qreal\ rotMidX\ =\ mx*cosRot\ -\/\ my*sinRot;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00113}00113\ \ \ \ \ qreal\ rotMidY\ =\ mx*sinRot\ +\ my*cosRot;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{keywordflow}{return}\ (scenePos()\ +\ QPointF(rotMidX,\ rotMidY));}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00116}00116\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00118}\mbox{\hyperlink{class_dim_leader_object_a23787ab0864216d473b44472b88ace8f}{00118}}\ qreal\ \mbox{\hyperlink{class_dim_leader_object_a23787ab0864216d473b44472b88ace8f}{DimLeaderObject::objectAngle}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00119}00119\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00120}00120\ \ \ \ \ qreal\ angle\ =\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}().angle()\ -\/\ rotation();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00121}00121\ \ \ \ \ \textcolor{keywordflow}{while}(angle\ >=\ 360.0)\ \{\ angle\ -\/=\ 360.0;\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00122}00122\ \ \ \ \ \textcolor{keywordflow}{while}(angle\ <\ 0.0)\ \ \ \ \{\ angle\ +=\ 360.0;\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00123}00123\ \ \ \ \ \textcolor{keywordflow}{return}\ angle;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00124}00124\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00126}00126\ \textcolor{keywordtype}{void}\ DimLeaderObject::updateLeader()}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00127}00127\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00128}00128\ \ \ \ \ \textcolor{keywordtype}{int}\ arrowStyle\ =\ \mbox{\hyperlink{class_dim_leader_object_af383b92747d373906c77cdaf55f06556a30c0b4dad1e3a3b93f822b9cef26244b}{Closed}};\ \textcolor{comment}{//TODO:\ Make\ this\ customizable}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00129}00129\ \ \ \ \ qreal\ arrowStyleAngle\ =\ 15.0;\ \textcolor{comment}{//TODO:\ Make\ this\ customizable}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00130}00130\ \ \ \ \ qreal\ arrowStyleLength\ =\ 1.0;\ \textcolor{comment}{//TODO:\ Make\ this\ customizable}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00131}00131\ \ \ \ \ qreal\ lineStyleAngle\ =\ 45.0;\ \textcolor{comment}{//TODO:\ Make\ this\ customizable}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00132}00132\ \ \ \ \ qreal\ lineStyleLength\ =\ 1.0;\ \textcolor{comment}{//TODO:\ Make\ this\ customizable}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00134}00134\ \ \ \ \ QLineF\ lyne\ =\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00135}00135\ \ \ \ \ qreal\ angle\ =\ lyne.angle();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00136}00136\ \ \ \ \ QPointF\ ap0\ =\ lyne.p1();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00137}00137\ \ \ \ \ QPointF\ lp0\ =\ lyne.p2();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00139}00139\ \ \ \ \ \textcolor{comment}{//Arrow}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00140}00140\ \ \ \ \ QLineF\ lynePerp(lyne.pointAt(arrowStyleLength/lyne.length())\ ,lp0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00141}00141\ \ \ \ \ lynePerp.setAngle(angle\ +\ 90);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00142}00142\ \ \ \ \ QLineF\ lyne1(ap0,\ lp0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00143}00143\ \ \ \ \ QLineF\ lyne2(ap0,\ lp0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00144}00144\ \ \ \ \ lyne1.setAngle(angle\ +\ arrowStyleAngle);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00145}00145\ \ \ \ \ lyne2.setAngle(angle\ -\/\ arrowStyleAngle);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00146}00146\ \ \ \ \ QPointF\ ap1;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00147}00147\ \ \ \ \ QPointF\ ap2;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00148}00148\ \ \ \ \ lynePerp.intersects(lyne1,\ \&ap1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00149}00149\ \ \ \ \ lynePerp.intersects(lyne2,\ \&ap2);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00151}00151\ \ \ \ \ \textcolor{comment}{//Math\ Diagram}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00152}00152\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ .(ap1)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ .(lp1)}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00153}00153\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /|\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /|}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00154}00154\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00155}00155\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00156}00156\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00157}00157\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00158}00158\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ /\ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00159}00159\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ /\ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00160}00160\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ /\ \ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /\ \ \ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00161}00161\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ /+(aSA)\ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ /+(lSA)\ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00162}00162\ \ \ \ \ \textcolor{comment}{//\ (ap0)./\_\_(aSL)\_\_|\_\_\_\_\_\_\_\_\_\_(lp0)./\_\_(lSL)\_\_|}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00163}00163\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \(\backslash\)\ -\/(aSA)\ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ -\/(lSA)\ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00164}00164\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00165}00165\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00166}00166\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00167}00167\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00168}00168\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00169}00169\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00170}00170\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ \ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00171}00171\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ |\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)\ |}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00172}00172\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)|\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \(\backslash\)|}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00173}00173\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ .(ap2)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ .(lp2)}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00175}00175\ \ \ \ \ \textcolor{keywordflow}{if}(arrowStyle\ ==\ \mbox{\hyperlink{class_dim_leader_object_af383b92747d373906c77cdaf55f06556ac8e6944e998ac466c3cc4a648dde8291}{Open}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00176}00176\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00177}00177\ \ \ \ \ \ \ \ \ arrowStylePath\ =\ QPainterPath();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00178}00178\ \ \ \ \ \ \ \ \ arrowStylePath.moveTo(ap1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00179}00179\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap2);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00181}00181\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00183}00183\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00184}00184\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(arrowStyle\ ==\ \mbox{\hyperlink{class_dim_leader_object_af383b92747d373906c77cdaf55f06556a30c0b4dad1e3a3b93f822b9cef26244b}{Closed}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00185}00185\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ arrowStylePath\ =\ QPainterPath();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ arrowStylePath.moveTo(ap1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00188}00188\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00189}00189\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap2);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ arrowStylePath.lineTo(ap1);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00191}00191\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00192}00192\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(arrowStyle\ ==\ \mbox{\hyperlink{class_dim_leader_object_af383b92747d373906c77cdaf55f06556af7f834c597c60e7e59d272d3223742e7}{Dot}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00193}00193\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ arrowStylePath\ =\ QPainterPath();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ arrowStylePath.addEllipse(ap0,\ arrowStyleLength,\ arrowStyleLength);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00196}00196\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00197}00197\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(arrowStyle\ ==\ \mbox{\hyperlink{class_dim_leader_object_af383b92747d373906c77cdaf55f06556a2e9b74cea3051078ef75257fb1663dfd}{Box}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00198}00198\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ arrowStylePath\ =\ QPainterPath();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ qreal\ side\ =\ QLineF(ap1,\ ap2).length();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00201}00201\ \ \ \ \ \ \ \ \ QRectF\ ar0(0,\ 0,\ side,\ side);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ ar0.moveCenter(ap0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00203}00203\ \ \ \ \ \ \ \ \ arrowStylePath.addRect(ar0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00204}00204\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00205}00205\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(arrowStyle\ ==\ \mbox{\hyperlink{class_dim_leader_object_af383b92747d373906c77cdaf55f06556aa81b25684a7e7a64772aec24197626cb}{Tick}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00206}00206\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00207}00207\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00209}00209\ \ \ \ \ lineStylePath\ =\ QPainterPath();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00210}00210\ \ \ \ \ lineStylePath.moveTo(ap0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00211}00211\ \ \ \ \ lineStylePath.lineTo(lp0);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00212}00212\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00213}00213\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00214}\mbox{\hyperlink{class_dim_leader_object_a8c124c843504f6971f6677f12ac9247f}{00214}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_a8c124c843504f6971f6677f12ac9247f}{DimLeaderObject::paint}}(QPainter*\ painter,\ \textcolor{keyword}{const}\ QStyleOptionGraphicsItem*\ option,\ QWidget*\ \textcolor{comment}{/*widget*/})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00215}00215\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00216}00216\ \ \ \ \ QGraphicsScene*\ objScene\ =\ scene();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{keywordflow}{if}(!objScene)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00219}00219\ \ \ \ \ QPen\ paintPen\ =\ pen();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00220}00220\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00221}00221\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}(painter);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00222}00222\ \ \ \ \ \textcolor{keywordflow}{if}(option-\/>state\ \&\ QStyle::State\_Selected)\ \ \{\ paintPen.setStyle(Qt::DashLine);\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00223}00223\ \ \ \ \ \textcolor{keywordflow}{if}(objScene-\/>property(\mbox{\hyperlink{object-data_8h_a54e2373c95db640f15ef70c49de1d952}{ENABLE\_LWT}}).toBool())\ \{\ paintPen\ =\ \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{lineWeightPen}}();\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00224}00224\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00226}00226\ \ \ \ \ painter-\/>drawPath(lineStylePath);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00227}00227\ \ \ \ \ painter-\/>drawPath(arrowStylePath);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00229}00229\ \ \ \ \ \textcolor{keywordflow}{if}(filled)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00230}00230\ \ \ \ \ \ \ \ \ painter-\/>fillPath(arrowStylePath,\ \mbox{\hyperlink{class_base_object_adcce6670a3760ad7c3014f73d26ade81}{objectColor}}());}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00231}00231\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00232}00232\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00233}\mbox{\hyperlink{class_dim_leader_object_add4e11623be9bc6e02557c67674564ed}{00233}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_add4e11623be9bc6e02557c67674564ed}{DimLeaderObject::updateRubber}}(QPainter*\ painter)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00234}00234\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00235}00235\ \ \ \ \ \textcolor{keywordtype}{int}\ rubberMode\ =\ \mbox{\hyperlink{class_base_object_a59c34db9a64b2204bace685dd3dd74e7}{objectRubberMode}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a72e593539b7b6121934c924831e0742e}{OBJ\_RUBBER\_DIMLEADER\_LINE}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00237}00237\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00238}00238\ \ \ \ \ \ \ \ \ QPointF\ sceneStartPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}DIMLEADER\_LINE\_START"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00239}00239\ \ \ \ \ \ \ \ \ QPointF\ sceneQSnapPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}DIMLEADER\_LINE\_END"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00241}00241\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{setObjectEndPoint1}}(sceneStartPoint);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00242}00242\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{setObjectEndPoint2}}(sceneQSnapPoint);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00243}00243\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00244}00244\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a596fc3b8f3fff512fb6b62bd32362747}{OBJ\_RUBBER\_GRIP}})}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00245}00245\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00246}00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00247}00247\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ QPointF\ gripPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}GRIP\_POINT"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00249}00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (gripPoint\ ==\ \mbox{\hyperlink{class_dim_leader_object_a2ab9d9ac7926d9d0dbfdebbf28cd457b}{objectEndPoint1}}())\ painter-\/>drawLine(\mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}().p2(),\ mapFromScene(\mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(QString())));}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(gripPoint\ ==\ \mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{objectEndPoint2}}())\ painter-\/>drawLine(\mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}().p1(),\ mapFromScene(\mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(QString())));}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(gripPoint\ ==\ \mbox{\hyperlink{class_dim_leader_object_a217ed70d285ec9368d95b0ca4790460f}{objectMidPoint}}())\ \ painter-\/>drawLine(\mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}().translated(mapFromScene(\mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(QString()))-\/mapFromScene(gripPoint)));}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00252}00252\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00253}00253\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00254}00254\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00255}00255\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00256}\mbox{\hyperlink{class_dim_leader_object_a814830f38fd2c36b3f96252ee65d7617}{00256}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_a814830f38fd2c36b3f96252ee65d7617}{DimLeaderObject::vulcanize}}()}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00257}00257\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00258}00258\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}DimLeaderObject\ vulcanize()"{}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00259}00259\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00261}00261\ \ \ \ \ \mbox{\hyperlink{class_base_object_abc43b57468707e683827a13958f02f90}{setObjectRubberMode}}(\mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa35aded7b27be08a9939721598c550f6}{OBJ\_RUBBER\_OFF}});}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00262}00262\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00264}00264\ \textcolor{comment}{//\ Returns\ the\ closest\ snap\ point\ to\ the\ mouse\ point}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00265}\mbox{\hyperlink{class_dim_leader_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{00265}}\ QPointF\ \mbox{\hyperlink{class_dim_leader_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{DimLeaderObject::mouseSnapPoint}}(\textcolor{keyword}{const}\ QPointF\&\ mousePoint)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00266}00266\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00267}00267\ \ \ \ \ QPointF\ endPoint1\ =\ \mbox{\hyperlink{class_dim_leader_object_a2ab9d9ac7926d9d0dbfdebbf28cd457b}{objectEndPoint1}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00268}00268\ \ \ \ \ QPointF\ endPoint2\ =\ \mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{objectEndPoint2}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00269}00269\ \ \ \ \ QPointF\ midPoint\ \ =\ \mbox{\hyperlink{class_dim_leader_object_a217ed70d285ec9368d95b0ca4790460f}{objectMidPoint}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00270}00270\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00271}00271\ \ \ \ \ qreal\ end1Dist\ =\ QLineF(mousePoint,\ endPoint1).length();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00272}00272\ \ \ \ \ qreal\ end2Dist\ =\ QLineF(mousePoint,\ endPoint2).length();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00273}00273\ \ \ \ \ qreal\ midDist\ \ =\ QLineF(mousePoint,\ midPoint).length();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00274}00274\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00275}00275\ \ \ \ \ qreal\ minDist\ =\ qMin(end1Dist,\ end2Dist);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00277}00277\ \ \ \ \ \textcolor{keywordflow}{if}(curved)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00278}00278\ \ \ \ \ \ \ \ \ minDist\ =\ qMin(minDist,\ midDist);}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00280}00280\ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (minDist\ ==\ end1Dist)\ \textcolor{keywordflow}{return}\ endPoint1;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ end2Dist)\ \textcolor{keywordflow}{return}\ endPoint2;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00282}00282\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ midDist)\ \ \textcolor{keywordflow}{return}\ midPoint;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00284}00284\ \ \ \ \ \textcolor{keywordflow}{return}\ scenePos();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00285}00285\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00286}00286\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00287}\mbox{\hyperlink{class_dim_leader_object_acfde9da59c0bbaaab7decdc222aa38a3}{00287}}\ QList<QPointF>\ \mbox{\hyperlink{class_dim_leader_object_acfde9da59c0bbaaab7decdc222aa38a3}{DimLeaderObject::allGripPoints}}()}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00288}00288\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00289}00289\ \ \ \ \ QList<QPointF>\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00290}00290\ \ \ \ \ gripPoints\ <<\ \mbox{\hyperlink{class_dim_leader_object_a2ab9d9ac7926d9d0dbfdebbf28cd457b}{objectEndPoint1}}()\ <<\ \mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{objectEndPoint2}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00291}00291\ \ \ \ \ \textcolor{keywordflow}{if}(curved)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00292}00292\ \ \ \ \ \ \ \ \ gripPoints\ <<\ \mbox{\hyperlink{class_dim_leader_object_a217ed70d285ec9368d95b0ca4790460f}{objectMidPoint}}();}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00293}00293\ \ \ \ \ \textcolor{keywordflow}{return}\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00294}00294\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00296}\mbox{\hyperlink{class_dim_leader_object_af377b9b2e3594940757c25610899c02b}{00296}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_dim_leader_object_af377b9b2e3594940757c25610899c02b}{DimLeaderObject::gripEdit}}(\textcolor{keyword}{const}\ QPointF\&\ before,\ \textcolor{keyword}{const}\ QPointF\&\ after)}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00297}00297\ \{}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00298}00298\ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (before\ ==\ \mbox{\hyperlink{class_dim_leader_object_a2ab9d9ac7926d9d0dbfdebbf28cd457b}{objectEndPoint1}}())\ \{\ \mbox{\hyperlink{class_dim_leader_object_a1b150139c660fbed98153e3763e11d9a}{setObjectEndPoint1}}(after);\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00299}00299\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(before\ ==\ \mbox{\hyperlink{class_dim_leader_object_a28d7cf1439908a708098b4fdad8c27da}{objectEndPoint2}}())\ \{\ \mbox{\hyperlink{class_dim_leader_object_a9c8114746f495e93b28e22bed3568544}{setObjectEndPoint2}}(after);\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00300}00300\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(before\ ==\ \mbox{\hyperlink{class_dim_leader_object_a217ed70d285ec9368d95b0ca4790460f}{objectMidPoint}}())\ \ \{\ QPointF\ delta\ =\ after-\/before;\ moveBy(delta.x(),\ delta.y());\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00301}00301\ \}}
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00302}00302\ }
+\DoxyCodeLine{\Hypertarget{object-dimleader_8cpp_source_l00303}00303\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

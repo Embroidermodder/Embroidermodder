@@ -1,0 +1,53 @@
+\hypertarget{layer-manager_8h_source}{}\doxysubsection{layer-\/manager.h}
+\label{layer-manager_8h_source}\index{embroidermodder2/layer-\/manager.h@{embroidermodder2/layer-\/manager.h}}
+\mbox{\hyperlink{layer-manager_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ LAYER\_MANAGER\_H}}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ LAYER\_MANAGER\_H}}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QDialog>}}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00006}00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00008}00008\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00009}00009\ \textcolor{keyword}{class\ }QAbstractItemModel;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00010}00010\ \textcolor{keyword}{class\ }QCheckBox;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00011}00011\ \textcolor{keyword}{class\ }QComboBox;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00012}00012\ \textcolor{keyword}{class\ }QGroupBox;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00013}00013\ \textcolor{keyword}{class\ }QLabel;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00014}00014\ \textcolor{keyword}{class\ }QLineEdit;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00015}00015\ \textcolor{keyword}{class\ }QSortFilterProxyModel;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00016}00016\ \textcolor{keyword}{class\ }QTreeView;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00017}00017\ \textcolor{keyword}{class\ }QStandardItemModel;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00018}00018\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00020}\mbox{\hyperlink{class_layer_manager}{00020}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_layer_manager}{LayerManager}}\ :\ \textcolor{keyword}{public}\ QDialog}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00021}00021\ \{}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00022}00022\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00024}00024\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00025}00025\ \ \ \ \ \mbox{\hyperlink{class_layer_manager}{LayerManager}}(\mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QWidget\ *parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00026}00026\ \ \ \ \ \mbox{\hyperlink{class_layer_manager_a226d5772ed04dd312531850e7363b2eb}{\string~LayerManager}}();}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00028}00028\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_layer_manager_a609baedb0a60a79b6f71ef3b99ad7440}{addLayer}}(\textcolor{keyword}{const}\ QString\&\ name,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00029}00029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ visible,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00030}00030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ frozen,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00031}00031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ qreal\ zValue,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00032}00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QRgb\ color,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00033}00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QString\&\ lineType,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00034}00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ QString\&\ lineWeight,}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00035}00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ print);}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00036}00036\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00037}00037\ \textcolor{keyword}{private}\ slots:}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00039}00039\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00040}00040\ \ \ \ \ QStandardItemModel*\ \ \ \ layerModel;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00041}00041\ \ \ \ \ QSortFilterProxyModel*\ layerModelSorted;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00042}00042\ \ \ \ \ QTreeView*\ \ \ \ \ \ \ \ \ \ \ \ \ treeView;}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00043}00043\ \};}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00045}00045\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00046}00046\ }
+\DoxyCodeLine{\Hypertarget{layer-manager_8h_source_l00047}00047\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

@@ -1,0 +1,321 @@
+\hypertarget{object-ellipse_8cpp_source}{}\doxysubsection{object-\/ellipse.cpp}
+\label{object-ellipse_8cpp_source}\index{embroidermodder2/object-\/ellipse.cpp@{embroidermodder2/object-\/ellipse.cpp}}
+\mbox{\hyperlink{object-ellipse_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-ellipse_8h}{object-\/ellipse.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-data_8h}{object-\/data.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QPainter>}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QStyleOption>}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <QGraphicsScene>}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00007}00007\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00008}\mbox{\hyperlink{class_ellipse_object_ab3b83c00a93a95ca1fb3687a74683975}{00008}}\ \mbox{\hyperlink{class_ellipse_object_ab3b83c00a93a95ca1fb3687a74683975}{EllipseObject::EllipseObject}}(qreal\ centerX,\ qreal\ centerY,\ qreal\ width,\ qreal\ height,\ QRgb\ rgb,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00009}00009\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00010}00010\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}EllipseObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00011}00011\ \ \ \ \ init(centerX,\ centerY,\ width,\ height,\ rgb,\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00012}00012\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00014}\mbox{\hyperlink{class_ellipse_object_aeb8df5faa02dae96ed3ca12247ebec3b}{00014}}\ \mbox{\hyperlink{class_ellipse_object_ab3b83c00a93a95ca1fb3687a74683975}{EllipseObject::EllipseObject}}(\mbox{\hyperlink{class_ellipse_object}{EllipseObject}}*\ obj,\ QGraphicsItem*\ parent)\ :\ \mbox{\hyperlink{class_base_object}{BaseObject}}(parent)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00015}00015\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00016}00016\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}EllipseObject\ Constructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00017}00017\ \ \ \ \ \textcolor{keywordflow}{if}(obj)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00018}00018\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00019}00019\ \ \ \ \ \ \ \ \ init(obj-\/>\mbox{\hyperlink{class_ellipse_object_a38eb9c1ac0dba70c03c0aaf009b52359}{objectCenterX}}(),\ obj-\/>\mbox{\hyperlink{class_ellipse_object_ae515447aa537443a37150ebf9aa0dc9b}{objectCenterY}}(),\ obj-\/>\mbox{\hyperlink{class_ellipse_object_a06947a77020f6b0ad9767647472817ff}{objectWidth}}(),\ obj-\/>\mbox{\hyperlink{class_ellipse_object_a732d1bafb2973d70809b7b4ffc490e53}{objectHeight}}(),\ obj-\/>\mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objectColorRGB}}(),\ Qt::SolidLine);\ \textcolor{comment}{//TODO:\ getCurrentLineType}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00020}00020\ \ \ \ \ \ \ \ \ setRotation(obj-\/>rotation());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00021}00021\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00022}00022\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00024}\mbox{\hyperlink{class_ellipse_object_a4af49ee541a5ac77011f084eb4170969}{00024}}\ \mbox{\hyperlink{class_ellipse_object_a4af49ee541a5ac77011f084eb4170969}{EllipseObject::\string~EllipseObject}}()}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00025}00025\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00026}00026\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}EllipseObject\ Destructor()"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00027}00027\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00029}00029\ \textcolor{keywordtype}{void}\ EllipseObject::init(qreal\ centerX,\ qreal\ centerY,\ qreal\ width,\ qreal\ height,\ QRgb\ rgb,\ Qt::PenStyle\ lineType)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00030}00030\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00031}00031\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}{OBJ\_TYPE}},\ \mbox{\hyperlink{class_ellipse_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}}());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00032}00032\ \ \ \ \ setData(\mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b}{OBJ\_NAME}},\ \mbox{\hyperlink{object-data_8h_aff0137d1f58b174235597a2221934631}{OBJ\_NAME\_ELLIPSE}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//WARNING:\ DO\ NOT\ enable\ QGraphicsItem::ItemIsMovable.\ If\ it\ is\ enabled,}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00035}00035\ \ \ \ \ \textcolor{comment}{//WARNING:\ and\ the\ item\ is\ double\ clicked,\ the\ scene\ will\ erratically\ move\ the\ item\ while\ zooming.}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00036}00036\ \ \ \ \ \textcolor{comment}{//WARNING:\ All\ movement\ has\ to\ be\ handled\ explicitly\ by\ us,\ not\ by\ the\ scene.}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00037}00037\ \ \ \ \ setFlag(QGraphicsItem::ItemIsSelectable,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}{setObjectSize}}(width,\ height);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00040}00040\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(centerX,\ centerY);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00041}00041\ \ \ \ \ \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{setObjectColor}}(rgb);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00042}00042\ \ \ \ \ \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{setObjectLineType}}(lineType);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00043}00043\ \ \ \ \ \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{setObjectLineWeight}}(0.35);\ \textcolor{comment}{//TODO:\ pass\ in\ proper\ lineweight}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00044}00044\ \ \ \ \ setPen(\mbox{\hyperlink{class_base_object_adbe2cb871eda436257a2f9140a62dffa}{objectPen}}());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00045}00045\ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00046}00046\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00048}\mbox{\hyperlink{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}{00048}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}{EllipseObject::setObjectSize}}(qreal\ width,\ qreal\ height)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00049}00049\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00050}00050\ \ \ \ \ QRectF\ elRect\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00051}00051\ \ \ \ \ elRect.setWidth(width);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00052}00052\ \ \ \ \ elRect.setHeight(height);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00053}00053\ \ \ \ \ elRect.moveCenter(QPointF(0,0));}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{setRect}}(elRect);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00055}00055\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00057}\mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{00057}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{EllipseObject::setObjectCenter}}(\textcolor{keyword}{const}\ QPointF\&\ center)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00058}00058\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00059}00059\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(center.x(),\ center.y());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00060}00060\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00062}\mbox{\hyperlink{class_ellipse_object_acaf966b0c2d06eec5f95ecceda481e52}{00062}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{EllipseObject::setObjectCenter}}(qreal\ centerX,\ qreal\ centerY)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00063}00063\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00064}00064\ \ \ \ \ setPos(centerX,\ centerY);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00065}00065\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00067}\mbox{\hyperlink{class_ellipse_object_a147b2ff3561d389cbe579134f3080cf3}{00067}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a147b2ff3561d389cbe579134f3080cf3}{EllipseObject::setObjectCenterX}}(qreal\ centerX)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00068}00068\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00069}00069\ \ \ \ \ setX(centerX);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00070}00070\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00071}00071\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00072}\mbox{\hyperlink{class_ellipse_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}{00072}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}{EllipseObject::setObjectCenterY}}(qreal\ centerY)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00073}00073\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00074}00074\ \ \ \ \ setY(centerY);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00075}00075\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00077}\mbox{\hyperlink{class_ellipse_object_acea0f957dab3876197f2210c71b567a5}{00077}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_acea0f957dab3876197f2210c71b567a5}{EllipseObject::setObjectRadiusMajor}}(qreal\ radius)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00078}00078\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_a89413638132f1817d4edf2c4f9fc1576}{setObjectDiameterMajor}}(radius*2.0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00080}00080\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00082}\mbox{\hyperlink{class_ellipse_object_a2ab4bb6691afe0de34d0bbeb6b158b88}{00082}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a2ab4bb6691afe0de34d0bbeb6b158b88}{EllipseObject::setObjectRadiusMinor}}(qreal\ radius)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00083}00083\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00084}00084\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_a38d2a9005168c1e8011ed7d812f010f4}{setObjectDiameterMinor}}(radius*2.0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00085}00085\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00087}\mbox{\hyperlink{class_ellipse_object_a89413638132f1817d4edf2c4f9fc1576}{00087}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a89413638132f1817d4edf2c4f9fc1576}{EllipseObject::setObjectDiameterMajor}}(qreal\ diameter)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00088}00088\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00089}00089\ \ \ \ \ QRectF\ elRect\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00090}00090\ \ \ \ \ \textcolor{keywordflow}{if}(elRect.width()\ >\ elRect.height())}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00091}00091\ \ \ \ \ \ \ \ \ elRect.setWidth(diameter);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00092}00092\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ elRect.setHeight(diameter);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00094}00094\ \ \ \ \ elRect.moveCenter(QPointF(0,0));}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00095}00095\ \ \ \ \ \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{setRect}}(elRect);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00096}00096\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00098}\mbox{\hyperlink{class_ellipse_object_a38d2a9005168c1e8011ed7d812f010f4}{00098}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a38d2a9005168c1e8011ed7d812f010f4}{EllipseObject::setObjectDiameterMinor}}(qreal\ diameter)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00099}00099\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00100}00100\ \ \ \ \ QRectF\ elRect\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00101}00101\ \ \ \ \ \textcolor{keywordflow}{if}(elRect.width()\ <\ elRect.height())}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00102}00102\ \ \ \ \ \ \ \ \ elRect.setWidth(diameter);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ elRect.setHeight(diameter);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00105}00105\ \ \ \ \ elRect.moveCenter(QPointF(0,0));}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00106}00106\ \ \ \ \ \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{setRect}}(elRect);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00107}00107\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00109}\mbox{\hyperlink{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}{00109}}\ QPointF\ \mbox{\hyperlink{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}{EllipseObject::objectQuadrant0}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00110}00110\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00111}00111\ \ \ \ \ qreal\ halfW\ =\ \mbox{\hyperlink{class_ellipse_object_a06947a77020f6b0ad9767647472817ff}{objectWidth}}()/2.0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00112}00112\ \ \ \ \ qreal\ rot\ =\ \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}}(rotation());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00113}00113\ \ \ \ \ qreal\ x\ =\ halfW*qCos(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00114}00114\ \ \ \ \ qreal\ y\ =\ halfW*qSin(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}()\ +\ QPointF(x,y);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00116}00116\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00118}\mbox{\hyperlink{class_ellipse_object_a9f6924403c5064c4c0bef05f4bc353e5}{00118}}\ QPointF\ \mbox{\hyperlink{class_ellipse_object_a9f6924403c5064c4c0bef05f4bc353e5}{EllipseObject::objectQuadrant90}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00119}00119\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00120}00120\ \ \ \ \ qreal\ halfH\ =\ \mbox{\hyperlink{class_ellipse_object_a732d1bafb2973d70809b7b4ffc490e53}{objectHeight}}()/2.0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00121}00121\ \ \ \ \ qreal\ rot\ =\ \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}}(rotation()+90.0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00122}00122\ \ \ \ \ qreal\ x\ =\ halfH*qCos(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00123}00123\ \ \ \ \ qreal\ y\ =\ halfH*qSin(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}()\ +\ QPointF(x,y);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00125}00125\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00127}\mbox{\hyperlink{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}{00127}}\ QPointF\ \mbox{\hyperlink{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}{EllipseObject::objectQuadrant180}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00128}00128\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00129}00129\ \ \ \ \ qreal\ halfW\ =\ \mbox{\hyperlink{class_ellipse_object_a06947a77020f6b0ad9767647472817ff}{objectWidth}}()/2.0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00130}00130\ \ \ \ \ qreal\ rot\ =\ \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}}(rotation()+180.0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00131}00131\ \ \ \ \ qreal\ x\ =\ halfW*qCos(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00132}00132\ \ \ \ \ qreal\ y\ =\ halfW*qSin(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00133}00133\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}()\ +\ QPointF(x,y);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00134}00134\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00136}\mbox{\hyperlink{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{00136}}\ QPointF\ \mbox{\hyperlink{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{EllipseObject::objectQuadrant270}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00137}00137\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00138}00138\ \ \ \ \ qreal\ halfH\ =\ \mbox{\hyperlink{class_ellipse_object_a732d1bafb2973d70809b7b4ffc490e53}{objectHeight}}()/2.0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00139}00139\ \ \ \ \ qreal\ rot\ =\ \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}}(rotation()+270.0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00140}00140\ \ \ \ \ qreal\ x\ =\ halfH*qCos(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00141}00141\ \ \ \ \ qreal\ y\ =\ halfH*qSin(rot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00142}00142\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}()\ +\ QPointF(x,y);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00143}00143\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00144}00144\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00145}00145\ \textcolor{keywordtype}{void}\ EllipseObject::updatePath()}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00146}00146\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00147}00147\ \ \ \ \ QPainterPath\ path;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00148}00148\ \ \ \ \ QRectF\ r\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00149}00149\ \ \ \ \ path.arcMoveTo(r,\ 0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00150}00150\ \ \ \ \ path.arcTo(r,\ 0,\ 360);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00151}00151\ \ \ \ \ \textcolor{comment}{//NOTE:\ Reverse\ the\ path\ so\ that\ the\ inside\ area\ isn't\ considered\ part\ of\ the\ ellipse}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00152}00152\ \ \ \ \ path.arcTo(r,\ 0,\ -\/360);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00153}00153\ \ \ \ \ \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{setObjectPath}}(path);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00154}00154\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00156}\mbox{\hyperlink{class_ellipse_object_a8c124c843504f6971f6677f12ac9247f}{00156}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a8c124c843504f6971f6677f12ac9247f}{EllipseObject::paint}}(QPainter*\ painter,\ \textcolor{keyword}{const}\ QStyleOptionGraphicsItem*\ option,\ QWidget*\ \textcolor{comment}{/*widget*/})}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00157}00157\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00158}00158\ \ \ \ \ QGraphicsScene*\ objScene\ =\ scene();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00159}00159\ \ \ \ \ \textcolor{keywordflow}{if}(!objScene)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00161}00161\ \ \ \ \ QPen\ paintPen\ =\ pen();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00162}00162\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00163}00163\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}(painter);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00164}00164\ \ \ \ \ \textcolor{keywordflow}{if}(option-\/>state\ \&\ QStyle::State\_Selected)\ \ \{\ paintPen.setStyle(Qt::DashLine);\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00165}00165\ \ \ \ \ \textcolor{keywordflow}{if}(objScene-\/>property(\mbox{\hyperlink{object-data_8h_a54e2373c95db640f15ef70c49de1d952}{ENABLE\_LWT}}).toBool())\ \{\ paintPen\ =\ \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{lineWeightPen}}();\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00166}00166\ \ \ \ \ painter-\/>setPen(paintPen);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00168}00168\ \ \ \ \ painter-\/>drawEllipse(\mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00169}00169\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00171}\mbox{\hyperlink{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}{00171}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}{EllipseObject::updateRubber}}(QPainter*\ painter)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00172}00172\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00173}00173\ \ \ \ \ \textcolor{keywordtype}{int}\ rubberMode\ =\ \mbox{\hyperlink{class_base_object_a59c34db9a64b2204bace685dd3dd74e7}{objectRubberMode}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00174}00174\ \ \ \ \ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a0a8b9f43105580702a954cbbc668d380}{OBJ\_RUBBER\_ELLIPSE\_LINE}})}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00175}00175\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00176}00176\ \ \ \ \ \ \ \ \ QPointF\ sceneLinePoint1\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_LINE\_POINT1"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00177}00177\ \ \ \ \ \ \ \ \ QPointF\ sceneLinePoint2\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_LINE\_POINT2"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00178}00178\ \ \ \ \ \ \ \ \ QPointF\ itemLinePoint1\ \ =\ mapFromScene(sceneLinePoint1);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00179}00179\ \ \ \ \ \ \ \ \ QPointF\ itemLinePoint2\ \ =\ mapFromScene(sceneLinePoint2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00180}00180\ \ \ \ \ \ \ \ \ QLineF\ itemLine(itemLinePoint1,\ itemLinePoint2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00181}00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)\ \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{drawRubberLine}}(itemLine,\ painter,\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00182}00182\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00183}00183\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00184}00184\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a5f1cb27f461337f16a08e25310a39965}{OBJ\_RUBBER\_ELLIPSE\_MAJORDIAMETER\_MINORRADIUS}})}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00185}00185\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00186}00186\ \ \ \ \ \ \ \ \ QPointF\ sceneAxis1Point1\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_AXIS1\_POINT1"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00187}00187\ \ \ \ \ \ \ \ \ QPointF\ sceneAxis1Point2\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_AXIS1\_POINT2"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00188}00188\ \ \ \ \ \ \ \ \ QPointF\ sceneCenterPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_CENTER"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00189}00189\ \ \ \ \ \ \ \ \ QPointF\ sceneAxis2Point2\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_AXIS2\_POINT2"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00190}00190\ \ \ \ \ \ \ \ \ qreal\ ellipseWidth\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_WIDTH"{}}).x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00191}00191\ \ \ \ \ \ \ \ \ qreal\ ellipseRot\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_ROT"{}}).x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00192}00192\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00193}00193\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ incorporate\ perpendicularDistance()\ into\ libcgeometry}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00194}00194\ \ \ \ \ \ \ \ \ qreal\ px\ =\ sceneAxis2Point2.x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00195}00195\ \ \ \ \ \ \ \ \ qreal\ py\ =\ sceneAxis2Point2.y();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00196}00196\ \ \ \ \ \ \ \ \ qreal\ x1\ =\ sceneAxis1Point1.x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00197}00197\ \ \ \ \ \ \ \ \ qreal\ y1\ =\ sceneAxis1Point1.y();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00198}00198\ \ \ \ \ \ \ \ \ QLineF\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}(sceneAxis1Point1,\ sceneAxis1Point2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00199}00199\ \ \ \ \ \ \ \ \ QLineF\ norm\ =\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}.normalVector();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00200}00200\ \ \ \ \ \ \ \ \ qreal\ dx\ =\ px-\/x1;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00201}00201\ \ \ \ \ \ \ \ \ qreal\ dy\ =\ py-\/y1;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00202}00202\ \ \ \ \ \ \ \ \ norm.translate(dx,\ dy);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00203}00203\ \ \ \ \ \ \ \ \ QPointF\ iPoint;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00204}00204\ \ \ \ \ \ \ \ \ norm.intersects(\mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}},\ \&iPoint);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00205}00205\ \ \ \ \ \ \ \ \ qreal\ ellipseHeight\ =\ QLineF(px,\ py,\ iPoint.x(),\ iPoint.y()).length()*2.0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00207}00207\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00208}00208\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}{setObjectSize}}(ellipseWidth,\ ellipseHeight);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00209}00209\ \ \ \ \ \ \ \ \ setRotation(-\/ellipseRot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00210}00210\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00211}00211\ \ \ \ \ \ \ \ \ QPointF\ itemCenterPoint\ =\ mapFromScene(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00212}00212\ \ \ \ \ \ \ \ \ QPointF\ itemAxis2Point2\ =\ mapFromScene(sceneAxis2Point2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00213}00213\ \ \ \ \ \ \ \ \ QLineF\ itemLine(itemCenterPoint,\ itemAxis2Point2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00214}00214\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)\ \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{drawRubberLine}}(itemLine,\ painter,\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00215}00215\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00216}00216\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00217}00217\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa47658102951498e611ccff08fee7f84}{OBJ\_RUBBER\_ELLIPSE\_MAJORRADIUS\_MINORRADIUS}})}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00218}00218\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00219}00219\ \ \ \ \ \ \ \ \ QPointF\ sceneAxis1Point2\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_AXIS1\_POINT2"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00220}00220\ \ \ \ \ \ \ \ \ QPointF\ sceneCenterPoint\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_CENTER"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ QPointF\ sceneAxis2Point2\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_AXIS2\_POINT2"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00222}00222\ \ \ \ \ \ \ \ \ qreal\ ellipseWidth\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_WIDTH"{}}).x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00223}00223\ \ \ \ \ \ \ \ \ qreal\ ellipseRot\ =\ \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{objectRubberPoint}}(\textcolor{stringliteral}{"{}ELLIPSE\_ROT"{}}).x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00224}00224\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00225}00225\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ incorporate\ perpendicularDistance()\ into\ libcgeometry}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00226}00226\ \ \ \ \ \ \ \ \ qreal\ px\ =\ sceneAxis2Point2.x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ qreal\ py\ =\ sceneAxis2Point2.y();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00228}00228\ \ \ \ \ \ \ \ \ qreal\ x1\ =\ sceneCenterPoint.x();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00229}00229\ \ \ \ \ \ \ \ \ qreal\ y1\ =\ sceneCenterPoint.y();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00230}00230\ \ \ \ \ \ \ \ \ QLineF\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}(sceneCenterPoint,\ sceneAxis1Point2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00231}00231\ \ \ \ \ \ \ \ \ QLineF\ norm\ =\ \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}}.normalVector();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00232}00232\ \ \ \ \ \ \ \ \ qreal\ dx\ =\ px-\/x1;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00233}00233\ \ \ \ \ \ \ \ \ qreal\ dy\ =\ py-\/y1;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00234}00234\ \ \ \ \ \ \ \ \ norm.translate(dx,\ dy);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00235}00235\ \ \ \ \ \ \ \ \ QPointF\ iPoint;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00236}00236\ \ \ \ \ \ \ \ \ norm.intersects(\mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}},\ \&iPoint);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00237}00237\ \ \ \ \ \ \ \ \ qreal\ ellipseHeight\ =\ QLineF(px,\ py,\ iPoint.x(),\ iPoint.y()).length()*2.0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00239}00239\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{setObjectCenter}}(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00240}00240\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}{setObjectSize}}(ellipseWidth,\ ellipseHeight);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00241}00241\ \ \ \ \ \ \ \ \ setRotation(-\/ellipseRot);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00242}00242\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00243}00243\ \ \ \ \ \ \ \ \ QPointF\ itemCenterPoint\ =\ mapFromScene(sceneCenterPoint);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00244}00244\ \ \ \ \ \ \ \ \ QPointF\ itemAxis2Point2\ =\ mapFromScene(sceneAxis2Point2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00245}00245\ \ \ \ \ \ \ \ \ QLineF\ itemLine(itemCenterPoint,\ itemAxis2Point2);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00246}00246\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(painter)\ \mbox{\hyperlink{class_base_object_ad7b8179f2af447b57ca7ea1ce160dbe4}{drawRubberLine}}(itemLine,\ painter,\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00247}00247\ \ \ \ \ \ \ \ \ updatePath();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00248}00248\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(rubberMode\ ==\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a596fc3b8f3fff512fb6b62bd32362747}{OBJ\_RUBBER\_GRIP}})}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00250}00250\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00251}00251\ \ \ \ \ \ \ \ \ \textcolor{comment}{//TODO:\ updateRubber()\ gripping\ for\ EllipseObject}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00252}00252\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00253}00253\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00254}00254\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00255}\mbox{\hyperlink{class_ellipse_object_a814830f38fd2c36b3f96252ee65d7617}{00255}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_a814830f38fd2c36b3f96252ee65d7617}{EllipseObject::vulcanize}}()}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00256}00256\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00257}00257\ \ \ \ \ qDebug(\textcolor{stringliteral}{"{}EllipseObject\ vulcanize()"{}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00258}00258\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00260}00260\ \ \ \ \ \mbox{\hyperlink{class_base_object_abc43b57468707e683827a13958f02f90}{setObjectRubberMode}}(\mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa35aded7b27be08a9939721598c550f6}{OBJ\_RUBBER\_OFF}});}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00261}00261\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00263}00263\ \textcolor{comment}{//\ Returns\ the\ closest\ snap\ point\ to\ the\ mouse\ point}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00264}\mbox{\hyperlink{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{00264}}\ QPointF\ \mbox{\hyperlink{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{EllipseObject::mouseSnapPoint}}(\textcolor{keyword}{const}\ QPointF\&\ mousePoint)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00265}00265\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00266}00266\ \ \ \ \ QPointF\ center\ \ =\ \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00267}00267\ \ \ \ \ QPointF\ quad0\ \ \ =\ \mbox{\hyperlink{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}{objectQuadrant0}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00268}00268\ \ \ \ \ QPointF\ quad90\ \ =\ \mbox{\hyperlink{class_ellipse_object_a9f6924403c5064c4c0bef05f4bc353e5}{objectQuadrant90}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00269}00269\ \ \ \ \ QPointF\ quad180\ =\ \mbox{\hyperlink{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}{objectQuadrant180}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00270}00270\ \ \ \ \ QPointF\ quad270\ =\ \mbox{\hyperlink{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{objectQuadrant270}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00272}00272\ \ \ \ \ qreal\ cntrDist\ =\ QLineF(mousePoint,\ center).length();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00273}00273\ \ \ \ \ qreal\ q0Dist\ \ \ =\ QLineF(mousePoint,\ quad0).length();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00274}00274\ \ \ \ \ qreal\ q90Dist\ \ =\ QLineF(mousePoint,\ quad90).length();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00275}00275\ \ \ \ \ qreal\ q180Dist\ =\ QLineF(mousePoint,\ quad180).length();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00276}00276\ \ \ \ \ qreal\ q270Dist\ =\ QLineF(mousePoint,\ quad270).length();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00277}00277\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00278}00278\ \ \ \ \ qreal\ minDist\ =\ qMin(qMin(qMin(q0Dist,\ q90Dist),\ qMin(q180Dist,\ q270Dist)),\ cntrDist);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00280}00280\ \ \ \ \ \textcolor{keywordflow}{if}\ \ \ \ \ (minDist\ ==\ cntrDist)\ \textcolor{keywordflow}{return}\ center;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q0Dist)\ \ \ \textcolor{keywordflow}{return}\ quad0;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00282}00282\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q90Dist)\ \ \textcolor{keywordflow}{return}\ quad90;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q180Dist)\ \textcolor{keywordflow}{return}\ quad180;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00284}00284\ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(minDist\ ==\ q270Dist)\ \textcolor{keywordflow}{return}\ quad270;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00286}00286\ \ \ \ \ \textcolor{keywordflow}{return}\ scenePos();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00287}00287\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00289}\mbox{\hyperlink{class_ellipse_object_acfde9da59c0bbaaab7decdc222aa38a3}{00289}}\ QList<QPointF>\ \mbox{\hyperlink{class_ellipse_object_acfde9da59c0bbaaab7decdc222aa38a3}{EllipseObject::allGripPoints}}()}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00290}00290\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00291}00291\ \ \ \ \ QList<QPointF>\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00292}00292\ \ \ \ \ gripPoints\ <<\ \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{objectCenter}}()\ <<\ \mbox{\hyperlink{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}{objectQuadrant0}}()\ <<\ \mbox{\hyperlink{class_ellipse_object_a9f6924403c5064c4c0bef05f4bc353e5}{objectQuadrant90}}()\ <<\ \mbox{\hyperlink{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}{objectQuadrant180}}()\ <<\ \mbox{\hyperlink{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{objectQuadrant270}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00293}00293\ \ \ \ \ \textcolor{keywordflow}{return}\ gripPoints;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00294}00294\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00296}\mbox{\hyperlink{class_ellipse_object_af377b9b2e3594940757c25610899c02b}{00296}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_ellipse_object_af377b9b2e3594940757c25610899c02b}{EllipseObject::gripEdit}}(\textcolor{keyword}{const}\ QPointF\&\ before,\ \textcolor{keyword}{const}\ QPointF\&\ after)}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00297}00297\ \{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00298}00298\ \ \ \ \ \textcolor{comment}{//TODO:\ gripEdit()\ for\ EllipseObject}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00299}00299\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00301}\mbox{\hyperlink{class_ellipse_object_ac103a3e4474b084a48281e9409087272}{00301}}\ QPainterPath\ \mbox{\hyperlink{class_ellipse_object_ac103a3e4474b084a48281e9409087272}{EllipseObject::objectSavePath}}()\textcolor{keyword}{\ const}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00302}00302\ \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00303}00303\ \ \ \ \ QPainterPath\ path;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00304}00304\ \ \ \ \ QRectF\ r\ =\ \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}}();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00305}00305\ \ \ \ \ path.arcMoveTo(r,\ 0);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00306}00306\ \ \ \ \ path.arcTo(r,\ 0,\ 360);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00307}00307\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00308}00308\ \ \ \ \ qreal\ s\ =\ scale();}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00309}00309\ \ \ \ \ QTransform\ trans;}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00310}00310\ \ \ \ \ trans.rotate(rotation());}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00311}00311\ \ \ \ \ trans.scale(s,s);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00312}00312\ \ \ \ \ \textcolor{keywordflow}{return}\ trans.map(path);}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00313}00313\ \}}
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{object-ellipse_8cpp_source_l00315}00315\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

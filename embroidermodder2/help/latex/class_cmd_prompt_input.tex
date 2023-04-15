@@ -1,0 +1,525 @@
+\hypertarget{class_cmd_prompt_input}{}\doxysubsection{Cmd\+Prompt\+Input Class Reference}
+\label{class_cmd_prompt_input}\index{CmdPromptInput@{CmdPromptInput}}
+
+
+{\ttfamily \#include $<$cmdprompt.\+h$>$}
+
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a82d2c8e6d18f2b014a2f650ff52c0a66}{add\+Command}} (const QString \&alias, const QString \&cmd)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a82aa679ad2c2cc3c5a2ad82d7564b0b6}{end\+Command}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}{process\+Input}} (const QChar \&rapid\+Char=QChar())
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a4aa20ec4ce311f15fa1608b6d3928969}{check\+Selection}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a70f5bdb24323aa90f40e9442becd2e63}{update\+Current\+Text}} (const QString \&txt)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_acbaf91bc62a9a35290b9661fe36b6d5f}{check\+Edited\+Text}} (const QString \&txt)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a8879ea019915d4e44d0256adb9be7f5c}{check\+Changed\+Text}} (const QString \&txt)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_aaf3fa10595368733ad823e48b99ea808}{check\+Cursor\+Position}} (int oldpos, int newpos)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a629e6e8652ccd0ff78d08cb23b314f83}{append\+History}} (const QString \&txt, int prefix\+Length)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_afd6e69dc9fe1b076bbcc69fb3931da0e}{start\+Command}} (const QString \&cmd)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}{run\+Command}} (const QString \&cmd, const QString \&cmdtxt)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a74af558a825ac72754085696d893671d}{delete\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a5bdc9d7b57997bc3f69c9281e5a3caac}{tab\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_abb2c9654968151943c6068652051fe73}{escape\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a3ac8ff7536eaff8c48297effe38dd49b}{up\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_ac3465cb35ba356dc7b25316ebecf6418}{down\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a497fc0afaca5b0221a701d16c5669f6e}{F1\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a22d931e95d5d4ee7ddcda464c3013da7}{F2\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_aa7f4737767af0407b584d72d82eac575}{F3\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_ab40bffe5abc8e5bd0dd213c8d09f127f}{F4\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_adb19d80475373f5f04bb37915eebc52c}{F5\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a5f7be131042ab667dcf63b179648d836}{F6\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a4542ddd7f03d93e1818387c0cb0f8a63}{F7\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a7a70f165bc38bf8a1659723bb69dd0f3}{F8\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a1c30ad91ca91781a975712c361651d76}{F9\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_aabd407a7f7f65e643a85e8e7ee6130bd}{F10\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a253b9a7a27ef5d7f3619362f60caf8b3}{F11\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_abcae88d050bd8c7cbf947b132db1ec82}{F12\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_ac592ae9edd3e41debabc86083d818a0b}{cut\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a6a6cf2771118274de46b15c22d5d0554}{copy\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a22d984256486e2ff46ad007399f8aaeb}{paste\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a8c1995c536a85dfb8f66ecf9dcc0dc13}{select\+All\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a05b431deab4716a1cd8d608c9c3d5503}{undo\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}{redo\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_addb9170c614df4078997f470a3adadbe}{shift\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_ad349219a6273ed0e7cd90523e06b6631}{shift\+Released}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_ac593ceea953da376d165ce31e3187767}{show\+Settings}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a13f2c0b5a7f1d4b33fc323e585f807b2}{stop\+Blinking}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_cmd_prompt_input_ab5f12870265949b620f2d5d39398193c}{Cmd\+Prompt\+Input}} (QWidget $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_cmd_prompt_input_a8c4c9cf079dd926513eb04799032cf2b}{$\sim$\+Cmd\+Prompt\+Input}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+QString \mbox{\hyperlink{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}{cur\+Text}}
+\item 
+QString \mbox{\hyperlink{class_cmd_prompt_input_acfede5c1376f63deaec7732d5484b411}{default\+Prefix}}
+\item 
+QString \mbox{\hyperlink{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}{prefix}}
+\item 
+QString \mbox{\hyperlink{class_cmd_prompt_input_aa2f6a10f9492ebff3e65caa000779258}{last\+Cmd}}
+\item 
+QString \mbox{\hyperlink{class_cmd_prompt_input_a252c1bea192e7d97caf8d3e0f8262240}{cur\+Cmd}}
+\item 
+bool \mbox{\hyperlink{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}{cmd\+Active}}
+\item 
+bool \mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{rapid\+Fire\+Enabled}}
+\item 
+bool \mbox{\hyperlink{class_cmd_prompt_input_a2f7636df8b2a22914ee5e8a96139b655}{is\+Blinking}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a59701ebb47f7e2f55977543b6293ba47}{context\+Menu\+Event}} (QContext\+Menu\+Event $\ast$event)
+\item 
+bool \mbox{\hyperlink{class_cmd_prompt_input_ad7452c5931d2f0c7f63a308d1ccccfc7}{event\+Filter}} (QObject $\ast$obj, QEvent $\ast$event)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00022}{22}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_cmd_prompt_input_ab5f12870265949b620f2d5d39398193c}\label{class_cmd_prompt_input_ab5f12870265949b620f2d5d39398193c}} 
+\index{CmdPromptInput@{CmdPromptInput}!CmdPromptInput@{CmdPromptInput}}
+\index{CmdPromptInput@{CmdPromptInput}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{CmdPromptInput()}{CmdPromptInput()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_input}{Cmd\+Prompt\+Input}} (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00386}{386}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a8c4c9cf079dd926513eb04799032cf2b}\label{class_cmd_prompt_input_a8c4c9cf079dd926513eb04799032cf2b}} 
+\index{CmdPromptInput@{CmdPromptInput}!````~CmdPromptInput@{$\sim$CmdPromptInput}}
+\index{````~CmdPromptInput@{$\sim$CmdPromptInput}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{$\sim$CmdPromptInput()}{~CmdPromptInput()}}
+{\footnotesize\ttfamily $\sim$\mbox{\hyperlink{class_cmd_prompt_input}{Cmd\+Prompt\+Input}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00422}{422}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_cmd_prompt_input_a82d2c8e6d18f2b014a2f650ff52c0a66}\label{class_cmd_prompt_input_a82d2c8e6d18f2b014a2f650ff52c0a66}} 
+\index{CmdPromptInput@{CmdPromptInput}!addCommand@{addCommand}}
+\index{addCommand@{addCommand}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{addCommand}{addCommand}}
+{\footnotesize\ttfamily void add\+Command (\begin{DoxyParamCaption}\item[{const QString \&}]{alias,  }\item[{const QString \&}]{cmd }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00427}{427}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a629e6e8652ccd0ff78d08cb23b314f83}\label{class_cmd_prompt_input_a629e6e8652ccd0ff78d08cb23b314f83}} 
+\index{CmdPromptInput@{CmdPromptInput}!appendHistory@{appendHistory}}
+\index{appendHistory@{appendHistory}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{appendHistory}{appendHistory}}
+{\footnotesize\ttfamily void append\+History (\begin{DoxyParamCaption}\item[{const QString \&}]{txt,  }\item[{int}]{prefix\+Length }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a8879ea019915d4e44d0256adb9be7f5c}\label{class_cmd_prompt_input_a8879ea019915d4e44d0256adb9be7f5c}} 
+\index{CmdPromptInput@{CmdPromptInput}!checkChangedText@{checkChangedText}}
+\index{checkChangedText@{checkChangedText}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{checkChangedText}{checkChangedText}}
+{\footnotesize\ttfamily void check\+Changed\+Text (\begin{DoxyParamCaption}\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00667}{667}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_aaf3fa10595368733ad823e48b99ea808}\label{class_cmd_prompt_input_aaf3fa10595368733ad823e48b99ea808}} 
+\index{CmdPromptInput@{CmdPromptInput}!checkCursorPosition@{checkCursorPosition}}
+\index{checkCursorPosition@{checkCursorPosition}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{checkCursorPosition}{checkCursorPosition}}
+{\footnotesize\ttfamily void check\+Cursor\+Position (\begin{DoxyParamCaption}\item[{int}]{oldpos,  }\item[{int}]{newpos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00522}{522}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_acbaf91bc62a9a35290b9661fe36b6d5f}\label{class_cmd_prompt_input_acbaf91bc62a9a35290b9661fe36b6d5f}} 
+\index{CmdPromptInput@{CmdPromptInput}!checkEditedText@{checkEditedText}}
+\index{checkEditedText@{checkEditedText}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{checkEditedText}{checkEditedText}}
+{\footnotesize\ttfamily void check\+Edited\+Text (\begin{DoxyParamCaption}\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00659}{659}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a4aa20ec4ce311f15fa1608b6d3928969}\label{class_cmd_prompt_input_a4aa20ec4ce311f15fa1608b6d3928969}} 
+\index{CmdPromptInput@{CmdPromptInput}!checkSelection@{checkSelection}}
+\index{checkSelection@{checkSelection}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{checkSelection}{checkSelection}}
+{\footnotesize\ttfamily void check\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00515}{515}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a59701ebb47f7e2f55977543b6293ba47}\label{class_cmd_prompt_input_a59701ebb47f7e2f55977543b6293ba47}} 
+\index{CmdPromptInput@{CmdPromptInput}!contextMenuEvent@{contextMenuEvent}}
+\index{contextMenuEvent@{contextMenuEvent}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{contextMenuEvent()}{contextMenuEvent()}}
+{\footnotesize\ttfamily void context\+Menu\+Event (\begin{DoxyParamCaption}\item[{QContext\+Menu\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00683}{683}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a6a6cf2771118274de46b15c22d5d0554}\label{class_cmd_prompt_input_a6a6cf2771118274de46b15c22d5d0554}} 
+\index{CmdPromptInput@{CmdPromptInput}!copyPressed@{copyPressed}}
+\index{copyPressed@{copyPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{copyPressed}{copyPressed}}
+{\footnotesize\ttfamily void copy\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ac592ae9edd3e41debabc86083d818a0b}\label{class_cmd_prompt_input_ac592ae9edd3e41debabc86083d818a0b}} 
+\index{CmdPromptInput@{CmdPromptInput}!cutPressed@{cutPressed}}
+\index{cutPressed@{cutPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{cutPressed}{cutPressed}}
+{\footnotesize\ttfamily void cut\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a74af558a825ac72754085696d893671d}\label{class_cmd_prompt_input_a74af558a825ac72754085696d893671d}} 
+\index{CmdPromptInput@{CmdPromptInput}!deletePressed@{deletePressed}}
+\index{deletePressed@{deletePressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{deletePressed}{deletePressed}}
+{\footnotesize\ttfamily void delete\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ac3465cb35ba356dc7b25316ebecf6418}\label{class_cmd_prompt_input_ac3465cb35ba356dc7b25316ebecf6418}} 
+\index{CmdPromptInput@{CmdPromptInput}!downPressed@{downPressed}}
+\index{downPressed@{downPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{downPressed}{downPressed}}
+{\footnotesize\ttfamily void down\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a82aa679ad2c2cc3c5a2ad82d7564b0b6}\label{class_cmd_prompt_input_a82aa679ad2c2cc3c5a2ad82d7564b0b6}} 
+\index{CmdPromptInput@{CmdPromptInput}!endCommand@{endCommand}}
+\index{endCommand@{endCommand}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{endCommand}{endCommand}}
+{\footnotesize\ttfamily void end\+Command (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00433}{433}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_abb2c9654968151943c6068652051fe73}\label{class_cmd_prompt_input_abb2c9654968151943c6068652051fe73}} 
+\index{CmdPromptInput@{CmdPromptInput}!escapePressed@{escapePressed}}
+\index{escapePressed@{escapePressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{escapePressed}{escapePressed}}
+{\footnotesize\ttfamily void escape\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ad7452c5931d2f0c7f63a308d1ccccfc7}\label{class_cmd_prompt_input_ad7452c5931d2f0c7f63a308d1ccccfc7}} 
+\index{CmdPromptInput@{CmdPromptInput}!eventFilter@{eventFilter}}
+\index{eventFilter@{eventFilter}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{eventFilter()}{eventFilter()}}
+{\footnotesize\ttfamily bool event\+Filter (\begin{DoxyParamCaption}\item[{QObject $\ast$}]{obj,  }\item[{QEvent $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00707}{707}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_aabd407a7f7f65e643a85e8e7ee6130bd}\label{class_cmd_prompt_input_aabd407a7f7f65e643a85e8e7ee6130bd}} 
+\index{CmdPromptInput@{CmdPromptInput}!F10Pressed@{F10Pressed}}
+\index{F10Pressed@{F10Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F10Pressed}{F10Pressed}}
+{\footnotesize\ttfamily void F10\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a253b9a7a27ef5d7f3619362f60caf8b3}\label{class_cmd_prompt_input_a253b9a7a27ef5d7f3619362f60caf8b3}} 
+\index{CmdPromptInput@{CmdPromptInput}!F11Pressed@{F11Pressed}}
+\index{F11Pressed@{F11Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F11Pressed}{F11Pressed}}
+{\footnotesize\ttfamily void F11\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_abcae88d050bd8c7cbf947b132db1ec82}\label{class_cmd_prompt_input_abcae88d050bd8c7cbf947b132db1ec82}} 
+\index{CmdPromptInput@{CmdPromptInput}!F12Pressed@{F12Pressed}}
+\index{F12Pressed@{F12Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F12Pressed}{F12Pressed}}
+{\footnotesize\ttfamily void F12\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a497fc0afaca5b0221a701d16c5669f6e}\label{class_cmd_prompt_input_a497fc0afaca5b0221a701d16c5669f6e}} 
+\index{CmdPromptInput@{CmdPromptInput}!F1Pressed@{F1Pressed}}
+\index{F1Pressed@{F1Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F1Pressed}{F1Pressed}}
+{\footnotesize\ttfamily void F1\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a22d931e95d5d4ee7ddcda464c3013da7}\label{class_cmd_prompt_input_a22d931e95d5d4ee7ddcda464c3013da7}} 
+\index{CmdPromptInput@{CmdPromptInput}!F2Pressed@{F2Pressed}}
+\index{F2Pressed@{F2Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F2Pressed}{F2Pressed}}
+{\footnotesize\ttfamily void F2\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_aa7f4737767af0407b584d72d82eac575}\label{class_cmd_prompt_input_aa7f4737767af0407b584d72d82eac575}} 
+\index{CmdPromptInput@{CmdPromptInput}!F3Pressed@{F3Pressed}}
+\index{F3Pressed@{F3Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F3Pressed}{F3Pressed}}
+{\footnotesize\ttfamily void F3\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ab40bffe5abc8e5bd0dd213c8d09f127f}\label{class_cmd_prompt_input_ab40bffe5abc8e5bd0dd213c8d09f127f}} 
+\index{CmdPromptInput@{CmdPromptInput}!F4Pressed@{F4Pressed}}
+\index{F4Pressed@{F4Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F4Pressed}{F4Pressed}}
+{\footnotesize\ttfamily void F4\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_adb19d80475373f5f04bb37915eebc52c}\label{class_cmd_prompt_input_adb19d80475373f5f04bb37915eebc52c}} 
+\index{CmdPromptInput@{CmdPromptInput}!F5Pressed@{F5Pressed}}
+\index{F5Pressed@{F5Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F5Pressed}{F5Pressed}}
+{\footnotesize\ttfamily void F5\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a5f7be131042ab667dcf63b179648d836}\label{class_cmd_prompt_input_a5f7be131042ab667dcf63b179648d836}} 
+\index{CmdPromptInput@{CmdPromptInput}!F6Pressed@{F6Pressed}}
+\index{F6Pressed@{F6Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F6Pressed}{F6Pressed}}
+{\footnotesize\ttfamily void F6\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a4542ddd7f03d93e1818387c0cb0f8a63}\label{class_cmd_prompt_input_a4542ddd7f03d93e1818387c0cb0f8a63}} 
+\index{CmdPromptInput@{CmdPromptInput}!F7Pressed@{F7Pressed}}
+\index{F7Pressed@{F7Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F7Pressed}{F7Pressed}}
+{\footnotesize\ttfamily void F7\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a7a70f165bc38bf8a1659723bb69dd0f3}\label{class_cmd_prompt_input_a7a70f165bc38bf8a1659723bb69dd0f3}} 
+\index{CmdPromptInput@{CmdPromptInput}!F8Pressed@{F8Pressed}}
+\index{F8Pressed@{F8Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F8Pressed}{F8Pressed}}
+{\footnotesize\ttfamily void F8\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a1c30ad91ca91781a975712c361651d76}\label{class_cmd_prompt_input_a1c30ad91ca91781a975712c361651d76}} 
+\index{CmdPromptInput@{CmdPromptInput}!F9Pressed@{F9Pressed}}
+\index{F9Pressed@{F9Pressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{F9Pressed}{F9Pressed}}
+{\footnotesize\ttfamily void F9\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a22d984256486e2ff46ad007399f8aaeb}\label{class_cmd_prompt_input_a22d984256486e2ff46ad007399f8aaeb}} 
+\index{CmdPromptInput@{CmdPromptInput}!pastePressed@{pastePressed}}
+\index{pastePressed@{pastePressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{pastePressed}{pastePressed}}
+{\footnotesize\ttfamily void paste\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}\label{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}} 
+\index{CmdPromptInput@{CmdPromptInput}!processInput@{processInput}}
+\index{processInput@{processInput}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{processInput}{processInput}}
+{\footnotesize\ttfamily void process\+Input (\begin{DoxyParamCaption}\item[{const QChar \&}]{rapid\+Char = {\ttfamily QChar()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\begin{DoxyRefDesc}{Todo}
+\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]sort Qt\+::\+Return if(rapid\+Char == Qt\+::\+Key\+\_\+\+Enter $\vert$$\vert$ rapid\+Char == Qt\+::\+Key\+\_\+\+Return) \{ emit append\+History(cur\+Text, prefix.\+length()); emit run\+Command(cur\+Cmd, \char`\"{}\+RAPID\+\_\+\+ENTER\char`\"{}); cur\+Text.\+clear(); clear(); return; \} else if(rapid\+Char == Qt\+::\+Key\+\_\+\+Space) \{ update\+Current\+Text(cur\+Text + \char`\"{} \char`\"{}); emit run\+Command(cur\+Cmd, cmdtxt + \char`\"{} \char`\"{}); return; \} else \{ emit \mbox{\hyperlink{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}{run\+Command(cur\+Cmd, cmdtxt)}}; return; \} \end{DoxyRefDesc}
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00445}{445}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}\label{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}} 
+\index{CmdPromptInput@{CmdPromptInput}!redoPressed@{redoPressed}}
+\index{redoPressed@{redoPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{redoPressed}{redoPressed}}
+{\footnotesize\ttfamily void redo\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}\label{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}} 
+\index{CmdPromptInput@{CmdPromptInput}!runCommand@{runCommand}}
+\index{runCommand@{runCommand}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{runCommand}{runCommand}}
+{\footnotesize\ttfamily void run\+Command (\begin{DoxyParamCaption}\item[{const QString \&}]{cmd,  }\item[{const QString \&}]{cmdtxt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a8c1995c536a85dfb8f66ecf9dcc0dc13}\label{class_cmd_prompt_input_a8c1995c536a85dfb8f66ecf9dcc0dc13}} 
+\index{CmdPromptInput@{CmdPromptInput}!selectAllPressed@{selectAllPressed}}
+\index{selectAllPressed@{selectAllPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{selectAllPressed}{selectAllPressed}}
+{\footnotesize\ttfamily void select\+All\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_addb9170c614df4078997f470a3adadbe}\label{class_cmd_prompt_input_addb9170c614df4078997f470a3adadbe}} 
+\index{CmdPromptInput@{CmdPromptInput}!shiftPressed@{shiftPressed}}
+\index{shiftPressed@{shiftPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{shiftPressed}{shiftPressed}}
+{\footnotesize\ttfamily void shift\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ad349219a6273ed0e7cd90523e06b6631}\label{class_cmd_prompt_input_ad349219a6273ed0e7cd90523e06b6631}} 
+\index{CmdPromptInput@{CmdPromptInput}!shiftReleased@{shiftReleased}}
+\index{shiftReleased@{shiftReleased}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{shiftReleased}{shiftReleased}}
+{\footnotesize\ttfamily void shift\+Released (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ac593ceea953da376d165ce31e3187767}\label{class_cmd_prompt_input_ac593ceea953da376d165ce31e3187767}} 
+\index{CmdPromptInput@{CmdPromptInput}!showSettings@{showSettings}}
+\index{showSettings@{showSettings}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{showSettings}{showSettings}}
+{\footnotesize\ttfamily void show\+Settings (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_afd6e69dc9fe1b076bbcc69fb3931da0e}\label{class_cmd_prompt_input_afd6e69dc9fe1b076bbcc69fb3931da0e}} 
+\index{CmdPromptInput@{CmdPromptInput}!startCommand@{startCommand}}
+\index{startCommand@{startCommand}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{startCommand}{startCommand}}
+{\footnotesize\ttfamily void start\+Command (\begin{DoxyParamCaption}\item[{const QString \&}]{cmd }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a13f2c0b5a7f1d4b33fc323e585f807b2}\label{class_cmd_prompt_input_a13f2c0b5a7f1d4b33fc323e585f807b2}} 
+\index{CmdPromptInput@{CmdPromptInput}!stopBlinking@{stopBlinking}}
+\index{stopBlinking@{stopBlinking}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{stopBlinking}{stopBlinking}}
+{\footnotesize\ttfamily void stop\+Blinking (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a5bdc9d7b57997bc3f69c9281e5a3caac}\label{class_cmd_prompt_input_a5bdc9d7b57997bc3f69c9281e5a3caac}} 
+\index{CmdPromptInput@{CmdPromptInput}!tabPressed@{tabPressed}}
+\index{tabPressed@{tabPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{tabPressed}{tabPressed}}
+{\footnotesize\ttfamily void tab\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a05b431deab4716a1cd8d608c9c3d5503}\label{class_cmd_prompt_input_a05b431deab4716a1cd8d608c9c3d5503}} 
+\index{CmdPromptInput@{CmdPromptInput}!undoPressed@{undoPressed}}
+\index{undoPressed@{undoPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{undoPressed}{undoPressed}}
+{\footnotesize\ttfamily void undo\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a70f5bdb24323aa90f40e9442becd2e63}\label{class_cmd_prompt_input_a70f5bdb24323aa90f40e9442becd2e63}} 
+\index{CmdPromptInput@{CmdPromptInput}!updateCurrentText@{updateCurrentText}}
+\index{updateCurrentText@{updateCurrentText}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{updateCurrentText}{updateCurrentText}}
+{\footnotesize\ttfamily void update\+Current\+Text (\begin{DoxyParamCaption}\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8cpp_source_l00636}{636}} of file \mbox{\hyperlink{cmdprompt_8cpp_source}{cmdprompt.\+cpp}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a3ac8ff7536eaff8c48297effe38dd49b}\label{class_cmd_prompt_input_a3ac8ff7536eaff8c48297effe38dd49b}} 
+\index{CmdPromptInput@{CmdPromptInput}!upPressed@{upPressed}}
+\index{upPressed@{upPressed}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{upPressed}{upPressed}}
+{\footnotesize\ttfamily void up\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+
+
+\doxysubsubsection{Field Documentation}
+\mbox{\Hypertarget{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}\label{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}} 
+\index{CmdPromptInput@{CmdPromptInput}!cmdActive@{cmdActive}}
+\index{cmdActive@{cmdActive}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{cmdActive}{cmdActive}}
+{\footnotesize\ttfamily bool cmd\+Active}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00036}{36}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a252c1bea192e7d97caf8d3e0f8262240}\label{class_cmd_prompt_input_a252c1bea192e7d97caf8d3e0f8262240}} 
+\index{CmdPromptInput@{CmdPromptInput}!curCmd@{curCmd}}
+\index{curCmd@{curCmd}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{curCmd}{curCmd}}
+{\footnotesize\ttfamily QString cur\+Cmd}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00035}{35}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}\label{class_cmd_prompt_input_a50cac6b92ecebfb210ae7367e73a3020}} 
+\index{CmdPromptInput@{CmdPromptInput}!curText@{curText}}
+\index{curText@{curText}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{curText}{curText}}
+{\footnotesize\ttfamily QString cur\+Text}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00030}{30}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_acfede5c1376f63deaec7732d5484b411}\label{class_cmd_prompt_input_acfede5c1376f63deaec7732d5484b411}} 
+\index{CmdPromptInput@{CmdPromptInput}!defaultPrefix@{defaultPrefix}}
+\index{defaultPrefix@{defaultPrefix}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{defaultPrefix}{defaultPrefix}}
+{\footnotesize\ttfamily QString default\+Prefix}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00031}{31}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a2f7636df8b2a22914ee5e8a96139b655}\label{class_cmd_prompt_input_a2f7636df8b2a22914ee5e8a96139b655}} 
+\index{CmdPromptInput@{CmdPromptInput}!isBlinking@{isBlinking}}
+\index{isBlinking@{isBlinking}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{isBlinking}{isBlinking}}
+{\footnotesize\ttfamily bool is\+Blinking}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00039}{39}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_aa2f6a10f9492ebff3e65caa000779258}\label{class_cmd_prompt_input_aa2f6a10f9492ebff3e65caa000779258}} 
+\index{CmdPromptInput@{CmdPromptInput}!lastCmd@{lastCmd}}
+\index{lastCmd@{lastCmd}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{lastCmd}{lastCmd}}
+{\footnotesize\ttfamily QString last\+Cmd}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00034}{34}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}\label{class_cmd_prompt_input_a3442cb7cc0af91a52daf8bbd40344f89}} 
+\index{CmdPromptInput@{CmdPromptInput}!prefix@{prefix}}
+\index{prefix@{prefix}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{prefix}{prefix}}
+{\footnotesize\ttfamily QString prefix}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00032}{32}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+\mbox{\Hypertarget{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}\label{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}} 
+\index{CmdPromptInput@{CmdPromptInput}!rapidFireEnabled@{rapidFireEnabled}}
+\index{rapidFireEnabled@{rapidFireEnabled}!CmdPromptInput@{CmdPromptInput}}
+\doxyparagraph{\texorpdfstring{rapidFireEnabled}{rapidFireEnabled}}
+{\footnotesize\ttfamily bool rapid\+Fire\+Enabled}
+
+
+
+Definition at line \mbox{\hyperlink{cmdprompt_8h_source_l00038}{38}} of file \mbox{\hyperlink{cmdprompt_8h_source}{cmdprompt.\+h}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+embroidermodder2/\mbox{\hyperlink{cmdprompt_8h}{cmdprompt.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{cmdprompt_8cpp}{cmdprompt.\+cpp}}\end{DoxyCompactItemize}

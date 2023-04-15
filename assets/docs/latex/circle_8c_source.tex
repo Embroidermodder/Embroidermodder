@@ -1,0 +1,167 @@
+\hypertarget{circle_8c_source}{}\doxysubsection{circle.\+c}
+\label{circle_8c_source}\index{extern/libembroidery/src/geometry/circle.c@{extern/libembroidery/src/geometry/circle.c}}
+\mbox{\hyperlink{circle_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00002}00002\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ libembroidery.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00004}00004\ \textcolor{comment}{\ *\ Copyright\ 2018-\/2023\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00005}00005\ \textcolor{comment}{\ *\ Licensed\ under\ the\ terms\ of\ the\ zlib\ license.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00006}00006\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00007}00007\ \textcolor{comment}{\ *\ GEOMETRY}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00008}00008\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00014}00014\ \textcolor{preprocessor}{\#include\ "{}../embroidery.h"{}}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00016}00016\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00017}00017\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00018}00018\ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00019}\mbox{\hyperlink{embroidery_8h_a847a64f66c1b6493da001e241a1a2ce3}{00019}}\ \mbox{\hyperlink{circle_8c_aa633592d2901b0f510920d9c658fb88b}{embCircle\_init}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00020}00020\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00021}00021\ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00022}00022\ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00023}00023\ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00024}00024\ \ \ \ \ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ =\ 1.0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00025}00025\ \ \ \ \ \textcolor{keywordflow}{return}\ circle;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00026}00026\ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00028}00028\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00029}00029\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00030}00030\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00031}\mbox{\hyperlink{circle_8c_a5b1865f7a240f8800e32f4320f7879ea}{00031}}\ \mbox{\hyperlink{circle_8c_a5b1865f7a240f8800e32f4320f7879ea}{embCircle\_area}}(\mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle)}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00032}00032\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00033}00033\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}{embConstantPi}}\ *\ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ *\ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}};}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00034}00034\ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00036}00036\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00037}00037\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00038}00038\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00039}\mbox{\hyperlink{circle_8c_a8491bab7af8df0f6f297ff4de0fe3524}{00039}}\ \mbox{\hyperlink{circle_8c_a8491bab7af8df0f6f297ff4de0fe3524}{embCircle\_circumference}}(\mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle)}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00040}00040\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00041}00041\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}{embConstantPi}}\ *\ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ *\ circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}};}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00042}00042\ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00043}00043\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00044}00044\ \textcolor{comment}{/*\ Computational\ Geometry\ for\ Circles\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00046}00046\ \textcolor{comment}{/****************************************************************}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00047}00047\ \textcolor{comment}{\ *\ Calculates\ the\ intersection\ points\ of\ two\ overlapping\ circles.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00048}00048\ \textcolor{comment}{\ *\ Returns\ true\ if\ the\ circles\ intersect.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00049}00049\ \textcolor{comment}{\ *\ Returns\ false\ if\ the\ circles\ do\ not\ intersect.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00050}00050\ \textcolor{comment}{\ ****************************************************************/}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00051}00051\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00052}\mbox{\hyperlink{embroidery_8h_ac005ed8ac46c8a27b281039c439e0576}{00052}}\ \mbox{\hyperlink{circle_8c_a02d84117276c09a6d557ee1b64e6cf7f}{getCircleCircleIntersections}}(\mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ c0,\ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ c1,}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ *p0,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ *p1)}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00054}00054\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00055}00055\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ delta;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00056}00056\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ a,\ h,\ px2,\ py2,\ mx,\ my,\ d;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00057}00057\ \ \ \ \ \textcolor{comment}{/*\ Distance\ between\ centers\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00058}00058\ \ \ \ \ delta\ =\ \mbox{\hyperlink{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}{embVector\_subtract}}(c1.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}},\ c0.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}});}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00059}00059\ \ \ \ \ d\ =\ \mbox{\hyperlink{embroidery_8h_ac0161afdbecb1d33336072331183e441}{embVector\_length}}(delta);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00061}00061\ \ \ \ \ \textcolor{comment}{/*Circles\ share\ centers.\ This\ results\ in\ division\ by\ zero,}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00062}00062\ \textcolor{comment}{\ \ \ \ \ \ infinite\ solutions\ or\ one\ circle\ being\ contained\ within\ the\ other.\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00063}00063\ \ \ \ \ \textcolor{keywordflow}{if}\ (d\ ==\ 0.0)\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00064}00064\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00065}00065\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (d\ >\ (c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ +\ c1.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}))\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Circles\ do\ not\ touch\ each\ other\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00068}00068\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (d\ <\ (c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ -\/\ c1.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}))\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00069}00069\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ One\ circle\ is\ contained\ within\ the\ other\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00070}00070\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00071}00071\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00072}00072\ \ \ \ \ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00073}00073\ \textcolor{comment}{\ \ \ \ \ *\ Considering\ the\ two\ right\ triangles\ p0p2p3\ and\ p1p2p3\ we\ can\ write:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00074}00074\ \textcolor{comment}{\ \ \ \ \ *\ a\string^2\ +\ h\string^2\ =\ r0\string^2\ and\ b\string^2\ +\ h\string^2\ =\ r1\string^2}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00075}00075\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00076}00076\ \textcolor{comment}{\ \ \ \ \ *\ BEGIN\ PROOF}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00077}00077\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00078}00078\ \textcolor{comment}{\ \ \ \ \ *\ Remove\ h\string^2\ from\ the\ equation\ by\ setting\ them\ equal\ to\ themselves:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00079}00079\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ a\string^2\ =\ r1\string^2\ -\/\ b\string^2}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00080}00080\ \textcolor{comment}{\ \ \ \ \ *\ Substitute\ b\ with\ (d\ -\/\ a)\ since\ it\ is\ proven\ that\ d\ =\ a\ +\ b:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00081}00081\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ a\string^2\ =\ r1\string^2\ -\/\ (d\ -\/\ a)\string^2}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00082}00082\ \textcolor{comment}{\ \ \ \ \ *\ Complete\ the\ square:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00083}00083\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ a\string^2\ =\ r1\string^2\ -\/\ (d\string^2\ -\/2da\ +\ a\string^2)}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00084}00084\ \textcolor{comment}{\ \ \ \ \ *\ Subtract\ r1\string^2\ from\ both\ sides:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00085}00085\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ r1\string^2\ -\/\ a\string^2\ =\ -\/(d\string^2\ -\/2da\ +\ a\string^2)}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00086}00086\ \textcolor{comment}{\ \ \ \ \ *\ Invert\ the\ signs:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00087}00087\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ r1\string^2\ -\/\ a\string^2\ =\ -\/d\string^2\ +\ 2da\ -\/\ a\string^2}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00088}00088\ \textcolor{comment}{\ \ \ \ \ *\ Adding\ a\string^2\ to\ each\ side\ cancels\ them\ out:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00089}00089\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ r1\string^2\ =\ -\/d\string^2\ +\ 2da}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00090}00090\ \textcolor{comment}{\ \ \ \ \ *\ Add\ d\string^2\ to\ both\ sides\ to\ shift\ it\ to\ the\ other\ side:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00091}00091\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ r0\string^2\ -\/\ r1\string^2\ +\ d\string^2\ =\ 2da}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00092}00092\ \textcolor{comment}{\ \ \ \ \ *\ Divide\ by\ 2d\ to\ finally\ solve\ for\ a:}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00093}00093\ \textcolor{comment}{\ \ \ \ \ *\ \ \ \ \ a\ =\ (r0\string^2\ -\/\ r1\string^2\ +\ d\string^2)/\ (2d)}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00094}00094\ \textcolor{comment}{\ \ \ \ \ *}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00095}00095\ \textcolor{comment}{\ \ \ \ \ *\ END\ PROOF}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00096}00096\ \textcolor{comment}{\ \ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00098}00098\ \ \ \ \ a\ =\ ((c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}*c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}})\ -\/\ (c1.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}*c1.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}})\ +\ (d*d))\ /\ (2.0\ *\ d);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00099}00099\ \ \ \ \ \textcolor{comment}{/*\ Solve\ for\ h\ by\ substituting\ a\ into\ a\string^2\ +\ h\string^2\ =\ r0\string^2\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00100}00100\ \ \ \ \ h\ =\ sqrt((c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}*c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}})\ -\/\ (a*a));}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00101}00101\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00102}00102\ \ \ \ \ \textcolor{comment}{/*Find\ point\ p2\ by\ adding\ the\ a\ offset\ in\ relation\ to\ line\ d\ to\ point\ p0\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00103}00103\ \ \ \ \ px2\ =\ c0.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ +\ (delta.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ a/d);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00104}00104\ \ \ \ \ py2\ =\ c0.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ +\ (delta.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ a/d);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00106}00106\ \ \ \ \ \textcolor{comment}{/*\ Tangent\ circles\ have\ only\ one\ intersection}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00107}00107\ \textcolor{comment}{}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00108}00108\ \textcolor{comment}{\ \ \ \ \ \ \ TODO:\ using\ ==\ in\ floating\ point\ arithmetic}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00109}00109\ \textcolor{comment}{\ \ \ \ \ \ \ doesn't\ account\ for\ the\ machine\ accuracy,\ having}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00110}00110\ \textcolor{comment}{\ \ \ \ \ \ \ a\ stated\ (EmbReal)\ tolerance\ value\ would\ help.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00111}00111\ \textcolor{comment}{\ \ \ \ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00112}00112\ \ \ \ \ \textcolor{keywordflow}{if}\ (d\ ==\ (c0.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ +\ c1.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}))\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ p0-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ px2;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ p0-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ py2;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ p1-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ px2;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ p1-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ py2;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00118}00118\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00120}00120\ \ \ \ \ \textcolor{comment}{/*\ Get\ the\ perpendicular\ slope\ by\ multiplying\ by\ the\ negative\ reciprocal}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00121}00121\ \textcolor{comment}{\ \ \ \ \ *\ Then\ multiply\ by\ the\ h\ offset\ in\ relation\ to\ d\ to\ get\ the\ actual\ offsets\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00122}00122\ \ \ \ \ mx\ =\ -\/(delta.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ h/d);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00123}00123\ \ \ \ \ my\ =\ \ (delta.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ h/d);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00125}00125\ \ \ \ \ \textcolor{comment}{/*\ Add\ the\ offsets\ to\ point\ p2\ to\ obtain\ the\ intersection\ points\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00126}00126\ \ \ \ \ p0-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ px2\ +\ mx;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00127}00127\ \ \ \ \ p0-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ py2\ +\ my;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00128}00128\ \ \ \ \ p1-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ px2\ -\/\ mx;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00129}00129\ \ \ \ \ p1-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ py2\ -\/\ my;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00131}00131\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00132}00132\ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00134}00134\ \textcolor{comment}{/****************************************************************}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00135}00135\ \textcolor{comment}{\ *\ Calculates\ the\ tangent\ points\ on\ circle\ from\ a\ given\ point.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00136}00136\ \textcolor{comment}{\ *\ Returns\ true\ if\ the\ given\ point\ lies\ outside\ the\ circle.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00137}00137\ \textcolor{comment}{\ *\ Returns\ false\ if\ the\ given\ point\ is\ inside\ the\ circle.}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00138}00138\ \textcolor{comment}{\ ****************************************************************/}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00139}00139\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00140}\mbox{\hyperlink{embroidery_8h_a7e454215c86e5f9190247ad029d79c5c}{00140}}\ \mbox{\hyperlink{circle_8c_adda14071875745c5b1610ec895db46a0}{getCircleTangentPoints}}(\mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ c,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ point,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ *t0,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ *t1)}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00141}00141\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00142}00142\ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ p;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00143}00143\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ hyp;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00144}00144\ \ \ \ \ \textcolor{comment}{/*\ Distance\ to\ center\ of\ circle\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00145}00145\ \ \ \ \ hyp\ =\ \mbox{\hyperlink{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}{embVector\_distance}}(point,\ c.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}});}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00146}00146\ \ \ \ \ \textcolor{comment}{/*\ Point\ is\ inside\ the\ circle\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00147}00147\ \ \ \ \ \textcolor{keywordflow}{if}\ (hyp\ <\ c.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}})\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00148}00148\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00149}00149\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}\ (hyp\ ==\ c.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}})\ \{}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00150}00150\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Point\ is\ lies\ on\ the\ circle,\ so\ there\ is\ only\ one\ tangent\ point\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00151}00151\ \ \ \ \ \ \ \ \ *t0\ =\ point;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00152}00152\ \ \ \ \ \ \ \ \ *t1\ =\ point;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00153}00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00154}00154\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00156}00156\ \ \ \ \ \textcolor{comment}{/*\ Since\ the\ tangent\ lines\ are\ always\ perpendicular\ to\ the\ radius,\ so}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00157}00157\ \textcolor{comment}{\ \ \ \ \ *\ we\ can\ use\ the\ Pythagorean\ theorem\ to\ solve\ for\ the\ missing\ side\ */}}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00158}00158\ \ \ \ \ p.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}\ =\ point;}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00159}00159\ \ \ \ \ p.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ =\ sqrt((hyp*hyp)\ -\/\ (c.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}*c.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}));}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00160}00160\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{circle_8c_a02d84117276c09a6d557ee1b64e6cf7f}{getCircleCircleIntersections}}(c,\ p,\ t0,\ t1);}
+\DoxyCodeLine{\Hypertarget{circle_8c_source_l00161}00161\ \}}
+
+\end{DoxyCode}

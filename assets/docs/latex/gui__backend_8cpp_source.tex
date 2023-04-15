@@ -1,0 +1,452 @@
+\hypertarget{gui__backend_8cpp_source}{}\doxysubsection{gui\+\_\+backend.\+cpp}
+\label{gui__backend_8cpp_source}\index{src/gui\_backend.cpp@{src/gui\_backend.cpp}}
+\mbox{\hyperlink{gui__backend_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00002}00002\ \textcolor{comment}{\ *\ \ Embroidermodder\ 2.}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00003}00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00004}00004\ \textcolor{comment}{\ *\ \ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00005}00005\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00006}00006\ \textcolor{comment}{\ *\ \ Copyright\ 2013-\/2022\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00007}00007\ \textcolor{comment}{\ *\ \ Embroidermodder\ 2\ is\ Open\ Source\ Software.}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00008}00008\ \textcolor{comment}{\ *\ \ See\ LICENSE\ for\ licensing\ terms.}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00009}00009\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00010}00010\ \textcolor{comment}{\ *\ \ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00011}00011\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00012}00012\ \textcolor{comment}{\ *\ \ Use\ Python's\ PEP7\ style\ guide.}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00013}00013\ \textcolor{comment}{\ *\ \ \ \ \ \ https://peps.python.org/pep-\/0007/}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00014}00014\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00016}00016\ \textcolor{preprocessor}{\#include\ "{}imgui.h"{}}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00017}00017\ \textcolor{preprocessor}{\#include\ "{}backends/imgui\_impl\_glfw.h"{}}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00018}00018\ \textcolor{preprocessor}{\#include\ "{}backends/imgui\_impl\_opengl2.h"{}}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00020}00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{gui__backend_8h}{gui\_backend.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00021}00021\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00022}00022\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00023}00023\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00024}00024\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00025}00025\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00027}\mbox{\hyperlink{gui__backend_8cpp_a74e55d8b582dfe7fa8eda915698600bf}{00027}}\ ImFont\ *\mbox{\hyperlink{gui__backend_8cpp_a74e55d8b582dfe7fa8eda915698600bf}{font}};}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00028}\mbox{\hyperlink{gui__backend_8cpp_a345408056df1f4ae1743435e1f0e3869}{00028}}\ ImFont\ *\mbox{\hyperlink{gui__backend_8cpp_a345408056df1f4ae1743435e1f0e3869}{header\_font}};}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00029}\mbox{\hyperlink{gui__backend_8cpp_a76dea3d45b112c21ac8da8eb0ae3ea4a}{00029}}\ std::unordered\_map<std::string,\ GLuint>\ \mbox{\hyperlink{gui__backend_8cpp_a76dea3d45b112c21ac8da8eb0ae3ea4a}{textures}};}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00031}00031\ \textcolor{comment}{/*\ filesystem\ homePath\ equivalent?\ */}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00032}00032\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00033}00033\ \textcolor{comment}{std::string\ settingsDir\ =\ QDir::homePath()\ +\ "{}/.embroidermodder2/"{};}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00034}00034\ \textcolor{comment}{*/}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00036}00036\ \textcolor{keyword}{inline}\ ImVec2}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00037}\mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{00037}}\ \mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{to\_ImVec2}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ v)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00038}00038\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00039}00039\ \ \ \ \ \textcolor{keywordflow}{return}\ ImVec2(v.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ v.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00040}00040\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00050}00050\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00051}\mbox{\hyperlink{gui__backend_8cpp_a0490aafb784f2925a0959eb53b4dac85}{00051}}\ \mbox{\hyperlink{gui__backend_8cpp_a0490aafb784f2925a0959eb53b4dac85}{embColor\_to\_int}}(\mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ c,\ \textcolor{keywordtype}{int}\ alpha)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00052}00052\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{return}\ IM\_COL32(c.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}},\ c.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}},\ c.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}},\ alpha);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00054}00054\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00063}00063\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00064}\mbox{\hyperlink{gui__backend_8cpp_a0ed3bd48761dd68faad7818ff955d541}{00064}}\ \mbox{\hyperlink{gui__backend_8cpp_a0ed3bd48761dd68faad7818ff955d541}{draw\_line}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ start,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ end,\ \textcolor{keywordtype}{int}\ color)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00065}00065\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00066}00066\ \ \ \ \ ImDrawList\ *draw\_list\ =\ ImGui::GetWindowDrawList();;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00067}00067\ \ \ \ \ draw\_list-\/>AddLine(ImVec2(start.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ start.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),\ ImVec2(end.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ end.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),\ color);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00068}00068\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00078}00078\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00079}\mbox{\hyperlink{gui__backend_8cpp_ab09741ff3c62da497f16b71d5e713922}{00079}}\ \mbox{\hyperlink{gui__backend_8cpp_ab09741ff3c62da497f16b71d5e713922}{draw\_circle}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ position,\ \textcolor{keywordtype}{float}\ radius,\ \textcolor{keywordtype}{int}\ color,\ \textcolor{keywordtype}{bool}\ filled)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00080}00080\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00081}00081\ \ \ \ \ ImDrawList\ *draw\_list\ =\ ImGui::GetWindowDrawList();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00082}00082\ \ \ \ \ \textcolor{keywordflow}{if}\ (filled)\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00083}00083\ \ \ \ \ \ \ \ \ draw\_list-\/>AddCircleFilled(ImVec2(position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),\ radius,\ color);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00084}00084\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00085}00085\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00086}00086\ \ \ \ \ \ \ \ \ draw\_list-\/>AddCircle(ImVec2(position.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ position.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),\ radius,\ color);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00087}00087\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00088}00088\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00098}00098\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00099}\mbox{\hyperlink{gui__backend_8cpp_adb7832f9cc91f18fffd8420f96a59013}{00099}}\ \mbox{\hyperlink{gui__backend_8cpp_adb7832f9cc91f18fffd8420f96a59013}{draw\_rect}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ bottom\_left,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ top\_right,\ \textcolor{keywordtype}{int}\ color,\ \textcolor{keywordtype}{bool}\ filled)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00100}00100\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00101}00101\ \ \ \ \ ImDrawList\ *draw\_list\ =\ ImGui::GetWindowDrawList();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00102}00102\ \ \ \ \ \textcolor{keywordflow}{if}\ (filled)\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00103}00103\ \ \ \ \ \ \ \ \ draw\_list-\/>AddRectFilled(}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ ImVec2(bottom\_left.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ bottom\_left.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ ImVec2(top\_right.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ top\_right.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ color);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00107}00107\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00108}00108\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00109}00109\ \ \ \ \ \ \ \ \ draw\_list-\/>AddRect(}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ ImVec2(bottom\_left.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ bottom\_left.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ ImVec2(top\_right.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ top\_right.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ color);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00113}00113\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00114}00114\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00123}00123\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00124}\mbox{\hyperlink{gui__backend_8cpp_a4e91dde886217f53a5c9b7855d4515b3}{00124}}\ \mbox{\hyperlink{gui__backend_8cpp_a4e91dde886217f53a5c9b7855d4515b3}{draw\_text}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ position,\ \textcolor{keywordtype}{int}\ color,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *text)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00125}00125\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00126}00126\ \ \ \ \ ImDrawList\ *draw\_list\ =\ ImGui::GetWindowDrawList();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00127}00127\ \ \ \ \ draw\_list-\/>AddText(\mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{to\_ImVec2}}(position),\ color,\ text);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00128}00128\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00139}00139\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00140}\mbox{\hyperlink{gui__backend_8cpp_aabd6aa9b3f3a00fcd23c8d63572de4d8}{00140}}\ \mbox{\hyperlink{gui__backend_8cpp_aabd6aa9b3f3a00fcd23c8d63572de4d8}{draw\_quad}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ c1,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ c2,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ c3,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ c4,\ \textcolor{keywordtype}{int}\ color)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00141}00141\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00142}00142\ \ \ \ \ ImDrawList\ *draw\_list\ =\ ImGui::GetWindowDrawList();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00143}00143\ \ \ \ \ draw\_list-\/>AddQuadFilled(}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00144}00144\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{to\_ImVec2}}(c1),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00145}00145\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{to\_ImVec2}}(c2),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00146}00146\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{to\_ImVec2}}(c3),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00147}00147\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_afc784912d791244639559ab067051a48}{to\_ImVec2}}(c4),}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00148}00148\ \ \ \ \ \ \ \ \ color);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00149}00149\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00158}00158\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00159}\mbox{\hyperlink{gui__backend_8cpp_aa9b5d585f25aeeaa9ca4e3081d28999a}{00159}}\ \mbox{\hyperlink{gui__backend_8cpp_aa9b5d585f25aeeaa9ca4e3081d28999a}{begin\_ui}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \textcolor{keywordtype}{int}\ height,\ \textcolor{keywordtype}{int}\ width)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00160}00160\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00161}00161\ \ \ \ \ ImGui::SetNextWindowSize(ImVec2(height,\ width));}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00162}00162\ \ \ \ \ ImGui::Begin(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00163}00163\ \ \ \ \ ImGui::SetWindowFontScale(1.5);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00164}00164\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00165}00165\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00170}00170\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00171}\mbox{\hyperlink{gui__backend_8cpp_a37f225ac592fc1180e680cefaefe9ed8}{00171}}\ \mbox{\hyperlink{gui__backend_8cpp_a37f225ac592fc1180e680cefaefe9ed8}{end\_ui}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00172}00172\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00173}00173\ \ \ \ \ ImGui::End();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00174}00174\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00183}00183\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00184}\mbox{\hyperlink{gui__backend_8cpp_a1ae1242385e31eab675db827665abaab}{00184}}\ \mbox{\hyperlink{gui__backend_8cpp_a1ae1242385e31eab675db827665abaab}{begin\_tab\_bar}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00185}00185\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00186}00186\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::BeginTabBar(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00187}00187\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00193}00193\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00194}\mbox{\hyperlink{gui__backend_8cpp_af0dc2940f5e407472fbf9d5cb5af9736}{00194}}\ \mbox{\hyperlink{gui__backend_8cpp_af0dc2940f5e407472fbf9d5cb5af9736}{end\_tab\_bar}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00195}00195\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00196}00196\ \ \ \ \ ImGui::EndTabBar();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00197}00197\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00198}00198\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00207}00207\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00208}\mbox{\hyperlink{gui__backend_8cpp_aefaefb6a12a4817f80686282053323b8}{00208}}\ \mbox{\hyperlink{gui__backend_8cpp_aefaefb6a12a4817f80686282053323b8}{begin\_combo}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \textcolor{keywordtype}{char}\ *data)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00209}00209\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00210}00210\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::BeginCombo(label,\ data);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00211}00211\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00221}00221\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00222}\mbox{\hyperlink{gui__backend_8cpp_a5e2001e773a73cde8eddc08a430f7445}{00222}}\ \mbox{\hyperlink{gui__backend_8cpp_a5e2001e773a73cde8eddc08a430f7445}{selectable}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \textcolor{keywordtype}{bool}\ current)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00223}00223\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00224}00224\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::Selectable(label,\ current);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00225}00225\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00226}00226\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00231}00231\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00232}\mbox{\hyperlink{gui__backend_8cpp_abd3aefeae83b67bb104df347849d2fe4}{00232}}\ \mbox{\hyperlink{gui__backend_8cpp_abd3aefeae83b67bb104df347849d2fe4}{end\_combo}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00233}00233\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00234}00234\ \ \ \ \ ImGui::EndCombo();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00235}00235\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00236}00236\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00244}00244\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00245}\mbox{\hyperlink{gui__backend_8cpp_a4e4df236f4cf8a10c13cb4d3ce172554}{00245}}\ \mbox{\hyperlink{gui__backend_8cpp_a4e4df236f4cf8a10c13cb4d3ce172554}{collapsing\_header}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00246}00246\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00247}00247\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::CollapsingHeader(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00248}00248\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00249}00249\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00257}00257\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00258}\mbox{\hyperlink{gui__backend_8cpp_a0c6827c84869745e59d4f820224396a3}{00258}}\ \mbox{\hyperlink{gui__backend_8cpp_a0c6827c84869745e59d4f820224396a3}{button}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00259}00259\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00260}00260\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::Button(\mbox{\hyperlink{gui__backend_8h_a404be4263e1e9a553e362bb5f40448b1}{translate}}(label));}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00261}00261\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00262}00262\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00270}00270\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00271}\mbox{\hyperlink{gui__backend_8cpp_a7f2abb5165c26b3283e1799610ee67d8}{00271}}\ \mbox{\hyperlink{gui__backend_8cpp_a7f2abb5165c26b3283e1799610ee67d8}{begin\_tab\_item}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00272}00272\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00273}00273\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::BeginTabItem(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00274}00274\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00275}00275\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00280}00280\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00281}\mbox{\hyperlink{gui__backend_8cpp_a203a18dacb5949cc179b00595b334236}{00281}}\ \mbox{\hyperlink{gui__backend_8cpp_a203a18dacb5949cc179b00595b334236}{end\_tab\_item}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00282}00282\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00283}00283\ \ \ \ \ ImGui::EndTabItem();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00284}00284\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00292}00292\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00293}\mbox{\hyperlink{gui__backend_8cpp_a7570cb2b056ebc94f830153588ab5161}{00293}}\ \mbox{\hyperlink{gui__backend_8cpp_a7570cb2b056ebc94f830153588ab5161}{edit\_int}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \textcolor{keywordtype}{int}\ *data)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00294}00294\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00295}00295\ \ \ \ \ ImGui::InputInt(label,\ data,\ *data);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00296}00296\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00297}00297\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00298}00298\ \textcolor{comment}{/*\ Need\ validation\ for\ the\ input\ number\ before\ applying\ to\ object.}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00299}00299\ \textcolor{comment}{\ *\ and\ to\ add\ to\ undo\ history}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00300}00300\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00301}00301\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00302}\mbox{\hyperlink{gui__backend_8cpp_a8870a36bffb819475927ff13f8dfcc92}{00302}}\ \mbox{\hyperlink{gui__backend_8cpp_a8870a36bffb819475927ff13f8dfcc92}{show\_real}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ data)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00303}00303\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00304}00304\ \ \ \ \ ImGui::Text(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00305}00305\ \ \ \ \ ImGui::SameLine();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00306}00306\ \ \ \ \ \textcolor{keywordtype}{char}\ s[200];}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00307}00307\ \ \ \ \ sprintf(s,\ \textcolor{stringliteral}{"{}\%f"{}},\ data);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00308}00308\ \ \ \ \ ImGui::Text(s);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00309}00309\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00317}00317\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00318}\mbox{\hyperlink{gui__backend_8cpp_a24ae6f0170becf9054e244a2d79d70f6}{00318}}\ \mbox{\hyperlink{gui__backend_8cpp_a24ae6f0170becf9054e244a2d79d70f6}{show\_int}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \textcolor{keywordtype}{int}\ data)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00319}00319\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00320}00320\ \ \ \ \ ImGui::Text(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00321}00321\ \ \ \ \ ImGui::SameLine();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00322}00322\ \ \ \ \ \textcolor{keywordtype}{char}\ s[200];}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00323}00323\ \ \ \ \ sprintf(s,\ \textcolor{stringliteral}{"{}\%d"{}},\ data);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00324}00324\ \ \ \ \ ImGui::Text(s);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00325}00325\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00326}00326\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00332}00332\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00333}\mbox{\hyperlink{gui__backend_8cpp_aa64aa9f5d65eab5a4ad4173087502c9d}{00333}}\ \mbox{\hyperlink{gui__backend_8cpp_aa64aa9f5d65eab5a4ad4173087502c9d}{translated\_text}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00334}00334\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00335}00335\ \ \ \ \ ImGui::Text(\mbox{\hyperlink{gui__backend_8h_a404be4263e1e9a553e362bb5f40448b1}{translate}}(str));}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00336}00336\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00337}00337\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00345}00345\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00346}\mbox{\hyperlink{gui__backend_8cpp_a1ddedc73af0a1437b2f4d2b7e290ba68}{00346}}\ \mbox{\hyperlink{gui__backend_8cpp_a1ddedc73af0a1437b2f4d2b7e290ba68}{checkbox\_data}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \textcolor{keywordtype}{bool}\ *stor,\ \textcolor{keywordtype}{bool}\ *value)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00347}00347\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00348}00348\ \ \ \ \ *stor\ =\ *value;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00349}00349\ \ \ \ \ ImGui::Checkbox(\mbox{\hyperlink{gui__backend_8h_a404be4263e1e9a553e362bb5f40448b1}{translate}}(label),\ stor);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00350}00350\ \ \ \ \ *value\ =\ *stor;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00351}00351\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00352}00352\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00359}00359\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00360}\mbox{\hyperlink{gui__backend_8cpp_a97d7490ac64b08e0717873ce5d68dd34}{00360}}\ \mbox{\hyperlink{gui__backend_8cpp_a97d7490ac64b08e0717873ce5d68dd34}{edit\_real}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label,\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ *data)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00361}00361\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00362}00362\ \ \ \ \ ImGui::InputFloat(\mbox{\hyperlink{gui__backend_8h_a404be4263e1e9a553e362bb5f40448b1}{translate}}(label),\ data,\ *data);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00363}00363\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00364}00364\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00369}00369\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00370}\mbox{\hyperlink{gui__backend_8cpp_ae7b14b8d680e22b0d7c10f259b0ac542}{00370}}\ \mbox{\hyperlink{gui__backend_8cpp_ae7b14b8d680e22b0d7c10f259b0ac542}{same\_line}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00371}00371\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00372}00372\ \ \ \ \ ImGui::SameLine();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00373}00373\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00374}00374\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00380}00380\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00381}\mbox{\hyperlink{gui__backend_8cpp_a0da4ed4b945297febc418899c868b545}{00381}}\ \mbox{\hyperlink{gui__backend_8cpp_a0da4ed4b945297febc418899c868b545}{begin\_child}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00382}00382\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00383}00383\ \ \ \ \ ImGui::BeginChild(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00384}00384\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00385}00385\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00390}00390\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00391}\mbox{\hyperlink{gui__backend_8cpp_ae4ae9d3c84c1518ae7854b6afcfa9e54}{00391}}\ \mbox{\hyperlink{gui__backend_8cpp_ae4ae9d3c84c1518ae7854b6afcfa9e54}{end\_child}}()}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00392}00392\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00393}00393\ \ \ \ \ ImGui::EndChild();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00394}00394\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00395}00395\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00401}00401\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00402}\mbox{\hyperlink{gui__backend_8cpp_a027acac5a15363318344a67db71f95f9}{00402}}\ \mbox{\hyperlink{gui__backend_8cpp_a027acac5a15363318344a67db71f95f9}{get\_window\_pos}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00403}00403\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00404}00404\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ em\_offset;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00405}00405\ \ \ \ \ ImVec2\ offset\ =\ ImGui::GetWindowPos();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00406}00406\ \ \ \ \ em\_offset.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ offset.x;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00407}00407\ \ \ \ \ em\_offset.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ offset.y;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00408}00408\ \ \ \ \ \textcolor{keywordflow}{return}\ em\_offset;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00409}00409\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00410}00410\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00416}00416\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00417}\mbox{\hyperlink{gui__backend_8cpp_a1835634de5e51f2d179588b84ae8bfa7}{00417}}\ \mbox{\hyperlink{gui__backend_8cpp_a1835634de5e51f2d179588b84ae8bfa7}{get\_screen\_size}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00418}00418\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00419}00419\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ screen\_size;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00420}00420\ \ \ \ \ ImGuiIO\ \&io\ =\ ImGui::GetIO();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00421}00421\ \ \ \ \ screen\_size.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ io.DisplaySize.x;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00422}00422\ \ \ \ \ screen\_size.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ io.DisplaySize.y;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00423}00423\ \ \ \ \ \textcolor{keywordflow}{return}\ screen\_size;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00424}00424\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00425}00425\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00432}00432\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00433}\mbox{\hyperlink{gui__backend_8cpp_a9603a5939337471ff9e0b352f220162d}{00433}}\ \mbox{\hyperlink{gui__backend_8cpp_a9603a5939337471ff9e0b352f220162d}{get\_display\_size}}(\textcolor{keywordtype}{int}\ *width,\ \textcolor{keywordtype}{int}\ *height)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00434}00434\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00435}00435\ \ \ \ \ ImGuiIO\&\ io\ =\ ImGui::GetIO();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00436}00436\ \ \ \ \ *width\ =\ io.DisplaySize.x;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00437}00437\ \ \ \ \ *height\ =\ io.DisplaySize.y;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00438}00438\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00439}00439\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00444}00444\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00445}\mbox{\hyperlink{gui__backend_8cpp_a2e4adedfb3d492cf41e16c9e2364019f}{00445}}\ \mbox{\hyperlink{gui__backend_8cpp_a2e4adedfb3d492cf41e16c9e2364019f}{set\_style}}(\textcolor{keywordtype}{char}\ font\_file[200])}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00446}00446\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00447}00447\ \ \ \ \ ImGuiIO\&\ io\ =\ ImGui::GetIO();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00448}00448\ \ \ \ \ ImFontConfig\ config;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00449}00449\ \ \ \ \ config.OversampleH\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00450}00450\ \ \ \ \ config.OversampleV\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00451}00451\ \ \ \ \ FILE\ *f\ =\ fopen(font\_file,\ \textcolor{stringliteral}{"{}r"{}});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00452}00452\ \ \ \ \ \textcolor{keywordflow}{if}\ (f)\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00453}00453\ \ \ \ \ \ \ \ \ fclose(f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00454}00454\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_a74e55d8b582dfe7fa8eda915698600bf}{font}}\ =\ io.Fonts-\/>AddFontFromFileTTF(font\_file,\ 16,\ \&config);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00455}00455\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_a345408056df1f4ae1743435e1f0e3869}{header\_font}}\ =\ io.Fonts-\/>AddFontFromFileTTF(font\_file,\ 24,\ \&config);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00456}00456\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00457}00457\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00458}00458\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8h_a13a5a2fd32929ba9f29802bd3c39b674}{log\_debug}}(\textcolor{stringliteral}{"{}ERROR:\ Failed\ to\ load\ font\ file."{}});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00459}00459\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00460}00460\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00461}00461\ \ \ \ \ ImGuiStyle\&\ style\ =\ ImGui::GetStyle();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00462}00462\ \ \ \ \ style.Colors[ImGuiCol\_Text]\ =\ ImVec4(0.00f,\ 0.00f,\ 0.00f,\ 1.00f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00463}00463\ \ \ \ \ style.Colors[ImGuiCol\_FrameBgActive]\ =\ ImVec4(0.75f,\ 0.75f,\ 0.75f,\ 1.00f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00464}00464\ \ \ \ \ style.Colors[ImGuiCol\_PopupBg]\ =\ ImVec4(0.85f,\ 0.85f,\ 0.85f,\ 1.00f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00465}00465\ \ \ \ \ style.Colors[ImGuiCol\_WindowBg]\ =\ ImVec4(0.65f,\ 0.65f,\ 0.65f,\ 1.00f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00466}00466\ \ \ \ \ style.Colors[ImGuiCol\_MenuBarBg]\ =\ ImVec4(1.0f,\ 1.0f,\ 1.0f,\ 1.00f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00467}00467\ \ \ \ \ style.Colors[ImGuiCol\_ChildBg]\ =\ ImVec4(1.0f,\ 1.0f,\ 1.0f,\ 1.00f);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00468}00468\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00469}00469\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00473}00473\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00474}\mbox{\hyperlink{gui__backend_8cpp_aeb5e92d2a51d4141602872120f1b3645}{00474}}\ \mbox{\hyperlink{gui__backend_8cpp_aeb5e92d2a51d4141602872120f1b3645}{columns}}(\textcolor{keywordtype}{int}\ n,\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00475}00475\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00476}00476\ \ \ \ \ ImGui::Columns(n,\ label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00477}00477\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00478}00478\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00482}00482\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00483}\mbox{\hyperlink{gui__backend_8cpp_a38b8c1c43207473d3bbab953fab5ab42}{00483}}\ \mbox{\hyperlink{gui__backend_8cpp_a38b8c1c43207473d3bbab953fab5ab42}{next\_column}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00484}00484\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00485}00485\ \ \ \ \ ImGui::NextColumn();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00486}00486\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00487}00487\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00491}00491\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00492}\mbox{\hyperlink{gui__backend_8cpp_a96bb136853ffafabfe46d342a07fc428}{00492}}\ \mbox{\hyperlink{gui__backend_8cpp_a96bb136853ffafabfe46d342a07fc428}{end\_columns}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00493}00493\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00494}00494\ \ \ \ \ ImGui::Columns();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00495}00495\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00496}00496\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00500}00500\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00501}\mbox{\hyperlink{gui__backend_8cpp_ab7b443070d87b28508501c0125bee0de}{00501}}\ \mbox{\hyperlink{gui__backend_8cpp_ab7b443070d87b28508501c0125bee0de}{display\_text}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *msg)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00502}00502\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00503}00503\ \ \ \ \ ImGui::Text(msg);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00504}00504\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00505}00505\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00509}00509\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00510}\mbox{\hyperlink{gui__backend_8cpp_aca4abf3c9f7a69ff2af2846ff8ebbf2f}{00510}}\ \mbox{\hyperlink{gui__backend_8cpp_aca4abf3c9f7a69ff2af2846ff8ebbf2f}{get\_current\_directory}}(\textcolor{keywordtype}{char}\ directory[200])}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00511}00511\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00512}00512\ \ \ \ \ strcpy(directory,\ std::filesystem::current\_path().\textcolor{keywordtype}{string}().c\_str());}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00513}00513\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00514}00514\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00518}00518\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00519}\mbox{\hyperlink{gui__backend_8cpp_afa5dc595844fa60a2550d2c4792c241c}{00519}}\ \mbox{\hyperlink{gui__backend_8cpp_afa5dc595844fa60a2550d2c4792c241c}{menu\_item}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00520}00520\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00521}00521\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::MenuItem(key);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00522}00522\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00523}00523\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00530}00530\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00531}\mbox{\hyperlink{gui__backend_8cpp_a6dfa1a690b8a00e06fe270890e16ab15}{00531}}\ \mbox{\hyperlink{gui__backend_8cpp_a6dfa1a690b8a00e06fe270890e16ab15}{load\_textures}}(\mbox{\hyperlink{struct_dictionary__}{Dictionary}}\ *texture\_list)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00532}00532\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00533}00533\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i=0;\ i<texture\_list-\/>\mbox{\hyperlink{struct_dictionary___a9f59b34b1f25fe00023291b678246bcc}{length}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00534}00534\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_dictionary_entry__}{DictionaryEntry}}\ d\ =\ texture\_list-\/>\mbox{\hyperlink{struct_dictionary___a2ce61a6090ad4880aa8ba9ec0ca1a85b}{data}}[i];}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00535}00535\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_a76dea3d45b112c21ac8da8eb0ae3ea4a}{textures}}[d.\mbox{\hyperlink{struct_dictionary_entry___ac7711b274031701960867a8e5823898c}{key}}]\ =\ \mbox{\hyperlink{gui__backend_8h_ab33d11acd85f14eb910d0735a9384510}{load\_texture}}(d.\mbox{\hyperlink{struct_dictionary_entry___accebef43cd5369e811915b639124df8f}{value}});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00536}00536\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{gui__backend_8cpp_a76dea3d45b112c21ac8da8eb0ae3ea4a}{textures}}[d.\mbox{\hyperlink{struct_dictionary_entry___ac7711b274031701960867a8e5823898c}{key}}])\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00537}00537\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ error[200];}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00538}00538\ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(error,\ \textcolor{stringliteral}{"{}ERROR:\ Failed\ to\ open\ \%s."{}},\ d.\mbox{\hyperlink{struct_dictionary_entry___accebef43cd5369e811915b639124df8f}{value}});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00539}00539\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{gui__backend_8h_a13a5a2fd32929ba9f29802bd3c39b674}{log\_debug}}(error);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00540}00540\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ return\ 0;\ */}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00541}00541\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00542}00542\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00543}00543\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00544}00544\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00545}00545\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00546}00546\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00550}00550\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00551}\mbox{\hyperlink{gui__backend_8cpp_a5f78a83078ffcfb5e680751b8bda2c0f}{00551}}\ \mbox{\hyperlink{gui__backend_8cpp_a5f78a83078ffcfb5e680751b8bda2c0f}{menu\_separator}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00552}00552\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00553}00553\ \ \ \ \ ImGui::Separator();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00554}00554\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00555}00555\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00559}00559\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00560}\mbox{\hyperlink{gui__backend_8cpp_abeb3dceb90107244fea867ea87b10430}{00560}}\ \mbox{\hyperlink{gui__backend_8cpp_abeb3dceb90107244fea867ea87b10430}{begin\_menu}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *label)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00561}00561\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00562}00562\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::BeginMenu(label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00563}00563\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00564}00564\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00568}00568\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00569}\mbox{\hyperlink{gui__backend_8cpp_ae18f1d8182edf522c8ac617445f0c213}{00569}}\ \mbox{\hyperlink{gui__backend_8cpp_ae18f1d8182edf522c8ac617445f0c213}{end\_menu}}()}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00570}00570\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00571}00571\ \ \ \ \ ImGui::EndMenu();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00572}00572\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00573}00573\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00578}00578\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00579}\mbox{\hyperlink{gui__backend_8cpp_a4959b847d964ce421c816ee571d2d1a0}{00579}}\ \mbox{\hyperlink{gui__backend_8cpp_a4959b847d964ce421c816ee571d2d1a0}{image\_button}}(\textcolor{keywordtype}{char}*\ texture\_label,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ size)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00580}00580\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00581}00581\ \ \ \ \ ImVec2\ size\_\ =\ \{size.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ size.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\};}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00582}00582\ \ \ \ \ std::string\ label(texture\_label);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00583}00583\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::ImageButton((\textcolor{keywordtype}{void}*)(intptr\_t)\mbox{\hyperlink{gui__backend_8cpp_a76dea3d45b112c21ac8da8eb0ae3ea4a}{textures}}[label],\ size\_);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00584}00584\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00585}00585\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00586}00586\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00587}\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{00587}}\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *title)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00588}00588\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00589}00589\ \ \ \ \ ImGui::PushFont(\mbox{\hyperlink{gui__backend_8cpp_a345408056df1f4ae1743435e1f0e3869}{header\_font}});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00590}00590\ \ \ \ \ \mbox{\hyperlink{gui__backend_8cpp_aa64aa9f5d65eab5a4ad4173087502c9d}{translated\_text}}(title);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00591}00591\ \ \ \ \ ImGui::PopFont();\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00592}00592\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00593}00593\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00594}00594\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00595}\mbox{\hyperlink{gui__backend_8cpp_a960c13f150be9d62033b08a517ec5208}{00595}}\ \mbox{\hyperlink{gui__backend_8cpp_a960c13f150be9d62033b08a517ec5208}{set\_column\_width}}(\textcolor{keywordtype}{int}\ start,\ \textcolor{keywordtype}{int}\ end)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00596}00596\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00597}00597\ \ \ \ \ ImGui::SetColumnWidth(start,\ end);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00598}00598\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00599}00599\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00603}00603\ \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00604}\mbox{\hyperlink{gui__backend_8cpp_af770a7172c08ae83c9c632a29b6ab228}{00604}}\ \mbox{\hyperlink{gui__backend_8cpp_af770a7172c08ae83c9c632a29b6ab228}{begin\_menu\_bar}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00605}00605\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00606}00606\ \ \ \ \ \textcolor{keywordflow}{return}\ ImGui::BeginMenuBar();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00607}00607\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00608}00608\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00612}00612\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00613}\mbox{\hyperlink{gui__backend_8cpp_a7b22a6dd37a62abd19ef6e8e3c4474a6}{00613}}\ \mbox{\hyperlink{gui__backend_8cpp_a7b22a6dd37a62abd19ef6e8e3c4474a6}{end\_menu\_bar}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00614}00614\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00615}00615\ \ \ \ \ ImGui::EndMenuBar();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00616}00616\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00617}00617\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00620}00620\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00621}\mbox{\hyperlink{gui__backend_8cpp_a8671d22390b07206a4082dd584c6f65d}{00621}}\ \mbox{\hyperlink{gui__backend_8cpp_a8671d22390b07206a4082dd584c6f65d}{setup\_main\_widget}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00622}00622\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00623}00623\ \ \ \ \ ImGuiViewport*\ viewport\ =\ ImGui::GetMainViewport();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00624}00624\ \ \ \ \ ImGui::SetNextWindowPos(ImVec2(0,\ 0));}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00625}00625\ \ \ \ \ ImGui::SetNextWindowSize(viewport-\/>Size);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00626}00626\ \ \ \ \ ImGui::Begin(\textcolor{stringliteral}{"{}Embroidermodder"{}},\ NULL,\ ImGuiWindowFlags\_MenuBar}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00627}00627\ \ \ \ \ \ \ \ \ |\ ImGuiWindowFlags\_NoResize\ |\ ImGuiWindowFlags\_NoTitleBar}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00628}00628\ \ \ \ \ \ \ \ \ |\ ImGuiWindowFlags\_NoMove\ );}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00629}00629\ \ \ \ \ ImGui::SetWindowFontScale(1.5);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00630}00630\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00631}00631\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00634}00634\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00635}\mbox{\hyperlink{gui__backend_8cpp_a313cee6c596d01e2c042296ea5c88a97}{00635}}\ \mbox{\hyperlink{gui__backend_8cpp_a313cee6c596d01e2c042296ea5c88a97}{setup\_imgui}}(GLFWwindow\ *window)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00636}00636\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00637}00637\ \ \ \ \ \textcolor{keywordtype}{int}\ width,\ height;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00638}00638\ \ \ \ \ IMGUI\_CHECKVERSION();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00639}00639\ \ \ \ \ ImGui::CreateContext();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00640}00640\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00641}00641\ \ \ \ \ ImGui\_ImplGlfw\_InitForOpenGL(window,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00642}00642\ \ \ \ \ ImGui\_ImplOpenGL2\_Init();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00643}00643\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00644}00644\ \ \ \ \ glfwGetFramebufferSize(window,\ \&width,\ \&height);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00645}00645\ \ \ \ \ ImVec2\ v\ =\ \{1.0f*width,\ 1.0f*height\};}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00646}00646\ \ \ \ \ ImGui::SetNextWindowPos(\{0.0,\ 0.0\});}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00647}00647\ \ \ \ \ ImGui::SetNextWindowSize(v);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00648}00648\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00649}00649\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00652}00652\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00653}\mbox{\hyperlink{gui__backend_8cpp_ae19012ad0f0292d0cf6923d14f0d0f44}{00653}}\ \mbox{\hyperlink{gui__backend_8cpp_ae19012ad0f0292d0cf6923d14f0d0f44}{imgui\_render}}(GLFWwindow\ *window)}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00654}00654\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00655}00655\ \ \ \ \ \textcolor{keywordtype}{int}\ width,\ height;}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00656}00656\ \ \ \ \ ImGui::Render();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00657}00657\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00658}00658\ \ \ \ \ glfwGetFramebufferSize(window,\ \&width,\ \&height);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00659}00659\ \ \ \ \ glViewport(0,\ 0,\ width,\ height);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00660}00660\ \ \ \ \ glClearColor(0.1,\ 0.1,\ 0.1,\ 0.0);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00661}00661\ \ \ \ \ glClear(GL\_COLOR\_BUFFER\_BIT);}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00662}00662\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00663}00663\ \ \ \ \ ImGui\_ImplOpenGL2\_RenderDrawData(ImGui::GetDrawData());}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00664}00664\ \}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00665}00665\ }
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00668}00668\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00669}\mbox{\hyperlink{gui__backend_8cpp_a1408578c63bcf39c371ede8e2e56c3ea}{00669}}\ \mbox{\hyperlink{gui__backend_8cpp_a1408578c63bcf39c371ede8e2e56c3ea}{imgui\_new\_frame}}(\textcolor{keywordtype}{void})}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00670}00670\ \{}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00671}00671\ \ \ \ \ ImGui\_ImplOpenGL2\_NewFrame();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00672}00672\ \ \ \ \ ImGui\_ImplGlfw\_NewFrame();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00673}00673\ \ \ \ \ ImGui::NewFrame();}
+\DoxyCodeLine{\Hypertarget{gui__backend_8cpp_source_l00674}00674\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,1030 @@
+\hypertarget{class_view}{}\doxysubsection{View Class Reference}
+\label{class_view}\index{View@{View}}
+
+
+{\ttfamily \#include $<$view.\+h$>$}
+
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_view_a7d7e315e34a66d9a66022d31635e7aca}{zoom\+In}} ()
+\item 
+void \mbox{\hyperlink{class_view_a72d29d38d8dd2c091cdd7078e1364f25}{zoom\+Out}} ()
+\item 
+void \mbox{\hyperlink{class_view_a8a61a1a0975cb8663e805361884df66d}{zoom\+Window}} ()
+\item 
+void \mbox{\hyperlink{class_view_a29304b5b8cae9c622a64491ebf5eafef}{zoom\+Selected}} ()
+\item 
+void \mbox{\hyperlink{class_view_a68ccbc27a011c2b3ed99cea7cba7f66e}{zoom\+Extents}} ()
+\item 
+void \mbox{\hyperlink{class_view_afb3d0b673328efbf248d7d5ddf645895}{pan\+Real\+Time}} ()
+\item 
+void \mbox{\hyperlink{class_view_a7d1b5d673c621538459a144cddb31603}{pan\+Point}} ()
+\item 
+void \mbox{\hyperlink{class_view_a619649963ef9ad898fe74cddbd1ad878}{pan\+Left}} ()
+\item 
+void \mbox{\hyperlink{class_view_add4363dde53b126aed7f72bc661b57ca}{pan\+Right}} ()
+\item 
+void \mbox{\hyperlink{class_view_abffa3918b99a689552c01c11bbf0b175}{pan\+Up}} ()
+\item 
+void \mbox{\hyperlink{class_view_a5c9e7f314e3195e0f6db233ee8fed3ac}{pan\+Down}} ()
+\item 
+void \mbox{\hyperlink{class_view_ab6658ed404200bd7aaca5629db064645}{select\+All}} ()
+\item 
+void \mbox{\hyperlink{class_view_a1d85de554564e69188e34457b463de1b}{selection\+Changed}} ()
+\item 
+void \mbox{\hyperlink{class_view_abd07e172ccec6823a88289c21124a367}{clear\+Selection}} ()
+\item 
+void \mbox{\hyperlink{class_view_adc2fdeeaaaa3dde25a46a15a8815c3ac}{delete\+Selected}} ()
+\item 
+void \mbox{\hyperlink{class_view_ac51e16242e7caa854922c3d00e84cbe2}{move\+Selected}} (qreal dx, qreal dy)
+\item 
+void \mbox{\hyperlink{class_view_ada01f65675afbbc0b8006d58df5acb81}{cut}} ()
+\item 
+void \mbox{\hyperlink{class_view_aaa6c087511a52e64fc9ad92820c7c0a8}{copy}} ()
+\item 
+void \mbox{\hyperlink{class_view_ad7f58047731e9a1b735aa142811c70e8}{paste}} ()
+\item 
+void \mbox{\hyperlink{class_view_aaad9dded92c1d0bd14357bb8bc5a142d}{repeat\+Action}} ()
+\item 
+void \mbox{\hyperlink{class_view_a08439dd91239f4e45fc585a9c6f2988a}{move\+Action}} ()
+\item 
+void \mbox{\hyperlink{class_view_ad0a1d907f075c38a1d34cf976a9527d8}{scale\+Action}} ()
+\item 
+void \mbox{\hyperlink{class_view_ae8656e711caf4f6d627411ba87f5507c}{scale\+Selected}} (qreal x, qreal y, qreal factor)
+\item 
+void \mbox{\hyperlink{class_view_a99afe6ecc9412bcf50b8a8ba1836177f}{rotate\+Action}} ()
+\item 
+void \mbox{\hyperlink{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}{rotate\+Selected}} (qreal x, qreal y, qreal rot)
+\item 
+void \mbox{\hyperlink{class_view_a0d24c4e6576ba8a921fdccb9d89db887}{mirror\+Selected}} (qreal x1, qreal y1, qreal x2, qreal y2)
+\item 
+int \mbox{\hyperlink{class_view_a50f2a887aea481c21501f0ba17f1ec27}{num\+Selected}} ()
+\item 
+void \mbox{\hyperlink{class_view_a74af558a825ac72754085696d893671d}{delete\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_view_abb2c9654968151943c6068652051fe73}{escape\+Pressed}} ()
+\item 
+void \mbox{\hyperlink{class_view_a1965f3faead77d69a1c0c6e2115e07c5}{corner\+Button\+Clicked}} ()
+\item 
+void \mbox{\hyperlink{class_view_ae9693cc28c79625147187b1f453f5126}{show\+Scroll\+Bars}} (bool val)
+\item 
+void \mbox{\hyperlink{class_view_a42a33d19fc5d46b5c07b108f166b014e}{set\+Corner\+Button}} ()
+\item 
+void \mbox{\hyperlink{class_view_ac7ddf091a5138a99250ac0bde26191de}{set\+Cross\+Hair\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}{set\+Cross\+Hair\+Size}} (quint8 percent)
+\item 
+void \mbox{\hyperlink{class_view_a0611092d52a93bb9ccb3cdcb09adaa55}{set\+Background\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_view_a03cb6c65d4056ad02541f28450fed058}{set\+Select\+Box\+Colors}} (QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha)
+\item 
+void \mbox{\hyperlink{class_view_a8966d3c24ca080bc510137696930eabf}{toggle\+Snap}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_a801c2b151be4cd0bbca2e788957ae09b}{toggle\+Grid}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_aaeb8dbe2e5f6c268d42a3c0705388033}{toggle\+Ruler}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_a1581551d50109dbe52aa0e37c7464115}{toggle\+Ortho}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_a383007f70259d129c2686bd8aa315840}{toggle\+Polar}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_a7b7d2dc56a845dd3a20fadacdbd0c184}{toggle\+QSnap}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_add2424e5e45c9e1442f2418bccecc224}{toggle\+QTrack}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_afea870e2ddae286d6228523c39a581ee}{toggle\+Lwt}} (bool on)
+\item 
+void \mbox{\hyperlink{class_view_a019cda5ece7dc25e96280e1859638a6d}{toggle\+Real}} (bool on)
+\item 
+bool \mbox{\hyperlink{class_view_ad4f95dfb8b4585faffcb4f1cadd8f746}{is\+Lwt\+Enabled}} ()
+\item 
+bool \mbox{\hyperlink{class_view_a860f6d3addef391bad0986536b4b93a0}{is\+Real\+Enabled}} ()
+\item 
+void \mbox{\hyperlink{class_view_a51b34485435f5af679bc62ebf5492c44}{set\+Grid\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_view_a935fdfc805caa4ece4930fff01b7aa39}{create\+Grid}} (const QString \&grid\+Type)
+\item 
+void \mbox{\hyperlink{class_view_ade2a3a088253cd83dd64a0bd3fbb12bb}{set\+Ruler\+Color}} (QRgb color)
+\item 
+void \mbox{\hyperlink{class_view_a2aaf2120aae14d65a869325c2b3e6179}{preview\+On}} (int clone, int mode, qreal x, qreal y, qreal data)
+\item 
+void \mbox{\hyperlink{class_view_a70844daf87c63fdfb93c78436fb83215}{preview\+Off}} ()
+\item 
+void \mbox{\hyperlink{class_view_ac85a07d654a28f7ba6fccddd0328d1a0}{enable\+Move\+Rapid\+Fire}} ()
+\item 
+void \mbox{\hyperlink{class_view_ab1b8d3117e804d31da3f538473d9bb68}{disable\+Move\+Rapid\+Fire}} ()
+\item 
+bool \mbox{\hyperlink{class_view_a03fe569d1119d2252ef8f547d0f5ef3b}{allow\+Rubber}} ()
+\item 
+void \mbox{\hyperlink{class_view_aa9ac21e89f642400a99275f5d4553fb3}{add\+To\+Rubber\+Room}} (QGraphics\+Item $\ast$item)
+\item 
+void \mbox{\hyperlink{class_view_ac87acb2daa23a7cf69142589de87bfdc}{vulcanize\+Rubber\+Room}} ()
+\item 
+void \mbox{\hyperlink{class_view_aa59ad7673935c8a951a1722a343a139d}{clear\+Rubber\+Room}} ()
+\item 
+void \mbox{\hyperlink{class_view_ad6cf4a66399bdc7751fd2a1da2983529}{spare\+Rubber}} (qint64 id)
+\item 
+void \mbox{\hyperlink{class_view_afe1ee601931b010c9d66040b0bb305f7}{set\+Rubber\+Mode}} (int mode)
+\item 
+void \mbox{\hyperlink{class_view_ac0470e16d6548ee03efeba7be219f72e}{set\+Rubber\+Point}} (const QString \&key, const QPointF \&point)
+\item 
+void \mbox{\hyperlink{class_view_a11a3932473113075fb90069a58c3a5bb}{set\+Rubber\+Text}} (const QString \&key, const QString \&txt)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_view_a24fa1beae5239d8fbec787552a41a4fb}{View}} (\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$mw, QGraphics\+Scene $\ast$the\+Scene, QWidget $\ast$parent)
+\item 
+\mbox{\hyperlink{class_view_aca0fee82e5ee0d139ca4b895a4facdb2}{$\sim$\+View}} ()
+\item 
+bool \mbox{\hyperlink{class_view_a45f3b6b99ab9b4af38b16e63b294ae90}{allow\+Zoom\+In}} ()
+\item 
+bool \mbox{\hyperlink{class_view_a1ed4bf88acc7a3a6e55b22f842200daf}{allow\+Zoom\+Out}} ()
+\item 
+void \mbox{\hyperlink{class_view_ac6217db074fb196b438586032cce55e2}{recalculate\+Limits}} ()
+\item 
+void \mbox{\hyperlink{class_view_a9399e75033763a468dbce886b3a2bef1}{zoom\+To\+Point}} (const QPoint \&mouse\+Point, int zoom\+Dir)
+\item 
+void \mbox{\hyperlink{class_view_a762bca22928e74a869759f7e19304496}{center\+At}} (const QPointF \&center\+Point)
+\item 
+QPointF \mbox{\hyperlink{class_view_a410eee3fe77195bbe49197bd8a3929d9}{center}} ()
+\item 
+QUndo\+Stack $\ast$ \mbox{\hyperlink{class_view_aa987e8c7cd0567c751a38aba012b7ce7}{get\+Undo\+Stack}} ()
+\item 
+void \mbox{\hyperlink{class_view_aed9efd2a70381e9bf92ace0a97c32e6c}{add\+Object}} (\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$obj)
+\item 
+void \mbox{\hyperlink{class_view_a2cb8abcb40747af7daa5221c538eacd9}{delete\+Object}} (\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$obj)
+\item 
+void \mbox{\hyperlink{class_view_a94df1b6af4e568bfe42441ec033a27b6}{vulcanize\+Object}} (\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$obj)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_view_ae04da8b5cfdee7755734bf7b4822aa58}{mouse\+Double\+Click\+Event}} (QMouse\+Event $\ast$event)
+\item 
+void \mbox{\hyperlink{class_view_ad2272e344e46519f026cd02f419884f1}{mouse\+Press\+Event}} (QMouse\+Event $\ast$event)
+\item 
+void \mbox{\hyperlink{class_view_ae820c6a86f0a1908bf451f86db043489}{mouse\+Move\+Event}} (QMouse\+Event $\ast$event)
+\item 
+void \mbox{\hyperlink{class_view_a35226f6549add1ff837c65888fcd00fc}{mouse\+Release\+Event}} (QMouse\+Event $\ast$event)
+\item 
+void \mbox{\hyperlink{class_view_aca4aade13313c3deb599501abdd947f1}{wheel\+Event}} (QWheel\+Event $\ast$event)
+\item 
+void \mbox{\hyperlink{class_view_a59701ebb47f7e2f55977543b6293ba47}{context\+Menu\+Event}} (QContext\+Menu\+Event $\ast$event)
+\item 
+void \mbox{\hyperlink{class_view_a862810f7e46922a88db3c1d8cca8a1eb}{draw\+Background}} (QPainter $\ast$painter, const QRectF \&rect)
+\item 
+void \mbox{\hyperlink{class_view_ab6f7e79f17cb13be6db60124a34591ca}{draw\+Foreground}} (QPainter $\ast$painter, const QRectF \&rect)
+\item 
+void \mbox{\hyperlink{class_view_a5edce8f98a7b7ab40e4c7b8787475e39}{enter\+Event}} (QEvent $\ast$event)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{view_8h_source_l00017}{17}} of file \mbox{\hyperlink{view_8h_source}{view.\+h}}.
+
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_view_a24fa1beae5239d8fbec787552a41a4fb}\label{class_view_a24fa1beae5239d8fbec787552a41a4fb}} 
+\index{View@{View}!View@{View}}
+\index{View@{View}!View@{View}}
+\doxyparagraph{\texorpdfstring{View()}{View()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_view}{View}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$}]{mw,  }\item[{QGraphics\+Scene $\ast$}]{the\+Scene,  }\item[{QWidget $\ast$}]{parent }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00028}{28}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aca0fee82e5ee0d139ca4b895a4facdb2}\label{class_view_aca0fee82e5ee0d139ca4b895a4facdb2}} 
+\index{View@{View}!````~View@{$\sim$View}}
+\index{````~View@{$\sim$View}!View@{View}}
+\doxyparagraph{\texorpdfstring{$\sim$View()}{~View()}}
+{\footnotesize\ttfamily $\sim$\mbox{\hyperlink{class_view}{View}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00124}{124}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_view_aed9efd2a70381e9bf92ace0a97c32e6c}\label{class_view_aed9efd2a70381e9bf92ace0a97c32e6c}} 
+\index{View@{View}!addObject@{addObject}}
+\index{addObject@{addObject}!View@{View}}
+\doxyparagraph{\texorpdfstring{addObject()}{addObject()}}
+{\footnotesize\ttfamily void add\+Object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$}]{obj }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00141}{141}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aa9ac21e89f642400a99275f5d4553fb3}\label{class_view_aa9ac21e89f642400a99275f5d4553fb3}} 
+\index{View@{View}!addToRubberRoom@{addToRubberRoom}}
+\index{addToRubberRoom@{addToRubberRoom}!View@{View}}
+\doxyparagraph{\texorpdfstring{addToRubberRoom}{addToRubberRoom}}
+{\footnotesize\ttfamily void add\+To\+Rubber\+Room (\begin{DoxyParamCaption}\item[{QGraphics\+Item $\ast$}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00224}{224}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a03fe569d1119d2252ef8f547d0f5ef3b}\label{class_view_a03fe569d1119d2252ef8f547d0f5ef3b}} 
+\index{View@{View}!allowRubber@{allowRubber}}
+\index{allowRubber@{allowRubber}!View@{View}}
+\doxyparagraph{\texorpdfstring{allowRubber}{allowRubber}}
+{\footnotesize\ttfamily bool allow\+Rubber (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00217}{217}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a45f3b6b99ab9b4af38b16e63b294ae90}\label{class_view_a45f3b6b99ab9b4af38b16e63b294ae90}} 
+\index{View@{View}!allowZoomIn@{allowZoomIn}}
+\index{allowZoomIn@{allowZoomIn}!View@{View}}
+\doxyparagraph{\texorpdfstring{allowZoomIn()}{allowZoomIn()}}
+{\footnotesize\ttfamily bool allow\+Zoom\+In (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01665}{1665}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a1ed4bf88acc7a3a6e55b22f842200daf}\label{class_view_a1ed4bf88acc7a3a6e55b22f842200daf}} 
+\index{View@{View}!allowZoomOut@{allowZoomOut}}
+\index{allowZoomOut@{allowZoomOut}!View@{View}}
+\doxyparagraph{\texorpdfstring{allowZoomOut()}{allowZoomOut()}}
+{\footnotesize\ttfamily bool allow\+Zoom\+Out (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01682}{1682}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a410eee3fe77195bbe49197bd8a3929d9}\label{class_view_a410eee3fe77195bbe49197bd8a3929d9}} 
+\index{View@{View}!center@{center}}
+\index{center@{center}!View@{View}}
+\doxyparagraph{\texorpdfstring{center()}{center()}}
+{\footnotesize\ttfamily QPointF center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8h_source_l00031}{31}} of file \mbox{\hyperlink{view_8h_source}{view.\+h}}.
+
+\mbox{\Hypertarget{class_view_a762bca22928e74a869759f7e19304496}\label{class_view_a762bca22928e74a869759f7e19304496}} 
+\index{View@{View}!centerAt@{centerAt}}
+\index{centerAt@{centerAt}!View@{View}}
+\doxyparagraph{\texorpdfstring{centerAt()}{centerAt()}}
+{\footnotesize\ttfamily void center\+At (\begin{DoxyParamCaption}\item[{const QPointF \&}]{center\+Point }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01498}{1498}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aa59ad7673935c8a951a1722a343a139d}\label{class_view_aa59ad7673935c8a951a1722a343a139d}} 
+\index{View@{View}!clearRubberRoom@{clearRubberRoom}}
+\index{clearRubberRoom@{clearRubberRoom}!View@{View}}
+\doxyparagraph{\texorpdfstring{clearRubberRoom}{clearRubberRoom}}
+{\footnotesize\ttfamily void clear\+Rubber\+Room (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00252}{252}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_abd07e172ccec6823a88289c21124a367}\label{class_view_abd07e172ccec6823a88289c21124a367}} 
+\index{View@{View}!clearSelection@{clearSelection}}
+\index{clearSelection@{clearSelection}!View@{View}}
+\doxyparagraph{\texorpdfstring{clearSelection}{clearSelection}}
+{\footnotesize\ttfamily void clear\+Selection (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01889}{1889}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a59701ebb47f7e2f55977543b6293ba47}\label{class_view_a59701ebb47f7e2f55977543b6293ba47}} 
+\index{View@{View}!contextMenuEvent@{contextMenuEvent}}
+\index{contextMenuEvent@{contextMenuEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{contextMenuEvent()}{contextMenuEvent()}}
+{\footnotesize\ttfamily void context\+Menu\+Event (\begin{DoxyParamCaption}\item[{QContext\+Menu\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01753}{1753}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aaa6c087511a52e64fc9ad92820c7c0a8}\label{class_view_aaa6c087511a52e64fc9ad92820c7c0a8}} 
+\index{View@{View}!copy@{copy}}
+\index{copy@{copy}!View@{View}}
+\doxyparagraph{\texorpdfstring{copy}{copy}}
+{\footnotesize\ttfamily void copy (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01931}{1931}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a1965f3faead77d69a1c0c6e2115e07c5}\label{class_view_a1965f3faead77d69a1c0c6e2115e07c5}} 
+\index{View@{View}!cornerButtonClicked@{cornerButtonClicked}}
+\index{cornerButtonClicked@{cornerButtonClicked}!View@{View}}
+\doxyparagraph{\texorpdfstring{cornerButtonClicked}{cornerButtonClicked}}
+{\footnotesize\ttfamily void corner\+Button\+Clicked (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01136}{1136}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a935fdfc805caa4ece4930fff01b7aa39}\label{class_view_a935fdfc805caa4ece4930fff01b7aa39}} 
+\index{View@{View}!createGrid@{createGrid}}
+\index{createGrid@{createGrid}!View@{View}}
+\doxyparagraph{\texorpdfstring{createGrid}{createGrid}}
+{\footnotesize\ttfamily void create\+Grid (\begin{DoxyParamCaption}\item[{const QString \&}]{grid\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00338}{338}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ada01f65675afbbc0b8006d58df5acb81}\label{class_view_ada01f65675afbbc0b8006d58df5acb81}} 
+\index{View@{View}!cut@{cut}}
+\index{cut@{cut}!View@{View}}
+\doxyparagraph{\texorpdfstring{cut}{cut}}
+{\footnotesize\ttfamily void cut (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01917}{1917}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a2cb8abcb40747af7daa5221c538eacd9}\label{class_view_a2cb8abcb40747af7daa5221c538eacd9}} 
+\index{View@{View}!deleteObject@{deleteObject}}
+\index{deleteObject@{deleteObject}!View@{View}}
+\doxyparagraph{\texorpdfstring{deleteObject()}{deleteObject()}}
+{\footnotesize\ttfamily void delete\+Object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$}]{obj }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00148}{148}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a74af558a825ac72754085696d893671d}\label{class_view_a74af558a825ac72754085696d893671d}} 
+\index{View@{View}!deletePressed@{deletePressed}}
+\index{deletePressed@{deletePressed}!View@{View}}
+\doxyparagraph{\texorpdfstring{deletePressed}{deletePressed}}
+{\footnotesize\ttfamily void delete\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01829}{1829}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_adc2fdeeaaaa3dde25a46a15a8815c3ac}\label{class_view_adc2fdeeaaaa3dde25a46a15a8815c3ac}} 
+\index{View@{View}!deleteSelected@{deleteSelected}}
+\index{deleteSelected@{deleteSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{deleteSelected}{deleteSelected}}
+{\footnotesize\ttfamily void delete\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01894}{1894}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ab1b8d3117e804d31da3f538473d9bb68}\label{class_view_ab1b8d3117e804d31da3f538473d9bb68}} 
+\index{View@{View}!disableMoveRapidFire@{disableMoveRapidFire}}
+\index{disableMoveRapidFire@{disableMoveRapidFire}!View@{View}}
+\doxyparagraph{\texorpdfstring{disableMoveRapidFire}{disableMoveRapidFire}}
+{\footnotesize\ttfamily void disable\+Move\+Rapid\+Fire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00212}{212}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a862810f7e46922a88db3c1d8cca8a1eb}\label{class_view_a862810f7e46922a88db3c1d8cca8a1eb}} 
+\index{View@{View}!drawBackground@{drawBackground}}
+\index{drawBackground@{drawBackground}!View@{View}}
+\doxyparagraph{\texorpdfstring{drawBackground()}{drawBackground()}}
+{\footnotesize\ttfamily void draw\+Background (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QRectF \&}]{rect }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00586}{586}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ab6f7e79f17cb13be6db60124a34591ca}\label{class_view_ab6f7e79f17cb13be6db60124a34591ca}} 
+\index{View@{View}!drawForeground@{drawForeground}}
+\index{drawForeground@{drawForeground}!View@{View}}
+\doxyparagraph{\texorpdfstring{drawForeground()}{drawForeground()}}
+{\footnotesize\ttfamily void draw\+Foreground (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QRectF \&}]{rect }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00602}{602}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ac85a07d654a28f7ba6fccddd0328d1a0}\label{class_view_ac85a07d654a28f7ba6fccddd0328d1a0}} 
+\index{View@{View}!enableMoveRapidFire@{enableMoveRapidFire}}
+\index{enableMoveRapidFire@{enableMoveRapidFire}!View@{View}}
+\doxyparagraph{\texorpdfstring{enableMoveRapidFire}{enableMoveRapidFire}}
+{\footnotesize\ttfamily void enable\+Move\+Rapid\+Fire (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00207}{207}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a5edce8f98a7b7ab40e4c7b8787475e39}\label{class_view_a5edce8f98a7b7ab40e4c7b8787475e39}} 
+\index{View@{View}!enterEvent@{enterEvent}}
+\index{enterEvent@{enterEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{enterEvent()}{enterEvent()}}
+{\footnotesize\ttfamily void enter\+Event (\begin{DoxyParamCaption}\item[{QEvent $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00135}{135}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_abb2c9654968151943c6068652051fe73}\label{class_view_abb2c9654968151943c6068652051fe73}} 
+\index{View@{View}!escapePressed@{escapePressed}}
+\index{escapePressed@{escapePressed}!View@{View}}
+\doxyparagraph{\texorpdfstring{escapePressed}{escapePressed}}
+{\footnotesize\ttfamily void escape\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01845}{1845}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aa987e8c7cd0567c751a38aba012b7ce7}\label{class_view_aa987e8c7cd0567c751a38aba012b7ce7}} 
+\index{View@{View}!getUndoStack@{getUndoStack}}
+\index{getUndoStack@{getUndoStack}!View@{View}}
+\doxyparagraph{\texorpdfstring{getUndoStack()}{getUndoStack()}}
+{\footnotesize\ttfamily QUndo\+Stack $\ast$ get\+Undo\+Stack (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8h_source_l00033}{33}} of file \mbox{\hyperlink{view_8h_source}{view.\+h}}.
+
+\mbox{\Hypertarget{class_view_ad4f95dfb8b4585faffcb4f1cadd8f746}\label{class_view_ad4f95dfb8b4585faffcb4f1cadd8f746}} 
+\index{View@{View}!isLwtEnabled@{isLwtEnabled}}
+\index{isLwtEnabled@{isLwtEnabled}!View@{View}}
+\doxyparagraph{\texorpdfstring{isLwtEnabled}{isLwtEnabled}}
+{\footnotesize\ttfamily bool is\+Lwt\+Enabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00576}{576}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a860f6d3addef391bad0986536b4b93a0}\label{class_view_a860f6d3addef391bad0986536b4b93a0}} 
+\index{View@{View}!isRealEnabled@{isRealEnabled}}
+\index{isRealEnabled@{isRealEnabled}!View@{View}}
+\doxyparagraph{\texorpdfstring{isRealEnabled}{isRealEnabled}}
+{\footnotesize\ttfamily bool is\+Real\+Enabled (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00581}{581}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a0d24c4e6576ba8a921fdccb9d89db887}\label{class_view_a0d24c4e6576ba8a921fdccb9d89db887}} 
+\index{View@{View}!mirrorSelected@{mirrorSelected}}
+\index{mirrorSelected@{mirrorSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{mirrorSelected}{mirrorSelected}}
+{\footnotesize\ttfamily void mirror\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{x1,  }\item[{qreal}]{y1,  }\item[{qreal}]{x2,  }\item[{qreal}]{y2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02203}{2203}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ae04da8b5cfdee7755734bf7b4822aa58}\label{class_view_ae04da8b5cfdee7755734bf7b4822aa58}} 
+\index{View@{View}!mouseDoubleClickEvent@{mouseDoubleClickEvent}}
+\index{mouseDoubleClickEvent@{mouseDoubleClickEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{mouseDoubleClickEvent()}{mouseDoubleClickEvent()}}
+{\footnotesize\ttfamily void mouse\+Double\+Click\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01261}{1261}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ae820c6a86f0a1908bf451f86db043489}\label{class_view_ae820c6a86f0a1908bf451f86db043489}} 
+\index{View@{View}!mouseMoveEvent@{mouseMoveEvent}}
+\index{mouseMoveEvent@{mouseMoveEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{mouseMoveEvent()}{mouseMoveEvent()}}
+{\footnotesize\ttfamily void mouse\+Move\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01521}{1521}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ad2272e344e46519f026cd02f419884f1}\label{class_view_ad2272e344e46519f026cd02f419884f1}} 
+\index{View@{View}!mousePressEvent@{mousePressEvent}}
+\index{mousePressEvent@{mousePressEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{mousePressEvent()}{mousePressEvent()}}
+{\footnotesize\ttfamily void mouse\+Press\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01273}{1273}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a35226f6549add1ff837c65888fcd00fc}\label{class_view_a35226f6549add1ff837c65888fcd00fc}} 
+\index{View@{View}!mouseReleaseEvent@{mouseReleaseEvent}}
+\index{mouseReleaseEvent@{mouseReleaseEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{mouseReleaseEvent()}{mouseReleaseEvent()}}
+{\footnotesize\ttfamily void mouse\+Release\+Event (\begin{DoxyParamCaption}\item[{QMouse\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01626}{1626}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a08439dd91239f4e45fc585a9c6f2988a}\label{class_view_a08439dd91239f4e45fc585a9c6f2988a}} 
+\index{View@{View}!moveAction@{moveAction}}
+\index{moveAction@{moveAction}!View@{View}}
+\doxyparagraph{\texorpdfstring{moveAction}{moveAction}}
+{\footnotesize\ttfamily void move\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02145}{2145}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ac51e16242e7caa854922c3d00e84cbe2}\label{class_view_ac51e16242e7caa854922c3d00e84cbe2}} 
+\index{View@{View}!moveSelected@{moveSelected}}
+\index{moveSelected@{moveSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{moveSelected}{moveSelected}}
+{\footnotesize\ttfamily void move\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{dx,  }\item[{qreal}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02152}{2152}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a50f2a887aea481c21501f0ba17f1ec27}\label{class_view_a50f2a887aea481c21501f0ba17f1ec27}} 
+\index{View@{View}!numSelected@{numSelected}}
+\index{numSelected@{numSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{numSelected}{numSelected}}
+{\footnotesize\ttfamily int num\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02254}{2254}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a5c9e7f314e3195e0f6db233ee8fed3ac}\label{class_view_a5c9e7f314e3195e0f6db233ee8fed3ac}} 
+\index{View@{View}!panDown@{panDown}}
+\index{panDown@{panDown}!View@{View}}
+\doxyparagraph{\texorpdfstring{panDown}{panDown}}
+{\footnotesize\ttfamily void pan\+Down (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01239}{1239}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a619649963ef9ad898fe74cddbd1ad878}\label{class_view_a619649963ef9ad898fe74cddbd1ad878}} 
+\index{View@{View}!panLeft@{panLeft}}
+\index{panLeft@{panLeft}!View@{View}}
+\doxyparagraph{\texorpdfstring{panLeft}{panLeft}}
+{\footnotesize\ttfamily void pan\+Left (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01218}{1218}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a7d1b5d673c621538459a144cddb31603}\label{class_view_a7d1b5d673c621538459a144cddb31603}} 
+\index{View@{View}!panPoint@{panPoint}}
+\index{panPoint@{panPoint}!View@{View}}
+\doxyparagraph{\texorpdfstring{panPoint}{panPoint}}
+{\footnotesize\ttfamily void pan\+Point (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01213}{1213}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_afb3d0b673328efbf248d7d5ddf645895}\label{class_view_afb3d0b673328efbf248d7d5ddf645895}} 
+\index{View@{View}!panRealTime@{panRealTime}}
+\index{panRealTime@{panRealTime}!View@{View}}
+\doxyparagraph{\texorpdfstring{panRealTime}{panRealTime}}
+{\footnotesize\ttfamily void pan\+Real\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01208}{1208}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_add4363dde53b126aed7f72bc661b57ca}\label{class_view_add4363dde53b126aed7f72bc661b57ca}} 
+\index{View@{View}!panRight@{panRight}}
+\index{panRight@{panRight}!View@{View}}
+\doxyparagraph{\texorpdfstring{panRight}{panRight}}
+{\footnotesize\ttfamily void pan\+Right (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01225}{1225}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_abffa3918b99a689552c01c11bbf0b175}\label{class_view_abffa3918b99a689552c01c11bbf0b175}} 
+\index{View@{View}!panUp@{panUp}}
+\index{panUp@{panUp}!View@{View}}
+\doxyparagraph{\texorpdfstring{panUp}{panUp}}
+{\footnotesize\ttfamily void pan\+Up (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01232}{1232}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ad7f58047731e9a1b735aa142811c70e8}\label{class_view_ad7f58047731e9a1b735aa142811c70e8}} 
+\index{View@{View}!paste@{paste}}
+\index{paste@{paste}!View@{View}}
+\doxyparagraph{\texorpdfstring{paste}{paste}}
+{\footnotesize\ttfamily void paste (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01957}{1957}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a70844daf87c63fdfb93c78436fb83215}\label{class_view_a70844daf87c63fdfb93c78436fb83215}} 
+\index{View@{View}!previewOff@{previewOff}}
+\index{previewOff@{previewOff}!View@{View}}
+\doxyparagraph{\texorpdfstring{previewOff}{previewOff}}
+{\footnotesize\ttfamily void preview\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00189}{189}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a2aaf2120aae14d65a869325c2b3e6179}\label{class_view_a2aaf2120aae14d65a869325c2b3e6179}} 
+\index{View@{View}!previewOn@{previewOn}}
+\index{previewOn@{previewOn}!View@{View}}
+\doxyparagraph{\texorpdfstring{previewOn}{previewOn}}
+{\footnotesize\ttfamily void preview\+On (\begin{DoxyParamCaption}\item[{int}]{clone,  }\item[{int}]{mode,  }\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00157}{157}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ac6217db074fb196b438586032cce55e2}\label{class_view_ac6217db074fb196b438586032cce55e2}} 
+\index{View@{View}!recalculateLimits@{recalculateLimits}}
+\index{recalculateLimits@{recalculateLimits}!View@{View}}
+\doxyparagraph{\texorpdfstring{recalculateLimits()}{recalculateLimits()}}
+{\footnotesize\ttfamily void recalculate\+Limits (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01482}{1482}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aaad9dded92c1d0bd14357bb8bc5a142d}\label{class_view_aaad9dded92c1d0bd14357bb8bc5a142d}} 
+\index{View@{View}!repeatAction@{repeatAction}}
+\index{repeatAction@{repeatAction}!View@{View}}
+\doxyparagraph{\texorpdfstring{repeatAction}{repeatAction}}
+{\footnotesize\ttfamily void repeat\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02138}{2138}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a99afe6ecc9412bcf50b8a8ba1836177f}\label{class_view_a99afe6ecc9412bcf50b8a8ba1836177f}} 
+\index{View@{View}!rotateAction@{rotateAction}}
+\index{rotateAction@{rotateAction}!View@{View}}
+\doxyparagraph{\texorpdfstring{rotateAction}{rotateAction}}
+{\footnotesize\ttfamily void rotate\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02174}{2174}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}\label{class_view_a2eb33ba1e11c6e53493564917b3ae4fa}} 
+\index{View@{View}!rotateSelected@{rotateSelected}}
+\index{rotateSelected@{rotateSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{rotateSelected}{rotateSelected}}
+{\footnotesize\ttfamily void rotate\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02181}{2181}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ad0a1d907f075c38a1d34cf976a9527d8}\label{class_view_ad0a1d907f075c38a1d34cf976a9527d8}} 
+\index{View@{View}!scaleAction@{scaleAction}}
+\index{scaleAction@{scaleAction}!View@{View}}
+\doxyparagraph{\texorpdfstring{scaleAction}{scaleAction}}
+{\footnotesize\ttfamily void scale\+Action (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02225}{2225}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ae8656e711caf4f6d627411ba87f5507c}\label{class_view_ae8656e711caf4f6d627411ba87f5507c}} 
+\index{View@{View}!scaleSelected@{scaleSelected}}
+\index{scaleSelected@{scaleSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{scaleSelected}{scaleSelected}}
+{\footnotesize\ttfamily void scale\+Selected (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02232}{2232}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ab6658ed404200bd7aaca5629db064645}\label{class_view_ab6658ed404200bd7aaca5629db064645}} 
+\index{View@{View}!selectAll@{selectAll}}
+\index{selectAll@{selectAll}!View@{View}}
+\doxyparagraph{\texorpdfstring{selectAll}{selectAll}}
+{\footnotesize\ttfamily void select\+All (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01246}{1246}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a1d85de554564e69188e34457b463de1b}\label{class_view_a1d85de554564e69188e34457b463de1b}} 
+\index{View@{View}!selectionChanged@{selectionChanged}}
+\index{selectionChanged@{selectionChanged}!View@{View}}
+\doxyparagraph{\texorpdfstring{selectionChanged}{selectionChanged}}
+{\footnotesize\ttfamily void selection\+Changed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01253}{1253}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a0611092d52a93bb9ccb3cdcb09adaa55}\label{class_view_a0611092d52a93bb9ccb3cdcb09adaa55}} 
+\index{View@{View}!setBackgroundColor@{setBackgroundColor}}
+\index{setBackgroundColor@{setBackgroundColor}!View@{View}}
+\doxyparagraph{\texorpdfstring{setBackgroundColor}{setBackgroundColor}}
+{\footnotesize\ttfamily void set\+Background\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02280}{2280}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a42a33d19fc5d46b5c07b108f166b014e}\label{class_view_a42a33d19fc5d46b5c07b108f166b014e}} 
+\index{View@{View}!setCornerButton@{setCornerButton}}
+\index{setCornerButton@{setCornerButton}!View@{View}}
+\doxyparagraph{\texorpdfstring{setCornerButton}{setCornerButton}}
+{\footnotesize\ttfamily void set\+Corner\+Button (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01108}{1108}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ac7ddf091a5138a99250ac0bde26191de}\label{class_view_ac7ddf091a5138a99250ac0bde26191de}} 
+\index{View@{View}!setCrossHairColor@{setCrossHairColor}}
+\index{setCrossHairColor@{setCrossHairColor}!View@{View}}
+\doxyparagraph{\texorpdfstring{setCrossHairColor}{setCrossHairColor}}
+{\footnotesize\ttfamily void set\+Cross\+Hair\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02273}{2273}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}\label{class_view_a0da696c28b4956fc3b3e048a3e9a3d04}} 
+\index{View@{View}!setCrossHairSize@{setCrossHairSize}}
+\index{setCrossHairSize@{setCrossHairSize}!View@{View}}
+\doxyparagraph{\texorpdfstring{setCrossHairSize}{setCrossHairSize}}
+{\footnotesize\ttfamily void set\+Cross\+Hair\+Size (\begin{DoxyParamCaption}\item[{quint8}]{percent }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01095}{1095}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a51b34485435f5af679bc62ebf5492c44}\label{class_view_a51b34485435f5af679bc62ebf5492c44}} 
+\index{View@{View}!setGridColor@{setGridColor}}
+\index{setGridColor@{setGridColor}!View@{View}}
+\doxyparagraph{\texorpdfstring{setGridColor}{setGridColor}}
+{\footnotesize\ttfamily void set\+Grid\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00325}{325}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_afe1ee601931b010c9d66040b0bb305f7}\label{class_view_afe1ee601931b010c9d66040b0bb305f7}} 
+\index{View@{View}!setRubberMode@{setRubberMode}}
+\index{setRubberMode@{setRubberMode}!View@{View}}
+\doxyparagraph{\texorpdfstring{setRubberMode}{setRubberMode}}
+{\footnotesize\ttfamily void set\+Rubber\+Mode (\begin{DoxyParamCaption}\item[{int}]{mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00295}{295}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ac0470e16d6548ee03efeba7be219f72e}\label{class_view_ac0470e16d6548ee03efeba7be219f72e}} 
+\index{View@{View}!setRubberPoint@{setRubberPoint}}
+\index{setRubberPoint@{setRubberPoint}!View@{View}}
+\doxyparagraph{\texorpdfstring{setRubberPoint}{setRubberPoint}}
+{\footnotesize\ttfamily void set\+Rubber\+Point (\begin{DoxyParamCaption}\item[{const QString \&}]{key,  }\item[{const QPointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00305}{305}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a11a3932473113075fb90069a58c3a5bb}\label{class_view_a11a3932473113075fb90069a58c3a5bb}} 
+\index{View@{View}!setRubberText@{setRubberText}}
+\index{setRubberText@{setRubberText}!View@{View}}
+\doxyparagraph{\texorpdfstring{setRubberText}{setRubberText}}
+{\footnotesize\ttfamily void set\+Rubber\+Text (\begin{DoxyParamCaption}\item[{const QString \&}]{key,  }\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00315}{315}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ade2a3a088253cd83dd64a0bd3fbb12bb}\label{class_view_ade2a3a088253cd83dd64a0bd3fbb12bb}} 
+\index{View@{View}!setRulerColor@{setRulerColor}}
+\index{setRulerColor@{setRulerColor}!View@{View}}
+\doxyparagraph{\texorpdfstring{setRulerColor}{setRulerColor}}
+{\footnotesize\ttfamily void set\+Ruler\+Color (\begin{DoxyParamCaption}\item[{QRgb}]{color }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00332}{332}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a03cb6c65d4056ad02541f28450fed058}\label{class_view_a03cb6c65d4056ad02541f28450fed058}} 
+\index{View@{View}!setSelectBoxColors@{setSelectBoxColors}}
+\index{setSelectBoxColors@{setSelectBoxColors}!View@{View}}
+\doxyparagraph{\texorpdfstring{setSelectBoxColors}{setSelectBoxColors}}
+{\footnotesize\ttfamily void set\+Select\+Box\+Colors (\begin{DoxyParamCaption}\item[{QRgb}]{colorL,  }\item[{QRgb}]{fillL,  }\item[{QRgb}]{colorR,  }\item[{QRgb}]{fillR,  }\item[{int}]{alpha }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02287}{2287}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ae9693cc28c79625147187b1f453f5126}\label{class_view_ae9693cc28c79625147187b1f453f5126}} 
+\index{View@{View}!showScrollBars@{showScrollBars}}
+\index{showScrollBars@{showScrollBars}!View@{View}}
+\doxyparagraph{\texorpdfstring{showScrollBars}{showScrollBars}}
+{\footnotesize\ttfamily void show\+Scroll\+Bars (\begin{DoxyParamCaption}\item[{bool}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l02259}{2259}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ad6cf4a66399bdc7751fd2a1da2983529}\label{class_view_ad6cf4a66399bdc7751fd2a1da2983529}} 
+\index{View@{View}!spareRubber@{spareRubber}}
+\index{spareRubber@{spareRubber}!View@{View}}
+\doxyparagraph{\texorpdfstring{spareRubber}{spareRubber}}
+{\footnotesize\ttfamily void spare\+Rubber (\begin{DoxyParamCaption}\item[{qint64}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00290}{290}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a801c2b151be4cd0bbca2e788957ae09b}\label{class_view_a801c2b151be4cd0bbca2e788957ae09b}} 
+\index{View@{View}!toggleGrid@{toggleGrid}}
+\index{toggleGrid@{toggleGrid}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleGrid}{toggleGrid}}
+{\footnotesize\ttfamily void toggle\+Grid (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00497}{497}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_afea870e2ddae286d6228523c39a581ee}\label{class_view_afea870e2ddae286d6228523c39a581ee}} 
+\index{View@{View}!toggleLwt@{toggleLwt}}
+\index{toggleLwt@{toggleLwt}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleLwt}{toggleLwt}}
+{\footnotesize\ttfamily void toggle\+Lwt (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00558}{558}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a1581551d50109dbe52aa0e37c7464115}\label{class_view_a1581551d50109dbe52aa0e37c7464115}} 
+\index{View@{View}!toggleOrtho@{toggleOrtho}}
+\index{toggleOrtho@{toggleOrtho}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleOrtho}{toggleOrtho}}
+{\footnotesize\ttfamily void toggle\+Ortho (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00518}{518}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a383007f70259d129c2686bd8aa315840}\label{class_view_a383007f70259d129c2686bd8aa315840}} 
+\index{View@{View}!togglePolar@{togglePolar}}
+\index{togglePolar@{togglePolar}!View@{View}}
+\doxyparagraph{\texorpdfstring{togglePolar}{togglePolar}}
+{\footnotesize\ttfamily void toggle\+Polar (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00528}{528}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a7b7d2dc56a845dd3a20fadacdbd0c184}\label{class_view_a7b7d2dc56a845dd3a20fadacdbd0c184}} 
+\index{View@{View}!toggleQSnap@{toggleQSnap}}
+\index{toggleQSnap@{toggleQSnap}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleQSnap}{toggleQSnap}}
+{\footnotesize\ttfamily void toggle\+QSnap (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00538}{538}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_add2424e5e45c9e1442f2418bccecc224}\label{class_view_add2424e5e45c9e1442f2418bccecc224}} 
+\index{View@{View}!toggleQTrack@{toggleQTrack}}
+\index{toggleQTrack@{toggleQTrack}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleQTrack}{toggleQTrack}}
+{\footnotesize\ttfamily void toggle\+QTrack (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00548}{548}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a019cda5ece7dc25e96280e1859638a6d}\label{class_view_a019cda5ece7dc25e96280e1859638a6d}} 
+\index{View@{View}!toggleReal@{toggleReal}}
+\index{toggleReal@{toggleReal}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleReal}{toggleReal}}
+{\footnotesize\ttfamily void toggle\+Real (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00567}{567}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aaeb8dbe2e5f6c268d42a3c0705388033}\label{class_view_aaeb8dbe2e5f6c268d42a3c0705388033}} 
+\index{View@{View}!toggleRuler@{toggleRuler}}
+\index{toggleRuler@{toggleRuler}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleRuler}{toggleRuler}}
+{\footnotesize\ttfamily void toggle\+Ruler (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00506}{506}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a8966d3c24ca080bc510137696930eabf}\label{class_view_a8966d3c24ca080bc510137696930eabf}} 
+\index{View@{View}!toggleSnap@{toggleSnap}}
+\index{toggleSnap@{toggleSnap}!View@{View}}
+\doxyparagraph{\texorpdfstring{toggleSnap}{toggleSnap}}
+{\footnotesize\ttfamily void toggle\+Snap (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00487}{487}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a94df1b6af4e568bfe42441ec033a27b6}\label{class_view_a94df1b6af4e568bfe42441ec033a27b6}} 
+\index{View@{View}!vulcanizeObject@{vulcanizeObject}}
+\index{vulcanizeObject@{vulcanizeObject}!View@{View}}
+\doxyparagraph{\texorpdfstring{vulcanizeObject()}{vulcanizeObject()}}
+{\footnotesize\ttfamily void vulcanize\+Object (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$}]{obj }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00242}{242}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_ac87acb2daa23a7cf69142589de87bfdc}\label{class_view_ac87acb2daa23a7cf69142589de87bfdc}} 
+\index{View@{View}!vulcanizeRubberRoom@{vulcanizeRubberRoom}}
+\index{vulcanizeRubberRoom@{vulcanizeRubberRoom}!View@{View}}
+\doxyparagraph{\texorpdfstring{vulcanizeRubberRoom}{vulcanizeRubberRoom}}
+{\footnotesize\ttfamily void vulcanize\+Rubber\+Room (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l00231}{231}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_aca4aade13313c3deb599501abdd947f1}\label{class_view_aca4aade13313c3deb599501abdd947f1}} 
+\index{View@{View}!wheelEvent@{wheelEvent}}
+\index{wheelEvent@{wheelEvent}!View@{View}}
+\doxyparagraph{\texorpdfstring{wheelEvent()}{wheelEvent()}}
+{\footnotesize\ttfamily void wheel\+Event (\begin{DoxyParamCaption}\item[{QWheel\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01699}{1699}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a68ccbc27a011c2b3ed99cea7cba7f66e}\label{class_view_a68ccbc27a011c2b3ed99cea7cba7f66e}} 
+\index{View@{View}!zoomExtents@{zoomExtents}}
+\index{zoomExtents@{zoomExtents}!View@{View}}
+\doxyparagraph{\texorpdfstring{zoomExtents}{zoomExtents}}
+{\footnotesize\ttfamily void zoom\+Extents (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01194}{1194}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a7d7e315e34a66d9a66022d31635e7aca}\label{class_view_a7d7e315e34a66d9a66022d31635e7aca}} 
+\index{View@{View}!zoomIn@{zoomIn}}
+\index{zoomIn@{zoomIn}!View@{View}}
+\doxyparagraph{\texorpdfstring{zoomIn}{zoomIn}}
+{\footnotesize\ttfamily void zoom\+In (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01142}{1142}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a72d29d38d8dd2c091cdd7078e1364f25}\label{class_view_a72d29d38d8dd2c091cdd7078e1364f25}} 
+\index{View@{View}!zoomOut@{zoomOut}}
+\index{zoomOut@{zoomOut}!View@{View}}
+\doxyparagraph{\texorpdfstring{zoomOut}{zoomOut}}
+{\footnotesize\ttfamily void zoom\+Out (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01155}{1155}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a29304b5b8cae9c622a64491ebf5eafef}\label{class_view_a29304b5b8cae9c622a64491ebf5eafef}} 
+\index{View@{View}!zoomSelected@{zoomSelected}}
+\index{zoomSelected@{zoomSelected}!View@{View}}
+\doxyparagraph{\texorpdfstring{zoomSelected}{zoomSelected}}
+{\footnotesize\ttfamily void zoom\+Selected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01175}{1175}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a9399e75033763a468dbce886b3a2bef1}\label{class_view_a9399e75033763a468dbce886b3a2bef1}} 
+\index{View@{View}!zoomToPoint@{zoomToPoint}}
+\index{zoomToPoint@{zoomToPoint}!View@{View}}
+\doxyparagraph{\texorpdfstring{zoomToPoint()}{zoomToPoint()}}
+{\footnotesize\ttfamily void zoom\+To\+Point (\begin{DoxyParamCaption}\item[{const QPoint \&}]{mouse\+Point,  }\item[{int}]{zoom\+Dir }\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01719}{1719}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+\mbox{\Hypertarget{class_view_a8a61a1a0975cb8663e805361884df66d}\label{class_view_a8a61a1a0975cb8663e805361884df66d}} 
+\index{View@{View}!zoomWindow@{zoomWindow}}
+\index{zoomWindow@{zoomWindow}!View@{View}}
+\doxyparagraph{\texorpdfstring{zoomWindow}{zoomWindow}}
+{\footnotesize\ttfamily void zoom\+Window (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+Definition at line \mbox{\hyperlink{view_8cpp_source_l01168}{1168}} of file \mbox{\hyperlink{view_8cpp_source}{view.\+cpp}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+embroidermodder2/\mbox{\hyperlink{view_8h}{view.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{view_8cpp}{view.\+cpp}}\end{DoxyCompactItemize}

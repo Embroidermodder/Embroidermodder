@@ -1,0 +1,58 @@
+\hypertarget{mdiarea_8h_source}{}\doxysubsection{mdiarea.\+h}
+\label{mdiarea_8h_source}\index{embroidermodder2/mdiarea.h@{embroidermodder2/mdiarea.h}}
+\mbox{\hyperlink{mdiarea_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00001}00001\ \textcolor{preprocessor}{\#ifndef\ MDIAREA\_H}}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00002}00002\ \textcolor{preprocessor}{\#define\ MDIAREA\_H}}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00003}00003\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <QMdiArea>}}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <QPixmap>}}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00007}00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00009}00009\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00010}00010\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00012}\mbox{\hyperlink{class_mdi_area}{00012}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_mdi_area}{MdiArea}}\ :\ \textcolor{keyword}{public}\ QMdiArea}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00013}00013\ \{}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00014}00014\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00016}00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00017}00017\ \ \ \ \ \mbox{\hyperlink{class_mdi_area}{MdiArea}}(\mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00018}00018\ \ \ \ \ \mbox{\hyperlink{class_mdi_area_abb5e0393bfc3d407f074330da1e548d5}{\string~MdiArea}}();}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00020}00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a51320500372fafd1b4752e986aefd5e5}{useBackgroundLogo}}(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00021}00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a4e52adca7532608b02f316555022d30c}{useBackgroundTexture}}(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a3efe3a03c1f43d8371d59a12e9d72ed2}{useBackgroundColor}}(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00023}00023\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00024}00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a038af0082e21b09ddfc6fbf0b87e8e01}{setBackgroundLogo}}(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00025}00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a16b27111c3952c10671bdf60eeaac481}{setBackgroundTexture}}(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00026}00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a70d4e21190fdc47edd88f078dd2037cb}{setBackgroundColor}}(\textcolor{keyword}{const}\ QColor\&\ color);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00028}00028\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00029}00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a157d69731c7c18359f3aeb9eeb2831f4}{cascade}}();}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00030}00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_adf450a9a061d173710964aa7b86598b1}{tile}}();}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00031}00031\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00032}00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a91ecdca9f19ec37f982d2032c6b2aae4}{mouseDoubleClickEvent}}(QMouseEvent*\ e);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00033}00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a4c44746ee6abcfabac1581977a1b5c02}{paintEvent}}(QPaintEvent*\ e);}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00035}00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00036}00036\ \ \ \ \ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ mainWin;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00038}00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ useLogo;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00039}00039\ \ \ \ \ \textcolor{keywordtype}{bool}\ useTexture;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00040}00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ useColor;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00042}00042\ \ \ \ \ QPixmap\ bgLogo;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00043}00043\ \ \ \ \ QPixmap\ bgTexture;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00044}00044\ \ \ \ \ QColor\ \ bgColor;}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00046}00046\ \ \ \ \ \textcolor{keywordtype}{void}\ zoomExtentsAllSubWindows();}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00047}00047\ \ \ \ \ \textcolor{keywordtype}{void}\ forceRepaint();}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00048}00048\ \};}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00050}00050\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{mdiarea_8h_source_l00052}00052\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

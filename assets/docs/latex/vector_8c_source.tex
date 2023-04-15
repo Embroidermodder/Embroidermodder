@@ -1,0 +1,139 @@
+\hypertarget{vector_8c_source}{}\doxysubsection{vector.\+c}
+\label{vector_8c_source}\index{extern/libembroidery/src/geometry/vector.c@{extern/libembroidery/src/geometry/vector.c}}
+\mbox{\hyperlink{vector_8c}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00001}00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00002}00002\ \textcolor{comment}{\ *\ VECTOR\ ALGEBRA}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00003}00003\ \textcolor{comment}{\ *\ This\ file\ is\ part\ of\ libembroidery.}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00004}00004\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00005}00005\ \textcolor{comment}{\ *\ Copyright\ 2018-\/2023\ The\ Embroidermodder\ Team}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00006}00006\ \textcolor{comment}{\ *\ Licensed\ under\ the\ terms\ of\ the\ zlib\ license.}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00007}00007\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}../embroidery.h"{}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00026}00026\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00027}\mbox{\hyperlink{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}{00027}}\ \mbox{\hyperlink{vector_8c_aaad72d90c58592e330de08139aee5077}{embVector\_normalize}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ vector,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}*\ result)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00028}00028\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00029}00029\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ length\ =\ \mbox{\hyperlink{vector_8c_a96123840be79cee1c9857c7f47e772f2}{embVector\_length}}(vector);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{if}\ (!result)\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00032}00032\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ emb-\/vector.c\ embVector\_normalize(),\ result\ argument\ is\ null\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00033}00033\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00034}00034\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00035}00035\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ vector.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ /\ length;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00036}00036\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ vector.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ /\ length;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00037}00037\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00038}00038\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00045}00045\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00046}\mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{00046}}\ \mbox{\hyperlink{vector_8c_a0a4af07bfac410623cf77a35a11550b1}{embVector\_multiply}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ vector,\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ magnitude,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}*\ result)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00047}00047\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00048}00048\ \ \ \ \ \textcolor{keywordflow}{if}\ (!result)\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00049}00049\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ emb-\/vector.c\ embVector\_multiply(),\ result\ argument\ is\ null\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00050}00050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00051}00051\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00052}00052\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ vector.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ magnitude;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00053}00053\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ vector.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ magnitude;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00054}00054\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00066}00066\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00067}\mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{00067}}\ \mbox{\hyperlink{vector_8c_a338eacec372464c0c336e26a5586b3e9}{embVector\_add}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00068}00068\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00069}00069\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ result;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00070}00070\ \ \ \ \ result.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ a.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ +\ b.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00071}00071\ \ \ \ \ result.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ a.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ +\ b.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00072}00072\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00073}00073\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00085}00085\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00086}\mbox{\hyperlink{embroidery_8h_a9bd2260f41b3ba7bf814b639010d6006}{00086}}\ \mbox{\hyperlink{vector_8c_aecc78c302ab283c53ce99697008766d0}{embVector\_average}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00087}00087\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00088}00088\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ result;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00089}00089\ \ \ \ \ result.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.5*(a.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ +\ b.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00090}00090\ \ \ \ \ result.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ 0.5*(a.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ +\ b.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00091}00091\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00092}00092\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00104}00104\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00105}\mbox{\hyperlink{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}{00105}}\ \mbox{\hyperlink{vector_8c_a55514b10c8ae6869e9889d770f515882}{embVector\_subtract}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ v1,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ v2)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00106}00106\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00107}00107\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ result;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00108}00108\ \ \ \ \ result.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ v1.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ -\/\ v2.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00109}00109\ \ \ \ \ result.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ v1.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ -\/\ v2.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00110}00110\ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00111}00111\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00112}00112\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00123}00123\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00124}\mbox{\hyperlink{embroidery_8h_a30cd27cebdce50d05099d257afc91381}{00124}}\ \mbox{\hyperlink{vector_8c_a5eb0184af5d76ee1369f5019e61c27be}{embVector\_dot}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00125}00125\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00126}00126\ \ \ \ \ \textcolor{keywordflow}{return}\ a.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ b.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ +\ a.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ b.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00127}00127\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00142}00142\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00143}\mbox{\hyperlink{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}{00143}}\ \mbox{\hyperlink{vector_8c_ac763a1a571c5cb36a99bf73e31ee6919}{embVector\_cross}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00144}00144\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00145}00145\ \ \ \ \ \textcolor{keywordflow}{return}\ a.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ b.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ -\/\ a.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ b.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00146}00146\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00157}00157\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00158}\mbox{\hyperlink{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}{00158}}\ \mbox{\hyperlink{vector_8c_acb7c080f09a460062df3d4f9aa2693be}{embVector\_transpose\_product}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ v1,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ v2,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}*\ result)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00159}00159\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00160}00160\ \ \ \ \ \textcolor{keywordflow}{if}\ (!result)\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00161}00161\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ emb-\/vector.c\ embVector\_transpose\_product(),\ result\ argument\ is\ null\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00163}00163\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00164}00164\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ v1.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ v2.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00165}00165\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ v1.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ v2.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00166}00166\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00177}00177\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00178}\mbox{\hyperlink{embroidery_8h_ac0161afdbecb1d33336072331183e441}{00178}}\ \mbox{\hyperlink{vector_8c_a96123840be79cee1c9857c7f47e772f2}{embVector\_length}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ vector)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00179}00179\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00180}00180\ \ \ \ \ \textcolor{keywordflow}{return}\ sqrt(vector.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ *\ vector.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ +\ vector.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ *\ vector.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00181}00181\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00182}00182\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00186}00186\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00187}\mbox{\hyperlink{embroidery_8h_af790aef236de4e53badb9a9c8ce5664a}{00187}}\ \mbox{\hyperlink{vector_8c_a0823dd7ae47773dea4dc396f895fc198}{embVector\_relativeX}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a1,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a2,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a3)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00188}00188\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00189}00189\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b,\ c;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00190}00190\ \ \ \ \ b\ =\ \mbox{\hyperlink{vector_8c_a55514b10c8ae6869e9889d770f515882}{embVector\_subtract}}(a1,\ a2);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00191}00191\ \ \ \ \ c\ =\ \mbox{\hyperlink{vector_8c_a55514b10c8ae6869e9889d770f515882}{embVector\_subtract}}(a3,\ a2);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00192}00192\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{vector_8c_a5eb0184af5d76ee1369f5019e61c27be}{embVector\_dot}}(b,\ c);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00193}00193\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00194}00194\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00198}00198\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00199}\mbox{\hyperlink{embroidery_8h_af7f3d1d902464690990e2460088b03cb}{00199}}\ \mbox{\hyperlink{vector_8c_a8ba74d18e7d36b8340cb9149144d4ea1}{embVector\_relativeY}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a1,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a2,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a3)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00200}00200\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00201}00201\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b,\ c;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00202}00202\ \ \ \ \ b\ =\ \mbox{\hyperlink{vector_8c_a55514b10c8ae6869e9889d770f515882}{embVector\_subtract}}(a1,\ a2);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00203}00203\ \ \ \ \ c\ =\ \mbox{\hyperlink{vector_8c_a55514b10c8ae6869e9889d770f515882}{embVector\_subtract}}(a3,\ a2);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00204}00204\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{vector_8c_ac763a1a571c5cb36a99bf73e31ee6919}{embVector\_cross}}(b,\ c);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00205}00205\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00206}00206\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00210}00210\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00211}\mbox{\hyperlink{embroidery_8h_a04639683e8ca6259a875aea58c397a17}{00211}}\ \mbox{\hyperlink{vector_8c_a2d40fb11eee627cc40fa0e0b8b0bbcb9}{embVector\_angle}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ v)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00212}00212\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00213}00213\ \ \ \ \ \textcolor{keywordflow}{return}\ atan2(v.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ v.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}});}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00214}00214\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00223}00223\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00224}\mbox{\hyperlink{embroidery_8h_ab11f31b20d8eae4ee3a01355da73a9da}{00224}}\ \mbox{\hyperlink{vector_8c_a375a523c9d7cba12f3ac30d990868a7a}{embVector\_unit}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ alpha)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00225}00225\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00226}00226\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00227}00227\ \ \ \ \ a.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ cos(alpha);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00228}00228\ \ \ \ \ a.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ sin(alpha);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00229}00229\ \ \ \ \ \textcolor{keywordflow}{return}\ a;}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00230}00230\ \}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00240}00240\ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00241}\mbox{\hyperlink{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}{00241}}\ \mbox{\hyperlink{vector_8c_abdedf2d469e6f9f4dc6d530086c3aa11}{embVector\_distance}}(\mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ a,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ b)}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00242}00242\ \{}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00243}00243\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ delta\ =\ \mbox{\hyperlink{vector_8c_a55514b10c8ae6869e9889d770f515882}{embVector\_subtract}}(a,\ b);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00244}00244\ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{vector_8c_a96123840be79cee1c9857c7f47e772f2}{embVector\_length}}(delta);}
+\DoxyCodeLine{\Hypertarget{vector_8c_source_l00245}00245\ \}}
+
+\end{DoxyCode}
