@@ -61,14 +61,14 @@ typedef enum
 extern EMB_PRIVATE int EMB_CALL readSvg(EmbPattern* pattern, const char* fileName);
 extern EMB_PRIVATE int EMB_CALL writeSvg(EmbPattern* pattern, const char* fileName);
 
-int svgCreator;
+extern int svgCreator;
 
-int svgExpect;
-int svgMultiValue;
+extern int svgExpect;
+extern int svgMultiValue;
 
-SvgElement* currentElement;
-char* currentAttribute;
-char* currentValue;
+extern SvgElement* currentElement;
+extern char* currentAttribute;
+extern char* currentValue;
 
 #ifdef __cplusplus
 }

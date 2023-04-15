@@ -6,6 +6,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+int svgCreator;
+
+int svgExpect;
+int svgMultiValue;
+
+SvgElement* currentElement;
+char* currentAttribute;
+char* currentValue;
+
+
 EmbColor svgColorToEmbColor(char* colorString)
 {
     unsigned char r = 0;

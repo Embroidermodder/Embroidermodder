@@ -456,6 +456,8 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
     {
         if(rapidFireEnabled)
         {
+            /**
+            \todo sort Qt::Return
             if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return)
             {
                 emit appendHistory(curText, prefix.length());
@@ -475,6 +477,7 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
                 emit runCommand(curCmd, cmdtxt);
                 return;
             }
+            */
         }
         else
         {

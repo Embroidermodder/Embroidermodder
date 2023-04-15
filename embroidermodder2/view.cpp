@@ -23,7 +23,7 @@
 
 #include <QtGui>
 #include <QGraphicsScene>
-#include <QGLWidget>
+//#include <QOpenGLWidget>
 
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
 {
@@ -93,8 +93,8 @@ View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphic
     qSnapToggle = false;
 
     //Randomize the hot grip location initially so it's not located at (0,0)
-    qsrand(QDateTime::currentMSecsSinceEpoch());
-    sceneGripPoint = QPointF(qrand()*1000, qrand()*1000);
+    srand(QDateTime::currentMSecsSinceEpoch());
+    sceneGripPoint = QPointF(rand()*1000, rand()*1000);
 
     gripBaseObj = 0;
     tempBaseObj = 0;
@@ -1094,6 +1094,7 @@ void View::updateMouseCoords(int x, int y)
 
 void View::setCrossHairSize(quint8 percent)
 {
+    /*
     //NOTE: crosshairSize is in pixels and is a percentage of your screen width
     //NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
     quint32 screenWidth = qApp->desktop()->width();
@@ -1101,6 +1102,7 @@ void View::setCrossHairSize(quint8 percent)
         crosshairSize = (screenWidth*(percent/100.0))/2;
     else
         crosshairSize = screenWidth;
+    */
 }
 
 void View::setCornerButton()
@@ -1245,7 +1247,7 @@ void View::selectAll()
 {
     QPainterPath allPath;
     allPath.addRect(gscene->sceneRect());
-    gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform());
+    // gscene->setSelectionArea(allPath, Qt::IntersectsItemShape, this->transform());
 }
 
 void View::selectionChanged()
@@ -1455,7 +1457,7 @@ void View::mousePressEvent(QMouseEvent* event)
             clearSelection();
         }
     }
-    if (event->button() == Qt::MidButton)
+    if (event->button() == Qt::MiddleButton)
     {
         panStart(event->pos());
         //The Undo command will record the spot where the pan started.
@@ -1637,7 +1639,7 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         }
         event->accept();
     }
-    if(event->button() == Qt::MidButton)
+    if(event->button() == Qt::MiddleButton)
     {
         panningActive = false;
         //The Undo command will record the spot where the pan completed.
@@ -1696,8 +1698,9 @@ bool View::allowZoomOut()
 
 void View::wheelEvent(QWheelEvent* event)
 {
+    /*
     int zoomDir = event->delta();
-    QPoint mousePoint = event->pos();
+    QPoint mousePoint = event->position();
 
     updateMouseCoords(mousePoint.x(), mousePoint.y());
     if(zoomDir > 0)
@@ -1710,6 +1713,7 @@ void View::wheelEvent(QWheelEvent* event)
         UndoableNavCommand* cmd = new UndoableNavCommand("ZoomOutToPoint", this, 0);
         undoStack->push(cmd);
     }
+    */
 }
 
 void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)

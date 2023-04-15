@@ -5,8 +5,8 @@
 #include <QList>
 #include <QHash>
 #include <QDir>
-#include <QtScript>
-#include <QtScriptTools>
+//#include <QtScript>
+//#include <QtScriptTools>
 
 #include "mdiarea.h"
 #include "mdiwindow.h"
