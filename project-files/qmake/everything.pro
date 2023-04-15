@@ -16,7 +16,6 @@ CONFIG += ordered
 unix:!macx {
 SUBDIRS  = \
 ../../thumbnailer-kde4 \
-../../libembroidery-convert \
 ../../embroidermodder2 \
 
 }
@@ -27,7 +26,6 @@ SUBDIRS  = \
 
 win32 {
 SUBDIRS  = \
-../../libembroidery-convert \
 ../../embroidermodder2 \
 
 }
@@ -38,7 +36,6 @@ SUBDIRS  = \
 
 macx {
 SUBDIRS  = \
-../../libembroidery-convert \
 ../../embroidermodder2 \
 
 }

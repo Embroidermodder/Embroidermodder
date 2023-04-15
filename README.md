@@ -10,7 +10,7 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more information, see [our website](http://embroidermodder.github.io).
+For more information, see [our website](http://www.libembroidery.org).
 
 Dependencies
 ------------
@@ -26,21 +26,25 @@ Optionally, you may want to add:
 
 Ubuntu repository packages:
 The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+
 ```
 sudo apt-get install git build-essential qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind
 ```
 
 Fedora repository packages:
 The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+
 ```
 sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
 ```
+
 Building
 --------
 
 Various methods of building can be found in the project-files subfolder.
 For most builds, it is as simple as opening a terminal in the
 project-files/qmake subfolder and typing:
+
 ```
 qmake && make
 ```
@@ -48,10 +52,13 @@ qmake && make
 Build time can be considerably decreased on multi-core machines, for example:
 
 - Dual Core:
+
 ```
 qmake && make -j2
 ```
+
 - Quad Core:
+
 ```
 qmake && make -j4
 ```
@@ -79,7 +86,7 @@ they reside in a separate repository. They are not required for the application
 to run, but if they are not present, you will likely receive an error that they
 do not exist when pressing F1 or attempting to access help through the menu.
 
-If you used ```git clone``` to obtain the Embroidermodder source,
+If you used `git clone` to obtain the Embroidermodder source,
 you need to run these commands from the toplevel of
 the working tree(which is the Embroidermodder directory):
 
@@ -108,12 +115,14 @@ Install/Uninstall
 - Linux:
 To install, open a terminal in the
 project-files/qmake subfolder and type:
+
 ```
 sudo make install
 ```
 
 To uninstall, open a terminal in the
 project-files/qmake subfolder and type:
+
 ```
 sudo make uninstall
 ```

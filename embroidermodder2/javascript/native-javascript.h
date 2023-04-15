@@ -1,7 +1,7 @@
 #ifndef NATIVE_JAVASCRIPT_H
 #define NATIVE_JAVASCRIPT_H
 
-#include <QtScript>
+//#include <QtScript>
 #include "native-scripting.h"
 
 QScriptValue javaDebug                  (QScriptContext* context, QScriptEngine* engine);

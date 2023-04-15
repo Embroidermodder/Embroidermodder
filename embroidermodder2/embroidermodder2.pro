@@ -20,7 +20,7 @@ ICON = embroidermodder2.icns
 TARGET = embroidermodder2
 
 QT += opengl
-QT += script scripttools
+#QT += script scripttools
 
 #Qt5
 greaterThan(QT_MAJOR_VERSION, 4) {
@@ -139,15 +139,15 @@ object-textsingle.h \
     application.h
 
 #SCRIPTING
-SOURCES += \
-native-scripting.cpp \
-javascript/native-javascript.cpp \
-javascript/native-javascript-init.cpp \
-javascript/native-javascript-include.cpp \
+#SOURCES += \
+#native-scripting.cpp \
+#javascript/native-javascript.cpp \
+#javascript/native-javascript-init.cpp \
+#javascript/native-javascript-include.cpp \
 
-HEADERS += \
-native-scripting.h \
-javascript/native-javascript.h \
+#HEADERS += \
+#native-scripting.h \
+#javascript/native-javascript.h \
 
 include( ../libembroidery/libembroidery.pri )
 

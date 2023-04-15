@@ -39,7 +39,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     setAttribute(Qt::WA_DeleteOnClose);
 
     QString aName;
-    curFile = aName.sprintf("Untitled%d.dst", myIndex);
+    curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
     this->setWindowIcon(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
