@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Embroidermodder: embroidermodder2/extern/libembroidery/src/geometry/arc.c Source File</title>
+<title>Embroidermodder: extern/libembroidery/src/geometry/arc.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -319,7 +319,7 @@ $(document).ready(function(){initNavTree('arc_8c_source.html',''); initResizable
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    <span class="comment">//TODO: ArcObject setEndAngle</span></div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>}</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="arc_8c.html#a2059982ba0eb7e3bfc6f012ed7a6ed83">  218</a></span><span class="keywordtype">float</span> <a class="code hl_function" href="arc_8c.html#a2059982ba0eb7e3bfc6f012ed7a6ed83">embArc_startAngle</a>(<a class="code hl_struct" href="struct_emb_arc__.html">EmbArc</a> arc)</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="src_2main_8c.html#a2059982ba0eb7e3bfc6f012ed7a6ed83">  218</a></span><span class="keywordtype">float</span> <a class="code hl_function" href="arc_8c.html#a2059982ba0eb7e3bfc6f012ed7a6ed83">embArc_startAngle</a>(<a class="code hl_struct" href="struct_emb_arc__.html">EmbArc</a> arc)</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>{</div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    <a class="code hl_struct" href="struct_emb_vector__.html">EmbVector</a> delta;</div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <a class="code hl_struct" href="struct_emb_vector__.html">EmbVector</a> center;</div>
@@ -329,7 +329,7 @@ $(document).ready(function(){initNavTree('arc_8c_source.html',''); initResizable
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <span class="keywordflow">return</span> fmodf(angle, 360.0);</div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>}</div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno"><a class="line" href="arc_8c.html#acbf43fb19d520e458fc01d40fd819d7d">  228</a></span><span class="keywordtype">float</span> <a class="code hl_function" href="arc_8c.html#acbf43fb19d520e458fc01d40fd819d7d">embArc_endAngle</a>(<a class="code hl_struct" href="struct_emb_arc__.html">EmbArc</a> arc)</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno"><a class="line" href="src_2main_8c.html#acbf43fb19d520e458fc01d40fd819d7d">  228</a></span><span class="keywordtype">float</span> <a class="code hl_function" href="arc_8c.html#acbf43fb19d520e458fc01d40fd819d7d">embArc_endAngle</a>(<a class="code hl_struct" href="struct_emb_arc__.html">EmbArc</a> arc)</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>{</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <a class="code hl_struct" href="struct_emb_vector__.html">EmbVector</a> delta;</div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    <a class="code hl_struct" href="struct_emb_vector__.html">EmbVector</a> center;</div>
@@ -2899,9 +2899,9 @@ $(document).ready(function(){initNavTree('arc_8c_source.html',''); initResizable
 <div class="ttc" id="aarc_8c_html_aece09cb192df4b0512854f12cbcdfa10"><div class="ttname"><a href="arc_8c.html#aece09cb192df4b0512854f12cbcdfa10">embArc_updateRubber</a></div><div class="ttdeci">void embArc_updateRubber(EmbArc arc, int pattern, int layer, int index)</div><div class="ttdef"><b>Definition:</b> <a href="arc_8c_source.html#l00348">arc.c:348</a></div></div>
 <div class="ttc" id="aarc_8c_html_afaf32859f3047f1986880027b6f2e562"><div class="ttname"><a href="arc_8c.html#afaf32859f3047f1986880027b6f2e562">embArc_setStartAngle</a></div><div class="ttdeci">void embArc_setStartAngle(EmbArc *arc, float angle)</div><div class="ttdef"><b>Definition:</b> <a href="arc_8c_source.html#l00206">arc.c:206</a></div></div>
 <div class="ttc" id="aembroidery_8h_html_a04639683e8ca6259a875aea58c397a17"><div class="ttname"><a href="embroidery_8h.html#a04639683e8ca6259a875aea58c397a17">embVector_angle</a></div><div class="ttdeci">EMB_PUBLIC EmbReal embVector_angle(EmbVector v)</div><div class="ttdef"><b>Definition:</b> <a href="vector_8c_source.html#l00211">vector.c:211</a></div></div>
-<div class="ttc" id="aembroidery_8h_html_a052bcc45c7207b189a9fe6925ec76c99"><div class="ttname"><a href="embroidery_8h.html#a052bcc45c7207b189a9fe6925ec76c99">embConstantPi</a></div><div class="ttdeci">const EmbReal embConstantPi</div><div class="ttdef"><b>Definition:</b> <a href="main_8c_source.html#l00060">main.c:60</a></div></div>
+<div class="ttc" id="aembroidery_8h_html_a052bcc45c7207b189a9fe6925ec76c99"><div class="ttname"><a href="embroidery_8h.html#a052bcc45c7207b189a9fe6925ec76c99">embConstantPi</a></div><div class="ttdeci">const EmbReal embConstantPi</div><div class="ttdef"><b>Definition:</b> <a href="extern_2libembroidery_2src_2main_8c_source.html#l00060">main.c:60</a></div></div>
 <div class="ttc" id="aembroidery_8h_html_a0e589a7b4fd30698b359cd3e597fb0ec"><div class="ttname"><a href="embroidery_8h.html#a0e589a7b4fd30698b359cd3e597fb0ec">radians</a></div><div class="ttdeci">EMB_PUBLIC EmbReal radians(EmbReal degree)</div><div class="ttdef"><b>Definition:</b> <a href="functions_8c_source.html#l00028">functions.c:28</a></div></div>
-<div class="ttc" id="aembroidery_8h_html_a1a622bb87a39f0338527347ee6ba1402"><div class="ttname"><a href="embroidery_8h.html#a1a622bb87a39f0338527347ee6ba1402">emb_error</a></div><div class="ttdeci">int emb_error</div><div class="ttdoc">Error code storage for optional control flow blocking.</div><div class="ttdef"><b>Definition:</b> <a href="main_8c_source.html#l00058">main.c:58</a></div></div>
+<div class="ttc" id="aembroidery_8h_html_a1a622bb87a39f0338527347ee6ba1402"><div class="ttname"><a href="embroidery_8h.html#a1a622bb87a39f0338527347ee6ba1402">emb_error</a></div><div class="ttdeci">int emb_error</div><div class="ttdoc">Error code storage for optional control flow blocking.</div><div class="ttdef"><b>Definition:</b> <a href="extern_2libembroidery_2src_2main_8c_source.html#l00058">main.c:58</a></div></div>
 <div class="ttc" id="aembroidery_8h_html_a2082be9aabfb541dff1825c4ca6a05cd"><div class="ttname"><a href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a></div><div class="ttdeci">float EmbReal</div><div class="ttdef"><b>Definition:</b> <a href="embroidery_8h_source.html#l00185">embroidery.h:185</a></div></div>
 <div class="ttc" id="aembroidery_8h_html_a38503615e02e56b3004cc02664e1e62d"><div class="ttname"><a href="embroidery_8h.html#a38503615e02e56b3004cc02664e1e62d">embVector_subtract</a></div><div class="ttdeci">EMB_PUBLIC EmbVector embVector_subtract(EmbVector v1, EmbVector v2)</div><div class="ttdef"><b>Definition:</b> <a href="vector_8c_source.html#l00105">vector.c:105</a></div></div>
 <div class="ttc" id="aembroidery_8h_html_a6efd27ecee68d6b66d1abae0d90925a7"><div class="ttname"><a href="embroidery_8h.html#a6efd27ecee68d6b66d1abae0d90925a7">embVector_add</a></div><div class="ttdeci">EMB_PUBLIC EmbVector embVector_add(EmbVector v1, EmbVector v2)</div><div class="ttdef"><b>Definition:</b> <a href="vector_8c_source.html#l00067">vector.c:67</a></div></div>
@@ -2933,7 +2933,7 @@ $(document).ready(function(){initNavTree('arc_8c_source.html',''); initResizable
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_14b8d3c8a029a2dddea7631dedf084d1.html">embroidermodder2</a></li><li class="navelem"><a class="el" href="dir_5ebc0d6bffec16411e8302ebc360c8e7.html">extern</a></li><li class="navelem"><a class="el" href="dir_17f61c207046f9493402ba671f3f1d16.html">libembroidery</a></li><li class="navelem"><a class="el" href="dir_a3caa16e85c47264fe5680a2b3b9d581.html">src</a></li><li class="navelem"><a class="el" href="dir_d8eb0f89760ef801623fc52dde25071a.html">geometry</a></li><li class="navelem"><a class="el" href="arc_8c.html">arc.c</a></li>
+    <li class="navelem"><a class="el" href="dir_dc9e1e299a0b26f222fe6c0a872463f0.html">extern</a></li><li class="navelem"><a class="el" href="dir_6a8aa8af2875e58e82a0145491f7a8e2.html">libembroidery</a></li><li class="navelem"><a class="el" href="dir_50a7dc5dba8160ac8332d90912e622db.html">src</a></li><li class="navelem"><a class="el" href="dir_d5dfb2055b0c9abc7442cd9e132844b4.html">geometry</a></li><li class="navelem"><a class="el" href="arc_8c.html">arc.c</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
   </ul>
 </div>

@@ -1,5 +1,5 @@
 \hypertarget{geometry_8c_source}{}\doxysubsection{geometry.\+c}
-\label{geometry_8c_source}\index{embroidermodder2/extern/libembroidery/src/geometry.c@{embroidermodder2/extern/libembroidery/src/geometry.c}}
+\label{geometry_8c_source}\index{extern/libembroidery/src/geometry.c@{extern/libembroidery/src/geometry.c}}
 \mbox{\hyperlink{geometry_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -39,7 +39,7 @@
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00041}00041\ }
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00042}00042\ \ \ \ \ \textcolor{keywordflow}{switch}\ (obj-\/>\mbox{\hyperlink{struct_emb_geometry___ac765329451135abec74c45e1897abf26}{type}})\ \{}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00043}00043\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a121b752016999703e9ec106a3839d5dc}{EMB\_ARC}}:\ \{}
-\DoxyCodeLine{\Hypertarget{geometry_8c_source_l00044}00044\ \ \ \ \ \ \ \ \ obj-\/>\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a643b1c49b6a47115b01c80af29914520}{arc}}\ =\ \mbox{\hyperlink{embroidery_8h_a9b68f2e53b9683d777bf82aef736741a}{embArc\_init}}();}
+\DoxyCodeLine{\Hypertarget{geometry_8c_source_l00044}00044\ \ \ \ \ \ \ \ \ obj-\/>\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a643b1c49b6a47115b01c80af29914520}{arc}}\ =\ \mbox{\hyperlink{embroidery_8h_a9b68f2e53b9683d777bf82aef736741a}{embArc\_init}}();}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*}}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00046}00046\ \textcolor{comment}{\ \ \ \ \ \ \ \ embArc\_init(EmbArc\ arc\_in,\ unsigned\ int\ rgb,\ int\ lineType)}}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00047}00047\ \textcolor{comment}{\ \ \ \ \ \ \ \ arc\ =\ arc\_in;}}
@@ -82,14 +82,14 @@
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00095}00095\ \{}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00096}00096\ \ \ \ \ \textcolor{keywordflow}{switch}\ (obj-\/>\mbox{\hyperlink{struct_emb_geometry___ac765329451135abec74c45e1897abf26}{type}})\ \{}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00097}00097\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a121b752016999703e9ec106a3839d5dc}{EMB\_ARC}}:\ \{}
-\DoxyCodeLine{\Hypertarget{geometry_8c_source_l00098}00098\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc\ =\ \&(obj-\/>\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a643b1c49b6a47115b01c80af29914520}{arc}});}
+\DoxyCodeLine{\Hypertarget{geometry_8c_source_l00098}00098\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc\ =\ \&(obj-\/>\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a643b1c49b6a47115b01c80af29914520}{arc}});}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00099}00099\ \ \ \ \ \ \ \ \ arc-\/>\mbox{\hyperlink{struct_emb_arc___ad61a9cd980182f7b946d1a38aaee8562}{start}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(arc-\/>\mbox{\hyperlink{struct_emb_arc___ad61a9cd980182f7b946d1a38aaee8562}{start}},\ delta);}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00100}00100\ \ \ \ \ \ \ \ \ arc-\/>\mbox{\hyperlink{struct_emb_arc___ae22a3dbe0e89a2ee0b0934a8799c8f14}{mid}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(arc-\/>\mbox{\hyperlink{struct_emb_arc___ae22a3dbe0e89a2ee0b0934a8799c8f14}{mid}},\ delta);}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00101}00101\ \ \ \ \ \ \ \ \ arc-\/>\mbox{\hyperlink{struct_emb_arc___ac19242fe9e53942be61574685fbd49ed}{end}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(arc-\/>\mbox{\hyperlink{struct_emb_arc___ac19242fe9e53942be61574685fbd49ed}{end}},\ delta);}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00102}00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00103}00103\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00104}00104\ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a360a30eda3be6c003bc6aff56be7be37}{EMB\_CIRCLE}}:\ \{}
-\DoxyCodeLine{\Hypertarget{geometry_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ *circle\ =\ \&(obj-\/>\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a266384774724ffa486e4512821606c8b}{circle}});}
+\DoxyCodeLine{\Hypertarget{geometry_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ *circle\ =\ \&(obj-\/>\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a266384774724ffa486e4512821606c8b}{circle}});}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00106}00106\ \ \ \ \ \ \ \ \ circle-\/>\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(circle-\/>\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}},\ delta);}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
 \DoxyCodeLine{\Hypertarget{geometry_8c_source_l00108}00108\ \ \ \ \ \}}

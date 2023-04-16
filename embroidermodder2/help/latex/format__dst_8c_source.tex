@@ -1,5 +1,5 @@
 \hypertarget{format__dst_8c_source}{}\doxysubsection{format\+\_\+dst.\+c}
-\label{format__dst_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_dst.c@{embroidermodder2/extern/libembroidery/src/formats/format\_dst.c}}
+\label{format__dst_8c_source}\index{extern/libembroidery/src/formats/format\_dst.c@{extern/libembroidery/src/formats/format\_dst.c}}
 \mbox{\hyperlink{format__dst_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -241,7 +241,7 @@
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00237}00237\ \ \ \ \ \textcolor{keywordtype}{char}\ val[512];\ \textcolor{comment}{/*\ temporary\ storage\ variable\ value\ */}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00238}00238\ \ \ \ \ \textcolor{keywordtype}{int}\ valpos;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00239}00239\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ b[3];}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00240}00240\ \ \ \ \ \textcolor{keywordtype}{char}\ header[512\ +\ 1];}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00240}00240\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[512\ +\ 1];}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00241}00241\ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0,\ flags;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00242}00242\ }
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00243}00243\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ review\ commented\ code\ below}}
@@ -249,26 +249,26 @@
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00245}00245\ \textcolor{comment}{\ \ \ \ pattern-\/>set\_variable("{}file\_name"{},filename);}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00246}00246\ \textcolor{comment}{\ \ \ \ */}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00247}00247\ }
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00248}00248\ \ \ \ \ fread(header,\ 1,\ 512,\ file);}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00248}00248\ \ \ \ \ fread(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}},\ 1,\ 512,\ file);}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00249}00249\ }
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00250}00250\ \ \ \ \ \textcolor{comment}{/*TODO:It\ would\ probably\ be\ a\ good\ idea\ to\ }}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00251}00251\ \textcolor{comment}{\ \ \ \ \ \ \ \ validate\ file\ before\ accepting\ it.\ */}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00252}00252\ \ \ \ \ \textcolor{comment}{/*\ fill\ variables\ from\ header\ fields\ */}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00253}00253\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ 512;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00254}00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (header[i]\ ==\ \textcolor{charliteral}{':'}\ \&\&\ i\ >\ 1)\ \{}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ var[0]\ =\ header[i\ -\/\ 2];}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ var[1]\ =\ header[i\ -\/\ 1];}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00254}00254\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[i]\ ==\ \textcolor{charliteral}{':'}\ \&\&\ i\ >\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00255}00255\ \ \ \ \ \ \ \ \ \ \ \ \ var[0]\ =\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[i\ -\/\ 2];}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ var[1]\ =\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[i\ -\/\ 1];}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ var[2]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ valpos\ =\ i\ +\ 1;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00259}00259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i++;\ i\ <\ 512;\ i++)}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00260}00260\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00261}00261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ don't\ accept\ :\ without\ CR\ because\ there's\ a\ bug\ below:\ i-\/valpos\ must\ be\ >\ 0\ which\ is\ not\ the\ case\ if\ the\ :\ is\ before\ the\ third\ character.\ */}}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (header[i]\ ==\ 13\textcolor{comment}{/*||header[i]==':'*/})\ \{\ \textcolor{comment}{/*\ 0x0d\ =\ carriage\ return\ */}}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[i]\ ==\ 13\textcolor{comment}{/*||header[i]==':'*/})\ \{\ \textcolor{comment}{/*\ 0x0d\ =\ carriage\ return\ */}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ :\ indicates\ another\ variable,\ CR\ was\ missing!\ */}}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (header[i]\ ==\ \textcolor{charliteral}{':'})\ \{}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[i]\ ==\ \textcolor{charliteral}{':'})\ \{}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00265}00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i\ -\/=\ 2;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00266}00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strncpy(val,\ \&header[valpos],\ (\textcolor{keywordtype}{size\_t})(i\ -\/\ valpos));}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00267}00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ strncpy(val,\ \&\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[valpos],\ (\textcolor{keywordtype}{size\_t})(i\ -\/\ valpos));}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val[i\ -\/\ valpos]\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__dst_8c_aaa10e861e196d8f74ea00f21a4277e83}{set\_dst\_variable}}(pattern,\ var,\ val);}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
@@ -293,7 +293,7 @@
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00289}00289\ }
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00290}00290\ \textcolor{keywordtype}{char}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00291}\mbox{\hyperlink{embroidery__internal_8h_a5b971603eb8cc707cfd0167659fd8aab}{00291}}\ \mbox{\hyperlink{format__dst_8c_a5b971603eb8cc707cfd0167659fd8aab}{writeDst}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)\ \{}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00292}00292\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ boundingRect;}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00292}00292\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}};}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00293}00293\ \ \ \ \ \textcolor{keywordtype}{int}\ i,\ ax,\ ay,\ mx,\ my;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00294}00294\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ pos;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00295}00295\ \ \ \ \ \textcolor{keywordtype}{char}\ pd[10];}
@@ -302,7 +302,7 @@
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00298}00298\ }
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00299}00299\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ make\ sure\ that\ pattern-\/>thread\_list-\/>count}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00300}00300\ \textcolor{comment}{\ \ \ \ \ *\ defaults\ to\ 1\ in\ new\ patterns\ */}}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00301}00301\ \ \ \ \ boundingRect\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00301}00301\ \ \ \ \ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00302}00302\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ review\ the\ code\ below}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00303}00303\ \textcolor{comment}{\ \ \ \ if\ (pattern-\/>get\_variable("{}design\_name"{})\ !=\ NULL)\ \{}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00304}00304\ \textcolor{comment}{\ \ \ \ \ \ \ \ char\ *la\ =\ stralloccopy(pattern-\/>get\_variable("{}design\_name"{}));}}
@@ -321,10 +321,10 @@
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00317}00317\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}-\/X:\%5d\(\backslash\)x0d"{}}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00318}00318\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}+Y:\%5d\(\backslash\)x0d"{}}}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00319}00319\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}-\/Y:\%5d\(\backslash\)x0d"{}},}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00320}00320\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(boundingRect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *\ 10.0),}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00321}00321\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(fabs(boundingRect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}})\ *\ 10.0),}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00322}00322\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(boundingRect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *\ 10.0),}
-\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00323}00323\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(fabs(boundingRect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}})\ *\ 10.0));}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00320}00320\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *\ 10.0),}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00321}00321\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(fabs(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}})\ *\ 10.0),}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00322}00322\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *\ 10.0),}
+\DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00323}00323\ \ \ \ \ \ \ \ \ (\textcolor{keywordtype}{int})(fabs(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}})\ *\ 10.0));}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00324}00324\ }
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00325}00325\ \ \ \ \ ax\ =\ ay\ =\ mx\ =\ my\ =\ 0;}
 \DoxyCodeLine{\Hypertarget{format__dst_8c_source_l00326}00326\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ review\ the\ code\ below\ */}}

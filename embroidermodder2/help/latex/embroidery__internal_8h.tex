@@ -1,5 +1,5 @@
-\hypertarget{embroidery__internal_8h}{}\doxysubsection{embroidermodder2/extern/libembroidery/src/embroidery\+\_\+internal.h File Reference}
-\label{embroidery__internal_8h}\index{embroidermodder2/extern/libembroidery/src/embroidery\_internal.h@{embroidermodder2/extern/libembroidery/src/embroidery\_internal.h}}
+\hypertarget{embroidery__internal_8h}{}\doxysubsection{extern/libembroidery/src/embroidery\+\_\+internal.h File Reference}
+\label{embroidery__internal_8h}\index{extern/libembroidery/src/embroidery\_internal.h@{extern/libembroidery/src/embroidery\_internal.h}}
 {\ttfamily \#include \char`\"{}embroidery.\+h\char`\"{}}\newline
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
 \doxysubsubsection*{Data Structures}
@@ -462,25 +462,11 @@ unsigned short \mbox{\hyperlink{embroidery__internal_8h_ac97a207bfe58bd024305af6
 \item 
 short \mbox{\hyperlink{embroidery__internal_8h_a15c50a3a26d0d120fe31f54313984185}{fread\+\_\+int16}} (FILE $\ast$f)
 \item 
-int \mbox{\hyperlink{embroidery__internal_8h_a05fb50e7292226bc2947dd2b4da7a9bd}{fread\+\_\+int32\+\_\+be}} (FILE $\ast$f)
-\item 
 void \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\+\_\+free}} (void $\ast$data)
-\item 
-void \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binary\+Write\+UInt\+BE}} (FILE $\ast$f, unsigned int data)
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binary\+Write\+UInt}} (FILE $\ast$f, unsigned int data)
 \item 
-void \mbox{\hyperlink{embroidery__internal_8h_ad608ccee7fa2036aeba8500061ea0824}{binary\+Write\+Int\+BE}} (FILE $\ast$f, int data)
-\item 
-void \mbox{\hyperlink{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}{binary\+Write\+Int}} (FILE $\ast$f, int data)
-\item 
-void \mbox{\hyperlink{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}{binary\+Write\+UShort}} (FILE $\ast$f, unsigned short data)
-\item 
-void \mbox{\hyperlink{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binary\+Write\+UShort\+BE}} (FILE $\ast$f, unsigned short data)
-\item 
-void \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binary\+Write\+Short}} (FILE $\ast$f, short data)
-\item 
-\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a8277b359861dbbfe6c3244f28c894632}{bcf\+\_\+difat\+\_\+create}} (FILE $\ast$file, unsigned int fat\+Sectors, const unsigned int \mbox{\hyperlink{main_8c_a5da0013e5c2fb1d49c92d85fd8028109}{sector\+Size}})
+\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a8277b359861dbbfe6c3244f28c894632}{bcf\+\_\+difat\+\_\+create}} (FILE $\ast$file, unsigned int fat\+Sectors, const unsigned int \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_a5da0013e5c2fb1d49c92d85fd8028109}{sector\+Size}})
 \item 
 unsigned int \mbox{\hyperlink{embroidery__internal_8h_acc7b07d624b22e55803b750ab5ba4f7b}{read\+Full\+Sector}} (FILE $\ast$file, \mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$bcf\+File, unsigned int $\ast$number\+Of\+Difat\+Entries\+Still\+To\+Read)
 \item 
@@ -490,7 +476,7 @@ void \mbox{\hyperlink{embroidery__internal_8h_aeecbd20f351d4a81983306492a44189a}
 \item 
 unsigned int \mbox{\hyperlink{embroidery__internal_8h_a5462a9cf780abd252021ca031a1f59af}{entries\+In\+Difat\+Sector}} (\mbox{\hyperlink{embroidery__internal_8h_a04a761d12d7ad0f1f0c7566dda49f354}{bcf\+\_\+file\+\_\+difat}} $\ast$fat)
 \item 
-\mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a4e7377ff59e275ae4dc1d80ede4837e9}{bcf\+File\+Fat\+\_\+create}} (const unsigned int \mbox{\hyperlink{main_8c_a5da0013e5c2fb1d49c92d85fd8028109}{sector\+Size}})
+\mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$ \mbox{\hyperlink{embroidery__internal_8h_a4e7377ff59e275ae4dc1d80ede4837e9}{bcf\+File\+Fat\+\_\+create}} (const unsigned int \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_a5da0013e5c2fb1d49c92d85fd8028109}{sector\+Size}})
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_a71a5f4111bd3daa574148e2f45d4c893}{load\+Fat\+From\+Sector}} (\mbox{\hyperlink{embroidery__internal_8h_a9a00b74e77254af1f7af14c6e12007d7}{bcf\+\_\+file\+\_\+fat}} $\ast$fat, FILE $\ast$file)
 \item 
@@ -506,7 +492,7 @@ void \mbox{\hyperlink{embroidery__internal_8h_a994645555ce8f1021b9efc280bffd6a9}
 \item 
 \mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} \mbox{\hyperlink{embroidery__internal_8h_a6faf1e4138b3dba5948cb6da199babce}{bcf\+File\+Header\+\_\+read}} (FILE $\ast$file)
 \item 
-int \mbox{\hyperlink{embroidery__internal_8h_a881951514705cf56858b42c3f67c7243}{bcf\+File\+Header\+\_\+is\+Valid}} (\mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} header)
+int \mbox{\hyperlink{embroidery__internal_8h_a881951514705cf56858b42c3f67c7243}{bcf\+File\+Header\+\_\+is\+Valid}} (\mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}} \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}})
 \item 
 int \mbox{\hyperlink{embroidery__internal_8h_acc6ad43e9cf396ef9fc41b57a2cab32f}{hus\+\_\+compress}} (char $\ast$input, int size, char $\ast$output, int $\ast$out\+\_\+size)
 \item 
@@ -514,7 +500,7 @@ int \mbox{\hyperlink{embroidery__internal_8h_a5347d0ea95cdde07f817a4388f5c0ef9}{
 \item 
 void \mbox{\hyperlink{embroidery__internal_8h_ad6ffc62e3f475d1b71758d4f35683b0e}{test\+Tangent\+Points}} (\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} c, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} p, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$t0, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$t1)
 \item 
-void \mbox{\hyperlink{embroidery__internal_8h_a7dbe0a9236a451fb553372113d247e97}{print\+Arc\+Results}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bulge, \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radius, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} diameter, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} chord, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} chord\+MidX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} chord\+MidY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} sagitta, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} apothem, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} inc\+Angle, char \mbox{\hyperlink{arc_8c_aa06996ece460f2c55c48322923c14625}{clockwise}})
+void \mbox{\hyperlink{embroidery__internal_8h_a7dbe0a9236a451fb553372113d247e97}{print\+Arc\+Results}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bulge, \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radius, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} diameter, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} chord, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} chord\+MidX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} chord\+MidY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} sagitta, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} apothem, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} inc\+Angle, char \mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
 \item 
 int \mbox{\hyperlink{embroidery__internal_8h_a2e49bf0deb2392bc15e5545a03b71bd3}{create\+\_\+test\+\_\+file\+\_\+1}} (const char $\ast$outf)
 \item 
@@ -2142,7 +2128,7 @@ Definition at line \mbox{\hyperlink{embroidery__internal_8h_source_l00084}{84}} 
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct__bcf__directory}{\+\_\+bcf\+\_\+directory}} \mbox{\hyperlink{embroidery__internal_8h_a5e0de54ec0ef10b88a4e499bbe94f869}{bcf\+\_\+directory}}}
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000008}{Todo}}]possibly add a directory tree in the future. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000401}{Todo}}]possibly add a directory tree in the future. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_abb451c97faf6366fb733ff7b29054c19}\label{embroidery__internal_8h_abb451c97faf6366fb733ff7b29054c19}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcf\_directory\_entry@{bcf\_directory\_entry}}
 \index{bcf\_directory\_entry@{bcf\_directory\_entry}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2174,7 +2160,7 @@ Definition at line \mbox{\hyperlink{embroidery__internal_8h_source_l00084}{84}} 
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct__bcf__file__header}{\+\_\+bcf\+\_\+file\+\_\+header}} \mbox{\hyperlink{embroidery__internal_8h_a5226ee18f1045aa203f53da9b74d6963}{bcf\+\_\+file\+\_\+header}}}
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000009}{Todo}}]CLSID should be a separate type. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000402}{Todo}}]CLSID should be a separate type. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}\label{embroidery__internal_8h_a0a1ded23c1c333067bcfb59d5b83ce2a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress@{compress}}
 \index{compress@{compress}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -2315,7 +2301,7 @@ bcf\+\_\+file\+\_\+difat$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00363}{363}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00363}{363}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a994645555ce8f1021b9efc280bffd6a9}\label{embroidery__internal_8h_a994645555ce8f1021b9efc280bffd6a9}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcf\_directory\_free@{bcf\_directory\_free}}
@@ -2330,7 +2316,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00363}{363}} of file \mbox{\
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00584}{584}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00584}{584}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_aeecbd20f351d4a81983306492a44189a}\label{embroidery__internal_8h_aeecbd20f351d4a81983306492a44189a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcf\_file\_difat\_free@{bcf\_file\_difat\_free}}
@@ -2357,7 +2343,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00584}{584}} of file \mbox{\
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00346}{346}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00346}{346}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a4acd18062065ffbee8f6cd9b00965cc2}\label{embroidery__internal_8h_a4acd18062065ffbee8f6cd9b00965cc2}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcfFile\_read@{bcfFile\_read}}
@@ -2377,7 +2363,7 @@ int
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00262}{262}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00262}{262}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a4e7377ff59e275ae4dc1d80ede4837e9}\label{embroidery__internal_8h_a4e7377ff59e275ae4dc1d80ede4837e9}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcfFileFat\_create@{bcfFileFat\_create}}
@@ -2395,7 +2381,7 @@ bcf\+\_\+file\+\_\+fat$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00609}{609}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00609}{609}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a881951514705cf56858b42c3f67c7243}\label{embroidery__internal_8h_a881951514705cf56858b42c3f67c7243}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!bcfFileHeader\_isValid@{bcfFileHeader\_isValid}}
@@ -2419,7 +2405,7 @@ bcf\+\_\+file\+\_\+header
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00649}{649}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00649}{649}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a0312900273cfed05bf6d7ed748940cdb}\label{embroidery__internal_8h_a0312900273cfed05bf6d7ed748940cdb}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryReadString@{binaryReadString}}
@@ -2438,7 +2424,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00649}{649}} of file \mbox{\
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00976}{976}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00976}{976}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a33105f462fbb9892aebb284f35606c57}\label{embroidery__internal_8h_a33105f462fbb9892aebb284f35606c57}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryReadUnicodeString@{binaryReadUnicodeString}}
@@ -2457,64 +2443,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00976}{976}} of file \mbox{\
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00994}{994}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
-
-\mbox{\Hypertarget{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}\label{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteInt@{binaryWriteInt}}
-\index{binaryWriteInt@{binaryWriteInt}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{binaryWriteInt()}{binaryWriteInt()}}
-{\footnotesize\ttfamily void binary\+Write\+Int (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{int}]{data }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000024}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00318}{318}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
-\mbox{\Hypertarget{embroidery__internal_8h_ad608ccee7fa2036aeba8500061ea0824}\label{embroidery__internal_8h_ad608ccee7fa2036aeba8500061ea0824}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteIntBE@{binaryWriteIntBE}}
-\index{binaryWriteIntBE@{binaryWriteIntBE}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{binaryWriteIntBE()}{binaryWriteIntBE()}}
-{\footnotesize\ttfamily void binary\+Write\+Int\+BE (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{int}]{data }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000025}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00332}{332}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
-\mbox{\Hypertarget{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}\label{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteShort@{binaryWriteShort}}
-\index{binaryWriteShort@{binaryWriteShort}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{binaryWriteShort()}{binaryWriteShort()}}
-{\footnotesize\ttfamily void binary\+Write\+Short (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{short}]{data }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000021}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00276}{276}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00994}{994}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}\label{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUInt@{binaryWriteUInt}}
@@ -2530,67 +2459,10 @@ Definition at line \mbox{\hyperlink{formats_8c_source_l00276}{276}} of file \mbo
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000026}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000419}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{formats_8c_source_l00346}{346}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
-\mbox{\Hypertarget{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}\label{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUIntBE@{binaryWriteUIntBE}}
-\index{binaryWriteUIntBE@{binaryWriteUIntBE}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{binaryWriteUIntBE()}{binaryWriteUIntBE()}}
-{\footnotesize\ttfamily void binary\+Write\+UInt\+BE (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned int}]{data }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000027}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00360}{360}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
-\mbox{\Hypertarget{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}\label{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUShort@{binaryWriteUShort}}
-\index{binaryWriteUShort@{binaryWriteUShort}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{binaryWriteUShort()}{binaryWriteUShort()}}
-{\footnotesize\ttfamily void binary\+Write\+UShort (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned short}]{data }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000022}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00290}{290}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
-\mbox{\Hypertarget{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}\label{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!binaryWriteUShortBE@{binaryWriteUShortBE}}
-\index{binaryWriteUShortBE@{binaryWriteUShortBE}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{binaryWriteUShortBE()}{binaryWriteUShortBE()}}
-{\footnotesize\ttfamily void binary\+Write\+UShort\+BE (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f,  }\item[{unsigned short}]{data }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-{\em data} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000023}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00304}{304}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}\label{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!check\_header\_present@{check\_header\_present}}
@@ -2612,7 +2484,7 @@ Checks that there are enough bytes to interpret the header, stops possible segfa
 
 Returns 0 if there aren\textquotesingle{}t enough, or the length of the file if there are. 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00182}{182}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00182}{182}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a66c717936143bb39229e9c5880dacaa1}\label{embroidery__internal_8h_a66c717936143bb39229e9c5880dacaa1}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!CompoundFileDirectory@{CompoundFileDirectory}}
@@ -2630,7 +2502,7 @@ bcf\+\_\+directory$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00473}{473}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00473}{473}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a3b7a815d54672417e902a05a3d7f7b3f}\label{embroidery__internal_8h_a3b7a815d54672417e902a05a3d7f7b3f}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!CompoundFileDirectoryEntry@{CompoundFileDirectoryEntry}}
@@ -2648,7 +2520,7 @@ bcf\+\_\+directory\+\_\+entry$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00515}{515}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00515}{515}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_aed62fb2531905dbb3a075afb3912c50e}\label{embroidery__internal_8h_aed62fb2531905dbb3a075afb3912c50e}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!compress\_get\_bits@{compress\_get\_bits}}
@@ -2819,10 +2691,10 @@ Definition at line \mbox{\hyperlink{compress_8c_source_l00204}{204}} of file \mb
 char$\ast$
 \end{DoxyReturn}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000030}{Todo}}]decription \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000423}{Todo}}]decription \end{DoxyRefDesc}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l01091}{1091}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01091}{1091}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a2e49bf0deb2392bc15e5545a03b71bd3}\label{embroidery__internal_8h_a2e49bf0deb2392bc15e5545a03b71bd3}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!create\_test\_file\_1@{create\_test\_file\_1}}
@@ -2925,7 +2797,7 @@ char$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l01114}{1114}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01114}{1114}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a7859b94e89cd2848d4116c7e8d662a14}\label{embroidery__internal_8h_a7859b94e89cd2848d4116c7e8d662a14}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!emb\_readline@{emb\_readline}}
@@ -2947,7 +2819,7 @@ int
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l01034}{1034}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01034}{1034}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a7f539183b901a4c1d25adcb71c6fbdc9}\label{embroidery__internal_8h_a7f539183b901a4c1d25adcb71c6fbdc9}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!embColor\_read@{embColor\_read}}
@@ -2966,7 +2838,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l01034}{1034}} of file \mbox{
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00869}{869}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00869}{869}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}\label{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!embColor\_write@{embColor\_write}}
@@ -2985,7 +2857,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00869}{869}} of file \mbox{\
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00886}{886}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00886}{886}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}\label{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!embInt\_read@{embInt\_read}}
@@ -3090,7 +2962,7 @@ unsigned int
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00401}{401}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00401}{401}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a72e798e33c5912c4a540cc09d4dbed42}\label{embroidery__internal_8h_a72e798e33c5912c4a540cc09d4dbed42}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!fpad@{fpad}}
@@ -3128,26 +3000,6 @@ short
 
 Definition at line \mbox{\hyperlink{formats_8c_source_l00213}{213}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
 
-\mbox{\Hypertarget{embroidery__internal_8h_a05fb50e7292226bc2947dd2b4da7a9bd}\label{embroidery__internal_8h_a05fb50e7292226bc2947dd2b4da7a9bd}} 
-\index{embroidery\_internal.h@{embroidery\_internal.h}!fread\_int32\_be@{fread\_int32\_be}}
-\index{fread\_int32\_be@{fread\_int32\_be}!embroidery\_internal.h@{embroidery\_internal.h}}
-\doxyparagraph{\texorpdfstring{fread\_int32\_be()}{fread\_int32\_be()}}
-{\footnotesize\ttfamily int fread\+\_\+int32\+\_\+be (\begin{DoxyParamCaption}\item[{FILE $\ast$}]{f }\end{DoxyParamCaption})}
-
-
-\begin{DoxyParams}{Parameters}
-{\em f} & \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-int
-\end{DoxyReturn}
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000020}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00245}{245}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
 \mbox{\Hypertarget{embroidery__internal_8h_ac97a207bfe58bd024305af6bb7242f96}\label{embroidery__internal_8h_ac97a207bfe58bd024305af6bb7242f96}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!fread\_uint16@{fread\_uint16}}
 \index{fread\_uint16@{fread\_uint16}!embroidery\_internal.h@{embroidery\_internal.h}}
@@ -3163,7 +3015,7 @@ Definition at line \mbox{\hyperlink{formats_8c_source_l00245}{245}} of file \mbo
 unsigned short
 \end{DoxyReturn}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000019}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000412}{Todo}}]replace with emb\+Int\+\_\+read \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{formats_8c_source_l00229}{229}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
@@ -3192,7 +3044,7 @@ FILE$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00307}{307}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00307}{307}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a7e5d1d3488d7124ab020287e2606f89d}\label{embroidery__internal_8h_a7e5d1d3488d7124ab020287e2606f89d}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!huffman\_build\_table@{huffman\_build\_table}}
@@ -3300,7 +3152,7 @@ Definition at line \mbox{\hyperlink{compress_8c_source_l00373}{373}} of file \mb
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00629}{629}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00629}{629}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a896703c85b788f1c46053d826cdd3524}\label{embroidery__internal_8h_a896703c85b788f1c46053d826cdd3524}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!mitDecodeStitch@{mitDecodeStitch}}
@@ -3511,7 +3363,7 @@ Definition at line \mbox{\hyperlink{format__dem_8c_source_l00015}{15}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00112}{112}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00110}{110}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a4a33cd7c3d9250a7a32e6b6e5b835e36}\label{embroidery__internal_8h_a4a33cd7c3d9250a7a32e6b6e5b835e36}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readDsb@{readDsb}}
@@ -3611,7 +3463,7 @@ Definition at line \mbox{\hyperlink{format__eys_8c_source_l00015}{15}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00276}{276}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00274}{274}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_acc7b07d624b22e55803b750ab5ba4f7b}\label{embroidery__internal_8h_acc7b07d624b22e55803b750ab5ba4f7b}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readFullSector@{readFullSector}}
@@ -3633,7 +3485,7 @@ unsigned int
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00415}{415}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00415}{415}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a229e11039db6cd9c2a795bc7fdb53502}\label{embroidery__internal_8h_a229e11039db6cd9c2a795bc7fdb53502}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readFxy@{readFxy}}
@@ -3683,7 +3535,7 @@ Definition at line \mbox{\hyperlink{format__gt_8c_source_l00015}{15}} of file \m
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00220}{220}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00218}{218}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a32dc0f3a80d04bf5da7e43ab8a0a2e9a}\label{embroidery__internal_8h_a32dc0f3a80d04bf5da7e43ab8a0a2e9a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readHus@{readHus}}
@@ -3703,7 +3555,7 @@ Definition at line \mbox{\hyperlink{format__hus_8c_source_l00084}{84}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00235}{235}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00233}{233}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a5d18eaa45fe7be673bdc59b26c00b10f}\label{embroidery__internal_8h_a5d18eaa45fe7be673bdc59b26c00b10f}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readInb@{readInb}}
@@ -3773,7 +3625,7 @@ Definition at line \mbox{\hyperlink{format__mit_8c_source_l00015}{15}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00263}{263}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00261}{261}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ad8d1833c64f1fe7fc6a54cb062eeacfc}\label{embroidery__internal_8h_ad8d1833c64f1fe7fc6a54cb062eeacfc}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readNew@{readNew}}
@@ -3800,7 +3652,7 @@ Definition at line \mbox{\hyperlink{format__new_8c_source_l00015}{15}} of file \
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00557}{557}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00557}{557}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ac2fee81b7f6864d67c43ff860b505704}\label{embroidery__internal_8h_ac2fee81b7f6864d67c43ff860b505704}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readOfm@{readOfm}}
@@ -3900,7 +3752,7 @@ Definition at line \mbox{\hyperlink{format__pem_8c_source_l00019}{19}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00039}{39}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00037}{37}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_aa6678c8d94b8da627da1df79854c738c}\label{embroidery__internal_8h_aa6678c8d94b8da627da1df79854c738c}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPESHeaderV10@{readPESHeaderV10}}
@@ -3910,7 +3762,7 @@ Definition at line \mbox{\hyperlink{format__pes_8c_source_l00039}{39}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00206}{206}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00204}{204}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a80e9341e7b138005b46a14d192742d3e}\label{embroidery__internal_8h_a80e9341e7b138005b46a14d192742d3e}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPESHeaderV5@{readPESHeaderV5}}
@@ -3920,7 +3772,7 @@ Definition at line \mbox{\hyperlink{format__pes_8c_source_l00206}{206}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00142}{142}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00140}{140}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_aeb553d48f0a3b12d87f298d084b56253}\label{embroidery__internal_8h_aeb553d48f0a3b12d87f298d084b56253}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPESHeaderV6@{readPESHeaderV6}}
@@ -3930,7 +3782,7 @@ Definition at line \mbox{\hyperlink{format__pes_8c_source_l00142}{142}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00156}{156}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00154}{154}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a18d87163e82fb0fdca61ea4ebe3ab21a}\label{embroidery__internal_8h_a18d87163e82fb0fdca61ea4ebe3ab21a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPESHeaderV7@{readPESHeaderV7}}
@@ -3940,7 +3792,7 @@ Definition at line \mbox{\hyperlink{format__pes_8c_source_l00156}{156}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00168}{168}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00166}{166}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a02acda8d5a95508fa005c0d775ca42a0}\label{embroidery__internal_8h_a02acda8d5a95508fa005c0d775ca42a0}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPESHeaderV8@{readPESHeaderV8}}
@@ -3950,7 +3802,7 @@ Definition at line \mbox{\hyperlink{format__pes_8c_source_l00168}{168}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00180}{180}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00178}{178}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ac302af7f4bb37d91d46e586d66cdde61}\label{embroidery__internal_8h_ac302af7f4bb37d91d46e586d66cdde61}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPESHeaderV9@{readPESHeaderV9}}
@@ -3960,7 +3812,7 @@ Definition at line \mbox{\hyperlink{format__pes_8c_source_l00180}{180}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00192}{192}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00190}{190}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a1269ea24750ff4584b0cc750d47ccf5d}\label{embroidery__internal_8h_a1269ea24750ff4584b0cc750d47ccf5d}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readPhb@{readPhb}}
@@ -4000,7 +3852,7 @@ Definition at line \mbox{\hyperlink{format__plt_8c_source_l00019}{19}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00250}{250}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00248}{248}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a1ac7d582acd6765ee34baa8abb98e50a}\label{embroidery__internal_8h_a1ac7d582acd6765ee34baa8abb98e50a}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readRgb@{readRgb}}
@@ -4030,7 +3882,7 @@ Definition at line \mbox{\hyperlink{format__sew_8c_source_l00026}{26}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__shv_8c_source_l00033}{33}} of file \mbox{\hyperlink{format__shv_8c_source}{format\+\_\+shv.\+c}}.
+Definition at line \mbox{\hyperlink{format__shv_8c_source_l00032}{32}} of file \mbox{\hyperlink{format__shv_8c_source}{format\+\_\+shv.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a51f31b5c0906f4014e375af7162c2048}\label{embroidery__internal_8h_a51f31b5c0906f4014e375af7162c2048}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readSst@{readSst}}
@@ -4050,7 +3902,7 @@ Definition at line \mbox{\hyperlink{format__sst_8c_source_l00015}{15}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__stx_8c_source_l00114}{114}} of file \mbox{\hyperlink{format__stx_8c_source}{format\+\_\+stx.\+c}}.
+Definition at line \mbox{\hyperlink{format__stx_8c_source_l00112}{112}} of file \mbox{\hyperlink{format__stx_8c_source}{format\+\_\+stx.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a77e72b493a82e1f636b8b83bea0cb206}\label{embroidery__internal_8h_a77e72b493a82e1f636b8b83bea0cb206}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readSvg@{readSvg}}
@@ -4110,7 +3962,7 @@ Definition at line \mbox{\hyperlink{format__thr_8c_source_l00037}{37}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00289}{289}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00287}{287}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_adc792ed47afef51048abc51495c11e82}\label{embroidery__internal_8h_adc792ed47afef51048abc51495c11e82}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readTxt@{readTxt}}
@@ -4150,7 +4002,7 @@ Definition at line \mbox{\hyperlink{format__u01_8c_source_l00017}{17}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00080}{80}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
+Definition at line \mbox{\hyperlink{format__vip_8c_source_l00079}{79}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a3154fc5825c5901e6251116dcc1378a8}\label{embroidery__internal_8h_a3154fc5825c5901e6251116dcc1378a8}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readVp3@{readVp3}}
@@ -4160,7 +4012,7 @@ Definition at line \mbox{\hyperlink{format__vip_8c_source_l00080}{80}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__vp3_8c_source_l00112}{112}} of file \mbox{\hyperlink{format__vp3_8c_source}{format\+\_\+vp3.\+c}}.
+Definition at line \mbox{\hyperlink{format__vp3_8c_source_l00110}{110}} of file \mbox{\hyperlink{format__vp3_8c_source}{format\+\_\+vp3.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a7a9d723388ea7ecc28a214a964c5a4ce}\label{embroidery__internal_8h_a7a9d723388ea7ecc28a214a964c5a4ce}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!readXxx@{readXxx}}
@@ -4212,7 +4064,7 @@ The end of the array is marked by an empty string.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l01014}{1014}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01014}{1014}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ad26dd27d9308e625d6d88aeb64b27de4}\label{embroidery__internal_8h_ad26dd27d9308e625d6d88aeb64b27de4}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!testEmbCircle@{testEmbCircle}}
@@ -4285,7 +4137,7 @@ Definition at line \mbox{\hyperlink{format__10o_8c_source_l00046}{46}} of file \
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00834}{834}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00834}{834}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_ab1f6a20dd5ef0db6a0e6483deba90711}\label{embroidery__internal_8h_ab1f6a20dd5ef0db6a0e6483deba90711}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writeArt@{writeArt}}
@@ -4685,7 +4537,7 @@ Definition at line \mbox{\hyperlink{format__pem_8c_source_l00029}{29}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__pes_8c_source_l00474}{474}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
+Definition at line \mbox{\hyperlink{format__pes_8c_source_l00472}{472}} of file \mbox{\hyperlink{format__pes_8c_source}{format\+\_\+pes.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a5d148afd8188fa51fbcc7871d9b06a2b}\label{embroidery__internal_8h_a5d148afd8188fa51fbcc7871d9b06a2b}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writePhb@{writePhb}}
@@ -4745,7 +4597,7 @@ Definition at line \mbox{\hyperlink{format__sew_8c_source_l00078}{78}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__shv_8c_source_l00155}{155}} of file \mbox{\hyperlink{format__shv_8c_source}{format\+\_\+shv.\+c}}.
+Definition at line \mbox{\hyperlink{format__shv_8c_source_l00154}{154}} of file \mbox{\hyperlink{format__shv_8c_source}{format\+\_\+shv.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a624c472076dd5f278b8a23984b49a3d4}\label{embroidery__internal_8h_a624c472076dd5f278b8a23984b49a3d4}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writeSst@{writeSst}}
@@ -4765,7 +4617,7 @@ Definition at line \mbox{\hyperlink{format__sst_8c_source_l00049}{49}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__stx_8c_source_l00256}{256}} of file \mbox{\hyperlink{format__stx_8c_source}{format\+\_\+stx.\+c}}.
+Definition at line \mbox{\hyperlink{format__stx_8c_source_l00254}{254}} of file \mbox{\hyperlink{format__stx_8c_source}{format\+\_\+stx.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a8ca7313902787e9ed94a23630033bee4}\label{embroidery__internal_8h_a8ca7313902787e9ed94a23630033bee4}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writeSvg@{writeSvg}}
@@ -4855,7 +4707,7 @@ Definition at line \mbox{\hyperlink{format__u01_8c_source_l00063}{63}} of file \
 
 
 
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00212}{212}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
+Definition at line \mbox{\hyperlink{format__vip_8c_source_l00211}{211}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_a7735b8a342f55e82de409eb30517d33c}\label{embroidery__internal_8h_a7735b8a342f55e82de409eb30517d33c}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writeVp3@{writeVp3}}
@@ -4865,7 +4717,7 @@ Definition at line \mbox{\hyperlink{format__vip_8c_source_l00212}{212}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__vp3_8c_source_l00280}{280}} of file \mbox{\hyperlink{format__vp3_8c_source}{format\+\_\+vp3.\+c}}.
+Definition at line \mbox{\hyperlink{format__vp3_8c_source_l00278}{278}} of file \mbox{\hyperlink{format__vp3_8c_source}{format\+\_\+vp3.\+c}}.
 
 \mbox{\Hypertarget{embroidery__internal_8h_aea15300b875a3f8ed110c66f52fae6a4}\label{embroidery__internal_8h_aea15300b875a3f8ed110c66f52fae6a4}} 
 \index{embroidery\_internal.h@{embroidery\_internal.h}!writeXxx@{writeXxx}}

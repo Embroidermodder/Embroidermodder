@@ -1,5 +1,5 @@
 \hypertarget{format__vip_8c_source}{}\doxysubsection{format\+\_\+vip.\+c}
-\label{format__vip_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_vip.c@{embroidermodder2/extern/libembroidery/src/formats/format\_vip.c}}
+\label{format__vip_8c_source}\index{extern/libembroidery/src/formats/format\_vip.c@{extern/libembroidery/src/formats/format\_vip.c}}
 \mbox{\hyperlink{format__vip_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -11,322 +11,321 @@
 \DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00007}00007\ \textcolor{comment}{\ */}}
 \DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00008}00008\ }
 \DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <math.h>}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00012}00012\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}../embroidery\_internal.h"{}}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00014}00014\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00015}\mbox{\hyperlink{embroidery_8h_af343b92924aeba034403b37c3fcb8142}{00015}}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fcb8142}{vipDecodingTable}}[]\ =\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00016}00016\ \ \ \ \ 0x2E,\ 0x82,\ 0xE4,\ 0x6F,\ 0x38,\ 0xA9,\ 0xDC,\ 0xC6,\ 0x7B,\ 0xB6,\ 0x28,\ 0xAC,\ 0xFD,\ 0xAA,\ 0x8A,\ 0x4E,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00017}00017\ \ \ \ \ 0x76,\ 0x2E,\ 0xF0,\ 0xE4,\ 0x25,\ 0x1B,\ 0x8A,\ 0x68,\ 0x4E,\ 0x92,\ 0xB9,\ 0xB4,\ 0x95,\ 0xF0,\ 0x3E,\ 0xEF,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00018}00018\ \ \ \ \ 0xF7,\ 0x40,\ 0x24,\ 0x18,\ 0x39,\ 0x31,\ 0xBB,\ 0xE1,\ 0x53,\ 0xA8,\ 0x1F,\ 0xB1,\ 0x3A,\ 0x07,\ 0xFB,\ 0xCB,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00019}00019\ \ \ \ \ 0xE6,\ 0x00,\ 0x81,\ 0x50,\ 0x0E,\ 0x40,\ 0xE1,\ 0x2C,\ 0x73,\ 0x50,\ 0x0D,\ 0x91,\ 0xD6,\ 0x0A,\ 0x5D,\ 0xD6,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00020}00020\ \ \ \ \ 0x8B,\ 0xB8,\ 0x62,\ 0xAE,\ 0x47,\ 0x00,\ 0x53,\ 0x5A,\ 0xB7,\ 0x80,\ 0xAA,\ 0x28,\ 0xF7,\ 0x5D,\ 0x70,\ 0x5E,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00021}00021\ \ \ \ \ 0x2C,\ 0x0B,\ 0x98,\ 0xE3,\ 0xA0,\ 0x98,\ 0x60,\ 0x47,\ 0x89,\ 0x9B,\ 0x82,\ 0xFB,\ 0x40,\ 0xC9,\ 0xB4,\ 0x00,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00022}00022\ \ \ \ \ 0x0E,\ 0x68,\ 0x6A,\ 0x1E,\ 0x09,\ 0x85,\ 0xC0,\ 0x53,\ 0x81,\ 0xD1,\ 0x98,\ 0x89,\ 0xAF,\ 0xE8,\ 0x85,\ 0x4F,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00023}00023\ \ \ \ \ 0xE3,\ 0x69,\ 0x89,\ 0x03,\ 0xA1,\ 0x2E,\ 0x8F,\ 0xCF,\ 0xED,\ 0x91,\ 0x9F,\ 0x58,\ 0x1E,\ 0xD6,\ 0x84,\ 0x3C,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00024}00024\ \ \ \ \ 0x09,\ 0x27,\ 0xBD,\ 0xF4,\ 0xC3,\ 0x90,\ 0xC0,\ 0x51,\ 0x1B,\ 0x2B,\ 0x63,\ 0xBC,\ 0xB9,\ 0x3D,\ 0x40,\ 0x4D,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00025}00025\ \ \ \ \ 0x62,\ 0x6F,\ 0xE0,\ 0x8C,\ 0xF5,\ 0x5D,\ 0x08,\ 0xFD,\ 0x3D,\ 0x50,\ 0x36,\ 0xD7,\ 0xC9,\ 0xC9,\ 0x43,\ 0xE4,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00026}00026\ \ \ \ \ 0x2D,\ 0xCB,\ 0x95,\ 0xB6,\ 0xF4,\ 0x0D,\ 0xEA,\ 0xC2,\ 0xFD,\ 0x66,\ 0x3F,\ 0x5E,\ 0xBD,\ 0x69,\ 0x06,\ 0x2A,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00027}00027\ \ \ \ \ 0x03,\ 0x19,\ 0x47,\ 0x2B,\ 0xDF,\ 0x38,\ 0xEA,\ 0x4F,\ 0x80,\ 0x49,\ 0x95,\ 0xB2,\ 0xD6,\ 0xF9,\ 0x9A,\ 0x75,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00028}00028\ \ \ \ \ 0xF4,\ 0xD8,\ 0x9B,\ 0x1D,\ 0xB0,\ 0xA4,\ 0x69,\ 0xDB,\ 0xA9,\ 0x21,\ 0x79,\ 0x6F,\ 0xD8,\ 0xDE,\ 0x33,\ 0xFE,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00029}00029\ \ \ \ \ 0x9F,\ 0x04,\ 0xE5,\ 0x9A,\ 0x6B,\ 0x9B,\ 0x73,\ 0x83,\ 0x62,\ 0x7C,\ 0xB9,\ 0x66,\ 0x76,\ 0xF2,\ 0x5B,\ 0xC9,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00030}00030\ \ \ \ \ 0x5E,\ 0xFC,\ 0x74,\ 0xAA,\ 0x6C,\ 0xF1,\ 0xCD,\ 0x93,\ 0xCE,\ 0xE9,\ 0x80,\ 0x53,\ 0x03,\ 0x3B,\ 0x97,\ 0x4B,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00031}00031\ \ \ \ \ 0x39,\ 0x76,\ 0xC2,\ 0xC1,\ 0x56,\ 0xCB,\ 0x70,\ 0xFD,\ 0x3B,\ 0x3E,\ 0x52,\ 0x57,\ 0x81,\ 0x5D,\ 0x56,\ 0x8D,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00032}00032\ \ \ \ \ 0x51,\ 0x90,\ 0xD4,\ 0x76,\ 0xD7,\ 0xD5,\ 0x16,\ 0x02,\ 0x6D,\ 0xF2,\ 0x4D,\ 0xE1,\ 0x0E,\ 0x96,\ 0x4F,\ 0xA1,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00033}00033\ \ \ \ \ 0x3A,\ 0xA0,\ 0x60,\ 0x59,\ 0x64,\ 0x04,\ 0x1A,\ 0xE4,\ 0x67,\ 0xB6,\ 0xED,\ 0x3F,\ 0x74,\ 0x20,\ 0x55,\ 0x1F,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00034}00034\ \ \ \ \ 0xFB,\ 0x23,\ 0x92,\ 0x91,\ 0x53,\ 0xC8,\ 0x65,\ 0xAB,\ 0x9D,\ 0x51,\ 0xD6,\ 0x73,\ 0xDE,\ 0x01,\ 0xB1,\ 0x80,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00035}00035\ \ \ \ \ 0xB7,\ 0xC0,\ 0xD6,\ 0x80,\ 0x1C,\ 0x2E,\ 0x3C,\ 0x83,\ 0x63,\ 0xEE,\ 0xBC,\ 0x33,\ 0x25,\ 0xE2,\ 0x0E,\ 0x7A,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00036}00036\ \ \ \ \ 0x67,\ 0xDE,\ 0x3F,\ 0x71,\ 0x14,\ 0x49,\ 0x9C,\ 0x92,\ 0x93,\ 0x0D,\ 0x26,\ 0x9A,\ 0x0E,\ 0xDA,\ 0xED,\ 0x6F,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00037}00037\ \ \ \ \ 0xA4,\ 0x89,\ 0x0C,\ 0x1B,\ 0xF0,\ 0xA1,\ 0xDF,\ 0xE1,\ 0x9E,\ 0x3C,\ 0x04,\ 0x78,\ 0xE4,\ 0xAB,\ 0x6D,\ 0xFF,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00038}00038\ \ \ \ \ 0x9C,\ 0xAF,\ 0xCA,\ 0xC7,\ 0x88,\ 0x17,\ 0x9C,\ 0xE5,\ 0xB7,\ 0x33,\ 0x6D,\ 0xDC,\ 0xED,\ 0x8F,\ 0x6C,\ 0x18,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00039}00039\ \ \ \ \ 0x1D,\ 0x71,\ 0x06,\ 0xB1,\ 0xC5,\ 0xE2,\ 0xCF,\ 0x13,\ 0x77,\ 0x81,\ 0xC5,\ 0xB7,\ 0x0A,\ 0x14,\ 0x0A,\ 0x6B,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00040}00040\ \ \ \ \ 0x40,\ 0x26,\ 0xA0,\ 0x88,\ 0xD1,\ 0x62,\ 0x6A,\ 0xB3,\ 0x50,\ 0x12,\ 0xB9,\ 0x9B,\ 0xB5,\ 0x83,\ 0x9B,\ 0x37}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00041}00041\ \};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00042}00042\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00043}00043\ \textcolor{keywordtype}{int}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00044}\mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{00044}}\ \mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{vipDecodeByte}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ b)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00045}00045\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00046}00046\ \ \ \ \ \textcolor{keywordflow}{if}\ (b\ >=\ 0x80)\ \textcolor{keywordflow}{return}\ (-\/(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})\ (\string~b\ +\ 1));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00047}00047\ \ \ \ \ \textcolor{keywordflow}{return}\ b;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00048}00048\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00049}00049\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00050}00050\ \textcolor{keywordtype}{int}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00051}\mbox{\hyperlink{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}{00051}}\ \mbox{\hyperlink{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}{vipDecodeStitchType}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ b)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00052}00052\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00053}00053\ \ \ \ \ \textcolor{keywordflow}{switch}\ (b)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x80:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x81:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x84:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}{STOP}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x90:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}{END}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00064}00064\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00065}00065\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00066}00066\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00067}00067\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00068}\mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{00068}}\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ input,\ \textcolor{keywordtype}{int}\ compressedInputLength,\ \textcolor{keywordtype}{int}\ decompressedContentLength)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00069}00069\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00070}00070\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ decompressedData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(decompressedContentLength);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00071}00071\ \ \ \ \ \textcolor{keywordflow}{if}\ (!decompressedData)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ vipDecompressData(),\ cannot\ allocate\ memory\ for\ decompressedData\(\backslash\)n"{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00073}00073\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00074}00074\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00075}00075\ \ \ \ \ \mbox{\hyperlink{compress_8c_aa5370ff498be6c8a440bb0a581c2ed5c}{hus\_decompress}}((\textcolor{keywordtype}{char}*)input,\ compressedInputLength,\ (\textcolor{keywordtype}{char}\ *)decompressedData,\ \&decompressedContentLength);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00076}00076\ \ \ \ \ \textcolor{keywordflow}{return}\ decompressedData;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00077}00077\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00078}00078\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00079}00079\ \textcolor{keywordtype}{char}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00080}\mbox{\hyperlink{embroidery__internal_8h_a9dbe86a0803845f5995106d20deabc38}{00080}}\ \mbox{\hyperlink{format__vip_8c_a9dbe86a0803845f5995106d20deabc38}{readVip}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00081}00081\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00082}00082\ \ \ \ \ \textcolor{keywordtype}{int}\ fileLength;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00083}00083\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00084}00084\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ prevByte\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00085}00085\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *attributeData\ =\ 0,\ *decodedColors\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00086}00086\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *attributeDataDecompressed\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00087}00087\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *xData\ =\ 0,\ *xDecompressed\ =\ 0,\ *yData\ =\ 0,\ *yDecompressed\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00088}00088\ \ \ \ \ \mbox{\hyperlink{struct_vip_header__}{VipHeader}}\ header;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00089}00089\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00090}00090\ \ \ \ \ fileLength\ =\ \mbox{\hyperlink{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}{check\_header\_present}}(file,\ 32);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00091}00091\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fileLength)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ file\ shorter\ than\ header."{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00094}00094\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00095}00095\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00096}00096\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}magicCode"{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___ac3f21eeb306f069d71f34ed3fb9dad18}{magicCode}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00097}00097\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}numberOfStitches"{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___ab31cb71e80530643bf3a28aeb180b5dc}{numberOfStitches}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00098}00098\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a84c387dad5d95eb7a12dbf283910935c}{numberOfColors}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00099}00099\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00100}00100\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___acfef0732a1145686af11167da6466e0b}{postitiveXHoopSize}}),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a5624a4cb013f87c42db003df21d6ef76}{postitiveYHoopSize}}),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00102}00102\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___ad35562c868709d4daee63a46aaed4d0b}{negativeXHoopSize}}),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00103}00103\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a0bb19c8470c771e3f749e9cfd80639be}{negativeYHoopSize}}),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00104}00104\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a5de43b30095d9584cd2af196857692d0}{attributeOffset}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00105}00105\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00106}00106\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00107}00107\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00108}00108\ \ \ \ \ fread(header.\mbox{\hyperlink{struct_vip_header___adf1d1fd88ee419b917a414c216b10203}{stringVal}},\ 1,\ 8,\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00109}00109\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00110}00110\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___a53e516fdee736bbd051aec9f6090fa54}{unknown}}),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00111}00111\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00112}00112\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(header.\mbox{\hyperlink{struct_vip_header___abc7a57aca38414b18503c88b9274c105}{colorLength}}),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00113}00113\ \ \ \ \ decodedColors\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(header.\mbox{\hyperlink{struct_vip_header___a84c387dad5d95eb7a12dbf283910935c}{numberOfColors}}*4);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00114}00114\ \ \ \ \ \textcolor{keywordflow}{if}\ (!decodedColors)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ "{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}cannot\ allocate\ memory\ for\ decodedColors\(\backslash\)n"{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00118}00118\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ header.\mbox{\hyperlink{struct_vip_header___a84c387dad5d95eb7a12dbf283910935c}{numberOfColors}}*4;\ ++i)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ inputByte\ =\ (char)fgetc(file);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ tmpByte\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (inputByte\ \string^\ \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fcb8142}{vipDecodingTable}}[i]);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ decodedColors[i]\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (tmpByte\ \string^\ prevByte);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00123}00123\ \ \ \ \ \ \ \ \ prevByte\ =\ inputByte;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00124}00124\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ header.\mbox{\hyperlink{struct_vip_header___a84c387dad5d95eb7a12dbf283910935c}{numberOfColors}};\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00126}00126\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_thread__}{EmbThread}}\ thread;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ startIndex\ =\ i\ <<\ 2;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00128}00128\ \ \ \ \ \ \ \ \ thread.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}}\ =\ decodedColors[startIndex];}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00129}00129\ \ \ \ \ \ \ \ \ thread.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}}\ =\ decodedColors[startIndex\ +\ 1];}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00130}00130\ \ \ \ \ \ \ \ \ thread.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}}\ =\ decodedColors[startIndex\ +\ 2];}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ printf("{}\%d\(\backslash\)n"{},\ decodedColors[startIndex\ +\ 3]);\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00132}00132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}{embPattern\_addThread}}(pattern,\ thread);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00133}00133\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00134}00134\ \ \ \ \ fseek(file,\ header.\mbox{\hyperlink{struct_vip_header___a5de43b30095d9584cd2af196857692d0}{attributeOffset}},\ SEEK\_SET);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00135}00135\ \ \ \ \ attributeData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}}\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a5de43b30095d9584cd2af196857692d0}{attributeOffset}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{if}\ (!attributeData)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00137}00137\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ cannot\ allocate\ memory\ for\ attributeData\(\backslash\)n"{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00138}00138\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00139}00139\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00140}00140\ \ \ \ \ fread(attributeData,\ 1,\ header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}}\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a5de43b30095d9584cd2af196857692d0}{attributeOffset}},\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00141}00141\ \ \ \ \ attributeDataDecompressed\ =\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(attributeData,\ header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}}\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a5de43b30095d9584cd2af196857692d0}{attributeOffset}},\ header.\mbox{\hyperlink{struct_vip_header___ab31cb71e80530643bf3a28aeb180b5dc}{numberOfStitches}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00142}00142\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00143}00143\ \ \ \ \ fseek(file,\ header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}},\ SEEK\_SET);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00144}00144\ \ \ \ \ xData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}}\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00145}00145\ \ \ \ \ \textcolor{keywordflow}{if}\ (!xData)\ \{\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00146}00146\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ cannot\ allocate\ memory\ for\ xData\(\backslash\)n"{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00147}00147\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00148}00148\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00149}00149\ \ \ \ \ fread(xData,\ 1,\ header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}}\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}},\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00150}00150\ \ \ \ \ xDecompressed\ =\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(xData,\ header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}}\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a38b670313be423c4fbcaa4b6ff0e5e83}{xOffset}},\ header.\mbox{\hyperlink{struct_vip_header___ab31cb71e80530643bf3a28aeb180b5dc}{numberOfStitches}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00151}00151\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00152}00152\ \ \ \ \ fseek(file,\ header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}},\ SEEK\_SET);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00153}00153\ \ \ \ \ yData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(fileLength\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00154}00154\ \ \ \ \ \textcolor{keywordflow}{if}\ (!yData)\ \{\ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ cannot\ allocate\ memory\ for\ yData\(\backslash\)n"{}});\ \textcolor{keywordflow}{return}\ 0;\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00155}00155\ \ \ \ \ fread(yData,\ 1,\ fileLength\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}},\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00156}00156\ \ \ \ \ yDecompressed\ =\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(yData,\ fileLength\ -\/\ header.\mbox{\hyperlink{struct_vip_header___a016718268d32fcb95b1190cc1071e270}{yOffset}},\ header.\mbox{\hyperlink{struct_vip_header___ab31cb71e80530643bf3a28aeb180b5dc}{numberOfStitches}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00157}00157\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00158}00158\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ header.\mbox{\hyperlink{struct_vip_header___ab31cb71e80530643bf3a28aeb180b5dc}{numberOfStitches}};\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}{embPattern\_addStitchRel}}(pattern,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{vipDecodeByte}}(xDecompressed[i])\ /\ 10.0,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{vipDecodeByte}}(yDecompressed[i])\ /\ 10.0,}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00162}00162\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}{vipDecodeStitchType}}(attributeDataDecompressed[i]),\ 1);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00163}00163\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00164}00164\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}{embPattern\_addStitchRel}}(pattern,\ 0,\ 0,\ \mbox{\hyperlink{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}{END}},\ 1);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00165}00165\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00166}00166\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeData);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00167}00167\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xData);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00168}00168\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yData);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00169}00169\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeDataDecompressed);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00170}00170\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xDecompressed);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00171}00171\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yDecompressed);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00172}00172\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00173}00173\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00174}00174\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00175}00175\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00176}\mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{00176}}\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ input,\ \textcolor{keywordtype}{int}\ decompressedInputSize,\ \textcolor{keywordtype}{int}*\ compressedSize)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00177}00177\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00178}00178\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ compressedData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(decompressedInputSize*2);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00179}00179\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressedData)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ vipCompressData(),\ cannot\ allocate\ memory\ for\ compressedData\(\backslash\)n"{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00181}00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00182}00182\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00183}00183\ \ \ \ \ \mbox{\hyperlink{compress_8c_a053addffe32629b6727073e9c499cc32}{hus\_compress}}((\textcolor{keywordtype}{char}*)input,\ decompressedInputSize,\ (\textcolor{keywordtype}{char}\ *)compressedData,\ compressedSize);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00184}00184\ \ \ \ \ \textcolor{keywordflow}{return}\ compressedData;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00185}00185\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00186}00186\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00187}00187\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00188}\mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{00188}}\ \mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{vipEncodeByte}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ f)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00189}00189\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00190}00190\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})(int)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(f);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00191}00191\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00192}00192\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00193}00193\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00194}\mbox{\hyperlink{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}{00194}}\ \mbox{\hyperlink{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}{vipEncodeStitchType}}(\textcolor{keywordtype}{int}\ st)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00195}00195\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00196}00196\ \ \ \ \ \textcolor{keywordflow}{switch}\ (st)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x80);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00199}00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}{JUMP}}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00201}00201\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x81);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}{STOP}}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x84);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}{END}}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x90);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x80);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00208}00208\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00209}00209\ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00210}00210\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00211}00211\ \textcolor{keywordtype}{char}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00212}\mbox{\hyperlink{embroidery__internal_8h_a37f9056462dcb2c323f49e49fe78fa63}{00212}}\ \mbox{\hyperlink{format__vip_8c_a37f9056462dcb2c323f49e49fe78fa63}{writeVip}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00213}00213\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00214}00214\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ boundingRect;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00215}00215\ \ \ \ \ \textcolor{keywordtype}{int}\ stitchCount,\ minColors,\ patternColor;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00216}00216\ \ \ \ \ \textcolor{keywordtype}{int}\ attributeSize\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00217}00217\ \ \ \ \ \textcolor{keywordtype}{int}\ xCompressedSize\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00218}00218\ \ \ \ \ \textcolor{keywordtype}{int}\ yCompressedSize\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00219}00219\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ previousX\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00220}00220\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ previousY\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00221}00221\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ xValues\ =\ 0,\ *yValues\ =\ 0,\ *attributeValues\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00222}00222\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ xx\ =\ 0.0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00223}00223\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ yy\ =\ 0.0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00224}00224\ \ \ \ \ \textcolor{keywordtype}{int}\ flags\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00225}00225\ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00226}00226\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ attributeCompressed\ =\ 0,\ *xCompressed\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00227}00227\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ yCompressed\ =\ 0,\ *decodedColors\ =\ 0,\ *encodedColors\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00228}00228\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ prevByte\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00229}00229\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00230}00230\ \ \ \ \ puts(\textcolor{stringliteral}{"{}VIP\ not\ yet\ implemented."{}});}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00231}00231\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00232}00232\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00233}00233\ \ \ \ \ stitchCount\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00234}00234\ \ \ \ \ minColors\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00235}00235\ \ \ \ \ decodedColors\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(minColors\ <<\ 2);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00236}00236\ \ \ \ \ \textcolor{keywordflow}{if}\ (!decodedColors)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00237}00237\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00238}00238\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00239}00239\ \ \ \ \ encodedColors\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(minColors\ <<\ 2);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00240}00240\ \ \ \ \ \textcolor{keywordflow}{if}\ (!encodedColors)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00241}00241\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(decodedColors);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00242}00242\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00243}00243\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00244}00244\ \ \ \ \ \textcolor{comment}{/*\ embPattern\_correctForMaxStitchLength(pattern,\ 0x7F,\ 0x7F);\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00245}00245\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00246}00246\ \ \ \ \ patternColor\ =\ minColors;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00247}00247\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}>1)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00248}00248\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}patternColor:\ \%d\(\backslash\)n"{}},\ patternColor);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00249}00249\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00250}00250\ \ \ \ \ \textcolor{keywordflow}{if}\ (minColors\ >\ 24)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00251}00251\ \ \ \ \ \ \ \ \ minColors\ =\ 24;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00252}00252\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00253}00253\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x0190FC5D);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00254}00254\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ stitchCount);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00255}00255\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ minColors);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00256}00256\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00257}00257\ \ \ \ \ boundingRect\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00258}00258\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *\ 10.0));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00259}00259\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ *\ 10.0\ -\/\ 1.0));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00260}00260\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ *\ 10.0));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00261}00261\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *\ 10.0\ -\/\ 1.0));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00262}00262\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00263}00263\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x38\ +\ (minColors\ <<\ 3));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00264}00264\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00265}00265\ \ \ \ \ xValues\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})*(stitchCount));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00266}00266\ \ \ \ \ yValues\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})*(stitchCount));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00267}00267\ \ \ \ \ attributeValues\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})*(stitchCount));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00268}00268\ \ \ \ \ \textcolor{keywordflow}{if}\ (xValues\ \&\&\ yValues\ \&\&\ attributeValues)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_stitch__}{EmbStitch}}\ st;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ st\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a4d06a0868c91ec35c5c0e2e5661ddfa2}{stitch}}[i];}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ xx\ =\ st.\mbox{\hyperlink{struct_emb_stitch___ae1a3958205104364b97172da19628db7}{x}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ yy\ =\ st.\mbox{\hyperlink{struct_emb_stitch___ac696d7e3434ae029d180ef550e61af2d}{y}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00274}00274\ \ \ \ \ \ \ \ \ \ \ \ \ flags\ =\ st.\mbox{\hyperlink{struct_emb_stitch___ac8bf36fe0577cba66bccda3a6f7e80a4}{flags}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ xValues[i]\ =\ \mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{vipEncodeByte}}((xx\ -\/\ previousX)\ *\ 10.0);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ previousX\ =\ xx;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ yValues[i]\ =\ \mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{vipEncodeByte}}((yy\ -\/\ previousY)\ *\ 10.0);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ previousY\ =\ yy;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ attributeValues[i]\ =\ \mbox{\hyperlink{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}{vipEncodeStitchType}}(flags);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00280}00280\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00281}00281\ \ \ \ \ \ \ \ \ attributeCompressed\ =\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(attributeValues,\ stitchCount,\ \&attributeSize);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00282}00282\ \ \ \ \ \ \ \ \ xCompressed\ =\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(xValues,\ stitchCount,\ \&xCompressedSize);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00283}00283\ \ \ \ \ \ \ \ \ yCompressed\ =\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(yValues,\ stitchCount,\ \&yCompressedSize);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00284}00284\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00285}00285\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int})\ (0x38\ +\ (minColors\ <<\ 3)\ +\ attributeSize));}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00286}00286\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int})\ (0x38\ +\ (minColors\ <<\ 3)\ +\ attributeSize\ +\ xCompressedSize));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00011}00011\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00012}00012\ \textcolor{preprocessor}{\#include\ "{}../embroidery\_internal.h"{}}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00013}00013\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00014}\mbox{\hyperlink{embroidery_8h_af343b92924aeba034403b37c3fcb8142}{00014}}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fcb8142}{vipDecodingTable}}[]\ =\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00015}00015\ \ \ \ \ 0x2E,\ 0x82,\ 0xE4,\ 0x6F,\ 0x38,\ 0xA9,\ 0xDC,\ 0xC6,\ 0x7B,\ 0xB6,\ 0x28,\ 0xAC,\ 0xFD,\ 0xAA,\ 0x8A,\ 0x4E,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00016}00016\ \ \ \ \ 0x76,\ 0x2E,\ 0xF0,\ 0xE4,\ 0x25,\ 0x1B,\ 0x8A,\ 0x68,\ 0x4E,\ 0x92,\ 0xB9,\ 0xB4,\ 0x95,\ 0xF0,\ 0x3E,\ 0xEF,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00017}00017\ \ \ \ \ 0xF7,\ 0x40,\ 0x24,\ 0x18,\ 0x39,\ 0x31,\ 0xBB,\ 0xE1,\ 0x53,\ 0xA8,\ 0x1F,\ 0xB1,\ 0x3A,\ 0x07,\ 0xFB,\ 0xCB,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00018}00018\ \ \ \ \ 0xE6,\ 0x00,\ 0x81,\ 0x50,\ 0x0E,\ 0x40,\ 0xE1,\ 0x2C,\ 0x73,\ 0x50,\ 0x0D,\ 0x91,\ 0xD6,\ 0x0A,\ 0x5D,\ 0xD6,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00019}00019\ \ \ \ \ 0x8B,\ 0xB8,\ 0x62,\ 0xAE,\ 0x47,\ 0x00,\ 0x53,\ 0x5A,\ 0xB7,\ 0x80,\ 0xAA,\ 0x28,\ 0xF7,\ 0x5D,\ 0x70,\ 0x5E,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00020}00020\ \ \ \ \ 0x2C,\ 0x0B,\ 0x98,\ 0xE3,\ 0xA0,\ 0x98,\ 0x60,\ 0x47,\ 0x89,\ 0x9B,\ 0x82,\ 0xFB,\ 0x40,\ 0xC9,\ 0xB4,\ 0x00,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00021}00021\ \ \ \ \ 0x0E,\ 0x68,\ 0x6A,\ 0x1E,\ 0x09,\ 0x85,\ 0xC0,\ 0x53,\ 0x81,\ 0xD1,\ 0x98,\ 0x89,\ 0xAF,\ 0xE8,\ 0x85,\ 0x4F,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00022}00022\ \ \ \ \ 0xE3,\ 0x69,\ 0x89,\ 0x03,\ 0xA1,\ 0x2E,\ 0x8F,\ 0xCF,\ 0xED,\ 0x91,\ 0x9F,\ 0x58,\ 0x1E,\ 0xD6,\ 0x84,\ 0x3C,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00023}00023\ \ \ \ \ 0x09,\ 0x27,\ 0xBD,\ 0xF4,\ 0xC3,\ 0x90,\ 0xC0,\ 0x51,\ 0x1B,\ 0x2B,\ 0x63,\ 0xBC,\ 0xB9,\ 0x3D,\ 0x40,\ 0x4D,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00024}00024\ \ \ \ \ 0x62,\ 0x6F,\ 0xE0,\ 0x8C,\ 0xF5,\ 0x5D,\ 0x08,\ 0xFD,\ 0x3D,\ 0x50,\ 0x36,\ 0xD7,\ 0xC9,\ 0xC9,\ 0x43,\ 0xE4,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00025}00025\ \ \ \ \ 0x2D,\ 0xCB,\ 0x95,\ 0xB6,\ 0xF4,\ 0x0D,\ 0xEA,\ 0xC2,\ 0xFD,\ 0x66,\ 0x3F,\ 0x5E,\ 0xBD,\ 0x69,\ 0x06,\ 0x2A,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00026}00026\ \ \ \ \ 0x03,\ 0x19,\ 0x47,\ 0x2B,\ 0xDF,\ 0x38,\ 0xEA,\ 0x4F,\ 0x80,\ 0x49,\ 0x95,\ 0xB2,\ 0xD6,\ 0xF9,\ 0x9A,\ 0x75,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00027}00027\ \ \ \ \ 0xF4,\ 0xD8,\ 0x9B,\ 0x1D,\ 0xB0,\ 0xA4,\ 0x69,\ 0xDB,\ 0xA9,\ 0x21,\ 0x79,\ 0x6F,\ 0xD8,\ 0xDE,\ 0x33,\ 0xFE,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00028}00028\ \ \ \ \ 0x9F,\ 0x04,\ 0xE5,\ 0x9A,\ 0x6B,\ 0x9B,\ 0x73,\ 0x83,\ 0x62,\ 0x7C,\ 0xB9,\ 0x66,\ 0x76,\ 0xF2,\ 0x5B,\ 0xC9,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00029}00029\ \ \ \ \ 0x5E,\ 0xFC,\ 0x74,\ 0xAA,\ 0x6C,\ 0xF1,\ 0xCD,\ 0x93,\ 0xCE,\ 0xE9,\ 0x80,\ 0x53,\ 0x03,\ 0x3B,\ 0x97,\ 0x4B,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00030}00030\ \ \ \ \ 0x39,\ 0x76,\ 0xC2,\ 0xC1,\ 0x56,\ 0xCB,\ 0x70,\ 0xFD,\ 0x3B,\ 0x3E,\ 0x52,\ 0x57,\ 0x81,\ 0x5D,\ 0x56,\ 0x8D,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00031}00031\ \ \ \ \ 0x51,\ 0x90,\ 0xD4,\ 0x76,\ 0xD7,\ 0xD5,\ 0x16,\ 0x02,\ 0x6D,\ 0xF2,\ 0x4D,\ 0xE1,\ 0x0E,\ 0x96,\ 0x4F,\ 0xA1,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00032}00032\ \ \ \ \ 0x3A,\ 0xA0,\ 0x60,\ 0x59,\ 0x64,\ 0x04,\ 0x1A,\ 0xE4,\ 0x67,\ 0xB6,\ 0xED,\ 0x3F,\ 0x74,\ 0x20,\ 0x55,\ 0x1F,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00033}00033\ \ \ \ \ 0xFB,\ 0x23,\ 0x92,\ 0x91,\ 0x53,\ 0xC8,\ 0x65,\ 0xAB,\ 0x9D,\ 0x51,\ 0xD6,\ 0x73,\ 0xDE,\ 0x01,\ 0xB1,\ 0x80,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00034}00034\ \ \ \ \ 0xB7,\ 0xC0,\ 0xD6,\ 0x80,\ 0x1C,\ 0x2E,\ 0x3C,\ 0x83,\ 0x63,\ 0xEE,\ 0xBC,\ 0x33,\ 0x25,\ 0xE2,\ 0x0E,\ 0x7A,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00035}00035\ \ \ \ \ 0x67,\ 0xDE,\ 0x3F,\ 0x71,\ 0x14,\ 0x49,\ 0x9C,\ 0x92,\ 0x93,\ 0x0D,\ 0x26,\ 0x9A,\ 0x0E,\ 0xDA,\ 0xED,\ 0x6F,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00036}00036\ \ \ \ \ 0xA4,\ 0x89,\ 0x0C,\ 0x1B,\ 0xF0,\ 0xA1,\ 0xDF,\ 0xE1,\ 0x9E,\ 0x3C,\ 0x04,\ 0x78,\ 0xE4,\ 0xAB,\ 0x6D,\ 0xFF,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00037}00037\ \ \ \ \ 0x9C,\ 0xAF,\ 0xCA,\ 0xC7,\ 0x88,\ 0x17,\ 0x9C,\ 0xE5,\ 0xB7,\ 0x33,\ 0x6D,\ 0xDC,\ 0xED,\ 0x8F,\ 0x6C,\ 0x18,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00038}00038\ \ \ \ \ 0x1D,\ 0x71,\ 0x06,\ 0xB1,\ 0xC5,\ 0xE2,\ 0xCF,\ 0x13,\ 0x77,\ 0x81,\ 0xC5,\ 0xB7,\ 0x0A,\ 0x14,\ 0x0A,\ 0x6B,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00039}00039\ \ \ \ \ 0x40,\ 0x26,\ 0xA0,\ 0x88,\ 0xD1,\ 0x62,\ 0x6A,\ 0xB3,\ 0x50,\ 0x12,\ 0xB9,\ 0x9B,\ 0xB5,\ 0x83,\ 0x9B,\ 0x37}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00040}00040\ \};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00042}00042\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00043}\mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{00043}}\ \mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{vipDecodeByte}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ b)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00044}00044\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00045}00045\ \ \ \ \ \textcolor{keywordflow}{if}\ (b\ >=\ 0x80)\ \textcolor{keywordflow}{return}\ (-\/(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})\ (\string~b\ +\ 1));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00046}00046\ \ \ \ \ \textcolor{keywordflow}{return}\ b;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00047}00047\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00048}00048\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00049}00049\ \textcolor{keywordtype}{int}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00050}\mbox{\hyperlink{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}{00050}}\ \mbox{\hyperlink{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}{vipDecodeStitchType}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ b)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00051}00051\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00052}00052\ \ \ \ \ \textcolor{keywordflow}{switch}\ (b)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00053}00053\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x80:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x81:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x84:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}{STOP}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00059}00059\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ 0x90:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00060}00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}{END}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00061}00061\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00063}00063\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00064}00064\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00066}00066\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00067}\mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{00067}}\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ input,\ \textcolor{keywordtype}{int}\ compressedInputLength,\ \textcolor{keywordtype}{int}\ decompressedContentLength)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00068}00068\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00069}00069\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ decompressedData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(decompressedContentLength);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00070}00070\ \ \ \ \ \textcolor{keywordflow}{if}\ (!decompressedData)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00071}00071\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ vipDecompressData(),\ cannot\ allocate\ memory\ for\ decompressedData\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00072}00072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00073}00073\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00074}00074\ \ \ \ \ \mbox{\hyperlink{compress_8c_aa5370ff498be6c8a440bb0a581c2ed5c}{hus\_decompress}}((\textcolor{keywordtype}{char}*)input,\ compressedInputLength,\ (\textcolor{keywordtype}{char}\ *)decompressedData,\ \&decompressedContentLength);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00075}00075\ \ \ \ \ \textcolor{keywordflow}{return}\ decompressedData;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00076}00076\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00078}00078\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00079}\mbox{\hyperlink{embroidery__internal_8h_a9dbe86a0803845f5995106d20deabc38}{00079}}\ \mbox{\hyperlink{format__vip_8c_a9dbe86a0803845f5995106d20deabc38}{readVip}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00080}00080\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00081}00081\ \ \ \ \ \textcolor{keywordtype}{int}\ fileLength;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00082}00082\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00083}00083\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ prevByte\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00084}00084\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *attributeData\ =\ 0,\ *decodedColors\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00085}00085\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *attributeDataDecompressed\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00086}00086\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ *xData\ =\ 0,\ *xDecompressed\ =\ 0,\ *yData\ =\ 0,\ *yDecompressed\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00087}00087\ \ \ \ \ \mbox{\hyperlink{struct_vip_header__}{VipHeader}}\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00089}00089\ \ \ \ \ fileLength\ =\ \mbox{\hyperlink{embroidery__internal_8h_ad6d5aaabb6637d271cec955c2dd42ded}{check\_header\_present}}(file,\ 32);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00090}00090\ \ \ \ \ \textcolor{keywordflow}{if}\ (!fileLength)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00091}00091\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ file\ shorter\ than\ header."{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00093}00093\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00095}00095\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}magicCode"{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.magicCode),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00096}00096\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}numberOfStitches"{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfStitches),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00097}00097\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfColors),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00098}00098\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00099}00099\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.postitiveXHoopSize),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00100}00100\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.postitiveYHoopSize),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.negativeXHoopSize),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00102}00102\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.negativeYHoopSize),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00103}00103\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.attributeOffset),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00104}00104\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00105}00105\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00107}00107\ \ \ \ \ fread(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.stringVal,\ 1,\ 8,\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00109}00109\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.unknown),\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00110}00110\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00111}00111\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac14e60a4d0a0fae16f22ccbbb2373e2a}{embInt\_read}}(file,\ \textcolor{stringliteral}{"{}."{}},\ \&(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.colorLength),\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00112}00112\ \ \ \ \ decodedColors\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfColors*4);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00113}00113\ \ \ \ \ \textcolor{keywordflow}{if}\ (!decodedColors)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ "{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}cannot\ allocate\ memory\ for\ decodedColors\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00117}00117\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00118}00118\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfColors*4;\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00119}00119\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ inputByte\ =\ (char)fgetc(file);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00120}00120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ tmpByte\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (inputByte\ \string^\ \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fcb8142}{vipDecodingTable}}[i]);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00121}00121\ \ \ \ \ \ \ \ \ decodedColors[i]\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (tmpByte\ \string^\ prevByte);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00122}00122\ \ \ \ \ \ \ \ \ prevByte\ =\ inputByte;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00123}00123\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00124}00124\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfColors;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00125}00125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_thread__}{EmbThread}}\ thread;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00126}00126\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ startIndex\ =\ i\ <<\ 2;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00127}00127\ \ \ \ \ \ \ \ \ thread.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}}\ =\ decodedColors[startIndex];}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00128}00128\ \ \ \ \ \ \ \ \ thread.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}}\ =\ decodedColors[startIndex\ +\ 1];}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00129}00129\ \ \ \ \ \ \ \ \ thread.\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}}.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}}\ =\ decodedColors[startIndex\ +\ 2];}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00130}00130\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ printf("{}\%d\(\backslash\)n"{},\ decodedColors[startIndex\ +\ 3]);\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00131}00131\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}{embPattern\_addThread}}(pattern,\ thread);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00132}00132\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00133}00133\ \ \ \ \ fseek(file,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.attributeOffset,\ SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00134}00134\ \ \ \ \ attributeData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.attributeOffset);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00135}00135\ \ \ \ \ \textcolor{keywordflow}{if}\ (!attributeData)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00136}00136\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ cannot\ allocate\ memory\ for\ attributeData\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00138}00138\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00139}00139\ \ \ \ \ fread(attributeData,\ 1,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.attributeOffset,\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00140}00140\ \ \ \ \ attributeDataDecompressed\ =\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(attributeData,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.attributeOffset,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfStitches);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00141}00141\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00142}00142\ \ \ \ \ fseek(file,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset,\ SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00143}00143\ \ \ \ \ xData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00144}00144\ \ \ \ \ \textcolor{keywordflow}{if}\ (!xData)\ \{\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00145}00145\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ cannot\ allocate\ memory\ for\ xData\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00146}00146\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00147}00147\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00148}00148\ \ \ \ \ fread(xData,\ 1,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset,\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00149}00149\ \ \ \ \ xDecompressed\ =\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(xData,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.xOffset,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfStitches);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00151}00151\ \ \ \ \ fseek(file,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset,\ SEEK\_SET);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00152}00152\ \ \ \ \ yData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(fileLength\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00153}00153\ \ \ \ \ \textcolor{keywordflow}{if}\ (!yData)\ \{\ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ readVip(),\ cannot\ allocate\ memory\ for\ yData\(\backslash\)n"{}});\ \textcolor{keywordflow}{return}\ 0;\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00154}00154\ \ \ \ \ fread(yData,\ 1,\ fileLength\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset,\ file);\ \textcolor{comment}{/*\ TODO:\ check\ return\ value\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00155}00155\ \ \ \ \ yDecompressed\ =\ \mbox{\hyperlink{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}{vipDecompressData}}(yData,\ fileLength\ -\/\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.yOffset,\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfStitches);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00156}00156\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00157}00157\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}.numberOfStitches;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00158}00158\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}{embPattern\_addStitchRel}}(pattern,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00159}00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{vipDecodeByte}}(xDecompressed[i])\ /\ 10.0,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00160}00160\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}{vipDecodeByte}}(yDecompressed[i])\ /\ 10.0,}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00161}00161\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}{vipDecodeStitchType}}(attributeDataDecompressed[i]),\ 1);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00162}00162\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00163}00163\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}{embPattern\_addStitchRel}}(pattern,\ 0,\ 0,\ \mbox{\hyperlink{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}{END}},\ 1);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00165}00165\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeData);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00166}00166\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xData);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00167}00167\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yData);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00168}00168\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeDataDecompressed);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00169}00169\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xDecompressed);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00170}00170\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yDecompressed);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00171}00171\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00172}00172\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00174}00174\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00175}\mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{00175}}\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ input,\ \textcolor{keywordtype}{int}\ decompressedInputSize,\ \textcolor{keywordtype}{int}*\ compressedSize)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00176}00176\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00177}00177\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ compressedData\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(decompressedInputSize*2);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00178}00178\ \ \ \ \ \textcolor{keywordflow}{if}\ (!compressedData)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00179}00179\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}ERROR:\ format-\/vip.c\ vipCompressData(),\ cannot\ allocate\ memory\ for\ compressedData\(\backslash\)n"{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00180}00180\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00181}00181\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00182}00182\ \ \ \ \ \mbox{\hyperlink{compress_8c_a053addffe32629b6727073e9c499cc32}{hus\_compress}}((\textcolor{keywordtype}{char}*)input,\ decompressedInputSize,\ (\textcolor{keywordtype}{char}\ *)compressedData,\ compressedSize);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00183}00183\ \ \ \ \ \textcolor{keywordflow}{return}\ compressedData;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00186}00186\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00187}\mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{00187}}\ \mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{vipEncodeByte}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ f)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00188}00188\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00189}00189\ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})(int)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(f);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00190}00190\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00192}00192\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00193}\mbox{\hyperlink{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}{00193}}\ \mbox{\hyperlink{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}{vipEncodeStitchType}}(\textcolor{keywordtype}{int}\ st)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00194}00194\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00195}00195\ \ \ \ \ \textcolor{keywordflow}{switch}\ (st)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00196}00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x80);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00198}00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}{JUMP}}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00199}00199\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00200}00200\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x81);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00201}00201\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}{STOP}}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x84);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00203}00203\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}{END}}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x90);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00205}00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (0x80);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00207}00207\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00208}00208\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00210}00210\ \textcolor{keywordtype}{char}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00211}\mbox{\hyperlink{embroidery__internal_8h_a37f9056462dcb2c323f49e49fe78fa63}{00211}}\ \mbox{\hyperlink{format__vip_8c_a37f9056462dcb2c323f49e49fe78fa63}{writeVip}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00212}00212\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00213}00213\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00214}00214\ \ \ \ \ \textcolor{keywordtype}{int}\ stitchCount,\ minColors,\ patternColor;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00215}00215\ \ \ \ \ \textcolor{keywordtype}{int}\ attributeSize\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00216}00216\ \ \ \ \ \textcolor{keywordtype}{int}\ xCompressedSize\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00217}00217\ \ \ \ \ \textcolor{keywordtype}{int}\ yCompressedSize\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00218}00218\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ previousX\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00219}00219\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ previousY\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00220}00220\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ xValues\ =\ 0,\ *yValues\ =\ 0,\ *attributeValues\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00221}00221\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ xx\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00222}00222\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ yy\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00223}00223\ \ \ \ \ \textcolor{keywordtype}{int}\ flags\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00224}00224\ \ \ \ \ \textcolor{keywordtype}{int}\ i\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00225}00225\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ attributeCompressed\ =\ 0,\ *xCompressed\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00226}00226\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*\ yCompressed\ =\ 0,\ *decodedColors\ =\ 0,\ *encodedColors\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00227}00227\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ prevByte\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00228}00228\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00229}00229\ \ \ \ \ puts(\textcolor{stringliteral}{"{}VIP\ not\ yet\ implemented."{}});}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00230}00230\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00231}00231\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00232}00232\ \ \ \ \ stitchCount\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00233}00233\ \ \ \ \ minColors\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00234}00234\ \ \ \ \ decodedColors\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(minColors\ <<\ 2);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00235}00235\ \ \ \ \ \textcolor{keywordflow}{if}\ (!decodedColors)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00236}00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00237}00237\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00238}00238\ \ \ \ \ encodedColors\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(minColors\ <<\ 2);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00239}00239\ \ \ \ \ \textcolor{keywordflow}{if}\ (!encodedColors)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00240}00240\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(decodedColors);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00241}00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00242}00242\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00243}00243\ \ \ \ \ \textcolor{comment}{/*\ embPattern\_correctForMaxStitchLength(pattern,\ 0x7F,\ 0x7F);\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00244}00244\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00245}00245\ \ \ \ \ patternColor\ =\ minColors;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00246}00246\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}>1)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00247}00247\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}patternColor:\ \%d\(\backslash\)n"{}},\ patternColor);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00248}00248\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00249}00249\ \ \ \ \ \textcolor{keywordflow}{if}\ (minColors\ >\ 24)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00250}00250\ \ \ \ \ \ \ \ \ minColors\ =\ 24;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00251}00251\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00252}00252\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x0190FC5D);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00253}00253\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ stitchCount);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00254}00254\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ minColors);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00255}00255\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00256}00256\ \ \ \ \ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00257}00257\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *\ 10.0));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00258}00258\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ *\ 10.0\ -\/\ 1.0));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00259}00259\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ *\ 10.0));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00260}00260\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *\ 10.0\ -\/\ 1.0));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00261}00261\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00262}00262\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x38\ +\ (minColors\ <<\ 3));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00264}00264\ \ \ \ \ xValues\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})*(stitchCount));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00265}00265\ \ \ \ \ yValues\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})*(stitchCount));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00266}00266\ \ \ \ \ attributeValues\ =\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}*)malloc(\textcolor{keyword}{sizeof}(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})*(stitchCount));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00267}00267\ \ \ \ \ \textcolor{keywordflow}{if}\ (xValues\ \&\&\ yValues\ \&\&\ attributeValues)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00268}00268\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_stitch__}{EmbStitch}}\ st;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ st\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a4d06a0868c91ec35c5c0e2e5661ddfa2}{stitch}}[i];}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00271}00271\ \ \ \ \ \ \ \ \ \ \ \ \ xx\ =\ st.\mbox{\hyperlink{struct_emb_stitch___ae1a3958205104364b97172da19628db7}{x}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00272}00272\ \ \ \ \ \ \ \ \ \ \ \ \ yy\ =\ st.\mbox{\hyperlink{struct_emb_stitch___ac696d7e3434ae029d180ef550e61af2d}{y}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00273}00273\ \ \ \ \ \ \ \ \ \ \ \ \ flags\ =\ st.\mbox{\hyperlink{struct_emb_stitch___ac8bf36fe0577cba66bccda3a6f7e80a4}{flags}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00274}00274\ \ \ \ \ \ \ \ \ \ \ \ \ xValues[i]\ =\ \mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{vipEncodeByte}}((xx\ -\/\ previousX)\ *\ 10.0);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ previousX\ =\ xx;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ yValues[i]\ =\ \mbox{\hyperlink{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}{vipEncodeByte}}((yy\ -\/\ previousY)\ *\ 10.0);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ previousY\ =\ yy;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ attributeValues[i]\ =\ \mbox{\hyperlink{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}{vipEncodeStitchType}}(flags);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00279}00279\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00280}00280\ \ \ \ \ \ \ \ \ attributeCompressed\ =\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(attributeValues,\ stitchCount,\ \&attributeSize);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00281}00281\ \ \ \ \ \ \ \ \ xCompressed\ =\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(xValues,\ stitchCount,\ \&xCompressedSize);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00282}00282\ \ \ \ \ \ \ \ \ yCompressed\ =\ \mbox{\hyperlink{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}{vipCompressData}}(yValues,\ stitchCount,\ \&yCompressedSize);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00284}00284\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int})\ (0x38\ +\ (minColors\ <<\ 3)\ +\ attributeSize));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00285}00285\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int})\ (0x38\ +\ (minColors\ <<\ 3)\ +\ attributeSize\ +\ xCompressedSize));}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00286}00286\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x00000000);}
 \DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00287}00287\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x00000000);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00288}00288\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0x00000000);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00289}00289\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}{binaryWriteUShort}}(file,\ 0x0000);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00290}00290\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00291}00291\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}{binaryWriteInt}}(file,\ minColors\ <<\ 2);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00292}00292\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00293}00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ minColors;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ byteChunk\ =\ i\ <<\ 2;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ currentColor\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a87dbedfa066778e08311fe1bbb89b302}{thread}}[i].\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk]\ =\ currentColor.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk\ +\ 1]\ =\ currentColor.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk\ +\ 2]\ =\ currentColor.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}};}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk\ +\ 3]\ =\ 0x01;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00300}00300\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00301}00301\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00302}00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ minColors\ <<\ 2;\ ++i)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00303}00303\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ tmpByte\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (decodedColors[i]\ \string^\ \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fcb8142}{vipDecodingTable}}[i]);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ prevByte\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (tmpByte\ \string^\ prevByte);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ fputc(prevByte,\ file);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00306}00306\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00307}00307\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <=\ minColors;\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}{binaryWriteInt}}(file,\ 1);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00309}00309\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00310}00310\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0);\ \textcolor{comment}{/*\ string\ length\ */}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00311}00311\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ 0);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00312}00312\ \ \ \ \ \ \ \ \ fwrite((\textcolor{keywordtype}{char}*)\ attributeCompressed,\ 1,\ attributeSize,\ file);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00313}00313\ \ \ \ \ \ \ \ \ fwrite((\textcolor{keywordtype}{char}*)\ xCompressed,\ 1,\ xCompressedSize,\ file);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00314}00314\ \ \ \ \ \ \ \ \ fwrite((\textcolor{keywordtype}{char}*)\ yCompressed,\ 1,\ yCompressedSize,\ file);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00315}00315\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00316}00316\ }
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00317}00317\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeCompressed);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00318}00318\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xCompressed);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00319}00319\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yCompressed);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00320}00320\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeValues);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00321}00321\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xValues);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00322}00322\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yValues);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00323}00323\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(decodedColors);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00324}00324\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(encodedColors);}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00325}00325\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
-\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00326}00326\ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00288}00288\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_a760e806c16c1612a6b5ca5a26bc736d1}{binaryWriteUShort}}(file,\ 0x0000);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00289}00289\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00290}00290\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_acaa069d2e820245be0f711415e2c297d}{binaryWriteInt}}(file,\ minColors\ <<\ 2);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00292}00292\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ minColors;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00293}00293\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ byteChunk\ =\ i\ <<\ 2;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ currentColor\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a87dbedfa066778e08311fe1bbb89b302}{thread}}[i].\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk]\ =\ currentColor.\mbox{\hyperlink{struct_emb_color___afd7b1ea9ff115205b65e0bffc92946ac}{r}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk\ +\ 1]\ =\ currentColor.\mbox{\hyperlink{struct_emb_color___a83576af39a9f289a28c1263d61073508}{g}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk\ +\ 2]\ =\ currentColor.\mbox{\hyperlink{struct_emb_color___a41cede1b4c0d05cff170ad5761f70964}{b}};}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ decodedColors[byteChunk\ +\ 3]\ =\ 0x01;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00299}00299\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00301}00301\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ minColors\ <<\ 2;\ ++i)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ tmpByte\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (decodedColors[i]\ \string^\ \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fcb8142}{vipDecodingTable}}[i]);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00303}00303\ \ \ \ \ \ \ \ \ \ \ \ \ prevByte\ =\ (\textcolor{keywordtype}{unsigned}\ char)\ (tmpByte\ \string^\ prevByte);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ fputc(prevByte,\ file);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00305}00305\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00306}00306\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <=\ minColors;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_acaa069d2e820245be0f711415e2c297d}{binaryWriteInt}}(file,\ 1);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00308}00308\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00309}00309\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ad56027171faded451118350359c1e8ae}{binaryWriteUInt}}(file,\ 0);\ \textcolor{comment}{/*\ string\ length\ */}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00310}00310\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ 0);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00311}00311\ \ \ \ \ \ \ \ \ fwrite((\textcolor{keywordtype}{char}*)\ attributeCompressed,\ 1,\ attributeSize,\ file);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00312}00312\ \ \ \ \ \ \ \ \ fwrite((\textcolor{keywordtype}{char}*)\ xCompressed,\ 1,\ xCompressedSize,\ file);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00313}00313\ \ \ \ \ \ \ \ \ fwrite((\textcolor{keywordtype}{char}*)\ yCompressed,\ 1,\ yCompressedSize,\ file);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00314}00314\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00315}00315\ }
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00316}00316\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeCompressed);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00317}00317\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xCompressed);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00318}00318\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yCompressed);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00319}00319\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(attributeValues);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00320}00320\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(xValues);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00321}00321\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(yValues);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00322}00322\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(decodedColors);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00323}00323\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a596a4ab45910b13ea2809999de4c6950}{safe\_free}}(encodedColors);}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00324}00324\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{\Hypertarget{format__vip_8c_source_l00325}00325\ \}}
 
 \end{DoxyCode}

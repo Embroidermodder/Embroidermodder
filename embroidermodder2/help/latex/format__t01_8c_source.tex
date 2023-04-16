@@ -1,5 +1,5 @@
 \hypertarget{format__t01_8c_source}{}\doxysubsection{format\+\_\+t01.\+c}
-\label{format__t01_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_t01.c@{embroidermodder2/extern/libembroidery/src/formats/format\_t01.c}}
+\label{format__t01_8c_source}\index{extern/libembroidery/src/formats/format\_t01.c@{extern/libembroidery/src/formats/format\_t01.c}}
 \mbox{\hyperlink{format__t01_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -34,15 +34,15 @@
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00030}00030\ \textcolor{keywordtype}{char}}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00031}\mbox{\hyperlink{embroidery__internal_8h_aa24e7962d3833a4d7b0997c983efa586}{00031}}\ \mbox{\hyperlink{format__t01_8c_aa24e7962d3833a4d7b0997c983efa586}{writeT01}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00032}00032\ \{}
-\DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00033}00033\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ boundingRect;}
+\DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00033}00033\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}};}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00034}00034\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ pos;}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00036}00036\ }
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00037}00037\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a3838304c6930f2cc53cf763349fc27db}{embPattern\_correctForMaxStitchLength}}(pattern,\ 12.1,\ 12.1);}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00038}00038\ }
-\DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00039}00039\ \ \ \ \ boundingRect\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00039}00039\ \ \ \ \ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00040}00040\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}>1)\ \{}
-\DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}bounding\ rectangle\ with\ top\ \%f\ not\ used\ "{}},\ boundingRect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
+\DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00041}00041\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}bounding\ rectangle\ with\ top\ \%f\ not\ used\ "{}},\ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00042}00042\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}in\ the\ function\ writeT01\(\backslash\)n"{}});}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00043}00043\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{format__t01_8c_source_l00044}00044\ \ \ \ \ pos.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ 0.0;}

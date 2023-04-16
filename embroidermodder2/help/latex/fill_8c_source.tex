@@ -1,5 +1,5 @@
 \hypertarget{fill_8c_source}{}\doxysubsection{fill.\+c}
-\label{fill_8c_source}\index{embroidermodder2/extern/libembroidery/src/fill.c@{embroidermodder2/extern/libembroidery/src/fill.c}}
+\label{fill_8c_source}\index{extern/libembroidery/src/fill.c@{extern/libembroidery/src/fill.c}}
 \mbox{\hyperlink{fill_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00001}00001\ \textcolor{comment}{/*\ }}
@@ -91,9 +91,9 @@
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00109}00109\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (i=*n\_points-\/2;\ i>=0;\ i-\/-\/)\ \{}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00110}00110\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ st1\ =\ points[i+1]\%width\ -\/\ points[i]\%width;}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00111}00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ st2\ =\ points[i+2]\%width\ -\/\ points[i+1]\%width;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ same\_line\ =\ (points[i+1]/width\ ==\ points[i]/width)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l00112}00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{gui__backend_8cpp_ae7b14b8d680e22b0d7c10f259b0ac542}{same\_line}}\ =\ (points[i+1]/width\ ==\ points[i]/width)}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00113}00113\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\&\ (points[i+2]/width\ ==\ points[i+1]/width);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (st1\ <\ tolerence\ \&\&\ st2\ <\ tolerence\ \&\&\ same\_line)\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l00114}00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (st1\ <\ tolerence\ \&\&\ st2\ <\ tolerence\ \&\&\ \mbox{\hyperlink{gui__backend_8cpp_ae7b14b8d680e22b0d7c10f259b0ac542}{same\_line}})\ \{}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00115}00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ found++;}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00116}00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00117}00117\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
@@ -770,15 +770,15 @@
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00991}00991\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nextId\ =\ (i\ +\ 1)\ \%\ vertices-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00992}00992\ }
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00993}00993\ \ \ \ \ \ \ \ \ delta\ =\ \mbox{\hyperlink{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}{embVector\_subtract}}(}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l00994}00994\ \ \ \ \ \ \ \ \ \ \ \ \ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[nextId].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l00995}00995\ \ \ \ \ \ \ \ \ \ \ \ \ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}});}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l00994}00994\ \ \ \ \ \ \ \ \ \ \ \ \ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[nextId].\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}},}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l00995}00995\ \ \ \ \ \ \ \ \ \ \ \ \ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}});}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00996}00996\ }
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00997}00997\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ If\ they\ are\ closer\ than\ the\ distance,\ continue\ */}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00998}00998\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_ac0161afdbecb1d33336072331183e441}{embVector\_length}}(delta)\ <\ distance)\ \{}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l00999}00999\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{continue};}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01000}01000\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01001}01001\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01002}01002\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_ae7afecc6b39df1016ccda59227922483}{embArray\_addVector}}(simplified,\ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}});}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01002}01002\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_ae7afecc6b39df1016ccda59227922483}{embArray\_addVector}}(simplified,\ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}});}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01003}01003\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01004}01004\ \}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01005}01005\ }
@@ -794,7 +794,7 @@
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01026}01026\ }
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01027}01027\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ i<vertices-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01028}01028\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (i!=nth)\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01029}01029\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_ae7afecc6b39df1016ccda59227922483}{embArray\_addVector}}(out,\ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}});}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01029}01029\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{array_8c_ae7afecc6b39df1016ccda59227922483}{embArray\_addVector}}(out,\ vertices-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i].\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a397103c1ef81333bc4e689bb8da585ec}{vector}});}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01030}01030\ \ \ \ \ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01031}01031\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01032}01032\ \}}
@@ -823,130 +823,123 @@
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01070}01070\ \textcolor{keywordtype}{void}}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01071}\mbox{\hyperlink{fill_8c_a8e048d8296a5178c1188ca70ee2256e7}{01071}}\ \mbox{\hyperlink{fill_8c_a8e048d8296a5178c1188ca70ee2256e7}{embPattern\_stitchArc}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ arc,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
 \DoxyCodeLine{\Hypertarget{fill_8c_source_l01072}01072\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01073}01073\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEBUG\ stitchArc\ (unfinished):\ \%f\ \%f\ \%d\ \%d\(\backslash\)n"{}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01074}01074\ \ \ \ \ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___ac48e62ceddc59146061c070d7074ddd2}{home}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ arc.\mbox{\hyperlink{struct_emb_arc___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ thread\_index,\ style);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01075}01075\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01076}01076\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01110}01110\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01111}\mbox{\hyperlink{fill_8c_a4927287166f2a0abbc7b482ff4054a5e}{01111}}\ \mbox{\hyperlink{fill_8c_a4927287166f2a0abbc7b482ff4054a5e}{embPattern\_stitchCircle}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01112}01112\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01113}01113\ \ \ \ \ \textcolor{keywordtype}{float}\ s;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01114}01114\ \ \ \ \ \textcolor{keywordtype}{float}\ seperation\ =\ 0.1;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01115}01115\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ direction\ =\ \{1.0,\ 1.0\};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01116}01116\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ normal\ =\ \{-\/1.0,\ 1.0\};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01117}01117\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}{embVector\_normalize}}(direction,\ \&direction);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01118}01118\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}{embVector\_normalize}}(normal,\ \&normal);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01119}01119\ \ \ \ \ \textcolor{keywordflow}{for}\ (s=-\/circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}};\ s<circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}};\ s\ +=\ seperation)\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01120}01120\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ line;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01121}01121\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ length\ =\ sqrt(circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}*circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ -\/\ s*s);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01122}01122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ scaled;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01123}01123\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(normal,\ s,\ \&scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01124}01124\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}},\ scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01125}01125\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(direction,\ length,\ \&scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01126}01126\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}\ =\ \mbox{\hyperlink{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}{embVector\_subtract}}(line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}},\ scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01127}01127\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(normal,\ s,\ \&scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01128}01128\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}},\ scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01129}01129\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(direction,\ length,\ \&scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01130}01130\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}},\ scaled);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01131}01131\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Split\ long\ stitches\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01132}01132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01133}01133\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01134}01134\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01135}01135\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01136}01136\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01147}01147\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01148}\mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{01148}}\ \mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{embPattern\_stitchEllipse}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_ellipse__}{EmbEllipse}}\ ellipse,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01149}01149\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01150}01150\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEBUG\ stitchEllipse:\ \%f\ \%f\ \%d\ \%d\(\backslash\)n"{}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01151}01151\ \ \ \ \ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___ac48e62ceddc59146061c070d7074ddd2}{home}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ ellipse.\mbox{\hyperlink{struct_emb_ellipse___a68e2bdfeb187d1c5a46afffe5129aabf}{center}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ thread\_index,\ style);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01152}01152\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01153}01153\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01164}01164\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01165}\mbox{\hyperlink{fill_8c_a736fce5df010bbe74ea9ad2857be9bf4}{01165}}\ \mbox{\hyperlink{fill_8c_a736fce5df010bbe74ea9ad2857be9bf4}{embPattern\_stitchPath}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_path__}{EmbPath}}\ path,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01166}01166\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01167}01167\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEBUG\ stitchPath:\ \%f\ \%d\ \%d\ \%d\(\backslash\)n"{}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01168}01168\ \ \ \ \ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___ac48e62ceddc59146061c070d7074ddd2}{home}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ path.\mbox{\hyperlink{struct_emb_path___ae745585ab1bd333341d4502e19f92b0e}{pointList}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}},\ thread\_index,\ style);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01169}01169\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01170}01170\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01181}01181\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01182}\mbox{\hyperlink{fill_8c_a86f903495c0da7514294200680bd6414}{01182}}\ \mbox{\hyperlink{fill_8c_a86f903495c0da7514294200680bd6414}{embPattern\_stitchPolygon}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_path__}{EmbPolygon}}\ polygon,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01183}01183\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01184}01184\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEBUG\ stitchPolygon:\ \%f\ \%d\ \%d\ \%d\(\backslash\)n"{}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01185}01185\ \ \ \ \ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___ac48e62ceddc59146061c070d7074ddd2}{home}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ polygon.\mbox{\hyperlink{struct_emb_path___ae745585ab1bd333341d4502e19f92b0e}{pointList}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}},\ thread\_index,\ style);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01186}01186\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01187}01187\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01198}01198\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01199}\mbox{\hyperlink{fill_8c_a9ae9d5d7dfbb2ab361dc37970b7eb2f2}{01199}}\ \mbox{\hyperlink{fill_8c_a9ae9d5d7dfbb2ab361dc37970b7eb2f2}{embPattern\_stitchPolyline}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_path__}{EmbPolyline}}\ polyline,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01200}01200\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01201}01201\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEBUG\ stitchPolyline:\ \%f\ \%d\ \%d\ \%d\(\backslash\)n"{}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01202}01202\ \ \ \ \ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___ac48e62ceddc59146061c070d7074ddd2}{home}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ polyline.\mbox{\hyperlink{struct_emb_path___ae745585ab1bd333341d4502e19f92b0e}{pointList}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}},\ thread\_index,\ style);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01203}01203\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01204}01204\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01215}01215\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01216}\mbox{\hyperlink{fill_8c_ae38ddde615726bba5070a6b17ce6d018}{01216}}\ \mbox{\hyperlink{fill_8c_ae38ddde615726bba5070a6b17ce6d018}{embPattern\_stitchRect}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01217}01217\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01218}01218\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ seperation\ =\ 0.1;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01219}01219\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ width\ =\ rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01220}01220\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ height\ =\ rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01221}01221\ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ height)\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01222}01222\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ s;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01223}01223\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (s=rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}};\ s<rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}};\ s\ +=\ seperation)\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01224}01224\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Split\ long\ stitches\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01225}01225\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}},\ s,\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01226}01226\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}},\ s,\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01227}01227\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01228}01228\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01229}01229\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01230}01230\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ s;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01231}01231\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (s=rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}};\ s<rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}};\ s\ +=\ seperation)\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01232}01232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Split\ long\ stitches\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01233}01233\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ s,\ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01234}01234\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ s,\ rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01235}01235\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01236}01236\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01237}01237\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01238}01238\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01247}01247\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01248}\mbox{\hyperlink{fill_8c_a908f6c41318183bcfceebdd9b646dc90}{01248}}\ \mbox{\hyperlink{fill_8c_a908f6c41318183bcfceebdd9b646dc90}{embPattern\_stitchText}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01249}01249\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01250}01250\ \ \ \ \ printf(\textcolor{stringliteral}{"{}DEBUG:\ \%f\ \%f\ \%d\ \%d"{}},}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01251}01251\ \ \ \ \ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___ac48e62ceddc59146061c070d7074ddd2}{home}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}},\ thread\_index,\ style);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01252}01252\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01253}01253\ }
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01259}01259\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01260}\mbox{\hyperlink{embroidery_8h_a65792d1b0c470b33261281062fb92a54}{01260}}\ \mbox{\hyperlink{fill_8c_ad948b1ae6e42c31b1a020348bedddfab}{embPattern\_convertGeometry}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ p)}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01261}01261\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01262}01262\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01263}01263\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ i<p-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01264}01264\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_geometry__}{EmbGeometry}}\ g\ =\ p-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i];}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01265}01265\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (g.\mbox{\hyperlink{struct_emb_geometry___ac765329451135abec74c45e1897abf26}{type}})\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01266}01266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a121b752016999703e9ec106a3839d5dc}{EMB\_ARC}}:\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01267}01267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01268}01268\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_a8e048d8296a5178c1188ca70ee2256e7}{embPattern\_stitchArc}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a643b1c49b6a47115b01c80af29914520}{arc}},\ 0,\ 0);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01269}01269\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01270}01270\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01271}01271\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a360a30eda3be6c003bc6aff56be7be37}{EMB\_CIRCLE}}:\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01272}01272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01273}01273\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_a4927287166f2a0abbc7b482ff4054a5e}{embPattern\_stitchCircle}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a266384774724ffa486e4512821606c8b}{circle}},\ 0,\ 0);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01274}01274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01275}01275\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01276}01276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a09ebf481eb0c684537b863663e40ede8}{EMB\_ELLIPSE}}:\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01277}01277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01278}01278\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{embPattern\_stitchEllipse}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___a21524733115b114333b98bba4ba8ec13}{ellipse}},\ 0,\ 0);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01279}01279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01280}01280\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01281}01281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a2fcee7ad80543768ad9578ca4ec02ada}{EMB\_RECT}}:\ \{}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01282}01282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01283}01283\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_ae38ddde615726bba5070a6b17ce6d018}{embPattern\_stitchRect}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a0bcd5490114c59533032a6dda94a3310}{object}}.\mbox{\hyperlink{struct_emb_geometry___abbe981e36903877bff823bb13928ae38}{rect}},\ 0,\ 0);}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01284}01284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01285}01285\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01286}01286\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01287}01287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01288}01288\ \ \ \ \ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01289}01289\ \ \ \ \ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01290}01290\ \ \ \ \ \textcolor{comment}{/*\ Now\ ignore\ the\ geometry\ when\ writing.\ */}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01291}01291\ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}}\ =\ 0;}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01292}01292\ \}}
-\DoxyCodeLine{\Hypertarget{fill_8c_source_l01293}01293\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01073}01073\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01074}01074\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01075}01075\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01109}01109\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01110}\mbox{\hyperlink{fill_8c_a4927287166f2a0abbc7b482ff4054a5e}{01110}}\ \mbox{\hyperlink{fill_8c_a4927287166f2a0abbc7b482ff4054a5e}{embPattern\_stitchCircle}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ circle,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01111}01111\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01112}01112\ \ \ \ \ \textcolor{keywordtype}{float}\ s;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01113}01113\ \ \ \ \ \textcolor{keywordtype}{float}\ seperation\ =\ 0.1;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01114}01114\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ direction\ =\ \{1.0,\ 1.0\};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01115}01115\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ normal\ =\ \{-\/1.0,\ 1.0\};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01116}01116\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}{embVector\_normalize}}(direction,\ \&direction);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01117}01117\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}{embVector\_normalize}}(normal,\ \&normal);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01118}01118\ \ \ \ \ \textcolor{keywordflow}{for}\ (s=-\/circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}};\ s<circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}};\ s\ +=\ seperation)\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01119}01119\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ line;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01120}01120\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ length\ =\ sqrt(circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}*circle.\mbox{\hyperlink{struct_emb_circle___a1f90f77f18adae49041cb441535414ce}{radius}}\ -\/\ s*s);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01121}01121\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ scaled;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01122}01122\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(normal,\ s,\ \&scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01123}01123\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}},\ scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01124}01124\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(direction,\ length,\ \&scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01125}01125\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}\ =\ \mbox{\hyperlink{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}{embVector\_subtract}}(line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}},\ scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01126}01126\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(normal,\ s,\ \&scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01127}01127\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(circle.\mbox{\hyperlink{struct_emb_circle___a68e2bdfeb187d1c5a46afffe5129aabf}{center}},\ scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01128}01128\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}{embVector\_multiply}}(direction,\ length,\ \&scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01129}01129\ \ \ \ \ \ \ \ \ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}\ =\ \mbox{\hyperlink{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}{embVector\_add}}(line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}},\ scaled);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01130}01130\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Split\ long\ stitches\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01131}01131\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ line.\mbox{\hyperlink{struct_emb_line___ad61a9cd980182f7b946d1a38aaee8562}{start}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01132}01132\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}},\ line.\mbox{\hyperlink{struct_emb_line___ac19242fe9e53942be61574685fbd49ed}{end}}.\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01133}01133\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01134}01134\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01135}01135\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01146}01146\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01147}\mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{01147}}\ \mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{embPattern\_stitchEllipse}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_ellipse__}{EmbEllipse}}\ ellipse,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01148}01148\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01149}01149\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01150}01150\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01151}01151\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01162}01162\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01163}\mbox{\hyperlink{fill_8c_a130b4030da774600c6005183dabb2d28}{01163}}\ \mbox{\hyperlink{fill_8c_a130b4030da774600c6005183dabb2d28}{embPattern\_stitchPath}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_path__}{EmbPath}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01164}01164\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01165}01165\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01166}01166\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01167}01167\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01178}01178\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01179}\mbox{\hyperlink{fill_8c_a6e95b120116c16767cecbd2284ce1e7b}{01179}}\ \mbox{\hyperlink{fill_8c_a6e95b120116c16767cecbd2284ce1e7b}{embPattern\_stitchPolygon}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_path__}{EmbPolygon}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01180}01180\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01181}01181\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01182}01182\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01183}01183\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01194}01194\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01195}\mbox{\hyperlink{fill_8c_a18bde39bfa17dfb7fe07137d62260e5c}{01195}}\ \mbox{\hyperlink{fill_8c_a18bde39bfa17dfb7fe07137d62260e5c}{embPattern\_stitchPolyline}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_path__}{EmbPolyline}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01196}01196\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01197}01197\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01198}01198\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01199}01199\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01210}01210\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01211}\mbox{\hyperlink{fill_8c_ae38ddde615726bba5070a6b17ce6d018}{01211}}\ \mbox{\hyperlink{fill_8c_ae38ddde615726bba5070a6b17ce6d018}{embPattern\_stitchRect}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01212}01212\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01213}01213\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ seperation\ =\ 0.1;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01214}01214\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ width\ =\ rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01215}01215\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ height\ =\ rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01216}01216\ \ \ \ \ \textcolor{keywordflow}{if}\ (width\ >\ height)\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01217}01217\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ s;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01218}01218\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (s=rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}};\ s<rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}};\ s\ +=\ seperation)\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01219}01219\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Split\ long\ stitches\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01220}01220\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ rect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}},\ s,\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01221}01221\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ rect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}},\ s,\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01222}01222\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01223}01223\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01224}01224\ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01225}01225\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{float}\ s;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01226}01226\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (s=rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}};\ s<rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}};\ s\ +=\ seperation)\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01227}01227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Split\ long\ stitches\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01228}01228\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ s,\ rect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01229}01229\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}{embPattern\_addStitchAbs}}(p,\ s,\ rect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}},\ \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}},\ thread\_index);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01230}01230\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01231}01231\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01232}01232\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01233}01233\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01242}01242\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01243}\mbox{\hyperlink{fill_8c_a908f6c41318183bcfceebdd9b646dc90}{01243}}\ \mbox{\hyperlink{fill_8c_a908f6c41318183bcfceebdd9b646dc90}{embPattern\_stitchText}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *p,\ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ rect,\ \textcolor{keywordtype}{int}\ thread\_index,\ \textcolor{keywordtype}{int}\ style)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01244}01244\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01245}01245\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01246}01246\ }
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01252}01252\ \textcolor{keywordtype}{void}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01253}\mbox{\hyperlink{embroidery_8h_a65792d1b0c470b33261281062fb92a54}{01253}}\ \mbox{\hyperlink{fill_8c_ad948b1ae6e42c31b1a020348bedddfab}{embPattern\_convertGeometry}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ p)}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01254}01254\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01255}01255\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01256}01256\ \ \ \ \ \textcolor{keywordflow}{for}\ (i=0;\ i<p-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01257}01257\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_geometry__}{EmbGeometry}}\ g\ =\ p-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___a53ed4a940a3d3011efefded128131523}{geometry}}[i];}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01258}01258\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (g.\mbox{\hyperlink{struct_emb_geometry___ac765329451135abec74c45e1897abf26}{type}})\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01259}01259\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a121b752016999703e9ec106a3839d5dc}{EMB\_ARC}}:\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01260}01260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01261}01261\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_a8e048d8296a5178c1188ca70ee2256e7}{embPattern\_stitchArc}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a643b1c49b6a47115b01c80af29914520}{arc}},\ 0,\ 0);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01262}01262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01263}01263\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01264}01264\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a360a30eda3be6c003bc6aff56be7be37}{EMB\_CIRCLE}}:\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01265}01265\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01266}01266\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_a4927287166f2a0abbc7b482ff4054a5e}{embPattern\_stitchCircle}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a266384774724ffa486e4512821606c8b}{circle}},\ 0,\ 0);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01267}01267\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01268}01268\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01269}01269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a09ebf481eb0c684537b863663e40ede8}{EMB\_ELLIPSE}}:\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01270}01270\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01271}01271\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_a63bc84e4406e59c092a2e076afedf930}{embPattern\_stitchEllipse}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___a21524733115b114333b98bba4ba8ec13}{ellipse}},\ 0,\ 0);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01272}01272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01273}01273\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01274}01274\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{embroidery_8h_a2fcee7ad80543768ad9578ca4ec02ada}{EMB\_RECT}}:\ \{}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01275}01275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ To\ Do\ make\ the\ thread\ up\ here.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01276}01276\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{fill_8c_ae38ddde615726bba5070a6b17ce6d018}{embPattern\_stitchRect}}(p,\ g.\mbox{\hyperlink{struct_emb_geometry___a31650b1b1788d96f8b93bb39ed6e17ba}{object}}.\mbox{\hyperlink{struct_emb_geometry___abbe981e36903877bff823bb13928ae38}{rect}},\ 0,\ 0);}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01277}01277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01278}01278\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01279}01279\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01280}01280\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01281}01281\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01282}01282\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01283}01283\ \ \ \ \ \textcolor{comment}{/*\ Now\ ignore\ the\ geometry\ when\ writing.\ */}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01284}01284\ \ \ \ \ p-\/>\mbox{\hyperlink{struct_emb_pattern___aaddfa3a566bc153ef88a3106389e20d4}{geometry}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01285}01285\ \}}
+\DoxyCodeLine{\Hypertarget{fill_8c_source_l01286}01286\ }
 
 \end{DoxyCode}

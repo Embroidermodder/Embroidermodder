@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['readme_2emd_0',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
-  ['rect_2ec_1',['rect.c',['../rect_8c.html',1,'']]]
+  ['text_2ec_0',['text.c',['../text_8c.html',1,'']]],
+  ['thread_2dcolor_2ec_1',['thread-color.c',['../thread-color_8c.html',1,'']]]
 ];

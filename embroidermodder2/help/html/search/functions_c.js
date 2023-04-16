@@ -1,21 +1,10 @@
 var searchData=
 [
-  ['main_0',['main',['../main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main.cpp']]],
-  ['mainwin_1',['mainWin',['../native-scripting_8cpp.html#a0f36a84e7a582fc0c4da7b9f6bc47119',1,'mainWin():&#160;native-scripting.cpp'],['../native-scripting_8h.html#a0f36a84e7a582fc0c4da7b9f6bc47119',1,'mainWin():&#160;native-scripting.cpp']]],
-  ['mainwindow_2',['MainWindow',['../class_main_window.html#aeb676574b78bda84d687fdcfd65d84a6',1,'MainWindow']]],
-  ['makelayeractive_3',['makeLayerActive',['../class_main_window.html#ae03dd5abbfc1517bfb0dfc62289ae48a',1,'MainWindow']]],
-  ['mdiarea_4',['MdiArea',['../class_mdi_area.html#a20434b7ffe649fa9f34a7229ab841fe1',1,'MdiArea']]],
-  ['mdiwindow_5',['MdiWindow',['../class_mdi_window.html#afd35fb0bc495cf9741f744f0714e3e8f',1,'MdiWindow']]],
-  ['mergewith_6',['mergeWith',['../class_undoable_nav_command.html#a827c000df0233dc7e8ca1e3d6ba1d896',1,'UndoableNavCommand']]],
-  ['mirrorselected_7',['mirrorSelected',['../class_view.html#a0d24c4e6576ba8a921fdccb9d89db887',1,'View']]],
-  ['mitdecodestitch_8',['mitDecodeStitch',['../encoding_8c.html#a896703c85b788f1c46053d826cdd3524',1,'mitDecodeStitch(unsigned char value):&#160;encoding.c'],['../embroidery__internal_8h.html#a896703c85b788f1c46053d826cdd3524',1,'mitDecodeStitch(unsigned char value):&#160;encoding.c']]],
-  ['mitencodestitch_9',['mitEncodeStitch',['../embroidery__internal_8h.html#a558c902db31be6221139e394313e4a0c',1,'mitEncodeStitch(EmbReal value):&#160;encoding.c'],['../encoding_8c.html#a558c902db31be6221139e394313e4a0c',1,'mitEncodeStitch(EmbReal value):&#160;encoding.c']]],
-  ['mousedoubleclickevent_10',['mouseDoubleClickEvent',['../class_mdi_area.html#a91ecdca9f19ec37f982d2032c6b2aae4',1,'MdiArea::mouseDoubleClickEvent()'],['../class_view.html#ae04da8b5cfdee7755734bf7b4822aa58',1,'View::mouseDoubleClickEvent()']]],
-  ['mousemoveevent_11',['mouseMoveEvent',['../class_cmd_prompt_handle.html#a69f8b856a74f015b817c36689f9aa18a',1,'CmdPromptHandle::mouseMoveEvent()'],['../class_view.html#ae820c6a86f0a1908bf451f86db043489',1,'View::mouseMoveEvent()']]],
-  ['mousepressevent_12',['mousePressEvent',['../class_cmd_prompt_handle.html#a3571373ca6fedac4299977ab5fa2b88a',1,'CmdPromptHandle::mousePressEvent()'],['../class_view.html#ad2272e344e46519f026cd02f419884f1',1,'View::mousePressEvent()']]],
-  ['mousereleaseevent_13',['mouseReleaseEvent',['../class_cmd_prompt_handle.html#a6be117e92e9375a28092144242dd29a4',1,'CmdPromptHandle::mouseReleaseEvent()'],['../class_view.html#a35226f6549add1ff837c65888fcd00fc',1,'View::mouseReleaseEvent()']]],
-  ['mousesnappoint_14',['mouseSnapPoint',['../class_line_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'LineObject::mouseSnapPoint()'],['../class_path_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'PathObject::mouseSnapPoint()'],['../class_point_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'PointObject::mouseSnapPoint()'],['../class_polygon_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'PolygonObject::mouseSnapPoint()'],['../class_polyline_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'PolylineObject::mouseSnapPoint()'],['../class_rect_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'RectObject::mouseSnapPoint()'],['../class_text_single_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'TextSingleObject::mouseSnapPoint()'],['../class_dim_leader_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'DimLeaderObject::mouseSnapPoint()'],['../class_circle_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'CircleObject::mouseSnapPoint()'],['../class_base_object.html#a80af764c683465a8777c85754f619d28',1,'BaseObject::mouseSnapPoint()'],['../class_arc_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'ArcObject::mouseSnapPoint()'],['../class_image_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'ImageObject::mouseSnapPoint()'],['../class_ellipse_object.html#a71dcd474d5a8c0e5fdc137b48da18a0c',1,'EllipseObject::mouseSnapPoint()']]],
-  ['moveaction_15',['moveAction',['../class_view.html#a08439dd91239f4e45fc585a9c6f2988a',1,'View']]],
-  ['moveresizehistory_16',['moveResizeHistory',['../class_cmd_prompt_splitter.html#a9c4590a8674c0cf256a7fccb2ac376fb',1,'CmdPromptSplitter']]],
-  ['moveselected_17',['moveSelected',['../class_view.html#ac51e16242e7caa854922c3d00e84cbe2',1,'View']]]
+  ['main_0',['main',['../src_2main_8c.html#a0ddf1224851353fc92bfbff6f499fa97',1,'main.c']]],
+  ['menu_5fitem_1',['menu_item',['../gui__backend_8cpp.html#afa5dc595844fa60a2550d2c4792c241c',1,'menu_item(const char *key):&#160;gui_backend.cpp'],['../gui__backend_8h.html#a8e9c1d102fc4669dfc09579d64694725',1,'menu_item(const char *):&#160;gui_backend.cpp']]],
+  ['menu_5fseparator_2',['menu_separator',['../gui__backend_8cpp.html#a5f78a83078ffcfb5e680751b8bda2c0f',1,'menu_separator(void):&#160;gui_backend.cpp'],['../gui__backend_8h.html#a5f78a83078ffcfb5e680751b8bda2c0f',1,'menu_separator(void):&#160;gui_backend.cpp']]],
+  ['merge_5fwith_3',['merge_with',['../src_2main_8c.html#adf20f5328b0d7b1bc0c5b98358413837',1,'main.c']]],
+  ['mitdecodestitch_4',['mitDecodeStitch',['../embroidery__internal_8h.html#a896703c85b788f1c46053d826cdd3524',1,'mitDecodeStitch(unsigned char value):&#160;encoding.c'],['../encoding_8c.html#a896703c85b788f1c46053d826cdd3524',1,'mitDecodeStitch(unsigned char value):&#160;encoding.c']]],
+  ['mitencodestitch_5',['mitEncodeStitch',['../embroidery__internal_8h.html#a558c902db31be6221139e394313e4a0c',1,'mitEncodeStitch(EmbReal value):&#160;encoding.c'],['../encoding_8c.html#a558c902db31be6221139e394313e4a0c',1,'mitEncodeStitch(EmbReal value):&#160;encoding.c']]],
+  ['move_5fmain_6',['move_main',['../src_2main_8c.html#a55555197c724d3b2a543e87077876399',1,'main.c']]]
 ];

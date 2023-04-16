@@ -1,5 +1,5 @@
-\hypertarget{embroidery_8h}{}\doxysubsection{embroidermodder2/extern/libembroidery/src/embroidery.h File Reference}
-\label{embroidery_8h}\index{embroidermodder2/extern/libembroidery/src/embroidery.h@{embroidermodder2/extern/libembroidery/src/embroidery.h}}
+\hypertarget{embroidery_8h}{}\doxysubsection{extern/libembroidery/src/embroidery.h File Reference}
+\label{embroidery_8h}\index{extern/libembroidery/src/embroidery.h@{extern/libembroidery/src/embroidery.h}}
 \doxysubsubsection*{Data Structures}
 \begin{DoxyCompactItemize}
 \item 
@@ -478,7 +478,7 @@ typedef struct \mbox{\hyperlink{struct_emb_format_list__}{Emb\+Format\+List\+\_\
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} \mbox{\hyperlink{embroidery_8h_afdb3beaf9455403550bea072e6433024}{emb\+Line\+\_\+make}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_a9559c0d75a8e73a52114e9c20f45838b}{emb\+Line\+\_\+normal\+Vector}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$result, int \mbox{\hyperlink{arc_8c_aa06996ece460f2c55c48322923c14625}{clockwise}})
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_a9559c0d75a8e73a52114e9c20f45838b}{emb\+Line\+\_\+normal\+Vector}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$result, int \mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{embroidery_8h_a95daa6f689b628dec2a772dfde676c83}{emb\+Line\+\_\+intersection\+Point}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line1, \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line2)
 \item 
@@ -522,7 +522,7 @@ typedef struct \mbox{\hyperlink{struct_emb_format_list__}{Emb\+Format\+List\+\_\
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_abcb0a9723dfb5440894eb50cb219d993}{get\+Arc\+Center}} (\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$arc\+Center)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} char \mbox{\hyperlink{embroidery_8h_abccfe683f2d3b1bafb626c3987e3c9ac}{get\+Arc\+Data\+From\+Bulge}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bulge, \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} $\ast$arc, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$radius, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$diameter, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$sagitta, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$apothem, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$inc\+Angle\+In\+Degrees, char $\ast$\mbox{\hyperlink{arc_8c_aa06996ece460f2c55c48322923c14625}{clockwise}})
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} char \mbox{\hyperlink{embroidery_8h_abccfe683f2d3b1bafb626c3987e3c9ac}{get\+Arc\+Data\+From\+Bulge}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bulge, \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} $\ast$arc, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$radius, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$diameter, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$sagitta, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$apothem, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$inc\+Angle\+In\+Degrees, char $\ast$\mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} \mbox{\hyperlink{embroidery_8h_a847a64f66c1b6493da001e241a1a2ce3}{emb\+Circle\+\_\+init}} (void)
 \item 
@@ -2712,7 +2712,7 @@ int
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00852}{852}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00852}{852}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}\label{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}} 
 \index{embroidery.h@{embroidery.h}!embColor\_fromHexStr@{embColor\_fromHexStr}}
@@ -2918,7 +2918,7 @@ Toggle the rubber mode of the object.
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000028}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000421}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{geometry_8c_source_l00158}{158}} of file \mbox{\hyperlink{geometry_8c_source}{geometry.\+c}}.
@@ -3179,7 +3179,7 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00656}{656}} of file \mbo
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{fill_8c_source_l01260}{1260}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
+Definition at line \mbox{\hyperlink{fill_8c_source_l01253}{1253}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_adb4b9ef23f2fbe8b6d04e50e9f043da1}\label{embroidery_8h_adb4b9ef23f2fbe8b6d04e50e9f043da1}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_copyPolylinesToStitchList@{embPattern\_copyPolylinesToStitchList}}
@@ -3599,7 +3599,7 @@ Definition at line \mbox{\hyperlink{rect_8c_source_l00018}{18}} of file \mbox{\h
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00681}{681}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00681}{681}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}\label{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}} 
 \index{embroidery.h@{embroidery.h}!embSatinOutline\_renderStitches@{embSatinOutline\_renderStitches}}
@@ -3619,7 +3619,7 @@ Emb\+Array$\ast$
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00776}{776}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00776}{776}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a58c3e07fc4e42ab234f8915ae132d829}\label{embroidery_8h_a58c3e07fc4e42ab234f8915ae132d829}} 
 \index{embroidery.h@{embroidery.h}!embThread\_findNearestColor@{embThread\_findNearestColor}}
@@ -3643,7 +3643,7 @@ closest\+Index The entry in the Thread\+List that matches.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00910}{910}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00910}{910}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_afa800b5fae861c97f7921b41dc96c755}\label{embroidery_8h_afa800b5fae861c97f7921b41dc96c755}} 
 \index{embroidery.h@{embroidery.h}!embThread\_findNearestThread@{embThread\_findNearestThread}}
@@ -3665,7 +3665,7 @@ int
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00934}{934}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00934}{934}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a76fab67622f40989635482b9a1b1dfc2}\label{embroidery_8h_a76fab67622f40989635482b9a1b1dfc2}} 
 \index{embroidery.h@{embroidery.h}!embThread\_getRandom@{embThread\_getRandom}}
@@ -3680,7 +3680,7 @@ c The resulting color.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00957}{957}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00957}{957}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_aab99160f0470d40b5f7bf4bbe5017fae}\label{embroidery_8h_aab99160f0470d40b5f7bf4bbe5017fae}} 
 \index{embroidery.h@{embroidery.h}!embTime\_initNow@{embTime\_initNow}}
@@ -3695,7 +3695,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00957}{957}} of file \mbox{\
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l01136}{1136}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01136}{1136}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_af1dbef098d0111b2f93e9aee1bbdf79d}\label{embroidery_8h_af1dbef098d0111b2f93e9aee1bbdf79d}} 
 \index{embroidery.h@{embroidery.h}!embTime\_time@{embTime\_time}}
@@ -3713,7 +3713,7 @@ Emb\+Time
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l01162}{1162}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01162}{1162}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}\label{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}} 
 \index{embroidery.h@{embroidery.h}!embVector\_add@{embVector\_add}}
@@ -3836,7 +3836,7 @@ Definition at line \mbox{\hyperlink{vector_8c_source_l00178}{178}} of file \mbox
 The scalar multiple {\itshape magnitude} of a vector {\itshape vector}. Returned as {\itshape result}.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000039}{Todo}}]make result return argument. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000432}{Todo}}]make result return argument. \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{vector_8c_source_l00046}{46}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
@@ -3856,7 +3856,7 @@ Equivalent to\+:
 \]
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000038}{Todo}}]make result return argument. \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000431}{Todo}}]make result return argument. \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{vector_8c_source_l00027}{27}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
@@ -4089,7 +4089,7 @@ Definition at line \mbox{\hyperlink{thread-color_8c_source_l00014}{14}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00056}{56}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00056}{56}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a1a622bb87a39f0338527347ee6ba1402}\label{embroidery_8h_a1a622bb87a39f0338527347ee6ba1402}} 
 \index{embroidery.h@{embroidery.h}!emb\_error@{emb\_error}}
@@ -4103,7 +4103,7 @@ Error code storage for optional control flow blocking.
 
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00058}{58}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00058}{58}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}\label{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}} 
 \index{embroidery.h@{embroidery.h}!emb\_verbose@{emb\_verbose}}
@@ -4117,7 +4117,7 @@ Verbosity level.
 
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00057}{57}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00057}{57}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}\label{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}} 
 \index{embroidery.h@{embroidery.h}!embConstantPi@{embConstantPi}}
@@ -4127,7 +4127,7 @@ Definition at line \mbox{\hyperlink{main_8c_source_l00057}{57}} of file \mbox{\h
 
 
 
-Definition at line \mbox{\hyperlink{main_8c_source_l00060}{60}} of file \mbox{\hyperlink{main_8c_source}{main.\+c}}.
+Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00060}{60}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8cb11404ce46501561f956d33f8dcf95}\label{embroidery_8h_a8cb11404ce46501561f956d33f8dcf95}} 
 \index{embroidery.h@{embroidery.h}!formatTable@{formatTable}}
@@ -4140,7 +4140,7 @@ This file is part of libembroidery.
 Copyright 2018-\/2022 The Embroidermodder Team Licensed under the terms of the zlib license.
 
 This file contains all the read and write functions for the library. \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000018}{Todo}}]This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$ \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000411}{Todo}}]This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$ \end{DoxyRefDesc}
 
 
 Definition at line \mbox{\hyperlink{formats_8c_source_l00025}{25}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
@@ -4223,5 +4223,5 @@ Definition at line \mbox{\hyperlink{thread-color_8c_source_l00017}{17}} of file 
 
 
 
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00015}{15}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
+Definition at line \mbox{\hyperlink{format__vip_8c_source_l00014}{14}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 

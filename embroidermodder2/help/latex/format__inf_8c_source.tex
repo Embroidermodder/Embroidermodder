@@ -1,5 +1,5 @@
 \hypertarget{format__inf_8c_source}{}\doxysubsection{format\+\_\+inf.\+c}
-\label{format__inf_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_inf.c@{embroidermodder2/extern/libembroidery/src/formats/format\_inf.c}}
+\label{format__inf_8c_source}\index{extern/libembroidery/src/formats/format\_inf.c@{extern/libembroidery/src/formats/format\_inf.c}}
 \mbox{\hyperlink{format__inf_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -51,11 +51,11 @@
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00047}00047\ \{}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00048}00048\ \ \ \ \ \textcolor{keywordtype}{int}\ i,\ bytesRemaining;}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00049}00049\ \ \ \ \ }
-\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00050}00050\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x01);}
-\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00051}00051\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x08);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00050}00050\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x01);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00051}00051\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x08);}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00052}00052\ \ \ \ \ \textcolor{comment}{/*\ write\ place\ holder\ offset\ */}}
-\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x00);}
-\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00053}00053\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ 0x00);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00054}00054\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00055}00055\ }
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00056}00056\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00057}00057\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{char}\ buffer[50];}
@@ -80,7 +80,7 @@
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00076}00076\ \ \ \ \ fseek(file,\ -\/8,\ SEEK\_END);}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00077}00077\ \ \ \ \ bytesRemaining\ =\ ftell(file);}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00078}00078\ \ \ \ \ fseek(file,\ 8,\ SEEK\_SET);}
-\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ bytesRemaining);}
+\DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00079}00079\ \ \ \ \ \mbox{\hyperlink{formats_8c_a152fc4262fce475f30786312da68fad6}{binaryWriteUIntBE}}(file,\ bytesRemaining);}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00080}00080\ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
 \DoxyCodeLine{\Hypertarget{format__inf_8c_source_l00081}00081\ \}}
 

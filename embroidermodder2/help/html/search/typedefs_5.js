@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['stxthread_0',['StxThread',['../embroidery__internal_8h.html#af9469bba0fdbec9610a24d5e5f633379',1,'embroidery_internal.h']]],
-  ['subdescriptor_1',['SubDescriptor',['../embroidery__internal_8h.html#a7f9d4d9fe0cd966cefbf35c228076a30',1,'embroidery_internal.h']]],
-  ['svgattribute_2',['SvgAttribute',['../embroidery__internal_8h.html#a1e4f54951edfeeec310af2579c48f4e6',1,'embroidery_internal.h']]]
+  ['index_0',['Index',['../src_2main_8c.html#a6e4c300aad52822a324a91edae2235b6',1,'main.c']]],
+  ['indexentry_1',['IndexEntry',['../src_2main_8c.html#ac4aeb4daa04ff262b2f2fd479dc0e98f',1,'main.c']]]
 ];

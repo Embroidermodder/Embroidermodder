@@ -1,5 +1,5 @@
 \hypertarget{line_8c_source}{}\doxysubsection{line.\+c}
-\label{line_8c_source}\index{embroidermodder2/extern/libembroidery/src/geometry/line.c@{embroidermodder2/extern/libembroidery/src/geometry/line.c}}
+\label{line_8c_source}\index{extern/libembroidery/src/geometry/line.c@{extern/libembroidery/src/geometry/line.c}}
 \mbox{\hyperlink{line_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -17,7 +17,7 @@
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}../embroidery.h"{}}}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00014}00014\ }
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00017}00017\ \textcolor{keywordtype}{void}}
-\DoxyCodeLine{\Hypertarget{line_8c_source_l00018}\mbox{\hyperlink{embroidery_8h_a9559c0d75a8e73a52114e9c20f45838b}{00018}}\ \mbox{\hyperlink{line_8c_a39cd302248c62d0f38987cf30f16f97d}{embLine\_normalVector}}(\mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ line,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}*\ result,\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{arc_8c_aa06996ece460f2c55c48322923c14625}{clockwise}})}
+\DoxyCodeLine{\Hypertarget{line_8c_source_l00018}\mbox{\hyperlink{embroidery_8h_a9559c0d75a8e73a52114e9c20f45838b}{00018}}\ \mbox{\hyperlink{line_8c_a39cd302248c62d0f38987cf30f16f97d}{embLine\_normalVector}}(\mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ line,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}*\ result,\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00019}00019\ \{}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00020}00020\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ temp;}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00021}00021\ \ \ \ \ \textcolor{keywordflow}{if}\ (!result)\ \{}
@@ -30,7 +30,7 @@
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00028}00028\ \ \ \ \ temp\ =\ result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00029}00029\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00030}00030\ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ -\/temp;}
-\DoxyCodeLine{\Hypertarget{line_8c_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{arc_8c_aa06996ece460f2c55c48322923c14625}{clockwise}})\ \{}
+\DoxyCodeLine{\Hypertarget{line_8c_source_l00031}00031\ \ \ \ \ \textcolor{keywordflow}{if}\ (!\mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})\ \{}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00032}00032\ \ \ \ \ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}}\ =\ -\/result-\/>\mbox{\hyperlink{struct_emb_vector___ae1a3958205104364b97172da19628db7}{x}};}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00033}00033\ \ \ \ \ \ \ \ \ result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}}\ =\ -\/result-\/>\mbox{\hyperlink{struct_emb_vector___ac696d7e3434ae029d180ef550e61af2d}{y}};}
 \DoxyCodeLine{\Hypertarget{line_8c_source_l00034}00034\ \ \ \ \ \}}

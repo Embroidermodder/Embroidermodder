@@ -1,5 +1,5 @@
 \hypertarget{format__pec_8c_source}{}\doxysubsection{format\+\_\+pec.\+c}
-\label{format__pec_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_pec.c@{embroidermodder2/extern/libembroidery/src/formats/format\_pec.c}}
+\label{format__pec_8c_source}\index{extern/libembroidery/src/formats/format\_pec.c@{extern/libembroidery/src/formats/format\_pec.c}}
 \mbox{\hyperlink{format__pec_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -274,15 +274,15 @@
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00270}00270\ \ \ \ \ height\ =\ (int)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(bounds.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ -\/\ bounds.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}});}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00271}00271\ \ \ \ \ width\ =\ (int)\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(bounds.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ -\/\ bounds.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}});}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00272}00272\ \ \ \ \ \textcolor{comment}{/*\ write\ 2\ byte\ x\ size\ */}}
-\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00273}00273\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})width);}
+\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00273}00273\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})width);}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00274}00274\ \ \ \ \ \textcolor{comment}{/*\ write\ 2\ byte\ y\ size\ */}}
-\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00275}00275\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})height);}
+\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00275}00275\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})height);}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00276}00276\ }
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00277}00277\ \ \ \ \ \textcolor{comment}{/*\ Write\ 4\ miscellaneous\ int16's\ */}}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00278}00278\ \ \ \ \ fwrite(\textcolor{stringliteral}{"{}\(\backslash\)x01\(\backslash\)xe0\(\backslash\)x01\(\backslash\)xb0"{}},\ 1,\ 4,\ file);}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00279}00279\ }
-\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00280}00280\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binaryWriteUShortBE}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})(0x9000\ |\ -\/(\textcolor{keywordtype}{int})\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(bounds.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}})));}
-\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00281}00281\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binaryWriteUShortBE}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})(0x9000\ |\ -\/(\textcolor{keywordtype}{int})\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(bounds.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}})));}
+\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00280}00280\ \ \ \ \ \mbox{\hyperlink{formats_8c_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binaryWriteUShortBE}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})(0x9000\ |\ -\/(\textcolor{keywordtype}{int})\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(bounds.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}})));}
+\DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00281}00281\ \ \ \ \ \mbox{\hyperlink{formats_8c_ac93ea02c7dfc79fb81e7e7cc5acea14a}{binaryWriteUShortBE}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})(0x9000\ |\ -\/(\textcolor{keywordtype}{int})\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(bounds.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}})));}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00282}00282\ }
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00283}00283\ \ \ \ \ \mbox{\hyperlink{format__pec_8c_a29630bd31090c09996a3a42a8f71e34d}{pecEncode}}(file,\ pattern);}
 \DoxyCodeLine{\Hypertarget{format__pec_8c_source_l00284}00284\ \ \ \ \ graphicsOffsetValue\ =\ ftell(file)\ -\/\ graphicsOffsetLocation\ +\ 2;}

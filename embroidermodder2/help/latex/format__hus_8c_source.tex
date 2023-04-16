@@ -1,5 +1,5 @@
 \hypertarget{format__hus_8c_source}{}\doxysubsection{format\+\_\+hus.\+c}
-\label{format__hus_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_hus.c@{embroidermodder2/extern/libembroidery/src/formats/format\_hus.c}}
+\label{format__hus_8c_source}\index{extern/libembroidery/src/formats/format\_hus.c@{extern/libembroidery/src/formats/format\_hus.c}}
 \mbox{\hyperlink{format__hus_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -181,7 +181,7 @@
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00177}00177\ \textcolor{keywordtype}{char}}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00178}\mbox{\hyperlink{embroidery__internal_8h_aaf00410a4837aac34d67149c659a33f8}{00178}}\ \mbox{\hyperlink{format__hus_8c_aaf00410a4837aac34d67149c659a33f8}{writeHus}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00179}00179\ \{}
-\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00180}00180\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ boundingRect;}
+\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00180}00180\ \ \ \ \ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}};}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00181}00181\ \ \ \ \ \textcolor{keywordtype}{int}\ stitchCount,\ minColors,\ patternColor,\ attributeSize,\ xCompressedSize,\ yCompressedSize,\ i;}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00182}00182\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ previousX,\ previousY;}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00183}00183\ \ \ \ \ \textcolor{keywordtype}{short}\ right,\ top,\ bottom,\ left;}
@@ -199,11 +199,11 @@
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00195}00195\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}stitchCount"{}},\ \&stitchCount,\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00196}00196\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}minColors"{}},\ \&minColors,\ \mbox{\hyperlink{embroidery__internal_8h_adf5a6371ed3ee9d649f92592139ac6a1}{EMB\_INT32\_LITTLE}});}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00197}00197\ }
-\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00198}00198\ \ \ \ \ boundingRect\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
-\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00199}00199\ \ \ \ \ right\ =\ (short)\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *\ 10.0);}
-\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00200}00200\ \ \ \ \ top\ =\ (short)\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ *\ 10.0);}
-\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00201}00201\ \ \ \ \ left\ =\ (short)\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ *\ 10.0);}
-\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00202}00202\ \ \ \ \ bottom\ =\ (short)\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(boundingRect.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *\ 10.0);}
+\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00198}00198\ \ \ \ \ \mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}\ =\ \mbox{\hyperlink{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}{embPattern\_calcBoundingBox}}(pattern);}
+\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00199}00199\ \ \ \ \ right\ =\ (short)\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a74553efd0031b4ea1214293434719a5c}{right}}\ *\ 10.0);}
+\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00200}00200\ \ \ \ \ top\ =\ (short)\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a4b993166cfa980dd5e6a6509918ece68}{top}}\ *\ 10.0);}
+\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00201}00201\ \ \ \ \ left\ =\ (short)\ \mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___add22e8a42c753ce55b8c0bb8d00d8fa5}{left}}\ *\ 10.0);}
+\DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00202}00202\ \ \ \ \ bottom\ =\ (short)\ -\/\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(\mbox{\hyperlink{src_2main_8c_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}.\mbox{\hyperlink{struct_emb_rect___a80919e999819bed2a8571971e583212f}{bottom}}\ *\ 10.0);}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00203}00203\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}right"{}},\ \&right,\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00204}00204\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}top"{}},\ \&top,\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}
 \DoxyCodeLine{\Hypertarget{format__hus_8c_source_l00205}00205\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a6afc577513abd5034e24efdcbdd7f9f5}{embInt\_write}}(file,\ \textcolor{stringliteral}{"{}left"{}},\ \&left,\ \mbox{\hyperlink{embroidery__internal_8h_a5323ffd703cdbbe7400de705ae606d2f}{EMB\_INT16\_LITTLE}});}

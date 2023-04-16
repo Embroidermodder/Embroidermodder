@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['whitespace_0',['WHITESPACE',['../main_8c.html#aa9ac064963355a764e9ac3cbbb60dc64',1,'main.c']]],
-  ['width_1',['width',['../struct_emb_image__.html#a2474a5474cbff19523a51eb1de01cda4',1,'EmbImage_::width()'],['../struct__vp3_hoop.html#a2474a5474cbff19523a51eb1de01cda4',1,'_vp3Hoop::width()']]],
-  ['write_5fexternal_5fcolor_5ffile_2',['write_external_color_file',['../struct_emb_format_list__.html#a4868ff467a01587db789617fab19e641',1,'EmbFormatList_']]],
-  ['writer_5fstate_3',['writer_state',['../struct_emb_format_list__.html#a400f4620551bb3b884a0c57d5966a5df',1,'EmbFormatList_']]]
+  ['ui_5fmode_0',['ui_mode',['../struct_view__.html#a58b88594ab95157f9a4e4b655ba7a639',1,'View_']]],
+  ['undo_5fhistory_1',['undo_history',['../struct_view__.html#a910be9b9781d5fcbfd76cdcb713e3b52',1,'View_']]],
+  ['unknown_2',['unknown',['../struct_vip_header__.html#a53e516fdee736bbd051aec9f6090fa54',1,'VipHeader_']]],
+  ['unknown2_3',['unknown2',['../struct__vp3_hoop.html#a0a6f0a0ff81e2dd70eb41ae7bc7c9ae2',1,'_vp3Hoop']]],
+  ['unknown3_4',['unknown3',['../struct__vp3_hoop.html#ac2b8752f7335c7c73b8ba2642af0ef85',1,'_vp3Hoop']]],
+  ['unknown4_5',['unknown4',['../struct__vp3_hoop.html#a0c34404af2e2405af603c13b8394a3af',1,'_vp3Hoop']]],
+  ['use_5ftranslation_6',['use_translation',['../struct_settings__.html#a05fb0994f59a541f66dc725bc2715bcf',1,'Settings_']]]
 ];

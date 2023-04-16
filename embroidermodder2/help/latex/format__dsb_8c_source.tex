@@ -1,5 +1,5 @@
 \hypertarget{format__dsb_8c_source}{}\doxysubsection{format\+\_\+dsb.\+c}
-\label{format__dsb_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_dsb.c@{embroidermodder2/extern/libembroidery/src/formats/format\_dsb.c}}
+\label{format__dsb_8c_source}\index{extern/libembroidery/src/formats/format\_dsb.c@{extern/libembroidery/src/formats/format\_dsb.c}}
 \mbox{\hyperlink{format__dsb_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -18,10 +18,10 @@
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00014}00014\ \textcolor{keywordtype}{char}}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00015}\mbox{\hyperlink{embroidery__internal_8h_a4a33cd7c3d9250a7a32e6b6e5b835e36}{00015}}\ \mbox{\hyperlink{format__dsb_8c_a4a33cd7c3d9250a7a32e6b6e5b835e36}{readDsb}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ FILE*\ file)}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00016}00016\ \{}
-\DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00017}00017\ \ \ \ \ \textcolor{keywordtype}{char}\ header[512+1];}
+\DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00017}00017\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}}[512+1];}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00018}00018\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ buffer[3];}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00019}00019\ }
-\DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00020}00020\ \ \ \ \ fread(header,\ 1,\ 512,\ file);}
+\DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00020}00020\ \ \ \ \ fread(\mbox{\hyperlink{gui__backend_8cpp_ab82d378d208eeb22efb6d0dccc5b05a1}{header}},\ 1,\ 512,\ file);}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00021}00021\ }
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00022}00022\ \ \ \ \ \textcolor{keywordflow}{while}\ (fread(buffer,\ 1,\ 3,\ file)\ ==\ 3)\ \{}
 \DoxyCodeLine{\Hypertarget{format__dsb_8c_source_l00023}00023\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}

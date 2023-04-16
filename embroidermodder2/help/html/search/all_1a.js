@@ -1,16 +1,6 @@
 var searchData=
 [
   ['z102_5fisacord_5fpolyester_0',['Z102_Isacord_Polyester',['../embroidery_8h.html#a9a2bac219517e78ae335d9ce7cd9bcec',1,'embroidery.h']]],
-  ['zoomall_1',['zoomAll',['../class_main_window.html#a9195bda6648adc336a085e2d74472f15',1,'MainWindow']]],
-  ['zoomcenter_2',['zoomCenter',['../class_main_window.html#a0ac8893c559166e21505dc46f86f21ae',1,'MainWindow']]],
-  ['zoomdynamic_3',['zoomDynamic',['../class_main_window.html#ad0c6edaf60596b1a9c58bf80ff8854d3',1,'MainWindow']]],
-  ['zoomextents_4',['zoomExtents',['../class_main_window.html#a68ccbc27a011c2b3ed99cea7cba7f66e',1,'MainWindow::zoomExtents()'],['../class_view.html#a68ccbc27a011c2b3ed99cea7cba7f66e',1,'View::zoomExtents()']]],
-  ['zoomin_5',['zoomIn',['../class_main_window.html#a7d7e315e34a66d9a66022d31635e7aca',1,'MainWindow::zoomIn()'],['../class_view.html#a7d7e315e34a66d9a66022d31635e7aca',1,'View::zoomIn()']]],
-  ['zoomout_6',['zoomOut',['../class_main_window.html#a72d29d38d8dd2c091cdd7078e1364f25',1,'MainWindow::zoomOut()'],['../class_view.html#a72d29d38d8dd2c091cdd7078e1364f25',1,'View::zoomOut()']]],
-  ['zoomprevious_7',['zoomPrevious',['../class_main_window.html#ac12ea50d4d6d0e6ab1a414988108b9ab',1,'MainWindow']]],
-  ['zoomrealtime_8',['zoomRealtime',['../class_main_window.html#a515b1efc5768d8ae5e263aecb8b2c950',1,'MainWindow']]],
-  ['zoomscale_9',['zoomScale',['../class_main_window.html#a3d42a75b868213d626ed66ae1bf3c5d3',1,'MainWindow']]],
-  ['zoomselected_10',['zoomSelected',['../class_main_window.html#a29304b5b8cae9c622a64491ebf5eafef',1,'MainWindow::zoomSelected()'],['../class_view.html#a29304b5b8cae9c622a64491ebf5eafef',1,'View::zoomSelected()']]],
-  ['zoomtopoint_11',['zoomToPoint',['../class_view.html#a9399e75033763a468dbce886b3a2bef1',1,'View']]],
-  ['zoomwindow_12',['zoomWindow',['../class_main_window.html#a8a61a1a0975cb8663e805361884df66d',1,'MainWindow::zoomWindow()'],['../class_view.html#a8a61a1a0975cb8663e805361884df66d',1,'View::zoomWindow()']]]
+  ['zoominlimit_1',['zoomInLimit',['../struct_settings__.html#a107d0243902802ec4f9b273734f6a614',1,'Settings_']]],
+  ['zoomoutlimit_2',['zoomOutLimit',['../struct_settings__.html#a22030556e91787edb8b334fd9ba7df2f',1,'Settings_']]]
 ];

@@ -1,5 +1,5 @@
 \hypertarget{format__pcs_8c_source}{}\doxysubsection{format\+\_\+pcs.\+c}
-\label{format__pcs_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_pcs.c@{embroidermodder2/extern/libembroidery/src/formats/format\_pcs.c}}
+\label{format__pcs_8c_source}\index{extern/libembroidery/src/formats/format\_pcs.c@{extern/libembroidery/src/formats/format\_pcs.c}}
 \mbox{\hyperlink{format__pcs_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -93,7 +93,7 @@
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00089}00089\ }
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00090}00090\ \ \ \ \ \textcolor{comment}{/*\ TODO:\ select\ hoop\ size\ defaulting\ to\ Large\ PCS\ hoop\ */}}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00091}00091\ \ \ \ \ fwrite(\textcolor{stringliteral}{"{}2\(\backslash\)x03"{}},\ 1,\ 2,\ file);}
-\DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00092}00092\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}{binaryWriteUShort}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00092}00092\ \ \ \ \ \mbox{\hyperlink{formats_8c_a760e806c16c1612a6b5ca5a26bc736d1}{binaryWriteUShort}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00093}00093\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ color\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a87dbedfa066778e08311fe1bbb89b302}{thread}}[i].\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a14b8ac9c1dba4c2978c3db27a8c16689}{embColor\_write}}(file,\ color,\ 4);}
@@ -102,7 +102,7 @@
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00098}00098\ \ \ \ \ \textcolor{comment}{/*\ write\ remaining\ colors\ to\ reach\ 16\ */}}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00099}00099\ \ \ \ \ \textcolor{comment}{/*\ fpad(file,\ 0,\ 4*(16-\/i));\ */}}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00100}00100\ }
-\DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a760e806c16c1612a6b5ca5a26bc736d1}{binaryWriteUShort}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00101}00101\ \ \ \ \ \mbox{\hyperlink{formats_8c_a760e806c16c1612a6b5ca5a26bc736d1}{binaryWriteUShort}}(file,\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{short})pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00102}00102\ \ \ \ \ \textcolor{comment}{/*\ write\ stitches\ */}}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00103}00103\ \ \ \ \ \textcolor{keywordflow}{for}\ (i\ =\ 0;\ i\ <\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}};\ i++)\ \{}
 \DoxyCodeLine{\Hypertarget{format__pcs_8c_source_l00104}00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_stitch__}{EmbStitch}}\ st\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a4838c6d36990e7fcf958d1029f4a98aa}{stitch\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a4d06a0868c91ec35c5c0e2e5661ddfa2}{stitch}}[i];}

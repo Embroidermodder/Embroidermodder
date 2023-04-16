@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.6"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Embroidermodder: embroidermodder2/extern/libembroidery/src/formats/format_dsb.c Source File</title>
+<title>Embroidermodder: extern/libembroidery/src/formats/format_dsb.c Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -118,10 +118,10 @@ $(document).ready(function(){initNavTree('format__dsb_8c_source.html',''); initR
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keywordtype">char</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="embroidery__internal_8h.html#a4a33cd7c3d9250a7a32e6b6e5b835e36">   15</a></span><a class="code hl_function" href="format__dsb_8c.html#a4a33cd7c3d9250a7a32e6b6e5b835e36">readDsb</a>(<a class="code hl_struct" href="struct_emb_pattern__.html">EmbPattern</a>* pattern, FILE* file)</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>{</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">char</span> header[512+1];</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">char</span> <a class="code hl_function" href="gui__backend_8cpp.html#ab82d378d208eeb22efb6d0dccc5b05a1">header</a>[512+1];</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> buffer[3];</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    fread(header, 1, 512, file);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    fread(<a class="code hl_function" href="gui__backend_8cpp.html#ab82d378d208eeb22efb6d0dccc5b05a1">header</a>, 1, 512, file);</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordflow">while</span> (fread(buffer, 1, 3, file) == 3) {</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keywordtype">int</span> x, y;</div>
@@ -164,13 +164,14 @@ $(document).ready(function(){initNavTree('format__dsb_8c_source.html',''); initR
 <div class="ttc" id="aembroidery__internal_8h_html_a5b971603eb8cc707cfd0167659fd8aab"><div class="ttname"><a href="embroidery__internal_8h.html#a5b971603eb8cc707cfd0167659fd8aab">writeDst</a></div><div class="ttdeci">char writeDst(EmbPattern *pattern, FILE *file)</div><div class="ttdef"><b>Definition:</b> <a href="format__dst_8c_source.html#l00291">format_dst.c:291</a></div></div>
 <div class="ttc" id="aformat__dsb_8c_html_a4a33cd7c3d9250a7a32e6b6e5b835e36"><div class="ttname"><a href="format__dsb_8c.html#a4a33cd7c3d9250a7a32e6b6e5b835e36">readDsb</a></div><div class="ttdeci">char readDsb(EmbPattern *pattern, FILE *file)</div><div class="ttdef"><b>Definition:</b> <a href="format__dsb_8c_source.html#l00015">format_dsb.c:15</a></div></div>
 <div class="ttc" id="aformat__dsb_8c_html_ada695ccab5b0243b9b3944ce0b1e48db"><div class="ttname"><a href="format__dsb_8c.html#ada695ccab5b0243b9b3944ce0b1e48db">writeDsb</a></div><div class="ttdeci">char writeDsb(EmbPattern *pattern, FILE *file)</div><div class="ttdef"><b>Definition:</b> <a href="format__dsb_8c_source.html#l00048">format_dsb.c:48</a></div></div>
+<div class="ttc" id="agui__backend_8cpp_html_ab82d378d208eeb22efb6d0dccc5b05a1"><div class="ttname"><a href="gui__backend_8cpp.html#ab82d378d208eeb22efb6d0dccc5b05a1">header</a></div><div class="ttdeci">void header(const char *title)</div><div class="ttdef"><b>Definition:</b> <a href="gui__backend_8cpp_source.html#l00587">gui_backend.cpp:587</a></div></div>
 <div class="ttc" id="astruct_emb_pattern___html"><div class="ttname"><a href="struct_emb_pattern__.html">EmbPattern_</a></div><div class="ttdef"><b>Definition:</b> <a href="embroidery_8h_source.html#l00571">embroidery.h:572</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_14b8d3c8a029a2dddea7631dedf084d1.html">embroidermodder2</a></li><li class="navelem"><a class="el" href="dir_5ebc0d6bffec16411e8302ebc360c8e7.html">extern</a></li><li class="navelem"><a class="el" href="dir_17f61c207046f9493402ba671f3f1d16.html">libembroidery</a></li><li class="navelem"><a class="el" href="dir_a3caa16e85c47264fe5680a2b3b9d581.html">src</a></li><li class="navelem"><a class="el" href="dir_0cfa5124514ca44951975ee7c480c809.html">formats</a></li><li class="navelem"><a class="el" href="format__dsb_8c.html">format_dsb.c</a></li>
+    <li class="navelem"><a class="el" href="dir_dc9e1e299a0b26f222fe6c0a872463f0.html">extern</a></li><li class="navelem"><a class="el" href="dir_6a8aa8af2875e58e82a0145491f7a8e2.html">libembroidery</a></li><li class="navelem"><a class="el" href="dir_50a7dc5dba8160ac8332d90912e622db.html">src</a></li><li class="navelem"><a class="el" href="dir_7d0e9abc6dadcd976ab885d9ba0d632b.html">formats</a></li><li class="navelem"><a class="el" href="format__dsb_8c.html">format_dsb.c</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6 </li>
   </ul>
 </div>

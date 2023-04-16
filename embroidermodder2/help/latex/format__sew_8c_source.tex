@@ -1,5 +1,5 @@
 \hypertarget{format__sew_8c_source}{}\doxysubsection{format\+\_\+sew.\+c}
-\label{format__sew_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_sew.c@{embroidermodder2/extern/libembroidery/src/formats/format\_sew.c}}
+\label{format__sew_8c_source}\index{extern/libembroidery/src/formats/format\_sew.c@{extern/libembroidery/src/formats/format\_sew.c}}
 \mbox{\hyperlink{format__sew_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -83,7 +83,7 @@
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00079}00079\ \{}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00080}00080\ \ \ \ \ \textcolor{keywordtype}{int}\ i;}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00081}00081\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ xx\ =\ 0.0,\ yy\ =\ 0.0;}
-\DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00082}00082\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
+\DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00082}00082\ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}});}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00083}00083\ }
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\_verbose}}>1)\ \{}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00085}00085\ \ \ \ \ \ \ \ \ printf(\textcolor{stringliteral}{"{}Debugging\ Information\(\backslash\)n"{}});}
@@ -96,7 +96,7 @@
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00092}00092\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ col;}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00093}00093\ \ \ \ \ \ \ \ \ col\ =\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___a87dbedfa066778e08311fe1bbb89b302}{thread}}[i].\mbox{\hyperlink{struct_emb_thread___a5b70f2bf502560229b7fecf8984e33e9}{color}};}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00094}00094\ \ \ \ \ \ \ \ \ thr\ =\ \mbox{\hyperlink{embroidery_8h_afa800b5fae861c97f7921b41dc96c755}{embThread\_findNearestThread}}(col,\ (\mbox{\hyperlink{struct_emb_thread__}{EmbThread}}\ *)\mbox{\hyperlink{embroidery_8h_a0f3d1df26f83f13f6ee95eeaf44c0cec}{jefThreads}},\ 79);}
-\DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ thr);}
+\DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00095}00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ thr);}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00096}00096\ \ \ \ \ \}}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00097}00097\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a72e798e33c5912c4a540cc09d4dbed42}{fpad}}(file,\ 0,\ 0x1D78\ -\/\ 2\ -\/\ pattern-\/>\mbox{\hyperlink{struct_emb_pattern___a557baab7c413f8c27729c6cbab8ba102}{thread\_list}}-\/>\mbox{\hyperlink{struct_emb_array___ad43c3812e6d13e0518d9f8b8f463ffcf}{count}}\ *\ 2);}
 \DoxyCodeLine{\Hypertarget{format__sew_8c_source_l00098}00098\ }

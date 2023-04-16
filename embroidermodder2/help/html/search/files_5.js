@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['image_2ec_0',['image.c',['../image_8c.html',1,'']]],
-  ['imagewidget_2ecpp_1',['imagewidget.cpp',['../imagewidget_8cpp.html',1,'']]],
-  ['imagewidget_2eh_2',['imagewidget.h',['../imagewidget_8h.html',1,'']]]
+  ['geometry_2ec_0',['geometry.c',['../geometry_8c.html',1,'']]],
+  ['geometry_2emd_1',['geometry.md',['../geometry_8md.html',1,'']]],
+  ['gui_5fbackend_2ecpp_2',['gui_backend.cpp',['../gui__backend_8cpp.html',1,'']]],
+  ['gui_5fbackend_2eh_3',['gui_backend.h',['../gui__backend_8h.html',1,'']]]
 ];

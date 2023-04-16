@@ -1,5 +1,5 @@
 \hypertarget{format__xxx_8c_source}{}\doxysubsection{format\+\_\+xxx.\+c}
-\label{format__xxx_8c_source}\index{embroidermodder2/extern/libembroidery/src/formats/format\_xxx.c@{embroidermodder2/extern/libembroidery/src/formats/format\_xxx.c}}
+\label{format__xxx_8c_source}\index{extern/libembroidery/src/formats/format\_xxx.c@{extern/libembroidery/src/formats/format\_xxx.c}}
 \mbox{\hyperlink{format__xxx_8c}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00001}00001\ \textcolor{comment}{/*}}
@@ -105,8 +105,8 @@
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00101}00101\ \ \ \ \ \textcolor{keywordflow}{if}\ ((flags\ \&\ (\mbox{\hyperlink{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}{JUMP}}\ |\ \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}}))\ \&\&\ (fabs(deltaX)\ >\ 124\ ||\ fabs(deltaY)\ >\ 124))\ \{}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00102}00102\ \ \ \ \ \ \ \ \ fputc(0x7E,\ file);}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00103}00103\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Does\ this\ cast\ work\ right?\ */}}
-\DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00104}00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})deltaX);}
-\DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})deltaY);}
+\DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00104}00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})deltaX);}
+\DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00105}00105\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{formats_8c_ab2256826c6ea8d2374fc94df46a7616f}{binaryWriteShort}}(file,\ (\textcolor{keywordtype}{short})deltaY);}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00106}00106\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00107}00107\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ TODO:\ Verify\ this\ works\ after\ changing\ this\ to\ unsigned\ char\ */}}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00108}00108\ \ \ \ \ \ \ \ \ fputc((\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char})\mbox{\hyperlink{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}{emb\_round}}(deltaX),\ file);}
@@ -190,7 +190,7 @@
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00186}00186\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_a72e798e33c5912c4a540cc09d4dbed42}{fpad}}(file,\ 0,\ 0xC5);}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00187}00187\ }
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00188}00188\ \ \ \ \ \textcolor{comment}{/*\ place\ holder\ for\ end\ of\ stitches\ */}}
-\DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00189}00189\ \ \ \ \ \mbox{\hyperlink{embroidery__internal_8h_acaa069d2e820245be0f711415e2c297d}{binaryWriteInt}}(file,\ 0x0000);\ }
+\DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00189}00189\ \ \ \ \ \mbox{\hyperlink{formats_8c_acaa069d2e820245be0f711415e2c297d}{binaryWriteInt}}(file,\ 0x0000);\ }
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00190}00190\ \ \ \ \ \mbox{\hyperlink{format__xxx_8c_a7caa5344443c95331ec49e247e55cb3b}{xxxEncodeDesign}}(file,\ pattern);}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00191}00191\ \ \ \ \ endOfStitches\ =\ ftell(file);}
 \DoxyCodeLine{\Hypertarget{format__xxx_8c_source_l00192}00192\ \ \ \ \ fseek(file,\ 0xFC,\ SEEK\_SET);}
