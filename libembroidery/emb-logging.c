@@ -1,4 +1,4 @@
-#include "emb-logging.h"
+#include "embroidery.h"
 
 #include <stdio.h>
 #include <stdarg.h>

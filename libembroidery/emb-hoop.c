@@ -1,4 +1,4 @@
-#include "emb-hoop.h"
+#include "embroidery.h"
 
 /**************************************************/
 /* EmbHoop                                        */

@@ -1,5 +1,4 @@
-#include "emb-flag.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 #include <stdlib.h>
 
 /**************************************************/

@@ -1,4 +1,4 @@
-#include "emb-settings.h"
+#include "embroidery.h"
 
 /*! Initializes and returns an EmbSettings */
 EmbSettings embSettings_init(void)

@@ -1,6 +1,4 @@
-#include "compound-file.h"
-#include "emb-logging.h"
-#include "helpers-binary.h"
+#include "embroidery.h"
 #include <stdlib.h>
 
 static const unsigned int sizeOfDifatEntry = 4;

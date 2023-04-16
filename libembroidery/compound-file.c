@@ -1,9 +1,4 @@
-#include "compound-file.h"
-#include "compound-file-difat.h"
-#include "compound-file-header.h"
-#include "compound-file-fat.h"
-#include "compound-file-common.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>

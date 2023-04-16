@@ -1,4 +1,4 @@
-#include "emb-spline.h"
+#include "embroidery.h"
 
 int embSplineObjectList_count(EmbSplineObjectList* pointer)
 {

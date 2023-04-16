@@ -1,4 +1,4 @@
-#include "thread-color.h"
+#include "embroidery.h"
 
 #ifdef ARDUINO /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
 #else          /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */

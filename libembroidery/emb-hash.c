@@ -1,3 +1,5 @@
+#include "embroidery.h"
+#include "hashtable.h"
 #include "emb-hash.h"
 
 /* This file contains wrapper functions around Keith Pomakis' HashTable Library */

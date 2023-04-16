@@ -5,7 +5,6 @@
 #define EMBROIDERY_H
 
 #include <stdio.h>
-#include "hashtable.h"
 
 /* Only include this in libembroidery header files around functions to be exported as shared library */
 #if defined(API_START_H)
@@ -321,20 +320,6 @@ extern EMB_PRIVATE void EMB_CALL bcf_file_free(bcf_file* bcfFile);
 
 /*! Constant representing the number of Double Indirect FAT entries in a single header */
 static const unsigned int NumberOfDifatEntriesInHeader = 109;
-
-typedef HashTable EmbHash;
-
-extern EMB_PUBLIC EmbHash* EMB_CALL embHash_create(void);
-extern EMB_PUBLIC void EMB_CALL embHash_free(EmbHash* hash);
-
-extern EMB_PUBLIC int EMB_CALL embHash_contains(const EmbHash* hash, const void* key);
-extern EMB_PUBLIC int EMB_CALL embHash_insert(EmbHash* hash, const void* key, void* value);
-extern EMB_PUBLIC void* EMB_CALL embHash_value(const EmbHash* hash, const void* key);
-extern EMB_PUBLIC void EMB_CALL embHash_remove(EmbHash* hash, const void *key);
-extern EMB_PUBLIC void EMB_CALL embHash_clear(EmbHash* hash);
-extern EMB_PUBLIC int EMB_CALL embHash_empty(const EmbHash* hash);
-extern EMB_PUBLIC long EMB_CALL embHash_count(const EmbHash* hash);
-extern EMB_PUBLIC void EMB_CALL embHash_rehash(EmbHash* hash, long numOfBuckets);
 
 typedef struct EmbFormatList_
 {

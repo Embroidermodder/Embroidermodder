@@ -1,4 +1,4 @@
-#include "emb-time.h"
+#include "embroidery.h"
 
 #ifdef ARDUINO
 /*TODO: arduino embTime includes */

@@ -25,7 +25,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
-#include "emb-reader-writer.h"
+#include "embroidery.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {

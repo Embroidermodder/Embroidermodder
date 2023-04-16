@@ -15,7 +15,7 @@
 
 #include "preview-dialog.h"
 
-#include "emb-format.h"
+#include "embroidery.h"
 
 #include <stdlib.h>
 
