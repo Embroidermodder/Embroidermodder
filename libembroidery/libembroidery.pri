@@ -22,6 +22,7 @@ QMAKE_CFLAGS_WARN_ON += -Werror=implicit-function-declaration
 #QMAKE_CFLAGS_WARN_ON += -Wno-unused-variable
 
 SOURCES += \
+    $$PWD/format-bro.c \
 ../libembroidery/compound-file.c \
 ../libembroidery/compound-file-difat.c \
 ../libembroidery/compound-file-directory.c \
@@ -62,7 +63,6 @@ SOURCES += \
 ../libembroidery/format-100.c \
 ../libembroidery/format-art.c \
 ../libembroidery/format-bmc.c \
-../libembroidery/format-bro.c \
 ../libembroidery/format-cnd.c \
 ../libembroidery/format-col.c \
 ../libembroidery/format-csd.c \
@@ -121,108 +121,9 @@ SOURCES += \
 ../libembroidery/format-zsk.c \
 
 HEADERS += \
-../libembroidery/api-start.h \
-../libembroidery/api-stop.h \
-../libembroidery/compound-file.h \
-../libembroidery/compound-file-common.h \
-../libembroidery/compound-file-difat.h \
-../libembroidery/compound-file-directory.h \
-../libembroidery/compound-file-fat.h \
-../libembroidery/compound-file-header.h \
-../libembroidery/emb-arc.h \
-../libembroidery/emb-circle.h \
+    $$PWD/embroidery.h \
 ../libembroidery/emb-compress.h \
-../libembroidery/emb-color.h \
-../libembroidery/emb-ellipse.h \
-../libembroidery/emb-file.h \
-../libembroidery/emb-flag.h \
-../libembroidery/emb-format.h \
-../libembroidery/emb-hash.h \
-../libembroidery/emb-hoop.h \
-../libembroidery/emb-layer.h \
-../libembroidery/emb-line.h \
-../libembroidery/emb-logging.h \
-../libembroidery/emb-path.h \
-../libembroidery/emb-pattern.h \
-../libembroidery/emb-point.h \
-../libembroidery/emb-polygon.h \
-../libembroidery/emb-polyline.h \
-../libembroidery/emb-reader-writer.h \
-../libembroidery/emb-rect.h \
-../libembroidery/emb-satin-line.h \
-../libembroidery/emb-settings.h \
-../libembroidery/emb-spline.h \
-../libembroidery/emb-stitch.h \
-../libembroidery/emb-thread.h \
-../libembroidery/emb-time.h \
-../libembroidery/emb-vector.h \
 ../libembroidery/hashtable.h \
-../libembroidery/helpers-binary.h \
-../libembroidery/helpers-misc.h \
-../libembroidery/helpers-unused.h \
-../libembroidery/thread-color.h \
-../libembroidery/formats.h \
-../libembroidery/format-10o.h \
-../libembroidery/format-100.h \
-../libembroidery/format-art.h \
-../libembroidery/format-bmc.h \
-../libembroidery/format-bro.h \
-../libembroidery/format-cnd.h \
-../libembroidery/format-col.h \
-../libembroidery/format-csd.h \
-../libembroidery/format-csv.h \
-../libembroidery/format-dat.h \
-../libembroidery/format-dem.h \
-../libembroidery/format-dsb.h \
-../libembroidery/format-dst.h \
-../libembroidery/format-dsz.h \
-../libembroidery/format-dxf.h \
-../libembroidery/format-edr.h \
-../libembroidery/format-emd.h \
-../libembroidery/format-exp.h \
-../libembroidery/format-exy.h \
-../libembroidery/format-eys.h \
-../libembroidery/format-fxy.h \
-../libembroidery/format-gc.h  \
-../libembroidery/format-gnc.h \
-../libembroidery/format-gt.h  \
-../libembroidery/format-hus.h \
-../libembroidery/format-inb.h \
-../libembroidery/format-inf.h \
-../libembroidery/format-jef.h \
-../libembroidery/format-ksm.h \
-../libembroidery/format-max.h \
-../libembroidery/format-mit.h \
-../libembroidery/format-new.h \
-../libembroidery/format-ofm.h \
-../libembroidery/format-pcd.h \
-../libembroidery/format-pcm.h \
-../libembroidery/format-pcq.h \
-../libembroidery/format-pcs.h \
-../libembroidery/format-pec.h \
-../libembroidery/format-pel.h \
-../libembroidery/format-pem.h \
-../libembroidery/format-pes.h \
-../libembroidery/format-phb.h \
-../libembroidery/format-phc.h \
-../libembroidery/format-plt.h \
-../libembroidery/format-rgb.h \
-../libembroidery/format-sew.h \
-../libembroidery/format-shv.h \
-../libembroidery/format-sst.h \
-../libembroidery/format-stx.h \
-../libembroidery/format-svg.h \
-../libembroidery/format-t01.h \
-../libembroidery/format-t09.h \
-../libembroidery/format-tap.h \
-../libembroidery/format-thr.h \
-../libembroidery/format-txt.h \
-../libembroidery/format-u00.h \
-../libembroidery/format-u01.h \
-../libembroidery/format-vip.h \
-../libembroidery/format-vp3.h \
-../libembroidery/format-xxx.h \
-../libembroidery/format-zsk.h \
 
 # TODO: merge the computational geometry code into libembroidery structs
 SOURCES += \
@@ -230,5 +131,3 @@ SOURCES += \
 ../libembroidery/geom-line.c \
 
 HEADERS += \
-../libembroidery/geom-arc.h \
-../libembroidery/geom-line.h \

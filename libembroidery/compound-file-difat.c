@@ -1,5 +1,4 @@
-#include "compound-file-difat.h"
-#include "compound-file-common.h"
+#include "compound-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include <stdlib.h>

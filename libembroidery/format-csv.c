@@ -1,6 +1,4 @@
-#include "format-csv.h"
-#include "emb-file.h"
-#include "emb-logging.h"
+#include "embroidery.h"
 #include <stdlib.h>
 #include <string.h>
 

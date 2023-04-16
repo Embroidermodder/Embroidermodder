@@ -1,4 +1,4 @@
-#include "compound-file-header.h"
+#include "compound-file.h"
 #include "helpers-binary.h"
 #include <string.h>
 #include <stdio.h>

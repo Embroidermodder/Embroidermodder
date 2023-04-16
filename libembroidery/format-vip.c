@@ -1,9 +1,5 @@
-#include "format-vip.h"
-#include "helpers-binary.h"
-#include "helpers-misc.h"
-#include "emb-compress.h"
-#include "emb-file.h"
-#include "emb-logging.h"
+
+#include "embroidery.h"
 #include <stdlib.h>
 
 static int vipDecodeByte(unsigned char b)

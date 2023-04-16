@@ -1,5 +1,4 @@
-#include "compound-file-directory.h"
-#include "compound-file-common.h"
+#include "compound-file.h"
 #include "emb-logging.h"
 #include "helpers-binary.h"
 #include <stdio.h>
