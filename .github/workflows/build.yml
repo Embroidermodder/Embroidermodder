@@ -64,7 +64,7 @@ jobs:
     steps:
     - name: Install Qt
       run: |
-        sudo apt install qt6-base-dev libqt6*widgets* qtcreator qmake6
+        sudo apt install qt6-base-dev libqt6*widgets* qtcreator qmake6*
 
     - name: build
       run: |
