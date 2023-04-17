@@ -1,0 +1,82 @@
+name: build
+
+on: [push]
+
+jobs:
+  build_windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Install Qt
+      run: |
+        python -m pip install -U pip --upgrade pip
+        pip install aqtinstall
+        aqt install-qt windows desktop 6.2.0 win64_msvc2019_64
+
+    - name: build
+      run: |
+        git clone https://github.com/embroidermodder/embroidermodder
+        cd embroidermodder/project-files/qmake
+        qmake
+        make
+        cd ../..
+        
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Windows Installer
+        path: embroidermodder/embroidermodder_*
+
+  build_macos:
+    runs-on: macos-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Install Qt
+      run: |
+        brew install qt6 qwt
+
+    - name: build
+      run: |
+        git clone https://github.com/embroidermodder/embroidermodder
+        cd embroidermodder/project-files/qmake
+        qmake
+        make
+        cd ../..
+        
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: MacOS Installer
+        path: embroidermodder/embroidermodder_*
+
+  build_linux:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Install Qt
+      run: |
+        sudo apt install qt6-base-dev libqt6*widgets* qtcreator qmake
+
+    - name: build
+      run: |
+        git clone https://github.com/embroidermodder/embroidermodder
+        cd embroidermodder/project-files/qmake
+        qmake
+        make
+        cd ../..
+        
+    - name: archive production artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: GNU/Linux Installer
+        path: embroidermodder/embroidermodder_*
+
