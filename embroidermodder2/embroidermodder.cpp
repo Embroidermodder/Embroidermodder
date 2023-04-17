@@ -1,12 +1,13 @@
 /**
  * \file main.cpp
  */
+
 #include "application.h"
 #include "mainwindow.h"
 
-const char* _appName_ = "Embroidermodder";
-const char* _appVer_  = "v2.0 alpha";
-bool exitApp = false;
+static const char* _appName_ = "Embroidermodder";
+static const char* _appVer_  = "v2.0 alpha";
+static bool exitApp = false;
 
 /**
  * @brief Application::Application

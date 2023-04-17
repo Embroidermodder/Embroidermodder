@@ -1176,16 +1176,6 @@ void MainWindow::nativeExit()
     exit();
 }
 
-void MainWindow::nativeHelp()
-{
-    help();
-}
-
-void MainWindow::nativeAbout()
-{
-    about();
-}
-
 void MainWindow::nativeTipOfTheDay()
 {
     tipOfTheDay();
@@ -1219,16 +1209,6 @@ void MainWindow::nativeWindowNext()
 void MainWindow::nativeWindowPrevious()
 {
     mdiArea->activatePreviousSubWindow();
-}
-
-/**
- * @brief MainWindow::nativePlatformString
- * @return
- */
-QString
-MainWindow::nativePlatformString()
-{
-    return platformString();
 }
 
 /**

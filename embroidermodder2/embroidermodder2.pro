@@ -68,9 +68,6 @@ SOURCES += \
     embroidermodder.cpp \
     gui_backend.cpp \
     imgui_main.c \
-    javascript/native-javascript-include.cpp \
-    javascript/native-javascript-init.cpp \
-    javascript/native-javascript.cpp \
 mainwindow.cpp \
 mainwindow-settings.cpp \
 mainwindow-menus.cpp \
@@ -111,7 +108,6 @@ object-textsingle.cpp
 HEADERS += \
     embroidermodder.h \
     gui_backend.h \
-    javascript/native-javascript.h \
 mainwindow.h \
 mdiarea.h \
 mdiwindow.h \

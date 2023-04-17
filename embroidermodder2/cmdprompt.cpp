@@ -1,4 +1,6 @@
 #include "cmdprompt.h"
+#include "native-scripting.h"
+
 #include <QApplication>
 #include <QClipboard>
 #include <QString>
@@ -483,28 +485,8 @@ void CmdPromptInput::processInput()
         }
     }
     else {
-        if (cmdtxt == "version") {
-            emit appendHistory(curText + "<br/>pong", prefix.length());
-        }
-        else if (cmdtxt == "platform") {
-//            emit appendHistory(curText + "<br/>" + platformString(), prefix.length());
-        }
-        else if (aliasHash->contains(cmdtxt)) {
-            cmdActive = true;
-            lastCmd = curCmd;
-            curCmd = aliasHash->value(cmdtxt);
-            emit appendHistory(curText, prefix.length());
-            emit startCommand(curCmd);
-        }
-        else if (cmdtxt.isEmpty()) {
-            cmdActive = true;
-            emit appendHistory(curText, prefix.length());
-            //Rerun the last successful command
-            emit startCommand(lastCmd);
-        }
-        else {
-            emit appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>", prefix.length());
-        }
+        QString output = QString::fromStdString(mainWin()->actuator(cmdtxt.toStdString()));
+        emit appendHistory(curText + output, prefix.length());
     }
 
     if (!rapidFireEnabled) {

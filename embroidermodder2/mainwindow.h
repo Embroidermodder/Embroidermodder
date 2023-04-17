@@ -73,7 +73,9 @@ public:
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
-    void actuator(std::string command);
+    std::string actuator(std::string command);
+    std::string run_script_file(std::string fname);
+    std::string run_script(std::vector<std::string> script);
 
     QString getSettingsGeneralLanguage()              { return settings_general_language;               }
     QString getSettingsGeneralIconTheme()             { return settings_general_icon_theme;             }
@@ -687,8 +689,6 @@ public:
     void nativeOpenFile();
 
     void nativeExit();
-    void nativeHelp();
-    void nativeAbout();
     void nativeTipOfTheDay();
     void nativeWindowCascade();
     void nativeWindowTile();
@@ -696,8 +696,6 @@ public:
     void nativeWindowCloseAll();
     void nativeWindowNext();
     void nativeWindowPrevious();
-
-    QString nativePlatformString();
 
     void nativeMessageBox(const QString& type, const QString& title, const QString& text);
 
@@ -806,5 +804,7 @@ public:
     EmbReal nativeMouseX();
     EmbReal nativeMouseY();
 };
+
+MainWindow* mainWin();
 
 #endif

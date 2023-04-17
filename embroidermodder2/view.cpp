@@ -1,3 +1,7 @@
+/**
+ * \file view.cpp
+ */
+
 #include "view.h"
 #include "property-editor.h"
 #include "statusbar.h"
@@ -1094,15 +1098,16 @@ void View::updateMouseCoords(int x, int y)
 
 void View::setCrossHairSize(quint8 percent)
 {
-    /*
+    QSize size = qApp->screens()[0]->size();
     //NOTE: crosshairSize is in pixels and is a percentage of your screen width
     //NOTE: Example: (1280*0.05)/2 = 32, thus 32 + 1 + 32 = 65 pixel wide crosshair
-    quint32 screenWidth = qApp->desktop()->width();
-    if(percent > 0 && percent < 100)
+    quint32 screenWidth = size.width();
+    if (percent > 0 && percent < 100) {
         crosshairSize = (screenWidth*(percent/100.0))/2;
-    else
+    }
+    else {
         crosshairSize = screenWidth;
-    */
+    }
 }
 
 void View::setCornerButton()
@@ -1520,19 +1525,16 @@ void View::alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint&
 
 void View::mouseMoveEvent(QMouseEvent* event)
 {
-    updateMouseCoords(event->x(), event->y());
+    updateMouseCoords(event->position().x(), event->position().y());
     movePoint = event->pos();
     sceneMovePoint = mapToScene(movePoint);
 
-    if(mainWin->isCommandActive())
-    {
-        if(rapidMoveActive)
-        {
+    if (mainWin->isCommandActive()) {
+        if (rapidMoveActive) {
             mainWin->runCommandMove(mainWin->activeCommand(), sceneMovePoint.x(), sceneMovePoint.y());
         }
     }
-    if(previewActive)
-    {
+    if (previewActive) {
         if(previewMode == PREVIEW_MODE_MOVE)
         {
             previewObjectItemGroup->setPos(sceneMousePoint - previewPoint);

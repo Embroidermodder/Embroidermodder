@@ -33,12 +33,12 @@ SaveObject::~SaveObject()
  * Returns whether the save to file process was successful.
  *
  * \todo Before saving to a stitch only format, Embroidermodder needs
- *       to calculate the optimal path to minimize jump stitches. Also
- *       based upon which layer needs to be stitched first,
- *       the path to the next object needs to be hidden beneath fills
- *       that will come later. When finding the optimal path, we need
- *       to take into account the color of the thread, as we do not want
- *       to try to hide dark colored stitches beneath light colored fills.
+ * to calculate the optimal path to minimize jump stitches. Also
+ * based upon which layer needs to be stitched first,
+ * the path to the next object needs to be hidden beneath fills
+ * that will come later. When finding the optimal path, we need
+ * to take into account the color of the thread, as we do not want
+ * to try to hide dark colored stitches beneath light colored fills.
  */
 bool SaveObject::save(const QString &fileName)
 {
@@ -111,47 +111,84 @@ bool SaveObject::save(const QString &fileName)
     return writeSuccessful;
 }
 
+/**
+ * @brief SaveObject::addArc
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addArc(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
+/**
+ * @brief SaveObject::addBlock
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addBlock(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
+/**
+ * @brief SaveObject::addCircle
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addCircle(EmbPattern* pattern, QGraphicsItem* item)
 {
     CircleObject* obj = static_cast<CircleObject*>(item);
-    if(obj)
-    {
-        if(formatType == EMBFORMAT_STITCHONLY)
-        {
+    if (obj) {
+        if(formatType == EMBFORMAT_STITCHONLY) {
             QPainterPath path = obj->objectSavePath();
             toPolyline(pattern, obj->objectCenter(), path.simplified(), "0", obj->objectColor(), "CONTINUOUS", "BYLAYER"); //TODO: proper layer/lineType/lineWeight //TODO: Improve precision, replace simplified
         }
-        else
-        {
+        else {
             embPattern_addCircleObjectAbs(pattern, (double)obj->objectCenterX(), (double)obj->objectCenterY(), (double)obj->objectRadius());
         }
     }
 }
 
+/**
+ * @brief SaveObject::addDimAligned
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addDimAligned(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
+/**
+ * @brief SaveObject::addDimAngular
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addDimAngular(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
+/**
+ * @brief SaveObject::addDimArcLength
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addDimArcLength(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
+/**
+ * @brief SaveObject::addDimDiameter
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addDimDiameter(EmbPattern* pattern, QGraphicsItem* item)
 {
 }
 
+/**
+ * @brief SaveObject::addDimLeader
+ * @param pattern
+ * @param item
+ */
 void SaveObject::addDimLeader(EmbPattern* pattern, QGraphicsItem* item)
 {
 }

@@ -104,5 +104,4 @@ enum COMMAND_ACTIONS
     ACTION_null
 };
 
-
 #endif
