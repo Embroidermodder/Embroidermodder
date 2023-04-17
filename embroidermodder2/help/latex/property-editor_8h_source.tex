@@ -1,0 +1,538 @@
+\hypertarget{property-editor_8h_source}{}\doxysubsection{property-\/editor.h}
+\label{property-editor_8h_source}\index{embroidermodder2/property-\/editor.h@{embroidermodder2/property-\/editor.h}}
+\mbox{\hyperlink{property-editor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ PROPERTY\_EDITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ PROPERTY\_EDITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QDockWidget>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_arc_object}{ArcObject}};}
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }BlockObject;}
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_circle_object}{CircleObject}};}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }DimAlignedObject;}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }DimAngularObject;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }DimArcLengthObject;}
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }DimDiameterObject;}
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_dim_leader_object}{DimLeaderObject}};}
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }DimLinearObject;}
+\DoxyCodeLine{00015\ \textcolor{keyword}{class\ }DimOrdinateObject;}
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }DimRadiusObject;}
+\DoxyCodeLine{00017\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_ellipse_object}{EllipseObject}};}
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }EllipseArcObject;}
+\DoxyCodeLine{00019\ \textcolor{keyword}{class\ }HatchObject;}
+\DoxyCodeLine{00020\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_image_object}{ImageObject}};}
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }InfiniteLineObject;}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_line_object}{LineObject}};}
+\DoxyCodeLine{00023\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_path_object}{PathObject}};}
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_point_object}{PointObject}};}
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_polygon_object}{PolygonObject}};}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_polyline_object}{PolylineObject}};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{class\ }RayObject;}
+\DoxyCodeLine{00028\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_rect_object}{RectObject}};}
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }SplineObject;}
+\DoxyCodeLine{00030\ \textcolor{keyword}{class\ }TextMultiObject;}
+\DoxyCodeLine{00031\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_text_single_object}{TextSingleObject}};}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{00034\ \textcolor{keyword}{class\ }QGroupBox;}
+\DoxyCodeLine{00035\ \textcolor{keyword}{class\ }QComboBox;}
+\DoxyCodeLine{00036\ \textcolor{keyword}{class\ }QFontComboBox;}
+\DoxyCodeLine{00037\ \textcolor{keyword}{class\ }QLineEdit;}
+\DoxyCodeLine{00038\ \textcolor{keyword}{class\ }QToolButton;}
+\DoxyCodeLine{00039\ \textcolor{keyword}{class\ }QGraphicsItem;}
+\DoxyCodeLine{00040\ \textcolor{keyword}{class\ }QSignalMapper;}
+\DoxyCodeLine{00041\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_property_editor}{PropertyEditor}}\ :\ \textcolor{keyword}{public}\ QDockWidget}
+\DoxyCodeLine{00044\ \{}
+\DoxyCodeLine{00045\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{class_property_editor}{PropertyEditor}}(\textcolor{keyword}{const}\ QString\&\ iconDirectory\ =\ QString(),\ \textcolor{keywordtype}{bool}\ pickAddMode\ =\ \textcolor{keyword}{true},\ QWidget*\ widgetToFocus\ =\ 0,\ QWidget*\ parent\ =\ 0);\ \textcolor{comment}{//,\ Qt::WindowFlags\ flags\ =\ 0);}}
+\DoxyCodeLine{00049\ \ \ \ \ \mbox{\hyperlink{class_property_editor_a4bca2abc45a97402b7135f7b8407d125}{\string~PropertyEditor}}();}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_property_editor_ad7452c5931d2f0c7f63a308d1ccccfc7}{eventFilter}}(QObject\ *obj,\ QEvent\ *event);}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ signals:}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_aaf5a022104e1ce97c51424fbcda97e31}{pickAddModeToggled}}();}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a19315d9e4bd97aaa94afc6d4c61f0296}{setSelectedItems}}(QList<QGraphicsItem*>\ itemList);}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a8337c0887ee7e0d0fca75314d513016d}{updatePickAddModeButton}}(\textcolor{keywordtype}{bool}\ pickAddMode);}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{private}\ slots:}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_af76a7a3da67dae7943455cc2f5765c40}{fieldEdited}}(QObject*\ fieldObj);}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a48d19b8f825fa38f582a3812172b1254}{showGroups}}(\textcolor{keywordtype}{int}\ objType);}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_aa3d58838990eed46ed357186724d74d4}{showOneType}}(\textcolor{keywordtype}{int}\ index);}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a29076473d4954ce5d9719e36a1862a9f}{hideAllGroups}}();}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_af677b799a39d2374c702087e23fb6b3c}{clearAllFields}}();}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_afae78b003aef6f5128ba9d8f026928b0}{togglePickAddMode}}();}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00070\ \ \ \ \ QWidget*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_ad11af965753130b800267961b150efdf}{focusWidget}};}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \ \ \ \ QString\ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_ad085b0152655682d722dfe67c7255a9d}{iconDir}};}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a69e645ac34ef17670c8d6efe067f2a85}{iconSize}};}
+\DoxyCodeLine{00074\ \ \ \ \ Qt::ToolButtonStyle\ \mbox{\hyperlink{class_property_editor_a21ae82167e36507752b1c394176844e8}{propertyEditorButtonStyle}};}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_property_editor_a1a75a2a25a6094bc638240f9fe178621}{pickAdd}};}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \ \ \ \ QList<QGraphicsItem*>\ \mbox{\hyperlink{class_property_editor_a4ce0905810fb8312f8743824201a9733}{selectedItemList}};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \mbox{\hyperlink{class_arc_object}{ArcObject}}*\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a323bac76f47473671c8b588347996385}{tempArcObj}};}
+\DoxyCodeLine{00081\ \ \ \ \ BlockObject*\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a41071c045712cf07bedcedc6e42e050f}{tempBlockObj}};}
+\DoxyCodeLine{00082\ \ \ \ \ \mbox{\hyperlink{class_circle_object}{CircleObject}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_ae69172ef07bbc195992c7b7003d16eb5}{tempCircleObj}};}
+\DoxyCodeLine{00083\ \ \ \ \ DimAlignedObject*\ \ \ \mbox{\hyperlink{class_property_editor_a6c0f4e2bf50f55925f800c6ab7d9baca}{tempDimAlignedObj}};}
+\DoxyCodeLine{00084\ \ \ \ \ DimAngularObject*\ \ \ \mbox{\hyperlink{class_property_editor_acfbc4375eb37fc2ad879fa018813f2d1}{tempDimAngularObj}};}
+\DoxyCodeLine{00085\ \ \ \ \ DimArcLengthObject*\ \mbox{\hyperlink{class_property_editor_a923b9ab491c4698cfb48020f00a5039b}{tempDimArcLenObj}};}
+\DoxyCodeLine{00086\ \ \ \ \ DimDiameterObject*\ \ \mbox{\hyperlink{class_property_editor_afb43bcab8d00b1f169a68058f9a97ca4}{tempDimDiamObj}};}
+\DoxyCodeLine{00087\ \ \ \ \ \mbox{\hyperlink{class_dim_leader_object}{DimLeaderObject}}*\ \ \ \ \mbox{\hyperlink{class_property_editor_aa9253542663af3d79e109878f12ec204}{tempDimLeaderObj}};}
+\DoxyCodeLine{00088\ \ \ \ \ DimLinearObject*\ \ \ \ \mbox{\hyperlink{class_property_editor_a70d3b3fd0e9c8a3f1217f7d435fa928e}{tempDimLinearObj}};}
+\DoxyCodeLine{00089\ \ \ \ \ DimOrdinateObject*\ \ \mbox{\hyperlink{class_property_editor_ac9bfc1a4be5c0bc357fa06eb247a7411}{tempDimOrdObj}};}
+\DoxyCodeLine{00090\ \ \ \ \ DimRadiusObject*\ \ \ \ \mbox{\hyperlink{class_property_editor_a2ebe3377f6dbf695fb0cb8c50de5755d}{tempDimRadiusObj}};}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{class_ellipse_object}{EllipseObject}}*\ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a9c852d74ef9685683c18307ba8d423fd}{tempEllipseObj}};}
+\DoxyCodeLine{00092\ \ \ \ \ EllipseArcObject*\ \ \ \mbox{\hyperlink{class_property_editor_ac63eb86a4eafbbad878fbe18af1665a6}{tempEllipseArcObj}};}
+\DoxyCodeLine{00093\ \ \ \ \ HatchObject*\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a3876727c3aebf355c3e21afc3a329dfc}{tempHatchObj}};}
+\DoxyCodeLine{00094\ \ \ \ \ \mbox{\hyperlink{class_image_object}{ImageObject}}*\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a25217c8bbdf7b3490c018a755ee0fdf1}{tempImageObj}};}
+\DoxyCodeLine{00095\ \ \ \ \ InfiniteLineObject*\ \mbox{\hyperlink{class_property_editor_a92411002e51ad89bdd236614fc4ccd3e}{tempInfLineObj}};}
+\DoxyCodeLine{00096\ \ \ \ \ \mbox{\hyperlink{class_line_object}{LineObject}}*\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a4a530c3c3edce736f7c3aa5f9a3fdea9}{tempLineObj}};}
+\DoxyCodeLine{00097\ \ \ \ \ \mbox{\hyperlink{class_path_object}{PathObject}}*\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a4ee02d3a281ccaaccb7a44e910c15f8a}{tempPathObj}};}
+\DoxyCodeLine{00098\ \ \ \ \ \mbox{\hyperlink{class_point_object}{PointObject}}*\ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_aa5b82b2c08104040c0ef986089271fb0}{tempPointObj}};}
+\DoxyCodeLine{00099\ \ \ \ \ \mbox{\hyperlink{class_polygon_object}{PolygonObject}}*\ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a40843b506be05b4780b71f0694ce0a82}{tempPolygonObj}};}
+\DoxyCodeLine{00100\ \ \ \ \ \mbox{\hyperlink{class_polyline_object}{PolylineObject}}*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_a3a95465131ee78910494993a85a65cb3}{tempPolylineObj}};}
+\DoxyCodeLine{00101\ \ \ \ \ RayObject*\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_ac62698d7d2d8adccdd72888f5bb648c3}{tempRayObj}};}
+\DoxyCodeLine{00102\ \ \ \ \ \mbox{\hyperlink{class_rect_object}{RectObject}}*\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a701f23d32d67993872b0ad418ee0238b}{tempRectObj}};}
+\DoxyCodeLine{00103\ \ \ \ \ SplineObject*\ \ \ \ \ \ \ \mbox{\hyperlink{class_property_editor_a15107bb1516f6ff49c247d4352038150}{tempSplineObj}};}
+\DoxyCodeLine{00104\ \ \ \ \ TextMultiObject*\ \ \ \ \mbox{\hyperlink{class_property_editor_a0b20095be35cb74cb90cb2de07bbe856}{tempTextMultiObj}};}
+\DoxyCodeLine{00105\ \ \ \ \ \mbox{\hyperlink{class_text_single_object}{TextSingleObject}}*\ \ \ \mbox{\hyperlink{class_property_editor_aaa6bf9c8bc980621380b9faa15111db6}{tempTextSingleObj}};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \textcolor{comment}{//Helper\ functions}}
+\DoxyCodeLine{00108\ \ \ \ \ QToolButton*\ \ \ \mbox{\hyperlink{class_property_editor_a86eae2cbff8b4e86b35e86c14f9af83d}{createToolButton}}(\textcolor{keyword}{const}\ QString\&\ iconName,\ \textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{00109\ \ \ \ \ QLineEdit*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_afd4d564e3918124343999a06c11821b0}{createLineEdit}}(\textcolor{keyword}{const}\ QString\&\ validatorType\ =\ QString(),\ \textcolor{keywordtype}{bool}\ readOnly\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00110\ \ \ \ \ QComboBox*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_af929b4ab4d555c3aaf71b46ff48c4b75}{createComboBox}}(\textcolor{keywordtype}{bool}\ disable\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00111\ \ \ \ \ QFontComboBox*\ \mbox{\hyperlink{class_property_editor_a7a1337f44c4a3e2256dc78d7201b03f5}{createFontComboBox}}(\textcolor{keywordtype}{bool}\ disable\ =\ \textcolor{keyword}{false});}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_property_editor_a67bcdae431fd4c2babe0c045dfb68cd7}{precisionAngle}};}
+\DoxyCodeLine{00114\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_property_editor_a9e42212d5fa5815bc291e26e83df4239}{precisionLength}};}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{//Used\ when\ checking\ if\ fields\ vary}}
+\DoxyCodeLine{00117\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_ab0788c2a5bd8481167722c7f71d478ef}{fieldOldText}};}
+\DoxyCodeLine{00118\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_a14af17685a596d524d2590b7c3915676}{fieldNewText}};}
+\DoxyCodeLine{00119\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_a24a396d80f610de17baf4c5c5503102e}{fieldVariesText}};}
+\DoxyCodeLine{00120\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_a3061600ac10c33a3d58e5106bf5d8d1a}{fieldYesText}};}
+\DoxyCodeLine{00121\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_a4ffb7230efe45a09c1a4b638fbdab58b}{fieldNoText}};}
+\DoxyCodeLine{00122\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_a25a83a35273343ad0365fdc4cc682acd}{fieldOnText}};}
+\DoxyCodeLine{00123\ \ \ \ \ QString\ \mbox{\hyperlink{class_property_editor_af9200f3b9e5f1a0a396fa1cff9e09268}{fieldOffText}};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_af09f2b45f2192ff22f3176e8e5b3e47c}{updateLineEditStrIfVaries}}(QLineEdit*\ lineEdit,\ \textcolor{keyword}{const}\ QString\&\ str);}
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_ab96426c38a6f51e57b8aec6187a6ecc9}{updateLineEditNumIfVaries}}(QLineEdit*\ lineEdit,\ qreal\ num,\ \textcolor{keywordtype}{bool}\ useAnglePrecision);}
+\DoxyCodeLine{00127\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a4658a7fe1a5ac2422b18a2be24588f72}{updateFontComboBoxStrIfVaries}}(QFontComboBox*\ fontComboBox,\ \textcolor{keyword}{const}\ QString\&\ str);}
+\DoxyCodeLine{00128\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a68635b8dcaa0aae6b99d78d8eee54ee7}{updateComboBoxStrIfVaries}}(QComboBox*\ comboBox,\ \textcolor{keyword}{const}\ QString\&\ str,\ \textcolor{keyword}{const}\ QStringList\&\ strList);}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a7c782c237fdeb80dd92cad765ae1cf63}{updateComboBoxBoolIfVaries}}(QComboBox*\ comboBox,\ \textcolor{keywordtype}{bool}\ val,\ \textcolor{keywordtype}{bool}\ yesOrNoText);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ QSignalMapper*\ \mbox{\hyperlink{class_property_editor_aaa72fcbe4b8eac04110e709e5876436b}{signalMapper}};}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_property_editor_a6c53f5d6a1dfc5e2117422f8adf9ff2a}{mapSignal}}(QObject*\ fieldObj,\ \textcolor{keyword}{const}\ QString\&\ name,\ QVariant\ value);}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{comment}{//====================}}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{comment}{//Selection}}
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{comment}{//====================}}
+\DoxyCodeLine{00137\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_af77a9b50a881ba48136c67f40c274e1e}{createComboBoxSelected}}();}
+\DoxyCodeLine{00138\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a25880d96f0b4466fc4342255adaa7022}{createToolButtonQSelect}}();}
+\DoxyCodeLine{00139\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aa302104ad9a4b8b7b39c1a31db425de3}{createToolButtonPickAdd}}();}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a2f4d206df804f30db362bacff2239ede}{comboBoxSelected}};}
+\DoxyCodeLine{00142\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a90f4aa323b8e04f5715d540be0b1382c}{toolButtonQSelect}};}
+\DoxyCodeLine{00143\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aa45e3ebf4e9b9afb3c0edefe4f7873b3}{toolButtonPickAdd}};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \textcolor{comment}{//TODO:\ Alphabetic/Categorized\ TabWidget}}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{comment}{//====================}}
+\DoxyCodeLine{00148\ \ \ \ \ \textcolor{comment}{//General}}
+\DoxyCodeLine{00149\ \ \ \ \ \textcolor{comment}{//====================}}
+\DoxyCodeLine{00150\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a6e903f301e6b9cddd3e33f622c58d096}{createGroupBoxGeneral}}();}
+\DoxyCodeLine{00151\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a552f6966db394aafac7e4f6e7f3fab7e}{groupBoxGeneral}};}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a674761ee1618f1927da7cfdf4849dbca}{toolButtonGeneralLayer}};}
+\DoxyCodeLine{00154\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aec228cba9e5ac221c8632cd597621ba8}{toolButtonGeneralColor}};}
+\DoxyCodeLine{00155\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a605acd418e331a46631b5276f4d9a3c2}{toolButtonGeneralLineType}};}
+\DoxyCodeLine{00156\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aa779e27a1e295013e44eeded6ed90827}{toolButtonGeneralLineWeight}};}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a1022e5656b7274a8269e1cef1ba95b86}{comboBoxGeneralLayer}};}
+\DoxyCodeLine{00159\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a4a7c913b52f99aec5ecd93336a27d575}{comboBoxGeneralColor}};}
+\DoxyCodeLine{00160\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a6991c69ab9e1adc69ac019fff4e10e62}{comboBoxGeneralLineType}};}
+\DoxyCodeLine{00161\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a5f0b5b22e967979d180784b11eb54e89}{comboBoxGeneralLineWeight}};}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ \textcolor{comment}{//====================}}
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{//Geometry}}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{comment}{//====================}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{comment}{//Arc}}
+\DoxyCodeLine{00168\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a223e912eadfbb3aa8d44ed27e16e0486}{createGroupBoxGeometryArc}}();}
+\DoxyCodeLine{00169\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a270ae9aa4647fe4bad145062fd1ad64c}{groupBoxGeometryArc}};}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_af03fd8933decdc6963e734a00243607e}{toolButtonArcCenterX}};}
+\DoxyCodeLine{00172\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a6d41ba26ee84f49f2b334b0ca1251fa4}{toolButtonArcCenterY}};}
+\DoxyCodeLine{00173\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ac37c99a33430adac9d7be3eb8ec0058a}{toolButtonArcRadius}};}
+\DoxyCodeLine{00174\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a71a6a1d841c7fc39407692d39d59d612}{toolButtonArcStartAngle}};}
+\DoxyCodeLine{00175\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ac9c6ef24e0be3e43240ca9e623ff5981}{toolButtonArcEndAngle}};}
+\DoxyCodeLine{00176\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a15502f5ac0e721a9405ebf6ded0fffb4}{toolButtonArcStartX}};}
+\DoxyCodeLine{00177\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a06c8f370c61a815a749d65c2a351d78c}{toolButtonArcStartY}};}
+\DoxyCodeLine{00178\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a8908af8eb601b615135f530fa8fa8286}{toolButtonArcEndX}};}
+\DoxyCodeLine{00179\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a9f1c346afdc301d397fe396c3694b344}{toolButtonArcEndY}};}
+\DoxyCodeLine{00180\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a3fcf422440bff6a4980cde0a51c73f07}{toolButtonArcArea}};}
+\DoxyCodeLine{00181\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a585747c78b59a7226384867fff0fe956}{toolButtonArcLength}};}
+\DoxyCodeLine{00182\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a0cadb312fe64d2c2ec85b84737243530}{toolButtonArcChord}};}
+\DoxyCodeLine{00183\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ab5bf837000c8b8fb16df5b9d2911192a}{toolButtonArcIncAngle}};}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a8f9dfb5148e3fd4b6121366ab523f224}{lineEditArcCenterX}};}
+\DoxyCodeLine{00186\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_adf02ac7b86a48349081352582d8226df}{lineEditArcCenterY}};}
+\DoxyCodeLine{00187\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ac7cecee9680864888ccde7c81217cb1e}{lineEditArcRadius}};}
+\DoxyCodeLine{00188\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a83d0242c589609395080cfeb98c53930}{lineEditArcStartAngle}};}
+\DoxyCodeLine{00189\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7f5be486fbc60e030a2e8264b1fe740a}{lineEditArcEndAngle}};}
+\DoxyCodeLine{00190\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ac8fa4ed1d9dd4f318651899589a7cc91}{lineEditArcStartX}};}
+\DoxyCodeLine{00191\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a62a198eed24ddb4e974ff30f944fc22a}{lineEditArcStartY}};}
+\DoxyCodeLine{00192\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a466ab25be8ca8d2f1973f12e742830b9}{lineEditArcEndX}};}
+\DoxyCodeLine{00193\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a25426dd87255b4315c6104c2e178096f}{lineEditArcEndY}};}
+\DoxyCodeLine{00194\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a6ae0f53e0f9217687aaeb440f162b3c2}{lineEditArcArea}};}
+\DoxyCodeLine{00195\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a0046138c106897ab63beaace1d010346}{lineEditArcLength}};}
+\DoxyCodeLine{00196\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ad1f9177f46358560eb1dd060e1b5a4e3}{lineEditArcChord}};}
+\DoxyCodeLine{00197\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a1cb6da80b2db287b76b61b7080cc38b4}{lineEditArcIncAngle}};}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_abb548c17f8edeaabbd56962a8bb2be1d}{createGroupBoxMiscArc}}();}
+\DoxyCodeLine{00200\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_aeb658a4fc1200c4ef3dedc6caf1611c9}{groupBoxMiscArc}};}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a83d709d77be95b24ed991aafb80de7d7}{toolButtonArcClockwise}};}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a741a5034b8beefcf397c4f8f24be6b60}{comboBoxArcClockwise}};}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{comment}{//Block}}
+\DoxyCodeLine{00207\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a93392f5daa30b8bd9c458df58075dd80}{createGroupBoxGeometryBlock}}();}
+\DoxyCodeLine{00208\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ad39a71aab4832811d413e41a2a0ea8d7}{groupBoxGeometryBlock}};}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ac0ae4f3b4f605f3e7fcca42d36713ebd}{toolButtonBlockX}};}
+\DoxyCodeLine{00211\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_afa8f7fd777dabc347b0f821815aeef24}{toolButtonBlockY}};}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a912fc9e960f8de6a0b1f2bec467e33fe}{lineEditBlockX}};}
+\DoxyCodeLine{00214\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a0988042e44cdc4c1a0351c1d8e64fd3e}{lineEditBlockY}};}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ \textcolor{comment}{//Circle}}
+\DoxyCodeLine{00217\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a321c20908b05594bf78c234e3770b1bc}{createGroupBoxGeometryCircle}}();}
+\DoxyCodeLine{00218\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ab8249e7f58d5b0ad51d56a046abb2e78}{groupBoxGeometryCircle}};}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_af5c892279250eb7c6264deeec3da3ba6}{toolButtonCircleCenterX}};}
+\DoxyCodeLine{00221\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a3fb3bc792de6190e7fd61cba63802f94}{toolButtonCircleCenterY}};}
+\DoxyCodeLine{00222\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ae3314ac030e85d1b93c618a456389af1}{toolButtonCircleRadius}};}
+\DoxyCodeLine{00223\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a97c3ba2fc0859a74b14e36d1a2b76f2b}{toolButtonCircleDiameter}};}
+\DoxyCodeLine{00224\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a28d1b81289ba8f698a7f0a1985e5a9b1}{toolButtonCircleArea}};}
+\DoxyCodeLine{00225\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a3f69986ea8d7405da281e8cab961cc82}{toolButtonCircleCircumference}};}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a3878e47fc1aaabd510b97d48aa39bf76}{lineEditCircleCenterX}};}
+\DoxyCodeLine{00228\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a9dd6204dd53c90ea9580828d17bc66f5}{lineEditCircleCenterY}};}
+\DoxyCodeLine{00229\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a17031dc6a9e4a18f8033bcfd2d50e4b2}{lineEditCircleRadius}};}
+\DoxyCodeLine{00230\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a384aa4cf3712646d9474f72885f7622c}{lineEditCircleDiameter}};}
+\DoxyCodeLine{00231\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a2c820bfe3a830f5b26f4b130b15d3f1b}{lineEditCircleArea}};}
+\DoxyCodeLine{00232\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a6f9cde4882b30679183f2fae5a2d7784}{lineEditCircleCircumference}};}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{comment}{//DimAligned}}
+\DoxyCodeLine{00235\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_af993c685f20bae0d8d12a8a6466b4bb6}{createGroupBoxGeometryDimAligned}}();}
+\DoxyCodeLine{00236\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_adb518f4ff10eac74e6c5cf7bafb08686}{groupBoxGeometryDimAligned}};}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimAligned}}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \ \ \ \ \textcolor{comment}{//DimAngular}}
+\DoxyCodeLine{00241\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a6bede4611a862d003f4b9e00c5effd3d}{createGroupBoxGeometryDimAngular}}();}
+\DoxyCodeLine{00242\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_abd45e76364dccb15e23221cdd813c92d}{groupBoxGeometryDimAngular}};}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimAngular}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{//DimArcLength}}
+\DoxyCodeLine{00247\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a446830ba385c713523f7d505983b6352}{createGroupBoxGeometryDimArcLength}}();}
+\DoxyCodeLine{00248\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_aa6a2b5e223ea0df0e563400554ef9445}{groupBoxGeometryDimArcLength}};}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimArcLength}}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{comment}{//DimDiameter}}
+\DoxyCodeLine{00253\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a11039c0d2b9b5699d37792290fb3da40}{createGroupBoxGeometryDimDiameter}}();}
+\DoxyCodeLine{00254\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_af9bdcbb578bde0cccf92c6ab7a3199d9}{groupBoxGeometryDimDiameter}};}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimDiameter}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{comment}{//DimLeader}}
+\DoxyCodeLine{00259\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a7991afef71ae2a305b678314cd4147a0}{createGroupBoxGeometryDimLeader}}();}
+\DoxyCodeLine{00260\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a5a13587121fa7a4ea1de988e0395fd19}{groupBoxGeometryDimLeader}};}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimLeader}}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{comment}{//DimLinear}}
+\DoxyCodeLine{00265\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ac14281c5a4ea6132d9a5e48e38909258}{createGroupBoxGeometryDimLinear}}();}
+\DoxyCodeLine{00266\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a40f6b57049865585cb34d7b375601ff8}{groupBoxGeometryDimLinear}};}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimLinear}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{comment}{//DimOrdinate}}
+\DoxyCodeLine{00271\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ab868a858f4883ddb0e89a08474f18cad}{createGroupBoxGeometryDimOrdinate}}();}
+\DoxyCodeLine{00272\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_aa1c7f2328ecf4abc3ba79589721c2b79}{groupBoxGeometryDimOrdinate}};}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimOrdinate}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \textcolor{comment}{//DimRadius}}
+\DoxyCodeLine{00277\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a8c38e2cb053c4a56d19a734d786eeffc}{createGroupBoxGeometryDimRadius}}();}
+\DoxyCodeLine{00278\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a5cffa26ac81b0346974e8b8abf1c4bab}{groupBoxGeometryDimRadius}};}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{comment}{//TODO:\ toolButtons\ and\ lineEdits\ for\ DimRadius}}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{comment}{//Ellipse}}
+\DoxyCodeLine{00283\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_aa8f626b8bd4dd3fcf125273849c26a73}{createGroupBoxGeometryEllipse}}();}
+\DoxyCodeLine{00284\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a3298de0f08fb1f1954649750cff8605d}{groupBoxGeometryEllipse}};}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_af2692ed82100c669e608db40699425f5}{toolButtonEllipseCenterX}};}
+\DoxyCodeLine{00287\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ac0ca3772669a8a479ad0f92740f3dd8d}{toolButtonEllipseCenterY}};}
+\DoxyCodeLine{00288\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_af2af83bfe29e41a06e498d730e3da646}{toolButtonEllipseRadiusMajor}};}
+\DoxyCodeLine{00289\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a9f5d8b15f5b6c3f6075bd9cd81248bf7}{toolButtonEllipseRadiusMinor}};}
+\DoxyCodeLine{00290\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a50da64beb77cf54ea45da134ee22e028}{toolButtonEllipseDiameterMajor}};}
+\DoxyCodeLine{00291\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aef904830139f2fddfa43029aed046fa3}{toolButtonEllipseDiameterMinor}};}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a5bee0c1ce67e3148f8523cc5129779b3}{lineEditEllipseCenterX}};}
+\DoxyCodeLine{00294\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a159d557d996e23790c1ab32963c4dc7d}{lineEditEllipseCenterY}};}
+\DoxyCodeLine{00295\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a87bee4ce7b793c63309db0aa11f88e2d}{lineEditEllipseRadiusMajor}};}
+\DoxyCodeLine{00296\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a0fe10146c48bd5e05bbfaf5c255c6b28}{lineEditEllipseRadiusMinor}};}
+\DoxyCodeLine{00297\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_abe62f83083e662f1c9ae4fc7b5e69b84}{lineEditEllipseDiameterMajor}};}
+\DoxyCodeLine{00298\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a36d14175a387b2640aacf1fcbbcaa5b7}{lineEditEllipseDiameterMinor}};}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \textcolor{comment}{//Image}}
+\DoxyCodeLine{00301\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ac510d996507e11c53a7e064a05f29bdc}{createGroupBoxGeometryImage}}();}
+\DoxyCodeLine{00302\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a506238c12bb529abbcad6b184bfb74b9}{groupBoxGeometryImage}};}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aaa17b300192a1021164b0aca2e3395ff}{toolButtonImageX}};}
+\DoxyCodeLine{00305\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_acd0d0bf1fc35cfb23513510414373aee}{toolButtonImageY}};}
+\DoxyCodeLine{00306\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a00ef314f0770b0654b9affb5bee38662}{toolButtonImageWidth}};}
+\DoxyCodeLine{00307\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a61626bd812cd3baa6415290bbdd7da4a}{toolButtonImageHeight}};}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ab6d5b12426cb4d1e37277689eb1b0cff}{lineEditImageX}};}
+\DoxyCodeLine{00310\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ade60c23795bfdf7f6bf7cb9e7b6896a8}{lineEditImageY}};}
+\DoxyCodeLine{00311\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a8c769815e48c43def251357ca301359b}{lineEditImageWidth}};}
+\DoxyCodeLine{00312\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_aa87351809ede6597bea2fb26f61b9308}{lineEditImageHeight}};}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a3404c3a703f98e605cadb445cc3c524b}{createGroupBoxMiscImage}}();}
+\DoxyCodeLine{00315\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ac5b9fdb62878802e000fd874a81370f2}{groupBoxMiscImage}};}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a376e840026e22a10631bf6cbe97626d6}{toolButtonImageName}};}
+\DoxyCodeLine{00318\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ae3398b2b5e8e040fac3acef1edcb2aa3}{toolButtonImagePath}};}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a15aff56888a4e3d37ef6a001ba481413}{lineEditImageName}};}
+\DoxyCodeLine{00321\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a028266d465ee8f4a7a45c98345f22651}{lineEditImagePath}};}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ \textcolor{comment}{//Infinite\ Line}}
+\DoxyCodeLine{00324\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_af8f404d1a6fea0ce5d0b3ef2adea2f62}{createGroupBoxGeometryInfiniteLine}}();}
+\DoxyCodeLine{00325\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a4f3467cba14c9b465a11be2e9dce3494}{groupBoxGeometryInfiniteLine}};}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a596ce82c1e0d00ac525bd64b12c0faf3}{toolButtonInfiniteLineX1}};}
+\DoxyCodeLine{00328\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a31134d1c8570c553904a90e5002704c6}{toolButtonInfiniteLineY1}};}
+\DoxyCodeLine{00329\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a02b747c05131016409e6043d6c14faa3}{toolButtonInfiniteLineX2}};}
+\DoxyCodeLine{00330\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ad571726d3d738c6c9a878c133232d769}{toolButtonInfiniteLineY2}};}
+\DoxyCodeLine{00331\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a0ac9f8ecda1fced96067f7f710669823}{toolButtonInfiniteLineVectorX}};}
+\DoxyCodeLine{00332\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_abfe367545586fba892153c0a7310edaf}{toolButtonInfiniteLineVectorY}};}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_af1844edfab0577b5281fad6fbf917bce}{lineEditInfiniteLineX1}};}
+\DoxyCodeLine{00335\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_afd97631d52826ff1d6547302dc62e653}{lineEditInfiniteLineY1}};}
+\DoxyCodeLine{00336\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a5d52b256ee2b7a6b0f6648d0457f98c0}{lineEditInfiniteLineX2}};}
+\DoxyCodeLine{00337\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a1891624316bc4ded15fa31f1eb112cdc}{lineEditInfiniteLineY2}};}
+\DoxyCodeLine{00338\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a44075c07a1e49e40e2771c669c3937da}{lineEditInfiniteLineVectorX}};}
+\DoxyCodeLine{00339\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a3e835672ad8ea29b36c769d1ba7806eb}{lineEditInfiniteLineVectorY}};}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{comment}{//Line}}
+\DoxyCodeLine{00342\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a065b20e6f63e01e16bf49378d6a062c9}{createGroupBoxGeometryLine}}();}
+\DoxyCodeLine{00343\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a81362f81c4b87076243447baba9d2a9b}{groupBoxGeometryLine}};}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a668a6ea08fc558c3b628bfa849ce0d5f}{toolButtonLineStartX}};}
+\DoxyCodeLine{00346\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a0beb3f8e0fa1a45d67eb5e7b481dfc5a}{toolButtonLineStartY}};}
+\DoxyCodeLine{00347\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ae94dbd1302c59cc518367cac1772f385}{toolButtonLineEndX}};}
+\DoxyCodeLine{00348\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ac7023cc72f81df04ffe2a9f483ea6f59}{toolButtonLineEndY}};}
+\DoxyCodeLine{00349\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_af9d56ffc133a995f8ca9ebb610655380}{toolButtonLineDeltaX}};}
+\DoxyCodeLine{00350\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aa0277eafcce7da468bac44a0acce1b78}{toolButtonLineDeltaY}};}
+\DoxyCodeLine{00351\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a1c5a03fc9da8e021fcc3d83714af6ebd}{toolButtonLineAngle}};}
+\DoxyCodeLine{00352\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a4086b8486b3cf7b5c7081a747e6ea8d1}{toolButtonLineLength}};}
+\DoxyCodeLine{00353\ }
+\DoxyCodeLine{00354\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a17777b3757ae3b9bb968ddb82b6ae112}{lineEditLineStartX}};}
+\DoxyCodeLine{00355\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a4a5cbcafcc452144a91d333df4a6f198}{lineEditLineStartY}};}
+\DoxyCodeLine{00356\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7611f6b9477fbc311dda79d8a0048ecf}{lineEditLineEndX}};}
+\DoxyCodeLine{00357\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ac80edb74bdc34c276bf467b476a4ea90}{lineEditLineEndY}};}
+\DoxyCodeLine{00358\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a9afad26b814b8822559d6b10da0d3634}{lineEditLineDeltaX}};}
+\DoxyCodeLine{00359\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a86b7ce1cd5880e9c41bce7ffdf5d36ff}{lineEditLineDeltaY}};}
+\DoxyCodeLine{00360\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a2b21bc4f050f6e52a03a6b1495027707}{lineEditLineAngle}};}
+\DoxyCodeLine{00361\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7b0931d123a5107c4949d3edb82a0e4a}{lineEditLineLength}};}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \textcolor{comment}{//Path}}
+\DoxyCodeLine{00364\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_adc137ffbe8152714abd3059a2f7a808a}{createGroupBoxGeometryPath}}();}
+\DoxyCodeLine{00365\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a92be664836ab8920cb30b751c6021a74}{groupBoxGeometryPath}};}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a32d8ce45b7e29b47d39ca17706490487}{toolButtonPathVertexNum}};}
+\DoxyCodeLine{00368\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ab42f16301935a8d553486ee7c6282349}{toolButtonPathVertexX}};}
+\DoxyCodeLine{00369\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a09283ebf4c5d23c56045b236274b8ad5}{toolButtonPathVertexY}};}
+\DoxyCodeLine{00370\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a9f8d385021825f9670dadac4c0e8ac44}{toolButtonPathArea}};}
+\DoxyCodeLine{00371\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a107f860d445055b18a07364c13483c6d}{toolButtonPathLength}};}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a54dc6f6b5fcb0d99ce3c06bdfba6eff7}{comboBoxPathVertexNum}};}
+\DoxyCodeLine{00374\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a0a37c0252091a23625b57f96b5531ce4}{lineEditPathVertexX}};}
+\DoxyCodeLine{00375\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a327271367947985f52b4ed716143406b}{lineEditPathVertexY}};}
+\DoxyCodeLine{00376\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a693169cb7cb34c1401cc6e9bed527e72}{lineEditPathArea}};}
+\DoxyCodeLine{00377\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7a86f2216eb7d3f6292c8dbd6342d3a4}{lineEditPathLength}};}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a2b39cb8197965f83ba72d04a7cfa0d3b}{createGroupBoxMiscPath}}();}
+\DoxyCodeLine{00380\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a144cf41bb338928125500399bad4d808}{groupBoxMiscPath}};}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aefee428730625fb85da5b5ad0ccb2d94}{toolButtonPathClosed}};}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00384\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_acc20773ca014e43fd87063a45d70b309}{comboBoxPathClosed}};}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \textcolor{comment}{//Point}}
+\DoxyCodeLine{00387\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_aca15b02b2a8000070ae0a5186650432c}{createGroupBoxGeometryPoint}}();}
+\DoxyCodeLine{00388\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a0fc1e0012d31059c0d50dd7212e2dfb1}{groupBoxGeometryPoint}};}
+\DoxyCodeLine{00389\ }
+\DoxyCodeLine{00390\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a5c79dddca1067561476dbceda27cb9ec}{toolButtonPointX}};}
+\DoxyCodeLine{00391\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ae9cae8277f19707ea7a345b1713fb3b5}{toolButtonPointY}};}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7c9f34fca7d2fe0d640e3777a344e260}{lineEditPointX}};}
+\DoxyCodeLine{00394\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a4b96da36f68def1cafdd1b9c8067a5d5}{lineEditPointY}};}
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00396\ \ \ \ \ \textcolor{comment}{//Polygon}}
+\DoxyCodeLine{00397\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a4b0b3e35936c46e351ccebca68052837}{createGroupBoxGeometryPolygon}}();}
+\DoxyCodeLine{00398\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a23b34fcf66d7d9930fc30230a2fbbb84}{groupBoxGeometryPolygon}};}
+\DoxyCodeLine{00399\ }
+\DoxyCodeLine{00400\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a72c4a619067883dc31db8bec86471b2d}{toolButtonPolygonCenterX}};}
+\DoxyCodeLine{00401\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a2bef97a4645d3e7ba7d72ea1e1523a87}{toolButtonPolygonCenterY}};}
+\DoxyCodeLine{00402\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aeaf83ba78e37f0b9d26211c3e42efb3b}{toolButtonPolygonRadiusVertex}};}
+\DoxyCodeLine{00403\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a8f3c01e67fd5cbc96a5045cb384cd612}{toolButtonPolygonRadiusSide}};}
+\DoxyCodeLine{00404\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aec5afeaab65410a3fe6838ce34d1286d}{toolButtonPolygonDiameterVertex}};}
+\DoxyCodeLine{00405\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a2dfc41841c21658f9a5696b3358b485a}{toolButtonPolygonDiameterSide}};}
+\DoxyCodeLine{00406\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a0d81e39eec9a155dbfc2b9ee14cd92c5}{toolButtonPolygonInteriorAngle}};}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ab77e523e36cbcefba0ebaad4039b7d02}{lineEditPolygonCenterX}};}
+\DoxyCodeLine{00409\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a6a90c000f97e1b99eae370cac8223b63}{lineEditPolygonCenterY}};}
+\DoxyCodeLine{00410\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a6ede4b57c3f80265f3bf170610f9b5f9}{lineEditPolygonRadiusVertex}};}
+\DoxyCodeLine{00411\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a4d4811a19f60acaa8cc831ecd5c414cf}{lineEditPolygonRadiusSide}};}
+\DoxyCodeLine{00412\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ae2c20e527e06f91193e8cbf99612a7cb}{lineEditPolygonDiameterVertex}};}
+\DoxyCodeLine{00413\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a3e8c387fcf5b9511dbbd0150e43bd497}{lineEditPolygonDiameterSide}};}
+\DoxyCodeLine{00414\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7b8cf01fe7594721a6bb6664ef5c4928}{lineEditPolygonInteriorAngle}};}
+\DoxyCodeLine{00415\ }
+\DoxyCodeLine{00416\ \ \ \ \ \textcolor{comment}{//Polyline}}
+\DoxyCodeLine{00417\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_aaace0ed83f37ffb4150a3fa8220b6d21}{createGroupBoxGeometryPolyline}}();}
+\DoxyCodeLine{00418\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a820aa946715c9153c808c4d45f3ebb00}{groupBoxGeometryPolyline}};}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_adf98ecffe3cb5ef715a1751e27be2ad7}{toolButtonPolylineVertexNum}};}
+\DoxyCodeLine{00421\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a4032b50b830b84b146e995d8e0795c74}{toolButtonPolylineVertexX}};}
+\DoxyCodeLine{00422\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a53a5207fca843221f4517c3603c7fedc}{toolButtonPolylineVertexY}};}
+\DoxyCodeLine{00423\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a5641507c2f3d9943a43ab1f5847fa125}{toolButtonPolylineArea}};}
+\DoxyCodeLine{00424\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ab3817dcfd8b3f8cbf666a764f9862193}{toolButtonPolylineLength}};}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a359e5211eb0aa91401adcedda30386af}{comboBoxPolylineVertexNum}};}
+\DoxyCodeLine{00427\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_aa1f590e99434367662aa6fd3fb3af2f0}{lineEditPolylineVertexX}};}
+\DoxyCodeLine{00428\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a3f3ad8f8129e99e0fe143c608e7c3666}{lineEditPolylineVertexY}};}
+\DoxyCodeLine{00429\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a5f470b64ab5c814f7a13668effaa9210}{lineEditPolylineArea}};}
+\DoxyCodeLine{00430\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_aad54d6180457ebe063d69c2a5abfa170}{lineEditPolylineLength}};}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a1be715497066bd053656893f372fb5b5}{createGroupBoxMiscPolyline}}();}
+\DoxyCodeLine{00433\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a31e5c821ab9bd358427c217a1db53f74}{groupBoxMiscPolyline}};}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aa0d8aa16c860acf4728b6f63282844a7}{toolButtonPolylineClosed}};}
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_af119a767db29f440bbb1b9d5d61e0fcb}{comboBoxPolylineClosed}};}
+\DoxyCodeLine{00438\ }
+\DoxyCodeLine{00439\ \ \ \ \ \textcolor{comment}{//Ray}}
+\DoxyCodeLine{00440\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a7fe2c36e7ac7c5c462313783e84edabf}{createGroupBoxGeometryRay}}();}
+\DoxyCodeLine{00441\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ac24bb4e47748b2ac289d20d4cb661e6b}{groupBoxGeometryRay}};}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a7bdef7656aee7460101c6a3c149c3793}{toolButtonRayX1}};}
+\DoxyCodeLine{00444\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a77dc430f7389e1d19e5564e735bd4b8e}{toolButtonRayY1}};}
+\DoxyCodeLine{00445\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a42af87b6188de41b595ba538f4e51626}{toolButtonRayX2}};}
+\DoxyCodeLine{00446\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ad1bae5bc1a493002ee5befec9ede70bd}{toolButtonRayY2}};}
+\DoxyCodeLine{00447\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a5ee8dcb8602a496c0615f4830c64e96d}{toolButtonRayVectorX}};}
+\DoxyCodeLine{00448\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a4f050624b208c00a3f25d160b182881c}{toolButtonRayVectorY}};}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ac99654294d891ab22da2b88415d11de7}{lineEditRayX1}};}
+\DoxyCodeLine{00451\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_aee98d2c190e8df4f9e3d11aed489f6a3}{lineEditRayY1}};}
+\DoxyCodeLine{00452\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ab5114dbc0b55ed4c59b05a94b68fc7ab}{lineEditRayX2}};}
+\DoxyCodeLine{00453\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_acc6c16c3f06960bd13348ba35feec9c9}{lineEditRayY2}};}
+\DoxyCodeLine{00454\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a1f37245ba7fe4cbd9caf1497de5f198c}{lineEditRayVectorX}};}
+\DoxyCodeLine{00455\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a4426bcb728b68e8097890d6aa6257b61}{lineEditRayVectorY}};}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{comment}{//Rectangle}}
+\DoxyCodeLine{00458\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a3ac7bc6f4d079105012abc39ddffcb22}{createGroupBoxGeometryRectangle}}();}
+\DoxyCodeLine{00459\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a558ec09de83df587844f61e8be326934}{groupBoxGeometryRectangle}};}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a1b664feb9006bb3e1e6102f6fda5b176}{toolButtonRectangleCorner1X}};}
+\DoxyCodeLine{00462\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a6273f3c63b2cdf4b8a5c1e49cbaaa6da}{toolButtonRectangleCorner1Y}};}
+\DoxyCodeLine{00463\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a19330cecb4b2c4c435397dc7b5136356}{toolButtonRectangleCorner2X}};}
+\DoxyCodeLine{00464\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ad458298f6e025c7fec6be2c4d203180f}{toolButtonRectangleCorner2Y}};}
+\DoxyCodeLine{00465\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_af834e71093e06fa603af47e1d5f0ece6}{toolButtonRectangleCorner3X}};}
+\DoxyCodeLine{00466\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a2ae59aac3cde57ce1f9737569facba57}{toolButtonRectangleCorner3Y}};}
+\DoxyCodeLine{00467\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ae7c5baee2c0567706c058a9e130e7711}{toolButtonRectangleCorner4X}};}
+\DoxyCodeLine{00468\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_aff847b0515e69b04ee1f476c644aef09}{toolButtonRectangleCorner4Y}};}
+\DoxyCodeLine{00469\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_acab56e606611d60ae3124b68d3564762}{toolButtonRectangleWidth}};}
+\DoxyCodeLine{00470\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a983fb12d0c15b201e9ff738667f797ac}{toolButtonRectangleHeight}};}
+\DoxyCodeLine{00471\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a986cd97620e01c2c2ba10328f69a9c33}{toolButtonRectangleArea}};}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a82ae0279f87ad97f9a608a8c4253f27e}{lineEditRectangleCorner1X}};}
+\DoxyCodeLine{00474\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a7d463fb01789ea7f5d5ce0bb45e5e1be}{lineEditRectangleCorner1Y}};}
+\DoxyCodeLine{00475\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a5f36ae470f2363d32ea63fdefbe193a3}{lineEditRectangleCorner2X}};}
+\DoxyCodeLine{00476\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ad17135c2d7e7c54b22ce61f29c22163a}{lineEditRectangleCorner2Y}};}
+\DoxyCodeLine{00477\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a05e40172dcfaf1b03cd0d7fc59f5227e}{lineEditRectangleCorner3X}};}
+\DoxyCodeLine{00478\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a6596bd39c67ed68b3496e276ea5f7914}{lineEditRectangleCorner3Y}};}
+\DoxyCodeLine{00479\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a9c4f80081ec13d68b6fa6af41a092df2}{lineEditRectangleCorner4X}};}
+\DoxyCodeLine{00480\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_aa376637a8bb14bfab856bf49d6a4c870}{lineEditRectangleCorner4Y}};}
+\DoxyCodeLine{00481\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a6af84f9b188648c44650b9055e870814}{lineEditRectangleWidth}};}
+\DoxyCodeLine{00482\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a350081261a22bbbb5ff08a91f95f9a83}{lineEditRectangleHeight}};}
+\DoxyCodeLine{00483\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a15fc3c09a0226d61e40c6b3cca119a55}{lineEditRectangleArea}};}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \textcolor{comment}{//Text\ Multi}}
+\DoxyCodeLine{00486\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_afce2f3c6caa7da3ee12dab52e43ddec7}{createGroupBoxGeometryTextMulti}}();}
+\DoxyCodeLine{00487\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_abd3fd538a3764fd7e02c5f0661dfeee5}{groupBoxGeometryTextMulti}};}
+\DoxyCodeLine{00488\ }
+\DoxyCodeLine{00489\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ad6bf097a9c82ff6d3e818773b1800e8f}{toolButtonTextMultiX}};}
+\DoxyCodeLine{00490\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_adf119830a5e9aae7b78ed70fa37a982b}{toolButtonTextMultiY}};}
+\DoxyCodeLine{00491\ }
+\DoxyCodeLine{00492\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_aa1c918bedbc74f2d684145e8a4138828}{lineEditTextMultiX}};}
+\DoxyCodeLine{00493\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a18b30a6a7bc1b8d28d1d4460869944bc}{lineEditTextMultiY}};}
+\DoxyCodeLine{00494\ }
+\DoxyCodeLine{00495\ \ \ \ \ \textcolor{comment}{//Text\ Single}}
+\DoxyCodeLine{00496\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ac1a474e724e31d836f3d3679dd81d217}{createGroupBoxTextTextSingle}}();}
+\DoxyCodeLine{00497\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_ac40b006c1f0a503a8c6a17e3cc82df89}{groupBoxTextTextSingle}};}
+\DoxyCodeLine{00498\ }
+\DoxyCodeLine{00499\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ab1a8f268bdeef1f47dee87fabb857412}{toolButtonTextSingleContents}};}
+\DoxyCodeLine{00500\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ad84ab9a8e424b805d0955dbf5b8c70af}{toolButtonTextSingleFont}};}
+\DoxyCodeLine{00501\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_abed789dd4751ea607b3bb0d0facb94ca}{toolButtonTextSingleJustify}};}
+\DoxyCodeLine{00502\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a84c66f407463e59e441c763f6c68847a}{toolButtonTextSingleHeight}};}
+\DoxyCodeLine{00503\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a6efc71330f1044543d108e7aafaacf2c}{toolButtonTextSingleRotation}};}
+\DoxyCodeLine{00504\ }
+\DoxyCodeLine{00505\ \ \ \ \ QLineEdit*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_a91b93273f161e2e4a8f75042cb84e65c}{lineEditTextSingleContents}};}
+\DoxyCodeLine{00506\ \ \ \ \ QFontComboBox*\ \mbox{\hyperlink{class_property_editor_a3aa139608b4816f4f70595814a31760d}{comboBoxTextSingleFont}};}
+\DoxyCodeLine{00507\ \ \ \ \ QComboBox*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_a824c174b2dd0f56f8aeee97a538947ee}{comboBoxTextSingleJustify}};}
+\DoxyCodeLine{00508\ \ \ \ \ QLineEdit*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_adc168453836b03a0680da095eff46104}{lineEditTextSingleHeight}};}
+\DoxyCodeLine{00509\ \ \ \ \ QLineEdit*\ \ \ \ \ \mbox{\hyperlink{class_property_editor_a74a3b0df14baf163db867e1459e7f902}{lineEditTextSingleRotation}};}
+\DoxyCodeLine{00510\ }
+\DoxyCodeLine{00511\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a15308d4d2b1253eeb3190dd199cf5bc1}{createGroupBoxGeometryTextSingle}}();}
+\DoxyCodeLine{00512\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a0380d9c59f0823caa52acc665644e555}{groupBoxGeometryTextSingle}};}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ad84956e99ce4596560cc49772862c55c}{toolButtonTextSingleX}};}
+\DoxyCodeLine{00515\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ada389cb2d92c457bd2c9d26faaf43732}{toolButtonTextSingleY}};}
+\DoxyCodeLine{00516\ }
+\DoxyCodeLine{00517\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_a4605e3db3fd7dd6e84159a717cafb9fa}{lineEditTextSingleX}};}
+\DoxyCodeLine{00518\ \ \ \ \ QLineEdit*\ \ \ \mbox{\hyperlink{class_property_editor_ac41fb035ef899046590c14377ef74d81}{lineEditTextSingleY}};}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a381655979bcdfa36390cbeccd04ad5a9}{createGroupBoxMiscTextSingle}}();}
+\DoxyCodeLine{00521\ \ \ \ \ QGroupBox*\ \ \ \mbox{\hyperlink{class_property_editor_a17f3be7140a4686d38f120a80759b6c0}{groupBoxMiscTextSingle}};}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_ae84fb03d315848cd0758f4833c256d83}{toolButtonTextSingleBackward}};}
+\DoxyCodeLine{00524\ \ \ \ \ QToolButton*\ \mbox{\hyperlink{class_property_editor_a2d9daae6488772bb0091cd6b60fdecb9}{toolButtonTextSingleUpsideDown}};}
+\DoxyCodeLine{00525\ }
+\DoxyCodeLine{00526\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a78b5f4d860898c409c72bdce2175d560}{comboBoxTextSingleBackward}};}
+\DoxyCodeLine{00527\ \ \ \ \ QComboBox*\ \ \ \mbox{\hyperlink{class_property_editor_a08687e5b17d6eae1b6260241276b0322}{comboBoxTextSingleUpsideDown}};}
+\DoxyCodeLine{00528\ \};}
+\DoxyCodeLine{00529\ }
+\DoxyCodeLine{00530\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

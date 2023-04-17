@@ -18,8 +18,16 @@ var searchData=
   ['qsnap_5fperpendicular_15',['qsnap_perpendicular',['../struct_settings__.html#a3b2f5e6f30732489a78dfd1c6deafd94',1,'Settings_']]],
   ['qsnap_5fquadrant_16',['qsnap_quadrant',['../struct_settings__.html#a708071a7eeafee3132e1e3d9ebbe378c',1,'Settings_']]],
   ['qsnap_5ftangent_17',['qsnap_tangent',['../struct_settings__.html#a45f375e014e027a97ecd2cb36d1d3c31',1,'Settings_']]],
-  ['qtrack_5fmode_18',['qtrack_mode',['../struct_view__.html#a5a1d2d1823baf209e2bb2f1ca9ec2758',1,'View_']]],
-  ['quadtocontrol_19',['QUADTOCONTROL',['../embroidery__internal_8h.html#a8dd86aec011bb128235d9244cbf85a78',1,'embroidery_internal.h']]],
-  ['quadtoend_20',['QUADTOEND',['../embroidery__internal_8h.html#ae57575b7c2752f3904fde5e8f7f50cea',1,'embroidery_internal.h']]],
-  ['quickleader_5fmain_21',['quickleader_main',['../src_2main_8c.html#aa963018f80feb78d794c2980576edcc9',1,'main.c']]]
+  ['qsnapactive_18',['qSnapActive',['../class_view.html#a6a8be994b833ec12a9e8fbdad48f7ca2',1,'View']]],
+  ['qsnapaperturesize_19',['qsnapApertureSize',['../class_view.html#a7effedd971ebccaeb39df82fb11aebb6',1,'View']]],
+  ['qsnaplocatorcolor_20',['qsnapLocatorColor',['../class_view.html#a75f72855bbcbbeb072006d662bb3a1dd',1,'View']]],
+  ['qsnaplocatorsize_21',['qsnapLocatorSize',['../class_view.html#ae2dfdc2818141b74596c96d9039e7274',1,'View']]],
+  ['qsnaptoggle_22',['qSnapToggle',['../class_view.html#a8c6f84b32094a0b2a0387e2ae5eec659',1,'View']]],
+  ['qtrack_5fmode_23',['qtrack_mode',['../struct_view__.html#a5a1d2d1823baf209e2bb2f1ca9ec2758',1,'View_']]],
+  ['quadtocontrol_24',['QUADTOCONTROL',['../embroidery__internal_8h.html#a8dd86aec011bb128235d9244cbf85a78',1,'embroidery_internal.h']]],
+  ['quadtoend_25',['QUADTOEND',['../embroidery__internal_8h.html#ae57575b7c2752f3904fde5e8f7f50cea',1,'embroidery_internal.h']]],
+  ['quickleader_5fclick_26',['quickleader_click',['../imgui__main_8c.html#a729a4f8f667abfb3c2033dae1dfcc485',1,'imgui_main.c']]],
+  ['quickleader_5fmain_27',['quickleader_main',['../imgui__main_8c.html#aa963018f80feb78d794c2980576edcc9',1,'imgui_main.c']]],
+  ['quickleader_5fprompt_28',['quickleader_prompt',['../imgui__main_8c.html#a6a7f56aaec3b17f36b4fcb4ac5ecde8b',1,'imgui_main.c']]],
+  ['quit_29',['quit',['../class_main_window.html#a2463a3acef2df4c951ce942a3229e44e',1,'MainWindow']]]
 ];

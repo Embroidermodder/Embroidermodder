@@ -1,6 +1,24 @@
 var searchData=
 [
   ['z102_5fisacord_5fpolyester_0',['Z102_Isacord_Polyester',['../embroidery_8h.html#a9a2bac219517e78ae335d9ce7cd9bcec',1,'embroidery.h']]],
-  ['zoominlimit_1',['zoomInLimit',['../struct_settings__.html#a107d0243902802ec4f9b273734f6a614',1,'Settings_']]],
-  ['zoomoutlimit_2',['zoomOutLimit',['../struct_settings__.html#a22030556e91787edb8b334fd9ba7df2f',1,'Settings_']]]
+  ['zoom_5faction_1',['zoom_action',['../imgui__main_8c.html#a9d77efa715f7141c72b9cc864fccab50',1,'imgui_main.c']]],
+  ['zoom_5fextents_5fall_5fsubviews_2',['zoom_extents_all_subviews',['../imgui__main_8c.html#a6e94b00a9d38e575f3404ff95c879ed8',1,'imgui_main.c']]],
+  ['zoom_5fto_5fpoint_3',['zoom_to_point',['../imgui__main_8c.html#ae74d2a556db8f6e8e916705f457cc9e8',1,'imgui_main.c']]],
+  ['zoomall_4',['zoomAll',['../class_main_window.html#a9195bda6648adc336a085e2d74472f15',1,'MainWindow']]],
+  ['zoomcenter_5',['zoomCenter',['../class_main_window.html#a0ac8893c559166e21505dc46f86f21ae',1,'MainWindow']]],
+  ['zoomdynamic_6',['zoomDynamic',['../class_main_window.html#ad0c6edaf60596b1a9c58bf80ff8854d3',1,'MainWindow']]],
+  ['zoomextents_7',['zoomExtents',['../class_main_window.html#a68ccbc27a011c2b3ed99cea7cba7f66e',1,'MainWindow::zoomExtents()'],['../class_view.html#a68ccbc27a011c2b3ed99cea7cba7f66e',1,'View::zoomExtents()']]],
+  ['zoomextentsallsubwindows_8',['zoomExtentsAllSubWindows',['../class_mdi_area.html#ac28cb9239c066bb293ac849fa0c8d284',1,'MdiArea']]],
+  ['zoomin_9',['zoomIn',['../class_main_window.html#a7d7e315e34a66d9a66022d31635e7aca',1,'MainWindow::zoomIn()'],['../class_view.html#a7d7e315e34a66d9a66022d31635e7aca',1,'View::zoomIn()']]],
+  ['zoominlimit_10',['zoomInLimit',['../struct_settings__.html#a107d0243902802ec4f9b273734f6a614',1,'Settings_']]],
+  ['zoommenu_11',['zoomMenu',['../class_main_window.html#a66a1fa14ff2b8b7de65166e398f7be2c',1,'MainWindow']]],
+  ['zoomout_12',['zoomOut',['../class_main_window.html#a72d29d38d8dd2c091cdd7078e1364f25',1,'MainWindow::zoomOut()'],['../class_view.html#a72d29d38d8dd2c091cdd7078e1364f25',1,'View::zoomOut()']]],
+  ['zoomoutlimit_13',['zoomOutLimit',['../struct_settings__.html#a22030556e91787edb8b334fd9ba7df2f',1,'Settings_']]],
+  ['zoomprevious_14',['zoomPrevious',['../class_main_window.html#ac12ea50d4d6d0e6ab1a414988108b9ab',1,'MainWindow']]],
+  ['zoomrealtime_15',['zoomRealtime',['../class_main_window.html#a515b1efc5768d8ae5e263aecb8b2c950',1,'MainWindow']]],
+  ['zoomscale_16',['zoomScale',['../class_main_window.html#a3d42a75b868213d626ed66ae1bf3c5d3',1,'MainWindow']]],
+  ['zoomselected_17',['zoomSelected',['../class_main_window.html#a29304b5b8cae9c622a64491ebf5eafef',1,'MainWindow::zoomSelected()'],['../class_view.html#a29304b5b8cae9c622a64491ebf5eafef',1,'View::zoomSelected()']]],
+  ['zoomtopoint_18',['zoomToPoint',['../class_view.html#a9399e75033763a468dbce886b3a2bef1',1,'View']]],
+  ['zoomwindow_19',['zoomWindow',['../class_main_window.html#a8a61a1a0975cb8663e805361884df66d',1,'MainWindow::zoomWindow()'],['../class_view.html#a8a61a1a0975cb8663e805361884df66d',1,'View::zoomWindow()']]],
+  ['zoomwindowactive_20',['zoomWindowActive',['../class_view.html#ad277bd0f5c60773167a851c0489d3b3a',1,'View']]]
 ];

@@ -1,0 +1,48 @@
+\hypertarget{selectbox_8h_source}{}\doxysubsection{selectbox.\+h}
+\label{selectbox_8h_source}\index{embroidermodder2/selectbox.h@{embroidermodder2/selectbox.h}}
+\mbox{\hyperlink{selectbox_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ SELECTBOX\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ SELECTBOX\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QRubberBand>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QBrush>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QPen>}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_select_box}{SelectBox}}\ :\ \textcolor{keyword}{public}\ QRubberBand}
+\DoxyCodeLine{00009\ \{}
+\DoxyCodeLine{00010\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{class_select_box}{SelectBox}}(Shape\ s,\ QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_a418e29947b0a8e46496b999cae4f3bdb}{setDirection}}(\textcolor{keywordtype}{int}\ dir);}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_a340d927ba62648c3649048b0fa670427}{setColors}}(\textcolor{keyword}{const}\ QColor\&\ colorL,\ \textcolor{keyword}{const}\ QColor\&\ fillL,\ \textcolor{keyword}{const}\ QColor\&\ colorR,\ \textcolor{keyword}{const}\ QColor\&\ fillR,\ \textcolor{keywordtype}{int}\ newAlpha);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_ad06d035e601c42cc2a3b9d1229c73d36}{paintEvent}}(QPaintEvent*);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ QColor\ \mbox{\hyperlink{class_select_box_a45d6eadf737f3fc35603ca5a3f87241b}{leftBrushColor}};}
+\DoxyCodeLine{00022\ \ \ \ \ QColor\ \mbox{\hyperlink{class_select_box_aadcb6f682a6334809a9c3a81a0ed6d16}{rightBrushColor}};}
+\DoxyCodeLine{00023\ \ \ \ \ QColor\ \mbox{\hyperlink{class_select_box_a26ef04da79e7c6a2ba9f24083c49f6db}{leftPenColor}};}
+\DoxyCodeLine{00024\ \ \ \ \ QColor\ \mbox{\hyperlink{class_select_box_a056ab29b922818ec8bbce7078c1ced7c}{rightPenColor}};}
+\DoxyCodeLine{00025\ \ \ \ \ quint8\ \mbox{\hyperlink{class_select_box_a0c8ebcb450e5237c286698fa7b3598e2}{alpha}};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ QBrush\ \mbox{\hyperlink{class_select_box_ab2699f42ba40a5ededd08a4896d6df59}{dirBrush}};}
+\DoxyCodeLine{00028\ \ \ \ \ QBrush\ \mbox{\hyperlink{class_select_box_ae8749b68f20174405a53330b8eed29e2}{leftBrush}};}
+\DoxyCodeLine{00029\ \ \ \ \ QBrush\ \mbox{\hyperlink{class_select_box_a2c29fd8ebfab9dd6e36b919753f12fe2}{rightBrush}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \ \ \ \ QPen\ \mbox{\hyperlink{class_select_box_ad4fc0a789bf892949ffd7424c94a8568}{dirPen}};}
+\DoxyCodeLine{00032\ \ \ \ \ QPen\ \mbox{\hyperlink{class_select_box_a9635f4e925e6b503d0f52ecf995b1b69}{leftPen}};}
+\DoxyCodeLine{00033\ \ \ \ \ QPen\ \mbox{\hyperlink{class_select_box_a2fc397bae81f3bb01544d54bb415db14}{rightPen}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_select_box_a3d6024e9a39bf026a8a6c26a21d5eb08}{boxDir}};}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_select_box_adf24d9bfdd91fce7679ab5e45c915406}{forceRepaint}}();}
+\DoxyCodeLine{00038\ \};}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

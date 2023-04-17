@@ -1,0 +1,68 @@
+\hypertarget{object-save_8h_source}{}\doxysubsection{object-\/save.h}
+\label{object-save_8h_source}\index{embroidermodder2/object-\/save.h@{embroidermodder2/object-\/save.h}}
+\mbox{\hyperlink{object-save_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ OBJECT\_SAVE\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ OBJECT\_SAVE\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{embroidery_8h}{embroidery.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QObject>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <QPainterPath>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }QGraphicsItem;}
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }QGraphicsScene;}
+\DoxyCodeLine{00012\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00014\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_save_object}{SaveObject}}\ :\ \textcolor{keyword}{public}\ QObject}
+\DoxyCodeLine{00015\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00019\ \ \ \ \ \mbox{\hyperlink{class_save_object}{SaveObject}}(QGraphicsScene*\ theScene,\ QObject*\ parent\ =\ 0);}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_save_object_a078b1f821a2c797e387c9dcb95db7190}{\string~SaveObject}}();}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_save_object_a15bdf578a20c1c1cb630dc8264448484}{save}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a5ea9d72136d58fe015bb966409ad9efd}{addArc}}\ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a8101f93e144b7597b429c90008a0c32a}{addBlock}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a136f15160a3a38bf84155a6d4529ee4d}{addCircle}}\ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a21f3ded964f97a3c4541d82ae2013982}{addDimAligned}}\ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_ab7e966439929747934b38ef015938c33}{addDimAngular}}\ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_ac5cdffd7f6498d44307a831548abd359}{addDimArcLength}}\ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a45638bb67ba9cd82b1e5bdfbd111c962}{addDimDiameter}}\ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a93ebf7c045279170bc1e7ee5fecf84f1}{addDimLeader}}\ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a28fc9f9d2fac690f29ded7e09179d43b}{addDimLinear}}\ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a82fc38d390066db0384bcb7791ce7708}{addDimOrdinate}}\ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a9edb45dec277f6c3bd31eb9bed71ab61}{addDimRadius}}\ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a461190d2d6c2b10ff17829e70ffa7251}{addEllipse}}\ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a946c6f3fb50b2cf5b017fb0857be340f}{addEllipseArc}}\ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_abc2f834f84307285ecf920f45da1bcb2}{addGrid}}\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a74b851e3080fa4cf0e85a84b1a21fe88}{addHatch}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a434b6f9590b92b905ad4dfde36cd7e8a}{addImage}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a8b67d731f04c599d8cf483d453595b8b}{addInfiniteLine}}\ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_afa0699aaffbd5b068b5d013c187a460d}{addLine}}\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_ae11f893d999e959825a7ee160b269e51}{addPath}}\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a84cb4108e2977f858248b4ddb4dcde59}{addPoint}}\ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a070e079f9211d2e5ebf14b9ee4f46863}{addPolygon}}\ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_ace37a0a25fcffac8075e6814ed54255a}{addPolyline}}\ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_ad0843696ab800cfb6d239af0051117b7}{addRay}}\ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a469c9b5363613194ff353eb4b4d223d1}{addRectangle}}\ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_ad152af660d8c5ca9d3c479d12122697e}{addSlot}}\ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_a45d832addcf71af4b78d3f5485af6639}{addSpline}}\ \ \ \ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_abb60fb25003294b1e94abb30e64c3c5b}{addTextMulti}}\ \ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_afb37e4cd771449c65d3023d2e51bf40a}{addTextSingle}}\ \ \ (\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ QGraphicsItem*\ item);}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00054\ \ \ \ \ QGraphicsScene*\ \mbox{\hyperlink{class_save_object_a54342adb25110a7823aaf91cc53ea522}{gscene}};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_save_object_aeb6ef11808c001275918420f9793256e}{formatType}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_save_object_aaa28ee2579ab1b54602812d652889737}{toPolyline}}(\mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}*\ pattern,\ \textcolor{keyword}{const}\ QPointF\&\ objPos,\ \textcolor{keyword}{const}\ QPainterPath\&\ objPath,\ \textcolor{keyword}{const}\ QString\&\ layer,\ \textcolor{keyword}{const}\ QColor\&\ color,\ \textcolor{keyword}{const}\ QString\&\ lineType,\ \textcolor{keyword}{const}\ QString\&\ lineWeight);}
+\DoxyCodeLine{00058\ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

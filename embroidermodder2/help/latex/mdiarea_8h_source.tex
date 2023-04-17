@@ -1,0 +1,58 @@
+\hypertarget{mdiarea_8h_source}{}\doxysubsection{mdiarea.\+h}
+\label{mdiarea_8h_source}\index{embroidermodder2/mdiarea.h@{embroidermodder2/mdiarea.h}}
+\mbox{\hyperlink{mdiarea_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MDIAREA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MDIAREA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QMdiArea>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QPixmap>}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{00010\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_mdi_area}{MdiArea}}\ :\ \textcolor{keyword}{public}\ QMdiArea}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{class_mdi_area}{MdiArea}}(\mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QWidget*\ parent\ =\ 0);}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_mdi_area_abb5e0393bfc3d407f074330da1e548d5}{\string~MdiArea}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a51320500372fafd1b4752e986aefd5e5}{useBackgroundLogo}}(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a4e52adca7532608b02f316555022d30c}{useBackgroundTexture}}(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a3efe3a03c1f43d8371d59a12e9d72ed2}{useBackgroundColor}}(\textcolor{keywordtype}{bool}\ use);}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a038af0082e21b09ddfc6fbf0b87e8e01}{setBackgroundLogo}}(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a16b27111c3952c10671bdf60eeaac481}{setBackgroundTexture}}(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a70d4e21190fdc47edd88f078dd2037cb}{setBackgroundColor}}(\textcolor{keyword}{const}\ QColor\&\ color);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a157d69731c7c18359f3aeb9eeb2831f4}{cascade}}();}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_adf450a9a061d173710964aa7b86598b1}{tile}}();}
+\DoxyCodeLine{00031\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a91ecdca9f19ec37f982d2032c6b2aae4}{mouseDoubleClickEvent}}(QMouseEvent*\ e);}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_a4c44746ee6abcfabac1581977a1b5c02}{paintEvent}}(QPaintEvent*\ e);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ \mbox{\hyperlink{class_mdi_area_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{mainWin}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_mdi_area_a479a40d62ea1d8c7b4f85cc9e0c32220}{useLogo}};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_mdi_area_a0d6975377ce943fe0e3639db200728a9}{useTexture}};}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_mdi_area_ac55b37fcf3cf11f65b73843dccb6a638}{useColor}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \ \ \ \ QPixmap\ \mbox{\hyperlink{class_mdi_area_a4e06d5f0fb8d3641ef02e610581ba8ef}{bgLogo}};}
+\DoxyCodeLine{00043\ \ \ \ \ QPixmap\ \mbox{\hyperlink{class_mdi_area_a6df916272a52c37dcef1bd667d7d02a9}{bgTexture}};}
+\DoxyCodeLine{00044\ \ \ \ \ QColor\ \ \mbox{\hyperlink{class_mdi_area_a283e84c661c43ef1417c9c75eb1370bc}{bgColor}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_ac28cb9239c066bb293ac849fa0c8d284}{zoomExtentsAllSubWindows}}();}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_area_adf24d9bfdd91fce7679ab5e45c915406}{forceRepaint}}();}
+\DoxyCodeLine{00048\ \};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

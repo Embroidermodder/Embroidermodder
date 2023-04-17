@@ -1,7 +1,11 @@
 var searchData=
 [
-  ['circle_2ec_0',['circle.c',['../circle_8c.html',1,'']]],
-  ['code_5fof_5fconduct_2emd_1',['CODE_OF_CONDUCT.md',['../_c_o_d_e___o_f___c_o_n_d_u_c_t_8md.html',1,'']]],
-  ['compress_2ec_2',['compress.c',['../compress_8c.html',1,'']]],
-  ['credits_2emd_3',['CREDITS.md',['../_c_r_e_d_i_t_s_8md.html',1,'']]]
+  ['ellipse_2ec_0',['ellipse.c',['../ellipse_8c.html',1,'']]],
+  ['embdetails_2ddialog_2ecpp_1',['embdetails-dialog.cpp',['../embdetails-dialog_8cpp.html',1,'']]],
+  ['embdetails_2ddialog_2eh_2',['embdetails-dialog.h',['../embdetails-dialog_8h.html',1,'']]],
+  ['embedded_2emd_3',['embedded.md',['../embedded_8md.html',1,'']]],
+  ['embroider_5fcli_2emd_4',['embroider_cli.md',['../embroider__cli_8md.html',1,'']]],
+  ['embroidery_2eh_5',['embroidery.h',['../embroidery_8h.html',1,'']]],
+  ['embroidery_5finternal_2eh_6',['embroidery_internal.h',['../embroidery__internal_8h.html',1,'']]],
+  ['encoding_2ec_7',['encoding.c',['../encoding_8c.html',1,'']]]
 ];

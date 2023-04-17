@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['view_5f_0',['View_',['../struct_view__.html',1,'']]],
-  ['vipheader_5f_1',['VipHeader_',['../struct_vip_header__.html',1,'']]]
+  ['pathobject_0',['PathObject',['../class_path_object.html',1,'']]],
+  ['pointobject_1',['PointObject',['../class_point_object.html',1,'']]],
+  ['polygonobject_2',['PolygonObject',['../class_polygon_object.html',1,'']]],
+  ['polylineobject_3',['PolylineObject',['../class_polyline_object.html',1,'']]],
+  ['previewdialog_4',['PreviewDialog',['../class_preview_dialog.html',1,'']]],
+  ['propertyeditor_5',['PropertyEditor',['../class_property_editor.html',1,'']]]
 ];

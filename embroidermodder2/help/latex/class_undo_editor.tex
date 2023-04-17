@@ -1,0 +1,150 @@
+\hypertarget{class_undo_editor}{}\doxysubsection{Undo\+Editor Class Reference}
+\label{class_undo_editor}\index{UndoEditor@{UndoEditor}}
+
+
+{\ttfamily \#include $<$undo-\/editor.\+h$>$}
+
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_undo_editor_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}} ()
+\item 
+void \mbox{\hyperlink{class_undo_editor_a93c48d6ed036e1a381be53ac67643284}{redo}} ()
+\item 
+void \mbox{\hyperlink{class_undo_editor_ac7d2d3d1e6f3e2030551a50729cd2687}{update\+Clean\+Icon}} (bool opened)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_undo_editor_a64a5f4888ee50e28fc0f138618813d63}{Undo\+Editor}} (const QString \&icon\+Directory=QString(), QWidget $\ast$widget\+To\+Focus=0, QWidget $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_undo_editor_a7115b468cec0a911d696ff5289956150}{$\sim$\+Undo\+Editor}} ()
+\item 
+void \mbox{\hyperlink{class_undo_editor_a49792429b8a973f9badbfac692426ff0}{add\+Stack}} (QUndo\+Stack $\ast$stack)
+\item 
+bool \mbox{\hyperlink{class_undo_editor_a9d3be6f39301a723f28d3f53f36323f2}{can\+Undo}} () const
+\item 
+bool \mbox{\hyperlink{class_undo_editor_a381a2a326e444a8571ea40e480c25afe}{can\+Redo}} () const
+\item 
+QString \mbox{\hyperlink{class_undo_editor_ab552a1360ec65ef0163b22c15ba196a0}{undo\+Text}} () const
+\item 
+QString \mbox{\hyperlink{class_undo_editor_a69e660c2803ec7de1a3294e22ae32f53}{redo\+Text}} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+QWidget $\ast$ \mbox{\hyperlink{class_undo_editor_ad11af965753130b800267961b150efdf}{focus\+Widget}}
+\item 
+QString \mbox{\hyperlink{class_undo_editor_ad085b0152655682d722dfe67c7255a9d}{icon\+Dir}}
+\item 
+int \mbox{\hyperlink{class_undo_editor_a69e645ac34ef17670c8d6efe067f2a85}{icon\+Size}}
+\item 
+QUndo\+Group $\ast$ \mbox{\hyperlink{class_undo_editor_a2f995dc4648267211bb86dbf77d51c32}{undo\+Group}}
+\item 
+QUndo\+View $\ast$ \mbox{\hyperlink{class_undo_editor_aad686cdfc63313681f3c98aaf67f8407}{undo\+View}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_undo_editor_a64a5f4888ee50e28fc0f138618813d63}\label{class_undo_editor_a64a5f4888ee50e28fc0f138618813d63}} 
+\index{UndoEditor@{UndoEditor}!UndoEditor@{UndoEditor}}
+\index{UndoEditor@{UndoEditor}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{UndoEditor()}{UndoEditor()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_undo_editor}{Undo\+Editor}} (\begin{DoxyParamCaption}\item[{const QString \&}]{icon\+Directory = {\ttfamily QString()},  }\item[{QWidget $\ast$}]{widget\+To\+Focus = {\ttfamily 0},  }\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_undo_editor_a7115b468cec0a911d696ff5289956150}\label{class_undo_editor_a7115b468cec0a911d696ff5289956150}} 
+\index{UndoEditor@{UndoEditor}!````~UndoEditor@{$\sim$UndoEditor}}
+\index{````~UndoEditor@{$\sim$UndoEditor}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{$\sim$UndoEditor()}{~UndoEditor()}}
+{\footnotesize\ttfamily $\sim$\mbox{\hyperlink{class_undo_editor}{Undo\+Editor}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_undo_editor_a49792429b8a973f9badbfac692426ff0}\label{class_undo_editor_a49792429b8a973f9badbfac692426ff0}} 
+\index{UndoEditor@{UndoEditor}!addStack@{addStack}}
+\index{addStack@{addStack}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{addStack()}{addStack()}}
+{\footnotesize\ttfamily void add\+Stack (\begin{DoxyParamCaption}\item[{QUndo\+Stack $\ast$}]{stack }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_undo_editor_a381a2a326e444a8571ea40e480c25afe}\label{class_undo_editor_a381a2a326e444a8571ea40e480c25afe}} 
+\index{UndoEditor@{UndoEditor}!canRedo@{canRedo}}
+\index{canRedo@{canRedo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{canRedo()}{canRedo()}}
+{\footnotesize\ttfamily bool can\+Redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_undo_editor_a9d3be6f39301a723f28d3f53f36323f2}\label{class_undo_editor_a9d3be6f39301a723f28d3f53f36323f2}} 
+\index{UndoEditor@{UndoEditor}!canUndo@{canUndo}}
+\index{canUndo@{canUndo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{canUndo()}{canUndo()}}
+{\footnotesize\ttfamily bool can\+Undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_undo_editor_a93c48d6ed036e1a381be53ac67643284}\label{class_undo_editor_a93c48d6ed036e1a381be53ac67643284}} 
+\index{UndoEditor@{UndoEditor}!redo@{redo}}
+\index{redo@{redo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{redo}{redo}}
+{\footnotesize\ttfamily void redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_undo_editor_a69e660c2803ec7de1a3294e22ae32f53}\label{class_undo_editor_a69e660c2803ec7de1a3294e22ae32f53}} 
+\index{UndoEditor@{UndoEditor}!redoText@{redoText}}
+\index{redoText@{redoText}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{redoText()}{redoText()}}
+{\footnotesize\ttfamily QString redo\+Text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_undo_editor_a0e1e7804a53f6d62efc72c9bdbec8571}\label{class_undo_editor_a0e1e7804a53f6d62efc72c9bdbec8571}} 
+\index{UndoEditor@{UndoEditor}!undo@{undo}}
+\index{undo@{undo}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{undo}{undo}}
+{\footnotesize\ttfamily void undo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_undo_editor_ab552a1360ec65ef0163b22c15ba196a0}\label{class_undo_editor_ab552a1360ec65ef0163b22c15ba196a0}} 
+\index{UndoEditor@{UndoEditor}!undoText@{undoText}}
+\index{undoText@{undoText}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{undoText()}{undoText()}}
+{\footnotesize\ttfamily QString undo\+Text (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_undo_editor_ac7d2d3d1e6f3e2030551a50729cd2687}\label{class_undo_editor_ac7d2d3d1e6f3e2030551a50729cd2687}} 
+\index{UndoEditor@{UndoEditor}!updateCleanIcon@{updateCleanIcon}}
+\index{updateCleanIcon@{updateCleanIcon}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{updateCleanIcon}{updateCleanIcon}}
+{\footnotesize\ttfamily void update\+Clean\+Icon (\begin{DoxyParamCaption}\item[{bool}]{opened }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_undo_editor_ad11af965753130b800267961b150efdf}\label{class_undo_editor_ad11af965753130b800267961b150efdf}} 
+\index{UndoEditor@{UndoEditor}!focusWidget@{focusWidget}}
+\index{focusWidget@{focusWidget}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{focusWidget}{focusWidget}}
+{\footnotesize\ttfamily QWidget$\ast$ focus\+Widget\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_undo_editor_ad085b0152655682d722dfe67c7255a9d}\label{class_undo_editor_ad085b0152655682d722dfe67c7255a9d}} 
+\index{UndoEditor@{UndoEditor}!iconDir@{iconDir}}
+\index{iconDir@{iconDir}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{iconDir}{iconDir}}
+{\footnotesize\ttfamily QString icon\+Dir\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_undo_editor_a69e645ac34ef17670c8d6efe067f2a85}\label{class_undo_editor_a69e645ac34ef17670c8d6efe067f2a85}} 
+\index{UndoEditor@{UndoEditor}!iconSize@{iconSize}}
+\index{iconSize@{iconSize}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{iconSize}{iconSize}}
+{\footnotesize\ttfamily int icon\+Size\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_undo_editor_a2f995dc4648267211bb86dbf77d51c32}\label{class_undo_editor_a2f995dc4648267211bb86dbf77d51c32}} 
+\index{UndoEditor@{UndoEditor}!undoGroup@{undoGroup}}
+\index{undoGroup@{undoGroup}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{undoGroup}{undoGroup}}
+{\footnotesize\ttfamily QUndo\+Group$\ast$ undo\+Group\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_undo_editor_aad686cdfc63313681f3c98aaf67f8407}\label{class_undo_editor_aad686cdfc63313681f3c98aaf67f8407}} 
+\index{UndoEditor@{UndoEditor}!undoView@{undoView}}
+\index{undoView@{undoView}!UndoEditor@{UndoEditor}}
+\doxyparagraph{\texorpdfstring{undoView}{undoView}}
+{\footnotesize\ttfamily QUndo\+View$\ast$ undo\+View\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+embroidermodder2/\mbox{\hyperlink{undo-editor_8h}{undo-\/editor.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{undo-editor_8cpp}{undo-\/editor.\+cpp}}\end{DoxyCompactItemize}

@@ -1,0 +1,123 @@
+\hypertarget{mdiwindow_8h_source}{}\doxysubsection{mdiwindow.\+h}
+\label{mdiwindow_8h_source}\index{embroidermodder2/mdiwindow.h@{embroidermodder2/mdiwindow.h}}
+\mbox{\hyperlink{mdiwindow_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MDIWINDOW\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MDIWINDOW\_H}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//Qt}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QObject>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QMainWindow>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QMdiSubWindow>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <QScrollBar>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <QGridLayout>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#if\ QT\_VERSION\ >=\ 0x050000}}
+\DoxyCodeLine{00011\ \textcolor{comment}{//Qt5}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <QtPrintSupport>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00014\ \textcolor{comment}{//Qt4}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <QPrinter>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{mainwindow_8h}{mainwindow.h}}"{}}}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_main_window}{MainWindow}};}
+\DoxyCodeLine{00022\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_view}{View}};}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }QMdiArea;}
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }QGraphicsScene;}
+\DoxyCodeLine{00027\ \textcolor{keyword}{class\ }QGraphicsView;}
+\DoxyCodeLine{00028\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_mdi_window}{MdiWindow}}:\ \textcolor{keyword}{public}\ QMdiSubWindow}
+\DoxyCodeLine{00031\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{class_mdi_window}{MdiWindow}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ theIndex,\ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ mw,\ QMdiArea*\ parent,\ Qt::WindowFlags\ wflags);}
+\DoxyCodeLine{00036\ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a7dc5f33f85d9521df57d0b2b52a3925b}{\string~MdiWindow}}();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{virtual}\ QSize\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ab811bd256b700b7e894cc3b62515bcec}{sizeHint}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00039\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aef74298226065865a13b44697d122a18}{getCurrentFile}}()\ \ \ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_a4024f69c46d11c8e85cc7fa312d2e90f}{curFile}};\ \}}
+\DoxyCodeLine{00040\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a6865ed252723d09b16383afd88f55813}{getShortCurrentFile}}();}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ae499df12c7dad4ae678b3bb2b32b03dc}{getView}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_a9e47fdf77546964b59fb5e1bd8736196}{gview}};\ \}}
+\DoxyCodeLine{00042\ \ \ \ \ QGraphicsScene*\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a76ed9f15d95e5bce5609f6e0309a94a8}{getScene}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_a54342adb25110a7823aaf91cc53ea522}{gscene}};\ \}}
+\DoxyCodeLine{00043\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a5e68b0a37f6d9b9056245336123e5425}{getCurrentLayer}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_ae9b8be8650abbc471fb4035025aa70af}{curLayer}};\ \}}
+\DoxyCodeLine{00044\ \ \ \ \ QRgb\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a7477f451c0364aac406b01938ba2770f}{getCurrentColor}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_adece04c2b7366c94760e241ed5b0e67e}{curColor}};\ \}}
+\DoxyCodeLine{00045\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a3cf7a99d1afce0afcf97c0fb22f11eb5}{getCurrentLineType}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_aa702d39a518745f825e4ad75e0afd070}{curLineType}};\ \}}
+\DoxyCodeLine{00046\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ac9c127dff59bfd141b4ba67221553134}{getCurrentLineWeight}}()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_mdi_window_aa2c2576bb903851128481093c0e88710}{curLineWeight}};\ \}}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a3a875b4b6d9e844f9597650e74899363}{setCurrentLayer}}(\textcolor{keyword}{const}\ QString\&\ layer)\ \{\ \mbox{\hyperlink{class_mdi_window_ae9b8be8650abbc471fb4035025aa70af}{curLayer}}\ =\ layer;\ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_af25850fe78cf92350a21d616fd10f1e6}{setCurrentColor}}(\textcolor{keyword}{const}\ QRgb\&\ color)\ \{\ \mbox{\hyperlink{class_mdi_window_adece04c2b7366c94760e241ed5b0e67e}{curColor}}\ =\ color;\ \}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aa3a28893c0aa55d931d82ab8f8bc3207}{setCurrentLineType}}(\textcolor{keyword}{const}\ QString\&\ lineType)\ \{\ \mbox{\hyperlink{class_mdi_window_aa702d39a518745f825e4ad75e0afd070}{curLineType}}\ =\ lineType;\ \}}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a98db6b16f30a0e91912563e44d3f26a2}{setCurrentLineWeight}}(\textcolor{keyword}{const}\ QString\&\ lineWeight)\ \{\ \mbox{\hyperlink{class_mdi_window_aa2c2576bb903851128481093c0e88710}{curLineWeight}}\ =\ lineWeight;\ \}}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ab4cad34422175b633fa0d243cbc7bf42}{designDetails}}();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a8437f8fd71bcf6da5de2a49cbd0b105b}{loadFile}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aee368b2e953c4f7588e5da35d944cb0e}{saveFile}}(\textcolor{keyword}{const}\ QString\ \&fileName);}
+\DoxyCodeLine{00054\ signals:}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a2a3936fc781a9fdcb8793c8f2030834c}{sendCloseMdiWin}}(\mbox{\hyperlink{class_mdi_window}{MdiWindow}}*);}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aa5274b1d2675c2d6e4883b8b77747e42}{closeEvent}}(QCloseEvent*\ e);}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_abe8de8cccec92139e7b920659a38a62d}{onWindowActivated}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a235df8277a1ccfc4f132aa56be2a557b}{currentLayerChanged}}(\textcolor{keyword}{const}\ QString\&\ layer);}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a15ee00d06a62026ec2dd3ef83d76c3db}{currentColorChanged}}(\textcolor{keyword}{const}\ QRgb\&\ color);}
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_af03668f2b1f4cb09fd499abe8c8548b2}{currentLinetypeChanged}}(\textcolor{keyword}{const}\ QString\&\ type);}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a5d8fea11d1b93dc1574f4c18080edf42}{currentLineweightChanged}}(\textcolor{keyword}{const}\ QString\&\ weight);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a670ce2d87f6289083a1b4a1531f5be21}{updateColorLinetypeLineweight}}();}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a74af558a825ac72754085696d893671d}{deletePressed}}();}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_abb2c9654968151943c6068652051fe73}{escapePressed}}();}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a754be5f2a56472b04d88b98cdcac1caf}{showViewScrollBars}}(\textcolor{keywordtype}{bool}\ val);}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_add3eae5083efcf9079114646741288a9}{setViewCrossHairColor}}(QRgb\ color);}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a19e3b1f8b485e29678f99d6df5bf7f61}{setViewBackgroundColor}}(QRgb\ color);}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a1bd06495bfd1d5c7b22997d61e08904f}{setViewSelectBoxColors}}(QRgb\ colorL,\ QRgb\ fillL,\ QRgb\ colorR,\ QRgb\ fillR,\ \textcolor{keywordtype}{int}\ alpha);}
+\DoxyCodeLine{00074\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ad3ef5fde0863f6e6b924cbbbf1627205}{setViewGridColor}}(QRgb\ color);}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a46c80c43b6ddf7cf2b1465af15f23226}{setViewRulerColor}}(QRgb\ color);}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a388f572c62279f839ee138a9afbdeeb5}{print}}();}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a2167cf71975c040208ae05b7b6b10a2f}{saveBMC}}();}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_a19bdabe257073caa0f70f6cb617e6211}{promptHistoryAppended}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_a296e76dd335d1cd0981a002e1342a2aa}{logPromptInput}}(\textcolor{keyword}{const}\ QString\&\ txt);}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_adb1cb792f8d7dffaa9a8ecbea1a3b517}{promptInputPrevious}}();}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_aa183f50daf2ba1bed0068f7eae87f6a4}{promptInputNext}}();}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00088\ \ \ \ \ \mbox{\hyperlink{class_main_window}{MainWindow}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a8a28ac6f98797eb7aa5972c3f9f9ffdd}{mainWin}};}
+\DoxyCodeLine{00089\ \ \ \ \ QMdiArea*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a330351f723b854c6ef3438b43e588894}{mdiArea}};}
+\DoxyCodeLine{00090\ \ \ \ \ QGraphicsScene*\ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a54342adb25110a7823aaf91cc53ea522}{gscene}};}
+\DoxyCodeLine{00091\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a99612de46b0f57e5a1bd28fe6215838a}{fileWasLoaded}};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ QString\ \mbox{\hyperlink{class_mdi_window_ae3717ac617fd663565b044cd74a485f9}{promptHistory}};}
+\DoxyCodeLine{00096\ \ \ \ \ QList<QString>\ \mbox{\hyperlink{class_mdi_window_a81cda2cb23a21aa07d1e74a188492c5e}{promptInputList}};}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_mdi_window_a74505d10227dcd378095afb41fc3f612}{promptInputNum}};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ QPrinter\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a2153e1752d368de2817d14ecf0ec2322}{printer}};}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a4024f69c46d11c8e85cc7fa312d2e90f}{curFile}};}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a4d539fd163f34d90b66ce39e30932cb8}{setCurrentFile}}(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{00103\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a414e8623aca4020eb34c3a8836cc1acf}{fileExtension}}(\textcolor{keyword}{const}\ QString\&\ fileName);}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_a144cfe5f3188584af7abb73a8689d92c}{myIndex}};}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_ae9b8be8650abbc471fb4035025aa70af}{curLayer}};}
+\DoxyCodeLine{00108\ \ \ \ \ QRgb\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_adece04c2b7366c94760e241ed5b0e67e}{curColor}};}
+\DoxyCodeLine{00109\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aa702d39a518745f825e4ad75e0afd070}{curLineType}};}
+\DoxyCodeLine{00110\ \ \ \ \ QString\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_mdi_window_aa2c2576bb903851128481093c0e88710}{curLineWeight}};}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_mdi_window_a64031f68285f5aa00a8e8f1d044ee318}{promptInputPrevNext}}(\textcolor{keywordtype}{bool}\ prev);}
+\DoxyCodeLine{00113\ \};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

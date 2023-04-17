@@ -11,7 +11,7 @@ var dir_50a7dc5dba8160ac8332d90912e622db =
     [ "formats.c", "formats_8c.html", "formats_8c" ],
     [ "geometry.c", "geometry_8c.html", "geometry_8c" ],
     [ "image.c", "image_8c.html", "image_8c" ],
-    [ "main.c", "extern_2libembroidery_2src_2main_8c.html", "extern_2libembroidery_2src_2main_8c" ],
+    [ "main.c", "main_8c.html", "main_8c" ],
     [ "pattern.c", "pattern_8c.html", "pattern_8c" ],
     [ "thread-color.c", "thread-color_8c.html", "thread-color_8c" ]
 ];

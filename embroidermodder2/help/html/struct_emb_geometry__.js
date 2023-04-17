@@ -7,7 +7,7 @@ var struct_emb_geometry__ =
     [ "flag", "struct_emb_geometry__.html#adf916204820072417ed73a32de1cefcf", null ],
     [ "line", "struct_emb_geometry__.html#a82bfa90ca01e79040dffe8ed965c2f9a", null ],
     [ "lineType", "struct_emb_geometry__.html#a2c9095113c375b0d647be2da7e1b2eb3", null ],
-    [ "object", "struct_emb_geometry__.html#a31650b1b1788d96f8b93bb39ed6e17ba", null ],
+    [ "object", "struct_emb_geometry__.html#a0bcd5490114c59533032a6dda94a3310", null ],
     [ "path", "struct_emb_geometry__.html#aa7e3b581c414b7c7cfdea18905dfc49c", null ],
     [ "point", "struct_emb_geometry__.html#a7de8c8929f3c778c502ed070fc15ff60", null ],
     [ "polygon", "struct_emb_geometry__.html#a4dcfd5f48f00c93fee416603b2b62357", null ],

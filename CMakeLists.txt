@@ -2,11 +2,10 @@ cmake_minimum_required(VERSION 3.16)
 
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
-find_package(OpenGL REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+qt_standard_project_setup()
 
-set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/extern/glew/include)
-set(CMAKE_LIBRARY_PATH ${CMAKE_SOURCE_DIR}/extern/glew/lib/Release/x64)
-find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
@@ -38,15 +37,6 @@ add_compile_options(
 )
 endif()
 
-set(GLFW_BUILD_EXAMPLES OFF)
-set(GLFW_BUILD_TESTS OFF)
-set(GLFW_BUILD_DOCS OFF)
-set(GLFW_INSTALL OFF)
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/glfw)
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/libembroidery)
-add_subdirectory(${CMAKE_SOURCE_DIR}/extern/imgui)
-
 # The makers of CMake advise that you do not glob source files.
 #
 # https://cmake.org/cmake/help/latest/command/file.html?highlight=glob#glob
@@ -58,8 +48,47 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/extern/imgui)
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
 add_executable(embroidermodder
-	${CMAKE_SOURCE_DIR}/src/gui_backend.cpp
-	${CMAKE_SOURCE_DIR}/src/main.c
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-base.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-textsingle.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/imagewidget.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-circle.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/preview-dialog.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/application.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-dimleader.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/property-editor.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/cmdprompt.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/layer-manager.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-ellipse.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/main.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/selectbox.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-actions.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-image.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/settings-dialog.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/embdetails-dialog.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-commands.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-line.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-menus.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-settings.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-path.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar-button.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-toolbars.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-point.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mdiarea.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-polygon.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/mdiwindow.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-polyline.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/undo-commands.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/native-scripting.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-rect.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/undo-editor.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/gui_backend.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-arc.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/object-save.cpp
+	${CMAKE_SOURCE_DIR}/embroidermodder2/view.cpp
+
+#	${CMAKE_SOURCE_DIR}/libembroidery/...
 
 	${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )
@@ -72,14 +101,8 @@ add_executable(embroidermodder
 # endif()
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/extern/glew/include
-	${CMAKE_SOURCE_DIR}/extern/glfw/include
-	${CMAKE_SOURCE_DIR}/extern/imgui
-	${CMAKE_SOURCE_DIR}/extern/tinydir
-	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
-	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
-	${CMAKE_SOURCE_DIR}/extern/tomlc99
-	${CMAKE_SOURCE_DIR}/src
+	${CMAKE_SOURCE_DIR}/libembroidery
+	${CMAKE_SOURCE_DIR}/embroidermodder2
 )
 
 set_target_properties(embroidermodder PROPERTIES
@@ -87,11 +110,7 @@ set_target_properties(embroidermodder PROPERTIES
     MACOSX_BUNDLE ON
 )
 
-target_link_libraries(embroidermodder PRIVATE
-	glfw
-	embroidery_static
-	imgui_static
-	${OPENGL_LIBRARIES})
+target_link_libraries(embroidermodder PRIVATE Qt6::Core Qt6::Widgets)
 
 if (WIN32)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
@@ -103,7 +122,7 @@ set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
 endif()
 
 set(EXEC_DIR ".")
-set(ASSETS_DIR ".")
+set(ASSETS_DIR "embroidermodder2")
 
 install(
 	FILES ${EXEC}

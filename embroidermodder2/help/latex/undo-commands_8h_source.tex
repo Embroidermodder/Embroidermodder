@@ -1,0 +1,151 @@
+\hypertarget{undo-commands_8h_source}{}\doxysubsection{undo-\/commands.h}
+\label{undo-commands_8h_source}\index{embroidermodder2/undo-\/commands.h@{embroidermodder2/undo-\/commands.h}}
+\mbox{\hyperlink{undo-commands_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ UNDO\_COMMANDS\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ UNDO\_COMMANDS\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QUndoCommand>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <QPointF>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <QTransform>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <QtCore/qmath.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_base_object}{BaseObject}};}
+\DoxyCodeLine{00010\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_view}{View}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_add_command}{UndoableAddCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_undoable_add_command}{UndoableAddCommand}}(\textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_add_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_add_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00021\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_add_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00022\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_add_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00023\ \};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_delete_command}{UndoableDeleteCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00026\ \{}
+\DoxyCodeLine{00027\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_undoable_delete_command}{UndoableDeleteCommand}}(\textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_delete_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_delete_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_delete_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_delete_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_move_command}{UndoableMoveCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00039\ \{}
+\DoxyCodeLine{00040\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00041\ \ \ \ \ \mbox{\hyperlink{class_undoable_move_command}{UndoableMoveCommand}}(qreal\ deltaX,\ qreal\ deltaY,\ \textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_move_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_move_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_move_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_move_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00049\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_move_command_a134d83875f77905608cf461d3928ab31}{dx}};}
+\DoxyCodeLine{00050\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_move_command_a8d9cac9b570526f7bdc2d96f18a1e675}{dy}};}
+\DoxyCodeLine{00051\ \};}
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_rotate_command}{UndoableRotateCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00054\ \{}
+\DoxyCodeLine{00055\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00056\ \ \ \ \ \mbox{\hyperlink{class_undoable_rotate_command}{UndoableRotateCommand}}(qreal\ pivotPointX,\ qreal\ pivotPointY,\ qreal\ rotAngle,\ \textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_rotate_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_rotate_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_rotate_command_a521c88e7fec79196ea48330175ada7e3}{rotate}}(qreal\ x,\ qreal\ y,\ qreal\ rot);}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{inline}\ qreal\ \mbox{\hyperlink{class_undoable_rotate_command_a198c35d0f4b77c21af2adcc0d28b3abb}{pi}}()\ \{\ \textcolor{keywordflow}{return}\ (qAtan(1.0)*4.0);\ \};}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{inline}\ qreal\ \mbox{\hyperlink{class_undoable_rotate_command_ac59979622741dac009ccdbeac2503662}{radians}}(qreal\ \mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{degrees}})\ \{\ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{degrees}}*\mbox{\hyperlink{class_undoable_rotate_command_a198c35d0f4b77c21af2adcc0d28b3abb}{pi}}()/180.0);\ \};}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_rotate_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_rotate_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00069\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_rotate_command_a31f5904782b4558f0c5245add4dbbe60}{pivotX}};}
+\DoxyCodeLine{00070\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_rotate_command_a9ac068f8814e4a8191550a2b571dd0c1}{pivotY}};}
+\DoxyCodeLine{00071\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_rotate_command_afeb394ee506f5642a6db2b27a26af405}{angle}};}
+\DoxyCodeLine{00072\ \};}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_scale_command}{UndoableScaleCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00075\ \{}
+\DoxyCodeLine{00076\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00077\ \ \ \ \ \mbox{\hyperlink{class_undoable_scale_command}{UndoableScaleCommand}}(qreal\ x,\ qreal\ y,\ qreal\ scaleFactor,\ \textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_scale_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_scale_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_scale_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00084\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_scale_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00085\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_scale_command_a134d83875f77905608cf461d3928ab31}{dx}};}
+\DoxyCodeLine{00086\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_scale_command_a8d9cac9b570526f7bdc2d96f18a1e675}{dy}};}
+\DoxyCodeLine{00087\ \ \ \ \ qreal\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_scale_command_ad808572d9685a28a25102756d2a3603d}{factor}};}
+\DoxyCodeLine{00088\ \};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_nav_command}{UndoableNavCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00091\ \{}
+\DoxyCodeLine{00092\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00093\ \ \ \ \ \mbox{\hyperlink{class_undoable_nav_command}{UndoableNavCommand}}(\textcolor{keyword}{const}\ QString\&\ type,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_undoable_nav_command_a67c5505c191c19aefa81f8f006267fa5}{id}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ 1234;\ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_undoable_nav_command_a827c000df0233dc7e8ca1e3d6ba1d896}{mergeWith}}(\textcolor{keyword}{const}\ QUndoCommand*\ command);}
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_nav_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_nav_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00101\ \ \ \ \ QString\ \mbox{\hyperlink{class_undoable_nav_command_a4abd772938d3481c74165f7e1f560c05}{navType}};}
+\DoxyCodeLine{00102\ \ \ \ \ QTransform\ \mbox{\hyperlink{class_undoable_nav_command_afde7905d6eacb6a51dd86b67d96da5ab}{fromTransform}};}
+\DoxyCodeLine{00103\ \ \ \ \ QTransform\ \mbox{\hyperlink{class_undoable_nav_command_ac03c81aef6e6628cbf16766fb0fcc74d}{toTransform}};}
+\DoxyCodeLine{00104\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_undoable_nav_command_a568dc0a363c30074218baf00718c87f5}{fromCenter}};}
+\DoxyCodeLine{00105\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_undoable_nav_command_a88afee069be115fadc2b7d2e6b578c0f}{toCenter}};}
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \mbox{\hyperlink{class_undoable_nav_command_a1d39aac66e12dae50a24cd7a9100ef33}{done}};}
+\DoxyCodeLine{00107\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \mbox{\hyperlink{class_undoable_nav_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00108\ \};}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_grip_edit_command}{UndoableGripEditCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00111\ \{}
+\DoxyCodeLine{00112\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00113\ \ \ \ \ \mbox{\hyperlink{class_undoable_grip_edit_command}{UndoableGripEditCommand}}(\textcolor{keyword}{const}\ QPointF\ beforePoint,\ \textcolor{keyword}{const}\ QPointF\ afterPoint,\ \textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_grip_edit_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_grip_edit_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00119\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_grip_edit_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00120\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_grip_edit_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00121\ \ \ \ \ QPointF\ \ \ \ \ \mbox{\hyperlink{class_undoable_grip_edit_command_ad2956bebc59e857866d5333ccb7ebd76}{before}};}
+\DoxyCodeLine{00122\ \ \ \ \ QPointF\ \ \ \ \ \mbox{\hyperlink{class_undoable_grip_edit_command_a59e4f9c676798693d715c0e9e4de9687}{after}};}
+\DoxyCodeLine{00123\ \};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undoable_mirror_command}{UndoableMirrorCommand}}\ :\ \textcolor{keyword}{public}\ QUndoCommand}
+\DoxyCodeLine{00127\ \{}
+\DoxyCodeLine{00128\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00129\ \ \ \ \ \mbox{\hyperlink{class_undoable_mirror_command}{UndoableMirrorCommand}}(qreal\ x1,\ qreal\ y1,\ qreal\ x2,\ qreal\ y2,\ \textcolor{keyword}{const}\ QString\&\ text,\ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ obj,\ \mbox{\hyperlink{class_view}{View}}*\ v,\ QUndoCommand*\ parent\ =\ 0);}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_mirror_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00132\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_mirror_command_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undoable_mirror_command_a68a2f3f7ec219e7852eca888e3f925b5}{mirror}}();}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \mbox{\hyperlink{class_base_object}{BaseObject}}*\ \mbox{\hyperlink{class_undoable_mirror_command_a2e1f84592366462c24fc68dff57b903c}{object}};}
+\DoxyCodeLine{00138\ \ \ \ \ \mbox{\hyperlink{class_view}{View}}*\ \ \ \ \ \ \ \mbox{\hyperlink{class_undoable_mirror_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}};}
+\DoxyCodeLine{00139\ \ \ \ \ QLineF\ \ \ \ \ \ \mbox{\hyperlink{class_undoable_mirror_command_a86117a851d7587f4b98154d2fb3e0b84}{mirrorLine}};}
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \};}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

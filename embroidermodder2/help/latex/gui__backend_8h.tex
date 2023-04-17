@@ -1,12 +1,12 @@
-\hypertarget{gui__backend_8h}{}\doxysubsection{src/gui\+\_\+backend.h File Reference}
-\label{gui__backend_8h}\index{src/gui\_backend.h@{src/gui\_backend.h}}
+\hypertarget{gui__backend_8h}{}\doxysubsection{embroidermodder2/gui\+\_\+backend.h File Reference}
+\label{gui__backend_8h}\index{embroidermodder2/gui\_backend.h@{embroidermodder2/gui\_backend.h}}
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
 {\ttfamily \#include $<$stdbool.\+h$>$}\newline
 {\ttfamily \#include $<$time.\+h$>$}\newline
 {\ttfamily \#include $<$embroidery.\+h$>$}\newline
 {\ttfamily \#include $<$GL/glew.\+h$>$}\newline
 {\ttfamily \#include $<$GLFW/glfw3.\+h$>$}\newline
-\doxysubsubsection*{Data Structures}
+\doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{struct_dictionary_entry__}{Dictionary\+Entry\+\_\+}}
@@ -77,7 +77,7 @@ void \mbox{\hyperlink{gui__backend_8h_a24ae6f0170becf9054e244a2d79d70f6}{show\+\
 \item 
 void \mbox{\hyperlink{gui__backend_8h_aa64aa9f5d65eab5a4ad4173087502c9d}{translated\+\_\+text}} (const char $\ast$str)
 \item 
-void \mbox{\hyperlink{gui__backend_8h_a7e91591791a601a8c29c873e3706454b}{checkbox\+\_\+data}} (const char $\ast$str, bool $\ast$stor, bool $\ast$value)
+void \mbox{\hyperlink{gui__backend_8h_a7e91591791a601a8c29c873e3706454b}{checkbox\+\_\+data}} (const char $\ast$str, bool $\ast$\mbox{\hyperlink{imgui__main_8c_afa99c46d3a257d3f81458c18e2bbf4f0}{stor}}, bool $\ast$value)
 \item 
 void \mbox{\hyperlink{gui__backend_8h_a8e437214cf99df3b02ca007f8dc6665f}{edit\+\_\+real}} (const char $\ast$str, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$data)
 \item 
@@ -160,10 +160,6 @@ void \mbox{\hyperlink{gui__backend_8h_a9603a5939337471ff9e0b352f220162d}{get\+\_
 {\em label} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00381}{381}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_aefaefb6a12a4817f80686282053323b8}\label{gui__backend_8h_aefaefb6a12a4817f80686282053323b8}} 
 \index{gui\_backend.h@{gui\_backend.h}!begin\_combo@{begin\_combo}}
 \index{begin\_combo@{begin\_combo}!gui\_backend.h@{gui\_backend.h}}
@@ -182,29 +178,17 @@ true
 
 false 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00208}{208}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_abeb3dceb90107244fea867ea87b10430}\label{gui__backend_8h_abeb3dceb90107244fea867ea87b10430}} 
 \index{gui\_backend.h@{gui\_backend.h}!begin\_menu@{begin\_menu}}
 \index{begin\_menu@{begin\_menu}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{begin\_menu()}{begin\_menu()}}
 {\footnotesize\ttfamily bool begin\+\_\+menu (\begin{DoxyParamCaption}\item[{const char $\ast$}]{label }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00560}{560}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_af770a7172c08ae83c9c632a29b6ab228}\label{gui__backend_8h_af770a7172c08ae83c9c632a29b6ab228}} 
 \index{gui\_backend.h@{gui\_backend.h}!begin\_menu\_bar@{begin\_menu\_bar}}
 \index{begin\_menu\_bar@{begin\_menu\_bar}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{begin\_menu\_bar()}{begin\_menu\_bar()}}
 {\footnotesize\ttfamily bool begin\+\_\+menu\+\_\+bar (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00604}{604}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a1ae1242385e31eab675db827665abaab}\label{gui__backend_8h_a1ae1242385e31eab675db827665abaab}} 
 \index{gui\_backend.h@{gui\_backend.h}!begin\_tab\_bar@{begin\_tab\_bar}}
@@ -222,10 +206,6 @@ true
 
 false 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00184}{184}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a8cf14ca61661ee8e1b94774aad614b91}\label{gui__backend_8h_a8cf14ca61661ee8e1b94774aad614b91}} 
 \index{gui\_backend.h@{gui\_backend.h}!begin\_tab\_item@{begin\_tab\_item}}
 \index{begin\_tab\_item@{begin\_tab\_item}!gui\_backend.h@{gui\_backend.h}}
@@ -242,10 +222,6 @@ true
 
 false 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00271}{271}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a077b26493d056627b8d387be60502750}\label{gui__backend_8h_a077b26493d056627b8d387be60502750}} 
 \index{gui\_backend.h@{gui\_backend.h}!begin\_ui@{begin\_ui}}
 \index{begin\_ui@{begin\_ui}!gui\_backend.h@{gui\_backend.h}}
@@ -261,10 +237,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00271}{271}} of fi
 {\em width} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00159}{159}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_abb83a89f8c17446714cd128561cebe18}\label{gui__backend_8h_abb83a89f8c17446714cd128561cebe18}} 
 \index{gui\_backend.h@{gui\_backend.h}!button@{button}}
 \index{button@{button}!gui\_backend.h@{gui\_backend.h}}
@@ -281,10 +253,6 @@ true
 
 false 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00258}{258}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a7e91591791a601a8c29c873e3706454b}\label{gui__backend_8h_a7e91591791a601a8c29c873e3706454b}} 
 \index{gui\_backend.h@{gui\_backend.h}!checkbox\_data@{checkbox\_data}}
 \index{checkbox\_data@{checkbox\_data}!gui\_backend.h@{gui\_backend.h}}
@@ -300,10 +268,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00258}{258}} of fi
 {\em value} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00346}{346}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a4e4df236f4cf8a10c13cb4d3ce172554}\label{gui__backend_8h_a4e4df236f4cf8a10c13cb4d3ce172554}} 
 \index{gui\_backend.h@{gui\_backend.h}!collapsing\_header@{collapsing\_header}}
 \index{collapsing\_header@{collapsing\_header}!gui\_backend.h@{gui\_backend.h}}
@@ -320,29 +284,17 @@ true
 
 false 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00245}{245}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_aeb5e92d2a51d4141602872120f1b3645}\label{gui__backend_8h_aeb5e92d2a51d4141602872120f1b3645}} 
 \index{gui\_backend.h@{gui\_backend.h}!columns@{columns}}
 \index{columns@{columns}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{columns()}{columns()}}
 {\footnotesize\ttfamily void columns (\begin{DoxyParamCaption}\item[{int}]{n,  }\item[{char $\ast$}]{label }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00474}{474}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_ab7b443070d87b28508501c0125bee0de}\label{gui__backend_8h_ab7b443070d87b28508501c0125bee0de}} 
 \index{gui\_backend.h@{gui\_backend.h}!display\_text@{display\_text}}
 \index{display\_text@{display\_text}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{display\_text()}{display\_text()}}
 {\footnotesize\ttfamily void display\+\_\+text (\begin{DoxyParamCaption}\item[{const char $\ast$}]{msg }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00501}{501}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_ab09741ff3c62da497f16b71d5e713922}\label{gui__backend_8h_ab09741ff3c62da497f16b71d5e713922}} 
 \index{gui\_backend.h@{gui\_backend.h}!draw\_circle@{draw\_circle}}
@@ -361,10 +313,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00501}{501}} of fi
 {\em filled} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00079}{79}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a0ed3bd48761dd68faad7818ff955d541}\label{gui__backend_8h_a0ed3bd48761dd68faad7818ff955d541}} 
 \index{gui\_backend.h@{gui\_backend.h}!draw\_line@{draw\_line}}
 \index{draw\_line@{draw\_line}!gui\_backend.h@{gui\_backend.h}}
@@ -380,10 +328,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00079}{79}} of fil
 {\em color} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00064}{64}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_aabd6aa9b3f3a00fcd23c8d63572de4d8}\label{gui__backend_8h_aabd6aa9b3f3a00fcd23c8d63572de4d8}} 
 \index{gui\_backend.h@{gui\_backend.h}!draw\_quad@{draw\_quad}}
 \index{draw\_quad@{draw\_quad}!gui\_backend.h@{gui\_backend.h}}
@@ -403,10 +347,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00064}{64}} of fil
 {\em color} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00140}{140}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_adb7832f9cc91f18fffd8420f96a59013}\label{gui__backend_8h_adb7832f9cc91f18fffd8420f96a59013}} 
 \index{gui\_backend.h@{gui\_backend.h}!draw\_rect@{draw\_rect}}
 \index{draw\_rect@{draw\_rect}!gui\_backend.h@{gui\_backend.h}}
@@ -424,10 +364,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00140}{140}} of fi
 {\em filled} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00099}{99}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a4e91dde886217f53a5c9b7855d4515b3}\label{gui__backend_8h_a4e91dde886217f53a5c9b7855d4515b3}} 
 \index{gui\_backend.h@{gui\_backend.h}!draw\_text@{draw\_text}}
 \index{draw\_text@{draw\_text}!gui\_backend.h@{gui\_backend.h}}
@@ -443,10 +379,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00099}{99}} of fil
 {\em text} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00124}{124}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a38fb7e13ed18777a92892a8d96a4ac7d}\label{gui__backend_8h_a38fb7e13ed18777a92892a8d96a4ac7d}} 
 \index{gui\_backend.h@{gui\_backend.h}!edit\_int@{edit\_int}}
 \index{edit\_int@{edit\_int}!gui\_backend.h@{gui\_backend.h}}
@@ -460,10 +392,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00124}{124}} of fi
 {\em data} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00293}{293}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a8e437214cf99df3b02ca007f8dc6665f}\label{gui__backend_8h_a8e437214cf99df3b02ca007f8dc6665f}} 
 \index{gui\_backend.h@{gui\_backend.h}!edit\_real@{edit\_real}}
 \index{edit\_real@{edit\_real}!gui\_backend.h@{gui\_backend.h}}
@@ -477,10 +405,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00293}{293}} of fi
 {\em data} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00360}{360}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a0490aafb784f2925a0959eb53b4dac85}\label{gui__backend_8h_a0490aafb784f2925a0959eb53b4dac85}} 
 \index{gui\_backend.h@{gui\_backend.h}!embColor\_to\_int@{embColor\_to\_int}}
 \index{embColor\_to\_int@{embColor\_to\_int}!gui\_backend.h@{gui\_backend.h}}
@@ -501,19 +425,11 @@ This function doesn\textquotesingle{}t deal with opacity.
 \begin{DoxyReturn}{Returns}
 unsigned int The color encoded as an integer. 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00051}{51}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_ad06d5d308c4cdf027eadbc6843b3c09f}\label{gui__backend_8h_ad06d5d308c4cdf027eadbc6843b3c09f}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_child@{end\_child}}
 \index{end\_child@{end\_child}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{end\_child()}{end\_child()}}
 {\footnotesize\ttfamily void end\+\_\+child (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00391}{391}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a96bb136853ffafabfe46d342a07fc428}\label{gui__backend_8h_a96bb136853ffafabfe46d342a07fc428}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_columns@{end\_columns}}
@@ -521,19 +437,11 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00391}{391}} of fi
 \doxyparagraph{\texorpdfstring{end\_columns()}{end\_columns()}}
 {\footnotesize\ttfamily void end\+\_\+columns (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00492}{492}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_abd3aefeae83b67bb104df347849d2fe4}\label{gui__backend_8h_abd3aefeae83b67bb104df347849d2fe4}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_combo@{end\_combo}}
 \index{end\_combo@{end\_combo}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{end\_combo()}{end\_combo()}}
 {\footnotesize\ttfamily void end\+\_\+combo (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00232}{232}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_ae18f1d8182edf522c8ac617445f0c213}\label{gui__backend_8h_ae18f1d8182edf522c8ac617445f0c213}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_menu@{end\_menu}}
@@ -541,19 +449,11 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00232}{232}} of fi
 \doxyparagraph{\texorpdfstring{end\_menu()}{end\_menu()}}
 {\footnotesize\ttfamily void end\+\_\+menu (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00569}{569}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a7b22a6dd37a62abd19ef6e8e3c4474a6}\label{gui__backend_8h_a7b22a6dd37a62abd19ef6e8e3c4474a6}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_menu\_bar@{end\_menu\_bar}}
 \index{end\_menu\_bar@{end\_menu\_bar}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{end\_menu\_bar()}{end\_menu\_bar()}}
 {\footnotesize\ttfamily void end\+\_\+menu\+\_\+bar (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00613}{613}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_af0dc2940f5e407472fbf9d5cb5af9736}\label{gui__backend_8h_af0dc2940f5e407472fbf9d5cb5af9736}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_tab\_bar@{end\_tab\_bar}}
@@ -561,29 +461,17 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00613}{613}} of fi
 \doxyparagraph{\texorpdfstring{end\_tab\_bar()}{end\_tab\_bar()}}
 {\footnotesize\ttfamily void end\+\_\+tab\+\_\+bar (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00194}{194}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a203a18dacb5949cc179b00595b334236}\label{gui__backend_8h_a203a18dacb5949cc179b00595b334236}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_tab\_item@{end\_tab\_item}}
 \index{end\_tab\_item@{end\_tab\_item}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{end\_tab\_item()}{end\_tab\_item()}}
 {\footnotesize\ttfamily void end\+\_\+tab\+\_\+item (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00281}{281}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a37f225ac592fc1180e680cefaefe9ed8}\label{gui__backend_8h_a37f225ac592fc1180e680cefaefe9ed8}} 
 \index{gui\_backend.h@{gui\_backend.h}!end\_ui@{end\_ui}}
 \index{end\_ui@{end\_ui}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{end\_ui()}{end\_ui()}}
 {\footnotesize\ttfamily void end\+\_\+ui (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00171}{171}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a6611fff19a9318d4752406c03eaf192c}\label{gui__backend_8h_a6611fff19a9318d4752406c03eaf192c}} 
 \index{gui\_backend.h@{gui\_backend.h}!gen\_gl\_texture@{gen\_gl\_texture}}
@@ -595,19 +483,11 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00171}{171}} of fi
 
 
 
-
-
-Definition at line \mbox{\hyperlink{src_2main_8c_source_l01842}{1842}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{gui__backend_8h_aca4abf3c9f7a69ff2af2846ff8ebbf2f}\label{gui__backend_8h_aca4abf3c9f7a69ff2af2846ff8ebbf2f}} 
 \index{gui\_backend.h@{gui\_backend.h}!get\_current\_directory@{get\_current\_directory}}
 \index{get\_current\_directory@{get\_current\_directory}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{get\_current\_directory()}{get\_current\_directory()}}
 {\footnotesize\ttfamily void get\+\_\+current\+\_\+directory (\begin{DoxyParamCaption}\item[{char}]{directory\mbox{[}200\mbox{]} }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00510}{510}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a9603a5939337471ff9e0b352f220162d}\label{gui__backend_8h_a9603a5939337471ff9e0b352f220162d}} 
 \index{gui\_backend.h@{gui\_backend.h}!get\_display\_size@{get\_display\_size}}
@@ -626,10 +506,6 @@ Get the display size object.
 {\em height} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00433}{433}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a1835634de5e51f2d179588b84ae8bfa7}\label{gui__backend_8h_a1835634de5e51f2d179588b84ae8bfa7}} 
 \index{gui\_backend.h@{gui\_backend.h}!get\_screen\_size@{get\_screen\_size}}
 \index{get\_screen\_size@{get\_screen\_size}!gui\_backend.h@{gui\_backend.h}}
@@ -643,10 +519,6 @@ Get the screen size object.
 \begin{DoxyReturn}{Returns}
 Emb\+Vector 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00417}{417}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a027acac5a15363318344a67db71f95f9}\label{gui__backend_8h_a027acac5a15363318344a67db71f95f9}} 
 \index{gui\_backend.h@{gui\_backend.h}!get\_window\_pos@{get\_window\_pos}}
 \index{get\_window\_pos@{get\_window\_pos}!gui\_backend.h@{gui\_backend.h}}
@@ -660,19 +532,11 @@ Get the window pos object.
 \begin{DoxyReturn}{Returns}
 Emb\+Vector 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00402}{402}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_ab82d378d208eeb22efb6d0dccc5b05a1}\label{gui__backend_8h_ab82d378d208eeb22efb6d0dccc5b05a1}} 
 \index{gui\_backend.h@{gui\_backend.h}!header@{header}}
 \index{header@{header}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{header()}{header()}}
 {\footnotesize\ttfamily void header (\begin{DoxyParamCaption}\item[{const char $\ast$}]{title }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00587}{587}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a4959b847d964ce421c816ee571d2d1a0}\label{gui__backend_8h_a4959b847d964ce421c816ee571d2d1a0}} 
 \index{gui\_backend.h@{gui\_backend.h}!image\_button@{image\_button}}
@@ -680,29 +544,17 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00587}{587}} of fi
 \doxyparagraph{\texorpdfstring{image\_button()}{image\_button()}}
 {\footnotesize\ttfamily bool image\+\_\+button (\begin{DoxyParamCaption}\item[{char $\ast$}]{texture\+\_\+label,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{size }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00579}{579}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a1408578c63bcf39c371ede8e2e56c3ea}\label{gui__backend_8h_a1408578c63bcf39c371ede8e2e56c3ea}} 
 \index{gui\_backend.h@{gui\_backend.h}!imgui\_new\_frame@{imgui\_new\_frame}}
 \index{imgui\_new\_frame@{imgui\_new\_frame}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{imgui\_new\_frame()}{imgui\_new\_frame()}}
 {\footnotesize\ttfamily void imgui\+\_\+new\+\_\+frame (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00669}{669}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_ae19012ad0f0292d0cf6923d14f0d0f44}\label{gui__backend_8h_ae19012ad0f0292d0cf6923d14f0d0f44}} 
 \index{gui\_backend.h@{gui\_backend.h}!imgui\_render@{imgui\_render}}
 \index{imgui\_render@{imgui\_render}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{imgui\_render()}{imgui\_render()}}
 {\footnotesize\ttfamily void imgui\+\_\+render (\begin{DoxyParamCaption}\item[{GLFWwindow $\ast$}]{window }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00653}{653}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_ab33d11acd85f14eb910d0735a9384510}\label{gui__backend_8h_ab33d11acd85f14eb910d0735a9384510}} 
 \index{gui\_backend.h@{gui\_backend.h}!load\_texture@{load\_texture}}
@@ -713,10 +565,6 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00653}{653}} of fi
 
 
 
-
-
-
-Definition at line \mbox{\hyperlink{src_2main_8c_source_l01865}{1865}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a6dfa1a690b8a00e06fe270890e16ab15}\label{gui__backend_8h_a6dfa1a690b8a00e06fe270890e16ab15}} 
 \index{gui\_backend.h@{gui\_backend.h}!load\_textures@{load\_textures}}
@@ -732,10 +580,6 @@ Definition at line \mbox{\hyperlink{src_2main_8c_source_l01865}{1865}} of file \
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00531}{531}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a13a5a2fd32929ba9f29802bd3c39b674}\label{gui__backend_8h_a13a5a2fd32929ba9f29802bd3c39b674}} 
 \index{gui\_backend.h@{gui\_backend.h}!log\_debug@{log\_debug}}
 \index{log\_debug@{log\_debug}!gui\_backend.h@{gui\_backend.h}}
@@ -751,20 +595,12 @@ Rather than outputting debug information to the command line it is sent to a fil
 The benefits of always logging to file are\+: they are easily requested from users who need help and we can search the debug log using grep and other tool.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000079}{Todo}}]log current time and process id alongside all debug information. \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{src_2main_8c_source_l07129}{7129}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
-
+\item[\mbox{\hyperlink{todo__todo000077}{Todo}}]log current time and process id alongside all debug information. \end{DoxyRefDesc}
 \mbox{\Hypertarget{gui__backend_8h_a8e9c1d102fc4669dfc09579d64694725}\label{gui__backend_8h_a8e9c1d102fc4669dfc09579d64694725}} 
 \index{gui\_backend.h@{gui\_backend.h}!menu\_item@{menu\_item}}
 \index{menu\_item@{menu\_item}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{menu\_item()}{menu\_item()}}
 {\footnotesize\ttfamily bool menu\+\_\+item (\begin{DoxyParamCaption}\item[{const char $\ast$}]{key }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00519}{519}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a5f78a83078ffcfb5e680751b8bda2c0f}\label{gui__backend_8h_a5f78a83078ffcfb5e680751b8bda2c0f}} 
 \index{gui\_backend.h@{gui\_backend.h}!menu\_separator@{menu\_separator}}
@@ -772,29 +608,17 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00519}{519}} of fi
 \doxyparagraph{\texorpdfstring{menu\_separator()}{menu\_separator()}}
 {\footnotesize\ttfamily void menu\+\_\+separator (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00551}{551}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a38b8c1c43207473d3bbab953fab5ab42}\label{gui__backend_8h_a38b8c1c43207473d3bbab953fab5ab42}} 
 \index{gui\_backend.h@{gui\_backend.h}!next\_column@{next\_column}}
 \index{next\_column@{next\_column}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{next\_column()}{next\_column()}}
 {\footnotesize\ttfamily void next\+\_\+column (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00483}{483}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_ae7b14b8d680e22b0d7c10f259b0ac542}\label{gui__backend_8h_ae7b14b8d680e22b0d7c10f259b0ac542}} 
 \index{gui\_backend.h@{gui\_backend.h}!same\_line@{same\_line}}
 \index{same\_line@{same\_line}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{same\_line()}{same\_line()}}
 {\footnotesize\ttfamily void same\+\_\+line (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00370}{370}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_ac0a28355e9c8e3fa46ea38b03893b397}\label{gui__backend_8h_ac0a28355e9c8e3fa46ea38b03893b397}} 
 \index{gui\_backend.h@{gui\_backend.h}!selectable@{selectable}}
@@ -814,19 +638,11 @@ true
 
 false 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00222}{222}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_ae0acc6b0db8204de2bb29c8f85657d8b}\label{gui__backend_8h_ae0acc6b0db8204de2bb29c8f85657d8b}} 
 \index{gui\_backend.h@{gui\_backend.h}!set\_column\_width@{set\_column\_width}}
 \index{set\_column\_width@{set\_column\_width}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{set\_column\_width()}{set\_column\_width()}}
 {\footnotesize\ttfamily void set\+\_\+column\+\_\+width (\begin{DoxyParamCaption}\item[{int}]{start,  }\item[{int}]{end }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00595}{595}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a4e3914b9b73e908758f812294001c565}\label{gui__backend_8h_a4e3914b9b73e908758f812294001c565}} 
 \index{gui\_backend.h@{gui\_backend.h}!set\_style@{set\_style}}
@@ -838,29 +654,17 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00595}{595}} of fi
 
 Set the style object. 
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00445}{445}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a313cee6c596d01e2c042296ea5c88a97}\label{gui__backend_8h_a313cee6c596d01e2c042296ea5c88a97}} 
 \index{gui\_backend.h@{gui\_backend.h}!setup\_imgui@{setup\_imgui}}
 \index{setup\_imgui@{setup\_imgui}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{setup\_imgui()}{setup\_imgui()}}
 {\footnotesize\ttfamily void setup\+\_\+imgui (\begin{DoxyParamCaption}\item[{GLFWwindow $\ast$}]{window }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00635}{635}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a8671d22390b07206a4082dd584c6f65d}\label{gui__backend_8h_a8671d22390b07206a4082dd584c6f65d}} 
 \index{gui\_backend.h@{gui\_backend.h}!setup\_main\_widget@{setup\_main\_widget}}
 \index{setup\_main\_widget@{setup\_main\_widget}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{setup\_main\_widget()}{setup\_main\_widget()}}
 {\footnotesize\ttfamily void setup\+\_\+main\+\_\+widget (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00621}{621}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a24ae6f0170becf9054e244a2d79d70f6}\label{gui__backend_8h_a24ae6f0170becf9054e244a2d79d70f6}} 
 \index{gui\_backend.h@{gui\_backend.h}!show\_int@{show\_int}}
@@ -875,19 +679,11 @@ Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00621}{621}} of fi
 {\em data} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00318}{318}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a8870a36bffb819475927ff13f8dfcc92}\label{gui__backend_8h_a8870a36bffb819475927ff13f8dfcc92}} 
 \index{gui\_backend.h@{gui\_backend.h}!show\_real@{show\_real}}
 \index{show\_real@{show\_real}!gui\_backend.h@{gui\_backend.h}}
 \doxyparagraph{\texorpdfstring{show\_real()}{show\_real()}}
 {\footnotesize\ttfamily void show\+\_\+real (\begin{DoxyParamCaption}\item[{const char $\ast$}]{label,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{data }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00302}{302}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
 
 \mbox{\Hypertarget{gui__backend_8h_a404be4263e1e9a553e362bb5f40448b1}\label{gui__backend_8h_a404be4263e1e9a553e362bb5f40448b1}} 
 \index{gui\_backend.h@{gui\_backend.h}!translate@{translate}}
@@ -902,11 +698,7 @@ Rather than using .po files we translate at runtime using this function.
 {\itshape string} The string to be translated. Returns const char$\ast$ The translated string.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000080}{Todo}}]check for translation\+\_\+table loaded and use it. \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{src_2main_8c_source_l07183}{7183}} of file \mbox{\hyperlink{src_2main_8c_source}{main.\+c}}.
-
+\item[\mbox{\hyperlink{todo__todo000078}{Todo}}]check for translation\+\_\+table loaded and use it. \end{DoxyRefDesc}
 \mbox{\Hypertarget{gui__backend_8h_aa64aa9f5d65eab5a4ad4173087502c9d}\label{gui__backend_8h_aa64aa9f5d65eab5a4ad4173087502c9d}} 
 \index{gui\_backend.h@{gui\_backend.h}!translated\_text@{translated\_text}}
 \index{translated\_text@{translated\_text}!gui\_backend.h@{gui\_backend.h}}
@@ -918,10 +710,6 @@ Definition at line \mbox{\hyperlink{src_2main_8c_source_l07183}{7183}} of file \
 {\em str} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{gui__backend_8cpp_source_l00333}{333}} of file \mbox{\hyperlink{gui__backend_8cpp_source}{gui\+\_\+backend.\+cpp}}.
-
 \mbox{\Hypertarget{gui__backend_8h_a365eeaff2aa548db74e56ac9e19fb5df}\label{gui__backend_8h_a365eeaff2aa548db74e56ac9e19fb5df}} 
 \index{gui\_backend.h@{gui\_backend.h}!view\_tab@{view\_tab}}
 \index{view\_tab@{view\_tab}!gui\_backend.h@{gui\_backend.h}}

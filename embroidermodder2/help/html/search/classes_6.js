@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['lsystem_0',['LSYSTEM',['../struct_l_s_y_s_t_e_m.html',1,'']]]
+  ['hoop_5fpadding_0',['hoop_padding',['../structhoop__padding.html',1,'']]],
+  ['huffman_1',['Huffman',['../struct_huffman.html',1,'']]]
 ];

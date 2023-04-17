@@ -1,0 +1,53 @@
+\hypertarget{undo-editor_8h_source}{}\doxysubsection{undo-\/editor.h}
+\label{undo-editor_8h_source}\index{embroidermodder2/undo-\/editor.h@{embroidermodder2/undo-\/editor.h}}
+\mbox{\hyperlink{undo-editor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ UNDO\_EDITOR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ UNDO\_EDITOR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <QDockWidget>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ QT\_BEGIN\_NAMESPACE}
+\DoxyCodeLine{00007\ \textcolor{keyword}{class\ }QUndoGroup;}
+\DoxyCodeLine{00008\ \textcolor{keyword}{class\ }QUndoStack;}
+\DoxyCodeLine{00009\ \textcolor{keyword}{class\ }QUndoView;}
+\DoxyCodeLine{00010\ QT\_END\_NAMESPACE}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_undo_editor}{UndoEditor}}\ :\ \textcolor{keyword}{public}\ QDockWidget}
+\DoxyCodeLine{00013\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ Q\_OBJECT}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{class_undo_editor}{UndoEditor}}(\textcolor{keyword}{const}\ QString\&\ iconDirectory\ =\ QString(),\ QWidget*\ widgetToFocus\ =\ 0,\ QWidget*\ parent\ =\ 0);\ \textcolor{comment}{//,\ Qt::WindowFlags\ flags\ =\ 0);}}
+\DoxyCodeLine{00018\ \ \ \ \ \mbox{\hyperlink{class_undo_editor_a7115b468cec0a911d696ff5289956150}{\string~UndoEditor}}();}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_a49792429b8a973f9badbfac692426ff0}{addStack}}(QUndoStack*\ stack);}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_undo_editor_a9d3be6f39301a723f28d3f53f36323f2}{canUndo}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_undo_editor_a381a2a326e444a8571ea40e480c25afe}{canRedo}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ QString\ \mbox{\hyperlink{class_undo_editor_ab552a1360ec65ef0163b22c15ba196a0}{undoText}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00026\ \ \ \ \ QString\ \mbox{\hyperlink{class_undo_editor_a69e660c2803ec7de1a3294e22ae32f53}{redoText}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00027\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{public}\ slots:}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}}();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_a93c48d6ed036e1a381be53ac67643284}{redo}}();}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_undo_editor_ac7d2d3d1e6f3e2030551a50729cd2687}{updateCleanIcon}}(\textcolor{keywordtype}{bool}\ opened);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ QWidget*\ \ \ \ \mbox{\hyperlink{class_undo_editor_ad11af965753130b800267961b150efdf}{focusWidget}};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ QString\ \ \ \ \ \mbox{\hyperlink{class_undo_editor_ad085b0152655682d722dfe67c7255a9d}{iconDir}};}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_undo_editor_a69e645ac34ef17670c8d6efe067f2a85}{iconSize}};}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \ \ \ \ QUndoGroup*\ \mbox{\hyperlink{class_undo_editor_a2f995dc4648267211bb86dbf77d51c32}{undoGroup}};}
+\DoxyCodeLine{00042\ \ \ \ \ QUndoView*\ \ \mbox{\hyperlink{class_undo_editor_aad686cdfc63313681f3c98aaf67f8407}{undoView}};}
+\DoxyCodeLine{00043\ \};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

@@ -24,7 +24,6 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
-<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -110,13 +109,19 @@ $(document).ready(function(){initNavTree('fill_8c.html',''); initResizable(); })
 <code>#include &lt;string.h&gt;</code><br />
 <code>#include &lt;math.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="embroidery__internal_8h_source.html">embroidery_internal.h</a>&quot;</code><br />
-</div>
-<p><a href="fill_8c_source.html">Go to the source code of this file.</a></p>
-<table class="memberdecls">
+</div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:af27a83a237ef6302cbfb5af534229e10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#af27a83a237ef6302cbfb5af534229e10">lindenmayer_system</a> (<a class="el" href="embroidery_8h.html#a914404401c03a6bf0dac814661ba370c">L_system</a> L, char *state, int iterations, int complete)</td></tr>
 <tr class="separator:af27a83a237ef6302cbfb5af534229e10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fd47c53d468e3e5590e096495acac79"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a0fd47c53d468e3e5590e096495acac79">join_short_stitches</a> (int *points, int *n_points, int width, int tolerence)</td></tr>
+<tr class="separator:a0fd47c53d468e3e5590e096495acac79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc8683886c723530102d2b75f14b6dbd"><td class="memItemLeft" align="right" valign="top">static int *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#adc8683886c723530102d2b75f14b6dbd">threshold_method</a> (<a class="el" href="embroidery_8h.html#a907d23c2268eff84b7c5146b2add1bb4">EmbImage</a> *image, int *n_points, int subsample_width, int subsample_height, int threshold)</td></tr>
+<tr class="separator:adc8683886c723530102d2b75f14b6dbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d43a4168ef00fcb9221321b4508c8c5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a5d43a4168ef00fcb9221321b4508c8c5">greedy_algorithm</a> (int *points, int n_points, int width, <a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> bias)</td></tr>
+<tr class="separator:a5d43a4168ef00fcb9221321b4508c8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af65a5f7a682322a9588066dfc9d3e10d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#af65a5f7a682322a9588066dfc9d3e10d">save_points_to_pattern</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern, int *points, int n_points, <a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> scale, int width, int height)</td></tr>
+<tr class="separator:af65a5f7a682322a9588066dfc9d3e10d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51526002a19f07437ee07f4c6d475690"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a51526002a19f07437ee07f4c6d475690">embPattern_horizontal_fill</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern, <a class="el" href="embroidery_8h.html#a907d23c2268eff84b7c5146b2add1bb4">EmbImage</a> *image, int threshhold)</td></tr>
 <tr class="separator:a51526002a19f07437ee07f4c6d475690"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadaaf644936dbeeb4286a00c4fe04794"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#aadaaf644936dbeeb4286a00c4fe04794">embPattern_crossstitch</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *pattern, <a class="el" href="embroidery_8h.html#a907d23c2268eff84b7c5146b2add1bb4">EmbImage</a> *image, int threshhold)</td></tr>
@@ -134,17 +139,18 @@ Functions</h2></td></tr>
 <tr class="memitem:aa629adadc7956aab2bfd8b0de7ccdd54"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#aa629adadc7956aab2bfd8b0de7ccdd54">embPattern_combine</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p1, <a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p2)</td></tr>
 <tr class="separator:aa629adadc7956aab2bfd8b0de7ccdd54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e048d8296a5178c1188ca70ee2256e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a8e048d8296a5178c1188ca70ee2256e7">embPattern_stitchArc</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a09945e6e919629c5787e61582c712ba1">EmbArc</a> arc, int thread_index, int style)</td></tr>
+<tr class="memdesc:a8e048d8296a5178c1188ca70ee2256e7"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>p</em> <em>arc</em> <em>thread_index</em> <em>style</em>  <br /></td></tr>
 <tr class="separator:a8e048d8296a5178c1188ca70ee2256e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4927287166f2a0abbc7b482ff4054a5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a4927287166f2a0abbc7b482ff4054a5e">embPattern_stitchCircle</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a87fc13ccd4dbaa7de7c85efde17bba0e">EmbCircle</a> circle, int thread_index, int style)</td></tr>
 <tr class="separator:a4927287166f2a0abbc7b482ff4054a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63bc84e4406e59c092a2e076afedf930"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a63bc84e4406e59c092a2e076afedf930">embPattern_stitchEllipse</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a4e48ebde5bd4d82b875f98b347bdd62c">EmbEllipse</a> ellipse, int thread_index, int style)</td></tr>
 <tr class="separator:a63bc84e4406e59c092a2e076afedf930"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a130b4030da774600c6005183dabb2d28"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a130b4030da774600c6005183dabb2d28">embPattern_stitchPath</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#af29045dfeebafdcb66d114b390c4a686">EmbPath</a> rect, int thread_index, int style)</td></tr>
-<tr class="separator:a130b4030da774600c6005183dabb2d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e95b120116c16767cecbd2284ce1e7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a6e95b120116c16767cecbd2284ce1e7b">embPattern_stitchPolygon</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a2d6988a5f4ba24d26c7eff65dbc9d029">EmbPolygon</a> rect, int thread_index, int style)</td></tr>
-<tr class="separator:a6e95b120116c16767cecbd2284ce1e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18bde39bfa17dfb7fe07137d62260e5c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a18bde39bfa17dfb7fe07137d62260e5c">embPattern_stitchPolyline</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#ab5563c868d8f8174d5be764808a647dd">EmbPolyline</a> rect, int thread_index, int style)</td></tr>
-<tr class="separator:a18bde39bfa17dfb7fe07137d62260e5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a736fce5df010bbe74ea9ad2857be9bf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a736fce5df010bbe74ea9ad2857be9bf4">embPattern_stitchPath</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#af29045dfeebafdcb66d114b390c4a686">EmbPath</a> path, int thread_index, int style)</td></tr>
+<tr class="separator:a736fce5df010bbe74ea9ad2857be9bf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86f903495c0da7514294200680bd6414"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a86f903495c0da7514294200680bd6414">embPattern_stitchPolygon</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#a2d6988a5f4ba24d26c7eff65dbc9d029">EmbPolygon</a> polygon, int thread_index, int style)</td></tr>
+<tr class="separator:a86f903495c0da7514294200680bd6414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ae9d5d7dfbb2ab361dc37970b7eb2f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a9ae9d5d7dfbb2ab361dc37970b7eb2f2">embPattern_stitchPolyline</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#ab5563c868d8f8174d5be764808a647dd">EmbPolyline</a> polyline, int thread_index, int style)</td></tr>
+<tr class="separator:a9ae9d5d7dfbb2ab361dc37970b7eb2f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae38ddde615726bba5070a6b17ce6d018"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#ae38ddde615726bba5070a6b17ce6d018">embPattern_stitchRect</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#ac2f33b151fc40a0da3b14379aa0ec653">EmbRect</a> rect, int thread_index, int style)</td></tr>
 <tr class="separator:ae38ddde615726bba5070a6b17ce6d018"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a908f6c41318183bcfceebdd9b646dc90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fill_8c.html#a908f6c41318183bcfceebdd9b646dc90">embPattern_stitchText</a> (<a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *p, <a class="el" href="embroidery_8h.html#ac2f33b151fc40a0da3b14379aa0ec653">EmbRect</a> rect, int thread_index, int style)</td></tr>
@@ -183,8 +189,6 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00426">426</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="aa629adadc7956aab2bfd8b0de7ccdd54" name="aa629adadc7956aab2bfd8b0de7ccdd54"></a>
@@ -221,8 +225,6 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>EmbPattern* </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01042">1042</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="ad948b1ae6e42c31b1a020348bedddfab" name="ad948b1ae6e42c31b1a020348bedddfab"></a>
@@ -246,8 +248,6 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01253">1253</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
 
 </div>
 </div>
@@ -292,8 +292,6 @@ Variables</h2></td></tr>
 </dl>
 <p>Uses a threshhold method to determine where to put crosses in the fill.</p>
 <p>To improve this, we can remove the vertical stitches when two crosses neighbour. Currently the simple way to do this is to chain crosses that are neighbours exactly one ahead. </p>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00299">299</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
 
 </div>
 </div>
@@ -340,8 +338,6 @@ Variables</h2></td></tr>
 <p>Needs to pass a "donut test", i.e. an image with black pixels where: 10 &lt; x*x + y*y &lt; 20 over the area (-30, 30) x (-30, 30).</p>
 <p>Use render then image difference to see how well it passes. </p>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00265">265</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="a8e048d8296a5178c1188ca70ee2256e7" name="a8e048d8296a5178c1188ca70ee2256e7"></a>
@@ -381,17 +377,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">arc</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
-  </table>
-  </dd>
-</dl>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01071">1071</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+<p><em>p</em> <em>arc</em> <em>thread_index</em> <em>style</em> </p>
 
 </div>
 </div>
@@ -435,9 +422,7 @@ Variables</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p</td><td></td></tr>
-    <tr><td class="paramname">circle</td><td></td></tr>
-    <tr><td class="paramname">thread_index</td><td></td></tr>
-    <tr><td class="paramname">style</td><td></td></tr>
+    <tr><td class="paramname">circle</td><td><em>thread_index</em> <em>style</em> </td></tr>
   </table>
   </dd>
 </dl>
@@ -447,8 +432,6 @@ Variables</h2></td></tr>
 </pre><p> Lines that are above and below this with an even seperation $s$ can be found by taking the point on the line to be c+sn where the $n$ is the unit normal vector to $d$ and the vector to be $d$ again. The intersection points are therefore a right angled triangle, with one side r, another s and the third the length to be solved, by Pythagoras we have:</p>
 <p>$(c + sn - \sqrt{r^2-s^2}(d/|d|), c + sn + \sqrt{r^2-s^2}(d/|d|))$</p>
 <p>repeating this process gives us all the end points and the fill only alters these lines by splitting the ones longer than some tolerence. </p>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01110">1110</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
 
 </div>
 </div>
@@ -498,14 +481,12 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000407">Todo:</a></b></dt><dd>finish stitchEllipse </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01147">1147</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000235">Todo:</a></b></dt><dd>finish stitchEllipse </dd></dl>
 
 </div>
 </div>
-<a id="a130b4030da774600c6005183dabb2d28" name="a130b4030da774600c6005183dabb2d28"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a130b4030da774600c6005183dabb2d28">&#9670;&#160;</a></span>embPattern_stitchPath()</h2>
+<a id="a736fce5df010bbe74ea9ad2857be9bf4" name="a736fce5df010bbe74ea9ad2857be9bf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a736fce5df010bbe74ea9ad2857be9bf4">&#9670;&#160;</a></span>embPattern_stitchPath()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -520,7 +501,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="embroidery_8h.html#af29045dfeebafdcb66d114b390c4a686">EmbPath</a>&#160;</td>
-          <td class="paramname"><em>rect</em>, </td>
+          <td class="paramname"><em>path</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -550,14 +531,12 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000408">Todo:</a></b></dt><dd>finish stitch path </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01163">1163</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000236">Todo:</a></b></dt><dd>finish stitch path </dd></dl>
 
 </div>
 </div>
-<a id="a6e95b120116c16767cecbd2284ce1e7b" name="a6e95b120116c16767cecbd2284ce1e7b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e95b120116c16767cecbd2284ce1e7b">&#9670;&#160;</a></span>embPattern_stitchPolygon()</h2>
+<a id="a86f903495c0da7514294200680bd6414" name="a86f903495c0da7514294200680bd6414"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86f903495c0da7514294200680bd6414">&#9670;&#160;</a></span>embPattern_stitchPolygon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -572,7 +551,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="embroidery_8h.html#a2d6988a5f4ba24d26c7eff65dbc9d029">EmbPolygon</a>&#160;</td>
-          <td class="paramname"><em>rect</em>, </td>
+          <td class="paramname"><em>polygon</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -602,14 +581,12 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000409">Todo:</a></b></dt><dd>finish stitch polygon </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01179">1179</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000237">Todo:</a></b></dt><dd>finish stitch polygon </dd></dl>
 
 </div>
 </div>
-<a id="a18bde39bfa17dfb7fe07137d62260e5c" name="a18bde39bfa17dfb7fe07137d62260e5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18bde39bfa17dfb7fe07137d62260e5c">&#9670;&#160;</a></span>embPattern_stitchPolyline()</h2>
+<a id="a9ae9d5d7dfbb2ab361dc37970b7eb2f2" name="a9ae9d5d7dfbb2ab361dc37970b7eb2f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ae9d5d7dfbb2ab361dc37970b7eb2f2">&#9670;&#160;</a></span>embPattern_stitchPolyline()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -624,7 +601,7 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="embroidery_8h.html#ab5563c868d8f8174d5be764808a647dd">EmbPolyline</a>&#160;</td>
-          <td class="paramname"><em>rect</em>, </td>
+          <td class="paramname"><em>polyline</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -654,9 +631,7 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000410">Todo:</a></b></dt><dd>finish stitch polyline </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01195">1195</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000238">Todo:</a></b></dt><dd>finish stitch polyline </dd></dl>
 
 </div>
 </div>
@@ -708,8 +683,6 @@ Variables</h2></td></tr>
 </dl>
 <p>Here we just stitch the rectangle in the direction of it's longer side. </p>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01211">1211</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="a908f6c41318183bcfceebdd9b646dc90" name="a908f6c41318183bcfceebdd9b646dc90"></a>
@@ -759,8 +732,6 @@ Variables</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01243">1243</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="accb8d958755abb87ae8fe5cb64241c5b" name="accb8d958755abb87ae8fe5cb64241c5b"></a>
@@ -805,8 +776,6 @@ Variables</h2></td></tr>
 <p>Reduces the polygon by distance.</p>
 <p>This is a non-destructive function, so the caller is responsible for freeing "vertices" if they choose to keep "simplified". </p>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00980">980</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="aa25158aa39b36f6981756295d6601910" name="aa25158aa39b36f6981756295d6601910"></a>
@@ -850,8 +819,6 @@ Variables</h2></td></tr>
 </dl>
 <p>Reduces the polygon by removing the Nth vertex in the vertices list. This is a non-destructive function, so the caller is responsible for freeing vertices if they choose to keep out. </p>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l01018">1018</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="ad02b5d945eacff708d2bf084c40044d8" name="ad02b5d945eacff708d2bf084c40044d8"></a>
@@ -886,9 +853,68 @@ Variables</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>using the "paper folding" method </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000406">Todo:</a></b></dt><dd>find citation for paper folding method </dd></dl>
+<p>using the "paper folding" method </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000234">Todo:</a></b></dt><dd>find citation for paper folding method </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00398">398</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+</div>
+</div>
+<a id="a5d43a4168ef00fcb9221321b4508c8c5" name="a5d43a4168ef00fcb9221321b4508c8c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d43a4168ef00fcb9221321b4508c8c5">&#9670;&#160;</a></span>greedy_algorithm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void greedy_algorithm </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
+          <td class="paramname"><em>bias</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td></td></tr>
+    <tr><td class="paramname">n_points</td><td></td></tr>
+    <tr><td class="paramname">width</td><td></td></tr>
+    <tr><td class="paramname">bias</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<h2><a class="anchor" id="autotoc_md5"></a>
+Greedy Algorithm</h2>
+<p>For each point in the list find the shortest distance to any possible neighbour, then perform a swap to make that neighbour the next item in the list.</p>
+<p>To make the stitches lie more on one axis than the other bias the distance operator to prefer horizontal direction. </p>
 
 </div>
 </div>
@@ -928,7 +954,63 @@ Variables</h2></td></tr>
 <p><a href="https://en.wikipedia.org/wiki/Hilbert_curve">https://en.wikipedia.org/wiki/Hilbert_curve</a></p>
 <p>Using the Lindenmayer System, so we can save work across different functions. </p>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00340">340</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+</div>
+</div>
+<a id="a0fd47c53d468e3e5590e096495acac79" name="a0fd47c53d468e3e5590e096495acac79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fd47c53d468e3e5590e096495acac79">&#9670;&#160;</a></span>join_short_stitches()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void join_short_stitches </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>n_points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>tolerence</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td></td></tr>
+    <tr><td class="paramname">n_points</td><td></td></tr>
+    <tr><td class="paramname">width</td><td></td></tr>
+    <tr><td class="paramname">tolerence</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Remove points that lie in the middle of two short stitches that could be one longer stitch. Repeat until none are found. </p>
 
 </div>
 </div>
@@ -981,7 +1063,142 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>int</dd></dl>
 <p>This is a slow generation algorithm. </p>
 
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00037">37</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
+</div>
+</div>
+<a id="af65a5f7a682322a9588066dfc9d3e10d" name="af65a5f7a682322a9588066dfc9d3e10d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af65a5f7a682322a9588066dfc9d3e10d">&#9670;&#160;</a></span>save_points_to_pattern()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void save_points_to_pattern </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a168c2ed6c7e17dd1aa7755aabc1db314">EmbPattern</a> *&#160;</td>
+          <td class="paramname"><em>pattern</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n_points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
+          <td class="paramname"><em>scale</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>height</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pattern</td><td></td></tr>
+    <tr><td class="paramname">points</td><td></td></tr>
+    <tr><td class="paramname">n_points</td><td></td></tr>
+    <tr><td class="paramname">scale</td><td></td></tr>
+    <tr><td class="paramname">width</td><td></td></tr>
+    <tr><td class="paramname">height</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adc8683886c723530102d2b75f14b6dbd" name="adc8683886c723530102d2b75f14b6dbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc8683886c723530102d2b75f14b6dbd">&#9670;&#160;</a></span>threshold_method()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int * threshold_method </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a907d23c2268eff84b7c5146b2add1bb4">EmbImage</a> *&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>n_points</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>subsample_width</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>subsample_height</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>threshold</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">image</td><td></td></tr>
+    <tr><td class="paramname">n_points</td><td></td></tr>
+    <tr><td class="paramname">subsample_width</td><td></td></tr>
+    <tr><td class="paramname">subsample_height</td><td></td></tr>
+    <tr><td class="paramname">threshold</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int*</dd></dl>
+<p>Identify darker pixels to put stitches in. </p>
 
 </div>
 </div>
@@ -1000,10 +1217,8 @@ Variables</h2></td></tr>
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    <span class="charliteral">&#39;A&#39;</span>, <span class="stringliteral">&quot;AB&quot;</span>, <span class="stringliteral">&quot;F+-&quot;</span>, (<span class="keywordtype">char</span>**)<a class="code hl_variable" href="fill_8c.html#add6424b0861a4e44ac11fc4cbf99d1d1">rules</a></div>
 <div class="line">}</div>
-<div class="ttc" id="afill_8c_html_add6424b0861a4e44ac11fc4cbf99d1d1"><div class="ttname"><a href="fill_8c.html#add6424b0861a4e44ac11fc4cbf99d1d1">rules</a></div><div class="ttdeci">const char * rules[]</div><div class="ttdef"><b>Definition:</b> <a href="fill_8c_source.html#l00020">fill.c:20</a></div></div>
+<div class="ttc" id="afill_8c_html_add6424b0861a4e44ac11fc4cbf99d1d1"><div class="ttname"><a href="fill_8c.html#add6424b0861a4e44ac11fc4cbf99d1d1">rules</a></div><div class="ttdeci">const char * rules[]</div><div class="ttdef"><b>Definition:</b> fill.c:20</div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00022">22</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
-
 </div>
 </div>
 <a id="add6424b0861a4e44ac11fc4cbf99d1d1" name="add6424b0861a4e44ac11fc4cbf99d1d1"></a>
@@ -1017,8 +1232,6 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="fill_8c_source.html#l00020">20</a> of file <a class="el" href="fill_8c_source.html">fill.c</a>.</p>
 
 </div>
 </div>

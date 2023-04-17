@@ -1,6 +1,6 @@
 \hypertarget{embroidery_8h}{}\doxysubsection{extern/libembroidery/src/embroidery.h File Reference}
 \label{embroidery_8h}\index{extern/libembroidery/src/embroidery.h@{extern/libembroidery/src/embroidery.h}}
-\doxysubsubsection*{Data Structures}
+\doxysubsubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
 struct \mbox{\hyperlink{struct_emb_color__}{Emb\+Color\+\_\+}}
@@ -82,9 +82,9 @@ struct \mbox{\hyperlink{struct_emb_format_list__}{Emb\+Format\+List\+\_\+}}
 \item 
 \#define \mbox{\hyperlink{embroidery_8h_a1291f416b069313021b519eea62d5bf1}{NORMAL}}~0 /$\ast$! stitch to (x, y) $\ast$/
 \item 
-\#define \mbox{\hyperlink{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}{JUMP}}~1 /$\ast$! move to (x, y) $\ast$/
+\#define \mbox{\hyperlink{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}{JUMP}}~1 /$\ast$! \mbox{\hyperlink{imgui__main_8c_a0534af61c3532dc1a468141e90396156}{move}} to (x, y) $\ast$/
 \item 
-\#define \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}}~2 /$\ast$! trim + move to (x, y) $\ast$/
+\#define \mbox{\hyperlink{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}{TRIM}}~2 /$\ast$! trim + \mbox{\hyperlink{imgui__main_8c_a0534af61c3532dc1a468141e90396156}{move}} to (x, y) $\ast$/
 \item 
 \#define \mbox{\hyperlink{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}{STOP}}~4 /$\ast$! pause machine for thread change $\ast$/
 \item 
@@ -478,7 +478,7 @@ typedef struct \mbox{\hyperlink{struct_emb_format_list__}{Emb\+Format\+List\+\_\
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} \mbox{\hyperlink{embroidery_8h_afdb3beaf9455403550bea072e6433024}{emb\+Line\+\_\+make}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_a9559c0d75a8e73a52114e9c20f45838b}{emb\+Line\+\_\+normal\+Vector}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$result, int \mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_a9559c0d75a8e73a52114e9c20f45838b}{emb\+Line\+\_\+normal\+Vector}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$result, int \mbox{\hyperlink{imgui__main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{embroidery_8h_a95daa6f689b628dec2a772dfde676c83}{emb\+Line\+\_\+intersection\+Point}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line1, \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line2)
 \item 
@@ -522,7 +522,7 @@ typedef struct \mbox{\hyperlink{struct_emb_format_list__}{Emb\+Format\+List\+\_\
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void \mbox{\hyperlink{embroidery_8h_abcb0a9723dfb5440894eb50cb219d993}{get\+Arc\+Center}} (\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} arc, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$arc\+Center)
 \item 
-\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} char \mbox{\hyperlink{embroidery_8h_abccfe683f2d3b1bafb626c3987e3c9ac}{get\+Arc\+Data\+From\+Bulge}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bulge, \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} $\ast$arc, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$radius, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$diameter, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$sagitta, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$apothem, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$inc\+Angle\+In\+Degrees, char $\ast$\mbox{\hyperlink{src_2main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
+\mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} char \mbox{\hyperlink{embroidery_8h_abccfe683f2d3b1bafb626c3987e3c9ac}{get\+Arc\+Data\+From\+Bulge}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bulge, \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} $\ast$arc, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$arc\+CenterY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$radius, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$diameter, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$chord\+MidY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$sagitta, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$apothem, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$inc\+Angle\+In\+Degrees, char $\ast$\mbox{\hyperlink{imgui__main_8c_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}})
 \item 
 \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} \mbox{\hyperlink{embroidery_8h_a847a64f66c1b6493da001e241a1a2ce3}{emb\+Circle\+\_\+init}} (void)
 \item 
@@ -730,19 +730,11 @@ int \mbox{\hyperlink{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}{emb\+\_\+v
 \doxyparagraph{\texorpdfstring{Arc\_Polyester}{Arc\_Polyester}}
 {\footnotesize\ttfamily \#define Arc\+\_\+\+Polyester~0}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00095}{95}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_adb1a3354aa982fe0f9d2b747ea489973}\label{embroidery_8h_adb1a3354aa982fe0f9d2b747ea489973}} 
 \index{embroidery.h@{embroidery.h}!Arc\_Rayon@{Arc\_Rayon}}
 \index{Arc\_Rayon@{Arc\_Rayon}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Arc\_Rayon}{Arc\_Rayon}}
 {\footnotesize\ttfamily \#define Arc\+\_\+\+Rayon~1}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00096}{96}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aea3cfda4f3a9f978ec759f206cf186fe}\label{embroidery_8h_aea3cfda4f3a9f978ec759f206cf186fe}} 
 \index{embroidery.h@{embroidery.h}!CHUNK\_SIZE@{CHUNK\_SIZE}}
@@ -750,19 +742,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00096}{96}} of file \m
 \doxyparagraph{\texorpdfstring{CHUNK\_SIZE}{CHUNK\_SIZE}}
 {\footnotesize\ttfamily \#define CHUNK\+\_\+\+SIZE~128}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00154}{154}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_abffe504635101687eb1d1e49f45325bb}\label{embroidery_8h_abffe504635101687eb1d1e49f45325bb}} 
 \index{embroidery.h@{embroidery.h}!CoatsAndClark\_Rayon@{CoatsAndClark\_Rayon}}
 \index{CoatsAndClark\_Rayon@{CoatsAndClark\_Rayon}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{CoatsAndClark\_Rayon}{CoatsAndClark\_Rayon}}
 {\footnotesize\ttfamily \#define Coats\+And\+Clark\+\_\+\+Rayon~2}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00097}{97}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_adfcb302b46b6976306bddb5e114b1256}\label{embroidery_8h_adfcb302b46b6976306bddb5e114b1256}} 
 \index{embroidery.h@{embroidery.h}!dxf\_color@{dxf\_color}}
@@ -770,19 +754,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00097}{97}} of file \m
 \doxyparagraph{\texorpdfstring{dxf\_color}{dxf\_color}}
 {\footnotesize\ttfamily \#define dxf\+\_\+color~29}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00124}{124}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a121b752016999703e9ec106a3839d5dc}\label{embroidery_8h_a121b752016999703e9ec106a3839d5dc}} 
 \index{embroidery.h@{embroidery.h}!EMB\_ARC@{EMB\_ARC}}
 \index{EMB\_ARC@{EMB\_ARC}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_ARC}{EMB\_ARC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+ARC~1}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00127}{127}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a815149c54482a0f44e272eab515e9bb7}\label{embroidery_8h_a815149c54482a0f44e272eab515e9bb7}} 
 \index{embroidery.h@{embroidery.h}!EMB\_ARRAY@{EMB\_ARRAY}}
@@ -790,19 +766,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00127}{127}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_ARRAY}{EMB\_ARRAY}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+ARRAY~0}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00126}{126}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a360a30eda3be6c003bc6aff56be7be37}\label{embroidery_8h_a360a30eda3be6c003bc6aff56be7be37}} 
 \index{embroidery.h@{embroidery.h}!EMB\_CIRCLE@{EMB\_CIRCLE}}
 \index{EMB\_CIRCLE@{EMB\_CIRCLE}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_CIRCLE}{EMB\_CIRCLE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+CIRCLE~2}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00128}{128}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aceae01f986ab5393ba337d3b6a710d78}\label{embroidery_8h_aceae01f986ab5393ba337d3b6a710d78}} 
 \index{embroidery.h@{embroidery.h}!EMB\_DIM\_DIAMETER@{EMB\_DIM\_DIAMETER}}
@@ -810,19 +778,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00128}{128}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_DIM\_DIAMETER}{EMB\_DIM\_DIAMETER}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+DIM\+\_\+\+DIAMETER~3}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00129}{129}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a8b2765db6e3b5f8dda8dd28cc7a64a09}\label{embroidery_8h_a8b2765db6e3b5f8dda8dd28cc7a64a09}} 
 \index{embroidery.h@{embroidery.h}!EMB\_DIM\_LEADER@{EMB\_DIM\_LEADER}}
 \index{EMB\_DIM\_LEADER@{EMB\_DIM\_LEADER}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_DIM\_LEADER}{EMB\_DIM\_LEADER}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+DIM\+\_\+\+LEADER~4}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00130}{130}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a09ebf481eb0c684537b863663e40ede8}\label{embroidery_8h_a09ebf481eb0c684537b863663e40ede8}} 
 \index{embroidery.h@{embroidery.h}!EMB\_ELLIPSE@{EMB\_ELLIPSE}}
@@ -830,19 +790,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00130}{130}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_ELLIPSE}{EMB\_ELLIPSE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+ELLIPSE~5}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00131}{131}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a9fd22b852192b4b65fa6323ccd4c94f4}\label{embroidery_8h_a9fd22b852192b4b65fa6323ccd4c94f4}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FLAG@{EMB\_FLAG}}
 \index{EMB\_FLAG@{EMB\_FLAG}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FLAG}{EMB\_FLAG}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FLAG~6}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00132}{132}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a861ac4ebd283de3ad781bfdeef38c8b6}\label{embroidery_8h_a861ac4ebd283de3ad781bfdeef38c8b6}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_100@{EMB\_FORMAT\_100}}
@@ -850,19 +802,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00132}{132}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_100}{EMB\_FORMAT\_100}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+100~0}
 
-Format identifiers 
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00032}{32}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
-\mbox{\Hypertarget{embroidery_8h_ab6fd2f56f15d8a8d29ebe847d92fd651}\label{embroidery_8h_ab6fd2f56f15d8a8d29ebe847d92fd651}} 
+Format identifiers \mbox{\Hypertarget{embroidery_8h_ab6fd2f56f15d8a8d29ebe847d92fd651}\label{embroidery_8h_ab6fd2f56f15d8a8d29ebe847d92fd651}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_10O@{EMB\_FORMAT\_10O}}
 \index{EMB\_FORMAT\_10O@{EMB\_FORMAT\_10O}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_10O}{EMB\_FORMAT\_10O}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+10O~1}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00033}{33}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a3ecde07612d019c10b5ddc5ac7b44bc3}\label{embroidery_8h_a3ecde07612d019c10b5ddc5ac7b44bc3}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_ART@{EMB\_FORMAT\_ART}}
@@ -870,19 +814,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00033}{33}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_ART}{EMB\_FORMAT\_ART}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+ART~2}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00034}{34}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a98ee5d45a9ec1e9cf1b82ce2c8357f4e}\label{embroidery_8h_a98ee5d45a9ec1e9cf1b82ce2c8357f4e}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_BMC@{EMB\_FORMAT\_BMC}}
 \index{EMB\_FORMAT\_BMC@{EMB\_FORMAT\_BMC}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_BMC}{EMB\_FORMAT\_BMC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+BMC~3}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00035}{35}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a3f924e612041bbb2adc281215322847e}\label{embroidery_8h_a3f924e612041bbb2adc281215322847e}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_BRO@{EMB\_FORMAT\_BRO}}
@@ -890,19 +826,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00035}{35}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_BRO}{EMB\_FORMAT\_BRO}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+BRO~4}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00036}{36}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a58a0540c5eca586a5be4cea95ab5bb8f}\label{embroidery_8h_a58a0540c5eca586a5be4cea95ab5bb8f}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_CND@{EMB\_FORMAT\_CND}}
 \index{EMB\_FORMAT\_CND@{EMB\_FORMAT\_CND}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_CND}{EMB\_FORMAT\_CND}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+CND~5}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00037}{37}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_af9056d9db1575278f7ea184fee9d98e3}\label{embroidery_8h_af9056d9db1575278f7ea184fee9d98e3}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_COL@{EMB\_FORMAT\_COL}}
@@ -910,19 +838,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00037}{37}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_COL}{EMB\_FORMAT\_COL}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+COL~6}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00038}{38}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ab5363df483171d67a7282f3112594cab}\label{embroidery_8h_ab5363df483171d67a7282f3112594cab}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_CSD@{EMB\_FORMAT\_CSD}}
 \index{EMB\_FORMAT\_CSD@{EMB\_FORMAT\_CSD}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_CSD}{EMB\_FORMAT\_CSD}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+CSD~7}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00039}{39}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ad4c58afce58204acde8eaf8aca500d00}\label{embroidery_8h_ad4c58afce58204acde8eaf8aca500d00}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_CSV@{EMB\_FORMAT\_CSV}}
@@ -930,19 +850,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00039}{39}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_CSV}{EMB\_FORMAT\_CSV}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+CSV~8}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00040}{40}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a910338b8998abb52f6d4e0851cc8a3a0}\label{embroidery_8h_a910338b8998abb52f6d4e0851cc8a3a0}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_DAT@{EMB\_FORMAT\_DAT}}
 \index{EMB\_FORMAT\_DAT@{EMB\_FORMAT\_DAT}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_DAT}{EMB\_FORMAT\_DAT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+DAT~9}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00041}{41}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a65d646a9c5a534238aac6569a27be5fb}\label{embroidery_8h_a65d646a9c5a534238aac6569a27be5fb}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_DEM@{EMB\_FORMAT\_DEM}}
@@ -950,19 +862,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00041}{41}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_DEM}{EMB\_FORMAT\_DEM}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+DEM~10}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00042}{42}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a3ee7db9cb41a966276aa271b85cee962}\label{embroidery_8h_a3ee7db9cb41a966276aa271b85cee962}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_DSB@{EMB\_FORMAT\_DSB}}
 \index{EMB\_FORMAT\_DSB@{EMB\_FORMAT\_DSB}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_DSB}{EMB\_FORMAT\_DSB}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+DSB~11}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00043}{43}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a751536ad908d9ac1ceb755ddc97378ff}\label{embroidery_8h_a751536ad908d9ac1ceb755ddc97378ff}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_DST@{EMB\_FORMAT\_DST}}
@@ -970,19 +874,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00043}{43}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_DST}{EMB\_FORMAT\_DST}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+DST~12}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00044}{44}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a1c1d3eb8cb8d7d9160c10899258ed530}\label{embroidery_8h_a1c1d3eb8cb8d7d9160c10899258ed530}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_DSZ@{EMB\_FORMAT\_DSZ}}
 \index{EMB\_FORMAT\_DSZ@{EMB\_FORMAT\_DSZ}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_DSZ}{EMB\_FORMAT\_DSZ}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+DSZ~13}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00045}{45}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a771a6f9dd622fad8befd91e334c22219}\label{embroidery_8h_a771a6f9dd622fad8befd91e334c22219}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_DXF@{EMB\_FORMAT\_DXF}}
@@ -990,19 +886,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00045}{45}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_DXF}{EMB\_FORMAT\_DXF}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+DXF~14}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00046}{46}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a32a6274e614c68306a9a241990f47efc}\label{embroidery_8h_a32a6274e614c68306a9a241990f47efc}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_EDR@{EMB\_FORMAT\_EDR}}
 \index{EMB\_FORMAT\_EDR@{EMB\_FORMAT\_EDR}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_EDR}{EMB\_FORMAT\_EDR}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+EDR~15}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00047}{47}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a3470af77aeefe4dc23cc935010cb25c5}\label{embroidery_8h_a3470af77aeefe4dc23cc935010cb25c5}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_EMD@{EMB\_FORMAT\_EMD}}
@@ -1010,19 +898,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00047}{47}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_EMD}{EMB\_FORMAT\_EMD}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+EMD~16}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00048}{48}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_aa5aadd7a9d1641fe3a95155c377deb79}\label{embroidery_8h_aa5aadd7a9d1641fe3a95155c377deb79}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_EXP@{EMB\_FORMAT\_EXP}}
 \index{EMB\_FORMAT\_EXP@{EMB\_FORMAT\_EXP}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_EXP}{EMB\_FORMAT\_EXP}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+EXP~17}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00049}{49}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a9e9351cdb2ec2c0e3e4db9baceb3cb22}\label{embroidery_8h_a9e9351cdb2ec2c0e3e4db9baceb3cb22}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_EXY@{EMB\_FORMAT\_EXY}}
@@ -1030,19 +910,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00049}{49}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_EXY}{EMB\_FORMAT\_EXY}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+EXY~18}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00050}{50}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ab51d11a1525001fcaad55b2fc3e4fb07}\label{embroidery_8h_ab51d11a1525001fcaad55b2fc3e4fb07}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_EYS@{EMB\_FORMAT\_EYS}}
 \index{EMB\_FORMAT\_EYS@{EMB\_FORMAT\_EYS}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_EYS}{EMB\_FORMAT\_EYS}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+EYS~19}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00051}{51}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a41e0917395e79b0b1152b52460b6c15b}\label{embroidery_8h_a41e0917395e79b0b1152b52460b6c15b}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_FXY@{EMB\_FORMAT\_FXY}}
@@ -1050,19 +922,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00051}{51}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_FXY}{EMB\_FORMAT\_FXY}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+FXY~20}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00052}{52}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a5101166aae355a02f7c98fb3960ca15a}\label{embroidery_8h_a5101166aae355a02f7c98fb3960ca15a}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_GC@{EMB\_FORMAT\_GC}}
 \index{EMB\_FORMAT\_GC@{EMB\_FORMAT\_GC}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_GC}{EMB\_FORMAT\_GC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+GC~21}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00053}{53}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_af5b0bb7b2a0cc4354801d914664de4b3}\label{embroidery_8h_af5b0bb7b2a0cc4354801d914664de4b3}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_GNC@{EMB\_FORMAT\_GNC}}
@@ -1070,19 +934,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00053}{53}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_GNC}{EMB\_FORMAT\_GNC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+GNC~22}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00054}{54}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a841f390caf2abca102dad063438adcf3}\label{embroidery_8h_a841f390caf2abca102dad063438adcf3}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_GT@{EMB\_FORMAT\_GT}}
 \index{EMB\_FORMAT\_GT@{EMB\_FORMAT\_GT}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_GT}{EMB\_FORMAT\_GT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+GT~23}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00055}{55}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ade7ac010aef71797ab1e6178ccb99459}\label{embroidery_8h_ade7ac010aef71797ab1e6178ccb99459}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_HUS@{EMB\_FORMAT\_HUS}}
@@ -1090,19 +946,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00055}{55}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_HUS}{EMB\_FORMAT\_HUS}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+HUS~24}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00056}{56}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a7b37a2db2ed762d41729f3268561e551}\label{embroidery_8h_a7b37a2db2ed762d41729f3268561e551}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_INB@{EMB\_FORMAT\_INB}}
 \index{EMB\_FORMAT\_INB@{EMB\_FORMAT\_INB}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_INB}{EMB\_FORMAT\_INB}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+INB~25}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00057}{57}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ab5711c9156d637408957825c974b5a91}\label{embroidery_8h_ab5711c9156d637408957825c974b5a91}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_INF@{EMB\_FORMAT\_INF}}
@@ -1110,19 +958,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00057}{57}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_INF}{EMB\_FORMAT\_INF}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+INF~26}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00058}{58}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a1d81041eb19e8ab0d5bd3df4e473bb2b}\label{embroidery_8h_a1d81041eb19e8ab0d5bd3df4e473bb2b}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_JEF@{EMB\_FORMAT\_JEF}}
 \index{EMB\_FORMAT\_JEF@{EMB\_FORMAT\_JEF}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_JEF}{EMB\_FORMAT\_JEF}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+JEF~27}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00059}{59}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a50956eb3d4e887d85579c1a5529602fe}\label{embroidery_8h_a50956eb3d4e887d85579c1a5529602fe}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_KSM@{EMB\_FORMAT\_KSM}}
@@ -1130,19 +970,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00059}{59}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_KSM}{EMB\_FORMAT\_KSM}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+KSM~28}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00060}{60}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a5993bf875f38a886dcc72ba7c0573d66}\label{embroidery_8h_a5993bf875f38a886dcc72ba7c0573d66}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_MAX@{EMB\_FORMAT\_MAX}}
 \index{EMB\_FORMAT\_MAX@{EMB\_FORMAT\_MAX}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_MAX}{EMB\_FORMAT\_MAX}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+MAX~29}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00061}{61}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a839ce036c00f725c91667a33538b3c11}\label{embroidery_8h_a839ce036c00f725c91667a33538b3c11}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_MIT@{EMB\_FORMAT\_MIT}}
@@ -1150,19 +982,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00061}{61}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_MIT}{EMB\_FORMAT\_MIT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+MIT~30}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00062}{62}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ab8f938b54b0d61e311979fd2871c9baa}\label{embroidery_8h_ab8f938b54b0d61e311979fd2871c9baa}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_NEW@{EMB\_FORMAT\_NEW}}
 \index{EMB\_FORMAT\_NEW@{EMB\_FORMAT\_NEW}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_NEW}{EMB\_FORMAT\_NEW}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+NEW~31}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00063}{63}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aed52cbe47e7d03084d425a5676646e58}\label{embroidery_8h_aed52cbe47e7d03084d425a5676646e58}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_OFM@{EMB\_FORMAT\_OFM}}
@@ -1170,19 +994,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00063}{63}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_OFM}{EMB\_FORMAT\_OFM}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+OFM~32}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00064}{64}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_acb3c529a233fe0109bdacec95864e9aa}\label{embroidery_8h_acb3c529a233fe0109bdacec95864e9aa}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PCD@{EMB\_FORMAT\_PCD}}
 \index{EMB\_FORMAT\_PCD@{EMB\_FORMAT\_PCD}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PCD}{EMB\_FORMAT\_PCD}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PCD~33}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00065}{65}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a1cca6a2d65079f523664b48c8bcebb66}\label{embroidery_8h_a1cca6a2d65079f523664b48c8bcebb66}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PCM@{EMB\_FORMAT\_PCM}}
@@ -1190,19 +1006,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00065}{65}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PCM}{EMB\_FORMAT\_PCM}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PCM~34}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00066}{66}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a6bf3d06b0959c9f3f7f457f9f9a44dbc}\label{embroidery_8h_a6bf3d06b0959c9f3f7f457f9f9a44dbc}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PCQ@{EMB\_FORMAT\_PCQ}}
 \index{EMB\_FORMAT\_PCQ@{EMB\_FORMAT\_PCQ}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PCQ}{EMB\_FORMAT\_PCQ}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PCQ~35}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00067}{67}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aef0fb07b6e5112a86b516aea4dc742e3}\label{embroidery_8h_aef0fb07b6e5112a86b516aea4dc742e3}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PCS@{EMB\_FORMAT\_PCS}}
@@ -1210,19 +1018,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00067}{67}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PCS}{EMB\_FORMAT\_PCS}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PCS~36}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00068}{68}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae42176874da8db4d9b747b55ded5c577}\label{embroidery_8h_ae42176874da8db4d9b747b55ded5c577}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PEC@{EMB\_FORMAT\_PEC}}
 \index{EMB\_FORMAT\_PEC@{EMB\_FORMAT\_PEC}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PEC}{EMB\_FORMAT\_PEC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PEC~37}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00069}{69}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8438b8301924756d4b96f67584885c9a}\label{embroidery_8h_a8438b8301924756d4b96f67584885c9a}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PEL@{EMB\_FORMAT\_PEL}}
@@ -1230,19 +1030,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00069}{69}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PEL}{EMB\_FORMAT\_PEL}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PEL~38}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00070}{70}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae4a80f8d4961c0aa2c2e432f52e5b60c}\label{embroidery_8h_ae4a80f8d4961c0aa2c2e432f52e5b60c}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PEM@{EMB\_FORMAT\_PEM}}
 \index{EMB\_FORMAT\_PEM@{EMB\_FORMAT\_PEM}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PEM}{EMB\_FORMAT\_PEM}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PEM~39}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00071}{71}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ae03e6f929e83708eea9866193d41137c}\label{embroidery_8h_ae03e6f929e83708eea9866193d41137c}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PES@{EMB\_FORMAT\_PES}}
@@ -1250,19 +1042,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00071}{71}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PES}{EMB\_FORMAT\_PES}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PES~40}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00072}{72}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ac0cbb0c05581efed7a365420a1482847}\label{embroidery_8h_ac0cbb0c05581efed7a365420a1482847}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PHB@{EMB\_FORMAT\_PHB}}
 \index{EMB\_FORMAT\_PHB@{EMB\_FORMAT\_PHB}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PHB}{EMB\_FORMAT\_PHB}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PHB~41}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00073}{73}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_adf7fc94d78a9f23814fa49c2c2aef016}\label{embroidery_8h_adf7fc94d78a9f23814fa49c2c2aef016}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PHC@{EMB\_FORMAT\_PHC}}
@@ -1270,19 +1054,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00073}{73}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PHC}{EMB\_FORMAT\_PHC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PHC~42}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00074}{74}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_aded733a98718fbd6d31b1a48416f6d5b}\label{embroidery_8h_aded733a98718fbd6d31b1a48416f6d5b}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_PLT@{EMB\_FORMAT\_PLT}}
 \index{EMB\_FORMAT\_PLT@{EMB\_FORMAT\_PLT}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_PLT}{EMB\_FORMAT\_PLT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+PLT~43}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00075}{75}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a53634341e1c74f7d7949b2091d27a71b}\label{embroidery_8h_a53634341e1c74f7d7949b2091d27a71b}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_RGB@{EMB\_FORMAT\_RGB}}
@@ -1290,19 +1066,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00075}{75}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_RGB}{EMB\_FORMAT\_RGB}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+RGB~44}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00076}{76}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a5579b3f4efe36e882a6c77b82075391f}\label{embroidery_8h_a5579b3f4efe36e882a6c77b82075391f}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_SEW@{EMB\_FORMAT\_SEW}}
 \index{EMB\_FORMAT\_SEW@{EMB\_FORMAT\_SEW}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_SEW}{EMB\_FORMAT\_SEW}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+SEW~45}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00077}{77}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a743b0bba25f76b4d91f5718069d3ae95}\label{embroidery_8h_a743b0bba25f76b4d91f5718069d3ae95}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_SHV@{EMB\_FORMAT\_SHV}}
@@ -1310,19 +1078,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00077}{77}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_SHV}{EMB\_FORMAT\_SHV}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+SHV~46}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00078}{78}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a9e4ea410174d34d4a6d4bf190a6d3471}\label{embroidery_8h_a9e4ea410174d34d4a6d4bf190a6d3471}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_SST@{EMB\_FORMAT\_SST}}
 \index{EMB\_FORMAT\_SST@{EMB\_FORMAT\_SST}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_SST}{EMB\_FORMAT\_SST}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+SST~47}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00079}{79}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8645603136851cb55ff9a3033c83ed61}\label{embroidery_8h_a8645603136851cb55ff9a3033c83ed61}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_STX@{EMB\_FORMAT\_STX}}
@@ -1330,19 +1090,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00079}{79}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_STX}{EMB\_FORMAT\_STX}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+STX~48}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00080}{80}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a8df1a6cf790a8ecebd4e5553dfaca476}\label{embroidery_8h_a8df1a6cf790a8ecebd4e5553dfaca476}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_SVG@{EMB\_FORMAT\_SVG}}
 \index{EMB\_FORMAT\_SVG@{EMB\_FORMAT\_SVG}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_SVG}{EMB\_FORMAT\_SVG}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+SVG~49}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00081}{81}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ad45f2268d8f7cbfe771a7903715c5220}\label{embroidery_8h_ad45f2268d8f7cbfe771a7903715c5220}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_T01@{EMB\_FORMAT\_T01}}
@@ -1350,19 +1102,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00081}{81}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_T01}{EMB\_FORMAT\_T01}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+T01~50}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00082}{82}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_abbb7f592e33843d32fb3bf69fd14eb80}\label{embroidery_8h_abbb7f592e33843d32fb3bf69fd14eb80}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_T09@{EMB\_FORMAT\_T09}}
 \index{EMB\_FORMAT\_T09@{EMB\_FORMAT\_T09}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_T09}{EMB\_FORMAT\_T09}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+T09~51}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00083}{83}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ae91ebaf730fe17a88c0ce2f3474e4073}\label{embroidery_8h_ae91ebaf730fe17a88c0ce2f3474e4073}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_TAP@{EMB\_FORMAT\_TAP}}
@@ -1370,19 +1114,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00083}{83}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_TAP}{EMB\_FORMAT\_TAP}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+TAP~52}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00084}{84}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_acfe6d18e35416b96245b5dd93602da8d}\label{embroidery_8h_acfe6d18e35416b96245b5dd93602da8d}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_THR@{EMB\_FORMAT\_THR}}
 \index{EMB\_FORMAT\_THR@{EMB\_FORMAT\_THR}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_THR}{EMB\_FORMAT\_THR}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+THR~53}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00085}{85}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a5bb3e3287341901eb727b01481565d42}\label{embroidery_8h_a5bb3e3287341901eb727b01481565d42}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_TXT@{EMB\_FORMAT\_TXT}}
@@ -1390,19 +1126,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00085}{85}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_TXT}{EMB\_FORMAT\_TXT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+TXT~54}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00086}{86}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ad7ab688a485a43d4f2d0087d0f22157e}\label{embroidery_8h_ad7ab688a485a43d4f2d0087d0f22157e}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_U00@{EMB\_FORMAT\_U00}}
 \index{EMB\_FORMAT\_U00@{EMB\_FORMAT\_U00}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_U00}{EMB\_FORMAT\_U00}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+U00~55}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00087}{87}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a2b791b0055cae3196709d0c3ec0e44f4}\label{embroidery_8h_a2b791b0055cae3196709d0c3ec0e44f4}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_U01@{EMB\_FORMAT\_U01}}
@@ -1410,19 +1138,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00087}{87}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_U01}{EMB\_FORMAT\_U01}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+U01~56}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00088}{88}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a741966510e479176af965d836e4959a3}\label{embroidery_8h_a741966510e479176af965d836e4959a3}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_VIP@{EMB\_FORMAT\_VIP}}
 \index{EMB\_FORMAT\_VIP@{EMB\_FORMAT\_VIP}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_VIP}{EMB\_FORMAT\_VIP}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+VIP~57}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00089}{89}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a2c6b80d5669767052f6e7baf85352465}\label{embroidery_8h_a2c6b80d5669767052f6e7baf85352465}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_VP3@{EMB\_FORMAT\_VP3}}
@@ -1430,19 +1150,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00089}{89}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_VP3}{EMB\_FORMAT\_VP3}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+VP3~58}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00090}{90}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a82f141848ae511bf50983da2316c4b71}\label{embroidery_8h_a82f141848ae511bf50983da2316c4b71}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_XXX@{EMB\_FORMAT\_XXX}}
 \index{EMB\_FORMAT\_XXX@{EMB\_FORMAT\_XXX}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_XXX}{EMB\_FORMAT\_XXX}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+XXX~59}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00091}{91}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a393329370db8c3a2cf67bef26d0b1828}\label{embroidery_8h_a393329370db8c3a2cf67bef26d0b1828}} 
 \index{embroidery.h@{embroidery.h}!EMB\_FORMAT\_ZSK@{EMB\_FORMAT\_ZSK}}
@@ -1450,19 +1162,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00091}{91}} of file \m
 \doxyparagraph{\texorpdfstring{EMB\_FORMAT\_ZSK}{EMB\_FORMAT\_ZSK}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+FORMAT\+\_\+\+ZSK~60}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00092}{92}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a97c04d0fc0ec3c30df885c20cca443fa}\label{embroidery_8h_a97c04d0fc0ec3c30df885c20cca443fa}} 
 \index{embroidery.h@{embroidery.h}!EMB\_IMAGE@{EMB\_IMAGE}}
 \index{EMB\_IMAGE@{EMB\_IMAGE}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_IMAGE}{EMB\_IMAGE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+IMAGE~8}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00134}{134}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a702fd238ea210e97017fd4b709528f0f}\label{embroidery_8h_a702fd238ea210e97017fd4b709528f0f}} 
 \index{embroidery.h@{embroidery.h}!EMB\_LINE@{EMB\_LINE}}
@@ -1470,19 +1174,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00134}{134}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_LINE}{EMB\_LINE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+LINE~7}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00133}{133}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae511f7649d55053e7edd4f7ee64c6558}\label{embroidery_8h_ae511f7649d55053e7edd4f7ee64c6558}} 
 \index{embroidery.h@{embroidery.h}!EMB\_MAX\_LAYERS@{EMB\_MAX\_LAYERS}}
 \index{EMB\_MAX\_LAYERS@{EMB\_MAX\_LAYERS}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_MAX\_LAYERS}{EMB\_MAX\_LAYERS}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+MAX\+\_\+\+LAYERS~10}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00156}{156}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a33c2bba91cbd00ce32e770488175d4d2}\label{embroidery_8h_a33c2bba91cbd00ce32e770488175d4d2}} 
 \index{embroidery.h@{embroidery.h}!EMB\_PATH@{EMB\_PATH}}
@@ -1490,19 +1186,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00156}{156}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_PATH}{EMB\_PATH}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+PATH~9}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00135}{135}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a20f029cd78225bfeec66da1b3745311a}\label{embroidery_8h_a20f029cd78225bfeec66da1b3745311a}} 
 \index{embroidery.h@{embroidery.h}!EMB\_POINT@{EMB\_POINT}}
 \index{EMB\_POINT@{EMB\_POINT}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_POINT}{EMB\_POINT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+POINT~10}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00136}{136}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8f03220a91565e1239055ed73ec6f7a4}\label{embroidery_8h_a8f03220a91565e1239055ed73ec6f7a4}} 
 \index{embroidery.h@{embroidery.h}!EMB\_POLYGON@{EMB\_POLYGON}}
@@ -1510,19 +1198,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00136}{136}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_POLYGON}{EMB\_POLYGON}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+POLYGON~11}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00137}{137}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a70437221e34443b9b272d5cac835de0c}\label{embroidery_8h_a70437221e34443b9b272d5cac835de0c}} 
 \index{embroidery.h@{embroidery.h}!EMB\_POLYLINE@{EMB\_POLYLINE}}
 \index{EMB\_POLYLINE@{EMB\_POLYLINE}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_POLYLINE}{EMB\_POLYLINE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+POLYLINE~12}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00138}{138}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}\label{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}} 
 \index{embroidery.h@{embroidery.h}!EMB\_PUBLIC@{EMB\_PUBLIC}}
@@ -1530,19 +1210,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00138}{138}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_PUBLIC}{EMB\_PUBLIC}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+PUBLIC}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00172}{172}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a2fcee7ad80543768ad9578ca4ec02ada}\label{embroidery_8h_a2fcee7ad80543768ad9578ca4ec02ada}} 
 \index{embroidery.h@{embroidery.h}!EMB\_RECT@{EMB\_RECT}}
 \index{EMB\_RECT@{EMB\_RECT}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_RECT}{EMB\_RECT}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+RECT~13}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00139}{139}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a5782f0286784cd30a831982a9fad9f99}\label{embroidery_8h_a5782f0286784cd30a831982a9fad9f99}} 
 \index{embroidery.h@{embroidery.h}!EMB\_SPLINE@{EMB\_SPLINE}}
@@ -1550,19 +1222,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00139}{139}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_SPLINE}{EMB\_SPLINE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+SPLINE~14}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00140}{140}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a31ba1c65ab728d8338131548d117b6ad}\label{embroidery_8h_a31ba1c65ab728d8338131548d117b6ad}} 
 \index{embroidery.h@{embroidery.h}!EMB\_STITCH@{EMB\_STITCH}}
 \index{EMB\_STITCH@{EMB\_STITCH}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_STITCH}{EMB\_STITCH}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+STITCH~15}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00141}{141}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_afd5ae52642c8e6127205e8ec503e2fd2}\label{embroidery_8h_afd5ae52642c8e6127205e8ec503e2fd2}} 
 \index{embroidery.h@{embroidery.h}!EMB\_TEXT\_MULTI@{EMB\_TEXT\_MULTI}}
@@ -1570,19 +1234,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00141}{141}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_TEXT\_MULTI}{EMB\_TEXT\_MULTI}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+TEXT\+\_\+\+MULTI~17}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00143}{143}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae3382ca947f1c723aa0d12433c19705d}\label{embroidery_8h_ae3382ca947f1c723aa0d12433c19705d}} 
 \index{embroidery.h@{embroidery.h}!EMB\_TEXT\_SINGLE@{EMB\_TEXT\_SINGLE}}
 \index{EMB\_TEXT\_SINGLE@{EMB\_TEXT\_SINGLE}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_TEXT\_SINGLE}{EMB\_TEXT\_SINGLE}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+TEXT\+\_\+\+SINGLE~16}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00142}{142}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ad9f844f65db2092b2a042950e2a2515f}\label{embroidery_8h_ad9f844f65db2092b2a042950e2a2515f}} 
 \index{embroidery.h@{embroidery.h}!EMB\_THREAD@{EMB\_THREAD}}
@@ -1590,19 +1246,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00142}{142}} of file \
 \doxyparagraph{\texorpdfstring{EMB\_THREAD}{EMB\_THREAD}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+THREAD~19}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00145}{145}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_afcd788a4e739d346ed03eda45f4b7594}\label{embroidery_8h_afcd788a4e739d346ed03eda45f4b7594}} 
 \index{embroidery.h@{embroidery.h}!EMB\_VECTOR@{EMB\_VECTOR}}
 \index{EMB\_VECTOR@{EMB\_VECTOR}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMB\_VECTOR}{EMB\_VECTOR}}
 {\footnotesize\ttfamily \#define EMB\+\_\+\+VECTOR~18}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00144}{144}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ab1a5a2c4668446c41eed2a39e3c41efc}\label{embroidery_8h_ab1a5a2c4668446c41eed2a39e3c41efc}} 
 \index{embroidery.h@{embroidery.h}!EMBFORMAT\_MAXDESC@{EMBFORMAT\_MAXDESC}}
@@ -1610,19 +1258,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00144}{144}} of file \
 \doxyparagraph{\texorpdfstring{EMBFORMAT\_MAXDESC}{EMBFORMAT\_MAXDESC}}
 {\footnotesize\ttfamily \#define EMBFORMAT\+\_\+\+MAXDESC~50}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00160}{160}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ad006f9ea712f6465fee22288794776eb}\label{embroidery_8h_ad006f9ea712f6465fee22288794776eb}} 
 \index{embroidery.h@{embroidery.h}!EMBFORMAT\_MAXEXT@{EMBFORMAT\_MAXEXT}}
 \index{EMBFORMAT\_MAXEXT@{EMBFORMAT\_MAXEXT}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMBFORMAT\_MAXEXT}{EMBFORMAT\_MAXEXT}}
 {\footnotesize\ttfamily \#define EMBFORMAT\+\_\+\+MAXEXT~3}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00158}{158}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aec39777a8e9d3ac08485fde2f5fd4eff}\label{embroidery_8h_aec39777a8e9d3ac08485fde2f5fd4eff}} 
 \index{embroidery.h@{embroidery.h}!EMBFORMAT\_OBJECTONLY@{EMBFORMAT\_OBJECTONLY}}
@@ -1630,19 +1270,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00158}{158}} of file \
 \doxyparagraph{\texorpdfstring{EMBFORMAT\_OBJECTONLY}{EMBFORMAT\_OBJECTONLY}}
 {\footnotesize\ttfamily \#define EMBFORMAT\+\_\+\+OBJECTONLY~2}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00149}{149}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_aae45d0c5e3f49c5ccdb004c105f82317}\label{embroidery_8h_aae45d0c5e3f49c5ccdb004c105f82317}} 
 \index{embroidery.h@{embroidery.h}!EMBFORMAT\_STCHANDOBJ@{EMBFORMAT\_STCHANDOBJ}}
 \index{EMBFORMAT\_STCHANDOBJ@{EMBFORMAT\_STCHANDOBJ}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMBFORMAT\_STCHANDOBJ}{EMBFORMAT\_STCHANDOBJ}}
 {\footnotesize\ttfamily \#define EMBFORMAT\+\_\+\+STCHANDOBJ~3 /$\ast$ binary operation\+: 1+2=3 $\ast$/}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00150}{150}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a6745e78a06e8c382f6b8fd31acf0fef7}\label{embroidery_8h_a6745e78a06e8c382f6b8fd31acf0fef7}} 
 \index{embroidery.h@{embroidery.h}!EMBFORMAT\_STITCHONLY@{EMBFORMAT\_STITCHONLY}}
@@ -1650,19 +1282,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00150}{150}} of file \
 \doxyparagraph{\texorpdfstring{EMBFORMAT\_STITCHONLY}{EMBFORMAT\_STITCHONLY}}
 {\footnotesize\ttfamily \#define EMBFORMAT\+\_\+\+STITCHONLY~1}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00148}{148}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a31f572fa9f867bc59b332246ddfd34bf}\label{embroidery_8h_a31f572fa9f867bc59b332246ddfd34bf}} 
 \index{embroidery.h@{embroidery.h}!EMBFORMAT\_UNSUPPORTED@{EMBFORMAT\_UNSUPPORTED}}
 \index{EMBFORMAT\_UNSUPPORTED@{EMBFORMAT\_UNSUPPORTED}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EMBFORMAT\_UNSUPPORTED}{EMBFORMAT\_UNSUPPORTED}}
 {\footnotesize\ttfamily \#define EMBFORMAT\+\_\+\+UNSUPPORTED~0}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00147}{147}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}\label{embroidery_8h_a29fd18bed01c4d836c7ebfe73a125c3f}} 
 \index{embroidery.h@{embroidery.h}!END@{END}}
@@ -1670,19 +1294,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00147}{147}} of file \
 \doxyparagraph{\texorpdfstring{END}{END}}
 {\footnotesize\ttfamily \#define END~16 /$\ast$! end of program $\ast$/}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00027}{27}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_aed1a440a40b9bd58701814290a25ed1b}\label{embroidery_8h_aed1a440a40b9bd58701814290a25ed1b}} 
 \index{embroidery.h@{embroidery.h}!Exquisite\_Polyester@{Exquisite\_Polyester}}
 \index{Exquisite\_Polyester@{Exquisite\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Exquisite\_Polyester}{Exquisite\_Polyester}}
 {\footnotesize\ttfamily \#define Exquisite\+\_\+\+Polyester~3}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00098}{98}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aefdcf05f0dbe30dc884f4753465c7c68}\label{embroidery_8h_aefdcf05f0dbe30dc884f4753465c7c68}} 
 \index{embroidery.h@{embroidery.h}!Fufu\_Polyester@{Fufu\_Polyester}}
@@ -1690,19 +1306,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00098}{98}} of file \m
 \doxyparagraph{\texorpdfstring{Fufu\_Polyester}{Fufu\_Polyester}}
 {\footnotesize\ttfamily \#define Fufu\+\_\+\+Polyester~4}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00099}{99}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a95afb81cc5b838a1afb33a178a2f85ca}\label{embroidery_8h_a95afb81cc5b838a1afb33a178a2f85ca}} 
 \index{embroidery.h@{embroidery.h}!Fufu\_Rayon@{Fufu\_Rayon}}
 \index{Fufu\_Rayon@{Fufu\_Rayon}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Fufu\_Rayon}{Fufu\_Rayon}}
 {\footnotesize\ttfamily \#define Fufu\+\_\+\+Rayon~5}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00100}{100}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ae3226e90dbbb865b8c6211687a410030}\label{embroidery_8h_ae3226e90dbbb865b8c6211687a410030}} 
 \index{embroidery.h@{embroidery.h}!Hemingworth\_Polyester@{Hemingworth\_Polyester}}
@@ -1710,19 +1318,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00100}{100}} of file \
 \doxyparagraph{\texorpdfstring{Hemingworth\_Polyester}{Hemingworth\_Polyester}}
 {\footnotesize\ttfamily \#define Hemingworth\+\_\+\+Polyester~6}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00101}{101}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_accf77ab58402f9f77a41328a2198c105}\label{embroidery_8h_accf77ab58402f9f77a41328a2198c105}} 
 \index{embroidery.h@{embroidery.h}!hus\_thread@{hus\_thread}}
 \index{hus\_thread@{hus\_thread}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{hus\_thread}{hus\_thread}}
 {\footnotesize\ttfamily \#define hus\+\_\+thread~24}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00119}{119}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a998fc646741524f4f3fffb9454f304f8}\label{embroidery_8h_a998fc646741524f4f3fffb9454f304f8}} 
 \index{embroidery.h@{embroidery.h}!Isacord\_Polyester@{Isacord\_Polyester}}
@@ -1730,19 +1330,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00119}{119}} of file \
 \doxyparagraph{\texorpdfstring{Isacord\_Polyester}{Isacord\_Polyester}}
 {\footnotesize\ttfamily \#define Isacord\+\_\+\+Polyester~7}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00102}{102}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a03dbb997ba155dc4c6212d0094107ae7}\label{embroidery_8h_a03dbb997ba155dc4c6212d0094107ae7}} 
 \index{embroidery.h@{embroidery.h}!Isafil\_Rayon@{Isafil\_Rayon}}
 \index{Isafil\_Rayon@{Isafil\_Rayon}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Isafil\_Rayon}{Isafil\_Rayon}}
 {\footnotesize\ttfamily \#define Isafil\+\_\+\+Rayon~8}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00103}{103}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a007d16b8f9e075b446c0845273dc4868}\label{embroidery_8h_a007d16b8f9e075b446c0845273dc4868}} 
 \index{embroidery.h@{embroidery.h}!jef\_thread@{jef\_thread}}
@@ -1750,19 +1342,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00103}{103}} of file \
 \doxyparagraph{\texorpdfstring{jef\_thread}{jef\_thread}}
 {\footnotesize\ttfamily \#define jef\+\_\+thread~25}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00120}{120}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}\label{embroidery_8h_aee551d17fffb6235cc7123499dbf7d65}} 
 \index{embroidery.h@{embroidery.h}!JUMP@{JUMP}}
 \index{JUMP@{JUMP}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{JUMP}{JUMP}}
-{\footnotesize\ttfamily \#define JUMP~1 /$\ast$! move to (x, y) $\ast$/}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00023}{23}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
+{\footnotesize\ttfamily \#define JUMP~1 /$\ast$! \mbox{\hyperlink{imgui__main_8c_a0534af61c3532dc1a468141e90396156}{move}} to (x, y) $\ast$/}
 
 \mbox{\Hypertarget{embroidery_8h_add1f345d9645d75ef775107d4c9b1b05}\label{embroidery_8h_add1f345d9645d75ef775107d4c9b1b05}} 
 \index{embroidery.h@{embroidery.h}!LIBEMBROIDERY\_EMBEDDED\_VERSION@{LIBEMBROIDERY\_EMBEDDED\_VERSION}}
@@ -1770,19 +1354,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00023}{23}} of file \m
 \doxyparagraph{\texorpdfstring{LIBEMBROIDERY\_EMBEDDED\_VERSION}{LIBEMBROIDERY\_EMBEDDED\_VERSION}}
 {\footnotesize\ttfamily \#define LIBEMBROIDERY\+\_\+\+EMBEDDED\+\_\+\+VERSION~0}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00013}{13}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae803ca494158ee9d38747acdda06d010}\label{embroidery_8h_ae803ca494158ee9d38747acdda06d010}} 
 \index{embroidery.h@{embroidery.h}!Madeira\_Polyester@{Madeira\_Polyester}}
 \index{Madeira\_Polyester@{Madeira\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Madeira\_Polyester}{Madeira\_Polyester}}
 {\footnotesize\ttfamily \#define Madeira\+\_\+\+Polyester~11}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00106}{106}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aa23f8a8a6df74dfc17b228f83b85431c}\label{embroidery_8h_aa23f8a8a6df74dfc17b228f83b85431c}} 
 \index{embroidery.h@{embroidery.h}!Madeira\_Rayon@{Madeira\_Rayon}}
@@ -1790,19 +1366,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00106}{106}} of file \
 \doxyparagraph{\texorpdfstring{Madeira\_Rayon}{Madeira\_Rayon}}
 {\footnotesize\ttfamily \#define Madeira\+\_\+\+Rayon~12}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00107}{107}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ad747916af35ecc77ba6fb8da63cca678}\label{embroidery_8h_ad747916af35ecc77ba6fb8da63cca678}} 
 \index{embroidery.h@{embroidery.h}!Marathon\_Polyester@{Marathon\_Polyester}}
 \index{Marathon\_Polyester@{Marathon\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Marathon\_Polyester}{Marathon\_Polyester}}
 {\footnotesize\ttfamily \#define Marathon\+\_\+\+Polyester~9}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00104}{104}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a2259f04c224a096b92e97775c784acec}\label{embroidery_8h_a2259f04c224a096b92e97775c784acec}} 
 \index{embroidery.h@{embroidery.h}!Marathon\_Rayon@{Marathon\_Rayon}}
@@ -1810,19 +1378,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00104}{104}} of file \
 \doxyparagraph{\texorpdfstring{Marathon\_Rayon}{Marathon\_Rayon}}
 {\footnotesize\ttfamily \#define Marathon\+\_\+\+Rayon~10}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00105}{105}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_af33a320a7e31d42c7fbb3e3796bd5b41}\label{embroidery_8h_af33a320a7e31d42c7fbb3e3796bd5b41}} 
 \index{embroidery.h@{embroidery.h}!MAX\_STITCHES@{MAX\_STITCHES}}
 \index{MAX\_STITCHES@{MAX\_STITCHES}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{MAX\_STITCHES}{MAX\_STITCHES}}
 {\footnotesize\ttfamily \#define MAX\+\_\+\+STITCHES~1000000}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00162}{162}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8b5173357adb02a86c027316e0acdfa0}\label{embroidery_8h_a8b5173357adb02a86c027316e0acdfa0}} 
 \index{embroidery.h@{embroidery.h}!MAX\_THREADS@{MAX\_THREADS}}
@@ -1830,19 +1390,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00162}{162}} of file \
 \doxyparagraph{\texorpdfstring{MAX\_THREADS}{MAX\_THREADS}}
 {\footnotesize\ttfamily \#define MAX\+\_\+\+THREADS~256}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00157}{157}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_af88ed2c1736b38925bb568ade876c7a0}\label{embroidery_8h_af88ed2c1736b38925bb568ade876c7a0}} 
 \index{embroidery.h@{embroidery.h}!Metro\_Polyester@{Metro\_Polyester}}
 \index{Metro\_Polyester@{Metro\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Metro\_Polyester}{Metro\_Polyester}}
 {\footnotesize\ttfamily \#define Metro\+\_\+\+Polyester~13}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00108}{108}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a1291f416b069313021b519eea62d5bf1}\label{embroidery_8h_a1291f416b069313021b519eea62d5bf1}} 
 \index{embroidery.h@{embroidery.h}!NORMAL@{NORMAL}}
@@ -1850,19 +1402,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00108}{108}} of file \
 \doxyparagraph{\texorpdfstring{NORMAL}{NORMAL}}
 {\footnotesize\ttfamily \#define NORMAL~0 /$\ast$! stitch to (x, y) $\ast$/}
 
-Machine codes for stitch flags 
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00022}{22}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
-\mbox{\Hypertarget{embroidery_8h_afc6032ce2b92a1d32b18b87b1e5ba13e}\label{embroidery_8h_afc6032ce2b92a1d32b18b87b1e5ba13e}} 
+Machine codes for stitch flags \mbox{\Hypertarget{embroidery_8h_afc6032ce2b92a1d32b18b87b1e5ba13e}\label{embroidery_8h_afc6032ce2b92a1d32b18b87b1e5ba13e}} 
 \index{embroidery.h@{embroidery.h}!numberOfFormats@{numberOfFormats}}
 \index{numberOfFormats@{numberOfFormats}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{numberOfFormats}{numberOfFormats}}
 {\footnotesize\ttfamily \#define number\+Of\+Formats~61}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00152}{152}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8819afa5065b3697fada924e47456a00}\label{embroidery_8h_a8819afa5065b3697fada924e47456a00}} 
 \index{embroidery.h@{embroidery.h}!Pantone@{Pantone}}
@@ -1870,19 +1414,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00152}{152}} of file \
 \doxyparagraph{\texorpdfstring{Pantone}{Pantone}}
 {\footnotesize\ttfamily \#define Pantone~14}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00109}{109}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_afcb20ef67ccf15a53fd805ed1530fbe9}\label{embroidery_8h_afcb20ef67ccf15a53fd805ed1530fbe9}} 
 \index{embroidery.h@{embroidery.h}!pcm\_thread@{pcm\_thread}}
 \index{pcm\_thread@{pcm\_thread}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{pcm\_thread}{pcm\_thread}}
 {\footnotesize\ttfamily \#define pcm\+\_\+thread~26}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00121}{121}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a7933ff7886177be9efcdc06c9caf47ac}\label{embroidery_8h_a7933ff7886177be9efcdc06c9caf47ac}} 
 \index{embroidery.h@{embroidery.h}!pec\_thread@{pec\_thread}}
@@ -1890,19 +1426,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00121}{121}} of file \
 \doxyparagraph{\texorpdfstring{pec\_thread}{pec\_thread}}
 {\footnotesize\ttfamily \#define pec\+\_\+thread~27}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00122}{122}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a46c870d20825beee47d80bcd1fc31654}\label{embroidery_8h_a46c870d20825beee47d80bcd1fc31654}} 
 \index{embroidery.h@{embroidery.h}!RobisonAnton\_Polyester@{RobisonAnton\_Polyester}}
 \index{RobisonAnton\_Polyester@{RobisonAnton\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{RobisonAnton\_Polyester}{RobisonAnton\_Polyester}}
 {\footnotesize\ttfamily \#define Robison\+Anton\+\_\+\+Polyester~15}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00110}{110}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a20f089c663587248f9ca0d669926370e}\label{embroidery_8h_a20f089c663587248f9ca0d669926370e}} 
 \index{embroidery.h@{embroidery.h}!RobisonAnton\_Rayon@{RobisonAnton\_Rayon}}
@@ -1910,19 +1438,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00110}{110}} of file \
 \doxyparagraph{\texorpdfstring{RobisonAnton\_Rayon}{RobisonAnton\_Rayon}}
 {\footnotesize\ttfamily \#define Robison\+Anton\+\_\+\+Rayon~16}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00111}{111}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae4173abb99b75065eebf9ebd91c28277}\label{embroidery_8h_ae4173abb99b75065eebf9ebd91c28277}} 
 \index{embroidery.h@{embroidery.h}!SEQUIN@{SEQUIN}}
 \index{SEQUIN@{SEQUIN}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{SEQUIN}{SEQUIN}}
 {\footnotesize\ttfamily \#define SEQUIN~8 /$\ast$! sequin $\ast$/}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00026}{26}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a7e0d6f6593cae7ea005fd93dd8d8dfee}\label{embroidery_8h_a7e0d6f6593cae7ea005fd93dd8d8dfee}} 
 \index{embroidery.h@{embroidery.h}!shv\_thread@{shv\_thread}}
@@ -1930,19 +1450,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00026}{26}} of file \m
 \doxyparagraph{\texorpdfstring{shv\_thread}{shv\_thread}}
 {\footnotesize\ttfamily \#define shv\+\_\+thread~28}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00123}{123}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a39cc7f0492632e70421b520786850a3f}\label{embroidery_8h_a39cc7f0492632e70421b520786850a3f}} 
 \index{embroidery.h@{embroidery.h}!Sigma\_Polyester@{Sigma\_Polyester}}
 \index{Sigma\_Polyester@{Sigma\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Sigma\_Polyester}{Sigma\_Polyester}}
 {\footnotesize\ttfamily \#define Sigma\+\_\+\+Polyester~17}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00112}{112}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}\label{embroidery_8h_ae19b6bb2940d2fbe0a79852b070eeafd}} 
 \index{embroidery.h@{embroidery.h}!STOP@{STOP}}
@@ -1950,19 +1462,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00112}{112}} of file \
 \doxyparagraph{\texorpdfstring{STOP}{STOP}}
 {\footnotesize\ttfamily \#define STOP~4 /$\ast$! pause machine for thread change $\ast$/}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00025}{25}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_adabe8c203bc68bd4f61157b1bff8b165}\label{embroidery_8h_adabe8c203bc68bd4f61157b1bff8b165}} 
 \index{embroidery.h@{embroidery.h}!Sulky\_Rayon@{Sulky\_Rayon}}
 \index{Sulky\_Rayon@{Sulky\_Rayon}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Sulky\_Rayon}{Sulky\_Rayon}}
 {\footnotesize\ttfamily \#define Sulky\+\_\+\+Rayon~18}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00113}{113}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_a435440ff87d1825deb18f41303846058}\label{embroidery_8h_a435440ff87d1825deb18f41303846058}} 
 \index{embroidery.h@{embroidery.h}!SVG\_Colors@{SVG\_Colors}}
@@ -1970,19 +1474,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00113}{113}} of file \
 \doxyparagraph{\texorpdfstring{SVG\_Colors}{SVG\_Colors}}
 {\footnotesize\ttfamily \#define SVG\+\_\+\+Colors~23}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00118}{118}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a77ef87658aa4bf6f4b78e769106ad368}\label{embroidery_8h_a77ef87658aa4bf6f4b78e769106ad368}} 
 \index{embroidery.h@{embroidery.h}!ThreadArt\_Polyester@{ThreadArt\_Polyester}}
 \index{ThreadArt\_Polyester@{ThreadArt\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{ThreadArt\_Polyester}{ThreadArt\_Polyester}}
 {\footnotesize\ttfamily \#define Thread\+Art\+\_\+\+Polyester~20}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00115}{115}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aba1131e05c9325f402f4cda8b22dffbc}\label{embroidery_8h_aba1131e05c9325f402f4cda8b22dffbc}} 
 \index{embroidery.h@{embroidery.h}!ThreadArt\_Rayon@{ThreadArt\_Rayon}}
@@ -1990,39 +1486,23 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00115}{115}} of file \
 \doxyparagraph{\texorpdfstring{ThreadArt\_Rayon}{ThreadArt\_Rayon}}
 {\footnotesize\ttfamily \#define Thread\+Art\+\_\+\+Rayon~19}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00114}{114}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a6560bb7158c190f57944318489dd055d}\label{embroidery_8h_a6560bb7158c190f57944318489dd055d}} 
 \index{embroidery.h@{embroidery.h}!ThreaDelight\_Polyester@{ThreaDelight\_Polyester}}
 \index{ThreaDelight\_Polyester@{ThreaDelight\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{ThreaDelight\_Polyester}{ThreaDelight\_Polyester}}
 {\footnotesize\ttfamily \#define Threa\+Delight\+\_\+\+Polyester~21}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00116}{116}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}\label{embroidery_8h_a26f53b7361e8f4529b048dfa1237908a}} 
 \index{embroidery.h@{embroidery.h}!TRIM@{TRIM}}
 \index{TRIM@{TRIM}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{TRIM}{TRIM}}
-{\footnotesize\ttfamily \#define TRIM~2 /$\ast$! trim + move to (x, y) $\ast$/}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00024}{24}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
+{\footnotesize\ttfamily \#define TRIM~2 /$\ast$! trim + \mbox{\hyperlink{imgui__main_8c_a0534af61c3532dc1a468141e90396156}{move}} to (x, y) $\ast$/}
 
 \mbox{\Hypertarget{embroidery_8h_a9a2bac219517e78ae335d9ce7cd9bcec}\label{embroidery_8h_a9a2bac219517e78ae335d9ce7cd9bcec}} 
 \index{embroidery.h@{embroidery.h}!Z102\_Isacord\_Polyester@{Z102\_Isacord\_Polyester}}
 \index{Z102\_Isacord\_Polyester@{Z102\_Isacord\_Polyester}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{Z102\_Isacord\_Polyester}{Z102\_Isacord\_Polyester}}
 {\footnotesize\ttfamily \#define Z102\+\_\+\+Isacord\+\_\+\+Polyester~22}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00117}{117}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 
 
@@ -2061,11 +1541,7 @@ absolute position (not relative)
 \doxyparagraph{\texorpdfstring{EmbArray}{EmbArray}}
 {\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_emb_array__}{Emb\+Array\+\_\+}} \mbox{\hyperlink{embroidery_8h_aebe8b1561a59d167cfe6613863a671ca}{Emb\+Array}}}
 
-The basic array type. 
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00211}{211}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
-\mbox{\Hypertarget{embroidery_8h_a4ec971140fa4eef5a57a5dfe1112ed42}\label{embroidery_8h_a4ec971140fa4eef5a57a5dfe1112ed42}} 
+The basic array type. \mbox{\Hypertarget{embroidery_8h_a4ec971140fa4eef5a57a5dfe1112ed42}\label{embroidery_8h_a4ec971140fa4eef5a57a5dfe1112ed42}} 
 \index{embroidery.h@{embroidery.h}!EmbBezier@{EmbBezier}}
 \index{EmbBezier@{EmbBezier}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EmbBezier}{EmbBezier}}
@@ -2106,10 +1582,6 @@ Emb\+Color uses the light primaries\+: red, green, blue in that order. \mbox{\Hy
 \index{EmbFlag@{EmbFlag}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EmbFlag}{EmbFlag}}
 {\footnotesize\ttfamily typedef int \mbox{\hyperlink{embroidery_8h_aa8d187896cf7654438e8108ea481b11a}{Emb\+Flag}}}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00463}{463}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_afb3d2c0a23933d1ce50c4ec598b31c56}\label{embroidery_8h_afb3d2c0a23933d1ce50c4ec598b31c56}} 
 \index{embroidery.h@{embroidery.h}!EmbFormatList@{EmbFormatList}}
@@ -2189,19 +1661,11 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00463}{463}} of file \
 \doxyparagraph{\texorpdfstring{EmbPolygon}{EmbPolygon}}
 {\footnotesize\ttfamily typedef \mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}} \mbox{\hyperlink{embroidery_8h_a2d6988a5f4ba24d26c7eff65dbc9d029}{Emb\+Polygon}}}
 
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00451}{451}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
-
 \mbox{\Hypertarget{embroidery_8h_ab5563c868d8f8174d5be764808a647dd}\label{embroidery_8h_ab5563c868d8f8174d5be764808a647dd}} 
 \index{embroidery.h@{embroidery.h}!EmbPolyline@{EmbPolyline}}
 \index{EmbPolyline@{EmbPolyline}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EmbPolyline}{EmbPolyline}}
 {\footnotesize\ttfamily typedef \mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}} \mbox{\hyperlink{embroidery_8h_ab5563c868d8f8174d5be764808a647dd}{Emb\+Polyline}}}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00457}{457}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_aae68919fdb850b157647e11c00ba0d58}\label{embroidery_8h_aae68919fdb850b157647e11c00ba0d58}} 
 \index{embroidery.h@{embroidery.h}!EmbRadiusDim@{EmbRadiusDim}}
@@ -2220,10 +1684,6 @@ Definition at line \mbox{\hyperlink{embroidery_8h_source_l00457}{457}} of file \
 \index{EmbReal@{EmbReal}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{EmbReal}{EmbReal}}
 {\footnotesize\ttfamily typedef float \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}
-
-
-
-Definition at line \mbox{\hyperlink{embroidery_8h_source_l00185}{185}} of file \mbox{\hyperlink{embroidery_8h_source}{embroidery.\+h}}.
 
 \mbox{\Hypertarget{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}\label{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}} 
 \index{embroidery.h@{embroidery.h}!EmbRect@{EmbRect}}
@@ -2302,19 +1762,11 @@ Positive y is up, units are in mm. \mbox{\Hypertarget{embroidery_8h_a914404401c0
 \doxyparagraph{\texorpdfstring{convert()}{convert()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int convert (\begin{DoxyParamCaption}\item[{const char $\ast$}]{inf,  }\item[{const char $\ast$}]{outf }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01140}{1140}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}\label{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}} 
 \index{embroidery.h@{embroidery.h}!degrees@{degrees}}
 \index{degrees@{degrees}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{degrees()}{degrees()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} degrees (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{radian }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{functions_8c_source_l00034}{34}} of file \mbox{\hyperlink{functions_8c_source}{functions.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a0f8edee07ad5c7518178006359616aa9}\label{embroidery_8h_a0f8edee07ad5c7518178006359616aa9}} 
 \index{embroidery.h@{embroidery.h}!emb\_identify\_format@{emb\_identify\_format}}
@@ -2330,19 +1782,11 @@ Definition at line \mbox{\hyperlink{functions_8c_source_l00034}{34}} of file \mb
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00191}{191}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}\label{embroidery_8h_add352b7d68f1c51d7bca75ab181e8bde}} 
 \index{embroidery.h@{embroidery.h}!emb\_round@{emb\_round}}
 \index{emb\_round@{emb\_round}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{emb\_round()}{emb\_round()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int emb\+\_\+round (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{functions_8c_source_l00018}{18}} of file \mbox{\hyperlink{functions_8c_source}{functions.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a35f99650cd186428272f8cf9d0dbce30}\label{embroidery_8h_a35f99650cd186428272f8cf9d0dbce30}} 
 \index{embroidery.h@{embroidery.h}!embArc\_clockwise@{embArc\_clockwise}}
@@ -2350,19 +1794,11 @@ Definition at line \mbox{\hyperlink{functions_8c_source_l00018}{18}} of file \mb
 \doxyparagraph{\texorpdfstring{embArc\_clockwise()}{embArc\_clockwise()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} char emb\+Arc\+\_\+clockwise (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}}}]{arc }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{arc_8c_source_l00037}{37}} of file \mbox{\hyperlink{arc_8c_source}{arc.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a9b68f2e53b9683d777bf82aef736741a}\label{embroidery_8h_a9b68f2e53b9683d777bf82aef736741a}} 
 \index{embroidery.h@{embroidery.h}!embArc\_init@{embArc\_init}}
 \index{embArc\_init@{embArc\_init}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embArc\_init()}{embArc\_init()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} emb\+Arc\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{arc_8c_source_l00022}{22}} of file \mbox{\hyperlink{arc_8c_source}{arc.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_ae674306b85cffe3ca32e939241751722}\label{embroidery_8h_ae674306b85cffe3ca32e939241751722}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addArc@{embArray\_addArc}}
@@ -2380,10 +1816,6 @@ Definition at line \mbox{\hyperlink{arc_8c_source_l00022}{22}} of file \mbox{\hy
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00122}{122}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ab50a7fa3d577df5a2c79e93982f08566}\label{embroidery_8h_ab50a7fa3d577df5a2c79e93982f08566}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addCircle@{embArray\_addCircle}}
 \index{embArray\_addCircle@{embArray\_addCircle}!embroidery.h@{embroidery.h}}
@@ -2400,10 +1832,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00122}{122}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00141}{141}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aa2f00ea4c352b929ec047b26a2b65940}\label{embroidery_8h_aa2f00ea4c352b929ec047b26a2b65940}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addEllipse@{embArray\_addEllipse}}
 \index{embArray\_addEllipse@{embArray\_addEllipse}!embroidery.h@{embroidery.h}}
@@ -2420,10 +1848,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00141}{141}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00160}{160}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_adbd6d6feaccea72e3b9820dc7177d202}\label{embroidery_8h_adbd6d6feaccea72e3b9820dc7177d202}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addFlag@{embArray\_addFlag}}
 \index{embArray\_addFlag@{embArray\_addFlag}!embroidery.h@{embroidery.h}}
@@ -2440,10 +1864,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00160}{160}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00179}{179}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a1df3d95cffaeaa6ebbea91ceb9e653b5}\label{embroidery_8h_a1df3d95cffaeaa6ebbea91ceb9e653b5}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addLine@{embArray\_addLine}}
 \index{embArray\_addLine@{embArray\_addLine}!embroidery.h@{embroidery.h}}
@@ -2460,10 +1880,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00179}{179}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00198}{198}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a26aac7fb3e50ee96071cf8ebd1bf14c2}\label{embroidery_8h_a26aac7fb3e50ee96071cf8ebd1bf14c2}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addPath@{embArray\_addPath}}
 \index{embArray\_addPath@{embArray\_addPath}!embroidery.h@{embroidery.h}}
@@ -2480,10 +1896,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00198}{198}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00217}{217}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a8ed73489671100fc1d8757fbbb89c0ab}\label{embroidery_8h_a8ed73489671100fc1d8757fbbb89c0ab}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addPoint@{embArray\_addPoint}}
 \index{embArray\_addPoint@{embArray\_addPoint}!embroidery.h@{embroidery.h}}
@@ -2500,10 +1912,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00217}{217}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00236}{236}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a61253da29dc1139e92f44266bdfb9706}\label{embroidery_8h_a61253da29dc1139e92f44266bdfb9706}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addPolygon@{embArray\_addPolygon}}
 \index{embArray\_addPolygon@{embArray\_addPolygon}!embroidery.h@{embroidery.h}}
@@ -2520,10 +1928,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00236}{236}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00274}{274}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ab3cf65449a42130370774d455d9476fd}\label{embroidery_8h_ab3cf65449a42130370774d455d9476fd}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addPolyline@{embArray\_addPolyline}}
 \index{embArray\_addPolyline@{embArray\_addPolyline}!embroidery.h@{embroidery.h}}
@@ -2540,10 +1944,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00274}{274}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00255}{255}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a6bb4bd5ec4e88ca2a8f45e369c404a5b}\label{embroidery_8h_a6bb4bd5ec4e88ca2a8f45e369c404a5b}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addRect@{embArray\_addRect}}
 \index{embArray\_addRect@{embArray\_addRect}!embroidery.h@{embroidery.h}}
@@ -2560,10 +1960,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00255}{255}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00293}{293}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a2eff23d64fad7d63b81d121849d7a776}\label{embroidery_8h_a2eff23d64fad7d63b81d121849d7a776}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addStitch@{embArray\_addStitch}}
 \index{embArray\_addStitch@{embArray\_addStitch}!embroidery.h@{embroidery.h}}
@@ -2580,10 +1976,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00293}{293}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00312}{312}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_af10acdaaaa831455d78437e1a8f30261}\label{embroidery_8h_af10acdaaaa831455d78437e1a8f30261}} 
 \index{embroidery.h@{embroidery.h}!embArray\_addThread@{embArray\_addThread}}
 \index{embArray\_addThread@{embArray\_addThread}!embroidery.h@{embroidery.h}}
@@ -2606,10 +1998,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00312}{312}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00330}{330}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a92da1370cde056a9fe1513570b4f06b5}\label{embroidery_8h_a92da1370cde056a9fe1513570b4f06b5}} 
 \index{embroidery.h@{embroidery.h}!embArray\_copy@{embArray\_copy}}
 \index{embArray\_copy@{embArray\_copy}!embroidery.h@{embroidery.h}}
@@ -2623,10 +2011,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00330}{330}} of file \mbox{
 {\em src} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00093}{93}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a5bd3cad4995558d9b4fdd322155bedbc}\label{embroidery_8h_a5bd3cad4995558d9b4fdd322155bedbc}} 
 \index{embroidery.h@{embroidery.h}!embArray\_create@{embArray\_create}}
 \index{embArray\_create@{embArray\_create}!embroidery.h@{embroidery.h}}
@@ -2641,10 +2025,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00093}{93}} of file \mbox{\
 \begin{DoxyReturn}{Returns}
 Emb\+Array$\ast$ 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00025}{25}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ada30f6c98c39769efc9471ea3a54220c}\label{embroidery_8h_ada30f6c98c39769efc9471ea3a54220c}} 
 \index{embroidery.h@{embroidery.h}!embArray\_free@{embArray\_free}}
 \index{embArray\_free@{embArray\_free}!embroidery.h@{embroidery.h}}
@@ -2656,10 +2036,6 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00025}{25}} of file \mbox{\
 {\em a} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00347}{347}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a85d705f3076d37ccc0eeb5d4f156975c}\label{embroidery_8h_a85d705f3076d37ccc0eeb5d4f156975c}} 
 \index{embroidery.h@{embroidery.h}!embArray\_resize@{embArray\_resize}}
 \index{embArray\_resize@{embArray\_resize}!embroidery.h@{embroidery.h}}
@@ -2674,19 +2050,11 @@ Definition at line \mbox{\hyperlink{array_8c_source_l00347}{347}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{array_8c_source_l00053}{53}} of file \mbox{\hyperlink{array_8c_source}{array.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a847a64f66c1b6493da001e241a1a2ce3}\label{embroidery_8h_a847a64f66c1b6493da001e241a1a2ce3}} 
 \index{embroidery.h@{embroidery.h}!embCircle\_init@{embCircle\_init}}
 \index{embCircle\_init@{embCircle\_init}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embCircle\_init()}{embCircle\_init()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}} emb\+Circle\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{circle_8c_source_l00019}{19}} of file \mbox{\hyperlink{circle_8c_source}{circle.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_acb02ef0b5cae46807df2ad2b3a99f57f}\label{embroidery_8h_acb02ef0b5cae46807df2ad2b3a99f57f}} 
 \index{embroidery.h@{embroidery.h}!embColor\_create@{embColor\_create}}
@@ -2710,10 +2078,6 @@ Definition at line \mbox{\hyperlink{circle_8c_source_l00019}{19}} of file \mbox{
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00852}{852}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}\label{embroidery_8h_aa26fa3dbc266462673043ca0b65c3c4e}} 
 \index{embroidery.h@{embroidery.h}!embColor\_fromHexStr@{embColor\_fromHexStr}}
 \index{embColor\_fromHexStr@{embColor\_fromHexStr}!embroidery.h@{embroidery.h}}
@@ -2732,10 +2096,6 @@ Converts a 6 digit hex string (I.\+E. \char`\"{}00\+FF00\char`\"{}) into an Emb\
 \begin{DoxyReturn}{Returns}
 Emb\+Color the same color as our internal type. 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{encoding_8c_source_l00040}{40}} of file \mbox{\hyperlink{encoding_8c_source}{encoding.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a075db63a6ebdae9a30ee3549d92047e0}\label{embroidery_8h_a075db63a6ebdae9a30ee3549d92047e0}} 
 \index{embroidery.h@{embroidery.h}!embColor\_make@{embColor\_make}}
 \index{embColor\_make@{embColor\_make}!embroidery.h@{embroidery.h}}
@@ -2748,19 +2108,11 @@ Definition at line \mbox{\hyperlink{encoding_8c_source_l00040}{40}} of file \mbo
 \doxyparagraph{\texorpdfstring{embEllipse\_area()}{embEllipse\_area()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Ellipse\+\_\+area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00032}{32}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a3498f38737f8760195323486680711f8}\label{embroidery_8h_a3498f38737f8760195323486680711f8}} 
 \index{embroidery.h@{embroidery.h}!embEllipse\_diameterX@{embEllipse\_diameterX}}
 \index{embEllipse\_diameterX@{embEllipse\_diameterX}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embEllipse\_diameterX()}{embEllipse\_diameterX()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Ellipse\+\_\+diameterX (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00047}{47}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_aa05c0995fe9972bcce71d4b795a4bd75}\label{embroidery_8h_aa05c0995fe9972bcce71d4b795a4bd75}} 
 \index{embroidery.h@{embroidery.h}!embEllipse\_diameterY@{embEllipse\_diameterY}}
@@ -2768,29 +2120,17 @@ Definition at line \mbox{\hyperlink{ellipse_8c_source_l00047}{47}} of file \mbox
 \doxyparagraph{\texorpdfstring{embEllipse\_diameterY()}{embEllipse\_diameterY()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Ellipse\+\_\+diameterY (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00053}{53}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a24379b160f1253a94502df9db3f49244}\label{embroidery_8h_a24379b160f1253a94502df9db3f49244}} 
 \index{embroidery.h@{embroidery.h}!embEllipse\_height@{embEllipse\_height}}
 \index{embEllipse\_height@{embEllipse\_height}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embEllipse\_height()}{embEllipse\_height()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Ellipse\+\_\+height (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00065}{65}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a6911a2c61474451a39add47b0f7de868}\label{embroidery_8h_a6911a2c61474451a39add47b0f7de868}} 
 \index{embroidery.h@{embroidery.h}!embEllipse\_init@{embEllipse\_init}}
 \index{embEllipse\_init@{embEllipse\_init}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embEllipse\_init()}{embEllipse\_init()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}} emb\+Ellipse\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00018}{18}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a39c0df3309f802b2d8613653ff8bb906}\label{embroidery_8h_a39c0df3309f802b2d8613653ff8bb906}} 
 \index{embroidery.h@{embroidery.h}!embEllipse\_make@{embEllipse\_make}}
@@ -2804,19 +2144,11 @@ Definition at line \mbox{\hyperlink{ellipse_8c_source_l00018}{18}} of file \mbox
 \doxyparagraph{\texorpdfstring{embEllipse\_perimeter()}{embEllipse\_perimeter()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Ellipse\+\_\+perimeter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00040}{40}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aa5f2f533024c9eca31df30bc6cf670c5}\label{embroidery_8h_aa5f2f533024c9eca31df30bc6cf670c5}} 
 \index{embroidery.h@{embroidery.h}!embEllipse\_width@{embEllipse\_width}}
 \index{embEllipse\_width@{embEllipse\_width}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embEllipse\_width()}{embEllipse\_width()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Ellipse\+\_\+width (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{ellipse_8c_source_l00059}{59}} of file \mbox{\hyperlink{ellipse_8c_source}{ellipse.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_ad869f53be717447df50db02df40178ed}\label{embroidery_8h_ad869f53be717447df50db02df40178ed}} 
 \index{embroidery.h@{embroidery.h}!embGeometry\_boundingRect@{embGeometry\_boundingRect}}
@@ -2836,11 +2168,7 @@ Calculate the bounding box of geometry {\itshape obj} based on what kind of geom
 \begin{DoxyReturn}{Returns}
 Emb\+Rect The bounding box in the same scale as the input geometry.
 \end{DoxyReturn}
-In the case of a failure the bounding box returned is always the unit square with top left corner at (0, 0). 
-
-Definition at line \mbox{\hyperlink{geometry_8c_source_l00125}{125}} of file \mbox{\hyperlink{geometry_8c_source}{geometry.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a439d686b2b6c28793e50ef72b909f12f}\label{embroidery_8h_a439d686b2b6c28793e50ef72b909f12f}} 
+In the case of a failure the bounding box returned is always the unit square with top left corner at (0, 0). \mbox{\Hypertarget{embroidery_8h_a439d686b2b6c28793e50ef72b909f12f}\label{embroidery_8h_a439d686b2b6c28793e50ef72b909f12f}} 
 \index{embroidery.h@{embroidery.h}!embGeometry\_free@{embGeometry\_free}}
 \index{embGeometry\_free@{embGeometry\_free}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embGeometry\_free()}{embGeometry\_free()}}
@@ -2855,10 +2183,6 @@ Free the memory occupied by a non-\/stitch geometry object.
 {\em obj} & Pointer to geometry memory. \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{geometry_8c_source_l00070}{70}} of file \mbox{\hyperlink{geometry_8c_source}{geometry.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a1f7e5a1db0dc11ef2bb7def04bae32b9}\label{embroidery_8h_a1f7e5a1db0dc11ef2bb7def04bae32b9}} 
 \index{embroidery.h@{embroidery.h}!embGeometry\_init@{embGeometry\_init}}
 \index{embGeometry\_init@{embGeometry\_init}!embroidery.h@{embroidery.h}}
@@ -2877,10 +2201,6 @@ Our generic object interface backends to each individual type.
 \begin{DoxyReturn}{Returns}
 Emb\+Geometry$\ast$ 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{geometry_8c_source_l00022}{22}} of file \mbox{\hyperlink{geometry_8c_source}{geometry.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ad828bce06ad3137b9f8079fe5d262b6f}\label{embroidery_8h_ad828bce06ad3137b9f8079fe5d262b6f}} 
 \index{embroidery.h@{embroidery.h}!embGeometry\_move@{embGeometry\_move}}
 \index{embGeometry\_move@{embGeometry\_move}!embroidery.h@{embroidery.h}}
@@ -2898,10 +2218,6 @@ Translate {\itshape obj} by the vector {\itshape delta}.
 {\em delta} & A vector in the 0.\+1mm scale to offset the geometry by. \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{geometry_8c_source_l00094}{94}} of file \mbox{\hyperlink{geometry_8c_source}{geometry.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aaad366b6c8651825c096c9b8fd731fcc}\label{embroidery_8h_aaad366b6c8651825c096c9b8fd731fcc}} 
 \index{embroidery.h@{embroidery.h}!embGeometry\_vulcanize@{embGeometry\_vulcanize}}
 \index{embGeometry\_vulcanize@{embGeometry\_vulcanize}!embroidery.h@{embroidery.h}}
@@ -2918,11 +2234,7 @@ Toggle the rubber mode of the object.
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000421}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{geometry_8c_source_l00158}{158}} of file \mbox{\hyperlink{geometry_8c_source}{geometry.\+c}}.
-
+\item[\mbox{\hyperlink{todo__todo000249}{Todo}}]Review. This could be controlled by a simple flag. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_a910afe5c3ca865bc9afd8a520ae73e37}\label{embroidery_8h_a910afe5c3ca865bc9afd8a520ae73e37}} 
 \index{embroidery.h@{embroidery.h}!embImage\_create@{embImage\_create}}
 \index{embImage\_create@{embImage\_create}!embroidery.h@{embroidery.h}}
@@ -2953,10 +2265,6 @@ Definition at line \mbox{\hyperlink{geometry_8c_source_l00158}{158}} of file \mb
 \doxyparagraph{\texorpdfstring{embLine\_intersectionPoint()}{embLine\_intersectionPoint()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} emb\+Line\+\_\+intersection\+Point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line1,  }\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line2 }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{line_8c_source_l00047}{47}} of file \mbox{\hyperlink{line_8c_source}{line.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_afdb3beaf9455403550bea072e6433024}\label{embroidery_8h_afdb3beaf9455403550bea072e6433024}} 
 \index{embroidery.h@{embroidery.h}!embLine\_make@{embLine\_make}}
 \index{embLine\_make@{embLine\_make}!embroidery.h@{embroidery.h}}
@@ -2969,49 +2277,29 @@ Definition at line \mbox{\hyperlink{line_8c_source_l00047}{47}} of file \mbox{\h
 \doxyparagraph{\texorpdfstring{embLine\_normalVector()}{embLine\_normalVector()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Line\+\_\+normal\+Vector (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{result,  }\item[{int}]{clockwise }\end{DoxyParamCaption})}
 
-Finds the normalized vector perpendicular (clockwise) to the line given by v1-\/\texorpdfstring{$>$}{>}v2 (normal to the line) 
-
-Definition at line \mbox{\hyperlink{line_8c_source_l00018}{18}} of file \mbox{\hyperlink{line_8c_source}{line.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}\label{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}} 
+Finds the normalized vector perpendicular (clockwise) to the line given by v1-\/\texorpdfstring{$>$}{>}v2 (normal to the line) \mbox{\Hypertarget{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}\label{embroidery_8h_a324691deebb0e224ce2f406b8cc30e0e}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addCircleAbs@{embPattern\_addCircleAbs}}
 \index{embPattern\_addCircleAbs@{embPattern\_addCircleAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addCircleAbs()}{embPattern\_addCircleAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Circle\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}}}]{circle }\end{DoxyParamCaption})}
 
-Adds a circle object to pattern ({\itshape p}) with its center at the absolute position ({\itshape cx},{\itshape cy}) with a radius of ({\itshape r}). Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00819}{819}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_abe0e2b92cd0e0e514c63e2eda5968f9f}\label{embroidery_8h_abe0e2b92cd0e0e514c63e2eda5968f9f}} 
+Adds a circle object to pattern ({\itshape p}) with its center at the absolute position ({\itshape cx},{\itshape cy}) with a radius of ({\itshape r}). Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_abe0e2b92cd0e0e514c63e2eda5968f9f}\label{embroidery_8h_abe0e2b92cd0e0e514c63e2eda5968f9f}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addEllipseAbs@{embPattern\_addEllipseAbs}}
 \index{embPattern\_addEllipseAbs@{embPattern\_addEllipseAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addEllipseAbs()}{embPattern\_addEllipseAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Ellipse\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a4e48ebde5bd4d82b875f98b347bdd62c}{Emb\+Ellipse}}}]{ellipse }\end{DoxyParamCaption})}
 
-Adds an ellipse object to pattern ({\itshape p}) with its center at the absolute position ({\itshape cx},{\itshape cy}) with radii of ({\itshape rx},{\itshape ry}). Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00833}{833}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_af85d9e191f5c09f877fad0f1605a66f4}\label{embroidery_8h_af85d9e191f5c09f877fad0f1605a66f4}} 
+Adds an ellipse object to pattern ({\itshape p}) with its center at the absolute position ({\itshape cx},{\itshape cy}) with radii of ({\itshape rx},{\itshape ry}). Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_af85d9e191f5c09f877fad0f1605a66f4}\label{embroidery_8h_af85d9e191f5c09f877fad0f1605a66f4}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addLineAbs@{embPattern\_addLineAbs}}
 \index{embPattern\_addLineAbs@{embPattern\_addLineAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addLineAbs()}{embPattern\_addLineAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Line\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line }\end{DoxyParamCaption})}
 
-Adds a line object to pattern ({\itshape p}) starting at the absolute position ({\itshape x1},{\itshape y1}) and ending at the absolute position ({\itshape x2},{\itshape y2}). Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00848}{848}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a173b673741f42aba5463fe6f32fb3b32}\label{embroidery_8h_a173b673741f42aba5463fe6f32fb3b32}} 
+Adds a line object to pattern ({\itshape p}) starting at the absolute position ({\itshape x1},{\itshape y1}) and ending at the absolute position ({\itshape x2},{\itshape y2}). Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_a173b673741f42aba5463fe6f32fb3b32}\label{embroidery_8h_a173b673741f42aba5463fe6f32fb3b32}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addPathAbs@{embPattern\_addPathAbs}}
 \index{embPattern\_addPathAbs@{embPattern\_addPathAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addPathAbs()}{embPattern\_addPathAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Path\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}}}]{obj }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00859}{859}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a177816da32581f8737a1825391d44f84}\label{embroidery_8h_a177816da32581f8737a1825391d44f84}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addPointAbs@{embPattern\_addPointAbs}}
@@ -3019,19 +2307,11 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00859}{859}} of file \mbo
 \doxyparagraph{\texorpdfstring{embPattern\_addPointAbs()}{embPattern\_addPointAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Point\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a835ccc3aedf71b57dca6130be87ea463}{Emb\+Point}}}]{obj }\end{DoxyParamCaption})}
 
-Adds a point object to pattern ({\itshape p}) at the absolute position ({\itshape x},{\itshape y}). Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00875}{875}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a34d24abbe4ed74a8df28a8625cfdfacb}\label{embroidery_8h_a34d24abbe4ed74a8df28a8625cfdfacb}} 
+Adds a point object to pattern ({\itshape p}) at the absolute position ({\itshape x},{\itshape y}). Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_a34d24abbe4ed74a8df28a8625cfdfacb}\label{embroidery_8h_a34d24abbe4ed74a8df28a8625cfdfacb}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addPolygonAbs@{embPattern\_addPolygonAbs}}
 \index{embPattern\_addPolygonAbs@{embPattern\_addPolygonAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addPolygonAbs()}{embPattern\_addPolygonAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Polygon\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2d6988a5f4ba24d26c7eff65dbc9d029}{Emb\+Polygon}}}]{obj }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00886}{886}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a5b4ae4d41a6f7dd41e09dd549bdc2348}\label{embroidery_8h_a5b4ae4d41a6f7dd41e09dd549bdc2348}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addPolylineAbs@{embPattern\_addPolylineAbs}}
@@ -3045,31 +2325,19 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00886}{886}} of file \mbo
 \doxyparagraph{\texorpdfstring{embPattern\_addRectAbs()}{embPattern\_addRectAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Rect\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}}}]{rect }\end{DoxyParamCaption})}
 
-Adds a rectangle object to pattern ({\itshape p}) at the absolute position ({\itshape x},{\itshape y}) with a width of ({\itshape w}) and a height of ({\itshape h}). Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00920}{920}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}\label{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}} 
+Adds a rectangle object to pattern ({\itshape p}) at the absolute position ({\itshape x},{\itshape y}) with a width of ({\itshape w}) and a height of ({\itshape h}). Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}\label{embroidery_8h_adb38a95b0ac7c7f48aa92bcb156f9413}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addStitchAbs@{embPattern\_addStitchAbs}}
 \index{embPattern\_addStitchAbs@{embPattern\_addStitchAbs}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addStitchAbs()}{embPattern\_addStitchAbs()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Stitch\+Abs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{int}]{flags,  }\item[{int}]{is\+Auto\+Color\+Index }\end{DoxyParamCaption})}
 
-Adds a stitch to the pattern ({\itshape p}) at the absolute position ({\itshape x},{\itshape y}). Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00262}{262}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}\label{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}} 
+Adds a stitch to the pattern ({\itshape p}) at the absolute position ({\itshape x},{\itshape y}). Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}\label{embroidery_8h_aa2c02d649c5a2ac8513514da7b0b5fc1}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addStitchRel@{embPattern\_addStitchRel}}
 \index{embPattern\_addStitchRel@{embPattern\_addStitchRel}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addStitchRel()}{embPattern\_addStitchRel()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+add\+Stitch\+Rel (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{dx,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{dy,  }\item[{int}]{flags,  }\item[{int}]{is\+Auto\+Color\+Index }\end{DoxyParamCaption})}
 
-Adds a stitch to the pattern ({\itshape p}) at the relative position ({\itshape dx},{\itshape dy}) to the previous stitch. Positive y is up. Units are in millimeters. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00316}{316}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}\label{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}} 
+Adds a stitch to the pattern ({\itshape p}) at the relative position ({\itshape dx},{\itshape dy}) to the previous stitch. Positive y is up. Units are in millimeters. \mbox{\Hypertarget{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}\label{embroidery_8h_a1b281916881a27935b9e1f6bcffb2087}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_addThread@{embPattern\_addThread}}
 \index{embPattern\_addThread@{embPattern\_addThread}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_addThread()}{embPattern\_addThread()}}
@@ -3085,29 +2353,17 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00316}{316}} of file \mbo
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00083}{83}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}\label{embroidery_8h_a2c98adbce5554d426cc190eb7659e82c}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_calcBoundingBox@{embPattern\_calcBoundingBox}}
 \index{embPattern\_calcBoundingBox@{embPattern\_calcBoundingBox}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_calcBoundingBox()}{embPattern\_calcBoundingBox()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}} emb\+Pattern\+\_\+calc\+Bounding\+Box (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-Returns an Emb\+Rect that encapsulates all stitches and objects in the pattern ({\itshape p}). 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00372}{372}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a5961ea19e0e8733ce24c3ba52b6b66f8}\label{embroidery_8h_a5961ea19e0e8733ce24c3ba52b6b66f8}} 
+Returns an Emb\+Rect that encapsulates all stitches and objects in the pattern ({\itshape p}). \mbox{\Hypertarget{embroidery_8h_a5961ea19e0e8733ce24c3ba52b6b66f8}\label{embroidery_8h_a5961ea19e0e8733ce24c3ba52b6b66f8}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_center@{embPattern\_center}}
 \index{embPattern\_center@{embPattern\_center}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_center()}{embPattern\_center()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+center (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00741}{741}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_abeb4c0f3d40c17445df2aeef9677c10e}\label{embroidery_8h_abeb4c0f3d40c17445df2aeef9677c10e}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_changeColor@{embPattern\_changeColor}}
@@ -3122,19 +2378,11 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00741}{741}} of file \mbo
 {\em index} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00344}{344}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ade565ade884217b77053c4cd62c9ade3}\label{embroidery_8h_ade565ade884217b77053c4cd62c9ade3}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_color\_count@{embPattern\_color\_count}}
 \index{embPattern\_color\_count@{embPattern\_color\_count}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_color\_count()}{embPattern\_color\_count()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int emb\+Pattern\+\_\+color\+\_\+count (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{\mbox{\hyperlink{embroidery_8h_acde9d757854564332fd795a084ec88b3}{Emb\+Color}}}]{start\+Color }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00943}{943}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a00deebb53dcaab1a1669e4549f97de62}\label{embroidery_8h_a00deebb53dcaab1a1669e4549f97de62}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_combine@{embPattern\_combine}}
@@ -3152,19 +2400,11 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00943}{943}} of file \mbo
 \begin{DoxyReturn}{Returns}
 Emb\+Pattern$\ast$ 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{fill_8c_source_l01042}{1042}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a839120fda91e639e45430e7cd2debae0}\label{embroidery_8h_a839120fda91e639e45430e7cd2debae0}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_combineJumpStitches@{embPattern\_combineJumpStitches}}
 \index{embPattern\_combineJumpStitches@{embPattern\_combineJumpStitches}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_combineJumpStitches()}{embPattern\_combineJumpStitches()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+combine\+Jump\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00656}{656}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a65792d1b0c470b33261281062fb92a54}\label{embroidery_8h_a65792d1b0c470b33261281062fb92a54}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_convertGeometry@{embPattern\_convertGeometry}}
@@ -3177,10 +2417,6 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00656}{656}} of file \mbo
 {\em p} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{fill_8c_source_l01253}{1253}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_adb4b9ef23f2fbe8b6d04e50e9f043da1}\label{embroidery_8h_adb4b9ef23f2fbe8b6d04e50e9f043da1}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_copyPolylinesToStitchList@{embPattern\_copyPolylinesToStitchList}}
 \index{embPattern\_copyPolylinesToStitchList@{embPattern\_copyPolylinesToStitchList}!embroidery.h@{embroidery.h}}
@@ -3199,10 +2435,6 @@ Definition at line \mbox{\hyperlink{fill_8c_source_l01253}{1253}} of file \mbox{
 \doxyparagraph{\texorpdfstring{embPattern\_correctForMaxStitchLength()}{embPattern\_correctForMaxStitchLength()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+correct\+For\+Max\+Stitch\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{max\+Stitch\+Length,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{max\+Jump\+Length }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00692}{692}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ad1be1abf388d4479ffe2b75f8470273b}\label{embroidery_8h_ad1be1abf388d4479ffe2b75f8470273b}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_create@{embPattern\_create}}
 \index{embPattern\_create@{embPattern\_create}!embroidery.h@{embroidery.h}}
@@ -3216,10 +2448,6 @@ Returns a pointer to an Emb\+Pattern. It is created on the heap. The caller is r
 \begin{DoxyReturn}{Returns}
 Emb\+Pattern$\ast$ 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00025}{25}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a2a11e2787f04c55c5fd09cba349b6037}\label{embroidery_8h_a2a11e2787f04c55c5fd09cba349b6037}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_crossstitch@{embPattern\_crossstitch}}
 \index{embPattern\_crossstitch@{embPattern\_crossstitch}!embroidery.h@{embroidery.h}}
@@ -3237,29 +2465,17 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00025}{25}} of file \mbox
 \end{DoxyParams}
 Uses a threshhold method to determine where to put crosses in the fill.
 
-To improve this, we can remove the vertical stitches when two crosses neighbour. Currently the simple way to do this is to chain crosses that are neighbours exactly one ahead. 
-
-Definition at line \mbox{\hyperlink{fill_8c_source_l00299}{299}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_abcedd1e1682fbb2af2db3dc9704c035e}\label{embroidery_8h_abcedd1e1682fbb2af2db3dc9704c035e}} 
+To improve this, we can remove the vertical stitches when two crosses neighbour. Currently the simple way to do this is to chain crosses that are neighbours exactly one ahead. \mbox{\Hypertarget{embroidery_8h_abcedd1e1682fbb2af2db3dc9704c035e}\label{embroidery_8h_abcedd1e1682fbb2af2db3dc9704c035e}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_designDetails@{embPattern\_designDetails}}
 \index{embPattern\_designDetails@{embPattern\_designDetails}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_designDetails()}{embPattern\_designDetails()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+design\+Details (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00974}{974}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a5e60e4e5dfdebd4a6887f299a82adb2c}\label{embroidery_8h_a5e60e4e5dfdebd4a6887f299a82adb2c}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_end@{embPattern\_end}}
 \index{embPattern\_end@{embPattern\_end}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_end()}{embPattern\_end()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+end (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00930}{930}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a06e84e58ffaff895d4ffd4f659dedc73}\label{embroidery_8h_a06e84e58ffaff895d4ffd4f659dedc73}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_fixColorCount@{embPattern\_fixColorCount}}
@@ -3272,51 +2488,31 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00930}{930}} of file \mbo
 {\em p} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00101}{101}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a34ef93c9c7d2a335d50d85ab1e3d28c2}\label{embroidery_8h_a34ef93c9c7d2a335d50d85ab1e3d28c2}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_flip@{embPattern\_flip}}
 \index{embPattern\_flip@{embPattern\_flip}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_flip()}{embPattern\_flip()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+flip (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{int}]{horz,  }\item[{int}]{vert }\end{DoxyParamCaption})}
 
-Flips the entire pattern ({\itshape p}) horizontally about the x-\/axis if ({\itshape horz}) is true. Flips the entire pattern ({\itshape p}) vertically about the y-\/axis if ({\itshape vert}) is true. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00529}{529}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a80f235d1089633b4e14f674d2d2f8be9}\label{embroidery_8h_a80f235d1089633b4e14f674d2d2f8be9}} 
+Flips the entire pattern ({\itshape p}) horizontally about the x-\/axis if ({\itshape horz}) is true. Flips the entire pattern ({\itshape p}) vertically about the y-\/axis if ({\itshape vert}) is true. \mbox{\Hypertarget{embroidery_8h_a80f235d1089633b4e14f674d2d2f8be9}\label{embroidery_8h_a80f235d1089633b4e14f674d2d2f8be9}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_flipHorizontal@{embPattern\_flipHorizontal}}
 \index{embPattern\_flipHorizontal@{embPattern\_flipHorizontal}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_flipHorizontal()}{embPattern\_flipHorizontal()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+flip\+Horizontal (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-Flips the entire pattern ({\itshape p}) horizontally about the y-\/axis. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00504}{504}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}\label{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}} 
+Flips the entire pattern ({\itshape p}) horizontally about the y-\/axis. \mbox{\Hypertarget{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}\label{embroidery_8h_a1845b61574f492a6dbef5fd6401ae4a2}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_flipVertical@{embPattern\_flipVertical}}
 \index{embPattern\_flipVertical@{embPattern\_flipVertical}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_flipVertical()}{embPattern\_flipVertical()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+flip\+Vertical (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-Flips the entire pattern ({\itshape p}) vertically about the x-\/axis. 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00516}{516}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a47cefd322c29827f2989630c0aa6cbc5}\label{embroidery_8h_a47cefd322c29827f2989630c0aa6cbc5}} 
+Flips the entire pattern ({\itshape p}) vertically about the x-\/axis. \mbox{\Hypertarget{embroidery_8h_a47cefd322c29827f2989630c0aa6cbc5}\label{embroidery_8h_a47cefd322c29827f2989630c0aa6cbc5}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_free@{embPattern\_free}}
 \index{embPattern\_free@{embPattern\_free}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_free()}{embPattern\_free()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+free (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p }\end{DoxyParamCaption})}
 
-Frees all memory allocated in the pattern ({\itshape p}). 
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00803}{803}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a405e65b9e43916a34bcc149480e0bfea}\label{embroidery_8h_a405e65b9e43916a34bcc149480e0bfea}} 
+Frees all memory allocated in the pattern ({\itshape p}). \mbox{\Hypertarget{embroidery_8h_a405e65b9e43916a34bcc149480e0bfea}\label{embroidery_8h_a405e65b9e43916a34bcc149480e0bfea}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_hideStitchesOverLength@{embPattern\_hideStitchesOverLength}}
 \index{embPattern\_hideStitchesOverLength@{embPattern\_hideStitchesOverLength}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_hideStitchesOverLength()}{embPattern\_hideStitchesOverLength()}}
@@ -3329,10 +2525,6 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00803}{803}} of file \mbo
 {\em length} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00052}{52}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aabc92974158cc1717c9a3a2ade7b04c8}\label{embroidery_8h_aabc92974158cc1717c9a3a2ade7b04c8}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_horizontal\_fill@{embPattern\_horizontal\_fill}}
 \index{embPattern\_horizontal\_fill@{embPattern\_horizontal\_fill}!embroidery.h@{embroidery.h}}
@@ -3352,19 +2544,11 @@ Uses a threshhold method to determine where to put lines in the fill.
 
 Needs to pass a \char`\"{}donut test\char`\"{}, i.\+e. an image with black pixels where\+: 10 \texorpdfstring{$<$}{<} x$\ast$x + y$\ast$y \texorpdfstring{$<$}{<} 20 over the area (-\/30, 30) x (-\/30, 30).
 
-Use render then image difference to see how well it passes. 
-
-Definition at line \mbox{\hyperlink{fill_8c_source_l00265}{265}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a0169ae239bf5c69b878b67755e25ea46}\label{embroidery_8h_a0169ae239bf5c69b878b67755e25ea46}} 
+Use render then image difference to see how well it passes. \mbox{\Hypertarget{embroidery_8h_a0169ae239bf5c69b878b67755e25ea46}\label{embroidery_8h_a0169ae239bf5c69b878b67755e25ea46}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_jumpStitches@{embPattern\_jumpStitches}}
 \index{embPattern\_jumpStitches@{embPattern\_jumpStitches}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_jumpStitches()}{embPattern\_jumpStitches()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int emb\+Pattern\+\_\+jump\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01279}{1279}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a443049847ec14ded075d72988912ecb9}\label{embroidery_8h_a443049847ec14ded075d72988912ecb9}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_lengthHistogram@{embPattern\_lengthHistogram}}
@@ -3372,19 +2556,11 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l01279}{1279}} of file \mb
 \doxyparagraph{\texorpdfstring{embPattern\_lengthHistogram()}{embPattern\_lengthHistogram()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+length\+Histogram (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{int $\ast$}]{bin,  }\item[{int}]{NUMBINS }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01244}{1244}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a3bf191bd99e2da8d36465f454a4646f6}\label{embroidery_8h_a3bf191bd99e2da8d36465f454a4646f6}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_loadExternalColorFile@{embPattern\_loadExternalColorFile}}
 \index{embPattern\_loadExternalColorFile@{embPattern\_loadExternalColorFile}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_loadExternalColorFile()}{embPattern\_loadExternalColorFile()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+load\+External\+Color\+File (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{const char $\ast$}]{file\+Name }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00764}{764}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_adefc123fce26ec1b8f0dc9add1108217}\label{embroidery_8h_adefc123fce26ec1b8f0dc9add1108217}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_maximumStitchLength@{embPattern\_maximumStitchLength}}
@@ -3392,19 +2568,11 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00764}{764}} of file \mbo
 \doxyparagraph{\texorpdfstring{embPattern\_maximumStitchLength()}{embPattern\_maximumStitchLength()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Pattern\+\_\+maximum\+Stitch\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01223}{1223}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a47a5356e0c28581ef02f71458da21170}\label{embroidery_8h_a47a5356e0c28581ef02f71458da21170}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_minimumStitchLength@{embPattern\_minimumStitchLength}}
 \index{embPattern\_minimumStitchLength@{embPattern\_minimumStitchLength}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_minimumStitchLength()}{embPattern\_minimumStitchLength()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Pattern\+\_\+minimum\+Stitch\+Length (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01202}{1202}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a4b03497c38b0e6a93b57e1ecc346f893}\label{embroidery_8h_a4b03497c38b0e6a93b57e1ecc346f893}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_movePolylinesToStitchList@{embPattern\_movePolylinesToStitchList}}
@@ -3436,10 +2604,6 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l01202}{1202}} of file \mb
 \begin{DoxyReturn}{Returns}
 char 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00374}{374}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a6deb066d3415e77f4771b2fc2d6ac3e8}\label{embroidery_8h_a6deb066d3415e77f4771b2fc2d6ac3e8}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_readAuto@{embPattern\_readAuto}}
 \index{embPattern\_readAuto@{embPattern\_readAuto}!embroidery.h@{embroidery.h}}
@@ -3456,19 +2620,11 @@ Definition at line \mbox{\hyperlink{formats_8c_source_l00374}{374}} of file \mbo
 \begin{DoxyReturn}{Returns}
 char 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00836}{836}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a461849dcd54ea958ac45303abf8dde13}\label{embroidery_8h_a461849dcd54ea958ac45303abf8dde13}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_realStitches@{embPattern\_realStitches}}
 \index{embPattern\_realStitches@{embPattern\_realStitches}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_realStitches()}{embPattern\_realStitches()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int emb\+Pattern\+\_\+real\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01266}{1266}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a4a1b44a1dda28aec2cdab69cbdd226fb}\label{embroidery_8h_a4a1b44a1dda28aec2cdab69cbdd226fb}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_render@{embPattern\_render}}
@@ -3481,10 +2637,6 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l01266}{1266}} of file \mb
 \index{embPattern\_scale@{embPattern\_scale}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_scale()}{embPattern\_scale()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void emb\+Pattern\+\_\+scale (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{scale }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l00356}{356}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a76cca8e66e7c5efcf965f5c708fc7b8b}\label{embroidery_8h_a76cca8e66e7c5efcf965f5c708fc7b8b}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_simulate@{embPattern\_simulate}}
@@ -3506,19 +2658,11 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l00356}{356}} of file \mbo
 \begin{DoxyReturn}{Returns}
 float 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01182}{1182}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a1068135a787f788bf477613c62187769}\label{embroidery_8h_a1068135a787f788bf477613c62187769}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_trimStitches@{embPattern\_trimStitches}}
 \index{embPattern\_trimStitches@{embPattern\_trimStitches}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embPattern\_trimStitches()}{embPattern\_trimStitches()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int emb\+Pattern\+\_\+trim\+Stitches (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{pattern_8c_source_l01293}{1293}} of file \mbox{\hyperlink{pattern_8c_source}{pattern.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a860e4cca0f3e88a3341c77160047fb61}\label{embroidery_8h_a860e4cca0f3e88a3341c77160047fb61}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_write@{embPattern\_write}}
@@ -3538,10 +2682,6 @@ Definition at line \mbox{\hyperlink{pattern_8c_source_l01293}{1293}} of file \mb
 \begin{DoxyReturn}{Returns}
 char 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00603}{603}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a533aaf5c2f1775990d297435354288f1}\label{embroidery_8h_a533aaf5c2f1775990d297435354288f1}} 
 \index{embroidery.h@{embroidery.h}!embPattern\_writeAuto@{embPattern\_writeAuto}}
 \index{embPattern\_writeAuto@{embPattern\_writeAuto}!embroidery.h@{embroidery.h}}
@@ -3558,29 +2698,17 @@ Definition at line \mbox{\hyperlink{formats_8c_source_l00603}{603}} of file \mbo
 \begin{DoxyReturn}{Returns}
 char 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00855}{855}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a44f8e958006d6b2042f43204b24d9395}\label{embroidery_8h_a44f8e958006d6b2042f43204b24d9395}} 
 \index{embroidery.h@{embroidery.h}!embRect\_area@{embRect\_area}}
 \index{embRect\_area@{embRect\_area}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embRect\_area()}{embRect\_area()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Rect\+\_\+area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}}}]{rect }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{rect_8c_source_l00029}{29}} of file \mbox{\hyperlink{rect_8c_source}{rect.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a19cce6ce8cab6eb9f3808efb33e27a8c}\label{embroidery_8h_a19cce6ce8cab6eb9f3808efb33e27a8c}} 
 \index{embroidery.h@{embroidery.h}!embRect\_init@{embRect\_init}}
 \index{embRect\_init@{embRect\_init}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embRect\_init()}{embRect\_init()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_ac2f33b151fc40a0da3b14379aa0ec653}{Emb\+Rect}} emb\+Rect\+\_\+init (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{rect_8c_source_l00018}{18}} of file \mbox{\hyperlink{rect_8c_source}{rect.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_aac78be5a14c3044d704e8f39dd160fa9}\label{embroidery_8h_aac78be5a14c3044d704e8f39dd160fa9}} 
 \index{embroidery.h@{embroidery.h}!embSatinOutline\_generateSatinOutline@{embSatinOutline\_generateSatinOutline}}
@@ -3597,10 +2725,6 @@ Definition at line \mbox{\hyperlink{rect_8c_source_l00018}{18}} of file \mbox{\h
 {\em result} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00681}{681}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}\label{embroidery_8h_a9e843bec24828324a88b8a0ad699a07a}} 
 \index{embroidery.h@{embroidery.h}!embSatinOutline\_renderStitches@{embSatinOutline\_renderStitches}}
 \index{embSatinOutline\_renderStitches@{embSatinOutline\_renderStitches}!embroidery.h@{embroidery.h}}
@@ -3617,10 +2741,6 @@ Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l
 \begin{DoxyReturn}{Returns}
 Emb\+Array$\ast$ 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00776}{776}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a58c3e07fc4e42ab234f8915ae132d829}\label{embroidery_8h_a58c3e07fc4e42ab234f8915ae132d829}} 
 \index{embroidery.h@{embroidery.h}!embThread\_findNearestColor@{embThread\_findNearestColor}}
 \index{embThread\_findNearestColor@{embThread\_findNearestColor}!embroidery.h@{embroidery.h}}
@@ -3641,10 +2761,6 @@ Returns the closest color to the required color based on a list of available thr
 \begin{DoxyReturn}{Returns}
 closest\+Index The entry in the Thread\+List that matches. 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00910}{910}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_afa800b5fae861c97f7921b41dc96c755}\label{embroidery_8h_afa800b5fae861c97f7921b41dc96c755}} 
 \index{embroidery.h@{embroidery.h}!embThread\_findNearestThread@{embThread\_findNearestThread}}
 \index{embThread\_findNearestThread@{embThread\_findNearestThread}!embroidery.h@{embroidery.h}}
@@ -3663,10 +2779,6 @@ Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l
 \begin{DoxyReturn}{Returns}
 int 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00934}{934}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a76fab67622f40989635482b9a1b1dfc2}\label{embroidery_8h_a76fab67622f40989635482b9a1b1dfc2}} 
 \index{embroidery.h@{embroidery.h}!embThread\_getRandom@{embThread\_getRandom}}
 \index{embThread\_getRandom@{embThread\_getRandom}!embroidery.h@{embroidery.h}}
@@ -3678,10 +2790,6 @@ Returns a random thread color, useful in filling in cases where the actual color
 \begin{DoxyReturn}{Returns}
 c The resulting color. 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00957}{957}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aab99160f0470d40b5f7bf4bbe5017fae}\label{embroidery_8h_aab99160f0470d40b5f7bf4bbe5017fae}} 
 \index{embroidery.h@{embroidery.h}!embTime\_initNow@{embTime\_initNow}}
 \index{embTime\_initNow@{embTime\_initNow}!embroidery.h@{embroidery.h}}
@@ -3693,10 +2801,6 @@ Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l
 {\em t} & \\
 \hline
 \end{DoxyParams}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01136}{1136}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_af1dbef098d0111b2f93e9aee1bbdf79d}\label{embroidery_8h_af1dbef098d0111b2f93e9aee1bbdf79d}} 
 \index{embroidery.h@{embroidery.h}!embTime\_time@{embTime\_time}}
 \index{embTime\_time@{embTime\_time}!embroidery.h@{embroidery.h}}
@@ -3711,10 +2815,6 @@ Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l
 \begin{DoxyReturn}{Returns}
 Emb\+Time 
 \end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l01162}{1162}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}\label{embroidery_8h_a6efd27ecee68d6b66d1abae0d90925a7}} 
 \index{embroidery.h@{embroidery.h}!embVector\_add@{embVector\_add}}
 \index{embVector\_add@{embVector\_add}!embroidery.h@{embroidery.h}}
@@ -3728,21 +2828,13 @@ Equivalent to\+:
 \[
       \mathbf{c} = \mathbf{a} + \mathbf{b}
                  = \begin{pmatrix} a_{x} + b_{x} \\ a_{y}+b_{y} \end{pmatrix}
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00067}{67}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a04639683e8ca6259a875aea58c397a17}\label{embroidery_8h_a04639683e8ca6259a875aea58c397a17}} 
+\] \mbox{\Hypertarget{embroidery_8h_a04639683e8ca6259a875aea58c397a17}\label{embroidery_8h_a04639683e8ca6259a875aea58c397a17}} 
 \index{embroidery.h@{embroidery.h}!embVector\_angle@{embVector\_angle}}
 \index{embVector\_angle@{embVector\_angle}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_angle()}{embVector\_angle()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Vector\+\_\+angle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{v }\end{DoxyParamCaption})}
 
-The angle, measured anti-\/clockwise from the x-\/axis, of a vector v. 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00211}{211}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a9bd2260f41b3ba7bf814b639010d6006}\label{embroidery_8h_a9bd2260f41b3ba7bf814b639010d6006}} 
+The angle, measured anti-\/clockwise from the x-\/axis, of a vector v. \mbox{\Hypertarget{embroidery_8h_a9bd2260f41b3ba7bf814b639010d6006}\label{embroidery_8h_a9bd2260f41b3ba7bf814b639010d6006}} 
 \index{embroidery.h@{embroidery.h}!embVector\_average@{embVector\_average}}
 \index{embVector\_average@{embVector\_average}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_average()}{embVector\_average()}}
@@ -3755,11 +2847,7 @@ Equivalent to\+:
 \[
       \mathbf{c} = \frac{\mathbf{a} + \mathbf{b}}{2}
                  = \begin{pmatrix} \frac{a_{x} + b_{x}}{2} \\ \frac{a_{y}+b_{y}}{2} \end{pmatrix}
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00086}{86}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}\label{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}} 
+\] \mbox{\Hypertarget{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}\label{embroidery_8h_a07e04b93bf1b220b0287b3e8e7de7c0c}} 
 \index{embroidery.h@{embroidery.h}!embVector\_cross@{embVector\_cross}}
 \index{embVector\_cross@{embVector\_cross}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_cross()}{embVector\_cross()}}
@@ -3775,11 +2863,7 @@ Technically, this is the magnitude of the cross product when the embroidery is p
       |c| = \left| \begin{pmatrix} a_x \\ a_y \\ 0 \end{pmatrix} \times \begin{pmatrix} b_x \\ b_y \\ 0 \end{pmatrix}\right|
           = \left| \begin{pmatrix} 0 \\ 0 \\ a_x b_y - a_y b_x \end{pmatrix} \right|
           = a_x b_y - a_y b_x
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00143}{143}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}\label{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}} 
+\] \mbox{\Hypertarget{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}\label{embroidery_8h_ae6eb6571cc109a253dc4f7d825e56694}} 
 \index{embroidery.h@{embroidery.h}!embVector\_distance@{embVector\_distance}}
 \index{embVector\_distance@{embVector\_distance}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_distance()}{embVector\_distance()}}
@@ -3790,11 +2874,7 @@ The distance between {\itshape a} and {\itshape b} returned as a real value.
 \[
      d = \left|\mathbf{a}-\mathbf{b}\right|
        = \sqrt{(a_x-b_x)^{2} + (a_y-b_y)^{2}}
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00241}{241}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a30cd27cebdce50d05099d257afc91381}\label{embroidery_8h_a30cd27cebdce50d05099d257afc91381}} 
+\] \mbox{\Hypertarget{embroidery_8h_a30cd27cebdce50d05099d257afc91381}\label{embroidery_8h_a30cd27cebdce50d05099d257afc91381}} 
 \index{embroidery.h@{embroidery.h}!embVector\_dot@{embVector\_dot}}
 \index{embVector\_dot@{embVector\_dot}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_dot()}{embVector\_dot()}}
@@ -3807,11 +2887,7 @@ Equivalent to\+:
 \[
       c = \mathbf{a} \cdot \mathbf{b}
         = a_x b_x + a_y b_y
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00124}{124}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_ac0161afdbecb1d33336072331183e441}\label{embroidery_8h_ac0161afdbecb1d33336072331183e441}} 
+\] \mbox{\Hypertarget{embroidery_8h_ac0161afdbecb1d33336072331183e441}\label{embroidery_8h_ac0161afdbecb1d33336072331183e441}} 
 \index{embroidery.h@{embroidery.h}!embVector\_length@{embVector\_length}}
 \index{embVector\_length@{embVector\_length}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_length()}{embVector\_length()}}
@@ -3823,11 +2899,7 @@ Equivalent to\+:
 
 \[
       |v| = \sqrt{v_{x}^{2} + v_{y}^{2}}
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00178}{178}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}\label{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}} 
+\] \mbox{\Hypertarget{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}\label{embroidery_8h_a710ebab38d10db6e2582707c1d60036b}} 
 \index{embroidery.h@{embroidery.h}!embVector\_multiply@{embVector\_multiply}}
 \index{embVector\_multiply@{embVector\_multiply}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_multiply()}{embVector\_multiply()}}
@@ -3836,11 +2908,7 @@ Definition at line \mbox{\hyperlink{vector_8c_source_l00178}{178}} of file \mbox
 The scalar multiple {\itshape magnitude} of a vector {\itshape vector}. Returned as {\itshape result}.
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000432}{Todo}}]make result return argument. \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00046}{46}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
+\item[\mbox{\hyperlink{todo__todo000260}{Todo}}]make result return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}\label{embroidery_8h_a34e670486dcdd3b97c65c81ba8eea067}} 
 \index{embroidery.h@{embroidery.h}!embVector\_normalize@{embVector\_normalize}}
 \index{embVector\_normalize@{embVector\_normalize}!embroidery.h@{embroidery.h}}
@@ -3856,32 +2924,20 @@ Equivalent to\+:
 \]
 
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000431}{Todo}}]make result return argument. \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00027}{27}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
+\item[\mbox{\hyperlink{todo__todo000259}{Todo}}]make result return argument. \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_af790aef236de4e53badb9a9c8ce5664a}\label{embroidery_8h_af790aef236de4e53badb9a9c8ce5664a}} 
 \index{embroidery.h@{embroidery.h}!embVector\_relativeX@{embVector\_relativeX}}
 \index{embVector\_relativeX@{embVector\_relativeX}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_relativeX()}{embVector\_relativeX()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Vector\+\_\+relativeX (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a1,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a2,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a3 }\end{DoxyParamCaption})}
 
-The x-\/component of the vector 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00187}{187}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_af7f3d1d902464690990e2460088b03cb}\label{embroidery_8h_af7f3d1d902464690990e2460088b03cb}} 
+The x-\/component of the vector \mbox{\Hypertarget{embroidery_8h_af7f3d1d902464690990e2460088b03cb}\label{embroidery_8h_af7f3d1d902464690990e2460088b03cb}} 
 \index{embroidery.h@{embroidery.h}!embVector\_relativeY@{embVector\_relativeY}}
 \index{embVector\_relativeY@{embVector\_relativeY}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_relativeY()}{embVector\_relativeY()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Vector\+\_\+relativeY (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a1,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a2,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{a3 }\end{DoxyParamCaption})}
 
-The y-\/component of the vector 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00199}{199}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}\label{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}} 
+The y-\/component of the vector \mbox{\Hypertarget{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}\label{embroidery_8h_a38503615e02e56b3004cc02664e1e62d}} 
 \index{embroidery.h@{embroidery.h}!embVector\_subtract@{embVector\_subtract}}
 \index{embVector\_subtract@{embVector\_subtract}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_subtract()}{embVector\_subtract()}}
@@ -3894,11 +2950,7 @@ Equivalent to\+:
 \[
       \mathbf{c} = \mathbf{a} - \mathbf{b}
                  = \begin{pmatrix} a_{x} - b_{x} \\ a_{y}-b_{y} \end{pmatrix}
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00105}{105}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}\label{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}} 
+\] \mbox{\Hypertarget{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}\label{embroidery_8h_a25608cfbca820b4a4bdd53083ec87450}} 
 \index{embroidery.h@{embroidery.h}!embVector\_transpose\_product@{embVector\_transpose\_product}}
 \index{embVector\_transpose\_product@{embVector\_transpose\_product}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_transpose\_product()}{embVector\_transpose\_product()}}
@@ -3906,11 +2958,7 @@ Definition at line \mbox{\hyperlink{vector_8c_source_l00105}{105}} of file \mbox
 
 Since we aren\textquotesingle{}t using full vector algebra here, all vectors are \char`\"{}vertical\char`\"{}. so this is like the product v1$^\wedge$\{T\} I\+\_\+\{2\} v2 for our vectors {\itshape v1} and \textbackslash{}v2 so a \char`\"{}component-\/wise product\char`\"{}. The result is stored at the pointer {\itshape result}.
 
-That is (1 0) (a) = (xa) (x y)(0 1) (b) (yb) 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00158}{158}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_ab11f31b20d8eae4ee3a01355da73a9da}\label{embroidery_8h_ab11f31b20d8eae4ee3a01355da73a9da}} 
+That is (1 0) (a) = (xa) (x y)(0 1) (b) (yb) \mbox{\Hypertarget{embroidery_8h_ab11f31b20d8eae4ee3a01355da73a9da}\label{embroidery_8h_ab11f31b20d8eae4ee3a01355da73a9da}} 
 \index{embroidery.h@{embroidery.h}!embVector\_unit@{embVector\_unit}}
 \index{embVector\_unit@{embVector\_unit}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embVector\_unit()}{embVector\_unit()}}
@@ -3920,11 +2968,7 @@ The unit vector in the direction {\itshape angle}.
 
 \[
       \mathbf{a}_{\alpha} = \begin{pmatrix} \cos(\alpha) \\ \sin(\alpha) \end{pmatrix}
-\] 
-
-Definition at line \mbox{\hyperlink{vector_8c_source_l00224}{224}} of file \mbox{\hyperlink{vector_8c_source}{vector.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}\label{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}} 
+\] \mbox{\Hypertarget{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}\label{embroidery_8h_aa72a9eb0e258efbb67453e5f79af62c8}} 
 \index{embroidery.h@{embroidery.h}!full\_test\_matrix@{full\_test\_matrix}}
 \index{full\_test\_matrix@{full\_test\_matrix}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{full\_test\_matrix()}{full\_test\_matrix()}}
@@ -3936,19 +2980,11 @@ Definition at line \mbox{\hyperlink{vector_8c_source_l00224}{224}} of file \mbox
 \doxyparagraph{\texorpdfstring{getArcCenter()}{getArcCenter()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} void get\+Arc\+Center (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}}}]{arc,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{arc\+Center }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{arc_8c_source_l00051}{51}} of file \mbox{\hyperlink{arc_8c_source}{arc.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_abccfe683f2d3b1bafb626c3987e3c9ac}\label{embroidery_8h_abccfe683f2d3b1bafb626c3987e3c9ac}} 
 \index{embroidery.h@{embroidery.h}!getArcDataFromBulge@{getArcDataFromBulge}}
 \index{getArcDataFromBulge@{getArcDataFromBulge}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{getArcDataFromBulge()}{getArcDataFromBulge()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} char get\+Arc\+Data\+From\+Bulge (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{bulge,  }\item[{\mbox{\hyperlink{embroidery_8h_a09945e6e919629c5787e61582c712ba1}{Emb\+Arc}} $\ast$}]{arc,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{arc\+CenterX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{arc\+CenterY,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{radius,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{diameter,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{chord,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{chord\+MidX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{chord\+MidY,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{sagitta,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{apothem,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} $\ast$}]{inc\+Angle\+In\+Degrees,  }\item[{char $\ast$}]{clockwise }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{arc_8c_source_l00083}{83}} of file \mbox{\hyperlink{arc_8c_source}{arc.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_ac005ed8ac46c8a27b281039c439e0576}\label{embroidery_8h_ac005ed8ac46c8a27b281039c439e0576}} 
 \index{embroidery.h@{embroidery.h}!getCircleCircleIntersections@{getCircleCircleIntersections}}
@@ -3956,19 +2992,11 @@ Definition at line \mbox{\hyperlink{arc_8c_source_l00083}{83}} of file \mbox{\hy
 \doxyparagraph{\texorpdfstring{getCircleCircleIntersections()}{getCircleCircleIntersections()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int get\+Circle\+Circle\+Intersections (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}}}]{c0,  }\item[{\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}}}]{c1,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{v0,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{v1 }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{circle_8c_source_l00052}{52}} of file \mbox{\hyperlink{circle_8c_source}{circle.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a7e454215c86e5f9190247ad029d79c5c}\label{embroidery_8h_a7e454215c86e5f9190247ad029d79c5c}} 
 \index{embroidery.h@{embroidery.h}!getCircleTangentPoints@{getCircleTangentPoints}}
 \index{getCircleTangentPoints@{getCircleTangentPoints}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{getCircleTangentPoints()}{getCircleTangentPoints()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int get\+Circle\+Tangent\+Points (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a87fc13ccd4dbaa7de7c85efde17bba0e}{Emb\+Circle}}}]{c,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{v0,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} $\ast$}]{v1 }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{circle_8c_source_l00140}{140}} of file \mbox{\hyperlink{circle_8c_source}{circle.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_abc0ebbb6da27faacd87e8abaf57733c8}\label{embroidery_8h_abc0ebbb6da27faacd87e8abaf57733c8}} 
 \index{embroidery.h@{embroidery.h}!hilbert\_curve@{hilbert\_curve}}
@@ -3988,11 +3016,7 @@ int
 \end{DoxyReturn}
 \href{https://en.wikipedia.org/wiki/Hilbert_curve}{\texttt{ https\+://en.\+wikipedia.\+org/wiki/\+Hilbert\+\_\+curve}}
 
-Using the Lindenmayer System, so we can save work across different functions. 
-
-Definition at line \mbox{\hyperlink{fill_8c_source_l00340}{340}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a37ecaa3f785f905f33e2f22a3e925907}\label{embroidery_8h_a37ecaa3f785f905f33e2f22a3e925907}} 
+Using the Lindenmayer System, so we can save work across different functions. \mbox{\Hypertarget{embroidery_8h_a37ecaa3f785f905f33e2f22a3e925907}\label{embroidery_8h_a37ecaa3f785f905f33e2f22a3e925907}} 
 \index{embroidery.h@{embroidery.h}!lindenmayer\_system@{lindenmayer\_system}}
 \index{lindenmayer\_system@{lindenmayer\_system}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{lindenmayer\_system()}{lindenmayer\_system()}}
@@ -4012,19 +3036,11 @@ Definition at line \mbox{\hyperlink{fill_8c_source_l00340}{340}} of file \mbox{\
 \begin{DoxyReturn}{Returns}
 int
 \end{DoxyReturn}
-This is a slow generation algorithm. 
-
-Definition at line \mbox{\hyperlink{fill_8c_source_l00037}{37}} of file \mbox{\hyperlink{fill_8c_source}{fill.\+c}}.
-
-\mbox{\Hypertarget{embroidery_8h_a0e589a7b4fd30698b359cd3e597fb0ec}\label{embroidery_8h_a0e589a7b4fd30698b359cd3e597fb0ec}} 
+This is a slow generation algorithm. \mbox{\Hypertarget{embroidery_8h_a0e589a7b4fd30698b359cd3e597fb0ec}\label{embroidery_8h_a0e589a7b4fd30698b359cd3e597fb0ec}} 
 \index{embroidery.h@{embroidery.h}!radians@{radians}}
 \index{radians@{radians}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{radians()}{radians()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radians (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{degree }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{functions_8c_source_l00028}{28}} of file \mbox{\hyperlink{functions_8c_source}{functions.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a3a3f2c52fdf22db3acaaabdff68db2ce}\label{embroidery_8h_a3a3f2c52fdf22db3acaaabdff68db2ce}} 
 \index{embroidery.h@{embroidery.h}!report@{report}}
@@ -4044,29 +3060,17 @@ Definition at line \mbox{\hyperlink{functions_8c_source_l00028}{28}} of file \mb
 \doxyparagraph{\texorpdfstring{threadColor()}{threadColor()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int thread\+Color (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name,  }\item[{int}]{brand }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l04012}{4012}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a2be9bcb326d8bb595079f9129df9e35e}\label{embroidery_8h_a2be9bcb326d8bb595079f9129df9e35e}} 
 \index{embroidery.h@{embroidery.h}!threadColorName@{threadColorName}}
 \index{threadColorName@{threadColorName}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{threadColorName()}{threadColorName()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} const char $\ast$ thread\+Color\+Name (\begin{DoxyParamCaption}\item[{unsigned int}]{color,  }\item[{int}]{brand }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l04035}{4035}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae6976ffd0a29cdf4247e8da3aefc8ef0}\label{embroidery_8h_ae6976ffd0a29cdf4247e8da3aefc8ef0}} 
 \index{embroidery.h@{embroidery.h}!threadColorNum@{threadColorNum}}
 \index{threadColorNum@{threadColorNum}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{threadColorNum()}{threadColorNum()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_adc22fdb8ac4461c2c98ca89ae0c27299}{EMB\+\_\+\+PUBLIC}} int thread\+Color\+Num (\begin{DoxyParamCaption}\item[{unsigned int}]{color,  }\item[{int}]{brand }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l04023}{4023}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
 
 
 
@@ -4077,19 +3081,11 @@ Definition at line \mbox{\hyperlink{thread-color_8c_source_l04023}{4023}} of fil
 \doxyparagraph{\texorpdfstring{\_dxfColorTable}{\_dxfColorTable}}
 {\footnotesize\ttfamily const unsigned char \+\_\+dxf\+Color\+Table\mbox{[}$\,$\mbox{]}\mbox{[}3\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00014}{14}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_ae6a1199d8c3aad2464c3296ab902b4a9}\label{embroidery_8h_ae6a1199d8c3aad2464c3296ab902b4a9}} 
 \index{embroidery.h@{embroidery.h}!black\_thread@{black\_thread}}
 \index{black\_thread@{black\_thread}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{black\_thread}{black\_thread}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} black\+\_\+thread\hspace{0.3cm}{\ttfamily [extern]}}
-
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00056}{56}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a1a622bb87a39f0338527347ee6ba1402}\label{embroidery_8h_a1a622bb87a39f0338527347ee6ba1402}} 
 \index{embroidery.h@{embroidery.h}!emb\_error@{emb\_error}}
@@ -4101,10 +3097,6 @@ Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l
 
 Error code storage for optional control flow blocking. 
 
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00058}{58}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}\label{embroidery_8h_a3e3a5b8efffea93c4268a39ee5690098}} 
 \index{embroidery.h@{embroidery.h}!emb\_verbose@{emb\_verbose}}
 \index{emb\_verbose@{emb\_verbose}!embroidery.h@{embroidery.h}}
@@ -4115,19 +3107,11 @@ Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l
 
 Verbosity level. 
 
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00057}{57}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}\label{embroidery_8h_a052bcc45c7207b189a9fe6925ec76c99}} 
 \index{embroidery.h@{embroidery.h}!embConstantPi@{embConstantPi}}
 \index{embConstantPi@{embConstantPi}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{embConstantPi}{embConstantPi}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Constant\+Pi\hspace{0.3cm}{\ttfamily [extern]}}
-
-
-
-Definition at line \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source_l00060}{60}} of file \mbox{\hyperlink{extern_2libembroidery_2src_2main_8c_source}{main.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a8cb11404ce46501561f956d33f8dcf95}\label{embroidery_8h_a8cb11404ce46501561f956d33f8dcf95}} 
 \index{embroidery.h@{embroidery.h}!formatTable@{formatTable}}
@@ -4140,20 +3124,12 @@ This file is part of libembroidery.
 Copyright 2018-\/2022 The Embroidermodder Team Licensed under the terms of the zlib license.
 
 This file contains all the read and write functions for the library. \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000411}{Todo}}]This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$ \end{DoxyRefDesc}
-
-
-Definition at line \mbox{\hyperlink{formats_8c_source_l00025}{25}} of file \mbox{\hyperlink{formats_8c_source}{formats.\+c}}.
-
+\item[\mbox{\hyperlink{todo__todo000239}{Todo}}]This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT\+\_\+\+STCHANDOBJ). $\ast$ \end{DoxyRefDesc}
 \mbox{\Hypertarget{embroidery_8h_a79aeead6ed60b9a00526759a7b0a65d3}\label{embroidery_8h_a79aeead6ed60b9a00526759a7b0a65d3}} 
 \index{embroidery.h@{embroidery.h}!husThreads@{husThreads}}
 \index{husThreads@{husThreads}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{husThreads}{husThreads}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} hus\+Threads\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
-
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00015}{15}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a0f3d1df26f83f13f6ee95eeaf44c0cec}\label{embroidery_8h_a0f3d1df26f83f13f6ee95eeaf44c0cec}} 
 \index{embroidery.h@{embroidery.h}!jefThreads@{jefThreads}}
@@ -4161,19 +3137,11 @@ Definition at line \mbox{\hyperlink{thread-color_8c_source_l00015}{15}} of file 
 \doxyparagraph{\texorpdfstring{jefThreads}{jefThreads}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} jef\+Threads\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00016}{16}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_a16da974838d509e7910f805288b2b8bc}\label{embroidery_8h_a16da974838d509e7910f805288b2b8bc}} 
 \index{embroidery.h@{embroidery.h}!pcmThreads@{pcmThreads}}
 \index{pcmThreads@{pcmThreads}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{pcmThreads}{pcmThreads}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} pcm\+Threads\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
-
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00018}{18}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_a0ddaecc4fc077a3db30ea5ffd20ac823}\label{embroidery_8h_a0ddaecc4fc077a3db30ea5ffd20ac823}} 
 \index{embroidery.h@{embroidery.h}!pecThreadCount@{pecThreadCount}}
@@ -4181,19 +3149,11 @@ Definition at line \mbox{\hyperlink{thread-color_8c_source_l00018}{18}} of file 
 \doxyparagraph{\texorpdfstring{pecThreadCount}{pecThreadCount}}
 {\footnotesize\ttfamily const int pec\+Thread\+Count\hspace{0.3cm}{\ttfamily [extern]}}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00021}{21}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_acd4ee62733d77dd5fb6d73cd5dab495d}\label{embroidery_8h_acd4ee62733d77dd5fb6d73cd5dab495d}} 
 \index{embroidery.h@{embroidery.h}!pecThreads@{pecThreads}}
 \index{pecThreads@{pecThreads}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{pecThreads}{pecThreads}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} pec\+Threads\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
-
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00019}{19}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
 
 \mbox{\Hypertarget{embroidery_8h_ac6cc44cb0eab5e1c3e63c4d028a0dea2}\label{embroidery_8h_ac6cc44cb0eab5e1c3e63c4d028a0dea2}} 
 \index{embroidery.h@{embroidery.h}!shvThreadCount@{shvThreadCount}}
@@ -4201,27 +3161,15 @@ Definition at line \mbox{\hyperlink{thread-color_8c_source_l00019}{19}} of file 
 \doxyparagraph{\texorpdfstring{shvThreadCount}{shvThreadCount}}
 {\footnotesize\ttfamily const int shv\+Thread\+Count\hspace{0.3cm}{\ttfamily [extern]}}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00020}{20}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_aa7da69925fff9b09d85d550966e4e633}\label{embroidery_8h_aa7da69925fff9b09d85d550966e4e633}} 
 \index{embroidery.h@{embroidery.h}!shvThreads@{shvThreads}}
 \index{shvThreads@{shvThreads}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{shvThreads}{shvThreads}}
 {\footnotesize\ttfamily const \mbox{\hyperlink{embroidery_8h_ab3faffce89b1a5043f8b4e3a001a70bd}{Emb\+Thread}} shv\+Threads\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
 
-
-
-Definition at line \mbox{\hyperlink{thread-color_8c_source_l00017}{17}} of file \mbox{\hyperlink{thread-color_8c_source}{thread-\/color.\+c}}.
-
 \mbox{\Hypertarget{embroidery_8h_af343b92924aeba034403b37c3fcb8142}\label{embroidery_8h_af343b92924aeba034403b37c3fcb8142}} 
 \index{embroidery.h@{embroidery.h}!vipDecodingTable@{vipDecodingTable}}
 \index{vipDecodingTable@{vipDecodingTable}!embroidery.h@{embroidery.h}}
 \doxyparagraph{\texorpdfstring{vipDecodingTable}{vipDecodingTable}}
 {\footnotesize\ttfamily const unsigned char vip\+Decoding\+Table\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
-
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00014}{14}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 

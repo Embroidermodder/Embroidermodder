@@ -1,0 +1,234 @@
+\hypertarget{object-data_8h_source}{}\doxysubsection{object-\/data.h}
+\label{object-data_8h_source}\index{embroidermodder2/object-\/data.h@{embroidermodder2/object-\/data.h}}
+\mbox{\hyperlink{object-data_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ OBJECT\_DATA\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ OBJECT\_DATA\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{comment}{//Custom\ Data\ used\ in\ QGraphicsItems}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (\ \ \ \ \ int,\ const\ QVariant)}}
+\DoxyCodeLine{00007\ \textcolor{comment}{//I.E.\ object.setData(OBJ\_TYPE,\ OBJ\_TYPE\_LINE);}}
+\DoxyCodeLine{00008\ \textcolor{comment}{//I.E.\ object.setData(OBJ\_LAYER,\ "{}OUTLINE"{});}}
+\DoxyCodeLine{00009\ \textcolor{comment}{//I.E.\ object.setData(OBJ\_COLOR,\ 123);}}
+\DoxyCodeLine{00010\ \textcolor{comment}{//I.E.\ object.setData(OBJ\_LTYPE,\ OBJ\_LTYPE\_CONT);}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{//Keys}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0}{OBJ\_KEYS}}\ \{}
+\DoxyCodeLine{00014\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f}{OBJ\_TYPE}}\ \ \ =\ 0,\ \textcolor{comment}{//value\ type\ -\/\ int:\ See\ OBJ\_TYPE\_VALUES}}
+\DoxyCodeLine{00015\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b}{OBJ\_NAME}}\ \ \ =\ 1,\ \textcolor{comment}{//value\ type\ -\/\ str:\ See\ OBJ\_NAME\_VALUES}}
+\DoxyCodeLine{00016\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0af0fe7dca80b5d4384a0576b3edaa5fd5}{OBJ\_LAYER}}\ \ =\ 2,\ \textcolor{comment}{//value\ type\ -\/\ str:\ "{}USER"{},\ "{}DEFINED"{},\ "{}STRINGS"{},\ etc...}}
+\DoxyCodeLine{00017\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0acae9d8a010607446e0c13af5bc6737c0}{OBJ\_COLOR}}\ \ =\ 3,\ \textcolor{comment}{//value\ type\ -\/\ int:\ 0-\/255\ //TODO:\ Use\ color\ chart\ in\ formats/format-\/dxf.h\ for\ this}}
+\DoxyCodeLine{00018\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9}{OBJ\_LTYPE}}\ \ =\ 4,\ \textcolor{comment}{//value\ type\ -\/\ int:\ See\ OBJ\_LTYPE\_VALUES}}
+\DoxyCodeLine{00019\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a23e240f9a493316b344299cecd26dc91}{OBJ\_LWT}}\ \ \ \ =\ 5,\ \textcolor{comment}{//value\ type\ -\/\ int:\ 0-\/27}}
+\DoxyCodeLine{00020\ \mbox{\hyperlink{object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a512b85e93266086439b59a6aa83a0f2b}{OBJ\_RUBBER}}\ =\ 6\ \ \textcolor{comment}{//value\ type\ -\/\ int:\ See\ OBJ\_RUBBER\_VALUES}}
+\DoxyCodeLine{00021\ \};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//Values}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8}{OBJ\_TYPE\_VALUES}}\ \{}
+\DoxyCodeLine{00025\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a8b3aa67e9e05192db8ee6924255ff480}{OBJ\_TYPE\_NULL}}\ \ \ \ \ \ \ \ \ =\ \ \ \ \ \ 0,\ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00026\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a188856aed0c8c16c681ef5a5ac15069e}{OBJ\_TYPE\_BASE}}\ \ \ \ \ \ \ \ \ =\ 100000,\ \textcolor{comment}{//NOTE:\ Values\ >=\ 65536\ ensure\ compatibility\ with\ qgraphicsitem\_cast()}}
+\DoxyCodeLine{00027\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8aa40eab4fef800410d95ed12f14141cb4}{OBJ\_TYPE\_ARC}}\ \ \ \ \ \ \ \ \ \ =\ 100001,}
+\DoxyCodeLine{00028\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a231f45d3a5f447aaede7f57fb8e4d42c}{OBJ\_TYPE\_BLOCK}}\ \ \ \ \ \ \ \ =\ 100002,}
+\DoxyCodeLine{00029\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a96da89e4349feb1e863e3e8307b83ef0}{OBJ\_TYPE\_CIRCLE}}\ \ \ \ \ \ \ =\ 100003,}
+\DoxyCodeLine{00030\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8affc5f6a2364c4697535d7eb022ef4994}{OBJ\_TYPE\_DIMALIGNED}}\ \ \ =\ 100004,}
+\DoxyCodeLine{00031\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ac181149a764d7fe5d32f1165d3aab748}{OBJ\_TYPE\_DIMANGULAR}}\ \ \ =\ 100005,}
+\DoxyCodeLine{00032\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ac2c75f6bc80915b15dcb779d2cf4b9fb}{OBJ\_TYPE\_DIMARCLENGTH}}\ =\ 100006,}
+\DoxyCodeLine{00033\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8adcb9f77edd8ed2469bea8e933a5c4044}{OBJ\_TYPE\_DIMDIAMETER}}\ \ =\ 100007,}
+\DoxyCodeLine{00034\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a492ad57fc19fb538d509618047a733b3}{OBJ\_TYPE\_DIMLEADER}}\ \ \ \ =\ 100008,}
+\DoxyCodeLine{00035\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a47457ea7083fe4917f15799b1463f9ab}{OBJ\_TYPE\_DIMLINEAR}}\ \ \ \ =\ 100009,}
+\DoxyCodeLine{00036\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8aa2397934c33673cccd20fbbceea9f7bf}{OBJ\_TYPE\_DIMORDINATE}}\ \ =\ 100010,}
+\DoxyCodeLine{00037\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ac171144c28f900148160107820d04269}{OBJ\_TYPE\_DIMRADIUS}}\ \ \ \ =\ 100011,}
+\DoxyCodeLine{00038\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ae53090a461f697691384519aee2ee3d3}{OBJ\_TYPE\_ELLIPSE}}\ \ \ \ \ \ =\ 100012,}
+\DoxyCodeLine{00039\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a145810034179a4c0663941ccf7bb9738}{OBJ\_TYPE\_ELLIPSEARC}}\ \ \ =\ 100013,}
+\DoxyCodeLine{00040\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a801cdcfeab3180a3918fc0ef11b7da53}{OBJ\_TYPE\_RUBBER}}\ \ \ \ \ \ \ =\ 100014,}
+\DoxyCodeLine{00041\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a8acd86cd0c89fce03bbae1c89a82f81d}{OBJ\_TYPE\_GRID}}\ \ \ \ \ \ \ \ \ =\ 100015,}
+\DoxyCodeLine{00042\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8afea3561fe79f3034d77a42a6b9808f99}{OBJ\_TYPE\_HATCH}}\ \ \ \ \ \ \ \ =\ 100016,}
+\DoxyCodeLine{00043\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a6a88937fa8fbf396850eb188d330091b}{OBJ\_TYPE\_IMAGE}}\ \ \ \ \ \ \ \ =\ 100017,}
+\DoxyCodeLine{00044\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8acc2b0cdfa4e3748aae93697eab6691fe}{OBJ\_TYPE\_INFINITELINE}}\ =\ 100018,}
+\DoxyCodeLine{00045\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a26ddff83534538ec9041df7b9776d0b3}{OBJ\_TYPE\_LINE}}\ \ \ \ \ \ \ \ \ =\ 100019,}
+\DoxyCodeLine{00046\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8aae26bb11b8e578b2fb2481fd30c909d3}{OBJ\_TYPE\_PATH}}\ \ \ \ \ \ \ \ \ =\ 100020,}
+\DoxyCodeLine{00047\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8aa574e3cd3ae272c98d365e0b189f8f05}{OBJ\_TYPE\_POINT}}\ \ \ \ \ \ \ \ =\ 100021,}
+\DoxyCodeLine{00048\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a99d6c13dd2c598303562d790038185f2}{OBJ\_TYPE\_POLYGON}}\ \ \ \ \ \ =\ 100022,}
+\DoxyCodeLine{00049\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ae16463492303d34eadf9e52a9513788d}{OBJ\_TYPE\_POLYLINE}}\ \ \ \ \ =\ 100023,}
+\DoxyCodeLine{00050\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ade98b11ca2ef6ee42905a0338c8aff3a}{OBJ\_TYPE\_RAY}}\ \ \ \ \ \ \ \ \ \ =\ 100024,}
+\DoxyCodeLine{00051\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ac11201dff221b4ce7a2c3998541ab187}{OBJ\_TYPE\_RECTANGLE}}\ \ \ \ =\ 100025,}
+\DoxyCodeLine{00052\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a0fc9cabc8a595f0c36ab791c986d5bb9}{OBJ\_TYPE\_SLOT}}\ \ \ \ \ \ \ \ \ =\ 100026,}
+\DoxyCodeLine{00053\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8ac30441c5f65b51b85241f9decebe15e6}{OBJ\_TYPE\_SPLINE}}\ \ \ \ \ \ \ =\ 100027,}
+\DoxyCodeLine{00054\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a22eb6d4771ef0a77bdf725c2b354d994}{OBJ\_TYPE\_TEXTMULTI}}\ \ \ \ =\ 100028,}
+\DoxyCodeLine{00055\ \mbox{\hyperlink{object-data_8h_a22d81a3797a15002a24137b9aa8e9ed8a72f23507892fd07c80925f6acf8baf05}{OBJ\_TYPE\_TEXTSINGLE}}\ \ \ =\ 100029}
+\DoxyCodeLine{00056\ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{//OBJ\_NAME\_VALUES}}
+\DoxyCodeLine{00059\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ac72e449c6967e295a05b0ce7ecf178c4}{OBJ\_NAME\_NULL}}\ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Unknown"{}};}
+\DoxyCodeLine{00060\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a45a11de76acf3c7585812d6d4603c440}{OBJ\_NAME\_BASE}}\ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Base"{}};}
+\DoxyCodeLine{00061\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a213acfa56f81af2866485f9452a721c8}{OBJ\_NAME\_ARC}}\ \ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Arc"{}};}
+\DoxyCodeLine{00062\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a346970db1c532a19ef2abc3856561690}{OBJ\_NAME\_BLOCK}}\ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Block"{}};}
+\DoxyCodeLine{00063\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_aa36fb08ad80238b8b2bb20b96582a3eb}{OBJ\_NAME\_CIRCLE}}\ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Circle"{}};}
+\DoxyCodeLine{00064\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_afdacdc53201a39f9bdaa5895cae3ca59}{OBJ\_NAME\_DIMALIGNED}}\ \ \ =\ \textcolor{stringliteral}{"{}Aligned\ Dimension"{}};}
+\DoxyCodeLine{00065\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a8c28504a41be2ce5f584a0a9cd08eefc}{OBJ\_NAME\_DIMANGULAR}}\ \ \ =\ \textcolor{stringliteral}{"{}Angular\ Dimension"{}};}
+\DoxyCodeLine{00066\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a7c83e4ff049e7417b6b85fa958b80204}{OBJ\_NAME\_DIMARCLENGTH}}\ =\ \textcolor{stringliteral}{"{}Arc\ Length\ Dimension"{}};}
+\DoxyCodeLine{00067\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_adfce175cdf54fe2dee780da9c5e18867}{OBJ\_NAME\_DIMDIAMETER}}\ \ =\ \textcolor{stringliteral}{"{}Diameter\ Dimension"{}};}
+\DoxyCodeLine{00068\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_acb90d906a6ba1fd3604aee4b9f526165}{OBJ\_NAME\_DIMLEADER}}\ \ \ \ =\ \textcolor{stringliteral}{"{}Leader\ Dimension"{}};}
+\DoxyCodeLine{00069\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ad30617078256028ae6a5420cc033005f}{OBJ\_NAME\_DIMLINEAR}}\ \ \ \ =\ \textcolor{stringliteral}{"{}Linear\ Dimension"{}};}
+\DoxyCodeLine{00070\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a58cceb0a9c6d4e216ae0dfd089a1e3da}{OBJ\_NAME\_DIMORDINATE}}\ \ =\ \textcolor{stringliteral}{"{}Ordinate\ Dimension"{}};}
+\DoxyCodeLine{00071\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ad8eed4e8c5601302cf47069546ed115c}{OBJ\_NAME\_DIMRADIUS}}\ \ \ \ =\ \textcolor{stringliteral}{"{}Radius\ Dimension"{}};}
+\DoxyCodeLine{00072\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_aff0137d1f58b174235597a2221934631}{OBJ\_NAME\_ELLIPSE}}\ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Ellipse"{}};}
+\DoxyCodeLine{00073\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a90752802f025ad34e84e3ea6cdfe1143}{OBJ\_NAME\_ELLIPSEARC}}\ \ \ =\ \textcolor{stringliteral}{"{}Elliptical\ Arc"{}};}
+\DoxyCodeLine{00074\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a7d56e46a96eaa97c2b66867f1a9aed53}{OBJ\_NAME\_RUBBER}}\ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Rubber"{}};}
+\DoxyCodeLine{00075\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a8ae6e8da7d373d80cfaec8b852b9edda}{OBJ\_NAME\_GRID}}\ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Grid"{}};}
+\DoxyCodeLine{00076\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a5e7efdedc65765e723cd8ebf8fdb338b}{OBJ\_NAME\_HATCH}}\ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Hatch"{}};}
+\DoxyCodeLine{00077\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a5547de1bdbaf847777e7f3cbb76bb5fe}{OBJ\_NAME\_IMAGE}}\ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Image"{}};}
+\DoxyCodeLine{00078\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a2b38d695960868fac6b56a9f6b82569b}{OBJ\_NAME\_INFINITELINE}}\ =\ \textcolor{stringliteral}{"{}Infinite\ Line"{}};}
+\DoxyCodeLine{00079\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_afc98727dcc92fcdb44e7e425e0688a6a}{OBJ\_NAME\_LINE}}\ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Line"{}};}
+\DoxyCodeLine{00080\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a5b33994918e5741c06842e3f19f4e0fd}{OBJ\_NAME\_PATH}}\ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Path"{}};}
+\DoxyCodeLine{00081\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ad35aef0b5aae849cd883910a5f5f2879}{OBJ\_NAME\_POINT}}\ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Point"{}};}
+\DoxyCodeLine{00082\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ae07597d24f2512507d74217a2ab89166}{OBJ\_NAME\_POLYGON}}\ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Polygon"{}};}
+\DoxyCodeLine{00083\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ac59323d9be7be67797ef48a4bbc0b168}{OBJ\_NAME\_POLYLINE}}\ \ \ \ \ =\ \textcolor{stringliteral}{"{}Polyline"{}};}
+\DoxyCodeLine{00084\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_acba516ce8c42cc3beea529b9764157a1}{OBJ\_NAME\_RAY}}\ \ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Ray"{}};}
+\DoxyCodeLine{00085\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a905c227e57243237f1ffcea467a45d17}{OBJ\_NAME\_RECTANGLE}}\ \ \ \ =\ \textcolor{stringliteral}{"{}Rectangle"{}};}
+\DoxyCodeLine{00086\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a74ed8fdbc445f4e966b2172a337f862a}{OBJ\_NAME\_SLOT}}\ \ \ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Slot"{}};}
+\DoxyCodeLine{00087\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ab566c260969b691ea1db82862d8d70e6}{OBJ\_NAME\_SPLINE}}\ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}Spline"{}};}
+\DoxyCodeLine{00088\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ab16f07a3c2a5d28570a52cf9a922dca9}{OBJ\_NAME\_TEXTMULTI}}\ \ \ \ =\ \textcolor{stringliteral}{"{}Multi\ Line\ Text"{}};}
+\DoxyCodeLine{00089\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a67b3cee09d3b1fb8f424174608c74d61}{OBJ\_NAME\_TEXTSINGLE}}\ \ \ =\ \textcolor{stringliteral}{"{}Single\ Line\ Text"{}};}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005}{OBJ\_LTYPE\_VALUES}}\ \{}
+\DoxyCodeLine{00092\ \textcolor{comment}{//CAD\ Linetypes}}
+\DoxyCodeLine{00093\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005a7ddb2b567c59071c706ec62e6a9b9417}{OBJ\_LTYPE\_CONT}}\ \ \ \ \ =\ 0,}
+\DoxyCodeLine{00094\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005adc707759e8128d1c07afa5a6f1116ae2}{OBJ\_LTYPE\_CENTER}}\ \ \ =\ 1,}
+\DoxyCodeLine{00095\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005ae1695cfabd2624651b4ae1b1ff6b7226}{OBJ\_LTYPE\_DOT}}\ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00096\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005a990362c005c8d39b6690ae15551bc5d6}{OBJ\_LTYPE\_HIDDEN}}\ \ \ =\ 3,}
+\DoxyCodeLine{00097\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005aeeacc4e38a9cbe2d9fbc4e642460d399}{OBJ\_LTYPE\_PHANTOM}}\ \ =\ 4,}
+\DoxyCodeLine{00098\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005aa22d9a2b020112cb0d2e6b1ad116d590}{OBJ\_LTYPE\_ZIGZAG}}\ \ \ =\ 5,}
+\DoxyCodeLine{00099\ \textcolor{comment}{//Embroidery\ Stitchtypes}}
+\DoxyCodeLine{00100\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005a993d70c925191202d350c3af7b2910c6}{OBJ\_LTYPE\_RUNNING}}\ \ =\ 6,\ \textcolor{comment}{//\ \_\_\_\_\_\_\_\_\_\_}}
+\DoxyCodeLine{00101\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005a1707c62d3c74430029bd0eb84e00c63b}{OBJ\_LTYPE\_SATIN}}\ \ \ \ =\ 7,\ \textcolor{comment}{//\ vvvvvvvvvv}}
+\DoxyCodeLine{00102\ \mbox{\hyperlink{object-data_8h_a21e56c6009307f15695315ac7af66005aeb1581f4c6c8ee998f142699eb31d621}{OBJ\_LTYPE\_FISHBONE}}\ =\ 8,\ \textcolor{comment}{//\ >>>>>>>>>>}}
+\DoxyCodeLine{00103\ \};}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784b}{OBJ\_LWT\_VALUES}}\ \{}
+\DoxyCodeLine{00106\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba4bdd33810a349bdc00810d9690f79a03}{OBJ\_LWT\_BYLAYER}}\ \ \ \ =\ -\/2,}
+\DoxyCodeLine{00107\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba0023182ed51aec306837323dfedf9d68}{OBJ\_LWT\_BYBLOCK}}\ \ \ \ =\ -\/1,}
+\DoxyCodeLine{00108\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba3c22581f1ae8a6005e817199d659d15d}{OBJ\_LWT\_DEFAULT}}\ \ \ \ =\ \ 0,}
+\DoxyCodeLine{00109\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba1c8d43480a28ba5f15ce8212fca66a00}{OBJ\_LWT\_01}}\ \ \ \ \ \ \ \ \ =\ \ 1,}
+\DoxyCodeLine{00110\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba1b4e5216c9734ccd7aaff7460bccd0a4}{OBJ\_LWT\_02}}\ \ \ \ \ \ \ \ \ =\ \ 2,}
+\DoxyCodeLine{00111\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba1154308ade9fd37ff1791628e2be414e}{OBJ\_LWT\_03}}\ \ \ \ \ \ \ \ \ =\ \ 3,}
+\DoxyCodeLine{00112\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784baa2cd4c3b4d95bb1bfafc99382c00936b}{OBJ\_LWT\_04}}\ \ \ \ \ \ \ \ \ =\ \ 4,}
+\DoxyCodeLine{00113\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba7ce40960c14b786c04a5dbc4a1c56921}{OBJ\_LWT\_05}}\ \ \ \ \ \ \ \ \ =\ \ 5,}
+\DoxyCodeLine{00114\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba6835339268076e5d222a1247d85b4245}{OBJ\_LWT\_06}}\ \ \ \ \ \ \ \ \ =\ \ 6,}
+\DoxyCodeLine{00115\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784baf61723dfe74b1842c100d6c954085a0f}{OBJ\_LWT\_07}}\ \ \ \ \ \ \ \ \ =\ \ 7,}
+\DoxyCodeLine{00116\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba3380796b7cb4825b488e7d9919316ef2}{OBJ\_LWT\_08}}\ \ \ \ \ \ \ \ \ =\ \ 8,}
+\DoxyCodeLine{00117\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba5f18830b40060a38b38281ff9b707996}{OBJ\_LWT\_09}}\ \ \ \ \ \ \ \ \ =\ \ 9,}
+\DoxyCodeLine{00118\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784bae47246661c795db486c3a0f91647e6bd}{OBJ\_LWT\_10}}\ \ \ \ \ \ \ \ \ =\ 10,}
+\DoxyCodeLine{00119\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba9bd8fe259200a44c1c5d50c53a434a76}{OBJ\_LWT\_11}}\ \ \ \ \ \ \ \ \ =\ 11,}
+\DoxyCodeLine{00120\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784bab8bec4c41be7e09e829fa950102423b6}{OBJ\_LWT\_12}}\ \ \ \ \ \ \ \ \ =\ 12,}
+\DoxyCodeLine{00121\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba4e770addc9b5d9ffad9e9e5f5fd30e60}{OBJ\_LWT\_13}}\ \ \ \ \ \ \ \ \ =\ 13,}
+\DoxyCodeLine{00122\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784baf754d66526f37b788ef9ce93c98ff9b8}{OBJ\_LWT\_14}}\ \ \ \ \ \ \ \ \ =\ 14,}
+\DoxyCodeLine{00123\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba440cdf4edabe041993aacf0bfa817b6d}{OBJ\_LWT\_15}}\ \ \ \ \ \ \ \ \ =\ 15,}
+\DoxyCodeLine{00124\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba0cb0da5b947f2808abb3279b6e9099c3}{OBJ\_LWT\_16}}\ \ \ \ \ \ \ \ \ =\ 16,}
+\DoxyCodeLine{00125\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba6085053e0af4cb18bd4bbe4af0b5e680}{OBJ\_LWT\_17}}\ \ \ \ \ \ \ \ \ =\ 17,}
+\DoxyCodeLine{00126\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba492d00ffcd70c45aa8beb2e1ed199780}{OBJ\_LWT\_18}}\ \ \ \ \ \ \ \ \ =\ 18,}
+\DoxyCodeLine{00127\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba3a50bc2bf9ae6d0bdc5ea6dd5c9c91cf}{OBJ\_LWT\_19}}\ \ \ \ \ \ \ \ \ =\ 19,}
+\DoxyCodeLine{00128\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba1e003f36206b0ff982a1cfa9ce430977}{OBJ\_LWT\_20}}\ \ \ \ \ \ \ \ \ =\ 20,}
+\DoxyCodeLine{00129\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba185297f3947b1f73e9ac73ba7618bc4d}{OBJ\_LWT\_21}}\ \ \ \ \ \ \ \ \ =\ 21,}
+\DoxyCodeLine{00130\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba0b42ef136fafb17df8763256d8899a42}{OBJ\_LWT\_22}}\ \ \ \ \ \ \ \ \ =\ 22,}
+\DoxyCodeLine{00131\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba1928cc50f16bb2256c54a3a2dfc80b5c}{OBJ\_LWT\_23}}\ \ \ \ \ \ \ \ \ =\ 23,}
+\DoxyCodeLine{00132\ \mbox{\hyperlink{object-data_8h_ace1093b4246d2a22a4b69a230334784ba514c9730833672683ba99cf179d65256}{OBJ\_LWT\_24}}\ \ \ \ \ \ \ \ \ =\ 24}
+\DoxyCodeLine{00133\ \};}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79c}{OBJ\_SNAP\_VALUES}}\ \{}
+\DoxyCodeLine{00136\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca397a8078438cef391ebfb521971fa1ab}{OBJ\_SNAP\_NULL}}\ \ \ \ \ \ \ \ \ \ \ \ =\ \ 0,\ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00137\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca6bb7efda84faeebbc3c812956135b28a}{OBJ\_SNAP\_ENDPOINT}}\ \ \ \ \ \ \ \ =\ \ 1,}
+\DoxyCodeLine{00138\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca40d7ab5fb60db769271cbd5ad74f5470}{OBJ\_SNAP\_MIDPOINT}}\ \ \ \ \ \ \ \ =\ \ 2,}
+\DoxyCodeLine{00139\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca6762f987d2282e0f38c5bf3a6e0b3184}{OBJ\_SNAP\_CENTER}}\ \ \ \ \ \ \ \ \ \ =\ \ 3,}
+\DoxyCodeLine{00140\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca37be8a9835c5bd5f9719cc09bb67d4bd}{OBJ\_SNAP\_NODE}}\ \ \ \ \ \ \ \ \ \ \ \ =\ \ 4,}
+\DoxyCodeLine{00141\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca0afbf83ab2e25690545e2e70e5bc400d}{OBJ\_SNAP\_QUADRANT}}\ \ \ \ \ \ \ \ =\ \ 5,}
+\DoxyCodeLine{00142\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79cac43055530349f1a5f736e37daa9a47d0}{OBJ\_SNAP\_INTERSECTION}}\ \ \ \ =\ \ 6,}
+\DoxyCodeLine{00143\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79cac3fbb87589f6610d7b6b5d67c419cce7}{OBJ\_SNAP\_EXTENSION}}\ \ \ \ \ \ \ =\ \ 7,}
+\DoxyCodeLine{00144\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca57a15f3fe0f0993e3270fe01f75cd3e1}{OBJ\_SNAP\_INSERTION}}\ \ \ \ \ \ \ =\ \ 8,}
+\DoxyCodeLine{00145\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca78243c8a85ab63499cff724860026f18}{OBJ\_SNAP\_PERPENDICULAR}}\ \ \ =\ \ 9,}
+\DoxyCodeLine{00146\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca9293987bb3c0020309646acd343df3ca}{OBJ\_SNAP\_TANGENT}}\ \ \ \ \ \ \ \ \ =\ 10,}
+\DoxyCodeLine{00147\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79cae011cb3215f302f9482eed663585a260}{OBJ\_SNAP\_NEAREST}}\ \ \ \ \ \ \ \ \ =\ 11,}
+\DoxyCodeLine{00148\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79ca2bcc6d6c5c858944119db1140939943d}{OBJ\_SNAP\_APPINTERSECTION}}\ =\ 12,}
+\DoxyCodeLine{00149\ \mbox{\hyperlink{object-data_8h_af62a108b3bb8639f104daa710d2dc79cac0b7ed37331f8570b784feb5a74cf92e}{OBJ\_SNAP\_PARALLEL}}\ \ \ \ \ \ \ \ =\ 13}
+\DoxyCodeLine{00150\ \};}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18}{OBJ\_RUBBER\_VALUES}}\ \{}
+\DoxyCodeLine{00153\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa35aded7b27be08a9939721598c550f6}{OBJ\_RUBBER\_OFF}}\ =\ 0,\ \ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00154\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a163c7eb019ecdb01d02d0c27e8794d30}{OBJ\_RUBBER\_ON}}\ \ =\ 1,\ \ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ true}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18ab8fad77f1ceb6c1fdff7a723e7098206}{OBJ\_RUBBER\_CIRCLE\_1P\_RAD}},}
+\DoxyCodeLine{00157\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aac53dfe4bc711588a984fed95cad9486}{OBJ\_RUBBER\_CIRCLE\_1P\_DIA}},}
+\DoxyCodeLine{00158\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a14fdfe581179ecdce01fcb772c31aada}{OBJ\_RUBBER\_CIRCLE\_2P}},}
+\DoxyCodeLine{00159\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a4ab10cf0b805e410a2d4c13126e92744}{OBJ\_RUBBER\_CIRCLE\_3P}},}
+\DoxyCodeLine{00160\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a72044b4db6385f3409897e823ce8b879}{OBJ\_RUBBER\_CIRCLE\_TTR}},}
+\DoxyCodeLine{00161\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a08dd2ecbb88cf3a453b40de8a893a22f}{OBJ\_RUBBER\_CIRCLE\_TTT}},}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a72e593539b7b6121934c924831e0742e}{OBJ\_RUBBER\_DIMLEADER\_LINE}},}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a0a8b9f43105580702a954cbbc668d380}{OBJ\_RUBBER\_ELLIPSE\_LINE}},}
+\DoxyCodeLine{00166\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a5f1cb27f461337f16a08e25310a39965}{OBJ\_RUBBER\_ELLIPSE\_MAJORDIAMETER\_MINORRADIUS}},}
+\DoxyCodeLine{00167\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18aa47658102951498e611ccff08fee7f84}{OBJ\_RUBBER\_ELLIPSE\_MAJORRADIUS\_MINORRADIUS}},}
+\DoxyCodeLine{00168\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a99e41d986f9cbd32ec0357722f3a1014}{OBJ\_RUBBER\_ELLIPSE\_ROTATION}},}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a596fc3b8f3fff512fb6b62bd32362747}{OBJ\_RUBBER\_GRIP}},}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18ae5401b195d69d234a74a137c3422aeb5}{OBJ\_RUBBER\_LINE}},}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18ab68163b9cb8d356515e6d3bc56c68865}{OBJ\_RUBBER\_POLYGON}},}
+\DoxyCodeLine{00175\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a37d656846108a12e5e60987e4fe5f0ea}{OBJ\_RUBBER\_POLYGON\_INSCRIBE}},}
+\DoxyCodeLine{00176\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a7a360ec656fe3d5a5a07544f89d347eb}{OBJ\_RUBBER\_POLYGON\_CIRCUMSCRIBE}},}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a0602a1de992c4e06f05c764ba9c7b608}{OBJ\_RUBBER\_POLYLINE}},}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00180\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18adc07ea114f4a45bc0967a771d6bc07ec}{OBJ\_RUBBER\_IMAGE}},}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18ab0575fd8d3b26cf7f52072d0df30e657}{OBJ\_RUBBER\_RECTANGLE}},}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \mbox{\hyperlink{object-data_8h_a7c60482fb1e0a76d596f483ee9651d18a1528a4ab103a075f5fe3598c33040bf9}{OBJ\_RUBBER\_TEXTSINGLE}}}
+\DoxyCodeLine{00185\ \};}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_ad8a5c79b7189c3d4a67cf30b1fc487b7}{SPARE\_RUBBER\_VALUES}}\ \{}
+\DoxyCodeLine{00188\ \mbox{\hyperlink{object-data_8h_ad8a5c79b7189c3d4a67cf30b1fc487b7a0a9297c6bc1effe457a30548154c5579}{SPARE\_RUBBER\_OFF}}\ =\ 0,\ \ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00189\ \mbox{\hyperlink{object-data_8h_ad8a5c79b7189c3d4a67cf30b1fc487b7a02b055646d419151ae0474592ab4b43e}{SPARE\_RUBBER\_PATH}},}
+\DoxyCodeLine{00190\ \mbox{\hyperlink{object-data_8h_ad8a5c79b7189c3d4a67cf30b1fc487b7ae255dc382125b6ee89f4b070972c5277}{SPARE\_RUBBER\_POLYGON}},}
+\DoxyCodeLine{00191\ \mbox{\hyperlink{object-data_8h_ad8a5c79b7189c3d4a67cf30b1fc487b7a7f8a615965c2736a0f22cede1d7d9ddb}{SPARE\_RUBBER\_POLYLINE}}}
+\DoxyCodeLine{00192\ \};}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_af88c3f69d0848e71783b49e7208dfd25}{PREVIEW\_CLONE\_VALUES}}\ \{}
+\DoxyCodeLine{00195\ \mbox{\hyperlink{object-data_8h_af88c3f69d0848e71783b49e7208dfd25a1cbbf0f330419b18e1551949ad3797b4}{PREVIEW\_CLONE\_NULL}}\ =\ 0,\ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00196\ \mbox{\hyperlink{object-data_8h_af88c3f69d0848e71783b49e7208dfd25ad55aaf9a251a61edf82dc34f45a44cc1}{PREVIEW\_CLONE\_SELECTED}},}
+\DoxyCodeLine{00197\ \mbox{\hyperlink{object-data_8h_af88c3f69d0848e71783b49e7208dfd25adc5e17a96bffbf914eaad72e9409219e}{PREVIEW\_CLONE\_RUBBER}}}
+\DoxyCodeLine{00198\ \};}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{object-data_8h_a142ce63dd47580d3d23de0a7147c0e2a}{PREVIEW\_MODE\_VALUES}}\ \{}
+\DoxyCodeLine{00201\ \mbox{\hyperlink{object-data_8h_a142ce63dd47580d3d23de0a7147c0e2aa67cd248111692fbb75c3925f4563023f}{PREVIEW\_MODE\_NULL}}\ =\ 0,\ \textcolor{comment}{//NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00202\ \mbox{\hyperlink{object-data_8h_a142ce63dd47580d3d23de0a7147c0e2aaddf6363550aa48a0a3744594956e21bb}{PREVIEW\_MODE\_MOVE}},}
+\DoxyCodeLine{00203\ \mbox{\hyperlink{object-data_8h_a142ce63dd47580d3d23de0a7147c0e2aa2431f64ba299b3a02eff9a838cd28151}{PREVIEW\_MODE\_ROTATE}},}
+\DoxyCodeLine{00204\ \mbox{\hyperlink{object-data_8h_a142ce63dd47580d3d23de0a7147c0e2aae2f17f575a2602a514379a28daccb722}{PREVIEW\_MODE\_SCALE}}}
+\DoxyCodeLine{00205\ \};}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a45328c3592a4be42d25bd2ce6af3e1d6}{ENABLE\_SNAP}}\ \ \ =\ \textcolor{stringliteral}{"{}ENABLE\_SNAP"{}};}
+\DoxyCodeLine{00208\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a210dc9a8a58385dd79e2d4fe60867ef7}{ENABLE\_GRID}}\ \ \ =\ \textcolor{stringliteral}{"{}ENABLE\_GRID"{}};}
+\DoxyCodeLine{00209\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ae8f57106dbf63df79131032fa78b710a}{ENABLE\_RULER}}\ \ =\ \textcolor{stringliteral}{"{}ENABLE\_RULER"{}};}
+\DoxyCodeLine{00210\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_aae2e067e55e3c35db96a3b196ed0dc77}{ENABLE\_ORTHO}}\ \ =\ \textcolor{stringliteral}{"{}ENABLE\_ORTHO"{}};}
+\DoxyCodeLine{00211\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_ae9fa47d495441ebcdba39a131b398b3a}{ENABLE\_POLAR}}\ \ =\ \textcolor{stringliteral}{"{}ENABLE\_POLAR"{}};}
+\DoxyCodeLine{00212\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a7b9123114a0b7bcf5316f5a966bda24b}{ENABLE\_QSNAP}}\ \ =\ \textcolor{stringliteral}{"{}ENABLE\_QSNAP"{}};}
+\DoxyCodeLine{00213\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a1e88257966883b8691cfa74b81cb56da}{ENABLE\_QTRACK}}\ =\ \textcolor{stringliteral}{"{}ENABLE\_QTRACK"{}};}
+\DoxyCodeLine{00214\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a54e2373c95db640f15ef70c49de1d952}{ENABLE\_LWT}}\ \ \ \ =\ \textcolor{stringliteral}{"{}ENABLE\_LWT"{}};}
+\DoxyCodeLine{00215\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a3c905d043127a700dd69c1172f3dde67}{ENABLE\_REAL}}\ \ \ =\ \textcolor{stringliteral}{"{}ENABLE\_REAL"{}};}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_adc05e0ea579b5a919edc05ee9a0400a1}{SCENE\_QSNAP\_POINT}}\ =\ \textcolor{stringliteral}{"{}SCENE\_QSNAP\_POINT"{}};}
+\DoxyCodeLine{00218\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_af6cc1c8bf8ee5c61926ecd87fea87dab}{SCENE\_MOUSE\_POINT}}\ =\ \textcolor{stringliteral}{"{}SCENE\_MOUSE\_POINT"{}};}
+\DoxyCodeLine{00219\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a2bd2b1c9f48e75452f757eaf87369fc8}{VIEW\_MOUSE\_POINT}}\ \ =\ \textcolor{stringliteral}{"{}VIEW\_MOUSE\_POINT"{}};}
+\DoxyCodeLine{00220\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a0ec1758f3f4f016d4b2b6c843770c498}{RUBBER\_ROOM}}\ =\ \textcolor{stringliteral}{"{}RUBBER\_ROOM"{}};}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a0f309bc86a67101e9a07d8f3705e538d}{VIEW\_COLOR\_BACKGROUND}}\ =\ \textcolor{stringliteral}{"{}VIEW\_COLOR\_BACKGROUND"{}};}
+\DoxyCodeLine{00223\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_a6fb0133a59f261ef3d731f8cfb023f73}{VIEW\_COLOR\_CROSSHAIR}}\ \ =\ \textcolor{stringliteral}{"{}VIEW\_COLOR\_CROSSHAIR"{}};}
+\DoxyCodeLine{00224\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ \textcolor{keyword}{const}\ \mbox{\hyperlink{object-data_8h_abbdf2b7c9b217309d487ab09c4963245}{VIEW\_COLOR\_GRID}}\ \ \ \ \ \ \ =\ \textcolor{stringliteral}{"{}VIEW\_COLOR\_GRID"{}};}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

@@ -1,6 +1,7 @@
 \hypertarget{format__vip_8c}{}\doxysubsection{extern/libembroidery/src/formats/format\+\_\+vip.c File Reference}
 \label{format__vip_8c}\index{extern/libembroidery/src/formats/format\_vip.c@{extern/libembroidery/src/formats/format\_vip.c}}
 {\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
 {\ttfamily \#include $<$math.\+h$>$}\newline
 {\ttfamily \#include \char`\"{}../embroidery\+\_\+internal.\+h\char`\"{}}\newline
 \doxysubsubsection*{Functions}
@@ -36,19 +37,11 @@ const unsigned char \mbox{\hyperlink{format__vip_8c_af343b92924aeba034403b37c3fc
 \doxyparagraph{\texorpdfstring{readVip()}{readVip()}}
 {\footnotesize\ttfamily char read\+Vip (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00079}{79}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
-
 \mbox{\Hypertarget{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}\label{format__vip_8c_a2bb028689b218cd7804bb43e0ad72a22}} 
 \index{format\_vip.c@{format\_vip.c}!vipCompressData@{vipCompressData}}
 \index{vipCompressData@{vipCompressData}!format\_vip.c@{format\_vip.c}}
 \doxyparagraph{\texorpdfstring{vipCompressData()}{vipCompressData()}}
 {\footnotesize\ttfamily unsigned char $\ast$ vip\+Compress\+Data (\begin{DoxyParamCaption}\item[{unsigned char $\ast$}]{input,  }\item[{int}]{decompressed\+Input\+Size,  }\item[{int $\ast$}]{compressed\+Size }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00175}{175}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 
 \mbox{\Hypertarget{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}\label{format__vip_8c_a3fa7f6841a6db32ccbf25b61a79dfae4}} 
 \index{format\_vip.c@{format\_vip.c}!vipDecodeByte@{vipDecodeByte}}
@@ -56,19 +49,11 @@ Definition at line \mbox{\hyperlink{format__vip_8c_source_l00175}{175}} of file 
 \doxyparagraph{\texorpdfstring{vipDecodeByte()}{vipDecodeByte()}}
 {\footnotesize\ttfamily int vip\+Decode\+Byte (\begin{DoxyParamCaption}\item[{unsigned char}]{b }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00043}{43}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
-
 \mbox{\Hypertarget{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}\label{format__vip_8c_ab8a8a0db6dfbd0eadd353817d6a7c97b}} 
 \index{format\_vip.c@{format\_vip.c}!vipDecodeStitchType@{vipDecodeStitchType}}
 \index{vipDecodeStitchType@{vipDecodeStitchType}!format\_vip.c@{format\_vip.c}}
 \doxyparagraph{\texorpdfstring{vipDecodeStitchType()}{vipDecodeStitchType()}}
 {\footnotesize\ttfamily int vip\+Decode\+Stitch\+Type (\begin{DoxyParamCaption}\item[{unsigned char}]{b }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00050}{50}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 
 \mbox{\Hypertarget{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}\label{format__vip_8c_ae76df61dd8851eb72b97fa686092aa4d}} 
 \index{format\_vip.c@{format\_vip.c}!vipDecompressData@{vipDecompressData}}
@@ -76,19 +61,11 @@ Definition at line \mbox{\hyperlink{format__vip_8c_source_l00050}{50}} of file \
 \doxyparagraph{\texorpdfstring{vipDecompressData()}{vipDecompressData()}}
 {\footnotesize\ttfamily unsigned char $\ast$ vip\+Decompress\+Data (\begin{DoxyParamCaption}\item[{unsigned char $\ast$}]{input,  }\item[{int}]{compressed\+Input\+Length,  }\item[{int}]{decompressed\+Content\+Length }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00067}{67}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
-
 \mbox{\Hypertarget{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}\label{format__vip_8c_ae703ba782e9edbab5683301d6816ddc9}} 
 \index{format\_vip.c@{format\_vip.c}!vipEncodeByte@{vipEncodeByte}}
 \index{vipEncodeByte@{vipEncodeByte}!format\_vip.c@{format\_vip.c}}
 \doxyparagraph{\texorpdfstring{vipEncodeByte()}{vipEncodeByte()}}
 {\footnotesize\ttfamily unsigned char vip\+Encode\+Byte (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{f }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00187}{187}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 
 \mbox{\Hypertarget{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}\label{format__vip_8c_a77aff66cc338f6b5988a7f4f9f00cc2d}} 
 \index{format\_vip.c@{format\_vip.c}!vipEncodeStitchType@{vipEncodeStitchType}}
@@ -96,19 +73,11 @@ Definition at line \mbox{\hyperlink{format__vip_8c_source_l00187}{187}} of file 
 \doxyparagraph{\texorpdfstring{vipEncodeStitchType()}{vipEncodeStitchType()}}
 {\footnotesize\ttfamily unsigned char vip\+Encode\+Stitch\+Type (\begin{DoxyParamCaption}\item[{int}]{st }\end{DoxyParamCaption})}
 
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00193}{193}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
-
 \mbox{\Hypertarget{format__vip_8c_a37f9056462dcb2c323f49e49fe78fa63}\label{format__vip_8c_a37f9056462dcb2c323f49e49fe78fa63}} 
 \index{format\_vip.c@{format\_vip.c}!writeVip@{writeVip}}
 \index{writeVip@{writeVip}!format\_vip.c@{format\_vip.c}}
 \doxyparagraph{\texorpdfstring{writeVip()}{writeVip()}}
 {\footnotesize\ttfamily char write\+Vip (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{FILE $\ast$}]{file }\end{DoxyParamCaption})}
-
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00211}{211}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
 
 
 
@@ -150,7 +119,3 @@ Definition at line \mbox{\hyperlink{format__vip_8c_source_l00211}{211}} of file 
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-
-
-Definition at line \mbox{\hyperlink{format__vip_8c_source_l00014}{14}} of file \mbox{\hyperlink{format__vip_8c_source}{format\+\_\+vip.\+c}}.
-

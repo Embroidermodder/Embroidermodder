@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['hoop_5fpadding_0',['hoop_padding',['../structhoop__padding.html',1,'']]],
-  ['huffman_1',['Huffman',['../struct_huffman.html',1,'']]]
+  ['dictionary_5f_0',['Dictionary_',['../struct_dictionary__.html',1,'']]],
+  ['dictionaryentry_5f_1',['DictionaryEntry_',['../struct_dictionary_entry__.html',1,'']]],
+  ['dimleaderobject_2',['DimLeaderObject',['../class_dim_leader_object.html',1,'']]]
 ];

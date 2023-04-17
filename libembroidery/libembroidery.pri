@@ -83,15 +83,13 @@ SOURCES += \
     $$PWD/formats/format-vp3.c \
     $$PWD/formats/format-xxx.c \
     $$PWD/formats/format-zsk.c \
-    $$PWD/geometry/emb-arc.c \
-    $$PWD/geometry/emb-circle.c \
+    $$PWD/geometry/arc.c \
+    $$PWD/geometry/circle.c \
     $$PWD/geometry/emb-line.c \
     $$PWD/geometry/emb-polygon.c \
     $$PWD/geometry/emb-polyline.c \
     $$PWD/geometry/emb-rect.c \
     $$PWD/geometry/emb-satin-line.c \
-    $$PWD/geometry/geom-arc.c \
-    $$PWD/geometry/geom-circle.c \
     $$PWD/geometry/geom-line.c \
     ../libembroidery/compound-file.c \
     ../libembroidery/compound-file-difat.c \

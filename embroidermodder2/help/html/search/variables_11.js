@@ -18,5 +18,10 @@ var searchData=
   ['qsnap_5fperpendicular_15',['qsnap_perpendicular',['../struct_settings__.html#a3b2f5e6f30732489a78dfd1c6deafd94',1,'Settings_']]],
   ['qsnap_5fquadrant_16',['qsnap_quadrant',['../struct_settings__.html#a708071a7eeafee3132e1e3d9ebbe378c',1,'Settings_']]],
   ['qsnap_5ftangent_17',['qsnap_tangent',['../struct_settings__.html#a45f375e014e027a97ecd2cb36d1d3c31',1,'Settings_']]],
-  ['qtrack_5fmode_18',['qtrack_mode',['../struct_view__.html#a5a1d2d1823baf209e2bb2f1ca9ec2758',1,'View_']]]
+  ['qsnapactive_18',['qSnapActive',['../class_view.html#a6a8be994b833ec12a9e8fbdad48f7ca2',1,'View']]],
+  ['qsnapaperturesize_19',['qsnapApertureSize',['../class_view.html#a7effedd971ebccaeb39df82fb11aebb6',1,'View']]],
+  ['qsnaplocatorcolor_20',['qsnapLocatorColor',['../class_view.html#a75f72855bbcbbeb072006d662bb3a1dd',1,'View']]],
+  ['qsnaplocatorsize_21',['qsnapLocatorSize',['../class_view.html#ae2dfdc2818141b74596c96d9039e7274',1,'View']]],
+  ['qsnaptoggle_22',['qSnapToggle',['../class_view.html#a8c6f84b32094a0b2a0387e2ae5eec659',1,'View']]],
+  ['qtrack_5fmode_23',['qtrack_mode',['../struct_view__.html#a5a1d2d1823baf209e2bb2f1ca9ec2758',1,'View_']]]
 ];

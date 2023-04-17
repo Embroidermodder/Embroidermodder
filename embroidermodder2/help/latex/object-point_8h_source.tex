@@ -1,0 +1,46 @@
+\hypertarget{object-point_8h_source}{}\doxysubsection{object-\/point.h}
+\label{object-point_8h_source}\index{embroidermodder2/object-\/point.h@{embroidermodder2/object-\/point.h}}
+\mbox{\hyperlink{object-point_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ OBJECT\_POINT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ OBJECT\_POINT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{object-base_8h}{object-\/base.h}}"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_point_object}{PointObject}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_base_object}{BaseObject}}}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00008\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00009\ \ \ \ \ \mbox{\hyperlink{class_point_object}{PointObject}}(qreal\ x,\ qreal\ y,\ QRgb\ rgb,\ QGraphicsItem*\ parent\ =\ 0);}
+\DoxyCodeLine{00010\ \ \ \ \ \mbox{\hyperlink{class_point_object}{PointObject}}(\mbox{\hyperlink{class_point_object}{PointObject}}*\ obj,\ QGraphicsItem*\ parent\ =\ 0);}
+\DoxyCodeLine{00011\ \ \ \ \ \mbox{\hyperlink{class_point_object_ad38172dcce976d1ba0272aec4c81b1d2}{\string~PointObject}}();}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{enum}\ \{\ \mbox{\hyperlink{class_point_object_abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6}{Type}}\ =\ \mbox{\hyperlink{imgui__main_8c_a7da3976dcadfc5d60ef03ca18bf0c085}{OBJ\_TYPE\_POINT}}\ \};}
+\DoxyCodeLine{00014\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_point_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{class_point_object_abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6}{Type}};\ \}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \ \ \ \ QPainterPath\ \mbox{\hyperlink{class_point_object_ac103a3e4474b084a48281e9409087272}{objectSavePath}}()\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ QPointF\ \mbox{\hyperlink{class_point_object_a1a830f5a31e400da1680895d92f8b763}{objectPos}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ scenePos();\ \}}
+\DoxyCodeLine{00019\ \ \ \ \ qreal\ \ \ \mbox{\hyperlink{class_point_object_a5accd51fbc75b1a14a56c2f20b57769e}{objectX}}()\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ scenePos().x();\ \}}
+\DoxyCodeLine{00020\ \ \ \ \ qreal\ \ \ \mbox{\hyperlink{class_point_object_a672f9e4f77a92bb4211be8bbb3981634}{objectY}}()\textcolor{keyword}{\ \ \ const\ }\{\ \textcolor{keywordflow}{return}\ scenePos().y();\ \}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{setObjectPos}}(\textcolor{keyword}{const}\ QPointF\&\ point)\ \{\ setPos(point.x(),\ point.y());\ \}}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_a3462477d59b303adaec6a9cb98a10313}{setObjectPos}}(qreal\ x,\ qreal\ y)\ \{\ setPos(x,\ y);\ \}}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_a5827c1605b3f62a56fa5008b498fc7b0}{setObjectX}}(qreal\ x)\ \{\ \mbox{\hyperlink{class_point_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{setObjectPos}}(x,\ \mbox{\hyperlink{class_point_object_a672f9e4f77a92bb4211be8bbb3981634}{objectY}}());\ \}}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_abf77d0df0a021f2d033e1be15580edb5}{setObjectY}}(qreal\ y)\ \{\ \mbox{\hyperlink{class_point_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{setObjectPos}}(\mbox{\hyperlink{class_point_object_a5accd51fbc75b1a14a56c2f20b57769e}{objectX}}(),\ y);\ \}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_add4e11623be9bc6e02557c67674564ed}{updateRubber}}(QPainter*\ painter\ =\ 0);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_a814830f38fd2c36b3f96252ee65d7617}{vulcanize}}();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ QPointF\ \mbox{\hyperlink{class_point_object_a71dcd474d5a8c0e5fdc137b48da18a0c}{mouseSnapPoint}}(\textcolor{keyword}{const}\ QPointF\&\ mousePoint);}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{virtual}\ QList<QPointF>\ \mbox{\hyperlink{class_point_object_acfde9da59c0bbaaab7decdc222aa38a3}{allGripPoints}}();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_af377b9b2e3594940757c25610899c02b}{gripEdit}}(\textcolor{keyword}{const}\ QPointF\&\ before,\ \textcolor{keyword}{const}\ QPointF\&\ after);}
+\DoxyCodeLine{00032\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_a8c124c843504f6971f6677f12ac9247f}{paint}}(QPainter*,\ \textcolor{keyword}{const}\ QStyleOptionGraphicsItem*,\ QWidget*);}
+\DoxyCodeLine{00034\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_point_object_af28ab13ee1f2015ea4c774ae9541b758}{init}}(qreal\ x,\ qreal\ y,\ QRgb\ rgb,\ Qt::PenStyle\ lineType);}
+\DoxyCodeLine{00036\ \};}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ \textcolor{comment}{/*\ kate:\ bom\ off;\ indent-\/mode\ cstyle;\ indent-\/width\ 4;\ replace-\/trailing-\/space-\/save\ on;\ */}}
+
+\end{DoxyCode}

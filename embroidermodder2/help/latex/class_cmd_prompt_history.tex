@@ -1,0 +1,119 @@
+\hypertarget{class_cmd_prompt_history}{}\doxysubsection{Cmd\+Prompt\+History Class Reference}
+\label{class_cmd_prompt_history}\index{CmdPromptHistory@{CmdPromptHistory}}
+
+
+{\ttfamily \#include $<$cmdprompt.\+h$>$}
+
+\doxysubsubsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_history_a629e6e8652ccd0ff78d08cb23b314f83}{append\+History}} (const QString \&txt, int prefix\+Length)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_history_a6f7d5d169c4b749614f641f03d60ac6c}{start\+Resize\+History}} (int y)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_history_a07f883a179efb9a482104055d57352a5}{stop\+Resize\+History}} (int y)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_history_a9c5b153d08b9883fddaa310357de4b3e}{resize\+History}} (int y)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_history_a35bb9de8cb458ad631a618b3c9a03615}{history\+Appended}} (const QString \&txt)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_cmd_prompt_history_a7758b86748c24bd1a9d2efb8c96fc131}{Cmd\+Prompt\+History}} (QWidget $\ast$parent=0)
+\item 
+\mbox{\hyperlink{class_cmd_prompt_history_a43ca37891556f01f374633c81a43e8d4}{$\sim$\+Cmd\+Prompt\+History}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_history_a59701ebb47f7e2f55977543b6293ba47}{context\+Menu\+Event}} (QContext\+Menu\+Event $\ast$event)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+QString \mbox{\hyperlink{class_cmd_prompt_history_a083f7557b2d14f34e7cdb0532301c012}{apply\+Formatting}} (const QString \&txt, int prefix\+Length)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_cmd_prompt_history_abbd120a8ddc81e6aa4451664821dd5ca}{tmp\+Height}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_cmd_prompt_history_a7758b86748c24bd1a9d2efb8c96fc131}\label{class_cmd_prompt_history_a7758b86748c24bd1a9d2efb8c96fc131}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\index{CmdPromptHistory@{CmdPromptHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{CmdPromptHistory()}{CmdPromptHistory()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_cmd_prompt_history}{Cmd\+Prompt\+History}} (\begin{DoxyParamCaption}\item[{QWidget $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a43ca37891556f01f374633c81a43e8d4}\label{class_cmd_prompt_history_a43ca37891556f01f374633c81a43e8d4}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!````~CmdPromptHistory@{$\sim$CmdPromptHistory}}
+\index{````~CmdPromptHistory@{$\sim$CmdPromptHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{$\sim$CmdPromptHistory()}{~CmdPromptHistory()}}
+{\footnotesize\ttfamily $\sim$\mbox{\hyperlink{class_cmd_prompt_history}{Cmd\+Prompt\+History}} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_cmd_prompt_history_a629e6e8652ccd0ff78d08cb23b314f83}\label{class_cmd_prompt_history_a629e6e8652ccd0ff78d08cb23b314f83}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!appendHistory@{appendHistory}}
+\index{appendHistory@{appendHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{appendHistory}{appendHistory}}
+{\footnotesize\ttfamily void append\+History (\begin{DoxyParamCaption}\item[{const QString \&}]{txt,  }\item[{int}]{prefix\+Length }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a083f7557b2d14f34e7cdb0532301c012}\label{class_cmd_prompt_history_a083f7557b2d14f34e7cdb0532301c012}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!applyFormatting@{applyFormatting}}
+\index{applyFormatting@{applyFormatting}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{applyFormatting()}{applyFormatting()}}
+{\footnotesize\ttfamily QString apply\+Formatting (\begin{DoxyParamCaption}\item[{const QString \&}]{txt,  }\item[{int}]{prefix\+Length }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a59701ebb47f7e2f55977543b6293ba47}\label{class_cmd_prompt_history_a59701ebb47f7e2f55977543b6293ba47}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!contextMenuEvent@{contextMenuEvent}}
+\index{contextMenuEvent@{contextMenuEvent}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{contextMenuEvent()}{contextMenuEvent()}}
+{\footnotesize\ttfamily void context\+Menu\+Event (\begin{DoxyParamCaption}\item[{QContext\+Menu\+Event $\ast$}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a35bb9de8cb458ad631a618b3c9a03615}\label{class_cmd_prompt_history_a35bb9de8cb458ad631a618b3c9a03615}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!historyAppended@{historyAppended}}
+\index{historyAppended@{historyAppended}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{historyAppended}{historyAppended}}
+{\footnotesize\ttfamily void history\+Appended (\begin{DoxyParamCaption}\item[{const QString \&}]{txt }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a9c5b153d08b9883fddaa310357de4b3e}\label{class_cmd_prompt_history_a9c5b153d08b9883fddaa310357de4b3e}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!resizeHistory@{resizeHistory}}
+\index{resizeHistory@{resizeHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{resizeHistory}{resizeHistory}}
+{\footnotesize\ttfamily void resize\+History (\begin{DoxyParamCaption}\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a6f7d5d169c4b749614f641f03d60ac6c}\label{class_cmd_prompt_history_a6f7d5d169c4b749614f641f03d60ac6c}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!startResizeHistory@{startResizeHistory}}
+\index{startResizeHistory@{startResizeHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{startResizeHistory}{startResizeHistory}}
+{\footnotesize\ttfamily void start\+Resize\+History (\begin{DoxyParamCaption}\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+\mbox{\Hypertarget{class_cmd_prompt_history_a07f883a179efb9a482104055d57352a5}\label{class_cmd_prompt_history_a07f883a179efb9a482104055d57352a5}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!stopResizeHistory@{stopResizeHistory}}
+\index{stopResizeHistory@{stopResizeHistory}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{stopResizeHistory}{stopResizeHistory}}
+{\footnotesize\ttfamily void stop\+Resize\+History (\begin{DoxyParamCaption}\item[{int}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+
+
+
+\doxysubsubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_cmd_prompt_history_abbd120a8ddc81e6aa4451664821dd5ca}\label{class_cmd_prompt_history_abbd120a8ddc81e6aa4451664821dd5ca}} 
+\index{CmdPromptHistory@{CmdPromptHistory}!tmpHeight@{tmpHeight}}
+\index{tmpHeight@{tmpHeight}!CmdPromptHistory@{CmdPromptHistory}}
+\doxyparagraph{\texorpdfstring{tmpHeight}{tmpHeight}}
+{\footnotesize\ttfamily int tmp\+Height\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+embroidermodder2/\mbox{\hyperlink{cmdprompt_8h}{cmdprompt.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{cmdprompt_8cpp}{cmdprompt.\+cpp}}\end{DoxyCompactItemize}
