@@ -20,7 +20,7 @@ jobs:
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder/project-files/qmake
-        qmake
+        6.2.0\msvc2019_64\bin\qmake.exe
         make
         cd ../..
         
@@ -64,7 +64,7 @@ jobs:
     steps:
     - name: Install Qt
       run: |
-        sudo apt install qt6-base-dev libqt6*widgets* qtcreator qmake
+        sudo apt install qt6-base-dev libqt6*widgets* qtcreator qmake6
 
     - name: build
       run: |
