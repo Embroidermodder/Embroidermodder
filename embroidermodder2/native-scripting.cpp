@@ -1,5 +1,7 @@
 #include "native-scripting.h"
 
+#if 0
+
 MainWindow* _mainWin = 0;
 
 //NOTE: qthelp://com.trolltech.qt.470/qdoc/scripting.html
@@ -15,4 +17,4 @@ MainWindow* mainWin()
     return _mainWin;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+#endif

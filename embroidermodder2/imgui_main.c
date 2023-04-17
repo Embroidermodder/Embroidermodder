@@ -24,6 +24,7 @@
 #include <math.h>
 #include <time.h>
 
+#if 0
 #ifdef __linux__
 #include <sys/utsname.h>
 #endif
@@ -18597,3 +18598,5 @@ updateStar(EmbPath *path, UiObject global)
     setRubberText("POLYGON_NUM_POINTS", (global.numPoints*2 - 1).toString());
     */
 }
+
+#endif

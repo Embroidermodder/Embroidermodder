@@ -1,9 +1,17 @@
+/**
+ * \file mainwindow-actions.cpp
+ */
+
 #include "mainwindow.h"
 #include <QAction>
 #include <QApplication>
 #include <QMdiArea>
 
-void MainWindow::createAllActions()
+/**
+ * @brief MainWindow::createAllActions
+ */
+void
+MainWindow::createAllActions()
 {
     qDebug("Creating All Actions...");
     QString appName = QApplication::applicationName();
@@ -93,7 +101,16 @@ void MainWindow::createAllActions()
     actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
 }
 
-QAction *MainWindow::createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted)
+/**
+ * @brief MainWindow::createAction
+ * @param icon
+ * @param toolTip
+ * @param statusTip
+ * @param scripted
+ * @return
+ */
+QAction *
+MainWindow::createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted)
 {
     QString appDir = qApp->applicationDirPath();
 
@@ -189,5 +206,3 @@ QAction *MainWindow::createAction(const QString icon, const QString toolTip, con
     }
     return ACTION;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

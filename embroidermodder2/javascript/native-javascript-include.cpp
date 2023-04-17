@@ -1,5 +1,7 @@
 #include "native-javascript.h"
 
+#if 0
+
 //NOTE: http://www.qtcentre.org/threads/20432-Can-I-include-a-script-from-script
 QScriptValue javaInclude(QScriptContext* context, QScriptEngine* engine)
 {
@@ -26,4 +28,4 @@ QScriptValue javaInclude(QScriptContext* context, QScriptEngine* engine)
     return 0;
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+#endif

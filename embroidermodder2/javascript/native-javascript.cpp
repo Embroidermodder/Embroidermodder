@@ -1,6 +1,8 @@
 #include "native-javascript.h"
 #include "object-data.h"
 
+#if 0
+
 QScriptValue javaDebug(QScriptContext* context, QScriptEngine* /*engine*/)
 {
     if(context->argumentCount() != 1)    return context->throwError("debug() requires one argument");
@@ -1561,4 +1563,4 @@ QScriptValue javaMouseY(QScriptContext* context, QScriptEngine* /*engine*/)
     return QScriptValue(mainWin()->nativeMouseY());
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+#endif

@@ -6,12 +6,28 @@
 #include <QStyleOption>
 #include <QGraphicsScene>
 
+/**
+ * @brief ArcObject::ArcObject
+ * @param startX
+ * @param startY
+ * @param midX
+ * @param midY
+ * @param endX
+ * @param endY
+ * @param rgb
+ * @param parent
+ */
 ArcObject::ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ArcObject Constructor()");
     init(startX, startY, midX, midY, endX, endY, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * @brief ArcObject::ArcObject
+ * @param obj
+ * @param parent
+ */
 ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ArcObject Constructor()");
@@ -22,11 +38,25 @@ ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
     }
 }
 
+/**
+ * @brief ArcObject::~ArcObject
+ */
 ArcObject::~ArcObject()
 {
     qDebug("ArcObject Destructor()");
 }
 
+/**
+ * @brief ArcObject::init
+ * @param startX
+ * @param startY
+ * @param midX
+ * @param midY
+ * @param endX
+ * @param endY
+ * @param rgb
+ * @param lineType
+ */
 void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
@@ -45,6 +75,15 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
     setPen(objectPen());
 }
 
+/**
+ * @brief ArcObject::calculateArcData
+ * @param startX
+ * @param startY
+ * @param midX
+ * @param midY
+ * @param endX
+ * @param endY
+ */
 void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY)
 {
     double centerX;
@@ -67,6 +106,10 @@ void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal m
     setScale(1);
 }
 
+/**
+ * @brief ArcObject::updateArcRect
+ * @param radius
+ */
 void ArcObject::updateArcRect(qreal radius)
 {
     QRectF arcRect;
@@ -76,6 +119,10 @@ void ArcObject::updateArcRect(qreal radius)
     setRect(arcRect);
 }
 
+/**
+ * @brief ArcObject::setObjectCenter
+ * @param point
+ */
 void ArcObject::setObjectCenter(const QPointF& point)
 {
     setObjectCenter(point.x(), point.y());
@@ -150,16 +197,29 @@ void ArcObject::setObjectMidPoint(qreal pointX, qreal pointY)
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), pointX, pointY, arcEndPoint.x(), arcEndPoint.y());
 }
 
+/**
+ * @brief ArcObject::setObjectEndPoint
+ * @param point
+ */
 void ArcObject::setObjectEndPoint(const QPointF& point)
 {
     setObjectEndPoint(point.x(), point.y());
 }
 
+/**
+ * @brief ArcObject::setObjectEndPoint
+ * @param pointX
+ * @param pointY
+ */
 void ArcObject::setObjectEndPoint(qreal pointX, qreal pointY)
 {
     calculateArcData(arcStartPoint.x(), arcStartPoint.y(), arcMidPoint.x(), arcMidPoint.y(), pointX, pointY);
 }
 
+/**
+ * @brief ArcObject::objectStartAngle
+ * @return
+ */
 qreal ArcObject::objectStartAngle() const
 {
     qreal angle = QLineF(scenePos(), objectStartPoint()).angle();
@@ -168,6 +228,10 @@ qreal ArcObject::objectStartAngle() const
     return angle;
 }
 
+/**
+ * @brief ArcObject::objectEndAngle
+ * @return
+ */
 qreal ArcObject::objectEndAngle() const
 {
     qreal angle = QLineF(scenePos(), objectEndPoint()).angle();
@@ -176,6 +240,10 @@ qreal ArcObject::objectEndAngle() const
     return angle;
 }
 
+/**
+ * @brief ArcObject::objectStartPoint
+ * @return
+ */
 QPointF ArcObject::objectStartPoint() const
 {
     qreal rot = radians(rotation());
@@ -189,16 +257,28 @@ QPointF ArcObject::objectStartPoint() const
     return (scenePos() + QPointF(rotX, rotY));
 }
 
+/**
+ * @brief ArcObject::objectStartX
+ * @return
+ */
 qreal ArcObject::objectStartX() const
 {
     return objectStartPoint().x();
 }
 
+/**
+ * @brief ArcObject::objectStartY
+ * @return
+ */
 qreal ArcObject::objectStartY() const
 {
     return objectStartPoint().y();
 }
 
+/**
+ * @brief ArcObject::objectMidPoint
+ * @return
+ */
 QPointF ArcObject::objectMidPoint() const
 {
     qreal rot = radians(rotation());
@@ -212,16 +292,28 @@ QPointF ArcObject::objectMidPoint() const
     return (scenePos() + QPointF(rotX, rotY));
 }
 
+/**
+ * @brief ArcObject::objectMidX
+ * @return
+ */
 qreal ArcObject::objectMidX() const
 {
     return objectMidPoint().x();
 }
 
+/**
+ * @brief ArcObject::objectMidY
+ * @return
+ */
 qreal ArcObject::objectMidY() const
 {
     return objectMidPoint().y();
 }
 
+/**
+ * @brief ArcObject::objectEndPoint
+ * @return
+ */
 QPointF ArcObject::objectEndPoint() const
 {
     qreal rot = radians(rotation());
@@ -235,16 +327,28 @@ QPointF ArcObject::objectEndPoint() const
     return (scenePos() + QPointF(rotX, rotY));
 }
 
+/**
+ * @brief ArcObject::objectEndX
+ * @return
+ */
 qreal ArcObject::objectEndX() const
 {
     return objectEndPoint().x();
 }
 
+/**
+ * @brief ArcObject::objectEndY
+ * @return
+ */
 qreal ArcObject::objectEndY() const
 {
     return objectEndPoint().y();
 }
 
+/**
+ * @brief ArcObject::objectArea
+ * @return
+ */
 qreal ArcObject::objectArea() const
 {
     //Area of a circular segment
@@ -253,16 +357,28 @@ qreal ArcObject::objectArea() const
     return ((r*r)/2)*(theta - qSin(theta));
 }
 
+/**
+ * @brief ArcObject::objectArcLength
+ * @return
+ */
 qreal ArcObject::objectArcLength() const
 {
     return radians(objectIncludedAngle())*objectRadius();
 }
 
+/**
+ * @brief ArcObject::objectChord
+ * @return
+ */
 qreal ArcObject::objectChord() const
 {
     return QLineF(objectStartX(), objectStartY(), objectEndX(), objectEndY()).length();
 }
 
+/**
+ * @brief ArcObject::objectIncludedAngle
+ * @return
+ */
 qreal ArcObject::objectIncludedAngle() const
 {
     qreal chord = objectChord();
@@ -277,6 +393,10 @@ qreal ArcObject::objectIncludedAngle() const
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
+/**
+ * @brief ArcObject::objectClockwise
+ * @return
+ */
 bool ArcObject::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
@@ -285,6 +405,9 @@ bool ArcObject::objectClockwise() const
     return false;
 }
 
+/**
+ * @brief ArcObject::updatePath
+ */
 void ArcObject::updatePath()
 {
     qreal startAngle = (objectStartAngle() + rotation());
@@ -301,6 +424,11 @@ void ArcObject::updatePath()
     setObjectPath(path);
 }
 
+/**
+ * @brief ArcObject::paint
+ * @param painter
+ * @param option
+ */
 void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
@@ -324,15 +452,25 @@ void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     painter->drawArc(paintRect, startAngle, spanAngle);
 }
 
-void ArcObject::updateRubber(QPainter* painter)
+/**
+ * @brief ArcObject::updateRubber
+ * @param painter
+ *
+ * \todo Arc Rubber Modes
+ *
+ * \todo updateRubber() gripping for ArcObject
+ */
+void
+ArcObject::updateRubber(QPainter* painter)
 {
-    //TODO: Arc Rubber Modes
-
-    //TODO: updateRubber() gripping for ArcObject
 
 }
 
-void ArcObject::vulcanize()
+/**
+ * @brief ArcObject::vulcanize
+ */
+void
+ArcObject::vulcanize()
 {
     qDebug("ArcObject vulcanize()");
     updateRubber();
@@ -340,8 +478,13 @@ void ArcObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
-// Returns the closest snap point to the mouse point
-QPointF ArcObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * @brief ArcObject::mouseSnapPoint
+ * @param mousePoint
+ * @return the closest snap point to the mouse point.
+ */
+QPointF
+ArcObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF center = objectCenter();
     QPointF start  = objectStartPoint();
@@ -363,16 +506,26 @@ QPointF ArcObject::mouseSnapPoint(const QPointF& mousePoint)
     return scenePos();
 }
 
-QList<QPointF> ArcObject::allGripPoints()
+/**
+ * @brief ArcObject::allGripPoints
+ * @return
+ */
+QList<QPointF>
+ArcObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectCenter() << objectStartPoint() << objectMidPoint() << objectEndPoint();
     return gripPoints;
 }
 
-void ArcObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * @brief ArcObject::gripEdit
+ * @param before
+ * @param after
+ *
+ * \todo gripEdit() for ArcObject
+ */
+void
+ArcObject::gripEdit(const QPointF& before, const QPointF& after)
 {
-    //TODO: gripEdit() for ArcObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,3 +1,7 @@
+/**
+ * \file mainwindow-settings.cpp
+ */
+
 #include "mainwindow.h"
 #include "settings-dialog.h"
 
@@ -26,7 +30,11 @@ QString SettingsPath()
 
 } // end anonymous namespace
 
-void MainWindow::readSettings()
+/**
+ * @brief MainWindow::readSettings
+ */
+void
+MainWindow::readSettings()
 {
     qDebug("Reading Settings...");
     // This file needs to be read from the users home directory to ensure it is writable
@@ -168,6 +176,9 @@ void MainWindow::readSettings()
     resize(size);
 }
 
+/**
+ * @brief MainWindow::writeSettings
+ */
 void MainWindow::writeSettings()
 {
     qDebug("Writing Settings...");

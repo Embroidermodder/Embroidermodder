@@ -1,10 +1,18 @@
+/**
+ * \file mainwindow-menus.cpp
+ */
+
 #include "mainwindow.h"
 #include <QDebug>
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
 
-void MainWindow::createFileMenu()
+/**
+ * @brief MainWindow::createFileMenu
+ */
+void
+MainWindow::createFileMenu()
 {
     qDebug("MainWindow createFileMenu()");
     menuBar()->addMenu(fileMenu);

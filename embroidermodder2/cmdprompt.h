@@ -82,7 +82,7 @@ signals:
 public slots:
     void addCommand(const QString& alias, const QString& cmd);
     void endCommand();
-    void processInput(const QChar& rapidChar = QChar());
+    void processInput(void);
     void checkSelection();
     void updateCurrentText(const QString& txt);
     void checkEditedText(const QString& txt);
@@ -274,5 +274,3 @@ private:
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

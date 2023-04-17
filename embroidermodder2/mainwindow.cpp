@@ -1,5 +1,9 @@
+/**
+ * \file mainwindow.cpp
+ */
+
 #include "mainwindow.h"
-#include "mainwindow-actions.h"
+#include "embroidermodder.h"
 
 #include "statusbar.h"
 #include "statusbar-button.h"
@@ -14,8 +18,6 @@
 //#include "native-javascript.h"
 
 #include "preview-dialog.h"
-
-#include "embroidery.h"
 
 #include <stdlib.h>
 
@@ -40,6 +42,9 @@
 #include <QMetaObject>
 #include <QLocale>
 
+/**
+ * @brief MainWindow::MainWindow
+ */
 MainWindow::MainWindow() : QMainWindow(0)
 {
     readSettings();
@@ -258,6 +263,9 @@ MainWindow::MainWindow() : QMainWindow(0)
         tipOfTheDay();
 }
 
+/**
+ * @brief MainWindow::~MainWindow
+ */
 MainWindow::~MainWindow()
 {
     qDebug("MainWindow::Destructor()");
@@ -267,12 +275,34 @@ MainWindow::~MainWindow()
     cutCopyObjectList.clear();
 }
 
-QAction* MainWindow::getAction(int actionEnum)
+/**
+ * @brief MainWindow::actuator
+ * @param command
+ */
+void
+MainWindow::actuator(std::string command)
+{
+    if (command == "test") {
+        embLog_print("test actuator");
+    }
+}
+
+/**
+ * @brief MainWindow::getAction
+ * @param actionEnum
+ * @return
+ */
+QAction*
+MainWindow::getAction(int actionEnum)
 {
     return actionHash.value(actionEnum);
 }
 
-void MainWindow::recentMenuAboutToShow()
+/**
+ * @brief MainWindow::recentMenuAboutToShow
+ */
+void
+MainWindow::recentMenuAboutToShow()
 {
     qDebug("MainWindow::recentMenuAboutToShow()");
     recentMenu->clear();
@@ -306,7 +336,11 @@ void MainWindow::recentMenuAboutToShow()
     }
 }
 
-void MainWindow::windowMenuAboutToShow()
+/**
+ * @brief MainWindow::windowMenuAboutToShow
+ */
+void
+MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
@@ -332,7 +366,12 @@ void MainWindow::windowMenuAboutToShow()
     }
 }
 
-void MainWindow::windowMenuActivated(bool checked)
+/**
+ * @brief MainWindow::windowMenuActivated
+ * @param checked
+ */
+void
+MainWindow::windowMenuActivated(bool checked)
 {
     qDebug("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
@@ -343,19 +382,33 @@ void MainWindow::windowMenuActivated(bool checked)
         w->setFocus();
 }
 
-MdiArea* MainWindow::getMdiArea()
+/**
+ * @brief MainWindow::getMdiArea
+ * @return
+ */
+MdiArea*
+MainWindow::getMdiArea()
 {
     qDebug("MainWindow::getMdiArea()");
     return mdiArea;
 }
 
-MainWindow* MainWindow::getApplication()
+/**
+ * @brief MainWindow::getApplication
+ * @return
+ */
+MainWindow*
+MainWindow::getApplication()
 {
     qDebug("MainWindow::getApplication()");
     return mainWin;
 }
 
-void MainWindow::newFile()
+/**
+ * @brief MainWindow::newFile
+ */
+void
+MainWindow::newFile()
 {
     qDebug("MainWindow::newFile()");
     docIndex++;
@@ -368,14 +421,19 @@ void MainWindow::newFile()
     windowMenuAboutToShow();
 
     View* v = mdiWin->getView();
-    if(v)
-    {
+    if (v) {
         v->recalculateLimits();
         v->zoomExtents();
     }
 }
 
-void MainWindow::openFile(bool recent, const QString& recentFile)
+/**
+ * @brief MainWindow::openFile
+ * @param recent
+ * @param recentFile
+ */
+void
+MainWindow::openFile(bool recent, const QString& recentFile)
 {
     qDebug("MainWindow::openFile()");
 
@@ -408,20 +466,22 @@ void MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::restoreOverrideCursor();
 }
 
-void MainWindow::openFilesSelected(const QStringList& filesToOpen)
+/**
+ * @brief MainWindow::openFilesSelected
+ * @param filesToOpen
+ */
+void
+MainWindow::openFilesSelected(const QStringList& filesToOpen)
 {
     bool doOnce = true;
 
-    if(filesToOpen.count())
-    {
-        for(int i = 0; i < filesToOpen.count(); i++)
-        {
-            if(!validFileFormat(filesToOpen[i]))
+    if (filesToOpen.count()) {
+        for (int i = 0; i < filesToOpen.count(); i++) {
+            if (!validFileFormat(filesToOpen[i]))
                 continue;
 
             QMdiSubWindow* existing = findMdiWindow(filesToOpen[i]);
-            if(existing)
-            {
+            if (existing) {
                 mdiArea->setActiveSubWindow(existing);
                 continue;
             }
@@ -470,24 +530,35 @@ void MainWindow::openFilesSelected(const QStringList& filesToOpen)
     windowMenuAboutToShow();
 }
 
-void MainWindow::openrecentfile()
+/**
+ * @brief MainWindow::openrecentfile
+ */
+void
+MainWindow::openrecentfile()
 {
     qDebug("MainWindow::openrecentfile()");
 
     //Check to see if this from the recent files list
     QAction* recentSender = qobject_cast<QAction*>(sender());
-    if(recentSender)
-    {
+    if (recentSender) {
         openFile(true, recentSender->data().toString());
     }
 }
 
-void MainWindow::savefile()
+/**
+ * @brief MainWindow::savefile
+ */
+void
+MainWindow::savefile()
 {
     qDebug("MainWindow::savefile()");
 }
 
-void MainWindow::saveasfile()
+/**
+ * @brief MainWindow::saveasfile
+ */
+void
+MainWindow::saveasfile()
 {
     qDebug("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
@@ -502,6 +573,11 @@ void MainWindow::saveasfile()
     mdiWin->saveFile(file);
 }
 
+/**
+ * @brief MainWindow::findMdiWindow
+ * @param fileName
+ * @return
+ */
 QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
 {
     qDebug("MainWindow::findMdiWindow(%s)", qPrintable(fileName));
@@ -521,6 +597,10 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     return 0;
 }
 
+/**
+ * @brief MainWindow::closeEvent
+ * @param event
+ */
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     mdiArea->closeAllSubWindows();
@@ -528,17 +608,24 @@ void MainWindow::closeEvent(QCloseEvent* event)
     event->accept();
 }
 
+/**
+ * @brief MainWindow::onCloseWindow
+ */
 void MainWindow::onCloseWindow()
 {
     qDebug("MainWindow::onCloseWindow()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin)
-    {
+    if (mdiWin) {
         onCloseMdiWin(mdiWin);
     }
 }
 
-void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
+/**
+ * @brief MainWindow::onCloseMdiWin
+ * @param theMdiWin
+ */
+void
+MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 {
     qDebug("MainWindow::onCloseMdiWin()");
     numOfDocs--;
@@ -552,20 +639,30 @@ void MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     updateMenuToolbarStatusbar();
     windowMenuAboutToShow();
 
-    if(keepMaximized)
-    {
+    if (keepMaximized) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
         if(mdiWin) { mdiWin->showMaximized(); }
     }
 }
 
-void MainWindow::onWindowActivated(QMdiSubWindow* w)
+/**
+ * @brief MainWindow::onWindowActivated
+ * @param w
+ */
+void
+MainWindow::onWindowActivated(QMdiSubWindow* w)
 {
     qDebug("MainWindow::onWindowActivated()");
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(w);
-    if(mdiWin) { mdiWin->onWindowActivated(); }
+    if (mdiWin) {
+        mdiWin->onWindowActivated();
+    }
 }
 
+/**
+ * @brief MainWindow::resizeEvent
+ * @param e
+ */
 void MainWindow::resizeEvent(QResizeEvent* e)
 {
     qDebug("MainWindow::resizeEvent()");
@@ -573,13 +670,22 @@ void MainWindow::resizeEvent(QResizeEvent* e)
     statusBar()->setSizeGripEnabled(!isMaximized());
 }
 
-QAction* MainWindow::getFileSeparator()
+/**
+ * @brief MainWindow::getFileSeparator
+ * @return
+ */
+QAction*
+MainWindow::getFileSeparator()
 {
     qDebug("MainWindow::getFileSeparator()");
     return myFileSeparator;
 }
 
-void MainWindow::updateMenuToolbarStatusbar()
+/**
+ * @brief MainWindow::updateMenuToolbarStatusbar
+ */
+void
+MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
@@ -587,8 +693,7 @@ void MainWindow::updateMenuToolbarStatusbar()
     actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
     actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
 
-    if(numOfDocs)
-    {
+    if (numOfDocs) {
         //Toolbars
         toolbarView->show();
         toolbarZoom->show();
@@ -600,8 +705,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarProperties->show();
         toolbarPrompt->show();
 
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        foreach (QToolBar* tb, toolbarHash) {
             tb->show();
         }
 
@@ -615,8 +719,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         menuBar()->addMenu(editMenu);
         menuBar()->addMenu(viewMenu);
 
-        foreach(QMenu* menu, menuHash)
-        {
+        foreach (QMenu* menu, menuHash) {
             menuBar()->addMenu(menu);
         }
 
@@ -638,8 +741,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         statusbar->statusBarQTrackButton->show();
         statusbar->statusBarLwtButton->show();
     }
-    else
-    {
+    else {
         //Toolbars
         toolbarView->hide();
         toolbarZoom->hide();
@@ -650,8 +752,7 @@ void MainWindow::updateMenuToolbarStatusbar()
         toolbarText->hide();
         toolbarProperties->hide();
         toolbarPrompt->hide();
-        foreach(QToolBar* tb, toolbarHash)
-        {
+        foreach (QToolBar* tb, toolbarHash) {
             tb->hide();
         }
 
@@ -684,19 +785,34 @@ void MainWindow::updateMenuToolbarStatusbar()
     hideUnimplemented();
 }
 
-void MainWindow::hideUnimplemented()
+/**
+ * @brief MainWindow::hideUnimplemented
+ */
+void
+MainWindow::hideUnimplemented()
 {
     qDebug("MainWindow::hideUnimplemented()");
 }
 
-bool MainWindow::validFileFormat(const QString& fileName)
+/**
+ * @brief MainWindow::validFileFormat
+ * @param fileName
+ * @return
+ */
+bool
+MainWindow::validFileFormat(const QString& fileName)
 {
-    if(embFormat_typeFromName(qPrintable(fileName)))
+    if (embFormat_typeFromName(qPrintable(fileName))) {
         return true;
+    }
     return false;
 }
 
-void MainWindow::loadFormats()
+/**
+ * @brief MainWindow::loadFormats
+ */
+void
+MainWindow::loadFormats()
 {
     char stable, unstable;
     QString supportedReaders  = "All Supported Files (";
@@ -771,26 +887,32 @@ void MainWindow::loadFormats()
     */
 }
 
-void MainWindow::closeToolBar(QAction* action)
+/**
+ * @brief MainWindow::closeToolBar
+ * @param action
+ */
+void
+MainWindow::closeToolBar(QAction* action)
 {
-    if(action->objectName() == "toolbarclose")
-    {
+    if (action->objectName() == "toolbarclose") {
         QToolBar* tb = qobject_cast<QToolBar*>(sender());
-        if(tb)
-        {
+        if (tb) {
             qDebug("%s closed.", qPrintable(tb->objectName()));
             tb->hide();
         }
     }
 }
 
-void MainWindow::floatingChangedToolBar(bool isFloating)
+/**
+ * @brief MainWindow::floatingChangedToolBar
+ * @param isFloating
+ */
+void
+MainWindow::floatingChangedToolBar(bool isFloating)
 {
     QToolBar* tb = qobject_cast<QToolBar*>(sender());
-    if(tb)
-    {
-        if(isFloating)
-        {
+    if (tb) {
+        if (isFloating) {
             /*
             //TODO: Determine best suited close button on various platforms.
             QStyle::SP_DockWidgetCloseButton
@@ -803,8 +925,7 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
             tb->addAction(ACTION);
             connect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));
         }
-        else
-        {
+        else {
             QList<QAction*> actList = tb->actions();
             for(int i = 0; i < actList.size(); ++i)
             {
@@ -819,5 +940,3 @@ void MainWindow::floatingChangedToolBar(bool isFloating)
         }
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

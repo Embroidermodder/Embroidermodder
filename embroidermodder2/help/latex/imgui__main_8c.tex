@@ -635,11 +635,11 @@ static void \mbox{\hyperlink{imgui__main_8c_a616bbab28522263031eafb738f5c9619}{r
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a8a537a5e2f23d7b506a1026eeb614e81}{redo\+\_\+action}} (void)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a16b4ab620db74511700d956eb1bef4d6}{text\+\_\+angle\+\_\+action}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} angle)
+static void \mbox{\hyperlink{imgui__main_8c_a16b4ab620db74511700d956eb1bef4d6}{text\+\_\+angle\+\_\+action}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} angle)
 \begin{DoxyCompactList}\small\item\em {\itshape angle} \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_a8a0b8542af72baf4d486ebfe2a98a65d}{text\+\_\+font\+\_\+action}} (const char $\ast$\mbox{\hyperlink{gui__backend_8cpp_a74e55d8b582dfe7fa8eda915698600bf}{font}})
 \begin{DoxyCompactList}\small\item\em {\itshape font} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a1b63d558798331e4ecf1a1a0467f0398}{text\+\_\+size\+\_\+action}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} size)
+static void \mbox{\hyperlink{imgui__main_8c_a1b63d558798331e4ecf1a1a0467f0398}{text\+\_\+size\+\_\+action}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} size)
 \begin{DoxyCompactList}\small\item\em {\itshape size} \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_ac2add86e93e670809a0836fef462d7b8}{undo\+\_\+action}} (void)
 \item 
@@ -811,7 +811,7 @@ int \mbox{\hyperlink{imgui__main_8c_a0ddf1224851353fc92bfbff6f499fa97}{main}} (i
 \begin{DoxyCompactList}\small\item\em The program entry point on all platforms. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{imgui__main_8c_aff183f464042b39eab77ce3fe5acc7e8}{run\+\_\+script}} (const char $\ast$filename)
 \begin{DoxyCompactList}\small\item\em A basic line-\/by-\/line script processor to allow for extensions to the program. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_abf62628119dde9fd93f65be6742e2b22}{random\+\_\+uniform}} (void)
+\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_abf62628119dde9fd93f65be6742e2b22}{random\+\_\+uniform}} (void)
 \begin{DoxyCompactList}\small\item\em Generate a random number in the range (0.\+0, 1.\+0). \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{imgui__main_8c_a2ae89ff887eb8c663accf7d97031a9ce}{round\+To\+Multiple}} (int round\+Up, int num\+To\+Round, int multiple)
 \begin{DoxyCompactList}\small\item\em Rounds integers to multiples of another given integer. \end{DoxyCompactList}\item 
@@ -823,7 +823,7 @@ bool \mbox{\hyperlink{imgui__main_8c_acf9ae2be63cafd4a01f64f1228acd70d}{valid\+\
 \begin{DoxyCompactList}\small\item\em Check if the filename is valid before we attempt to read or write it. \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{imgui__main_8c_a8d47e2b3013426389546bcecb90ff260}{test\+\_\+translate}} (void)
 \begin{DoxyCompactList}\small\item\em Check that the translate call can return an entry from the table. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_a1291ffefd4b741c0b342ed03934c431d}{emb\+\_\+clamp}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} lower, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} upper)
+\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_a1291ffefd4b741c0b342ed03934c431d}{emb\+\_\+clamp}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} lower, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} upper)
 \begin{DoxyCompactList}\small\item\em Ensure that x lies in the range \mbox{[}{\itshape lower}, {\itshape upper}\mbox{]} by rounding up or down if x is outside of that range. \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_ad2b4c954bfa0e509c24c6da87532e771}{undo\+\_\+history\+\_\+viewer}} (void)
 \item 
@@ -893,7 +893,7 @@ static void \mbox{\hyperlink{imgui__main_8c_a2b7d8cef24c45d49ff57f3f476607ea2}{i
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a7bbc6b2446f13572a0053772b874a71d}{layer\+\_\+manager}} (\mbox{\hyperlink{class_view}{View}} $\ast$view)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a998316b488c92f1c4034719df1e5df88}{Layer\+\_\+manager\+\_\+add\+\_\+layer}} (const char $\ast$name, bool visible, bool frozen, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} z\+Value, unsigned int color, const char $\ast$line\+Type, const char $\ast$line\+Weight, bool print)
+static void \mbox{\hyperlink{imgui__main_8c_a998316b488c92f1c4034719df1e5df88}{Layer\+\_\+manager\+\_\+add\+\_\+layer}} (const char $\ast$name, bool visible, bool frozen, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} z\+Value, unsigned int color, const char $\ast$line\+Type, const char $\ast$line\+Weight, bool print)
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a1d7dbd1773573f522eac182c4799ba8b}{View\+\_\+\+\_\+}} (void)
 \item 
@@ -905,7 +905,7 @@ static void \mbox{\hyperlink{imgui__main_8c_acfb8f114724f7040f92a5681f46a8115}{a
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_ab3d72e31daf94453a2200911abfcf5db}{delete\+\_\+object}} (\mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$obj)
 \begin{DoxyCompactList}\small\item\em We really just remove the objects from the scene. Deletion actually occurs in the destructor. \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_aeae362905e69f6f3393b965e2969bca7}{preview\+\_\+on}} (int clone, int mode, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} data)
+static void \mbox{\hyperlink{imgui__main_8c_aeae362905e69f6f3393b965e2969bca7}{preview\+\_\+on}} (int clone, int mode, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} data)
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a2215c9aae4a42877f53d58d5072dcc65}{preview\+\_\+off}} (void)
 \item 
@@ -1003,17 +1003,17 @@ static void \mbox{\hyperlink{imgui__main_8c_a491ef78f3b774b007d96522f1308f0ae}{r
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a64de9b51618ef03e9b4ce9a1e5fcfec9}{move\+Action}} (void)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a1fed6be2c746f79cf77f1f5f1b4548a3}{move\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dx, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} dy)
+static void \mbox{\hyperlink{imgui__main_8c_a1fed6be2c746f79cf77f1f5f1b4548a3}{move\+Selected}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} dx, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} dy)
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_ac616ca8468d7ccf756f08e335454aa44}{rotate\+Action}} (void)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a3c6e78c46a90eaeeb1dec65ed93cd932}{rotate\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
+static void \mbox{\hyperlink{imgui__main_8c_a3c6e78c46a90eaeeb1dec65ed93cd932}{rotate\+Selected}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_ae8fcc07a5000b6e920eb17f07147d416}{mirror\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
+static void \mbox{\hyperlink{imgui__main_8c_ae8fcc07a5000b6e920eb17f07147d416}{mirror\+Selected}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x2, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y2)
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_aa6e7e1721e6086d501ac4780d78bec17}{scale\+Action}} (void)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a0006eda2393129b54ed8bfbc2e610dad}{scale\+Selected}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} factor)
+static void \mbox{\hyperlink{imgui__main_8c_a0006eda2393129b54ed8bfbc2e610dad}{scale\+Selected}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} factor)
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_ab772a2587a2c3ef8a8f6f041b99098e5}{showscrollbars}} (bool val)
 \item 
@@ -1047,7 +1047,7 @@ static void \mbox{\hyperlink{imgui__main_8c_a5e5cb53f0c6737e12469f0df3af0ade2}{p
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a5a53b1c45895e5d7f309e62791d06857}{property\+\_\+editor\+\_\+update\+Line\+Edit\+Str\+If\+Varies}} (int $\ast$line\+Edit, const char $\ast$str)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a6b4345c571002962cba0424c8d03785a}{property\+\_\+editor\+\_\+update\+Line\+Edit\+Num\+If\+Varies}} (int $\ast$line\+Edit, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} num, bool use\+Angle\+Precision)
+static void \mbox{\hyperlink{imgui__main_8c_a6b4345c571002962cba0424c8d03785a}{property\+\_\+editor\+\_\+update\+Line\+Edit\+Num\+If\+Varies}} (int $\ast$line\+Edit, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} num, bool use\+Angle\+Precision)
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a34b600acc6259d543ff486e76c54c49c}{property\+\_\+editor\+\_\+update\+Font\+Combo\+Box\+Str\+If\+Varies}} (int $\ast$font\+Combo\+Box, const char $\ast$str)
 \item 
@@ -1241,7 +1241,7 @@ static void \mbox{\hyperlink{imgui__main_8c_aa6ad3110116034fee8d590f7e379f7af}{c
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a4111bee970d2262f92a8849ac1d2141d}{calculate\+\_\+distance\+\_\+action}} (void)
 \item 
-\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_afa5ace18f7505e5e457fa47c6cd7bff0}{emb\+Vector\+\_\+perpendicular\+Distance}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} p, \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line)
+\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_afa5ace18f7505e5e457fa47c6cd7bff0}{emb\+Vector\+\_\+perpendicular\+Distance}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} p, \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line)
 \begin{DoxyCompactList}\small\item\em {\itshape p} {\itshape line} Returns Emb\+Real \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_adeff67b5e32166b00dcde093be4ee92f}{cut\+\_\+selected}} (void)
 \item 
@@ -1335,7 +1335,7 @@ static void \mbox{\hyperlink{imgui__main_8c_ade3b9b5707149bbc7ebd77108a593cf3}{T
 \item 
 static void \mbox{\hyperlink{imgui__main_8c_a9ae502f36f9d1d83772226772c6f86e4}{messagebox}} (int type, char title\mbox{[}200\mbox{]}, char text\mbox{[}200\mbox{]})
 \begin{DoxyCompactList}\small\item\em {\itshape type} {\itshape title} {\itshape text} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a7f83a6bf28f21699753530d3a659a0bd}{Print\+Area}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} w, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} h)
+static void \mbox{\hyperlink{imgui__main_8c_a7f83a6bf28f21699753530d3a659a0bd}{Print\+Area}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} w, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} h)
 \begin{DoxyCompactList}\small\item\em {\itshape x} {\itshape y} {\itshape w} {\itshape h} \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_ae9db07b76e37a5ead54179bb2bef46f2}{set\+Background\+Color\+\_\+}} (int r, int g, int b)
 \begin{DoxyCompactList}\small\item\em Set the Background Color object. \end{DoxyCompactList}\item 
@@ -1351,23 +1351,23 @@ static void \mbox{\hyperlink{imgui__main_8c_a4582907016b39aaa5eaff223818aa2fd}{s
 \begin{DoxyCompactList}\small\item\em Set the rubber point object. \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_adbd8c35b43d3eaa48df35a5e1debdeff}{set\+\_\+rubber\+\_\+text}} (const char $\ast$key, const char $\ast$txt)
 \begin{DoxyCompactList}\small\item\em Set the rubber text object. \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_adf551b27689626167bdc9aa36b50ecd5}{add\+\_\+text\+\_\+multi}} (const char $\ast$str, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} pos, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot, bool fill, int rubber\+Mode)
+static void \mbox{\hyperlink{imgui__main_8c_adf551b27689626167bdc9aa36b50ecd5}{add\+\_\+text\+\_\+multi}} (const char $\ast$str, \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} pos, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot, bool fill, int rubber\+Mode)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a551fa26c5cb41765c5da55164b8d74d1}{add\+\_\+text\+\_\+single}} (const char $\ast$str, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot, bool fill, int rubber\+Mode)
+static void \mbox{\hyperlink{imgui__main_8c_a551fa26c5cb41765c5da55164b8d74d1}{add\+\_\+text\+\_\+single}} (const char $\ast$str, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot, bool fill, int rubber\+Mode)
 \item 
-static void \mbox{\hyperlink{imgui__main_8c_a1f8431e15fb7a730d8639d63c396f4cc}{add\+\_\+infinite\+\_\+line}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
+static void \mbox{\hyperlink{imgui__main_8c_a1f8431e15fb7a730d8639d63c396f4cc}{add\+\_\+infinite\+\_\+line}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x2, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y2, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot)
 \begin{DoxyCompactList}\small\item\em {\itshape x1} {\itshape y1} {\itshape x2} {\itshape y2} {\itshape rot} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a0ff1fa42314cf9bec7a2d7559ccce824}{add\+\_\+ray}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
+static void \mbox{\hyperlink{imgui__main_8c_a0ff1fa42314cf9bec7a2d7559ccce824}{add\+\_\+ray}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x2, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y2, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot)
 \begin{DoxyCompactList}\small\item\em {\itshape x1} {\itshape y1} {\itshape x2} {\itshape y2} {\itshape rot} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_ab3e7b1d81d21cc03cc27e80c8a2f5090}{add\+\_\+line}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot, int rubber\+Mode)
+static void \mbox{\hyperlink{imgui__main_8c_ab3e7b1d81d21cc03cc27e80c8a2f5090}{add\+\_\+line}} (\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot, int rubber\+Mode)
 \begin{DoxyCompactList}\small\item\em {\itshape line} {\itshape rot} {\itshape rubber\+Mode} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_ac31b2f6c9d1c163d5460cb4adb0325a1}{add\+\_\+ellipse}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} width, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} height, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot, bool fill, int rubber\+Mode)
+static void \mbox{\hyperlink{imgui__main_8c_ac31b2f6c9d1c163d5460cb4adb0325a1}{add\+\_\+ellipse}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} centerX, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} centerY, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} width, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} height, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot, bool fill, int rubber\+Mode)
 \begin{DoxyCompactList}\small\item\em {\itshape centerX} {\itshape centerY} {\itshape width} {\itshape height} {\itshape rot} {\itshape fill} {\itshape rubber\+Mode} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_adfd4a4149df7b5f07148ff77f82470c8}{add\+\_\+point}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
+static void \mbox{\hyperlink{imgui__main_8c_adfd4a4149df7b5f07148ff77f82470c8}{add\+\_\+point}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y)
 \begin{DoxyCompactList}\small\item\em {\itshape x} {\itshape y} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a3c2b6959a746a022c29706c395d774f5}{add\+\_\+regular\+\_\+polygon}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY, int sides, int mode, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rad, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot, bool fill)
+static void \mbox{\hyperlink{imgui__main_8c_a3c2b6959a746a022c29706c395d774f5}{add\+\_\+regular\+\_\+polygon}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} centerX, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} centerY, int sides, int mode, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rad, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot, bool fill)
 \begin{DoxyCompactList}\small\item\em {\itshape centerX} {\itshape centerY} {\itshape sides} {\itshape mode} {\itshape rad} {\itshape rot} {\itshape fill} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a1799fe290bacd137046f7e52751a6474}{path\+\_\+action}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} startX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} startY, \mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}} $\ast$p, int rubber\+Mode)
+static void \mbox{\hyperlink{imgui__main_8c_a1799fe290bacd137046f7e52751a6474}{path\+\_\+action}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} startX, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} startY, \mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}} $\ast$p, int rubber\+Mode)
 \begin{DoxyCompactList}\small\item\em {\itshape startX} {\itshape startY} {\itshape p} {\itshape rubber\+Mode} \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_af6ea106335ef929038c6a971fe45e764}{horizontal\+\_\+dimension\+\_\+action}} (void)
 \item 
@@ -1377,9 +1377,9 @@ static void \mbox{\hyperlink{imgui__main_8c_a522cad9c8b9672f085d6f3ffc0f6d67f}{i
 \begin{DoxyCompactList}\small\item\em Add an Emb\+Image to the current view. \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_afa6e9c56ed9f01289bfe44c7551ba583}{dim\+\_\+leader\+\_\+action}} (void)
 \begin{DoxyCompactList}\small\item\em Add a Emb\+Dim\+Leader to the current view. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_a6d3433fd7ebb707563972aad2dbb0d54}{calculate\+\_\+angle}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
+\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_a6d3433fd7ebb707563972aad2dbb0d54}{calculate\+\_\+angle}} (\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y1, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} x2, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} y2)
 \begin{DoxyCompactList}\small\item\em {\itshape x1} {\itshape y1} {\itshape x2} {\itshape y2} Returns Emb\+Real \end{DoxyCompactList}\item 
-\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_a41c05f4440a7fca1333c8793b9c46057}{perpendicular\+\_\+distance}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} p, \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line)
+\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} \mbox{\hyperlink{imgui__main_8c_a41c05f4440a7fca1333c8793b9c46057}{perpendicular\+\_\+distance}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} p, \mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}} line)
 \begin{DoxyCompactList}\small\item\em {\itshape p} {\itshape line} Returns Emb\+Real \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_ae74d2d91342a1511f26d7035e6051fd9}{create\+All\+Actions}} (void)
 \begin{DoxyCompactList}\small\item\em Create a All Actions object. \end{DoxyCompactList}\item 
@@ -1417,9 +1417,9 @@ static void \mbox{\hyperlink{imgui__main_8c_a7abdabde95542ae90c627a2f5d66cdbe}{u
 \begin{DoxyCompactList}\small\item\em {\itshape icon\+Directory} \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_af549faa1b048c498f14df2822257c8ed}{update\+\_\+clean\+\_\+icon}} (bool opened)
 \begin{DoxyCompactList}\small\item\em {\itshape opened} \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a722fabb820592e256d619ddab2389036}{rotate}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} point, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
+static void \mbox{\hyperlink{imgui__main_8c_a722fabb820592e256d619ddab2389036}{rotate}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} point, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rot)
 \begin{DoxyCompactList}\small\item\em Actions that were Qt internals were here. add\+Stack, can\+Undo, can\+Redo, undo\+Text, redo\+Text, undo, redo. \end{DoxyCompactList}\item 
-static void \mbox{\hyperlink{imgui__main_8c_a75e14b5c9aee9a8f78f29f19951655ea}{scale\+\_\+action}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} position, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} scale\+Factor, char $\ast$text, \mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$obj, \mbox{\hyperlink{class_view}{View}} $\ast$v)
+static void \mbox{\hyperlink{imgui__main_8c_a75e14b5c9aee9a8f78f29f19951655ea}{scale\+\_\+action}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} position, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} scale\+Factor, char $\ast$text, \mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$obj, \mbox{\hyperlink{class_view}{View}} $\ast$v)
 \begin{DoxyCompactList}\small\item\em {\itshape position} {\itshape scale\+Factor} {\itshape text} {\itshape obj} {\itshape v} \end{DoxyCompactList}\item 
 static void \mbox{\hyperlink{imgui__main_8c_a1c5590236f2767623174b3582aedb1af}{scale\+\_\+undo}} (void)
 \item 
@@ -3119,7 +3119,7 @@ The action string is command similar to how a command line works\+: seperated by
 \index{imgui\_main.c@{imgui\_main.c}!add\_ellipse@{add\_ellipse}}
 \index{add\_ellipse@{add\_ellipse}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_ellipse()}{add\_ellipse()}}
-{\footnotesize\ttfamily static void add\+\_\+ellipse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerY,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{width,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+ellipse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{centerX,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{centerY,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{width,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{height,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3129,7 +3129,7 @@ The action string is command similar to how a command line works\+: seperated by
 \index{imgui\_main.c@{imgui\_main.c}!add\_infinite\_line@{add\_infinite\_line}}
 \index{add\_infinite\_line@{add\_infinite\_line}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_infinite\_line()}{add\_infinite\_line()}}
-{\footnotesize\ttfamily static void add\+\_\+infinite\+\_\+line (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+infinite\+\_\+line (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y2,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3139,7 +3139,7 @@ The action string is command similar to how a command line works\+: seperated by
 \index{imgui\_main.c@{imgui\_main.c}!add\_line@{add\_line}}
 \index{add\_line@{add\_line}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_line()}{add\_line()}}
-{\footnotesize\ttfamily static void add\+\_\+line (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+line (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3159,7 +3159,7 @@ The action string is command similar to how a command line works\+: seperated by
 \index{imgui\_main.c@{imgui\_main.c}!add\_point@{add\_point}}
 \index{add\_point@{add\_point}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_point()}{add\_point()}}
-{\footnotesize\ttfamily static void add\+\_\+point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+point (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3177,7 +3177,7 @@ The action string is command similar to how a command line works\+: seperated by
 \index{imgui\_main.c@{imgui\_main.c}!add\_ray@{add\_ray}}
 \index{add\_ray@{add\_ray}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_ray()}{add\_ray()}}
-{\footnotesize\ttfamily static void add\+\_\+ray (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+ray (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y2,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3187,7 +3187,7 @@ The action string is command similar to how a command line works\+: seperated by
 \index{imgui\_main.c@{imgui\_main.c}!add\_regular\_polygon@{add\_regular\_polygon}}
 \index{add\_regular\_polygon@{add\_regular\_polygon}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_regular\_polygon()}{add\_regular\_polygon()}}
-{\footnotesize\ttfamily static void add\+\_\+regular\+\_\+polygon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerY,  }\item[{int}]{sides,  }\item[{int}]{mode,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rad,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+regular\+\_\+polygon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{centerX,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{centerY,  }\item[{int}]{sides,  }\item[{int}]{mode,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rad,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3344,7 +3344,7 @@ case EMB_RAY: {
 \index{imgui\_main.c@{imgui\_main.c}!add\_text\_multi@{add\_text\_multi}}
 \index{add\_text\_multi@{add\_text\_multi}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_text\_multi()}{add\_text\_multi()}}
-{\footnotesize\ttfamily static void add\+\_\+text\+\_\+multi (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{pos,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+text\+\_\+multi (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{pos,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3354,7 +3354,7 @@ case EMB_RAY: {
 \index{imgui\_main.c@{imgui\_main.c}!add\_text\_single@{add\_text\_single}}
 \index{add\_text\_single@{add\_text\_single}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{add\_text\_single()}{add\_text\_single()}}
-{\footnotesize\ttfamily static void add\+\_\+text\+\_\+single (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void add\+\_\+text\+\_\+single (\begin{DoxyParamCaption}\item[{const char $\ast$}]{str,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot,  }\item[{bool}]{fill,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -3480,7 +3480,7 @@ odo document this.
 \index{imgui\_main.c@{imgui\_main.c}!calculate\_angle@{calculate\_angle}}
 \index{calculate\_angle@{calculate\_angle}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{calculate\_angle()}{calculate\_angle()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} calculate\+\_\+angle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y2 }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} calculate\+\_\+angle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y2 }\end{DoxyParamCaption})}
 
 
 
@@ -4442,7 +4442,7 @@ odo document this.
 \index{imgui\_main.c@{imgui\_main.c}!emb\_clamp@{emb\_clamp}}
 \index{emb\_clamp@{emb\_clamp}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{emb\_clamp()}{emb\_clamp()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+\_\+clamp (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{lower,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{upper }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} emb\+\_\+clamp (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{lower,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{upper }\end{DoxyParamCaption})}
 
 
 
@@ -4546,7 +4546,7 @@ float global = \{\}; //\+Required global.\+first\+Run; global.\+firstX; global.\
 \index{imgui\_main.c@{imgui\_main.c}!embVector\_perpendicularDistance@{embVector\_perpendicularDistance}}
 \index{embVector\_perpendicularDistance@{embVector\_perpendicularDistance}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{embVector\_perpendicularDistance()}{embVector\_perpendicularDistance()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} emb\+Vector\+\_\+perpendicular\+Distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} emb\+Vector\+\_\+perpendicular\+Distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line }\end{DoxyParamCaption})}
 
 
 
@@ -4898,7 +4898,7 @@ On creation, view claims the active\+\_\+view and therefore captures key presses
 \index{imgui\_main.c@{imgui\_main.c}!Layer\_manager\_add\_layer@{Layer\_manager\_add\_layer}}
 \index{Layer\_manager\_add\_layer@{Layer\_manager\_add\_layer}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{Layer\_manager\_add\_layer()}{Layer\_manager\_add\_layer()}}
-{\footnotesize\ttfamily static void Layer\+\_\+manager\+\_\+add\+\_\+layer (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name,  }\item[{bool}]{visible,  }\item[{bool}]{frozen,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{z\+Value,  }\item[{unsigned int}]{color,  }\item[{const char $\ast$}]{line\+Type,  }\item[{const char $\ast$}]{line\+Weight,  }\item[{bool}]{print }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void Layer\+\_\+manager\+\_\+add\+\_\+layer (\begin{DoxyParamCaption}\item[{const char $\ast$}]{name,  }\item[{bool}]{visible,  }\item[{bool}]{frozen,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{z\+Value,  }\item[{unsigned int}]{color,  }\item[{const char $\ast$}]{line\+Type,  }\item[{const char $\ast$}]{line\+Weight,  }\item[{bool}]{print }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5142,7 +5142,7 @@ Returns Boolean value representing the success or failure of the function.
 \index{imgui\_main.c@{imgui\_main.c}!mirrorSelected@{mirrorSelected}}
 \index{mirrorSelected@{mirrorSelected}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{mirrorSelected()}{mirrorSelected()}}
-{\footnotesize\ttfamily static void mirror\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void mirror\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y1,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x2,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5236,7 +5236,7 @@ Initialise move UI event.
 \index{imgui\_main.c@{imgui\_main.c}!moveSelected@{moveSelected}}
 \index{moveSelected@{moveSelected}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{moveSelected()}{moveSelected()}}
-{\footnotesize\ttfamily static void move\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{dx,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void move\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{dx,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5348,7 +5348,7 @@ Initialise move UI event.
 \index{imgui\_main.c@{imgui\_main.c}!path\_action@{path\_action}}
 \index{path\_action@{path\_action}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{path\_action()}{path\_action()}}
-{\footnotesize\ttfamily static void path\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{startX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{startY,  }\item[{\mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}} $\ast$}]{p,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void path\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{startX,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{startY,  }\item[{\mbox{\hyperlink{embroidery_8h_af29045dfeebafdcb66d114b390c4a686}{Emb\+Path}} $\ast$}]{p,  }\item[{int}]{rubber\+Mode }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5396,7 +5396,7 @@ Returns Ui\+Object.
 \index{imgui\_main.c@{imgui\_main.c}!perpendicular\_distance@{perpendicular\_distance}}
 \index{perpendicular\_distance@{perpendicular\_distance}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{perpendicular\_distance()}{perpendicular\_distance()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} perpendicular\+\_\+distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} perpendicular\+\_\+distance (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{p,  }\item[{\mbox{\hyperlink{embroidery_8h_a62e08237073617de993166ed4a9ab085}{Emb\+Line}}}]{line }\end{DoxyParamCaption})}
 
 
 
@@ -5516,7 +5516,7 @@ NOTE\+: This is different than the rest in that the Y+ is down (scripters need n
 \index{imgui\_main.c@{imgui\_main.c}!preview\_on@{preview\_on}}
 \index{preview\_on@{preview\_on}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{preview\_on()}{preview\_on()}}
-{\footnotesize\ttfamily static void preview\+\_\+on (\begin{DoxyParamCaption}\item[{int}]{clone,  }\item[{int}]{mode,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void preview\+\_\+on (\begin{DoxyParamCaption}\item[{int}]{clone,  }\item[{int}]{mode,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{data }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5550,7 +5550,7 @@ NOTE\+: This is different than the rest in that the Y+ is down (scripters need n
 \index{imgui\_main.c@{imgui\_main.c}!PrintArea@{PrintArea}}
 \index{PrintArea@{PrintArea}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{PrintArea()}{PrintArea()}}
-{\footnotesize\ttfamily static void Print\+Area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{w,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{h }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void Print\+Area (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{w,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{h }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5724,7 +5724,7 @@ Returns true Returns false.
 \index{imgui\_main.c@{imgui\_main.c}!property\_editor\_updateLineEditNumIfVaries@{property\_editor\_updateLineEditNumIfVaries}}
 \index{property\_editor\_updateLineEditNumIfVaries@{property\_editor\_updateLineEditNumIfVaries}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{property\_editor\_updateLineEditNumIfVaries()}{property\_editor\_updateLineEditNumIfVaries()}}
-{\footnotesize\ttfamily static void property\+\_\+editor\+\_\+update\+Line\+Edit\+Num\+If\+Varies (\begin{DoxyParamCaption}\item[{int $\ast$}]{line\+Edit,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{num,  }\item[{bool}]{use\+Angle\+Precision }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void property\+\_\+editor\+\_\+update\+Line\+Edit\+Num\+If\+Varies (\begin{DoxyParamCaption}\item[{int $\ast$}]{line\+Edit,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{num,  }\item[{bool}]{use\+Angle\+Precision }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -5786,7 +5786,7 @@ Returns true Returns false.
 \index{imgui\_main.c@{imgui\_main.c}!random\_uniform@{random\_uniform}}
 \index{random\_uniform@{random\_uniform}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{random\_uniform()}{random\_uniform()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} random\+\_\+uniform (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} random\+\_\+uniform (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
 
 
 
@@ -5988,7 +5988,7 @@ Command\+: RGB (prompt only command).
 \index{imgui\_main.c@{imgui\_main.c}!rotate@{rotate}}
 \index{rotate@{rotate}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{rotate()}{rotate()}}
-{\footnotesize\ttfamily static void rotate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{point,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void rotate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{point,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -6034,7 +6034,7 @@ Actions that were Qt internals were here. add\+Stack, can\+Undo, can\+Redo, undo
 \index{imgui\_main.c@{imgui\_main.c}!rotateSelected@{rotateSelected}}
 \index{rotateSelected@{rotateSelected}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{rotateSelected()}{rotateSelected()}}
-{\footnotesize\ttfamily static void rotate\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void rotate\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -6206,7 +6206,7 @@ NOTE\+: This function should be used to interpret various object types and save 
 \index{imgui\_main.c@{imgui\_main.c}!scale\_action@{scale\_action}}
 \index{scale\_action@{scale\_action}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{scale\_action()}{scale\_action()}}
-{\footnotesize\ttfamily static void scale\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{position,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{scale\+Factor,  }\item[{char $\ast$}]{text,  }\item[{\mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$}]{obj,  }\item[{\mbox{\hyperlink{class_view}{View}} $\ast$}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void scale\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}}}]{position,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{scale\+Factor,  }\item[{char $\ast$}]{text,  }\item[{\mbox{\hyperlink{embroidery_8h_aca7cafe21cb651b77560fece69fb1984}{Emb\+Geometry}} $\ast$}]{obj,  }\item[{\mbox{\hyperlink{class_view}{View}} $\ast$}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -6272,7 +6272,7 @@ NOTE\+: This function should be used to interpret various object types and save 
 \index{imgui\_main.c@{imgui\_main.c}!scaleSelected@{scaleSelected}}
 \index{scaleSelected@{scaleSelected}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{scaleSelected()}{scaleSelected()}}
-{\footnotesize\ttfamily static void scale\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void scale\+Selected (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{factor }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -7404,7 +7404,7 @@ Returns true If the test has been passed. Returns false Otherwise. \mbox{\Hypert
 \index{imgui\_main.c@{imgui\_main.c}!text\_angle\_action@{text\_angle\_action}}
 \index{text\_angle\_action@{text\_angle\_action}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{text\_angle\_action()}{text\_angle\_action()}}
-{\footnotesize\ttfamily static void text\+\_\+angle\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{angle }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void text\+\_\+angle\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{angle }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 
@@ -7440,7 +7440,7 @@ Returns true If the test has been passed. Returns false Otherwise. \mbox{\Hypert
 \index{imgui\_main.c@{imgui\_main.c}!text\_size\_action@{text\_size\_action}}
 \index{text\_size\_action@{text\_size\_action}!imgui\_main.c@{imgui\_main.c}}
 \doxyparagraph{\texorpdfstring{text\_size\_action()}{text\_size\_action()}}
-{\footnotesize\ttfamily static void text\+\_\+size\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void text\+\_\+size\+\_\+action (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{size }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 

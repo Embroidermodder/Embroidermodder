@@ -1,4 +1,6 @@
 #include "embroidery.h"
+#include "embroidery-internal.h"
+#include "emb-compress.h"
 #include <stdio.h>
 
 #define HOOP_110X110 0

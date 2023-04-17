@@ -918,6 +918,7 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ./embroidermodder2 \
+                         ./embroidermodder2/docs \
                          ./extern/libembroidery/src \
                          ./extern/libembroidery/src/geometry \
                          ./extern/libembroidery/src/formats \

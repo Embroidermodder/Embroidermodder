@@ -5,7 +5,7 @@ Reallocating 'name_of_file' (item size: 1) to 6 items.
 The style file: plain.bst
 Reallocating 'name_of_file' (item size: 1) to 1 items.
 I couldn't open database file .bib
----line 12309 of file refman.aux
+---line 12689 of file refman.aux
  : \bibdata{
  :          }
 I'm skipping whatever remains of this command

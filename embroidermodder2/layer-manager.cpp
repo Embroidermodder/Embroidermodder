@@ -1,7 +1,16 @@
+/**
+ * \file layer-manager.cpp
+ */
+
 #include <QtGui>
 #include "layer-manager.h"
 #include "mainwindow.h"
 
+/**
+ * @brief LayerManager::LayerManager
+ * @param mw
+ * @param parent
+ */
 LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
 {
     layerModel = new QStandardItemModel(0, 8, this);
@@ -50,12 +59,27 @@ LayerManager::LayerManager(MainWindow* mw, QWidget* parent) : QDialog(parent)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
+/**
+ * @brief LayerManager::~LayerManager
+ */
 LayerManager::~LayerManager()
 {
     QApplication::restoreOverrideCursor();
 }
 
-void LayerManager::addLayer(const QString& name,
+/**
+ * @brief LayerManager::addLayer
+ * @param name
+ * @param visible
+ * @param frozen
+ * @param zValue
+ * @param color
+ * @param lineType
+ * @param lineWeight
+ * @param print
+ */
+void
+LayerManager::addLayer(const QString& name,
                             const bool visible,
                             const bool frozen,
                             const qreal zValue,
@@ -79,5 +103,3 @@ void LayerManager::addLayer(const QString& name,
     layerModel->setData(layerModel->index(0, 6), lineWeight);
     layerModel->setData(layerModel->index(0, 7), print);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

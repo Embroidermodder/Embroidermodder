@@ -442,7 +442,7 @@ void CmdPromptInput::endCommand()
     clear();
 }
 
-void CmdPromptInput::processInput(const QChar& rapidChar)
+void CmdPromptInput::processInput()
 {
     qDebug("CmdPromptInput::processInput");
 
@@ -452,11 +452,9 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
     cmdtxt.replace(0, prefix.length(), "");
     if(!rapidFireEnabled) cmdtxt = cmdtxt.toLower();
 
-    if(cmdActive)
-    {
-        if(rapidFireEnabled)
-        {
-            /**
+    if (cmdActive) {
+        if (rapidFireEnabled) {
+            /*
             \todo sort Qt::Return
             if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return)
             {
@@ -479,44 +477,47 @@ void CmdPromptInput::processInput(const QChar& rapidChar)
             }
             */
         }
-        else
-        {
+        else {
             emit appendHistory(curText, prefix.length());
             emit runCommand(curCmd, cmdtxt);
         }
     }
-    else
-    {
-        if(aliasHash->contains(cmdtxt))
-        {
+    else {
+        if (cmdtxt == "version") {
+            emit appendHistory(curText + "<br/>pong", prefix.length());
+        }
+        else if (cmdtxt == "platform") {
+//            emit appendHistory(curText + "<br/>" + platformString(), prefix.length());
+        }
+        else if (aliasHash->contains(cmdtxt)) {
             cmdActive = true;
             lastCmd = curCmd;
             curCmd = aliasHash->value(cmdtxt);
             emit appendHistory(curText, prefix.length());
             emit startCommand(curCmd);
         }
-        else if(cmdtxt.isEmpty())
-        {
+        else if (cmdtxt.isEmpty()) {
             cmdActive = true;
             emit appendHistory(curText, prefix.length());
             //Rerun the last successful command
             emit startCommand(lastCmd);
         }
-        else
-        {
+        else {
             emit appendHistory(curText + "<br/><font color=\"red\">Unknown command \"" + cmdtxt + "\". Press F1 for help.</font>", prefix.length());
         }
     }
 
-    if(!rapidFireEnabled)
+    if (!rapidFireEnabled) {
         clear();
+    }
 }
 
 void CmdPromptInput::checkSelection()
 {
     //qDebug("CmdPromptInput::checkSelection");
-    if(this->hasSelectedText())
+    if (this->hasSelectedText()) {
         this->deselect();
+    }
 }
 
 void CmdPromptInput::checkCursorPosition(int /*oldpos*/, int newpos)
@@ -660,8 +661,9 @@ void CmdPromptInput::checkEditedText(const QString& txt)
 {
     updateCurrentText(txt);
 
-    if(rapidFireEnabled)
+    if (rapidFireEnabled) {
         processInput();
+    }
 }
 
 void CmdPromptInput::checkChangedText(const QString& txt)
@@ -706,71 +708,62 @@ void CmdPromptInput::contextMenuEvent(QContextMenuEvent* event)
 
 bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
 {
-    if(event->type() == QEvent::KeyPress)
-    {
-        if(isBlinking) emit stopBlinking();
+    if (event->type() == QEvent::KeyPress) {
+        if (isBlinking) {
+            emit stopBlinking();
+        }
 
         QKeyEvent* pressedKey = (QKeyEvent*)event;
 
         //NOTE: These shortcuts need to be caught since QLineEdit uses them
-        if(pressedKey->matches(QKeySequence::Cut))
-        {
+        if (pressedKey->matches(QKeySequence::Cut)) {
             pressedKey->accept();
             emit cutPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Copy))
-        {
+        else if (pressedKey->matches(QKeySequence::Copy)) {
             pressedKey->accept();
             emit copyPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Paste))
-        {
+        else if (pressedKey->matches(QKeySequence::Paste)) {
             pressedKey->accept();
             emit pastePressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::SelectAll))
-        {
+        else if(pressedKey->matches(QKeySequence::SelectAll)) {
             pressedKey->accept();
             emit selectAllPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Undo))
-        {
+        else if (pressedKey->matches(QKeySequence::Undo)) {
             pressedKey->accept();
             emit undoPressed();
             return true;
         }
-        else if(pressedKey->matches(QKeySequence::Redo))
-        {
+        else if(pressedKey->matches(QKeySequence::Redo)) {
             pressedKey->accept();
             emit redoPressed();
             return true;
         }
 
         int key = pressedKey->key();
-        switch(key)
-        {
+        switch (key) {
             case Qt::Key_Enter:
             case Qt::Key_Return:
             case Qt::Key_Space:
                 pressedKey->accept();
-                processInput(QChar(key));
+                processInput();
                 return true;
-                break;
             case Qt::Key_Delete:
                 pressedKey->accept();
                 del();
                 emit deletePressed();
                 return true;
-                break;
             case Qt::Key_Tab:
                 pressedKey->accept();
                 emit tabPressed();
                 return true;
-                break;
             case Qt::Key_Escape:
                 pressedKey->accept();
                 prefix = defaultPrefix;
@@ -778,27 +771,22 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
                 emit appendHistory(curText + tr("*Cancel*"), prefix.length());
                 emit escapePressed();
                 return true;
-                break;
             case Qt::Key_Up:
                 pressedKey->accept();
                 emit upPressed();
                 return true;
-                break;
             case Qt::Key_Down:
                 pressedKey->accept();
                 emit downPressed();
                 return true;
-                break;
             case Qt::Key_F1:
                 pressedKey->accept();
                 emit F1Pressed();
                 return true;
-                break;
             case Qt::Key_F2:
                 pressedKey->accept();
                 emit F2Pressed();
                 return true;
-                break;
             case Qt::Key_F3:
                 pressedKey->accept();
                 emit F3Pressed();
@@ -858,12 +846,10 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
         }
     }
 
-    if(event->type() == QEvent::KeyRelease)
-    {
+    if (event->type() == QEvent::KeyRelease) {
         QKeyEvent* releasedKey = (QKeyEvent*)event;
         int key = releasedKey->key();
-        switch(key)
-        {
+        switch (key) {
             case Qt::Key_Shift:
                 releasedKey->ignore(); //we don't want to eat it, we just want to keep track of it
                 emit shiftReleased();
@@ -875,4 +861,3 @@ bool CmdPromptInput::eventFilter(QObject* obj, QEvent* event)
     return QObject::eventFilter(obj, event);
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

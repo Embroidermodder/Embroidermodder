@@ -8,7 +8,7 @@ var searchData=
   ['activescene_5',['activeScene',['../class_main_window.html#a7e8f60beeeac6d93016cce43a7b9bf40',1,'MainWindow']]],
   ['activeundostack_6',['activeUndoStack',['../class_main_window.html#a85fd98c305dcdcc1818c66e30dda4072',1,'MainWindow']]],
   ['activeview_7',['activeView',['../class_main_window.html#a0e11ead0eb096514ae4c0a4b31e5a1db',1,'MainWindow']]],
-  ['actuator_8',['actuator',['../imgui__main_8c.html#af6840ec2e5976c6e8bdab0e47abe9651',1,'imgui_main.c']]],
+  ['actuator_8',['actuator',['../class_main_window.html#a473b73fce1f85f2aed0696ad933c959d',1,'MainWindow::actuator()'],['../imgui__main_8c.html#af6840ec2e5976c6e8bdab0e47abe9651',1,'actuator(char command_line[200]):&#160;imgui_main.c']]],
   ['add_5fellipse_9',['add_ellipse',['../imgui__main_8c.html#ac31b2f6c9d1c163d5460cb4adb0325a1',1,'imgui_main.c']]],
   ['add_5finfinite_5fline_10',['add_infinite_line',['../imgui__main_8c.html#a1f8431e15fb7a730d8639d63c396f4cc',1,'imgui_main.c']]],
   ['add_5fline_11',['add_line',['../imgui__main_8c.html#ab3e7b1d81d21cc03cc27e80c8a2f5090',1,'imgui_main.c']]],

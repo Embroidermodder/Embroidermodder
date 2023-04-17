@@ -28,14 +28,15 @@ var searchData=
   ['embpolyline_25',['EmbPolyline',['../embroidery_8h.html#ab5563c868d8f8174d5be764808a647dd',1,'embroidery.h']]],
   ['embradiusdim_26',['EmbRadiusDim',['../embroidery_8h.html#aae68919fdb850b157647e11c00ba0d58',1,'embroidery.h']]],
   ['embray_27',['EmbRay',['../embroidery_8h.html#a678e60955aec52bb2623a55afee14dab',1,'embroidery.h']]],
-  ['embreal_28',['EmbReal',['../embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd',1,'embroidery.h']]],
+  ['embreal_28',['EmbReal',['../utility_8h.html#aaeb118982aa989fd8bd9db2780d42ec1',1,'EmbReal():&#160;utility.h'],['../embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd',1,'EmbReal():&#160;embroidery.h']]],
   ['embrect_29',['EmbRect',['../embroidery_8h.html#ac2f33b151fc40a0da3b14379aa0ec653',1,'embroidery.h']]],
   ['embsatinoutline_30',['EmbSatinOutline',['../embroidery_8h.html#af3d7bc78977c54ad019cf191aee0f276',1,'embroidery.h']]],
   ['embspline_31',['EmbSpline',['../embroidery_8h.html#ada60f3e4b416da22524211bc2f242434',1,'embroidery.h']]],
   ['embstitch_32',['EmbStitch',['../embroidery_8h.html#ae92ded87da0dcaaae8f7c7bc880fd1b0',1,'embroidery.h']]],
-  ['embtextmulti_33',['EmbTextMulti',['../embroidery_8h.html#a69ffc2160eb315de93eb634a18925dd5',1,'embroidery.h']]],
-  ['embtextsingle_34',['EmbTextSingle',['../embroidery_8h.html#a93c0b1083acdf358c6c73136607a4304',1,'embroidery.h']]],
-  ['embthread_35',['EmbThread',['../embroidery_8h.html#ab3faffce89b1a5043f8b4e3a001a70bd',1,'embroidery.h']]],
-  ['embtime_36',['EmbTime',['../embroidery_8h.html#a3829b58c37eab5cd81529f1916adcd33',1,'embroidery.h']]],
-  ['embvector_37',['EmbVector',['../embroidery_8h.html#a16fa26764453571074cb85a7574738d4',1,'embroidery.h']]]
+  ['embstring_33',['EmbString',['../utility_8h.html#ae6e24af24a7c5ff82e797ab449b35516',1,'utility.h']]],
+  ['embtextmulti_34',['EmbTextMulti',['../embroidery_8h.html#a69ffc2160eb315de93eb634a18925dd5',1,'embroidery.h']]],
+  ['embtextsingle_35',['EmbTextSingle',['../embroidery_8h.html#a93c0b1083acdf358c6c73136607a4304',1,'embroidery.h']]],
+  ['embthread_36',['EmbThread',['../embroidery_8h.html#ab3faffce89b1a5043f8b4e3a001a70bd',1,'embroidery.h']]],
+  ['embtime_37',['EmbTime',['../embroidery_8h.html#a3829b58c37eab5cd81529f1916adcd33',1,'embroidery.h']]],
+  ['embvector_38',['EmbVector',['../embroidery_8h.html#a16fa26764453571074cb85a7574738d4',1,'embroidery.h']]]
 ];

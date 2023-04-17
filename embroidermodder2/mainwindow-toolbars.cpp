@@ -1,7 +1,14 @@
+/**
+ * \file mainwindow-toolbars.cpp
+ */
+
 #include "mainwindow.h"
 #include <QAction>
 #include <QToolBar>
 
+/**
+ * @brief MainWindow::createFileToolbar
+ */
 void MainWindow::createFileToolbar()
 {
     qDebug("MainWindow createFileToolbar()");
@@ -23,6 +30,9 @@ void MainWindow::createFileToolbar()
     connect(toolbarFile, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+/**
+ * @brief MainWindow::createEditToolbar
+ */
 void MainWindow::createEditToolbar()
 {
     qDebug("MainWindow createEditToolbar()");
@@ -66,6 +76,9 @@ void MainWindow::createZoomToolbar()
     connect(toolbarZoom, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+/**
+ * @brief MainWindow::createPanToolbar
+ */
 void MainWindow::createPanToolbar()
 {
     qDebug("MainWindow createPanToolbar()");
@@ -82,6 +95,9 @@ void MainWindow::createPanToolbar()
     connect(toolbarPan, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+/**
+ * @brief MainWindow::createIconToolbar
+ */
 void MainWindow::createIconToolbar()
 {
     qDebug("MainWindow createIconToolbar()");
@@ -97,6 +113,9 @@ void MainWindow::createIconToolbar()
     connect(toolbarIcon, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+/**
+ * @brief MainWindow::createHelpToolbar
+ */
 void MainWindow::createHelpToolbar()
 {
     qDebug("MainWindow createHelpToolbar()");
@@ -113,6 +132,9 @@ void MainWindow::createHelpToolbar()
     connect(toolbarHelp, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+/**
+ * @brief MainWindow::createLayerToolbar
+ */
 void MainWindow::createLayerToolbar()
 {
     qDebug("MainWindow createLayerToolbar()");
@@ -145,6 +167,9 @@ void MainWindow::createLayerToolbar()
     connect(toolbarLayer, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
+/**
+ * @brief MainWindow::createPropertiesToolbar
+ */
 void MainWindow::createPropertiesToolbar()
 {
     qDebug("MainWindow createPropertiesToolbar()");
@@ -219,7 +244,11 @@ void MainWindow::createPropertiesToolbar()
     connect(toolbarProperties, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
-void MainWindow::createTextToolbar()
+/**
+ * @brief MainWindow::createTextToolbar
+ */
+void
+MainWindow::createTextToolbar()
 {
     qDebug("MainWindow createTextToolbar()");
 
@@ -262,7 +291,11 @@ void MainWindow::createTextToolbar()
     connect(toolbarText, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
 }
 
-void MainWindow::createPromptToolbar()
+/**
+ * @brief MainWindow::createPromptToolbar
+ */
+void
+MainWindow::createPromptToolbar()
 {
     qDebug("MainWindow createPromptToolbar()");
 
@@ -272,7 +305,11 @@ void MainWindow::createPromptToolbar()
     connect(toolbarPrompt, SIGNAL(topLevelChanged(bool)), prompt, SLOT(floatingChanged(bool)));
 }
 
-void MainWindow::createAllToolbars()
+/**
+ * @brief MainWindow::createAllToolbars
+ */
+void
+MainWindow::createAllToolbars()
 {
     qDebug("MainWindow createAllToolbars()");
 
@@ -315,5 +352,3 @@ void MainWindow::createAllToolbars()
 
     //zoomToolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

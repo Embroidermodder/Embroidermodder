@@ -14,9 +14,9 @@ static void \mbox{\hyperlink{fill_8c_a0fd47c53d468e3e5590e096495acac79}{join\+\_
 \item 
 static int $\ast$ \mbox{\hyperlink{fill_8c_adc8683886c723530102d2b75f14b6dbd}{threshold\+\_\+method}} (\mbox{\hyperlink{embroidery_8h_a907d23c2268eff84b7c5146b2add1bb4}{Emb\+Image}} $\ast$image, int $\ast$n\+\_\+points, int subsample\+\_\+width, int subsample\+\_\+height, int threshold)
 \item 
-static void \mbox{\hyperlink{fill_8c_a5d43a4168ef00fcb9221321b4508c8c5}{greedy\+\_\+algorithm}} (int $\ast$points, int n\+\_\+points, int width, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} bias)
+static void \mbox{\hyperlink{fill_8c_a5d43a4168ef00fcb9221321b4508c8c5}{greedy\+\_\+algorithm}} (int $\ast$points, int n\+\_\+points, int width, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} bias)
 \item 
-static void \mbox{\hyperlink{fill_8c_af65a5f7a682322a9588066dfc9d3e10d}{save\+\_\+points\+\_\+to\+\_\+pattern}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, int $\ast$points, int n\+\_\+points, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} scale, int width, int height)
+static void \mbox{\hyperlink{fill_8c_af65a5f7a682322a9588066dfc9d3e10d}{save\+\_\+points\+\_\+to\+\_\+pattern}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, int $\ast$points, int n\+\_\+points, \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} scale, int width, int height)
 \item 
 void \mbox{\hyperlink{fill_8c_a51526002a19f07437ee07f4c6d475690}{emb\+Pattern\+\_\+horizontal\+\_\+fill}} (\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$pattern, \mbox{\hyperlink{embroidery_8h_a907d23c2268eff84b7c5146b2add1bb4}{Emb\+Image}} $\ast$image, int threshhold)
 \item 
@@ -190,7 +190,7 @@ repeating this process gives us all the end points and the fill only alters thes
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000235}{Todo}}]finish stitch\+Ellipse \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000398}{Todo}}]finish stitch\+Ellipse \end{DoxyRefDesc}
 \mbox{\Hypertarget{fill_8c_a736fce5df010bbe74ea9ad2857be9bf4}\label{fill_8c_a736fce5df010bbe74ea9ad2857be9bf4}} 
 \index{fill.c@{fill.c}!embPattern\_stitchPath@{embPattern\_stitchPath}}
 \index{embPattern\_stitchPath@{embPattern\_stitchPath}!fill.c@{fill.c}}
@@ -209,7 +209,7 @@ repeating this process gives us all the end points and the fill only alters thes
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000236}{Todo}}]finish stitch path \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000399}{Todo}}]finish stitch path \end{DoxyRefDesc}
 \mbox{\Hypertarget{fill_8c_a86f903495c0da7514294200680bd6414}\label{fill_8c_a86f903495c0da7514294200680bd6414}} 
 \index{fill.c@{fill.c}!embPattern\_stitchPolygon@{embPattern\_stitchPolygon}}
 \index{embPattern\_stitchPolygon@{embPattern\_stitchPolygon}!fill.c@{fill.c}}
@@ -228,7 +228,7 @@ repeating this process gives us all the end points and the fill only alters thes
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000237}{Todo}}]finish stitch polygon \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000400}{Todo}}]finish stitch polygon \end{DoxyRefDesc}
 \mbox{\Hypertarget{fill_8c_a9ae9d5d7dfbb2ab361dc37970b7eb2f2}\label{fill_8c_a9ae9d5d7dfbb2ab361dc37970b7eb2f2}} 
 \index{fill.c@{fill.c}!embPattern\_stitchPolyline@{embPattern\_stitchPolyline}}
 \index{embPattern\_stitchPolyline@{embPattern\_stitchPolyline}!fill.c@{fill.c}}
@@ -247,7 +247,7 @@ repeating this process gives us all the end points and the fill only alters thes
 \hline
 \end{DoxyParams}
 \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000238}{Todo}}]finish stitch polyline \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000401}{Todo}}]finish stitch polyline \end{DoxyRefDesc}
 \mbox{\Hypertarget{fill_8c_ae38ddde615726bba5070a6b17ce6d018}\label{fill_8c_ae38ddde615726bba5070a6b17ce6d018}} 
 \index{fill.c@{fill.c}!embPattern\_stitchRect@{embPattern\_stitchRect}}
 \index{embPattern\_stitchRect@{embPattern\_stitchRect}!fill.c@{fill.c}}
@@ -328,12 +328,12 @@ Reduces the polygon by removing the Nth vertex in the vertices list. This is a n
 \hline
 \end{DoxyParams}
 using the \char`\"{}paper folding\char`\"{} method \begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000234}{Todo}}]find citation for paper folding method \end{DoxyRefDesc}
+\item[\mbox{\hyperlink{todo__todo000397}{Todo}}]find citation for paper folding method \end{DoxyRefDesc}
 \mbox{\Hypertarget{fill_8c_a5d43a4168ef00fcb9221321b4508c8c5}\label{fill_8c_a5d43a4168ef00fcb9221321b4508c8c5}} 
 \index{fill.c@{fill.c}!greedy\_algorithm@{greedy\_algorithm}}
 \index{greedy\_algorithm@{greedy\_algorithm}!fill.c@{fill.c}}
 \doxyparagraph{\texorpdfstring{greedy\_algorithm()}{greedy\_algorithm()}}
-{\footnotesize\ttfamily static void greedy\+\_\+algorithm (\begin{DoxyParamCaption}\item[{int $\ast$}]{points,  }\item[{int}]{n\+\_\+points,  }\item[{int}]{width,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{bias }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void greedy\+\_\+algorithm (\begin{DoxyParamCaption}\item[{int $\ast$}]{points,  }\item[{int}]{n\+\_\+points,  }\item[{int}]{width,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{bias }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 \begin{DoxyParams}{Parameters}
@@ -346,7 +346,7 @@ using the \char`\"{}paper folding\char`\"{} method \begin{DoxyRefDesc}{Todo}
 {\em bias} & \\
 \hline
 \end{DoxyParams}
-\hypertarget{fill_8c_autotoc_md5}{}\doxyparagraph{Greedy Algorithm}\label{fill_8c_autotoc_md5}
+\hypertarget{fill_8c_autotoc_md19}{}\doxyparagraph{Greedy Algorithm}\label{fill_8c_autotoc_md19}
 For each point in the list find the shortest distance to any possible neighbour, then perform a swap to make that neighbour the next item in the list.
 
 To make the stitches lie more on one axis than the other bias the distance operator to prefer horizontal direction. \mbox{\Hypertarget{fill_8c_a2f0cd5118998e9310252de0bd11c6fb2}\label{fill_8c_a2f0cd5118998e9310252de0bd11c6fb2}} 
@@ -408,7 +408,7 @@ This is a slow generation algorithm. \mbox{\Hypertarget{fill_8c_af65a5f7a682322a
 \index{fill.c@{fill.c}!save\_points\_to\_pattern@{save\_points\_to\_pattern}}
 \index{save\_points\_to\_pattern@{save\_points\_to\_pattern}!fill.c@{fill.c}}
 \doxyparagraph{\texorpdfstring{save\_points\_to\_pattern()}{save\_points\_to\_pattern()}}
-{\footnotesize\ttfamily static void save\+\_\+points\+\_\+to\+\_\+pattern (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{int $\ast$}]{points,  }\item[{int}]{n\+\_\+points,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{scale,  }\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+{\footnotesize\ttfamily static void save\+\_\+points\+\_\+to\+\_\+pattern (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a168c2ed6c7e17dd1aa7755aabc1db314}{Emb\+Pattern}} $\ast$}]{pattern,  }\item[{int $\ast$}]{points,  }\item[{int}]{n\+\_\+points,  }\item[{\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}}}]{scale,  }\item[{int}]{width,  }\item[{int}]{height }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
 
 
 \begin{DoxyParams}{Parameters}

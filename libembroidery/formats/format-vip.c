@@ -1,5 +1,6 @@
 
 #include "embroidery.h"
+#include "emb-compress.h"
 #include <stdlib.h>
 
 static int vipDecodeByte(unsigned char b)

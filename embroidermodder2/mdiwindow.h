@@ -1,20 +1,12 @@
 #ifndef MDIWINDOW_H
 #define MDIWINDOW_H
-//Qt
+
 #include <QObject>
 #include <QMainWindow>
 #include <QMdiSubWindow>
 #include <QScrollBar>
 #include <QGridLayout>
-
-#if QT_VERSION >= 0x050000
-//Qt5
 #include <QtPrintSupport>
-#else
-//Qt4
-#include <QPrinter>
-#endif
-
 
 #include "mainwindow.h"
 
@@ -113,5 +105,3 @@ private:
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

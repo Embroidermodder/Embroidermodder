@@ -78,18 +78,33 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     onWindowActivated();
 }
 
+/**
+ * @brief MdiWindow::~MdiWindow
+ */
 MdiWindow::~MdiWindow()
 {
     qDebug("MdiWindow Destructor()");
 }
 
-bool MdiWindow::saveFile(const QString &fileName)
+/**
+ * @brief MdiWindow::saveFile
+ * @param fileName
+ * @return
+ */
+bool
+MdiWindow::saveFile(const QString &fileName)
 {
     SaveObject saveObj(gscene, this);
     return saveObj.save(fileName);
 }
 
-bool MdiWindow::loadFile(const QString &fileName)
+/**
+ * @brief MdiWindow::loadFile
+ * @param fileName
+ * @return
+ */
+bool
+MdiWindow::loadFile(const QString &fileName)
 {
     qDebug("MdiWindow loadFile()");
 
@@ -333,6 +348,9 @@ bool MdiWindow::loadFile(const QString &fileName)
     return fileWasLoaded;
 }
 
+/**
+ * @brief MdiWindow::print
+ */
 void MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
@@ -358,11 +376,16 @@ void MdiWindow::print()
     }
 }
 
-//TODO: Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
 
-//TODO: Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
-//TODO: Is there/should there be other embedded data in the bitmap besides the image itself?
-//NOTE: Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
+/**
+ * @brief MdiWindow::saveBMC
+ *
+ * \todo Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?
+ *
+ * \todo Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?
+ * \todo Is there/should there be other embedded data in the bitmap besides the image itself?
+ * \note Can save a Singer BMC image (An 8bpp, 130x113 pixel colored bitmap image)
+ */
 void MdiWindow::saveBMC()
 {
     //TODO: figure out how to center the image, right now it just plops it to the left side.
@@ -389,30 +412,54 @@ void MdiWindow::saveBMC()
     img.convertToFormat(QImage::Format_Indexed8, Qt::ThresholdDither|Qt::AvoidDither).save("test.bmc", "BMP");
 }
 
-void MdiWindow::setCurrentFile(const QString &fileName)
+/**
+ * @brief MdiWindow::setCurrentFile
+ * @param fileName
+ */
+void
+MdiWindow::setCurrentFile(const QString &fileName)
 {
     curFile = QFileInfo(fileName).canonicalFilePath();
     setWindowModified(false);
     setWindowTitle(getShortCurrentFile());
 }
 
-QString MdiWindow::getShortCurrentFile()
+/**
+ * @brief MdiWindow::getShortCurrentFile
+ * @return
+ */
+QString
+MdiWindow::getShortCurrentFile()
 {
     return QFileInfo(curFile).fileName();
 }
 
-QString MdiWindow::fileExtension(const QString& fileName)
+/**
+ * @brief MdiWindow::fileExtension
+ * @param fileName
+ * @return
+ */
+QString
+MdiWindow::fileExtension(const QString& fileName)
 {
     return QFileInfo(fileName).suffix().toLower();
 }
 
-void MdiWindow::closeEvent(QCloseEvent* /*e*/)
+/**
+ * @brief MdiWindow::closeEvent
+ */
+void
+MdiWindow::closeEvent(QCloseEvent* /*e*/)
 {
     qDebug("MdiWindow closeEvent()");
     emit sendCloseMdiWin(this);
 }
 
-void MdiWindow::onWindowActivated()
+/**
+ * @brief MdiWindow::onWindowActivated
+ */
+void
+MdiWindow::onWindowActivated()
 {
     qDebug("MdiWindow onWindowActivated()");
     gview->getUndoStack()->setActive(true);
@@ -428,27 +475,49 @@ void MdiWindow::onWindowActivated()
     mainWin->prompt->setHistory(promptHistory);
 }
 
-QSize MdiWindow::sizeHint() const
+/**
+ * @brief MdiWindow::sizeHint
+ * @return
+ */
+QSize
+MdiWindow::sizeHint() const
 {
     qDebug("MdiWindow sizeHint()");
     return QSize(450, 300);
 }
 
-void MdiWindow::currentLayerChanged(const QString& layer)
+/**
+ * @brief MdiWindow::currentLayerChanged
+ * @param layer
+ */
+void
+MdiWindow::currentLayerChanged(const QString& layer)
 {
     curLayer = layer;
 }
 
+/**
+ * @brief MdiWindow::currentColorChanged
+ * @param color
+ */
 void MdiWindow::currentColorChanged(const QRgb& color)
 {
     curColor = color;
 }
 
+/**
+ * @brief MdiWindow::currentLinetypeChanged
+ * @param type
+ */
 void MdiWindow::currentLinetypeChanged(const QString& type)
 {
     curLineType = type;
 }
 
+/**
+ * @brief MdiWindow::currentLineweightChanged
+ * @param weight
+ */
 void MdiWindow::currentLineweightChanged(const QString& weight)
 {
     curLineWeight = weight;
@@ -514,12 +583,21 @@ void MdiWindow::promptInputPrevious()
     promptInputPrevNext(true);
 }
 
-void MdiWindow::promptInputNext()
+/**
+ * @brief MdiWindow::promptInputNext
+ */
+void
+MdiWindow::promptInputNext()
 {
     promptInputPrevNext(false);
 }
 
-void MdiWindow::promptInputPrevNext(bool prev)
+/**
+ * @brief MdiWindow::promptInputPrevNext
+ * @param prev
+ */
+void
+MdiWindow::promptInputPrevNext(bool prev)
 {
     if(promptInputList.isEmpty())
     {
@@ -537,5 +615,3 @@ void MdiWindow::promptInputPrevNext(bool prev)
         else                              { mainWin->prompt->setCurrentText(promptInputList.at(promptInputNum)); }
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

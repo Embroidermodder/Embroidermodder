@@ -6,9 +6,6 @@
 
 class MainWindow;
 
-QT_BEGIN_NAMESPACE
-QT_END_NAMESPACE
-
 class MdiArea : public QMdiArea
 {
     Q_OBJECT
@@ -48,5 +45,3 @@ private:
 };
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

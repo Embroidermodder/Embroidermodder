@@ -1,5 +1,6 @@
 var dir_14b8d3c8a029a2dddea7631dedf084d1 =
 [
+    [ "docs", "dir_48191f536b3bc71c20e20084cba37bae.html", null ],
     [ "application.cpp", "application_8cpp.html", null ],
     [ "application.h", "application_8h.html", "application_8h" ],
     [ "cmdprompt.cpp", "cmdprompt_8cpp.html", null ],
@@ -73,6 +74,7 @@ var dir_14b8d3c8a029a2dddea7631dedf084d1 =
     [ "undo-commands.h", "undo-commands_8h.html", "undo-commands_8h" ],
     [ "undo-editor.cpp", "undo-editor_8cpp.html", null ],
     [ "undo-editor.h", "undo-editor_8h.html", "undo-editor_8h" ],
+    [ "utility.h", "utility_8h.html", "utility_8h" ],
     [ "view.cpp", "view_8cpp.html", null ],
     [ "view.h", "view_8h.html", "view_8h" ]
 ];

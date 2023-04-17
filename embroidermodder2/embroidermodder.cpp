@@ -1,3 +1,6 @@
+/**
+ * \file main.cpp
+ */
 #include "application.h"
 #include "mainwindow.h"
 
@@ -5,6 +8,37 @@ const char* _appName_ = "Embroidermodder";
 const char* _appVer_  = "v2.0 alpha";
 bool exitApp = false;
 
+/**
+ * @brief Application::Application
+ * @param argc
+ * @param argv
+ */
+Application::Application(int argc, char **argv) : QApplication(argc, argv), _mainWin(NULL)
+{
+}
+
+/**
+ * @brief Application::event
+ * @param event
+ * @return
+ */
+bool Application::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::FileOpen:
+        if (_mainWin) {
+            _mainWin->openFilesSelected(QStringList(static_cast<QFileOpenEvent *>(event)->file()));
+            return true;
+        }
+        // Fall through
+    default:
+        return QApplication::event(event);
+    }
+}
+
+/**
+ * @brief usage
+ */
 static void usage(void)
 {
     fprintf(stderr,
@@ -28,12 +62,21 @@ static void usage(void)
     exitApp = true;
 }
 
+/**
+ * @brief version
+ */
 static void version()
 {
     fprintf(stdout, "%s %s\n", _appName_, _appVer_);
     exitApp = true;
 }
 
+/**
+ * @brief qMain
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, char* argv[])
 {
 #if defined(Q_OS_MAC)
@@ -80,5 +123,3 @@ int main(int argc, char* argv[])
 
     return app.exec();
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,3 +1,7 @@
+/**
+ * \file mainwindow-commands.cpp
+ */
+
 #include "mainwindow.h"
 #include "view.h"
 #include "statusbar.h"
@@ -36,17 +40,30 @@
 #include <QComboBox>
 #include <QWhatsThis>
 
-void MainWindow::stub_implement(QString txt)
+/**
+ * @brief MainWindow::stub_implement
+ * @param txt
+ */
+void
+MainWindow::stub_implement(QString txt)
 {
     qDebug("TODO: %s", qPrintable(txt));
 }
 
-void MainWindow::stub_testing()
+/**
+ * @brief MainWindow::stub_testing
+ */
+void
+MainWindow::stub_testing()
 {
     QMessageBox::warning(this, tr("Testing Feature"), tr("<b>This feature is in testing.</b>"));
 }
 
-void MainWindow::exit()
+/**
+ * @brief MainWindow::exit
+ */
+void
+MainWindow::exit()
 {
     qDebug("exit()");
     if(getSettingsPromptSaveHistory())
@@ -57,7 +74,11 @@ void MainWindow::exit()
     this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
 }
 
-void MainWindow::quit()
+/**
+ * @brief MainWindow::quit
+ */
+void
+MainWindow::quit()
 {
     qDebug("quit()");
     exit();
@@ -725,7 +746,11 @@ void MainWindow::panUp()
     }
 }
 
-void MainWindow::panDown()
+/**
+ * @brief MainWindow::panDown
+ */
+void
+MainWindow::panDown()
 {
     qDebug("panDown()");
     View* gview = activeView();
@@ -737,7 +762,11 @@ void MainWindow::panDown()
     }
 }
 
-void MainWindow::dayVision()
+/**
+ * @brief MainWindow::dayVision
+ */
+void
+MainWindow::dayVision()
 {
     View* gview = activeView();
     if(gview)
@@ -748,7 +777,11 @@ void MainWindow::dayVision()
     }
 }
 
-void MainWindow::nightVision()
+/**
+ * @brief MainWindow::nightVision
+ */
+void
+MainWindow::nightVision()
 {
     View* gview = activeView();
     if(gview)
@@ -1188,12 +1221,24 @@ void MainWindow::nativeWindowPrevious()
     mdiArea->activatePreviousSubWindow();
 }
 
-QString MainWindow::nativePlatformString()
+/**
+ * @brief MainWindow::nativePlatformString
+ * @return
+ */
+QString
+MainWindow::nativePlatformString()
 {
     return platformString();
 }
 
-void MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
+/**
+ * @brief MainWindow::nativeMessageBox
+ * @param type
+ * @param title
+ * @param text
+ */
+void
+MainWindow::nativeMessageBox(const QString& type, const QString& title, const QString& text)
 {
     QString msgType = type.toLower();
     if     (msgType == "critical")    { QMessageBox::critical   (this, tr(qPrintable(title)), tr(qPrintable(text))); }
@@ -1263,21 +1308,39 @@ void MainWindow::nativePanDown()
     panDown();
 }
 
+/**
+ * @brief MainWindow::nativeZoomIn
+ */
 void MainWindow::nativeZoomIn()
 {
     zoomIn();
 }
 
-void MainWindow::nativeZoomOut()
+/**
+ * @brief MainWindow::nativeZoomOut
+ */
+void
+MainWindow::nativeZoomOut()
 {
     zoomOut();
 }
 
-void MainWindow::nativeZoomExtents()
+/**
+ * @brief MainWindow::nativeZoomExtents
+ */
+void
+MainWindow::nativeZoomExtents()
 {
     zoomExtents();
 }
 
+/**
+ * @brief MainWindow::nativePrintArea
+ * @param x
+ * @param y
+ * @param w
+ * @param h
+ */
 void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
@@ -1812,34 +1875,62 @@ void MainWindow::nativeClearSelection()
     if(gview) { gview->clearSelection(); }
 }
 
+/**
+ * @brief MainWindow::nativeDeleteSelected
+ */
 void MainWindow::nativeDeleteSelected()
 {
     View* gview = activeView();
     if(gview) { gview->deleteSelected(); }
 }
 
+/**
+ * @brief MainWindow::nativeCutSelected
+ * @param x
+ * @param y
+ */
 void MainWindow::nativeCutSelected(qreal x, qreal y)
 {
 }
 
+/**
+ * @brief MainWindow::nativeCopySelected
+ * @param x
+ * @param y
+ */
 void MainWindow::nativeCopySelected(qreal x, qreal y)
 {
 }
 
+/**
+ * @brief MainWindow::nativePasteSelected
+ * @param x
+ * @param y
+ */
 void MainWindow::nativePasteSelected(qreal x, qreal y)
 {
 }
 
+/**
+ * @brief MainWindow::nativeMoveSelected
+ * @param dx
+ * @param dy
+ */
 void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
 {
     View* gview = activeView();
     if(gview) { gview->moveSelected(dx, -dy); }
 }
 
+/**
+ * @brief MainWindow::nativeScaleSelected
+ * @param x
+ * @param y
+ * @param factor
+ */
 void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
 {
-    if(factor <= 0.0)
-    {
+    if (factor <= 0.0) {
         QMessageBox::critical(this, tr("ScaleFactor Error"),
                                 tr("Hi there. If you are not a developer, report this as a bug. "
                                 "If you are a developer, your code needs examined, and possibly your head too."));
@@ -1849,46 +1940,91 @@ void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
     if(gview) { gview->scaleSelected(x, -y, factor); }
 }
 
-void MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
+/**
+ * @brief MainWindow::nativeRotateSelected
+ * @param x
+ * @param y
+ * @param rot
+ */
+void
+MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
 {
     View* gview = activeView();
-    if(gview) { gview->rotateSelected(x, -y, -rot); }
+    if (gview) {
+        gview->rotateSelected(x, -y, -rot);
+    }
 }
 
-void MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+/**
+ * @brief MainWindow::nativeMirrorSelected
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ */
+void
+MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
 {
     View* gview = activeView();
-    if(gview) { gview->mirrorSelected(x1, -y1, x2, -y2); }
+    if (gview) {
+        gview->mirrorSelected(x1, -y1, x2, -y2);
+    }
 }
 
-qreal MainWindow::nativeQSnapX()
+/**
+ * @brief MainWindow::nativeQSnapX
+ * @return
+ */
+qreal
+MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene) return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+    if (scene) {
+        return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+    }
     return 0.0;
 }
 
-qreal MainWindow::nativeQSnapY()
+/**
+ * @brief MainWindow::nativeQSnapY
+ * @return
+ */
+EmbReal
+MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene) return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+    if (scene) {
+        return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+    }
     return 0.0;
 }
 
-qreal MainWindow::nativeMouseX()
+/**
+ * @brief MainWindow::nativeMouseX
+ * @return
+ */
+EmbReal
+MainWindow::nativeMouseX()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene) qDebug("mouseX: %.50f", scene->property(SCENE_MOUSE_POINT).toPointF().x());
-    if(scene) return scene->property(SCENE_MOUSE_POINT).toPointF().x();
+    if (scene) {
+        qDebug("mouseX: %.50f", scene->property(SCENE_MOUSE_POINT).toPointF().x());
+        return scene->property(SCENE_MOUSE_POINT).toPointF().x();
+    }
     return 0.0;
 }
 
-qreal MainWindow::nativeMouseY()
+/**
+ * @brief MainWindow::nativeMouseY
+ * @return
+ */
+EmbReal
+MainWindow::nativeMouseY()
 {
     QGraphicsScene* scene = activeScene();
-    if(scene) qDebug("mouseY: %.50f", -scene->property(SCENE_MOUSE_POINT).toPointF().y());
-    if(scene) return -scene->property(SCENE_MOUSE_POINT).toPointF().y();
+    if (scene) {
+        qDebug("mouseY: %.50f", -scene->property(SCENE_MOUSE_POINT).toPointF().y());
+        return -scene->property(SCENE_MOUSE_POINT).toPointF().y();
+    }
     return 0.0;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

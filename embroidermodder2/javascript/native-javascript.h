@@ -1,6 +1,8 @@
 #ifndef NATIVE_JAVASCRIPT_H
 #define NATIVE_JAVASCRIPT_H
 
+#if 0
+
 //#include <QtScript>
 #include "native-scripting.h"
 
@@ -123,5 +125,4 @@ QScriptValue javaMouseY                 (QScriptContext* context, QScriptEngine*
 QScriptValue javaInclude                (QScriptContext* context, QScriptEngine* engine);
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+#endif

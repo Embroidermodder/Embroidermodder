@@ -123,6 +123,7 @@ SOURCES += \
 
 HEADERS += \
     $$PWD/emb-hash.h \
+    $$PWD/embroidery-internal.h \
     $$PWD/embroidery.h \
     ../libembroidery/emb-compress.h \
     ../libembroidery/hashtable.h \

@@ -1,7 +1,16 @@
+/**
+ * \file mdiarea.cpp
+ */
+
 #include "mdiarea.h"
 #include "mainwindow.h"
 #include "view.h"
 
+/**
+ * @brief MdiArea::MdiArea
+ * @param mw
+ * @param parent
+ */
 MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw)
 {
     #if QT_VERSION >= 0x040800
@@ -13,17 +22,30 @@ MdiArea::MdiArea(MainWindow* mw, QWidget *parent) : QMdiArea(parent), mainWin(mw
     useColor = false;
 }
 
+/**
+ * @brief MdiArea::~MdiArea
+ */
 MdiArea::~MdiArea()
 {
 }
 
-void MdiArea::useBackgroundLogo(bool use)
+/**
+ * @brief MdiArea::useBackgroundLogo
+ * @param use
+ */
+void
+MdiArea::useBackgroundLogo(bool use)
 {
     useLogo = use;
     forceRepaint();
 }
 
-void MdiArea::useBackgroundTexture(bool use)
+/**
+ * @brief MdiArea::useBackgroundTexture
+ * @param use
+ */
+void
+MdiArea::useBackgroundTexture(bool use)
 {
     useTexture = use;
     forceRepaint();
@@ -35,6 +57,10 @@ void MdiArea::useBackgroundColor(bool use)
     forceRepaint();
 }
 
+/**
+ * @brief MdiArea::setBackgroundLogo
+ * @param fileName
+ */
 void MdiArea::setBackgroundLogo(const QString& fileName)
 {
     bgLogo.load(fileName);
@@ -42,6 +68,10 @@ void MdiArea::setBackgroundLogo(const QString& fileName)
     forceRepaint();
 }
 
+/**
+ * @brief MdiArea::setBackgroundTexture
+ * @param fileName
+ */
 void MdiArea::setBackgroundTexture(const QString& fileName)
 {
     bgTexture.load(fileName);
@@ -49,6 +79,10 @@ void MdiArea::setBackgroundTexture(const QString& fileName)
     forceRepaint();
 }
 
+/**
+ * @brief MdiArea::setBackgroundColor
+ * @param color
+ */
 void MdiArea::setBackgroundColor(const QColor& color)
 {
     if(!color.isValid())
@@ -59,12 +93,20 @@ void MdiArea::setBackgroundColor(const QColor& color)
     forceRepaint();
 }
 
-void MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
+/**
+ * @brief MdiArea::mouseDoubleClickEvent
+ */
+void
+MdiArea::mouseDoubleClickEvent(QMouseEvent* /*e*/)
 {
     mainWin->openFile();
 }
 
-void MdiArea::paintEvent(QPaintEvent* /*e*/)
+/**
+ * @brief MdiArea::paintEvent
+ */
+void
+MdiArea::paintEvent(QPaintEvent* /*e*/)
 {
     QWidget* vport = viewport();
     QRect rect = vport->rect();
@@ -93,18 +135,27 @@ void MdiArea::paintEvent(QPaintEvent* /*e*/)
     }
 }
 
+/**
+ * @brief MdiArea::cascade
+ */
 void MdiArea::cascade()
 {
     cascadeSubWindows();
     zoomExtentsAllSubWindows();
 }
 
+/**
+ * @brief MdiArea::tile
+ */
 void MdiArea::tile()
 {
     tileSubWindows();
     zoomExtentsAllSubWindows();
 }
 
+/**
+ * @brief MdiArea::zoomExtentsAllSubWindows
+ */
 void MdiArea::zoomExtentsAllSubWindows()
 {
     foreach(QMdiSubWindow* window, subWindowList())
@@ -122,6 +173,9 @@ void MdiArea::zoomExtentsAllSubWindows()
     }
 }
 
+/**
+ * @brief MdiArea::forceRepaint
+ */
 void MdiArea::forceRepaint()
 {
     //HACK: Take that QMdiArea!
@@ -129,5 +183,3 @@ void MdiArea::forceRepaint()
     resize(hack + QSize(1,1));
     resize(hack);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

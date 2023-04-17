@@ -1,5 +1,7 @@
 #include "native-javascript.h"
 
+#if 0
+
 void MainWindow::javaInitNatives(QScriptEngine* engine)
 {
     QScriptValue scriptValDebug = engine->newFunction(javaDebug); engine->globalObject().setProperty("debug", scriptValDebug);
@@ -283,4 +285,4 @@ void MainWindow::javaLoadCommand(const QString& cmdName)
     }
 }
 
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
+#endif

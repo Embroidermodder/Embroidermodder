@@ -1446,18 +1446,6 @@ const char* threadColorName(unsigned int color, ThreadBrand brand);
 
 #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 
-#define PI 3.1415926535
-
-#ifndef MINMAX
-#define MINMAX
-#ifndef max
-#define max(a,b) (((a) > (b)) ? (a) : (b))
-#endif
-#ifndef min
-#define min(a,b) (((a) < (b)) ? (a) : (b))
-#endif
-#endif
-
 char binaryReadByte(EmbFile* file);
 int binaryReadBytes(EmbFile* file, unsigned char* destination, int count);
 short binaryReadInt16(EmbFile* file);
@@ -1533,8 +1521,6 @@ typedef struct EmbReaderWriter_
 } EmbReaderWriter;
 
 extern EMB_PUBLIC EmbReaderWriter* EMB_CALL embReaderWriter_getByFileName(const char* fileName);
-
-#include "emb-compress.h"
 
 #ifdef __cplusplus
 }

@@ -1,4 +1,6 @@
 #include "embroidery.h"
+#include "embroidery-internal.h"
+#include "emb-compress.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -314,14 +316,15 @@ void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int
 {
     double x,y;
 
-    if(!p) { embLog_error("emb-pattern.c embPattern_addStitchRel(), p argument is null\n"); return; }
-    if(!embStitchList_empty(p->stitchList))
-    {
+    if (!p) {
+        embLog_error("emb-pattern.c embPattern_addStitchRel(), p argument is null\n");
+        return;
+    }
+    if (!embStitchList_empty(p->stitchList)) {
         x = p->lastX + dx;
         y = p->lastY + dy;
     }
-    else
-    {
+    else {
         /* NOTE: The stitchList is empty, so add it to the HOME position. The embStitchList_create function will ensure the first coordinate is at the HOME position. */
         EmbPoint home = embSettings_home(&(p->settings));
         x = home.xx + dx;
