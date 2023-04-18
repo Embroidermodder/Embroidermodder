@@ -25,7 +25,7 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
-#include "embroidery.h"
+#include "../libembroidery/embroidery.h"
 
 MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::WindowFlags wflags) : QMdiSubWindow(parent, wflags)
 {

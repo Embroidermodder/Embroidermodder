@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
 qt_standard_project_setup()
 
 find_package(OpenGL REQUIRED)
@@ -12,6 +12,8 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_AUTOMOC ON)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
@@ -47,48 +49,180 @@ endif()
 
 set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
 
-add_executable(embroidermodder
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-base.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-textsingle.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/imagewidget.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-circle.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/preview-dialog.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/application.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-dimleader.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/property-editor.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/cmdprompt.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/layer-manager.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-ellipse.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/main.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/selectbox.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-actions.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-image.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/settings-dialog.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/embdetails-dialog.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-commands.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-line.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-menus.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-settings.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-path.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar-button.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-toolbars.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-point.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mdiarea.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-polygon.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/mdiwindow.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-polyline.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/undo-commands.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/native-scripting.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-rect.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/undo-editor.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/gui_backend.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-arc.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/object-save.cpp
-	${CMAKE_SOURCE_DIR}/embroidermodder2/view.cpp
+add_executable(embroidermodder2
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/cmdprompt.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/embdetails-dialog.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/embroidermodder.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/gui_backend.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/imagewidget.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/layer-manager.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-actions.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-commands.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-menus.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-settings.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow-toolbars.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mdiarea.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mdiwindow.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-arc.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-base.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-circle.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-dimleader.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-ellipse.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-image.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-line.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-path.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-point.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-polygon.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-polyline.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-rect.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-save.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-textsingle.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/preview-dialog.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/property-editor.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/selectbox.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/settings-dialog.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar-button.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/undo-commands.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/undo-editor.cpp
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/view.cpp
 
-#	${CMAKE_SOURCE_DIR}/libembroidery/...
+    embroidermodder2/application.h
+    embroidermodder2/cmdprompt.h
+    embroidermodder2/embdetails-dialog.h
+    embroidermodder2/embroidermodder.h
+    embroidermodder2/gui_backend.h
+    embroidermodder2/imagewidget.h
+    embroidermodder2/layer-manager.h
+    embroidermodder2/mainwindow.h
+    embroidermodder2/mdiarea.h
+    embroidermodder2/mdiwindow.h
+    embroidermodder2/object-arc.h
+    embroidermodder2/object-base.h
+    embroidermodder2/object-circle.h
+    embroidermodder2/object-data.h
+    embroidermodder2/object-dimleader.h
+    embroidermodder2/object-ellipse.h
+    embroidermodder2/object-image.h
+    embroidermodder2/object-line.h
+    embroidermodder2/object-path.h
+    embroidermodder2/object-point.h
+    embroidermodder2/object-polygon.h
+    embroidermodder2/object-polyline.h
+    embroidermodder2/object-rect.h
+    embroidermodder2/object-save.h
+    embroidermodder2/object-textsingle.h
+    embroidermodder2/preview-dialog.h
+    embroidermodder2/property-editor.h
+    embroidermodder2/selectbox.h
+    embroidermodder2/settings-dialog.h
+    embroidermodder2/statusbar-button.h
+    embroidermodder2/statusbar.h
+    embroidermodder2/undo-commands.h
+    embroidermodder2/undo-editor.h
+    embroidermodder2/view.h
+
+    ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-difat.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-directory.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-fat.c
+    libembroidery/compound-file-header.c
+    libembroidery/compound-file.c
+    libembroidery/emb-color.c
+    libembroidery/emb-compress.c
+    libembroidery/emb-ellipse.c
+    libembroidery/emb-file.c
+    libembroidery/emb-flag.c
+    libembroidery/emb-format.c
+    libembroidery/emb-hash.c
+    libembroidery/emb-hoop.c
+    libembroidery/emb-layer.c
+    libembroidery/emb-logging.c
+#    libembroidery/emb-outline.c
+    libembroidery/emb-path.c
+    libembroidery/emb-pattern.c
+    libembroidery/emb-point.c
+    libembroidery/emb-reader-writer.c
+    libembroidery/emb-settings.c
+    libembroidery/emb-spline.c
+    libembroidery/emb-stitch.c
+    libembroidery/emb-thread.c
+    libembroidery/emb-time.c
+    libembroidery/emb-vector.c
+    libembroidery/formats/format-100.c
+    libembroidery/formats/format-10o.c
+    libembroidery/formats/format-art.c
+    libembroidery/formats/format-bmc.c
+    libembroidery/formats/format-bro.c
+    libembroidery/formats/format-cnd.c
+    libembroidery/formats/format-col.c
+    libembroidery/formats/format-csd.c
+    libembroidery/formats/format-csv.c
+    libembroidery/formats/format-dat.c
+    libembroidery/formats/format-dem.c
+    libembroidery/formats/format-dsb.c
+    libembroidery/formats/format-dst.c
+    libembroidery/formats/format-dsz.c
+    libembroidery/formats/format-dxf.c
+    libembroidery/formats/format-edr.c
+    libembroidery/formats/format-emd.c
+    libembroidery/formats/format-exp.c
+    libembroidery/formats/format-exy.c
+    libembroidery/formats/format-eys.c
+    libembroidery/formats/format-fxy.c
+    libembroidery/formats/format-gc.c
+    libembroidery/formats/format-gnc.c
+    libembroidery/formats/format-gt.c
+    libembroidery/formats/format-hus.c
+    libembroidery/formats/format-inb.c
+    libembroidery/formats/format-inf.c
+    libembroidery/formats/format-jef.c
+    libembroidery/formats/format-ksm.c
+    libembroidery/formats/format-max.c
+    libembroidery/formats/format-mit.c
+    libembroidery/formats/format-new.c
+    libembroidery/formats/format-ofm.c
+    libembroidery/formats/format-pcd.c
+    libembroidery/formats/format-pcm.c
+    libembroidery/formats/format-pcq.c
+    libembroidery/formats/format-pcs.c
+    libembroidery/formats/format-pec.c
+    libembroidery/formats/format-pel.c
+    libembroidery/formats/format-pem.c
+    libembroidery/formats/format-pes.c
+    libembroidery/formats/format-phb.c
+    libembroidery/formats/format-phc.c
+    libembroidery/formats/format-plt.c
+    libembroidery/formats/format-rgb.c
+    libembroidery/formats/format-sew.c
+    libembroidery/formats/format-shv.c
+    libembroidery/formats/format-sst.c
+    libembroidery/formats/format-stx.c
+    libembroidery/formats/format-svg.c
+    libembroidery/formats/format-t01.c
+    libembroidery/formats/format-t09.c
+    libembroidery/formats/format-tap.c
+    libembroidery/formats/format-thr.c
+    libembroidery/formats/format-txt.c
+    libembroidery/formats/format-u00.c
+    libembroidery/formats/format-u01.c
+    libembroidery/formats/format-vip.c
+    libembroidery/formats/format-vp3.c
+    libembroidery/formats/format-xxx.c
+    libembroidery/formats/format-zsk.c
+    libembroidery/geometry/arc.c
+    libembroidery/geometry/circle.c
+    libembroidery/geometry/emb-line.c
+    libembroidery/geometry/emb-polygon.c
+    libembroidery/geometry/emb-polyline.c
+    libembroidery/geometry/emb-rect.c
+    libembroidery/geometry/emb-satin-line.c
+    libembroidery/geometry/geom-line.c
+    libembroidery/hashtable.c
+    libembroidery/helpers-binary.c
+    libembroidery/helpers-misc.c
+    libembroidery/thread-color.c
+
 
 	${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )
@@ -105,19 +239,19 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/embroidermodder2
 )
 
-set_target_properties(embroidermodder PROPERTIES
+set_target_properties(embroidermodder2 PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
 )
 
-target_link_libraries(embroidermodder PRIVATE Qt6::Core Qt6::Widgets)
+target_link_libraries(embroidermodder2 PRIVATE Qt6::Core Qt6::Widgets Qt6::PrintSupport)
 
 if (WIN32)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder.exe)
+set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
 
 else(WIN32)
 target_link_libraries(embroidermodder PRIVATE m)
-set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder)
+set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2)
 
 endif()
 
@@ -926,4 +1060,3 @@ install(
 )
 
 include(cpack.cmake)
-

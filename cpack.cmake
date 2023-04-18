@@ -14,6 +14,6 @@ set(CPACK_SOURCE_IGNORE_FILES .git .github)
 
 set(CPACK_WIX_PRODUCT_ICON assets/embroidermodder2.ico)
 
-set(CPACK_RESOURCE_FILE_LICENSE ZLIB-LICENSE.txt)
+#set(CPACK_RESOURCE_FILE_LICENSE ZLIB-LICENSE.txt)
 
 include(CPack)

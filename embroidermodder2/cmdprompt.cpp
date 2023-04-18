@@ -1,5 +1,5 @@
 #include "cmdprompt.h"
-#include "native-scripting.h"
+#include "mainwindow.h"
 
 #include <QApplication>
 #include <QClipboard>
