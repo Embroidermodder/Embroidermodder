@@ -39,7 +39,9 @@ beta release use:
 
 depending on your system. Then run without installing using:
 
-    ./build/embroidermodder
+    cd embroidermodder2 && ./embroidermodder2
+
+or, on Windows double-click the executable in the embroidermodder2 directory.
 
 If you're building as part of an effort to improve the software, build in the
 debug mode then read the gcov output:
@@ -74,7 +76,7 @@ function long_help_message () {
 
 function build_release () {
 
-    rm -fr $BUILD_DIR
+#    rm -fr $BUILD_DIR
 
     git submodule init
     git submodule update
@@ -150,6 +152,7 @@ do
     --windows | --windows-latest) GENERATOR="MinGW Makefiles" build_release;;
     --package) cd build && cpack;;
     -h | --help) long_help_message;;
+    -c | --clean) rm -fr build;;
     build.sh) ;;
     *) help_message;;
   esac

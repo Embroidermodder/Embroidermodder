@@ -3,6 +3,10 @@ Visual Studio project files
 
 We recommend using Visual Studio 2010 or newer.
 
+It may help to install the relevant CMake extensions since on VS we recommend
+using the cmake build rather than qmake. Since the VS workspace can be
+interpreted from the repository itself we don't supply sln/vcproj files.
+
 Troubleshooting
 ---------------
 

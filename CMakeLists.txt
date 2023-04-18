@@ -249,7 +249,7 @@ if (WIN32)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2.exe)
 
 else(WIN32)
-target_link_libraries(embroidermodder PRIVATE m)
+target_link_libraries(embroidermodder2 PRIVATE m)
 set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2)
 
 endif()
