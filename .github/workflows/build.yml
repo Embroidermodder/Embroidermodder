@@ -19,9 +19,13 @@ jobs:
     - name: build
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
-        cd embroidermodder/project-files/qmake
-        6.2.0\msvc2019_64\bin\qmake.exe
-        make
+        cd embroidermodder
+        mkdir build
+        cd build
+        cmake -G "MinGW Makefiles" ..
+        cmake --build .
+        windeployqt embroidermodder2.exe
+        cpack -G WIX
         cd ../..
         
     - name: archive production artifacts
@@ -44,10 +48,12 @@ jobs:
     - name: build
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
-        cd embroidermodder/project-files/qmake
-        qmake
-        make
-        cd ../..
+        cd embroidermodder
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+        cd ..
         
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
@@ -69,10 +75,15 @@ jobs:
     - name: build
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
-        cd embroidermodder/project-files/qmake
-        qmake
-        make
-        cd ../..
+        cd embroidermodder
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+        mv embroidermodder2 ../embroidermodder2
+        cd ..
+        rm embroidermodder2/*.cpp embroidermodder2/*.h
+        tar cf embroidermodder_2.0.0-alpha_linux.tar embroidermodder2
         
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
