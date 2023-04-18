@@ -1,5 +1,6 @@
-What is Embroidermodder ?
--------------------------
+# Embroidermodder 2.0.0-alpha
+
+( IN ALPHA DEVELOPMENT: NOT READY FOR SERIOUS USE. )
 
 Embroidermodder is a free machine embroidery software program.
 The newest version, Embroidermodder 2 can:
@@ -10,14 +11,118 @@ The newest version, Embroidermodder 2 can:
 - upscale or downscale designs
 - run on Windows, Mac and Linux
 
-For more information, see [our website](http://www.libembroidery.org).
+For more in-depth information, see [our website](http://www.libembroidery.org).
 
-Dependencies
-------------
+To try out the software in alpha see our current
+[alpha pre-release](https://github.com/Embroidermodder/Embroidermodder/releases/tag/alpha).
+
+Various sample embroidery design files can be found in
+the embroidermodder2/samples folder.
+
+## Screenshots
+
+If you use multiple operating systems, it's important to choose software that works on all of them.
+
+Embroidermodder 2 runs on Windows, Linux and Mac OS X. Let's not forget the [Raspberry
+Pi](http://www.raspberrypi.org).
+
+![features: platforms 1](embroidermodder2/images/features-platforms-1.png)
+
+### Realistic Rendering
+
+(This feature is currently broken.)
+
+It is important to be able to visualize what a design will look like when stitched and our
+pseudo ``3D'' realistic rendering helps achieve this.
+
+Realistic rendering sample \#1:
+
+![features real render 1](embroidermodder2/images/features-realrender-1.png)
+
+Realistic rendering sample \#2:
+
+![features real render 2](embroidermodder2/features-realrender-2.png)
+
+Realistic rendering sample \#3:
+
+![features real render 3](embroidermodder2/features-realrender-3.png)
+
+Various grid types and auto-adjusting rulers
+
+Making use of the automatically adjusting ruler in conjunction with the grid will ensure your
+design is properly sized and fits within your embroidery hoop area.
+
+Use rectangular, circular or isometric grids to construct your masterpiece!
+
+Multiple grids and rulers in action:
+
+![features grid ruler](embroidermodder2/images/features-grid-ruler-1.png)
+
+### Many measurement tools
+
+Taking measurements is a critical part of creating great designs. Whether you are designing
+mission critical embroidered space suits for NASA or some other far out design for your next
+meet-up, you will have precise measurement tools at your command to make it happen. You can
+locate individual points or find distances between any 2 points anywhere in the design!
+
+Take quick and accurate measurements:
+
+![features measure 1](embroidermodder2/images/features-measure-1.png)
+
+### Add text to any design
+
+Need to make company apparel for all of your employees with individual names on them? No sweat.
+Just simply add text to your existing design or create one from scratch, quickly and easily.
+Didn't get it the right size or made a typo? No problem. Just select the text and update it
+with the property editor.
+
+Add text and adjust its properties quickly:
+
+![features text 1](embroidermodder2/images/features-text-1.png)
+
+### Supports many formats
+
+Embroidery machines all accept different formats. There are so many formats available that it
+can sometimes be confusing whether a design will work with your machine.
+
+Embroidermodder 2 supports a wide variety of embroidery formats as well as several vector
+formats, such as SVG and DXF. This allows you to worry less about which designs you can use.
+
+### Batch Conversion
+
+(Currently this being ported to the `embroider` command line program.)
+
+Need to send a client several different formats? Just use libembroidery-convert, our command
+line utility which supports batch file conversion.
+
+There are a multitude of formats to choose from:
+
+![features formats](embroidermodder2/images/features-formats-1.png)
+
+### Scripting API
+
+The GUI works by emitting internal text commands, so if you want to alter
+or add features to the program that aren't as low level as these commands then you
+can chain them together in simple scripts. This allows more control over the program than
+the GUI can offer.
+
+A (no longer current) Embroidermodder 2 command excerpt:
+
+![scripting screenshot](embroidermodder2/images/features-scripting-1.png)
+
+## Building
 
 To build Embroidermodder 2 from source you will need at least:
 - [Embroidermodder 2](https://github.com/Embroidermodder/Embroidermodder)
-- [Qt](http://www.qt-project.org) (version >= 4.8).
+- [Qt](http://www.qt-project.org) (version >= 6.0).
+
+You will also need the git submodules, which can be collected by running these lines
+from the embroidermodder source directory:
+
+```
+git submodule init
+git submodule update
+```
 
 Optionally, you may want to add:
 
@@ -25,25 +130,49 @@ Optionally, you may want to add:
 - [Valgrind](http://www.valgrind.org) for debugging
 
 Ubuntu repository packages:
-The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+The Qt, KDE and Valgrind build dependencies can be installed easily by
+opening a terminal and issuing this command:
 
 ```
 sudo apt-get install git build-essential qt4-dev-tools libqt4-opengl-dev kdelibs5-dev valgrind
 ```
 
 Fedora repository packages:
-The Qt, KDE and Valgrind build dependencies can be installed easily by opening a terminal and issuing this command:
+The Qt, KDE and Valgrind build dependencies can be installed easily
+by opening a terminal and issuing this command:
 
 ```
 sudo yum install git gdb gcc-c++ qt-devel kdelibs-devel valgrind
 ```
 
-Building
---------
+### CMake
+
+The more capable build is the CMake one, which is what we use to make the installers as
+well.
+
+To use it read the output of the helper script like this:
+
+```
+bash build.sh --help
+```
+
+If you don't have bash, the following commands should build the software:
+
+```
+mkdir build
+cd build
+cmake ..
+cmake --build .
+mv embroidermodder* ../embroidermodder2
+```
+
+or you can use the qmake build, or load the cmake build in Visual Studio Code.
+
+### QMake
 
 Various methods of building can be found in the project-files subfolder.
 For most builds, it is as simple as opening a terminal in the
-project-files/qmake subfolder and typing:
+embroidermodder2 subfolder and typing:
 
 ```
 qmake && make
@@ -64,7 +193,10 @@ qmake && make -j4
 ```
 
 When building for Fedora:
-Substitute qmake-qt4 for qmake.
+Substitute `qmake-qt4` for `qmake`.
+
+When building the thumbnailer do the same but in the appropriate subfolder.
+Libembroidery is now maintained as a repository unto itself.
 
 When building for Windows:
 If you are using Qt/Mingw, substitute mingw32-make for make.
@@ -73,56 +205,24 @@ You may need to add the directory where those executables are located to your sy
 It is recommended that when targeting Windows, that you should omit the -j switch completely,
 otherwise build errors may occur unless you are building an individual pro file.
 
-On non-KDE environments you might want to omit `thumbnailer-kde4` building. Follow these steps **before** running `qmake && make`:
+## Install/Uninstall
 
-1. go to `/project-files/qmake/` directory;
-2. open `everything.pro` file;
-3. comment/erase `../../thumbnailer-kde4 \` line in it.
+To install, build one of the installers.
 
-Help Files
-------------
-The help files for Embroidermodder 2 are a git submodule, which means that
-they reside in a separate repository. They are not required for the application
-to run, but if they are not present, you will likely receive an error that they
-do not exist when pressing F1 or attempting to access help through the menu.
-
-If you used `git clone` to obtain the Embroidermodder source,
-you need to run these commands from the toplevel of
-the working tree(which is the Embroidermodder directory):
+On Windows, install WIX and then run cpack with
 
 ```
-git submodule init
-git submodule update
+./build.sh --package
 ```
 
-If you downloaded a zip file of the Embroidermodder source rather than using git,
-you will need to:
+Then double click the `.msi` file in the `build/build` subdirectory.
 
-- Download the [help files](https://github.com/Embroidermodder/Embroidermodder.github.io/archive/master.zip)
-- Unzip the archive
-- Rename the "Embroidermodder.github.io-master" directory to "help"
-- Copy the "help" directory to "Embroidermodder-master/embroidermodder2/help"
-
-Sample Files
-------------
-
-Various sample embroidery design files can be found in
-the embroidermodder2/samples folder.
-
-Install/Uninstall
------------------
-
-- Linux:
-To install, open a terminal in the
-project-files/qmake subfolder and type:
+On Debian, the same command will build the `.deb` package which you can then
+install using the aptitude package manager like this:
 
 ```
-sudo make install
+./build.sh --package
+dpkg -i build/build/embroidermodder*.deb
 ```
 
-To uninstall, open a terminal in the
-project-files/qmake subfolder and type:
-
-```
-sudo make uninstall
-```
+to uninstall you can remove it using the name of the package.
