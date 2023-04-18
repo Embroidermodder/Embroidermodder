@@ -76,7 +76,6 @@ mainwindow-commands.cpp \
 mainwindow-actions.cpp \
 mdiarea.cpp \
 mdiwindow.cpp \
-    native-scripting.cpp \
 view.cpp \
 cmdprompt.cpp \
 embdetails-dialog.cpp \

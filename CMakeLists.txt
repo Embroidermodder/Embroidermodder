@@ -47,7 +47,7 @@ endif()
 # give them the same treatment and list them explicitly here.
 #
 
-set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/assets)
+set(SRC_ASSETS ${CMAKE_SOURCE_DIR}/embroidermodder2)
 
 add_executable(embroidermodder2
     ${CMAKE_SOURCE_DIR}/embroidermodder2/cmdprompt.cpp
@@ -88,71 +88,71 @@ add_executable(embroidermodder2
     ${CMAKE_SOURCE_DIR}/embroidermodder2/undo-editor.cpp
     ${CMAKE_SOURCE_DIR}/embroidermodder2/view.cpp
 
-    embroidermodder2/application.h
-    embroidermodder2/cmdprompt.h
-    embroidermodder2/embdetails-dialog.h
-    embroidermodder2/embroidermodder.h
-    embroidermodder2/gui_backend.h
-    embroidermodder2/imagewidget.h
-    embroidermodder2/layer-manager.h
-    embroidermodder2/mainwindow.h
-    embroidermodder2/mdiarea.h
-    embroidermodder2/mdiwindow.h
-    embroidermodder2/object-arc.h
-    embroidermodder2/object-base.h
-    embroidermodder2/object-circle.h
-    embroidermodder2/object-data.h
-    embroidermodder2/object-dimleader.h
-    embroidermodder2/object-ellipse.h
-    embroidermodder2/object-image.h
-    embroidermodder2/object-line.h
-    embroidermodder2/object-path.h
-    embroidermodder2/object-point.h
-    embroidermodder2/object-polygon.h
-    embroidermodder2/object-polyline.h
-    embroidermodder2/object-rect.h
-    embroidermodder2/object-save.h
-    embroidermodder2/object-textsingle.h
-    embroidermodder2/preview-dialog.h
-    embroidermodder2/property-editor.h
-    embroidermodder2/selectbox.h
-    embroidermodder2/settings-dialog.h
-    embroidermodder2/statusbar-button.h
-    embroidermodder2/statusbar.h
-    embroidermodder2/undo-commands.h
-    embroidermodder2/undo-editor.h
-    embroidermodder2/view.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/application.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/cmdprompt.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/embdetails-dialog.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/embroidermodder.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/gui_backend.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/imagewidget.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/layer-manager.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mainwindow.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mdiarea.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/mdiwindow.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-arc.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-base.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-circle.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-data.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-dimleader.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-ellipse.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-image.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-line.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-path.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-point.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-polygon.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-polyline.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-rect.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-save.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/object-textsingle.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/preview-dialog.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/property-editor.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/selectbox.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/settings-dialog.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar-button.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/statusbar.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/undo-commands.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/undo-editor.h
+    ${CMAKE_SOURCE_DIR}/embroidermodder2/view.h
 
     ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-difat.c
     ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-directory.c
     ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-fat.c
-    libembroidery/compound-file-header.c
-    libembroidery/compound-file.c
-    libembroidery/emb-color.c
-    libembroidery/emb-compress.c
-    libembroidery/emb-ellipse.c
-    libembroidery/emb-file.c
-    libembroidery/emb-flag.c
-    libembroidery/emb-format.c
-    libembroidery/emb-hash.c
-    libembroidery/emb-hoop.c
-    libembroidery/emb-layer.c
-    libembroidery/emb-logging.c
-#    libembroidery/emb-outline.c
-    libembroidery/emb-path.c
-    libembroidery/emb-pattern.c
-    libembroidery/emb-point.c
-    libembroidery/emb-reader-writer.c
-    libembroidery/emb-settings.c
-    libembroidery/emb-spline.c
-    libembroidery/emb-stitch.c
-    libembroidery/emb-thread.c
-    libembroidery/emb-time.c
-    libembroidery/emb-vector.c
-    libembroidery/formats/format-100.c
-    libembroidery/formats/format-10o.c
-    libembroidery/formats/format-art.c
-    libembroidery/formats/format-bmc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/compound-file-header.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/compound-file.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-color.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-compress.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-ellipse.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-file.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-flag.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-format.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-hash.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-hoop.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-layer.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-logging.c
+#    ${CMAKE_SOURCE_DIR}/libembroidery/emb-outline.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-path.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-pattern.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-point.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-reader-writer.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-settings.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-spline.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-stitch.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-thread.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-time.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/emb-vector.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-100.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-10o.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-art.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-bmc.c
     libembroidery/formats/format-bro.c
     libembroidery/formats/format-cnd.c
     libembroidery/formats/format-col.c
@@ -208,21 +208,20 @@ add_executable(embroidermodder2
     libembroidery/formats/format-u01.c
     libembroidery/formats/format-vip.c
     libembroidery/formats/format-vp3.c
-    libembroidery/formats/format-xxx.c
-    libembroidery/formats/format-zsk.c
-    libembroidery/geometry/arc.c
-    libembroidery/geometry/circle.c
-    libembroidery/geometry/emb-line.c
-    libembroidery/geometry/emb-polygon.c
-    libembroidery/geometry/emb-polyline.c
-    libembroidery/geometry/emb-rect.c
-    libembroidery/geometry/emb-satin-line.c
-    libembroidery/geometry/geom-line.c
-    libembroidery/hashtable.c
-    libembroidery/helpers-binary.c
-    libembroidery/helpers-misc.c
-    libembroidery/thread-color.c
-
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-xxx.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-zsk.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/arc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/circle.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/emb-line.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/emb-polygon.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/emb-polyline.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/emb-rect.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/emb-satin-line.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/geometry/geom-line.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/hashtable.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/helpers-binary.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/helpers-misc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/thread-color.c
 
 	${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )
@@ -255,19 +254,85 @@ set(EXEC ${CMAKE_SOURCE_DIR}/build/embroidermodder2)
 
 endif()
 
-set(EXEC_DIR ".")
-set(ASSETS_DIR "embroidermodder2")
-
-install(
-	FILES ${EXEC}
-	DESTINATION ${EXEC_DIR}
-)
+set(INSTALL_DIR ".")
 
 install(
 	FILES
+        ${EXEC}
 		${SRC_ASSETS}/em2_config.toml
+        ${CMAKE_SOURCE_DIR}/build/D3Dcompiler_47.dll
+        ${CMAKE_SOURCE_DIR}/build/Qt6Core.dll
+        ${CMAKE_SOURCE_DIR}/build/Qt6Gui.dll
+        ${CMAKE_SOURCE_DIR}/build/Qt6Network.dll
+        ${CMAKE_SOURCE_DIR}/build/Qt6PrintSupport.dll
+        ${CMAKE_SOURCE_DIR}/build/Qt6Svg.dll
+        ${CMAKE_SOURCE_DIR}/build/Qt6Widgets.dll
+        ${CMAKE_SOURCE_DIR}/build/libgcc_s_seh-1.dll
+        ${CMAKE_SOURCE_DIR}/build/libstdc++-6.dll
+        ${CMAKE_SOURCE_DIR}/build/libwinpthread-1.dll
+        ${CMAKE_SOURCE_DIR}/build/opengl32sw.dll
+
 	DESTINATION
-		${ASSETS_DIR}
+		${INSTALL_DIR}
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/networkinformation/qnetworklistmanager.dll
+    DESTINATION
+        ${INSTALL_DIR}/networkinformation
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/platforms/qwindows.dll
+    DESTINATION
+        ${INSTALL_DIR}/platforms
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/styles/qwindowsvistastyle.dll
+    DESTINATION
+        ${INSTALL_DIR}/styles
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/tls/qcertonlybackend.dll
+        ${CMAKE_SOURCE_DIR}/build/tls/qopensslbackend.dll
+        ${CMAKE_SOURCE_DIR}/build/tls/qschannelbackend.dll
+    DESTINATION
+        ${INSTALL_DIR}/tls
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/generic/qtuiotouchplugin.dll
+    DESTINATION
+        ${INSTALL_DIR}/generic
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/iconengines/qsvgicon.dll
+    DESTINATION
+        ${INSTALL_DIR}/iconengines
+)
+
+install(
+    FILES
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qgif.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qicns.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qico.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qjpeg.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qsvg.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qtga.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qtiff.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qwbmp.dll
+        ${CMAKE_SOURCE_DIR}/build/imageformats/qwebp.dll
+    DESTINATION
+        ${INSTALL_DIR}/imageformats
 )
 
 install(
@@ -280,7 +345,7 @@ install(
 		${SRC_ASSETS}/translations/russian.toml
 		${SRC_ASSETS}/translations/spanish.toml
 	DESTINATION
-		${ASSETS_DIR}/translations
+		${INSTALL_DIR}/translations
 )
 
 # The necessary licenses are included in installation, should the user
@@ -295,7 +360,32 @@ install(
 		${SRC_ASSETS}/fonts/source-sans-readme.md
 		${SRC_ASSETS}/fonts/SourceSans3-Regular.ttf
 	DESTINATION
-		${ASSETS_DIR}/fonts
+		${INSTALL_DIR}/fonts
+)
+
+install(
+    FILES
+        ${SRC_ASSETS}/commands/about/about.ini
+    DESTINATION
+        ${INSTALL_DIR}/commands
+)
+
+install(
+    FILES
+        ${SRC_ASSETS}/images/texture-spirals.png
+        ${SRC_ASSETS}/images/logo-spirals.png
+        ${SRC_ASSETS}/images/did-you-know.png
+        ${SRC_ASSETS}/images/logo_embroidermodder_2_0.png
+        ${SRC_ASSETS}/images/about_embroidermodder.png
+    DESTINATION
+        ${INSTALL_DIR}/images
+)
+
+install(
+    FILES
+        ${SRC_ASSETS}/help/html/index.html
+    DESTINATION
+        ${INSTALL_DIR}/help
 )
 
 install(
@@ -639,7 +729,7 @@ install(
 		${SRC_ASSETS}/samples/star/Star.Z01
 		${SRC_ASSETS}/samples/Tux-R2000.dxf
 	DESTINATION
-		${ASSETS_DIR}/samples
+		${INSTALL_DIR}/samples
 )
 
 install(
@@ -651,7 +741,7 @@ install(
 		${SRC_ASSETS}/designs/star.toml
 		${SRC_ASSETS}/designs/treble_clef.toml
 	DESTINATION
-		${ASSETS_DIR}/shapes
+		${INSTALL_DIR}/shapes
 )
 
 install(
@@ -1015,48 +1105,48 @@ install(
 		${SRC_ASSETS}/icons/default/zoomselected.png
 		${SRC_ASSETS}/icons/default/zoomwindow.png
 	DESTINATION
-		${ASSETS_DIR}/icons/default
+		${INSTALL_DIR}/icons/default
 )
 
-install(
-	FILES
-		extern/libembroidery/assets/arc_polyester_colors.csv
-		extern/libembroidery/assets/pantone_colors.csv
-		extern/libembroidery/assets/arc_rayon_colors.csv
-		extern/libembroidery/assets/pcm_colors.csv
-		extern/libembroidery/assets/coats_and_clark_rayon_colors.csv
-		extern/libembroidery/assets/pec_colors.csv
-		extern/libembroidery/assets/dxf_color_table.csv
-		extern/libembroidery/assets/robison_anton_colors.csv
-		extern/libembroidery/assets/exquisite_polyester_colors.csv
-		extern/libembroidery/assets/robison_anton_rayon_colors.csv
-		extern/libembroidery/assets/fufu_polyester_colors.csv
-		extern/libembroidery/assets/shv_colors.csv
-		extern/libembroidery/assets/fufu_rayon_colors.csv
-		extern/libembroidery/assets/sigma_polyester_colors.csv
-		extern/libembroidery/assets/header.csv
-		extern/libembroidery/assets/sulky_rayon_colors.csv
-		extern/libembroidery/assets/hemingworth_polyester_colors.csv
-		extern/libembroidery/assets/svg_attribute_table.csv
-		extern/libembroidery/assets/hus_colors.csv
-		extern/libembroidery/assets/svg_colors.csv
-		extern/libembroidery/assets/isacord_polyester_colors.csv
-		extern/libembroidery/assets/svg_element_tokens.csv
-		extern/libembroidery/assets/isafil_rayon_colors.csv
-		extern/libembroidery/assets/svg_media_property_tokens.csv
-		extern/libembroidery/assets/jef_colors.csv
-		extern/libembroidery/assets/svg_property_tokens.csv
-		extern/libembroidery/assets/madeira_polyester_colors.csv
-		extern/libembroidery/assets/thread_art_polyester_colors.csv
-		extern/libembroidery/assets/madeira_rayon_colors.csv
-		extern/libembroidery/assets/thread_art_rayon_colors.csv
-		extern/libembroidery/assets/marathon_polyester_colors.csv
-		extern/libembroidery/assets/threadelight_polyester_colors.csv
-		extern/libembroidery/assets/marathon_rayon_colors.csv
-		extern/libembroidery/assets/z102_isacord_polyester_colors.csv
-		extern/libembroidery/assets/metro_polyester_colors.csv
-	DESTINATION
-		${ASSETS_DIR}/thread-colors
-)
+# install(
+	# FILES
+		# extern/libembroidery/assets/arc_polyester_colors.csv
+		# extern/libembroidery/assets/pantone_colors.csv
+		# extern/libembroidery/assets/arc_rayon_colors.csv
+		# extern/libembroidery/assets/pcm_colors.csv
+		# extern/libembroidery/assets/coats_and_clark_rayon_colors.csv
+		# extern/libembroidery/assets/pec_colors.csv
+		# extern/libembroidery/assets/dxf_color_table.csv
+		# extern/libembroidery/assets/robison_anton_colors.csv
+		# extern/libembroidery/assets/exquisite_polyester_colors.csv
+		# extern/libembroidery/assets/robison_anton_rayon_colors.csv
+		# extern/libembroidery/assets/fufu_polyester_colors.csv
+		# extern/libembroidery/assets/shv_colors.csv
+		# extern/libembroidery/assets/fufu_rayon_colors.csv
+		# extern/libembroidery/assets/sigma_polyester_colors.csv
+		# extern/libembroidery/assets/header.csv
+		# extern/libembroidery/assets/sulky_rayon_colors.csv
+		# extern/libembroidery/assets/hemingworth_polyester_colors.csv
+		# extern/libembroidery/assets/svg_attribute_table.csv
+		# extern/libembroidery/assets/hus_colors.csv
+		# extern/libembroidery/assets/svg_colors.csv
+		# extern/libembroidery/assets/isacord_polyester_colors.csv
+		# extern/libembroidery/assets/svg_element_tokens.csv
+		# extern/libembroidery/assets/isafil_rayon_colors.csv
+		# extern/libembroidery/assets/svg_media_property_tokens.csv
+		# extern/libembroidery/assets/jef_colors.csv
+		# extern/libembroidery/assets/svg_property_tokens.csv
+		# extern/libembroidery/assets/madeira_polyester_colors.csv
+		# extern/libembroidery/assets/thread_art_polyester_colors.csv
+		# extern/libembroidery/assets/madeira_rayon_colors.csv
+		# extern/libembroidery/assets/thread_art_rayon_colors.csv
+		# extern/libembroidery/assets/marathon_polyester_colors.csv
+		# extern/libembroidery/assets/threadelight_polyester_colors.csv
+		# extern/libembroidery/assets/marathon_rayon_colors.csv
+		# extern/libembroidery/assets/z102_isacord_polyester_colors.csv
+		# extern/libembroidery/assets/metro_polyester_colors.csv
+	# DESTINATION
+		# ${INSTALL_DIR}/thread-colors
+# )
 
 include(cpack.cmake)

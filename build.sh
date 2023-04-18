@@ -148,6 +148,7 @@ do
     --gnu-linux | --linux | --ubuntu | --ubuntu-latest) build_release;;
     --macos | --macos-latest) build_release;;
     --windows | --windows-latest) GENERATOR="MinGW Makefiles" build_release;;
+    --package) cd build && cpack;;
     -h | --help) long_help_message;;
     build.sh) ;;
     *) help_message;;
