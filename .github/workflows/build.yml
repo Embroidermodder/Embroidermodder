@@ -6,29 +6,34 @@ jobs:
   build_windows:
     runs-on: windows-latest
     steps:
+    - name: Set up MinGW
+      uses: egor-tensin/setup-mingw@v2
+      with:
+        platform: x64     
+
     - name: package
       run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
         bash build.sh --package-msi
-        
+
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
         name: Windows Installer
-        path: *.msi
+        path: ./*.msi
 
   build_macos:
     runs-on: macos-latest
     steps:
     - name: package
       run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
         bash build.sh --package-macos
         
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: MacOS
+        name: MacOS Archive
         path: embroidermodder*.tar
 
   build_linux:
@@ -36,12 +41,42 @@ jobs:
     steps:
     - name: package
       run: |
-        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh
-        bash build.sh --package-macos
+        curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh > build.sh
+        bash build.sh --package-linux
         
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: GNU/Linux Archive
+        name: GNU Linux Archive
         path: embroidermodder*.tar
 
+  daily:
+    name: Update latest release
+    runs-on: ubuntu-latest
+    needs: [build_windows, build_linux, build_macos]
+    steps:
+    - name: Get Windows MSI
+      uses: actions/download-artifact@v2
+      with:
+        name: Windows Installer
+
+    - name: Get MacOS Archive
+      uses: actions/download-artifact@v2
+      with:
+        name: MacOS Archive
+
+    - name: Get GNU Linux Archive
+      uses: actions/download-artifact@v2
+      with:
+        name: GNU Linux Archive
+
+    - name: daily
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: |
+          *.msi
+          *.tar

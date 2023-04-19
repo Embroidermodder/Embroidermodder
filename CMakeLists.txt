@@ -1,9 +1,23 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (WIN32)
+
+set(CMAKE_C_COMPILER "gcc")
+set(CMAKE_CXX_COMPILER "g++")
+
+endif()
+
 project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 
+include(config.cmake)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
+
+if (LINUX)
+include(GNUInstallDirs)
+else (LINUX)
 qt_standard_project_setup()
+endif (LINUX)
 
 find_package(OpenGL REQUIRED)
 
@@ -129,83 +143,71 @@ add_executable(embroidermodder2
     ${CMAKE_SOURCE_DIR}/libembroidery/formats.c
     ${CMAKE_SOURCE_DIR}/libembroidery/pattern.c
     ${CMAKE_SOURCE_DIR}/libembroidery/thread-color.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-color.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-file.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-flag.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-format.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-hash.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-hoop.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-layer.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-logging.c
-#    ${CMAKE_SOURCE_DIR}/libembroidery/emb-outline.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-settings.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-stitch.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-thread.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/emb-time.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/main.c
 
     ${CMAKE_SOURCE_DIR}/libembroidery/hashtable.c
 
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-100.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-10o.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-art.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-bmc.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-bro.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-cnd.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-col.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-csd.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-csv.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-dat.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-dem.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-dsb.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-dst.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-dsz.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-dxf.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-edr.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-emd.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-exp.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-exy.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-eys.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-fxy.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-gc.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-gnc.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-gt.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-hus.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-inb.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-inf.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-jef.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-ksm.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-max.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-mit.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-new.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-ofm.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pcd.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pcm.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pcq.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pcs.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pec.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pel.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pem.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-pes.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-phb.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-phc.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-plt.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-rgb.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-sew.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-shv.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-sst.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-stx.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-svg.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-t01.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-t09.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-tap.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-thr.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-txt.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-u00.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-u01.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-vip.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-vp3.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-xxx.c
-    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format-zsk.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_100.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_10o.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_art.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_bmc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_bro.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_cnd.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_col.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_csd.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_csv.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_dat.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_dem.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_dsb.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_dst.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_dsz.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_dxf.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_edr.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_emd.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_exp.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_exy.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_eys.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_fxy.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_gc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_gnc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_gt.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_hus.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_inb.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_inf.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_jef.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_ksm.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_max.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_mit.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_new.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_ofm.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pcd.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pcm.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pcq.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pcs.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pec.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pel.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pem.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_pes.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_phb.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_phc.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_plt.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_rgb.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_sew.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_shv.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_sst.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_stx.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_svg.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_t01.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_t09.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_tap.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_thr.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_txt.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_u00.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_u01.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_vip.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_vp3.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_xxx.c
+    ${CMAKE_SOURCE_DIR}/libembroidery/formats/format_zsk.c
 
     ${CMAKE_SOURCE_DIR}/libembroidery/geometry/arc.c
     ${CMAKE_SOURCE_DIR}/libembroidery/geometry/circle.c
@@ -220,7 +222,7 @@ add_executable(embroidermodder2
     ${CMAKE_SOURCE_DIR}/libembroidery/geometry/spline.c
     ${CMAKE_SOURCE_DIR}/libembroidery/geometry/vector.c
 
-	${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
+    ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )
 
 # if(CMAKE_BUILD_TYPE STREQUAL "Debug")

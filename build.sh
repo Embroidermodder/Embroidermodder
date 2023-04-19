@@ -83,7 +83,9 @@ function build_release () {
     git submodule update
 
     cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
-    cmake --build $BUILD_DIR &> build.log
+    cd $BUILD_DIR
+    cmake --build .
+    cd ..
 
 }
 
@@ -94,7 +96,7 @@ function build_docs () {
     doxygen
 
     cd embroidermodder2/help/latex
-
+OOB
     pdflatex -interaction=nonstopmode refman.tex
     makeindex refman.idx
     bibtex refman.aux
@@ -140,21 +142,26 @@ function gcoverage () {
 
 function package_msi () {
     
-    python -m pip install -U pip --upgrade pip
-    pip install aqtinstall
-    aqt install-qt windows desktop 6.2.0 win64_msvc2019_64
-
     git clone https://github.com/embroidermodder/embroidermodder
     cd embroidermodder
+
+    python -m pip install -U pip --upgrade pip
+    pip install aqtinstall
+    python -m aqt install-qt windows desktop 6.5.0 win64_mingw
+
+    ls 6.5.0/mingw_64
+    echo "set (CMAKE_PREFIX_PATH \"6.5.0/mingw_64\")" >> config.cmake
+
     git submodule init
     git submodule update
     mkdir build
     cd build
+    cp ../ZLIB-LICENSE.txt .
     cmake -G "MinGW Makefiles" ..
     cmake --build .
-    windeployqt embroidermodder2.exe
+    ../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
     cpack -G WIX
-    mv *.msi ../../..
+    mv build/*.msi ../../..
     cd ../../..
 
 }
@@ -169,10 +176,11 @@ function package_macos () {
     git submodule update
     mkdir build
     cd build
+    cp ../ZLIB-LICENSE.txt .
     cmake ..
     cmake --build .
     cd ..
-    mv build/embroidermodder2 embroidermodder2
+    mv build/embroidermodder2* embroidermodder2
     rm embroidermodder2/*.cpp embroidermodder2/*.h
     mv *manual*pdf embroidermodder2
     tar cf embroidermodder_$(VERSION)_macos.tar embroidermodder2
@@ -183,7 +191,9 @@ function package_macos () {
 
 function package_linux () {
 
+    sudo apt update
     sudo apt install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+    sudo apt upgrade
 
     git clone https://github.com/embroidermodder/embroidermodder
     cd embroidermodder
@@ -191,6 +201,7 @@ function package_linux () {
     git submodule update
     mkdir build
     cd build
+    cp ../ZLIB-LICENSE.txt .
     cmake ..
     cmake --build .
     cd ..
