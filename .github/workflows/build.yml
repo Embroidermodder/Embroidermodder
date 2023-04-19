@@ -49,17 +49,17 @@ jobs:
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        mkdir build
-        cd build
-        cmake ..
-        cmake --build .
-        cd ..
+        bash build.sh --macos
+        mv build/embroidermodder2 embroidermodder2
+        rm embroidermodder2/*.cpp embroidermodder2/*.h
+        mv *manual*pdf embroidermodder2
+        tar cf embroidermodder_2.0.0-alpha_macos.tar embroidermodder2
         
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: MacOS Installer
-        path: embroidermodder/embroidermodder_*
+        name: MacOS
+        path: embroidermodder/embroidermodder_2.0.0-alpha_macos.tar
 
   build_linux:
     runs-on: ubuntu-latest
@@ -70,24 +70,21 @@ jobs:
     steps:
     - name: Install Qt
       run: |
-        sudo apt install qt6-base-dev libqt6*widgets* qtcreator qmake6*
+        sudo apt install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
 
     - name: build
       run: |
         git clone https://github.com/embroidermodder/embroidermodder
         cd embroidermodder
-        mkdir build
-        cd build
-        cmake ..
-        cmake --build .
-        mv embroidermodder2 ../embroidermodder2
-        cd ..
+        bash build.sh --linux
+        mv build/embroidermodder2 embroidermodder2
         rm embroidermodder2/*.cpp embroidermodder2/*.h
+        mv *manual*pdf embroidermodder2
         tar cf embroidermodder_2.0.0-alpha_linux.tar embroidermodder2
         
     - name: archive production artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: GNU/Linux Installer
-        path: embroidermodder/embroidermodder_*
+        name: GNU/Linux Archive
+        path: embroidermodder/embroidermodder_2.0.0-alpha_linux.tar
 
