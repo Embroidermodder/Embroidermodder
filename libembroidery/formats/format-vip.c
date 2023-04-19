@@ -1,5 +1,4 @@
-
-#include "embroidery.h"
+#include "embroidery_internal.h"
 #include "emb-compress.h"
 #include <stdlib.h>
 

@@ -1,4 +1,4 @@
-#include "embroidery.h"
+#include "embroidery_internal.h"
 
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
@@ -30,5 +30,3 @@ int writePem(EmbPattern* pattern, const char* fileName)
 
     return 0; /*TODO: finish writePem */
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

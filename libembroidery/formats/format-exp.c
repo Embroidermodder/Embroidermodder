@@ -183,5 +183,3 @@ return 0; /* ARDUINO TODO: This is temporary. Remove when complete. */
     return 1;
 #endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

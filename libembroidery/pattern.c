@@ -1,5 +1,4 @@
-#include "embroidery.h"
-#include "embroidery-internal.h"
+#include "embroidery_internal.h"
 #include "emb-compress.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,7 +100,7 @@ void embPattern_fixColorCount(EmbPattern* p)
     list = p->stitchList;
     while(list)
     {
-        maxColorIndex = max(maxColorIndex, list->stitch.color);
+        maxColorIndex = EMB_MAX(maxColorIndex, list->stitch.color);
         list = list->next;
     }
 #ifndef ARDUINO
@@ -458,10 +457,10 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
         pt = pointer->stitch;
         if(!(pt.flags & TRIM))
         {
-            boundingRect.left = (double)min(boundingRect.left, pt.xx);
-            boundingRect.top = (double)min(boundingRect.top, pt.yy);
-            boundingRect.right = (double)max(boundingRect.right, pt.xx);
-            boundingRect.bottom = (double)max(boundingRect.bottom, pt.yy);
+            boundingRect.left = (double)EMB_MIN(boundingRect.left, pt.xx);
+            boundingRect.top = (double)EMB_MIN(boundingRect.top, pt.yy);
+            boundingRect.right = (double)EMB_MAX(boundingRect.right, pt.xx);
+            boundingRect.bottom = (double)EMB_MAX(boundingRect.bottom, pt.yy);
         }
         pointer = pointer->next;
     }
@@ -479,10 +478,10 @@ EmbRect embPattern_calcBoundingBox(EmbPattern* p)
     while(cObjList)
     {
         circle = cObjList->circleObj.circle;
-        boundingRect.left = (double)min(boundingRect.left, circle.centerX - circle.radius);
-        boundingRect.top = (double)min(boundingRect.top, circle.centerY - circle.radius);
-        boundingRect.right = (double)max(boundingRect.right, circle.centerX + circle.radius);
-        boundingRect.bottom = (double)max(boundingRect.bottom, circle.centerY + circle.radius);
+        boundingRect.left = (double)EMB_MIN(boundingRect.left, circle.centerX - circle.radius);
+        boundingRect.top = (double)EMB_MIN(boundingRect.top, circle.centerY - circle.radius);
+        boundingRect.right = (double)EMB_MAX(boundingRect.right, circle.centerX + circle.radius);
+        boundingRect.bottom = (double)EMB_MAX(boundingRect.bottom, circle.centerY + circle.radius);
 
         cObjList = cObjList->next;
     }
@@ -778,7 +777,7 @@ void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength,
             double dy = pointer->stitch.yy - yy;
             if((fabs(dx) > maxStitchLength) || (fabs(dy) > maxStitchLength))
             {
-                maxXY = max(fabs(dx), fabs(dy));
+                maxXY = EMB_MAX(fabs(dx), fabs(dy));
                 if(pointer->stitch.flags & (JUMP | TRIM)) maxLen = maxJumpLength;
                 else maxLen = maxStitchLength;
 
@@ -1063,5 +1062,3 @@ void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, do
         p->lastRectObj = embRectObjectList_add(p->lastRectObj, rectObj);
     }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -1,4 +1,4 @@
-#include "embroidery.h"
+#include "embroidery_internal.h"
 
 #include <ctype.h>
 #include <stdlib.h>

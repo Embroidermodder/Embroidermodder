@@ -2,6 +2,7 @@
 
 BUILD_DIR="build"
 BUILD_TYPE="Release"
+VERSION="2.0.0-alpha"
 GENERATOR="Unix Makefiles"
 
 read -r -d '' FLAG_USAGE <<-'EOF'
@@ -132,6 +133,76 @@ function gcoverage () {
 
 }
 
+# Run packagers with
+# curl https://raw.githubusercontent.com/Embroidermodder/Embroidermodder/master/build.sh
+# bash build.sh --package-msi
+# etc.
+
+function package_msi () {
+    
+    python -m pip install -U pip --upgrade pip
+    pip install aqtinstall
+    aqt install-qt windows desktop 6.2.0 win64_msvc2019_64
+
+    git clone https://github.com/embroidermodder/embroidermodder
+    cd embroidermodder
+    git submodule init
+    git submodule update
+    mkdir build
+    cd build
+    cmake -G "MinGW Makefiles" ..
+    cmake --build .
+    windeployqt embroidermodder2.exe
+    cpack -G WIX
+    mv *.msi ../../..
+    cd ../../..
+
+}
+
+function package_macos () {
+
+    brew install qt6 qwt
+
+    git clone https://github.com/embroidermodder/embroidermodder
+    cd embroidermodder
+    git submodule init
+    git submodule update
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build .
+    cd ..
+    mv build/embroidermodder2 embroidermodder2
+    rm embroidermodder2/*.cpp embroidermodder2/*.h
+    mv *manual*pdf embroidermodder2
+    tar cf embroidermodder_$(VERSION)_macos.tar embroidermodder2
+    mv embroidermodder_$(VERSION)_macos.tar ..
+    cd ..
+
+}
+
+function package_linux () {
+
+    sudo apt install qt6-base-dev libqt6gui6 libqt6widgets6 libqt6printsupport6 libqt6core6 libgl-dev libglx-dev libopengl-dev
+
+    git clone https://github.com/embroidermodder/embroidermodder
+    cd embroidermodder
+    git submodule init
+    git submodule update
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build .
+    cd ..
+    mv build/embroidermodder2 embroidermodder2
+    rm embroidermodder2/*.cpp embroidermodder2/*.h
+    mv *manual*pdf embroidermodder2
+    tar cf embroidermodder_$(VERSION)_linux.tar embroidermodder2
+    mv embroidermodder_$(VERSION)_linux.tar ..
+    cd ..
+
+}
+
 if [[ "$#" -eq 0 ]]; then
   help_message
 fi
@@ -150,6 +221,9 @@ do
     --gnu-linux | --linux | --ubuntu | --ubuntu-latest) build_release;;
     --macos | --macos-latest) build_release;;
     --windows | --windows-latest) GENERATOR="MinGW Makefiles" build_release;;
+    --package-msi) package_msi;;
+    --package-macos) package_macos;;
+    --package-linux) package_linux;;
     --package) cd build && cpack;;
     -h | --help) long_help_message;;
     -c | --clean) rm -fr build;;

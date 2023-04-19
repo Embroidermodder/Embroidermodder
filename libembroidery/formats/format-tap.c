@@ -1,4 +1,4 @@
-#include "embroidery.h"
+#include "embroidery_internal.h"
 #include <stdio.h>
 
 static int decodeRecordFlags(unsigned char b2)

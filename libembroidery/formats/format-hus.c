@@ -1,5 +1,4 @@
-#include "embroidery.h"
-#include "embroidery-internal.h"
+#include "embroidery_internal.h"
 #include "emb-compress.h"
 #include <stdlib.h>
 #include <string.h>
@@ -21,6 +20,9 @@ static short husDecode(unsigned char a1, unsigned char a2)
 	}
 }
 */
+
+void husExpand(unsigned char *a, unsigned char *b, int c, int d) {}
+int husCompress(unsigned char * b, unsigned long c, unsigned char *d, int e, int f) {return c;}
 
 static int husDecodeStitchType(unsigned char b)
 {
@@ -293,5 +295,3 @@ int writeHus(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
     return 1;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

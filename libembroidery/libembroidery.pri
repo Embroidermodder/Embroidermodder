@@ -85,20 +85,20 @@ SOURCES += \
     $$PWD/formats/format-zsk.c \
     $$PWD/geometry/arc.c \
     $$PWD/geometry/circle.c \
-    $$PWD/geometry/emb-line.c \
-    $$PWD/geometry/emb-polygon.c \
-    $$PWD/geometry/emb-polyline.c \
-    $$PWD/geometry/emb-rect.c \
-    $$PWD/geometry/emb-satin-line.c \
+    $$PWD/geometry/line.c \
+    $$PWD/geometry/polygon.c \
+    $$PWD/geometry/polyline.c \
+    $$PWD/geometry/rect.c \
+    $$PWD/geometry/satin-line.c \
     $$PWD/geometry/geom-line.c \
-    ../libembroidery/compound-file.c \
-    ../libembroidery/compound-file-difat.c \
-    ../libembroidery/compound-file-directory.c \
-    ../libembroidery/compound-file-fat.c \
-    ../libembroidery/compound-file-header.c \
-    ../libembroidery/emb-compress.c \
-    ../libembroidery/emb-color.c \
-    ../libembroidery/emb-ellipse.c \
+    $$PWD/compound-file.c \
+    $$PWD/compound-file-difat.c \
+    $$PWD/compound-file-directory.c \
+    $$PWD/compound-file-fat.c \
+    $$PWD/compound-file-header.c \
+    $$PWD/emb-compress.c \
+    $$PWD/emb-color.c \
+    $$PWD/geometry/ellipse.c \
     ../libembroidery/emb-file.c \
     ../libembroidery/emb-flag.c \
     ../libembroidery/emb-format.c \
@@ -106,9 +106,9 @@ SOURCES += \
     ../libembroidery/emb-hoop.c \
     ../libembroidery/emb-layer.c \
     ../libembroidery/emb-logging.c \
-    ../libembroidery/emb-path.c \
-    ../libembroidery/emb-pattern.c \
-    ../libembroidery/emb-point.c \
+    $$PWD/geometry/emb-path.c \
+    $$PWD/pattern.c \
+    $$PWD/geometry/point.c \
     ../libembroidery/emb-reader-writer.c \
     ../libembroidery/emb-settings.c \
     ../libembroidery/emb-spline.c \
@@ -117,9 +117,9 @@ SOURCES += \
     ../libembroidery/emb-time.c \
     ../libembroidery/emb-vector.c \
     ../libembroidery/hashtable.c \
-    ../libembroidery/helpers-binary.c \
-    ../libembroidery/helpers-misc.c \
-    ../libembroidery/thread-color.c \
+    $$PWD/helpers-binary.c \
+    $$PWD/helpers-misc.c \
+    $$PWD/thread-color.c \
 
 HEADERS += \
     $$PWD/emb-hash.h \

@@ -595,5 +595,3 @@ int writeDxf(EmbPattern* pattern, const char* fileName)
     if(!fileName) { embLog_error("format-dxf.c writeDxf(), fileName argument is null\n"); return 0; }
     return 0; /*TODO: finish writeDxf */
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

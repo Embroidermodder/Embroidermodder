@@ -104,5 +104,3 @@ int writeZsk(EmbPattern* pattern, const char* fileName)
 
     return 0; /*TODO: finish writeZsk */
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

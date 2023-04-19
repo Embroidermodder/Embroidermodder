@@ -1,16 +1,7 @@
-/**
- * \file embroidery.h
- */
-#ifndef EMBROIDERY_H
-#define EMBROIDERY_H
+#ifndef LIBEMBROIDERY_HEADER__
+#define LIBEMBROIDERY_HEADER__
 
 #include <stdio.h>
-
-/* Only include this in libembroidery header files around functions to be exported as shared library */
-#if defined(API_START_H)
-#error Nested inclusion of api-start.h is not allowed
-#endif
-#define API_START_H
 
 /* Sanity check */
 #if defined(LIBEMBROIDERY_SHARED) && defined(LIBEMBROIDERY_STATIC)
@@ -39,28 +30,35 @@
 #define EMB_PRIVATE
 #endif
 
-/* Use the C calling convention */
-#ifndef EMB_CALL
-#if defined(__WIN32__) && !defined(__GNUC__)
-#define EMB_CALL __cdecl
-#else
-#define EMB_CALL
-#endif
-#endif /* EMBCALL */
-
-/* Disable warnings about unsafe use of fopen, fseek etc */
-#if !defined(__GNUC__)
-#pragma warning(disable: 4996)
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define EMBFORMAT_UNSUPPORTED 0
-#define EMBFORMAT_STITCHONLY  1
-#define EMBFORMAT_OBJECTONLY  2
-#define EMBFORMAT_STCHANDOBJ  3 /* binary operation: 1+2=3 */
+/**
+ * @brief 
+ * 
+ */
+#ifndef LIBEMBROIDERY_EMBEDDED_VERSION
+#define LIBEMBROIDERY_EMBEDDED_VERSION 0
+#endif
+
+/* MACROS
+ *****************************************************************************/
+
+/**
+ * Machine codes for stitch flags
+ */
+#define NORMAL                  0 /*! stitch to (x, y) */
+#define JUMP                    1 /*! move to (x, y) */
+#define TRIM                    2 /*! trim + move to (x, y) */
+#define STOP                    4 /*! pause machine for thread change */
+#define SEQUIN                  8 /*! sequin */
+#define END                     16 /*! end of program */
+
+#define EMBFORMAT_UNSUPPORTED    0
+#define EMBFORMAT_STITCHONLY     1
+#define EMBFORMAT_OBJECTONLY     2
+#define EMBFORMAT_STCHANDOBJ     3 /* binary operation: 1+2=3 */
 
 #define EMBFORMAT_MAXEXT 3  /* maximum length of extension without dot */
 
@@ -121,12 +119,6 @@ typedef struct EmbTime_
     unsigned int minute;
     unsigned int second;
 } EmbTime;
-
-/*! \def emb_unused(expr)
- *  Supresses compiler warnings for unused variables.
- *  This should only be used on variables that truely are unused.
- *  <b>It should not be used in place of properly fixing compiler warnings.</b> */
-#define emb_unused(expr) do { (void)(expr); } while (0)
 
 typedef struct EmbColor_
 {
@@ -297,26 +289,26 @@ typedef struct _bcf_file
     bcf_directory* directory; /*! The directory for the CompoundFile */
 } bcf_file;
 
-extern EMB_PRIVATE bcf_file_fat* EMB_CALL bcfFileFat_create(const unsigned int sectorSize);
-extern EMB_PRIVATE void EMB_CALL loadFatFromSector(bcf_file_fat* fat, EmbFile* file);
-extern EMB_PRIVATE void EMB_CALL bcf_file_fat_free(bcf_file_fat* fat);
+extern EMB_PRIVATE bcf_file_fat* bcfFileFat_create(const unsigned int sectorSize);
+extern EMB_PRIVATE void loadFatFromSector(bcf_file_fat* fat, EmbFile* file);
+extern EMB_PRIVATE void bcf_file_fat_free(bcf_file_fat* fat);
 
-extern EMB_PRIVATE bcf_file_header EMB_CALL bcfFileHeader_read(EmbFile* file);
-extern EMB_PRIVATE int EMB_CALL bcfFileHeader_isValid(bcf_file_header header);
+extern EMB_PRIVATE bcf_file_header bcfFileHeader_read(EmbFile* file);
+extern EMB_PRIVATE int bcfFileHeader_isValid(bcf_file_header header);
 
-extern EMB_PRIVATE bcf_directory_entry* EMB_CALL CompoundFileDirectoryEntry(EmbFile* file);
-extern EMB_PRIVATE bcf_directory* EMB_CALL CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries);
-extern EMB_PRIVATE void EMB_CALL readNextSector(EmbFile* file, bcf_directory* dir);
-extern EMB_PRIVATE void EMB_CALL bcf_directory_free(bcf_directory* dir);
+extern EMB_PRIVATE bcf_directory_entry* CompoundFileDirectoryEntry(EmbFile* file);
+extern EMB_PRIVATE bcf_directory* CompoundFileDirectory(const unsigned int maxNumberOfDirectoryEntries);
+extern EMB_PRIVATE void readNextSector(EmbFile* file, bcf_directory* dir);
+extern EMB_PRIVATE void bcf_directory_free(bcf_directory* dir);
 
-extern EMB_PRIVATE bcf_file_difat* EMB_CALL bcf_difat_create(EmbFile* file, unsigned int fatSectors, const unsigned int sectorSize);
-extern EMB_PRIVATE unsigned int EMB_CALL readFullSector(EmbFile* file, bcf_file_difat* bcfFile, unsigned int* numberOfDifatEntriesStillToRead);
-extern EMB_PRIVATE unsigned int EMB_CALL numberOfEntriesInDifatSector(bcf_file_difat* fat);
-extern EMB_PRIVATE void EMB_CALL bcf_file_difat_free(bcf_file_difat* difat);
+extern EMB_PRIVATE bcf_file_difat* bcf_difat_create(EmbFile* file, unsigned int fatSectors, const unsigned int sectorSize);
+extern EMB_PRIVATE unsigned int readFullSector(EmbFile* file, bcf_file_difat* bcfFile, unsigned int* numberOfDifatEntriesStillToRead);
+extern EMB_PRIVATE unsigned int numberOfEntriesInDifatSector(bcf_file_difat* fat);
+extern EMB_PRIVATE void bcf_file_difat_free(bcf_file_difat* difat);
 
-extern EMB_PRIVATE int EMB_CALL bcfFile_read(EmbFile* file, bcf_file* bcfFile);
-extern EMB_PRIVATE EmbFile* EMB_CALL GetFile(bcf_file* bcfFile, EmbFile* file, char* fileToFind);
-extern EMB_PRIVATE void EMB_CALL bcf_file_free(bcf_file* bcfFile);
+extern EMB_PRIVATE int bcfFile_read(EmbFile* file, bcf_file* bcfFile);
+extern EMB_PRIVATE EmbFile* GetFile(bcf_file* bcfFile, EmbFile* file, char* fileToFind);
+extern EMB_PRIVATE void bcf_file_free(bcf_file* bcfFile);
 
 /*! Constant representing the number of Double Indirect FAT entries in a single header */
 static const unsigned int NumberOfDifatEntriesInHeader = 109;
@@ -331,39 +323,39 @@ typedef struct EmbFormatList_
     struct EmbFormatList_* next;
 } EmbFormatList;
 
-extern EMB_PUBLIC EmbFormatList* EMB_CALL embFormatList_create();
-extern EMB_PRIVATE EmbFormatList* EMB_CALL embFormatList_add(EmbFormatList* pointer, char* extension, char* description, char reader, char writer, int type);
-extern EMB_PUBLIC int EMB_CALL embFormatList_count(EmbFormatList* pointer);
-extern EMB_PUBLIC int EMB_CALL embFormatList_empty(EmbFormatList* pointer);
-extern EMB_PUBLIC void EMB_CALL embFormatList_free(EmbFormatList* pointer);
+EMB_PUBLIC EmbFormatList* embFormatList_create();
+EMB_PRIVATE EmbFormatList* embFormatList_add(EmbFormatList* pointer, char* extension, char* description, char reader, char writer, int type);
+EMB_PUBLIC int embFormatList_count(EmbFormatList* pointer);
+EMB_PUBLIC int embFormatList_empty(EmbFormatList* pointer);
+EMB_PUBLIC void embFormatList_free(EmbFormatList* pointer);
 
-extern EMB_PUBLIC const char* EMB_CALL embFormat_extension(EmbFormatList* pointer);
-extern EMB_PUBLIC const char* EMB_CALL embFormat_description(EmbFormatList* pointer);
-extern EMB_PUBLIC char EMB_CALL embFormat_readerState(EmbFormatList* pointer);
-extern EMB_PUBLIC char EMB_CALL embFormat_writerState(EmbFormatList* pointer);
-extern EMB_PUBLIC int EMB_CALL embFormat_type(EmbFormatList* pointer);
+EMB_PUBLIC const char* embFormat_extension(EmbFormatList* pointer);
+EMB_PUBLIC const char* embFormat_description(EmbFormatList* pointer);
+EMB_PUBLIC char embFormat_readerState(EmbFormatList* pointer);
+EMB_PUBLIC char embFormat_writerState(EmbFormatList* pointer);
+EMB_PUBLIC int embFormat_type(EmbFormatList* pointer);
 
-extern EMB_PUBLIC const char* EMB_CALL embFormat_extensionFromName(const char* fileName);
-extern EMB_PUBLIC const char* EMB_CALL embFormat_descriptionFromName(const char* fileName);
-extern EMB_PUBLIC char EMB_CALL embFormat_readerStateFromName(const char* fileName);
-extern EMB_PUBLIC char EMB_CALL embFormat_writerStateFromName(const char* fileName);
-extern EMB_PUBLIC int EMB_CALL embFormat_typeFromName(const char* fileName);
+EMB_PUBLIC const char* embFormat_extensionFromName(const char* fileName);
+EMB_PUBLIC const char* embFormat_descriptionFromName(const char* fileName);
+EMB_PUBLIC char embFormat_readerStateFromName(const char* fileName);
+EMB_PUBLIC char embFormat_writerStateFromName(const char* fileName);
+EMB_PUBLIC int embFormat_typeFromName(const char* fileName);
 
-extern EMB_PUBLIC EmbFile* EMB_CALL embFile_open(const char* fileName, const char* mode);
-extern EMB_PUBLIC int EMB_CALL embFile_close(EmbFile* stream);
-extern EMB_PUBLIC int EMB_CALL embFile_eof(EmbFile* stream);
-extern EMB_PUBLIC int EMB_CALL embFile_getc(EmbFile* stream);
-extern EMB_PUBLIC size_t EMB_CALL embFile_read(void* ptr, size_t size, size_t nmemb, EmbFile* stream);
-extern EMB_PUBLIC size_t EMB_CALL embFile_write(const void* ptr, size_t size, size_t nmemb, EmbFile* stream);
-extern EMB_PUBLIC int EMB_CALL embFile_seek(EmbFile* stream, long offset, int origin);
-extern EMB_PUBLIC long EMB_CALL embFile_tell(EmbFile* stream);
-extern EMB_PUBLIC EmbFile* EMB_CALL embFile_tmpfile(void);
-extern EMB_PUBLIC int EMB_CALL embFile_putc(int ch, EmbFile* stream);
+EMB_PUBLIC EmbFile* embFile_open(const char* fileName, const char* mode);
+EMB_PUBLIC int embFile_close(EmbFile* stream);
+EMB_PUBLIC int embFile_eof(EmbFile* stream);
+EMB_PUBLIC int embFile_getc(EmbFile* stream);
+EMB_PUBLIC size_t embFile_read(void* ptr, size_t size, size_t nmemb, EmbFile* stream);
+EMB_PUBLIC size_t embFile_write(const void* ptr, size_t size, size_t nmemb, EmbFile* stream);
+EMB_PUBLIC int embFile_seek(EmbFile* stream, long offset, int origin);
+EMB_PUBLIC long embFile_tell(EmbFile* stream);
+EMB_PUBLIC EmbFile* embFile_tmpfile(void);
+EMB_PUBLIC int embFile_putc(int ch, EmbFile* stream);
 
-extern EMB_PUBLIC int EMB_CALL embFile_printf(EmbFile* stream, const char* format, ...);
+EMB_PUBLIC int embFile_printf(EmbFile* stream, const char* format, ...);
 
-extern EMB_PUBLIC EmbArcObject EMB_CALL embArcObject_make(double sx, double sy, double mx, double my, double ex, double ey);
-extern EMB_PUBLIC EmbArcObject* EMB_CALL embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey);
+EMB_PUBLIC EmbArcObject embArcObject_make(double sx, double sy, double mx, double my, double ex, double ey);
+EMB_PUBLIC EmbArcObject* embArcObject_create(double sx, double sy, double mx, double my, double ex, double ey);
 
 typedef struct EmbArcObjectList_
 {
@@ -375,59 +367,59 @@ typedef struct EmbArcObjectList_
 #include "utility/ino-logging.h"
 #endif
 
-extern EMB_PUBLIC void EMB_CALL embLog_print(const char* format, ...);
-extern EMB_PUBLIC void EMB_CALL embLog_error(const char* format, ...);
+EMB_PUBLIC void embLog_print(const char* format, ...);
+EMB_PUBLIC void embLog_error(const char* format, ...);
 
-extern EMB_PUBLIC EmbArcObjectList* EMB_CALL embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
-extern EMB_PUBLIC int EMB_CALL embArcObjectList_count(EmbArcObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embArcObjectList_empty(EmbArcObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embArcObjectList_free(EmbArcObjectList* pointer);
+EMB_PUBLIC EmbArcObjectList* embArcObjectList_add(EmbArcObjectList* pointer, EmbArcObject data);
+EMB_PUBLIC int embArcObjectList_count(EmbArcObjectList* pointer);
+EMB_PUBLIC int embArcObjectList_empty(EmbArcObjectList* pointer);
+EMB_PUBLIC void embArcObjectList_free(EmbArcObjectList* pointer);
 
-extern EMB_PUBLIC EmbColor EMB_CALL embColor_make(unsigned char r, unsigned char g, unsigned char b);
-extern EMB_PUBLIC EmbColor* EMB_CALL embColor_create(unsigned char r, unsigned char g, unsigned char b);
-extern EMB_PUBLIC EmbColor EMB_CALL embColor_fromHexStr(char* val);
+EMB_PUBLIC EmbColor embColor_make(unsigned char r, unsigned char g, unsigned char b);
+EMB_PUBLIC EmbColor* embColor_create(unsigned char r, unsigned char g, unsigned char b);
+EMB_PUBLIC EmbColor embColor_fromHexStr(char* val);
 
-extern EMB_PUBLIC int EMB_CALL embThread_findNearestColor(EmbColor color, EmbThreadList* colors);
-extern EMB_PUBLIC int EMB_CALL embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
-extern EMB_PUBLIC EmbThread EMB_CALL embThread_getRandom(void);
+EMB_PUBLIC int embThread_findNearestColor(EmbColor color, EmbThreadList* colors);
+EMB_PUBLIC int embThread_findNearestColorInArray(EmbColor color, EmbThread* colorArray, int count);
+EMB_PUBLIC EmbThread embThread_getRandom(void);
 
-extern EMB_PUBLIC EmbThreadList* EMB_CALL embThreadList_create(EmbThread data);
-extern EMB_PUBLIC EmbThreadList* EMB_CALL embThreadList_add(EmbThreadList* pointer, EmbThread data);
-extern EMB_PUBLIC int EMB_CALL embThreadList_count(EmbThreadList* pointer);
-extern EMB_PUBLIC int EMB_CALL embThreadList_empty(EmbThreadList* pointer);
-extern EMB_PUBLIC void EMB_CALL embThreadList_free(EmbThreadList* pointer);
-extern EMB_PUBLIC EmbThread EMB_CALL embThreadList_getAt(EmbThreadList* pointer, int num);
+EMB_PUBLIC EmbThreadList* embThreadList_create(EmbThread data);
+EMB_PUBLIC EmbThreadList* embThreadList_add(EmbThreadList* pointer, EmbThread data);
+EMB_PUBLIC int embThreadList_count(EmbThreadList* pointer);
+EMB_PUBLIC int embThreadList_empty(EmbThreadList* pointer);
+EMB_PUBLIC void embThreadList_free(EmbThreadList* pointer);
+EMB_PUBLIC EmbThread embThreadList_getAt(EmbThreadList* pointer, int num);
 
-extern EMB_PUBLIC double EMB_CALL embLine_x1(EmbLine line);
-extern EMB_PUBLIC double EMB_CALL embLine_y1(EmbLine line);
-extern EMB_PUBLIC double EMB_CALL embLine_x2(EmbLine line);
-extern EMB_PUBLIC double EMB_CALL embLine_y2(EmbLine line);
+EMB_PUBLIC double embLine_x1(EmbLine line);
+EMB_PUBLIC double embLine_y1(EmbLine line);
+EMB_PUBLIC double embLine_x2(EmbLine line);
+EMB_PUBLIC double embLine_y2(EmbLine line);
 
-extern EMB_PUBLIC EmbLineObject EMB_CALL embLineObject_make(double x1, double y1, double x2, double y2);
-extern EMB_PUBLIC EmbLineObject* EMB_CALL embLineObject_create(double x1, double y1, double x2, double y2);
+EMB_PUBLIC EmbLineObject embLineObject_make(double x1, double y1, double x2, double y2);
+EMB_PUBLIC EmbLineObject* embLineObject_create(double x1, double y1, double x2, double y2);
 
-extern EMB_PUBLIC EmbLineObjectList* EMB_CALL embLineObjectList_create(EmbLineObject data);
-extern EMB_PUBLIC EmbLineObjectList* EMB_CALL embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
-extern EMB_PUBLIC int EMB_CALL embLineObjectList_count(EmbLineObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embLineObjectList_empty(EmbLineObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embLineObjectList_free(EmbLineObjectList* pointer);
+EMB_PUBLIC EmbLineObjectList* embLineObjectList_create(EmbLineObject data);
+EMB_PUBLIC EmbLineObjectList* embLineObjectList_add(EmbLineObjectList* pointer, EmbLineObject data);
+EMB_PUBLIC int embLineObjectList_count(EmbLineObjectList* pointer);
+EMB_PUBLIC int embLineObjectList_empty(EmbLineObjectList* pointer);
+EMB_PUBLIC void embLineObjectList_free(EmbLineObjectList* pointer);
 
-extern EMB_PUBLIC void EMB_CALL embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise);
-extern EMB_PUBLIC void EMB_CALL embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
+EMB_PUBLIC void embLine_normalVector(EmbVector vector1, EmbVector vector2, EmbVector* result, int clockwise);
+EMB_PUBLIC void embLine_intersectionPoint(EmbVector v1, EmbVector v2, EmbVector v3, EmbVector v4, EmbVector* result);
 
-extern EMB_PUBLIC void EMB_CALL embTime_initNow(EmbTime* t);
-extern EMB_PUBLIC EmbTime EMB_CALL embTime_time(EmbTime* t);
+EMB_PUBLIC void embTime_initNow(EmbTime* t);
+EMB_PUBLIC EmbTime embTime_time(EmbTime* t);
 
-extern EMB_PUBLIC void EMB_CALL embVector_normalize(EmbVector vector, EmbVector* result);
-extern EMB_PUBLIC void EMB_CALL embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
-extern EMB_PUBLIC void EMB_CALL embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);
-extern EMB_PUBLIC double EMB_CALL embVector_getLength(EmbVector vector);
+EMB_PUBLIC void embVector_normalize(EmbVector vector, EmbVector* result);
+EMB_PUBLIC void embVector_multiply(EmbVector vector, double magnitude, EmbVector* result);
+EMB_PUBLIC void embVector_add(EmbVector v1, EmbVector v2, EmbVector* result);
+EMB_PUBLIC double embVector_getLength(EmbVector vector);
 
-extern EMB_PUBLIC EmbVectorList* EMB_CALL embVectorList_create(EmbVector data);
-extern EMB_PUBLIC EmbVectorList* EMB_CALL embVectorList_add(EmbVectorList* pointer, EmbVector data);
-extern EMB_PUBLIC int EMB_CALL embVectorList_count(EmbVectorList* pointer);
-extern EMB_PUBLIC int EMB_CALL embVectorList_empty(EmbVectorList* pointer);
-extern EMB_PUBLIC void EMB_CALL embVectorList_free(EmbVectorList* pointer);
+EMB_PUBLIC EmbVectorList* embVectorList_create(EmbVector data);
+EMB_PUBLIC EmbVectorList* embVectorList_add(EmbVectorList* pointer, EmbVector data);
+EMB_PUBLIC int embVectorList_count(EmbVectorList* pointer);
+EMB_PUBLIC int embVectorList_empty(EmbVectorList* pointer);
+EMB_PUBLIC void embVectorList_free(EmbVectorList* pointer);
 
 typedef struct EmbCircle_
 {
@@ -436,9 +428,9 @@ typedef struct EmbCircle_
     double radius;
 } EmbCircle;
 
-extern EMB_PUBLIC double EMB_CALL embCircle_centerX(EmbCircle circle);
-extern EMB_PUBLIC double EMB_CALL embCircle_centerY(EmbCircle circle);
-extern EMB_PUBLIC double EMB_CALL embCircle_radius(EmbCircle circle);
+EMB_PUBLIC double embCircle_centerX(EmbCircle circle);
+EMB_PUBLIC double embCircle_centerY(EmbCircle circle);
+EMB_PUBLIC double embCircle_radius(EmbCircle circle);
 
 typedef struct EmbCircleObject_
 {
@@ -449,8 +441,8 @@ typedef struct EmbCircleObject_
     EmbColor color;
 } EmbCircleObject;
 
-extern EMB_PUBLIC EmbCircleObject EMB_CALL embCircleObject_make(double cx, double cy, double r);
-extern EMB_PUBLIC EmbCircleObject* EMB_CALL embCircleObject_create(double cx, double cy, double r);
+EMB_PUBLIC EmbCircleObject embCircleObject_make(double cx, double cy, double r);
+EMB_PUBLIC EmbCircleObject* embCircleObject_create(double cx, double cy, double r);
 
 typedef struct EmbCircleObjectList_
 {
@@ -458,11 +450,11 @@ typedef struct EmbCircleObjectList_
     struct EmbCircleObjectList_* next;
 } EmbCircleObjectList;
 
-extern EMB_PUBLIC EmbCircleObjectList* EMB_CALL embCircleObjectList_create(EmbCircleObject data);
-extern EMB_PUBLIC EmbCircleObjectList* EMB_CALL embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data);
-extern EMB_PUBLIC int EMB_CALL embCircleObjectList_count(EmbCircleObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embCircleObjectList_empty(EmbCircleObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embCircleObjectList_free(EmbCircleObjectList* pointer);
+EMB_PUBLIC EmbCircleObjectList* embCircleObjectList_create(EmbCircleObject data);
+EMB_PUBLIC EmbCircleObjectList* embCircleObjectList_add(EmbCircleObjectList* pointer, EmbCircleObject data);
+EMB_PUBLIC int embCircleObjectList_count(EmbCircleObjectList* pointer);
+EMB_PUBLIC int embCircleObjectList_empty(EmbCircleObjectList* pointer);
+EMB_PUBLIC void embCircleObjectList_free(EmbCircleObjectList* pointer);
 
 
 typedef struct EmbPoint_
@@ -471,9 +463,9 @@ typedef struct EmbPoint_
     double yy; /* positive is up, units are in mm  */
 } EmbPoint;
 
-extern EMB_PUBLIC double EMB_CALL embPoint_x(EmbPoint point);
-extern EMB_PUBLIC double EMB_CALL embPoint_y(EmbPoint point);
-extern EMB_PUBLIC EmbPoint EMB_CALL embPoint_make(double x, double y);
+EMB_PUBLIC double embPoint_x(EmbPoint point);
+EMB_PUBLIC double embPoint_y(EmbPoint point);
+EMB_PUBLIC EmbPoint embPoint_make(double x, double y);
 
 typedef struct EmbPointList_
 {
@@ -481,11 +473,11 @@ typedef struct EmbPointList_
     struct EmbPointList_* next;
 } EmbPointList;
 
-extern EMB_PUBLIC EmbPointList* EMB_CALL embPointList_create(double x, double y);
-extern EMB_PUBLIC EmbPointList* EMB_CALL embPointList_add(EmbPointList* pointer, EmbPoint data);
-extern EMB_PUBLIC int EMB_CALL embPointList_count(EmbPointList* pointer);
-extern EMB_PUBLIC int EMB_CALL embPointList_empty(EmbPointList* pointer);
-extern EMB_PUBLIC void EMB_CALL embPointList_free(EmbPointList* pointer);
+EMB_PUBLIC EmbPointList* embPointList_create(double x, double y);
+EMB_PUBLIC EmbPointList* embPointList_add(EmbPointList* pointer, EmbPoint data);
+EMB_PUBLIC int embPointList_count(EmbPointList* pointer);
+EMB_PUBLIC int embPointList_empty(EmbPointList* pointer);
+EMB_PUBLIC void embPointList_free(EmbPointList* pointer);
 
 typedef struct EmbPointObject_
 {
@@ -496,8 +488,8 @@ typedef struct EmbPointObject_
     EmbColor color;
 } EmbPointObject;
 
-extern EMB_PUBLIC EmbPointObject EMB_CALL embPointObject_make(double x, double y);
-extern EMB_PUBLIC EmbPointObject* EMB_CALL embPointObject_create(double x, double y);
+EMB_PUBLIC EmbPointObject embPointObject_make(double x, double y);
+EMB_PUBLIC EmbPointObject* embPointObject_create(double x, double y);
 
 typedef struct EmbPointObjectList_
 {
@@ -505,11 +497,11 @@ typedef struct EmbPointObjectList_
     struct EmbPointObjectList_* next;
 } EmbPointObjectList;
 
-extern EMB_PUBLIC EmbPointObjectList* EMB_CALL embPointObjectList_create(EmbPointObject data);
-extern EMB_PUBLIC EmbPointObjectList* EMB_CALL embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
-extern EMB_PUBLIC int EMB_CALL embPointObjectList_count(EmbPointObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embPointObjectList_empty(EmbPointObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embPointObjectList_free(EmbPointObjectList* pointer);
+EMB_PUBLIC EmbPointObjectList* embPointObjectList_create(EmbPointObject data);
+EMB_PUBLIC EmbPointObjectList* embPointObjectList_add(EmbPointObjectList* pointer, EmbPointObject data);
+EMB_PUBLIC int embPointObjectList_count(EmbPointObjectList* pointer);
+EMB_PUBLIC int embPointObjectList_empty(EmbPointObjectList* pointer);
+EMB_PUBLIC void embPointObjectList_free(EmbPointObjectList* pointer);
 
 typedef int EmbFlag;
 
@@ -519,11 +511,11 @@ typedef struct EmbFlagList_
     struct EmbFlagList_* next;
 } EmbFlagList;
 
-extern EMB_PUBLIC EmbFlagList* EMB_CALL embFlagList_create(EmbFlag data);
-extern EMB_PUBLIC EmbFlagList* EMB_CALL embFlagList_add(EmbFlagList* pointer, EmbFlag data);
-extern EMB_PUBLIC int EMB_CALL embFlagList_count(EmbFlagList* pointer);
-extern EMB_PUBLIC int EMB_CALL embFlagList_empty(EmbFlagList* pointer);
-extern EMB_PUBLIC void EMB_CALL embFlagList_free(EmbFlagList* pointer);
+EMB_PUBLIC EmbFlagList* embFlagList_create(EmbFlag data);
+EMB_PUBLIC EmbFlagList* embFlagList_add(EmbFlagList* pointer, EmbFlag data);
+EMB_PUBLIC int embFlagList_count(EmbFlagList* pointer);
+EMB_PUBLIC int embFlagList_empty(EmbFlagList* pointer);
+EMB_PUBLIC void embFlagList_free(EmbFlagList* pointer);
 
 
 typedef struct EmbBezier_
@@ -555,16 +547,8 @@ typedef struct EmbSplineObjectList_
     struct EmbSplineObjectList_* next;
 } EmbSplineObjectList; /* TODO: This struct/file needs reworked to work internally similar to polylines */
 
-extern EMB_PUBLIC int EMB_CALL embSplineObjectList_count(EmbSplineObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embSplineObjectList_empty(EmbSplineObjectList* pointer);
-
-/* Machine codes for stitch flags */
-#define NORMAL              0 /* stitch to (xx, yy) */
-#define JUMP                1 /* move to(xx, yy) */
-#define TRIM                2 /* trim + move to(xx, yy) */
-#define STOP                4 /* pause machine for thread change */
-#define SEQUIN              8 /* sequin */
-#define END                 16 /* end of program */
+EMB_PUBLIC int embSplineObjectList_count(EmbSplineObjectList* pointer);
+EMB_PUBLIC int embSplineObjectList_empty(EmbSplineObjectList* pointer);
 
 typedef struct EmbStitch_
 {
@@ -580,12 +564,12 @@ typedef struct EmbStitchList_
     struct EmbStitchList_* next;
 } EmbStitchList;
 
-extern EMB_PUBLIC EmbStitchList* EMB_CALL embStitchList_create(EmbStitch data);
-extern EMB_PUBLIC EmbStitchList* EMB_CALL embStitchList_add(EmbStitchList* pointer, EmbStitch data);
-extern EMB_PUBLIC int EMB_CALL embStitchList_count(EmbStitchList* pointer);
-extern EMB_PUBLIC int EMB_CALL embStitchList_empty(EmbStitchList* pointer);
-extern EMB_PUBLIC void EMB_CALL embStitchList_free(EmbStitchList* pointer);
-extern EMB_PUBLIC EmbStitch EMB_CALL embStitchList_getAt(EmbStitchList* pointer, int num);
+EMB_PUBLIC EmbStitchList* embStitchList_create(EmbStitch data);
+EMB_PUBLIC EmbStitchList* embStitchList_add(EmbStitchList* pointer, EmbStitch data);
+EMB_PUBLIC int embStitchList_count(EmbStitchList* pointer);
+EMB_PUBLIC int embStitchList_empty(EmbStitchList* pointer);
+EMB_PUBLIC void embStitchList_free(EmbStitchList* pointer);
+EMB_PUBLIC EmbStitch embStitchList_getAt(EmbStitchList* pointer, int num);
 
 
 typedef struct EmbEllipse_
@@ -596,14 +580,14 @@ typedef struct EmbEllipse_
     double radiusY;
 } EmbEllipse;
 
-extern EMB_PUBLIC double EMB_CALL embEllipse_centerX(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_centerY(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_radiusX(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_radiusY(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_diameterX(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_diameterY(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_width(EmbEllipse ellipse);
-extern EMB_PUBLIC double EMB_CALL embEllipse_height(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_centerX(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_centerY(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_radiusX(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_radiusY(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_diameterX(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_diameterY(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_width(EmbEllipse ellipse);
+EMB_PUBLIC double embEllipse_height(EmbEllipse ellipse);
 
 typedef struct EmbEllipseObject_
 {
@@ -615,8 +599,8 @@ typedef struct EmbEllipseObject_
     EmbColor color;
 } EmbEllipseObject;
 
-extern EMB_PUBLIC EmbEllipseObject EMB_CALL embEllipseObject_make(double cx, double cy, double rx, double ry);
-extern EMB_PUBLIC EmbEllipseObject* EMB_CALL embEllipseObject_create(double cx, double cy, double rx, double ry);
+EMB_PUBLIC EmbEllipseObject embEllipseObject_make(double cx, double cy, double rx, double ry);
+EMB_PUBLIC EmbEllipseObject* embEllipseObject_create(double cx, double cy, double rx, double ry);
 
 typedef struct EmbEllipseObjectList_
 {
@@ -624,11 +608,11 @@ typedef struct EmbEllipseObjectList_
     struct EmbEllipseObjectList_* next;
 } EmbEllipseObjectList;
 
-extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL embEllipseObjectList_create(EmbEllipseObject data);
-extern EMB_PUBLIC EmbEllipseObjectList* EMB_CALL embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
-extern EMB_PUBLIC int EMB_CALL embEllipseObjectList_count(EmbEllipseObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embEllipseObjectList_free(EmbEllipseObjectList* pointer);
+EMB_PUBLIC EmbEllipseObjectList* embEllipseObjectList_create(EmbEllipseObject data);
+EMB_PUBLIC EmbEllipseObjectList* embEllipseObjectList_add(EmbEllipseObjectList* pointer, EmbEllipseObject data);
+EMB_PUBLIC int embEllipseObjectList_count(EmbEllipseObjectList* pointer);
+EMB_PUBLIC int embEllipseObjectList_empty(EmbEllipseObjectList* pointer);
+EMB_PUBLIC void embEllipseObjectList_free(EmbEllipseObjectList* pointer);
 
 typedef struct EmbHoop_
 {
@@ -636,8 +620,8 @@ typedef struct EmbHoop_
     double height;
 } EmbHoop;
 
-extern EMB_PUBLIC double EMB_CALL embHoop_width(EmbHoop hoop);
-extern EMB_PUBLIC double EMB_CALL embHoop_height(EmbHoop hoop);
+EMB_PUBLIC double embHoop_width(EmbHoop hoop);
+EMB_PUBLIC double embHoop_height(EmbHoop hoop);
 
 /* path flag codes */
 #define LINETO             0
@@ -662,8 +646,8 @@ typedef struct EmbPathObject_
     EmbColor color;
 } EmbPathObject;
 
-extern EMB_PUBLIC EmbPathObject* EMB_CALL embPathObject_create(EmbPointList* pointList, EmbFlagList* flagList, EmbColor color, int lineType);
-extern EMB_PUBLIC void EMB_CALL embPathObject_free(EmbPathObject* pointer);
+EMB_PUBLIC EmbPathObject* embPathObject_create(EmbPointList* pointList, EmbFlagList* flagList, EmbColor color, int lineType);
+EMB_PUBLIC void embPathObject_free(EmbPathObject* pointer);
 
 typedef struct EmbPathObjectList_
 {
@@ -671,11 +655,11 @@ typedef struct EmbPathObjectList_
     struct EmbPathObjectList_* next;
 } EmbPathObjectList;
 
-extern EMB_PUBLIC EmbPathObjectList* EMB_CALL embPathObjectList_create(EmbPathObject* data);
-extern EMB_PUBLIC EmbPathObjectList* EMB_CALL embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data);
-extern EMB_PUBLIC int EMB_CALL embPathObjectList_count(EmbPathObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embPathObjectList_empty(EmbPathObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embPathObjectList_free(EmbPathObjectList* pointer);
+EMB_PUBLIC EmbPathObjectList* embPathObjectList_create(EmbPathObject* data);
+EMB_PUBLIC EmbPathObjectList* embPathObjectList_add(EmbPathObjectList* pointer, EmbPathObject* data);
+EMB_PUBLIC int embPathObjectList_count(EmbPathObjectList* pointer);
+EMB_PUBLIC int embPathObjectList_empty(EmbPathObjectList* pointer);
+EMB_PUBLIC void embPathObjectList_free(EmbPathObjectList* pointer);
 
 typedef struct EmbPolygonObject_
 {
@@ -686,8 +670,8 @@ typedef struct EmbPolygonObject_
     EmbColor color;
 } EmbPolygonObject;
 
-extern EMB_PUBLIC EmbPolygonObject* EMB_CALL embPolygonObject_create(EmbPointList* pointList, EmbColor color, int lineType);
-extern EMB_PUBLIC void EMB_CALL embPolygonObject_free(EmbPolygonObject* pointer);
+EMB_PUBLIC EmbPolygonObject* embPolygonObject_create(EmbPointList* pointList, EmbColor color, int lineType);
+EMB_PUBLIC void embPolygonObject_free(EmbPolygonObject* pointer);
 
 typedef struct EmbPolygonObjectList_
 {
@@ -695,11 +679,11 @@ typedef struct EmbPolygonObjectList_
     struct EmbPolygonObjectList_* next;
 } EmbPolygonObjectList;
 
-extern EMB_PUBLIC EmbPolygonObjectList* EMB_CALL embPolygonObjectList_create(EmbPolygonObject* data);
-extern EMB_PUBLIC EmbPolygonObjectList* EMB_CALL embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data);
-extern EMB_PUBLIC int EMB_CALL embPolygonObjectList_count(EmbPolygonObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embPolygonObjectList_free(EmbPolygonObjectList* pointer);
+EMB_PUBLIC EmbPolygonObjectList* embPolygonObjectList_create(EmbPolygonObject* data);
+EMB_PUBLIC EmbPolygonObjectList* embPolygonObjectList_add(EmbPolygonObjectList* pointer, EmbPolygonObject* data);
+EMB_PUBLIC int embPolygonObjectList_count(EmbPolygonObjectList* pointer);
+EMB_PUBLIC int embPolygonObjectList_empty(EmbPolygonObjectList* pointer);
+EMB_PUBLIC void embPolygonObjectList_free(EmbPolygonObjectList* pointer);
 
 typedef struct EmbPolylineObject_
 {
@@ -710,8 +694,8 @@ typedef struct EmbPolylineObject_
     EmbColor color;
 } EmbPolylineObject;
 
-extern EMB_PUBLIC EmbPolylineObject* EMB_CALL embPolylineObject_create(EmbPointList* pointList, EmbColor color, int lineType);
-extern EMB_PUBLIC void EMB_CALL embPolylineObject_free(EmbPolylineObject* pointer);
+EMB_PUBLIC EmbPolylineObject* embPolylineObject_create(EmbPointList* pointList, EmbColor color, int lineType);
+EMB_PUBLIC void embPolylineObject_free(EmbPolylineObject* pointer);
 
 typedef struct EmbPolylineObjectList_
 {
@@ -719,11 +703,11 @@ typedef struct EmbPolylineObjectList_
     struct EmbPolylineObjectList_* next;
 } EmbPolylineObjectList;
 
-extern EMB_PUBLIC EmbPolylineObjectList* EMB_CALL embPolylineObjectList_create(EmbPolylineObject* data);
-extern EMB_PUBLIC EmbPolylineObjectList* EMB_CALL embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
-extern EMB_PUBLIC int EMB_CALL embPolylineObjectList_count(EmbPolylineObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embPolylineObjectList_free(EmbPolylineObjectList* pointer);
+EMB_PUBLIC EmbPolylineObjectList* embPolylineObjectList_create(EmbPolylineObject* data);
+EMB_PUBLIC EmbPolylineObjectList* embPolylineObjectList_add(EmbPolylineObjectList* pointer, EmbPolylineObject* data);
+EMB_PUBLIC int embPolylineObjectList_count(EmbPolylineObjectList* pointer);
+EMB_PUBLIC int embPolylineObjectList_empty(EmbPolylineObjectList* pointer);
+EMB_PUBLIC void embPolylineObjectList_free(EmbPolylineObjectList* pointer);
 
 
 typedef struct EmbRect_
@@ -734,18 +718,18 @@ typedef struct EmbRect_
     double right;
 } EmbRect;
 
-extern EMB_PUBLIC double EMB_CALL embRect_x(EmbRect rect);
-extern EMB_PUBLIC double EMB_CALL embRect_y(EmbRect rect);
-extern EMB_PUBLIC double EMB_CALL embRect_width(EmbRect rect);
-extern EMB_PUBLIC double EMB_CALL embRect_height(EmbRect rect);
+EMB_PUBLIC double embRect_x(EmbRect rect);
+EMB_PUBLIC double embRect_y(EmbRect rect);
+EMB_PUBLIC double embRect_width(EmbRect rect);
+EMB_PUBLIC double embRect_height(EmbRect rect);
 
-extern EMB_PUBLIC void EMB_CALL embRect_setX(EmbRect* rect, double x);
-extern EMB_PUBLIC void EMB_CALL embRect_setY(EmbRect* rect, double y);
-extern EMB_PUBLIC void EMB_CALL embRect_setWidth(EmbRect* rect, double w);
-extern EMB_PUBLIC void EMB_CALL embRect_setHeight(EmbRect* rect, double h);
+EMB_PUBLIC void embRect_setX(EmbRect* rect, double x);
+EMB_PUBLIC void embRect_setY(EmbRect* rect, double y);
+EMB_PUBLIC void embRect_setWidth(EmbRect* rect, double w);
+EMB_PUBLIC void embRect_setHeight(EmbRect* rect, double h);
 
-extern EMB_PUBLIC void EMB_CALL embRect_setCoords(EmbRect* rect, double x1, double y1, double x2, double y2);
-extern EMB_PUBLIC void EMB_CALL embRect_setRect(EmbRect* rect, double x, double y, double w, double h);
+EMB_PUBLIC void embRect_setCoords(EmbRect* rect, double x1, double y1, double x2, double y2);
+EMB_PUBLIC void embRect_setRect(EmbRect* rect, double x, double y, double w, double h);
 
 typedef struct EmbRectObject_
 {
@@ -758,8 +742,8 @@ typedef struct EmbRectObject_
     EmbColor color;
 } EmbRectObject;
 
-extern EMB_PUBLIC EmbRectObject EMB_CALL embRectObject_make(double x, double y, double w, double h);
-extern EMB_PUBLIC EmbRectObject* EMB_CALL embRectObject_create(double x, double y, double w, double h);
+EMB_PUBLIC EmbRectObject embRectObject_make(double x, double y, double w, double h);
+EMB_PUBLIC EmbRectObject* embRectObject_create(double x, double y, double w, double h);
 
 typedef struct EmbRectObjectList_
 {
@@ -767,11 +751,11 @@ typedef struct EmbRectObjectList_
     struct EmbRectObjectList_* next;
 } EmbRectObjectList;
 
-extern EMB_PUBLIC EmbRectObjectList* EMB_CALL embRectObjectList_create(EmbRectObject data);
-extern EMB_PUBLIC EmbRectObjectList* EMB_CALL embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
-extern EMB_PUBLIC int EMB_CALL embRectObjectList_count(EmbRectObjectList* pointer);
-extern EMB_PUBLIC int EMB_CALL embRectObjectList_empty(EmbRectObjectList* pointer);
-extern EMB_PUBLIC void EMB_CALL embRectObjectList_free(EmbRectObjectList* pointer);
+EMB_PUBLIC EmbRectObjectList* embRectObjectList_create(EmbRectObject data);
+EMB_PUBLIC EmbRectObjectList* embRectObjectList_add(EmbRectObjectList* pointer, EmbRectObject data);
+EMB_PUBLIC int embRectObjectList_count(EmbRectObjectList* pointer);
+EMB_PUBLIC int embRectObjectList_empty(EmbRectObjectList* pointer);
+EMB_PUBLIC void embRectObjectList_free(EmbRectObjectList* pointer);
 
 typedef struct EmbSatinOutline_
 {
@@ -786,13 +770,13 @@ typedef struct EmbSettings_
     EmbPoint home;
 } EmbSettings;
 
-extern EMB_PUBLIC void EMB_CALL embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
-extern EMB_PUBLIC EmbVectorList* EMB_CALL embSatinOutline_renderStitches(EmbSatinOutline* result, double density);
+EMB_PUBLIC void embSatinOutline_generateSatinOutline(EmbVector lines[], int numberOfPoints, double thickness, EmbSatinOutline* result);
+EMB_PUBLIC EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double density);
 
-extern EMB_PUBLIC EmbSettings EMB_CALL embSettings_init(void);
+EMB_PUBLIC EmbSettings embSettings_init(void);
 
-extern EMB_PUBLIC EmbPoint EMB_CALL embSettings_home(EmbSettings* settings);
-extern EMB_PUBLIC void EMB_CALL embSettings_setHome(EmbSettings* settings, EmbPoint point);
+EMB_PUBLIC EmbPoint embSettings_home(EmbSettings* settings);
+EMB_PUBLIC void embSettings_setHome(EmbSettings* settings, EmbPoint point);
 
 
 typedef struct EmbPattern_
@@ -832,40 +816,40 @@ typedef struct EmbPattern_
     double lastY;
 } EmbPattern;
 
-extern EMB_PUBLIC EmbPattern* EMB_CALL embPattern_create(void);
-extern EMB_PUBLIC void EMB_CALL embPattern_hideStitchesOverLength(EmbPattern* p, int length);
-extern EMB_PUBLIC void EMB_CALL embPattern_fixColorCount(EmbPattern* p);
-extern EMB_PUBLIC int EMB_CALL embPattern_addThread(EmbPattern* p, EmbThread thread);
-extern EMB_PUBLIC void EMB_CALL embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex);
-extern EMB_PUBLIC void EMB_CALL embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
-extern EMB_PUBLIC void EMB_CALL embPattern_changeColor(EmbPattern* p, int index);
-extern EMB_PUBLIC void EMB_CALL embPattern_free(EmbPattern* p);
-extern EMB_PUBLIC void EMB_CALL embPattern_scale(EmbPattern* p, double scale);
-extern EMB_PUBLIC EmbRect EMB_CALL embPattern_calcBoundingBox(EmbPattern* p);
-extern EMB_PUBLIC void EMB_CALL embPattern_flipHorizontal(EmbPattern* p);
-extern EMB_PUBLIC void EMB_CALL embPattern_flipVertical(EmbPattern* p);
-extern EMB_PUBLIC void EMB_CALL embPattern_flip(EmbPattern* p, int horz, int vert);
-extern EMB_PUBLIC void EMB_CALL embPattern_combineJumpStitches(EmbPattern* p);
-extern EMB_PUBLIC void EMB_CALL embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
-extern EMB_PUBLIC void EMB_CALL embPattern_center(EmbPattern* p);
-extern EMB_PUBLIC void EMB_CALL embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
+EMB_PUBLIC EmbPattern* embPattern_create(void);
+EMB_PUBLIC void embPattern_hideStitchesOverLength(EmbPattern* p, int length);
+EMB_PUBLIC void embPattern_fixColorCount(EmbPattern* p);
+EMB_PUBLIC int embPattern_addThread(EmbPattern* p, EmbThread thread);
+EMB_PUBLIC void embPattern_addStitchAbs(EmbPattern* p, double x, double y, int flags, int isAutoColorIndex);
+EMB_PUBLIC void embPattern_addStitchRel(EmbPattern* p, double dx, double dy, int flags, int isAutoColorIndex);
+EMB_PUBLIC void embPattern_changeColor(EmbPattern* p, int index);
+EMB_PUBLIC void embPattern_free(EmbPattern* p);
+EMB_PUBLIC void embPattern_scale(EmbPattern* p, double scale);
+EMB_PUBLIC EmbRect embPattern_calcBoundingBox(EmbPattern* p);
+EMB_PUBLIC void embPattern_flipHorizontal(EmbPattern* p);
+EMB_PUBLIC void embPattern_flipVertical(EmbPattern* p);
+EMB_PUBLIC void embPattern_flip(EmbPattern* p, int horz, int vert);
+EMB_PUBLIC void embPattern_combineJumpStitches(EmbPattern* p);
+EMB_PUBLIC void embPattern_correctForMaxStitchLength(EmbPattern* p, double maxStitchLength, double maxJumpLength);
+EMB_PUBLIC void embPattern_center(EmbPattern* p);
+EMB_PUBLIC void embPattern_loadExternalColorFile(EmbPattern* p, const char* fileName);
 
-extern EMB_PUBLIC void EMB_CALL embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r);
-extern EMB_PUBLIC void EMB_CALL embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry); /* TODO: ellipse rotation */
-extern EMB_PUBLIC void EMB_CALL embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
-extern EMB_PUBLIC void EMB_CALL embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj);
-extern EMB_PUBLIC void EMB_CALL embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
-extern EMB_PUBLIC void EMB_CALL embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
-extern EMB_PUBLIC void EMB_CALL embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
-extern EMB_PUBLIC void EMB_CALL embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
+EMB_PUBLIC void embPattern_addCircleObjectAbs(EmbPattern* p, double cx, double cy, double r);
+EMB_PUBLIC void embPattern_addEllipseObjectAbs(EmbPattern* p, double cx, double cy, double rx, double ry); /* TODO: ellipse rotation */
+EMB_PUBLIC void embPattern_addLineObjectAbs(EmbPattern* p, double x1, double y1, double x2, double y2);
+EMB_PUBLIC void embPattern_addPathObjectAbs(EmbPattern* p, EmbPathObject* obj);
+EMB_PUBLIC void embPattern_addPointObjectAbs(EmbPattern* p, double x, double y);
+EMB_PUBLIC void embPattern_addPolygonObjectAbs(EmbPattern* p, EmbPolygonObject* obj);
+EMB_PUBLIC void embPattern_addPolylineObjectAbs(EmbPattern* p, EmbPolylineObject* obj);
+EMB_PUBLIC void embPattern_addRectObjectAbs(EmbPattern* p, double x, double y, double w, double h);
 
-extern EMB_PUBLIC void EMB_CALL embPattern_copyStitchListToPolylines(EmbPattern* pattern);
-extern EMB_PUBLIC void EMB_CALL embPattern_copyPolylinesToStitchList(EmbPattern* pattern);
-extern EMB_PUBLIC void EMB_CALL embPattern_moveStitchListToPolylines(EmbPattern* pattern);
-extern EMB_PUBLIC void EMB_CALL embPattern_movePolylinesToStitchList(EmbPattern* pattern);
+EMB_PUBLIC void embPattern_copyStitchListToPolylines(EmbPattern* pattern);
+EMB_PUBLIC void embPattern_copyPolylinesToStitchList(EmbPattern* pattern);
+EMB_PUBLIC void embPattern_moveStitchListToPolylines(EmbPattern* pattern);
+EMB_PUBLIC void embPattern_movePolylinesToStitchList(EmbPattern* pattern);
 
-extern EMB_PUBLIC int EMB_CALL embPattern_read(EmbPattern* pattern, const char* fileName);
-extern EMB_PUBLIC int EMB_CALL embPattern_write(EmbPattern* pattern, const char* fileName);
+EMB_PUBLIC int embPattern_read(EmbPattern* pattern, const char* fileName);
+EMB_PUBLIC int embPattern_write(EmbPattern* pattern, const char* fileName);
 
 /** \note
  * colors must be passed in #AARRGGBB format with
@@ -874,13 +858,6 @@ extern EMB_PUBLIC int EMB_CALL embPattern_write(EmbPattern* pattern, const char*
 
 int threadColorNum(unsigned int color, ThreadBrand brand);
 const char* threadColorName(unsigned int color, ThreadBrand brand);
-
-#ifdef ARDUINO /* ARDUINO TODO: This is temporary. Remove when complete. */
-
-extern EMB_PRIVATE int EMB_CALL readExp(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeExp(EmbPattern* pattern, const char* fileName);
-
-#else /* ARDUINO TODO: This is temporary. Remove when complete. */
 
 typedef enum
 {
@@ -899,56 +876,6 @@ typedef enum
     CSV_MODE_STITCH
 } CSV_MODE;
 
-extern EMB_PRIVATE int EMB_CALL read100(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL write100(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL read10o(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL write10o(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readArt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeArt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readBmc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeBmc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readBro(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeBro(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readCnd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeCnd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readCol(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeCol(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readCsd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeCsd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readCsv(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeCsv(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readDat(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeDat(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readDem(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeDem(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readDsb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeDsb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readDst(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeDst(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readDsz(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeDsz(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readDxf(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeDxf(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readEdr(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeEdr(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readEmd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeEmd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readExp(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeExp(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readExy(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeExy(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readEys(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeEys(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readFxy(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeFxy(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readGc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeGc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readGnc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeGnc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readGt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeGt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readHus(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeHus(EmbPattern* pattern, const char* fileName);
 
 /*****************************************
  * HUS Colors
@@ -985,11 +912,6 @@ static const EmbThread husThreads[] = {
     {{ 115,  40,   0 }, "Dark Brown",   "TODO:HUS_CATALOG_NUMBER"},
     {{ 175,  90,  10 }, "Light Brown",  "TODO:HUS_CATALOG_NUMBER"}
 };
-
-extern EMB_PRIVATE int EMB_CALL readInb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeInb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readJef(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeJef(EmbPattern* pattern, const char* fileName);
 
 static const EmbThread jefThreads[] = {
     {{0, 0 ,0}, "Black", ""},
@@ -1071,35 +993,6 @@ static const EmbThread jefThreads[] = {
     {{56, 108, 174}, "Ocean Blue", ""},
     {{227, 196, 180}, "Beige Grey", ""},
     {{227, 172, 129}, "Bamboo", ""}};
-
-extern EMB_PRIVATE int EMB_CALL readInb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeInb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readInf(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeInf(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readKsm(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeKsm(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readMax(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeMax(EmbPattern* pattern, const char* fileName);
-
-
-extern EMB_PRIVATE int EMB_CALL readPlt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePlt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readRgb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeRgb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPhc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePhc(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPhb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePhb(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPes(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePes(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPem(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePem(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPel(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePel(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPec(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePec(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE void EMB_CALL readPecStitches(EmbPattern* pattern, EmbFile* file);
-extern EMB_PRIVATE void EMB_CALL writePecStitches(EmbPattern* pattern, EmbFile* file, const char* filename);
 
 static const int pecThreadCount = 65;
 static const EmbThread pecThreads[] = {
@@ -1211,20 +1104,6 @@ static const char imageWithFrame[38][48] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
 
-
-extern EMB_PRIVATE int EMB_CALL readMit(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeMit(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readNew(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeNew(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readOfm(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeOfm(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPcd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePcd(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPcm(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePcm(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readPcq(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePcq(EmbPattern* pattern, const char* fileName);
-
 static const int pcmThreadCount = 65;
 static const EmbThread pcmThreads[] = {
     {{0x00, 0x00, 0x00}, "PCM Color 1", ""},
@@ -1245,13 +1124,6 @@ static const EmbThread pcmThreads[] = {
     {{0xFF, 0xFF, 0xFF}, "PCM Color 16", ""}};
 
 
-extern EMB_PRIVATE int EMB_CALL readPcs(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writePcs(EmbPattern* pattern, const char* fileName);
-
-
-
-extern EMB_PRIVATE int EMB_CALL readShv(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeShv(EmbPattern* pattern, const char* fileName);
 /*****************************************
  * SHV Colors
  ****************************************/
@@ -1302,15 +1174,6 @@ static const EmbThread shvThreads[] = {
     {{ 255, 102, 122 }, "Dark Pink",    "TODO:CATALOG_NUMBER"}
 };
 
-extern EMB_PRIVATE int EMB_CALL readSew(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeSew(EmbPattern* pattern, const char* fileName);
-
-
-extern EMB_PRIVATE int EMB_CALL readThr(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeThr(EmbPattern* pattern, const char* fileName);
-
-
-
 typedef struct SvgAttribute_     SvgAttribute;
 typedef struct SvgAttributeList_ SvgAttributeList;
 typedef struct SvgElement_       SvgElement;
@@ -1360,45 +1223,12 @@ typedef enum
     SVG_CATCH_ALL
 } SVG_TYPES;
 
-extern EMB_PRIVATE int EMB_CALL readSvg(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeSvg(EmbPattern* pattern, const char* fileName);
-
-extern EMB_PRIVATE int EMB_CALL readT01(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeT01(EmbPattern* pattern, const char* fileName);
-
-extern EMB_PRIVATE int EMB_CALL readT09(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeT09(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readTap(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeTap(EmbPattern* pattern, const char* fileName);
-
-
-
-extern EMB_PRIVATE int EMB_CALL readSst(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeSst(EmbPattern* pattern, const char* fileName);
-
-
-extern EMB_PRIVATE int EMB_CALL readStx(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeStx(EmbPattern* pattern, const char* fileName);
-
-
 extern int svgCreator;
-
 extern int svgExpect;
 extern int svgMultiValue;
-
 extern SvgElement* currentElement;
 extern char* currentAttribute;
 extern char* currentValue;
-
-
-extern EMB_PRIVATE int EMB_CALL readTxt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeTxt(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readU00(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeU00(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readU01(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeU01(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readVip(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeVip(EmbPattern* pattern, const char* fileName);
 
 static const unsigned char vipDecodingTable[] = {
     0x2E, 0x82, 0xE4, 0x6F, 0x38, 0xA9, 0xDC, 0xC6, 0x7B, 0xB6, 0x28, 0xAC, 0xFD, 0xAA, 0x8A, 0x4E,
@@ -1428,13 +1258,6 @@ static const unsigned char vipDecodingTable[] = {
     0x40, 0x26, 0xA0, 0x88, 0xD1, 0x62, 0x6A, 0xB3, 0x50, 0x12, 0xB9, 0x9B, 0xB5, 0x83, 0x9B, 0x37
 };
 
-extern EMB_PRIVATE int EMB_CALL readVp3(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeVp3(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readXxx(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeXxx(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL readZsk(EmbPattern* pattern, const char* fileName);
-extern EMB_PRIVATE int EMB_CALL writeZsk(EmbPattern* pattern, const char* fileName);
-
 /**
  * \note
  * colors must be passed in #AARRGGBB format with
@@ -1443,8 +1266,6 @@ extern EMB_PRIVATE int EMB_CALL writeZsk(EmbPattern* pattern, const char* fileNa
 
 int threadColorNum(unsigned int color, ThreadBrand brand);
 const char* threadColorName(unsigned int color, ThreadBrand brand);
-
-#endif /* ARDUINO TODO: This is temporary. Remove when complete. */
 
 char binaryReadByte(EmbFile* file);
 int binaryReadBytes(EmbFile* file, unsigned char* destination, int count);
@@ -1520,12 +1341,10 @@ typedef struct EmbReaderWriter_
     int (*writer)(EmbPattern*, const char*);
 } EmbReaderWriter;
 
-extern EMB_PUBLIC EmbReaderWriter* EMB_CALL embReaderWriter_getByFileName(const char* fileName);
+EMB_PUBLIC EmbReaderWriter* embReaderWriter_getByFileName(const char* fileName);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-/*  Reverse the effects of api-start.h and should only be included at the bottom of the libembroidery headers */
-#undef API_START_H
 
 #endif /* EMBROIDERY_H */

@@ -1,5 +1,4 @@
-#include "embroidery.h"
-#include "embroidery-internal.h"
+#include "embroidery_internal.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -161,7 +160,7 @@ int writeSew(EmbPattern* pattern, const char* fileName)
     }
 
     colorlistSize = embThreadList_count(pattern->threadList);
-    minColors = max(colorlistSize, 6);
+    minColors = EMB_MAX(colorlistSize, 6);
     binaryWriteInt(file, 0x74 + (minColors * 4));
     binaryWriteInt(file, 0x0A);
 
@@ -201,5 +200,3 @@ int writeSew(EmbPattern* pattern, const char* fileName)
     embFile_close(file);
     return 1;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

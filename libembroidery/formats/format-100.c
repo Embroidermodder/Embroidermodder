@@ -59,5 +59,3 @@ int write100(EmbPattern* pattern, const char* fileName)
 
     return 0; /*TODO: finish write100 */
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
