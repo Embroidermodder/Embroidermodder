@@ -160,8 +160,8 @@ function package_msi () {
     cmake -G "MinGW Makefiles" ..
     cmake --build .
     ../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
-    cpack -G WIX
-    mv build/*.msi ../../..
+    #cpack -G WIX
+    #mv build/*.msi ../../..
     cd ../../..
 
 }
