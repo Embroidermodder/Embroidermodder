@@ -1,9 +1,9 @@
 SOURCES += \
-about/about.js \
-circle/circle.js \
-day/day.js \
-distance/distance.js \
-dolphin/dolphin.js \
+about.cpp \
+circle.cpp \
+day.cpp \
+distance.cpp \
+dolphin.cpp \
 ellipse/ellipse.js \
 erase/erase.js \
 exit/exit.js \

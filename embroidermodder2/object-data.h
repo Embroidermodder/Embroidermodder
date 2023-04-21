@@ -154,7 +154,14 @@ OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
 OBJ_RUBBER_ON  = 1,  //NOTE: Allow this enum to evaluate true
 
 OBJ_RUBBER_CIRCLE_1P_RAD,
+    /*!< For the circle object currently focussed, show two rubber points:
+        one for the centre (the anchor) and the other at some point on the
+        radius to adjust the radius. */
 OBJ_RUBBER_CIRCLE_1P_DIA,
+    /*!< For the curcle object currently focussed, show two rubber points:
+        one for the left of the diameter and one for the right.
+        These rubber points can be moved around the circle, but they always
+        oppose one another. */
 OBJ_RUBBER_CIRCLE_2P,
 OBJ_RUBBER_CIRCLE_3P,
 OBJ_RUBBER_CIRCLE_TTR,
@@ -224,5 +231,3 @@ const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
 const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
 
 #endif
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

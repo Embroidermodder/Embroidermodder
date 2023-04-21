@@ -20,7 +20,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Windows Installer
-        path: embroidermodder/
+        path: embroidermodder_2.0.0-alpha_windows.zip
 
   build_macos:
     runs-on: macos-latest
@@ -34,7 +34,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: MacOS Archive
-        path: embroidermodder/
+        path: embroidermodder_2.0.0-alpha_macos.tar
 
   build_linux:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: GNU Linux Archive
-        path: embroidermodder/
+        path: embroidermodder_2.0.0-alpha_linux.tar
 
   daily:
     name: Update latest release
@@ -78,4 +78,5 @@ jobs:
         prerelease: true
         title: "Development Build"
         files: |
+          *.tar
           *.zip

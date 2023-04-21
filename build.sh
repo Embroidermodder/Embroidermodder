@@ -77,15 +77,23 @@ function long_help_message () {
 
 function build_release () {
 
-#    rm -fr $BUILD_DIR
-
     git submodule init
     git submodule update
 
     cmake -S . -B"$BUILD_DIR" -G"$GENERATOR" -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
     cd $BUILD_DIR
     cmake --build .
+    cp ../ZLIB-LICENSE.txt .
     cd ..
+
+}
+
+function assemble_release () {
+
+    rm -fr $BUILD_DIR/CMake* $BUILD_DIR/embroidermodder2_autogen $BUILD_DIR/extern
+    rm -fr embroidermodder2/*.cpp embroidermodder2/*.h
+    cp -r $BUILD_DIR/* embroidermodder2
+    mv *manual*pdf embroidermodder2
 
 }
 
@@ -96,7 +104,7 @@ function build_docs () {
     doxygen
 
     cd embroidermodder2/help/latex
-OOB
+
     pdflatex -interaction=nonstopmode refman.tex
     makeindex refman.idx
     bibtex refman.aux
@@ -152,17 +160,15 @@ function package_msi () {
     ls 6.5.0/mingw_64
     echo "set (CMAKE_PREFIX_PATH \"6.5.0/mingw_64\")" >> config.cmake
 
-    git submodule init
-    git submodule update
-    mkdir build
-    cd build
-    cp ../ZLIB-LICENSE.txt .
-    cmake -G "MinGW Makefiles" ..
-    cmake --build .
+    GENERATOR="MinGW Makefiles" build_release
+    cd $BUILD_DIR
     ../6.5.0/mingw_64/bin/windeployqt embroidermodder2.exe
     #cpack -G WIX
-    #mv build/*.msi ../../..
-    cd ../../..
+    cd ..
+    assemble_release
+    powershell Compress-Archive embroidermodder2 embroidermodder_2.0.0-alpha_windows.zip 
+    mv *.zip ..
+    cd ..
 
 }
 
@@ -172,19 +178,10 @@ function package_macos () {
 
     git clone https://github.com/embroidermodder/embroidermodder
     cd embroidermodder
-    git submodule init
-    git submodule update
-    mkdir build
-    cd build
-    cp ../ZLIB-LICENSE.txt .
-    cmake ..
-    cmake --build .
-    cd ..
-    mv build/embroidermodder2* embroidermodder2
-    rm embroidermodder2/*.cpp embroidermodder2/*.h
-    mv *manual*pdf embroidermodder2
-    tar cf embroidermodder_$(VERSION)_macos.tar embroidermodder2
-    mv embroidermodder_$(VERSION)_macos.tar ..
+    build_release
+    assemble_release
+    tar cf embroidermodder_2.0.0-alpha_macos.tar embroidermodder2
+    mv *.tar ..
     cd ..
 
 }
@@ -197,19 +194,10 @@ function package_linux () {
 
     git clone https://github.com/embroidermodder/embroidermodder
     cd embroidermodder
-    git submodule init
-    git submodule update
-    mkdir build
-    cd build
-    cp ../ZLIB-LICENSE.txt .
-    cmake ..
-    cmake --build .
-    cd ..
-    mv build/embroidermodder2 embroidermodder2
-    rm embroidermodder2/*.cpp embroidermodder2/*.h
-    mv *manual*pdf embroidermodder2
-    tar cf embroidermodder_$(VERSION)_linux.tar embroidermodder2
-    mv embroidermodder_$(VERSION)_linux.tar ..
+    build_release
+    assemble_release
+    tar cf embroidermodder_2.0.0-alpha_linux.tar embroidermodder2
+    mv *.tar ..
     cd ..
 
 }

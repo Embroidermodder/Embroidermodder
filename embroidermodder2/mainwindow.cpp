@@ -283,19 +283,61 @@ MainWindow::~MainWindow()
 
 /**
  * @brief MainWindow::run_script_file
- * @param fname
+ * @param fname The path of the script to run.
  */
 std::string
 MainWindow::run_script_file(std::string fname)
 {
     std::string output = "";
-
+    /*
+    char line[200];
+    FILE *f;
+    int line_pos = 0;
+    f = fopen(filename, "r");
+    char c;
+    while (fread(&c, 1, 1, f)) {
+        if (c != '\n') {
+            line[line_pos] = c;
+            line_pos++;
+        }
+        else {
+            line[line_pos+1] = 0;
+            actuator(line);
+            line_pos = 0;
+        }
+    }
+    fclose(f);
+    */
     return output;
 }
 
 /**
- * @brief MainWindow::run_script
- * @param script
+ * @brief A basic line-by-line script processor to allow for extensions to the program.
+ *
+ * Since the actuator uses command line style parsing, a script is just a text
+ * file with each line a compatible command.
+ *
+ * It should be stressed that this has no control flow on purpose. We don't want
+ * this to be hacked into a full scripting language that could cause havoc on
+ * the user's system.
+ *
+ * However, it may be useful to set and get variables and define macros:
+ * neither of these will allow for endless loops, stack overflow or other
+ * problems that third-party scripts could introduce.
+ *
+ *     example.sh
+ *     ------------------------------------------------------------------
+ *     # Save characters by defining functions.
+ *     # The syntax features
+ *     # Semi-colon ';' seperates out lines like in bash.
+ *     # The line ending is the end of the function, but the style
+ *     # is a shell function, so we need to write the end brace.
+ *
+ *     donut() { circle $1 $2 $3 $5 ; circle $1 $2 $4 $5 }
+ *
+ *     donut 10 20 20 black
+ *     donut 20 40 20 black
+ *     ------------------------------------------------------------------
  */
 std::string
 MainWindow::run_script(std::vector<std::string> script)

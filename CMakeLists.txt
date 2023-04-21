@@ -68,7 +68,7 @@ add_executable(embroidermodder2
     ${SRC_DIR}/cmdprompt.cpp
     ${SRC_DIR}/embdetails-dialog.cpp
     ${SRC_DIR}/embroidermodder.cpp
-    ${SRC_DIR}/gui_backend.cpp
+    ${SRC_DIR}/utility.cpp
     ${SRC_DIR}/imagewidget.cpp
     ${SRC_DIR}/layer-manager.cpp
     ${SRC_DIR}/mainwindow-actions.cpp
@@ -107,7 +107,6 @@ add_executable(embroidermodder2
     ${SRC_DIR}/cmdprompt.h
     ${SRC_DIR}/embdetails-dialog.h
     ${SRC_DIR}/embroidermodder.h
-    ${SRC_DIR}/gui_backend.h
     ${SRC_DIR}/imagewidget.h
     ${SRC_DIR}/layer-manager.h
     ${SRC_DIR}/mainwindow.h
@@ -144,6 +143,7 @@ add_executable(embroidermodder2
 add_subdirectory(extern/libembroidery)
 
 include_directories(
+	${CMAKE_SOURCE_DIR}/extern/tomlc99
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/stb
 	${CMAKE_SOURCE_DIR}/extern/libembroidery/src/nanosvg
