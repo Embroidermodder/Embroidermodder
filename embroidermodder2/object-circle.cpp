@@ -169,13 +169,16 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF sceneTan2Point = objectRubberPoint("CIRCLE_TAN2");
         QPointF sceneTan3Point = objectRubberPoint("CIRCLE_TAN3");
 
-        double sceneCenterX;
-        double sceneCenterY;
-        getArcCenter(sceneTan1Point.x(), sceneTan1Point.y(),
-                     sceneTan2Point.x(), sceneTan2Point.y(),
-                     sceneTan3Point.x(), sceneTan3Point.y(),
-                     &sceneCenterX, &sceneCenterY);
-        QPointF sceneCenterPoint(sceneCenterX, sceneCenterY);
+        EmbVector sceneCenter;
+        EmbArc arc;
+        arc.start.x = sceneTan1Point.x();
+        arc.start.y = sceneTan1Point.y();
+        arc.mid.x = sceneTan2Point.x();
+        arc.mid.y = sceneTan2Point.y();
+        arc.end.x = sceneTan3Point.x();
+        arc.end.y = sceneTan3Point.y();
+        getArcCenter(arc, &sceneCenter);
+        QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
         setObjectCenter(sceneCenterPoint);
         qreal radius = sceneLine.length();

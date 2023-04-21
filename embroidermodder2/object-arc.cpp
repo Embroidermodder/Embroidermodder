@@ -1,6 +1,6 @@
 #include "object-arc.h"
 #include "object-data.h"
-#include "embroidery.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
@@ -86,20 +86,23 @@ void ArcObject::init(qreal startX, qreal startY, qreal midX, qreal midY, qreal e
  */
 void ArcObject::calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY)
 {
-    double centerX;
-    double centerY;
-    getArcCenter(startX,  startY,
-                 midX,    midY,
-                 endX,    endY,
-                 &centerX, &centerY);
+    EmbVector center;
+    EmbArc arc;
+    arc.start.x = startX;
+    arc.start.x = startY;
+    arc.mid.x = midX;
+    arc.mid.x = midY;
+    arc.end.x = endX;
+    arc.end.x = endY;
+    getArcCenter(arc, &center);
 
-    arcStartPoint = QPointF(startX - centerX, startY - centerY);
-    arcMidPoint   = QPointF(midX   - centerX, midY   - centerY);
-    arcEndPoint   = QPointF(endX   - centerX, endY   - centerY);
+    arcStartPoint = QPointF(startX - center.x, startY - center.y);
+    arcMidPoint   = QPointF(midX   - center.x, midY   - center.y);
+    arcEndPoint   = QPointF(endX   - center.x, endY   - center.y);
 
-    setPos(centerX, centerY);
+    setPos(center.x, center.y);
 
-    qreal radius = QLineF(centerX, centerY, midX, midY).length();
+    qreal radius = QLineF(center.x, center.y, midX, midY).length();
     updateArcRect(radius);
     updatePath();
     setRotation(0);
@@ -400,7 +403,14 @@ qreal ArcObject::objectIncludedAngle() const
 bool ArcObject::objectClockwise() const
 {
     //NOTE: Y values are inverted here on purpose
-    if(isArcClockwise(objectStartX(), -objectStartY(), objectMidX(), -objectMidY(), objectEndX(), -objectEndY()))
+    EmbArc arc;
+    arc.start.x = objectStartX();
+    arc.start.y = -objectStartY();
+    arc.mid.x = objectMidX();
+    arc.mid.y = -objectMidY();
+    arc.end.x = objectEndX();
+    arc.end.y = -objectEndY();
+    if(embArc_clockwise(arc))
         return true;
     return false;
 }

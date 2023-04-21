@@ -7,7 +7,7 @@
 #ifndef __EMBROIDERMODDER_UTILITY_H__
 #define __EMBROIDERMODDER_UTILITY_H__
 
-#include "../libembroidery/embroidery.h"
+#include "embroidery.h"
 
 #include <QMainWindow>
 

@@ -1,7 +1,7 @@
 #ifndef OBJECT_SAVE_H
 #define OBJECT_SAVE_H
 
-#include "../libembroidery/embroidery.h"
+#include "embroidery.h"
 
 #include <QObject>
 #include <QPainterPath>
