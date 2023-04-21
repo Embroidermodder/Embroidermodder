@@ -35,7 +35,7 @@
 #define DXF_VERSION_2013 "AC1027"
 
 /* Based on the DraftSight color table */
-static const unsigned char _dxfColorTable[][3] = {
+const unsigned char _dxfColorTable[][3] = {
 {   0,   0,   0 }, /*   '0' (BYBLOCK)    */
 { 255,   0,   0 }, /*   '1' (red)        */
 { 255, 255,   0 }, /*   '2' (yellow)     */

@@ -3,24 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct SubDescriptor_
-{
-    int someNum;      /* TODO: better variable naming */
-    int someInt;      /* TODO: better variable naming */
-    int someOtherInt; /* TODO: better variable naming */
-    char* colorCode;
-    char* colorName;
-} SubDescriptor;
-
-typedef struct StxThread_
-{
-    char* colorCode;
-    char* colorName;
-    char* sectionName;
-    SubDescriptor* subDescriptors;
-    EmbColor stxColor;
-} StxThread;
-
 static int stxReadThread(StxThread* thread, EmbFile* file)
 {
     int j, colorNameLength, sectionNameLength;

@@ -4,26 +4,6 @@
 
 #define NOTFRM 0x00080000
 
-typedef struct ThredHeader_     /* thred file header */
-{
-    unsigned int sigVersion;    /* signature and version */
-    unsigned int length;        /* length of ThredHeader + length of stitch data */
-    unsigned short numStiches;  /* number of stitches */
-    unsigned short hoopSize;    /* size of hoop */
-    unsigned short reserved[7]; /* reserved for expansion */
-} ThredHeader;
-
-typedef struct ThredExtension_  /* thred v1.0 file header extension */
-{
-    float hoopX;                /* hoop size x dimension in 1/6 mm units */
-    float hoopY;                /* hoop size y dimension in 1/6 mm units */
-    float stitchGranularity;    /* stitches per millimeter--not implemented */
-    char creatorName[50];       /* name of the file creator */
-    char modifierName[50];      /* name of last file modifier */
-    char auxFormat;             /* auxillary file format, 0=PCS,1=DST,2=PES */
-    char reserved[31];          /* reserved for expansion */
-} ThredExtension;
-
 /*
 bit definitions for attributes of stitch
 0-3     stitch color

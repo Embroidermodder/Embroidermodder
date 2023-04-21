@@ -1,5 +1,330 @@
 #include "embroidery.h"
 
+const unsigned char vipDecodingTable[] = {
+    0x2E, 0x82, 0xE4, 0x6F, 0x38, 0xA9, 0xDC, 0xC6, 0x7B, 0xB6, 0x28, 0xAC, 0xFD, 0xAA, 0x8A, 0x4E,
+    0x76, 0x2E, 0xF0, 0xE4, 0x25, 0x1B, 0x8A, 0x68, 0x4E, 0x92, 0xB9, 0xB4, 0x95, 0xF0, 0x3E, 0xEF,
+    0xF7, 0x40, 0x24, 0x18, 0x39, 0x31, 0xBB, 0xE1, 0x53, 0xA8, 0x1F, 0xB1, 0x3A, 0x07, 0xFB, 0xCB,
+    0xE6, 0x00, 0x81, 0x50, 0x0E, 0x40, 0xE1, 0x2C, 0x73, 0x50, 0x0D, 0x91, 0xD6, 0x0A, 0x5D, 0xD6,
+    0x8B, 0xB8, 0x62, 0xAE, 0x47, 0x00, 0x53, 0x5A, 0xB7, 0x80, 0xAA, 0x28, 0xF7, 0x5D, 0x70, 0x5E,
+    0x2C, 0x0B, 0x98, 0xE3, 0xA0, 0x98, 0x60, 0x47, 0x89, 0x9B, 0x82, 0xFB, 0x40, 0xC9, 0xB4, 0x00,
+    0x0E, 0x68, 0x6A, 0x1E, 0x09, 0x85, 0xC0, 0x53, 0x81, 0xD1, 0x98, 0x89, 0xAF, 0xE8, 0x85, 0x4F,
+    0xE3, 0x69, 0x89, 0x03, 0xA1, 0x2E, 0x8F, 0xCF, 0xED, 0x91, 0x9F, 0x58, 0x1E, 0xD6, 0x84, 0x3C,
+    0x09, 0x27, 0xBD, 0xF4, 0xC3, 0x90, 0xC0, 0x51, 0x1B, 0x2B, 0x63, 0xBC, 0xB9, 0x3D, 0x40, 0x4D,
+    0x62, 0x6F, 0xE0, 0x8C, 0xF5, 0x5D, 0x08, 0xFD, 0x3D, 0x50, 0x36, 0xD7, 0xC9, 0xC9, 0x43, 0xE4,
+    0x2D, 0xCB, 0x95, 0xB6, 0xF4, 0x0D, 0xEA, 0xC2, 0xFD, 0x66, 0x3F, 0x5E, 0xBD, 0x69, 0x06, 0x2A,
+    0x03, 0x19, 0x47, 0x2B, 0xDF, 0x38, 0xEA, 0x4F, 0x80, 0x49, 0x95, 0xB2, 0xD6, 0xF9, 0x9A, 0x75,
+    0xF4, 0xD8, 0x9B, 0x1D, 0xB0, 0xA4, 0x69, 0xDB, 0xA9, 0x21, 0x79, 0x6F, 0xD8, 0xDE, 0x33, 0xFE,
+    0x9F, 0x04, 0xE5, 0x9A, 0x6B, 0x9B, 0x73, 0x83, 0x62, 0x7C, 0xB9, 0x66, 0x76, 0xF2, 0x5B, 0xC9,
+    0x5E, 0xFC, 0x74, 0xAA, 0x6C, 0xF1, 0xCD, 0x93, 0xCE, 0xE9, 0x80, 0x53, 0x03, 0x3B, 0x97, 0x4B,
+    0x39, 0x76, 0xC2, 0xC1, 0x56, 0xCB, 0x70, 0xFD, 0x3B, 0x3E, 0x52, 0x57, 0x81, 0x5D, 0x56, 0x8D,
+    0x51, 0x90, 0xD4, 0x76, 0xD7, 0xD5, 0x16, 0x02, 0x6D, 0xF2, 0x4D, 0xE1, 0x0E, 0x96, 0x4F, 0xA1,
+    0x3A, 0xA0, 0x60, 0x59, 0x64, 0x04, 0x1A, 0xE4, 0x67, 0xB6, 0xED, 0x3F, 0x74, 0x20, 0x55, 0x1F,
+    0xFB, 0x23, 0x92, 0x91, 0x53, 0xC8, 0x65, 0xAB, 0x9D, 0x51, 0xD6, 0x73, 0xDE, 0x01, 0xB1, 0x80,
+    0xB7, 0xC0, 0xD6, 0x80, 0x1C, 0x2E, 0x3C, 0x83, 0x63, 0xEE, 0xBC, 0x33, 0x25, 0xE2, 0x0E, 0x7A,
+    0x67, 0xDE, 0x3F, 0x71, 0x14, 0x49, 0x9C, 0x92, 0x93, 0x0D, 0x26, 0x9A, 0x0E, 0xDA, 0xED, 0x6F,
+    0xA4, 0x89, 0x0C, 0x1B, 0xF0, 0xA1, 0xDF, 0xE1, 0x9E, 0x3C, 0x04, 0x78, 0xE4, 0xAB, 0x6D, 0xFF,
+    0x9C, 0xAF, 0xCA, 0xC7, 0x88, 0x17, 0x9C, 0xE5, 0xB7, 0x33, 0x6D, 0xDC, 0xED, 0x8F, 0x6C, 0x18,
+    0x1D, 0x71, 0x06, 0xB1, 0xC5, 0xE2, 0xCF, 0x13, 0x77, 0x81, 0xC5, 0xB7, 0x0A, 0x14, 0x0A, 0x6B,
+    0x40, 0x26, 0xA0, 0x88, 0xD1, 0x62, 0x6A, 0xB3, 0x50, 0x12, 0xB9, 0x9B, 0xB5, 0x83, 0x9B, 0x37
+};
+
+/*****************************************
+ * HUS Colors
+ ****************************************/
+const int husThreadCount = 29;
+const EmbThread husThreads[] = {
+    {{   0,   0,   0 }, "Black",        "TODO:HUS_CATALOG_NUMBER"},
+    {{   0,   0, 255 }, "Blue",         "TODO:HUS_CATALOG_NUMBER"},
+    {{   0, 255,   0 }, "Light Green",  "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255,   0,   0 }, "Red",          "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255,   0, 255 }, "Purple",       "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 255,   0 }, "Yellow",       "TODO:HUS_CATALOG_NUMBER"},
+    {{ 127, 127, 127 }, "Gray",         "TODO:HUS_CATALOG_NUMBER"},
+    {{  51, 154, 255 }, "Light Blue",   "TODO:HUS_CATALOG_NUMBER"},
+    {{  51, 204, 102 }, "Green",        "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 127,   0 }, "Orange",       "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 160, 180 }, "Pink",         "TODO:HUS_CATALOG_NUMBER"},
+    {{ 153,  75,   0 }, "Brown",        "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 255, 255 }, "White",        "TODO:HUS_CATALOG_NUMBER"},
+    {{   0,   0, 127 }, "Dark Blue",    "TODO:HUS_CATALOG_NUMBER"},
+    {{   0, 127,   0 }, "Dark Green",   "TODO:HUS_CATALOG_NUMBER"},
+    {{ 127,   0,   0 }, "Dark Red",     "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 127, 127 }, "Light Red",    "TODO:HUS_CATALOG_NUMBER"},
+    {{ 127,   0, 127 }, "Dark Purple",  "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 127, 255 }, "Light Purple", "TODO:HUS_CATALOG_NUMBER"},
+    {{ 200, 200,   0 }, "Dark Yellow",  "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 255, 153 }, "Light Yellow", "TODO:HUS_CATALOG_NUMBER"},
+    {{  60,  60,  60 }, "Dark Gray",    "TODO:HUS_CATALOG_NUMBER"},
+    {{ 192, 192, 192 }, "Light Gray",   "TODO:HUS_CATALOG_NUMBER"},
+    {{ 232,  63,   0 }, "Dark Orange",  "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 165,  65 }, "Light Orange", "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 102, 122 }, "Dark Pink",    "TODO:HUS_CATALOG_NUMBER"},
+    {{ 255, 204, 204 }, "Light Pink",   "TODO:HUS_CATALOG_NUMBER"},
+    {{ 115,  40,   0 }, "Dark Brown",   "TODO:HUS_CATALOG_NUMBER"},
+    {{ 175,  90,  10 }, "Light Brown",  "TODO:HUS_CATALOG_NUMBER"}
+};
+
+const EmbThread jefThreads[] = {
+    {{0, 0 ,0}, "Black", ""},
+    {{0, 0, 0}, "Black", ""},
+    {{255, 255, 255}, "White", ""},
+    {{255, 255, 23}, "Yellow", ""},
+    {{250, 160, 96}, "Orange", ""},
+    {{92, 118, 73}, "Olive Green", ""},
+    {{64, 192, 48}, "Green", ""},
+    {{101, 194, 200}, "Sky", ""},
+    {{172, 128, 190}, "Purple", ""},
+    {{245, 188, 203}, "Pink", ""},
+    {{255, 0, 0}, "Red", ""},
+    {{192, 128, 0}, "Brown", ""},
+    {{0, 0, 240}, "Blue", ""},
+    {{228, 195, 93}, "Gold", ""},
+    {{165, 42, 42}, "Dark Brown", ""},
+    {{213, 176, 212}, "Pale Violet", ""},
+    {{252, 242, 148}, "Pale Yellow", ""},
+    {{240, 208, 192}, "Pale Pink", ""},
+    {{255, 192, 0}, "Peach", ""},
+    {{201, 164, 128}, "Beige", ""},
+    {{155, 61, 75}, "Wine Red", ""},
+    {{160, 184, 204}, "Pale Sky", ""},
+    {{127, 194, 28}, "Yellow Green", ""},
+    {{185, 185, 185}, "Silver Grey", ""},
+    {{160, 160, 160}, "Grey", ""},
+    {{152, 214, 189}, "Pale Aqua", ""},
+    {{184, 240, 240}, "Baby Blue", ""},
+    {{54, 139, 160}, "Powder Blue", ""},
+    {{79, 131, 171}, "Bright Blue", ""},
+    {{56, 106, 145}, "Slate Blue", ""},
+    {{0, 32, 107}, "Nave Blue", ""},
+    {{229, 197, 202}, "Salmon Pink", ""},
+    {{249, 103, 107}, "Coral", ""},
+    {{227, 49, 31}, "Burnt Orange", ""},
+    {{226, 161, 136}, "Cinnamon", ""},
+    {{181, 148, 116}, "Umber", ""},
+    {{228, 207, 153}, "Blonde", ""},
+    {{225, 203, 0}, "Sunflower", ""},
+    {{225, 173, 212}, "Orchid Pink", ""},
+    {{195, 0, 126}, "Peony Purple", ""},
+    {{128, 0, 75}, "Burgundy", ""},
+    {{160, 96, 176}, "Royal Purple", ""},
+    {{192, 64, 32}, "Cardinal Red", ""},
+    {{202, 224, 192}, "Opal Green", ""},
+    {{137, 152, 86}, "Moss Green", ""},
+    {{0, 170, 0}, "Meadow Green", ""},
+    {{33, 138, 33}, "Dark Green", ""},
+    {{93, 174, 148}, "Aquamarine", ""},
+    {{76, 191, 143}, "Emerald Green", ""},
+    {{0, 119, 114}, "Peacock Green", ""},
+    {{112, 112, 112}, "Dark Grey", ""},
+    {{242, 255, 255}, "Ivory White", ""},
+    {{177, 88, 24}, "Hazel", ""},
+    {{203, 138, 7}, "Toast", ""},
+    {{247, 146, 123}, "Salmon", ""},
+    {{152, 105, 45}, "Cocoa Brown", ""},
+    {{162, 113, 72}, "Sienna", ""},
+    {{123, 85, 74}, "Sepia", ""},
+    {{79, 57, 70}, "Dark Sepia", ""},
+    {{82, 58, 151}, "Violet Blue", ""},
+    {{0, 0, 160}, "Blue Ink", ""},
+    {{0, 150, 222}, "Solar Blue", ""},
+    {{178, 221, 83}, "Green Dust", ""},
+    {{250, 143, 187}, "Crimson", ""},
+    {{222, 100, 158}, "Floral Pink", ""},
+    {{181, 80, 102}, "Wine", ""},
+    {{94, 87, 71}, "Olive Drab", ""},
+    {{76, 136, 31}, "Meadow", ""},
+    {{228, 220, 121}, "Mustard", ""},
+    {{203, 138, 26}, "Yellow Ochre", ""},
+    {{198, 170, 66}, "Old Gold", ""},
+    {{236, 176, 44}, "Honeydew", ""},
+    {{248, 128, 64}, "Tangerine", ""},
+    {{255, 229, 5}, "Canary Yellow", ""},
+    {{250, 122, 122}, "Vermillion", ""},
+    {{107, 224, 0}, "Bright Green", ""},
+    {{56, 108, 174}, "Ocean Blue", ""},
+    {{227, 196, 180}, "Beige Grey", ""},
+    {{227, 172, 129}, "Bamboo", ""}};
+
+const int pecThreadCount = 65;
+const EmbThread pecThreads[] = {
+    {{  0,   0,   0}, "Unknown",         ""}, /* Index  0 */
+    {{ 14,  31, 124}, "Prussian Blue",   ""}, /* Index  1 */
+    {{ 10,  85, 163}, "Blue",            ""}, /* Index  2 */
+    {{  0, 135, 119}, "Teal Green",      ""}, /* Index  3 */ /* TODO: Verify RGB value is correct */
+    {{ 75, 107, 175}, "Cornflower Blue", ""}, /* Index  4 */
+    {{237,  23,  31}, "Red",             ""}, /* Index  5 */
+    {{209,  92,   0}, "Reddish Brown",   ""}, /* Index  6 */
+    {{145,  54, 151}, "Magenta",         ""}, /* Index  7 */
+    {{228, 154, 203}, "Light Lilac",     ""}, /* Index  8 */
+    {{145,  95, 172}, "Lilac",           ""}, /* Index  9 */
+    {{158, 214, 125}, "Mint Green",      ""}, /* Index 10 */ /* TODO: Verify RGB value is correct */
+    {{232, 169,   0}, "Deep Gold",       ""}, /* Index 11 */
+    {{254, 186,  53}, "Orange",          ""}, /* Index 12 */
+    {{255, 255,   0}, "Yellow",          ""}, /* Index 13 */
+    {{112, 188,  31}, "Lime Green",      ""}, /* Index 14 */
+    {{186, 152,   0}, "Brass",           ""}, /* Index 15 */
+    {{168, 168, 168}, "Silver",          ""}, /* Index 16 */
+    {{125, 111,   0}, "Russet Brown",    ""}, /* Index 17 */ /* TODO: Verify RGB value is correct */
+    {{255, 255, 179}, "Cream Brown",     ""}, /* Index 18 */
+    {{ 79,  85,  86}, "Pewter",          ""}, /* Index 19 */
+    {{  0,   0,   0}, "Black",           ""}, /* Index 20 */
+    {{ 11,  61, 145}, "Ultramarine",     ""}, /* Index 21 */
+    {{119,   1, 118}, "Royal Purple",    ""}, /* Index 22 */
+    {{ 41,  49,  51}, "Dark Gray",       ""}, /* Index 23 */
+    {{ 42,  19,   1}, "Dark Brown",      ""}, /* Index 24 */
+    {{246,  74, 138}, "Deep Rose",       ""}, /* Index 25 */
+    {{178, 118,  36}, "Light Brown",     ""}, /* Index 26 */
+    {{252, 187, 197}, "Salmon Pink",     ""}, /* Index 27 */ /* TODO: Verify RGB value is correct */
+    {{254,  55,  15}, "Vermillion",      ""}, /* Index 28 */
+    {{240, 240, 240}, "White",           ""}, /* Index 29 */
+    {{106,  28, 138}, "Violet",          ""}, /* Index 30 */
+    {{168, 221, 196}, "Seacrest",        ""}, /* Index 31 */
+    {{ 37, 132, 187}, "Sky Blue",        ""}, /* Index 32 */
+    {{254, 179,  67}, "Pumpkin",         ""}, /* Index 33 */
+    {{255, 243, 107}, "Cream Yellow",    ""}, /* Index 34 */
+    {{208, 166,  96}, "Khaki",           ""}, /* Index 35 */
+    {{209,  84,   0}, "Clay Brown",      ""}, /* Index 36 */
+    {{102, 186,  73}, "Leaf Green",      ""}, /* Index 37 */
+    {{ 19,  74,  70}, "Peacock Blue",    ""}, /* Index 38 */
+    {{135, 135, 135}, "Gray",            ""}, /* Index 39 */
+    {{216, 204, 198}, "Warm Gray",       ""}, /* Index 40 */ /* TODO: Verify RGB value is correct */
+    {{ 67,  86,   7}, "Dark Olive",      ""}, /* Index 41 */
+    {{253, 217, 222}, "Flesh Pink",      ""}, /* Index 42 */ /* TODO: Verify RGB value is correct */
+    {{249, 147, 188}, "Pink",            ""}, /* Index 43 */
+    {{  0,  56,  34}, "Deep Green",      ""}, /* Index 44 */
+    {{178, 175, 212}, "Lavender",        ""}, /* Index 45 */
+    {{104, 106, 176}, "Wisteria Violet", ""}, /* Index 46 */
+    {{239, 227, 185}, "Beige",           ""}, /* Index 47 */
+    {{247,  56, 102}, "Carmine",         ""}, /* Index 48 */
+    {{181,  75, 100}, "Amber Red",       ""}, /* Index 49 */ /* TODO: Verify RGB value is correct */
+    {{ 19,  43,  26}, "Olive Green",     ""}, /* Index 50 */
+    {{199,   1,  86}, "Dark Fuschia",    ""}, /* Index 51 */ /* TODO: Verify RGB value is correct */
+    {{254, 158,  50}, "Tangerine",       ""}, /* Index 52 */
+    {{168, 222, 235}, "Light Blue",      ""}, /* Index 53 */
+    {{  0, 103,  62}, "Emerald Green",   ""}, /* Index 54 */ /* TODO: Verify RGB value is correct */
+    {{ 78,  41, 144}, "Purple",          ""}, /* Index 55 */
+    {{ 47, 126,  32}, "Moss Green",      ""}, /* Index 56 */
+    {{255, 204, 204}, "Flesh Pink",      ""}, /* Index 57 */ /* TODO: Verify RGB value is correct */ /* TODO: Flesh Pink is Index 42, is this Index incorrect? */
+    {{255, 217,  17}, "Harvest Gold",    ""}, /* Index 58 */
+    {{  9,  91, 166}, "Electric Blue",   ""}, /* Index 59 */
+    {{240, 249, 112}, "Lemon Yellow",    ""}, /* Index 60 */
+    {{227, 243,  91}, "Fresh Green",     ""}, /* Index 61 */
+    {{255, 153,   0}, "Orange",          ""}, /* Index 62 */ /* TODO: Verify RGB value is correct */ /* TODO: Orange is Index 12, is this Index incorrect? */
+    {{255, 240, 141}, "Cream Yellow",    ""}, /* Index 63 */ /* TODO: Verify RGB value is correct */ /* TODO: Cream Yellow is Index 34, is this Index incorrect? */
+    {{255, 200, 200}, "Applique",        ""}  /* Index 64 */
+};
+
+const char imageWithFrame[38][48] = {
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+    {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0},
+    {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0},
+    {0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0},
+    {0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+};
+
+const int pcmThreadCount = 65;
+const EmbThread pcmThreads[] = {
+    {{0x00, 0x00, 0x00}, "PCM Color 1", ""},
+    {{0x00, 0x00, 0x80}, "PCM Color 2", ""},
+    {{0x00, 0x00, 0xFF}, "PCM Color 3", ""},
+    {{0x00, 0x80, 0x80}, "PCM Color 4", ""},
+    {{0x00, 0xFF, 0xFF}, "PCM Color 5", ""},
+    {{0x80, 0x00, 0x80}, "PCM Color 6", ""},
+    {{0xFF, 0x00, 0xFF}, "PCM Color 7", ""},
+    {{0x80, 0x00, 0x00}, "PCM Color 8", ""},
+    {{0xFF, 0x00, 0x00}, "PCM Color 9", ""},
+    {{0x00, 0x80, 0x00}, "PCM Color 10", ""},
+    {{0x00, 0xFF, 0x00}, "PCM Color 11", ""},
+    {{0x80, 0x80, 0x00}, "PCM Color 12", ""},
+    {{0xFF, 0xFF, 0x00}, "PCM Color 13", ""},
+    {{0x80, 0x80, 0x80}, "PCM Color 14", ""},
+    {{0xC0, 0xC0, 0xC0}, "PCM Color 15", ""},
+    {{0xFF, 0xFF, 0xFF}, "PCM Color 16", ""}};
+
+
+/*****************************************
+ * SHV Colors
+ ****************************************/
+const int shvThreadCount = 42;
+const EmbThread shvThreads[] = {
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0, 255 }, "Blue",         "TODO:CATALOG_NUMBER"},
+    {{  51, 204, 102 }, "Green",        "TODO:CATALOG_NUMBER"},
+    {{ 255,   0,   0 }, "Red",          "TODO:CATALOG_NUMBER"},
+    {{ 255,   0, 255 }, "Purple",       "TODO:CATALOG_NUMBER"},
+    {{ 255, 255,   0 }, "Yellow",       "TODO:CATALOG_NUMBER"},
+    {{ 127, 127, 127 }, "Grey",         "TODO:CATALOG_NUMBER"},
+    {{  51, 154, 255 }, "Light Blue",   "TODO:CATALOG_NUMBER"},
+    {{   0, 255,   0 }, "Light Green",  "TODO:CATALOG_NUMBER"},
+    {{ 255, 127,   0 }, "Orange",       "TODO:CATALOG_NUMBER"},
+    {{ 255, 160, 180 }, "Pink",         "TODO:CATALOG_NUMBER"},
+    {{ 153,  75,   0 }, "Brown",        "TODO:CATALOG_NUMBER"},
+    {{ 255, 255, 255 }, "White",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{ 255, 127, 127 }, "Light Red",    "TODO:CATALOG_NUMBER"},
+    {{ 255, 127, 255 }, "Light Purple", "TODO:CATALOG_NUMBER"},
+    {{ 255, 255, 153 }, "Light Yellow", "TODO:CATALOG_NUMBER"},
+    {{ 192, 192, 192 }, "Light Grey",   "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{ 255, 165,  65 }, "Light Orange", "TODO:CATALOG_NUMBER"},
+    {{ 255, 204, 204 }, "Light Pink",   "TODO:CATALOG_NUMBER"},
+    {{ 175,  90,  10 }, "Light Brown",  "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0, 127 }, "Dark Blue",    "TODO:CATALOG_NUMBER"},
+    {{   0, 127,   0 }, "Dark Green",   "TODO:CATALOG_NUMBER"},
+    {{ 127,   0,   0 }, "Dark Red",     "TODO:CATALOG_NUMBER"},
+    {{ 127,   0, 127 }, "Dark Purple",  "TODO:CATALOG_NUMBER"},
+    {{ 200, 200,   0 }, "Dark Yellow",  "TODO:CATALOG_NUMBER"},
+    {{  60,  60,  60 }, "Dark Gray",    "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{   0,   0,   0 }, "Black",        "TODO:CATALOG_NUMBER"},
+    {{ 232,  63,   0 }, "Dark Orange",  "TODO:CATALOG_NUMBER"},
+    {{ 255, 102, 122 }, "Dark Pink",    "TODO:CATALOG_NUMBER"}
+};
+
 #ifdef ARDUINO /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
 #else          /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
 
@@ -5004,10 +5329,9 @@ const char* getName_Z102_Isacord_Polyester(unsigned int color) { return ""; } /*
 
 #endif /* ARDUINO TODO: remove this line when thread-color.c is arduino compatible. This is a temporary arduino build fix. */
 
-int threadColorNum(unsigned int color, ThreadBrand brand)
+int threadColorNum(unsigned int color, int brand)
 {
-    switch(brand)
-    {
+    switch(brand) {
         case Arc_Polyester:          return getNum_Arc_Polyester(color);
         case Arc_Rayon:              return getNum_Arc_Rayon(color);
         case CoatsAndClark_Rayon:    return getNum_CoatsAndClark_Rayon(color);
@@ -5036,7 +5360,7 @@ int threadColorNum(unsigned int color, ThreadBrand brand)
     return -1;
 }
 
-const char* threadColorName(unsigned int color, ThreadBrand brand)
+const char* threadColorName(unsigned int color, int brand)
 {
     switch(brand)
     {

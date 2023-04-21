@@ -77,15 +77,15 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
             EmbVector p3 = result->side2[j];
             EmbVector p4 = result->side2[j + 1];
 
-            double topXDiff = p2.X - p1.X;
-            double topYDiff = p2.Y - p1.Y;
-            double bottomXDiff = p4.X - p3.X;
-            double bottomYDiff = p4.Y - p3.Y;
+            double topXDiff = p2.x - p1.x;
+            double topYDiff = p2.y - p1.y;
+            double bottomXDiff = p4.x - p3.x;
+            double bottomYDiff = p4.y - p3.y;
 
-            double midLeftX = (p1.X + p3.X) / 2;
-            double midLeftY = (p1.Y + p3.Y) / 2;
-            double midRightX = (p2.X + p4.X) / 2;
-            double midRightY = (p2.Y + p4.Y) / 2;
+            double midLeftX = (p1.x + p3.x) / 2;
+            double midLeftY = (p1.y + p3.y) / 2;
+            double midRightX = (p2.x + p4.x) / 2;
+            double midRightY = (p2.y + p4.y) / 2;
 
             double midXDiff = midLeftX - midRightX;
             double midYDiff = midLeftY - midRightY;
@@ -96,16 +96,16 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
             double topStepY = topYDiff / numberOfSteps;
             double bottomStepX = bottomXDiff / numberOfSteps;
             double bottomStepY = bottomYDiff / numberOfSteps;
-            currTopX = p1.X;
-            currTopY = p1.Y;
-            currBottomX = p3.X;
-            currBottomY = p3.Y;
+            currTopX = p1.x;
+            currTopY = p1.y;
+            currBottomX = p3.x;
+            currBottomY = p3.y;
 
             for(i = 0; i < numberOfSteps; i++)
             {
                 EmbVector temp2;
-                temp.X= currTopX;
-                temp.Y = currTopY;
+                temp.x= currTopX;
+                temp.y = currTopY;
                 if(stitches)
                 {
                     currentStitch = embVectorList_add(currentStitch, temp);
@@ -114,8 +114,8 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
                 {
                     stitches = currentStitch = embVectorList_create(temp);
                 }
-                temp2.X = currBottomX;
-                temp2.Y = currBottomY;
+                temp2.x = currBottomX;
+                temp2.y = currBottomY;
                 currentStitch = embVectorList_add(currentStitch, temp2);
                 currTopX += topStepX;
                 currTopY += topStepY;
@@ -123,11 +123,11 @@ EmbVectorList* embSatinOutline_renderStitches(EmbSatinOutline* result, double de
                 currBottomY += bottomStepY;
             }
         }
-        temp.X = currTopX;
-        temp.Y = currTopY;
+        temp.x = currTopX;
+        temp.y = currTopY;
         currentStitch = embVectorList_add(currentStitch, temp);
-        temp.X = currBottomX;
-        temp.Y = currBottomY;
+        temp.x = currBottomX;
+        temp.y = currBottomY;
         currentStitch = embVectorList_add(currentStitch, temp);
     }
     return stitches;
@@ -152,29 +152,29 @@ struct StitchBlock
 
 double LineLength(EmbPoint a1, EmbPoint a2)
 {
-    return sqrt(pow(a2.X - a1.X, 2) + pow(a2.Y - a1.Y, 2));
+    return sqrt(pow(a2.x - a1.x, 2) + pow(a2.y - a1.y, 2));
 }
 
 double DistancePointPoint(Vector2 p, Vector2 p2)
 {
-    double dx = p.X - p2.X;
-    double dy = p.Y - p2.X;
+    double dx = p.x - p2.x;
+    double dy = p.y - p2.x;
     return sqrt(dx * dx + dy * dy);
 }
 
 float GetRelativeX(EmbPoint a1, EmbPoint a2, Point a3)
 {
-    return ((a1.X - a2.X) * (a3.X - a2.X) + (a1.Y - a2.Y) * (a3.Y - a2.Y));
+    return ((a1.x - a2.x) * (a3.x - a2.x) + (a1.y - a2.y) * (a3.y - a2.y));
 }
 
 float GetRelativeY(EmbPoint a1, EmbPoint a2, EmbPoint a3)
 {
-    return ((a1.X - a2.X) * (a3.Y - a2.Y) - (a1.Y - a2.Y) * (a3.X - a2.X));
+    return ((a1.x - a2.x) * (a3.y - a2.y) - (a1.y - a2.y) * (a3.x - a2.x));
 }
 
 double GetAngle(VectorStitch vs, VectorStitch vs2)
 {
-    return atan((vs2.Xy.X - vs.Xy.X)/(vs2.Xy.Y - vs.Xy.Y));
+    return atan((vs2.xy.x - vs.xy.x)/(vs2.xy.y - vs.xy.y));
 }
 
 StitchBlock* BreakIntoColorBlocks(EmbPattern pattern)
@@ -193,7 +193,7 @@ StitchBlock* BreakIntoColorBlocks(EmbPattern pattern)
             sa2.Thread = new Thread(color.Red, color.Blue, color.Green);
             oldColor = s.ColorIndex;
         }
-        var vs = new VectorStitch { Xy = new Point(s.X, s.Y), Color = s.ColorIndex };
+        var vs = new VectorStitch { Xy = new Point(s.x, s.y), Color = s.ColorIndex };
         sa2.Stitches.Add(vs);
     }
     yield return sa2;
@@ -212,7 +212,7 @@ StitchBlock * BreakIntoSeparateObjects(EmbStitchBlock* blocks)
 
         for (int i = 0; i < block.Stitches.Count - 2; i++) // step 0
         {
-            double dx = (GetRelativeX(block.Stitches[i].Xy, block.Stitches[i + 1].Xy, block.Stitches[i + 2].Xy));
+            double dx = (GetRelativeX(block.Stitches[i].xy, block.Stitches[i + 1].xy, block.Stitches[i + 2].xy));
             block.Stitches[i + 1].Type = dx <= 0 ? VectorStitchType.Run : VectorStitchType.Contour;
             block.Stitches[i].Angle = GetAngle(block.Stitches[i], block.Stitches[i + 1]);
             stitches.Add(block.Stitches[i].Clone());
@@ -237,9 +237,9 @@ StitchBlock * BreakIntoSeparateObjects(EmbStitchBlock* blocks)
         //{
         //    if (sa.Stitches[i + 1].Type == VectorStitchType.Contour)
         //    {
-        //        //float dy = GetRelativeY(sa[i + 1].XY, sa[i + 2].XY, sa[i + 3].XY);
-        //        //float dy2 = GetRelativeY(sa[i].XY, sa[i + 1].XY, sa[i + 2].XY);
-        //        //float dy3 = GetRelativeY(sa[i + 2].XY, sa[i + 3].XY, sa[i + 4].XY);
+        //        //float dy = GetRelativeY(sa[i + 1].xY, sa[i + 2].xY, sa[i + 3].xY);
+        //        //float dy2 = GetRelativeY(sa[i].xY, sa[i + 1].xY, sa[i + 2].xY);
+        //        //float dy3 = GetRelativeY(sa[i + 2].xY, sa[i + 3].xY, sa[i + 4].xY);
         //        //if(dy)
         //        if (sa.Stitches[i - 1].Type == VectorStitchType.Run || sa.Stitches[i + 1].Type == VectorStitchType.Run)
         //        {
@@ -267,7 +267,7 @@ StitchObject * FindOutline(EmbStitchBlock* stitchData)
             sa.Stitches[sa.Stitches.Count - 1].Type = VectorStitchType.Contour;
             for (int i = 0; i < sa.Stitches.Count - 2; i++) // step 0
             {
-                float dx = (GetRelativeX(sa.Stitches[i].Xy, sa.Stitches[i + 1].Xy, sa.Stitches[i + 2].Xy));
+                float dx = (GetRelativeX(sa.Stitches[i].xy, sa.Stitches[i + 1].xy, sa.Stitches[i + 2].xy));
                 sa.Stitches[i + 1].Type = dx <= 0 ? VectorStitchType.Run : VectorStitchType.Contour;
                 sa.Stitches[i].Angle = GetAngle(sa.Stitches[i], sa.Stitches[i + 1]);
             }
@@ -275,9 +275,9 @@ StitchObject * FindOutline(EmbStitchBlock* stitchData)
             //{
             //    if (sa.Stitches[i + 1].Type == VectorStitchType.Contour)
             //    {
-            //        //float dy = GetRelativeY(sa[i + 1].XY, sa[i + 2].XY, sa[i + 3].XY);
-            //        //float dy2 = GetRelativeY(sa[i].XY, sa[i + 1].XY, sa[i + 2].XY);
-            //        //float dy3 = GetRelativeY(sa[i + 2].XY, sa[i + 3].XY, sa[i + 4].XY);
+            //        //float dy = GetRelativeY(sa[i + 1].xY, sa[i + 2].xY, sa[i + 3].xY);
+            //        //float dy2 = GetRelativeY(sa[i].xY, sa[i + 1].xY, sa[i + 2].xY);
+            //        //float dy3 = GetRelativeY(sa[i + 2].xY, sa[i + 3].xY, sa[i + 4].xY);
             //        //if(dy)
             //        if (sa.Stitches[i - 1].Type == VectorStitchType.Run || sa.Stitches[i + 1].Type == VectorStitchType.Run)
             //        {
@@ -297,13 +297,13 @@ StitchObject * FindOutline(EmbStitchBlock* stitchData)
         {
             if ((t.Type == VectorStitchType.Contour) && (oddEven % 2) == 0)
             {
-                pEven.Add(t.Xy);
+                pEven.Add(t.xy);
 
                 oddEven++;
             }
             else if ((t.Type == VectorStitchType.Contour) && (oddEven % 2) == 1)
             {
-                pOdd.Add(t.Xy);
+                pOdd.Add(t.xy);
                 oddEven++;
             }
         }
@@ -349,23 +349,23 @@ EmbPattern DrawGraphics(EmbPattern p)
             var points = stitchObject.Generate2(75);
             foreach (var point in points)
             {
-                outPattern.AddStitchAbsolute(point.X, point.Y, StitchTypes.Normal);
+                outPattern.AddStitchAbsolute(point.x, point.y, StitchTypes.Normal);
             }
             //break;
             //StitchObject stitchObject = objectsFound[1];))
             //////if (stitchObject.SideOne.Count > 0)
             //////{
-            //////    outPattern.StitchList.Add(new Stitch(stitchObject.SideOne[0].X, stitchObject.SideOne[0].Y,
+            //////    outPattern.StitchList.Add(new Stitch(stitchObject.SideOne[0].x, stitchObject.SideOne[0].y,
             //////                                         StitchType.Jump, colorIndex));
             //////}
             //////foreach (Point t in stitchObject.SideOne)
             //////{
-            //////    outPattern.StitchList.Add(new Stitch(t.X, t.Y,
+            //////    outPattern.StitchList.Add(new Stitch(t.x, t.y,
             //////                                         StitchType.Normal, colorIndex));
             //////}
             //////foreach (Point t in stitchObject.SideTwo)
             //////{
-            //////    outPattern.StitchList.Add(new Stitch(t.X, t.Y,
+            //////    outPattern.StitchList.Add(new Stitch(t.x, t.y,
             //////                                         StitchType.Normal, colorIndex));
             //////}
             //break;
@@ -379,7 +379,7 @@ EmbPattern DrawGraphics(EmbPattern p)
 EmbPattern SimplifyOutline(EmbPattern pattern)
 {
     var v = new Vertices();
-    v.AddRange(pattern.StitchList.Select(point => new Vector2(point.X, point.Y)));
+    v.AddRange(pattern.StitchList.Select(point => new Vector2(point.x, point.y)));
     var output = SimplifyTools.DouglasPeuckerSimplify(v, 10);
     var patternOut = new Pattern();
     foreach (var color in pattern.ColorList)
@@ -389,7 +389,7 @@ EmbPattern SimplifyOutline(EmbPattern pattern)
 
     foreach (var vertex in output)
     {
-        patternOut.AddStitchAbsolute(vertex.X, vertex.Y, StitchTypes.Normal);
+        patternOut.AddStitchAbsolute(vertex.x, vertex.y, StitchTypes.Normal);
     }
     patternOut.AddStitchRelative(0, 0, StitchTypes.End);
     return patternOut;
@@ -491,7 +491,7 @@ void SimplifySection(Vertices vertices, int i, int j)
 double DistancePointLine(EmbPoint p, EmbPoint a, EmbPoint b)
 {
     /* if start == end, then use point-to-point distance */
-    if (a.X == b.X && a.Y == b.Y)
+    if (a.x == b.x && a.y == b.y)
         return DistancePointPoint(p, a);
 
     // otherwise use comp.graphics.algorithms Frequently Asked Questions method
@@ -507,9 +507,9 @@ double DistancePointLine(EmbPoint p, EmbPoint a, EmbPoint b)
                 0<r<1 Point is interior to AB
     */
 
-    double r = ((p.X - a.X) * (b.X - a.X) + (p.Y - a.Y) * (b.Y - a.Y))
+    double r = ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y))
                /
-               ((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y));
+               ((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 
     if (r <= 0.0) return DistancePointPoint(p, a);
     if (r >= 1.0) return DistancePointPoint(p, b);
@@ -523,11 +523,11 @@ double DistancePointLine(EmbPoint p, EmbPoint a, EmbPoint b)
                 Then the distance from C to Point = |s|*Curve.
     */
 
-    double s = ((a.Y - p.Y) * (b.X - a.X) - (a.X - p.X) * (b.Y - a.Y))
+    double s = ((a.y - p.y) * (b.x - a.x) - (a.x - p.x) * (b.y - a.y))
                /
-               ((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y));
+               ((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 
-    return Math.Abs(s) * Math.Sqrt(((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y)));
+    return Math.Abs(s) * Math.Sqrt(((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y)));
 }
 
 /* From physics2d.net */
@@ -592,10 +592,10 @@ public static void MergeParallelEdges(Vertices vertices, float tolerance)
         int middle = i;
         int upper = (i == vertices.Count - 1) ? (0) : (i + 1);
 
-        float dx0 = vertices[middle].X - vertices[lower].X;
-        float dy0 = vertices[middle].Y - vertices[lower].Y;
-        float dx1 = vertices[upper].Y - vertices[middle].X;
-        float dy1 = vertices[upper].Y - vertices[middle].Y;
+        float dx0 = vertices[middle].x - vertices[lower].x;
+        float dy0 = vertices[middle].y - vertices[lower].y;
+        float dx1 = vertices[upper].y - vertices[middle].x;
+        float dy1 = vertices[upper].y - vertices[middle].y;
         var norm0 = (float)Math.Sqrt(dx0 * dx0 + dy0 * dy0);
         var norm1 = (float)Math.Sqrt(dx1 * dx1 + dy1 * dy1);
 

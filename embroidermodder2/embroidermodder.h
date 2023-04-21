@@ -11,7 +11,6 @@
 
 #include <QMainWindow>
 
-typedef qreal EmbReal;
 typedef QString EmbString;
 
 enum COMMAND_ACTIONS

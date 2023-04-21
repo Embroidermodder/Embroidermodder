@@ -33,36 +33,6 @@ static short vp3DecodeInt16(unsigned short inputByte)
     return ((short)inputByte);
 }
 
-typedef struct _vp3Hoop
-{
-    int right;
-    int bottom;
-    int left;
-    int top;
-    int threadLength;
-    char unknown2;
-    unsigned char numberOfColors;
-    unsigned short unknown3;
-    int unknown4;
-    int numberOfBytesRemaining;
-
-    int xOffset;
-    int yOffset;
-
-    unsigned char byte1;
-    unsigned char byte2;
-    unsigned char byte3;
-
-    /* Centered hoop dimensions */
-    int right2;
-    int left2;
-    int bottom2;
-    int top2;
-
-    int width;
-    int height;
-} vp3Hoop;
-
 static vp3Hoop vp3ReadHoopSection(EmbFile* file)
 {
     vp3Hoop hoop;

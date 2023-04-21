@@ -37,23 +37,6 @@ static unsigned char* vipDecompressData(unsigned char* input, int compressedInpu
     return decompressedData;
 }
 
-typedef struct VipHeader_
-{
-    int magicCode;
-    int numberOfStitches;
-    int numberOfColors;
-    short postitiveXHoopSize;
-    short postitiveYHoopSize;
-    short negativeXHoopSize;
-    short negativeYHoopSize;
-    int attributeOffset;
-    int xOffset;
-    int yOffset;
-    unsigned char stringVal[8];
-    short unknown;
-    int colorLength;
-} VipHeader;
-
 /*! Reads a file with the given \a fileName and loads the data into \a pattern.
  *  Returns \c true if successful, otherwise returns \c false. */
 int readVip(EmbPattern* pattern, const char* fileName)

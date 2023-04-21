@@ -851,12 +851,12 @@ QString MainWindow::textFont()
     return getSettingsTextFont();
 }
 
-qreal MainWindow::textSize()
+EmbReal MainWindow::textSize()
 {
     return getSettingsTextSize();
 }
 
-qreal MainWindow::textAngle()
+EmbReal MainWindow::textAngle()
 {
     return getSettingsTextAngle();
 }
@@ -892,7 +892,7 @@ void MainWindow::setTextFont(const QString& str)
     setSettingsTextFont(str);
 }
 
-void MainWindow::setTextSize(qreal num)
+void MainWindow::setTextSize(EmbReal num)
 {
     setSettingsTextSize(qFabs(num));
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
@@ -904,7 +904,7 @@ void MainWindow::setTextSize(qreal num)
         textSizeSelector->setCurrentIndex(index);
 }
 
-void MainWindow::setTextAngle(qreal num)
+void MainWindow::setTextAngle(EmbReal num)
 {
     setSettingsTextAngle(num);
 }
@@ -1066,14 +1066,14 @@ void MainWindow::runCommandMain(const QString& cmd)
     //engine->evaluate(cmd + "_main()", fileName);
 }
 
-void MainWindow::runCommandClick(const QString& cmd, qreal x, qreal y)
+void MainWindow::runCommandClick(const QString& cmd, EmbReal x, EmbReal y)
 {
     qDebug("runCommandClick(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
     //engine->evaluate(cmd + "_click(" + QString().setNum(x) + "," + QString().setNum(-y) + ")", fileName);
 }
 
-void MainWindow::runCommandMove(const QString& cmd, qreal x, qreal y)
+void MainWindow::runCommandMove(const QString& cmd, EmbReal x, EmbReal y)
 {
     qDebug("runCommandMove(%s, %.2f, %.2f)", qPrintable(cmd), x, y);
     QString fileName = "commands/" + cmd + "/" + cmd + ".js";
@@ -1321,7 +1321,7 @@ MainWindow::nativeZoomExtents()
  * @param w
  * @param h
  */
-void MainWindow::nativePrintArea(qreal x, qreal y, qreal w, qreal h)
+void MainWindow::nativePrintArea(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     qDebug("nativePrintArea(%.2f, %.2f, %.2f, %.2f)", x, y, w, h);
     //TODO: Print Setup Stuff
@@ -1361,12 +1361,12 @@ QString MainWindow::nativeTextFont()
     return textFont();
 }
 
-qreal MainWindow::nativeTextSize()
+EmbReal MainWindow::nativeTextSize()
 {
     return textSize();
 }
 
-qreal MainWindow::nativeTextAngle()
+EmbReal MainWindow::nativeTextAngle()
 {
     return textAngle();
 }
@@ -1401,12 +1401,12 @@ void MainWindow::nativeSetTextFont(const QString& str)
     setTextFont(str);
 }
 
-void MainWindow::nativeSetTextSize(qreal num)
+void MainWindow::nativeSetTextSize(EmbReal num)
 {
     setTextSize(num);
 }
 
-void MainWindow::nativeSetTextAngle(qreal num)
+void MainWindow::nativeSetTextAngle(EmbReal num)
 {
     setTextAngle(num);
 }
@@ -1436,7 +1436,7 @@ void MainWindow::nativeSetTextOverline(bool val)
     setTextOverline(val);
 }
 
-void MainWindow::nativePreviewOn(int clone, int mode, qreal x, qreal y, qreal data)
+void MainWindow::nativePreviewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
 {
     View* gview = activeView();
     if(gview) gview->previewOn(clone, mode, x, -y, data);
@@ -1479,7 +1479,7 @@ void MainWindow::nativeSetRubberMode(int mode)
     if(gview) gview->setRubberMode(mode);
 }
 
-void MainWindow::nativeSetRubberPoint(const QString& key, qreal x, qreal y)
+void MainWindow::nativeSetRubberPoint(const QString& key, EmbReal x, EmbReal y)
 {
     View* gview = activeView();
     if(gview) gview->setRubberPoint(key, QPointF(x, -y));
@@ -1491,11 +1491,11 @@ void MainWindow::nativeSetRubberText(const QString& key, const QString& txt)
     if(gview) gview->setRubberText(key, txt);
 }
 
-void MainWindow::nativeAddTextMulti(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddTextMulti(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1529,15 +1529,15 @@ void MainWindow::nativeAddTextSingle(const QString& str, qreal x, qreal y, qreal
     }
 }
 
-void MainWindow::nativeAddInfiniteLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
+void MainWindow::nativeAddInfiniteLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
 }
 
-void MainWindow::nativeAddRay(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot)
+void MainWindow::nativeAddRay(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot)
 {
 }
 
-void MainWindow::nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode)
+void MainWindow::nativeAddLine(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1561,11 +1561,11 @@ void MainWindow::nativeAddLine(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot
     }
 }
 
-void MainWindow::nativeAddTriangle(qreal x1, qreal y1, qreal x2, qreal y2, qreal x3, qreal y3, qreal rot, bool fill)
+void MainWindow::nativeAddTriangle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal x3, EmbReal y3, EmbReal rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1590,11 +1590,11 @@ void MainWindow::nativeAddRectangle(qreal x, qreal y, qreal w, qreal h, qreal ro
     }
 }
 
-void MainWindow::nativeAddRoundedRectangle(qreal x, qreal y, qreal w, qreal h, qreal rad, qreal rot, bool fill)
+void MainWindow::nativeAddRoundedRectangle(EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rad, EmbReal rot, bool fill)
 {
 }
 
-void MainWindow::nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, int rubberMode)
+void MainWindow::nativeAddArc(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* scene = activeScene();
@@ -1608,7 +1608,7 @@ void MainWindow::nativeAddArc(qreal startX, qreal startY, qreal midX, qreal midY
     }
 }
 
-void MainWindow::nativeAddCircle(qreal centerX, qreal centerY, qreal radius, bool fill, int rubberMode)
+void MainWindow::nativeAddCircle(EmbReal centerX, EmbReal centerY, EmbReal radius, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1632,7 +1632,7 @@ void MainWindow::nativeAddCircle(qreal centerX, qreal centerY, qreal radius, boo
     }
 }
 
-void MainWindow::nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qreal length, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddSlot(EmbReal centerX, EmbReal centerY, EmbReal diameter, EmbReal length, EmbReal rot, bool fill, int rubberMode)
 {
     //TODO: Use UndoableAddCommand for slots
     /*
@@ -1646,7 +1646,7 @@ void MainWindow::nativeAddSlot(qreal centerX, qreal centerY, qreal diameter, qre
     */
 }
 
-void MainWindow::nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qreal height, qreal rot, bool fill, int rubberMode)
+void MainWindow::nativeAddEllipse(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, EmbReal rot, bool fill, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1671,7 +1671,7 @@ void MainWindow::nativeAddEllipse(qreal centerX, qreal centerY, qreal width, qre
     }
 }
 
-void MainWindow::nativeAddPoint(qreal x, qreal y)
+void MainWindow::nativeAddPoint(EmbReal x, EmbReal y)
 {
     View* gview = activeView();
     QUndoStack* stack = gview->getUndoStack();
@@ -1683,12 +1683,12 @@ void MainWindow::nativeAddPoint(qreal x, qreal y)
     }
 }
 
-void MainWindow::nativeAddRegularPolygon(qreal centerX, qreal centerY, quint16 sides, quint8 mode, qreal rad, qreal rot, bool fill)
+void MainWindow::nativeAddRegularPolygon(EmbReal centerX, EmbReal centerY, quint16 sides, quint8 mode, EmbReal rad, EmbReal rot, bool fill)
 {
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+void MainWindow::nativeAddPolygon(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1712,7 +1712,7 @@ void MainWindow::nativeAddPolygon(qreal startX, qreal startY, const QPainterPath
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+void MainWindow::nativeAddPolyline(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1736,23 +1736,23 @@ void MainWindow::nativeAddPolyline(qreal startX, qreal startY, const QPainterPat
 }
 
 //NOTE: This native is different than the rest in that the Y+ is down (scripters need not worry about this)
-void MainWindow::nativeAddPath(qreal startX, qreal startY, const QPainterPath& p, int rubberMode)
+void MainWindow::nativeAddPath(EmbReal startX, EmbReal startY, const QPainterPath& p, int rubberMode)
 {
 }
 
-void MainWindow::nativeAddHorizontalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight)
+void MainWindow::nativeAddHorizontalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
 }
 
-void MainWindow::nativeAddVerticalDimension(qreal x1, qreal y1, qreal x2, qreal y2, qreal legHeight)
+void MainWindow::nativeAddVerticalDimension(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal legHeight)
 {
 }
 
-void MainWindow::nativeAddImage(const QString& img, qreal x, qreal y, qreal w, qreal h, qreal rot)
+void MainWindow::nativeAddImage(const QString& img, EmbReal x, EmbReal y, EmbReal w, EmbReal h, EmbReal rot)
 {
 }
 
-void MainWindow::nativeAddDimLeader(qreal x1, qreal y1, qreal x2, qreal y2, qreal rot, int rubberMode)
+void MainWindow::nativeAddDimLeader(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, EmbReal rot, int rubberMode)
 {
     View* gview = activeView();
     QGraphicsScene* gscene = gview->scene();
@@ -1810,22 +1810,22 @@ void MainWindow::nativeSetCursorShape(const QString& str)
     }
 }
 
-qreal MainWindow::nativeCalculateAngle(qreal x1, qreal y1, qreal x2, qreal y2)
+EmbReal MainWindow::nativeCalculateAngle(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     return QLineF(x1, -y1, x2, -y2).angle();
 }
 
-qreal MainWindow::nativeCalculateDistance(qreal x1, qreal y1, qreal x2, qreal y2)
+EmbReal MainWindow::nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     return QLineF(x1, y1, x2, y2).length();
 }
 
-qreal MainWindow::nativePerpendicularDistance(qreal px, qreal py, qreal x1, qreal y1, qreal x2, qreal y2)
+EmbReal MainWindow::nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QLineF line(x1, y1, x2, y2);
     QLineF norm = line.normalVector();
-    qreal dx = px-x1;
-    qreal dy = py-y1;
+    EmbReal dx = px-x1;
+    EmbReal dy = py-y1;
     norm.translate(dx, dy);
     QPointF iPoint;
     norm.intersects(line, &iPoint);
@@ -1869,7 +1869,7 @@ void MainWindow::nativeDeleteSelected()
  * @param x
  * @param y
  */
-void MainWindow::nativeCutSelected(qreal x, qreal y)
+void MainWindow::nativeCutSelected(EmbReal x, EmbReal y)
 {
 }
 
@@ -1878,7 +1878,7 @@ void MainWindow::nativeCutSelected(qreal x, qreal y)
  * @param x
  * @param y
  */
-void MainWindow::nativeCopySelected(qreal x, qreal y)
+void MainWindow::nativeCopySelected(EmbReal x, EmbReal y)
 {
 }
 
@@ -1887,7 +1887,7 @@ void MainWindow::nativeCopySelected(qreal x, qreal y)
  * @param x
  * @param y
  */
-void MainWindow::nativePasteSelected(qreal x, qreal y)
+void MainWindow::nativePasteSelected(EmbReal x, EmbReal y)
 {
 }
 
@@ -1896,7 +1896,7 @@ void MainWindow::nativePasteSelected(qreal x, qreal y)
  * @param dx
  * @param dy
  */
-void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
+void MainWindow::nativeMoveSelected(EmbReal dx, EmbReal dy)
 {
     View* gview = activeView();
     if(gview) { gview->moveSelected(dx, -dy); }
@@ -1908,7 +1908,7 @@ void MainWindow::nativeMoveSelected(qreal dx, qreal dy)
  * @param y
  * @param factor
  */
-void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
+void MainWindow::nativeScaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
     if (factor <= 0.0) {
         QMessageBox::critical(this, tr("ScaleFactor Error"),
@@ -1927,7 +1927,7 @@ void MainWindow::nativeScaleSelected(qreal x, qreal y, qreal factor)
  * @param rot
  */
 void
-MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
+MainWindow::nativeRotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 {
     View* gview = activeView();
     if (gview) {
@@ -1943,7 +1943,7 @@ MainWindow::nativeRotateSelected(qreal x, qreal y, qreal rot)
  * @param y2
  */
 void
-MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+MainWindow::nativeMirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     View* gview = activeView();
     if (gview) {
@@ -1955,7 +1955,7 @@ MainWindow::nativeMirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
  * @brief MainWindow::nativeQSnapX
  * @return
  */
-qreal
+EmbReal
 MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
