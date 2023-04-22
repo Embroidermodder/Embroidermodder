@@ -494,46 +494,6 @@ MainWindow::actuator(std::string command)
     return output;
 }
 
-/**
- * \brief .
- */
-typedef struct std::string_ {
-    int int_value;
-    EmbReal real_value;
-    EmbString string_value;
-    int type;
-} std::string;
-
-/**
- * \brief .
- */
-typedef struct EmbFunction_ {
-    EmbString label;
-    int arguments;
-    std::vector<EmbString> body;
-} EmbFunction;
-
-/**
- * \brief .
- */
-typedef struct EmbScriptContext_ {
-    std::vector<std::string> arguments;
-    std::vector<EmbFunction> functions;
-} EmbScriptContext;
-
-/**
- * \brief .
- */
-typedef struct EmbAction_ {
-    EmbString init;
-    EmbString main;
-    EmbString mouse;
-    EmbString click;
-    EmbString prompt;
-} EmbAction;
-
-EmbScriptContext engine;
-
 #if 0
 void MainWindow::LoadCommand(EmbString cmdName)
 {
