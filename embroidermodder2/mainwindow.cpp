@@ -494,11 +494,10 @@ MainWindow::actuator(std::string command)
     return output;
 }
 
-#if 0
+    /*
 void MainWindow::LoadCommand(EmbString cmdName)
 {
     qDebug("LoadCommand(%s)", qPrintable(cmdName));
-    /*
     //NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
     //      the QScriptEngine would only call the last script evaluated (which happens to be main() in another script).
     //      Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
@@ -522,7 +521,7 @@ void MainWindow::LoadCommand(EmbString cmdName)
                 done = true;
             }
             else {
-                index += findFunc.length();
+                index += findFunc.size();
                 findNextIndex = false;
             }
         }
@@ -573,17 +572,17 @@ void MainWindow::LoadCommand(EmbString cmdName)
                     int i = 0;
                     QChar charAfter;
                     do {
-                        charAfter = script.at(index + i + findFunc.length());
+                        charAfter = script.at(index + i + findFunc.size());
                         if (charAfter == '(')
                         {
                             found++;
-                            script.replace(index, findFunc.length(), funcName);
+                            script.replace(index, findFunc.size(), funcName);
                         }
                         i++;
                     }
                     while(validAfterChars.contains(charAfter));
                 }
-                index += findFunc.length();
+                index += findFunc.size();
                 findNextIndex = true;
             }
         }
@@ -643,8 +642,8 @@ void MainWindow::LoadCommand(EmbString cmdName)
     {
         prompt->addCommand(alias, cmdName);
     }
-    */
 }
+    */
 
 /**
  * \brief
@@ -652,6 +651,7 @@ void MainWindow::LoadCommand(EmbString cmdName)
 std::string
 Include(std::vector<std::string> args, QScriptEngine* engine)
 {
+    /*
     EmbString fileName = args(0).toString();
     QFile scriptFile("commands/" + fileName);
 
@@ -671,26 +671,46 @@ Include(std::vector<std::string> args, QScriptEngine* engine)
     }
 
     std::string result = engine->evaluate(s);
+    */
 
-    return 0;
-}
-
-std::string
-Debug(std::vector<std::string> args)
-{
-    if (argsCount() != 1)    return context->throwError("debug() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "debug(): first argument is not a string");
-
-    qDebug("%s", qPrintable(args(0).toString()));
     return "";
 }
 
+/**
+ *
+ */
+std::string
+Debug(std::vector<std::string> args)
+{
+    /*
+    if (args.size() != 1) {
+        return "ERROR: debug() requires one argument");
+    }
+    if (args[0] == "") {
+        return "TYPE ERROR: debug(): first argument is empty");
+    }
+
+    qDebug("%s", qPrintable(args(0).toString()));
+    */
+    return "";
+}
+
+/**
+ *
+ */
 std::string
 Error(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("error() requires two arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "error(): first argument is not a string");
-    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "error(): second argument is not a string");
+    /*
+    if (args.size() != 2) {
+        return "ERROR: error() requires two arguments");
+    }
+    if (!args(0).isString()) {
+        return "TYPE ERROR: error(): first argument is not a string");
+    }
+    if (!args(1).isString()) {
+        return "TYPE ERROR: error(): second argument is not a string");
+    }
 
     EmbString strCmd = args(0).toString();
     EmbString strErr = args(1).toString();
@@ -698,29 +718,39 @@ Error(std::vector<std::string> args)
     mainWin()->nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
     mainWin()->nativeAppendPromptHistory(QString());
     mainWin()->nativeEndCommand();
+    */
     return "";
 }
 
+/**
+ *
+ */
 std::string
 Todo(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("todo() requires two arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "todo(): first argument is not a string");
-    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "todo(): second argument is not a string");
+    /*
+    if (args.size() != 2)
+        return "ERROR: todo() requires two arguments");
+    if (!args(0).isString())
+        return "TYPE ERROR: todo(): first argument is not a string");
+    if (!args(1).isString())
+        return "TYPE ERROR: todo(): second argument is not a string");
 
     EmbString strCmd  = args(0).toString();
     EmbString strTodo = args(1).toString();
 
     mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
     mainWin()->nativeEndCommand();
+    */
     return "";
 }
 
+#if 0
 std::string
 Alert(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("alert() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "alert(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: alert() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: alert(): first argument is not a string");
 
     mainWin()->nativeAlert(args(0).toString());
     return "";
@@ -729,7 +759,7 @@ Alert(std::vector<std::string> args)
 std::string
 BlinkPrompt(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("blinkPrompt() requires zero arguments");
+    if (args.size() != 0) return "ERROR: blinkPrompt() requires zero arguments");
 
     mainWin()->nativeBlinkPrompt();
     return "";
@@ -738,8 +768,8 @@ BlinkPrompt(std::vector<std::string> args)
 std::string
 SetPromptPrefix(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setPromptPrefix() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setPromptPrefix(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: setPromptPrefix() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: setPromptPrefix(): first argument is not a string");
 
     mainWin()->nativeSetPromptPrefix(args(0).toString());
     return "";
@@ -751,7 +781,7 @@ SetPromptPrefix(std::vector<std::string> args)
 std::string
 AppendPromptHistory(std::vector<std::string> args)
 {
-    int args = argsCount();
+    int args = args.size();
     if (args == 0)
     {
         mainWin()->nativeAppendPromptHistory(QString());
@@ -762,7 +792,7 @@ AppendPromptHistory(std::vector<std::string> args)
     }
     else
     {
-        return context->throwError("appendPromptHistory() requires one or zero arguments");
+        return "ERROR: appendPromptHistory() requires one or zero arguments");
     }
     return "";
 }
@@ -775,7 +805,7 @@ AppendPromptHistory(std::vector<std::string> args)
 std::string
 EnablePromptRapidFire(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("enablePromptRapidFire() requires zero arguments");
+    if (args.size() != 0) return "ERROR: enablePromptRapidFire() requires zero arguments");
 
     mainWin()->nativeEnablePromptRapidFire();
     return "";
@@ -789,7 +819,7 @@ EnablePromptRapidFire(std::vector<std::string> args)
 std::string
 DisablePromptRapidFire(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("disablePromptRapidFire() requires zero arguments");
+    if (args.size() != 0) return "ERROR: disablePromptRapidFire() requires zero arguments");
 
     mainWin()->nativeDisablePromptRapidFire();
     return "";
@@ -798,7 +828,7 @@ DisablePromptRapidFire(std::vector<std::string> args)
 std::string
 EnableMoveRapidFire(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("enableMoveRapidFire() requires zero arguments");
+    if (args.size() != 0) return "ERROR: enableMoveRapidFire() requires zero arguments");
 
     mainWin()->nativeEnableMoveRapidFire();
     return "";
@@ -807,7 +837,7 @@ EnableMoveRapidFire(std::vector<std::string> args)
 std::string
 DisableMoveRapidFire(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("disableMoveRapidFire() requires zero arguments");
+    if (args.size() != 0) return "ERROR: disableMoveRapidFire() requires zero arguments");
 
     mainWin()->nativeDisableMoveRapidFire();
     return "";
@@ -816,7 +846,7 @@ DisableMoveRapidFire(std::vector<std::string> args)
 std::string
 InitCommand(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("initCommand() requires zero arguments");
+    if (args.size() != 0) return "ERROR: initCommand() requires zero arguments");
 
     mainWin()->nativeInitCommand();
     return "";
@@ -830,7 +860,7 @@ InitCommand(std::vector<std::string> args)
 std::string
 EndCommand(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("endCommand() requires zero arguments");
+    if (args.size() != 0) return "ERROR: endCommand() requires zero arguments");
 
     mainWin()->nativeEndCommand();
     return "";
@@ -844,7 +874,7 @@ EndCommand(std::vector<std::string> args)
 std::string
 NewFile(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("newFile() requires zero arguments");
+    if (args.size() != 0) return "ERROR: newFile() requires zero arguments");
 
     mainWin()->nativeNewFile();
     return "";
@@ -858,8 +888,8 @@ NewFile(std::vector<std::string> args)
 std::string
 OpenFile(std::vector<std::string> args)
 {
-    if (argsCount() != 0) {
-        return context->throwError("openFile() requires zero arguments");
+    if (args.size() != 0) {
+        return "ERROR: openFile() requires zero arguments");
     }
 
     mainWin()->nativeOpenFile();
@@ -874,7 +904,8 @@ OpenFile(std::vector<std::string> args)
 std::string
 Exit(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("exit() requires zero arguments");
+    if (args.size() != 0)
+        return "ERROR: exit() requires zero arguments");
 
     mainWin()->nativeExit();
     return "";
@@ -883,7 +914,7 @@ Exit(std::vector<std::string> args)
 std::string
 Help(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("help() requires zero arguments");
+    if (args.size() != 0) return "ERROR: help() requires zero arguments");
 
     mainWin()->nativeHelp();
     return "";
@@ -892,7 +923,7 @@ Help(std::vector<std::string> args)
 std::string
 About(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("about() requires zero arguments");
+    if (args.size() != 0) return "ERROR: about() requires zero arguments");
 
     mainWin()->nativeAbout();
     return "";
@@ -901,7 +932,7 @@ About(std::vector<std::string> args)
 std::string
 TipOfTheDay(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("tipOfTheDay() requires zero arguments");
+    if (args.size() != 0) return "ERROR: tipOfTheDay() requires zero arguments");
 
     mainWin()->nativeTipOfTheDay();
     return "";
@@ -910,7 +941,7 @@ TipOfTheDay(std::vector<std::string> args)
 std::string
 WindowCascade(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("windowCascade() requires zero arguments");
+    if (args.size() != 0) return "ERROR: windowCascade() requires zero arguments");
 
     mainWin()->nativeWindowCascade();
     return "";
@@ -919,7 +950,7 @@ WindowCascade(std::vector<std::string> args)
 std::string
 WindowTile(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("windowTile() requires zero arguments");
+    if (args.size() != 0) return "ERROR: windowTile() requires zero arguments");
 
     mainWin()->nativeWindowTile();
     return "";
@@ -928,7 +959,7 @@ WindowTile(std::vector<std::string> args)
 std::string
 WindowClose(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("windowClose() requires zero arguments");
+    if (args.size() != 0) return "ERROR: windowClose() requires zero arguments");
 
     mainWin()->nativeWindowClose();
     return "";
@@ -937,7 +968,7 @@ WindowClose(std::vector<std::string> args)
 std::string
 WindowCloseAll(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("windowCloseAll() requires zero arguments");
+    if (args.size() != 0) return "ERROR: windowCloseAll() requires zero arguments");
 
     mainWin()->nativeWindowCloseAll();
     return "";
@@ -946,7 +977,7 @@ WindowCloseAll(std::vector<std::string> args)
 std::string
 WindowNext(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("windowNext() requires zero arguments");
+    if (args.size() != 0) return "ERROR: windowNext() requires zero arguments");
 
     mainWin()->nativeWindowNext();
     return "";
@@ -955,26 +986,33 @@ WindowNext(std::vector<std::string> args)
 std::string
 WindowPrevious(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("windowPrevious() requires zero arguments");
+    if (args.size() != 0) return "ERROR: windowPrevious() requires zero arguments");
 
     mainWin()->nativeWindowPrevious();
     return "";
 }
 
+/**
+ *
+ */
 std::string
 PlatformString(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("platformString() requires zero arguments");
+    if (args.size() != 0) return "ERROR: platformString() requires zero arguments");
     return std::string(mainWin()->nativePlatformString());
 }
 
+/**
+ *
+ */
 std::string
 MessageBox(std::vector<std::string> args)
 {
-    if (argsCount() != 3)    return context->throwError("messageBox() requires three arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): first argument is not a string");
-    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): second argument is not a string");
-    if (!args(2).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): third argument is not a string");
+    /*
+    if (args.size() != 3)    return "ERROR: messageBox() requires three arguments");
+    if (!args(0).isString()) return "TYPE ERROR: messageBox(): first argument is not a string");
+    if (!args(1).isString()) return "TYPE ERROR: messageBox(): second argument is not a string");
+    if (!args(2).isString()) return "TYPE ERROR: messageBox(): third argument is not a string");
 
     EmbString type  = args(0).toString().toLower();
     EmbString title = args(1).toString();
@@ -984,29 +1022,36 @@ MessageBox(std::vector<std::string> args)
         return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
     mainWin()->nativeMessageBox(type, title, text);
+    */
     return "";
 }
 
+/**
+ *
+ */
 std::string
 IsInt(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("isInt() requires one argument");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "isInt(): first argument is not a number");
+    if (args.size() != 1)    return "ERROR: isInt() requires one argument");
+    if (!args(0).isNumber()) return "TYPE ERROR: isInt(): first argument is not a number");
 
     EmbReal num = args(0).toNumber();
 
     //isNaN check
-    if (std::isnan(num)) return context->throwError(QScriptContext::TypeError, "isInt(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(num)) return "TYPE ERROR: isInt(): first argument failed isNaN check. There is an error in your code.");
 
     if (fmod(num, 1) == 0)
         return std::string(true);
     return std::string(false);
 }
 
+/**
+ *
+ */
 std::string
 Undo(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("undo() requires zero arguments");
+    if (args.size() != 0) return "ERROR: undo() requires zero arguments");
 
     mainWin()->nativeUndo();
     return "";
@@ -1015,7 +1060,7 @@ Undo(std::vector<std::string> args)
 std::string
 Redo(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("redo() requires zero arguments");
+    if (args.size() != 0) return "ERROR: redo() requires zero arguments");
 
     mainWin()->nativeRedo();
     return "";
@@ -1024,7 +1069,7 @@ Redo(std::vector<std::string> args)
 std::string
 Icon16(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("icon16() requires zero arguments");
+    if (args.size() != 0) return "ERROR: icon16() requires zero arguments");
 
     mainWin()->nativeIcon16();
     return "";
@@ -1033,7 +1078,7 @@ Icon16(std::vector<std::string> args)
 std::string
 Icon24(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("icon24() requires zero arguments");
+    if (args.size() != 0) return "ERROR: icon24() requires zero arguments");
 
     mainWin()->nativeIcon24();
     return "";
@@ -1042,7 +1087,7 @@ Icon24(std::vector<std::string> args)
 std::string
 Icon32(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("icon32() requires zero arguments");
+    if (args.size() != 0) return "ERROR: icon32() requires zero arguments");
 
     mainWin()->nativeIcon32();
     return "";
@@ -1051,7 +1096,7 @@ Icon32(std::vector<std::string> args)
 std::string
 Icon48(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("icon48() requires zero arguments");
+    if (args.size() != 0) return "ERROR: icon48() requires zero arguments");
 
     mainWin()->nativeIcon48();
     return "";
@@ -1060,7 +1105,7 @@ Icon48(std::vector<std::string> args)
 std::string
 Icon64(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("icon64() requires zero arguments");
+    if (args.size() != 0) return "ERROR: icon64() requires zero arguments");
 
     mainWin()->nativeIcon64();
     return "";
@@ -1069,7 +1114,7 @@ Icon64(std::vector<std::string> args)
 std::string
 Icon128(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("icon128() requires zero arguments");
+    if (args.size() != 0) return "ERROR: icon128() requires zero arguments");
 
     mainWin()->nativeIcon128();
     return "";
@@ -1078,7 +1123,7 @@ Icon128(std::vector<std::string> args)
 std::string
 PanLeft(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("panLeft() requires zero arguments");
+    if (args.size() != 0) return "ERROR: panLeft() requires zero arguments");
 
     mainWin()->nativePanLeft();
     return "";
@@ -1087,7 +1132,7 @@ PanLeft(std::vector<std::string> args)
 std::string
 PanRight(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("panRight() requires zero arguments");
+    if (args.size() != 0) return "ERROR: panRight() requires zero arguments");
 
     mainWin()->nativePanRight();
     return "";
@@ -1096,7 +1141,7 @@ PanRight(std::vector<std::string> args)
 std::string
 PanUp(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("panUp() requires zero arguments");
+    if (args.size() != 0) return "ERROR: panUp() requires zero arguments");
 
     mainWin()->nativePanUp();
     return "";
@@ -1105,7 +1150,7 @@ PanUp(std::vector<std::string> args)
 std::string
 PanDown(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("panDown() requires zero arguments");
+    if (args.size() != 0) return "ERROR: panDown() requires zero arguments");
 
     mainWin()->nativePanDown();
     return "";
@@ -1114,7 +1159,7 @@ PanDown(std::vector<std::string> args)
 std::string
 ZoomIn(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("zoomIn() requires zero arguments");
+    if (args.size() != 0) return "ERROR: zoomIn() requires zero arguments");
 
     mainWin()->nativeZoomIn();
     return "";
@@ -1123,7 +1168,7 @@ ZoomIn(std::vector<std::string> args)
 std::string
 ZoomOut(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("zoomOut() requires zero arguments");
+    if (args.size() != 0) return "ERROR: zoomOut() requires zero arguments");
 
     mainWin()->nativeZoomOut();
     return "";
@@ -1132,7 +1177,7 @@ ZoomOut(std::vector<std::string> args)
 std::string
 ZoomExtents(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("zoomExtents() requires zero arguments");
+    if (args.size() != 0) return "ERROR: zoomExtents() requires zero arguments");
 
     mainWin()->nativeZoomExtents();
     return "";
@@ -1141,11 +1186,11 @@ ZoomExtents(std::vector<std::string> args)
 std::string
 PrintArea(std::vector<std::string> args)
 {
-    if (argsCount() != 4)    return context->throwError("printArea() requires four arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument is not a number");
+    if (args.size() != 4)    return "ERROR: printArea() requires four arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: printArea(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: printArea(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: printArea(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: printArea(): fourth argument is not a number");
 
     EmbReal x = args(0).toNumber();
     EmbReal y = args(1).toNumber();
@@ -1153,10 +1198,10 @@ PrintArea(std::vector<std::string> args)
     EmbReal h = args(3).toNumber();
 
     //isNaN check
-    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(w)) return context->throwError(QScriptContext::TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(h)) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return "TYPE ERROR: printArea(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return "TYPE ERROR: printArea(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(w)) return "TYPE ERROR: printArea(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(h)) return "TYPE ERROR: printArea(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativePrintArea(x, y, w, h);
     return "";
@@ -1165,7 +1210,7 @@ PrintArea(std::vector<std::string> args)
 std::string
 DayVision(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("dayVision() requires zero arguments");
+    if (args.size() != 0) return "ERROR: dayVision() requires zero arguments");
 
     mainWin()->nativeDayVision();
     return "";
@@ -1174,7 +1219,7 @@ DayVision(std::vector<std::string> args)
 std::string
 NightVision(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("nightVision() requires zero arguments");
+    if (args.size() != 0) return "ERROR: nightVision() requires zero arguments");
 
     mainWin()->nativeNightVision();
     return "";
@@ -1183,19 +1228,19 @@ NightVision(std::vector<std::string> args)
 std::string
 SetBackgroundColor(std::vector<std::string> args)
 {
-    if (argsCount() != 3)    return context->throwError("setBackgroundColor() requires three arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument is not a number");
+    if (args.size() != 3)    return "ERROR: setBackgroundColor() requires three arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: setBackgroundColor(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: setBackgroundColor(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: setBackgroundColor(): third argument is not a number");
 
     EmbReal r = args(0).toNumber();
     EmbReal g = args(1).toNumber();
     EmbReal b = args(2).toNumber();
 
     //isNaN check
-    if (std::isnan(r)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(g)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(b)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(r)) return "TYPE ERROR: setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(g)) return "TYPE ERROR: setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(b)) return "TYPE ERROR: setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
 
     if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
@@ -1208,19 +1253,19 @@ SetBackgroundColor(std::vector<std::string> args)
 std::string
 SetCrossHairColor(std::vector<std::string> args)
 {
-    if (argsCount() != 3)    return context->throwError("setCrossHairColor() requires three arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument is not a number");
+    if (args.size() != 3)    return "ERROR: setCrossHairColor() requires three arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: setCrossHairColor(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: setCrossHairColor(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: setCrossHairColor(): third argument is not a number");
 
     EmbReal r = args(0).toNumber();
     EmbReal g = args(1).toNumber();
     EmbReal b = args(2).toNumber();
 
     //isNaN check
-    if (std::isnan(r)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(g)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(b)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(r)) return "TYPE ERROR: setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(g)) return "TYPE ERROR: setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(b)) return "TYPE ERROR: setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
 
     if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
@@ -1233,19 +1278,19 @@ SetCrossHairColor(std::vector<std::string> args)
 std::string
 SetGridColor(std::vector<std::string> args)
 {
-    if (argsCount() != 3)    return context->throwError("setGridColor() requires three arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument is not a number");
+    if (args.size() != 3)    return "ERROR: setGridColor() requires three arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: setGridColor(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: setGridColor(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: setGridColor(): third argument is not a number");
 
     EmbReal r = args(0).toNumber();
     EmbReal g = args(1).toNumber();
     EmbReal b = args(2).toNumber();
 
     //isNaN check
-    if (std::isnan(r)) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(g)) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(b)) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(r)) return "TYPE ERROR: setGridColor(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(g)) return "TYPE ERROR: setGridColor(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(b)) return "TYPE ERROR: setGridColor(): third argument failed isNaN check. There is an error in your code.");
 
     if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): r value must be in range 0-255"); }
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
@@ -1255,67 +1300,94 @@ SetGridColor(std::vector<std::string> args)
     return "";
 }
 
+/**
+ * \brief
+ */
 std::string
 TextFont(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textFont() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textFont() requires zero arguments");
     return std::string(mainWin()->nativeTextFont());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextSize(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textSize() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textSize() requires zero arguments");
     return std::string(mainWin()->nativeTextSize());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextAngle(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textAngle() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textAngle() requires zero arguments");
     return std::string(mainWin()->nativeTextAngle());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextBold(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textBold() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textBold() requires zero arguments");
     return std::string(mainWin()->nativeTextBold());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextItalic(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textItalic() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textItalic() requires zero arguments");
     return std::string(mainWin()->nativeTextItalic());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextUnderline(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textUnderline() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textUnderline() requires zero arguments");
     return std::string(mainWin()->nativeTextUnderline());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextStrikeOut(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textStrikeOut() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textStrikeOut() requires zero arguments");
     return std::string(mainWin()->nativeTextStrikeOut());
 }
 
+/**
+ * \brief
+ */
 std::string
 TextOverline(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("textOverline() requires zero arguments");
+    if (args.size() != 0) return "ERROR: textOverline() requires zero arguments");
     return std::string(mainWin()->nativeTextOverline());
 }
 
+/**
+ * \brief
+ */
 std::string
 SetTextFont(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextFont() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setTextFont(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: setTextFont() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: setTextFont(): first argument is not a string");
 
     mainWin()->nativeSetTextFont(args(0).toString());
     return "";
@@ -1327,14 +1399,14 @@ SetTextFont(std::vector<std::string> args)
 std::string
 SetTextSize(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextSize() requires one argument");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument is not a number");
+    if (args.size() != 1)    return "ERROR: setTextSize() requires one argument");
+    if (!args(0).isNumber()) return "TYPE ERROR: setTextSize(): first argument is not a number");
 
     EmbReal num = args(0).toNumber();
 
     //isNaN check
     if (std::isnan(num)) {
-        return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
+        return "TYPE ERROR: setTextSize(): first argument failed isNaN check. There is an error in your code.");
     }
 
     mainWin()->nativeSetTextSize(num);
@@ -1347,14 +1419,14 @@ SetTextSize(std::vector<std::string> args)
 std::string
 SetTextAngle(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextAngle() requires one argument");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument is not a number");
+    if (args.size() != 1)    return "ERROR: setTextAngle() requires one argument");
+    if (!args(0).isNumber()) return "TYPE ERROR: setTextAngle(): first argument is not a number");
 
     EmbReal num = args(0).toNumber();
 
     //isNaN check
     if (std::isnan(num))
-        return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
+        return "TYPE ERROR: setTextAngle(): first argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeSetTextAngle(num);
     return "";
@@ -1366,10 +1438,10 @@ SetTextAngle(std::vector<std::string> args)
 std::string
 SetTextBold(std::vector<std::string> args)
 {
-    if (args.length() != 1) {
-        return context->throwError("setTextBold() requires one argument");
+    if (args.size() != 1) {
+        return "ERROR: setTextBold() requires one argument");
     }
-    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextBold(): first argument is not a bool");
+    if (!args(0).isBool()) return "TYPE ERROR: setTextBold(): first argument is not a bool");
 
     mainWin()->nativeSetTextBold(args(0).toBool());
     return "";
@@ -1381,8 +1453,8 @@ SetTextBold(std::vector<std::string> args)
 std::string
 SetTextItalic(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextItalic() requires one argument");
-    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextItalic(): first argument is not a bool");
+    if (args.size() != 1)    return "ERROR: setTextItalic() requires one argument");
+    if (!args(0).isBool()) return "TYPE ERROR: setTextItalic(): first argument is not a bool");
 
     mainWin()->nativeSetTextItalic(args(0).toBool());
     return "";
@@ -1394,8 +1466,8 @@ SetTextItalic(std::vector<std::string> args)
 std::string
 SetTextUnderline(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextUnderline() requires one argument");
-    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextUnderline(): first argument is not a bool");
+    if (args.size() != 1)    return "ERROR: setTextUnderline() requires one argument");
+    if (!args(0).isBool()) return "TYPE ERROR: setTextUnderline(): first argument is not a bool");
 
     mainWin()->nativeSetTextUnderline(args(0).toBool());
     return "";
@@ -1407,8 +1479,8 @@ SetTextUnderline(std::vector<std::string> args)
 std::string
 SetTextStrikeOut(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextStrikeOut() requires one argument");
-    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextStrikeOut(): first argument is not a bool");
+    if (args.size() != 1)    return "ERROR: setTextStrikeOut() requires one argument");
+    if (!args(0).isBool()) return "TYPE ERROR: setTextStrikeOut(): first argument is not a bool");
 
     mainWin()->nativeSetTextStrikeOut(args(0).toBool());
     return "";
@@ -1420,8 +1492,8 @@ SetTextStrikeOut(std::vector<std::string> args)
 std::string
 SetTextOverline(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setTextOverline() requires one argument");
-    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextOverline(): first argument is not a bool");
+    if (args.size() != 1)    return "ERROR: setTextOverline() requires one argument");
+    if (!args(0).isBool()) return "TYPE ERROR: setTextOverline(): first argument is not a bool");
 
     mainWin()->nativeSetTextOverline(args(0).toBool());
     return "";
@@ -1430,12 +1502,12 @@ SetTextOverline(std::vector<std::string> args)
 std::string
 PreviewOn(std::vector<std::string> args)
 {
-    if (argsCount() != 5)    return context->throwError("previewOn() requires five arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): first argument is not a string");
-    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): second argument is not a string");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument is not a number");
+    if (args.size() != 5)    return "ERROR: previewOn() requires five arguments");
+    if (!args(0).isString()) return "TYPE ERROR: previewOn(): first argument is not a string");
+    if (!args(1).isString()) return "TYPE ERROR: previewOn(): second argument is not a string");
+    if (!args(2).isNumber()) return "TYPE ERROR: previewOn(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: previewOn(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: previewOn(): fifth argument is not a number");
 
     EmbString cloneStr = args(0).toString().toUpper();
     EmbString modeStr  = args(1).toString().toUpper();
@@ -1456,9 +1528,9 @@ PreviewOn(std::vector<std::string> args)
 
     // isNaN check
     if (std::isnan(x))
-        return context->throwError(QScriptContext::TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
+        return "TYPE ERROR: previewOn(): third argument failed isNaN check. There is an error in your code.");
     if (std::isnan(y))
-        return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
+        return "TYPE ERROR: previewOn(): fourth argument failed isNaN check. There is an error in your code.");
     if (std::isnan(data)) {
         return context->throwError(QScriptContext::TypeError,
             "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
@@ -1475,8 +1547,8 @@ std::string
 PreviewOff(std::vector<std::string> args)
 {
     /*
-    if (argsCount() != 0) {
-        return context->throwError("previewOff() requires zero arguments");
+    if (args.size() != 0) {
+        return "ERROR: previewOff() requires zero arguments");
     }
 
     mainWin()->nativePreviewOff();
@@ -1487,7 +1559,7 @@ PreviewOff(std::vector<std::string> args)
 std::string
 Vulcanize(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("vulcanize() requires zero arguments");
+    if (args.size() != 0) return "ERROR: vulcanize() requires zero arguments");
 
     mainWin()->nativeVulcanize();
     return "";
@@ -1496,7 +1568,7 @@ Vulcanize(std::vector<std::string> args)
 std::string
 AllowRubber(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("allowRubber() requires zero arguments");
+    if (args.size() != 0) return "ERROR: allowRubber() requires zero arguments");
 
     return std::string(mainWin()->nativeAllowRubber());
 }
@@ -1504,8 +1576,8 @@ AllowRubber(std::vector<std::string> args)
 std::string
 SetRubberMode(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setRubberMode() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberMode(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: setRubberMode() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: setRubberMode(): first argument is not a string");
 
     EmbString mode = args(0).toString().toUpper();
 
@@ -1546,17 +1618,17 @@ SetRubberMode(std::vector<std::string> args)
 std::string
 SetRubberPoint(std::vector<std::string> args)
 {
-    if (argsCount() != 3) {
-        return context->throwError("setRubberPoint() requires three arguments");
+    if (args.size() != 3) {
+        return "ERROR: setRubberPoint() requires three arguments");
     }
     if (!args(0).isString()) {
-        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): first argument is not a string");
+        return "TYPE ERROR: setRubberPoint(): first argument is not a string");
     }
     if (!args(1).isNumber()) {
-        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument is not a number");
+        return "TYPE ERROR: setRubberPoint(): second argument is not a number");
     }
     if (!args(2).isNumber()) {
-        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument is not a number");
+        return "TYPE ERROR: setRubberPoint(): third argument is not a number");
     }
 
     EmbString key = args(0).toString().toUpper();
@@ -1565,10 +1637,10 @@ SetRubberPoint(std::vector<std::string> args)
 
     //isNaN check
     if (std::isnan(x)) {
-        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
+        return "TYPE ERROR: setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
     }
     if (std::isnan(y)) {
-        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
+        return "TYPE ERROR: setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
     }
 
     mainWin()->nativeSetRubberPoint(key, x, y);
@@ -1581,9 +1653,9 @@ SetRubberPoint(std::vector<std::string> args)
 std::string
 SetRubberText(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("setRubberText() requires two arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): first argument is not a string");
-    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): second argument is not a string");
+    if (args.size() != 2)    return "ERROR: setRubberText() requires two arguments");
+    if (!args(0).isString()) return "TYPE ERROR: setRubberText(): first argument is not a string");
+    if (!args(1).isString()) return "TYPE ERROR: setRubberText(): second argument is not a string");
 
     EmbString key = args(0).toString().toUpper();
     EmbString txt = args(1).toString();
@@ -1595,8 +1667,8 @@ SetRubberText(std::vector<std::string> args)
 std::string
 AddRubber(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("addRubber() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "addRubber(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: addRubber() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: addRubber(): first argument is not a string");
 
     EmbString objType = args(0).toString().toUpper();
 
@@ -1639,7 +1711,7 @@ AddRubber(std::vector<std::string> args)
 std::string
 ClearRubber(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("clearRubber() requires zero arguments");
+    if (args.size() != 0) return "ERROR: clearRubber() requires zero arguments");
 
     mainWin()->nativeClearRubber();
     return "";
@@ -1648,8 +1720,8 @@ ClearRubber(std::vector<std::string> args)
 std::string
 SpareRubber(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("spareRubber() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "spareRubber(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: spareRubber() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: spareRubber(): first argument is not a string");
 
     EmbString objID = args(0).toString().toUpper();
 
@@ -1660,7 +1732,7 @@ SpareRubber(std::vector<std::string> args)
     {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
-        if (!ok) return context->throwError(QScriptContext::TypeError, "spareRubber(): error converting object ID into an int64");
+        if (!ok) return "TYPE ERROR: spareRubber(): error converting object ID into an int64");
         mainWin()->nativeSpareRubber(id);
     }
 
@@ -1673,12 +1745,12 @@ SpareRubber(std::vector<std::string> args)
 std::string
 AddTextMulti(std::vector<std::string> args)
 {
-    if (argsCount() != 5)    return context->throwError("addTextMulti() requires five arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): first argument is not a string");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument is not a number");
-    if (!args(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextMulti(): fifth argument is not a bool");
+    if (args.size() != 5)    return "ERROR: addTextMulti() requires five arguments");
+    if (!args(0).isString()) return "TYPE ERROR: addTextMulti(): first argument is not a string");
+    if (!args(1).isNumber()) return "TYPE ERROR: addTextMulti(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addTextMulti(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addTextMulti(): fourth argument is not a number");
+    if (!args(4).isBool())   return "TYPE ERROR: addTextMulti(): fifth argument is not a bool");
 
     EmbString str   = args(0).toString();
     EmbReal   x     = args(1).toNumber();
@@ -1687,9 +1759,9 @@ AddTextMulti(std::vector<std::string> args)
     bool    fill  = args(4).toBool();
 
     //isNaN check
-    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return "TYPE ERROR: addTextMulti(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return "TYPE ERROR: addTextMulti(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1698,12 +1770,12 @@ AddTextMulti(std::vector<std::string> args)
 std::string
 AddTextSingle(std::vector<std::string> args)
 {
-    if (argsCount() != 5)    return context->throwError("addTextSingle() requires five arguments");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): first argument is not a string");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument is not a number");
-    if (!args(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextSingle(): fifth argument is not a bool");
+    if (args.size() != 5)    return "ERROR: addTextSingle() requires five arguments");
+    if (!args(0).isString()) return "TYPE ERROR: addTextSingle(): first argument is not a string");
+    if (!args(1).isNumber()) return "TYPE ERROR: addTextSingle(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addTextSingle(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addTextSingle(): fourth argument is not a number");
+    if (!args(4).isBool())   return "TYPE ERROR: addTextSingle(): fifth argument is not a bool");
 
     EmbString str   = args(0).toString();
     EmbReal   x     = args(1).toNumber();
@@ -1712,9 +1784,9 @@ AddTextSingle(std::vector<std::string> args)
     bool    fill  = args(4).toBool();
 
     //isNaN check
-    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return "TYPE ERROR: addTextSingle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return "TYPE ERROR: addTextSingle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1748,12 +1820,12 @@ AddRay(std::vector<std::string> args)
 std::string
 AddLine(std::vector<std::string> args)
 {
-    if (argsCount() != 5)    return context->throwError("addLine() requires five arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument is not a number");
+    if (args.size() != 5)    return "ERROR: addLine() requires five arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addLine(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addLine(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addLine(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addLine(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addLine(): fifth argument is not a number");
 
     EmbReal x1  = args(0).toNumber();
     EmbReal y1  = args(1).toNumber();
@@ -1762,11 +1834,11 @@ AddLine(std::vector<std::string> args)
     EmbReal rot = args(4).toNumber();
 
     //isNaN check
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "addLine(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "addLine(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "addLine(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return "TYPE ERROR: addLine(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return "TYPE ERROR: addLine(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return "TYPE ERROR: addLine(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return "TYPE ERROR: addLine(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addLine(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return "";
@@ -1778,15 +1850,15 @@ AddLine(std::vector<std::string> args)
 std::string
 AddTriangle(std::vector<std::string> args)
 {
-    if (argsCount() != 8)    return context->throwError("addTriangle() requires eight arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument is not a number");
-    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument is not a number");
-    if (!args(6).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument is not a number");
-    if (!args(7).isBool())   return context->throwError(QScriptContext::TypeError, "addTriangle(): eighth argument is not a bool");
+    if (args.size() != 8)    return "ERROR: addTriangle() requires eight arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addTriangle(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addTriangle(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addTriangle(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addTriangle(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addTriangle(): fifth argument is not a number");
+    if (!args(5).isNumber()) return "TYPE ERROR: addTriangle(): sixth argument is not a number");
+    if (!args(6).isNumber()) return "TYPE ERROR: addTriangle(): seventh argument is not a number");
+    if (!args(7).isBool())   return "TYPE ERROR: addTriangle(): eighth argument is not a bool");
 
     EmbReal x1     = args(0).toNumber();
     EmbReal y1     = args(1).toNumber();
@@ -1798,13 +1870,13 @@ AddTriangle(std::vector<std::string> args)
     bool  fill   = args(7).toBool();
 
     //isNaN check
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return "TYPE ERROR: addTriangle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return "TYPE ERROR: addTriangle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return "TYPE ERROR: addTriangle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return "TYPE ERROR: addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x3))  return "TYPE ERROR: addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y3))  return "TYPE ERROR: addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
     return "";
@@ -1816,13 +1888,13 @@ AddTriangle(std::vector<std::string> args)
 std::string
 AddRectangle(std::vector<std::string> args)
 {
-    if (argsCount() != 6)    return context->throwError("addRectangle() requires six arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument is not a number");
-    if (!args(5).isBool())   return context->throwError(QScriptContext::TypeError, "addRectangle(): sixth argument is not a bool");
+    if (args.size() != 6)    return "ERROR: addRectangle() requires six arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addRectangle(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addRectangle(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addRectangle(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addRectangle(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addRectangle(): fifth argument is not a number");
+    if (!args(5).isBool())   return "TYPE ERROR: addRectangle(): sixth argument is not a bool");
 
     EmbReal x    = args(0).toNumber();
     EmbReal y    = args(1).toNumber();
@@ -1832,11 +1904,11 @@ AddRectangle(std::vector<std::string> args)
     bool  fill = args(5).toBool();
 
     //isNaN check
-    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(w))   return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(h))   return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return "TYPE ERROR: addRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return "TYPE ERROR: addRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(w))   return "TYPE ERROR: addRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(h))   return "TYPE ERROR: addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1848,14 +1920,14 @@ AddRectangle(std::vector<std::string> args)
 std::string
 AddRoundedRectangle(std::vector<std::string> args)
 {
-    if (argsCount() != 7)    return context->throwError("addRoundedRectangle() requires seven arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument is not a number");
-    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument is not a number");
-    if (!args(6).isBool())   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): seventh argument is not a bool");
+    if (args.size() != 7)    return "ERROR: addRoundedRectangle() requires seven arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addRoundedRectangle(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addRoundedRectangle(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addRoundedRectangle(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addRoundedRectangle(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addRoundedRectangle(): fifth argument is not a number");
+    if (!args(5).isNumber()) return "TYPE ERROR: addRoundedRectangle(): sixth argument is not a number");
+    if (!args(6).isBool())   return "TYPE ERROR: addRoundedRectangle(): seventh argument is not a bool");
 
     EmbReal x    = args(0).toNumber();
     EmbReal y    = args(1).toNumber();
@@ -1866,12 +1938,12 @@ AddRoundedRectangle(std::vector<std::string> args)
     bool  fill = args(6).toBool();
 
     //isNaN check
-    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(w))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(h))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rad)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return "TYPE ERROR: addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return "TYPE ERROR: addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(w))   return "TYPE ERROR: addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(h))   return "TYPE ERROR: addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rad)) return "TYPE ERROR: addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
     return "";
@@ -1883,13 +1955,13 @@ AddRoundedRectangle(std::vector<std::string> args)
 std::string
 AddArc(std::vector<std::string> args)
 {
-    if (argsCount() != 6)    return context->throwError("addArc() requires six arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument is not a number");
-    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument is not a number");
+    if (args.size() != 6)    return "ERROR: addArc() requires six arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addArc(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addArc(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addArc(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addArc(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addArc(): fifth argument is not a number");
+    if (!args(5).isNumber()) return "TYPE ERROR: addArc(): sixth argument is not a number");
 
     EmbReal startX = args(0).toNumber();
     EmbReal startY = args(1).toNumber();
@@ -1899,12 +1971,12 @@ AddArc(std::vector<std::string> args)
     EmbReal endY   = args(5).toNumber();
 
     //isNaN check
-    if (std::isnan(startX)) return context->throwError(QScriptContext::TypeError, "addArc(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(startY)) return context->throwError(QScriptContext::TypeError, "addArc(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(midX))   return context->throwError(QScriptContext::TypeError, "addArc(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(midY))   return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(endX))   return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(endY))   return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(startX)) return "TYPE ERROR: addArc(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(startY)) return "TYPE ERROR: addArc(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(midX))   return "TYPE ERROR: addArc(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(midY))   return "TYPE ERROR: addArc(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(endX))   return "TYPE ERROR: addArc(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(endY))   return "TYPE ERROR: addArc(): sixth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
     return "";
@@ -1916,11 +1988,11 @@ AddArc(std::vector<std::string> args)
 std::string
 AddCircle(std::vector<std::string> args)
 {
-    if (argsCount() != 4)    return context->throwError("addCircle() requires four arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): third argument is not a number");
-    if (!args(3).isBool())   return context->throwError(QScriptContext::TypeError, "addCircle(): fourth argument is not a bool");
+    if (args.size() != 4)    return "ERROR: addCircle() requires four arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addCircle(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addCircle(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addCircle(): third argument is not a number");
+    if (!args(3).isBool())   return "TYPE ERROR: addCircle(): fourth argument is not a bool");
 
     EmbReal centerX = args(0).toNumber();
     EmbReal centerY = args(1).toNumber();
@@ -1928,9 +2000,9 @@ AddCircle(std::vector<std::string> args)
     bool  fill    = args(3).toBool();
 
     //isNaN check
-    if (std::isnan(centerX)) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(centerY)) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(radius))  return context->throwError(QScriptContext::TypeError, "addCircle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerX)) return "TYPE ERROR: addCircle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerY)) return "TYPE ERROR: addCircle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(radius))  return "TYPE ERROR: addCircle(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1942,13 +2014,13 @@ AddCircle(std::vector<std::string> args)
 std::string
 AddSlot(std::vector<std::string> args)
 {
-    if (argsCount() != 6)    return context->throwError("addSlot() requires six arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument is not a number");
-    if (!args(5).isBool())   return context->throwError(QScriptContext::TypeError, "addSlot(): sixth argument is not a bool");
+    if (args.size() != 6)    return "ERROR: addSlot() requires six arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addSlot(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addSlot(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addSlot(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addSlot(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addSlot(): fifth argument is not a number");
+    if (!args(5).isBool())   return "TYPE ERROR: addSlot(): sixth argument is not a bool");
 
     EmbReal centerX  = args(0).toNumber();
     EmbReal centerY  = args(1).toNumber();
@@ -1958,11 +2030,11 @@ AddSlot(std::vector<std::string> args)
     bool  fill     = args(5).toBool();
 
     //isNaN check
-    if (std::isnan(centerX))  return context->throwError(QScriptContext::TypeError, "addSlot(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(centerY))  return context->throwError(QScriptContext::TypeError, "addSlot(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(diameter)) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(length))   return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot))      return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerX))  return "TYPE ERROR: addSlot(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerY))  return "TYPE ERROR: addSlot(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(diameter)) return "TYPE ERROR: addSlot(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(length))   return "TYPE ERROR: addSlot(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot))      return "TYPE ERROR: addSlot(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -1971,13 +2043,13 @@ AddSlot(std::vector<std::string> args)
 std::string
 AddEllipse(std::vector<std::string> args)
 {
-    if (argsCount() != 6)    return context->throwError("addEllipse() requires six arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument is not a number");
-    if (!args(5).isBool())   return context->throwError(QScriptContext::TypeError, "addEllipse(): sixth argument is not a bool");
+    if (args.size() != 6)    return "ERROR: addEllipse() requires six arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addEllipse(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addEllipse(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addEllipse(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addEllipse(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addEllipse(): fifth argument is not a number");
+    if (!args(5).isBool())   return "TYPE ERROR: addEllipse(): sixth argument is not a bool");
 
     EmbReal centerX = args(0).toNumber();
     EmbReal centerY = args(1).toNumber();
@@ -1987,11 +2059,11 @@ AddEllipse(std::vector<std::string> args)
     bool  fill    = args(5).toBool();
 
     //isNaN check
-    if (std::isnan(centerX)) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(centerY)) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(radX))    return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(radY))    return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot))     return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerX)) return "TYPE ERROR: addEllipse(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerY)) return "TYPE ERROR: addEllipse(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(radX))    return "TYPE ERROR: addEllipse(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(radY))    return "TYPE ERROR: addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot))     return "TYPE ERROR: addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
     return "";
@@ -2000,16 +2072,16 @@ AddEllipse(std::vector<std::string> args)
 std::string
 AddPoint(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("addPoint() requires two arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument is not a number");
+    if (args.size() != 2)    return "ERROR: addPoint() requires two arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addPoint(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addPoint(): second argument is not a number");
 
     EmbReal x = args(0).toNumber();
     EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return "TYPE ERROR: addPoint(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return "TYPE ERROR: addPoint(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddPoint(x,y);
     return "";
@@ -2026,13 +2098,13 @@ AddRegularPolygon(std::vector<std::string> args)
 std::string
 AddPolygon(std::vector<std::string> args)
 {
-    if (argsCount() != 1)   return context->throwError("addPolygon() requires one argument");
-    if (!args(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolygon(): first argument is not an array");
+    if (args.size() != 1)   return "ERROR: addPolygon() requires one argument");
+    if (!args(0).isArray()) return "TYPE ERROR: addPolygon(): first argument is not an array");
 
     QVariantList varList = args(0).toVariant().toList();
     int varSize = varList.size();
-    if (varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array must contain at least two elements");
-    if (varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array cannot contain an odd number of elements");
+    if (varSize < 2) return "TYPE ERROR: addPolygon(): array must contain at least two elements");
+    if (varSize % 2) return "TYPE ERROR: addPolygon(): array cannot contain an odd number of elements");
 
     bool lineTo = false;
     bool xCoord = true;
@@ -2060,7 +2132,7 @@ AddPolygon(std::vector<std::string> args)
             }
         }
         else
-            return context->throwError(QScriptContext::TypeError, "addPolygon(): array contains one or more invalid elements");
+            return "TYPE ERROR: addPolygon(): array contains one or more invalid elements");
     }
 
     //Close the polygon
@@ -2075,13 +2147,13 @@ AddPolygon(std::vector<std::string> args)
 std::string
 AddPolyline(std::vector<std::string> args)
 {
-    if (argsCount() != 1)   return context->throwError("addPolyline() requires one argument");
-    if (!args(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolyline(): first argument is not an array");
+    if (args.size() != 1)   return "ERROR: addPolyline() requires one argument");
+    if (!args(0).isArray()) return "TYPE ERROR: addPolyline(): first argument is not an array");
 
     QVariantList varList = args(0).toVariant().toList();
     int varSize = varList.size();
-    if (varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array must contain at least two elements");
-    if (varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array cannot contain an odd number of elements");
+    if (varSize < 2) return "TYPE ERROR: addPolyline(): array must contain at least two elements");
+    if (varSize % 2) return "TYPE ERROR: addPolyline(): array cannot contain an odd number of elements");
 
     bool lineTo = false;
     bool xCoord = true;
@@ -2105,7 +2177,7 @@ AddPolyline(std::vector<std::string> args)
             }
         }
         else
-            return context->throwError(QScriptContext::TypeError, "addPolyline(): array contains one or more invalid elements");
+            return "TYPE ERROR: addPolyline(): array contains one or more invalid elements");
     }
 
     path.translate(-startX, -startY);
@@ -2146,15 +2218,18 @@ AddImage(std::vector<std::string> args)
     return "";
 }
 
+/**
+ *
+ */
 std::string
 AddDimLeader(std::vector<std::string> args)
 {
-    if (argsCount() != 5)    return context->throwError("addDimLeader() requires five arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument is not a number");
+    if (args.size() != 5)    return "ERROR: addDimLeader() requires five arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: addDimLeader(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: addDimLeader(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: addDimLeader(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: addDimLeader(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: addDimLeader(): fifth argument is not a number");
 
     EmbReal x1  = args(0).toNumber();
     EmbReal y1  = args(1).toNumber();
@@ -2163,35 +2238,41 @@ AddDimLeader(std::vector<std::string> args)
     EmbReal rot = args(4).toNumber();
 
     //isNaN check
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return "TYPE ERROR: addDimLeader(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return "TYPE ERROR: addDimLeader(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return "TYPE ERROR: addDimLeader(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return "TYPE ERROR: addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
     return "";
 }
 
+/**
+ *
+ */
 std::string
 SetCursorShape(std::vector<std::string> args)
 {
-    if (argsCount() != 1)    return context->throwError("setCursorShape() requires one argument");
-    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setCursorShape(): first argument is not a string");
+    if (args.size() != 1)    return "ERROR: setCursorShape() requires one argument");
+    if (!args(0).isString()) return "TYPE ERROR: setCursorShape(): first argument is not a string");
 
     EmbString shape = args(0).toString();
     mainWin()->nativeSetCursorShape(shape);
     return "";
 }
 
+/**
+ *
+ */
 std::string
 CalculateAngle(std::vector<std::string> args)
 {
-    if (argsCount() != 4)    return context->throwError("calculateAngle() requires four arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument is not a number");
+    if (args.size() != 4)    return "ERROR: calculateAngle() requires four arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: calculateAngle(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: calculateAngle(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: calculateAngle(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: calculateAngle(): fourth argument is not a number");
 
     EmbReal x1 = args(0).toNumber();
     EmbReal y1 = args(1).toNumber();
@@ -2199,22 +2280,25 @@ CalculateAngle(std::vector<std::string> args)
     EmbReal y2 = args(3).toNumber();
 
     //isNaN check
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return "TYPE ERROR: calculateAngle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return "TYPE ERROR: calculateAngle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return "TYPE ERROR: calculateAngle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return "TYPE ERROR: calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
 
     return std::string(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
 }
 
+/**
+ *
+ */
 std::string
 CalculateDistance(std::vector<std::string> args)
 {
-    if (argsCount() != 4)    return context->throwError("calculateDistance() requires four arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument is not a number");
+    if (args.size() != 4)    return "ERROR: calculateDistance() requires four arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: calculateDistance(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: calculateDistance(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: calculateDistance(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: calculateDistance(): fourth argument is not a number");
 
     EmbReal x1 = args(0).toNumber();
     EmbReal y1 = args(1).toNumber();
@@ -2222,24 +2306,27 @@ CalculateDistance(std::vector<std::string> args)
     EmbReal y2 = args(3).toNumber();
 
     //isNaN check
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return "TYPE ERROR: calculateDistance(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return "TYPE ERROR: calculateDistance(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return "TYPE ERROR: calculateDistance(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return "TYPE ERROR: calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
 
     return std::string(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
 }
 
+/**
+ *
+ */
 std::string
 PerpendicularDistance(std::vector<std::string> args)
 {
-    if (argsCount() != 6)    return context->throwError("perpendicularDistance() requires six arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument is not a number");
-    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument is not a number");
-    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument is not a number");
+    if (args.size() != 6)    return "ERROR: perpendicularDistance() requires six arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: perpendicularDistance(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: perpendicularDistance(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: perpendicularDistance(): third argument is not a number");
+    if (!args(3).isNumber()) return "TYPE ERROR: perpendicularDistance(): fourth argument is not a number");
+    if (!args(4).isNumber()) return "TYPE ERROR: perpendicularDistance(): fifth argument is not a number");
+    if (!args(5).isNumber()) return "TYPE ERROR: perpendicularDistance(): sixth argument is not a number");
 
     EmbReal px = args(0).toNumber();
     EmbReal py = args(1).toNumber();
@@ -2249,32 +2336,41 @@ PerpendicularDistance(std::vector<std::string> args)
     EmbReal y2 = args(5).toNumber();
 
     //isNaN check
-    if (std::isnan(px))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(py))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(px))  return "TYPE ERROR: perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(py))  return "TYPE ERROR: perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return "TYPE ERROR: perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return "TYPE ERROR: perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return "TYPE ERROR: perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return "TYPE ERROR: perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
 
     return std::string(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
 }
 
+/**
+ *
+ */
 std::string
 NumSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("numSelected() requires zero arguments");
+    if (args.size() != 0) return "ERROR: numSelected() requires zero arguments");
     return std::string(mainWin()->nativeNumSelected());
 }
 
+/**
+ *
+ */
 std::string
 SelectAll(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("selectAll() requires zero arguments");
+    if (args.size() != 0) return "ERROR: selectAll() requires zero arguments");
 
     mainWin()->nativeSelectAll();
     return "";
 }
 
+/**
+ *
+ */
 std::string
 AddToSelection(std::vector<std::string> args)
 {
@@ -2282,112 +2378,133 @@ AddToSelection(std::vector<std::string> args)
     return "";
 }
 
+/**
+ *
+ */
 std::string
 ClearSelection(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("clearSelection() requires zero arguments");
+    if (args.size() != 0) return "ERROR: clearSelection() requires zero arguments");
 
     mainWin()->nativeClearSelection();
     return "";
 }
 
+/**
+ *
+ */
 std::string
 DeleteSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 0) return context->throwError("deleteSelected() requires zero arguments");
+    if (args.size() != 0) return "ERROR: deleteSelected() requires zero arguments");
 
     mainWin()->nativeDeleteSelected();
     return "";
 }
 
+/**
+ *
+ */
 std::string
 CutSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("cutSelected() requires two arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument is not a number");
+    if (args.size() != 2)    return "ERROR: cutSelected() requires two arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: cutSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: cutSelected(): second argument is not a number");
 
     EmbReal x = args(0).toNumber();
     EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return "TYPE ERROR: cutSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return "TYPE ERROR: cutSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeCutSelected(x, y);
     return "";
 }
 
+/**
+ *
+ */
 std::string
 CopySelected(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("copySelected() requires two arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument is not a number");
+    if (args.size() != 2)    return "ERROR: copySelected() requires two arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: copySelected(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: copySelected(): second argument is not a number");
 
     EmbReal x = args(0).toNumber();
     EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return "TYPE ERROR: copySelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return "TYPE ERROR: copySelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeCopySelected(x, y);
     return "";
 }
 
+/**
+ *
+ */
 std::string
 PasteSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("pasteSelected() requires two arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument is not a number");
+    if (args.size() != 2)    return "ERROR: pasteSelected() requires two arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: pasteSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: pasteSelected(): second argument is not a number");
 
     EmbReal x = args(0).toNumber();
     EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return "TYPE ERROR: pasteSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return "TYPE ERROR: pasteSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativePasteSelected(x, y);
     return "";
 }
 
+/**
+ *
+ */
 std::string
 MoveSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 2)    return context->throwError("moveSelected() requires two arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument is not a number");
+    if (args.size() != 2)    return "ERROR: moveSelected() requires two arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: moveSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: moveSelected(): second argument is not a number");
 
     EmbReal dx = args(0).toNumber();
     EmbReal dy = args(1).toNumber();
 
     //isNaN check
-    if (std::isnan(dx)) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(dy)) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(dx)) return "TYPE ERROR: moveSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(dy)) return "TYPE ERROR: moveSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeMoveSelected(dx, dy);
     return "";
 }
 
+/**
+ *
+ */
 std::string
 ScaleSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 3)    return context->throwError("scaleSelected() requires three arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument is not a number");
+    if (args.size() != 3)    return "ERROR: scaleSelected() requires three arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: scaleSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: scaleSelected(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: scaleSelected(): third argument is not a number");
 
     EmbReal x      = args(0).toNumber();
     EmbReal y      = args(1).toNumber();
     EmbReal factor = args(2).toNumber();
 
     //isNaN check
-    if (std::isnan(x))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(factor)) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))      return "TYPE ERROR: scaleSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))      return "TYPE ERROR: scaleSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(factor)) return "TYPE ERROR: scaleSelected(): third argument failed isNaN check. There is an error in your code.");
 
     if (factor <= 0.0) return context->throwError(QScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
 
@@ -2398,32 +2515,40 @@ ScaleSelected(std::vector<std::string> args)
 std::string
 RotateSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 3)    return context->throwError("rotateSelected() requires three arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument is not a number");
+    if (args.size() != 3)    return "ERROR: rotateSelected() requires three arguments");
+    if (!args(0).isNumber()) return "TYPE ERROR: rotateSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return "TYPE ERROR: rotateSelected(): second argument is not a number");
+    if (!args(2).isNumber()) return "TYPE ERROR: rotateSelected(): third argument is not a number");
 
     EmbReal x   = args(0).toNumber();
     EmbReal y   = args(1).toNumber();
     EmbReal rot = args(2).toNumber();
 
     //isNaN check
-    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return "TYPE ERROR: rotateSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return "TYPE ERROR: rotateSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return "TYPE ERROR: rotateSelected(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeRotateSelected(x, y, rot);
     return "";
 }
 
+/**
+ * \brief
+ */
 std::string
 MirrorSelected(std::vector<std::string> args)
 {
-    if (argsCount() != 4)    return context->throwError("mirrorSelected() requires four arguments");
-    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument is not a number");
-    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument is not a number");
-    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument is not a number");
-    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument is not a number");
+    if (args.size() != 4)
+        return "ERROR: mirrorSelected() requires four arguments";
+    if (!args(0).isNumber())
+        return "TYPE ERROR: mirrorSelected(): first argument is not a number";
+    if (!args(1).isNumber())
+        return "TYPE ERROR: mirrorSelected(): second argument is not a number";
+    if (!args(2).isNumber())
+        return "TYPE ERROR: mirrorSelected(): third argument is not a number";
+    if (!args(3).isNumber())
+        return "TYPE ERROR: mirrorSelected(): fourth argument is not a number";
 
     EmbReal x1 = args(0).toNumber();
     EmbReal y1 = args(1).toNumber();
@@ -2431,52 +2556,70 @@ MirrorSelected(std::vector<std::string> args)
     EmbReal y2 = args(3).toNumber();
 
     //isNaN check
-    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument failed isNaN check. There is an error in your code.");
-    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))
+        return "TYPE ERROR: mirrorSelected(): first argument failed isNaN check. There is an error in your code.";
+    if (std::isnan(y1))
+        return "TYPE ERROR: mirrorSelected(): second argument failed isNaN check. There is an error in your code.";
+    if (std::isnan(x2))
+        return "TYPE ERROR: mirrorSelected(): third argument failed isNaN check. There is an error in your code.";
+    if (std::isnan(y2))
+        return "TYPE ERROR: mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.";
 
     mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
     return "";
 }
 
+/**
+ * \brief
+ */
 std::string
 QSnapX(std::vector<std::string> args)
 {
-    if (argsCount() != 0) {
-        return context->throwError("qsnapX() requires zero arguments");
+    if (args.size() != 0) {
+        return "ERROR: qsnapX() requires zero arguments");
     }
     return std::string(mainWin()->nativeQSnapX());
 }
 
+/**
+ * \brief
+ */
 std::string
 QSnapY(std::vector<std::string> args)
 {
-    if (argsCount() != 0) {
-        return context->throwError("qsnapY() requires zero arguments");
+    if (args.size() != 0) {
+        return "ERROR: qsnapY() requires zero arguments");
     }
-    return std::string(mainWin()->nativeQSnapY());
+    //return std::string(mainWin()->nativeQSnapY());
+    return "";
 }
+#endif
 
+/**
+ * \brief
+ */
 std::string
 MouseX(std::vector<std::string> args)
 {
-    if (argsCount() != 0) {
-        return context->throwError("mouseX() requires zero arguments");
+    if (args.size() != 0) {
+        return "ERROR: mouseX() requires zero arguments";
     }
-    return std::string(mainWin()->nativeMouseX());
+    //return std::string(mainWin()->nativeMouseX());
+    return "";
 }
 
+/**
+ * \brief
+ */
 std::string
 MouseY(std::vector<std::string> args)
 {
-    if (argsCount() != 0) {
-        return context->throwError("mouseY() requires zero arguments");
+    if (args.size() != 0) {
+        return "ERROR: mouseY() requires zero arguments.";
     }
-    return std::string(mainWin()->nativeMouseY());
+    //return std::string(mainWin()->nativeMouseY());
+    return "";
 }
-
-#endif
 
 /**
  * @brief MainWindow::getAction
