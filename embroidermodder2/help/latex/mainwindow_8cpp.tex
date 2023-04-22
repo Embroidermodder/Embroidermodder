@@ -1,7 +1,7 @@
 \hypertarget{mainwindow_8cpp}{}\doxysubsection{embroidermodder2/mainwindow.cpp File Reference}
 \label{mainwindow_8cpp}\index{embroidermodder2/mainwindow.cpp@{embroidermodder2/mainwindow.cpp}}
 {\ttfamily \#include \char`\"{}mainwindow.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}mainwindow-\/actions.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}embroidermodder.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}statusbar.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}statusbar-\/button.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}view.\+h\char`\"{}}\newline
@@ -9,7 +9,8 @@
 {\ttfamily \#include \char`\"{}property-\/editor.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}undo-\/editor.\+h\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}preview-\/dialog.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}embroidery.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}object-\/data.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$vector$>$}\newline
 {\ttfamily \#include $<$stdlib.\+h$>$}\newline
 {\ttfamily \#include $<$QDebug$>$}\newline
 {\ttfamily \#include $<$QFrame$>$}\newline
@@ -31,3 +32,111 @@
 {\ttfamily \#include $<$QClose\+Event$>$}\newline
 {\ttfamily \#include $<$QMeta\+Object$>$}\newline
 {\ttfamily \#include $<$QLocale$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structstd_1_1string__}{string\+\_\+}}
+\item 
+struct \mbox{\hyperlink{struct_emb_function__}{Emb\+Function\+\_\+}}
+\item 
+struct \mbox{\hyperlink{struct_emb_script_context__}{Emb\+Script\+Context\+\_\+}}
+\item 
+struct \mbox{\hyperlink{struct_emb_action__}{Emb\+Action\+\_\+}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structstd_1_1string__}{std\+::string\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_a7e8f7eb495b0062296396d5de56f4864}{string}}
+\item 
+typedef struct \mbox{\hyperlink{struct_emb_function__}{Emb\+Function\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_a8ed34ccf94d8a6d738b017eab885fafa}{Emb\+Function}}
+\item 
+typedef struct \mbox{\hyperlink{struct_emb_script_context__}{Emb\+Script\+Context\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_affea79f8670d9406feb94c0e9b9b3bf2}{Emb\+Script\+Context}}
+\item 
+typedef struct \mbox{\hyperlink{struct_emb_action__}{Emb\+Action\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_a3a0bb3811d682893dbd9f6cc8242106a}{Emb\+Action}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}{main\+Win}} ()
+\begin{DoxyCompactList}\small\item\em main\+Win \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ \mbox{\hyperlink{mainwindow_8cpp_a13c21041ff7e5b6de6cedd66bd347f52}{\+\_\+main\+Win}} = 0
+\item 
+\mbox{\hyperlink{mainwindow_8cpp_affea79f8670d9406feb94c0e9b9b3bf2}{Emb\+Script\+Context}} \mbox{\hyperlink{mainwindow_8cpp_ac628bab1d7838e1528d5f921a8c33656}{engine}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Typedef Documentation}
+\mbox{\Hypertarget{mainwindow_8cpp_a3a0bb3811d682893dbd9f6cc8242106a}\label{mainwindow_8cpp_a3a0bb3811d682893dbd9f6cc8242106a}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!EmbAction@{EmbAction}}
+\index{EmbAction@{EmbAction}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{EmbAction}{EmbAction}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_emb_action__}{Emb\+Action\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_a3a0bb3811d682893dbd9f6cc8242106a}{Emb\+Action}}}
+
+
+
+
+
+\mbox{\Hypertarget{mainwindow_8cpp_a8ed34ccf94d8a6d738b017eab885fafa}\label{mainwindow_8cpp_a8ed34ccf94d8a6d738b017eab885fafa}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!EmbFunction@{EmbFunction}}
+\index{EmbFunction@{EmbFunction}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{EmbFunction}{EmbFunction}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_emb_function__}{Emb\+Function\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_a8ed34ccf94d8a6d738b017eab885fafa}{Emb\+Function}}}
+
+
+
+
+
+\mbox{\Hypertarget{mainwindow_8cpp_affea79f8670d9406feb94c0e9b9b3bf2}\label{mainwindow_8cpp_affea79f8670d9406feb94c0e9b9b3bf2}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!EmbScriptContext@{EmbScriptContext}}
+\index{EmbScriptContext@{EmbScriptContext}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{EmbScriptContext}{EmbScriptContext}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{struct_emb_script_context__}{Emb\+Script\+Context\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_affea79f8670d9406feb94c0e9b9b3bf2}{Emb\+Script\+Context}}}
+
+
+
+
+
+\mbox{\Hypertarget{mainwindow_8cpp_a7e8f7eb495b0062296396d5de56f4864}\label{mainwindow_8cpp_a7e8f7eb495b0062296396d5de56f4864}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!string@{string}}
+\index{string@{string}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{string}{string}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structstd_1_1string__}{std\+::string\+\_\+}} \mbox{\hyperlink{mainwindow_8cpp_a7e8f7eb495b0062296396d5de56f4864}{string}}}
+
+
+
+
+
+
+
+\doxysubsubsection{Function Documentation}
+\mbox{\Hypertarget{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}\label{mainwindow_8cpp_a0f36a84e7a582fc0c4da7b9f6bc47119}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!mainWin@{mainWin}}
+\index{mainWin@{mainWin}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{mainWin()}{mainWin()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}} $\ast$ main\+Win (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+main\+Win 
+
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+
+
+\doxysubsubsection{Variable Documentation}
+\mbox{\Hypertarget{mainwindow_8cpp_a13c21041ff7e5b6de6cedd66bd347f52}\label{mainwindow_8cpp_a13c21041ff7e5b6de6cedd66bd347f52}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!\_mainWin@{\_mainWin}}
+\index{\_mainWin@{\_mainWin}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{\_mainWin}{\_mainWin}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_main_window}{Main\+Window}}$\ast$ \+\_\+main\+Win = 0}
+
+\mbox{\Hypertarget{mainwindow_8cpp_ac628bab1d7838e1528d5f921a8c33656}\label{mainwindow_8cpp_ac628bab1d7838e1528d5f921a8c33656}} 
+\index{mainwindow.cpp@{mainwindow.cpp}!engine@{engine}}
+\index{engine@{engine}!mainwindow.cpp@{mainwindow.cpp}}
+\doxyparagraph{\texorpdfstring{engine}{engine}}
+{\footnotesize\ttfamily \mbox{\hyperlink{mainwindow_8cpp_affea79f8670d9406feb94c0e9b9b3bf2}{Emb\+Script\+Context}} engine}
+

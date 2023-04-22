@@ -1,0 +1,815 @@
+\hypertarget{embroidermodder_8h_source}{}\doxysubsection{embroidermodder.\+h}
+\label{embroidermodder_8h_source}\index{embroidermodder2/embroidermodder.h@{embroidermodder2/embroidermodder.h}}
+\mbox{\hyperlink{embroidermodder_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#ifndef\ \_\_EMBROIDERMODDER\_UTILITY\_H\_\_}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ \_\_EMBROIDERMODDER\_UTILITY\_H\_\_}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <cstdio>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <cstdlib>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <ctime>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{embroidery_8h}{embroidery.h}}"{}}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}toml.h"{}}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <QMainWindow>}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_BLOCK\ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_TEXT\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_IMAGE\ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_SVG\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_BACKGROUND\ \ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00034\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_SPINBOX\ \ \ \ \ \ \ \ \ \ \ 5}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_COMBOBOX\ \ \ \ \ \ \ \ \ \ 6}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_CONTAINER\ \ \ \ \ \ \ \ \ 7}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_PANEL\ \ \ \ \ \ \ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_VIEW\ \ \ \ \ \ \ \ \ \ \ \ \ \ 9}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ WIDGET\_MODE\_ROOT\ \ \ \ \ \ \ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_SNAP\ \ \ \ \ \ \ \ \ \ 0x0000}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_GRIP\ \ \ \ \ \ \ \ \ \ 0x0001}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_RULER\ \ \ \ \ \ \ \ \ 0x0002}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_ORTHO\ \ \ \ \ \ \ \ \ 0x0004}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_POLAR\ \ \ \ \ \ \ \ \ 0x0008}}
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_QSNAP\ \ \ \ \ \ \ \ \ 0x0010}}
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_QTRACK\ \ \ \ \ \ \ \ 0x0020}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_LWT\ \ \ \ \ \ \ \ \ \ \ 0x0040}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_REAL\ \ \ \ \ \ \ \ \ \ 0x0080}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_CLOSEABLE\ \ \ \ \ 0x0100}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_USE\_LOGO\ \ \ \ \ \ 0x0200}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_USE\_TEXTURE\ \ \ 0x0400}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_USE\_COLOR\ \ \ \ \ 0x0800}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ VIEW\_STATE\_GRID\ \ \ \ \ \ \ \ \ \ 0x1000}}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{/*\ Permissions\ System(Not\ implemented)}}
+\DoxyCodeLine{00059\ \textcolor{comment}{\ *\ -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00060\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00061\ \textcolor{comment}{\ *\ The\ permissions\ flag\ determines\ whether\ the\ user\ or\ the\ system\ can\ run\ this}}
+\DoxyCodeLine{00062\ \textcolor{comment}{\ *\ action.}}
+\DoxyCodeLine{00063\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#define\ PERMISSIONS\_USER\ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#define\ PERMISSIONS\_SYSTEM\ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ MITER\_JOIN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#define\ LINE\_STYLE\_DASHED\ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#define\ LINE\_STYLE\_SOLID\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ BRUSH\_STYLE\_DASHED\ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ BRUSH\_STYLE\_SOLID\ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#define\ DIRECTION\_RIGHT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#define\ DIRECTION\_LEFT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#define\ RENDER\_UI\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#define\ RENDER\_TEXT\_EDITOR\ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{preprocessor}{\#define\ RUBBER\_MODES\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 22}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#define\ NUMBER\_ARCHITECTURAL\ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#define\ NUMBER\_DECIMAL\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#define\ NUMBER\_ENGINEERING\ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#define\ NUMBER\_FRACTIONAL\ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00089\ \textcolor{preprocessor}{\#define\ NUMBER\_SCIENTIFIC\ \ \ \ \ \ \ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ \textcolor{preprocessor}{\#define\ DISABLE\_GRID\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00092\ \textcolor{preprocessor}{\#define\ RECTANGULAR\_GRID\ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#define\ CIRCULAR\_GRID\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#define\ ISOMETRIC\_GRID\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00097\ \textcolor{comment}{enum\ ArrowStyle}}
+\DoxyCodeLine{00098\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00099\ \textcolor{comment}{\ \ \ \ NoArrow,\ //NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00100\ \textcolor{comment}{\ \ \ \ Open,}}
+\DoxyCodeLine{00101\ \textcolor{comment}{\ \ \ \ Closed,}}
+\DoxyCodeLine{00102\ \textcolor{comment}{\ \ \ \ Dot,}}
+\DoxyCodeLine{00103\ \textcolor{comment}{\ \ \ \ Box,}}
+\DoxyCodeLine{00104\ \textcolor{comment}{\ \ \ \ Tick}}
+\DoxyCodeLine{00105\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00106\ \textcolor{comment}{}}
+\DoxyCodeLine{00107\ \textcolor{comment}{enum\ lineStyle}}
+\DoxyCodeLine{00108\ \textcolor{comment}{\{}}
+\DoxyCodeLine{00109\ \textcolor{comment}{\ \ \ \ NoLine,\ //NOTE:\ Allow\ this\ enum\ to\ evaluate\ false}}
+\DoxyCodeLine{00110\ \textcolor{comment}{\ \ \ \ Flared,}}
+\DoxyCodeLine{00111\ \textcolor{comment}{\ \ \ \ Fletching}}
+\DoxyCodeLine{00112\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00113\ \textcolor{comment}{}}
+\DoxyCodeLine{00114\ \textcolor{comment}{Action\ action\_list[]\ =\ \{}}
+\DoxyCodeLine{00115\ \textcolor{comment}{\ \ \ \ \{"{}donothing"{},\ "{}\&Do\ Nothing"{},\ "{}Does\ Nothing"{}\},}}
+\DoxyCodeLine{00116\ \textcolor{comment}{\ \ \ \ \{ACTION\_windowcascade,\ "{}windowcascade"{},\ "{}\&Cascade"{},\ "{}Cascade\ the\ windows."{}\},}}
+\DoxyCodeLine{00117\ \textcolor{comment}{\ \ \ \ \{ACTION\_windowtile,\ "{}windowtile"{},\ "{}\&Tile"{},\ "{}Tile\ the\ windows."{}\},}}
+\DoxyCodeLine{00118\ \textcolor{comment}{\ \ \ \ \{ACTION\_windowclose,\ "{}windowclose"{},\ "{}Cl\&ose"{},\ "{}Close\ the\ active\ window."{}\},}}
+\DoxyCodeLine{00119\ \textcolor{comment}{\ \ \ \ \{ACTION\_windowcloseall,\ "{}windowcloseall"{},\ "{}Close\ \&All"{},\ "{}Close\ all\ the\ windows."{}\},}}
+\DoxyCodeLine{00120\ \textcolor{comment}{\ \ \ \ \{ACTION\_windownext,\ "{}windownext"{},\ "{}Ne\&xt"{},\ "{}Move\ the\ focus\ to\ the\ next\ window."{}\},}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ \ \ \ \{ACTION\_windowprevious,\ "{}windowprevious"{},\ "{}Pre\&vious"{},\ "{}Move\ the\ focus\ to\ the\ previous\ window."{}\},}}
+\DoxyCodeLine{00122\ \textcolor{comment}{}}
+\DoxyCodeLine{00123\ \textcolor{comment}{\ \ \ \ \{ACTION\_new,\ "{}new"{},\ "{}\&New"{},\ "{}Create\ a\ new\ file."{}\},}}
+\DoxyCodeLine{00124\ \textcolor{comment}{\ \ \ \ \{ACTION\_open,\ "{}open"{},\ "{}\&Open"{},\ "{}Open\ an\ existing\ file."{}\},}}
+\DoxyCodeLine{00125\ \textcolor{comment}{\ \ \ \ \{ACTION\_save,\ "{}save"{},\ "{}\&Save"{},\ "{}Save\ the\ design\ to\ disk."{}\},}}
+\DoxyCodeLine{00126\ \textcolor{comment}{\ \ \ \ \{ACTION\_saveas,\ "{}saveas"{},\ "{}Save\ \&As"{},\ "{}Save\ the\ design\ under\ a\ new\ name."{}\},}}
+\DoxyCodeLine{00127\ \textcolor{comment}{\ \ \ \ \{ACTION\_print,\ "{}print"{},\ "{}\&Print"{},\ "{}Print\ the\ design."{}\},}}
+\DoxyCodeLine{00128\ \textcolor{comment}{\ \ \ \ \{ACTION\_designdetails,\ "{}designdetails"{},\ "{}\&Details"{},\ "{}Details\ of\ the\ current\ design."{}\},}}
+\DoxyCodeLine{00129\ \textcolor{comment}{\ \ \ \ \{ACTION\_exit,\ "{}exit"{},\ "{}E\&xit"{},\ "{}Exit\ the\ application."{}\},}}
+\DoxyCodeLine{00130\ \textcolor{comment}{}}
+\DoxyCodeLine{00131\ \textcolor{comment}{\ \ \ \ \{ACTION\_cut,\ "{}cut"{},\ "{}Cu\&t"{},\ "{}Cut\ the\ current\ selection's\ contents\ to\ the\ clipboard."{}\},}}
+\DoxyCodeLine{00132\ \textcolor{comment}{\ \ \ \ \{ACTION\_copy,\ "{}copy"{},\ "{}\&Copy"{},\ "{}Copy\ the\ current\ selection's\ contents\ to\ the\ clipboard."{}\},}}
+\DoxyCodeLine{00133\ \textcolor{comment}{\ \ \ \ \{ACTION\_paste,\ "{}paste"{},\ "{}\&Paste"{},\ "{}Paste\ the\ clipboard's\ contents\ into\ the\ current\ selection."{}\},}}
+\DoxyCodeLine{00134\ \textcolor{comment}{}}
+\DoxyCodeLine{00135\ \textcolor{comment}{\ \ \ \ \{ACTION\_help,\ "{}help"{},\ "{}\&Help"{},\ "{}Displays\ help."{}\},}}
+\DoxyCodeLine{00136\ \textcolor{comment}{\ \ \ \ \{ACTION\_changelog,\ "{}changelog"{},\ "{}\&Changelog"{},\ "{}Describes\ new\ features\ in\ this\ product."{}\},}}
+\DoxyCodeLine{00137\ \textcolor{comment}{\ \ \ \ \{ACTION\_tipoftheday,\ "{}tipoftheday"{},\ "{}\&Tip\ Of\ The\ Day"{},\ "{}Displays\ a\ dialog\ with\ useful\ tips"{}\},}}
+\DoxyCodeLine{00138\ \textcolor{comment}{\ \ \ \ \{ACTION\_about,\ "{}about"{},\ "{}\&About\ Embroidermodder\ "{}\ VERSION,\ "{}Displays\ information\ about\ this\ product."{}\},}}
+\DoxyCodeLine{00139\ \textcolor{comment}{\ \ \ \ \{ACTION\_whatsthis,\ "{}whatsthis"{},\ "{}\&What's\ This?"{},\ "{}What's\ This?\ Context\ Help!"{}\},}}
+\DoxyCodeLine{00140\ \textcolor{comment}{}}
+\DoxyCodeLine{00141\ \textcolor{comment}{\ \ \ \ \{ACTION\_undo,\ "{}undo"{},\ "{}\&Undo"{},\ "{}Reverses\ the\ most\ recent\ action."{}\},}}
+\DoxyCodeLine{00142\ \textcolor{comment}{\ \ \ \ \{ACTION\_redo,\ "{}redo"{},\ "{}\&Redo"{},\ "{}Reverses\ the\ effects\ of\ the\ previous\ undo\ action."{}\},}}
+\DoxyCodeLine{00143\ \textcolor{comment}{}}
+\DoxyCodeLine{00144\ \textcolor{comment}{\ \ \ \ \{ACTION\_icon16,\ "{}icon16"{},\ "{}Icon\&16"{},\ "{}Sets\ the\ toolbar\ icon\ size\ to\ 16x16."{}\},}}
+\DoxyCodeLine{00145\ \textcolor{comment}{\ \ \ \ \{ACTION\_icon24,\ "{}icon24"{},\ "{}Icon\&24"{},\ "{}Sets\ the\ toolbar\ icon\ size\ to\ 24x24."{}\},}}
+\DoxyCodeLine{00146\ \textcolor{comment}{\ \ \ \ \{ACTION\_icon32,\ "{}icon32"{},\ "{}Icon\&32"{},\ "{}Sets\ the\ toolbar\ icon\ size\ to\ 32x32."{}\},}}
+\DoxyCodeLine{00147\ \textcolor{comment}{\ \ \ \ \{ACTION\_icon48,\ "{}icon48"{},\ "{}Icon\&48"{},\ "{}Sets\ the\ toolbar\ icon\ size\ to\ 48x48."{}\},}}
+\DoxyCodeLine{00148\ \textcolor{comment}{\ \ \ \ \{ACTION\_icon64,\ "{}icon64"{},\ "{}Icon\&64"{},\ "{}Sets\ the\ toolbar\ icon\ size\ to\ 64x64."{}\},}}
+\DoxyCodeLine{00149\ \textcolor{comment}{\ \ \ \ \{ACTION\_icon128,\ "{}icon128"{},\ "{}Icon12\&8"{},\ "{}Sets\ the\ toolbar\ icon\ size\ to\ 128x128."{}\},}}
+\DoxyCodeLine{00150\ \textcolor{comment}{}}
+\DoxyCodeLine{00151\ \textcolor{comment}{\ \ \ \ \{ACTION\_settingsdialog,\ "{}settingsdialog"{},\ "{}\&Settings"{},\ "{}Configure\ settings\ specific\ to\ this\ product."{}\},}}
+\DoxyCodeLine{00152\ \textcolor{comment}{}}
+\DoxyCodeLine{00153\ \textcolor{comment}{\ \ \ \ \{ACTION\_makelayercurrent,\ "{}makelayercurrent"{},\ "{}\&Make\ Layer\ Active"{},\ "{}Makes\ the\ layer\ of\ a\ selected\ object\ the\ active\ layer"{}\},}}
+\DoxyCodeLine{00154\ \textcolor{comment}{\ \ \ \ \{ACTION\_layers,\ "{}layers"{},\ "{}\&Layers"{},\ "{}Manages\ layers\ and\ layer\ properties:\ \ LAYER"{}\},}}
+\DoxyCodeLine{00155\ \textcolor{comment}{\ \ \ \ \{ACTION\_layerselector,\ "{}layerselector"{},\ "{}\&Layer\ Selector"{},\ "{}Dropdown\ selector\ for\ changing\ the\ current\ layer"{}\},}}
+\DoxyCodeLine{00156\ \textcolor{comment}{\ \ \ \ \{ACTION\_layerprevious,\ "{}layerprevious"{},\ "{}\&Layer\ Previous"{},\ "{}Restores\ the\ previous\ layer\ settings:\ \ LAYERP"{}\},}}
+\DoxyCodeLine{00157\ \textcolor{comment}{\ \ \ \ \{ACTION\_colorselector,\ "{}colorselector"{},\ "{}\&Color\ Selector"{},\ "{}Dropdown\ selector\ for\ changing\ the\ current\ thread\ color"{}\},}}
+\DoxyCodeLine{00158\ \textcolor{comment}{\ \ \ \ \{ACTION\_linetypeselector,\ "{}linetypeselector"{},\ "{}\&Stitchtype\ Selector"{},\ "{}Dropdown\ selector\ for\ changing\ the\ current\ stitch\ type"{}\},}}
+\DoxyCodeLine{00159\ \textcolor{comment}{\ \ \ \ \{ACTION\_lineweightselector,\ "{}lineweightselector"{},\ "{}\&Threadweight\ Selector"{},\ "{}Dropdown\ selector\ for\ changing\ the\ current\ thread\ weight"{}\},}}
+\DoxyCodeLine{00160\ \textcolor{comment}{\ \ \ \ \{ACTION\_hidealllayers,\ "{}hidealllayers"{},\ "{}\&Hide\ All\ Layers"{},\ "{}Turns\ the\ visibility\ off\ for\ all\ layers\ in\ the\ current\ drawing:\ \ HIDEALL"{}\},}}
+\DoxyCodeLine{00161\ \textcolor{comment}{\ \ \ \ \{ACTION\_showalllayers,\ "{}showalllayers"{},\ "{}\&Show\ All\ Layers"{},\ "{}Turns\ the\ visibility\ on\ for\ all\ layers\ in\ the\ current\ drawing:\ \ SHOWALL"{}\},}}
+\DoxyCodeLine{00162\ \textcolor{comment}{\ \ \ \ \{ACTION\_freezealllayers,\ "{}freezealllayers"{},\ "{}\&Freeze\ All\ Layers"{},\ "{}Freezes\ all\ layers\ in\ the\ current\ drawing:\ \ FREEZEALL"{}\},}}
+\DoxyCodeLine{00163\ \textcolor{comment}{\ \ \ \ \{ACTION\_thawalllayers,\ "{}thawalllayers"{},\ "{}\&Thaw\ All\ Layers"{},\ "{}Thaws\ all\ layers\ in\ the\ current\ drawing:\ \ THAWALL"{}\},}}
+\DoxyCodeLine{00164\ \textcolor{comment}{\ \ \ \ \{ACTION\_lockalllayers,\ "{}lockalllayers"{},\ "{}\&Lock\ All\ Layers"{},\ "{}Locks\ all\ layers\ in\ the\ current\ drawing:\ \ LOCKALL"{}\},}}
+\DoxyCodeLine{00165\ \textcolor{comment}{\ \ \ \ \{ACTION\_unlockalllayers,\ "{}unlockalllayers"{},\ "{}\&Unlock\ All\ Layers"{},\ "{}Unlocks\ all\ layers\ in\ the\ current\ drawing:\ \ UNLOCKALL"{}\},}}
+\DoxyCodeLine{00166\ \textcolor{comment}{}}
+\DoxyCodeLine{00167\ \textcolor{comment}{\ \ \ \ \{ACTION\_textbold,\ "{}textbold"{},\ "{}\&Bold\ Text"{},\ "{}Sets\ text\ to\ be\ bold."{}\},}}
+\DoxyCodeLine{00168\ \textcolor{comment}{\ \ \ \ \{ACTION\_textitalic,\ "{}textitalic"{},\ "{}\&Italic\ Text"{},\ "{}Sets\ text\ to\ be\ italic."{}\},}}
+\DoxyCodeLine{00169\ \textcolor{comment}{\ \ \ \ \{ACTION\_textunderline,\ "{}textunderline"{},\ "{}\&Underline\ Text"{},\ "{}Sets\ text\ to\ be\ underlined."{}\},}}
+\DoxyCodeLine{00170\ \textcolor{comment}{\ \ \ \ \{ACTION\_textstrikeout,\ "{}textstrikeout"{},\ "{}\&StrikeOut\ Text"{},\ "{}Sets\ text\ to\ be\ striked\ out."{}\},}}
+\DoxyCodeLine{00171\ \textcolor{comment}{\ \ \ \ \{ACTION\_textoverline,\ "{}textoverline"{},\ "{}\&Overline\ Text"{},\ "{}Sets\ text\ to\ be\ overlined."{}\},}}
+\DoxyCodeLine{00172\ \textcolor{comment}{}}
+\DoxyCodeLine{00173\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomrealtime,\ "{}zoomrealtime"{},\ "{}Zoom\ \&Realtime"{},\ "{}Zooms\ to\ increase\ or\ decrease\ the\ apparent\ size\ of\ objects\ in\ the\ current\ viewport."{}\},}}
+\DoxyCodeLine{00174\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomprevious,\ "{}zoomprevious"{},\ "{}Zoom\ \&Previous"{},\ "{}Zooms\ to\ display\ the\ previous\ view."{}\},}}
+\DoxyCodeLine{00175\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomwindow,\ "{}zoomwindow"{},\ "{}Zoom\ \&Window"{},\ "{}Zooms\ to\ display\ an\ area\ specified\ by\ a\ rectangular\ window."{}\},}}
+\DoxyCodeLine{00176\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomdynamic,\ "{}zoomdynamic"{},\ "{}Zoom\ \&Dynamic"{},\ "{}Zooms\ to\ display\ the\ generated\ portion\ of\ the\ drawing."{}\},}}
+\DoxyCodeLine{00177\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomscale,\ "{}zoomscale"{},\ "{}Zoom\ \&Scale"{},\ "{}Zooms\ the\ display\ using\ a\ specified\ scale\ factor."{}\},}}
+\DoxyCodeLine{00178\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomcenter,\ "{}zoomcenter"{},\ "{}Zoom\ \&Center"{},\ "{}Zooms\ to\ display\ a\ view\ specified\ by\ a\ center\ point\ and\ magnification\ or\ height."{}\},}}
+\DoxyCodeLine{00179\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomin,\ "{}zoomin"{},\ "{}Zoom\ \&In"{},\ "{}Zooms\ to\ increase\ the\ apparent\ size\ of\ objects."{}\},}}
+\DoxyCodeLine{00180\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomout,\ "{}zoomout"{},\ "{}Zoom\ \&Out"{},\ "{}Zooms\ to\ decrease\ the\ apparent\ size\ of\ objects."{}\},}}
+\DoxyCodeLine{00181\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomselected,\ "{}zoomselected"{},\ "{}Zoom\ Selec\&ted"{},\ "{}Zooms\ to\ display\ the\ selected\ objects."{}\},}}
+\DoxyCodeLine{00182\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomall,\ "{}zoomall"{},\ "{}Zoom\ \&All"{},\ "{}Zooms\ to\ display\ the\ drawing\ extents\ or\ the\ grid\ limits."{}\},}}
+\DoxyCodeLine{00183\ \textcolor{comment}{\ \ \ \ \{ACTION\_zoomextents,\ "{}zoomextents"{},\ "{}Zoom\ \&Extents"{},\ "{}Zooms\ to\ display\ the\ drawing\ extents."{}\},}}
+\DoxyCodeLine{00184\ \textcolor{comment}{}}
+\DoxyCodeLine{00185\ \textcolor{comment}{\ \ \ \ \{ACTION\_panrealtime,\ "{}panrealtime"{},\ "{}\&Pan\ Realtime"{},\ "{}Moves\ the\ view\ in\ the\ current\ viewport."{}\},}}
+\DoxyCodeLine{00186\ \textcolor{comment}{\ \ \ \ \{ACTION\_panpoint,\ "{}panpoint"{},\ "{}\&Pan\ Point"{},\ "{}Moves\ the\ view\ by\ the\ specified\ distance."{}\},}}
+\DoxyCodeLine{00187\ \textcolor{comment}{\ \ \ \ \{ACTION\_panleft,\ "{}panleft"{},\ "{}\&Pan\ Left"{},\ "{}Moves\ the\ view\ to\ the\ left."{}\},}}
+\DoxyCodeLine{00188\ \textcolor{comment}{\ \ \ \ \{ACTION\_panright,\ "{}panright"{},\ "{}\&Pan\ Right"{},\ "{}Moves\ the\ view\ to\ the\ right."{}\},}}
+\DoxyCodeLine{00189\ \textcolor{comment}{\ \ \ \ \{ACTION\_panup,\ "{}panup"{},\ "{}\&Pan\ Up"{},\ "{}Moves\ the\ view\ up."{}\},}}
+\DoxyCodeLine{00190\ \textcolor{comment}{\ \ \ \ \{ACTION\_pandown,\ "{}pandown"{},\ "{}\&Pan\ Down"{},\ "{}Moves\ the\ view\ down."{}\},}}
+\DoxyCodeLine{00191\ \textcolor{comment}{}}
+\DoxyCodeLine{00192\ \textcolor{comment}{\ \ \ \ \{ACTION\_day,\ "{}day"{},\ "{}\&Day"{},\ "{}Updates\ the\ current\ view\ using\ day\ vision\ settings."{}\},}}
+\DoxyCodeLine{00193\ \textcolor{comment}{\ \ \ \ \{ACTION\_night,\ "{}night"{},\ "{}\&Night"{},\ "{}Updates\ the\ current\ view\ using\ night\ vision\ settings."{}\},}}
+\DoxyCodeLine{00194\ \textcolor{comment}{\ \ \ \ \{-\/1,\ "{}END"{},\ "{}END"{},\ "{}END"{}\}}}
+\DoxyCodeLine{00195\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00196\ \textcolor{comment}{}}
+\DoxyCodeLine{00197\ \textcolor{comment}{std::vector<LineEdit>\ geometry\_circle\_line\_edits\ =\ \{}}
+\DoxyCodeLine{00198\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{00199\ \textcolor{comment}{\ \ \ \ \ \ \ \ .label\ =\ "{}Center\ X"{},}}
+\DoxyCodeLine{00200\ \textcolor{comment}{\ \ \ \ \ \ \ \ .icon\ =\ "{}blank"{},}}
+\DoxyCodeLine{00201\ \textcolor{comment}{\ \ \ \ \ \ \ \ .type\ =\ "{}double"{},}}
+\DoxyCodeLine{00202\ \textcolor{comment}{\ \ \ \ \ \ \ \ .signal\ =\ "{}lineEditCircleCenterX"{},}}
+\DoxyCodeLine{00203\ \textcolor{comment}{\ \ \ \ \ \ \ \ .user\_editable\ =\ false}}
+\DoxyCodeLine{00204\ \textcolor{comment}{\ \ \ \ \},}}
+\DoxyCodeLine{00205\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{00206\ \textcolor{comment}{\ \ \ \ \ \ \ \ .label\ =\ "{}Center\ Y"{},}}
+\DoxyCodeLine{00207\ \textcolor{comment}{\ \ \ \ \ \ \ \ .icon\ =\ "{}blank"{},}}
+\DoxyCodeLine{00208\ \textcolor{comment}{\ \ \ \ \ \ \ \ .type\ =\ "{}double"{},}}
+\DoxyCodeLine{00209\ \textcolor{comment}{\ \ \ \ \ \ \ \ .signal\ =\ "{}lineEditCircleCenterY"{},}}
+\DoxyCodeLine{00210\ \textcolor{comment}{\ \ \ \ \ \ \ \ .user\_editable\ =\ false}}
+\DoxyCodeLine{00211\ \textcolor{comment}{\ \ \ \ \},}}
+\DoxyCodeLine{00212\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{00213\ \textcolor{comment}{\ \ \ \ \ \ \ \ .label\ =\ "{}Radius"{},}}
+\DoxyCodeLine{00214\ \textcolor{comment}{\ \ \ \ \ \ \ \ .icon\ =\ "{}blank"{},}}
+\DoxyCodeLine{00215\ \textcolor{comment}{\ \ \ \ \ \ \ \ .type\ =\ "{}double"{},}}
+\DoxyCodeLine{00216\ \textcolor{comment}{\ \ \ \ \ \ \ \ .signal\ =\ "{}lineEditCircleRadius"{},}}
+\DoxyCodeLine{00217\ \textcolor{comment}{\ \ \ \ \ \ \ \ .user\_editable\ =\ false}}
+\DoxyCodeLine{00218\ \textcolor{comment}{\ \ \ \ \},}}
+\DoxyCodeLine{00219\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{00220\ \textcolor{comment}{\ \ \ \ \ \ \ \ .label\ =\ "{}Diameter"{},}}
+\DoxyCodeLine{00221\ \textcolor{comment}{\ \ \ \ \ \ \ \ .icon\ =\ "{}blank"{},}}
+\DoxyCodeLine{00222\ \textcolor{comment}{\ \ \ \ \ \ \ \ .type\ =\ "{}double"{},}}
+\DoxyCodeLine{00223\ \textcolor{comment}{\ \ \ \ \ \ \ \ .signal\ =\ "{}lineEditCircleDiameter"{},}}
+\DoxyCodeLine{00224\ \textcolor{comment}{\ \ \ \ \ \ \ \ .user\_editable\ =\ false}}
+\DoxyCodeLine{00225\ \textcolor{comment}{\ \ \ \ \},}}
+\DoxyCodeLine{00226\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{00227\ \textcolor{comment}{\ \ \ \ \ \ \ \ .label\ =\ "{}Area"{},}}
+\DoxyCodeLine{00228\ \textcolor{comment}{\ \ \ \ \ \ \ \ .icon\ =\ "{}blank"{},}}
+\DoxyCodeLine{00229\ \textcolor{comment}{\ \ \ \ \ \ \ \ .type\ =\ "{}double"{},}}
+\DoxyCodeLine{00230\ \textcolor{comment}{\ \ \ \ \ \ \ \ .signal\ =\ "{}lineEditCircleArea"{},}}
+\DoxyCodeLine{00231\ \textcolor{comment}{\ \ \ \ \ \ \ \ .user\_editable\ =\ false}}
+\DoxyCodeLine{00232\ \textcolor{comment}{\ \ \ \ \},}}
+\DoxyCodeLine{00233\ \textcolor{comment}{\ \ \ \ \{}}
+\DoxyCodeLine{00234\ \textcolor{comment}{\ \ \ \ \ \ \ \ .label\ =\ "{}Circumference"{},}}
+\DoxyCodeLine{00235\ \textcolor{comment}{\ \ \ \ \ \ \ \ .icon\ =\ "{}blank"{},}}
+\DoxyCodeLine{00236\ \textcolor{comment}{\ \ \ \ \ \ \ \ .type\ =\ "{}double"{},}}
+\DoxyCodeLine{00237\ \textcolor{comment}{\ \ \ \ \ \ \ \ .signal\ =\ "{}lineEditCircleCircumference"{},}}
+\DoxyCodeLine{00238\ \textcolor{comment}{\ \ \ \ \ \ \ \ .user\_editable\ =\ false}}
+\DoxyCodeLine{00239\ \textcolor{comment}{\ \ \ \ \}}}
+\DoxyCodeLine{00240\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00241\ \textcolor{comment}{}}
+\DoxyCodeLine{00242\ \textcolor{comment}{GroupBox\ geometry\_circle\ =\ \{}}
+\DoxyCodeLine{00243\ \textcolor{comment}{\ \ \ \ .title\ =\ "{}Geometry"{},}}
+\DoxyCodeLine{00244\ \textcolor{comment}{\ \ \ \ .line\_edits\ =\ geometry\_circle\_line\_edits,}}
+\DoxyCodeLine{00245\ \textcolor{comment}{\ \ \ \ .obj\_type\ =\ OBJ\_TYPE\_CIRCLE}}
+\DoxyCodeLine{00246\ \textcolor{comment}{\};}}
+\DoxyCodeLine{00247\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00253\ \textcolor{preprocessor}{\#define\ EMB\_BLOCK\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/1}}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ block\ type,\ that\ has\ to\ exist\ for\ SVG.\ */}}
+\DoxyCodeLine{00255\ \textcolor{preprocessor}{\#define\ EMB\_DIM\_ALIGNED\ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/2}}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Aligned\ Dimension,\ that\ has\ to\ exist\ for\ DXF\ drawings.\ */}}
+\DoxyCodeLine{00257\ \textcolor{preprocessor}{\#define\ EMB\_DIM\_ANGULAR\ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/20}}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Angular\ Dimension,\ that\ has\ to\ exist\ for\ DXF\ drawings.\ */}}
+\DoxyCodeLine{00259\ \textcolor{preprocessor}{\#define\ EMB\_DIM\_ARCLENGTH\ \ \ \ \ \ \ \ \ \ \ \ -\/3}}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Arc\ Length\ Dimension,\ that\ has\ to\ exist\ for\ DXF\ drawings.\ */}}
+\DoxyCodeLine{00261\ \textcolor{preprocessor}{\#define\ EMB\_DIM\_LINEAR\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/4}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Linear\ Dimension,\ that\ has\ to\ exist\ for\ DXF\ drawings.\ */}}
+\DoxyCodeLine{00263\ \textcolor{preprocessor}{\#define\ EMB\_DIM\_RADIUS\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/5}}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Radial\ Dimension,\ that\ has\ to\ exist\ for\ DXF\ drawings.\ */}}
+\DoxyCodeLine{00265\ \textcolor{preprocessor}{\#define\ EMB\_DIM\_ORDINATE\ \ \ \ \ \ \ \ \ \ \ \ \ -\/6}}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Ordinate\ Dimension,\ that\ has\ to\ exist\ for\ DXF\ drawings.\ */}}
+\DoxyCodeLine{00267\ \textcolor{preprocessor}{\#define\ EMB\_INFINITELINE\ \ \ \ \ \ \ \ \ \ \ \ \ -\/7}}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Infinite\ Line\ object.\ Which\ should\ be\ removed\ from\ output\ as\ it\ exists}}
+\DoxyCodeLine{00269\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ for\ drafting\ reasons.\ */}}
+\DoxyCodeLine{00270\ \textcolor{preprocessor}{\#define\ EMB\_RAY\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ -\/8}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \textcolor{comment}{/*<\ For\ the\ Ray\ object.\ */}}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00276\ \textcolor{preprocessor}{\#define\ DEFAULT\_MODE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \textcolor{preprocessor}{\#define\ CIRCLE\_MODE\_1P\_RAD\ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00279\ \textcolor{preprocessor}{\#define\ CIRCLE\_MODE\_1P\_DIA\ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00280\ \textcolor{preprocessor}{\#define\ CIRCLE\_MODE\_2P\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00281\ \textcolor{preprocessor}{\#define\ CIRCLE\_MODE\_3P\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00282\ \textcolor{preprocessor}{\#define\ CIRCLE\_MODE\_TTR\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 5}}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00284\ \textcolor{preprocessor}{\#define\ ELLIPSE\_MODE\_MAJORDIAMETER\_MINORRADIUS\ 6}}
+\DoxyCodeLine{00285\ \textcolor{preprocessor}{\#define\ ELLIPSE\_MODE\_MAJORRADIUS\_MINORRADIUS\ \ \ 7}}
+\DoxyCodeLine{00286\ \textcolor{preprocessor}{\#define\ ELLIPSE\_MODE\_ELLIPSE\_ROTATION\ \ 8}}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\#define\ DOLPHIN\_MODE\_NUM\_POINTS\ \ \ \ \ \ \ \ 9}}
+\DoxyCodeLine{00289\ \textcolor{preprocessor}{\#define\ DOLPHIN\_MODE\_XSCALE\ \ \ \ \ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{00290\ \textcolor{preprocessor}{\#define\ DOLPHIN\_MODE\_YSCALE\ \ \ \ \ \ \ \ \ \ \ 11}}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \textcolor{preprocessor}{\#define\ HEART\_MODE\_NUM\_POINTS\ \ \ \ \ \ \ \ \ 12}}
+\DoxyCodeLine{00293\ \textcolor{preprocessor}{\#define\ HEART\_MODE\_STYLE\ \ \ \ \ \ \ \ \ \ \ \ \ \ 13}}
+\DoxyCodeLine{00294\ \textcolor{preprocessor}{\#define\ HEART\_MODE\_XSCALE\ \ \ \ \ \ \ \ \ \ \ \ \ 14}}
+\DoxyCodeLine{00295\ \textcolor{preprocessor}{\#define\ HEART\_MODE\_YSCALE\ \ \ \ \ \ \ \ \ \ \ \ \ 15}}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \textcolor{preprocessor}{\#define\ ROTATE\_MODE\_NORMAL\ \ \ \ \ \ \ \ \ \ \ \ 16}}
+\DoxyCodeLine{00298\ \textcolor{preprocessor}{\#define\ ROTATE\_MODE\_REFERENCE\ \ \ \ \ \ \ \ \ 17}}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \textcolor{preprocessor}{\#define\ SCALE\_MODE\_NORMAL\ \ \ \ \ \ \ \ \ \ \ \ \ 18}}
+\DoxyCodeLine{00301\ \textcolor{preprocessor}{\#define\ SCALE\_MODE\_REFERENCE\ \ \ \ \ \ \ \ \ \ 19}}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00303\ \textcolor{preprocessor}{\#define\ SINGLE\_LINE\_TEXT\_MODE\_JUSTIFY\ 20}}
+\DoxyCodeLine{00304\ \textcolor{preprocessor}{\#define\ SINGLE\_LINE\_TEXT\_MODE\_SETFONT\ 21}}
+\DoxyCodeLine{00305\ \textcolor{preprocessor}{\#define\ SINGLE\_LINE\_TEXT\_MODE\_SETGEOM\ 22}}
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\#define\ SINGLE\_LINE\_TEXT\_MODE\_RAPID\ \ \ 23}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \textcolor{preprocessor}{\#define\ STAR\_MODE\_NUM\_POINTS\ \ \ \ \ \ \ \ \ \ 24}}
+\DoxyCodeLine{00309\ \textcolor{preprocessor}{\#define\ STAR\_MODE\_CENTER\_PT\ \ \ \ \ \ \ \ \ \ \ 25}}
+\DoxyCodeLine{00310\ \textcolor{preprocessor}{\#define\ STAR\_MODE\_RAD\_OUTER\ \ \ \ \ \ \ \ \ \ \ 26}}
+\DoxyCodeLine{00311\ \textcolor{preprocessor}{\#define\ STAR\_MODE\_RAD\_INNER\ \ \ \ \ \ \ \ \ \ \ 27}}
+\DoxyCodeLine{00312\ }
+\DoxyCodeLine{00313\ \textcolor{preprocessor}{\#define\ SNOWFLAKE\_MODE\_NUM\_POINTS\ \ \ \ \ 28}}
+\DoxyCodeLine{00314\ \textcolor{preprocessor}{\#define\ SNOWFLAKE\_MODE\_XSCALE\ \ \ \ \ \ \ \ \ 29}}
+\DoxyCodeLine{00315\ \textcolor{preprocessor}{\#define\ SNOWFLAKE\_MODE\_YSCALE\ \ \ \ \ \ \ \ \ 30}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00320\ \textcolor{preprocessor}{\#define\ MSG\_CRITICAL\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00321\ \textcolor{preprocessor}{\#define\ MSG\_INFORMATION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00322\ \textcolor{preprocessor}{\#define\ MSG\_QUESTION\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00323\ \textcolor{preprocessor}{\#define\ MSG\_WARNING\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00324\ }
+\DoxyCodeLine{00329\ \textcolor{preprocessor}{\#define\ JUSTIFY\_LEFT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0}}
+\DoxyCodeLine{00330\ \textcolor{preprocessor}{\#define\ JUSTIFY\_RIGHT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 1}}
+\DoxyCodeLine{00331\ \textcolor{preprocessor}{\#define\ JUSTIFY\_ALIGN\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 2}}
+\DoxyCodeLine{00332\ \textcolor{preprocessor}{\#define\ JUSTIFY\_MIDDLE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00333\ \textcolor{preprocessor}{\#define\ JUSTIFY\_\_\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 3}}
+\DoxyCodeLine{00334\ \textcolor{preprocessor}{\#define\ JUSTIFY\_TOPLEFT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 4}}
+\DoxyCodeLine{00335\ \textcolor{preprocessor}{\#define\ JUSTIFY\_TOPCENTER\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 5}}
+\DoxyCodeLine{00336\ \textcolor{preprocessor}{\#define\ JUSTIFY\_TOPRIGHT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 6}}
+\DoxyCodeLine{00337\ \textcolor{preprocessor}{\#define\ JUSTIFY\_MIDDLELEFT\ \ \ \ \ \ \ \ \ \ \ \ \ \ 7}}
+\DoxyCodeLine{00338\ \textcolor{preprocessor}{\#define\ JUSTIFY\_MIDDLECENTER\ \ \ \ \ \ \ \ \ \ \ \ 8}}
+\DoxyCodeLine{00339\ \textcolor{preprocessor}{\#define\ JUSTIFY\_MIDDLERIGHT\ \ \ \ \ \ \ \ \ \ \ \ \ 9}}
+\DoxyCodeLine{00340\ \textcolor{preprocessor}{\#define\ JUSTIFY\_BOTTOMLEFT\ \ \ \ \ \ \ \ \ \ \ \ \ 10}}
+\DoxyCodeLine{00341\ \textcolor{preprocessor}{\#define\ JUSTIFY\_BOTTOMCENTER\ \ \ \ \ \ \ \ \ \ \ 11}}
+\DoxyCodeLine{00342\ \textcolor{preprocessor}{\#define\ JUSTIFY\_BOTTOMRIGHT\ \ \ \ \ \ \ \ \ \ \ \ 12}}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00348\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_dictionary_entry__}{DictionaryEntry\_}}\ \{}
+\DoxyCodeLine{00349\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_dictionary_entry___ac7711b274031701960867a8e5823898c}{key}}[200];}
+\DoxyCodeLine{00350\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_dictionary_entry___accebef43cd5369e811915b639124df8f}{value}}[200];}
+\DoxyCodeLine{00351\ \}\ \mbox{\hyperlink{embroidermodder_8h_ae93c5f32d8c802d5428bd37e36e9cc59}{DictionaryEntry}};}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00357\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_dictionary__}{Dictionary\_}}\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \mbox{\hyperlink{struct_dictionary_entry__}{DictionaryEntry}}\ *\mbox{\hyperlink{struct_dictionary___a2ce61a6090ad4880aa8ba9ec0ca1a85b}{data}};}
+\DoxyCodeLine{00359\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_dictionary___a9f59b34b1f25fe00023291b678246bcc}{length}};}
+\DoxyCodeLine{00360\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_dictionary___ad888a988cf5dcbcdbd97ad63dd32df45}{max\_length}};}
+\DoxyCodeLine{00361\ \}\ \mbox{\hyperlink{embroidermodder_8h_a3794854683c62bbef133e2a41d85d87f}{Dictionary}};}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00395\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_ui_object__}{UiObject\_}}\ \{}
+\DoxyCodeLine{00396\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___ab52ef4455f9b2b7c2b3b59d6e01f085f}{fname}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00397\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___a1f9d39a794f62bdd21ee43c13719f87a}{command}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_ui_object___a714f1ca4d0b766c27006639b8cad4b70}{firstRun}};\ \textcolor{comment}{/*<\ If\ this\ UiObject\ has\ been\ put\ through\ the}}
+\DoxyCodeLine{00399\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ user\ interaction\ processor.\ */}}
+\DoxyCodeLine{00400\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ \mbox{\hyperlink{struct_ui_object___a8995a2cf258c3f0b30d03dbe2923959f}{controlPoints}}[10];\ \textcolor{comment}{/*<\ Storage\ for\ however\ many\ Rubber\ Points\ the}}
+\DoxyCodeLine{00401\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ design\ needs.\ */}}
+\DoxyCodeLine{00402\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___a8ca044138dd197845aefc0fe8c493219}{controlPointLabels}}[10][200];\ \textcolor{comment}{/*<\ Storage\ for\ the\ labels\ for\ the\ Rubber\ Points}}
+\DoxyCodeLine{00403\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ using\ the\ same\ indexing.\ */}}
+\DoxyCodeLine{00404\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___a8dbaa8affffc43357c6a974112149f42}{n\_controlPoints}};\ \textcolor{comment}{/*<\ The\ number\ of\ entries\ in\ the\ controlPoints}}
+\DoxyCodeLine{00405\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ controlPointsLabels.\ */}}
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___a876743604f1c17f0d9f7137274b1a7fd}{numPoints}};\ \textcolor{comment}{/*<\ The\ number\ of\ points\ if\ we\ consider\ the\ object\ as\ a\ Polygon.\ */}}
+\DoxyCodeLine{00407\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___a22e07bd217a8c33abb20a0bae57278b5}{minPoints}};\ \textcolor{comment}{/*<\ The\ minimum\ number\ of\ points\ needed\ to\ make\ the}}
+\DoxyCodeLine{00408\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ polygon\ look\ somewhat\ like\ the\ design.\ */}}
+\DoxyCodeLine{00409\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}{maxPoints}};\ \textcolor{comment}{/*<\ The\ maximum\ number\ of\ points\ before\ adding\ more\ will}}
+\DoxyCodeLine{00410\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ do\ nothing\ but\ slow\ down\ the\ program.\ */}}
+\DoxyCodeLine{00411\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ \mbox{\hyperlink{struct_ui_object___a68e2bdfeb187d1c5a46afffe5129aabf}{center}};\ \textcolor{comment}{/*<\ Where\ the\ polygon\ is\ centered.\ */}}
+\DoxyCodeLine{00412\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ \mbox{\hyperlink{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}{scale}};\ \textcolor{comment}{/*<\ The\ scale\ of\ the\ object:\ note\ that\ the\ default}}
+\DoxyCodeLine{00413\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ may\ not\ be\ (1.0,\ 1.0).\ */}}
+\DoxyCodeLine{00414\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ \mbox{\hyperlink{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}{rotation}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00415\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}{mode}};\ \textcolor{comment}{/*<\ The\ mode\ argument\ records\ what\ kind\ of\ design\ we\ are}}
+\DoxyCodeLine{00416\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ using\ and\ how\ to\ interact\ with\ it.\ */}}
+\DoxyCodeLine{00417\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___a25a3f80fabd63fada17a8a40b9d8c774}{path\_desc}}[1000];\ \textcolor{comment}{/*<\ The\ SVG\ style\ path\ spec.\ */}}
+\DoxyCodeLine{00418\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___a50cee21aace972bab778fcf9df69a4ae}{text}}[200];\ \textcolor{comment}{/*<\ The\ text\ to\ be\ rendered\ to\ the\ scene.\ */}}
+\DoxyCodeLine{00419\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___a33af7956829993c9a6e515c50a39e6ff}{textJustify}};\ \textcolor{comment}{/*<\ One\ of\ the\ JUSTIFY\_*\ constants\ representing\ what\ kind}}
+\DoxyCodeLine{00420\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ of\ alignment\ to\ use.\ */}}
+\DoxyCodeLine{00421\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}{textFont}}[200];\ \textcolor{comment}{/*<\ The\ file\ name\ of\ the\ font\ to\ use.\ */}}
+\DoxyCodeLine{00422\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}{textHeight}};\ \textcolor{comment}{/*<\ The\ text\ height.\ */}}
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}{textRotation}};\ \textcolor{comment}{/*<\ The\ rotation\ of\ the\ text\ in\ the\ scene.\ */}}
+\DoxyCodeLine{00424\ \ \ \ \ \textcolor{comment}{//GLuint\ texture\_id;\ /*<\ Pointer\ to\ a\ texture\ that\ may\ be\ rendered\ to\ the\ object.\ */}}
+\DoxyCodeLine{00425\ \ \ \ \ \textcolor{keywordtype}{char}\ \textcolor{keywordtype}{id}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00426\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___a554cb215e0c2be49aa91aa9a283d37c6}{pattern\_index}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_ui_object___a551374301513fdb71d8977304106af2c}{type}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00428\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_ui_object___a8e14df78c97bad47c11f5d964634f1ad}{object\_index}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00429\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_ui_object___a7a81b7e8dfdc640c03d8b7b1771ec773}{selectable}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00430\ \ \ \ \ \mbox{\hyperlink{struct_emb_color__}{EmbColor}}\ \mbox{\hyperlink{struct_ui_object___a5b70f2bf502560229b7fecf8984e33e9}{color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00431\ \}\ \mbox{\hyperlink{embroidermodder_8h_ac5795a0e93d9740c0f6a44ea312402bc}{UiObject}};}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00436\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_undo_history__}{UndoHistory\_}}\ \{}
+\DoxyCodeLine{00437\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_undo_history___aed980e1d88ff84ebb632b872863c6d93}{data}}[100][200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00438\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_undo_history___a9f59b34b1f25fe00023291b678246bcc}{length}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00439\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_undo_history___a401e942526aac47cef94f478182486e7}{position}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00440\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_undo_history___ad888a988cf5dcbcdbd97ad63dd32df45}{max\_length}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00441\ \}\ \mbox{\hyperlink{embroidermodder_8h_a459ace9a6c614fe41b7f08ba91bc6dd4}{UndoHistory}};}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00446\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_index_entry__}{IndexEntry\_}}\ \{}
+\DoxyCodeLine{00447\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_index_entry___ac7711b274031701960867a8e5823898c}{key}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00448\ \ \ \ \ \mbox{\hyperlink{struct_dictionary__}{Dictionary}}\ *\mbox{\hyperlink{struct_index_entry___a2faebad295f86e0f4d4840db6a58d105}{value}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00449\ \}\ \mbox{\hyperlink{embroidermodder_8h_ac4aeb4daa04ff262b2f2fd479dc0e98f}{IndexEntry}};}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00454\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_index__}{Index\_}}\ \{}
+\DoxyCodeLine{00455\ \ \ \ \ \mbox{\hyperlink{struct_index_entry__}{IndexEntry}}\ *\mbox{\hyperlink{struct_index___a7f90dc9174a5f48ab04c631d7caeb3ca}{data}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_index___a9f59b34b1f25fe00023291b678246bcc}{length}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00457\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_index___ad888a988cf5dcbcdbd97ad63dd32df45}{max\_length}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00458\ \}\ \mbox{\hyperlink{embroidermodder_8h_a6e4c300aad52822a324a91edae2235b6}{Index}};}
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00467\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_emb_view__}{EmbView\_}}\ \{}
+\DoxyCodeLine{00468\ \ \ \ \ \mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *\mbox{\hyperlink{struct_emb_view___a6b76e957ad8457d9c62bcd2259e69ac9}{pattern}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00469\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ \mbox{\hyperlink{struct_emb_view___a821e23ed6ce7caee8e57721096a04baf}{origin}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00470\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_emb_view___a1d28dec57cce925ad92342891bd71e7c}{scale}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00471\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_emb_view___ae57616b4d70c48c75cc90798d3360d69}{grid\_type}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00472\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_emb_view___a58b88594ab95157f9a4e4b655ba7a639}{ui\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00473\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___ace6519f113367c62c4298f1546d89ae3}{snap\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00474\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a7b9309a8010bf2383ac32e7ee71673f1}{grid\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00475\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a9c984fed79d8ec87533b02bcbdb90389}{ruler\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00476\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___ac3b4686fbdff311e4367b031d62e1034}{ortho\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00477\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a61415ea5ee54d45a6109225f59b7656a}{polar\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00478\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a0bc1be17a2582942a81ae80cfb57cec3}{qsnap\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00479\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a5a1d2d1823baf209e2bb2f1ca9ec2758}{qtrack\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00480\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a9ccb0c72197900cb5bd488f0a5d991f3}{lwt\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00481\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a4b486eb168e6dd6d02332a6b0ba21c22}{real\_render}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00482\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a2e477d6bab1c45f23850ac1a890abf4b}{metric}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00483\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a9232eb3d6544d0af9bc953cc62bc3b45}{simulate}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00484\ \ \ \ \ clock\_t\ \mbox{\hyperlink{struct_emb_view___ab0b389f512ac97f99fc1c843aca3165c}{simulation\_start}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00485\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_emb_view___a80bbdc55f4ddc408a0194bff38330ffa}{text\_font}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00486\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_emb_view___ac995fd5e20ae3d4678a027c26c5951ca}{text\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00487\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_emb_view___a4fe337735b8977ccd330e8925e6f49bd}{text\_angle}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a829f775ead3885a4aed3d4296d0acfd5}{text\_style\_bold}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00489\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a7b7e93e4933f97f58b1a8efa0a4d3ee3}{text\_style\_italic}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00490\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a58763bd3c0c574857c49d405dae02504}{text\_style\_underline}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00491\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___a0f1cc2cfa2811a2292f8e9b8ce4579ac}{text\_style\_overline}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00492\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_emb_view___aeb1b3d94e2c11f40c8ba63327335d87e}{text\_style\_strikeout}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00493\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_emb_view___a7b91ecb1f593bdecbfb953ede1a4fde9}{filename}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00494\ \ \ \ \ \mbox{\hyperlink{struct_undo_history__}{UndoHistory}}\ \mbox{\hyperlink{struct_emb_view___a910be9b9781d5fcbfd76cdcb713e3b52}{undo\_history}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00495\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_emb_view___ae394570258768b888bfbdfbf4c1ac419}{selected}}[100];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00496\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_emb_view___a040a11de8dccec11a917a7387ab0a2f8}{n\_selected}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00497\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_emb_view___a717c93116831dd05a41708e3a4ee2213}{rubber\_mode}};\ \textcolor{comment}{/*<\ .\ */}}
+\DoxyCodeLine{00498\ \}\ \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{EmbView}};}
+\DoxyCodeLine{00499\ }
+\DoxyCodeLine{00510\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_settings__}{Settings\_}}\ \{}
+\DoxyCodeLine{00511\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___acace48245648357b6966d493727f9370}{version}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00512\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a36f7b6be7108281af77939ceaec42fd6}{running}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00513\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a6bbd6d0faf2a5a2ae6a988e7198f0b14}{testing}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00514\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a4f7caf3ead45aac3963d1e354e820017}{debug\_mode}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00515\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ae9befc7f9e4a6855486cee3dbe0a41eb}{show\_about\_dialog}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00516\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ab40a6b6246ad903eccd3cf8ff1515987}{show\_settings\_editor}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00517\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a83447f4a885245b89431c8f9fb60548a}{show\_editor}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00518\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a2ee2208983519f35f541408757da8a23}{show\_details\_dialog}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00519\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a1cff51715c91cac3963fafd4af5f5b4c}{show\_open\_file\_dialog}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00520\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___aaaf21a61dc90e2ca7736cfd769817f46}{icon\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00521\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___af5ae0063dd0322540c6de6d3025545f7}{icon\_theme}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00522\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a554cb215e0c2be49aa91aa9a283d37c6}{pattern\_index}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00523\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a24972aa9801bf9474935eddc0d162796}{assets\_dir}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00524\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a05fb0994f59a541f66dc725bc2715bcf}{use\_translation}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00525\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___ac720832b7e86f959a9e692be69f817d3}{language}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00526\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a47845c8ac48b3f1173dd9806ee5c056d}{mdi\_bg\_use\_logo}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ae30a9b4bc66b7a9b28d9b090c788f211}{mdi\_bg\_use\_texture}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00528\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a8eb79bd0a599cb4a8b63855ece840001}{mdi\_bg\_use\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00529\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a9c814e9ec64de3aa36d54daa6ed6e1fa}{general\_mdi\_bg\_logo}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00530\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a88ec628f1df5913ebfb145192baf1b33}{general\_mdi\_bg\_texture}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00531\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{struct_settings___ae8e716bee815775562c8d161b22d4935}{general\_mdi\_bg\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00532\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ac3391ef17574e096e85df24dd478af13}{tip\_of\_the\_day}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00533\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a4f1704907a2130b0b865d3cdb063bab8}{general\_current\_tip}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00534\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___abe29d90072cde2e7298e2a5ad66fe5b8}{general\_system\_help\_browser}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00535\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aedb4797f75850fb55335acb2dee52d45}{general\_check\_for\_updates}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00536\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ae01d8fd5b8017ea792ded5cdc7d1da96}{display\_use\_opengl}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00537\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a04af28e1a2ae2f6979f907fd1a67880c}{display\_renderhint\_aa}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00538\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___abf15f605c87015be95d0904685881e03}{display\_renderhint\_text\_aa}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00539\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ad8e2d1be226ec0855e523944b82b0728}{display\_renderhint\_smooth\_pix}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00540\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a561eb7d52d460b706622b85ff42cb2c5}{display\_renderhint\_high\_aa}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00541\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ae4a1389b51d931855168481f61bfb749}{display\_renderhint\_noncosmetic}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00542\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a03296cbcf47e0a18dd90aa6fc5a5d3d7}{display\_show\_scrollbars}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00543\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a4107dfcbd078da61874495c7d340666c}{display\_scrollbar\_widget\_num}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00544\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a08c70e22754711ef6f69b04689f278a6}{display\_crosshair\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00545\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a83824c1a8771e12660e67694fc7c9375}{display\_bg\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00546\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___af15414f4a6d7e1f59cc4a936443b3456}{display\_selectbox\_left\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00547\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___afc10b8f7250014f895c1d6e88b3de73a}{display\_selectbox\_left\_fill}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00548\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a61fac9c17db2097f9904faddce1457e9}{display\_selectbox\_right\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00549\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a2ff0f0e9a9645621c4bab7e379d3a3c1}{display\_selectbox\_right\_fill}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00550\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a2cbd97157359fc50f24248f2b0858269}{display\_selectbox\_alpha}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00551\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a201ca2aaf7d700655d170b00eeae99c8}{display\_zoomscale\_in}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00552\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a93920d36d0d362908be2f44ad3eddc50}{display\_zoomscale\_out}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00553\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \ \mbox{\hyperlink{struct_settings___a59b244f1de339d28ff768985c3d813e6}{display\_crosshair\_percent}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00554\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___ab7445942006186ff4f3af1f0ba14a8be}{display\_units}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00555\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a419ea4269875cd8888004aebe8fc4646}{opensave\_custom\_filter}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00556\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a8ff25e42ee7344903b64d945eae6732f}{opensave\_open\_format}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00557\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a63d79c1dcf2ac36f1696b94f82daa2c6}{opensave\_open\_thumbnail}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00558\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a7e88c74b88dc1fbaebaf1bf0c4252d23}{opensave\_save\_format}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00559\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a730d6fef0713495f9701dd1f0ebb980d}{opensave\_save\_thumbnail}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00560\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \ \mbox{\hyperlink{struct_settings___a16e91e18177abbe944f632ddad3fc0ff}{opensave\_recent\_max\_files}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00561\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a8c7a85fd82a61c375c1ad59e03ae75be}{opensave\_recent\_list\_of\_files}}[20][200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00562\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a187a44f9b83587bb87244a0b938e2a48}{opensave\_recent\_directory}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00563\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \ \mbox{\hyperlink{struct_settings___ac2e35713470450b42a3baa7d3bcaefe8}{opensave\_trim\_dst\_num\_jumps}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00564\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___abe8f8fbf7fe10be7cfea5120b24772a6}{printing\_default\_device}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00565\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aed83ed1c4323f94dfcf9731eba09f878}{printing\_use\_last\_device}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00566\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a9101a09c1112f08a59eb810df61d4de9}{printing\_disable\_bg}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00567\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a314359e02a66cd971cec00e22b73b5d5}{grid\_show\_on\_load}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00568\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a87db92474746f8d18b3ce356b73897dc}{grid\_show\_origin}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00569\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a51d6cfe586a89f25dc84bb537420b00b}{grid\_color\_match\_crosshair}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00570\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ \mbox{\hyperlink{struct_settings___a4b1173f47a3980966425c3422ae0182a}{grid\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00571\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ad38c3ebd32ebbbbe07730b4ae9af9b26}{grid\_load\_from\_file}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00572\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___ae57616b4d70c48c75cc90798d3360d69}{grid\_type}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00573\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a55c7faa0c99439fcd4e04da1b69fe299}{grid\_center\_on\_origin}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00574\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ \mbox{\hyperlink{struct_settings___a3d8a5e343fe07b3b6ae190467bf6443b}{grid\_center}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00575\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___ab214fe2e8fe38a33d7845f53e9d65414}{grid\_size\_x}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00576\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a39f7fa56594e8e83b97755d17103ea36}{grid\_size\_y}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00577\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a9d0535f4572239b8aa60ccacf32bfd85}{grid\_spacing\_x}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00578\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a1e6d9345229b6cb9dac01f111ed6f39c}{grid\_spacing\_y}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00579\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a8468a7b358165db484a154060464346a}{grid\_size\_radius}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00580\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___ae5548779bad33d39d6849ba2ba5ba3a2}{grid\_spacing\_radius}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00581\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a0b295f90a1b59b96dd09cdc3a23e04ff}{grid\_spacing\_angle}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00582\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ae11278b95b33a125d8e7236bb21add9d}{ruler\_show\_on\_load}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00583\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aff16c2ebcbfa2625faf22c4ec67b3840}{ruler\_metric}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00584\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a9cc725a180fa63e2e543592beb02c8be}{ruler\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00585\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a259cb68f8aead2ac627cbe18bf795281}{ruler\_pixel\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00586\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ad56654b53ad84517e2c639ad55c828a1}{qsnap\_enabled}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00587\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___a8703fda97a9761d28cd6380d9899b3de}{qsnap\_locator\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00588\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a5a66d2d1a8ef177576b7ede7d713c2c6}{qsnap\_locator\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00589\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___af2b40c7a38f8186ead52e743de65456a}{qsnap\_aperture\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00590\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a6a7fbf8bd82235c5e735e3e965dfffd4}{qsnap\_endpoint}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00591\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___adcf597596d14d26a89d84cfabb11b18a}{qsnap\_midpoint}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00592\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a99203fb64a25c538eb1a0bf893092388}{qsnap\_center}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00593\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a1e946b98bba62cd67aeab6f06f45ef03}{qsnap\_node}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00594\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a708071a7eeafee3132e1e3d9ebbe378c}{qsnap\_quadrant}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00595\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___abd2cb3da9d3f27dccf5697cf420e6bdc}{qsnap\_intersection}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00596\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aa2e69459ac2429fd1292cc83fe489caa}{qsnap\_extension}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00597\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a8bf3751d40b0ccfd30435b6555de4da3}{qsnap\_insertion}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00598\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a3b2f5e6f30732489a78dfd1c6deafd94}{qsnap\_perpendicular}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00599\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a45f375e014e027a97ecd2cb36d1d3c31}{qsnap\_tangent}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00600\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a415a7fd8c81a74a10ec9baa8437bd819}{qsnap\_nearest}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00601\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a95f0da4e237c11f048dd77641390baa3}{qsnap\_apparent}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00602\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aa07416630c112a1678ac781f1967469c}{qsnap\_parallel}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ac4de3d5876d82468fc0f24eb3d36e203}{lwt\_show\_lwt}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ac2e85ad26fc7a8221ee715bfbac8feb6}{lwt\_real\_render}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___abf2f7e2a70dbb5043fd1fa8dc248438d}{shift\_held}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00606\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a8560f4ba737701c2494dfceb99eae521}{lwt\_default\_lwt}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00607\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___ab1f037b3edf33379d6ab29852c23233b}{selection\_mode\_pickfirst}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00608\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aaccce7273009baa275aa7230ff892086}{selection\_mode\_pickadd}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00609\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a89902e9e2bb884904fde0617effada50}{selection\_mode\_pickdrag}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00610\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___af4baa0124c86c5fde90e629229f6dda8}{selection\_coolgrip\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00611\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___aa758da1b81035f4bb615a1cf609b3b2f}{selection\_hotgrip\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00612\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a7d4489d5710b0f17c0f2ed6c6309db3b}{selection\_grip\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00613\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a05a4f9bc2c0a35bccc5349d6f94325dd}{selection\_pickbox\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00614\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a80bbdc55f4ddc408a0194bff38330ffa}{text\_font}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00615\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___ac995fd5e20ae3d4678a027c26c5951ca}{text\_size}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00616\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a4fe337735b8977ccd330e8925e6f49bd}{text\_angle}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00617\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a829f775ead3885a4aed3d4296d0acfd5}{text\_style\_bold}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00618\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a7b7e93e4933f97f58b1a8efa0a4d3ee3}{text\_style\_italic}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a58763bd3c0c574857c49d405dae02504}{text\_style\_underline}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00620\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___a0f1cc2cfa2811a2292f8e9b8ce4579ac}{text\_style\_overline}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00621\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{struct_settings___aeb1b3d94e2c11f40c8ba63327335d87e}{text\_style\_strikeout}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00622\ \ \ \ \ \mbox{\hyperlink{struct_dictionary__}{Dictionary}}\ *\mbox{\hyperlink{struct_settings___abaa02ce5ca22ae71574cc8b481dec6f6}{texture\_list}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00623\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___ad8f95bc7d103dde0028f42b06706cd2d}{ticks\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00624\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{struct_settings___aa619de4e53009ad6970f8dd8db23e860}{shine\_color}};\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___aff66b44112febf69b06f35108babd373}{to\_open}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00626\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a4e0667d44e799b5ed1a167ef9ba07fde}{menu\_action}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00627\ \ \ \ \ \textcolor{keywordtype}{char}\ \mbox{\hyperlink{struct_settings___a6873db41f8221dc7603b44d6e4cd8b41}{current\_directory}}[200];\ \textcolor{comment}{/*<\ \(\backslash\)todo\ document\ this\ */}}
+\DoxyCodeLine{00628\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ \mbox{\hyperlink{struct_settings___a107d0243902802ec4f9b273734f6a614}{zoomInLimit}};\ \ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00629\ \ \ \ \ \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}}\ \mbox{\hyperlink{struct_settings___a22030556e91787edb8b334fd9ba7df2f}{zoomOutLimit}};\ \ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00630\ \ \ \ \ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ \mbox{\hyperlink{struct_settings___ac7bdc1964a51c0ec0b34d214c8895073}{grid\_spacing}};\ \ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00631\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a950e78e3e03590c757f05d6012ae221f}{ruler\_width}};\ \ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___aacbfecd5fd78f9ee5aeda4761e2f20ff}{tick\_depth}};\ \ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00633\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a80851b476827402e81aac8daa97281e8}{major\_tick\_seperation}};\ \ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00634\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___a8080a6f1d63a008bef31d9dc0323ac07}{needle\_speed}};\ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00635\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{struct_settings___ab1879e03d03f1ef1e08db1d246513708}{stitch\_time}};\ \textcolor{comment}{/*<\ */}}
+\DoxyCodeLine{00636\ \}\ \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}};}
+\DoxyCodeLine{00637\ }
+\DoxyCodeLine{00638\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{embroidermodder_8h_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\_settings}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *\mbox{\hyperlink{utility_8cpp_a89d83c58510cbfa074c2f541751b57fd}{settings\_file}});}
+\DoxyCodeLine{00639\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a987d88e146471d89e51da7f02a61cf57}{write\_settings}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *fname);}
+\DoxyCodeLine{00640\ }
+\DoxyCodeLine{00641\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a8fa66ff8b2981ac145ae3ff050075d1d}{createOrigin}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00642\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a57df8167bf7482d88358b3502b4eefe8}{clear\_selection}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00643\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ac6e15dfa52e0d3aa4f4cce0f97cce319}{copy\_selection}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00644\ }
+\DoxyCodeLine{00645\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a13e1fade8d309a1e0e62c0ebb7f77687}{platform\_string}}(\textcolor{keywordtype}{char}\ s[200]);}
+\DoxyCodeLine{00646\ }
+\DoxyCodeLine{00647\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aab5876de73f7416a2f8b7297e2867588}{parse\_command}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ *argv[],\ \textcolor{keywordtype}{char}\ command[200]);}
+\DoxyCodeLine{00648\ }
+\DoxyCodeLine{00649\ \mbox{\hyperlink{struct_undo_history__}{UndoHistory}}\ \mbox{\hyperlink{embroidermodder_8h_a59f9ac3de27af69666b5d58fb31a79b2}{undo\_history\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00650\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_adbeb6522907e10af5ffddf33fda8661b}{undo\_history\_free}}(\mbox{\hyperlink{struct_undo_history__}{UndoHistory}}\ *);}
+\DoxyCodeLine{00651\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a66af086e0ac6d1d926a85ec600cb411e}{add\_to\_undo\_history}}(\mbox{\hyperlink{struct_undo_history__}{UndoHistory}}\ *undo\_history,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *command\_line);}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{embroidermodder_8h_a676090199811da7c58ccc15c8e25c308}{validRGB}}(\textcolor{keywordtype}{int}\ r,\ \textcolor{keywordtype}{int}\ g,\ \textcolor{keywordtype}{int}\ b);}
+\DoxyCodeLine{00654\ }
+\DoxyCodeLine{00655\ \mbox{\hyperlink{struct_emb_view__}{EmbView}}\ \mbox{\hyperlink{embroidermodder_8h_ad7b42fa6cc656491bc59cac9e608a719}{init\_view}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00656\ }
+\DoxyCodeLine{00657\ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *\mbox{\hyperlink{embroidermodder_8h_adce5db5dd1e8ab7e28b2908953bed991}{createObjectList}}(\mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *list);}
+\DoxyCodeLine{00658\ }
+\DoxyCodeLine{00659\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{embroidermodder_8h_a421e5f914841061096ef1977d1501b32}{streq}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *s1,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *s2);}
+\DoxyCodeLine{00660\ }
+\DoxyCodeLine{00661\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_af3e31c6a90d671c97d37b3cb16fcc5c8}{read\_str\_setting}}(toml\_table\_t\ *table,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{char}\ s[200]);}
+\DoxyCodeLine{00662\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{embroidermodder_8h_a4ade26a3aeecdb570959ecbc39e54e81}{read\_int\_setting}}(toml\_table\_t\ *table,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{00663\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{embroidermodder_8h_adc2caf2907b582de06d5ebe35baa9e42}{read\_bool\_setting}}(toml\_table\_t\ *table,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{00664\ \mbox{\hyperlink{struct_dictionary__}{Dictionary}}\ *\mbox{\hyperlink{embroidermodder_8h_af0b45f1f3c67420bb0e2db8bf0eefcb1}{read\_dictionary\_setting}}(toml\_table\_t\ *table,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{00665\ }
+\DoxyCodeLine{00666\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a2e3e2ad0a676a5a7467cc961061c0ce2}{write\_float\_setting}}(FILE\ *file,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{float}\ value);;}
+\DoxyCodeLine{00667\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a85025889c267517870f8b21038160787}{write\_int\_setting}}(FILE\ *file,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{int}\ value);}
+\DoxyCodeLine{00668\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a06a05332672bf175666dbfccfc0a9815}{write\_uint\_setting}}(FILE\ *file,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ value);}
+\DoxyCodeLine{00669\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ac951c5f76f00feccf7055ca95fc2302d}{write\_str\_setting}}(FILE\ *file,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ value[200]);}
+\DoxyCodeLine{00670\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ac5e094654b81ebb31dd8c7e0cccb9d74}{write\_bool\_setting}}(FILE\ *file,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{bool}\ value);}
+\DoxyCodeLine{00671\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_abd9b5711c82beaa94ff4f4caff5c3b8c}{write\_dictionary\_setting}}(FILE\ *file,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \mbox{\hyperlink{struct_dictionary__}{Dictionary}}\ value);}
+\DoxyCodeLine{00672\ }
+\DoxyCodeLine{00673\ \textcolor{comment}{/*\ Tabs\ */}}
+\DoxyCodeLine{00674\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a32612007637b4be1eca3808d79bffbb5}{create\_tab\_general}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00675\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a909fa08606e04b2aa3db0d64ea1b1288}{create\_tab\_files\_paths}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00676\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ad8d4a2819fcfd1f5abbad22316c27843}{create\_tab\_display}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00677\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a6a6031ee538bdf2a7c18b8a68cd336e9}{create\_tab\_prompt}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00678\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a637e76c9c9256b19bc77c1304dd26712}{create\_tab\_open\_save}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00679\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a6adf37222e550e6aaae6600038880964}{create\_tab\_printing}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00680\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_afdbfaa9227f83bd7ec3adc75f3af2937}{create\_tab\_snap}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00681\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a4e7c14e711a5313829bea7e105e63ee6}{create\_tab\_grid\_ruler}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00682\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a4cea7e1f6ea9c5523e5cacbb533878bb}{create\_tab\_ortho\_polar}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00683\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae226c4bbe9d13839fd4fb994d67895be}{create\_tab\_quicksnap}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00684\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a41565e9c3a36867233e2c1d1fcce63f1}{create\_tab\_quicktrack}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00685\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a07a5bcd639469192e9766becc891dbf7}{create\_tab\_lineweight}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00686\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a9ece66da0b330bc98448b8b9f069ba1b}{create\_tab\_selection}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00687\ }
+\DoxyCodeLine{00688\ \textcolor{comment}{/*\ Actions\ */}}
+\DoxyCodeLine{00689\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a280bf0e091c2101631d191de5b34c903}{arc\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00690\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a2b842fdc29545e805a712bc0f1162afd}{circle\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00691\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae80ea260143e597da615a078fc21914e}{close\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00692\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a7417bb6e2702a69789c3d1b466569fe4}{copy\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00693\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a61da1931d4c93e9016934e4af2de689a}{cut\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00694\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a43b0edc9634b2b7679388d7884e9d1fb}{ellipse\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00695\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a0e1667bd69a758b7dc3e531524996546}{error\_action}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00696\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_af3757cc06241927deaec39854a78e803}{exit\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00697\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a221aca131e03366747d7aec163e009de}{new\_file\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00698\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae199fde2507bf42a697884deb4fcae64}{open\_file\_action}}(\textcolor{keywordtype}{int}\ argc,\ \textcolor{keywordtype}{char}\ argv[10][200]);}
+\DoxyCodeLine{00699\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_af4b653e2bc00e2c864578aa02a077472}{icon\_action}}(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{00700\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aeb64296966b49650fb5db640031289f6}{pan\_action}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00701\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a56951b901c3783be4d4f452b7827efa6}{paste\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00702\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a67085426171d2888e23281ff40338351}{print\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00703\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a56acf88ff9c2a4f2df513784aad92d6f}{rectangle\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00704\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a612201c708b750a3f3444978cf0e7b54}{redo\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00705\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ab07558c00f40a61972b862be552cfd1c}{text\_angle\_action}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}});}
+\DoxyCodeLine{00706\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a5d93d29a6a1523f8ef10dd78ea127be5}{text\_font\_action}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00707\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a49f1cbbf2ebb97a9703e95a6b6f359aa}{text\_size\_action}}(\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{EmbReal}});}
+\DoxyCodeLine{00708\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a47133e4bc81c0c101e8f693cc709493c}{undo\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00709\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a1e49d657a084f1a4ca4309fa987806ab}{vulcanize\_action}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00710\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aa77ee8a3a4bd66c96e00cd663e1ef90c}{window\_action}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00711\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a5781d1a9b03dbd654bf14b433acfad15}{zoom\_action}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00712\ }
+\DoxyCodeLine{00713\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_abf379266c72f1ce4c9c59a5e6a4a76df}{create\_group\_box\_general}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_pattern__}{EmbPattern}}\ *pattern);}
+\DoxyCodeLine{00714\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a2953aa6261d0c8d5e44e4f4dba1e5624}{create\_group\_box\_arc}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc);}
+\DoxyCodeLine{00715\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aad82a9398fdb24ed3a90dda6b67ecac4}{create\_group\_box\_block}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_block__}{EmbBlock}}\ *block);}
+\DoxyCodeLine{00716\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_add4604806072079527cf55cc6da62140}{create\_group\_box\_circle}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ *circle);}
+\DoxyCodeLine{00717\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a14e02261e1e1b1a5bf1c92a805896e13}{create\_group\_box\_dim\_aligned}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_aligned_dim__}{EmbAlignedDim}}\ *dim\_aligned);}
+\DoxyCodeLine{00718\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a27c676cde0840bfc5fd5eead822786e4}{create\_group\_box\_dim\_angular}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_angular_dim__}{EmbAngularDim}}\ *dim\_angular);}
+\DoxyCodeLine{00719\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae32963c64b9f09c31767bfe976bab748}{create\_group\_box\_dim\_arc\_length}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_arc_length_dim__}{EmbArcLengthDim}}\ *dim\_arc\_length);}
+\DoxyCodeLine{00720\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ab53a67858cf6b49209983e22fe176ec5}{create\_group\_box\_dim\_diameter}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_diameter_dim__}{EmbDiameterDim}}\ *dim\_diameter);}
+\DoxyCodeLine{00721\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aa9b2c437540ee6f742b1741d963ff59d}{create\_group\_box\_dim\_leader}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_leader_dim__}{EmbLeaderDim}}\ *dim\_leader);}
+\DoxyCodeLine{00722\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a9d29af277ae20d6689e1b8f1c5f9c09b}{create\_group\_box\_dim\_linear}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_linear_dim__}{EmbLinearDim}}\ *dim\_linear);}
+\DoxyCodeLine{00723\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a0743251bf9cf8d4cd1879890eb02f59e}{create\_group\_box\_dim\_ordinate}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_ordinate_dim__}{EmbOrdinateDim}}\ *dim\_ordinate);}
+\DoxyCodeLine{00724\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a44b3b0ec6f272094720381e319acae13}{create\_group\_box\_dim\_radius}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_radius_dim__}{EmbRadiusDim}}\ *dim\_radius);}
+\DoxyCodeLine{00725\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a731744151f623907bc097187d67b30f3}{create\_group\_box\_ellipse}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_ellipse__}{EmbEllipse}}\ *ellipse);}
+\DoxyCodeLine{00726\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a7cdb00e60590c65192a9d642dc0f49c0}{create\_group\_box\_image}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_image__}{EmbImage}}\ *image);}
+\DoxyCodeLine{00727\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a3a46d58a80860c06f6346835f75810ca}{create\_group\_box\_infinite\_line}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_infinite_line__}{EmbInfiniteLine}}\ *infinite\_line);}
+\DoxyCodeLine{00728\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_af2162c9ce263f1ea0333a0fb2222c983}{create\_group\_box\_line}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_line__}{EmbLine}}\ *line);}
+\DoxyCodeLine{00729\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aac8d32f3e93c45f5e367a7f338f6fa00}{create\_group\_box\_path}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_path__}{EmbPath}}\ *path);}
+\DoxyCodeLine{00730\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a33ef2181d9ed4a9f10069b285ff0553a}{create\_group\_box\_point}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_point__}{EmbPoint}}\ *point);}
+\DoxyCodeLine{00731\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a705a1471380c55f1f8e8e975189b6607}{create\_group\_box\_polygon}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_path__}{EmbPolygon}}\ *polygon);}
+\DoxyCodeLine{00732\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aef8b32381dd8732988e9db0ba91bad3d}{create\_group\_box\_polyline}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_path__}{EmbPolyline}}\ *polyline);}
+\DoxyCodeLine{00733\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_adf925f2cc24e220061113bd51c9ab47e}{create\_group\_box\_ray}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_ray__}{EmbRay}}\ *ray);}
+\DoxyCodeLine{00734\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aecd16128606f0720e6f8e21c291c3cde}{create\_group\_box\_rectangle}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ *rect);}
+\DoxyCodeLine{00735\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ad3681f0eb1066e85c406d70ea069bcc2}{create\_group\_box\_stitch}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_stitch__}{EmbStitch}}\ *stitch);}
+\DoxyCodeLine{00736\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a9b126ab8de78f6fca6bada8b8c513bb2}{create\_group\_box\_stitch\_list}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_array__}{EmbArray}}\ *stitch\_list);}
+\DoxyCodeLine{00737\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_af97c8aa986e1376f5037ebcce9811088}{create\_group\_box\_text\_multi}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_text_multi__}{EmbTextMulti}}\ *text\_multi);}
+\DoxyCodeLine{00738\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aff0298f10486fc4c4cffab40c352080f}{create\_group\_box\_text\_single}}(\textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id},\ \mbox{\hyperlink{struct_emb_text_single__}{EmbTextSingle}}\ *text\_single);}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00740\ \textcolor{comment}{/*\ Dialogs\ */}}
+\DoxyCodeLine{00741\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a7ed8aa40a2d61f71fb8f911b6f89d69a}{alert}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00742\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a9f2de0d87f029c2a65d9f6d6c9bcca7d}{about\_dialog}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00743\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a3eccb9b3d79a65d250050747452e95c2}{changelog\_dialog}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00744\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ac19301d852631db0d43256127e9df120}{details\_dialog}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00745\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a3549d104cd98e9432754541ea45820cf}{help\_dialog}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00746\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a08a5eabbc189cd5c564d95933522a598}{tip\_of\_the\_day\_dialog}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00747\ }
+\DoxyCodeLine{00748\ \textcolor{comment}{/*\ Geometry\ Object\ interface\ */}}
+\DoxyCodeLine{00749\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *\mbox{\hyperlink{embroidermodder_8h_ada424c2d1701ecf5206b04ab5542ce83}{UiObject\_init}}(\textcolor{keywordtype}{int}\ pattern\_index,\ \textcolor{keywordtype}{char}\ type[200],\ \textcolor{keywordtype}{int}\ object\_index);}
+\DoxyCodeLine{00750\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a20087c62722275ca75438a1891237982}{UiObject\_free}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *obj);}
+\DoxyCodeLine{00751\ }
+\DoxyCodeLine{00752\ \mbox{\hyperlink{struct_emb_rect__}{EmbRect}}\ \mbox{\hyperlink{embroidermodder_8h_a3041b42333d3079c569c6334bb0f5624}{boundingRect}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *obj);}
+\DoxyCodeLine{00753\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{embroidermodder_8h_ad7e20fa8c288b8d9b03b074c242dda38}{clockwise}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *obj);}
+\DoxyCodeLine{00754\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a3a7a08376594b18fa0c650073f2b63b2}{move}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *obj,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ delta);}
+\DoxyCodeLine{00755\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ad65b7c3ca6fbe07126636c4331311c66}{vulcanize}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *obj);}
+\DoxyCodeLine{00756\ }
+\DoxyCodeLine{00757\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_ab5910f8e1137f0607f2c991abb2f40fe}{generic\_design\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00758\ }
+\DoxyCodeLine{00759\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a7cda47a95a7026eb1e9a3a4445661952}{sandbox\_main}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00760\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a7c347d2925c4c5672600e8b2917567c8}{sandbox\_click}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ pos);}
+\DoxyCodeLine{00761\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aa23a5f62b501ba5dac60c749840307ed}{sandbox\_prompt}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *global,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str);}
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a657c88a6929ce68286d1b91bf709c154}{scale\_main}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00764\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aaa46416f14182586ede1169a6d49eb08}{scale\_click}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ pos);}
+\DoxyCodeLine{00765\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_af7c42e90e15d7d8960f6dc47de0af522}{scale\_prompt}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *global,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str);}
+\DoxyCodeLine{00766\ }
+\DoxyCodeLine{00767\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a2af1bcb89a44719e48fbf611cbb83e41}{single\_line\_text\_main}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00768\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae9466b51965530753e4755228e70b5ba}{single\_line\_text\_click}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ pos);}
+\DoxyCodeLine{00769\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a189e68cb8dc5b6b5716d1bddc26b95aa}{single\_line\_text\_prompt}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ *global,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *str);}
+\DoxyCodeLine{00770\ }
+\DoxyCodeLine{00771\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a7adab548b935d5eea8c998b04df13c58}{embArc\_setCenter}}(\mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ point);}
+\DoxyCodeLine{00772\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a7cbf673c829cc595bc4a42ad80db2456}{embArc\_setRadius}}(\mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc,\ \textcolor{keywordtype}{float}\ radius);}
+\DoxyCodeLine{00773\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_afaf32859f3047f1986880027b6f2e562}{embArc\_setStartAngle}}(\mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc,\ \textcolor{keywordtype}{float}\ angle);}
+\DoxyCodeLine{00774\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae043defaa90bcbc3b420eb431761c8ac}{embArc\_setEndAngle}}(\mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ *arc,\ \textcolor{keywordtype}{float}\ angle);}
+\DoxyCodeLine{00775\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{embroidermodder_8h_a2059982ba0eb7e3bfc6f012ed7a6ed83}{embArc\_startAngle}}(\mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ arc);}
+\DoxyCodeLine{00776\ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{embroidermodder_8h_acbf43fb19d520e458fc01d40fd819d7d}{embArc\_endAngle}}(\mbox{\hyperlink{struct_emb_arc__}{EmbArc}}\ arc);}
+\DoxyCodeLine{00777\ }
+\DoxyCodeLine{00778\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a5e4270032e94ce0be4601f3955c2bb14}{embCircle\_setArea}}(\mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ *circle,\ \textcolor{keywordtype}{float}\ area);}
+\DoxyCodeLine{00779\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_abdc27fe900f556645509b9b5b6551a83}{embCircle\_setCircumference}}(\mbox{\hyperlink{struct_emb_circle__}{EmbCircle}}\ *circle,\ \textcolor{keywordtype}{float}\ circumference);}
+\DoxyCodeLine{00780\ }
+\DoxyCodeLine{00781\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a5307d28a0ab917195f11a89a0dd1e265}{snowflake\_main}}();}
+\DoxyCodeLine{00782\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a36528e3aa6a86c9139fc4e4e0aed1328}{snowflake\_click}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ position);}
+\DoxyCodeLine{00783\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_af62b68375035e2beebc9aa276cf5ce28}{snowflake\_move}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ delta);}
+\DoxyCodeLine{00784\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a6bb698f78523a47f793dbb531baed34e}{updateSnowflake}}(\mbox{\hyperlink{struct_emb_path__}{EmbPath}}\ *path,\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ global);}
+\DoxyCodeLine{00785\ }
+\DoxyCodeLine{00786\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a5c9d4ebc251dcd73d2993d1011151fee}{star\_main}}();}
+\DoxyCodeLine{00787\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a03c03e31f6f8ecb123da09829b6e6032}{star\_click}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ pos);}
+\DoxyCodeLine{00788\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ \mbox{\hyperlink{embroidermodder_8h_a5d3daa3a6249c689e5355566edbd9151}{star\_move}}(\mbox{\hyperlink{struct_ui_object__}{UiObject}}\ global,\ \mbox{\hyperlink{struct_emb_vector__}{EmbVector}}\ delta);}
+\DoxyCodeLine{00789\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_abc7da5a6db4b9a84e7fcd01048b98cc7}{updateStar}}(\mbox{\hyperlink{struct_emb_path__}{EmbPath}}\ *path,\ \mbox{\hyperlink{struct_ui_object__}{UiObject}}\ global);}
+\DoxyCodeLine{00790\ }
+\DoxyCodeLine{00791\ \mbox{\hyperlink{struct_index__}{Index}}\ *\mbox{\hyperlink{embroidermodder_8h_a5033d2f53319398a4123fb7d9de39d46}{index\_init}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00792\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a3e4c24c70f3c7772976e3aad0a11d233}{index\_free}}(\mbox{\hyperlink{struct_index__}{Index}}\ *);}
+\DoxyCodeLine{00793\ \mbox{\hyperlink{struct_dictionary__}{Dictionary}}\ *\mbox{\hyperlink{embroidermodder_8h_a0177e29aef17f890b2f96f693ee4dbb1}{dictionary\_from\_index}}(\mbox{\hyperlink{struct_index__}{Index}}\ *,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *);}
+\DoxyCodeLine{00794\ }
+\DoxyCodeLine{00795\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ae3f080af9ed5a4d74da64730178ad366}{c\_split}}(\textcolor{keywordtype}{char}\ input[200],\ \textcolor{keywordtype}{int}\ *argc,\ \textcolor{keywordtype}{char}\ argv[10][200]);}
+\DoxyCodeLine{00796\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a834ab7779e0389d5a150a710435f69bc}{open\_file\_dialog}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00797\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_aafc7c456ae21544a96d01ba62f97d761}{create\_tab}}(\textcolor{keywordtype}{int});}
+\DoxyCodeLine{00798\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a35063e25d1095b8cc14b9aa3c98c6100}{load\_menu}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *menu\_label);}
+\DoxyCodeLine{00799\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a75b4f1d8e9ede5862a8da6595b59c6ef}{load\_toolbar}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *toolbar\_label);}
+\DoxyCodeLine{00800\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a6ba40f28df8964130a55aac5472ea6d8}{simplify\_path}}(\textcolor{keywordtype}{char}\ *path);}
+\DoxyCodeLine{00801\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a4b63270e8bfe10a267ae2f2f841ea4ae}{status\_bar}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00802\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a54d87067d347ad378620638d8e65fc57}{property\_editor}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00803\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a1be652e7d942160a14a560e0be837358}{load\_configuration}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00804\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a857007ff95eac1c204e94cceba0d8e54}{pattern\_view}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00805\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_ab5b5508a4d53c9f4f4831f5be77f0795}{actuator}}(\textcolor{keywordtype}{char}\ cmd[200]);}
+\DoxyCodeLine{00806\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a192d01f2c3893ea16681e4e4796539c9}{settings\_editor}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00807\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{embroidermodder_8h_a192d01f2c3893ea16681e4e4796539c9}{settings\_editor}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \textcolor{keyword}{typedef}\ QString\ \mbox{\hyperlink{embroidermodder_8h_ae6e24af24a7c5ff82e797ab449b35516}{EmbString}};}
+\DoxyCodeLine{00810\ }
+\DoxyCodeLine{00811\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fc}{COMMAND\_ACTIONS}}}
+\DoxyCodeLine{00812\ \{}
+\DoxyCodeLine{00813\ }
+\DoxyCodeLine{00814\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca15d090b7d24a57f86ababa6db3a9204f}{ACTION\_donothing}},}
+\DoxyCodeLine{00815\ }
+\DoxyCodeLine{00816\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcacb2da4cdfeb397e732f994fad63ab942}{ACTION\_new}},}
+\DoxyCodeLine{00817\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcade0b3b59fcad2b4b7b156154ff9f94ff}{ACTION\_open}},}
+\DoxyCodeLine{00818\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca430bdbedb85eb3dcfec72b6ead638754}{ACTION\_save}},}
+\DoxyCodeLine{00819\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca556f60fb8daadb84f9ada6c8506e557b}{ACTION\_saveas}},}
+\DoxyCodeLine{00820\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac86eb9bcc79759d13c34dfd81216db94}{ACTION\_print}},}
+\DoxyCodeLine{00821\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4c7beb9e84f92596e4db8b7977192e54}{ACTION\_designdetails}},}
+\DoxyCodeLine{00822\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b626ae3e9176cfc878a2411e27b708c}{ACTION\_exit}},}
+\DoxyCodeLine{00823\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52afe49d8e6f4c88054d260ee970fafe}{ACTION\_cut}},}
+\DoxyCodeLine{00824\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaca93d90e3e32f904b31ffffdb54fbe3c}{ACTION\_copy}},}
+\DoxyCodeLine{00825\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafc522f5ec2f40c9f772873a1c3992552}{ACTION\_paste}},}
+\DoxyCodeLine{00826\ }
+\DoxyCodeLine{00827\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca5022df9896de87a368de8fd336c31cb1}{ACTION\_undo}},}
+\DoxyCodeLine{00828\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca58fdd6c905ccf8c47e95c4b193142eea}{ACTION\_redo}},}
+\DoxyCodeLine{00829\ \ \ \ \ \textcolor{comment}{//\ Window\ Menu}}
+\DoxyCodeLine{00830\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcafb667804a1eccff3677bae0d056b62ed}{ACTION\_windowclose}},}
+\DoxyCodeLine{00831\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca208373333309d3abf119f0d06d610b45}{ACTION\_windowcloseall}},}
+\DoxyCodeLine{00832\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca600eae75160b3ae8290a72d8ddc5cec3}{ACTION\_windowcascade}},}
+\DoxyCodeLine{00833\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ceac5c9a6fc1c34c2aa590abc424675}{ACTION\_windowtile}},}
+\DoxyCodeLine{00834\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2428793a68ce0a47d5f93f8af1d29de0}{ACTION\_windownext}},}
+\DoxyCodeLine{00835\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca454c6f2182b849ef732d1b261bb1e992}{ACTION\_windowprevious}},}
+\DoxyCodeLine{00836\ \ \ \ \ \textcolor{comment}{//\ Help\ Menu}}
+\DoxyCodeLine{00837\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca36905f2da38a5838600e0e627248b42f}{ACTION\_help}},}
+\DoxyCodeLine{00838\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0c5e7b093f656c5546c68eda1d53dca8}{ACTION\_changelog}},}
+\DoxyCodeLine{00839\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7ba76ac73667f38a73d1deb09b816d13}{ACTION\_tipoftheday}},}
+\DoxyCodeLine{00840\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca37aab16936775ab5dc5b9505aabd0729}{ACTION\_about}},}
+\DoxyCodeLine{00841\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9af65589ea79fe08dddfd3f7e2b9e0bc}{ACTION\_whatsthis}},}
+\DoxyCodeLine{00842\ \ \ \ \ \textcolor{comment}{//\ Icons}}
+\DoxyCodeLine{00843\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab64eb6f06b24e3dbf5bd8a3c6bc59baf}{ACTION\_icon16}},}
+\DoxyCodeLine{00844\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca7603187439a7af716a69743c88ffe83e}{ACTION\_icon24}},}
+\DoxyCodeLine{00845\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0ec3117d0f4bbc6973ceb5796bc82512}{ACTION\_icon32}},}
+\DoxyCodeLine{00846\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf6a61b52fc09260d40ee7a8e9e2ab709}{ACTION\_icon48}},}
+\DoxyCodeLine{00847\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca66bbf281904eb9463ccb93092c19a05c}{ACTION\_icon64}},}
+\DoxyCodeLine{00848\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0cd20308ac42398452524455a62968f7}{ACTION\_icon128}},}
+\DoxyCodeLine{00849\ }
+\DoxyCodeLine{00850\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4cd540a02c6b64a329cae7dda6e73b91}{ACTION\_settingsdialog}},}
+\DoxyCodeLine{00851\ }
+\DoxyCodeLine{00852\ \ \ \ \ \textcolor{comment}{//\ Layer\ ToolBar}}
+\DoxyCodeLine{00853\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab1889bac3e53c46a8c0f7f23ee73fa1d}{ACTION\_makelayercurrent}},}
+\DoxyCodeLine{00854\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae7c877df894de31a0dff585a54336688}{ACTION\_layers}},}
+\DoxyCodeLine{00855\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0fd27e8d67b2a647836328bc9a3f739b}{ACTION\_layerselector}},}
+\DoxyCodeLine{00856\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a5a7be7b038965c3d6579367ac2e2f4}{ACTION\_layerprevious}},}
+\DoxyCodeLine{00857\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae0616bbd5f50225df5ced30a5cb6da8e}{ACTION\_colorselector}},}
+\DoxyCodeLine{00858\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca52ae163e6ff982579d8e8b969f542ff7}{ACTION\_linetypeselector}},}
+\DoxyCodeLine{00859\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae01936ec7db3660164e4413c7a40cbed}{ACTION\_lineweightselector}},}
+\DoxyCodeLine{00860\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabfed6814a6aebc0980e4f71a52ab7060}{ACTION\_hidealllayers}},}
+\DoxyCodeLine{00861\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca75f6c3aa1f268ff7ad79c9a2aad8707b}{ACTION\_showalllayers}},}
+\DoxyCodeLine{00862\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3dd8a01f475281c1f47587ad216ffb14}{ACTION\_freezealllayers}},}
+\DoxyCodeLine{00863\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16f581048c1811d73eddde80e012d9e8}{ACTION\_thawalllayers}},}
+\DoxyCodeLine{00864\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca306aadeca5a7742a88d1688626d59343}{ACTION\_lockalllayers}},}
+\DoxyCodeLine{00865\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca715c72cd4758d2741a0eb5e31ee60daf}{ACTION\_unlockalllayers}},}
+\DoxyCodeLine{00866\ \ \ \ \ \textcolor{comment}{//Text\ ToolBar}}
+\DoxyCodeLine{00867\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca25027a5dbdbf8990c0336322817cd577}{ACTION\_textbold}},}
+\DoxyCodeLine{00868\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab430c5dd10d9735e1958965cb8bb7ba9}{ACTION\_textitalic}},}
+\DoxyCodeLine{00869\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca4a0b5a8f50474565680b448a50cf7862}{ACTION\_textunderline}},}
+\DoxyCodeLine{00870\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca628eff0e5c070ec93aa30dd41b7dcb49}{ACTION\_textstrikeout}},}
+\DoxyCodeLine{00871\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca6014061654033a1dfeaa729fbd690e4f}{ACTION\_textoverline}},}
+\DoxyCodeLine{00872\ \ \ \ \ \textcolor{comment}{//\ Zoom\ ToolBar}}
+\DoxyCodeLine{00873\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae4754789e1213f158ec4325ec476d6d4}{ACTION\_zoomrealtime}},}
+\DoxyCodeLine{00874\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf710dc46c9302b5911aae568ca5023fd}{ACTION\_zoomprevious}},}
+\DoxyCodeLine{00875\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca20ad3c49d1709a42907f6d7f93b326e5}{ACTION\_zoomwindow}},}
+\DoxyCodeLine{00876\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaf9e0709998469f1adcb1435641c8f07}{ACTION\_zoomdynamic}},}
+\DoxyCodeLine{00877\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca2b976385f59b0a1bbd7f5602cdaa7016}{ACTION\_zoomscale}},}
+\DoxyCodeLine{00878\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcabe9bf51f0a59aac29a933ced4c52ad88}{ACTION\_zoomcenter}},}
+\DoxyCodeLine{00879\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaf3d35153f13b01147b801c2e63fe4026}{ACTION\_zoomin}},}
+\DoxyCodeLine{00880\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcad801d0a5fc8e631bd089b06fc47e0212}{ACTION\_zoomout}},}
+\DoxyCodeLine{00881\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca16abb899231ae1c330fbb8a43be61a4a}{ACTION\_zoomselected}},}
+\DoxyCodeLine{00882\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9b1f4eeb2a8bbf418e627d03280a4659}{ACTION\_zoomall}},}
+\DoxyCodeLine{00883\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca9042f7bafc6661507f777636cdab4cae}{ACTION\_zoomextents}},}
+\DoxyCodeLine{00884\ \ \ \ \ \textcolor{comment}{//\ Pan\ SubMenu}}
+\DoxyCodeLine{00885\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcab9757c634c299cfc92dde1b39f500f19}{ACTION\_panrealtime}},}
+\DoxyCodeLine{00886\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaa55cf7437564e98f664af5beed45fc3f}{ACTION\_panpoint}},}
+\DoxyCodeLine{00887\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca3193769fd709b04909e493e57e6b117e}{ACTION\_panleft}},}
+\DoxyCodeLine{00888\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcac3c40b2fa87b1136fdbe8bf337c3606f}{ACTION\_panright}},}
+\DoxyCodeLine{00889\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca88f2c014326529783342b8a3361c9e3d}{ACTION\_panup}},}
+\DoxyCodeLine{00890\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcae42b7d8134942d3d7c63a099242d2fbb}{ACTION\_pandown}},}
+\DoxyCodeLine{00891\ }
+\DoxyCodeLine{00892\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca1768fb32e41df33c8556fa810a2ef32f}{ACTION\_day}},}
+\DoxyCodeLine{00893\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fca0de25f3dd0ea6cd01e3f783530529630}{ACTION\_night}},}
+\DoxyCodeLine{00894\ }
+\DoxyCodeLine{00895\ \ \ \ \ \textcolor{comment}{//TODO:\ ACTION\_spellcheck,}}
+\DoxyCodeLine{00896\ \ \ \ \ \textcolor{comment}{//TODO:\ ACTION\_quickselect,}}
+\DoxyCodeLine{00897\ }
+\DoxyCodeLine{00898\ \ \ \ \ \mbox{\hyperlink{embroidermodder_8h_a94040e008b74f73f2d2955f5f3c121fcaaa41192e225b09f65723e9c7bec5f9df}{ACTION\_null}}}
+\DoxyCodeLine{00899\ \};}
+\DoxyCodeLine{00900\ }
+\DoxyCodeLine{00901\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

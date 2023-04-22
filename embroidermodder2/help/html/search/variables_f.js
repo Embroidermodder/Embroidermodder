@@ -62,7 +62,7 @@ var searchData=
   ['opensave_5fsave_5fformat_59',['opensave_save_format',['../struct_settings__.html#a7e88c74b88dc1fbaebaf1bf0c4252d23',1,'Settings_']]],
   ['opensave_5fsave_5fthumbnail_60',['opensave_save_thumbnail',['../struct_settings__.html#a730d6fef0713495f9701dd1f0ebb980d',1,'Settings_']]],
   ['opensave_5ftrim_5fdst_5fnum_5fjumps_61',['opensave_trim_dst_num_jumps',['../struct_settings__.html#ac2e35713470450b42a3baa7d3bcaefe8',1,'Settings_']]],
-  ['origin_62',['origin',['../struct_view__.html#a821e23ed6ce7caee8e57721096a04baf',1,'View_']]],
+  ['origin_62',['origin',['../struct_emb_view__.html#a821e23ed6ce7caee8e57721096a04baf',1,'EmbView_']]],
   ['originpath_63',['originPath',['../class_view.html#a05060d0129ac2db4bd2e556b4d6750a9',1,'View']]],
-  ['ortho_5fmode_64',['ortho_mode',['../struct_view__.html#ac3b4686fbdff311e4367b031d62e1034',1,'View_']]]
+  ['ortho_5fmode_64',['ortho_mode',['../struct_emb_view__.html#ac3b4686fbdff311e4367b031d62e1034',1,'EmbView_']]]
 ];

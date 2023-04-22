@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2022.11.24)  17 APR 2023 10:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.10) (preloaded format=pdflatex 2022.11.24)  22 APR 2023 13:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -855,66 +855,10 @@ LaTeX Warning: Label `index_about' multiply defined.
 LaTeX Warning: Label `_post_fast-forward' multiply defined.
 
 
-LaTeX Warning: Label `imgui__main_8c_autotoc_md3' multiply defined.
+LaTeX Warning: Label `embroidermodder_8h_autotoc_md1' multiply defined.
 
 
-LaTeX Warning: Label `imgui__main_8c_autotoc_md4' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d
-5816dc9b15f9d9f88898764f' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3f
-c4b067f049c3c6efd029727b' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0af0fe7dca
-80b5d4384a0576b3edaa5fd5' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0acae9d8a0
-10607446e0c13af5bc6737c0' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0a21cbc22c
-d57ac906315fac3d245a25b9' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0a23e240f9
-a493316b344299cecd26dc91' multiply defined.
-
-
-LaTeX Warning: Label `imgui__main_8c_a29bcbce98e36705fa9c1577a227d53c0a512b85e9
-3266086439b59a6aa83a0f2b' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d
-5816dc9b15f9d9f88898764f' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3f
-c4b067f049c3c6efd029727b' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0af0fe7dca
-80b5d4384a0576b3edaa5fd5' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0acae9d8a0
-10607446e0c13af5bc6737c0' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22c
-d57ac906315fac3d245a25b9' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a23e240f9
-a493316b344299cecd26dc91' multiply defined.
-
-
-LaTeX Warning: Label `object-data_8h_a29bcbce98e36705fa9c1577a227d53c0a512b85e9
-3266086439b59a6aa83a0f2b' multiply defined.
+LaTeX Warning: Label `embroidermodder_8h_autotoc_md0' multiply defined.
 
 )
 \openout1 = `refman.aux'.
@@ -1046,11 +990,11 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 6.29996pt on input line 174.
  [1]
 [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
-[18] [19]
+[18]
 Package hyperref Info: Option `pageanchor' set `true' on input line 176.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 12.9599pt on input line 178.
- (index.tex
+ (index.tex [1]
 LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 (Font)              scaled to size 8.99994pt on input line 1.
 
@@ -1090,7 +1034,7 @@ Underfull \hbox (badness 8094) in paragraph at lines 44--44
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 44.
 
-[1]
+[2]
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 10.79993pt on input line 69.
 
@@ -1099,7 +1043,7 @@ Underfull \hbox (badness 2707) in paragraph at lines 81--82
 /10 libembroidery-python\T1/phv/m/n/10 ) which is part of [][]
  []
 
-[2]
+[3]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\char' on input line 92.
@@ -1108,13 +1052,13 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\char' on input line 92.
 
-[3
+[4
 pdfTeX warning (ext4): destination with the same identifier (name{index_the-emb
 roidermodder-team}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.103 \item R
-             ealistic rendering] [4
+             ealistic rendering] [5
 pdfTeX warning (ext4): destination with the same identifier (name{index_section
 }) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -1152,20 +1096,20 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `\char' on input line 185.
 
-[5
+[6
 pdfTeX warning (ext4): destination with the same identifier (name{index_section
 }) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.190 \item \href
                  {https://github.com/redteam316}{\texttt{ Jonathan Greig}}]
-[6]) (md_embroidermodder2__r_e_a_d_m_e.tex)
-(md_embroidermodder2_docs_fdl_1_3.tex [7] [8] [9] [10] [11]
+[7]) (md_embroidermodder2__r_e_a_d_m_e.tex)
+(md_embroidermodder2_docs_fdl_1_3.tex [8] [9] [10] [11] [12]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 102.
 
-) (tutorials.tex [12]) (_post.tex [13]
+) (tutorials.tex [13]) (_post.tex [14]
 Underfull \hbox (badness 3417) in paragraph at lines 43--43
 \T1/pcr/m/n/10 youtube.[]com/watch?v=[]Kqi[]Kfn4lx[]Bk[][]\T1/phv/m/n/10 "$\OML
 /cmm/m/it/10 >$\T1/phv/m/n/10 video$\OML/cmm/m/it/10 <$\T1/phv/m/n/10 /a$\OML/c
@@ -1182,12 +1126,12 @@ me$\OML/cmm/m/it/10 >$$<$\T1/phv/m/n/10 /div$\OML/cmm/m/it/10 >$ \T1/phv/m/n/10
  --[]
  []
 
-[14]
+[15]
 Underfull \hbox (badness 10000) detected at line 43
 [][][]
  []
 
-[15]
+[16]
 Underfull \hbox (badness 10000) detected at line 62
 [][][]
  []
@@ -1197,7 +1141,7 @@ Underfull \hbox (badness 10000) detected at line 75
 [][][]
  []
 
-[16] [17] [18] [19]
+[17] [18] [19] [20]
 pdfTeX warning (ext4): destination with the same identifier (name{_post_fast-fo
 rward}) has been already used, duplicate ignored
 <to be read again> 
@@ -1221,7 +1165,7 @@ me$\OML/cmm/m/it/10 >$$<$\T1/phv/m/n/10 /div$\OML/cmm/m/it/10 >$ \T1/phv/m/n/10
  --[]
  []
 
-(_changelog.tex) (md_extern_libembroidery_src_embedded.tex [20] [21])
+(_changelog.tex) (md_extern_libembroidery_src_embedded.tex [21] [22])
 (md_extern_libembroidery_src_embroider_cli.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
@@ -1255,7 +1199,7 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 1.
 
-[22]) (md_extern_libembroidery_src_geometry_geometry.tex
+[23]) (md_extern_libembroidery_src_geometry_geometry.tex
 Underfull \hbox (badness 3068) in paragraph at lines 25--26
 \T1/phv/m/n/10 If you wish to de-velop with us you can chat via the con-tact em
 ail on the []website[]\url{[][] \T1/pcr/m/n/10 https[]
@@ -1267,14 +1211,14 @@ Underfull \hbox (badness 853) in paragraph at lines 25--26
  on the []github page[]\url{[][] \T1/pcr/m/n/10 https[]://github.[]com/[]
  []
 
-[23] [24]
+[24] [25]
 Underfull \hbox (badness 2460) in paragraph at lines 56--57
 []\T1/phv/m/n/10 If it\TS1/phv/m/n/10 '\T1/phv/m/n/10 s some-thing the user can
  do, make a sec-tion of the \T1/pcr/m/n/10 actuator \T1/phv/m/n/10 func-tion (w
 hich lives in
  []
 
-[25] [26] [27]
+[26] [27] [28]
 Overfull \hbox (63.15622pt too wide) in paragraph at lines 141--141
 [] \T1/pcr/m/n/8 * HACK: This code shouldn't be written this way or I don't fee
 l right about it. There may a better solution[] 
@@ -1286,8 +1230,8 @@ Overfull \hbox (29.5562pt too wide) in paragraph at lines 145--145
 de. I put this here for a good reason.[] 
  []
 
-[28] [29] [30] [31] [32]) (md_extern_libembroidery_src_formats_formats.tex
-[33] [34] [35] [36] [37]
+[29] [30] [31] [32] [33]) (md_extern_libembroidery_src_formats_formats.tex
+[34] [35] [36] [37] [38]
 Overfull \hbox (16.56506pt too wide) in paragraph at lines 198--199
 []\T1/phv/m/n/10 .DST (Tajima) em-broi-dery file read/write rou-tines For-mat c
 om-ments are thanks to [][] \T1/pcr/m/n/10 tspilman@dalcoathletic.[]
@@ -1392,7 +1336,7 @@ Underfull \hbox (badness 2564) in paragraph at lines 221--221
 at
  []
 
-[38] [39]) (md__c_o_d_e__o_f__c_o_n_d_u_c_t.tex [40] [41]
+[39] [40]) (md__c_o_d_e__o_f__c_o_n_d_u_c_t.tex [41] [42]
 LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 4
 8.
 
@@ -1422,50 +1366,172 @@ s are avail-able at [][] \T1/pcr/m/n/10 https[]://www.[]contributor-covenant.[]
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 9.
 
-) (todo.tex [42] [43] [44] [45] [46]
-Underfull \hbox (badness 883) in paragraph at lines 392--393
+) (todo.tex [43] [44]
+Underfull \hbox (badness 883) in paragraph at lines 97--98
 \T1/phv/m/n/10 This list needs re-viewed in case some stitch for-mats also can 
 con-tain ob-ject data (EMBFORMAT[]_[][]
  []
 
-[47] [48] [49] [50] [51] [52] [53] [54] [55] [56] [57]
-Underfull \hbox (badness 10000) in paragraph at lines 1425--1426
-\T1/phv/m/n/10 Box[]QSnap[]Locator[]Color[]Current[]Index[]Changed(int in-dex) 
-combo[]Box[]Selection[]Cool[]Grip[]Color[]Current[]Index[]
+[45] [46] [47] [48] [49] [50]) (hierarchy.tex [51] [52] [53]) (annotated.tex
+[54]
+Underfull \hbox (badness 10000) in paragraph at lines 24--24
+ []  
  []
 
-[58]) (bug.tex) (hierarchy.tex [59] [60] [61] [62]) (annotated.tex [63]
-[64] [65] [66]) (files.tex [67] [68] [69] [70] [71])
-(struct__bcf__directory.tex) (struct__bcf__directory__entry.tex [72] [73])
-(struct__bcf__file.tex [74]) (struct__bcf__file__difat.tex)
-(struct__bcf__file__fat.tex [75]) (struct__bcf__file__header.tex [76] [77])
-(struct__vp3_hoop.tex [78] [79] [80]) (class_application.tex
+[55]
+Underfull \hbox (badness 10000) in paragraph at lines 38--38
+ []  
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 54--54
+ []  
+ []
+
+[56]
+Underfull \hbox (badness 10000) in paragraph at lines 88--88
+ []  
+ []
+
+[57]) (files.tex [58] [59] [60] [61] [62]) (struct__bcf__directory.tex [63])
+(struct__bcf__directory__entry.tex [64]) (struct__bcf__file.tex [65])
+(struct__bcf__file__difat.tex [66]) (struct__bcf__file__fat.tex)
+(struct__bcf__file__header.tex [67] [68] [69]) (struct__vp3_hoop.tex [70]
+[71]) (class_application.tex
+LaTeX Font Info:    Font shape `T1/phv/m/n' will be
+(Font)              scaled to size 8.09995pt on input line 11.
+LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
+(Font)              Font shape `T1/phv/m/sl' tried instead on input line 11.
+LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
+(Font)              scaled to size 8.09995pt on input line 11.
+ [72]
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <8> not available
 (Font)              Font shape `T1/pcr/m/sl' tried instead on input line 31.
- [81]
+
+Overfull \vbox (10.06776pt too high) has occurred while \output is active []
+
+
+[73]
+Underfull \hbox (badness 10000) detected at line 62
+[][][]
+ []
+
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <7> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 46.
-)
-(class_arc_object.tex [82] [83] [84]
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 69.
+) (class_arc_object.tex [74] [75] [76]
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 7.19995pt on input line 235.
- [85] [86] [87] [88] [89])
-(class_base_object.tex [90] [91] [92] [93] [94] [95] [96])
-(class_circle_object.tex [97] [98] [99] [100] [101] [102])
-(class_cmd_prompt.tex [103] [104] [105] [106] [107] [108] [109] [110] [111])
-(class_cmd_prompt_handle.tex [112] [113]) (class_cmd_prompt_history.tex
-[114] [115]) (class_cmd_prompt_input.tex [116] [117] [118] [119] [120] [121]
-[122]) (class_cmd_prompt_splitter.tex [123]) (struct_compress.tex [124]
-[125]) (struct_dictionary__.tex) (struct_dictionary_entry__.tex [126])
-(class_dim_leader_object.tex [127] [128] [129] [130] [131] [132] [133])
-(class_ellipse_object.tex [134] [135] [136] [137] [138] [139] [140])
+ [77]
+Underfull \hbox (badness 10000) detected at line 300
+[][][]
+ []
+
+[78] [79]
+Underfull \hbox (badness 10000) detected at line 399
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 416
+[][][]
+ []
+
+[80]
+Underfull \hbox (badness 10000) detected at line 429
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 460
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 473
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 486
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 499
+[][][]
+ []
+
+[81]
+Underfull \hbox (badness 10000) detected at line 512
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 525
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 538
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 551
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 564
+[][][]
+ []
+
+[82]
+Underfull \hbox (badness 10000) detected at line 577
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 596
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 609
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 622
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 635
+[][][]
+ []
+
+[83] [84] [85] [86]) (class_base_object.tex [87] [88] [89] [90] [91] [92]
+[93]) (class_circle_object.tex [94] [95] [96] [97] [98] [99])
+(class_cmd_prompt.tex [100] [101] [102] [103] [104] [105] [106] [107])
+(class_cmd_prompt_handle.tex [108] [109]) (class_cmd_prompt_history.tex
+[110] [111] [112]) (class_cmd_prompt_input.tex [113] [114] [115] [116] [117]
+[118] [119]) (class_cmd_prompt_splitter.tex [120]) (struct_compress.tex
+[121]) (struct_dictionary__.tex [122]) (struct_dictionary_entry__.tex)
+(class_dim_leader_object.tex [123] [124] [125]
+Overfull \vbox (11.7793pt too high) has occurred while \output is active []
+
+
+[126] [127] [128] [129] [130]) (class_ellipse_object.tex [131] [132] [133]
+[134] [135] [136]) (struct_emb_action__.tex [137])
 (struct_emb_aligned_dim__.tex) (struct_emb_angular_dim__.tex)
-(struct_emb_arc__.tex [141]) (struct_emb_arc_length_dim__.tex [142])
-(struct_emb_array__.tex [143]) (struct_emb_bezier__.tex)
-(struct_emb_block__.tex [144]) (struct_emb_circle__.tex)
-(struct_emb_color__.tex [145]) (class_emb_details_dialog.tex [146] [147])
-(struct_emb_diameter_dim__.tex [148]) (struct_emb_ellipse__.tex)
-(struct_emb_format_list__.tex [149]) (struct_emb_geometry__.tex [150]
+(struct_emb_arc__.tex [138]) (struct_emb_arc_length_dim__.tex [139])
+(struct_emb_array__.tex [140]) (struct_emb_bezier__.tex)
+(struct_emb_block__.tex [141]) (struct_emb_circle__.tex)
+(struct_emb_color__.tex [142]) (class_emb_details_dialog.tex [143] [144])
+(struct_emb_diameter_dim__.tex [145]) (struct_emb_ellipse__.tex)
+(struct_emb_format_list__.tex [146]) (struct_emb_function__.tex [147])
+(struct_emb_geometry__.tex
 
 ! LaTeX Error: Undefined tab position.
 
@@ -1544,1631 +1610,1036 @@ l.24 ...6764453571074cb85a7574738d4}{Emb\+Vector}}
 You're in trouble here.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-[151] [152]) (struct_emb_image__.tex [153]) (struct_emb_infinite_line__.tex)
-(struct_emb_layer__.tex [154]) (struct_emb_leader_dim__.tex)
-(struct_emb_line__.tex [155]) (struct_emb_linear_dim__.tex)
-(struct_emb_ordinate_dim__.tex [156]) (struct_emb_path__.tex)
-(struct_emb_pattern__.tex [157] [158]) (struct_emb_point__.tex)
-(struct_emb_radius_dim__.tex [159]) (struct_emb_ray__.tex)
-(struct_emb_rect__.tex [160]) (struct_emb_satin_outline__.tex [161])
-(struct_emb_spline__.tex) (struct_emb_stitch__.tex [162])
-(struct_emb_text_multi__.tex) (struct_emb_text_single__.tex [163])
-(struct_emb_thread__.tex [164]) (struct_emb_time__.tex [165])
-(struct_emb_vector__.tex) (structhoop__padding.tex [166]) (struct_huffman.tex
-[167]) (class_image_object.tex [168] [169] [170] [171] [172])
-(class_image_widget.tex [173]) (struct_index__.tex [174])
-(struct_index_entry__.tex) (class_layer_manager.tex [175])
-(class_line_object.tex [176] [177] [178] [179] [180] [181])
-(struct_l_s_y_s_t_e_m.tex [182]) (class_main_window.tex
-LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 24.
-LaTeX Font Info:    Font shape `T1/phv/m/it' in size <9> not available
-(Font)              Font shape `T1/phv/m/sl' tried instead on input line 24.
-LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
-(Font)              scaled to size 8.09995pt on input line 24.
- [183] [184] [185]
-[186] [187] [188] [189] [190] [191] [192]
-Underfull \hbox (badness 1783) in paragraph at lines 990--992
+[148] [149]) (struct_emb_image__.tex [150]) (struct_emb_infinite_line__.tex
+[151]) (struct_emb_layer__.tex) (struct_emb_leader_dim__.tex [152])
+(struct_emb_line__.tex) (struct_emb_linear_dim__.tex [153])
+(struct_emb_ordinate_dim__.tex) (struct_emb_path__.tex [154])
+(struct_emb_pattern__.tex [155]) (struct_emb_point__.tex [156])
+(struct_emb_radius_dim__.tex) (struct_emb_ray__.tex [157])
+(struct_emb_rect__.tex [158]) (struct_emb_satin_outline__.tex)
+(struct_emb_script_context__.tex [159]) (struct_emb_spline__.tex)
+(struct_emb_stitch__.tex [160]) (struct_emb_text_multi__.tex [161])
+(struct_emb_text_single__.tex) (struct_emb_thread__.tex [162])
+(struct_emb_time__.tex [163]) (struct_emb_vector__.tex) (struct_emb_view__.tex
+[164] [165] [166] [167]) (structhoop__padding.tex [168]) (struct_huffman.tex
+[169]) (class_image_object.tex [170] [171] [172] [173]) (class_image_widget.tex
+[174]
+Overfull \vbox (7.30832pt too high) has occurred while \output is active []
+
+
+[175]
+Underfull \hbox (badness 10000) detected at line 76
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 104
+[][][]
+ []
+
+[176]) (struct_index__.tex) (struct_index_entry__.tex [177])
+(class_layer_manager.tex [178] [179]) (class_line_object.tex [180] [181]
+[182] [183] [184]) (struct_l_s_y_s_t_e_m.tex [185]) (class_main_window.tex
+[186] [187] [188] [189] [190] [191] [192] [193] [194] [195] [196]
+Underfull \hbox (badness 1783) in paragraph at lines 988--989
 []\T1/phv/m/n/10 QAction $\OMS/cmsy/m/n/10 ^^C$ [] \T1/phv/m/n/10 (const QStrin
 g icon, const QString tool[]Tip, const QString status[]Tip, bool
  []
 
-[193] [194] [195] [196] [197] [198] [199] [200] [201]
-Underfull \hbox (badness 10000) detected at line 1690
+[197] [198] [199] [200] [201]
+Overfull \vbox (0.322pt too high) has occurred while \output is active []
+
+ [202]
+Underfull \hbox (badness 10000) detected at line 1494
 [][][]
  []
 
-[202]
-Underfull \hbox (badness 10000) detected at line 1723
+[203] [204] [205]
+Underfull \hbox (badness 10000) detected at line 1754
 [][][]
  []
 
-
-Underfull \hbox (badness 10000) detected at line 1736
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 1773
-[][][]
- []
-
-[203]
-Underfull \hbox (badness 10000) detected at line 1786
+[206]
+Underfull \hbox (badness 10000) detected at line 1787
 [][][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1811--1812
- \T1/phv/b/n/10 18.66.3.61 get-Set-tings-Dis-play-CrossHair-Per-cent()[] \T1/pc
+Underfull \hbox (badness 10000) detected at line 1800
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 1837
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 1850
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1875--1876
+ \T1/phv/b/n/10 17.70.3.61 get-Set-tings-Dis-play-CrossHair-Per-cent()[] \T1/pc
 r/m/n/8 uint8[]_[]t get[]Settings[]Display[]Cross[]Hair[]Percent ( )
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1823--1824
- \T1/phv/b/n/10 18.66.3.63 get-Set-tings-Dis-playRen-der-HintHighAA()[] \T1/pcr
+[207]
+Underfull \hbox (badness 10000) in paragraph at lines 1887--1888
+ \T1/phv/b/n/10 17.70.3.63 get-Set-tings-Dis-playRen-der-HintHighAA()[] \T1/pcr
 /m/n/8 bool get[]Settings[]Display[]Render[]Hint[]High[]AA ( )
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1829--1830
- \T1/phv/b/n/10 18.66.3.64 get-Set-tings-Dis-playRen-der-Hint-Non-Cos-metic()[]
+Underfull \hbox (badness 10000) in paragraph at lines 1893--1894
+ \T1/phv/b/n/10 17.70.3.64 get-Set-tings-Dis-playRen-der-Hint-Non-Cos-metic()[]
  \T1/pcr/m/n/8 bool get[]Settings[]Display[]Render[]Hint[]Non[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1835--1836
- \T1/phv/b/n/10 18.66.3.65 get-Set-tings-Dis-playRen-der-HintSmooth-Pix()[] \T1
+Underfull \hbox (badness 10000) in paragraph at lines 1899--1900
+ \T1/phv/b/n/10 17.70.3.65 get-Set-tings-Dis-playRen-der-HintSmooth-Pix()[] \T1
 /pcr/m/n/8 bool get[]Settings[]Display[]Render[]Hint[]Smooth[]Pix (
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1841--1842
- \T1/phv/b/n/10 18.66.3.66 get-Set-tings-Dis-playRen-der-Hint-Tex-tAA()[] \T1/p
+Underfull \hbox (badness 10000) in paragraph at lines 1905--1906
+ \T1/phv/b/n/10 17.70.3.66 get-Set-tings-Dis-playRen-der-Hint-Tex-tAA()[] \T1/p
 cr/m/n/8 bool get[]Settings[]Display[]Render[]Hint[]Text[]AA ( )
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1847--1848
- \T1/phv/b/n/10 18.66.3.67 get-Set-tings-Dis-playScroll-Bar-Wid-get-Num()[] \T1
+Underfull \hbox (badness 10000) in paragraph at lines 1911--1912
+ \T1/phv/b/n/10 17.70.3.67 get-Set-tings-Dis-playScroll-Bar-Wid-get-Num()[] \T1
 /pcr/m/n/8 int get[]Settings[]Display[]Scroll[]Bar[]Widget[]Num ( )
  []
 
-[204]
-Underfull \hbox (badness 10000) in paragraph at lines 1853--1854
- \T1/phv/b/n/10 18.66.3.68 get-Set-tings-Dis-play-S-e-lect-Box-Al-pha()[] \T1/p
+
+Underfull \hbox (badness 10000) in paragraph at lines 1917--1918
+ \T1/phv/b/n/10 17.70.3.68 get-Set-tings-Dis-play-S-e-lect-Box-Al-pha()[] \T1/p
 cr/m/n/8 uint8[]_[]t get[]Settings[]Display[]Select[]Box[]Alpha ( )
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1859--1860
- \T1/phv/b/n/10 18.66.3.69 get-Set-tings-Dis-play-S-e-lect-BoxLeft-Color()[] \T
+Underfull \hbox (badness 10000) in paragraph at lines 1923--1924
+ \T1/phv/b/n/10 17.70.3.69 get-Set-tings-Dis-play-S-e-lect-BoxLeft-Color()[] \T
 1/pcr/m/n/8 QRgb get[]Settings[]Display[]Select[]Box[]Left[]Color ( )
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1865--1866
- \T1/phv/b/n/10 18.66.3.70 get-Set-tings-Dis-play-S-e-lect-BoxLeft-Fill()[] \T1
+Underfull \hbox (badness 10000) in paragraph at lines 1929--1930
+ \T1/phv/b/n/10 17.70.3.70 get-Set-tings-Dis-play-S-e-lect-BoxLeft-Fill()[] \T1
 /pcr/m/n/8 QRgb get[]Settings[]Display[]Select[]Box[]Left[]Fill ( )
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1871--1872
- \T1/phv/b/n/10 18.66.3.71 get-Set-tings-Dis-play-S-e-lect-BoxRight-Color()[] \
+Underfull \hbox (badness 10000) in paragraph at lines 1935--1936
+ \T1/phv/b/n/10 17.70.3.71 get-Set-tings-Dis-play-S-e-lect-BoxRight-Color()[] \
 T1/pcr/m/n/8 QRgb get[]Settings[]Display[]Select[]Box[]Right[]Color (
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1877--1878
- \T1/phv/b/n/10 18.66.3.72 get-Set-tings-Dis-play-S-e-lect-BoxRight-Fill()[] \T
+[208]
+Underfull \hbox (badness 10000) in paragraph at lines 1941--1942
+ \T1/phv/b/n/10 17.70.3.72 get-Set-tings-Dis-play-S-e-lect-BoxRight-Fill()[] \T
 1/pcr/m/n/8 QRgb get[]Settings[]Display[]Select[]Box[]Right[]Fill ( )
  []
 
-[205]
-Underfull \hbox (badness 10000) in paragraph at lines 1913--1914
- \T1/phv/b/n/10 18.66.3.78 get-Set-tings-Gen-er-alCheck-ForUp-dates()[] \T1/pcr
+
+Underfull \hbox (badness 10000) in paragraph at lines 1977--1978
+ \T1/phv/b/n/10 17.70.3.78 get-Set-tings-Gen-er-alCheck-ForUp-dates()[] \T1/pcr
 /m/n/8 bool get[]Settings[]General[]Check[]For[]Updates ( )
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1973--1974
- \T1/phv/b/n/10 18.66.3.88 get-Set-tings-Gen-eralMdiB-GUse-Tex-ture()[] \T1/pcr
+[209]
+Underfull \hbox (badness 10000) in paragraph at lines 2037--2038
+ \T1/phv/b/n/10 17.70.3.88 get-Set-tings-Gen-eralMdiB-GUse-Tex-ture()[] \T1/pcr
 /m/n/8 bool get[]Settings[]General[]Mdi[]BGUse[]Texture ( )
  []
 
-[206]
-Underfull \hbox (badness 10000) in paragraph at lines 1979--1980
- \T1/phv/b/n/10 18.66.3.89 get-Set-tings-Gen-er-al-Sys-temHelp-Browser()[] \T1/
+
+Underfull \hbox (badness 10000) in paragraph at lines 2043--2044
+ \T1/phv/b/n/10 17.70.3.89 get-Set-tings-Gen-er-al-Sys-temHelp-Browser()[] \T1/
 pcr/m/n/8 bool get[]Settings[]General[]System[]Help[]Browser ( )
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 2015--2016
- \T1/phv/b/n/10 18.66.3.95 get-Set-tings-Grid-Col-or-MatchCrossHair()[] \T1/pcr
+[210]
+Underfull \hbox (badness 10000) in paragraph at lines 2079--2080
+ \T1/phv/b/n/10 17.70.3.95 get-Set-tings-Grid-Col-or-MatchCrossHair()[] \T1/pcr
 /m/n/8 bool get[]Settings[]Grid[]Color[]Match[]Cross[]Hair ( )
  []
 
-[207]
-Underfull \hbox (badness 10000) in paragraph at lines 2111--2112
- \T1/phv/b/n/10 18.66.3.111 get-Set-ting-sOpen-SaveTrimD-st-NumJumps()[] \T1/pc
+[211]
+Underfull \hbox (badness 10000) in paragraph at lines 2175--2176
+ \T1/phv/b/n/10 17.70.3.111 get-Set-ting-sOpen-SaveTrimD-st-NumJumps()[] \T1/pc
 r/m/n/8 uint8[]_[]t get[]Settings[]Open[]Save[]Trim[]Dst[]Num[]Jumps
  []
 
-[208]
-Overfull \hbox (15.8991pt too wide) in paragraph at lines 2123--2124
- \T1/phv/b/n/10 18.66.3.113 get-Set-tingsPrint-ingDe-fault-De-vice()[] \T1/pcr/
+
+Overfull \hbox (15.8991pt too wide) in paragraph at lines 2187--2188
+ \T1/phv/b/n/10 17.70.3.113 get-Set-tingsPrint-ingDe-fault-De-vice()[] \T1/pcr/
 m/n/8 QString get[]Settings[]Printing[]Default[]Device ( ) [inline] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 2171--2172
- \T1/phv/b/n/10 18.66.3.121 get-Set-tingsPrompt-Save-His-to-ryAsHtml()[] \T1/pc
+[212]
+Underfull \hbox (badness 10000) in paragraph at lines 2235--2236
+ \T1/phv/b/n/10 17.70.3.121 get-Set-tingsPrompt-Save-His-to-ryAsHtml()[] \T1/pc
 r/m/n/8 bool get[]Settings[]Prompt[]Save[]History[]As[]Html ( )
  []
 
-[209]
-Underfull \hbox (badness 10000) in paragraph at lines 2177--2178
- \T1/phv/b/n/10 18.66.3.122 get-Set-tingsPrompt-Save-His-to-ry-File-name()[] \T
+
+Underfull \hbox (badness 10000) in paragraph at lines 2241--2242
+ \T1/phv/b/n/10 17.70.3.122 get-Set-tingsPrompt-Save-His-to-ry-File-name()[] \T
 1/pcr/m/n/8 QString get[]Settings[]Prompt[]Save[]History[]Filename
  []
 
-[210] [211] [212] [213] [214] [215] [216] [217] [218] [219] [220] [221]
-[222]
-Underfull \hbox (badness 10000) detected at line 2923
+[213] [214] [215] [216] [217] [218] [219] [220] [221] [222] [223] [224]
+[225] [226]
+Underfull \hbox (badness 10000) detected at line 2975
 [][][]
  []
 
 
-Underfull \hbox (badness 10000) detected at line 2936
+Underfull \hbox (badness 10000) detected at line 2988
 [][][]
  []
 
-[223] [224]
-Underfull \hbox (badness 10000) detected at line 3037
+[227] [228]
+Underfull \hbox (badness 10000) detected at line 3122
 [][][]
  []
 
-[225]
-Underfull \hbox (badness 10000) detected at line 3083
+[229]
+Underfull \hbox (badness 10000) detected at line 3135
 [][][]
  []
 
-
-Underfull \hbox (badness 10000) detected at line 3096
-[][][]
- []
-
-[226] [227] [228] [229] [230] [231] [232] [233] [234]
-Underfull \hbox (badness 10000) in paragraph at lines 3716--3717
- \T1/phv/b/n/10 18.66.3.336 set-Set-tings-Dis-playRen-der-Hint-Non-Cos-metic()[
+[230] [231] [232] [233] [234] [235] [236] [237] [238] [239]
+Underfull \hbox (badness 10000) in paragraph at lines 3802--3803
+ \T1/phv/b/n/10 17.70.3.335 set-Set-tings-Dis-playRen-der-Hint-Non-Cos-metic()[
 ] \T1/pcr/m/n/8 void set[]Settings[]Display[]Render[]Hint[]Non[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3722--3723
- \T1/phv/b/n/10 18.66.3.337 set-Set-tings-Dis-playRen-der-HintSmooth-Pix()[] \T
+Underfull \hbox (badness 10000) in paragraph at lines 3808--3809
+ \T1/phv/b/n/10 17.70.3.336 set-Set-tings-Dis-playRen-der-HintSmooth-Pix()[] \T
 1/pcr/m/n/8 void set[]Settings[]Display[]Render[]Hint[]Smooth[]Pix
  []
 
-[235] [236] [237] [238] [239] [240] [241] [242] [243] [244] [245] [246]
-[247] [248] [249]
-Underfull \hbox (badness 10000) detected at line 4566
+[240] [241] [242] [243] [244] [245] [246] [247] [248] [249] [250] [251]
+[252] [253]
+Underfull \hbox (badness 10000) detected at line 4652
 [][][]
  []
 
-[250] [251] [252] [253]
-Underfull \hbox (badness 10000) in paragraph at lines 4889--4890
- \T1/phv/b/n/10 18.66.4.36 set-tings_display_renderhint_noncosmetic[] \T1/pcr/m
+[254] [255] [256] [257]
+Underfull \hbox (badness 10000) in paragraph at lines 4979--4980
+ \T1/phv/b/n/10 17.70.4.36 set-tings_display_renderhint_noncosmetic[] \T1/pcr/m
 /n/8 bool settings[]_[]display[]_[]renderhint[]_[]noncosmetic
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4895--4896
- \T1/phv/b/n/10 18.66.4.37 set-tings_display_renderhint_smooth_pix[] \T1/pcr/m/
+Underfull \hbox (badness 10000) in paragraph at lines 4985--4986
+ \T1/phv/b/n/10 17.70.4.37 set-tings_display_renderhint_smooth_pix[] \T1/pcr/m/
 n/8 bool settings[]_[]display[]_[]renderhint[]_[]smooth[]_[]pix
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 4907--4908
- \T1/phv/b/n/10 18.66.4.39 set-tings_display_scrollbar_widget_num[] \T1/pcr/m/n
+[258]
+Underfull \hbox (badness 10000) in paragraph at lines 4997--4998
+ \T1/phv/b/n/10 17.70.4.39 set-tings_display_scrollbar_widget_num[] \T1/pcr/m/n
 /8 int settings[]_[]display[]_[]scrollbar[]_[]widget[]_[]num
  []
 
 
-Overfull \hbox (19.72989pt too wide) in paragraph at lines 4919--4920
- \T1/phv/b/n/10 18.66.4.41 set-tings_display_selectbox_left_color[] \T1/pcr/m/n
+Overfull \hbox (19.72989pt too wide) in paragraph at lines 5009--5010
+ \T1/phv/b/n/10 17.70.4.41 set-tings_display_selectbox_left_color[] \T1/pcr/m/n
 /8 QRgb settings[]_[]display[]_[]selectbox[]_[]left[]_[]color [private] 
  []
 
-[254]
-Underfull \hbox (badness 10000) in paragraph at lines 4931--4932
- \T1/phv/b/n/10 18.66.4.43 set-tings_display_selectbox_right_color[] \T1/pcr/m/
+
+Underfull \hbox (badness 10000) in paragraph at lines 5021--5022
+ \T1/phv/b/n/10 17.70.4.43 set-tings_display_selectbox_right_color[] \T1/pcr/m/
 n/8 QRgb settings[]_[]display[]_[]selectbox[]_[]right[]_[]color
  []
 
-[255]
-Underfull \hbox (badness 10000) in paragraph at lines 5039--5040
- \T1/phv/b/n/10 18.66.4.61 set-tings_general_system_help_browser[] \T1/pcr/m/n/
+[259] [260]
+Underfull \hbox (badness 10000) in paragraph at lines 5129--5130
+ \T1/phv/b/n/10 17.70.4.61 set-tings_general_system_help_browser[] \T1/pcr/m/n/
 8 bool settings[]_[]general[]_[]system[]_[]help[]_[]browser
  []
 
-[256] [257]
-Underfull \hbox (badness 10000) in paragraph at lines 5189--5190
- \T1/phv/b/n/10 18.66.4.86 set-tings_opensave_recent_list_of_files[] \T1/pcr/m/
+[261] [262]
+Underfull \hbox (badness 10000) in paragraph at lines 5279--5280
+ \T1/phv/b/n/10 17.70.4.86 set-tings_opensave_recent_list_of_files[] \T1/pcr/m/
 n/8 QString[]List settings[]_[]opensave[]_[]recent[]_[]list[]_[]of[]_[]
  []
 
-[258]
-Overfull \hbox (16.55316pt too wide) in paragraph at lines 5195--5196
- \T1/phv/b/n/10 18.66.4.87 set-tings_opensave_recent_max_files[] \T1/pcr/m/n/8 
+
+Overfull \hbox (16.55316pt too wide) in paragraph at lines 5285--5286
+ \T1/phv/b/n/10 17.70.4.87 set-tings_opensave_recent_max_files[] \T1/pcr/m/n/8 
 uint8[]_[]t settings[]_[]opensave[]_[]recent[]_[]max[]_[]files [private] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5213--5214
- \T1/phv/b/n/10 18.66.4.90 set-tings_opensave_trim_dst_num_jumps[] \T1/pcr/m/n/
+Underfull \hbox (badness 10000) in paragraph at lines 5303--5304
+ \T1/phv/b/n/10 17.70.4.90 set-tings_opensave_trim_dst_num_jumps[] \T1/pcr/m/n/
 8 uint8[]_[]t settings[]_[]opensave[]_[]trim[]_[]dst[]_[]num[]_[]jumps
  []
 
-[259]
-Overfull \hbox (22.1479pt too wide) in paragraph at lines 5267--5268
- \T1/phv/b/n/10 18.66.4.99 set-tings_prompt_save_history_as_html[] \T1/pcr/m/n/
+[263]
+Overfull \hbox (22.1479pt too wide) in paragraph at lines 5357--5358
+ \T1/phv/b/n/10 17.70.4.99 set-tings_prompt_save_history_as_html[] \T1/pcr/m/n/
 8 bool settings[]_[]prompt[]_[]save[]_[]history[]_[]as[]_[]html [private] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 5273--5274
- \T1/phv/b/n/10 18.66.4.100 set-tings_prompt_save_history_filename[] \T1/pcr/m/
+Underfull \hbox (badness 10000) in paragraph at lines 5363--5364
+ \T1/phv/b/n/10 17.70.4.100 set-tings_prompt_save_history_filename[] \T1/pcr/m/
 n/8 QString settings[]_[]prompt[]_[]save[]_[]history[]_[]filename
  []
 
-[260] [261] [262] [263] [264]) (class_mdi_area.tex [265] [266] [267] [268])
-(class_mdi_window.tex [269] [270] [271] [272] [273] [274] [275])
-(class_path_object.tex [276] [277] [278] [279] [280]) (class_point_object.tex
-[281] [282] [283] [284] [285]) (class_polygon_object.tex [286] [287] [288]
-[289] [290]) (class_polyline_object.tex [291] [292] [293] [294] [295])
-(class_preview_dialog.tex [296]) (class_property_editor.tex [297] [298]
-[299] [300] [301] [302] [303] [304]
+[264] [265] [266] [267] [268] [269]) (class_mdi_area.tex [270] [271] [272]
+[273]) (class_mdi_window.tex [274] [275] [276] [277] [278]
+Underfull \hbox (badness 10000) detected at line 263
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 312
+[][][]
+ []
+
+[279]
+Underfull \hbox (badness 10000) detected at line 336
+[][][]
+ []
+
+[280]
+Underfull \hbox (badness 10000) detected at line 422
+[][][]
+ []
+
+
+Underfull \hbox (badness 10000) detected at line 440
+[][][]
+ []
+
+[281] [282] [283]
+Underfull \hbox (badness 10000) detected at line 534
+[][][]
+ []
+
+[284]) (class_path_object.tex [285] [286] [287] [288] [289])
+(class_point_object.tex [290] [291] [292] [293]) (class_polygon_object.tex
+[294] [295] [296] [297] [298] [299]) (class_polyline_object.tex [300] [301]
+[302] [303] [304]) (class_preview_dialog.tex [305]) (class_property_editor.tex
+[306] [307] [308] [309] [310] [311] [312] [313]
 Underfull \hbox (badness 10000) in paragraph at lines 762--763
- \T1/phv/b/n/10 18.74.2.9 cre-ate-Group-Box-Ge-om-e-try-Di-mA-ligned()[] \T1/pc
+ \T1/phv/b/n/10 17.78.2.9 cre-ate-Group-Box-Ge-om-e-try-Di-mA-ligned()[] \T1/pc
 r/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geo
 metry[]Dim[]Aligned ( )
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 768--769
- \T1/phv/b/n/10 18.74.2.10 cre-ate-Group-Box-Ge-om-e-try-Di-mAn-gu-lar()[] \T1/
+ \T1/phv/b/n/10 17.78.2.10 cre-ate-Group-Box-Ge-om-e-try-Di-mAn-gu-lar()[] \T1/
 pcr/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]G
 eometry[]Dim[]Angular (
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 774--775
- \T1/phv/b/n/10 18.74.2.11 cre-ate-Group-Box-Ge-om-e-try-Di-mAr-cLength()[] \T1
+ \T1/phv/b/n/10 17.78.2.11 cre-ate-Group-Box-Ge-om-e-try-Di-mAr-cLength()[] \T1
 /pcr/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]
 Geometry[]Dim[]Arc[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 780--781
- \T1/phv/b/n/10 18.74.2.12 cre-ate-Group-Box-Ge-om-e-try-Dim-Di-am-e-ter()[] \T
+ \T1/phv/b/n/10 17.78.2.12 cre-ate-Group-Box-Ge-om-e-try-Dim-Di-am-e-ter()[] \T
 1/pcr/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[
 ]Geometry[]Dim[]Diameter
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 786--787
- \T1/phv/b/n/10 18.74.2.13 cre-ate-Group-Box-Ge-om-e-try-Dim-Leader()[] \T1/pcr
+ \T1/phv/b/n/10 17.78.2.13 cre-ate-Group-Box-Ge-om-e-try-Dim-Leader()[] \T1/pcr
 /m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geom
 etry[]Dim[]Leader ( )
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 792--793
- \T1/phv/b/n/10 18.74.2.14 cre-ate-Group-Box-Ge-om-e-try-Dim-Lin-ear()[] \T1/pc
+ \T1/phv/b/n/10 17.78.2.14 cre-ate-Group-Box-Ge-om-e-try-Dim-Lin-ear()[] \T1/pc
 r/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geo
 metry[]Dim[]Linear ( )
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 798--799
- \T1/phv/b/n/10 18.74.2.15 cre-ate-Group-Box-Ge-om-e-try-Di-mOr-di-nate()[] \T1
+ \T1/phv/b/n/10 17.78.2.15 cre-ate-Group-Box-Ge-om-e-try-Di-mOr-di-nate()[] \T1
 /pcr/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]
 Geometry[]Dim[]Ordinate
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 804--805
- \T1/phv/b/n/10 18.74.2.16 cre-ate-Group-Box-Ge-om-e-try-Dim-Ra-dius()[] \T1/pc
+ \T1/phv/b/n/10 17.78.2.16 cre-ate-Group-Box-Ge-om-e-try-Dim-Ra-dius()[] \T1/pc
 r/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geo
 metry[]Dim[]Radius ( )
  []
 
 
 Overfull \hbox (18.64925pt too wide) in paragraph at lines 810--811
- \T1/phv/b/n/10 18.74.2.17 cre-ate-Group-Box-Ge-om-e-tryEl-lipse()[] \T1/pcr/m/
+ \T1/phv/b/n/10 17.78.2.17 cre-ate-Group-Box-Ge-om-e-tryEl-lipse()[] \T1/pcr/m/
 n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geometr
 y[]Ellipse ( ) [private] 
  []
 
-[305]
+[314]
 Underfull \hbox (badness 10000) in paragraph at lines 822--823
- \T1/phv/b/n/10 18.74.2.19 cre-ate-Group-Box-Ge-om-e-try-In-finite-Line()[] \T1
+ \T1/phv/b/n/10 17.78.2.19 cre-ate-Group-Box-Ge-om-e-try-In-finite-Line()[] \T1
 /pcr/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]
 Geometry[]Infinite[]Line
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 846--847
- \T1/phv/b/n/10 18.74.2.23 cre-ate-Group-Box-Ge-om-e-try-Poly-gon()[] \T1/pcr/m
+ \T1/phv/b/n/10 17.78.2.23 cre-ate-Group-Box-Ge-om-e-try-Poly-gon()[] \T1/pcr/m
 /n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geomet
 ry[]Polygon ( )
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 852--853
- \T1/phv/b/n/10 18.74.2.24 cre-ate-Group-Box-Ge-om-e-try-Poly-line()[] \T1/pcr/
+ \T1/phv/b/n/10 17.78.2.24 cre-ate-Group-Box-Ge-om-e-try-Poly-line()[] \T1/pcr/
 m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geome
 try[]Polyline ( )
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 864--865
- \T1/phv/b/n/10 18.74.2.26 cre-ate-Group-Box-Ge-om-e-tryRect-an-gle()[] \T1/pcr
+ \T1/phv/b/n/10 17.78.2.26 cre-ate-Group-Box-Ge-om-e-tryRect-an-gle()[] \T1/pcr
 /m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geom
 etry[]Rectangle ( )
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 870--871
- \T1/phv/b/n/10 18.74.2.27 cre-ate-Group-Box-Ge-om-e-try-Text-Multi()[] \T1/pcr
+ \T1/phv/b/n/10 17.78.2.27 cre-ate-Group-Box-Ge-om-e-try-Text-Multi()[] \T1/pcr
 /m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Geom
 etry[]Text[]Multi ( )
  []
 
-[306]
+[315]
 Underfull \hbox (badness 10000) in paragraph at lines 876--877
- \T1/phv/b/n/10 18.74.2.28 cre-ate-Group-Box-Ge-om-e-try-TextS-in-gle()[] \T1/p
+ \T1/phv/b/n/10 17.78.2.28 cre-ate-Group-Box-Ge-om-e-try-TextS-in-gle()[] \T1/p
 cr/m/n/8 QGroup[]Box $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 create[]Group[]Box[]Ge
 ometry[]Text[]Single ( )
  []
 
-[307] [308] [309] [310] [311] [312] [313] [314] [315] [316] [317] [318]
-[319] [320] [321] [322] [323] [324] [325] [326] [327] [328] [329] [330]
+[316] [317] [318] [319] [320] [321] [322] [323] [324] [325] [326] [327]
+[328] [329] [330] [331] [332] [333] [334] [335] [336] [337] [338] [339]
 Overfull \hbox (17.7915pt too wide) in paragraph at lines 2463--2464
- \T1/phv/b/n/10 18.74.3.239 tool-But-ton-Poly-gonDi-am-e-ter-Ver-tex[] \T1/pcr/
+ \T1/phv/b/n/10 17.78.3.239 tool-But-ton-Poly-gonDi-am-e-ter-Ver-tex[] \T1/pcr/
 m/n/8 QTool[]Button$\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 tool[]Button[]Polygon[]D
 iameter[]Vertex [private] 
  []
 
-[331] [332] [333] [334]) (class_rect_object.tex [335] [336] [337] [338])
-(class_save_object.tex [339] [340] [341] [342] [343] [344])
-(class_select_box.tex [345] [346]) (struct_settings__.tex [347] [348] [349]
-[350] [351] [352] [353] [354] [355] [356] [357] [358] [359] [360] [361])
-(class_settings___dialog.tex [362] [363] [364] [365] [366] [367]
+[340] [341] [342] [343]) (class_rect_object.tex [344] [345] [346] [347])
+(class_save_object.tex [348] [349] [350] [351] [352] [353] [354])
+(class_select_box.tex [355] [356] [357]) (struct_settings__.tex [358] [359]
+[360] [361] [362] [363] [364] [365] [366] [367] [368] [369] [370] [371])
+(class_settings___dialog.tex [372] [373] [374] [375] [376] [377]
 Overfull \hbox (15.38022pt too wide) in paragraph at lines 578--579
- \T1/phv/b/n/10 18.79.2.6 but-ton-Cus-tom-Fil-terS-e-lec-tAllClicked[] \T1/pcr/
+ \T1/phv/b/n/10 17.83.2.6 but-ton-Cus-tom-Fil-terS-e-lec-tAllClicked[] \T1/pcr/
 m/n/8 void button[]Custom[]Filter[]Select[]All[]Clicked ( ) [private],
  []
 
-[368]
+[378]
 Underfull \hbox (badness 10000) in paragraph at lines 620--621
- \T1/phv/b/n/10 18.79.2.13 check-Box-Gen-eralMdiB-GUse-C-ol-orStat-e-Changed[] 
+ \T1/phv/b/n/10 17.83.2.13 check-Box-Gen-eralMdiB-GUse-C-ol-orStat-e-Changed[] 
 \T1/pcr/m/n/8 void check[]Box[]General[]Mdi[]BGUse[]Color[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 626--627
- \T1/phv/b/n/10 18.79.2.14 check-Box-Gen-eralMdiB-GUseL-o-goStat-e-Changed[] \T
+ \T1/phv/b/n/10 17.83.2.14 check-Box-Gen-eralMdiB-GUseL-o-goStat-e-Changed[] \T
 1/pcr/m/n/8 void check[]Box[]General[]Mdi[]BGUse[]Logo[]State[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 632--633
- \T1/phv/b/n/10 18.79.2.15 check-Box-Gen-eralMdiB-GUse-Tex-tureStat-e-Changed[]
+ \T1/phv/b/n/10 17.83.2.15 check-Box-Gen-eralMdiB-GUse-Tex-tureStat-e-Changed[]
  \T1/pcr/m/n/8 void check[]Box[]General[]Mdi[]BGUse[]Texture[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 638--639
- \T1/phv/b/n/10 18.79.2.16 check-Box-Grid-Cen-terOnO-ri-gin-Stat-e-Changed[] \T
+ \T1/phv/b/n/10 17.83.2.16 check-Box-Grid-Cen-terOnO-ri-gin-Stat-e-Changed[] \T
 1/pcr/m/n/8 void check[]Box[]Grid[]Center[]On[]Origin[]State[]Changed
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 644--645
- \T1/phv/b/n/10 18.79.2.17 check-Box-Grid-Col-or-MatchCrossHairStat-e-Changed[]
+ \T1/phv/b/n/10 17.83.2.17 check-Box-Grid-Col-or-MatchCrossHairStat-e-Changed[]
  \T1/pcr/m/n/8 void check[]Box[]Grid[]Color[]Match[]Cross[]Hair[]
  []
 
-[369]
+[379]
 Underfull \hbox (badness 10000) in paragraph at lines 680--681
- \T1/phv/b/n/10 18.79.2.23 check-Box-Prompt-Save-His-to-ryAsHtml-Stat-e-Changed
+ \T1/phv/b/n/10 17.83.2.23 check-Box-Prompt-Save-His-to-ryAsHtml-Stat-e-Changed
 [] \T1/pcr/m/n/8 void check[]Box[]Prompt[]Save[]History[]As[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 686--687
- \T1/phv/b/n/10 18.79.2.24 check-Box-Prompt-Save-His-to-ryS-tat-e-Changed[] \T1
+ \T1/phv/b/n/10 17.83.2.24 check-Box-Prompt-Save-His-to-ryS-tat-e-Changed[] \T1
 /pcr/m/n/8 void check[]Box[]Prompt[]Save[]History[]State[]Changed
  []
 
-[370]
+[380]
 Underfull \hbox (badness 10000) in paragraph at lines 752--753
- \T1/phv/b/n/10 18.79.2.35 check-BoxQS-nap-Per-pen-dic-u-larStat-e-Changed[] \T
+ \T1/phv/b/n/10 17.83.2.35 check-BoxQS-nap-Per-pen-dic-u-larStat-e-Changed[] \T
 1/pcr/m/n/8 void check[]Box[]QSnap[]Perpendicular[]State[]
  []
 
-[371]
+[381]
 Underfull \hbox (badness 10000) in paragraph at lines 782--783
- \T1/phv/b/n/10 18.79.2.40 check-BoxRen-der-Hint-Non-Cos-met-ic-Stat-e-Changed[
+ \T1/phv/b/n/10 17.83.2.40 check-BoxRen-der-Hint-Non-Cos-met-ic-Stat-e-Changed[
 ] \T1/pcr/m/n/8 void check[]Box[]Render[]Hint[]Non[]Cosmetic[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 788--789
- \T1/phv/b/n/10 18.79.2.41 check-BoxRen-der-HintSmooth-PixS-tat-e-Changed[] \T1
+ \T1/phv/b/n/10 17.83.2.41 check-BoxRen-der-HintSmooth-PixS-tat-e-Changed[] \T1
 /pcr/m/n/8 void check[]Box[]Render[]Hint[]Smooth[]Pix[]State[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 806--807
- \T1/phv/b/n/10 18.79.2.44 check-BoxS-e-lec-tion-Mod-e-Pick-AddStat-e-Changed[]
+ \T1/phv/b/n/10 17.83.2.44 check-BoxS-e-lec-tion-Mod-e-Pick-AddStat-e-Changed[]
  \T1/pcr/m/n/8 void check[]Box[]Selection[]Mode[]Pick[]Add[]State[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 812--813
- \T1/phv/b/n/10 18.79.2.45 check-BoxS-e-lec-tion-Mod-e-Pick-DragStat-e-Changed[
+ \T1/phv/b/n/10 17.83.2.45 check-BoxS-e-lec-tion-Mod-e-Pick-DragStat-e-Changed[
 ] \T1/pcr/m/n/8 void check[]Box[]Selection[]Mode[]Pick[]Drag[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 818--819
- \T1/phv/b/n/10 18.79.2.46 check-BoxS-e-lec-tion-Mod-e-Pick-First-Stat-e-Change
+ \T1/phv/b/n/10 17.83.2.46 check-BoxS-e-lec-tion-Mod-e-Pick-First-Stat-e-Change
 d[] \T1/pcr/m/n/8 void check[]Box[]Selection[]Mode[]Pick[]First[]
  []
 
-[372]
+[382]
 Underfull \hbox (badness 10000) in paragraph at lines 842--843
- \T1/phv/b/n/10 18.79.2.50 chooseDis-play-Back-ground-Color[] \T1/pcr/m/n/8 voi
+ \T1/phv/b/n/10 17.83.2.50 chooseDis-play-Back-ground-Color[] \T1/pcr/m/n/8 voi
 d choose[]Display[]Background[]Color ( ) [private],
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 854--855
- \T1/phv/b/n/10 18.79.2.52 chooseDis-play-S-e-lect-BoxLeft-Color[] \T1/pcr/m/n/
+ \T1/phv/b/n/10 17.83.2.52 chooseDis-play-S-e-lect-BoxLeft-Color[] \T1/pcr/m/n/
 8 void choose[]Display[]Select[]Box[]Left[]Color ( ) [private],
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 860--861
- \T1/phv/b/n/10 18.79.2.53 chooseDis-play-S-e-lect-BoxLeft-Fill[] \T1/pcr/m/n/8
+ \T1/phv/b/n/10 17.83.2.53 chooseDis-play-S-e-lect-BoxLeft-Fill[] \T1/pcr/m/n/8
  void choose[]Display[]Select[]Box[]Left[]Fill ( ) [private],
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 872--873
- \T1/phv/b/n/10 18.79.2.55 chooseDis-play-S-e-lect-BoxRight-Fill[] \T1/pcr/m/n/
+ \T1/phv/b/n/10 17.83.2.55 chooseDis-play-S-e-lect-BoxRight-Fill[] \T1/pcr/m/n/
 8 void choose[]Display[]Select[]Box[]Right[]Fill ( ) [private],
  []
 
-[373]
+[383]
 Overfull \hbox (26.83438pt too wide) in paragraph at lines 890--891
- \T1/phv/b/n/10 18.79.2.58 chooseGen-eralMdiBack-ground-Tex-ture[] \T1/pcr/m/n/
+ \T1/phv/b/n/10 17.83.2.58 chooseGen-eralMdiBack-ground-Tex-ture[] \T1/pcr/m/n/
 8 void choose[]General[]Mdi[]Background[]Texture ( ) [private],
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 902--903
- \T1/phv/b/n/10 18.79.2.60 choose-Prompt-Back-ground-Color[] \T1/pcr/m/n/8 void
+ \T1/phv/b/n/10 17.83.2.60 choose-Prompt-Back-ground-Color[] \T1/pcr/m/n/8 void
  choose[]Prompt[]Background[]Color ( ) [private],
  []
 
-[374]
+[384]
 Underfull \hbox (badness 10000) in paragraph at lines 944--945
- \T1/phv/b/n/10 18.79.2.67 com-boBox-Prompt-Font-Fam-i-ly-Cur-rentIn-dex-Change
+ \T1/phv/b/n/10 17.83.2.67 com-boBox-Prompt-Font-Fam-i-ly-Cur-rentIn-dex-Change
 d[] \T1/pcr/m/n/8 void combo[]Box[]Prompt[]Font[]Family[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 950--951
- \T1/phv/b/n/10 18.79.2.68 com-boBox-Prompt-FontStyle-Cur-rentIn-dex-Changed[] 
+ \T1/phv/b/n/10 17.83.2.68 com-boBox-Prompt-FontStyle-Cur-rentIn-dex-Changed[] 
 \T1/pcr/m/n/8 void combo[]Box[]Prompt[]Font[]Style[]Current[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 956--957
- \T1/phv/b/n/10 18.79.2.69 com-boBoxQS-napLo-ca-tor-Col-or-Cur-rentIn-dex-Chang
+ \T1/phv/b/n/10 17.83.2.69 com-boBoxQS-napLo-ca-tor-Col-or-Cur-rentIn-dex-Chang
 ed[] \T1/pcr/m/n/8 void combo[]Box[]QSnap[]Locator[]Color[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 962--963
- \T1/phv/b/n/10 18.79.2.70 com-boBoxRuler-Met-ric-Cur-rentIn-dex-Changed[] \T1/
+ \T1/phv/b/n/10 17.83.2.70 com-boBoxRuler-Met-ric-Cur-rentIn-dex-Changed[] \T1/
 pcr/m/n/8 void combo[]Box[]Ruler[]Metric[]Current[]Index[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 968--969
- \T1/phv/b/n/10 18.79.2.71 com-boBoxScroll-Bar-Wid-getCur-rentIn-dex-Changed[] 
+ \T1/phv/b/n/10 17.83.2.71 com-boBoxScroll-Bar-Wid-getCur-rentIn-dex-Changed[] 
 \T1/pcr/m/n/8 void combo[]Box[]Scroll[]Bar[]Widget[]Current[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 974--975
- \T1/phv/b/n/10 18.79.2.72 com-boBoxS-e-lec-tion-Cool-Grip-Col-or-Cur-rentIn-de
+ \T1/phv/b/n/10 17.83.2.72 com-boBoxS-e-lec-tion-Cool-Grip-Col-or-Cur-rentIn-de
 x-Changed[] \T1/pcr/m/n/8 void combo[]Box[]Selection[]Cool[]Grip[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 980--981
- \T1/phv/b/n/10 18.79.2.73 com-boBoxS-e-lec-tion-Hot-Grip-Col-or-Cur-rentIn-dex
+ \T1/phv/b/n/10 17.83.2.73 com-boBoxS-e-lec-tion-Hot-Grip-Col-or-Cur-rentIn-dex
 -Changed[] \T1/pcr/m/n/8 void combo[]Box[]Selection[]Hot[]Grip[]
  []
 
-[375] [376]
+[385] [386]
 Underfull \hbox (badness 10000) in paragraph at lines 1076--1077
- \T1/phv/b/n/10 18.79.2.89 cur-rent-Dis-play-S-e-lect-BoxLeft-Col-or-Changed[] 
+ \T1/phv/b/n/10 17.83.2.89 cur-rent-Dis-play-S-e-lect-BoxLeft-Col-or-Changed[] 
 \T1/pcr/m/n/8 void current[]Display[]Select[]Box[]Left[]Color[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1088--1089
- \T1/phv/b/n/10 18.79.2.91 cur-rent-Dis-play-S-e-lect-BoxRight-Col-or-Changed[]
+ \T1/phv/b/n/10 17.83.2.91 cur-rent-Dis-play-S-e-lect-BoxRight-Col-or-Changed[]
  \T1/pcr/m/n/8 void current[]Display[]Select[]Box[]Right[]Color[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1094--1095
- \T1/phv/b/n/10 18.79.2.92 cur-rent-Dis-play-S-e-lect-BoxRight-FillChanged[] \T
+ \T1/phv/b/n/10 17.83.2.92 cur-rent-Dis-play-S-e-lect-BoxRight-FillChanged[] \T
 1/pcr/m/n/8 void current[]Display[]Select[]Box[]Right[]Fill[]Changed
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1100--1101
- \T1/phv/b/n/10 18.79.2.93 cur-rent-Gen-eralMdiBack-ground-Col-or-Changed[] \T1
+ \T1/phv/b/n/10 17.83.2.93 cur-rent-Gen-eralMdiBack-ground-Col-or-Changed[] \T1
 /pcr/m/n/8 void current[]General[]Mdi[]Background[]Color[]
  []
 
-[377]
+[387]
 Underfull \hbox (badness 10000) in paragraph at lines 1154--1155
- \T1/phv/b/n/10 18.79.2.102 slid-er-S-e-lec-tion-Pick-Box-Size-Val-ueChanged[] 
+ \T1/phv/b/n/10 17.83.2.102 slid-er-S-e-lec-tion-Pick-Box-Size-Val-ueChanged[] 
 \T1/pcr/m/n/8 void slider[]Selection[]Pick[]Box[]Size[]Value[]Changed
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1160--1161
- \T1/phv/b/n/10 18.79.2.103 spin-BoxDis-play-S-e-lect-Box-Al-phaVal-ueChanged[]
+ \T1/phv/b/n/10 17.83.2.103 spin-BoxDis-play-S-e-lect-Box-Al-phaVal-ueChanged[]
  \T1/pcr/m/n/8 void spin[]Box[]Display[]Select[]Box[]Alpha[]Value[]
  []
 
-[378] [379] [380] [381]
+[388] [389] [390] [391]
 Underfull \hbox (badness 10000) in paragraph at lines 1373--1374
- \T1/phv/b/n/10 18.79.3.20 di-a-log_display_renderhint_noncosmetic[] \T1/pcr/m/
+ \T1/phv/b/n/10 17.83.3.20 di-a-log_display_renderhint_noncosmetic[] \T1/pcr/m/
 n/8 bool dialog[]_[]display[]_[]renderhint[]_[]noncosmetic
  []
 
 
 Overfull \hbox (20.18597pt too wide) in paragraph at lines 1379--1380
- \T1/phv/b/n/10 18.79.3.21 di-a-log_display_renderhint_smooth_pix[] \T1/pcr/m/n
+ \T1/phv/b/n/10 17.83.3.21 di-a-log_display_renderhint_smooth_pix[] \T1/pcr/m/n
 /8 bool dialog[]_[]display[]_[]renderhint[]_[]smooth[]_[]pix [private] 
  []
 
-[382] [383] [384] [385]
+[392] [393] [394] [395]
 Overfull \hbox (21.64407pt too wide) in paragraph at lines 1673--1674
- \T1/phv/b/n/10 18.79.3.70 di-a-log_opensave_trim_dst_num_jumps[] \T1/pcr/m/n/8
+ \T1/phv/b/n/10 17.83.3.70 di-a-log_opensave_trim_dst_num_jumps[] \T1/pcr/m/n/8
  quint8 dialog[]_[]opensave[]_[]trim[]_[]dst[]_[]num[]_[]jumps [private] 
  []
 
-[386]
+[396]
 Underfull \hbox (badness 10000) in paragraph at lines 1733--1734
- \T1/phv/b/n/10 18.79.3.80 di-a-log_prompt_save_history_filename[] \T1/pcr/m/n/
+ \T1/phv/b/n/10 17.83.3.80 di-a-log_prompt_save_history_filename[] \T1/pcr/m/n/
 8 QString dialog[]_[]prompt[]_[]save[]_[]history[]_[]filename
  []
 
-[387] [388] [389]
+[397] [398] [399]
 Overfull \hbox (18.67389pt too wide) in paragraph at lines 1937--1938
- \T1/phv/b/n/10 18.79.3.114 pre-view_display_selectbox_left_color[] \T1/pcr/m/n
+ \T1/phv/b/n/10 17.83.3.114 pre-view_display_selectbox_left_color[] \T1/pcr/m/n
 /8 QRgb preview[]_[]display[]_[]selectbox[]_[]left[]_[]color [private] 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1949--1950
- \T1/phv/b/n/10 18.79.3.116 pre-view_display_selectbox_right_color[] \T1/pcr/m/
+ \T1/phv/b/n/10 17.83.3.116 pre-view_display_selectbox_right_color[] \T1/pcr/m/
 n/8 QRgb preview[]_[]display[]_[]selectbox[]_[]right[]_[]color
  []
 
-[390] [391]) (class_status_bar.tex [392] [393]) (class_status_bar_button.tex
-[394] [395] [396] [397]) (struct_stx_thread__.tex) (struct_sub_descriptor__.tex
-[398]) (struct_svg_attribute__.tex [399]) (class_text_single_object.tex
-[400] [401] [402] [403] [404] [405] [406] [407] [408])
-(structthread__color__.tex) (struct_thred_extension__.tex [409])
-(struct_thred_header__.tex [410]) (struct_ui_object__.tex [411] [412] [413]
-[414]) (class_undoable_add_command.tex [415])
-(class_undoable_delete_command.tex [416]) (class_undoable_grip_edit_command.tex
-[417] [418]) (class_undoable_mirror_command.tex [419])
-(class_undoable_move_command.tex [420]) (class_undoable_nav_command.tex
-[421] [422]) (class_undoable_rotate_command.tex
+[400] [401]) (class_status_bar.tex [402] [403]) (class_status_bar_button.tex
+[404] [405] [406] [407]) (structstd_1_1string__.tex) (struct_stx_thread__.tex
+[408]) (struct_sub_descriptor__.tex [409]) (struct_svg_attribute__.tex [410])
+(class_text_single_object.tex [411] [412] [413] [414] [415] [416] [417]
+[418] [419]) (structthread__color__.tex) (struct_thred_extension__.tex [420])
+(struct_thred_header__.tex [421]) (struct_ui_object__.tex [422] [423] [424]
+[425]) (class_undoable_add_command.tex [426])
+(class_undoable_delete_command.tex [427]) (class_undoable_grip_edit_command.tex
+[428]) (class_undoable_mirror_command.tex [429] [430])
+(class_undoable_move_command.tex [431]) (class_undoable_nav_command.tex
+[432] [433]) (class_undoable_rotate_command.tex
 Underfull \hbox (badness 1502) in paragraph at lines 10--12
 [][] \T1/phv/m/n/10 (qreal pivot[]PointX, qreal pivot[]PointY, qreal rot[]Angle
 , const QString &text,
  []
 
-[423] [424]) (class_undoable_scale_command.tex [425] [426])
-(class_undo_editor.tex [427] [428]) (struct_undo_history__.tex [429])
-(class_view.tex [430] [431] [432] [433] [434] [435] [436] [437] [438] [439]
-[440] [441] [442] [443] [444] [445] [446] [447] [448]) (struct_view__.tex
-[449] [450] [451]) (struct_vip_header__.tex [452] [453])
-(_c_o_d_e___o_f___c_o_n_d_u_c_t_8md.tex) (application_8cpp.tex)
-(application_8h.tex
+[434] [435]) (class_undoable_scale_command.tex [436] [437])
+(class_undo_editor.tex [438] [439]) (struct_undo_history__.tex [440])
+(class_view.tex [441] [442] [443] [444] [445] [446] [447] [448] [449] [450]
+[451] [452] [453] [454] [455] [456] [457] [458]) (struct_vip_header__.tex
+[459] [460]) (_c_o_d_e___o_f___c_o_n_d_u_c_t_8md.tex) (application_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-[454]) (application_8h_source.tex) (cmdprompt_8cpp.tex) (cmdprompt_8h.tex
+) (application_8h_source.tex [461]) (cmdprompt_8cpp.tex) (cmdprompt_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[455]) (cmdprompt_8h_source.tex [456] [457] [458]) (fdl-1_83_8md.tex)
+[462]) (cmdprompt_8h_source.tex [463] [464] [465]) (fdl-1_83_8md.tex)
 (embdetails-dialog_8cpp.tex) (embdetails-dialog_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-[459]) (embdetails-dialog_8h_source.tex) (gui__backend_8cpp.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--11
+[466]) (embdetails-dialog_8h_source.tex) (embroidermodder_8cpp.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--5
 
- []
-
-LaTeX Font Info:    Font shape `TS1/phv/m/it' in size <9> not available
-(Font)              Font shape `TS1/phv/m/sl' tried instead on input line 17.
-LaTeX Font Info:    Font shape `TS1/phv/m/sl' will be
-(Font)              scaled to size 8.09995pt on input line 17.
-[460] [461]
-Underfull \hbox (badness 10000) detected at line 150
-[][][]
- []
-
-[462]
-Underfull \hbox (badness 10000) detected at line 178
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 194
-[][][]
- []
-
-[463]
-Underfull \hbox (badness 10000) detected at line 225
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 256
-[][][]
- []
-
-[464]
-Overfull \vbox (16.07768pt too high) has occurred while \output is active []
-
-
-[465] [466]
-Underfull \hbox (badness 10000) detected at line 399
-[][][]
  []
 
 [467]
-Underfull \hbox (badness 10000) detected at line 483
+Underfull \hbox (badness 10000) detected at line 43
 [][][]
  []
 
-
-Underfull \hbox (badness 10000) detected at line 496
-[][][]
- []
-
-[468]
-Underfull \hbox (badness 10000) detected at line 534
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 574
-[][][]
- []
-
-[469] [470]) (gui__backend_8h.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--9
+) (embroidermodder_8h.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--16
 
  []
 
-[471] [472]
-Underfull \hbox (badness 10000) detected at line 176
-[][][]
- []
-
-[473]
-Underfull \hbox (badness 10000) detected at line 204
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 220
-[][][]
- []
-
-[474]
-Underfull \hbox (badness 10000) detected at line 251
-[][][]
+[468] [469] [470] [471]
+LaTeX Font Info:    Font shape `TS1/phv/m/it' in size <9> not available
+(Font)              Font shape `TS1/phv/m/sl' tried instead on input line 363.
+LaTeX Font Info:    Font shape `TS1/phv/m/sl' will be
+(Font)              scaled to size 8.09995pt on input line 363.
+ [472] [473] [474] [475]
+Underfull \hbox (badness 10000) in paragraph at lines 743--744
+ \T1/phv/b/n/10 18.12.1.17 EL-LIPSE_MODE_MAJORDIAMETER_MINORRADIUS[] \T1/pcr/m/
+n/8 #define ELLIPSE[]_[][]MODE[]_[][]MAJORDIAMETER[]
  []
 
 
-Underfull \hbox (badness 10000) detected at line 282
-[][][]
+Underfull \hbox (badness 10000) in paragraph at lines 749--750
+ \T1/phv/b/n/10 18.12.1.18 EL-LIPSE_MODE_MAJORRADIUS_MINORRADIUS[] \T1/pcr/m/n/
+8 #define ELLIPSE[]_[][]MODE[]_[][]MAJORRADIUS[]_[][]
  []
 
-[475] [476] [477]
-Underfull \hbox (badness 10000) detected at line 425
-[][][]
- []
-
-[478] [479]
-Underfull \hbox (badness 10000) detected at line 519
-[][][]
- []
-
-
-Underfull \hbox (badness 10000) detected at line 532
-[][][]
- []
-
-[480]
-Underfull \hbox (badness 10000) detected at line 580
-[][][]
- []
-
-[481]
-Underfull \hbox (badness 10000) detected at line 636
-[][][]
- []
-
-[482]) (gui__backend_8h_source.tex [483]) (imagewidget_8cpp.tex)
+[476] [477] [478] [479] [480] [481] [482] [483]
+pdfTeX warning (ext4): destination with the same identifier (name{embroidermodd
+er_8h_autotoc_md1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1294 ...target{embroidermodder_8h_autotoc_md1}{}
+                                                  \doxysubsubsection{Emb\+Vi...
+[484]
+pdfTeX warning (ext4): destination with the same identifier (name{embroidermodd
+er_8h_autotoc_md0}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1341 ...target{embroidermodder_8h_autotoc_md0}{}
+                                                  \doxyparagraph{Geometry Ob...
+[485] [486] [487] [488] [489] [490] [491] [492] [493] [494] [495] [496]
+[497] [498] [499] [500] [501] [502]) (embroidermodder_8h_source.tex [503]
+[504] [505] [506] [507] [508] [509] [510] [511] [512]) (imagewidget_8cpp.tex)
 (imagewidget_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[484]) (imagewidget_8h_source.tex) (imgui__main_8c.tex
+) (imagewidget_8h_source.tex) (layer-manager_8cpp.tex) (layer-manager_8h.tex
+Underfull \hbox (badness 10000) in paragraph at lines 3--4
+
+ []
+
+[513]) (layer-manager_8h_source.tex) (mainwindow-actions_8cpp.tex)
+(mainwindow-commands_8cpp.tex) (mainwindow-menus_8cpp.tex [514])
+(mainwindow-settings_8cpp.tex) (mainwindow-toolbars_8cpp.tex)
+(mainwindow_8cpp.tex [515]
+Underfull \hbox (badness 10000) in paragraph at lines 3--35
+
+ []
+
+[516]
+Underfull \hbox (badness 10000) detected at line 125
+[][][]
+ []
+
+) (mainwindow_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--13
 
  []
 
-[485] [486] [487] [488] [489] [490] [491] [492] [493] [494] [495] [496]
-[497] [498] [499] [500] [501] [502] [503] [504] [505]
-Underfull \hbox (badness 10000) in paragraph at lines 1656--1657
- \T1/phv/b/n/10 19.18.1.17 EL-LIPSE_MODE_MAJORDIAMETER_MINORRADIUS[] \T1/pcr/m/
-n/8 #define ELLIPSE[]_[][]MODE[]_[][]MAJORDIAMETER[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1662--1663
- \T1/phv/b/n/10 19.18.1.18 EL-LIPSE_MODE_MAJORRADIUS_MINORRADIUS[] \T1/pcr/m/n/
-8 #define ELLIPSE[]_[][]MODE[]_[][]MAJORRADIUS[]_[][]
- []
-
-[506] [507] [508] [509] [510] [511] [512] [513]
-Underfull \hbox (badness 10000) in paragraph at lines 2190--2191
- \T1/phv/b/n/10 19.18.1.106 OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS[] \T1/pc
-r/m/n/8 #define OBJ[]_[][]RUBBER[]_[][]ELLIPSE[]_[][]
- []
-
-[514] [515] [516] [517] [518] [519] [520] [521] [522] [523] [524] [525]
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_autotoc_md3}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.2982 ...ypertarget{imgui__main_8c_autotoc_md3}{}
-                                                  \doxyparagraph{Geometry Ob...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_autotoc_md4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.3003 \hypertarget{imgui__main_8c_autotoc_md4}{}
-                                                 \doxysubsubsection{Views}\l...
-[526] [527
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0af0fe7dca80b5d4384a05\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0acae9d8a010607446e0c1\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315f\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0a23e240f9a493316b3442\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-
-pdfTeX warning (ext4): destination with the same identifier (name{imgui__main_8
-c_a29bcbce98e36705fa9c1577a227d53c0a512b85e93266086439b5\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.3092 T
-        he unified user interaction system which operates like a command lin...
-] [528] [529]
-Overfull \hbox (15.15619pt too wide) in paragraph at lines 3243--3243
-[]    \T1/pcr/m/n/8 log_debug("add_rubber(): You must use vulcanize() before yo
-u can add another rubber object.");[] 
- []
-
-[530] [531] [532] [533] [534] [535] [536] [537] [538] [539] [540] [541]
-[542] [543] [544] [545] [546] [547] [548] [549] [550] [551] [552] [553]
-[554] [555] [556] [557] [558] [559] [560] [561] [562] [563] [564] [565]
-[566] [567]
-Underfull \hbox (badness 10000) in paragraph at lines 5611--5612
- \T1/phv/b/n/10 19.18.5.246 prop-erty_editor_create_tool_buttonPickAdd()[] \T1/
-pcr/m/n/8 int $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 property[]_[]editor[]_[]creat
-e[]_[]tool[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5621--5622
- \T1/phv/b/n/10 19.18.5.247 prop-erty_editor_create_tool_buttonQSelect()[] \T1/
-pcr/m/n/8 int $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 property[]_[]editor[]_[]creat
-e[]_[]tool[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5631--5632
- \T1/phv/b/n/10 19.18.5.248 prop-erty_editor_createComboBoxSelected()[] \T1/pcr
-/m/n/8 int $\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 property[]_[]editor[]_[]create[]
-Combo[]Box[]
- []
-
-[568]
-Underfull \hbox (badness 10000) in paragraph at lines 5697--5698
- \T1/phv/b/n/10 19.18.5.255 prop-erty_editor_updateComboBoxBoolIfVaries()[] \T1
-/pcr/m/n/8 static void property[]_[]editor[]_[]update[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5707--5708
- \T1/phv/b/n/10 19.18.5.256 prop-erty_editor_updateComboBoxStrIfVaries()[] \T1/
-pcr/m/n/8 static void property[]_[]editor[]_[]update[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5717--5718
- \T1/phv/b/n/10 19.18.5.257 prop-erty_editor_updateFontComboBoxStrIfVaries()[] 
-\T1/pcr/m/n/8 static void property[]_[]editor[]_[]
- []
-
-[569]
-Underfull \hbox (badness 10000) in paragraph at lines 5727--5728
- \T1/phv/b/n/10 19.18.5.258 prop-erty_editor_updateLineEditNumIfVaries()[] \T1/
-pcr/m/n/8 static void property[]_[]editor[]_[]update[]Line[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5737--5738
- \T1/phv/b/n/10 19.18.5.259 prop-erty_editor_updateLineEditStrIfVaries()[] \T1/
-pcr/m/n/8 static void property[]_[]editor[]_[]update[]Line[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 5747--5748
- \T1/phv/b/n/10 19.18.5.260 prop-erty_editor_updatePickAddModeButton()[] \T1/pc
-r/m/n/8 static void property[]_[]editor[]_[]update[]Pick[]
- []
-
-[570] [571] [572] [573] [574] [575] [576] [577] [578] [579] [580] [581]
-[582] [583]
-Underfull \hbox (badness 10000) in paragraph at lines 6617--6618
- \T1/phv/b/n/10 19.18.5.347 set-tings_dialog_addColorsToComboBox()[] \T1/pcr/m/
-n/8 static void settings[]_[]dialog[]_[]add[]Colors[]To[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6629--6630
- \T1/phv/b/n/10 19.18.5.348 set-tings_dialog_buttonCustomFilterClearAllClicked(
-)[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6637--6638
- \T1/phv/b/n/10 19.18.5.349 set-tings_dialog_buttonCustomFilterSelectAllClicked
-()[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6645--6646
- \T1/phv/b/n/10 19.18.5.350 set-tings_dialog_buttonQSnapClearAllClicked()[] \T1
-/pcr/m/n/8 static void settings[]_[]dialog[]_[]button[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6655--6656
- \T1/phv/b/n/10 19.18.5.351 set-tings_dialog_buttonQSnapSelectAllClicked()[] \T
-1/pcr/m/n/8 static void settings[]_[]dialog[]_[]button[]
- []
-
-[584]
-Underfull \hbox (badness 10000) in paragraph at lines 6663--6664
- \T1/phv/b/n/10 19.18.5.352 set-tings_dialog_checkBoxCustomFilterStateChanged()
-[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6673--6674
- \T1/phv/b/n/10 19.18.5.353 set-tings_dialog_checkBoxGeneralMdiBGUseColorStateC
-hanged()[] \T1/pcr/m/n/8 static void settings[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6683--6684
- \T1/phv/b/n/10 19.18.5.354 set-tings_dialog_checkBoxGeneralMdiBGUseLogoStateCh
-anged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6703--6704
- \T1/phv/b/n/10 19.18.5.356 set-tings_dialog_checkBoxGridCenterOnOriginStateCha
-nged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-[585]
-Underfull \hbox (badness 10000) in paragraph at lines 6723--6724
- \T1/phv/b/n/10 19.18.5.358 set-tings_dialog_checkBoxGridLoadFromFileStateChang
-ed()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6733--6734
- \T1/phv/b/n/10 19.18.5.359 set-tings_dialog_checkBoxLwtRealRenderStateChanged(
-)[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6743--6744
- \T1/phv/b/n/10 19.18.5.360 set-tings_dialog_checkBoxLwtShowLwtStateChanged()[]
- \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6753--6754
- \T1/phv/b/n/10 19.18.5.361 set-tings_dialog_checkBoxShowscrollbarsStateChanged
-()[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6763--6764
- \T1/phv/b/n/10 19.18.5.362 set-tings_dialog_chooseDisplayBackgroundColor()[] \
-T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]choose[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6773--6774
- \T1/phv/b/n/10 19.18.5.363 set-tings_dialog_chooseDisplayCrossHairColor()[] \T
-1/pcr/m/n/8 static void settings[]_[]dialog[]_[]choose[]
- []
-
-[586]
-Underfull \hbox (badness 10000) in paragraph at lines 6783--6784
- \T1/phv/b/n/10 19.18.5.364 set-tings_dialog_chooseDisplaySelectBoxLeftColor()[
-] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6793--6794
- \T1/phv/b/n/10 19.18.5.365 set-tings_dialog_chooseDisplaySelectBoxLeftFill()[]
- \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]choose[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6803--6804
- \T1/phv/b/n/10 19.18.5.366 set-tings_dialog_chooseDisplaySelectBoxRightColor()
-[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6813--6814
- \T1/phv/b/n/10 19.18.5.367 set-tings_dialog_chooseDisplaySelectBoxRightFill()[
-] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6823--6824
- \T1/phv/b/n/10 19.18.5.368 set-tings_dialog_chooseGeneralMdiBackgroundColor()[
-] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6833--6834
- \T1/phv/b/n/10 19.18.5.369 set-tings_dialog_chooseGeneralMdiBackgroundLogo()[]
- \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6843--6844
- \T1/phv/b/n/10 19.18.5.370 set-tings_dialog_chooseGeneralMdiBackgroundTexture(
-)[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-[587]
-Underfull \hbox (badness 10000) in paragraph at lines 6859--6860
- \T1/phv/b/n/10 19.18.5.372 set-tings_dialog_choosePromptBackgroundColor()[] \T
-1/pcr/m/n/8 static void settings[]_[]dialog[]_[]choose[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6869--6870
- \T1/phv/b/n/10 19.18.5.373 set-tings_dialog_choosePromptTextColor()[] \T1/pcr/
-m/n/8 static void settings[]_[]dialog[]_[]choose[]Prompt[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6887--6888
- \T1/phv/b/n/10 19.18.5.375 set-tings_dialog_combobox_selectionCoolGripColorCur
-rentIndexChanged()[] \T1/pcr/m/n/8 static void
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6899--6900
- \T1/phv/b/n/10 19.18.5.376 set-tings_dialog_combobox_selectionHotGripColorCurr
-entIndexChanged()[] \T1/pcr/m/n/8 static void
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6911--6912
- \T1/phv/b/n/10 19.18.5.377 set-tings_dialog_comboBoxGridTypeCurrentIndexChange
-d()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-[588]
-Underfull \hbox (badness 10000) in paragraph at lines 6921--6922
- \T1/phv/b/n/10 19.18.5.378 set-tings_dialog_comboBoxIconSizeCurrentIndexChange
-d()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6931--6932
- \T1/phv/b/n/10 19.18.5.379 set-tings_dialog_comboBoxIconThemeCurrentIndexChang
-ed()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6941--6942
- \T1/phv/b/n/10 19.18.5.380 set-tings_dialog_comboBoxLanguageCurrentIndexChange
-d()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Overfull \hbox (17.48857pt too wide) in paragraph at lines 6971--6972
- \T1/phv/b/n/10 19.18.5.383 set-tings_dialog_comboBoxQSnapLocatorColorCurrentIn
-dexChanged()[] \T1/pcr/m/n/8 static void settings[]
- []
-
-[589]
-Underfull \hbox (badness 10000) in paragraph at lines 6983--6984
- \T1/phv/b/n/10 19.18.5.384 set-tings_dialog_comboBoxRulerMetricCurrentIndexCha
-nged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6993--6994
- \T1/phv/b/n/10 19.18.5.385 set-tings_dialog_currentDisplayBackgroundColorChang
-ed()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7003--7004
- \T1/phv/b/n/10 19.18.5.386 set-tings_dialog_currentDisplayCrossHairColorChange
-d()[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7013--7014
- \T1/phv/b/n/10 19.18.5.387 set-tings_dialog_currentDisplaySelectBoxLeftColorCh
-anged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7023--7024
- \T1/phv/b/n/10 19.18.5.388 set-tings_dialog_currentDisplaySelectBoxLeftFillCha
-nged()[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7033--7034
- \T1/phv/b/n/10 19.18.5.389 set-tings_dialog_currentDisplaySelectBoxRightColorC
-hanged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7043--7044
- \T1/phv/b/n/10 19.18.5.390 set-tings_dialog_currentDisplaySelectBoxRightFillCh
-anged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-[590]
-Underfull \hbox (badness 10000) in paragraph at lines 7053--7054
- \T1/phv/b/n/10 19.18.5.391 set-tings_dialog_currentGeneralMdiBackgroundColorCh
-anged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7063--7064
- \T1/phv/b/n/10 19.18.5.392 set-tings_dialog_currentGridColorChanged()[] \T1/pc
-r/m/n/8 static void settings[]_[]dialog[]_[]current[]Grid[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7073--7074
- \T1/phv/b/n/10 19.18.5.393 set-tings_dialog_currentPromptBackgroundColorChange
-d()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7083--7084
- \T1/phv/b/n/10 19.18.5.394 set-tings_dialog_currentPromptTextColorChanged()[] 
-\T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7093--7094
- \T1/phv/b/n/10 19.18.5.395 set-tings_dialog_currentRulerColorChanged()[] \T1/p
-cr/m/n/8 static void settings[]_[]dialog[]_[]current[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 Background[]Color(dialog.[]general[]_[]mdi[]_[]bg[]_[]use[]_[]co
-lor); active[]_[]view-$\OML/cmm/m/it/10 >$\T1/phv/m/n/10 set[]Background[]Logo(
-dialog.[]general[]_[]mdi[]_[]
- []
-
-
-Underfull \hbox (badness 981) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 bg[]_[]logo); active[]_[]view-$\OML/cmm/m/it/10 >$\T1/phv/m/n/10
- set[]Background[]Texture(dialog.[]general[]_[]mdi[]_[]bg[]_[]texture); active[
-]_[]view-$\OML/cmm/m/it/10 >$\T1/phv/m/n/10 set[]Background[]
- []
-
-
-Underfull \hbox (badness 1681) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 Color(dialog.[]general[]_[]mdi[]_[]bg[]_[]color); update[]All[]V
-iewscrollbars(dialog.[]display[]_[]show[]_[]scrollbars); update[]All[]View[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 Cross[]Hair[]Colors(dialog.[]display[]_[]crosshair[]_[]color); u
-pdate[]All[]View[]Background[]Colors(dialog.[]display[]_[]bg[]_[]color);
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 update[]All[]View[]Select[]Box[]Colors(dialog.[]display[]_[]sele
-ctbox[]_[]left[]_[]color, dialog.[]display[]_[]selectbox[]_[]left[]_[]fill, dia
-log.[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 prompt[]_[]bg[]_[]color)); prompt-$\OML/cmm/m/it/10 >$\T1/phv/m/
-n/10 set[]Prompt[]Font[]Family(dialog.[]prompt[]_[]font[]_[]family); prompt-$\O
-ML/cmm/m/it/10 >$\T1/phv/m/n/10 set[]Prompt[]Font[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 Style(dialog.[]prompt[]_[]font[]_[]style); prompt-$\OML/cmm/m/it
-/10 >$\T1/phv/m/n/10 set[]Prompt[]Font[]Size(dialog.[]prompt[]_[]font[]_[]size)
-; update[]All[]View[]Grid[]
- []
-
-
-Underfull \hbox (badness 1337) in paragraph at lines 7111--7112
-\T1/phv/m/n/10 Colors(dialog.[]grid[]_[]color); update[]All[]View[]Ruler[]Color
-s(dialog.[]ruler[]_[]color); if (dialog.[]lwt[]_[]show[]_[]lwt) { statusbar[]
- []
-
-[591]
-Underfull \hbox (badness 10000) in paragraph at lines 7117--7118
- \T1/phv/b/n/10 19.18.5.397 set-tings_dialog_spinBoxDisplaySelectBoxAlphaValueC
-hanged()[] \T1/pcr/m/n/8 static void settings[]_[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 7127--7128
- \T1/phv/b/n/10 19.18.5.398 set-tings_dialog_spinBoxPromptFontSizeValueChanged(
-)[] \T1/pcr/m/n/8 static void settings[]_[]dialog[]_[]
- []
-
-[592] [593] [594] [595] [596]
-Underfull \hbox (badness 10000) in paragraph at lines 7453--7454
- \T1/phv/b/n/10 19.18.5.432 text-FontS-e-lec-tor-Cur-rent-FontChanged()[] \T1/p
-cr/m/n/8 static void text[]Font[]Selector[]Current[]Font[]Changed
- []
-
-[597] [598] [599] [600] [601] [602] [603] [604] [605] [606] [607])
-(layer-manager_8cpp.tex) (layer-manager_8h.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
-
- []
-
-) (layer-manager_8h_source.tex [608]) (main_8cpp.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--5
-
- []
-
-[609]
-Underfull \hbox (badness 10000) detected at line 43
+[517]
+Underfull \hbox (badness 10000) detected at line 36
 [][][]
  []
 
-) (mainwindow-actions_8cpp.tex) (mainwindow-actions_8h.tex [610] [611] [612])
-(mainwindow-actions_8h_source.tex [613]) (mainwindow-commands_8cpp.tex)
-(mainwindow-menus_8cpp.tex [614]) (mainwindow-settings_8cpp.tex)
-(mainwindow-toolbars_8cpp.tex) (mainwindow_8cpp.tex) (mainwindow_8h.tex
-[615]
-Underfull \hbox (badness 10000) in paragraph at lines 3--14
-
- []
-
-) (mainwindow_8h_source.tex [616] [617] [618] [619] [620] [621] [622] [623]
-[624] [625] [626] [627]) (mdiarea_8cpp.tex) (mdiarea_8h.tex
+) (mainwindow_8h_source.tex [518] [519] [520] [521] [522] [523] [524] [525]
+[526] [527] [528] [529]) (mdiarea_8cpp.tex) (mdiarea_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--5
 
  []
 
-) (mdiarea_8h_source.tex [628]) (mdiwindow_8cpp.tex) (mdiwindow_8h.tex [629]
+[530]) (mdiarea_8h_source.tex) (mdiwindow_8cpp.tex) (mdiwindow_8h.tex [531]
 Underfull \hbox (badness 10000) in paragraph at lines 3--10
 
  []
 
-) (mdiwindow_8h_source.tex [630]) (native-scripting_8cpp.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
-
- []
-
-[631]) (native-scripting_8h.tex
-Underfull \hbox (badness 10000) in paragraph at lines 3--4
-
- []
-
-) (native-scripting_8h_source.tex [632]) (object-arc_8cpp.tex)
+) (mdiwindow_8h_source.tex [532] [533]) (object-arc_8cpp.tex)
 (object-arc_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-arc_8h_source.tex [633]) (object-base_8cpp.tex) (object-base_8h.tex
-[634]
+) (object-arc_8h_source.tex [534]) (object-base_8cpp.tex) (object-base_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-) (object-base_8h_source.tex [635]) (object-circle_8cpp.tex)
-(object-circle_8h.tex
+) (object-base_8h_source.tex [535]) (object-circle_8cpp.tex)
+(object-circle_8h.tex [536]
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-circle_8h_source.tex [636]) (object-data_8h.tex
-Underfull \hbox (badness 3302) in paragraph at lines 26--67
+) (object-circle_8h_source.tex) (object-data_8h.tex [537]
+Underfull \hbox (badness 3302) in paragraph at lines 17--58
 [] \T1/phv/m/n/10 = 100015 , [] = 100016 , [] = 100017 ,
  []
 
 
-Overfull \hbox (23.03836pt too wide) in paragraph at lines 26--67
+Overfull \hbox (23.03836pt too wide) in paragraph at lines 17--58
 [] \T1/phv/m/n/10 = 100019 , [] = 100020 , [] = 100021 , []
  []
 
-[637]
-Overfull \hbox (34.43248pt too wide) in paragraph at lines 117--137
+
+Overfull \hbox (34.43248pt too wide) in paragraph at lines 108--128
 [] \T1/phv/m/n/10 = 4 , [] = 5 , [] = 6 , []
  []
 
 
-Underfull \hbox (badness 936) in paragraph at lines 117--137
+Underfull \hbox (badness 936) in paragraph at lines 108--128
 [] \T1/phv/m/n/10 = 8 , [] = 9 , [] = 10 ,
  []
 
 
-Overfull \hbox (49.37257pt too wide) in paragraph at lines 137--167
+Overfull \hbox (49.37257pt too wide) in paragraph at lines 128--158
 [] \T1/phv/m/n/10 = 0 , [] = 1 , [] , []
  []
 
 
-Overfull \hbox (55.71762pt too wide) in paragraph at lines 137--167
+Overfull \hbox (55.71762pt too wide) in paragraph at lines 128--158
 [] \T1/phv/m/n/10 , [] , [] , []
  []
 
 
-Overfull \hbox (104.17044pt too wide) in paragraph at lines 137--167
+Overfull \hbox (104.17044pt too wide) in paragraph at lines 128--158
 [] \T1/phv/m/n/10 , [] , []
  []
 
 
-Overfull \hbox (18.27797pt too wide) in paragraph at lines 137--167
+Overfull \hbox (18.27797pt too wide) in paragraph at lines 128--158
 [] \T1/phv/m/n/10 , [] , [] , []
  []
 
 
-Overfull \hbox (27.86998pt too wide) in paragraph at lines 137--167
+Overfull \hbox (27.86998pt too wide) in paragraph at lines 128--158
 [] \T1/phv/m/n/10 , [] , []
  []
 
 
-Overfull \hbox (52.0619pt too wide) in paragraph at lines 167--173
+Overfull \hbox (52.0619pt too wide) in paragraph at lines 158--164
 []\T1/phv/m/n/10 enum [] { [] = 0 , [] , []
  []
 
-
-Underfull \hbox (badness 6725) in paragraph at lines 178--183
+[538]
+Underfull \hbox (badness 6725) in paragraph at lines 169--174
 []\T1/phv/m/n/10 enum [] { [] = 0 , [] ,
  []
 
-[638]
-Overfull \vbox (59.67545pt too high) has occurred while \output is active []
-
-
-[639
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0af0fe7dca80b5d4384a05\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0acae9d8a010607446e0c1\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315f\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0a23e240f9a493316b3442\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-
-pdfTeX warning (ext4): destination with the same identifier (name{object-data_8
-h_a29bcbce98e36705fa9c1577a227d53c0a512b85e93266086439b5\ETC.}) has been alread
-y used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.347 \end{DoxyEnumFields}
-                          
-] [640] [641] [642] [643]
-Underfull \hbox (badness 10000) in paragraph at lines 965--966
- \T1/phv/b/n/10 19.51.2.16 OBJ_NAME_DIMARCLENGTH[] \T1/pcr/m/n/8 const char$\OM
+[539] [540] [541] [542] [543] [544]
+Underfull \hbox (badness 10000) in paragraph at lines 928--929
+ \T1/phv/b/n/10 18.43.2.16 OBJ_NAME_DIMARCLENGTH[] \T1/pcr/m/n/8 const char$\OM
 S/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 const OBJ[]_[][]NAME[]_[][]DIMARCLENGTH = "Arc 
 Length
  []
 
 
-Overfull \hbox (15.04024pt too wide) in paragraph at lines 971--972
- \T1/phv/b/n/10 19.51.2.17 OBJ_NAME_DIMDIAMETER[] \T1/pcr/m/n/8 const char$\OMS
+Overfull \hbox (15.04024pt too wide) in paragraph at lines 934--935
+ \T1/phv/b/n/10 18.43.2.17 OBJ_NAME_DIMDIAMETER[] \T1/pcr/m/n/8 const char$\OMS
 /cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 const OBJ[]_[][]NAME[]_[][]DIMDIAMETER = "Diamet
 er Dimension" 
  []
 
-[644] [645] [646]
-Underfull \hbox (badness 10000) in paragraph at lines 1133--1134
- \T1/phv/b/n/10 19.51.2.44 VIEW_COLOR_BACKGROUND[] \T1/pcr/m/n/8 const char$\OM
+[545] [546]
+Underfull \hbox (badness 10000) in paragraph at lines 1096--1097
+ \T1/phv/b/n/10 18.43.2.44 VIEW_COLOR_BACKGROUND[] \T1/pcr/m/n/8 const char$\OM
 S/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 const VIEW[]_[][]COLOR[]_[][]BACKGROUND = "VIEW
 []_[][]COLOR[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1139--1140
- \T1/phv/b/n/10 19.51.2.45 VIEW_COLOR_CROSSHAIR[] \T1/pcr/m/n/8 const char$\OMS
+Underfull \hbox (badness 10000) in paragraph at lines 1102--1103
+ \T1/phv/b/n/10 18.43.2.45 VIEW_COLOR_CROSSHAIR[] \T1/pcr/m/n/8 const char$\OMS
 /cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 const VIEW[]_[][]COLOR[]_[][]CROSSHAIR = "VIEW[]
 _[][]COLOR[]_[][]
  []
 
-) (object-data_8h_source.tex [647] [648] [649]) (object-dimleader_8cpp.tex)
-(object-dimleader_8h.tex
+[547]) (object-data_8h_source.tex [548] [549] [550]) (object-dimleader_8cpp.tex
+) (object-dimleader_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-dimleader_8h_source.tex [650]) (object-ellipse_8cpp.tex)
-(object-ellipse_8h.tex [651]
+) (object-dimleader_8h_source.tex [551]) (object-ellipse_8cpp.tex)
+(object-ellipse_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-ellipse_8h_source.tex [652]) (object-image_8cpp.tex)
+) (object-ellipse_8h_source.tex [552]) (object-image_8cpp.tex)
 (object-image_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-image_8h_source.tex) (object-line_8cpp.tex) (object-line_8h.tex
-[653]
+[553]) (object-image_8h_source.tex) (object-line_8cpp.tex) (object-line_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-line_8h_source.tex) (object-path_8cpp.tex) (object-path_8h.tex
-[654]
+) (object-line_8h_source.tex [554]) (object-path_8cpp.tex) (object-path_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-path_8h_source.tex) (object-point_8cpp.tex) (object-point_8h.tex
-[655]
+) (object-path_8h_source.tex [555]) (object-point_8cpp.tex)
+(object-point_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-point_8h_source.tex) (object-polygon_8cpp.tex) (object-polygon_8h.tex
-[656]
+) (object-point_8h_source.tex [556]) (object-polygon_8cpp.tex)
+(object-polygon_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-polygon_8h_source.tex) (object-polyline_8cpp.tex)
-(object-polyline_8h.tex [657]
+) (object-polygon_8h_source.tex [557]) (object-polyline_8cpp.tex)
+(object-polyline_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-polyline_8h_source.tex) (object-rect_8cpp.tex) (object-rect_8h.tex
-[658]
+) (object-polyline_8h_source.tex [558]) (object-rect_8cpp.tex)
+(object-rect_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-rect_8h_source.tex) (object-save_8cpp.tex) (object-save_8h.tex
-[659]
+) (object-rect_8h_source.tex [559]) (object-save_8cpp.tex) (object-save_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-) (object-save_8h_source.tex [660]) (object-textsingle_8cpp.tex)
+[560]) (object-save_8h_source.tex) (object-textsingle_8cpp.tex)
 (object-textsingle_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (object-textsingle_8h_source.tex [661]) (preview-dialog_8cpp.tex)
+[561]) (object-textsingle_8h_source.tex [562]) (preview-dialog_8cpp.tex)
 (preview-dialog_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-[662]) (preview-dialog_8h_source.tex) (property-editor_8cpp.tex)
-(property-editor_8h.tex [663]
+) (preview-dialog_8h_source.tex) (property-editor_8cpp.tex)
+(property-editor_8h.tex [563]
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (property-editor_8h_source.tex [664] [665] [666] [667] [668] [669])
+) (property-editor_8h_source.tex [564] [565] [566] [567] [568] [569])
 (docs_2_r_e_a_d_m_e_8md.tex) (_r_e_a_d_m_e_8md.tex) (selectbox_8cpp.tex)
-(selectbox_8h.tex
+(selectbox_8h.tex [570]
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-) (selectbox_8h_source.tex [670]) (settings-dialog_8cpp.tex)
-(settings-dialog_8h.tex
+) (selectbox_8h_source.tex) (settings-dialog_8cpp.tex) (settings-dialog_8h.tex
+[571]
 Underfull \hbox (badness 10000) in paragraph at lines 3--5
 
  []
 
-) (settings-dialog_8h_source.tex [671] [672] [673] [674])
-(statusbar-button_8cpp.tex) (statusbar-button_8h.tex
+) (settings-dialog_8h_source.tex [572] [573] [574]) (statusbar-button_8cpp.tex)
+(statusbar-button_8h.tex [575]
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (statusbar-button_8h_source.tex [675]) (statusbar_8cpp.tex) (statusbar_8h.tex
-
+) (statusbar-button_8h_source.tex) (statusbar_8cpp.tex) (statusbar_8h.tex
+[576]
 Underfull \hbox (badness 10000) in paragraph at lines 3--5
 
  []
 
-) (statusbar_8h_source.tex [676]) (undo-commands_8cpp.tex)
-(undo-commands_8h.tex
+) (statusbar_8h_source.tex) (undo-commands_8cpp.tex) (undo-commands_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[677]) (undo-commands_8h_source.tex [678]) (undo-editor_8cpp.tex)
-(undo-editor_8h.tex [679]
+[577]) (undo-commands_8h_source.tex [578] [579]) (undo-editor_8cpp.tex)
+(undo-editor_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-) (undo-editor_8h_source.tex) (utility_8h.tex
+) (undo-editor_8h_source.tex [580]) (utility_8cpp.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--4
 
  []
 
-[680]) (utility_8h_source.tex) (view_8cpp.tex) (view_8h.tex [681]
+[581] [582] [583] [584]) (view_8cpp.tex) (view_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-) (view_8h_source.tex [682] [683] [684]) (array_8c.tex
+[585]) (view_8h_source.tex [586] [587]) (array_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[685]
+[588]
 Underfull \hbox (badness 10000) detected at line 58
 [][][]
  []
@@ -3178,16 +2649,12 @@ Underfull \hbox (badness 10000) detected at line 74
 [][][]
  []
 
-
+[589]
 Underfull \hbox (badness 10000) detected at line 90
 [][][]
  []
 
 
-Overfull \vbox (7.45532pt too high) has occurred while \output is active []
-
-
-[686]
 Underfull \hbox (badness 10000) detected at line 106
 [][][]
  []
@@ -3197,7 +2664,7 @@ Underfull \hbox (badness 10000) detected at line 122
 [][][]
  []
 
-
+[590]
 Underfull \hbox (badness 10000) detected at line 138
 [][][]
  []
@@ -3207,12 +2674,16 @@ Underfull \hbox (badness 10000) detected at line 154
 [][][]
  []
 
-[687]
+
 Underfull \hbox (badness 10000) detected at line 170
 [][][]
  []
 
 
+Overfull \vbox (7.45532pt too high) has occurred while \output is active []
+
+
+[591]
 Underfull \hbox (badness 10000) detected at line 186
 [][][]
  []
@@ -3222,7 +2693,7 @@ Underfull \hbox (badness 10000) detected at line 202
 [][][]
  []
 
-[688]
+
 Underfull \hbox (badness 10000) detected at line 218
 [][][]
  []
@@ -3232,12 +2703,12 @@ Underfull \hbox (badness 10000) detected at line 234
 [][][]
  []
 
-
+[592]
 Underfull \hbox (badness 10000) detected at line 261
 [][][]
  []
 
-[689]
+
 Underfull \hbox (badness 10000) detected at line 286
 [][][]
  []
@@ -3247,12 +2718,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[690]
+[593]
 Underfull \hbox (badness 10000) detected at line 61
 [][][]
  []
 
-
+[594]
 Underfull \hbox (badness 10000) detected at line 75
 [][][]
  []
@@ -3262,13 +2733,13 @@ Underfull \hbox (badness 10000) detected at line 89
 [][][]
  []
 
-[691]
+
 Underfull \hbox (badness 10000) in paragraph at lines 124--125
- \T1/phv/b/n/10 19.118.1.7 com-press_load_character_length_huffman()[] \T1/pcr/
+ \T1/phv/b/n/10 18.109.1.7 com-press_load_character_length_huffman()[] \T1/pcr/
 m/n/8 void compress[]_[]load[]_[]character[]_[]length[]_[]
  []
 
-[692]
+[595]
 Underfull \hbox (badness 10000) detected at line 155
 [][][]
  []
@@ -3278,46 +2749,46 @@ Underfull \hbox (badness 10000) detected at line 171
 [][][]
  []
 
-
+[596]
 Underfull \hbox (badness 10000) detected at line 185
 [][][]
  []
 
-[693]
+
 Underfull \hbox (badness 10000) detected at line 216
 [][][]
  []
 
-
+[597]
 Underfull \hbox (badness 10000) detected at line 254
 [][][]
  []
 
-[694]
+
 Underfull \hbox (badness 10000) detected at line 274
 [][][]
  []
 
-) (embedded_8md.tex) (embroider__cli_8md.tex) (embroidery_8h.tex [695] [696]
-[697] [698] [699] [700]
+) (embedded_8md.tex) (embroider__cli_8md.tex) (embroidery_8h.tex [598] [599]
+[600] [601] [602] [603]
 Underfull \hbox (badness 10000) in paragraph at lines 571--573
 [][] \T1/phv/m/n/10 void [] ([] $\OMS/cmsy/m/n/10 ^^C$\T1/phv/m/n/10 lines, [] 
 thick-ness,
  []
 
-[701] [702] [703] [704] [705] [706] [707] [708] [709]
+[604] [605] [606] [607] [608] [609] [610] [611] [612] [613]
 Underfull \hbox (badness 10000) in paragraph at lines 1277--1278
- \T1/phv/b/n/10 19.121.1.92 EM-B-FOR-MAT_STCHANDOBJ[] \T1/pcr/m/n/8 #define EMB
+ \T1/phv/b/n/10 18.112.1.92 EM-B-FOR-MAT_STCHANDOBJ[] \T1/pcr/m/n/8 #define EMB
 FORMAT[]_[][]STCHANDOBJ 3 /$\OMS/cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 binary operation
 []
  []
 
-[710] [711] [712] [713] [714] [715] [716] [717]
+[614] [615] [616] [617] [618] [619] [620] [621]
 Underfull \hbox (badness 10000) detected at line 1782
 [][][]
  []
 
-[718]
+[622]
 Underfull \hbox (badness 10000) detected at line 1816
 [][][]
  []
@@ -3327,12 +2798,16 @@ Underfull \hbox (badness 10000) detected at line 1832
 [][][]
  []
 
-[719]
+
 Underfull \hbox (badness 10000) detected at line 1848
 [][][]
  []
 
 
+Overfull \vbox (7.45532pt too high) has occurred while \output is active []
+
+
+[623]
 Underfull \hbox (badness 10000) detected at line 1864
 [][][]
  []
@@ -3343,10 +2818,6 @@ Underfull \hbox (badness 10000) detected at line 1880
  []
 
 
-Overfull \vbox (7.10336pt too high) has occurred while \output is active []
-
-
-[720]
 Underfull \hbox (badness 10000) detected at line 1896
 [][][]
  []
@@ -3356,7 +2827,7 @@ Underfull \hbox (badness 10000) detected at line 1912
 [][][]
  []
 
-
+[624]
 Underfull \hbox (badness 10000) detected at line 1928
 [][][]
  []
@@ -3366,12 +2837,12 @@ Underfull \hbox (badness 10000) detected at line 1944
 [][][]
  []
 
-[721]
+
 Underfull \hbox (badness 10000) detected at line 1960
 [][][]
  []
 
-
+[625]
 Underfull \hbox (badness 10000) detected at line 1976
 [][][]
  []
@@ -3381,7 +2852,7 @@ Underfull \hbox (badness 10000) detected at line 1998
 [][][]
  []
 
-[722]
+[626]
 Underfull \hbox (badness 10000) detected at line 2025
 [][][]
  []
@@ -3391,7 +2862,7 @@ Underfull \hbox (badness 10000) detected at line 2050
 [][][]
  []
 
-[723]
+[627]
 Underfull \hbox (badness 10000) detected at line 2078
 [][][]
  []
@@ -3401,86 +2872,86 @@ Underfull \hbox (badness 10000) detected at line 2096
 [][][]
  []
 
-[724] [725]
+[628]
 Underfull \hbox (badness 10000) detected at line 2168
 [][][]
  []
 
-
+[629]
 Underfull \hbox (badness 10000) detected at line 2201
 [][][]
  []
 
-[726] [727] [728] [729]
+[630] [631] [632]
 Underfull \hbox (badness 10000) detected at line 2353
 [][][]
  []
 
-[730] [731]
+[633]
 Underfull \hbox (badness 10000) detected at line 2400
 [][][]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2424--2425
- \T1/phv/b/n/10 19.121.3.67 em-b-Pat-tern_copyPolylinesToStitchList()[] [] \T1/
+ \T1/phv/b/n/10 18.112.3.67 em-b-Pat-tern_copyPolylinesToStitchList()[] [] \T1/
 pcr/m/n/8 void emb[]Pattern[]_[]copy[]Polylines[]To[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2430--2431
- \T1/phv/b/n/10 19.121.3.68 em-b-Pat-tern_copyStitchListToPolylines()[] [] \T1/
+ \T1/phv/b/n/10 18.112.3.68 em-b-Pat-tern_copyStitchListToPolylines()[] [] \T1/
 pcr/m/n/8 void emb[]Pattern[]_[]copy[]Stitch[]List[]To[]
  []
 
-[732]
+
 Underfull \hbox (badness 10000) in paragraph at lines 2436--2437
- \T1/phv/b/n/10 19.121.3.69 em-b-Pat-tern_correctForMaxStitchLength()[] [] \T1/
+ \T1/phv/b/n/10 18.112.3.69 em-b-Pat-tern_correctForMaxStitchLength()[] [] \T1/
 pcr/m/n/8 void emb[]Pattern[]_[]correct[]For[]Max[]
  []
 
-
+[634]
 Underfull \hbox (badness 10000) detected at line 2448
 [][][]
  []
 
-[733]
+[635]
 Underfull \hbox (badness 10000) in paragraph at lines 2519--2520
- \T1/phv/b/n/10 19.121.3.79 em-b-Pat-tern_hideStitchesOverLength()[] [] \T1/pcr
+ \T1/phv/b/n/10 18.112.3.79 em-b-Pat-tern_hideStitchesOverLength()[] [] \T1/pcr
 /m/n/8 void emb[]Pattern[]_[]hide[]Stitches[]Over[]
  []
 
-[734]
+[636]
 Underfull \hbox (badness 10000) in paragraph at lines 2563--2564
- \T1/phv/b/n/10 19.121.3.83 em-b-Pat-tern_loadExternalColorFile()[] [] \T1/pcr/
+ \T1/phv/b/n/10 18.112.3.83 em-b-Pat-tern_loadExternalColorFile()[] [] \T1/pcr/
 m/n/8 void emb[]Pattern[]_[]load[]External[]Color[]File
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2569--2570
- \T1/phv/b/n/10 19.121.3.84 em-b-Pat-tern_maximumStitchLength()[] [] [] \T1/pcr
+ \T1/phv/b/n/10 18.112.3.84 em-b-Pat-tern_maximumStitchLength()[] [] [] \T1/pcr
 /m/n/8 emb[]Pattern[]_[]maximum[]Stitch[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2575--2576
- \T1/phv/b/n/10 19.121.3.85 em-b-Pat-tern_minimumStitchLength()[] [] [] \T1/pcr
+ \T1/phv/b/n/10 18.112.3.85 em-b-Pat-tern_minimumStitchLength()[] [] [] \T1/pcr
 /m/n/8 emb[]Pattern[]_[]minimum[]Stitch[]Length
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2581--2582
- \T1/phv/b/n/10 19.121.3.86 em-b-Pat-tern_movePolylinesToStitchList()[] [] \T1/
+ \T1/phv/b/n/10 18.112.3.86 em-b-Pat-tern_movePolylinesToStitchList()[] [] \T1/
 pcr/m/n/8 void emb[]Pattern[]_[]move[]Polylines[]To[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2587--2588
- \T1/phv/b/n/10 19.121.3.87 em-b-Pat-tern_moveStitchListToPolylines()[] [] \T1/
+ \T1/phv/b/n/10 18.112.3.87 em-b-Pat-tern_moveStitchListToPolylines()[] [] \T1/
 pcr/m/n/8 void emb[]Pattern[]_[]move[]Stitch[]List[]To[]
  []
 
-[735]
+[637]
 Underfull \hbox (badness 10000) detected at line 2604
 [][][]
  []
@@ -3490,7 +2961,7 @@ Underfull \hbox (badness 10000) detected at line 2620
 [][][]
  []
 
-[736]
+[638]
 Underfull \hbox (badness 10000) detected at line 2658
 [][][]
  []
@@ -3500,20 +2971,20 @@ Underfull \hbox (badness 10000) detected at line 2682
 [][][]
  []
 
-[737] [738]
+
 Underfull \hbox (badness 10000) detected at line 2698
 [][][]
  []
 
-
+[639]
 Underfull \hbox (badness 10000) in paragraph at lines 2717--2718
- \T1/phv/b/n/10 19.121.3.100 em-b-Sati-nOut-line_generateSatinOutline()[] [] \T
+ \T1/phv/b/n/10 18.112.3.100 em-b-Sati-nOut-line_generateSatinOutline()[] [] \T
 1/pcr/m/n/8 void emb[]Satin[]Outline[]_[]generate[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2732--2733
- \T1/phv/b/n/10 19.121.3.101 em-b-Sati-nOut-line_renderStitches()[] [] [] $\OMS
+ \T1/phv/b/n/10 18.112.3.101 em-b-Sati-nOut-line_renderStitches()[] [] [] $\OMS
 /cmsy/m/n/8 ^^C$ \T1/pcr/m/n/8 emb[]Satin[]Outline[]_[]render[]
  []
 
@@ -3522,7 +2993,7 @@ Underfull \hbox (badness 10000) detected at line 2741
 [][][]
  []
 
-[739]
+[640]
 Underfull \hbox (badness 10000) detected at line 2761
 [][][]
  []
@@ -3537,12 +3008,12 @@ Underfull \hbox (badness 10000) detected at line 2790
 [][][]
  []
 
-[740] [741]
+[641]
 Underfull \hbox (badness 10000) detected at line 2815
 [][][]
  []
 
-[742] [743] [744] [745]
+[642] [643] [644] [645]
 Underfull \hbox (badness 10000) detected at line 3014
 [][][]
  []
@@ -3552,40 +3023,40 @@ Underfull \hbox (badness 10000) detected at line 3036
 [][][]
  []
 
-[746] [747]) (embroidery_8h_source.tex [748] [749] [750] [751] [752] [753]
-[754] [755]) (embroidery__internal_8h.tex
+[646] [647]) (embroidery_8h_source.tex [648] [649] [650] [651] [652] [653]
+[654] [655]) (embroidery__internal_8h.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--5
 
  []
 
-[756] [757] [758]
+[656] [657] [658]
 Underfull \hbox (badness 1082) in paragraph at lines 345--351
 []\T1/phv/m/n/10 enum [] { [] , [] , [] ,
  []
 
-[759] [760] [761] [762] [763]
+[659] [660] [661] [662] [663]
 Underfull \hbox (badness 10000) in paragraph at lines 831--832
- \T1/phv/b/n/10 19.123.1.7 Com-pound-File-Sec-tor_MaxRegSector[] \T1/pcr/m/n/8 
+ \T1/phv/b/n/10 18.114.1.7 Com-pound-File-Sec-tor_MaxRegSector[] \T1/pcr/m/n/8 
 #define Compound[]File[]Sector[]_[][]Max[]Reg[]Sector 0x[]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 837--838
- \T1/phv/b/n/10 19.123.1.8 Com-pound-FileStreamId_MaxRegularStreamId[] \T1/pcr/
+ \T1/phv/b/n/10 18.114.1.8 Com-pound-FileStreamId_MaxRegularStreamId[] \T1/pcr/
 m/n/8 #define Compound[]File[]Stream[]Id[]_[][]Max[]Regular[]
  []
 
-[764] [765] [766] [767] [768] [769] [770] [771] [772] [773] [774] [775]
-[776]
+[664] [665] [666] [667] [668] [669] [670] [671] [672] [673] [674] [675]
+[676]
 Overfull \vbox (26.77316pt too high) has occurred while \output is active []
 
 
-[777]
+[677]
 Underfull \hbox (badness 10000) detected at line 1769
 [][][]
  []
 
-[778]
+[678]
 Underfull \hbox (badness 10000) detected at line 1819
 [][][]
  []
@@ -3595,21 +3066,21 @@ Underfull \hbox (badness 10000) detected at line 1833
 [][][]
  []
 
-[779]
+[679]
 Underfull \hbox (badness 10000) detected at line 1853
 [][][]
  []
 
-[780]
+[680]
 Overfull \vbox (18.14117pt too high) has occurred while \output is active []
 
 
-[781]
+[681]
 Underfull \hbox (badness 10000) detected at line 2004
 [][][]
  []
 
-[782]
+[682]
 Underfull \hbox (badness 10000) detected at line 2020
 [][][]
  []
@@ -3624,7 +3095,7 @@ Underfull \hbox (badness 10000) detected at line 2050
 [][][]
  []
 
-[783]
+[683]
 Underfull \hbox (badness 10000) detected at line 2064
 [][][]
  []
@@ -3636,11 +3107,11 @@ Underfull \hbox (badness 10000) detected at line 2078
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 2107--2108
- \T1/phv/b/n/10 19.123.4.27 com-press_load_character_length_huffman()[] \T1/pcr
+ \T1/phv/b/n/10 18.114.4.27 com-press_load_character_length_huffman()[] \T1/pcr
 /m/n/8 void compress[]_[]load[]_[]character[]_[]length[]_[]
  []
 
-[784]
+[684]
 Underfull \hbox (badness 10000) detected at line 2138
 [][][]
  []
@@ -3655,12 +3126,12 @@ Underfull \hbox (badness 10000) detected at line 2166
 [][][]
  []
 
-[785]
+[685]
 Underfull \hbox (badness 10000) detected at line 2206
 [][][]
  []
 
-[786]
+[686]
 Underfull \hbox (badness 10000) detected at line 2235
 [][][]
  []
@@ -3675,11 +3146,11 @@ Underfull \hbox (badness 10000) detected at line 2273
 [][][]
  []
 
-[787] [788]
+[687] [688]
 Overfull \vbox (22.561pt too high) has occurred while \output is active []
 
 
-[789]
+[689]
 Underfull \hbox (badness 10000) detected at line 2374
 [][][]
  []
@@ -3689,7 +3160,7 @@ Underfull \hbox (badness 10000) detected at line 2388
 [][][]
  []
 
-[790]
+[690]
 Underfull \hbox (badness 10000) detected at line 2402
 [][][]
  []
@@ -3704,7 +3175,7 @@ Underfull \hbox (badness 10000) detected at line 2430
 [][][]
  []
 
-[791]
+[691]
 Underfull \hbox (badness 10000) detected at line 2446
 [][][]
  []
@@ -3714,12 +3185,12 @@ Underfull \hbox (badness 10000) detected at line 2470
 [][][]
  []
 
-[792]
+[692]
 Underfull \hbox (badness 10000) detected at line 2529
 [][][]
  []
 
-[793]
+[693]
 Underfull \hbox (badness 10000) detected at line 2549
 [][][]
  []
@@ -3734,33 +3205,33 @@ Underfull \hbox (badness 10000) detected at line 2590
 [][][]
  []
 
-[794]
+[694]
 Underfull \hbox (badness 10000) detected at line 2614
 [][][]
  []
 
-[795] [796] [797]
+[695] [696] [697]
 Underfull \hbox (badness 10000) detected at line 2787
 [][][]
  []
 
-[798] [799]
+[698] [699]
 Overfull \vbox (12.9674pt too high) has occurred while \output is active []
 
 
-[800] [801] [802] [803] [804] [805]
+[700] [701] [702] [703] [704] [705]
 Underfull \hbox (badness 10000) detected at line 3142
 [][][]
  []
 
-[806] [807] [808] [809] [810] [811] [812] [813])
-(embroidery__internal_8h_source.tex [814] [815] [816] [817] [818] [819]
-[820] [821]) (encoding_8c.tex
+[706] [707] [708] [709] [710] [711] [712] [713])
+(embroidery__internal_8h_source.tex [714] [715] [716] [717] [718] [719]
+[720] [721]) (encoding_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[822]
+[722]
 Underfull \hbox (badness 10000) detected at line 59
 [][][]
  []
@@ -3770,7 +3241,7 @@ Underfull \hbox (badness 10000) detected at line 88
 [][][]
  []
 
-[823]
+[723]
 Underfull \hbox (badness 10000) detected at line 106
 [][][]
  []
@@ -3779,7 +3250,7 @@ Underfull \hbox (badness 10000) detected at line 106
 Overfull \vbox (9.13808pt too high) has occurred while \output is active []
 
 
-[824]
+[724]
 Underfull \hbox (badness 10000) detected at line 177
 [][][]
  []
@@ -3794,17 +3265,17 @@ Underfull \hbox (badness 10000) detected at line 205
 [][][]
  []
 
-[825]
+[725]
 Underfull \hbox (badness 10000) detected at line 223
 [][][]
  []
 
-) (fill_8c.tex [826]
+) (fill_8c.tex [726]
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[827]
+[727]
 Underfull \hbox (badness 10000) detected at line 76
 [][][]
  []
@@ -3814,17 +3285,17 @@ Underfull \hbox (badness 10000) detected at line 92
 [][][]
  []
 
-[828] [829] [830] [831] [832]
+[728] [729] [730] [731] [732]
 Underfull \hbox (badness 10000) detected at line 365
 [][][]
  []
 
-[833]
+[733]
 Underfull \hbox (badness 10000) detected at line 404
 [][][]
  []
 
-[834]
+[734]
 Underfull \hbox (badness 10000) detected at line 447
 [][][]
  []
@@ -3834,12 +3305,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--9
 
  []
 
-[835] [836] [837]
+[735] [736] [737]
 Underfull \hbox (badness 10000) detected at line 174
 [][][]
  []
 
-[838]
+[738]
 Underfull \hbox (badness 10000) detected at line 190
 [][][]
  []
@@ -3854,7 +3325,7 @@ Underfull \hbox (badness 10000) detected at line 224
 [][][]
  []
 
-[839]
+[739]
 Underfull \hbox (badness 10000) detected at line 242
 [][][]
  []
@@ -3869,7 +3340,7 @@ Underfull \hbox (badness 10000) detected at line 272
 [][][]
  []
 
-[840]
+[740]
 Underfull \hbox (badness 10000) detected at line 286
 [][][]
  []
@@ -3884,7 +3355,7 @@ Underfull \hbox (badness 10000) detected at line 316
 [][][]
  []
 
-[841]) (format__100_8c.tex
+[741]) (format__100_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -3894,7 +3365,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[842]) (format__art_8c.tex
+[742]) (format__art_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -3904,7 +3375,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[843]) (format__bro_8c.tex
+[743]) (format__bro_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -3914,27 +3385,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[844]) (format__col_8c.tex
+[744]) (format__col_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[845]) (format__csd_8c.tex
+[745]) (format__csd_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[846]) (format__csv_8c.tex
+[746]) (format__csv_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[847]) (format__dat_8c.tex
+[747]) (format__dat_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[848]) (format__dem_8c.tex
+[748]) (format__dem_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -3944,17 +3415,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[849]) (format__dst_8c.tex
+[749]) (format__dst_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[850]) (format__dsz_8c.tex
+[750]) (format__dsz_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[851]) (format__dxf_8c.tex
+[751]) (format__dxf_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
@@ -3964,12 +3435,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[852]) (format__emd_8c.tex
+[752]) (format__emd_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[853]) (format__exp_8c.tex
+[753]) (format__exp_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -3979,12 +3450,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[854]) (format__eys_8c.tex
+[754]) (format__eys_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[855]) (format__fxy_8c.tex
+[755]) (format__fxy_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -3994,7 +3465,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[856]) (format__gnc_8c.tex
+[756]) (format__gnc_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4004,17 +3475,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[857]) (format__hus_8c.tex
+[757]) (format__hus_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[858]) (format__inb_8c.tex
+[758]) (format__inb_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[859]) (format__inf_8c.tex
+[759]) (format__inf_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4024,7 +3495,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[860] [861]) (format__ksm_8c.tex
+[760] [761]) (format__ksm_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4034,7 +3505,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[862] [863]) (format__mit_8c.tex
+[762] [763]) (format__mit_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4044,17 +3515,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[864]) (format__ofm_8c.tex
+[764]) (format__ofm_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[865]) (format__pcd_8c.tex
+[765]) (format__pcd_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[866]) (format__pcm_8c.tex
+[766]) (format__pcm_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4064,7 +3535,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[867]) (format__pcs_8c.tex
+[767]) (format__pcs_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4074,12 +3545,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[868] [869]) (format__pel_8c.tex
+[768] [769]) (format__pel_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[870]) (format__pem_8c.tex
+[770]) (format__pem_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4089,7 +3560,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[871] [872] [873] [874]) (format__phb_8c.tex
+[771] [772] [773] [774]) (format__phb_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4099,7 +3570,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[875]) (format__plt_8c.tex
+[775]) (format__plt_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4109,12 +3580,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[876]) (format__sew_8c.tex
+[776]) (format__sew_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[877]) (format__shv_8c.tex
+[777]) (format__shv_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4124,27 +3595,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[878]) (format__stx_8c.tex
+[778]) (format__stx_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[879]) (format__svg_8c.tex
+[779]) (format__svg_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[880]) (format__t01_8c.tex
+[780]) (format__t01_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[881]) (format__t09_8c.tex
+[781]) (format__t09_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[882]) (format__tap_8c.tex
+[782]) (format__tap_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4154,12 +3625,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[883]) (format__txt_8c.tex
+[783]) (format__txt_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[884]) (format__u00_8c.tex
+[784]) (format__u00_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4169,22 +3640,22 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[885]) (format__vip_8c.tex
+[785]) (format__vip_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[886] [887]) (format__vp3_8c.tex
+[786] [787]) (format__vp3_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[888]) (format__xxx_8c.tex
+[788]) (format__xxx_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[889] [890]) (format__zsk_8c.tex
+[789] [790]) (format__zsk_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
@@ -4194,12 +3665,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[891]
+[791]
 Underfull \hbox (badness 10000) detected at line 38
 [][][]
  []
 
-[892]
+[792]
 Underfull \hbox (badness 10000) detected at line 71
 [][][]
  []
@@ -4209,17 +3680,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[893] [894] [895] [896] [897]) (circle_8c.tex
+[793] [794] [795] [796] [797]) (circle_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[898]) (ellipse_8c.tex
+[798]) (ellipse_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[899] [900] [901]) (functions_8c.tex
+[799] [800] [801]) (functions_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4229,7 +3700,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[902]) (path_8c.tex) (polygon_8c.tex) (polyline_8c.tex [903]) (rect_8c.tex
+[802]) (path_8c.tex) (polygon_8c.tex) (polyline_8c.tex [803]) (rect_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
@@ -4239,17 +3710,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[904] [905]) (vector_8c.tex [906]
+[804] [805]) (vector_8c.tex [806]
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[907] [908] [909]) (image_8c.tex
+[807] [808] [809]) (image_8c.tex
 Underfull \hbox (badness 10000) in paragraph at lines 3--7
 
  []
 
-[910]
+[810]
 Underfull \hbox (badness 10000) detected at line 32
 [][][]
  []
@@ -4259,7 +3730,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 8--14
 
  []
 
-[911] [912] [913] [914] [915]
+[811] [812] [813] [814] [815]
 Underfull \hbox (badness 10000) detected at line 463
 [][][]
  []
@@ -4269,7 +3740,7 @@ Underfull \hbox (badness 10000) detected at line 501
 [][][]
  []
 
-[916]
+[816]
 Underfull \hbox (badness 10000) detected at line 515
 [][][]
  []
@@ -4283,7 +3754,7 @@ Underfull \hbox (badness 10000) detected at line 529
 Overfull \vbox (5.3414pt too high) has occurred while \output is active []
 
 
-[917]
+[817]
 Underfull \hbox (badness 10000) detected at line 575
 [][][]
  []
@@ -4303,7 +3774,7 @@ Underfull \hbox (badness 10000) detected at line 619
 [][][]
  []
 
-[918]
+[818]
 Underfull \hbox (badness 10000) detected at line 641
 [][][]
  []
@@ -4322,12 +3793,12 @@ Underfull \hbox (badness 10000) detected at line 688
 Overfull \vbox (15.8364pt too high) has occurred while \output is active []
 
 
-[919]
+[819]
 Underfull \hbox (badness 10000) detected at line 749
 [][][]
  []
 
-[920]
+[820]
 Underfull \hbox (badness 10000) detected at line 769
 [][][]
  []
@@ -4347,7 +3818,7 @@ Underfull \hbox (badness 10000) detected at line 823
 [][][]
  []
 
-[921]
+[821]
 Underfull \hbox (badness 10000) detected at line 850
 [][][]
  []
@@ -4357,7 +3828,7 @@ Underfull \hbox (badness 10000) detected at line 891
 [][][]
  []
 
-[922]
+[822]
 Underfull \hbox (badness 10000) detected at line 905
 [][][]
  []
@@ -4367,7 +3838,7 @@ Underfull \hbox (badness 10000) detected at line 958
 [][][]
  []
 
-[923]
+[823]
 Underfull \hbox (badness 10000) detected at line 976
 [][][]
  []
@@ -4382,14 +3853,14 @@ Underfull \hbox (badness 10000) detected at line 1021
 [][][]
  []
 
-[924]
+[824]
 Underfull \hbox (badness 10000) detected at line 1034
 [][][]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1095--1096
- \T1/phv/b/n/10 19.204.4.6 size-OfChain-in-gEn-try-A-tEnd-OfD-i-fat-Sec-tor[] \
+ \T1/phv/b/n/10 18.195.4.6 size-OfChain-in-gEn-try-A-tEnd-OfD-i-fat-Sec-tor[] \
 T1/pcr/m/n/8 const unsigned int size[]Of[]Chaining[]Entry[]At[]End[]
  []
 
@@ -4398,17 +3869,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--8
 
  []
 
-[925] [926] [927]
+[825] [826] [827]
 Underfull \hbox (badness 10000) detected at line 173
 [][][]
  []
 
-[928]
+[828]
 Underfull \hbox (badness 10000) detected at line 250
 [][][]
  []
 
-[929] [930]
+[829] [830]
 Underfull \hbox (badness 10000) detected at line 378
 [][][]
  []
@@ -4418,7 +3889,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 3--6
 
  []
 
-[931] [932]) (privacy__policy_8md.tex) [933] (refman.bbl (refman.brf)
+[831] [832]) (privacy__policy_8md.tex) [833] (refman.bbl (refman.brf)
 \tf@brf=\write7
 \openout7 = `refman.brf'.
 
@@ -4428,424 +3899,138 @@ LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
 
 Package natbib Warning: Empty `thebibliography' environment on input line 3.
 
-) [934] (refman.ind [935
+) [834] (refman.ind [835
 
 
-] [936] [937] [938] [939] [940] [941] [942] [943]
-[944] [945] [946] [947] [948] [949] [950] [951] [952] [953] [954] [955]
-[956] [957] [958] [959] [960] [961] [962] [963] [964] [965] [966]
-Underfull \hbox (badness 10000) in paragraph at lines 3833--3835
-[]| \T1/phv/m/n/10 Com-pound-FileStreamId_MaxRegularStreamId,
- []
-
-[967] [968] [969] [970] [971] [972]
-Underfull \hbox (badness 10000) in paragraph at lines 4429--4431
-[]\T1/phv/m/n/10 extern/libembroidery/src/embroidery_internal.h, [][]756[][],
- []
-
-[973] [974] [975] [976] [977] [978] [979] [980] [981] [982] [983] [984]
-[985]
-Overfull \hbox (20.4121pt too wide) in paragraph at lines 6053--6055
+] [836] [837] [838] [839] [840] [841] [842] [843]
+[844] [845] [846] [847] [848] [849] [850] [851] [852] [853] [854] [855]
+[856] [857] [858] [859] [860] [861] [862] [863]
+Overfull \hbox (20.4121pt too wide) in paragraph at lines 3402--3404
 []| \T1/phv/m/n/10 EL-LIPSE_MODE_MAJORDIAMETER_MINORRADIUS,
  []
 
-[986] [987]
-Overfull \hbox (53.06364pt too wide) in paragraph at lines 6244--6246
-[]| \T1/phv/m/n/10 OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
+[864] [865] [866] [867] [868]
+Underfull \hbox (badness 10000) in paragraph at lines 4005--4007
+[]| \T1/phv/m/n/10 Com-pound-FileStreamId_MaxRegularStreamId,
  []
 
-
-Overfull \hbox (40.56284pt too wide) in paragraph at lines 6246--6248
-[]| \T1/phv/m/n/10 OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
+[869] [870] [871] [872] [873]
+Underfull \hbox (badness 10000) in paragraph at lines 4602--4604
+[]\T1/phv/m/n/10 extern/libembroidery/src/embroidery_internal.h, [][]655[][],
  []
 
-[988]
-Underfull \hbox (badness 10000) in paragraph at lines 6368--6370
-[]| \T1/phv/m/n/10 prop-erty_editor_updateComboBoxBoolIfVaries,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6372--6374
-[]| \T1/phv/m/n/10 prop-erty_editor_updateFontComboBoxStrIfVaries,
- []
-
-[989]
-Overfull \hbox (57.94131pt too wide) in paragraph at lines 6490--6492
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxGeneralMdiBGUseColorStateChanged,
- []
-
-
-Overfull \hbox (56.45631pt too wide) in paragraph at lines 6492--6494
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxGeneralMdiBGUseLogoStateChanged,
- []
-
-
-Overfull \hbox (65.60025pt too wide) in paragraph at lines 6494--6496
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxGeneralMdiBGUseTextureStateChanged,
-
- []
-
-
-Overfull \hbox (41.30022pt too wide) in paragraph at lines 6496--6498
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxGridCenterOnOriginStateChanged,
- []
-
-
-Overfull \hbox (64.15118pt too wide) in paragraph at lines 6498--6500
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxGridColorMatchCrossHairStateChanged
-,
- []
-
-
-Overfull \hbox (33.25467pt too wide) in paragraph at lines 6500--6502
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxGridLoadFromFileStateChanged,
- []
-
-
-Overfull \hbox (23.0309pt too wide) in paragraph at lines 6502--6504
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxLwtRealRenderStateChanged,
- []
-
-
-Overfull \hbox (21.8881pt too wide) in paragraph at lines 6506--6508
-[]| \T1/phv/m/n/10 set-tings_dialog_checkBoxShowscrollbarsStateChanged,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6508--6510
-[]| \T1/phv/m/n/10 set-tings_dialog_chooseDisplayBackgroundColor,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6510--6512
-[]| \T1/phv/m/n/10 set-tings_dialog_chooseDisplayCrossHairColor,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6512--6514
-[]| \T1/phv/m/n/10 set-tings_dialog_chooseDisplaySelectBoxLeftColor,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6514--6516
-[]| \T1/phv/m/n/10 set-tings_dialog_chooseDisplaySelectBoxLeftFill,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6518--6520
-[]| \T1/phv/m/n/10 set-tings_dialog_chooseDisplaySelectBoxRightFill,
- []
-
-
-Overfull \hbox (17.26208pt too wide) in paragraph at lines 6524--6526
-[]| \T1/phv/m/n/10 set-tings_dialog_chooseGeneralMdiBackgroundTexture,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6527--6529
-[]| \T1/phv/m/n/10 set-tings_dialog_choosePromptBackgroundColor,
- []
-
-
-Overfull \hbox (92.08656pt too wide) in paragraph at lines 6531--6533
-[]| \T1/phv/m/n/10 set-tings_dialog_combobox_selectionCoolGripColorCurrentIndex
-Changed,
- []
-
-
-Overfull \hbox (87.5866pt too wide) in paragraph at lines 6533--6535
-[]| \T1/phv/m/n/10 set-tings_dialog_combobox_selectionHotGripColorCurrentIndexC
-hanged,
- []
-
-
-Overfull \hbox (31.49072pt too wide) in paragraph at lines 6535--6537
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxGridTypeCurrentIndexChanged,
- []
-
-
-Overfull \hbox (29.80786pt too wide) in paragraph at lines 6537--6539
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxIconSizeCurrentIndexChanged,
- []
-
-
-Overfull \hbox (40.44563pt too wide) in paragraph at lines 6539--6541
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxIconThemeCurrentIndexChanged,
- []
-
-
-Overfull \hbox (35.45964pt too wide) in paragraph at lines 6541--6543
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxLanguageCurrentIndexChanged,
- []
-
-
-Overfull \hbox (68.21915pt too wide) in paragraph at lines 6543--6545
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxPromptFontFamilyCurrentIndexChanged
-,
- []
-
-
-Overfull \hbox (62.18013pt too wide) in paragraph at lines 6545--6547
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxPromptFontStyleCurrentIndexChanged,
-
- []
-
-
-Overfull \hbox (74.9599pt too wide) in paragraph at lines 6547--6549
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxQSnapLocatorColorCurrentIndexChange
-d,
- []
-
-
-Overfull \hbox (41.56148pt too wide) in paragraph at lines 6549--6551
-[]| \T1/phv/m/n/10 set-tings_dialog_comboBoxRulerMetricCurrentIndexChanged,
- []
-
-
-Overfull \hbox (27.9269pt too wide) in paragraph at lines 6551--6553
-[]| \T1/phv/m/n/10 set-tings_dialog_currentDisplayBackgroundColorChanged,
- []
-
-
-Overfull \hbox (20.16908pt too wide) in paragraph at lines 6553--6555
-[]| \T1/phv/m/n/10 set-tings_dialog_currentDisplayCrossHairColorChanged,
- []
-
-
-Overfull \hbox (35.43259pt too wide) in paragraph at lines 6555--6557
-[]| \T1/phv/m/n/10 set-tings_dialog_currentDisplaySelectBoxLeftColorChanged,
- []
-
-
-Overfull \hbox (25.42477pt too wide) in paragraph at lines 6557--6559
-[]| \T1/phv/m/n/10 set-tings_dialog_currentDisplaySelectBoxLeftFillChanged,
- []
-
-
-Overfull \hbox (41.42657pt too wide) in paragraph at lines 6559--6561
-[]| \T1/phv/m/n/10 set-tings_dialog_currentDisplaySelectBoxRightColorChanged,
- []
-
-
-Overfull \hbox (31.41876pt too wide) in paragraph at lines 6561--6563
-[]| \T1/phv/m/n/10 set-tings_dialog_currentDisplaySelectBoxRightFillChanged,
- []
-
-
-Overfull \hbox (45.1164pt too wide) in paragraph at lines 6563--6565
-[]| \T1/phv/m/n/10 set-tings_dialog_currentGeneralMdiBackgroundColorChanged,
- []
-
-
-Overfull \hbox (27.70168pt too wide) in paragraph at lines 6567--6569
-[]| \T1/phv/m/n/10 set-tings_dialog_currentPromptBackgroundColorChanged,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 6569--6571
-[]| \T1/phv/m/n/10 set-tings_dialog_currentPromptTextColorChanged,
- []
-
-
-Overfull \hbox (48.05063pt too wide) in paragraph at lines 6574--6576
-[]| \T1/phv/m/n/10 set-tings_dialog_spinBoxDisplaySelectBoxAlphaValueChanged,
- []
-
-
-Overfull \hbox (19.67403pt too wide) in paragraph at lines 6576--6578
-[]| \T1/phv/m/n/10 set-tings_dialog_spinBoxPromptFontSizeValueChanged,
- []
-
-[990] [991] [992] [993] [994] [995] [996] [997] [998] [999] [1000] [1001]
-[1002] [1003] [1004] [1005] [1006] [1007] [1008] [1009]
-Overfull \hbox (30.56175pt too wide) in paragraph at lines 8881--8882
+[874] [875] [876] [877] [878] [879] [880] [881] [882] [883] [884] [885]
+[886] [887] [888] [889] [890] [891] [892] [893] [894] [895] [896] [897]
+[898] [899] [900]
+Overfull \hbox (30.56175pt too wide) in paragraph at lines 7870--7871
 []\T1/phv/m/n/10 OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS 
  []
 
 
-Overfull \hbox (18.06094pt too wide) in paragraph at lines 8884--8885
+Overfull \hbox (18.06094pt too wide) in paragraph at lines 7872--7873
 []\T1/phv/m/n/10 OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS 
  []
 
-[1010] [1011]
-Overfull \hbox (53.06364pt too wide) in paragraph at lines 9172--9174
+[901] [902]
+Overfull \hbox (53.06364pt too wide) in paragraph at lines 8099--8101
 []| \T1/phv/m/n/10 OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
  []
 
 
-Overfull \hbox (40.56284pt too wide) in paragraph at lines 9174--9176
+Overfull \hbox (40.56284pt too wide) in paragraph at lines 8101--8103
 []| \T1/phv/m/n/10 OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
  []
 
-[1012] [1013] [1014] [1015] [1016] [1017] [1018] [1019] [1020] [1021] [1022]
-[1023] [1024] [1025] [1026] [1027] [1028] [1029] [1030] [1031] [1032] [1033]
-[1034]
-Underfull \hbox (badness 10000) in paragraph at lines 11856--11858
+[903] [904] [905] [906] [907] [908] [909] [910] [911] [912] [913] [914]
+[915] [916] [917] [918] [919] [920] [921] [922] [923]
+Underfull \hbox (badness 10000) in paragraph at lines 10562--10564
 []| \T1/phv/m/n/10 check-Box-Gen-eralMdiB-GUse-C-ol-orStat-e-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11858--11859
+Underfull \hbox (badness 10000) in paragraph at lines 10564--10565
 []| \T1/phv/m/n/10 check-Box-Gen-eralMdiB-GUseL-o-goStat-e-Changed,
  []
 
-[1035]
-Underfull \hbox (badness 10000) in paragraph at lines 11862--11864
+
+Underfull \hbox (badness 10000) in paragraph at lines 10568--10570
 []| \T1/phv/m/n/10 check-Box-Grid-Col-or-MatchCrossHairStat-e-Changed,
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 11887--11889
+[924]
+Underfull \hbox (badness 10000) in paragraph at lines 10593--10595
 []| \T1/phv/m/n/10 check-BoxRen-der-Hint-Non-Cos-met-ic-Stat-e-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11889--11890
+Underfull \hbox (badness 10000) in paragraph at lines 10595--10596
 []| \T1/phv/m/n/10 check-BoxRen-der-HintSmooth-PixS-tat-e-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11892--11894
+Underfull \hbox (badness 10000) in paragraph at lines 10598--10600
 []| \T1/phv/m/n/10 check-BoxS-e-lec-tion-Mod-e-Pick-AddStat-e-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11894--11896
+Underfull \hbox (badness 10000) in paragraph at lines 10600--10602
 []| \T1/phv/m/n/10 check-BoxS-e-lec-tion-Mod-e-Pick-DragStat-e-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11896--11898
+Underfull \hbox (badness 10000) in paragraph at lines 10602--10604
 []| \T1/phv/m/n/10 check-BoxS-e-lec-tion-Mod-e-Pick-First-Stat-e-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11920--11922
+Underfull \hbox (badness 10000) in paragraph at lines 10626--10628
 []| \T1/phv/m/n/10 com-boBox-Prompt-FontStyle-Cur-rentIn-dex-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11922--11924
+Underfull \hbox (badness 10000) in paragraph at lines 10628--10630
 []| \T1/phv/m/n/10 com-boBoxQS-napLo-ca-tor-Col-or-Cur-rentIn-dex-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11925--11927
+Underfull \hbox (badness 10000) in paragraph at lines 10631--10633
 []| \T1/phv/m/n/10 com-boBoxScroll-Bar-Wid-getCur-rentIn-dex-Changed,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11927--11929
+Underfull \hbox (badness 10000) in paragraph at lines 10633--10635
 []| \T1/phv/m/n/10 com-boBoxS-e-lec-tion-Cool-Grip-Col-or-Cur-rentIn-dex-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 11929--11931
+Underfull \hbox (badness 10000) in paragraph at lines 10635--10637
 []| \T1/phv/m/n/10 com-boBoxS-e-lec-tion-Hot-Grip-Col-or-Cur-rentIn-dex-
  []
 
-[1036]
-Underfull \hbox (badness 10000) in paragraph at lines 12085--12087
+[925]
+Underfull \hbox (badness 10000) in paragraph at lines 10791--10793
 []| \T1/phv/m/n/10 spin-BoxDis-play-S-e-lect-Box-Al-phaVal-ueChanged,
  []
 
-[1037]
-Overfull \hbox (35.43942pt too wide) in paragraph at lines 12117--12118
-[]\T1/phv/m/n/10 settings_dialog_checkBoxGeneralMdiBGUseColorStateChanged 
- []
-
-
-Overfull \hbox (33.95442pt too wide) in paragraph at lines 12119--12120
-[]\T1/phv/m/n/10 settings_dialog_checkBoxGeneralMdiBGUseLogoStateChanged 
- []
-
-
-Overfull \hbox (43.09836pt too wide) in paragraph at lines 12121--12122
-[]\T1/phv/m/n/10 settings_dialog_checkBoxGeneralMdiBGUseTextureStateChanged 
- []
-
-
-Overfull \hbox (18.79832pt too wide) in paragraph at lines 12123--12124
-[]\T1/phv/m/n/10 settings_dialog_checkBoxGridCenterOnOriginStateChanged 
- []
-
-
-Overfull \hbox (41.64929pt too wide) in paragraph at lines 12125--12126
-[]\T1/phv/m/n/10 settings_dialog_checkBoxGridColorMatchCrossHairStateChanged 
- []
-
-
-Overfull \hbox (69.58467pt too wide) in paragraph at lines 12161--12162
-[]\T1/phv/m/n/10 settings_dialog_combobox_selectionCoolGripColorCurrentIndexCha
-nged 
- []
-
-
-Overfull \hbox (65.0847pt too wide) in paragraph at lines 12163--12164
-[]\T1/phv/m/n/10 settings_dialog_combobox_selectionHotGripColorCurrentIndexChan
-ged 
- []
-
-
-Overfull \hbox (17.94374pt too wide) in paragraph at lines 12169--12170
-[]\T1/phv/m/n/10 settings_dialog_comboBoxIconThemeCurrentIndexChanged 
- []
-
-
-Overfull \hbox (45.71725pt too wide) in paragraph at lines 12173--12174
-[]\T1/phv/m/n/10 settings_dialog_comboBoxPromptFontFamilyCurrentIndexChanged 
- []
-
-
-Overfull \hbox (39.67824pt too wide) in paragraph at lines 12175--12176
-[]\T1/phv/m/n/10 settings_dialog_comboBoxPromptFontStyleCurrentIndexChanged 
- []
-
-
-Overfull \hbox (52.45801pt too wide) in paragraph at lines 12177--12178
-[]\T1/phv/m/n/10 settings_dialog_comboBoxQSnapLocatorColorCurrentIndexChanged 
- []
-
-
-Overfull \hbox (19.05959pt too wide) in paragraph at lines 12179--12180
-[]\T1/phv/m/n/10 settings_dialog_comboBoxRulerMetricCurrentIndexChanged 
- []
-
-
-Overfull \hbox (18.92468pt too wide) in paragraph at lines 12189--12190
-[]\T1/phv/m/n/10 settings_dialog_currentDisplaySelectBoxRightColorChanged 
- []
-
-
-Overfull \hbox (22.6145pt too wide) in paragraph at lines 12193--12194
-[]\T1/phv/m/n/10 settings_dialog_currentGeneralMdiBackgroundColorChanged 
- []
-
-
-Overfull \hbox (25.54874pt too wide) in paragraph at lines 12205--12206
-[]\T1/phv/m/n/10 settings_dialog_spinBoxDisplaySelectBoxAlphaValueChanged 
- []
-
-[1038] [1039] [1040] [1041] [1042] [1043] [1044] [1045] [1046] [1047] [1048]
-[1049] [1050] [1051] [1052] [1053] [1054] [1055] [1056] [1057] [1058])
-(refman.aux)
+[926] [927] [928] [929] [930] [931] [932] [933] [934] [935] [936] [937]
+[938] [939] [940] [941] [942] [943] [944] [945]) (refman.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `refman.out' has not changed.
-(rerunfilecheck)             Checksum: 2CD988DB93E198840FF81CB112CD868C;207159.
+(rerunfilecheck)             Checksum: 8A6166B2C3A8FCD30227C8656C7B2ADD;206328.
 
 Package rerunfilecheck Info: File `refman.brf' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 41092 strings out of 475385
- 1106308 string characters out of 2776906
- 2468627 words of memory out of 3000000
- 47932 multiletter control sequences out of 15000+600000
+ 38794 strings out of 475385
+ 1030023 string characters out of 2776906
+ 2272596 words of memory out of 3000000
+ 47122 multiletter control sequences out of 15000+600000
  528232 words of font info for 117 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,17n,117p,6709b,854s stack positions out of 10000i,1000n,20000p,200000b,80000s
+ 99i,17n,117p,6709b,851s stack positions out of 10000i,1000n,20000p,200000b,80000s
 {C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:
 /Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx1
 0.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts
@@ -4855,25 +4040,24 @@ e1/public/amsfonts/cm/cmmi12.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/
 fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/Users/eatin/AppData/Local/Programs
 /MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/eatin/AppData/Local/
 Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/eatin/AppDat
-a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><C:/Users/eati
-n/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Us
-ers/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb
-><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/c
-msy10.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmsy7.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmsy8.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmsy9.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX
-/fonts/type1/urw/courier/ucrb8a.pfb><C:/Users/eatin/AppData/Local/Programs/MiKT
-eX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Users/eatin/AppData/Local/Programs/Mi
-KTeX/fonts/type1/urw/courier/ucrro8a.pfb><C:/Users/eatin/AppData/Local/Programs
-/MiKTeX/fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/eatin/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/urw/helvetic/uhvb8ac.pfb><C:/Users/eatin/AppData/Local/P
-rograms/MiKTeX/fonts/type1/urw/helvetic/uhvbo8a.pfb><C:/Users/eatin/AppData/Loc
-al/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/eatin/AppData/
-Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on refman.pdf (1078 pages, 9891344 bytes).
+a/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/eati
+n/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Use
+rs/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmsy7.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmsy8.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmsy9.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/urw/courier/ucrb8a.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fonts
+/type1/urw/courier/ucrr8a.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/fon
+ts/type1/urw/courier/ucrro8a.pfb><C:/Users/eatin/AppData/Local/Programs/MiKTeX/
+fonts/type1/urw/helvetic/uhvb8a.pfb><C:/Users/eatin/AppData/Local/Programs/MiKT
+eX/fonts/type1/urw/helvetic/uhvb8ac.pfb><C:/Users/eatin/AppData/Local/Programs/
+MiKTeX/fonts/type1/urw/helvetic/uhvbo8a.pfb><C:/Users/eatin/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/eatin/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/urw/helvetic/uhvro8a.pfb>
+Output written on refman.pdf (964 pages, 9117721 bytes).
 PDF statistics:
- 49502 PDF objects out of 55141 (max. 8388607)
- 13449 named destinations out of 15390 (max. 500000)
- 6313 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 45267 PDF objects out of 45951 (max. 8388607)
+ 11977 named destinations out of 12825 (max. 500000)
+ 6289 words of extra memory for PDF output out of 10000 (max. 10000000)
 

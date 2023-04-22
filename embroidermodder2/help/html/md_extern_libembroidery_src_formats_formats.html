@@ -24,6 +24,7 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -101,9 +102,9 @@ $(document).ready(function(){initNavTree('md_extern_libembroidery_src_formats_fo
   <div class="headertitle"><div class="title">Formats </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md67"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md66"></a>
 Overview</h1>
-<h1><a class="anchor" id="autotoc_md68"></a>
+<h1><a class="anchor" id="autotoc_md67"></a>
 Read/Write Support Levels</h1>
 <p>The table of read/write format support levels uses the status levels described here:</p>
 <table class="markdownTable">
@@ -124,7 +125,7 @@ Read/Write Support Levels</h1>
 </table>
 <p>These can be split into <code>r-basic w-none</code>, for example, if they don't match.</p>
 <p>So all formats can, in principle, have good read and good write support, because it's defined in relation to files that we have described the formats for.</p>
-<h2><a class="anchor" id="autotoc_md69"></a>
+<h2><a class="anchor" id="autotoc_md68"></a>
 Test Support Levels</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -141,7 +142,7 @@ Test Support Levels</h2>
 <td class="markdownTableBodyNone"><code>test-complete</code>   </td><td class="markdownTableBodyNone">Both thorough and fuzz testing is covered.   </td></tr>
 </table>
 <p>So all formats can, in principle, have complete testing support, because it's defined in relation to files that we have described the formats for.</p>
-<h2><a class="anchor" id="autotoc_md70"></a>
+<h2><a class="anchor" id="autotoc_md69"></a>
 Documentation Support Levels</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -158,7 +159,7 @@ Documentation Support Levels</h2>
 <td class="markdownTableBodyNone"><code>doc-complete</code>   </td><td class="markdownTableBodyNone">There is a known official description and our description covers all the same features.   </td></tr>
 </table>
 <p>Not all formats can have complete documentation because it's based on what information is publically available. So the total score is reported in the table below based on what level we think is available.</p>
-<h2><a class="anchor" id="autotoc_md71"></a>
+<h2><a class="anchor" id="autotoc_md70"></a>
 Overall Support</h2>
 <p>Since the overall support level is the combination of these 4 factors, but rather than summing up their values it's an issue of the minimum support of the 4.</p>
 <table class="markdownTable">
@@ -179,7 +180,7 @@ Overall Support</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>experimental</code>   </td><td class="markdownTableBodyNone">For all other scenarios.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md71"></a>
 Table of Format Support Levels</h2>
 <p>Overview of documentation support by format.</p>
 <table class="markdownTable">
@@ -205,43 +206,43 @@ Table of Format Support Levels</h2>
 <td class="markdownTableBodyNone">Comma Separated Values (.csv)   </td><td class="markdownTableBodyNone">rw-none doc-none test-none   </td><td class="markdownTableBodyNone">experimental   </td></tr>
 </table>
 <p>| Barudan Embroidery Format (.dat) | rw-none doc-none test-none | experimental | Melco Embroidery Format (.dem) | rw-none doc-none test-none | experimental | | Barudan Embroidery Format (.dsb) | rw-none doc-none test-none | experimental | | Tajima Embroidery Format (.dst) | rw-none doc-none test-none | experimental | | ZSK USA Embroidery Format (.dsz) | rw-none doc-none test-none | experimental | | Drawing Exchange Format (.dxf) | rw-none doc-none test-none | experimental | | Embird Embroidery Format (.edr) | rw-none doc-none test-none | experimental | | Elna Embroidery Format (.emd) | rw-none doc-none test-none | experimental | | Melco Embroidery Format (.exp) | rw-none doc-none test-none | experimental | | Eltac Embroidery Format (.exy) | rw-none doc-none test-none | experimental | | Sierra Expanded Embroidery Format (.eys) | rw-none doc-none test-none | experimental | | Fortron Embroidery Format (.fxy) | rw-none doc-none test-none | experimental | | Smoothie G-Code Embroidery Format (.gc) | rw-none doc-none test-none | experimental | | Great Notions Embroidery Format (.gnc) | rw-none doc-none test-none | experimental | | Gold Thread Embroidery Format (.gt) | rw-none doc-none test-none | experimental | | Husqvarna Viking Embroidery Format (.hus) | rw-none doc-none test-none | experimental | | Inbro Embroidery Format (.inb) | rw-none doc-none test-none | experimental | | Embroidery Color Format (.inf) | rw-none doc-none test-none | experimental | | Janome Embroidery Format (.jef) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.ksm) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.max) | rw-none doc-none test-none | experimental | | Mitsubishi Embroidery Format (.mit) | rw-none doc-none test-none | experimental | | Ameco Embroidery Format (.new) | rw-none doc-none test-none | experimental | | Melco Embroidery Format (.ofm) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.pcd) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.pcm) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.pcq) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.pcs) | rw-none doc-none test-none | experimental | | Brother Embroidery Format (.pec) | rw-none doc-none test-none | experimental | | Brother Embroidery Format (.pel) | rw-none doc-none test-none | experimental | | Brother Embroidery Format (.pem) | rw-none doc-none test-none | experimental | | Brother Embroidery Format (.pes) | rw-none doc-none test-none | experimental | | Brother Embroidery Format (.phb) | rw-none doc-none test-none | experimental | | Brother Embroidery Format (.phc) | rw-none doc-none test-none | experimental | | AutoCAD Embroidery Format (.plt) | rw-none doc-none test-none | experimental | | RGB Embroidery Format (.rgb) | rw-none doc-none test-none | experimental | | Janome Embroidery Format (.sew) | rw-none doc-none test-none | experimental | | Husqvarna Viking Embroidery Format (.shv) | rw-none doc-none test-none | experimental | | Sunstar Embroidery Format (.sst) | rw-none doc-none test-none | experimental | | Data Stitch Embroidery Format (.stx) | rw-none doc-none test-none | experimental | | Scalable Vector Graphics (.svg) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.t01) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.t09) | rw-none doc-none test-none | experimental | | Happy Embroidery Format (.tap) | rw-none doc-none test-none | experimental | | ThredWorks Embroidery Format (.thr) | rw-none doc-none test-none | experimental | | Text File (.txt) | rw-none doc-none test-none | experimental | | Barudan Embroidery Format (.u00) | rw-none doc-none test-none | experimental | | Barudan Embroidery Format (.u01) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.vip) | rw-none doc-none test-none | experimental | | Pfaff Embroidery Format (.vp3) | rw-none doc-none test-none | experimental | | Singer Embroidery Format (.xxx) | rw-none doc-none test-none | experimental | | ZSK USA Embroidery Format (.zsk) | rw-none doc-none test-none | experimental</p>
-<h1><a class="anchor" id="autotoc_md73"></a>
+<h1><a class="anchor" id="autotoc_md72"></a>
 Toyota Embroidery Format (.100)</h1>
 <p>\index 100 \index Toyota</p>
 <p>The Toyota 100 format is a stitch-only format that uses an external color file.</p>
 <p>The stitch encoding is in 4 byte chunks.</p>
-<h2><a class="anchor" id="autotoc_md74"></a>
+<h2><a class="anchor" id="autotoc_md73"></a>
 Toyota Embroidery Format (.10o)</h2>
 <p>\index 10o \index Toyota</p>
 <p>The Toyota 10o format is a stitch-only format that uses an external color file.</p>
 <p>The stitch encoding is in 3 byte chunks.</p>
-<h1><a class="anchor" id="autotoc_md75"></a>
+<h1><a class="anchor" id="autotoc_md74"></a>
 Bernina Embroidery Format (.art)</h1>
 <p>\index art \index Bernina</p>
-<p>We don't know much about this format. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000424">Todo:</a></b></dt><dd>Find a source.</dd></dl>
-<h1><a class="anchor" id="autotoc_md76"></a>
+<p>We don't know much about this format. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000215">Todo:</a></b></dt><dd>Find a source.</dd></dl>
+<h1><a class="anchor" id="autotoc_md75"></a>
 Bitmap Cache Embroidery Format (.bmc)</h1>
 <p>\index bmc \index Bitmap Cache</p>
-<p>We don't know much about this format. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000425">Todo:</a></b></dt><dd>Find a source.</dd></dl>
-<h1><a class="anchor" id="autotoc_md77"></a>
+<p>We don't know much about this format. </p><dl class="todo"><dt><b><a class="el" href="todo.html#_todo000216">Todo:</a></b></dt><dd>Find a source.</dd></dl>
+<h1><a class="anchor" id="autotoc_md76"></a>
 Bits and Volts Embroidery Format (.bro)</h1>
 <p>\index bro \index Bits and Volts</p>
 <p>The Bits and Volts bro format is a stitch-only format that uses an external color file.</p>
 <p>The header is 256 bytes. There's a series of unknown variables in the header.</p>
 <p>The stitch list uses a variable length encoding which is 2 bytes for any stitch</p>
-<h1><a class="anchor" id="autotoc_md78"></a>
+<h1><a class="anchor" id="autotoc_md77"></a>
 Melco Embroidery Format (.cnd)</h1>
 <p>\index cnd \index Melco</p>
 <p>The Melco cnd format is a stitch-only format.</p>
 <p>We don't know much about this format.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000426">Todo:</a></b></dt><dd>Find a source.</dd></dl>
-<h1><a class="anchor" id="autotoc_md79"></a>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000217">Todo:</a></b></dt><dd>Find a source.</dd></dl>
+<h1><a class="anchor" id="autotoc_md78"></a>
 Embroidery Thread Color Format (.col)</h1>
 <p>\index col</p>
 <p>An external color file format for formats that do not record their own colors.</p>
 <p>It is a human-readable format that has a header that is a single line containing only the number of threads in decimal followed by the windows line break `\textbackslash{}r\textbackslash{}n}.</p>
 <p>Then the rest of the file is a comma seperated value list of all threads with 4 values per line: the index of the thread then the red, green and blue channels of the color in that order.</p>
-<h2><a class="anchor" id="autotoc_md80"></a>
+<h2><a class="anchor" id="autotoc_md79"></a>
 Example</h2>
 <p>If we had a pattern called "example" with four colors: black, red, magenta and cyan in that order then the file is (with the white space written out): </p><pre class="fragment">example.col
 
@@ -250,30 +251,30 @@ Example</h2>
 1,255,0,0\r\n
 2,0,255,0\r\n
 3,0,0,255\r\n
-</pre> <h1><a class="anchor" id="autotoc_md81"></a>
+</pre> <h1><a class="anchor" id="autotoc_md80"></a>
 Singer Embroidery Format (.csd)</h1>
 <p>\index csd \index Singer</p>
 <p>Stitch Only Format</p>
-<h1><a class="anchor" id="autotoc_md82"></a>
+<h1><a class="anchor" id="autotoc_md81"></a>
 Comma Separated Values (.csv)</h1>
 <p>\index csv</p>
 <p>Comma Seperated Values files aren't a universal system, here we aim to offer a broad support. The dialect is detected based on the opening lines, as each manufacturer should label their CSV files there.</p>
-<h2><a class="anchor" id="autotoc_md83"></a>
+<h2><a class="anchor" id="autotoc_md82"></a>
 Embroidermodder 2.0 CSV Dialect</h2>
 <p>Our own version has the identifier comment line:</p>
 <p>| Control Symbol | Type | Description | |&mdash;|&mdash;| | <code>#</code> | <code>COMMENT</code> | | | <code>&gt;</code> | <code>VARIABLE</code> | To store records of a pattern's width, height etc. This means that data stored in the header of say a .dst file is preserved. | | <code>$</code> | <code>THREAD</code> | | | <code>*</code> | <code>STITCH</code> | | | <code>*</code> | <code>JUMP</code> | | | <code>*</code> | <code>COLOR</code> | To change a color: used for trim as well | | <code>*</code> | <code>END</code> | To end a pattern. | | <code>*</code> | <code>UNKNOWN</code> | For any feature that we can't identify.</p>
-<h2><a class="anchor" id="autotoc_md84"></a>
+<h2><a class="anchor" id="autotoc_md83"></a>
 EmBird CSV Dialect</h2>
 <p>\index Embird</p>
-<h1><a class="anchor" id="autotoc_md85"></a>
+<h1><a class="anchor" id="autotoc_md84"></a>
 Barudan Embroidery Format (.dat)</h1>
 <p>\index dat \index Barudan</p>
 <p>Stitch Only Format</p>
-<h1><a class="anchor" id="autotoc_md86"></a>
+<h1><a class="anchor" id="autotoc_md85"></a>
 Melco Embroidery Format (.dem)</h1>
 <p>\index dem \index Melco</p>
 <p>Stitch Only Format</p>
-<h1><a class="anchor" id="autotoc_md87"></a>
+<h1><a class="anchor" id="autotoc_md86"></a>
 Barudan Embroidery Format (.dsb)</h1>
 <p>\index dsb \index Barudan</p>
 <ul>
@@ -283,7 +284,7 @@ Barudan Embroidery Format (.dsb)</h1>
 <li>[o] Well Tested Read</li>
 <li>[o] Well Tested Write</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md88"></a>
+<h1><a class="anchor" id="autotoc_md87"></a>
 Tajima Embroidery Format (.dst)</h1>
 <p>\index dst \index Tajima</p>
 <ul>
@@ -295,7 +296,7 @@ Tajima Embroidery Format (.dst)</h1>
 </ul>
 <p>.DST (Tajima) embroidery file read/write routines Format comments are thanks to <a href="tspilman@dalcoathletic.com">tspilman@dalcoathletic.com</a> who's notes appeared at <a href="http://www.wotsit.org">http://www.wotsit.org</a> under Tajima Format.</p>
 <p>Other references: <b>[kde_tajima]</b> , <b>[acatina]</b> .</p>
-<h2><a class="anchor" id="autotoc_md89"></a>
+<h2><a class="anchor" id="autotoc_md88"></a>
 Header</h2>
 <p>The header contains general information about the design. It is in lines of ASCII, so if you open a DST file as a text file, it's the only part that's easy to read. The line ending symbol is `0x0D}. The header is necessary for the file to be read by most softwares and hardwares.</p>
 <p>The header is 125 bytes of data followed by padding spaces to make it 512 bytes in total.</p>
@@ -310,7 +311,7 @@ Header</h2>
 <p class="endtd"></p>
 </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md90"></a>
+<h2><a class="anchor" id="autotoc_md89"></a>
 Stitch Data</h2>
 <p>Uses 3 byte per stitch encoding with the format as follows:</p>
 <table class="markdownTable">
@@ -333,11 +334,11 @@ Stitch Data</h2>
 </ul>
 <p>Inclusive or'ed with the last byte.</p>
 <p>Note that the max stitch length is the largest sum of $1+3+9+27+81=121$ where the unit length is 0.1mm so 12.1mm. The coordinate system is right handed.</p>
-<h1><a class="anchor" id="autotoc_md91"></a>
+<h1><a class="anchor" id="autotoc_md90"></a>
 ZSK USA Embroidery Format (.dsz)</h1>
 <p>\index dsz \index ZSK USA</p>
 <p>The ZSK USA dsz format is stitch-only.</p>
-<h1><a class="anchor" id="autotoc_md92"></a>
+<h1><a class="anchor" id="autotoc_md91"></a>
 Drawing Exchange Format (.dxf)</h1>
 <p>\index dxf \index AutoCAD \index AutoDesk</p>
 <p>Graphics format for drawing files designed and used by AudoDesk for their AutoCAD program. </p>

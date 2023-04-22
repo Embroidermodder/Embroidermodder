@@ -24,6 +24,7 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -107,6 +108,8 @@ $(document).ready(function(){initNavTree('struct_ui_object__.html',''); initResi
 
 <p>This covers the inbuilt designs: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events.  
  <a href="struct_ui_object__.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -132,7 +135,7 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a68e2bdfeb187d1c5a46afffe5129aabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bc9c6cc06f9e654a27fe2fc252c5570"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a16fa26764453571074cb85a7574738d4">EmbVector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#a0bc9c6cc06f9e654a27fe2fc252c5570">scale</a></td></tr>
 <tr class="separator:a0bc9c6cc06f9e654a27fe2fc252c5570"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8eb4a411f5cc41f7ed32d8c62540136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="utility_8h.html#aaeb118982aa989fd8bd9db2780d42ec1">EmbReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#ae8eb4a411f5cc41f7ed32d8c62540136">rotation</a></td></tr>
+<tr class="memitem:ae8eb4a411f5cc41f7ed32d8c62540136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#ae8eb4a411f5cc41f7ed32d8c62540136">rotation</a></td></tr>
 <tr class="separator:ae8eb4a411f5cc41f7ed32d8c62540136"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac1b4d694fc07a39e06900e82872aac7f"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#ac1b4d694fc07a39e06900e82872aac7f">mode</a></td></tr>
 <tr class="separator:ac1b4d694fc07a39e06900e82872aac7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -148,8 +151,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af2083d6aee31e64205fd5c037e90390b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac52fe42f6c748f8527c22231a12b2c26"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#ac52fe42f6c748f8527c22231a12b2c26">textRotation</a></td></tr>
 <tr class="separator:ac52fe42f6c748f8527c22231a12b2c26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0546d1993695b1dddda38ad4864782e5"><td class="memItemLeft" align="right" valign="top">GLuint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#a0546d1993695b1dddda38ad4864782e5">texture_id</a></td></tr>
-<tr class="separator:a0546d1993695b1dddda38ad4864782e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f071f39e69a703ee35a2dc313b928f0"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#a4f071f39e69a703ee35a2dc313b928f0">id</a> [200]</td></tr>
 <tr class="separator:a4f071f39e69a703ee35a2dc313b928f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a554cb215e0c2be49aa91aa9a283d37c6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_ui_object__.html#a554cb215e0c2be49aa91aa9a283d37c6">pattern_index</a></td></tr>
@@ -170,7 +171,7 @@ Public Attributes</h2></td></tr>
 <p>Do angles need special storage? angleRef, angleNew</p>
 <p>This chapter details how the source code achieves the design detailed in the previous chapter. For the low-level details, read the later chapters.</p>
 <p>Dear ImGui (CITATION NEEDED)</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<h2><a class="anchor" id="autotoc_md0"></a>
 Geometry Objects</h2>
 <p>At all times the EmbPattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.</p>
 <p>To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.</p>
@@ -408,7 +409,7 @@ Geometry Objects</h2>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="utility_8h.html#aaeb118982aa989fd8bd9db2780d42ec1">EmbReal</a> rotation</td>
+          <td class="memname"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> rotation</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -513,20 +514,6 @@ Geometry Objects</h2>
 
 </div>
 </div>
-<a id="a0546d1993695b1dddda38ad4864782e5" name="a0546d1993695b1dddda38ad4864782e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0546d1993695b1dddda38ad4864782e5">&#9670;&#160;</a></span>texture_id</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">GLuint texture_id</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a551374301513fdb71d8977304106af2c" name="a551374301513fdb71d8977304106af2c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a551374301513fdb71d8977304106af2c">&#9670;&#160;</a></span>type</h2>
 
@@ -542,7 +529,7 @@ Geometry Objects</h2>
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
-<li>embroidermodder2/<a class="el" href="imgui__main_8c.html">imgui_main.c</a></li>
+<li>embroidermodder2/<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -24,6 +24,7 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -113,7 +114,7 @@ $(document).ready(function(){initNavTree('object-point_8h_source.html',''); init
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <a class="code hl_class" href="class_point_object.html">PointObject</a>(<a class="code hl_class" href="class_point_object.html">PointObject</a>* obj, QGraphicsItem* parent = 0);</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <a class="code hl_function" href="class_point_object.html#ad38172dcce976d1ba0272aec4c81b1d2">~PointObject</a>();</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="class_point_object.html#abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6">   13</a></span>    <span class="keyword">enum</span> { <a class="code hl_enumvalue" href="class_point_object.html#abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6">Type</a> = <a class="code hl_define" href="imgui__main_8c.html#a7da3976dcadfc5d60ef03ca18bf0c085">OBJ_TYPE_POINT</a> };</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="class_point_object.html#abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6">   13</a></span>    <span class="keyword">enum</span> { <a class="code hl_enumvalue" href="class_point_object.html#abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6">Type</a> = <a class="code hl_enumvalue" href="object-data_8h.html#a22d81a3797a15002a24137b9aa8e9ed8aa574e3cd3ae272c98d365e0b189f8f05">OBJ_TYPE_POINT</a> };</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="class_point_object.html#a67b824a3d6f5f8dc7b9f435353c62676">   14</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code hl_function" href="class_point_object.html#a67b824a3d6f5f8dc7b9f435353c62676">type</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_enumvalue" href="class_point_object.html#abed82baf7f470b522273a3e37c24c600a56205085b8e5cc892bead298d181fae6">Type</a>; }</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    QPainterPath <a class="code hl_function" href="class_point_object.html#ac103a3e4474b084a48281e9409087272">objectSavePath</a>() <span class="keyword">const</span>;</div>
@@ -139,8 +140,6 @@ $(document).ready(function(){initNavTree('object-point_8h_source.html',''); init
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>};</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */</span></div>
 <div class="ttc" id="aclass_base_object_html"><div class="ttname"><a href="class_base_object.html">BaseObject</a></div><div class="ttdef"><b>Definition:</b> object-base.h:12</div></div>
 <div class="ttc" id="aclass_point_object_html"><div class="ttname"><a href="class_point_object.html">PointObject</a></div><div class="ttdef"><b>Definition:</b> object-point.h:7</div></div>
 <div class="ttc" id="aclass_point_object_html_a1a830f5a31e400da1680895d92f8b763"><div class="ttname"><a href="class_point_object.html#a1a830f5a31e400da1680895d92f8b763">PointObject::objectPos</a></div><div class="ttdeci">QPointF objectPos() const</div><div class="ttdef"><b>Definition:</b> object-point.h:18</div></div>
@@ -161,8 +160,8 @@ $(document).ready(function(){initNavTree('object-point_8h_source.html',''); init
 <div class="ttc" id="aclass_point_object_html_add4e11623be9bc6e02557c67674564ed"><div class="ttname"><a href="class_point_object.html#add4e11623be9bc6e02557c67674564ed">PointObject::updateRubber</a></div><div class="ttdeci">void updateRubber(QPainter *painter=0)</div><div class="ttdef"><b>Definition:</b> object-point.cpp:62</div></div>
 <div class="ttc" id="aclass_point_object_html_af28ab13ee1f2015ea4c774ae9541b758"><div class="ttname"><a href="class_point_object.html#af28ab13ee1f2015ea4c774ae9541b758">PointObject::init</a></div><div class="ttdeci">void init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)</div><div class="ttdef"><b>Definition:</b> object-point.cpp:29</div></div>
 <div class="ttc" id="aclass_point_object_html_af377b9b2e3594940757c25610899c02b"><div class="ttname"><a href="class_point_object.html#af377b9b2e3594940757c25610899c02b">PointObject::gripEdit</a></div><div class="ttdeci">virtual void gripEdit(const QPointF &amp;before, const QPointF &amp;after)</div><div class="ttdef"><b>Definition:</b> object-point.cpp:100</div></div>
-<div class="ttc" id="aimgui__main_8c_html_a7da3976dcadfc5d60ef03ca18bf0c085"><div class="ttname"><a href="imgui__main_8c.html#a7da3976dcadfc5d60ef03ca18bf0c085">OBJ_TYPE_POINT</a></div><div class="ttdeci">#define OBJ_TYPE_POINT</div><div class="ttdef"><b>Definition:</b> imgui_main.c:121</div></div>
 <div class="ttc" id="aobject-base_8h_html"><div class="ttname"><a href="object-base_8h.html">object-base.h</a></div></div>
+<div class="ttc" id="aobject-data_8h_html_a22d81a3797a15002a24137b9aa8e9ed8aa574e3cd3ae272c98d365e0b189f8f05"><div class="ttname"><a href="object-data_8h.html#a22d81a3797a15002a24137b9aa8e9ed8aa574e3cd3ae272c98d365e0b189f8f05">OBJ_TYPE_POINT</a></div><div class="ttdeci">@ OBJ_TYPE_POINT</div><div class="ttdef"><b>Definition:</b> object-data.h:47</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

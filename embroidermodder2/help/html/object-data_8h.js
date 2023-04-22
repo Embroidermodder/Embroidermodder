@@ -1,13 +1,6 @@
 var object_data_8h =
 [
     [ "OBJ_KEYS", "object-data_8h.html#a29bcbce98e36705fa9c1577a227d53c0", [
-      [ "OBJ_TYPE", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f", null ],
-      [ "OBJ_NAME", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b", null ],
-      [ "OBJ_LAYER", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0af0fe7dca80b5d4384a0576b3edaa5fd5", null ],
-      [ "OBJ_COLOR", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0acae9d8a010607446e0c13af5bc6737c0", null ],
-      [ "OBJ_LTYPE", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9", null ],
-      [ "OBJ_LWT", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0a23e240f9a493316b344299cecd26dc91", null ],
-      [ "OBJ_RUBBER", "imgui__main_8c.html#a29bcbce98e36705fa9c1577a227d53c0a512b85e93266086439b59a6aa83a0f2b", null ],
       [ "OBJ_TYPE", "object-data_8h.html#a29bcbce98e36705fa9c1577a227d53c0ad29edd5d5816dc9b15f9d9f88898764f", null ],
       [ "OBJ_NAME", "object-data_8h.html#a29bcbce98e36705fa9c1577a227d53c0a86bc3d3fc4b067f049c3c6efd029727b", null ],
       [ "OBJ_LAYER", "object-data_8h.html#a29bcbce98e36705fa9c1577a227d53c0af0fe7dca80b5d4384a0576b3edaa5fd5", null ],

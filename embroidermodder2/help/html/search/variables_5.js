@@ -15,7 +15,7 @@ var searchData=
   ['enable_5fruler_12',['ENABLE_RULER',['../object-data_8h.html#ae8f57106dbf63df79131032fa78b710a',1,'object-data.h']]],
   ['enable_5fsnap_13',['ENABLE_SNAP',['../object-data_8h.html#a45328c3592a4be42d25bd2ce6af3e1d6',1,'object-data.h']]],
   ['end_14',['end',['../struct_emb_line__.html#ac19242fe9e53942be61574685fbd49ed',1,'EmbLine_::end()'],['../struct_emb_arc__.html#ac19242fe9e53942be61574685fbd49ed',1,'EmbArc_::end()'],['../struct_emb_bezier__.html#ac19242fe9e53942be61574685fbd49ed',1,'EmbBezier_::end()']]],
-  ['engine_15',['engine',['../class_main_window.html#aa5c442763c909114545d28721ca46e8c',1,'MainWindow']]],
-  ['exitapp_16',['exitApp',['../main_8cpp.html#a5a42421b0311e4b603861e5b1e809ea5',1,'main.cpp']]],
+  ['engine_15',['engine',['../class_main_window.html#aa5c442763c909114545d28721ca46e8c',1,'MainWindow::engine()'],['../mainwindow_8cpp.html#ac628bab1d7838e1528d5f921a8c33656',1,'engine():&#160;mainwindow.cpp']]],
+  ['exitapp_16',['exitApp',['../embroidermodder_8cpp.html#a5a42421b0311e4b603861e5b1e809ea5',1,'embroidermodder.cpp']]],
   ['extension_17',['extension',['../struct_emb_format_list__.html#ad4e3afa5796088c8223396fa0140dde1',1,'EmbFormatList_']]]
 ];

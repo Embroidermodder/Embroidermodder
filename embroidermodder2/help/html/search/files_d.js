@@ -1,5 +1,8 @@
 var searchData=
 [
-  ['text_2ec_0',['text.c',['../text_8c.html',1,'']]],
-  ['thread_2dcolor_2ec_1',['thread-color.c',['../thread-color_8c.html',1,'']]]
+  ['undo_2dcommands_2ecpp_0',['undo-commands.cpp',['../undo-commands_8cpp.html',1,'']]],
+  ['undo_2dcommands_2eh_1',['undo-commands.h',['../undo-commands_8h.html',1,'']]],
+  ['undo_2deditor_2ecpp_2',['undo-editor.cpp',['../undo-editor_8cpp.html',1,'']]],
+  ['undo_2deditor_2eh_3',['undo-editor.h',['../undo-editor_8h.html',1,'']]],
+  ['utility_2ecpp_4',['utility.cpp',['../utility_8cpp.html',1,'']]]
 ];

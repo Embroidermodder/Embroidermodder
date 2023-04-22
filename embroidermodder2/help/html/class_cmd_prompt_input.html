@@ -24,6 +24,7 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -120,8 +121,8 @@ Public Slots</h2></td></tr>
 <tr class="separator:a82d2c8e6d18f2b014a2f650ff52c0a66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82aa679ad2c2cc3c5a2ad82d7564b0b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_input.html#a82aa679ad2c2cc3c5a2ad82d7564b0b6">endCommand</a> ()</td></tr>
 <tr class="separator:a82aa679ad2c2cc3c5a2ad82d7564b0b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab44f78b31931ea15fb5729c6491512ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_input.html#ab44f78b31931ea15fb5729c6491512ed">processInput</a> (const QChar &amp;rapidChar=QChar())</td></tr>
-<tr class="separator:ab44f78b31931ea15fb5729c6491512ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0fdaaca9ad9ac86e9156c2d2e63bdca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_input.html#ad0fdaaca9ad9ac86e9156c2d2e63bdca">processInput</a> (void)</td></tr>
+<tr class="separator:ad0fdaaca9ad9ac86e9156c2d2e63bdca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4aa20ec4ce311f15fa1608b6d3928969"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_input.html#a4aa20ec4ce311f15fa1608b6d3928969">checkSelection</a> ()</td></tr>
 <tr class="separator:a4aa20ec4ce311f15fa1608b6d3928969"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70f5bdb24323aa90f40e9442becd2e63"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_input.html#a70f5bdb24323aa90f40e9442becd2e63">updateCurrentText</a> (const QString &amp;txt)</td></tr>
@@ -1135,8 +1136,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab44f78b31931ea15fb5729c6491512ed" name="ab44f78b31931ea15fb5729c6491512ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab44f78b31931ea15fb5729c6491512ed">&#9670;&#160;</a></span>processInput</h2>
+<a id="ad0fdaaca9ad9ac86e9156c2d2e63bdca" name="ad0fdaaca9ad9ac86e9156c2d2e63bdca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0fdaaca9ad9ac86e9156c2d2e63bdca">&#9670;&#160;</a></span>processInput</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1147,8 +1148,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void processInput </td>
           <td>(</td>
-          <td class="paramtype">const QChar &amp;&#160;</td>
-          <td class="paramname"><em>rapidChar</em> = <code>QChar()</code></td><td>)</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1158,7 +1159,6 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Todo:</a></b></dt><dd>sort Qt::Return if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return) { emit appendHistory(curText, prefix.length()); emit runCommand(curCmd, "RAPID_ENTER"); curText.clear(); clear(); return; } else if(rapidChar == Qt::Key_Space) { updateCurrentText(curText + " "); emit runCommand(curCmd, cmdtxt + " "); return; } else { emit <a class="el" href="class_cmd_prompt_input.html#aa506049eb78e7b035aa76af84f4ffcef">runCommand(curCmd, cmdtxt)</a>; return; } </dd></dl>
 
 </div>
 </div>
