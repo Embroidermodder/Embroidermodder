@@ -338,7 +338,7 @@ simplify_path(char *path)
     int n_tokens = 0;
     char *token = strtok(storage, separator);
     while (token != NULL) {
-        if (streq(token, "..")) {
+        if (!strcmp(token, "..")) {
             n_tokens--;
         }
         if (strcmp(token, "..") && strcmp(token, ".") && strcmp(token, "")) {
@@ -923,9 +923,9 @@ main(int argc, char *argv[])
 bool
 test_translate(void)
 {
-    const char *translated = translate("?");
+    std::string translated = translate("?");
     printf("Failed to use translate.");
-    return streq(translated, "?");
+    return translated == "?";
 }
 
 
@@ -976,7 +976,7 @@ load_toolbar(const char *label)
 {
     Dictionary *toolbar = dictionary_from_index(toolbar_layout, label);
     for (int i=0; i<toolbar->length; i++) {
-        if (streq(toolbar->data[i].key, "---")) {
+        if (!strcmp(toolbar->data[i].key, "---")) {
             ImGui::Separator();
             continue;
         }
@@ -1049,27 +1049,27 @@ parse_command(int argc, char *argv[], char command[200])
 {
     for (int i=1; i<argc; i++) {
         char *s = argv[i];
-        if (streq(s, "--local-boot") || streq(s, "-L")) {
+        if (!strcmp(s, "--local-boot") || !strcmp(s, "-L")) {
             strcpy(settings.assets_dir, argv[i+1]);
             printf("Booting from \"%s\".\n", settings.assets_dir);
             i++;
             continue;
         }
-        if (streq(s, "--debug") || streq(s, "-d")) {
+        if (!strcmp(s, "--debug") || !strcmp(s, "-d")) {
             settings.debug_mode = 1;
             printf("DEBUG MODE\n");
             continue;
         }
-        if (streq(s, "--help") || streq(s, "-h")) {
+        if (!strcmp(s, "--help") || !strcmp(s, "-h")) {
             usage();
             settings.running = false;
         }
-        if (streq(s, "--version") || streq(s, "-v")) {
+        if (!strcmp(s, "--version") || !strcmp(s, "-v")) {
             /* For scripts that need the version string */
             printf("%s", settings.version);
             settings.running = false;
         }
-        if (streq(s, "--test")) {
+        if (!strcmp(s, "--test")) {
             settings.testing = true;
             continue;
         }
@@ -5759,7 +5759,7 @@ validRGB(int r, int g, int b)
  * for longer strings that match this far this is the wrong tool.
  */
 bool
-streq(const char *s1, const char *s2)
+!strcmp(const char *s1, const char *s2)
 {
     return !strncmp(s1, s2, 200);
 }
@@ -5780,7 +5780,7 @@ translate(const char *string)
     }
     return string;
     for (int i=0; i<translation_table->length; i++) {
-        if (streq(translation_table->data[i].key, string)) {
+        if (!strcmp(translation_table->data[i].key, string)) {
             return translation_table->data[i].value;
         }
     }
@@ -6447,10 +6447,10 @@ create_tab_general(void)
      *     to that when it can be detected. */
     if (ImGui::BeginCombo("Language", dialog.language)) {
         for (int i=0; ; i++) {
-            if (streq(languages[i], "END")) {
+            if (!strcmp(languages[i], "END")) {
                 break;
             }
-            bool current_language = streq(dialog.language, languages[i]);
+            bool current_language = !strcmp(dialog.language, languages[i]);
             if (ImGui::Selectable(languages[i], current_language)) {
                 strcpy(dialog.language, languages[i]);
                 dialog.use_translation = true;
@@ -6879,10 +6879,6 @@ create_tab_open_save(void)
     groupBoxTrim->set_layout(vboxLayoutTrim);
 }
 
-/**
- * @brief Create a tab printing object
- *
- */
 void
 create_tab_printing(void)
 {
@@ -6901,20 +6897,12 @@ create_tab_printing(void)
     checkbox_data("Disable Background", &(dialog.printing_disable_bg));
 }
 
-/**
- * @brief Create a tab snap object
- *
- */
 void
 create_tab_snap(void)
 {
 
 }
 
-/**
- * @brief Create a tab grid ruler object
- *
- */
 void
 create_tab_grid_ruler(void)
 {
@@ -8692,39 +8680,39 @@ actuator(char command_line[200])
      *
      * For actions with less than 5 lines of code, don't call a seperate
      * "*_action" function.
-     if (streq(cmd, "about")) {
+     if (!strcmp(cmd, "about")) {
         settings.show_about_dialog = true;
         return;
     }
-    if (streq(cmd, "alert")) {
+    if (!strcmp(cmd, "alert")) {
         /* settings.show_alert = true; */
         return;
     }
-    if (streq(cmd, "arc")) {
+    if (!strcmp(cmd, "arc")) {
         arc_action();
         return;
     }
-    if (streq(cmd, "circle")) {
+    if (!strcmp(cmd, "circle")) {
         circle_action();
         return;
     }
-    if (streq(cmd, "changelog")) {
+    if (!strcmp(cmd, "changelog")) {
         /* settings.show_changelog = true; */
         return;
     }
-    if (streq(cmd, "close")) {
+    if (!strcmp(cmd, "close")) {
         close_action();
         return;
     }
-    if (streq(cmd, "copy")) {
+    if (!strcmp(cmd, "copy")) {
         copy_action();
         return;
     }
-    if (streq(cmd, "cut")) {
+    if (!strcmp(cmd, "cut")) {
         cut_action();
         return;
     }
-    if (streq(cmd, "day")) {
+    if (!strcmp(cmd, "day")) {
             if (active_view != NULL) {
             active_view->setBackgroundColor(qRgb(255,255,255));
             active_view->setCrossHairColor(qRgb(0,0,0));
@@ -8732,50 +8720,50 @@ actuator(char command_line[200])
         }
             return;
     }
-    if (streq(cmd, "debug")) {
+    if (!strcmp(cmd, "debug")) {
         if (strlen(cmd) > 6) {
             log_debug(command_line + 6);
         }
         return;
     }
-    if (streq(cmd, "designdetails")) {
+    if (!strcmp(cmd, "designdetails")) {
         settings.show_details_dialog = true;
         return;
     }
-    if (streq(cmd, "donothing")) {
+    if (!strcmp(cmd, "donothing")) {
         log_debug("This action intentionally does nothing.");
         return;
     }
-    if (streq(cmd, "editor")) {
+    if (!strcmp(cmd, "editor")) {
         settings.show_editor = true;
         return;
     }
-    if (streq(cmd, "exit") || streq(cmd, "quit")) {
+    if (!strcmp(cmd, "exit") || !strcmp(cmd, "quit")) {
         exit_action();
         return;
     }
-    if (streq(cmd, "check-for-updates")) {
+    if (!strcmp(cmd, "check-for-updates")) {
         printf("Visit https://libembroidery.org for information about new releases.\n");
         printf("Your version is: %s.\n", settings.version);
         return;
     }
-    if (streq(cmd, "save")) {
+    if (!strcmp(cmd, "save")) {
         if (active_view != NULL) {
             embPattern_writeAuto(active_view->pattern, active_view->filename);
         }
         return;
     }
-    if (streq(cmd, "platform")) {
+    if (!strcmp(cmd, "platform")) {
         char s[200];
         platform_string(s);
         printf("%s\n", s);
         return;
     }
-    if (streq(cmd, "settingsdialog")) {
+    if (!strcmp(cmd, "settingsdialog")) {
         settings.show_settings_editor = true;
         return;
     }
-    if (streq(cmd, "simulate")) {
+    if (!strcmp(cmd, "simulate")) {
         if (active_view != NULL) {
             active_view->simulate = true;
             active_view->simulation_start = clock();
@@ -8783,27 +8771,27 @@ actuator(char command_line[200])
         return;
     }
 
-    if (streq(cmd, "ellipse")) {
+    if (!strcmp(cmd, "ellipse")) {
         ellipse_action();
         return;
     }
-    if (streq(cmd, "error")) {
+    if (!strcmp(cmd, "error")) {
         error_action(argv[1]);
         return;
     }
-    if (streq(cmd, "help")) {
+    if (!strcmp(cmd, "help")) {
         error_action(argv[1]);
         return;
     }
-    if (streq(cmd, "icon")) {
+    if (!strcmp(cmd, "icon")) {
         icon_action(atoi(argv[1]));
         return;
     }
-    if (streq(cmd, "new")) {
+    if (!strcmp(cmd, "new")) {
         new_file_action();
         return;
     }
-    if (streq(cmd, "night")) {
+    if (!strcmp(cmd, "night")) {
         /**
          * \todo Make night vision color settings.
                  if (active_view) {
@@ -8813,39 +8801,39 @@ actuator(char command_line[200])
         }
             return;
     }
-    if (streq(cmd, "open")) {
+    if (!strcmp(cmd, "open")) {
         open_file_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "pan")) {
+    if (!strcmp(cmd, "pan")) {
         pan_action(argv[1]);
         return;
     }
-    if (streq(cmd, "paste")) {
+    if (!strcmp(cmd, "paste")) {
         paste_action();
         return;
     }
-    if (streq(cmd, "print")) {
+    if (!strcmp(cmd, "print")) {
         print_action();
         return;
     }
-    if (streq(cmd, "rectangle")) {
+    if (!strcmp(cmd, "rectangle")) {
         rectangle_action();
         return;
     }
-    if (streq(cmd, "redo")) {
+    if (!strcmp(cmd, "redo")) {
         redo_action();
         return;
     }
-    if (streq(cmd, "undo")) {
+    if (!strcmp(cmd, "undo")) {
         undo_action();
         return;
     }
-    if (streq(cmd, "vulcanize")) {
+    if (!strcmp(cmd, "vulcanize")) {
         vulcanize_action();
         return;
     }
-    if (streq(cmd, "window")) {
+    if (!strcmp(cmd, "window")) {
         if (argc < 2) {
             /* \todo missing argument error */
         }
@@ -8854,7 +8842,7 @@ actuator(char command_line[200])
         }
         return;
     }
-    if (streq(cmd, "zoom")) {
+    if (!strcmp(cmd, "zoom")) {
         if (argc < 2) {
             /* \todo missing argument error */
         }
@@ -8864,259 +8852,259 @@ actuator(char command_line[200])
         return;
     }
 
-    if (streq(cmd, "blinkPrompt")) {
+    if (!strcmp(cmd, "blinkPrompt")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "set_prompt_prefix")) {
+    if (!strcmp(cmd, "set_prompt_prefix")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "append_prompt_history")) {
+    if (!strcmp(cmd, "append_prompt_history")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "enablePromptRapidFire")) {
+    if (!strcmp(cmd, "enablePromptRapidFire")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "disablePromptRapidFire")) {
+    if (!strcmp(cmd, "disablePromptRapidFire")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "enableMoveRapidFire")) {
+    if (!strcmp(cmd, "enableMoveRapidFire")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "disableMoveRapidFire")) {
+    if (!strcmp(cmd, "disableMoveRapidFire")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "init_command")) {
+    if (!strcmp(cmd, "init_command")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "end_command")) {
+    if (!strcmp(cmd, "end_command")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "tip-of-the-day")) {
+    if (!strcmp(cmd, "tip-of-the-day")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "message-box")) {
+    if (!strcmp(cmd, "message-box")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "print-area")) {
+    if (!strcmp(cmd, "print-area")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setBackgroundColor")) {
+    if (!strcmp(cmd, "setBackgroundColor")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setCrossHairColor")) {
+    if (!strcmp(cmd, "setCrossHairColor")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setGridColor")) {
+    if (!strcmp(cmd, "setGridColor")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textFont")) {
+    if (!strcmp(cmd, "textFont")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textSize")) {
+    if (!strcmp(cmd, "textSize")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textAngle")) {
+    if (!strcmp(cmd, "textAngle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textBold")) {
+    if (!strcmp(cmd, "textBold")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textItalic")) {
+    if (!strcmp(cmd, "textItalic")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textUnderline")) {
+    if (!strcmp(cmd, "textUnderline")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textStrikeOut")) {
+    if (!strcmp(cmd, "textStrikeOut")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "textOverline")) {
+    if (!strcmp(cmd, "textOverline")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextFont")) {
+    if (!strcmp(cmd, "setTextFont")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextSize")) {
+    if (!strcmp(cmd, "setTextSize")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextAngle")) {
+    if (!strcmp(cmd, "setTextAngle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextBold")) {
+    if (!strcmp(cmd, "setTextBold")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextItalic")) {
+    if (!strcmp(cmd, "setTextItalic")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextUnderline")) {
+    if (!strcmp(cmd, "setTextUnderline")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextStrikeOut")) {
+    if (!strcmp(cmd, "setTextStrikeOut")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setTextOverline")) {
+    if (!strcmp(cmd, "setTextOverline")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "previewOn")) {
+    if (!strcmp(cmd, "previewOn")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "previewOff")) {
+    if (!strcmp(cmd, "previewOff")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "allowRubber")) {
+    if (!strcmp(cmd, "allowRubber")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setRubberMode")) {
+    if (!strcmp(cmd, "setRubberMode")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setRubberPoint")) {
+    if (!strcmp(cmd, "setRubberPoint")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setRubberText")) {
+    if (!strcmp(cmd, "setRubberText")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "add_rubber")) {
+    if (!strcmp(cmd, "add_rubber")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "clearRubber")) {
+    if (!strcmp(cmd, "clearRubber")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "spareRubber")) {
+    if (!strcmp(cmd, "spareRubber")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addTextMulti")) {
+    if (!strcmp(cmd, "addTextMulti")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addTextSingle")) {
+    if (!strcmp(cmd, "addTextSingle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addInfiniteLine")) {
+    if (!strcmp(cmd, "addInfiniteLine")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addRay")) {
+    if (!strcmp(cmd, "addRay")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addLine")) {
+    if (!strcmp(cmd, "addLine")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addTriangle")) {
+    if (!strcmp(cmd, "addTriangle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addRectangle")) {
+    if (!strcmp(cmd, "addRectangle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addRoundedRectangle")) {
+    if (!strcmp(cmd, "addRoundedRectangle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addArc")) {
+    if (!strcmp(cmd, "addArc")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addCircle")) {
+    if (!strcmp(cmd, "addCircle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addEllipse")) {
+    if (!strcmp(cmd, "addEllipse")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addPoint")) {
+    if (!strcmp(cmd, "addPoint")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "regularPolygon")) {
+    if (!strcmp(cmd, "regularPolygon")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "polygon")) {
+    if (!strcmp(cmd, "polygon")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "polyline")) {
+    if (!strcmp(cmd, "polyline")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "path")) {
+    if (!strcmp(cmd, "path")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addHorizontalDimension")) {
+    if (!strcmp(cmd, "addHorizontalDimension")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addVerticalDimension")) {
+    if (!strcmp(cmd, "addVerticalDimension")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addImage")) {
+    if (!strcmp(cmd, "addImage")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "addDimLeader")) {
+    if (!strcmp(cmd, "addDimLeader")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "setCursorShape")) {
+    if (!strcmp(cmd, "setCursorShape")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "calculateAngle")) {
+    if (!strcmp(cmd, "calculateAngle")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "calculateDistance")) {
+    if (!strcmp(cmd, "calculateDistance")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "perpendicularDistance")) {
+    if (!strcmp(cmd, "perpendicularDistance")) {
         error_action(argc-1, argv+1);
         return;
     }
@@ -9124,394 +9112,394 @@ actuator(char command_line[200])
     \todo selection details need to be shown to the user,
         like they were through the property editor.
 
-    if (streq(cmd, "selectAll")) {
+    if (!strcmp(cmd, "selectAll")) {
         EmbPath allPath;
         allPath.addRect(active_view->sceneRect());
         // active_view->setSelectionArea(allPath, IntersectsItemShape, this->transform());
         return;
     }
-    if (streq(cmd, "clear_selection")) {
+    if (!strcmp(cmd, "clear_selection")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "delete")) {
+    if (!strcmp(cmd, "delete")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "move")) {
+    if (!strcmp(cmd, "move")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "scale")) {
+    if (!strcmp(cmd, "scale")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "rotate")) {
+    if (!strcmp(cmd, "rotate")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "mirror")) {
+    if (!strcmp(cmd, "mirror")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "qsnapX")) {
+    if (!strcmp(cmd, "qsnapX")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "qsnapY")) {
+    if (!strcmp(cmd, "qsnapY")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "include")) {
+    if (!strcmp(cmd, "include")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "details")) {
+    if (!strcmp(cmd, "details")) {
         details_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "paste")) {
+    if (!strcmp(cmd, "paste")) {
         paste_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "polygon")) {
+    if (!strcmp(cmd, "polygon")) {
         polygon_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "polyline")) {
+    if (!strcmp(cmd, "polyline")) {
         polyline_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "help")) {
+    if (!strcmp(cmd, "help")) {
         help_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "saveas")) {
+    if (!strcmp(cmd, "saveas")) {
         save_file_as_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "whatsthis")) {
+    if (!strcmp(cmd, "whatsthis")) {
         whatsThisContextHelp_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "makelayercurrent")) {
+    if (!strcmp(cmd, "makelayercurrent")) {
         makeLayerActive_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "layers")) {
+    if (!strcmp(cmd, "layers")) {
         layerManager_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "layerprevious")) {
+    if (!strcmp(cmd, "layerprevious")) {
         layerPrevious_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "selectAll")) {
+    if (!strcmp(cmd, "selectAll")) {
         for (i=0; i<active_view->pattern->objects; i++) {
             active_view->selected[i] = active_view->pattern->objects[i];
         }
         return;
     }
-    if (streq(cmd, "addToSelection")) {
+    if (!strcmp(cmd, "addToSelection")) {
         Using cursor input, we interpret what to add.
         active_view->selected[active_view->n_selected] = ;
         active_view->n_selected++;
         return;
     }
-    if (streq(cmd, "clear_selection")) {
+    if (!strcmp(cmd, "clear_selection")) {
         active_view->n_selected = 0;
         return;
     }
-    if (streq(cmd, "delete_selection")) {
+    if (!strcmp(cmd, "delete_selection")) {
         DeleteSelected_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "path")) {
+    if (!strcmp(cmd, "path")) {
         path_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "heart")) {
+    if (!strcmp(cmd, "heart")) {
         heart_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "treble clef")) {
+    if (!strcmp(cmd, "treble clef")) {
         treble_clef_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "line")) {
+    if (!strcmp(cmd, "line")) {
         line_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "dolphin")) {
+    if (!strcmp(cmd, "dolphin")) {
         dolphin_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "tab")) {
+    if (!strcmp(cmd, "tab")) {
         tab_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "save-as")) {
+    if (!strcmp(cmd, "save-as")) {
         save_file_as_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "select-all")) {
+    if (!strcmp(cmd, "select-all")) {
         select_all(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "whats-this")) {
+    if (!strcmp(cmd, "whats-this")) {
         whats_this(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "print-pattern")) {
+    if (!strcmp(cmd, "print-pattern")) {
         print_pattern(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "copy-object")) {
+    if (!strcmp(cmd, "copy-object")) {
         copy(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "paste-object")) {
+    if (!strcmp(cmd, "paste-object")) {
         paste_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "help")) {
+    if (!strcmp(cmd, "help")) {
         help_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "changelog-dialog")) {
+    if (!strcmp(cmd, "changelog-dialog")) {
         changelog(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "settings-dialog")) {
+    if (!strcmp(cmd, "settings-dialog")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "make-layer-current")) {
+    if (!strcmp(cmd, "make-layer-current")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "layer-manager")) {
+    if (!strcmp(cmd, "layer-manager")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "layer-selector")) {
+    if (!strcmp(cmd, "layer-selector")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "color-selector")) {
+    if (!strcmp(cmd, "color-selector")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "line-type-selector")) {
+    if (!strcmp(cmd, "line-type-selector")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "line-weight-selector")) {
+    if (!strcmp(cmd, "line-weight-selector")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "layer-previous")) {
+    if (!strcmp(cmd, "layer-previous")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "hide-all-layers")) {
+    if (!strcmp(cmd, "hide-all-layers")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "show-all-layers")) {
+    if (!strcmp(cmd, "show-all-layers")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "freeze-all-layers")) {
+    if (!strcmp(cmd, "freeze-all-layers")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "thaw-all-layers")) {
+    if (!strcmp(cmd, "thaw-all-layers")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "lock-all-layers")) {
+    if (!strcmp(cmd, "lock-all-layers")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "unlock-all-layers")) {
+    if (!strcmp(cmd, "unlock-all-layers")) {
         error_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "text")) {
-        if (streq(cmd, "font", "angle"(argc-1, argv+1);
+    if (!strcmp(cmd, "text")) {
+        if (!strcmp(cmd, "font", "angle"(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "distance")) {
+    if (!strcmp(cmd, "distance")) {
         distance(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "delete-object")) {
+    if (!strcmp(cmd, "delete-object")) {
         delete_object(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "locate_point")) {
+    if (!strcmp(cmd, "locate_point")) {
         locate_point(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "move")) {
+    if (!strcmp(cmd, "move")) {
         move_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "export")) {
+    if (!strcmp(cmd, "export")) {
         export_action(argc-1, argv+1);
         return;
     }
-    if (streq(cmd, "enable")) {
+    if (!strcmp(cmd, "enable")) {
         if (argc < 2) {
             return;
         }
         if (n_views == 0) {
             return;
         }
-        if (streq(argv[1], "grid")) {
+        if (!strcmp(argv[1], "grid")) {
             active_view->grid_mode = true;
             return;
         }
-        if (streq(argv[1], "real")) {
+        if (!strcmp(argv[1], "real")) {
             active_view->real_render = true;
             return;
         }
-        if (streq(argv[1], "ruler")) {
+        if (!strcmp(argv[1], "ruler")) {
             active_view->ruler_mode = true;
             return;
         }
-        if (streq(argv[1], "ortho")) {
+        if (!strcmp(argv[1], "ortho")) {
             active_view->ortho_mode = true;
             return;
         }
-        if (streq(argv[1], "qsnap")) {
+        if (!strcmp(argv[1], "qsnap")) {
             active_view->qsnap_mode = true;
             return;
         }
-        if (streq(argv[1], "polar")) {
+        if (!strcmp(argv[1], "polar")) {
             active_view->polar_mode = true;
             return;
         }
-        if (streq(argv[1], "track")) {
+        if (!strcmp(argv[1], "track")) {
             active_view->qtrack_mode = true;
             return;
         }
-        if (streq(argv[1], "lwt")) {
+        if (!strcmp(argv[1], "lwt")) {
             active_view->lwt_mode = true;
             return;
         }
-        if (streq(argv[1], "metric")) {
+        if (!strcmp(argv[1], "metric")) {
             active_view->metric = true;
             return;
         }
-        if (streq(argv[1], "text-bold")) {
+        if (!strcmp(argv[1], "text-bold")) {
             active_view->text_style_bold = true;
             return;
         }
-        if (streq(argv[1], "text-italic")) {
+        if (!strcmp(argv[1], "text-italic")) {
             active_view->text_style_italic = true;
             return;
         }
-        if (streq(argv[1], "text-underline")) {
+        if (!strcmp(argv[1], "text-underline")) {
             active_view->text_style_underline = true;
             return;
         }
-        if (streq(argv[1], "text-overline")) {
+        if (!strcmp(argv[1], "text-overline")) {
             active_view->text_style_overline = true;
             return;
         }
-        if (streq(argv[1], "text-strikeout")) {
+        if (!strcmp(argv[1], "text-strikeout")) {
             active_view->text_style_strikeout = true;
             return;
         }
         return;
     }
-    if (streq(cmd, "disable")) {
+    if (!strcmp(cmd, "disable")) {
         if (argc < 2) {
             return;
         }
         if (n_views == 0) {
             return;
         }
-        if (streq(argv[1], "grid")) {
+        if (!strcmp(argv[1], "grid")) {
             active_view->grid_mode = false;
             return;
         }
-        if (streq(argv[1], "real")) {
+        if (!strcmp(argv[1], "real")) {
             active_view->real_render = false;
             return;
         }
-        if (streq(argv[1], "ruler")) {
+        if (!strcmp(argv[1], "ruler")) {
             active_view->ruler_mode = false;
             return;
         }
-        if (streq(argv[1], "ortho")) {
+        if (!strcmp(argv[1], "ortho")) {
             active_view->ortho_mode = false;
             return;
         }
-        if (streq(argv[1], "qsnap")) {
+        if (!strcmp(argv[1], "qsnap")) {
             active_view->qsnap_mode = false;
             return;
         }
-        if (streq(argv[1], "polar")) {
+        if (!strcmp(argv[1], "polar")) {
             active_view->polar_mode = false;
             return;
         }
-        if (streq(argv[1], "track")) {
+        if (!strcmp(argv[1], "track")) {
             active_view->qtrack_mode = false;
             return;
         }
-        if (streq(argv[1], "lwt")) {
+        if (!strcmp(argv[1], "lwt")) {
             active_view->lwt_mode = false;
             return;
         }
-        if (streq(argv[1], "metric")) {
+        if (!strcmp(argv[1], "metric")) {
             active_view->metric = false;
             return;
         }
-        if (streq(argv[1], "text-bold")) {
+        if (!strcmp(argv[1], "text-bold")) {
             active_view->text_style_bold = false;
             return;
         }
-        if (streq(argv[1], "text-italic")) {
+        if (!strcmp(argv[1], "text-italic")) {
             active_view->text_style_italic = false;
             return;
         }
-        if (streq(argv[1], "text-underline")) {
+        if (!strcmp(argv[1], "text-underline")) {
             active_view->text_style_underline = false;
             return;
         }
-        if (streq(argv[1], "text-overline")) {
+        if (!strcmp(argv[1], "text-overline")) {
             active_view->text_style_overline = false;
             return;
         }
-        if (streq(argv[1], "text-strikeout")) {
+        if (!strcmp(argv[1], "text-strikeout")) {
             active_view->text_style_strikeout = false;
             return;
         }
         return;
     }
-    if (streq(cmd, "toggle")) {
+    if (!strcmp(cmd, "toggle")) {
         if (argc < 2) {
             return;
         }
         if (n_views == 0) {
             return;
         }
-        if (streq(argv[1], "snap")) {
+        if (!strcmp(argv[1], "snap")) {
             active_view->snap_mode = !active_view->snap_mode;
             return;
         }
-        if (streq(argv[1], "grid")) {
+        if (!strcmp(argv[1], "grid")) {
             active_view->grid_mode = !active_view->grid_mode;
             return;
         }
-        if (streq(argv[1], "real")) {
+        if (!strcmp(argv[1], "real")) {
             active_view->real_render = !active_view->real_render;
             return;
         }
-        if (streq(argv[1], "ruler")) {
+        if (!strcmp(argv[1], "ruler")) {
             active_view->ruler_mode = !active_view->ruler_mode;
             /**
             \todo These should be part of init_view
@@ -9520,52 +9508,52 @@ actuator(char command_line[200])
             rulerPixelSize = settings.ruler_pixel_size;
                     return;
         }
-        if (streq(argv[1], "ortho")) {
+        if (!strcmp(argv[1], "ortho")) {
             active_view->ortho_mode = !active_view->ortho_mode;
             return;
         }
-        if (streq(argv[1], "qsnap")) {
+        if (!strcmp(argv[1], "qsnap")) {
             active_view->qsnap_mode = !active_view->qsnap_mode;
             return;
         }
-        if (streq(argv[1], "qtrack")) {
+        if (!strcmp(argv[1], "qtrack")) {
             /* FIXME */
             active_view->qsnap_mode = !active_view->qsnap_mode;
             return;
         }
-        if (streq(argv[1], "polar")) {
+        if (!strcmp(argv[1], "polar")) {
             active_view->polar_mode = !active_view->polar_mode;
             return;
         }
-        if (streq(argv[1], "track")) {
+        if (!strcmp(argv[1], "track")) {
             active_view->qtrack_mode = !active_view->qtrack_mode;
             return;
         }
-        if (streq(argv[1], "lwt")) {
+        if (!strcmp(argv[1], "lwt")) {
             active_view->lwt_mode = !active_view->lwt_mode;
             return;
         }
-        if (streq(argv[1], "metric")) {
+        if (!strcmp(argv[1], "metric")) {
             active_view->metric = !active_view->metric;
             return;
         }
-        if (streq(argv[1], "text-bold")) {
+        if (!strcmp(argv[1], "text-bold")) {
             active_view->text_style_bold = !active_view->text_style_bold;
             return;
         }
-        if (streq(argv[1], "text-italic")) {
+        if (!strcmp(argv[1], "text-italic")) {
             active_view->text_style_italic = !active_view->text_style_italic;
             return;
         }
-        if (streq(argv[1], "text-underline")) {
+        if (!strcmp(argv[1], "text-underline")) {
             active_view->text_style_underline = !active_view->text_style_underline;
             return;
         }
-        if (streq(argv[1], "text-overline")) {
+        if (!strcmp(argv[1], "text-overline")) {
             active_view->text_style_overline = !active_view->text_style_overline;
             return;
         }
-        if (streq(argv[1], "text-strikeout")) {
+        if (!strcmp(argv[1], "text-strikeout")) {
             active_view->text_style_strikeout = !active_view->text_style_strikeout;
             return;
         }
@@ -9689,9 +9677,6 @@ cut_action(void)
 
 }
 
-/**
- * @brief     odo document this.
- */
 void
 ellipse_action(void)
 {
@@ -9707,11 +9692,6 @@ ellipse_action(void)
     embPattern_addEllipseAbs(views[settings.pattern_index].pattern, ellipse);
 }
 
-/**
- * @brief
- *
- * \a msg
- */
 void
 error_action(const char *msg)
 {
@@ -9733,11 +9713,6 @@ exit_action(void)
     closeAllWindows();
 }
 
-/**
- * @brief
- *
- * \a filename
- */
 void
 export_action(const char *filename)
 {
@@ -9746,11 +9721,6 @@ export_action(const char *filename)
     }
 }
 
-/**
- * @brief
- *
- * \a new_size
- */
 void
 icon_action(int new_size)
 {
@@ -9793,11 +9763,6 @@ new_file_action(void)
 }
 
 /**
- * @brief
- *
- * \a argc
- * \a argv
- *
  * \todo warn user of too many open tabs.
  */
 void
@@ -9986,42 +9951,38 @@ redo_action(void)
 }
 
 /**
- * @brief
- *
- * \a mode
- *
  * \todo Undo records for pan action.
  */
 void
 pan_action(const char *mode)
 {
-    if (streq(mode, "realtime")) {
+    if (!strcmp(mode, "realtime")) {
         /* active_view->panningRealTimeActive = true; */
         return;
     }
-    if (streq(mode, "point")) {
+    if (!strcmp(mode, "point")) {
         /* active_view->panningPointActive = true; */
         return;
     }
-    if (streq(mode, "left")) {
+    if (!strcmp(mode, "left")) {
         active_view->origin.x += active_view->scale;
             horizontalscrollbar()->setValue(horizontalscrollbar()->value() + panDistance);
         updateMouseCoords(viewMousePoint);
             return;
     }
-    if (streq(mode, "right")) {
+    if (!strcmp(mode, "right")) {
         active_view->origin.x -= active_view->scale;
             horizontalscrollbar()->setValue(horizontalscrollbar()->value() - panDistance);
         updateMouseCoords(viewMousePoint);
             return;
     }
-    if (streq(mode, "up")) {
+    if (!strcmp(mode, "up")) {
         active_view->origin.y += active_view->scale;
             verticalscrollbar()->setValue(verticalscrollbar()->value() + panDistance);
         updateMouseCoords(viewMousePoint);
             return;
     }
-    if (streq(mode, "down")) {
+    if (!strcmp(mode, "down")) {
         active_view->origin.y -= active_view->scale;
             verticalscrollbar()->setValue(verticalscrollbar()->value() - panDistance);
         updateMouseCoords(viewMousePoint);
@@ -10195,17 +10156,17 @@ window_action(const char *arg)
         return;
     }
 
-    if (streq(arg, "cascade")) {
+    if (!strcmp(arg, "cascade")) {
             cascadeSubWindows();
         zoomExtentsAllSubWindows();
             return;
     }
-    if (streq(arg, "tile")) {
+    if (!strcmp(arg, "tile")) {
             tileSubWindows();
         zoomExtentsAllSubWindows();
             return;
     }
-    if (streq(arg, "close")) {
+    if (!strcmp(arg, "close")) {
         log_debug("onCloseWindow()");
 
             numOfDocs--;
@@ -10226,15 +10187,15 @@ window_action(const char *arg)
         }
             return;
     }
-    if (streq(arg, "closeall")) {
+    if (!strcmp(arg, "closeall")) {
         /* active_view->closeAllSubWindows(); */
         return;
     }
-    if (streq(arg, "next")) {
+    if (!strcmp(arg, "next")) {
         /* active_view->activateNextSubWindow(); */
         return;
     }
-    if (streq(arg, "previous")) {
+    if (!strcmp(arg, "previous")) {
         /* active_view->activatePreviousSubWindow(); */
         return;
     }
@@ -10252,7 +10213,7 @@ zoom_action(const char *arg)
         return;
     }
 
-    if (streq(arg, "in")) {
+    if (!strcmp(arg, "in")) {
         if (!allow_zoom_in()) {
             return;
         }
@@ -10265,7 +10226,7 @@ zoom_action(const char *arg)
         centerOn(cntr);
             return;
     }
-    if (streq(arg, "out")) {
+    if (!strcmp(arg, "out")) {
         if (!allow_zoom_out()) {
             return;
         }
@@ -10278,31 +10239,31 @@ zoom_action(const char *arg)
         centerOn(cntr);
             return;
     }
-    if (streq(arg, "all")) {
+    if (!strcmp(arg, "all")) {
         log_debug("zoom all");
             stub_implement("Implement zoomAll.");
             return;
     }
-    if (streq(arg, "window")) {
+    if (!strcmp(arg, "window")) {
         log_debug("zoom window");
             active_view->zoomWindowActive = true;
         active_view->selectingActive = false;
             clear_selection();
         return;
     }
-    if (streq(arg, "center")) {
+    if (!strcmp(arg, "center")) {
         log_debug("zoom center");
         /**
          * \todo Implement zoomCenter.
              return;
     }
-    if (streq(arg, "dynamic")) {
+    if (!strcmp(arg, "dynamic")) {
         log_debug("zoom dynamic");
         /**
          * \todo Implement zoomDynamic.
              return;
     }
-    if (streq(arg, "extents")) {
+    if (!strcmp(arg, "extents")) {
         log_debug("zoom extents");
             EmbRect extents = active_view->itemsBoundingRect();
         if (extents.isNull()) {
@@ -10317,25 +10278,25 @@ zoom_action(const char *arg)
         stack->push(cmd);
             return;
     }
-    if (streq(arg, "previous")) {
+    if (!strcmp(arg, "previous")) {
         log_debug("zoom previous");
         /**
          * \todo Implement zoomPrevious.
              return;
     }
-    if (streq(arg, "realtime")) {
+    if (!strcmp(arg, "realtime")) {
         log_debug("zoomRealtime()");
         /**
          * \todo Implement zoomRealtime.
              return;
     }
-    if (streq(arg, "scale")) {
+    if (!strcmp(arg, "scale")) {
         log_debug("zoomScale()");
         /**
          * \todo Implement zoomScale.
              return;
     }
-    if (streq(arg, "selected")) {
+    if (!strcmp(arg, "selected")) {
         log_debug("zoomSelected()");
             QUndoStack* stack = active_view->undo_stack;
         UndoableNavCommand* cmd = UndoableNavCommand("ZoomSelected", active_view, 0);
@@ -11094,11 +11055,6 @@ paste_selected(void)
     PasteSelected(x, y);
 }
 
-/**
- * @brief
- *
- * \todo Get mouse point/move
- */
 void
 move_selected_action(void)
 {
@@ -11108,11 +11064,6 @@ move_selected_action(void)
     active_view->moveSelected(dx, -dy); }
 }
 
-/**
- * @brief
- *
- * \todo Get mouse point/move
- */
 void
 scale_selected_action(void)
 {
@@ -11156,11 +11107,6 @@ stub_testing_action(void)
     warning_messagebox(translate("Testing Feature"), translate("<b>This feature is in testing.</b>"));
 }
 
-/**
- * @brief
- *
- * \todo Check website for new versions, commands, etc...
- */
 void
 checkForUpdates(void)
 {
@@ -11196,10 +11142,6 @@ button_tip_of_the_day_clicked(int button)
     }
 }
 
-/**
- * @brief Set the Undo Clean Icon object
- *
- */
 void
 setUndoCleanIcon(void)
 {
@@ -11221,21 +11163,16 @@ updateAllEmbViewCrossHairColors(unsigned int color)
 {
     for (int i = 0; i < n_views; i++) {
         EmbView* mdiWin = &(views[i]);
-        // set_viewCrossHairColor(mdiWin, color);
+        set_viewCrossHairColor(mdiWin, color);
     }
 }
 
-/**
- * @brief
- *
- * \a color
- */
 void
 updateAllEmbViewBackgroundColors(unsigned int color)
 {
     for (int i = 0; i < n_views; i++) {
         EmbView* mdiWin = &(views[i]);
-        // set_viewBackgroundColor(mdiWin, color);
+        set_viewBackgroundColor(mdiWin, color);
     }
 }
 
@@ -12997,16 +12934,16 @@ embCircle_prompt(UiObject *global, const char *str)
 
     if (global->mode == CIRCLE_MODE_1P_RAD) {
             if (isnan(global.x1)) {
-            if (streq(str, "2P") {
+            if (!strcmp(str, "2P") {
                 //\todo Probably should add additional translate calls here.
                 global->mode = "CIRCLE_MODE_2P";
                 set_prompt_prefix(translate("Specify first end point of circle's diameter: "));
             }
-            else if (streq(str, "3P") {
+            else if (!strcmp(str, "3P") {
                 global->mode = "CIRCLE_MODE_3P";
                 set_prompt_prefix(translate("Specify first point of circle: "));
             }
-            else if (streq(str, "T" || streq(str, "TTR")  {
+            else if (!strcmp(str, "T" || !strcmp(str, "TTR")  {
                 global->mode = "CIRCLE_MODE_TTR";
                 set_prompt_prefix(translate("Specify point on object for first tangent of circle: "));
             }
@@ -13029,7 +12966,7 @@ embCircle_prompt(UiObject *global, const char *str)
             }
         }
         else {
-            if (streq(str, "D" || streq(str, "DIAMETER") {
+            if (!strcmp(str, "D" || !strcmp(str, "DIAMETER") {
                 //\todo Probably should add additional translate calls here.
                 global->mode = "CIRCLE_MODE_1P_DIA";
                 setRubberMode("CIRCLE_1P_DIA");
@@ -13398,11 +13335,11 @@ path_click(UiObject *global, EmbVector position)
 void
 path_prompt(const char *str)
 {
-    if (streq(str, "A" || streq(str, "ARC") {
+    if (!strcmp(str, "A" || !strcmp(str, "ARC") {
         //\todo Probably should add additional translate calls here.
         \todo PATH prompt() for ARC
     }
-    else if (streq(str, "U" || streq(str, "UNDO") {
+    else if (!strcmp(str, "U" || !strcmp(str, "UNDO") {
         //\todo Probably should add additional translate calls here.
         \todo "PATH prompt() for UNDO
     }
@@ -13466,10 +13403,10 @@ void
 point_prompt(const char *str)
 {
     if (global.firstRun) {
-        if (streq(str, "M" || streq(str, "MODE") {
+        if (!strcmp(str, "M" || !strcmp(str, "MODE") {
             todo("POINT", "prompt() for PDMODE");
         }
-        else if (streq(str, "S" || streq(str, "SIZE") {
+        else if (!strcmp(str, "S" || !strcmp(str, "SIZE") {
             todo("POINT", "prompt() for PDSIZE");
         }
         std_vector<char *> strList = str.split(",");
@@ -13592,7 +13529,7 @@ void
 polygon_prompt(const char *str)
 {
     if (global->mode == MODE_NUM_SIDES) {
-        if (streq(str, "" && global.numSides >= 3 && global.numSides <= 1024) {
+        if (!strcmp(str, "" && global.numSides >= 3 && global.numSides <= 1024) {
             set_prompt_prefix(translate("Specify center point or [Sidelength]: "));
             global->mode = MODE_CENTER_PT;
         }
@@ -13610,7 +13547,7 @@ polygon_prompt(const char *str)
         }
     }
     case MODE_CENTER_PT) {
-        if (streq(str, "S" || streq(str, "SIDELENGTH") {
+        if (!strcmp(str, "S" || !strcmp(str, "SIDELENGTH") {
             global->mode = MODE_SIDE_LEN;
             set_prompt_prefix(translate("Specify start point: "));
         }
@@ -13629,7 +13566,7 @@ polygon_prompt(const char *str)
         }
     }
     case MODE_POLYTYPE) {
-        if (streq(str, "INSCRIBED") {
+        if (!strcmp(str, "INSCRIBED") {
             global->mode = MODE_INSCRIBE;
             global.polyType = "Inscribed";
             set_prompt_prefix(translate("Specify polygon corner point or [Distance]: "));
@@ -13638,7 +13575,7 @@ polygon_prompt(const char *str)
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
             setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
         }
-        else if (streq(str, "CIRCUMSCRIBED") {
+        else if (!strcmp(str, "CIRCUMSCRIBED") {
             global->mode = MODE_CIRCUMSCRIBE;
             global.polyType = "Circumscribed";
             set_prompt_prefix(translate("Specify polygon side point or [Distance]: "));
@@ -13647,7 +13584,7 @@ polygon_prompt(const char *str)
             setRubberPoint("POLYGON_CENTER", global.centerX, global.centerY);
             setRubberPoint("POLYGON_NUM_SIDES", global.numSides, 0);
         }
-        else if (streq(str, "") {
+        else if (!strcmp(str, "") {
             if (global.polyType == "Inscribed") {
                 global->mode = MODE_INSCRIBE;
                 set_prompt_prefix(translate("Specify polygon corner point or [Distance]: "));
@@ -13674,7 +13611,7 @@ polygon_prompt(const char *str)
         }
     }
     case MODE_INSCRIBE) {
-        if (streq(str, "D" || streq(str, "DISTANCE") {
+        if (!strcmp(str, "D" || !strcmp(str, "DISTANCE") {
             global->mode = MODE_DISTANCE;
             set_prompt_prefix(translate("Specify distance: "));
         }
@@ -13694,7 +13631,7 @@ polygon_prompt(const char *str)
         }
     }
     case MODE_CIRCUMSCRIBE) {
-        if (streq(str, "D" || streq(str, "DISTANCE") {
+        if (!strcmp(str, "D" || !strcmp(str, "DISTANCE") {
             global->mode = MODE_DISTANCE;
             set_prompt_prefix(translate("Specify distance: "));
         }
@@ -13818,7 +13755,7 @@ embPolyline_prompt(UiObject global, const char *str)
                 }
         }
     else {
-            if (streq(str, "U" || streq(str, "UNDO") {
+            if (!strcmp(str, "U" || !strcmp(str, "UNDO") {
             todo("POLYLINE", "prompt() for UNDO");
         }
         else {
@@ -14098,13 +14035,13 @@ rectangle_click(UiObject *global, EmbVector position)
 void
 rectangle_prompt(UiObject *global, const char *str)
 {
-    if (streq(str, "C" || streq(str, "CHAMFER") {
+    if (!strcmp(str, "C" || !strcmp(str, "CHAMFER") {
         todo("RECTANGLE", "prompt() for CHAMFER");
     }
-    else if (streq(str, "D" || streq(str, "DIMENSIONS") {
+    else if (!strcmp(str, "D" || !strcmp(str, "DIMENSIONS") {
         todo("RECTANGLE", "prompt() for DIMENSIONS");
     }
-    else if (streq(str, "F" || streq(str, "FILLET") {
+    else if (!strcmp(str, "F" || !strcmp(str, "FILLET") {
         todo("RECTANGLE", "prompt() for FILLET");
     }
     else {
@@ -14159,12 +14096,12 @@ void
 rgb_prompt(const char *str)
 {
     if (global->mode == MODE_BACKGROUND) {
-        if (streq(str, "C" || streq(str, "CROSSHAIR") {
+        if (!strcmp(str, "C" || !strcmp(str, "CROSSHAIR") {
             //\todo Probably should add additional translate calls here.
             global->mode = MODE_CROSSHAIR;
             set_prompt_prefix(translate("Specify crosshair color: "));
         }
-        else if (streq(str, "G" || streq(str, "GRID") {
+        else if (!strcmp(str, "G" || !strcmp(str, "GRID") {
             //\todo Probably should add additional translate calls here.
             global->mode = MODE_GRID;
             set_prompt_prefix(translate("Specify grid color: "));
@@ -14332,7 +14269,7 @@ rotate_prompt(UiObject *global, const char *str)
             }
                 }
         else {
-                    if (streq(str, "R" || streq(str, "REFERENCE") {
+                    if (!strcmp(str, "R" || !strcmp(str, "REFERENCE") {
                 global->mode = MODE_REFERENCE;
                 set_prompt_prefix(translate("Specify the reference angle") + " {0.00}: ");
                 clearRubber();
@@ -14667,7 +14604,7 @@ scale_prompt(UiObject *global, const char *str)
             }
                 }
         else {
-                    if (streq(str, "R" || streq(str, "REFERENCE") {
+                    if (!strcmp(str, "R" || !strcmp(str, "REFERENCE") {
                 global->mode = MODE_REFERENCE;
                 set_prompt_prefix(translate("Specify reference length") + " {1}: ");
                 clearRubber();
@@ -14889,75 +14826,75 @@ single_line_text_prompt(UiObject *global, const char *str)
     switch (global->mode) {
     case SINGLE_LINE_TEXT_MODE_JUSTIFY:
         global->mode = SINGLE_LINE_TEXT_MODE_SETGEOM;
-        if (streq(str, "C") || streq(str, "CENTER")) {
+        if (!strcmp(str, "C") || !strcmp(str, "CENTER")) {
             global->textJustify = JUSTIFY_TOPCENTER;
                     setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify center point of text or [Justify/Setfont]: "));
                     break;
         }
-        if (streq(str, "R") || streq(str, "RIGHT")) {
+        if (!strcmp(str, "R") || !strcmp(str, "RIGHT")) {
             global->textJustify = JUSTIFY_RIGHT;
                     setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify right-end point of text or [Justify/Setfont]: "));
                     break;
         }
-            if (streq(str, "A") || streq(str, "ALIGN")) {
+            if (!strcmp(str, "A") || !strcmp(str, "ALIGN")) {
             global.textJustify = "Aligned";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify start point of text or [Justify/Setfont]: "));
             break;
         }
-        if (streq(str, "M" || streq(str, "MIDDLE") {
+        if (!strcmp(str, "M" || !strcmp(str, "MIDDLE") {
             global.textJustify = "Middle";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify middle point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "F" || streq(str, "FIT") {
+        else if (!strcmp(str, "F" || !strcmp(str, "FIT") {
             global.textJustify = "Fit";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify start point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "TL" || streq(str, "TOPLEFT") {
+        else if (!strcmp(str, "TL" || !strcmp(str, "TOPLEFT") {
             global.textJustify = "Top Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify top-left point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "TC" || streq(str, "TOPCENTER") {
+        else if (!strcmp(str, "TC" || !strcmp(str, "TOPCENTER") {
             global.textJustify = "Top Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify top-center point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "TR" || streq(str, "TOPRIGHT") {
+        else if (!strcmp(str, "TR" || !strcmp(str, "TOPRIGHT") {
             global.textJustify = "Top Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify top-right point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "ML" || streq(str, "MIDDLELEFT") {
+        else if (!strcmp(str, "ML" || !strcmp(str, "MIDDLELEFT") {
             global.textJustify = "Middle Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify middle-left point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "MC" || streq(str, "MIDDLECENTER") {
+        else if (!strcmp(str, "MC" || !strcmp(str, "MIDDLECENTER") {
             global.textJustify = "Middle Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify middle-center point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "MR" || streq(str, "MIDDLERIGHT") {
+        else if (!strcmp(str, "MR" || !strcmp(str, "MIDDLERIGHT") {
             global.textJustify = "Middle Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify middle-right point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "BL" || streq(str, "BOTTOMLEFT") {
+        else if (!strcmp(str, "BL" || !strcmp(str, "BOTTOMLEFT") {
             global.textJustify = "Bottom Left";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify bottom-left point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "BC" || streq(str, "BOTTOMCENTER") {
+        else if (!strcmp(str, "BC" || !strcmp(str, "BOTTOMCENTER") {
             global.textJustify = "Bottom Center";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify bottom-center point of text or [Justify/Setfont]: "));
         }
-        else if (streq(str, "BR" || streq(str, "BOTTOMRIGHT") {
+        else if (!strcmp(str, "BR" || !strcmp(str, "BOTTOMRIGHT") {
             global.textJustify = "Bottom Right";
             setRubberText("TEXT_JUSTIFY", global.textJustify);
             set_prompt_prefix(translate("Specify bottom-right point of text or [Justify/Setfont]: "));
@@ -14979,11 +14916,11 @@ single_line_text_prompt(UiObject *global, const char *str)
 
     case SINGLE_LINE_TEXT_MODE_SETGEOM:
             if (isnan(global.textX)) {
-            if (streq(str, "J" || streq(str, "JUSTIFY") {
+            if (!strcmp(str, "J" || !strcmp(str, "JUSTIFY") {
                 global->mode = MODE_JUSTIFY;
                 set_prompt_prefix(translate("Text Justification Options [Center/Right/Align/Middle/Fit/TL/TC/TR/ML/MC/MR/BL/BC/BR]: "));
             }
-            else if (streq(str, "S" || streq(str, "SETFONT") {
+            else if (!strcmp(str, "S" || !strcmp(str, "SETFONT") {
                 global->mode = MODE_SETFONT;
                 set_prompt_prefix(translate("Specify font name: "));
             }
@@ -15004,7 +14941,7 @@ single_line_text_prompt(UiObject *global, const char *str)
             }
         }
         else if (isnan(global.textHeight)) {
-            if (streq(str, "") {
+            if (!strcmp(str, "") {
                 global.textHeight = textSize();
                 set_prompt_prefix(translate("Specify text angle") + " {" + textAngle() + "}: ");
             }
@@ -15019,7 +14956,7 @@ single_line_text_prompt(UiObject *global, const char *str)
             }
         }
         else if (isnan(global.textRotation)) {
-            if (streq(str, "") {
+            if (!strcmp(str, "") {
                 global.textRotation = textAngle();
                 set_prompt_prefix(translate("Enter text: "));
                 global->mode = MODE_RAPID;
@@ -15060,7 +14997,7 @@ single_line_text_prompt(UiObject *global, const char *str)
 
     case SINGLE_LINE_TEXT_MODE_RAPID:
         /**
-        if (streq(str, "RAPID_ENTER") {
+        if (!strcmp(str, "RAPID_ENTER") {
             if (global.text == "") {
                 end_command();
             }
@@ -15237,7 +15174,7 @@ star_prompt(UiObject design, const char *str)
 {
     switch (design.mode) {
     case STAR_MODE_NUM_POINTS:
-            if (streq(str, "" && global.numPoints >= 3 && global.numPoints <= 1024) {
+            if (!strcmp(str, "" && global.numPoints >= 3 && global.numPoints <= 1024) {
             set_prompt_prefix(translate("Specify center point: "));
             global->mode = MODE_CENTER_PT;
         }
