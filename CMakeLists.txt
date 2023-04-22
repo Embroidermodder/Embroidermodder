@@ -12,24 +12,17 @@ project(embroidermodder VERSION 2.0.0 LANGUAGES C CXX)
 include(config.cmake)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets PrintSupport)
-
-if (LINUX)
-include(GNUInstallDirs)
-else (LINUX)
 qt_standard_project_setup()
-endif (LINUX)
 
-find_package(OpenGL REQUIRED)
+set(CMAKE_AUTOMOC ON)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(CMAKE_AUTOMOC ON)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 add_compile_options(
 	-g
