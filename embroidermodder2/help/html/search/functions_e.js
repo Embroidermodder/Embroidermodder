@@ -81,14 +81,12 @@ var searchData=
   ['ofmreadexpanded_78',['ofmReadExpanded',['../format__ofm_8c.html#a84260a236c94ae0a750864a2a2e0b09c',1,'format_ofm.c']]],
   ['ofmreadlibrary_79',['ofmReadLibrary',['../format__ofm_8c.html#ad122fd27abac7102ae75f82d8e578129',1,'format_ofm.c']]],
   ['ofmreadthreads_80',['ofmReadThreads',['../format__ofm_8c.html#afcdfe4c9bb0e551b1fa20ed9bc698bf4',1,'format_ofm.c']]],
-  ['on_5fwindow_5factivated_81',['on_window_activated',['../imgui__main_8c.html#a3e00a1cdbdae6386ce975f5f7c725245',1,'imgui_main.c']]],
-  ['onclosemdiwin_82',['onCloseMdiWin',['../class_main_window.html#ab3e0e552834026cc1e93952559a29a89',1,'MainWindow']]],
-  ['onclosewindow_83',['onCloseWindow',['../class_main_window.html#af4469ef58823461896f457363b3736e2',1,'MainWindow']]],
-  ['onwindowactivated_84',['onWindowActivated',['../class_mdi_window.html#abe8de8cccec92139e7b920659a38a62d',1,'MdiWindow::onWindowActivated()'],['../class_main_window.html#a0e137af32b5d2d86725f915020e7d0e6',1,'MainWindow::onWindowActivated()']]],
-  ['open_5ffile_5faction_85',['open_file_action',['../imgui__main_8c.html#a608d581974072ba9dff1f601f0a97092',1,'imgui_main.c']]],
-  ['open_5ffile_5fdialog_86',['open_file_dialog',['../imgui__main_8c.html#a07d3d19b4a7739d8aede8061882d0fc5',1,'imgui_main.c']]],
-  ['open_5frecent_5ffile_87',['open_recent_file',['../imgui__main_8c.html#aa2c0ece5dcf014611883ff57c4c90710',1,'imgui_main.c']]],
-  ['openfile_88',['openFile',['../class_main_window.html#aaaeacf4ff46ac4857ebdf69ad7005b00',1,'MainWindow']]],
-  ['openfilesselected_89',['openFilesSelected',['../class_main_window.html#a9de873bb2aacfc81086b5a5d54e9e600',1,'MainWindow']]],
-  ['openrecentfile_90',['openrecentfile',['../class_main_window.html#ab3ef02a683bbf703fdb8282c9bf4cd23',1,'MainWindow']]]
+  ['onclosemdiwin_81',['onCloseMdiWin',['../class_main_window.html#ab3e0e552834026cc1e93952559a29a89',1,'MainWindow']]],
+  ['onclosewindow_82',['onCloseWindow',['../class_main_window.html#af4469ef58823461896f457363b3736e2',1,'MainWindow']]],
+  ['onwindowactivated_83',['onWindowActivated',['../class_main_window.html#a0e137af32b5d2d86725f915020e7d0e6',1,'MainWindow::onWindowActivated()'],['../class_mdi_window.html#abe8de8cccec92139e7b920659a38a62d',1,'MdiWindow::onWindowActivated()']]],
+  ['open_5ffile_5faction_84',['open_file_action',['../embroidermodder_8h.html#ae199fde2507bf42a697884deb4fcae64',1,'embroidermodder.h']]],
+  ['open_5ffile_5fdialog_85',['open_file_dialog',['../embroidermodder_8h.html#a834ab7779e0389d5a150a710435f69bc',1,'embroidermodder.h']]],
+  ['openfile_86',['openFile',['../class_main_window.html#aaaeacf4ff46ac4857ebdf69ad7005b00',1,'MainWindow']]],
+  ['openfilesselected_87',['openFilesSelected',['../class_main_window.html#a9de873bb2aacfc81086b5a5d54e9e600',1,'MainWindow']]],
+  ['openrecentfile_88',['openrecentfile',['../class_main_window.html#ab3ef02a683bbf703fdb8282c9bf4cd23',1,'MainWindow']]]
 ];

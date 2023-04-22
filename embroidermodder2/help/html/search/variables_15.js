@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['ui_5fmode_0',['ui_mode',['../struct_view__.html#a58b88594ab95157f9a4e4b655ba7a639',1,'View_']]],
-  ['undo_5fhistory_1',['undo_history',['../struct_view__.html#a910be9b9781d5fcbfd76cdcb713e3b52',1,'View_']]],
+  ['ui_5fmode_0',['ui_mode',['../struct_emb_view__.html#a58b88594ab95157f9a4e4b655ba7a639',1,'EmbView_']]],
+  ['undo_5fhistory_1',['undo_history',['../struct_emb_view__.html#a910be9b9781d5fcbfd76cdcb713e3b52',1,'EmbView_']]],
   ['undogroup_2',['undoGroup',['../class_undo_editor.html#a2f995dc4648267211bb86dbf77d51c32',1,'UndoEditor']]],
   ['undostack_3',['undoStack',['../class_view.html#ad4d6a47446ac798a9c221d0e66c5d85e',1,'View']]],
   ['undoview_4',['undoView',['../class_undo_editor.html#aad686cdfc63313681f3c98aaf67f8407',1,'UndoEditor']]],

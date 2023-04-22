@@ -11,7 +11,7 @@ void \mbox{\hyperlink{class_cmd_prompt_input_a82d2c8e6d18f2b014a2f650ff52c0a66}{
 \item 
 void \mbox{\hyperlink{class_cmd_prompt_input_a82aa679ad2c2cc3c5a2ad82d7564b0b6}{end\+Command}} ()
 \item 
-void \mbox{\hyperlink{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}{process\+Input}} (const QChar \&rapid\+Char=QChar())
+void \mbox{\hyperlink{class_cmd_prompt_input_ad0fdaaca9ad9ac86e9156c2d2e63bdca}{process\+Input}} (void)
 \item 
 void \mbox{\hyperlink{class_cmd_prompt_input_a4aa20ec4ce311f15fa1608b6d3928969}{check\+Selection}} ()
 \item 
@@ -350,14 +350,12 @@ QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adf
 \doxyparagraph{\texorpdfstring{pastePressed}{pastePressed}}
 {\footnotesize\ttfamily void paste\+Pressed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [signal]}}
 
-\mbox{\Hypertarget{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}\label{class_cmd_prompt_input_ab44f78b31931ea15fb5729c6491512ed}} 
+\mbox{\Hypertarget{class_cmd_prompt_input_ad0fdaaca9ad9ac86e9156c2d2e63bdca}\label{class_cmd_prompt_input_ad0fdaaca9ad9ac86e9156c2d2e63bdca}} 
 \index{CmdPromptInput@{CmdPromptInput}!processInput@{processInput}}
 \index{processInput@{processInput}!CmdPromptInput@{CmdPromptInput}}
 \doxyparagraph{\texorpdfstring{processInput}{processInput}}
-{\footnotesize\ttfamily void process\+Input (\begin{DoxyParamCaption}\item[{const QChar \&}]{rapid\+Char = {\ttfamily QChar()} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
+{\footnotesize\ttfamily void process\+Input (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [slot]}}
 
-\begin{DoxyRefDesc}{Todo}
-\item[\mbox{\hyperlink{todo__todo000001}{Todo}}]sort Qt\+::\+Return if(rapid\+Char == Qt\+::\+Key\+\_\+\+Enter $\vert$$\vert$ rapid\+Char == Qt\+::\+Key\+\_\+\+Return) \{ emit append\+History(cur\+Text, prefix.\+length()); emit run\+Command(cur\+Cmd, \char`\"{}\+RAPID\+\_\+\+ENTER\char`\"{}); cur\+Text.\+clear(); clear(); return; \} else if(rapid\+Char == Qt\+::\+Key\+\_\+\+Space) \{ update\+Current\+Text(cur\+Text + \char`\"{} \char`\"{}); emit run\+Command(cur\+Cmd, cmdtxt + \char`\"{} \char`\"{}); return; \} else \{ emit \mbox{\hyperlink{class_cmd_prompt_input_aa506049eb78e7b035aa76af84f4ffcef}{run\+Command(cur\+Cmd, cmdtxt)}}; return; \} \end{DoxyRefDesc}
 \mbox{\Hypertarget{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}\label{class_cmd_prompt_input_a575fd1a60c16fe14f0a39ad9662b9ce2}} 
 \index{CmdPromptInput@{CmdPromptInput}!redoPressed@{redoPressed}}
 \index{redoPressed@{redoPressed}!CmdPromptInput@{CmdPromptInput}}

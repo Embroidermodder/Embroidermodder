@@ -5,6 +5,10 @@
 This covers the inbuilt designs\+: Dolphin, Snowflake and Heart. Covers Rotate, Scale and Point UI events.  
 
 
+
+
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
+
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -30,7 +34,7 @@ int \mbox{\hyperlink{struct_ui_object___ad6efdfb1c13924cbdcd908582b4be446}{max\+
 \item 
 \mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} \mbox{\hyperlink{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}{scale}}
 \item 
-\mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}{rotation}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{struct_ui_object___ae8eb4a411f5cc41f7ed32d8c62540136}{rotation}}
 \item 
 unsigned int \mbox{\hyperlink{struct_ui_object___ac1b4d694fc07a39e06900e82872aac7f}{mode}}
 \item 
@@ -45,8 +49,6 @@ char \mbox{\hyperlink{struct_ui_object___a8abb50dd6d871ebbb4956b3f99f54536}{text
 float \mbox{\hyperlink{struct_ui_object___af2083d6aee31e64205fd5c037e90390b}{text\+Height}}
 \item 
 float \mbox{\hyperlink{struct_ui_object___ac52fe42f6c748f8527c22231a12b2c26}{text\+Rotation}}
-\item 
-GLuint \mbox{\hyperlink{struct_ui_object___a0546d1993695b1dddda38ad4864782e5}{texture\+\_\+id}}
 \item 
 char \mbox{\hyperlink{struct_ui_object___a4f071f39e69a703ee35a2dc313b928f0}{id}} \mbox{[}200\mbox{]}
 \item 
@@ -73,7 +75,7 @@ Do angles need special storage? angle\+Ref, angle\+New
 
 This chapter details how the source code achieves the design detailed in the previous chapter. For the low-\/level details, read the later chapters.
 
-Dear Im\+Gui (CITATION NEEDED)\hypertarget{imgui__main_8c_autotoc_md3}{}\doxyparagraph{Geometry Objects}\label{imgui__main_8c_autotoc_md3}
+Dear Im\+Gui (CITATION NEEDED)\hypertarget{embroidermodder_8h_autotoc_md0}{}\doxyparagraph{Geometry Objects}\label{embroidermodder_8h_autotoc_md0}
 At all times the Emb\+Pattern has all of the information about the pattern however, editing information like the rubber text labels needs to be stored during runtime. Also editing ghosts like when a rotate command is half executed.
 
 To deal with this we have a generic object that can act as any other object that updates the associated pattern struct as changes as made.
@@ -183,7 +185,7 @@ Selecting is done via this interface.
 \index{UiObject\_@{UiObject\_}!rotation@{rotation}}
 \index{rotation@{rotation}!UiObject\_@{UiObject\_}}
 \doxyparagraph{\texorpdfstring{rotation}{rotation}}
-{\footnotesize\ttfamily \mbox{\hyperlink{utility_8h_aaeb118982aa989fd8bd9db2780d42ec1}{Emb\+Real}} rotation}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rotation}
 
 \mbox{\Hypertarget{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}\label{struct_ui_object___a0bc9c6cc06f9e654a27fe2fc252c5570}} 
 \index{UiObject\_@{UiObject\_}!scale@{scale}}
@@ -227,12 +229,6 @@ Selecting is done via this interface.
 \doxyparagraph{\texorpdfstring{textRotation}{textRotation}}
 {\footnotesize\ttfamily float text\+Rotation}
 
-\mbox{\Hypertarget{struct_ui_object___a0546d1993695b1dddda38ad4864782e5}\label{struct_ui_object___a0546d1993695b1dddda38ad4864782e5}} 
-\index{UiObject\_@{UiObject\_}!texture\_id@{texture\_id}}
-\index{texture\_id@{texture\_id}!UiObject\_@{UiObject\_}}
-\doxyparagraph{\texorpdfstring{texture\_id}{texture\_id}}
-{\footnotesize\ttfamily GLuint texture\+\_\+id}
-
 \mbox{\Hypertarget{struct_ui_object___a551374301513fdb71d8977304106af2c}\label{struct_ui_object___a551374301513fdb71d8977304106af2c}} 
 \index{UiObject\_@{UiObject\_}!type@{type}}
 \index{type@{type}!UiObject\_@{UiObject\_}}
@@ -243,4 +239,4 @@ Selecting is done via this interface.
 
 The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{imgui__main_8c}{imgui\+\_\+main.\+c}}\end{DoxyCompactItemize}
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\end{DoxyCompactItemize}

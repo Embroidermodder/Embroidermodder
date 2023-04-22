@@ -24,6 +24,7 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -102,369 +103,229 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><dl class="reflist">
-<dt>Member <a class="el" href="imgui__main_8c.html#af6840ec2e5976c6e8bdab0e47abe9651">actuator</a>  (char command_line[200])</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000104"></a>These should be part of init_view rulerMetric = settings.ruler_metric; rulerColor = EmbColor(settings.ruler_color); rulerPixelSize = settings.ruler_pixel_size; </p>
-<p class="interdd"><a class="anchor" id="_todo000100"></a>Make day vision color settings.</p>
-<p class="interdd"><a class="anchor" id="_todo000103"></a>Make night vision color settings. </p>
-<p class="interdd"><a class="anchor" id="_todo000101"></a>check-for-updates should create a dialog.</p>
-<p class="enddd"><a class="anchor" id="_todo000102"></a>changelog  </p>
+<dt>Member <a class="el" href="class_arc_object.html#af377b9b2e3594940757c25610899c02b">ArcObject::gripEdit</a>  (const QPointF &amp;before, const QPointF &amp;after)</dt>
+<dd><a class="anchor" id="_todo000009"></a><a class="el" href="class_arc_object.html#af377b9b2e3594940757c25610899c02b" title="ArcObject::gripEdit.">gripEdit()</a> for <a class="el" href="class_arc_object.html">ArcObject</a>  </dd>
+<dt>Member <a class="el" href="class_arc_object.html#add4e11623be9bc6e02557c67674564ed">ArcObject::updateRubber</a>  (QPainter *painter=0)</dt>
+<dd><p class="startdd"><a class="anchor" id="_todo000007"></a>Arc Rubber Modes</p>
+<p class="enddd"><a class="anchor" id="_todo000008"></a><a class="el" href="class_arc_object.html#add4e11623be9bc6e02557c67674564ed" title="ArcObject::updateRubber.">updateRubber()</a> gripping for <a class="el" href="class_arc_object.html">ArcObject</a>  </p>
 </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5ef9b23d5b62a96a6c4b331da1079d64">add_point_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000150"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a3c2b6959a746a022c29706c395d774f5">add_regular_polygon</a>  (EmbReal centerX, EmbReal centerY, int sides, int mode, EmbReal rad, EmbReal rot, bool fill)</dt>
-<dd><a class="anchor" id="_todo000189"></a>finish add_regular_polygon.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a417741c3dbb48336d29bcb2f1c1b58f9">add_rubber_action</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000136"></a>handle this type break; } case EMB_RECT: { addRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); break; } case EMB_SPLINE: { </p>
-<p class="interdd"><a class="anchor" id="_todo000135"></a>handle dim radius type </p>
-<p class="interdd"><a class="anchor" id="_todo000134"></a>handle dim ordinate type</p>
-<p class="interdd"><a class="anchor" id="_todo000133"></a>handle dim linear type</p>
-<p class="interdd"><a class="anchor" id="_todo000132"></a>handle arc type </p>
-<p class="interdd"></p>
-<p class="interdd">handle block type </p>
-<p class="interdd"></p>
-<p class="interdd">handle DimAligned type </p>
-<p class="interdd"></p>
-<p class="interdd">handle DimAngular rubber action. </p>
-<p class="interdd"></p>
-<p class="interdd">handle DimArcLength rubber action. </p>
-<p class="interdd"></p>
-<p class="interdd">handle DimDiameter rubber action. </p>
-<p class="interdd"></p>
-<p class="interdd">handle ellipse arc type </p>
-<p class="interdd"></p>
-<p class="interdd">handle hatch type </p>
-<p class="interdd"></p>
-<p class="interdd">handle image type </p>
-<p class="interdd"></p>
-<p class="interdd">handle infinite line type </p>
-<p class="interdd"></p>
-<p class="interdd">handle path type </p>
-<p class="interdd"></p>
-<p class="interdd">handle point type</p>
-<p class="interdd"><a class="anchor" id="_todo000140"></a>handle this type break; } case EMB_TEXTSINGLE: { addTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); break; } default: break; }</p>
-<p class="interdd"><a class="anchor" id="_todo000139"></a></p>
-<p class="interdd"><a class="anchor" id="_todo000138"></a>handle this type break; } case EMB_TEXTMULTI: { </p>
-<p class="enddd"><a class="anchor" id="_todo000137"></a> </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a565adddcd5c9478eaa23682f2d63d55c">add_slot_action</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000149"></a>slot fill </p>
-<p class="enddd"><a class="anchor" id="_todo000148"></a>Use <a class="el" href="class_undoable_add_command.html">UndoableAddCommand</a> for slots </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a551fa26c5cb41765c5da55164b8d74d1">add_text_single</a>  (const char *str, EmbReal x, EmbReal y, EmbReal rot, bool fill, int rubberMode)</dt>
-<dd><a class="anchor" id="_todo000188"></a>single line text fill  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae7e67339f8e559559f7b1940ed36e1b6">allow_rubber</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000041"></a>the rubberRoomList size check should be removed later.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6a745fd92d172c4c2b1713493871e4de">background_color_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000126"></a>document this.  </dd>
 <dt>Member <a class="el" href="embroidery__internal_8h.html#a5e0de54ec0ef10b88a4e499bbe94f869">bcf_directory</a>  </dt>
-<dd><a class="anchor" id="_todo000392"></a>possibly add a directory tree in the future.  </dd>
+<dd><a class="anchor" id="_todo000183"></a>possibly add a directory tree in the future.  </dd>
 <dt>Member <a class="el" href="embroidery__internal_8h.html#a5226ee18f1045aa203f53da9b74d6963">bcf_file_header</a>  </dt>
-<dd><a class="anchor" id="_todo000393"></a>CLSID should be a separate type.  </dd>
+<dd><a class="anchor" id="_todo000184"></a>CLSID should be a separate type.  </dd>
 <dt>Member <a class="el" href="formats_8c.html#acaa069d2e820245be0f711415e2c297d">binaryWriteInt</a>  (FILE *f, int data)</dt>
-<dd><a class="anchor" id="_todo000408"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000199"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#ad608ccee7fa2036aeba8500061ea0824">binaryWriteIntBE</a>  (FILE *f, int data)</dt>
-<dd><a class="anchor" id="_todo000409"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000200"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#ab2256826c6ea8d2374fc94df46a7616f">binaryWriteShort</a>  (FILE *f, short data)</dt>
-<dd><a class="anchor" id="_todo000405"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000196"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#ad56027171faded451118350359c1e8ae">binaryWriteUInt</a>  (FILE *f, unsigned int data)</dt>
-<dd><a class="anchor" id="_todo000410"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000201"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#a152fc4262fce475f30786312da68fad6">binaryWriteUIntBE</a>  (FILE *f, unsigned int data)</dt>
-<dd><a class="anchor" id="_todo000411"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000202"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#a760e806c16c1612a6b5ca5a26bc736d1">binaryWriteUShort</a>  (FILE *f, unsigned short data)</dt>
-<dd><a class="anchor" id="_todo000406"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000197"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#ac93ea02c7dfc79fb81e7e7cc5acea14a">binaryWriteUShortBE</a>  (FILE *f, unsigned short data)</dt>
-<dd><a class="anchor" id="_todo000407"></a>replace with embInt_read  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae14cb14b32162b75b166f20424ac698b">button_tip_of_the_day_clicked</a>  (int button)</dt>
-<dd><a class="anchor" id="_todo000166"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6d3433fd7ebb707563972aad2dbb0d54">calculate_angle</a>  (EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)</dt>
-<dd><a class="anchor" id="_todo000194"></a>finish CalculateAngle.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa6ad3110116034fee8d590f7e379f7af">calculate_angle_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000154"></a>Get mouse point.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a4111bee970d2262f92a8849ac1d2141d">calculate_distance_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000155"></a>Get mouse point.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a66ef6ad8d060652b27ea3b6cee926756">checkForUpdates</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000164"></a>Check website for new versions, commands, etc...  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#afddf9cfeda422b14ccd5d9f927288e9a">circle_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000105"></a>circle fill  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#afdedb6d22961c7bf7aec4f22a2287e98">clear_rubber</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000187"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af8c1680540296b4a2adacb15e57c295e">clearRubberRoom</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000042"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a712db8de54d9461d1a106c9a7aac0d10">close_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000106"></a>finish copy_action  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a46c4ffe394ae864ae88bdba585993c38">close_event</a>  (int *event)</dt>
-<dd><a class="anchor" id="_todo000019"></a>need close_view_event and close_window_event? or action  </dd>
-<dt>Member <a class="el" href="class_cmd_prompt_input.html#ab44f78b31931ea15fb5729c6491512ed">CmdPromptInput::processInput</a>  (const QChar &amp;rapidChar=QChar())</dt>
-<dd><a class="anchor" id="_todo000001"></a>sort Qt::Return if(rapidChar == Qt::Key_Enter || rapidChar == Qt::Key_Return) { emit appendHistory(curText, prefix.length()); emit runCommand(curCmd, "RAPID_ENTER"); curText.clear(); clear(); return; } else if(rapidChar == Qt::Key_Space) { updateCurrentText(curText + " "); emit runCommand(curCmd, cmdtxt + " "); return; } else { emit <a class="el" href="class_cmd_prompt_input.html#aa506049eb78e7b035aa76af84f4ffcef">runCommand(curCmd, cmdtxt)</a>; return; }  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a152aab1306f180696e3304162009b6f7">colorSelectorIndexChanged</a>  (int index)</dt>
-<dd><a class="anchor" id="_todo000174"></a>Handle ByLayer and ByBlock and Other...  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a2627a7999cd23d611de62da7205c82c0">context_menu_event</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000050"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af07789864af2722ae9651aa41209d4ee">copy</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000055"></a>Prompt to select objects if nothing is preselected.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac2c076c4fbd19adc76e5400806450cee">copy_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000107"></a>finish copy_action  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aad92db755b8d2d546ba1a91ea4f01cad">copy_selected</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000157"></a>Get mouse point/move  </dd>
+<dd><a class="anchor" id="_todo000198"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="main_8c.html#a5d7bf5f964ae87921bab916b871ea2dd">copy_trim</a>  (char const *s)</dt>
-<dd><a class="anchor" id="_todo000414"></a>decription  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5d5163cda675838e6cf30a759a080e2b">cornerButtonClicked</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000048"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa22d0789826ccc589335736185e288c6">create_group_box_block</a>  (int id, EmbBlock *obj)</dt>
-<dd><a class="anchor" id="_todo000072"></a>editors for blocks.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a3f2b226951d84282e6bece9f19002390">create_group_box_dim_aligned</a>  (int id, EmbAlignedDim *obj)</dt>
-<dd><a class="anchor" id="_todo000073"></a>editors for aligned dimension.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa41f7b574de87d8e01f2992c6a3996d3">create_group_box_dim_linear</a>  (int id, EmbLinearDim *obj)</dt>
-<dd><a class="anchor" id="_todo000074"></a>editors for linear dimension. </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a46bfed2bb525009d5d348b7d6fa38fc6">create_group_box_dim_ordinate</a>  (int id, EmbOrdinateDim *obj)</dt>
-<dd><a class="anchor" id="_todo000075"></a>editors for linear dimension. </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1620b0eadb019dfe848e26b05aeac9b4">create_group_box_dim_radius</a>  (int id, EmbRadiusDim *dim_radius)</dt>
-<dd><a class="anchor" id="_todo000076"></a>editors for radius dimension.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a66c307ee1c8944e7b47f23857b65180f">create_tab_lineweight</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000086"></a>finish this  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae74d2d91342a1511f26d7035e6051fd9">createAllActions</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000197"></a>Finish All Commands ... &lt;.&lt; </p>
-<p class="interdd"><a class="anchor" id="_todo000196"></a>Set What's This Context Help to statusTip for now so there is some infos there. Make custom whats this context help popup with more descriptive help than just the status bar/tip one liner(short but not real long) with a hyperlink in the custom popup at the bottom to open full help file description. Ex: like wxPython AGW's SuperToolTip.</p>
-<p class="enddd"><a class="anchor" id="_todo000195"></a>SCENE_QSNAP_POINT for each scene </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af3a1ec0a097fd17ed8066a9998940704">createGridIso</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000046"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a990d2f3521e68827189eb1ea7ea49153">createGridPolar</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000045"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1ef382b5c1b396c2d228932d2ea3c2ef">createGridRect</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000044"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#adce5db5dd1e8ab7e28b2908953bed991">createObjectList</a>  (EmbArray *list)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000060"></a>cut/copy images</p>
-<p class="interdd"><a class="anchor" id="_todo000061"></a>cut/copy infinite lines</p>
-<p class="interdd"><a class="anchor" id="_todo000062"></a>cut/copy linear dimensions</p>
-<p class="interdd"><a class="anchor" id="_todo000063"></a>cut/copy ordinate dimensions</p>
-<p class="interdd"><a class="anchor" id="_todo000064"></a>cut/copy radius dimensions </p>
-<p class="interdd"><a class="anchor" id="_todo000057"></a>cut/copy blocks</p>
-<p class="interdd"><a class="anchor" id="_todo000058"></a>cut/copy aligned dimensions</p>
-<p class="enddd"><a class="anchor" id="_todo000059"></a>cut/copy elliptical arcs </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a3603b6c716a31ea671a69789cf9914aa">createOrigin</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000043"></a>Make Origin Customizable  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae2a41608e07fec7445c05191fcd1595b">crosshair_color_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000127"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a85580eb9dfffa5def742e63d016d969f">cut</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000054"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a4c39def5f357299eb31be5a7644b1bb9">cut_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000108"></a>finish cut_action  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#adeff67b5e32166b00dcde093be4ee92f">cut_selected</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000156"></a>Get mouse point/move  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a59fa71de999ac511396682091d002c5a">delete_pressed</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000051"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aac781a443f5d71c4e23eaa744fcb5cc0">delete_selected</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000053"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa8004b73ec5090fec48156195498de15">details_dialog</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000028"></a>Color Histogram</p>
-<p class="interdd"><a class="anchor" id="_todo000029"></a>Stitch Distribution Histogram</p>
-<p class="enddd"><a class="anchor" id="_todo000027"></a>Move majority of the calculation code into libembroidery </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#afa6e9c56ed9f01289bfe44c7551ba583">dim_leader_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000193"></a>Finish dim_leader_action.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af0780bc626b0edd93a5323210a85ab58">disable_move_rapid_fire</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000040"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a4c786f303137470eabb4db685c64d56a">disablePromptRapidFire</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000180"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad0ea9b475e8aa2c58004ebc6bf95df1d">draw_grid</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000080"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1d1368160b5595cf6796e81b5ee3cb43">draw_rulers</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000079"></a>labels for measurements.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1291ffefd4b741c0b342ed03934c431d">emb_clamp</a>  (EmbReal lower, EmbReal x, EmbReal upper)</dt>
-<dd><a class="anchor" id="_todo000009"></a>Move to libembroidery.  </dd>
+<dd><a class="anchor" id="_todo000205"></a>decription  </dd>
+<dt>Member <a class="el" href="utility_8cpp.html#a1291ffefd4b741c0b342ed03934c431d">emb_clamp</a>  (EmbReal lower, EmbReal x, EmbReal upper)</dt>
+<dd><a class="anchor" id="_todo000014"></a>Move to libembroidery.  </dd>
 <dt>Member <a class="el" href="main_8c.html#a16e1e46c5c33874fc9a63476e70c0d66">embArc_print</a>  (EmbArc arc)</dt>
-<dd><a class="anchor" id="_todo000413"></a>move to <a class="el" href="arc_8c.html">arc.c</a>  </dd>
+<dd><a class="anchor" id="_todo000204"></a>move to <a class="el" href="arc_8c.html">arc.c</a>  </dd>
 <dt>Page <a class="el" href="md_extern_libembroidery_src_embedded.html">embedded</a>  </dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000387"></a>Replace EmbArray functions with embPattern load functions.</p>
-<p class="interdd"><a class="anchor" id="_todo000388"></a>Start file with a list of offsets to data with a corresponding table to load into with macro constants for each label needed.</p>
-<p class="enddd"><a class="anchor" id="_todo000389"></a>For each pattern generate a random string of hexadecimal and append it to the filenames like <code>stitchList\_A16F.dat</code>. Need to check for a file which indicates that this string has been used already. </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000179"></a>Start file with a list of offsets to data with a corresponding table to load into with macro constants for each label needed.</p>
+<p class="interdd"><a class="anchor" id="_todo000180"></a>For each pattern generate a random string of hexadecimal and append it to the filenames like <code>stitchList\_A16F.dat</code>. Need to check for a file which indicates that this string has been used already.</p>
+<p class="enddd"><a class="anchor" id="_todo000178"></a>Replace EmbArray functions with embPattern load functions. </p>
 </dd>
 <dt>Member <a class="el" href="geometry_8c.html#ae6461f57f08ce5992c70fa9897988644">embGeometry_vulcanize</a>  (EmbGeometry *obj)</dt>
-<dd><a class="anchor" id="_todo000412"></a>Review. This could be controlled by a simple flag.  </dd>
+<dd><a class="anchor" id="_todo000203"></a>Review. This could be controlled by a simple flag.  </dd>
 <dt>Member <a class="el" href="fill_8c.html#a63bc84e4406e59c092a2e076afedf930">embPattern_stitchEllipse</a>  (EmbPattern *p, EmbEllipse ellipse, int thread_index, int style)</dt>
-<dd><a class="anchor" id="_todo000398"></a>finish stitchEllipse  </dd>
+<dd><a class="anchor" id="_todo000189"></a>finish stitchEllipse  </dd>
 <dt>Member <a class="el" href="fill_8c.html#a736fce5df010bbe74ea9ad2857be9bf4">embPattern_stitchPath</a>  (EmbPattern *p, EmbPath path, int thread_index, int style)</dt>
-<dd><a class="anchor" id="_todo000399"></a>finish stitch path  </dd>
+<dd><a class="anchor" id="_todo000190"></a>finish stitch path  </dd>
 <dt>Member <a class="el" href="fill_8c.html#a86f903495c0da7514294200680bd6414">embPattern_stitchPolygon</a>  (EmbPattern *p, EmbPolygon polygon, int thread_index, int style)</dt>
-<dd><a class="anchor" id="_todo000400"></a>finish stitch polygon  </dd>
+<dd><a class="anchor" id="_todo000191"></a>finish stitch polygon  </dd>
 <dt>Member <a class="el" href="fill_8c.html#a9ae9d5d7dfbb2ab361dc37970b7eb2f2">embPattern_stitchPolyline</a>  (EmbPattern *p, EmbPolyline polyline, int thread_index, int style)</dt>
-<dd><a class="anchor" id="_todo000401"></a>finish stitch polyline  </dd>
+<dd><a class="anchor" id="_todo000192"></a>finish stitch polyline  </dd>
 <dt>Page <a class="el" href="md_extern_libembroidery_src_embroider_cli.html">embroider_cli</a>  </dt>
-<dd><a class="anchor" id="_todo000390"></a>Move back to libembroidery now we have the combined docs build. </dd>
+<dd><a class="anchor" id="_todo000181"></a>Move back to libembroidery now we have the combined docs build. </dd>
 <dt>Member <a class="el" href="vector_8c.html#a0a4af07bfac410623cf77a35a11550b1">embVector_multiply</a>  (EmbVector vector, EmbReal magnitude, EmbVector *result)</dt>
-<dd><a class="anchor" id="_todo000423"></a>make result return argument.  </dd>
+<dd><a class="anchor" id="_todo000214"></a>make result return argument.  </dd>
 <dt>Member <a class="el" href="vector_8c.html#aaad72d90c58592e330de08139aee5077">embVector_normalize</a>  (EmbVector vector, EmbVector *result)</dt>
-<dd><a class="anchor" id="_todo000422"></a>make result return argument.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a9c4cd1539d25f519a7e56f9df93761c2">enableMoveRapidFire</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000039"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a67e0c255f0ba83b53a1b6ac13ae701c7">enablePromptRapidFire</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000179"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae672f52d9b1356d7ed1cae9ffe7abf05">end_command</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000182"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#abc4204026fd25a1d6c397304366d72bf">enter_event</a>  (int *event)</dt>
-<dd><a class="anchor" id="_todo000037"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a67e0bec22b963083c5205868262ec0b4">escape_pressed</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000052"></a>document this. </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1650b0c1f4ac06a65b1778a0e8c118c1">exit_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000109"></a>document this.  </dd>
+<dd><a class="anchor" id="_todo000213"></a>make result return argument.  </dd>
 <dt>Page <a class="el" href="md_extern_libembroidery_src_formats_formats.html">Formats</a>  </dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000424"></a>Find a source.</p>
-<p class="interdd"><a class="anchor" id="_todo000425"></a>Find a source.</p>
-<p class="enddd"><a class="anchor" id="_todo000426"></a>Find a source. </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000217"></a>Find a source.</p>
+<p class="interdd"><a class="anchor" id="_todo000216"></a>Find a source.</p>
+<p class="enddd"><a class="anchor" id="_todo000215"></a>Find a source. </p>
 </dd>
 <dt>Member <a class="el" href="formats_8c.html#a8cb11404ce46501561f956d33f8dcf95">formatTable</a>  [numberOfFormats]</dt>
-<dd><a class="anchor" id="_todo000402"></a>This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT_STCHANDOBJ). *  </dd>
+<dd><a class="anchor" id="_todo000193"></a>This list needs reviewed in case some stitch formats also can contain object data (EMBFORMAT_STCHANDOBJ). *  </dd>
 <dt>Member <a class="el" href="formats_8c.html#a05fb50e7292226bc2947dd2b4da7a9bd">fread_int32_be</a>  (FILE *f)</dt>
-<dd><a class="anchor" id="_todo000404"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000195"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="formats_8c.html#a2bcdb1e6bf6930d5c054ecdca9831eba">fread_uint16</a>  (FILE *f)</dt>
-<dd><a class="anchor" id="_todo000403"></a>replace with embInt_read  </dd>
+<dd><a class="anchor" id="_todo000194"></a>replace with embInt_read  </dd>
 <dt>Member <a class="el" href="fill_8c.html#ad02b5d945eacff708d2bf084c40044d8">generate_dragon_curve</a>  (char *state, int iterations)</dt>
-<dd><a class="anchor" id="_todo000397"></a>find citation for paper folding method  </dd>
+<dd><a class="anchor" id="_todo000188"></a>find citation for paper folding method  </dd>
 <dt>Page <a class="el" href="md_extern_libembroidery_src_geometry_geometry.html">Geometry and Algorithms</a>  </dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000420"></a>(testing) looping test that reads 10 times while running valgrind. See \texttt{<a class="el" href="embroidery_8h.html#a3bf191bd99e2da8d36465f454a4646f6">embPattern_loadExternalColorFile()</a>} Arduino leak note for more info.</p>
-<p class="interdd"><a class="anchor" id="_todo000421"></a>Like most user interfaces Embroidermodder is mostly data, so here we will have a list describing where each CSV goes.</p>
-<p class="interdd"><a class="anchor" id="_todo000419"></a>(Arduino) Smoothieboard experiments</p>
-<p class="interdd"><a class="anchor" id="_todo000417"></a>(Arduino) Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework</p>
-<p class="interdd"><a class="anchor" id="_todo000418"></a>(Arduino) inotool.org - seems like the logical solution for Nightly/CI builds</p>
-<p class="interdd"><a class="anchor" id="_todo000416"></a>(Arduino)Fix thread-color files</p>
-<p class="enddd"><a class="anchor" id="_todo000415"></a>(Arduino) Fix emb-outline files </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000207"></a>(Arduino)Fix thread-color files</p>
+<p class="interdd"><a class="anchor" id="_todo000208"></a>(Arduino) Logging of Last Stitch Location to External USB Storage(commonly available and easily replaced) ...wait until TRE is available to avoid rework</p>
+<p class="interdd"><a class="anchor" id="_todo000209"></a>(Arduino) inotool.org - seems like the logical solution for Nightly/CI builds</p>
+<p class="interdd"><a class="anchor" id="_todo000210"></a>(Arduino) Smoothieboard experiments</p>
+<p class="interdd"><a class="anchor" id="_todo000206"></a>(Arduino) Fix emb-outline files</p>
+<p class="interdd"><a class="anchor" id="_todo000212"></a>Like most user interfaces Embroidermodder is mostly data, so here we will have a list describing where each CSV goes.</p>
+<p class="enddd"><a class="anchor" id="_todo000211"></a>(testing) looping test that reads 10 times while running valgrind. See \texttt{<a class="el" href="embroidery_8h.html#a3bf191bd99e2da8d36465f454a4646f6">embPattern_loadExternalColorFile()</a>} Arduino leak note for more info. </p>
 </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#adcae0cbecb600049c6dedd95cd9930cd">getCurrentColor</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000176"></a>return color ByLayer  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ab3b613d0d567021e164a02be665b5400">grid_color_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000128"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a61193ac4a9ec8dd4bc18dced3c4a3abd">heart_init</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000214"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a80a32bba36fcac6f698e1036d5291c31">Help</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000183"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af6ea106335ef929038c6a971fe45e764">horizontal_dimension_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000190"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a522cad9c8b9672f085d6f3ffc0f6d67f">image_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000192"></a>finish image_action.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6e4c300aad52822a324a91edae2235b6">Index</a>  </dt>
-<dd><a class="anchor" id="_todo000004"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac4aeb4daa04ff262b2f2fd479dc0e98f">IndexEntry</a>  </dt>
+<dt>Member <a class="el" href="embroidermodder_8h.html#a6e4c300aad52822a324a91edae2235b6">Index</a>  </dt>
 <dd><a class="anchor" id="_todo000003"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a100c6200e6b8744a8f92f6559f73b8b3">infinite_line_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000144"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5bc05721ad6272097545a51c437dc81e">init_command</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000181"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5bf845222a9932ec353859701d62474b">init_view</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000083"></a>Dropping files onto dock on Mac to open them?</p>
-<p class="interdd"><a class="anchor" id="_todo000082"></a>Originally, EM2 allowed for multiple views of the same file, we can allow for this, but currently means we have multiple pattern pointers. So we'd need to set the memory locations to be the same place.</p>
-<p class="enddd"><a class="anchor" id="_todo000084"></a>automatically maximises, but it could allow for multiple views, panes and windows.  </p>
+<dt>Member <a class="el" href="embroidermodder_8h.html#ac4aeb4daa04ff262b2f2fd479dc0e98f">IndexEntry</a>  </dt>
+<dd><a class="anchor" id="_todo000002"></a>document this.  </dd>
+<dt>Member <a class="el" href="utility_8cpp.html#a3e6926ae65525832ed3c1ba9d8df636e">just_opened</a>  </dt>
+<dd><a class="anchor" id="_todo000012"></a>Move to the settings struct.  </dd>
+<dt>Member <a class="el" href="class_mdi_window.html#a8437f8fd71bcf6da5de2a49cbd0b105b">MdiWindow::loadFile</a>  (const QString &amp;fileName)</dt>
+<dd><a class="anchor" id="_todo000004"></a>reincorporate embPattern_moveStitchListToPolylines(p); //TODO: Test more  </dd>
+<dt>Member <a class="el" href="class_mdi_window.html#a2167cf71975c040208ae05b7b6b10a2f">MdiWindow::saveBMC</a>  ()</dt>
+<dd><p class="startdd"><a class="anchor" id="_todo000005"></a>Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed?</p>
+<p class="interdd"><a class="anchor" id="_todo000006"></a>Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache? </p>
+<p class="interdd"></p>
+<p class="enddd">Is there/should there be other embedded data in the bitmap besides the image itself?  </p>
 </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a3e6926ae65525832ed3c1ba9d8df636e">just_opened</a>  </dt>
-<dd><a class="anchor" id="_todo000005"></a>Move to the settings struct.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a39311d663f15b821995a09b0e642ba0a">languages</a>  [20]</dt>
-<dd><a class="anchor" id="_todo000085"></a>this should be loaded from configuration.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a7bbc6b2446f13572a0053772b874a71d">layer_manager</a>  (<a class="el" href="class_view.html">View</a> *view)</dt>
-<dd><a class="anchor" id="_todo000033"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad6e8773f513b582fc2b4bd9326bfbb81">layerManager</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000172"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#acb0fe553e99e0c67e13993e307f56167">layerPrevious</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000173"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a203608629391f45d4a64b1b48c3daa3b">line_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000146"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af9ff1d7e362a83f5ed3c1975ad7d6970">load_formats</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000204"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ab32b7623b4a8feb9ddb21f061a97217a">log_debug</a>  (const char *msg)</dt>
-<dd><a class="anchor" id="_todo000077"></a>log current time and process id alongside all debug information.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>  (int argc, char *argv[])</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000007"></a>add icons and shortcut prompts to menus. </p>
-<p class="enddd"><a class="anchor" id="_todo000006"></a>detail all possible error return values here.  </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5bc5a91adf26b18dd615c83c53483c77">MainWindow</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000198"></a>Prevent memory leaks by deleting any unpasted objects.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a7da395699da3193a09abcddf50c6fb9a">messagebox_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000124"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ada71768b2d9a4eef7469c9aff4d03db3">mirror_selected_action</a>  (EmbLine line)</dt>
-<dd><a class="anchor" id="_todo000162"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a55555197c724d3b2a543e87077876399">move_main</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000215"></a>Prompt to select objects if nothing is preselected  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ab1b91aad20b1894b62be5cbc164f212b">move_selected_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000159"></a>Get mouse point/move  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a100e4694696c327bb497f71863c0c37e">new_file_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000110"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a3e00a1cdbdae6386ce975f5f7c725245">on_window_activated</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000020"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a608d581974072ba9dff1f601f0a97092">open_file_action</a>  (int argc, char argv[10][200])</dt>
-<dd><a class="anchor" id="_todo000111"></a>warn user of too many open tabs.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa2c0ece5dcf014611883ff57c4c90710">open_recent_file</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000201"></a>document this.  </dd>
 <dt>page <a class="el" href="index.html">Overview</a>  </dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000324"></a>(2.x/ideas) EPS format? Look at using Ghostscript as an optional add-on to libembroidery...</p>
-<p class="interdd"><a class="anchor" id="_todo000325"></a>(2.x/ideas) optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.</p>
-<p class="interdd"><a class="anchor" id="_todo000326"></a>(2.x/ideas) Realistic Visualization - Bump Mapping/OpenGL/Gradients?</p>
-<p class="interdd"><a class="anchor" id="_todo000327"></a>(2.x/ideas) Stippling Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000328"></a>(2.x/ideas) User Designed Custom Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000329"></a>(2.x/ideas) Honeycomb Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000330"></a>(2.x/ideas) Hilbert Curve Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000331"></a>(2.x/ideas) Sierpinski Triangle fill</p>
-<p class="interdd"><a class="anchor" id="_todo000332"></a>(2.x/ideas) Circle Grid Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000333"></a>(2.x/ideas) Spiral Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000334"></a>(2.x/ideas) Offset Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000335"></a>(2.x/ideas) Brick Fill</p>
-<p class="interdd"><a class="anchor" id="_todo000336"></a>(2.x/ideas) Trim jumps over a certain length.</p>
-<p class="interdd"><a class="anchor" id="_todo000337"></a>(2.x/ideas) FAQ about setting high number of jumps for more controlled trimming.</p>
-<p class="interdd"><a class="anchor" id="_todo000338"></a>(2.x/ideas) Minimum stitch length option. (Many machines also have this option too)</p>
-<p class="interdd"><a class="anchor" id="_todo000339"></a>(2.x/ideas) Add 'Design Details' functionality to libembroidery-convert</p>
-<p class="interdd"><a class="anchor" id="_todo000340"></a>(2.x/ideas) Add 'Batch convert many to one format' functionality to libembroidery-convert</p>
-<p class="interdd"><a class="anchor" id="_todo000341"></a>(2.x/ideas) EmbroideryFLOSS - Color picker that displays catalog numbers and names.</p>
-<p class="interdd"><a class="anchor" id="_todo000342"></a>(beta) Realistic Visualization - Bump Mapping/OpenGL/Gradients?</p>
-<p class="interdd"><a class="anchor" id="_todo000343"></a>(beta) Get undo history widget back (BUG).</p>
-<p class="interdd"><a class="anchor" id="_todo000344"></a>(beta) Mac Bundle, .tar.gz and .zip source archive.</p>
-<p class="interdd"><a class="anchor" id="_todo000345"></a>(beta) NSIS installer for Windows, Debian package, RPM package</p>
-<p class="interdd"><a class="anchor" id="_todo000346"></a>(beta) GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table</p>
-<p class="interdd"><a class="anchor" id="_todo000347"></a>(beta) Update all formats without color to check for edr or rgb files.</p>
-<p class="interdd"><a class="anchor" id="_todo000348"></a>(beta) Setting for reverse scrolling direction (for zoom, vertical pan)</p>
-<p class="interdd"><a class="anchor" id="_todo000349"></a>(beta) Keyboard zooming, panning</p>
-<p class="interdd"><a class="anchor" id="_todo000350"></a>(beta) New embroidermodder2.ico 16x16 logo that looks good at that scale.</p>
-<p class="interdd"><a class="anchor" id="_todo000351"></a>(beta) Saving dst, pes, jef.</p>
-<p class="interdd"><a class="anchor" id="_todo000352"></a>(beta) Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.</p>
-<p class="interdd"><a class="anchor" id="_todo000353"></a>(beta) Update language translations.</p>
-<p class="interdd"><a class="anchor" id="_todo000354"></a>(beta) Replace KDE4 thumbnailer.</p>
-<p class="interdd"><a class="anchor" id="_todo000355"></a>(beta) Import raster image.</p>
-<p class="interdd"><a class="anchor" id="_todo000356"></a>(beta) Statistics from 1.0, needs histogram.</p>
-<p class="interdd"><a class="anchor" id="_todo000357"></a>(beta) SNAP/ORTHO/POLAR.</p>
-<p class="interdd"><a class="anchor" id="_todo000358"></a>(beta) Cut/copy allow post-selection.</p>
-<p class="interdd"><a class="anchor" id="_todo000359"></a>(beta) Layout into config.</p>
-<p class="interdd"><a class="anchor" id="_todo000360"></a>(beta) Notify user of data loss if not saving to an object format.</p>
-<p class="interdd"><a class="anchor" id="_todo000361"></a>(beta) Add which formats to work with to preferences.</p>
-<p class="interdd"><a class="anchor" id="_todo000362"></a>(beta) Cannot open file with <code>#</code> in the name when opening multiple files but works with opening a single file.</p>
-<p class="interdd"><a class="anchor" id="_todo000363"></a>(beta) Closing settings dialog with the X in the window saves settings rather than discarding them.</p>
-<p class="interdd"><a class="anchor" id="_todo000364"></a>(beta) Otto theme icons: units, render, selectors, what's this icon doesn't scale.</p>
-<p class="interdd"><a class="anchor" id="_todo000365"></a>(beta) Layer manager and Layer switcher dock widget.</p>
-<p class="interdd"><a class="anchor" id="_todo000366"></a>(beta) Test that all formats read data in correct scale (format details should match other programs).</p>
-<p class="interdd"><a class="anchor" id="_todo000367"></a>(beta) Custom filter bug &ndash; doesn't save changes in some cases.</p>
-<p class="interdd"><a class="anchor" id="_todo000368"></a>(beta) Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.</p>
-<p class="interdd"><a class="anchor" id="_todo000369"></a>(beta) Converting Qt C++ version to native GUI C throughout.</p>
-<p class="interdd"><a class="anchor" id="_todo000370"></a>(beta) OpenGL Rendering: <code>Real</code> rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.</p>
-<p class="interdd"><a class="anchor" id="_todo000371"></a>(beta) Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So <code>Ellipse</code> has <code>EmbEllipse</code> as public data within it.</p>
-<p class="interdd"><a class="anchor" id="_todo000372"></a>(beta) Move calculations of rotation and scaling into <code>EmbVector</code> calls.</p>
-<p class="interdd"><a class="anchor" id="_todo000320"></a>(2.x/ideas) Reports?</p>
-<p class="interdd"><a class="anchor" id="_todo000374"></a>(beta) Update all formats without color to check for edr or rgb files.</p>
-<p class="interdd"><a class="anchor" id="_todo000375"></a>(beta) Setting for reverse scrolling direction (for zoom, vertical pan)</p>
-<p class="interdd"><a class="anchor" id="_todo000376"></a>(beta) Keyboard zooming, panning</p>
-<p class="interdd"><a class="anchor" id="_todo000377"></a>(beta) Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.</p>
-<p class="interdd"><a class="anchor" id="_todo000378"></a>(beta) New embroidermodder2.ico 16x16 logo that looks good at that scale.</p>
-<p class="interdd"><a class="anchor" id="_todo000379"></a>(beta) Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.</p>
-<p class="interdd"><a class="anchor" id="_todo000380"></a>(beta) Libembroidery 1.0.</p>
-<p class="interdd"><a class="anchor" id="_todo000381"></a>(beta) Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.</p>
-<p class="interdd"><a class="anchor" id="_todo000382"></a>(beta) EmbroideryFLOSS - Color picker that displays catalog numbers and names.</p>
-<p class="interdd"><a class="anchor" id="_todo000383"></a>(beta) Custom filter bug &ndash; doesn't save changes in some cases.</p>
-<p class="interdd"><a class="anchor" id="_todo000384"></a>(beta) Advanced printing.</p>
-<p class="interdd"><a class="anchor" id="_todo000385"></a>(beta) Stitching simulation.</p>
-<p class="interdd"><a class="anchor" id="_todo000386"></a>(2.x/ideas) User designed custom fill.</p>
-<p class="interdd"><a class="anchor" id="_todo000373"></a>(beta) GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table</p>
-<p class="interdd"><a class="anchor" id="_todo000267"></a>(2.0.0-rc1) CAD Command review: rgb</p>
-<p class="interdd"><a class="anchor" id="_todo000224"></a>Bibliography style to plainnat.</p>
-<p class="interdd"><a class="anchor" id="_todo000225"></a>Serif font for printed docs.</p>
-<p class="interdd"><a class="anchor" id="_todo000226"></a>US letter paper version of printed docs.</p>
-<p class="interdd"><a class="anchor" id="_todo000227"></a>Screenshot a working draft to demonstrate.</p>
-<p class="interdd"><a class="anchor" id="_todo000228"></a>(perennial) Check for memory leaks </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000047"></a>(2.0.0-rc1) CAD Command review: line</p>
+<p class="interdd"><a class="anchor" id="_todo000048"></a>(2.0.0-rc1) CAD Command review: circle</p>
+<p class="interdd"><a class="anchor" id="_todo000049"></a>(2.0.0-rc1) CAD Command review: rectangle</p>
+<p class="interdd"><a class="anchor" id="_todo000050"></a>(2.0.0-rc1) CAD Command review: polygon</p>
+<p class="interdd"><a class="anchor" id="_todo000051"></a>(2.0.0-rc1) CAD Command review: polyline</p>
+<p class="interdd"><a class="anchor" id="_todo000052"></a>(2.0.0-rc1) CAD Command review: point</p>
+<p class="interdd"><a class="anchor" id="_todo000053"></a>(2.0.0-rc1) CAD Command review: ellipse</p>
+<p class="interdd"><a class="anchor" id="_todo000054"></a>(2.0.0-rc1) CAD Command review: arc</p>
+<p class="interdd"><a class="anchor" id="_todo000056"></a>(2.0.0-rc1) CAD Command review: locatepoint</p>
+<p class="interdd"><a class="anchor" id="_todo000057"></a>(2.0.0-rc1) CAD Command review: move</p>
+<p class="interdd"><a class="anchor" id="_todo000058"></a>(2.0.0-rc1) CAD Command review: rgb</p>
+<p class="interdd"><a class="anchor" id="_todo000059"></a>(2.0.0-rc1) CAD Command review: rotate</p>
+<p class="interdd"><a class="anchor" id="_todo000060"></a>(2.0.0-rc1) CAD Command review: scale</p>
+<p class="interdd"><a class="anchor" id="_todo000061"></a>(2.0.0-rc1) CAD Command review: singlelinetext</p>
+<p class="interdd"><a class="anchor" id="_todo000062"></a>(2.0.0-rc1) CAD Command review: star</p>
+<p class="interdd"><a class="anchor" id="_todo000063"></a>(2.0.0-rc1) Clean up all compiler warning messages, right now theres plenty :P</p>
+<p class="interdd"><a class="anchor" id="_todo000064"></a>(2.0) tar.gz archive</p>
+<p class="interdd"><a class="anchor" id="_todo000065"></a>(2.0) zip archive</p>
+<p class="interdd"><a class="anchor" id="_todo000066"></a>(2.0) Debian Package (rt)</p>
+<p class="interdd"><a class="anchor" id="_todo000067"></a>(2.0) NSIS Installer (rt)</p>
+<p class="interdd"><a class="anchor" id="_todo000068"></a>(2.0) Mac Bundle?</p>
+<p class="interdd"><a class="anchor" id="_todo000069"></a>(2.0) press release</p>
+<p class="interdd"><a class="anchor" id="_todo000070"></a>(2.x/ideas) libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)</p>
+<p class="interdd"><a class="anchor" id="_todo000071"></a>(2.x/ideas) libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.</p>
+<p class="interdd"><a class="anchor" id="_todo000072"></a>(2.x/ideas) Cut/Copy - Allow Post-selection</p>
+<p class="interdd"><a class="anchor" id="_todo000073"></a>(2.x/ideas) CAD Command: Array</p>
+<p class="interdd"><a class="anchor" id="_todo000074"></a>(2.x/ideas) CAD Command: Offset</p>
+<p class="interdd"><a class="anchor" id="_todo000075"></a>(2.x/ideas) CAD Command: Extend</p>
+<p class="interdd"><a class="anchor" id="_todo000076"></a>(2.x/ideas) CAD Command: Trim</p>
+<p class="interdd"><a class="anchor" id="_todo000077"></a>(2.x/ideas) CAD Command: BreakAtPoint</p>
+<p class="interdd"><a class="anchor" id="_todo000078"></a>(2.x/ideas) CAD Command: Break2Points</p>
+<p class="interdd"><a class="anchor" id="_todo000079"></a>(2.x/ideas) CAD Command: Fillet</p>
+<p class="interdd"><a class="anchor" id="_todo000080"></a>(2.x/ideas) CAD Command: Chamfer</p>
+<p class="interdd"><a class="anchor" id="_todo000081"></a>(2.x/ideas) CAD Command: Split</p>
+<p class="interdd"><a class="anchor" id="_todo000082"></a>(2.x/ideas) CAD Command: Area</p>
+<p class="interdd"><a class="anchor" id="_todo000083"></a>(2.x/ideas) CAD Command: Time</p>
+<p class="interdd"><a class="anchor" id="_todo000084"></a>(2.x/ideas) CAD Command: PickAdd</p>
+<p class="interdd"><a class="anchor" id="_todo000085"></a>(2.x/ideas) CAD Command: Product</p>
+<p class="interdd"><a class="anchor" id="_todo000086"></a>(2.x/ideas) CAD Command: Program</p>
+<p class="interdd"><a class="anchor" id="_todo000087"></a>(2.x/ideas) CAD Command: ZoomFactor</p>
+<p class="interdd"><a class="anchor" id="_todo000088"></a>(2.x/ideas) CAD Command: GripHot</p>
+<p class="interdd"><a class="anchor" id="_todo000089"></a>(2.x/ideas) CAD Command: GripColor | GripCool</p>
+<p class="interdd"><a class="anchor" id="_todo000090"></a>(2.x/ideas) CAD Command: GripSize</p>
+<p class="interdd"><a class="anchor" id="_todo000091"></a>(2.x/ideas) CAD Command: Highlight</p>
+<p class="interdd"><a class="anchor" id="_todo000092"></a>(2.x/ideas) CAD Command: Units</p>
+<p class="interdd"><a class="anchor" id="_todo000093"></a>(2.x/ideas) CAD Command: Grid</p>
+<p class="interdd"><a class="anchor" id="_todo000094"></a>(2.x/ideas) CAD Command: Find</p>
+<p class="interdd"><a class="anchor" id="_todo000095"></a>(2.x/ideas) CAD Command: Divide</p>
+<p class="interdd"><a class="anchor" id="_todo000096"></a>(2.x/ideas) CAD Command: ZoomWindow (Move out of <a class="el" href="view_8cpp.html">view.cpp</a>)</p>
+<p class="interdd"><a class="anchor" id="_todo000097"></a>(2.x/ideas) Command: Web (Generates Spiderweb patterns)</p>
+<p class="interdd"><a class="anchor" id="_todo000098"></a>(2.x/ideas) Command: Guilloche (Generates Guilloche patterns)</p>
+<p class="interdd"><a class="anchor" id="_todo000099"></a>(2.x/ideas) Command: Celtic Knots</p>
+<p class="interdd"><a class="anchor" id="_todo000100"></a>(2.x/ideas) Command: Knotted Wreath</p>
+<p class="interdd"><a class="anchor" id="_todo000101"></a>(2.x/ideas) Lego Mindstorms NXT/EV3 ports and/or commands.</p>
+<p class="interdd"><a class="anchor" id="_todo000102"></a>(2.x/ideas) native function that flashes the command prompt to get users attention when using the prompt is required for a command.</p>
+<p class="interdd"><a class="anchor" id="_todo000103"></a>(2.x/ideas) libembroidery-composer like app that combines multiple files into one.</p>
+<p class="interdd"><a class="anchor" id="_todo000104"></a>(2.x/ideas) Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. </p>
+<p class="interdd"><a class="anchor" id="_todo000105"></a>(2.x/ideas) Keyboard Zooming/Panning</p>
+<p class="interdd"><a class="anchor" id="_todo000106"></a>(2.x/ideas) G-Code format?</p>
+<p class="interdd"><a class="anchor" id="_todo000107"></a>(2.x/ideas) 3D Raised Embroidery</p>
+<p class="interdd"><a class="anchor" id="_todo000108"></a>(2.x/ideas) Gradient Filling Algorithms</p>
+<p class="interdd"><a class="anchor" id="_todo000055"></a>(2.0.0-rc1) CAD Command review: distance</p>
+<p class="interdd"><a class="anchor" id="_todo000110"></a>(2.x/ideas) RPM packages?</p>
+<p class="interdd"><a class="anchor" id="_todo000111"></a>(2.x/ideas) Reports?</p>
+<p class="interdd"><a class="anchor" id="_todo000112"></a>(2.x/ideas) Record and Playback Commands</p>
+<p class="interdd"><a class="anchor" id="_todo000113"></a>(2.x/ideas) Settings option for reversing zoom scrolling direction</p>
+<p class="interdd"><a class="anchor" id="_todo000114"></a>(2.x/ideas) Qt GUI for libembroidery-convert</p>
+<p class="interdd"><a class="anchor" id="_todo000115"></a>(2.x/ideas) EPS format? Look at using Ghostscript as an optional add-on to libembroidery...</p>
+<p class="interdd"><a class="anchor" id="_todo000116"></a>(2.x/ideas) optional compile option for including LGPL/GPL libs etc... with warning to user about license requirements.</p>
+<p class="interdd"><a class="anchor" id="_todo000117"></a>(2.x/ideas) Realistic Visualization - Bump Mapping/OpenGL/Gradients?</p>
+<p class="interdd"><a class="anchor" id="_todo000118"></a>(2.x/ideas) Stippling Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000119"></a>(2.x/ideas) User Designed Custom Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000120"></a>(2.x/ideas) Honeycomb Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000121"></a>(2.x/ideas) Hilbert Curve Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000122"></a>(2.x/ideas) Sierpinski Triangle fill</p>
+<p class="interdd"><a class="anchor" id="_todo000123"></a>(2.x/ideas) Circle Grid Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000124"></a>(2.x/ideas) Spiral Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000125"></a>(2.x/ideas) Offset Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000126"></a>(2.x/ideas) Brick Fill</p>
+<p class="interdd"><a class="anchor" id="_todo000127"></a>(2.x/ideas) Trim jumps over a certain length.</p>
+<p class="interdd"><a class="anchor" id="_todo000128"></a>(2.x/ideas) FAQ about setting high number of jumps for more controlled trimming.</p>
+<p class="interdd"><a class="anchor" id="_todo000129"></a>(2.x/ideas) Minimum stitch length option. (Many machines also have this option too)</p>
+<p class="interdd"><a class="anchor" id="_todo000130"></a>(2.x/ideas) Add 'Design Details' functionality to libembroidery-convert</p>
+<p class="interdd"><a class="anchor" id="_todo000131"></a>(2.x/ideas) Add 'Batch convert many to one format' functionality to libembroidery-convert</p>
+<p class="interdd"><a class="anchor" id="_todo000132"></a>(2.x/ideas) EmbroideryFLOSS - Color picker that displays catalog numbers and names.</p>
+<p class="interdd"><a class="anchor" id="_todo000133"></a>(beta) Realistic Visualization - Bump Mapping/OpenGL/Gradients?</p>
+<p class="interdd"><a class="anchor" id="_todo000134"></a>(beta) Get undo history widget back (BUG).</p>
+<p class="interdd"><a class="anchor" id="_todo000135"></a>(beta) Mac Bundle, .tar.gz and .zip source archive.</p>
+<p class="interdd"><a class="anchor" id="_todo000136"></a>(beta) NSIS installer for Windows, Debian package, RPM package</p>
+<p class="interdd"><a class="anchor" id="_todo000137"></a>(beta) GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table</p>
+<p class="interdd"><a class="anchor" id="_todo000138"></a>(beta) Update all formats without color to check for edr or rgb files.</p>
+<p class="interdd"><a class="anchor" id="_todo000139"></a>(beta) Setting for reverse scrolling direction (for zoom, vertical pan)</p>
+<p class="interdd"><a class="anchor" id="_todo000140"></a>(beta) Keyboard zooming, panning</p>
+<p class="interdd"><a class="anchor" id="_todo000141"></a>(beta) New embroidermodder2.ico 16x16 logo that looks good at that scale.</p>
+<p class="interdd"><a class="anchor" id="_todo000142"></a>(beta) Saving dst, pes, jef.</p>
+<p class="interdd"><a class="anchor" id="_todo000143"></a>(beta) Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.</p>
+<p class="interdd"><a class="anchor" id="_todo000144"></a>(beta) Update language translations.</p>
+<p class="interdd"><a class="anchor" id="_todo000145"></a>(beta) Replace KDE4 thumbnailer.</p>
+<p class="interdd"><a class="anchor" id="_todo000146"></a>(beta) Import raster image.</p>
+<p class="interdd"><a class="anchor" id="_todo000147"></a>(beta) Statistics from 1.0, needs histogram.</p>
+<p class="interdd"><a class="anchor" id="_todo000148"></a>(beta) SNAP/ORTHO/POLAR.</p>
+<p class="interdd"><a class="anchor" id="_todo000149"></a>(beta) Cut/copy allow post-selection.</p>
+<p class="interdd"><a class="anchor" id="_todo000150"></a>(beta) Layout into config.</p>
+<p class="interdd"><a class="anchor" id="_todo000151"></a>(beta) Notify user of data loss if not saving to an object format.</p>
+<p class="interdd"><a class="anchor" id="_todo000152"></a>(beta) Add which formats to work with to preferences.</p>
+<p class="interdd"><a class="anchor" id="_todo000153"></a>(beta) Cannot open file with <code>#</code> in the name when opening multiple files but works with opening a single file.</p>
+<p class="interdd"><a class="anchor" id="_todo000154"></a>(beta) Closing settings dialog with the X in the window saves settings rather than discarding them.</p>
+<p class="interdd"><a class="anchor" id="_todo000155"></a>(beta) Otto theme icons: units, render, selectors, what's this icon doesn't scale.</p>
+<p class="interdd"><a class="anchor" id="_todo000156"></a>(beta) Layer manager and Layer switcher dock widget.</p>
+<p class="interdd"><a class="anchor" id="_todo000157"></a>(beta) Test that all formats read data in correct scale (format details should match other programs).</p>
+<p class="interdd"><a class="anchor" id="_todo000158"></a>(beta) Custom filter bug &ndash; doesn't save changes in some cases.</p>
+<p class="interdd"><a class="anchor" id="_todo000159"></a>(beta) Tools to find common problems in the source code and suggest fixes to the developers. For example, a translation miss: that is, for any language other than English a missing entry in the translation table should supply a clear warning to developers.</p>
+<p class="interdd"><a class="anchor" id="_todo000160"></a>(beta) Converting Qt C++ version to native GUI C throughout.</p>
+<p class="interdd"><a class="anchor" id="_todo000161"></a>(beta) OpenGL Rendering: <code>Real</code> rendering to see what the embroidery looks like, Icons and toolbars, Menu bar.</p>
+<p class="interdd"><a class="anchor" id="_todo000162"></a>(beta) Libembroidery interfacing: get all classes to use the proper libembroidery types within them. So <code>Ellipse</code> has <code>EmbEllipse</code> as public data within it.</p>
+<p class="interdd"><a class="anchor" id="_todo000164"></a>(beta) GUI frontend for embroider features that aren't supported by embroidermodder: flag selector from a table</p>
+<p class="interdd"><a class="anchor" id="_todo000165"></a>(beta) Update all formats without color to check for edr or rgb files.</p>
+<p class="interdd"><a class="anchor" id="_todo000166"></a>(beta) Setting for reverse scrolling direction (for zoom, vertical pan)</p>
+<p class="interdd"><a class="anchor" id="_todo000167"></a>(beta) Keyboard zooming, panning</p>
+<p class="interdd"><a class="anchor" id="_todo000168"></a>(beta) Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.</p>
+<p class="interdd"><a class="anchor" id="_todo000169"></a>(beta) New embroidermodder2.ico 16x16 logo that looks good at that scale.</p>
+<p class="interdd"><a class="anchor" id="_todo000170"></a>(beta) Settings dialog: notify when the user is switching tabs that the setting has been changed, adding apply button is what would make sense for this to happen.</p>
+<p class="interdd"><a class="anchor" id="_todo000171"></a>(beta) Libembroidery 1.0.</p>
+<p class="interdd"><a class="anchor" id="_todo000172"></a>(beta) Better integrated help: I don't think the help should backend to a html file somewhere on the user's system. A better system would be a custom widget within the program that's searchable.</p>
+<p class="interdd"><a class="anchor" id="_todo000173"></a>(beta) EmbroideryFLOSS - Color picker that displays catalog numbers and names.</p>
+<p class="interdd"><a class="anchor" id="_todo000174"></a>(beta) Custom filter bug &ndash; doesn't save changes in some cases.</p>
+<p class="interdd"><a class="anchor" id="_todo000175"></a>(beta) Advanced printing.</p>
+<p class="interdd"><a class="anchor" id="_todo000176"></a>(beta) Stitching simulation.</p>
+<p class="interdd"><a class="anchor" id="_todo000177"></a>(2.x/ideas) User designed custom fill.</p>
+<p class="interdd"><a class="anchor" id="_todo000028"></a>(2.0.0-alpha2) Reading DXF</p>
+<p class="interdd"><a class="anchor" id="_todo000015"></a>Bibliography style to plainnat.</p>
+<p class="interdd"><a class="anchor" id="_todo000016"></a>Serif font for printed docs.</p>
+<p class="interdd"><a class="anchor" id="_todo000017"></a>US letter paper version of printed docs.</p>
+<p class="interdd"><a class="anchor" id="_todo000018"></a>Screenshot a working draft to demonstrate.</p>
+<p class="interdd"><a class="anchor" id="_todo000019"></a>(perennial) Check for memory leaks </p>
 <p class="interdd"></p>
 <p class="interdd">(perennial) Clear compiler warnings on <code>-Wall -ansi -pedantic</code> for C. </p>
 <p class="interdd"></p>
@@ -475,320 +336,49 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <p class="interdd">(perennial) PEP7 compliance. </p>
 <p class="interdd"></p>
 <p class="interdd">(perennial) Better documentation with more photos/screencaps.</p>
-<p class="interdd"><a class="anchor" id="_todo000229"></a>sort todo list.</p>
-<p class="interdd"><a class="anchor" id="_todo000230"></a>(2.0.0-alpha1) Statistics from 1.0, needs histogram</p>
-<p class="interdd"><a class="anchor" id="_todo000231"></a>(2.0.0-alpha1) Saving DST/PES/JEF (varga)</p>
-<p class="interdd"><a class="anchor" id="_todo000232"></a>(2.0.0-alpha1) Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug</p>
-<p class="interdd"><a class="anchor" id="_todo000233"></a>(2.0.0-alpha2) Notify user of data loss if not saving to an object format.</p>
-<p class="interdd"><a class="anchor" id="_todo000234"></a>(2.0.0-alpha2) Import Raster Image</p>
-<p class="interdd"><a class="anchor" id="_todo000235"></a>(2.0.0-alpha2) SNAP/ORTHO/POLAR</p>
-<p class="interdd"><a class="anchor" id="_todo000236"></a>(2.0.0-alpha2) Layer Manager + LayerSwitcher DockWidget</p>
-<p class="interdd"><a class="anchor" id="_todo000237"></a>(2.0.0-alpha2) Reading DXF</p>
-<p class="interdd"><a class="anchor" id="_todo000238"></a>(2.0.0-alpha3) Writing DXF</p>
-<p class="interdd"><a class="anchor" id="_todo000239"></a>(2.0.0-alpha3) Up and Down keys cycle thru commands in the command prompt</p>
-<p class="interdd"><a class="anchor" id="_todo000240"></a>(2.0.0-alpha3) Amount of Thread | Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)</p>
-<p class="interdd"><a class="anchor" id="_todo000241"></a>(2.0.0-alpha3) Otto Theme Icons - whatsthis icon doesn't scale well, needs redone</p>
-<p class="interdd"><a class="anchor" id="_todo000242"></a>(2.0.0-alpha3) embroidermodder2.ico 16 x 16 looks horrible</p>
-<p class="interdd"><a class="anchor" id="_todo000243"></a>(2.0.0-alpha4) CAD Command: Arc (rt)</p>
-<p class="interdd"><a class="anchor" id="_todo000244"></a>(2.0.0-alpha4) automate changelog and write to a javascript file for the docs: git log &ndash;pretty=tformat:'<a href="\url{https://github.com/Embroidermodder/Embroidermodder/commit/%H}">s</a>'</p>
-<p class="interdd"><a class="anchor" id="_todo000245"></a>(2.0.0-beta1) Custom Filter Bug - doesn't save changes in some cases</p>
-<p class="interdd"><a class="anchor" id="_todo000246"></a>(2.0.0-beta1) Cannot open file with <code>#</code> in name when opening multiple files (works fine when opening the single file)</p>
-<p class="interdd"><a class="anchor" id="_todo000247"></a>(2.0.0-beta1) Closing Settings Dialog with the X in the window saves settings rather than discards them</p>
-<p class="interdd"><a class="anchor" id="_todo000248"></a>(2.0.0-beta1) Advanced Printing</p>
-<p class="interdd"><a class="anchor" id="_todo000249"></a>(2.0.0-beta1) Filling Algorithms (varga)</p>
-<p class="interdd"><a class="anchor" id="_todo000250"></a>(2.0.0-beta1) Otto Theme Icons - beta (rt) - Units, Render, Selectors</p>
-<p class="interdd"><a class="anchor" id="_todo000251"></a>(2.0.0-rc1) QDoc Comments</p>
-<p class="interdd"><a class="anchor" id="_todo000252"></a>(2.0.0-rc1) Review KDE4 Thumbnailer</p>
-<p class="interdd"><a class="anchor" id="_todo000253"></a>(2.0.0-rc1) Documentation for libembroidery | formats</p>
-<p class="interdd"><a class="anchor" id="_todo000254"></a>(2.0.0-rc1) HTML Help files</p>
-<p class="interdd"><a class="anchor" id="_todo000255"></a>(2.0.0-rc1) Update language translations</p>
-<p class="interdd"><a class="anchor" id="_todo000256"></a>(2.0.0-rc1) CAD Command review: line</p>
-<p class="interdd"><a class="anchor" id="_todo000257"></a>(2.0.0-rc1) CAD Command review: circle</p>
-<p class="interdd"><a class="anchor" id="_todo000258"></a>(2.0.0-rc1) CAD Command review: rectangle</p>
-<p class="interdd"><a class="anchor" id="_todo000259"></a>(2.0.0-rc1) CAD Command review: polygon</p>
-<p class="interdd"><a class="anchor" id="_todo000260"></a>(2.0.0-rc1) CAD Command review: polyline</p>
-<p class="interdd"><a class="anchor" id="_todo000261"></a>(2.0.0-rc1) CAD Command review: point</p>
-<p class="interdd"><a class="anchor" id="_todo000262"></a>(2.0.0-rc1) CAD Command review: ellipse</p>
-<p class="interdd"><a class="anchor" id="_todo000263"></a>(2.0.0-rc1) CAD Command review: arc</p>
-<p class="interdd"><a class="anchor" id="_todo000264"></a>(2.0.0-rc1) CAD Command review: distance</p>
-<p class="interdd"><a class="anchor" id="_todo000265"></a>(2.0.0-rc1) CAD Command review: locatepoint</p>
-<p class="interdd"><a class="anchor" id="_todo000266"></a>(2.0.0-rc1) CAD Command review: move</p>
-<p class="interdd"><a class="anchor" id="_todo000268"></a>(2.0.0-rc1) CAD Command review: rotate</p>
-<p class="interdd"><a class="anchor" id="_todo000269"></a>(2.0.0-rc1) CAD Command review: scale</p>
-<p class="interdd"><a class="anchor" id="_todo000270"></a>(2.0.0-rc1) CAD Command review: singlelinetext</p>
-<p class="interdd"><a class="anchor" id="_todo000271"></a>(2.0.0-rc1) CAD Command review: star</p>
-<p class="interdd"><a class="anchor" id="_todo000272"></a>(2.0.0-rc1) Clean up all compiler warning messages, right now theres plenty :P</p>
-<p class="interdd"><a class="anchor" id="_todo000273"></a>(2.0) tar.gz archive</p>
-<p class="interdd"><a class="anchor" id="_todo000274"></a>(2.0) zip archive</p>
-<p class="interdd"><a class="anchor" id="_todo000275"></a>(2.0) Debian Package (rt)</p>
-<p class="interdd"><a class="anchor" id="_todo000276"></a>(2.0) NSIS Installer (rt)</p>
-<p class="interdd"><a class="anchor" id="_todo000277"></a>(2.0) Mac Bundle?</p>
-<p class="interdd"><a class="anchor" id="_todo000278"></a>(2.0) press release</p>
-<p class="interdd"><a class="anchor" id="_todo000279"></a>(2.x/ideas) libembroidery.mk for MXE project (refer to qt submodule packages for qmake based building. Also refer to plibc.mk for example of how write an update macro for github.)</p>
-<p class="interdd"><a class="anchor" id="_todo000280"></a>(2.x/ideas) libembroidery safeguard for all writers - check if the last stitch is an END stitch. If not, add an end stitch in the writer and modify the header data if necessary.</p>
-<p class="interdd"><a class="anchor" id="_todo000281"></a>(2.x/ideas) Cut/Copy - Allow Post-selection</p>
-<p class="interdd"><a class="anchor" id="_todo000282"></a>(2.x/ideas) CAD Command: Array</p>
-<p class="interdd"><a class="anchor" id="_todo000283"></a>(2.x/ideas) CAD Command: Offset</p>
-<p class="interdd"><a class="anchor" id="_todo000284"></a>(2.x/ideas) CAD Command: Extend</p>
-<p class="interdd"><a class="anchor" id="_todo000285"></a>(2.x/ideas) CAD Command: Trim</p>
-<p class="interdd"><a class="anchor" id="_todo000286"></a>(2.x/ideas) CAD Command: BreakAtPoint</p>
-<p class="interdd"><a class="anchor" id="_todo000287"></a>(2.x/ideas) CAD Command: Break2Points</p>
-<p class="interdd"><a class="anchor" id="_todo000288"></a>(2.x/ideas) CAD Command: Fillet</p>
-<p class="interdd"><a class="anchor" id="_todo000289"></a>(2.x/ideas) CAD Command: Chamfer</p>
-<p class="interdd"><a class="anchor" id="_todo000290"></a>(2.x/ideas) CAD Command: Split</p>
-<p class="interdd"><a class="anchor" id="_todo000291"></a>(2.x/ideas) CAD Command: Area</p>
-<p class="interdd"><a class="anchor" id="_todo000292"></a>(2.x/ideas) CAD Command: Time</p>
-<p class="interdd"><a class="anchor" id="_todo000293"></a>(2.x/ideas) CAD Command: PickAdd</p>
-<p class="interdd"><a class="anchor" id="_todo000294"></a>(2.x/ideas) CAD Command: Product</p>
-<p class="interdd"><a class="anchor" id="_todo000295"></a>(2.x/ideas) CAD Command: Program</p>
-<p class="interdd"><a class="anchor" id="_todo000296"></a>(2.x/ideas) CAD Command: ZoomFactor</p>
-<p class="interdd"><a class="anchor" id="_todo000297"></a>(2.x/ideas) CAD Command: GripHot</p>
-<p class="interdd"><a class="anchor" id="_todo000298"></a>(2.x/ideas) CAD Command: GripColor | GripCool</p>
-<p class="interdd"><a class="anchor" id="_todo000299"></a>(2.x/ideas) CAD Command: GripSize</p>
-<p class="interdd"><a class="anchor" id="_todo000300"></a>(2.x/ideas) CAD Command: Highlight</p>
-<p class="interdd"><a class="anchor" id="_todo000301"></a>(2.x/ideas) CAD Command: Units</p>
-<p class="interdd"><a class="anchor" id="_todo000302"></a>(2.x/ideas) CAD Command: Grid</p>
-<p class="interdd"><a class="anchor" id="_todo000303"></a>(2.x/ideas) CAD Command: Find</p>
-<p class="interdd"><a class="anchor" id="_todo000304"></a>(2.x/ideas) CAD Command: Divide</p>
-<p class="interdd"><a class="anchor" id="_todo000305"></a>(2.x/ideas) CAD Command: ZoomWindow (Move out of <a class="el" href="view_8cpp.html">view.cpp</a>)</p>
-<p class="interdd"><a class="anchor" id="_todo000306"></a>(2.x/ideas) Command: Web (Generates Spiderweb patterns)</p>
-<p class="interdd"><a class="anchor" id="_todo000307"></a>(2.x/ideas) Command: Guilloche (Generates Guilloche patterns)</p>
-<p class="interdd"><a class="anchor" id="_todo000308"></a>(2.x/ideas) Command: Celtic Knots</p>
-<p class="interdd"><a class="anchor" id="_todo000309"></a>(2.x/ideas) Command: Knotted Wreath</p>
-<p class="interdd"><a class="anchor" id="_todo000310"></a>(2.x/ideas) Lego Mindstorms NXT/EV3 ports and/or commands.</p>
-<p class="interdd"><a class="anchor" id="_todo000311"></a>(2.x/ideas) native function that flashes the command prompt to get users attention when using the prompt is required for a command.</p>
-<p class="interdd"><a class="anchor" id="_todo000312"></a>(2.x/ideas) libembroidery-composer like app that combines multiple files into one.</p>
-<p class="interdd"><a class="anchor" id="_todo000313"></a>(2.x/ideas) Settings Dialog, it would be nice to have it notify you when switching tabs that a setting has been changed. Adding an Apply button is what would make sense for this to happen. </p>
-<p class="interdd"><a class="anchor" id="_todo000314"></a>(2.x/ideas) Keyboard Zooming/Panning</p>
-<p class="interdd"><a class="anchor" id="_todo000315"></a>(2.x/ideas) G-Code format?</p>
-<p class="interdd"><a class="anchor" id="_todo000316"></a>(2.x/ideas) 3D Raised Embroidery</p>
-<p class="interdd"><a class="anchor" id="_todo000317"></a>(2.x/ideas) Gradient Filling Algorithms</p>
-<p class="interdd"><a class="anchor" id="_todo000318"></a>(2.x/ideas) Stitching Simulation</p>
-<p class="interdd"><a class="anchor" id="_todo000319"></a>(2.x/ideas) RPM packages?</p>
-<p class="interdd"><a class="anchor" id="_todo000321"></a>(2.x/ideas) Record and Playback Commands</p>
-<p class="interdd"><a class="anchor" id="_todo000322"></a>(2.x/ideas) Settings option for reversing zoom scrolling direction</p>
-<p class="enddd"><a class="anchor" id="_todo000323"></a>(2.x/ideas) Qt GUI for libembroidery-convert </p>
+<p class="interdd"><a class="anchor" id="_todo000109"></a>(2.x/ideas) Stitching Simulation</p>
+<p class="interdd"><a class="anchor" id="_todo000020"></a>sort todo list.</p>
+<p class="interdd"><a class="anchor" id="_todo000021"></a>(2.0.0-alpha1) Statistics from 1.0, needs histogram</p>
+<p class="interdd"><a class="anchor" id="_todo000022"></a>(2.0.0-alpha1) Saving DST/PES/JEF (varga)</p>
+<p class="interdd"><a class="anchor" id="_todo000023"></a>(2.0.0-alpha1) Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug</p>
+<p class="interdd"><a class="anchor" id="_todo000024"></a>(2.0.0-alpha2) Notify user of data loss if not saving to an object format.</p>
+<p class="interdd"><a class="anchor" id="_todo000025"></a>(2.0.0-alpha2) Import Raster Image</p>
+<p class="interdd"><a class="anchor" id="_todo000026"></a>(2.0.0-alpha2) SNAP/ORTHO/POLAR</p>
+<p class="interdd"><a class="anchor" id="_todo000027"></a>(2.0.0-alpha2) Layer Manager + LayerSwitcher DockWidget</p>
+<p class="interdd"><a class="anchor" id="_todo000029"></a>(2.0.0-alpha3) Writing DXF</p>
+<p class="interdd"><a class="anchor" id="_todo000030"></a>(2.0.0-alpha3) Up and Down keys cycle thru commands in the command prompt</p>
+<p class="interdd"><a class="anchor" id="_todo000031"></a>(2.0.0-alpha3) Amount of Thread | Machine Time Estimation (also allow customizable times for setup, color changes, manually trimming jump threads, etc...that way a realistic total time can be estimated)</p>
+<p class="interdd"><a class="anchor" id="_todo000032"></a>(2.0.0-alpha3) Otto Theme Icons - whatsthis icon doesn't scale well, needs redone</p>
+<p class="interdd"><a class="anchor" id="_todo000033"></a>(2.0.0-alpha3) embroidermodder2.ico 16 x 16 looks horrible</p>
+<p class="interdd"><a class="anchor" id="_todo000034"></a>(2.0.0-alpha4) CAD Command: Arc (rt)</p>
+<p class="interdd"><a class="anchor" id="_todo000035"></a>(2.0.0-alpha4) automate changelog and write to a javascript file for the docs: git log &ndash;pretty=tformat:'<a href="\url{https://github.com/Embroidermodder/Embroidermodder/commit/%H}">s</a>'</p>
+<p class="interdd"><a class="anchor" id="_todo000036"></a>(2.0.0-beta1) Custom Filter Bug - doesn't save changes in some cases</p>
+<p class="interdd"><a class="anchor" id="_todo000037"></a>(2.0.0-beta1) Cannot open file with <code>#</code> in name when opening multiple files (works fine when opening the single file)</p>
+<p class="interdd"><a class="anchor" id="_todo000038"></a>(2.0.0-beta1) Closing Settings Dialog with the X in the window saves settings rather than discards them</p>
+<p class="interdd"><a class="anchor" id="_todo000039"></a>(2.0.0-beta1) Advanced Printing</p>
+<p class="interdd"><a class="anchor" id="_todo000040"></a>(2.0.0-beta1) Filling Algorithms (varga)</p>
+<p class="interdd"><a class="anchor" id="_todo000041"></a>(2.0.0-beta1) Otto Theme Icons - beta (rt) - Units, Render, Selectors</p>
+<p class="interdd"><a class="anchor" id="_todo000042"></a>(2.0.0-rc1) QDoc Comments</p>
+<p class="interdd"><a class="anchor" id="_todo000043"></a>(2.0.0-rc1) Review KDE4 Thumbnailer</p>
+<p class="interdd"><a class="anchor" id="_todo000044"></a>(2.0.0-rc1) Documentation for libembroidery | formats</p>
+<p class="interdd"><a class="anchor" id="_todo000045"></a>(2.0.0-rc1) HTML Help files</p>
+<p class="interdd"><a class="anchor" id="_todo000046"></a>(2.0.0-rc1) Update language translations</p>
+<p class="enddd"><a class="anchor" id="_todo000163"></a>(beta) Move calculations of rotation and scaling into <code>EmbVector</code> calls. </p>
 </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a61c74a220500dc98b0a69f9caa1b606a">pan_action</a>  (const char *mode)</dt>
-<dd><a class="anchor" id="_todo000113"></a>Undo records for pan action.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae0800b18cad9b17d3b26da24544f1d8f">paste</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000056"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a59c3cf8b0862a693755b117365055eaa">paste_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000114"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a06a4dd5f19b0327917ec50daf98b8c57">paste_selected</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000158"></a>Get mouse point/move  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a05199e8a973414ddc53073d4fcf16b01">pattern_view</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000081"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad37c25f1f6b31615c1cc03377ff88676">pickAddModeToggled</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000171"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af4def00971243cdeea8f9705a6e64b30">polygon_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000151"></a>finish polygon_action.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a8aff00f850489a80974f29458d113d46">polyline_action</a>  (EmbVector start, EmbPath *p, int rubberMode)</dt>
-<dd><a class="anchor" id="_todo000152"></a>finish polyline_action.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a0874fa8b4d857b5527c706a3fce40e0f">preview_dialog</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000024"></a>connect the currentChanged signal to update the preview imgWidget. </p>
-<p class="interdd"><a class="anchor" id="_todo000022"></a>get actual thumbnail image from file, lets also use a size of 128x128 for now...</p>
-<p class="enddd"><a class="anchor" id="_todo000023"></a>make thumbnail size adjustable thru settings dialog </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a2215c9aae4a42877f53d58d5072dcc65">preview_off</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000038"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac98567c915ff93cc4042dc100366bfc1">preview_on_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000129"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac09c52d8c04451a1763efb240514db61">print_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000115"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5c67ae25520041868d38ec8c49589553">print_area_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000125"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a7f83a6bf28f21699753530d3a659a0bd">PrintArea</a>  (EmbReal x, EmbReal y, EmbReal w, EmbReal h)</dt>
-<dd><a class="anchor" id="_todo000185"></a>Print Setup Stuff  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#adcadf5f247e819122ddc4edba08540c1">promptInputNext</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000178"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a04881913e0d4bcc19bddf5b53036c24e">promptInputPrevious</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000177"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6fec08ec06d2be895e3c320f3648b398">property_editor</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000069"></a>Load precisionAngle from settings and provide function for updating from settings </p>
-<p class="interdd"></p>
-<p class="enddd">Load precisionLength from settings and provide function for updating from settings  </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae29e2170871dbc827d7bc6301dad9851">property_editor_hideAllGroups</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000071"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1b56fd1759de1b3898cfb4f72793a39c">property_editor_togglePickAddMode</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000070"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa963018f80feb78d794c2980576edcc9">quickleader_main</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000216"></a>Adding the text is not complete yet. </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#abf62628119dde9fd93f65be6742e2b22">random_uniform</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000008"></a>move to libembroidery. </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae065faa22ca5c47d9c374749885f8a2f">ray_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000145"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6ac0cd10db63ed6c5decde168076f965">recentMenuAboutToShow</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000199"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a616bbab28522263031eafb738f5c9619">rectangle_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000116"></a>rect fill for rectangle_action  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a8a537a5e2f23d7b506a1026eeb614e81">redo_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000112"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a40f44fc7dc867a7cc9c67e55af4c1ad5">redo_navigation</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000208"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a491ef78f3b774b007d96522f1308f0ae">repeat_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000065"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af768196972a01c794c869ee4b4657e13">resize_event</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000202"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af79e738d67fcf5da0a50d6ea559d3b32">RGB_MODE_BACKGROUND</a>  </dt>
-<dd><a class="anchor" id="_todo000217"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a644510fd1fda113a92ff678338657074">rotate_main</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000218"></a>Prompt to select objects if nothing is preselected  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a778d491e9851372eed18d56bd73acc47">rotate_selected_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000161"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac616ca8468d7ccf756f08e335454aa44">rotateAction</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000066"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6c438df405b6d7180a3e20f42c37e0c9">rounded_rectangle_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000147"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aabe2efa6627dbff786aa942b4d28220f">rubber_point_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000130"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae842547a55833564fee3ca58a87e61a7">rubber_text_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000131"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac3e2aeea61a03de723ef16125e9e08ea">save_bmc</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000018"></a>figure out how to center the image, right now it just plops it to the left side. </p>
-<p class="interdd"><a class="anchor" id="_todo000017"></a>Make BMC background into it's own setting?</p>
-<p class="interdd"><a class="anchor" id="_todo000016"></a>Is there/should there be other embedded data in the bitmap besides the image itself?</p>
-<p class="interdd"><a class="anchor" id="_todo000015"></a>Should BMC be limited to ~32KB or is this a mix up with Bitmap Cache?</p>
-<p class="enddd"><a class="anchor" id="_todo000014"></a>Save a Brother PEL image (An 8bpp, 130x113 pixel monochromatic? bitmap image) Why 8bpp when only 1bpp is needed? </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ab7315b158db533fb73b44c2cbfe3c394">save_save</a>  (const char *fileName)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000209"></a>Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills.</p>
-<p class="interdd"><a class="anchor" id="_todo000210"></a>handle EMBFORMAT_STCHANDOBJ also </p>
-<p class="interdd"><a class="anchor" id="_todo000211"></a>handle all objects like this </p>
-<p class="enddd"><a class="anchor" id="_todo000212"></a>check the embLog for errors and if any exist, report them.  </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a0b3de79e89680a179f356443a96a1d82">save_toPolyline</a>  (EmbPattern *pattern, EmbVector objPos, EmbPath objPath, const char *layer, EmbColor color, const char *lineType, const char *lineWeight)</dt>
-<dd><a class="anchor" id="_todo000213"></a>proper lineType  </dd>
+<dt>Member <a class="el" href="utility_8cpp.html#abf62628119dde9fd93f65be6742e2b22">random_uniform</a>  (void)</dt>
+<dd><a class="anchor" id="_todo000013"></a>move to libembroidery. </dd>
 <dt>Member <a class="el" href="class_save_object.html#a15bdf578a20c1c1cb630dc8264448484">SaveObject::save</a>  (const QString &amp;fileName)</dt>
-<dd><a class="anchor" id="_todo000223"></a>Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a70fe2e75db13a87e2f7cacb84965d4f7">scale_main</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000219"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a576c69d904f6ab53782880507615c0bb">scale_redo</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000206"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae74d7fe26f0b7ad748ec0ee058890b1d">scale_selected_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000160"></a>Get mouse point/move  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1c5590236f2767623174b3582aedb1af">scale_undo</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000205"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aa6e7e1721e6086d501ac4780d78bec17">scaleAction</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000067"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac3bbc377fe8f8778b8ddd912c64e6d5c">selectbox_SelectBox</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000068"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1c40925b7c59e6ac1db5c448a11dfa97">selection_changed</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000049"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af75ec322a64e73ba58e5f3e01f7b9aa2">set_cursor_shape_action</a>  (int shape)</dt>
-<dd><a class="anchor" id="_todo000153"></a>Uses the CURSOR_SHAPE_ defines.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac8010fff46f518586076f69097039e7f">set_mouse_coord</a>  (EmbVector pos)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000025"></a>set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific)</p>
-<p class="enddd"><a class="anchor" id="_todo000026"></a>use precision from unit settings  </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a248c92649b8331edf74d484b8d0f61d9">set_prompt_prefix</a>  (const char *msg)</dt>
-<dd><a class="anchor" id="_todo000021"></a>finish set_prompt_prefix  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af105549891b13f4a961453c220130b12">setCornerButton</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000047"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad6e751c020a31bf521b787442ca924ba">settings_dialog_acceptChanges</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000097"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a40c9229e61f2999bf0c1c4d2c5bd4c5d">settings_dialog_addColorsToComboBox</a>  (int *comboBox)</dt>
-<dd><a class="anchor" id="_todo000087"></a>Add Other... so the user can select custom colors  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a35126f9bcc3a2bdfd7205d43aebc89aa">settings_dialog_buttonCustomFilterClearAllClicked</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000090"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a2690fae0c60c19b2b255bf22ca1eff86">settings_dialog_buttonCustomFilterSelectAllClicked</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000089"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af05571ed1edd88a9bea59d93f573a02c">settings_dialog_buttonQSnapSelectAllClicked</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000093"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6dba10b6144666c41d7975f35c1d628d">settings_dialog_chooseGeneralMdiBackgroundTexture</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000088"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a2ce7847993671cd77bf6bdd54422a193">settings_dialog_chooseGridColor</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000091"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad70b5a6243cc5e4e7e5c4b0c5c7b13de">settings_dialog_chooseRulerColor</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000092"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6f846feccfa72457fc96d98755125792">settings_dialog_combobox_selectionCoolGripColorCurrentIndexChanged</a>  (int index)</dt>
-<dd><a class="anchor" id="_todo000095"></a>Alert user if color matched the display bg color  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a08a56754761663f6828ea5a3fcbe32f0">settings_dialog_combobox_selectionHotGripColorCurrentIndexChanged</a>  (int index)</dt>
-<dd><a class="anchor" id="_todo000096"></a>Alert user if color matched the display bg color  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a8589bf2d4c49136949e9d2e8bee1eccb">settings_dialog_comboBoxQSnapLocatorColorCurrentIndexChanged</a>  (int index)</dt>
-<dd><a class="anchor" id="_todo000094"></a>Figure out how to abstract the slot in a way that it can be used for comboBoxes in general Currently comboBoxQSnapLocatorColorCurrentIndexChanged(int index) comboBoxSelectionCoolGripColorCurrentIndexChanged(int index) comboBoxSelectionHotGripColorCurrentIndexChanged(int index) are all similar except the dialog. variable being worked on and the QVariant.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae691afdd89d577472aaf70d31e27d942">settings_dialog_rejectChanges</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000099"></a>inform the user if they have changed settings </p>
-<p class="enddd"><a class="anchor" id="_todo000098"></a>document this. </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ae8fc4936b9433951a74c8f9bc667c246">single_line_text_main</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000220"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a9b5b21ae873aa1064eb16284d548fa11">single_line_text_prompt</a>  (UiObject *global, const char *str)</dt>
-<dd><a class="anchor" id="_todo000221"></a>Rather than ending the command, calculate where the next line would be and modify the x/y to the new point } } else { global.text = str; setRubberText("TEXT_RAPID", global.text); }  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a5307d28a0ab917195f11a89a0dd1e265">snowflake_main</a>  ()</dt>
-<dd><a class="anchor" id="_todo000222"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a2bace01becf7a93818045d13d18863db">spare_rubber_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000141"></a>ClearRubber(); function  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a33a7499d857fd607ce2627e8c02dbc9c">stub_testing_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000163"></a>document this.  </dd>
+<dd><a class="anchor" id="_todo000010"></a>Before saving to a stitch only format, Embroidermodder needs to calculate the optimal path to minimize jump stitches. Also based upon which layer needs to be stitched first, the path to the next object needs to be hidden beneath fills that will come later. When finding the optimal path, we need to take into account the color of the thread, as we do not want to try to hide dark colored stitches beneath light colored fills.  </dd>
+<dt>Member <a class="el" href="class_save_object.html#aaa28ee2579ab1b54602812d652889737">SaveObject::toPolyline</a>  (EmbPattern *pattern, const QPointF &amp;objPos, const QPainterPath &amp;objPath, const QString &amp;layer, const QColor &amp;color, const QString &amp;lineType, const QString &amp;lineWeight)</dt>
+<dd><a class="anchor" id="_todo000011"></a>FIX EmbPolyline* polyObject = embPolyline_init(pointList, color_out, 1); //TODO: proper lineType embPattern_addPolylineAbs(pattern, polyObject);  </dd>
 <dt>Member <a class="el" href="struct_sub_descriptor__.html#affb2c75b7f632338f368aafab49f678d">SubDescriptor_::colorCode</a>  </dt>
-<dd><a class="anchor" id="_todo000396"></a>better variable naming  </dd>
+<dd><a class="anchor" id="_todo000187"></a>better variable naming  </dd>
 <dt>Member <a class="el" href="struct_sub_descriptor__.html#a0cfe04519ff6dab092ee7c002e55e520">SubDescriptor_::someInt</a>  </dt>
-<dd><a class="anchor" id="_todo000394"></a>better variable naming  </dd>
+<dd><a class="anchor" id="_todo000185"></a>better variable naming  </dd>
 <dt>Member <a class="el" href="struct_sub_descriptor__.html#a6154b0f4ec7815c6d26c71852506418e">SubDescriptor_::someOtherInt</a>  </dt>
-<dd><a class="anchor" id="_todo000395"></a>better variable naming  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#af86b9a09f0e60cde3079b2007609e931">text_multi_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000142"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac78157cd935e95f0cbbe5924f7350230">text_single_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000143"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a9c46d1b36fc04b5e871fb69cbeef6738">textSizeSelectorIndexChanged</a>  (int index)</dt>
-<dd><a class="anchor" id="_todo000175"></a>check that the toReal() conversion is ok  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac1272afea42e08c828e1cb040ba5c903">tip_of_the_day_dialog</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000032"></a>Add icons to buttons by using wizardTipOfTheDay-&gt;setButton(CustomButton1, buttonClose) </p>
-<p class="interdd"><a class="anchor" id="_todo000030"></a>Add icons to buttons by using wizardTipOfTheDay-&gt;setButton(CustomButton1, buttonPrevious)</p>
-<p class="enddd"><a class="anchor" id="_todo000031"></a>Add icons to buttons by using wizardTipOfTheDay-&gt;setButton(CustomButton1, buttonNext) </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ade3b9b5707149bbc7ebd77108a593cf3">TipOfTheDay</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000184"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a84be33a7d31671fab1c88149df77a831">translate</a>  (const char *string)</dt>
-<dd><a class="anchor" id="_todo000078"></a>check for translation_table loaded and use it.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#adacf9e6c84ab5ba4079ab046784ad773">triangle_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000117"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac2add86e93e670809a0836fef462d7b8">undo_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000118"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad2b4c954bfa0e509c24c6da87532e771">undo_history_viewer</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000010"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ade55590a3b7e8da115c7b1040da0a26e">undo_navigation</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000207"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a459ace9a6c614fe41b7f08ba91bc6dd4">UndoHistory</a>  </dt>
-<dd><a class="anchor" id="_todo000002"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a4f0db1805b61395ac5131b6715853664">update_menu_toolbar_statusbar</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000203"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a0e5edf9912d0ddf2001d8b2dee57160f">updateAllViewCrossHairColors</a>  (unsigned int color)</dt>
-<dd><a class="anchor" id="_todo000168"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a2d7aab5bd0ea8c76fa3632031226a84e">updateAllViewGridColors</a>  (unsigned int color)</dt>
-<dd><a class="anchor" id="_todo000170"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#aca4bc88b2a23d898c399d9b8cac93633">updateAllViewscrollbars</a>  (bool val)</dt>
-<dd><a class="anchor" id="_todo000167"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a55e5254de2bc5047d00a331596fc1956">updateAllViewSelectBoxColors</a>  (unsigned int colorL, unsigned int fillL, unsigned int colorR, unsigned int fillR, int alpha)</dt>
-<dd><a class="anchor" id="_todo000169"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ad5c889067073aed7231513e6d906cda7">vertical_dimension_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000191"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a1d7dbd1773573f522eac182c4799ba8b">View__</a>  (void)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000034"></a>Review OpenGL direct calls (rather than via GLFW).</p>
-<p class="interdd"><a class="anchor" id="_todo000036"></a>load toggleReal from file, else settings with default being true. </p>
-<p class="enddd"><a class="anchor" id="_todo000035"></a>panDistance needs a setting. </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac8174d1035b7381b8a5940cdb1053b9b">view_empty_double_click</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000011"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a0871cb7dd9cb4de8391b002438003347">view_empty_paint_event</a>  (<a class="el" href="class_view.html">View</a> *view, int *event)</dt>
-<dd><a class="anchor" id="_todo000012"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ab1f89ec04ac60db83ea678ac3c73bbb4">vulcanize_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000186"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#ac8198c84e013c6fff241113b05e52c62">whats_this_context_help_action</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000165"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a0780df1393f84c56ce0163f7da1320f0">window_menu_about_to_show</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000200"></a>document this.  </dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a9d77efa715f7141c72b9cc864fccab50">zoom_action</a>  (const char *arg)</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000123"></a>Implement zoomScale. </p>
-<p class="interdd"><a class="anchor" id="_todo000122"></a>Implement zoomRealtime. </p>
-<p class="interdd"><a class="anchor" id="_todo000121"></a>Implement zoomPrevious. </p>
-<p class="interdd"><a class="anchor" id="_todo000120"></a>Implement zoomDynamic. </p>
-<p class="enddd"><a class="anchor" id="_todo000119"></a>Implement zoomCenter.  </p>
-</dd>
-<dt>Member <a class="el" href="imgui__main_8c.html#a6e94b00a9d38e575f3404ff95c879ed8">zoom_extents_all_subviews</a>  (void)</dt>
-<dd><a class="anchor" id="_todo000013"></a>document this. </dd>
+<dd><a class="anchor" id="_todo000186"></a>better variable naming  </dd>
+<dt>Member <a class="el" href="embroidermodder_8h.html#a459ace9a6c614fe41b7f08ba91bc6dd4">UndoHistory</a>  </dt>
+<dd><a class="anchor" id="_todo000001"></a>document this. </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

@@ -58,27 +58,27 @@ MainWindow::MainWindow() : QMainWindow(0)
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
     QFileInfo check(appDir + "/commands");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/help");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/icons");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/images");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/samples");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/translations");
-    if(!check.exists())
+    if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
     QString lang = getSettingsGeneralLanguage();
     qDebug("language: %s", qPrintable(lang));
-    if(lang == "system")
+    if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
 
     //Load translations for the Embroidermodder 2 GUI
@@ -215,7 +215,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
     //tabifyDockWidget(dockPropEdit, dockUndoEdit); //TODO: load this from settings
 
-    //Javascript
+    //script
     _mainWin = this;
 
     /*
@@ -223,14 +223,14 @@ MainWindow::MainWindow() : QMainWindow(0)
     engine->installTranslatorFunctions();
     debugger = new QScriptEngineDebugger(this);
     debugger->attachTo(engine);
-    javaInitNatives(engine);
+    InitNatives(engine);
 
     //Load all commands in a loop
     QDir commandDir(appDir + "/commands");
     QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     foreach(QString cmdName, cmdList)
     {
-        javaLoadCommand(cmdName);
+        LoadCommand(cmdName);
     }
     */
 
@@ -253,19 +253,19 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //Load tips from external file
     QFile tipFile(appDir + "/tips.txt");
-    if(tipFile.open(QFile::ReadOnly))
+    if (tipFile.open(QFile::ReadOnly))
     {
         QTextStream stream(&tipFile);
         QString tipLine;
         do
         {
             tipLine = stream.readLine();
-            if(!tipLine.isEmpty())
+            if (!tipLine.isEmpty())
                 listTipOfTheDay << tipLine;
         }
         while(!tipLine.isNull());
     }
-    if(getSettingsGeneralTipOfTheDay())
+    if (getSettingsGeneralTipOfTheDay())
         tipOfTheDay();
 }
 
@@ -371,18 +371,138 @@ MainWindow::actuator(std::string command)
     if (command == "version") {
         output = "<br/>2.0.0-alpha";
     }
+/*
+    if (cmd == "debug") scriptValDebug();
+    if (cmd == "error") scriptValError();
+    "todo", scriptValTodo();
+    "alert", scriptValAlert();
+    "blinkPrompt", scriptValBlinkPrompt);
+    "setPromptPrefix", scriptValSetPromptPrefix);
+    "appendPromptHistory", scriptValAppendPromptHistory);
+    "enablePromptRapidFire", scriptValEnablePromptRapidFire);
+    "disablePromptRapidFire", scriptValDisablePromptRapidFire);
+    "enableMoveRapidFire", scriptValEnableMoveRapidFire);
+    "disableMoveRapidFire", scriptValDisableMoveRapidFire);
+    "initCommand", scriptValInitCommand);
+    "endCommand", scriptValEndCommand);
+    "newFile", scriptValNewFile);
+    "openFile", scriptValOpenFile);
+    "exit", scriptValExit);
+    "help", scriptValHelp);
+    "about", scriptValAbout);
+    "tipOfTheDay", scriptValTipOfTheDay);
+    "windowCascade", scriptValWindowCascade);
+    "windowTile", scriptValWindowTile);
+    "windowClose", scriptValWindowClose);
+    "windowCloseAll", scriptValWindowCloseAll);
+    "windowNext", scriptValWindowNext);
+    "windowPrevious", scriptValWindowPrevious);
+    "platformString", scriptValPlatformString);
+    "messageBox", scriptValMessageBox);
+    "isInt", scriptValIsInt);
+    "undo", scriptValUndo);
+    "redo", scriptValRedo);
+    "icon16", scriptValIcon16);
+    "icon24", scriptValIcon24);
+    "icon32", scriptValIcon32);
+    "icon48", scriptValIcon48);
+    "icon64", scriptValIcon64);
+    "icon128", scriptValIcon128);
+    "panLeft", scriptValPanLeft);
+    "panRight", scriptValPanRight);
+    "panUp", scriptValPanUp);
+    "panDown", scriptValPanDown);
+    "zoomIn", scriptValZoomIn);
+    "zoomOut", scriptValZoomOut);
+    "zoomExtents", scriptValZoomExtents);
+    "printArea", scriptValPrintArea);
+    "dayVision", scriptValDayVision);
+    "nightVision", scriptValNightVision);
+    "setBackgroundColor", scriptValSetBackgroundColor);
+    "setCrossHairColor", scriptValSetCrossHairColor);
+    "setGridColor", scriptValSetGridColor);
+    "textFont", scriptValTextFont);
+    "textSize", scriptValTextSize);
+    "textAngle", scriptValTextAngle);
+    "textBold", scriptValTextBold);
+    "textItalic", scriptValTextItalic);
+    "textUnderline", scriptValTextUnderline);
+    "textStrikeOut", scriptValTextStrikeOut);
+    "textOverline", scriptValTextOverline);
+    "setTextFont", scriptValSetTextFont);
+    "setTextSize", scriptValSetTextSize);
+    "setTextAngle", scriptValSetTextAngle);
+    "setTextBold", scriptValSetTextBold);
+    "setTextItalic", scriptValSetTextItalic);
+    "setTextUnderline", scriptValSetTextUnderline);
+    "setTextStrikeOut", scriptValSetTextStrikeOut);
+    "setTextOverline", scriptValSetTextOverline);
+    "previewOn", scriptValPreviewOn);
+    "previewOff", scriptValPreviewOff);
+    "vulcanize", scriptValVulcanize);
+    "allowRubber", scriptValAllowRubber);
+    "setRubberMode", scriptValSetRubberMode);
+    "setRubberPoint", scriptValSetRubberPoint);
+    "setRubberText", scriptValSetRubberText);
+    "addRubber", scriptValAddRubber);
+    "clearRubber", scriptValClearRubber);
+    "spareRubber", scriptValSpareRubber);
+    "addTextMulti", scriptValAddTextMulti);
+    "addTextSingle", scriptValAddTextSingle);
+    "addInfiniteLine", scriptValAddInfiniteLine);
+    "addRay", scriptValAddRay);
+    "addLine", scriptValAddLine);
+    "addTriangle", scriptValAddTriangle);
+    "addRectangle", scriptValAddRectangle);
+    "addRoundedRectangle", scriptValAddRoundedRectangle);
+    "addArc", scriptValAddArc);
+    "addCircle", scriptValAddCircle);
+    "addEllipse", scriptValAddEllipse);
+    "addPoint", scriptValAddPoint);
+    "addRegularPolygon", scriptValAddRegularPolygon);
+    "addPolygon", scriptValAddPolygon);
+    "addPolyline", scriptValAddPolyline);
+    "addPath", scriptValAddPath);
+    "addHorizontalDimension", scriptValAddHorizontalDimension);
+    "addVerticalDimension", scriptValAddVerticalDimension);
+    "addImage", scriptValAddImage);
+    "addDimLeader", scriptValAddDimLeader);
+    "setCursorShape", scriptValSetCursorShape);
+    "calculateAngle", scriptValCalculateAngle);
+    if (cmd == "calculateDistance", scriptValCalculateDistance);
+    cmd == "perpendicularDistance", scriptValPerpendicularDistance();
+    cmd == "numSelected", scriptValNumSelected);
+    cmd == "selectAll", scriptValSelectAll);
+    if (cmd == "addToSelection", scriptValAddToSelection();
+    if (cmd == "clearSelection") scriptValClearSelection();
+    if (cmd == "deleteSelected") scriptValDeleteSelected();
+    if (cmd == "cutSelected") scriptValCutSelected);
+    if (cmd == "copySelected") scriptValCopySelected);
+    if (cmd == "pasteSelected") scriptValPasteSelected);
+    if (cmd == "moveSelected", scriptValMoveSelected);
+    if (cmd == "scaleSelected", scriptValScaleSelected);
+    if (cmd == "rotateSelected", scriptValRotateSelected);
+    if (cmd == "mirrorSelected", scriptValMirrorSelected);
+    "qsnapX", scriptValQSnapX);
+    "qsnapY", scriptValQSnapY);
+    "mouseX", scriptValMouseX);
+    "mouseY", scriptValMouseY);
+
+    std::string scriptValInclude = engine->newFunction(Include);
+    "include", scriptValInclude);
+*/
     return output;
 }
 
 /**
  * \brief .
  */
-typedef struct EmbScriptValue_ {
+typedef struct std::string_ {
     int int_value;
     EmbReal real_value;
     EmbString string_value;
     int type;
-} EmbScriptValue;
+} std::string;
 
 /**
  * \brief .
@@ -397,7 +517,7 @@ typedef struct EmbFunction_ {
  * \brief .
  */
 typedef struct EmbScriptContext_ {
-    std::vector<EmbScriptValue> arguments;
+    std::vector<std::string> arguments;
     std::vector<EmbFunction> functions;
 } EmbScriptContext;
 
@@ -415,253 +535,9 @@ typedef struct EmbAction_ {
 EmbScriptContext engine;
 
 #if 0
-void
-MainWindow::javaInitNatives(EmbScriptContext* engine)
+void MainWindow::LoadCommand(EmbString cmdName)
 {
-    /*
-    EmbScriptValue scriptValDebug = engine->newFunction(javaDebug);
-    engine->globalObject().setProperty("debug", scriptValDebug);
-    EmbScriptValue scriptValError = engine->newFunction(javaError);
-    engine->globalObject().setProperty("error", scriptValError);
-    EmbScriptValue scriptValTodo = engine->newFunction(javaTodo);
-    engine->globalObject().setProperty("todo", scriptValTodo);
-    EmbScriptValue scriptValAlert = engine->newFunction(javaAlert);
-    engine->globalObject().setProperty("alert", scriptValAlert);
-    EmbScriptValue scriptValBlinkPrompt = engine->newFunction(javaBlinkPrompt);
-    engine->globalObject().setProperty("blinkPrompt", scriptValBlinkPrompt);
-    EmbScriptValue scriptValSetPromptPrefix = engine->newFunction(javaSetPromptPrefix);
-    engine->globalObject().setProperty("setPromptPrefix", scriptValSetPromptPrefix);
-    EmbScriptValue scriptValAppendPromptHistory = engine->newFunction(javaAppendPromptHistory);
-    engine->globalObject().setProperty("appendPromptHistory", scriptValAppendPromptHistory);
-    EmbScriptValue scriptValEnablePromptRapidFire = engine->newFunction(javaEnablePromptRapidFire);
-    engine->globalObject().setProperty("enablePromptRapidFire", scriptValEnablePromptRapidFire);
-    EmbScriptValue scriptValDisablePromptRapidFire = engine->newFunction(javaDisablePromptRapidFire);
-    engine->globalObject().setProperty("disablePromptRapidFire", scriptValDisablePromptRapidFire);
-    EmbScriptValue scriptValEnableMoveRapidFire = engine->newFunction(javaEnableMoveRapidFire);
-    engine->globalObject().setProperty("enableMoveRapidFire", scriptValEnableMoveRapidFire);
-    EmbScriptValue scriptValDisableMoveRapidFire = engine->newFunction(javaDisableMoveRapidFire);
-    engine->globalObject().setProperty("disableMoveRapidFire", scriptValDisableMoveRapidFire);
-    EmbScriptValue scriptValInitCommand = engine->newFunction(javaInitCommand);
-    engine->globalObject().setProperty("initCommand", scriptValInitCommand);
-    EmbScriptValue scriptValEndCommand = engine->newFunction(javaEndCommand);
-    engine->globalObject().setProperty("endCommand", scriptValEndCommand);
-    EmbScriptValue scriptValNewFile = engine->newFunction(javaNewFile);
-    engine->globalObject().setProperty("newFile", scriptValNewFile);
-    EmbScriptValue scriptValOpenFile = engine->newFunction(javaOpenFile);
-    engine->globalObject().setProperty("openFile", scriptValOpenFile);
-    EmbScriptValue scriptValExit = engine->newFunction(javaExit);
-    engine->globalObject().setProperty("exit", scriptValExit);
-    EmbScriptValue scriptValHelp = engine->newFunction(javaHelp);
-    engine->globalObject().setProperty("help", scriptValHelp);
-    EmbScriptValue scriptValAbout = engine->newFunction(javaAbout);
-    engine->globalObject().setProperty("about", scriptValAbout);
-    EmbScriptValue scriptValTipOfTheDay = engine->newFunction(javaTipOfTheDay);
-    engine->globalObject().setProperty("tipOfTheDay", scriptValTipOfTheDay);
-    EmbScriptValue scriptValWindowCascade = engine->newFunction(javaWindowCascade);
-    engine->globalObject().setProperty("windowCascade", scriptValWindowCascade);
-    EmbScriptValue scriptValWindowTile = engine->newFunction(javaWindowTile);
-    engine->globalObject().setProperty("windowTile", scriptValWindowTile);
-    EmbScriptValue scriptValWindowClose = engine->newFunction(javaWindowClose);
-    engine->globalObject().setProperty("windowClose", scriptValWindowClose);
-    EmbScriptValue scriptValWindowCloseAll = engine->newFunction(javaWindowCloseAll);
-    engine->globalObject().setProperty("windowCloseAll", scriptValWindowCloseAll);
-    EmbScriptValue scriptValWindowNext = engine->newFunction(javaWindowNext);
-    engine->globalObject().setProperty("windowNext", scriptValWindowNext);
-    EmbScriptValue scriptValWindowPrevious = engine->newFunction(javaWindowPrevious);
-    engine->globalObject().setProperty("windowPrevious", scriptValWindowPrevious);
-    EmbScriptValue scriptValPlatformString = engine->newFunction(javaPlatformString);
-    engine->globalObject().setProperty("platformString", scriptValPlatformString);
-    EmbScriptValue scriptValMessageBox = engine->newFunction(javaMessageBox);
-    engine->globalObject().setProperty("messageBox", scriptValMessageBox);
-    EmbScriptValue scriptValIsInt = engine->newFunction(javaIsInt);
-    engine->globalObject().setProperty("isInt", scriptValIsInt);
-    EmbScriptValue scriptValUndo = engine->newFunction(javaUndo);
-    engine->globalObject().setProperty("undo", scriptValUndo);
-    EmbScriptValue scriptValRedo = engine->newFunction(javaRedo);
-    engine->globalObject().setProperty("redo", scriptValRedo);
-    EmbScriptValue scriptValIcon16 = engine->newFunction(javaIcon16);
-    engine->globalObject().setProperty("icon16", scriptValIcon16);
-    EmbScriptValue scriptValIcon24 = engine->newFunction(javaIcon24);
-    engine->globalObject().setProperty("icon24", scriptValIcon24);
-    EmbScriptValue scriptValIcon32 = engine->newFunction(javaIcon32);
-    engine->globalObject().setProperty("icon32", scriptValIcon32);
-    EmbScriptValue scriptValIcon48 = engine->newFunction(javaIcon48);
-    engine->globalObject().setProperty("icon48", scriptValIcon48);
-    EmbScriptValue scriptValIcon64 = engine->newFunction(javaIcon64);
-    engine->globalObject().setProperty("icon64", scriptValIcon64);
-    EmbScriptValue scriptValIcon128 = engine->newFunction(javaIcon128);
-    engine->globalObject().setProperty("icon128", scriptValIcon128);
-    EmbScriptValue scriptValPanLeft = engine->newFunction(javaPanLeft);
-    engine->globalObject().setProperty("panLeft", scriptValPanLeft);
-    EmbScriptValue scriptValPanRight = engine->newFunction(javaPanRight);
-    engine->globalObject().setProperty("panRight", scriptValPanRight);
-    EmbScriptValue scriptValPanUp = engine->newFunction(javaPanUp);
-    engine->globalObject().setProperty("panUp", scriptValPanUp);
-    EmbScriptValue scriptValPanDown = engine->newFunction(javaPanDown);
-    engine->globalObject().setProperty("panDown", scriptValPanDown);
-    EmbScriptValue scriptValZoomIn = engine->newFunction(javaZoomIn);
-    engine->globalObject().setProperty("zoomIn", scriptValZoomIn);
-    EmbScriptValue scriptValZoomOut = engine->newFunction(javaZoomOut);
-    engine->globalObject().setProperty("zoomOut", scriptValZoomOut);
-    EmbScriptValue scriptValZoomExtents = engine->newFunction(javaZoomExtents);
-    engine->globalObject().setProperty("zoomExtents", scriptValZoomExtents);
-    EmbScriptValue scriptValPrintArea = engine->newFunction(javaPrintArea);
-    engine->globalObject().setProperty("printArea", scriptValPrintArea);
-    EmbScriptValue scriptValDayVision = engine->newFunction(javaDayVision);
-    engine->globalObject().setProperty("dayVision", scriptValDayVision);
-    EmbScriptValue scriptValNightVision = engine->newFunction(javaNightVision);
-    engine->globalObject().setProperty("nightVision", scriptValNightVision);
-    EmbScriptValue scriptValSetBackgroundColor = engine->newFunction(javaSetBackgroundColor);
-    engine->globalObject().setProperty("setBackgroundColor", scriptValSetBackgroundColor);
-    EmbScriptValue scriptValSetCrossHairColor = engine->newFunction(javaSetCrossHairColor);
-    engine->globalObject().setProperty("setCrossHairColor", scriptValSetCrossHairColor);
-    EmbScriptValue scriptValSetGridColor = engine->newFunction(javaSetGridColor);
-    engine->globalObject().setProperty("setGridColor", scriptValSetGridColor);
-    EmbScriptValue scriptValTextFont = engine->newFunction(javaTextFont);
-    engine->globalObject().setProperty("textFont", scriptValTextFont);
-    EmbScriptValue scriptValTextSize = engine->newFunction(javaTextSize);
-    engine->globalObject().setProperty("textSize", scriptValTextSize);
-    EmbScriptValue scriptValTextAngle = engine->newFunction(javaTextAngle);
-    engine->globalObject().setProperty("textAngle", scriptValTextAngle);
-    EmbScriptValue scriptValTextBold = engine->newFunction(javaTextBold);
-    engine->globalObject().setProperty("textBold", scriptValTextBold);
-    EmbScriptValue scriptValTextItalic = engine->newFunction(javaTextItalic);
-    engine->globalObject().setProperty("textItalic", scriptValTextItalic);
-    EmbScriptValue scriptValTextUnderline = engine->newFunction(javaTextUnderline);
-    engine->globalObject().setProperty("textUnderline", scriptValTextUnderline);
-    EmbScriptValue scriptValTextStrikeOut = engine->newFunction(javaTextStrikeOut);
-    engine->globalObject().setProperty("textStrikeOut", scriptValTextStrikeOut);
-    EmbScriptValue scriptValTextOverline = engine->newFunction(javaTextOverline);
-    engine->globalObject().setProperty("textOverline", scriptValTextOverline);
-    EmbScriptValue scriptValSetTextFont = engine->newFunction(javaSetTextFont);
-    engine->globalObject().setProperty("setTextFont", scriptValSetTextFont);
-    EmbScriptValue scriptValSetTextSize = engine->newFunction(javaSetTextSize);
-    engine->globalObject().setProperty("setTextSize", scriptValSetTextSize);
-    EmbScriptValue scriptValSetTextAngle = engine->newFunction(javaSetTextAngle);
-    engine->globalObject().setProperty("setTextAngle", scriptValSetTextAngle);
-    EmbScriptValue scriptValSetTextBold = engine->newFunction(javaSetTextBold);
-    engine->globalObject().setProperty("setTextBold", scriptValSetTextBold);
-    EmbScriptValue scriptValSetTextItalic = engine->newFunction(javaSetTextItalic);
-    engine->globalObject().setProperty("setTextItalic", scriptValSetTextItalic);
-    EmbScriptValue scriptValSetTextUnderline = engine->newFunction(javaSetTextUnderline);
-    engine->globalObject().setProperty("setTextUnderline", scriptValSetTextUnderline);
-    EmbScriptValue scriptValSetTextStrikeOut = engine->newFunction(javaSetTextStrikeOut);
-    engine->globalObject().setProperty("setTextStrikeOut", scriptValSetTextStrikeOut);
-    EmbScriptValue scriptValSetTextOverline = engine->newFunction(javaSetTextOverline);
-    engine->globalObject().setProperty("setTextOverline", scriptValSetTextOverline);
-    EmbScriptValue scriptValPreviewOn = engine->newFunction(javaPreviewOn);
-    engine->globalObject().setProperty("previewOn", scriptValPreviewOn);
-    EmbScriptValue scriptValPreviewOff = engine->newFunction(javaPreviewOff);
-    engine->globalObject().setProperty("previewOff", scriptValPreviewOff);
-    EmbScriptValue scriptValVulcanize = engine->newFunction(javaVulcanize);
-    engine->globalObject().setProperty("vulcanize", scriptValVulcanize);
-    EmbScriptValue scriptValAllowRubber = engine->newFunction(javaAllowRubber);
-    engine->globalObject().setProperty("allowRubber", scriptValAllowRubber);
-    EmbScriptValue scriptValSetRubberMode = engine->newFunction(javaSetRubberMode);
-    engine->globalObject().setProperty("setRubberMode", scriptValSetRubberMode);
-    EmbScriptValue scriptValSetRubberPoint = engine->newFunction(javaSetRubberPoint);
-    engine->globalObject().setProperty("setRubberPoint", scriptValSetRubberPoint);
-    EmbScriptValue scriptValSetRubberText = engine->newFunction(javaSetRubberText);
-    engine->globalObject().setProperty("setRubberText", scriptValSetRubberText);
-    EmbScriptValue scriptValAddRubber = engine->newFunction(javaAddRubber);
-    engine->globalObject().setProperty("addRubber", scriptValAddRubber);
-    EmbScriptValue scriptValClearRubber = engine->newFunction(javaClearRubber);
-    engine->globalObject().setProperty("clearRubber", scriptValClearRubber);
-    EmbScriptValue scriptValSpareRubber = engine->newFunction(javaSpareRubber);
-    engine->globalObject().setProperty("spareRubber", scriptValSpareRubber);
-    EmbScriptValue scriptValAddTextMulti = engine->newFunction(javaAddTextMulti);
-    engine->globalObject().setProperty("addTextMulti", scriptValAddTextMulti);
-    EmbScriptValue scriptValAddTextSingle = engine->newFunction(javaAddTextSingle);
-    engine->globalObject().setProperty("addTextSingle", scriptValAddTextSingle);
-    EmbScriptValue scriptValAddInfiniteLine = engine->newFunction(javaAddInfiniteLine);
-    engine->globalObject().setProperty("addInfiniteLine", scriptValAddInfiniteLine);
-    EmbScriptValue scriptValAddRay = engine->newFunction(javaAddRay);
-    engine->globalObject().setProperty("addRay", scriptValAddRay);
-    EmbScriptValue scriptValAddLine = engine->newFunction(javaAddLine);
-    engine->globalObject().setProperty("addLine", scriptValAddLine);
-    EmbScriptValue scriptValAddTriangle = engine->newFunction(javaAddTriangle);
-    engine->globalObject().setProperty("addTriangle", scriptValAddTriangle);
-    EmbScriptValue scriptValAddRectangle = engine->newFunction(javaAddRectangle);
-    engine->globalObject().setProperty("addRectangle", scriptValAddRectangle);
-    EmbScriptValue scriptValAddRoundedRectangle = engine->newFunction(javaAddRoundedRectangle);
-    engine->globalObject().setProperty("addRoundedRectangle", scriptValAddRoundedRectangle);
-    EmbScriptValue scriptValAddArc = engine->newFunction(javaAddArc);
-    engine->globalObject().setProperty("addArc", scriptValAddArc);
-    EmbScriptValue scriptValAddCircle = engine->newFunction(javaAddCircle);
-    engine->globalObject().setProperty("addCircle", scriptValAddCircle);
-    EmbScriptValue scriptValAddEllipse = engine->newFunction(javaAddEllipse);
-    engine->globalObject().setProperty("addEllipse", scriptValAddEllipse);
-    EmbScriptValue scriptValAddPoint = engine->newFunction(javaAddPoint);
-    engine->globalObject().setProperty("addPoint", scriptValAddPoint);
-    EmbScriptValue scriptValAddRegularPolygon = engine->newFunction(javaAddRegularPolygon);
-    engine->globalObject().setProperty("addRegularPolygon", scriptValAddRegularPolygon);
-    EmbScriptValue scriptValAddPolygon = engine->newFunction(javaAddPolygon);
-    engine->globalObject().setProperty("addPolygon", scriptValAddPolygon);
-    EmbScriptValue scriptValAddPolyline = engine->newFunction(javaAddPolyline);
-    engine->globalObject().setProperty("addPolyline", scriptValAddPolyline);
-    EmbScriptValue scriptValAddPath = engine->newFunction(javaAddPath);
-    engine->globalObject().setProperty("addPath", scriptValAddPath);
-    EmbScriptValue scriptValAddHorizontalDimension = engine->newFunction(javaAddHorizontalDimension);
-    engine->globalObject().setProperty("addHorizontalDimension", scriptValAddHorizontalDimension);
-    EmbScriptValue scriptValAddVerticalDimension = engine->newFunction(javaAddVerticalDimension);
-    engine->globalObject().setProperty("addVerticalDimension", scriptValAddVerticalDimension);
-    EmbScriptValue scriptValAddImage = engine->newFunction(javaAddImage);
-    engine->globalObject().setProperty("addImage", scriptValAddImage);
-    EmbScriptValue scriptValAddDimLeader = engine->newFunction(javaAddDimLeader);
-    engine->globalObject().setProperty("addDimLeader", scriptValAddDimLeader);
-    EmbScriptValue scriptValSetCursorShape = engine->newFunction(javaSetCursorShape);
-    engine->globalObject().setProperty("setCursorShape", scriptValSetCursorShape);
-    EmbScriptValue scriptValCalculateAngle = engine->newFunction(javaCalculateAngle);
-    engine->globalObject().setProperty("calculateAngle", scriptValCalculateAngle);
-    EmbScriptValue scriptValCalculateDistance = engine->newFunction(javaCalculateDistance);
-    engine->globalObject().setProperty("calculateDistance", scriptValCalculateDistance);
-    EmbScriptValue scriptValPerpendicularDistance = engine->newFunction(javaPerpendicularDistance);
-    engine->globalObject().setProperty("perpendicularDistance", scriptValPerpendicularDistance);
-    EmbScriptValue scriptValNumSelected = engine->newFunction(javaNumSelected);
-    engine->globalObject().setProperty("numSelected", scriptValNumSelected);
-    EmbScriptValue scriptValSelectAll = engine->newFunction(javaSelectAll);
-    engine->globalObject().setProperty("selectAll", scriptValSelectAll);
-    EmbScriptValue scriptValAddToSelection = engine->newFunction(javaAddToSelection);
-    engine->globalObject().setProperty("addToSelection", scriptValAddToSelection);
-    EmbScriptValue scriptValClearSelection = engine->newFunction(javaClearSelection);
-    engine->globalObject().setProperty("clearSelection", scriptValClearSelection);
-    EmbScriptValue scriptValDeleteSelected = engine->newFunction(javaDeleteSelected);
-    engine->globalObject().setProperty("deleteSelected", scriptValDeleteSelected);
-    EmbScriptValue scriptValCutSelected = engine->newFunction(javaCutSelected);
-    engine->globalObject().setProperty("cutSelected", scriptValCutSelected);
-    EmbScriptValue scriptValCopySelected = engine->newFunction(javaCopySelected);
-    engine->globalObject().setProperty("copySelected", scriptValCopySelected);
-    EmbScriptValue scriptValPasteSelected = engine->newFunction(javaPasteSelected);
-    engine->globalObject().setProperty("pasteSelected", scriptValPasteSelected);
-    EmbScriptValue scriptValMoveSelected = engine->newFunction(javaMoveSelected);
-    engine->globalObject().setProperty("moveSelected", scriptValMoveSelected);
-    EmbScriptValue scriptValScaleSelected = engine->newFunction(javaScaleSelected);
-    engine->globalObject().setProperty("scaleSelected", scriptValScaleSelected);
-    EmbScriptValue scriptValRotateSelected = engine->newFunction(javaRotateSelected);
-    engine->globalObject().setProperty("rotateSelected", scriptValRotateSelected);
-    EmbScriptValue scriptValMirrorSelected = engine->newFunction(javaMirrorSelected);
-    engine->globalObject().setProperty("mirrorSelected", scriptValMirrorSelected);
-    EmbScriptValue scriptValQSnapX = engine->newFunction(javaQSnapX);
-    engine->globalObject().setProperty("qsnapX", scriptValQSnapX);
-    EmbScriptValue scriptValQSnapY = engine->newFunction(javaQSnapY);
-    engine->globalObject().setProperty("qsnapY", scriptValQSnapY);
-    EmbScriptValue scriptValMouseX = engine->newFunction(javaMouseX);
-    engine->globalObject().setProperty("mouseX", scriptValMouseX);
-    EmbScriptValue scriptValMouseY = engine->newFunction(javaMouseY);
-    engine->globalObject().setProperty("mouseY", scriptValMouseY);
-
-    EmbScriptValue scriptValInclude = engine->newFunction(javaInclude);
-    engine->globalObject().setProperty("include", scriptValInclude);
-    */
-}
-
-/**
- * @brief MainWindow::javaLoadCommand
- * @param cmdName
- */
-void MainWindow::javaLoadCommand(EmbString cmdName)
-{
-    qDebug("javaLoadCommand(%s)", qPrintable(cmdName));
+    qDebug("LoadCommand(%s)", qPrintable(cmdName));
     /*
     //NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
     //      the QScriptEngine would only call the last script evaluated (which happens to be main() in another script).
@@ -732,13 +608,13 @@ void MainWindow::javaLoadCommand(EmbString cmdName)
             }
             else {
                 QChar charBefore = script.at(index - 1);
-                if(validBeforeChars.contains(charBefore))
+                if (validBeforeChars.contains(charBefore))
                 {
                     int i = 0;
                     QChar charAfter;
                     do {
                         charAfter = script.at(index + i + findFunc.length());
-                        if(charAfter == '(')
+                        if (charAfter == '(')
                         {
                             found++;
                             script.replace(index, findFunc.length(), funcName);
@@ -771,10 +647,10 @@ void MainWindow::javaLoadCommand(EmbString cmdName)
 
     QAction* ACTION = createAction(cmdName, toolTip, statusTip, true);
 
-    if(toolbarName.toUpper() != "NONE")
+    if (toolbarName.toUpper() != "NONE")
     {
         //If the toolbar doesn't exist, create it.
-        if(!toolbarHash.value(toolbarName))
+        if (!toolbarHash.value(toolbarName))
         {
             QToolBar* tb = new QToolBar(toolbarName, this);
             tb->setObjectName("toolbar" + toolbarName);
@@ -788,10 +664,10 @@ void MainWindow::javaLoadCommand(EmbString cmdName)
         toolbarHash.value(toolbarName)->addAction(ACTION);
     }
 
-    if(menuName.toUpper() != "NONE")
+    if (menuName.toUpper() != "NONE")
     {
         //If the menu doesn't exist, create it.
-        if(!menuHash.value(menuName))
+        if (!menuHash.value(menuName))
         {
             QMenu* menu = new QMenu(menuName, this);
             menu->setTearOffEnabled(true);
@@ -810,20 +686,16 @@ void MainWindow::javaLoadCommand(EmbString cmdName)
     */
 }
 
-//NOTE: http://www.qtcentre.org/threads/20432-Can-I-include-a-script-from-script
-
 /**
- * @brief javaInclude
- * @param context
- * @param engine
- * @return
+ * \brief
  */
-EmbScriptValue javaInclude(QScriptContext* context, QScriptEngine* engine)
+std::string
+Include(std::vector<std::string> args, QScriptEngine* engine)
 {
-    EmbString fileName = context->argument(0).toString();
+    EmbString fileName = args(0).toString();
     QFile scriptFile("commands/" + fileName);
 
-    if(!scriptFile.open(QIODevice::ReadOnly))
+    if (!scriptFile.open(QIODevice::ReadOnly))
         return -1;
 
     QTextStream stream(&scriptFile);
@@ -832,1237 +704,1375 @@ EmbScriptValue javaInclude(QScriptContext* context, QScriptEngine* engine)
 
     QScriptContext* parent=context->parentContext();
 
-    if(parent!=0)
+    if (parent!=0)
     {
         context->setActivationObject(context->parentContext()->activationObject());
         context->setThisObject(context->parentContext()->thisObject());
     }
 
-    EmbScriptValue result = engine->evaluate(s);
+    std::string result = engine->evaluate(s);
 
     return 0;
 }
 
-/**
- * @brief javaDebug
- * @param context
- * @return
- */
-EmbScriptValue javaDebug(QScriptContext* context)
+std::string
+Debug(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("debug() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "debug(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("debug() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "debug(): first argument is not a string");
 
-    qDebug("%s", qPrintable(context->argument(0).toString()));
-    return EmbScriptValue();
+    qDebug("%s", qPrintable(args(0).toString()));
+    return "";
 }
 
-/**
- * @brief javaError
- * @param context
- * @return
- */
-EmbScriptValue javaError(QScriptContext* context)
+std::string
+Error(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("error() requires two arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "error(): first argument is not a string");
-    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "error(): second argument is not a string");
+    if (argsCount() != 2)    return context->throwError("error() requires two arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "error(): first argument is not a string");
+    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "error(): second argument is not a string");
 
-    EmbString strCmd = context->argument(0).toString();
-    EmbString strErr = context->argument(1).toString();
+    EmbString strCmd = args(0).toString();
+    EmbString strErr = args(1).toString();
 
     mainWin()->nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
     mainWin()->nativeAppendPromptHistory(QString());
     mainWin()->nativeEndCommand();
-    return EmbScriptValue();
+    return "";
 }
 
-/**
- * @brief javaTodo
- * @param context
- * @return
- */
-EmbScriptValue javaTodo(QScriptContext* context)
+std::string
+Todo(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("todo() requires two arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "todo(): first argument is not a string");
-    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "todo(): second argument is not a string");
+    if (argsCount() != 2)    return context->throwError("todo() requires two arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "todo(): first argument is not a string");
+    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "todo(): second argument is not a string");
 
-    EmbString strCmd  = context->argument(0).toString();
-    EmbString strTodo = context->argument(1).toString();
+    EmbString strCmd  = args(0).toString();
+    EmbString strTodo = args(1).toString();
 
     mainWin()->nativeAlert("TODO: (" + strCmd + ") " + strTodo);
     mainWin()->nativeEndCommand();
-    return EmbScriptValue();
+    return "";
 }
 
-/**
- * @brief javaAlert
- * @param context
- * @return
- */
-EmbScriptValue
-javaAlert(QScriptContext* context)
+std::string
+Alert(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("alert() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "alert(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("alert() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "alert(): first argument is not a string");
 
-    mainWin()->nativeAlert(context->argument(0).toString());
-    return EmbScriptValue();
+    mainWin()->nativeAlert(args(0).toString());
+    return "";
 }
 
-/**
- * @brief javaBlinkPrompt
- * @param context
- * @return
- */
-EmbScriptValue
-javaBlinkPrompt(QScriptContext* context)
+std::string
+BlinkPrompt(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("blinkPrompt() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("blinkPrompt() requires zero arguments");
 
     mainWin()->nativeBlinkPrompt();
-    return EmbScriptValue();
+    return "";
+}
+
+std::string
+SetPromptPrefix(std::vector<std::string> args)
+{
+    if (argsCount() != 1)    return context->throwError("setPromptPrefix() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setPromptPrefix(): first argument is not a string");
+
+    mainWin()->nativeSetPromptPrefix(args(0).toString());
+    return "";
 }
 
 /**
- * @brief javaSetPromptPrefix
- * @param context
- * @return
+ *
  */
-EmbScriptValue
-javaSetPromptPrefix(QScriptContext* context)
+std::string
+AppendPromptHistory(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setPromptPrefix() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setPromptPrefix(): first argument is not a string");
-
-    mainWin()->nativeSetPromptPrefix(context->argument(0).toString());
-    return EmbScriptValue();
-}
-
-/**
- * @brief javaAppendPromptHistory
- * @param context
- * @return
- */
-EmbScriptValue
-javaAppendPromptHistory(QScriptContext* context)
-{
-    int args = context->argumentCount();
-    if(args == 0)
+    int args = argsCount();
+    if (args == 0)
     {
         mainWin()->nativeAppendPromptHistory(QString());
     }
-    else if(args == 1)
+    else if (args == 1)
     {
-        mainWin()->nativeAppendPromptHistory(context->argument(0).toString());
+        mainWin()->nativeAppendPromptHistory(args(0).toString());
     }
     else
     {
         return context->throwError("appendPromptHistory() requires one or zero arguments");
     }
-    return EmbScriptValue();
+    return "";
 }
 
 /**
- * @brief javaEnablePromptRapidFire
+ * @brief EnablePromptRapidFire
  * @param context
  * @return
  */
-EmbScriptValue
-javaEnablePromptRapidFire(QScriptContext* context)
+std::string
+EnablePromptRapidFire(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("enablePromptRapidFire() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("enablePromptRapidFire() requires zero arguments");
 
     mainWin()->nativeEnablePromptRapidFire();
-    return EmbScriptValue();
+    return "";
 }
 
 /**
- * @brief javaDisablePromptRapidFire
+ * @brief DisablePromptRapidFire
  * @param context
  * @return
  */
-EmbScriptValue
-javaDisablePromptRapidFire(QScriptContext* context)
+std::string
+DisablePromptRapidFire(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("disablePromptRapidFire() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("disablePromptRapidFire() requires zero arguments");
 
     mainWin()->nativeDisablePromptRapidFire();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaEnableMoveRapidFire(QScriptContext* context)
+std::string
+EnableMoveRapidFire(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("enableMoveRapidFire() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("enableMoveRapidFire() requires zero arguments");
 
     mainWin()->nativeEnableMoveRapidFire();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaDisableMoveRapidFire(QScriptContext* context)
+std::string
+DisableMoveRapidFire(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("disableMoveRapidFire() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("disableMoveRapidFire() requires zero arguments");
 
     mainWin()->nativeDisableMoveRapidFire();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaInitCommand(QScriptContext* context)
+std::string
+InitCommand(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("initCommand() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("initCommand() requires zero arguments");
 
     mainWin()->nativeInitCommand();
-    return EmbScriptValue();
+    return "";
 }
 
 /**
- * @brief javaEndCommand
+ * @brief EndCommand
  * @param context
  * @return
  */
-EmbScriptValue javaEndCommand(QScriptContext* context)
+std::string
+EndCommand(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("endCommand() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("endCommand() requires zero arguments");
 
     mainWin()->nativeEndCommand();
-    return EmbScriptValue();
+    return "";
 }
 
 /**
- * @brief javaNewFile
+ * @brief NewFile
  * @param context
  * @return
  */
-EmbScriptValue javaNewFile(QScriptContext* context)
+std::string
+NewFile(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("newFile() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("newFile() requires zero arguments");
 
     mainWin()->nativeNewFile();
-    return EmbScriptValue();
+    return "";
 }
 
 /**
- * @brief javaOpenFile
+ * @brief OpenFile
  * @param context
  * @return
  */
-EmbScriptValue javaOpenFile(QScriptContext* context)
+std::string
+OpenFile(std::vector<std::string> args)
 {
-    if (context->argumentCount() != 0) {
+    if (argsCount() != 0) {
         return context->throwError("openFile() requires zero arguments");
     }
 
     mainWin()->nativeOpenFile();
-    return EmbScriptValue();
+    return "";
 }
 
 /**
- * @brief javaExit
+ * @brief Exit
  * @param context
  * @return
  */
-EmbScriptValue javaExit(QScriptContext* context)
+std::string
+Exit(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("exit() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("exit() requires zero arguments");
 
     mainWin()->nativeExit();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaHelp(QScriptContext* context)
+std::string
+Help(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("help() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("help() requires zero arguments");
 
     mainWin()->nativeHelp();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAbout(QScriptContext* context)
+std::string
+About(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("about() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("about() requires zero arguments");
 
     mainWin()->nativeAbout();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaTipOfTheDay(QScriptContext* context)
+std::string
+TipOfTheDay(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("tipOfTheDay() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("tipOfTheDay() requires zero arguments");
 
     mainWin()->nativeTipOfTheDay();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaWindowCascade(QScriptContext* context)
+std::string
+WindowCascade(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("windowCascade() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("windowCascade() requires zero arguments");
 
     mainWin()->nativeWindowCascade();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaWindowTile(QScriptContext* context)
+std::string
+WindowTile(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("windowTile() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("windowTile() requires zero arguments");
 
     mainWin()->nativeWindowTile();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaWindowClose(QScriptContext* context)
+std::string
+WindowClose(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("windowClose() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("windowClose() requires zero arguments");
 
     mainWin()->nativeWindowClose();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaWindowCloseAll(QScriptContext* context)
+std::string
+WindowCloseAll(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("windowCloseAll() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("windowCloseAll() requires zero arguments");
 
     mainWin()->nativeWindowCloseAll();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaWindowNext(QScriptContext* context)
+std::string
+WindowNext(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("windowNext() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("windowNext() requires zero arguments");
 
     mainWin()->nativeWindowNext();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaWindowPrevious(QScriptContext* context)
+std::string
+WindowPrevious(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("windowPrevious() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("windowPrevious() requires zero arguments");
 
     mainWin()->nativeWindowPrevious();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPlatformString(QScriptContext* context)
+std::string
+PlatformString(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("platformString() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativePlatformString());
+    if (argsCount() != 0) return context->throwError("platformString() requires zero arguments");
+    return std::string(mainWin()->nativePlatformString());
 }
 
-EmbScriptValue javaMessageBox(QScriptContext* context)
+std::string
+MessageBox(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("messageBox() requires three arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): first argument is not a string");
-    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): second argument is not a string");
-    if(!context->argument(2).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): third argument is not a string");
+    if (argsCount() != 3)    return context->throwError("messageBox() requires three arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): first argument is not a string");
+    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): second argument is not a string");
+    if (!args(2).isString()) return context->throwError(QScriptContext::TypeError, "messageBox(): third argument is not a string");
 
-    EmbString type  = context->argument(0).toString().toLower();
-    EmbString title = context->argument(1).toString();
-    EmbString text  = context->argument(2).toString();
+    EmbString type  = args(0).toString().toLower();
+    EmbString title = args(1).toString();
+    EmbString text  = args(2).toString();
 
-    if(type != "critical" && type != "information" && type != "question" && type != "warning")
+    if (type != "critical" && type != "information" && type != "question" && type != "warning")
         return context->throwError(QScriptContext::UnknownError, "messageBox(): first argument must be \"critical\", \"information\", \"question\" or \"warning\".");
 
     mainWin()->nativeMessageBox(type, title, text);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIsInt(QScriptContext* context)
+std::string
+IsInt(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("isInt() requires one argument");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "isInt(): first argument is not a number");
+    if (argsCount() != 1)    return context->throwError("isInt() requires one argument");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "isInt(): first argument is not a number");
 
-    EmbReal num = context->argument(0).toNumber();
+    EmbReal num = args(0).toNumber();
 
     //isNaN check
-    if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "isInt(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(num)) return context->throwError(QScriptContext::TypeError, "isInt(): first argument failed isNaN check. There is an error in your code.");
 
-    if(fmod(num, 1) == 0)
-        return EmbScriptValue(true);
-    return EmbScriptValue(false);
+    if (fmod(num, 1) == 0)
+        return std::string(true);
+    return std::string(false);
 }
 
-EmbScriptValue javaUndo(QScriptContext* context)
+std::string
+Undo(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("undo() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("undo() requires zero arguments");
 
     mainWin()->nativeUndo();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaRedo(QScriptContext* context)
+std::string
+Redo(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("redo() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("redo() requires zero arguments");
 
     mainWin()->nativeRedo();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIcon16(QScriptContext* context)
+std::string
+Icon16(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("icon16() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("icon16() requires zero arguments");
 
     mainWin()->nativeIcon16();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIcon24(QScriptContext* context)
+std::string
+Icon24(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("icon24() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("icon24() requires zero arguments");
 
     mainWin()->nativeIcon24();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIcon32(QScriptContext* context)
+std::string
+Icon32(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("icon32() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("icon32() requires zero arguments");
 
     mainWin()->nativeIcon32();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIcon48(QScriptContext* context)
+std::string
+Icon48(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("icon48() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("icon48() requires zero arguments");
 
     mainWin()->nativeIcon48();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIcon64(QScriptContext* context)
+std::string
+Icon64(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("icon64() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("icon64() requires zero arguments");
 
     mainWin()->nativeIcon64();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaIcon128(QScriptContext* context)
+std::string
+Icon128(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("icon128() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("icon128() requires zero arguments");
 
     mainWin()->nativeIcon128();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPanLeft(QScriptContext* context)
+std::string
+PanLeft(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("panLeft() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("panLeft() requires zero arguments");
 
     mainWin()->nativePanLeft();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPanRight(QScriptContext* context)
+std::string
+PanRight(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("panRight() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("panRight() requires zero arguments");
 
     mainWin()->nativePanRight();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPanUp(QScriptContext* context)
+std::string
+PanUp(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("panUp() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("panUp() requires zero arguments");
 
     mainWin()->nativePanUp();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPanDown(QScriptContext* context)
+std::string
+PanDown(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("panDown() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("panDown() requires zero arguments");
 
     mainWin()->nativePanDown();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaZoomIn(QScriptContext* context)
+std::string
+ZoomIn(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("zoomIn() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("zoomIn() requires zero arguments");
 
     mainWin()->nativeZoomIn();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaZoomOut(QScriptContext* context)
+std::string
+ZoomOut(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("zoomOut() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("zoomOut() requires zero arguments");
 
     mainWin()->nativeZoomOut();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaZoomExtents(QScriptContext* context)
+std::string
+ZoomExtents(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("zoomExtents() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("zoomExtents() requires zero arguments");
 
     mainWin()->nativeZoomExtents();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPrintArea(QScriptContext* context)
+std::string
+PrintArea(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 4)    return context->throwError("printArea() requires four arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument is not a number");
+    if (argsCount() != 4)    return context->throwError("printArea() requires four arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument is not a number");
 
-    EmbReal x = context->argument(0).toNumber();
-    EmbReal y = context->argument(1).toNumber();
-    EmbReal w = context->argument(2).toNumber();
-    EmbReal h = context->argument(3).toNumber();
+    EmbReal x = args(0).toNumber();
+    EmbReal y = args(1).toNumber();
+    EmbReal w = args(2).toNumber();
+    EmbReal h = args(3).toNumber();
 
     //isNaN check
-    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(w)) return context->throwError(QScriptContext::TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(h)) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "printArea(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "printArea(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(w)) return context->throwError(QScriptContext::TypeError, "printArea(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(h)) return context->throwError(QScriptContext::TypeError, "printArea(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativePrintArea(x, y, w, h);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaDayVision(QScriptContext* context)
+std::string
+DayVision(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("dayVision() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("dayVision() requires zero arguments");
 
     mainWin()->nativeDayVision();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaNightVision(QScriptContext* context)
+std::string
+NightVision(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("nightVision() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("nightVision() requires zero arguments");
 
     mainWin()->nativeNightVision();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetBackgroundColor(QScriptContext* context)
+std::string
+SetBackgroundColor(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("setBackgroundColor() requires three arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument is not a number");
+    if (argsCount() != 3)    return context->throwError("setBackgroundColor() requires three arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument is not a number");
 
-    EmbReal r = context->argument(0).toNumber();
-    EmbReal g = context->argument(1).toNumber();
-    EmbReal b = context->argument(2).toNumber();
+    EmbReal r = args(0).toNumber();
+    EmbReal g = args(1).toNumber();
+    EmbReal b = args(2).toNumber();
 
     //isNaN check
-    if(qIsNaN(r)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(g)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(b)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(r)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(g)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(b)) return context->throwError(QScriptContext::TypeError, "setBackgroundColor(): third argument failed isNaN check. There is an error in your code.");
 
-    if(r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
-    if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
-    if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
     mainWin()->nativeSetBackgroundColor(r, g, b);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetCrossHairColor(QScriptContext* context)
+std::string
+SetCrossHairColor(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("setCrossHairColor() requires three arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument is not a number");
+    if (argsCount() != 3)    return context->throwError("setCrossHairColor() requires three arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument is not a number");
 
-    EmbReal r = context->argument(0).toNumber();
-    EmbReal g = context->argument(1).toNumber();
-    EmbReal b = context->argument(2).toNumber();
+    EmbReal r = args(0).toNumber();
+    EmbReal g = args(1).toNumber();
+    EmbReal b = args(2).toNumber();
 
     //isNaN check
-    if(qIsNaN(r)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(g)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(b)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(r)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(g)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(b)) return context->throwError(QScriptContext::TypeError, "setCrossHairColor(): third argument failed isNaN check. There is an error in your code.");
 
-    if(r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
-    if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
-    if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
 
     mainWin()->nativeSetCrossHairColor(r, g, b);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetGridColor(QScriptContext* context)
+std::string
+SetGridColor(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("setGridColor() requires three arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument is not a number");
+    if (argsCount() != 3)    return context->throwError("setGridColor() requires three arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument is not a number");
 
-    EmbReal r = context->argument(0).toNumber();
-    EmbReal g = context->argument(1).toNumber();
-    EmbReal b = context->argument(2).toNumber();
+    EmbReal r = args(0).toNumber();
+    EmbReal g = args(1).toNumber();
+    EmbReal b = args(2).toNumber();
 
     //isNaN check
-    if(qIsNaN(r)) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(g)) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(b)) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(r)) return context->throwError(QScriptContext::TypeError, "setGridColor(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(g)) return context->throwError(QScriptContext::TypeError, "setGridColor(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(b)) return context->throwError(QScriptContext::TypeError, "setGridColor(): third argument failed isNaN check. There is an error in your code.");
 
-    if(r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): r value must be in range 0-255"); }
-    if(g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
-    if(b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
+    if (r < 0 || r > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): r value must be in range 0-255"); }
+    if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
+    if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
 
     mainWin()->nativeSetGridColor(r, g, b);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaTextFont(QScriptContext* context)
+std::string
+TextFont(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textFont() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextFont());
+    if (argsCount() != 0) return context->throwError("textFont() requires zero arguments");
+    return std::string(mainWin()->nativeTextFont());
 }
 
-EmbScriptValue javaTextSize(QScriptContext* context)
+std::string
+TextSize(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textSize() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextSize());
+    if (argsCount() != 0) return context->throwError("textSize() requires zero arguments");
+    return std::string(mainWin()->nativeTextSize());
 }
 
-EmbScriptValue javaTextAngle(QScriptContext* context)
+std::string
+TextAngle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textAngle() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextAngle());
+    if (argsCount() != 0) return context->throwError("textAngle() requires zero arguments");
+    return std::string(mainWin()->nativeTextAngle());
 }
 
-EmbScriptValue javaTextBold(QScriptContext* context)
+std::string
+TextBold(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textBold() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextBold());
+    if (argsCount() != 0) return context->throwError("textBold() requires zero arguments");
+    return std::string(mainWin()->nativeTextBold());
 }
 
-EmbScriptValue javaTextItalic(QScriptContext* context)
+std::string
+TextItalic(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textItalic() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextItalic());
+    if (argsCount() != 0) return context->throwError("textItalic() requires zero arguments");
+    return std::string(mainWin()->nativeTextItalic());
 }
 
-EmbScriptValue javaTextUnderline(QScriptContext* context)
+std::string
+TextUnderline(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textUnderline() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextUnderline());
+    if (argsCount() != 0) return context->throwError("textUnderline() requires zero arguments");
+    return std::string(mainWin()->nativeTextUnderline());
 }
 
-EmbScriptValue javaTextStrikeOut(QScriptContext* context)
+std::string
+TextStrikeOut(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textStrikeOut() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextStrikeOut());
+    if (argsCount() != 0) return context->throwError("textStrikeOut() requires zero arguments");
+    return std::string(mainWin()->nativeTextStrikeOut());
 }
 
-EmbScriptValue javaTextOverline(QScriptContext* context)
+std::string
+TextOverline(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("textOverline() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeTextOverline());
+    if (argsCount() != 0) return context->throwError("textOverline() requires zero arguments");
+    return std::string(mainWin()->nativeTextOverline());
 }
 
-EmbScriptValue javaSetTextFont(QScriptContext* context)
+std::string
+SetTextFont(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextFont() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setTextFont(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("setTextFont() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setTextFont(): first argument is not a string");
 
-    mainWin()->nativeSetTextFont(context->argument(0).toString());
-    return EmbScriptValue();
+    mainWin()->nativeSetTextFont(args(0).toString());
+    return "";
 }
 
-EmbScriptValue javaSetTextSize(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextSize(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextSize() requires one argument");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument is not a number");
+    if (argsCount() != 1)    return context->throwError("setTextSize() requires one argument");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument is not a number");
 
-    EmbReal num = context->argument(0).toNumber();
+    EmbReal num = args(0).toNumber();
 
     //isNaN check
-    if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(num)) {
+        return context->throwError(QScriptContext::TypeError, "setTextSize(): first argument failed isNaN check. There is an error in your code.");
+    }
 
     mainWin()->nativeSetTextSize(num);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetTextAngle(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextAngle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextAngle() requires one argument");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument is not a number");
+    if (argsCount() != 1)    return context->throwError("setTextAngle() requires one argument");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument is not a number");
 
-    EmbReal num = context->argument(0).toNumber();
+    EmbReal num = args(0).toNumber();
 
     //isNaN check
-    if(qIsNaN(num)) return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(num))
+        return context->throwError(QScriptContext::TypeError, "setTextAngle(): first argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeSetTextAngle(num);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetTextBold(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextBold(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextBold() requires one argument");
-    if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextBold(): first argument is not a bool");
+    if (args.length() != 1) {
+        return context->throwError("setTextBold() requires one argument");
+    }
+    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextBold(): first argument is not a bool");
 
-    mainWin()->nativeSetTextBold(context->argument(0).toBool());
-    return EmbScriptValue();
+    mainWin()->nativeSetTextBold(args(0).toBool());
+    return "";
 }
 
-EmbScriptValue javaSetTextItalic(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextItalic(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextItalic() requires one argument");
-    if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextItalic(): first argument is not a bool");
+    if (argsCount() != 1)    return context->throwError("setTextItalic() requires one argument");
+    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextItalic(): first argument is not a bool");
 
-    mainWin()->nativeSetTextItalic(context->argument(0).toBool());
-    return EmbScriptValue();
+    mainWin()->nativeSetTextItalic(args(0).toBool());
+    return "";
 }
 
-EmbScriptValue javaSetTextUnderline(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextUnderline(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextUnderline() requires one argument");
-    if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextUnderline(): first argument is not a bool");
+    if (argsCount() != 1)    return context->throwError("setTextUnderline() requires one argument");
+    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextUnderline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextUnderline(context->argument(0).toBool());
-    return EmbScriptValue();
+    mainWin()->nativeSetTextUnderline(args(0).toBool());
+    return "";
 }
 
-EmbScriptValue javaSetTextStrikeOut(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextStrikeOut(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextStrikeOut() requires one argument");
-    if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextStrikeOut(): first argument is not a bool");
+    if (argsCount() != 1)    return context->throwError("setTextStrikeOut() requires one argument");
+    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextStrikeOut(): first argument is not a bool");
 
-    mainWin()->nativeSetTextStrikeOut(context->argument(0).toBool());
-    return EmbScriptValue();
+    mainWin()->nativeSetTextStrikeOut(args(0).toBool());
+    return "";
 }
 
-EmbScriptValue javaSetTextOverline(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetTextOverline(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setTextOverline() requires one argument");
-    if(!context->argument(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextOverline(): first argument is not a bool");
+    if (argsCount() != 1)    return context->throwError("setTextOverline() requires one argument");
+    if (!args(0).isBool()) return context->throwError(QScriptContext::TypeError, "setTextOverline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextOverline(context->argument(0).toBool());
-    return EmbScriptValue();
+    mainWin()->nativeSetTextOverline(args(0).toBool());
+    return "";
 }
 
-EmbScriptValue javaPreviewOn(QScriptContext* context)
+std::string
+PreviewOn(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 5)    return context->throwError("previewOn() requires five arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): first argument is not a string");
-    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): second argument is not a string");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument is not a number");
+    if (argsCount() != 5)    return context->throwError("previewOn() requires five arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): first argument is not a string");
+    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "previewOn(): second argument is not a string");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument is not a number");
 
-    EmbString cloneStr = context->argument(0).toString().toUpper();
-    EmbString modeStr  = context->argument(1).toString().toUpper();
-    EmbReal x          = context->argument(2).toNumber();
-    EmbReal y          = context->argument(3).toNumber();
-    EmbReal data       = context->argument(4).toNumber();
+    EmbString cloneStr = args(0).toString().toUpper();
+    EmbString modeStr  = args(1).toString().toUpper();
+    EmbReal x          = args(2).toNumber();
+    EmbReal y          = args(3).toNumber();
+    EmbReal data       = args(4).toNumber();
 
     int clone = PREVIEW_CLONE_NULL;
     int mode = PREVIEW_MODE_NULL;
     if     (cloneStr == "SELECTED") { clone = PREVIEW_CLONE_SELECTED; }
-    else if(cloneStr == "RUBBER")   { clone = PREVIEW_CLONE_RUBBER;   }
+    else if (cloneStr == "RUBBER") { clone = PREVIEW_CLONE_RUBBER;   }
     else                            { return context->throwError(QScriptContext::UnknownError, "previewOn(): first argument must be \"SELECTED\" or \"RUBBER\"."); }
 
-    if     (modeStr == "MOVE")   { mode = PREVIEW_MODE_MOVE;   }
-    else if(modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
-    else if(modeStr == "SCALE")  { mode = PREVIEW_MODE_SCALE;  }
+    if     (modeStr == "MOVE") { mode = PREVIEW_MODE_MOVE;   }
+    else if (modeStr == "ROTATE") { mode = PREVIEW_MODE_ROTATE; }
+    else if (modeStr == "SCALE") { mode = PREVIEW_MODE_SCALE;  }
     else                         { return context->throwError(QScriptContext::UnknownError, "previewOn(): second argument must be \"MOVE\", \"ROTATE\" or \"SCALE\"."); }
 
-    //isNaN check
-    if(qIsNaN(x))    return context->throwError(QScriptContext::TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))    return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(data)) return context->throwError(QScriptContext::TypeError, "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
+    // isNaN check
+    if (std::isnan(x))
+        return context->throwError(QScriptContext::TypeError, "previewOn(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))
+        return context->throwError(QScriptContext::TypeError, "previewOn(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(data)) {
+        return context->throwError(QScriptContext::TypeError,
+            "previewOn(): fifth argument failed isNaN check. There is an error in your code.");
+    }
 
     mainWin()->nativePreviewOn(clone, mode, x, y, data);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPreviewOff(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+PreviewOff(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("previewOff() requires zero arguments");
+    /*
+    if (argsCount() != 0) {
+        return context->throwError("previewOff() requires zero arguments");
+    }
 
     mainWin()->nativePreviewOff();
-    return EmbScriptValue();
+    */
+    return "";
 }
 
-EmbScriptValue javaVulcanize(QScriptContext* context)
+std::string
+Vulcanize(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("vulcanize() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("vulcanize() requires zero arguments");
 
     mainWin()->nativeVulcanize();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAllowRubber(QScriptContext* context)
+std::string
+AllowRubber(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("allowRubber() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("allowRubber() requires zero arguments");
 
-    return EmbScriptValue(mainWin()->nativeAllowRubber());
+    return std::string(mainWin()->nativeAllowRubber());
 }
 
-EmbScriptValue javaSetRubberMode(QScriptContext* context)
+std::string
+SetRubberMode(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setRubberMode() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberMode(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("setRubberMode() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberMode(): first argument is not a string");
 
-    EmbString mode = context->argument(0).toString().toUpper();
+    EmbString mode = args(0).toString().toUpper();
 
-    if     (mode == "CIRCLE_1P_RAD")                     { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
-    else if(mode == "CIRCLE_1P_DIA")                     { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if(mode == "CIRCLE_2P")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if(mode == "CIRCLE_3P")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if(mode == "CIRCLE_TTR")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if(mode == "CIRCLE_TTR")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
+    if     (mode == "CIRCLE_1P_RAD") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD); }
+    else if (mode == "CIRCLE_1P_DIA") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
+    else if (mode == "CIRCLE_2P") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
+    else if (mode == "CIRCLE_3P") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
+    else if (mode == "CIRCLE_TTR") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    else if (mode == "CIRCLE_TTR") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
-    else if(mode == "DIMLEADER_LINE")                    { mainWin()->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
+    else if (mode == "DIMLEADER_LINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
 
-    else if(mode == "ELLIPSE_LINE")                      { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if(mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if(mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS")   { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if(mode == "ELLIPSE_ROTATION")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
+    else if (mode == "ELLIPSE_LINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
+    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
+    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
+    else if (mode == "ELLIPSE_ROTATION") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
 
-    else if(mode == "LINE")                              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
+    else if (mode == "LINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
 
-    else if(mode == "POLYGON")                           { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if(mode == "POLYGON_INSCRIBE")                  { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if(mode == "POLYGON_CIRCUMSCRIBE")              { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
+    else if (mode == "POLYGON") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
+    else if (mode == "POLYGON_INSCRIBE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if (mode == "POLYGON_CIRCUMSCRIBE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
-    else if(mode == "POLYLINE")                          { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
+    else if (mode == "POLYLINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
 
-    else if(mode == "RECTANGLE")                         { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
+    else if (mode == "RECTANGLE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
 
-    else if(mode == "TEXTSINGLE")                        { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+    else if (mode == "TEXTSINGLE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else                                                 { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetRubberPoint(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetRubberPoint(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("setRubberPoint() requires three arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): first argument is not a string");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument is not a number");
+    if (argsCount() != 3) {
+        return context->throwError("setRubberPoint() requires three arguments");
+    }
+    if (!args(0).isString()) {
+        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): first argument is not a string");
+    }
+    if (!args(1).isNumber()) {
+        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument is not a number");
+    }
+    if (!args(2).isNumber()) {
+        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument is not a number");
+    }
 
-    EmbString key = context->argument(0).toString().toUpper();
-    EmbReal x     = context->argument(1).toNumber();
-    EmbReal y     = context->argument(2).toNumber();
+    EmbString key = args(0).toString().toUpper();
+    EmbReal x = args(1).toNumber();
+    EmbReal y = args(2).toNumber();
 
     //isNaN check
-    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) {
+        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): second argument failed isNaN check. There is an error in your code.");
+    }
+    if (std::isnan(y)) {
+        return context->throwError(QScriptContext::TypeError, "setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
+    }
 
     mainWin()->nativeSetRubberPoint(key, x, y);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetRubberText(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+SetRubberText(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("setRubberText() requires two arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): first argument is not a string");
-    if(!context->argument(1).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): second argument is not a string");
+    if (argsCount() != 2)    return context->throwError("setRubberText() requires two arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): first argument is not a string");
+    if (!args(1).isString()) return context->throwError(QScriptContext::TypeError, "setRubberText(): second argument is not a string");
 
-    EmbString key = context->argument(0).toString().toUpper();
-    EmbString txt = context->argument(1).toString();
+    EmbString key = args(0).toString().toUpper();
+    EmbString txt = args(1).toString();
 
     mainWin()->nativeSetRubberText(key, txt);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddRubber(QScriptContext* context)
+std::string
+AddRubber(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("addRubber() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "addRubber(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("addRubber() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "addRubber(): first argument is not a string");
 
-    EmbString objType = context->argument(0).toString().toUpper();
+    EmbString objType = args(0).toString().toUpper();
 
-    if(!mainWin()->nativeAllowRubber())
+    if (!mainWin()->nativeAllowRubber())
         return context->throwError(QScriptContext::UnknownError, "addRubber(): You must use vulcanize() before you can add another rubber object.");
 
     EmbReal mx = mainWin()->nativeMouseX();
     EmbReal my = mainWin()->nativeMouseY();
 
-    if     (objType == "ARC")          {} //TODO: handle this type
-    else if(objType == "BLOCK")        {} //TODO: handle this type
-    else if(objType == "CIRCLE")       { mainWin()->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
-    else if(objType == "DIMALIGNED")   {} //TODO: handle this type
-    else if(objType == "DIMANGULAR")   {} //TODO: handle this type
-    else if(objType == "DIMARCLENGTH") {} //TODO: handle this type
-    else if(objType == "DIMDIAMETER")  {} //TODO: handle this type
-    else if(objType == "DIMLEADER")    { mainWin()->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if(objType == "DIMLINEAR")    {} //TODO: handle this type
-    else if(objType == "DIMORDINATE")  {} //TODO: handle this type
-    else if(objType == "DIMRADIUS")    {} //TODO: handle this type
-    else if(objType == "ELLIPSE")      { mainWin()->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
-    else if(objType == "ELLIPSEARC")   {} //TODO: handle this type
-    else if(objType == "HATCH")        {} //TODO: handle this type
-    else if(objType == "IMAGE")        {} //TODO: handle this type
-    else if(objType == "INFINITELINE") {} //TODO: handle this type
-    else if(objType == "LINE")         { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
-    else if(objType == "PATH")         {} //TODO: handle this type
-    else if(objType == "POINT")        {} //TODO: handle this type
-    else if(objType == "POLYGON")      { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if(objType == "POLYLINE")     { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
-    else if(objType == "RAY")          {} //TODO: handle this type
-    else if(objType == "RECTANGLE")    { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
-    else if(objType == "SPLINE")       {} //TODO: handle this type
-    else if(objType == "TEXTMULTI")    {} //TODO: handle this type
-    else if(objType == "TEXTSINGLE")   { mainWin()->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
+    if     (objType == "ARC") {} //TODO: handle this type
+    else if (objType == "BLOCK") {} //TODO: handle this type
+    else if (objType == "CIRCLE") { mainWin()->nativeAddCircle(mx, my, 0, false, OBJ_RUBBER_ON); }
+    else if (objType == "DIMALIGNED") {} //TODO: handle this type
+    else if (objType == "DIMANGULAR") {} //TODO: handle this type
+    else if (objType == "DIMARCLENGTH") {} //TODO: handle this type
+    else if (objType == "DIMDIAMETER") {} //TODO: handle this type
+    else if (objType == "DIMLEADER") { mainWin()->nativeAddDimLeader(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "DIMLINEAR") {} //TODO: handle this type
+    else if (objType == "DIMORDINATE") {} //TODO: handle this type
+    else if (objType == "DIMRADIUS") {} //TODO: handle this type
+    else if (objType == "ELLIPSE") { mainWin()->nativeAddEllipse(mx, my, 0, 0, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "ELLIPSEARC") {} //TODO: handle this type
+    else if (objType == "HATCH") {} //TODO: handle this type
+    else if (objType == "IMAGE") {} //TODO: handle this type
+    else if (objType == "INFINITELINE") {} //TODO: handle this type
+    else if (objType == "LINE") { mainWin()->nativeAddLine(mx, my, mx, my, 0, OBJ_RUBBER_ON); }
+    else if (objType == "PATH") {} //TODO: handle this type
+    else if (objType == "POINT") {} //TODO: handle this type
+    else if (objType == "POLYGON") { mainWin()->nativeAddPolygon(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "POLYLINE") { mainWin()->nativeAddPolyline(mx, my, QPainterPath(), OBJ_RUBBER_ON); }
+    else if (objType == "RAY") {} //TODO: handle this type
+    else if (objType == "RECTANGLE") { mainWin()->nativeAddRectangle(mx, my, mx, my, 0, 0, OBJ_RUBBER_ON); }
+    else if (objType == "SPLINE") {} //TODO: handle this type
+    else if (objType == "TEXTMULTI") {} //TODO: handle this type
+    else if (objType == "TEXTSINGLE") { mainWin()->nativeAddTextSingle("", mx, my, 0, false, OBJ_RUBBER_ON); }
 
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaClearRubber(QScriptContext* context)
+std::string
+ClearRubber(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("clearRubber() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("clearRubber() requires zero arguments");
 
     mainWin()->nativeClearRubber();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSpareRubber(QScriptContext* context)
+std::string
+SpareRubber(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("spareRubber() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "spareRubber(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("spareRubber() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "spareRubber(): first argument is not a string");
 
-    EmbString objID = context->argument(0).toString().toUpper();
+    EmbString objID = args(0).toString().toUpper();
 
-    if     (objID == "PATH")     { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
-    else if(objID == "POLYGON")  { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
-    else if(objID == "POLYLINE") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
+    if     (objID == "PATH") { mainWin()->nativeSpareRubber(SPARE_RUBBER_PATH);     }
+    else if (objID == "POLYGON") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYGON);  }
+    else if (objID == "POLYLINE") { mainWin()->nativeSpareRubber(SPARE_RUBBER_POLYLINE); }
     else
     {
         bool ok = false;
         qint64 id = objID.toLongLong(&ok);
-        if(!ok) return context->throwError(QScriptContext::TypeError, "spareRubber(): error converting object ID into an int64");
+        if (!ok) return context->throwError(QScriptContext::TypeError, "spareRubber(): error converting object ID into an int64");
         mainWin()->nativeSpareRubber(id);
     }
 
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddTextMulti(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddTextMulti(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 5)    return context->throwError("addTextMulti() requires five arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): first argument is not a string");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument is not a number");
-    if(!context->argument(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextMulti(): fifth argument is not a bool");
+    if (argsCount() != 5)    return context->throwError("addTextMulti() requires five arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): first argument is not a string");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument is not a number");
+    if (!args(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextMulti(): fifth argument is not a bool");
 
-    EmbString str   = context->argument(0).toString();
-    EmbReal   x     = context->argument(1).toNumber();
-    EmbReal   y     = context->argument(2).toNumber();
-    EmbReal   rot   = context->argument(3).toNumber();
-    bool    fill  = context->argument(4).toBool();
+    EmbString str   = args(0).toString();
+    EmbReal   x     = args(1).toNumber();
+    EmbReal   y     = args(2).toNumber();
+    EmbReal   rot   = args(3).toNumber();
+    bool    fill  = args(4).toBool();
 
     //isNaN check
-    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addTextMulti(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addTextMulti(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextMulti(str, x, y, rot, fill, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddTextSingle(QScriptContext* context)
+std::string
+AddTextSingle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 5)    return context->throwError("addTextSingle() requires five arguments");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): first argument is not a string");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument is not a number");
-    if(!context->argument(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextSingle(): fifth argument is not a bool");
+    if (argsCount() != 5)    return context->throwError("addTextSingle() requires five arguments");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): first argument is not a string");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument is not a number");
+    if (!args(4).isBool())   return context->throwError(QScriptContext::TypeError, "addTextSingle(): fifth argument is not a bool");
 
-    EmbString str   = context->argument(0).toString();
-    EmbReal   x     = context->argument(1).toNumber();
-    EmbReal   y     = context->argument(2).toNumber();
-    EmbReal   rot   = context->argument(3).toNumber();
-    bool    fill  = context->argument(4).toBool();
+    EmbString str   = args(0).toString();
+    EmbReal   x     = args(1).toNumber();
+    EmbReal   y     = args(2).toNumber();
+    EmbReal   rot   = args(3).toNumber();
+    bool    fill  = args(4).toBool();
 
     //isNaN check
-    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addTextSingle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addTextSingle(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTextSingle(str, x, y, rot, fill, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddInfiniteLine(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddInfiniteLine(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addInfiniteLine command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddRay(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddRay(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addRay command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddLine(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddLine(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 5)    return context->throwError("addLine() requires five arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument is not a number");
+    if (argsCount() != 5)    return context->throwError("addLine() requires five arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument is not a number");
 
-    EmbReal x1  = context->argument(0).toNumber();
-    EmbReal y1  = context->argument(1).toNumber();
-    EmbReal x2  = context->argument(2).toNumber();
-    EmbReal y2  = context->argument(3).toNumber();
-    EmbReal rot = context->argument(4).toNumber();
+    EmbReal x1  = args(0).toNumber();
+    EmbReal y1  = args(1).toNumber();
+    EmbReal x2  = args(2).toNumber();
+    EmbReal y2  = args(3).toNumber();
+    EmbReal rot = args(4).toNumber();
 
     //isNaN check
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "addLine(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "addLine(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "addLine(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "addLine(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "addLine(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "addLine(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "addLine(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addLine(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddLine(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddTriangle(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddTriangle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 8)    return context->throwError("addTriangle() requires eight arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument is not a number");
-    if(!context->argument(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument is not a number");
-    if(!context->argument(6).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument is not a number");
-    if(!context->argument(7).isBool())   return context->throwError(QScriptContext::TypeError, "addTriangle(): eighth argument is not a bool");
+    if (argsCount() != 8)    return context->throwError("addTriangle() requires eight arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument is not a number");
+    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument is not a number");
+    if (!args(6).isNumber()) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument is not a number");
+    if (!args(7).isBool())   return context->throwError(QScriptContext::TypeError, "addTriangle(): eighth argument is not a bool");
 
-    EmbReal x1     = context->argument(0).toNumber();
-    EmbReal y1     = context->argument(1).toNumber();
-    EmbReal x2     = context->argument(2).toNumber();
-    EmbReal y2     = context->argument(3).toNumber();
-    EmbReal x3     = context->argument(4).toNumber();
-    EmbReal y3     = context->argument(5).toNumber();
-    EmbReal rot    = context->argument(6).toNumber();
-    bool  fill   = context->argument(7).toBool();
+    EmbReal x1     = args(0).toNumber();
+    EmbReal y1     = args(1).toNumber();
+    EmbReal x2     = args(2).toNumber();
+    EmbReal y2     = args(3).toNumber();
+    EmbReal x3     = args(4).toNumber();
+    EmbReal y3     = args(5).toNumber();
+    EmbReal rot    = args(6).toNumber();
+    bool  fill   = args(7).toBool();
 
     //isNaN check
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "addTriangle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y3))  return context->throwError(QScriptContext::TypeError, "addTriangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addTriangle(): seventh argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddTriangle(x1, y1, x2, y2, x3, y3, rot, fill);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddRectangle(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddRectangle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 6)    return context->throwError("addRectangle() requires six arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument is not a number");
-    if(!context->argument(5).isBool())   return context->throwError(QScriptContext::TypeError, "addRectangle(): sixth argument is not a bool");
+    if (argsCount() != 6)    return context->throwError("addRectangle() requires six arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument is not a number");
+    if (!args(5).isBool())   return context->throwError(QScriptContext::TypeError, "addRectangle(): sixth argument is not a bool");
 
-    EmbReal x    = context->argument(0).toNumber();
-    EmbReal y    = context->argument(1).toNumber();
-    EmbReal w    = context->argument(2).toNumber();
-    EmbReal h    = context->argument(3).toNumber();
-    EmbReal rot  = context->argument(4).toNumber();
-    bool  fill = context->argument(5).toBool();
+    EmbReal x    = args(0).toNumber();
+    EmbReal y    = args(1).toNumber();
+    EmbReal w    = args(2).toNumber();
+    EmbReal h    = args(3).toNumber();
+    EmbReal rot  = args(4).toNumber();
+    bool  fill = args(5).toBool();
 
     //isNaN check
-    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(w))   return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(h))   return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(w))   return context->throwError(QScriptContext::TypeError, "addRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(h))   return context->throwError(QScriptContext::TypeError, "addRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addRectangle(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRectangle(x, y, w, h, rot, fill, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddRoundedRectangle(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddRoundedRectangle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 7)    return context->throwError("addRoundedRectangle() requires seven arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument is not a number");
-    if(!context->argument(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument is not a number");
-    if(!context->argument(6).isBool())   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): seventh argument is not a bool");
+    if (argsCount() != 7)    return context->throwError("addRoundedRectangle() requires seven arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument is not a number");
+    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument is not a number");
+    if (!args(6).isBool())   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): seventh argument is not a bool");
 
-    EmbReal x    = context->argument(0).toNumber();
-    EmbReal y    = context->argument(1).toNumber();
-    EmbReal w    = context->argument(2).toNumber();
-    EmbReal h    = context->argument(3).toNumber();
-    EmbReal rad  = context->argument(4).toNumber();
-    EmbReal rot  = context->argument(5).toNumber();
-    bool  fill = context->argument(6).toBool();
+    EmbReal x    = args(0).toNumber();
+    EmbReal y    = args(1).toNumber();
+    EmbReal w    = args(2).toNumber();
+    EmbReal h    = args(3).toNumber();
+    EmbReal rad  = args(4).toNumber();
+    EmbReal rot  = args(5).toNumber();
+    bool  fill = args(6).toBool();
 
     //isNaN check
-    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(w))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(h))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rad)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(w))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(h))   return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rad)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addRoundedRectangle(): sixth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddRoundedRectangle(x, y, w, h, rad, rot, fill);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddArc(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddArc(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 6)    return context->throwError("addArc() requires six arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument is not a number");
-    if(!context->argument(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument is not a number");
+    if (argsCount() != 6)    return context->throwError("addArc() requires six arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument is not a number");
+    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument is not a number");
 
-    EmbReal startX = context->argument(0).toNumber();
-    EmbReal startY = context->argument(1).toNumber();
-    EmbReal midX   = context->argument(2).toNumber();
-    EmbReal midY   = context->argument(3).toNumber();
-    EmbReal endX   = context->argument(4).toNumber();
-    EmbReal endY   = context->argument(5).toNumber();
+    EmbReal startX = args(0).toNumber();
+    EmbReal startY = args(1).toNumber();
+    EmbReal midX   = args(2).toNumber();
+    EmbReal midY   = args(3).toNumber();
+    EmbReal endX   = args(4).toNumber();
+    EmbReal endY   = args(5).toNumber();
 
     //isNaN check
-    if(qIsNaN(startX)) return context->throwError(QScriptContext::TypeError, "addArc(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(startY)) return context->throwError(QScriptContext::TypeError, "addArc(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(midX))   return context->throwError(QScriptContext::TypeError, "addArc(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(midY))   return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(endX))   return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(endY))   return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(startX)) return context->throwError(QScriptContext::TypeError, "addArc(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(startY)) return context->throwError(QScriptContext::TypeError, "addArc(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(midX))   return context->throwError(QScriptContext::TypeError, "addArc(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(midY))   return context->throwError(QScriptContext::TypeError, "addArc(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(endX))   return context->throwError(QScriptContext::TypeError, "addArc(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(endY))   return context->throwError(QScriptContext::TypeError, "addArc(): sixth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddArc(startX, startY, midX, midY, endX, endY, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddCircle(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddCircle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 4)    return context->throwError("addCircle() requires four arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): third argument is not a number");
-    if(!context->argument(3).isBool())   return context->throwError(QScriptContext::TypeError, "addCircle(): fourth argument is not a bool");
+    if (argsCount() != 4)    return context->throwError("addCircle() requires four arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addCircle(): third argument is not a number");
+    if (!args(3).isBool())   return context->throwError(QScriptContext::TypeError, "addCircle(): fourth argument is not a bool");
 
-    EmbReal centerX = context->argument(0).toNumber();
-    EmbReal centerY = context->argument(1).toNumber();
-    EmbReal radius  = context->argument(2).toNumber();
-    bool  fill    = context->argument(3).toBool();
+    EmbReal centerX = args(0).toNumber();
+    EmbReal centerY = args(1).toNumber();
+    EmbReal radius  = args(2).toNumber();
+    bool  fill    = args(3).toBool();
 
     //isNaN check
-    if(qIsNaN(centerX)) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(centerY)) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(radius))  return context->throwError(QScriptContext::TypeError, "addCircle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerX)) return context->throwError(QScriptContext::TypeError, "addCircle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerY)) return context->throwError(QScriptContext::TypeError, "addCircle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(radius))  return context->throwError(QScriptContext::TypeError, "addCircle(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddCircle(centerX, centerY, radius, fill, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddSlot(QScriptContext* context)
+/**
+ * \brief
+ */
+std::string
+AddSlot(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 6)    return context->throwError("addSlot() requires six arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument is not a number");
-    if(!context->argument(5).isBool())   return context->throwError(QScriptContext::TypeError, "addSlot(): sixth argument is not a bool");
+    if (argsCount() != 6)    return context->throwError("addSlot() requires six arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument is not a number");
+    if (!args(5).isBool())   return context->throwError(QScriptContext::TypeError, "addSlot(): sixth argument is not a bool");
 
-    EmbReal centerX  = context->argument(0).toNumber();
-    EmbReal centerY  = context->argument(1).toNumber();
-    EmbReal diameter = context->argument(2).toNumber();
-    EmbReal length   = context->argument(3).toNumber();
-    EmbReal rot      = context->argument(4).toNumber();
-    bool  fill     = context->argument(5).toBool();
+    EmbReal centerX  = args(0).toNumber();
+    EmbReal centerY  = args(1).toNumber();
+    EmbReal diameter = args(2).toNumber();
+    EmbReal length   = args(3).toNumber();
+    EmbReal rot      = args(4).toNumber();
+    bool  fill     = args(5).toBool();
 
     //isNaN check
-    if(qIsNaN(centerX))  return context->throwError(QScriptContext::TypeError, "addSlot(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(centerY))  return context->throwError(QScriptContext::TypeError, "addSlot(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(diameter)) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(length))   return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot))      return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerX))  return context->throwError(QScriptContext::TypeError, "addSlot(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerY))  return context->throwError(QScriptContext::TypeError, "addSlot(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(diameter)) return context->throwError(QScriptContext::TypeError, "addSlot(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(length))   return context->throwError(QScriptContext::TypeError, "addSlot(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot))      return context->throwError(QScriptContext::TypeError, "addSlot(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddSlot(centerX, centerY, diameter, length, rot, fill, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddEllipse(QScriptContext* context)
+std::string
+AddEllipse(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 6)    return context->throwError("addEllipse() requires six arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument is not a number");
-    if(!context->argument(5).isBool())   return context->throwError(QScriptContext::TypeError, "addEllipse(): sixth argument is not a bool");
+    if (argsCount() != 6)    return context->throwError("addEllipse() requires six arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument is not a number");
+    if (!args(5).isBool())   return context->throwError(QScriptContext::TypeError, "addEllipse(): sixth argument is not a bool");
 
-    EmbReal centerX = context->argument(0).toNumber();
-    EmbReal centerY = context->argument(1).toNumber();
-    EmbReal radX    = context->argument(2).toNumber();
-    EmbReal radY    = context->argument(3).toNumber();
-    EmbReal rot     = context->argument(4).toNumber();
-    bool  fill    = context->argument(5).toBool();
+    EmbReal centerX = args(0).toNumber();
+    EmbReal centerY = args(1).toNumber();
+    EmbReal radX    = args(2).toNumber();
+    EmbReal radY    = args(3).toNumber();
+    EmbReal rot     = args(4).toNumber();
+    bool  fill    = args(5).toBool();
 
     //isNaN check
-    if(qIsNaN(centerX)) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(centerY)) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(radX))    return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(radY))    return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot))     return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerX)) return context->throwError(QScriptContext::TypeError, "addEllipse(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(centerY)) return context->throwError(QScriptContext::TypeError, "addEllipse(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(radX))    return context->throwError(QScriptContext::TypeError, "addEllipse(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(radY))    return context->throwError(QScriptContext::TypeError, "addEllipse(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot))     return context->throwError(QScriptContext::TypeError, "addEllipse(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddEllipse(centerX, centerY, radX, radY, rot, fill, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddPoint(QScriptContext* context)
+std::string
+AddPoint(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("addPoint() requires two arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument is not a number");
+    if (argsCount() != 2)    return context->throwError("addPoint() requires two arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument is not a number");
 
-    EmbReal x = context->argument(0).toNumber();
-    EmbReal y = context->argument(1).toNumber();
+    EmbReal x = args(0).toNumber();
+    EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "addPoint(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "addPoint(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddPoint(x,y);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddRegularPolygon(QScriptContext* context)
+std::string
+AddRegularPolygon(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addRegularPolygon command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddPolygon(QScriptContext* context)
+std::string
+AddPolygon(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)   return context->throwError("addPolygon() requires one argument");
-    if(!context->argument(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolygon(): first argument is not an array");
+    if (argsCount() != 1)   return context->throwError("addPolygon() requires one argument");
+    if (!args(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolygon(): first argument is not an array");
 
-    QVariantList varList = context->argument(0).toVariant().toList();
+    QVariantList varList = args(0).toVariant().toList();
     int varSize = varList.size();
-    if(varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array must contain at least two elements");
-    if(varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array cannot contain an odd number of elements");
+    if (varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array must contain at least two elements");
+    if (varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolygon(): array cannot contain an odd number of elements");
 
     bool lineTo = false;
     bool xCoord = true;
@@ -2073,9 +2083,9 @@ EmbScriptValue javaAddPolygon(QScriptContext* context)
     QPainterPath path;
     foreach(QVariant var, varList)
     {
-        if(var.canConvert(QVariant::Double))
+        if (var.canConvert(QVariant::Double))
         {
-            if(xCoord)
+            if (xCoord)
             {
                 xCoord = false;
                 x = var.toReal();
@@ -2085,7 +2095,7 @@ EmbScriptValue javaAddPolygon(QScriptContext* context)
                 xCoord = true;
                 y = -var.toReal();
 
-                if(lineTo) { path.lineTo(x,y); }
+                if (lineTo) { path.lineTo(x,y); }
                 else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
             }
         }
@@ -2099,18 +2109,19 @@ EmbScriptValue javaAddPolygon(QScriptContext* context)
     path.translate(-startX, -startY);
 
     mainWin()->nativeAddPolygon(startX, startY, path, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddPolyline(QScriptContext* context)
+std::string
+AddPolyline(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)   return context->throwError("addPolyline() requires one argument");
-    if(!context->argument(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolyline(): first argument is not an array");
+    if (argsCount() != 1)   return context->throwError("addPolyline() requires one argument");
+    if (!args(0).isArray()) return context->throwError(QScriptContext::TypeError, "addPolyline(): first argument is not an array");
 
-    QVariantList varList = context->argument(0).toVariant().toList();
+    QVariantList varList = args(0).toVariant().toList();
     int varSize = varList.size();
-    if(varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array must contain at least two elements");
-    if(varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array cannot contain an odd number of elements");
+    if (varSize < 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array must contain at least two elements");
+    if (varSize % 2) return context->throwError(QScriptContext::TypeError, "addPolyline(): array cannot contain an odd number of elements");
 
     bool lineTo = false;
     bool xCoord = true;
@@ -2120,8 +2131,8 @@ EmbScriptValue javaAddPolyline(QScriptContext* context)
     EmbReal startY = 0;
     QPainterPath path;
     foreach (QVariant var, varList) {
-        if(var.canConvert(QVariant::Double)) {
-            if(xCoord) {
+        if (var.canConvert(QVariant::Double)) {
+            if (xCoord) {
                 xCoord = false;
                 x = var.toReal();
             }
@@ -2129,7 +2140,7 @@ EmbScriptValue javaAddPolyline(QScriptContext* context)
                 xCoord = true;
                 y = -var.toReal();
 
-                if(lineTo) { path.lineTo(x,y); }
+                if (lineTo) { path.lineTo(x,y); }
                 else       { path.moveTo(x,y); lineTo = true; startX = x; startY = y; }
             }
         }
@@ -2140,344 +2151,369 @@ EmbScriptValue javaAddPolyline(QScriptContext* context)
     path.translate(-startX, -startY);
 
     mainWin()->nativeAddPolyline(startX, startY, path, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddPath(QScriptContext* context)
+std::string
+AddPath(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addPath command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddHorizontalDimension(QScriptContext* context)
+std::string
+AddHorizontalDimension(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addHorizontalDimension command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddVerticalDimension(QScriptContext* context)
+std::string
+AddVerticalDimension(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addVerticalDimension command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddImage(QScriptContext* context)
+std::string
+AddImage(std::vector<std::string> args)
 {
     //TODO: parameter error checking
     qDebug("TODO: finish addImage command");
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddDimLeader(QScriptContext* context)
+std::string
+AddDimLeader(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 5)    return context->throwError("addDimLeader() requires five arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument is not a number");
+    if (argsCount() != 5)    return context->throwError("addDimLeader() requires five arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument is not a number");
 
-    EmbReal x1  = context->argument(0).toNumber();
-    EmbReal y1  = context->argument(1).toNumber();
-    EmbReal x2  = context->argument(2).toNumber();
-    EmbReal y2  = context->argument(3).toNumber();
-    EmbReal rot = context->argument(4).toNumber();
+    EmbReal x1  = args(0).toNumber();
+    EmbReal y1  = args(1).toNumber();
+    EmbReal x2  = args(2).toNumber();
+    EmbReal y2  = args(3).toNumber();
+    EmbReal rot = args(4).toNumber();
 
     //isNaN check
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "addDimLeader(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "addDimLeader(): fifth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeAddDimLeader(x1, y1, x2, y2, rot, OBJ_RUBBER_OFF);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaSetCursorShape(QScriptContext* context)
+std::string
+SetCursorShape(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 1)    return context->throwError("setCursorShape() requires one argument");
-    if(!context->argument(0).isString()) return context->throwError(QScriptContext::TypeError, "setCursorShape(): first argument is not a string");
+    if (argsCount() != 1)    return context->throwError("setCursorShape() requires one argument");
+    if (!args(0).isString()) return context->throwError(QScriptContext::TypeError, "setCursorShape(): first argument is not a string");
 
-    EmbString shape = context->argument(0).toString();
+    EmbString shape = args(0).toString();
     mainWin()->nativeSetCursorShape(shape);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaCalculateAngle(QScriptContext* context)
+std::string
+CalculateAngle(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 4)    return context->throwError("calculateAngle() requires four arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument is not a number");
+    if (argsCount() != 4)    return context->throwError("calculateAngle() requires four arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument is not a number");
 
-    EmbReal x1 = context->argument(0).toNumber();
-    EmbReal y1 = context->argument(1).toNumber();
-    EmbReal x2 = context->argument(2).toNumber();
-    EmbReal y2 = context->argument(3).toNumber();
+    EmbReal x1 = args(0).toNumber();
+    EmbReal y1 = args(1).toNumber();
+    EmbReal x2 = args(2).toNumber();
+    EmbReal y2 = args(3).toNumber();
 
     //isNaN check
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "calculateAngle(): fourth argument failed isNaN check. There is an error in your code.");
 
-    return EmbScriptValue(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
+    return std::string(mainWin()->nativeCalculateAngle(x1, y1, x2, y2));
 }
 
-EmbScriptValue javaCalculateDistance(QScriptContext* context)
+std::string
+CalculateDistance(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 4)    return context->throwError("calculateDistance() requires four arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument is not a number");
+    if (argsCount() != 4)    return context->throwError("calculateDistance() requires four arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument is not a number");
 
-    EmbReal x1 = context->argument(0).toNumber();
-    EmbReal y1 = context->argument(1).toNumber();
-    EmbReal x2 = context->argument(2).toNumber();
-    EmbReal y2 = context->argument(3).toNumber();
+    EmbReal x1 = args(0).toNumber();
+    EmbReal y1 = args(1).toNumber();
+    EmbReal x2 = args(2).toNumber();
+    EmbReal y2 = args(3).toNumber();
 
     //isNaN check
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "calculateDistance(): fourth argument failed isNaN check. There is an error in your code.");
 
-    return EmbScriptValue(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
+    return std::string(mainWin()->nativeCalculateDistance(x1, y1, x2, y2));
 }
 
-EmbScriptValue javaPerpendicularDistance(QScriptContext* context)
+std::string
+PerpendicularDistance(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 6)    return context->throwError("perpendicularDistance() requires six arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument is not a number");
-    if(!context->argument(4).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument is not a number");
-    if(!context->argument(5).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument is not a number");
+    if (argsCount() != 6)    return context->throwError("perpendicularDistance() requires six arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument is not a number");
+    if (!args(4).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument is not a number");
+    if (!args(5).isNumber()) return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument is not a number");
 
-    EmbReal px = context->argument(0).toNumber();
-    EmbReal py = context->argument(1).toNumber();
-    EmbReal x1 = context->argument(2).toNumber();
-    EmbReal y1 = context->argument(3).toNumber();
-    EmbReal x2 = context->argument(4).toNumber();
-    EmbReal y2 = context->argument(5).toNumber();
+    EmbReal px = args(0).toNumber();
+    EmbReal py = args(1).toNumber();
+    EmbReal x1 = args(2).toNumber();
+    EmbReal y1 = args(3).toNumber();
+    EmbReal x2 = args(4).toNumber();
+    EmbReal y2 = args(5).toNumber();
 
     //isNaN check
-    if(qIsNaN(px))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(py))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(px))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(py))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): fifth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "perpendicularDistance(): sixth argument failed isNaN check. There is an error in your code.");
 
-    return EmbScriptValue(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
+    return std::string(mainWin()->nativePerpendicularDistance(px, py, x1, y1, x2, y2));
 }
 
-EmbScriptValue javaNumSelected(QScriptContext* context)
+std::string
+NumSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("numSelected() requires zero arguments");
-    return EmbScriptValue(mainWin()->nativeNumSelected());
+    if (argsCount() != 0) return context->throwError("numSelected() requires zero arguments");
+    return std::string(mainWin()->nativeNumSelected());
 }
 
-EmbScriptValue javaSelectAll(QScriptContext* context)
+std::string
+SelectAll(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("selectAll() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("selectAll() requires zero arguments");
 
     mainWin()->nativeSelectAll();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaAddToSelection(QScriptContext* context)
+std::string
+AddToSelection(std::vector<std::string> args)
 {
     //TODO: finish
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaClearSelection(QScriptContext* context)
+std::string
+ClearSelection(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("clearSelection() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("clearSelection() requires zero arguments");
 
     mainWin()->nativeClearSelection();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaDeleteSelected(QScriptContext* context)
+std::string
+DeleteSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 0) return context->throwError("deleteSelected() requires zero arguments");
+    if (argsCount() != 0) return context->throwError("deleteSelected() requires zero arguments");
 
     mainWin()->nativeDeleteSelected();
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaCutSelected(QScriptContext* context)
+std::string
+CutSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("cutSelected() requires two arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument is not a number");
+    if (argsCount() != 2)    return context->throwError("cutSelected() requires two arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument is not a number");
 
-    EmbReal x = context->argument(0).toNumber();
-    EmbReal y = context->argument(1).toNumber();
+    EmbReal x = args(0).toNumber();
+    EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "cutSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "cutSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeCutSelected(x, y);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaCopySelected(QScriptContext* context)
+std::string
+CopySelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("copySelected() requires two arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument is not a number");
+    if (argsCount() != 2)    return context->throwError("copySelected() requires two arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument is not a number");
 
-    EmbReal x = context->argument(0).toNumber();
-    EmbReal y = context->argument(1).toNumber();
+    EmbReal x = args(0).toNumber();
+    EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "copySelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "copySelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeCopySelected(x, y);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaPasteSelected(QScriptContext* context)
+std::string
+PasteSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("pasteSelected() requires two arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument is not a number");
+    if (argsCount() != 2)    return context->throwError("pasteSelected() requires two arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument is not a number");
 
-    EmbReal x = context->argument(0).toNumber();
-    EmbReal y = context->argument(1).toNumber();
+    EmbReal x = args(0).toNumber();
+    EmbReal y = args(1).toNumber();
 
     //isNaN check
-    if(qIsNaN(x)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y)) return context->throwError(QScriptContext::TypeError, "pasteSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativePasteSelected(x, y);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaMoveSelected(QScriptContext* context)
+std::string
+MoveSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 2)    return context->throwError("moveSelected() requires two arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument is not a number");
+    if (argsCount() != 2)    return context->throwError("moveSelected() requires two arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument is not a number");
 
-    EmbReal dx = context->argument(0).toNumber();
-    EmbReal dy = context->argument(1).toNumber();
+    EmbReal dx = args(0).toNumber();
+    EmbReal dy = args(1).toNumber();
 
     //isNaN check
-    if(qIsNaN(dx)) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(dy)) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(dx)) return context->throwError(QScriptContext::TypeError, "moveSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(dy)) return context->throwError(QScriptContext::TypeError, "moveSelected(): second argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeMoveSelected(dx, dy);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaScaleSelected(QScriptContext* context)
+std::string
+ScaleSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("scaleSelected() requires three arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument is not a number");
+    if (argsCount() != 3)    return context->throwError("scaleSelected() requires three arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument is not a number");
 
-    EmbReal x      = context->argument(0).toNumber();
-    EmbReal y      = context->argument(1).toNumber();
-    EmbReal factor = context->argument(2).toNumber();
+    EmbReal x      = args(0).toNumber();
+    EmbReal y      = args(1).toNumber();
+    EmbReal factor = args(2).toNumber();
 
     //isNaN check
-    if(qIsNaN(x))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(factor)) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))      return context->throwError(QScriptContext::TypeError, "scaleSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(factor)) return context->throwError(QScriptContext::TypeError, "scaleSelected(): third argument failed isNaN check. There is an error in your code.");
 
-    if(factor <= 0.0) return context->throwError(QScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
+    if (factor <= 0.0) return context->throwError(QScriptContext::UnknownError, "scaleSelected(): scale factor must be greater than zero");
 
     mainWin()->nativeScaleSelected(x, y, factor);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaRotateSelected(QScriptContext* context)
+std::string
+RotateSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 3)    return context->throwError("rotateSelected() requires three arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument is not a number");
+    if (argsCount() != 3)    return context->throwError("rotateSelected() requires three arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument is not a number");
 
-    EmbReal x   = context->argument(0).toNumber();
-    EmbReal y   = context->argument(1).toNumber();
-    EmbReal rot = context->argument(2).toNumber();
+    EmbReal x   = args(0).toNumber();
+    EmbReal y   = args(1).toNumber();
+    EmbReal rot = args(2).toNumber();
 
     //isNaN check
-    if(qIsNaN(x))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(rot)) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y))   return context->throwError(QScriptContext::TypeError, "rotateSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(rot)) return context->throwError(QScriptContext::TypeError, "rotateSelected(): third argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeRotateSelected(x, y, rot);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaMirrorSelected(QScriptContext* context)
+std::string
+MirrorSelected(std::vector<std::string> args)
 {
-    if(context->argumentCount() != 4)    return context->throwError("mirrorSelected() requires four arguments");
-    if(!context->argument(0).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument is not a number");
-    if(!context->argument(1).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument is not a number");
-    if(!context->argument(2).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument is not a number");
-    if(!context->argument(3).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument is not a number");
+    if (argsCount() != 4)    return context->throwError("mirrorSelected() requires four arguments");
+    if (!args(0).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument is not a number");
+    if (!args(1).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument is not a number");
+    if (!args(2).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument is not a number");
+    if (!args(3).isNumber()) return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument is not a number");
 
-    EmbReal x1 = context->argument(0).toNumber();
-    EmbReal y1 = context->argument(1).toNumber();
-    EmbReal x2 = context->argument(2).toNumber();
-    EmbReal y2 = context->argument(3).toNumber();
+    EmbReal x1 = args(0).toNumber();
+    EmbReal y1 = args(1).toNumber();
+    EmbReal x2 = args(2).toNumber();
+    EmbReal y2 = args(3).toNumber();
 
     //isNaN check
-    if(qIsNaN(x1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(x2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument failed isNaN check. There is an error in your code.");
-    if(qIsNaN(y2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): first argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y1))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): second argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(x2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): third argument failed isNaN check. There is an error in your code.");
+    if (std::isnan(y2))  return context->throwError(QScriptContext::TypeError, "mirrorSelected(): fourth argument failed isNaN check. There is an error in your code.");
 
     mainWin()->nativeMirrorSelected(x1, y1, x2, y2);
-    return EmbScriptValue();
+    return "";
 }
 
-EmbScriptValue javaQSnapX(QScriptContext* context)
+std::string
+QSnapX(std::vector<std::string> args)
 {
-    if (context->argumentCount() != 0) {
+    if (argsCount() != 0) {
         return context->throwError("qsnapX() requires zero arguments");
     }
-    return EmbScriptValue(mainWin()->nativeQSnapX());
+    return std::string(mainWin()->nativeQSnapX());
 }
 
-EmbScriptValue javaQSnapY(QScriptContext* context)
+std::string
+QSnapY(std::vector<std::string> args)
 {
-    if (context->argumentCount() != 0) {
+    if (argsCount() != 0) {
         return context->throwError("qsnapY() requires zero arguments");
     }
-    return EmbScriptValue(mainWin()->nativeQSnapY());
+    return std::string(mainWin()->nativeQSnapY());
 }
 
-EmbScriptValue javaMouseX(QScriptContext* context)
+std::string
+MouseX(std::vector<std::string> args)
 {
-    if (context->argumentCount() != 0) {
+    if (argsCount() != 0) {
         return context->throwError("mouseX() requires zero arguments");
     }
-    return EmbScriptValue(mainWin()->nativeMouseX());
+    return std::string(mainWin()->nativeMouseX());
 }
 
-EmbScriptValue javaMouseY(QScriptContext* context)
+std::string
+MouseY(std::vector<std::string> args)
 {
-    if (context->argumentCount() != 0) {
+    if (argsCount() != 0) {
         return context->throwError("mouseY() requires zero arguments");
     }
-    return EmbScriptValue(mainWin()->nativeMouseY());
+    return std::string(mainWin()->nativeMouseY());
 }
 
 #endif
@@ -2507,15 +2543,15 @@ MainWindow::recentMenuAboutToShow()
     for(int i = 0; i < settings_opensave_recent_list_of_files.size(); ++i)
     {
         //If less than the max amount of entries add to menu
-        if(i < settings_opensave_recent_max_files)
+        if (i < settings_opensave_recent_max_files)
         {
             recentFileInfo = QFileInfo(settings_opensave_recent_list_of_files.at(i));
-            if(recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName()))
+            if (recentFileInfo.exists() && validFileFormat(recentFileInfo.fileName()))
             {
                 recentValue.setNum(i+1);
                 QAction* rAction;
                 if     (recentValue.toInt() >= 1 && recentValue.toInt() <= 9) rAction = new QAction("&" + recentValue + " " + recentFileInfo.fileName(), this);
-                else if(recentValue.toInt() == 10)                            rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
+                else if (recentValue.toInt() == 10)                            rAction = new QAction("1&0 "                  + recentFileInfo.fileName(), this);
                 else                                                          rAction = new QAction(      recentValue + " " + recentFileInfo.fileName(), this);
                 rAction->setCheckable(false);
                 rAction->setData(settings_opensave_recent_list_of_files.at(i));
@@ -2570,10 +2606,10 @@ MainWindow::windowMenuActivated(bool checked)
 {
     qDebug("MainWindow::windowMenuActivated()");
     QAction* aSender = qobject_cast<QAction*>(sender());
-    if(!aSender)
+    if (!aSender)
         return;
     QWidget* w = mdiArea->subWindowList().at(aSender->data().toInt());
-    if(w && checked)
+    if (w && checked)
         w->setFocus();
 }
 
@@ -2639,18 +2675,18 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     openFilesPath = settings_opensave_recent_directory;
 
     //Check to see if this from the recent files list
-    if(recent)
+    if (recent)
     {
         files.append(recentFile);
         openFilesSelected(files);
     }
-    else if(!preview)
+    else if (!preview)
     {
         //TODO: set getOpenFileNames' selectedFilter parameter from settings_opensave_open_format
         files = QFileDialog::getOpenFileNames(this, tr("Open"), openFilesPath, formatFilterOpen);
         openFilesSelected(files);
     }
-    else if(preview)
+    else if (preview)
     {
         PreviewDialog* openDialog = new PreviewDialog(this, tr("Open w/Preview"), openFilesPath, formatFilterOpen);
         //TODO: set openDialog->selectNameFilter(const QString& filter) from settings_opensave_open_format
@@ -2688,15 +2724,15 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
             connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(onWindowActivated(QMdiSubWindow*)));
 
             //Make sure the toolbars/etc... are shown before doing their zoomExtents
-            if(doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
+            if (doOnce) { updateMenuToolbarStatusbar(); doOnce = false; }
 
-            if(mdiWin->loadFile(filesToOpen.at(i)))
+            if (mdiWin->loadFile(filesToOpen.at(i)))
             {
                 statusbar->showMessage(tr("File(s) loaded"), 2000);
                 mdiWin->show();
                 mdiWin->showMaximized();
                 //Prevent duplicate entries in the recent files list
-                if(!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
+                if (!settings_opensave_recent_list_of_files.contains(filesToOpen.at(i), Qt::CaseInsensitive))
                 {
                     settings_opensave_recent_list_of_files.prepend(filesToOpen.at(i));
                 }
@@ -2709,7 +2745,7 @@ MainWindow::openFilesSelected(const QStringList& filesToOpen)
                 settings_opensave_recent_directory = QFileInfo(filesToOpen.at(i)).absolutePath();
 
                 View* v = mdiWin->getView();
-                if(v)
+                if (v)
                 {
                     v->recalculateLimits();
                     v->zoomExtents();
@@ -2758,7 +2794,7 @@ MainWindow::saveasfile()
     qDebug("MainWindow::saveasfile()");
     // need to find the activeSubWindow before it loses focus to the FileDialog
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(!mdiWin)
+    if (!mdiWin)
         return;
 
     QString file;
@@ -2781,9 +2817,9 @@ QMdiSubWindow* MainWindow::findMdiWindow(const QString& fileName)
     foreach(QMdiSubWindow* subWindow, mdiArea->subWindowList())
     {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(subWindow);
-        if(mdiWin)
+        if (mdiWin)
         {
-            if(mdiWin->getCurrentFile() == canonicalFilePath)
+            if (mdiWin->getCurrentFile() == canonicalFilePath)
             {
                 return subWindow;
             }
@@ -2826,7 +2862,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
     numOfDocs--;
 
     bool keepMaximized;
-    if(theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
+    if (theMdiWin) { keepMaximized = theMdiWin->isMaximized(); }
 
     mdiArea->removeSubWindow(theMdiWin);
     theMdiWin->deleteLater();
@@ -2836,7 +2872,7 @@ MainWindow::onCloseMdiWin(MdiWindow* theMdiWin)
 
     if (keepMaximized) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-        if(mdiWin) { mdiWin->showMaximized(); }
+        if (mdiWin) { mdiWin->showMaximized(); }
     }
 }
 
@@ -3037,16 +3073,16 @@ MainWindow::loadFormats()
         QString upperExt = QString(extension).toUpper();
         supportedStr = "*" + upperExt + " ";
         individualStr = upperExt.replace(".", "") + " - " + description + " (*" + extension + ");;";
-        if(readerState == stable || readerState == unstable)
+        if (readerState == stable || readerState == unstable)
         {
             //Exclude color file formats from open dialogs
-            if(upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
+            if (upperExt != "COL" && upperExt != "EDR" && upperExt != "INF" && upperExt != "RGB")
             {
                 supportedReaders.append(supportedStr);
                 individualReaders.append(individualStr);
             }
         }
-        if(writerState == stable || writerState == unstable)
+        if (writerState == stable || writerState == unstable)
         {
             supportedWriters.append(supportedStr);
             individualWriters.append(individualStr);
@@ -3062,9 +3098,9 @@ MainWindow::loadFormats()
     //TODO: Fixup custom filter
     /*
     QString custom = getSettingsCustomFilter();
-    if(custom.contains("supported", Qt::CaseInsensitive))
+    if (custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
-    else if(!custom.contains("*", Qt::CaseInsensitive))
+    else if (!custom.contains("*", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else
         custom = "Custom Filter(" + custom + ");;";
@@ -3116,7 +3152,7 @@ MainWindow::floatingChangedToolBar(bool isFloating)
             for(int i = 0; i < actList.size(); ++i)
             {
                 QAction* ACTION = actList.value(i);
-                if(ACTION->objectName() == "toolbarclose")
+                if (ACTION->objectName() == "toolbarclose")
                 {
                     tb->removeAction(ACTION);
                     disconnect(tb, SIGNAL(actionTriggered(QAction*)), this, SLOT(closeToolBar(QAction*)));

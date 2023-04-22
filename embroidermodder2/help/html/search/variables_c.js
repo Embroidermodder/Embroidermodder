@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['labeltipoftheday_0',['labelTipOfTheDay',['../class_main_window.html#abdfd85b441c74976311b9acd3b6744d8',1,'MainWindow']]],
-  ['language_1',['language',['../struct_settings__.html#ac720832b7e86f959a9e692be69f817d3',1,'Settings_']]],
-  ['languages_2',['languages',['../imgui__main_8c.html#a39311d663f15b821995a09b0e642ba0a',1,'imgui_main.c']]],
+  ['label_0',['label',['../struct_emb_function__.html#a8300149a9c901a228bad830e50ad7556',1,'EmbFunction_']]],
+  ['labeltipoftheday_1',['labelTipOfTheDay',['../class_main_window.html#abdfd85b441c74976311b9acd3b6744d8',1,'MainWindow']]],
+  ['language_2',['language',['../struct_settings__.html#ac720832b7e86f959a9e692be69f817d3',1,'Settings_']]],
   ['lastcmd_3',['lastCmd',['../class_cmd_prompt_input.html#aa2f6a10f9492ebff3e65caa000779258',1,'CmdPromptInput']]],
   ['layer_4',['layer',['../struct_emb_pattern__.html#a07d661b0fcd8e10302fd63ce8eb397f4',1,'EmbPattern_']]],
   ['layermodel_5',['layerModel',['../class_layer_manager.html#ad3c739e7e5d6e58fdfddea1c30c89588',1,'LayerManager']]],
@@ -16,7 +16,7 @@ var searchData=
   ['leftpen_13',['leftPen',['../class_select_box.html#a9635f4e925e6b503d0f52ecf995b1b69',1,'SelectBox']]],
   ['leftpencolor_14',['leftPenColor',['../class_select_box.html#a26ef04da79e7c6a2ba9f24083c49f6db',1,'SelectBox']]],
   ['leftsiblingid_15',['leftSiblingId',['../struct__bcf__directory__entry.html#a1a189ccb0591596986b8ae10dd22ed00',1,'_bcf_directory_entry']]],
-  ['length_16',['length',['../struct_undo_history__.html#a9f59b34b1f25fe00023291b678246bcc',1,'UndoHistory_::length()'],['../struct_index__.html#a9f59b34b1f25fe00023291b678246bcc',1,'Index_::length()'],['../struct_emb_satin_outline__.html#a9f59b34b1f25fe00023291b678246bcc',1,'EmbSatinOutline_::length()'],['../struct_emb_array__.html#a9f59b34b1f25fe00023291b678246bcc',1,'EmbArray_::length()'],['../struct_thred_header__.html#ac8d42bcd4a44e078047ccd7291059238',1,'ThredHeader_::length()'],['../struct_dictionary__.html#a9f59b34b1f25fe00023291b678246bcc',1,'Dictionary_::length()']]],
+  ['length_16',['length',['../struct_dictionary__.html#a9f59b34b1f25fe00023291b678246bcc',1,'Dictionary_::length()'],['../struct_undo_history__.html#a9f59b34b1f25fe00023291b678246bcc',1,'UndoHistory_::length()'],['../struct_index__.html#a9f59b34b1f25fe00023291b678246bcc',1,'Index_::length()'],['../struct_emb_satin_outline__.html#a9f59b34b1f25fe00023291b678246bcc',1,'EmbSatinOutline_::length()'],['../struct_emb_array__.html#a9f59b34b1f25fe00023291b678246bcc',1,'EmbArray_::length()'],['../struct_thred_header__.html#ac8d42bcd4a44e078047ccd7291059238',1,'ThredHeader_::length()']]],
   ['lengths_17',['lengths',['../struct_huffman.html#a3612239e49acda829e2ea44fb152b20f',1,'Huffman']]],
   ['line_18',['line',['../struct_emb_geometry__.html#a82bfa90ca01e79040dffe8ed965c2f9a',1,'EmbGeometry_']]],
   ['lineeditarcarea_19',['lineEditArcArea',['../class_property_editor.html#a6ae0f53e0f9217687aaeb440f162b3c2',1,'PropertyEditor']]],
@@ -116,7 +116,7 @@ var searchData=
   ['listmdiwin_113',['listMdiWin',['../class_main_window.html#aa90264b8db45234ed685e8f467b68fd4',1,'MainWindow']]],
   ['listtipoftheday_114',['listTipOfTheDay',['../class_main_window.html#afb9a4aec72cd4e2bad348185bb82837d',1,'MainWindow']]],
   ['lwt_5fdefault_5flwt_115',['lwt_default_lwt',['../struct_settings__.html#a8560f4ba737701c2494dfceb99eae521',1,'Settings_']]],
-  ['lwt_5fmode_116',['lwt_mode',['../struct_view__.html#a9ccb0c72197900cb5bd488f0a5d991f3',1,'View_']]],
+  ['lwt_5fmode_116',['lwt_mode',['../struct_emb_view__.html#a9ccb0c72197900cb5bd488f0a5d991f3',1,'EmbView_']]],
   ['lwt_5freal_5frender_117',['lwt_real_render',['../struct_settings__.html#ac2e85ad26fc7a8221ee715bfbac8feb6',1,'Settings_']]],
   ['lwt_5fshow_5flwt_118',['lwt_show_lwt',['../struct_settings__.html#ac4de3d5876d82468fc0f24eb3d36e203',1,'Settings_']]],
   ['lwtpen_119',['lwtPen',['../class_base_object.html#ade83f75b3122d793d6f692ed411921da',1,'BaseObject']]]

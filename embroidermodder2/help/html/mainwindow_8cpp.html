@@ -24,6 +24,7 @@ MathJax.Hub.Config({
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
@@ -98,11 +99,16 @@ $(document).ready(function(){initNavTree('mainwindow_8cpp.html',''); initResizab
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle"><div class="title">mainwindow.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="mainwindow_8h_source.html">mainwindow.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="mainwindow-actions_8h_source.html">mainwindow-actions.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="statusbar_8h_source.html">statusbar.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="statusbar-button_8h_source.html">statusbar-button.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="view_8h_source.html">view.h</a>&quot;</code><br />
@@ -110,7 +116,8 @@ $(document).ready(function(){initNavTree('mainwindow_8cpp.html',''); initResizab
 <code>#include &quot;<a class="el" href="property-editor_8h_source.html">property-editor.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="undo-editor_8h_source.html">undo-editor.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="preview-dialog_8h_source.html">preview-dialog.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="embroidery_8h_source.html">embroidery.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="object-data_8h_source.html">object-data.h</a>&quot;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;QDebug&gt;</code><br />
 <code>#include &lt;QFrame&gt;</code><br />
@@ -132,7 +139,158 @@ $(document).ready(function(){initNavTree('mainwindow_8cpp.html',''); initResizab
 <code>#include &lt;QCloseEvent&gt;</code><br />
 <code>#include &lt;QMetaObject&gt;</code><br />
 <code>#include &lt;QLocale&gt;</code><br />
-</div></div><!-- contents -->
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1string__.html">string_</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_emb_function__.html">EmbFunction_</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_emb_script_context__.html">EmbScriptContext_</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_emb_action__.html">EmbAction_</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a7e8f7eb495b0062296396d5de56f4864"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structstd_1_1string__.html">std::string_</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a7e8f7eb495b0062296396d5de56f4864">string</a></td></tr>
+<tr class="separator:a7e8f7eb495b0062296396d5de56f4864"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ed34ccf94d8a6d738b017eab885fafa"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_emb_function__.html">EmbFunction_</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a8ed34ccf94d8a6d738b017eab885fafa">EmbFunction</a></td></tr>
+<tr class="separator:a8ed34ccf94d8a6d738b017eab885fafa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affea79f8670d9406feb94c0e9b9b3bf2"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_emb_script_context__.html">EmbScriptContext_</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#affea79f8670d9406feb94c0e9b9b3bf2">EmbScriptContext</a></td></tr>
+<tr class="separator:affea79f8670d9406feb94c0e9b9b3bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a0bb3811d682893dbd9f6cc8242106a"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_emb_action__.html">EmbAction_</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a3a0bb3811d682893dbd9f6cc8242106a">EmbAction</a></td></tr>
+<tr class="separator:a3a0bb3811d682893dbd9f6cc8242106a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a0f36a84e7a582fc0c4da7b9f6bc47119"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_main_window.html">MainWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a0f36a84e7a582fc0c4da7b9f6bc47119">mainWin</a> ()</td></tr>
+<tr class="memdesc:a0f36a84e7a582fc0c4da7b9f6bc47119"><td class="mdescLeft">&#160;</td><td class="mdescRight">mainWin  <br /></td></tr>
+<tr class="separator:a0f36a84e7a582fc0c4da7b9f6bc47119"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a13c21041ff7e5b6de6cedd66bd347f52"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_main_window.html">MainWindow</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#a13c21041ff7e5b6de6cedd66bd347f52">_mainWin</a> = 0</td></tr>
+<tr class="separator:a13c21041ff7e5b6de6cedd66bd347f52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac628bab1d7838e1528d5f921a8c33656"><td class="memItemLeft" align="right" valign="top"><a class="el" href="mainwindow_8cpp.html#affea79f8670d9406feb94c0e9b9b3bf2">EmbScriptContext</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mainwindow_8cpp.html#ac628bab1d7838e1528d5f921a8c33656">engine</a></td></tr>
+<tr class="separator:ac628bab1d7838e1528d5f921a8c33656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a3a0bb3811d682893dbd9f6cc8242106a" name="a3a0bb3811d682893dbd9f6cc8242106a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a0bb3811d682893dbd9f6cc8242106a">&#9670;&#160;</a></span>EmbAction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="struct_emb_action__.html">EmbAction_</a> <a class="el" href="mainwindow_8cpp.html#a3a0bb3811d682893dbd9f6cc8242106a">EmbAction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p></p>
+
+</div>
+</div>
+<a id="a8ed34ccf94d8a6d738b017eab885fafa" name="a8ed34ccf94d8a6d738b017eab885fafa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ed34ccf94d8a6d738b017eab885fafa">&#9670;&#160;</a></span>EmbFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="struct_emb_function__.html">EmbFunction_</a> <a class="el" href="mainwindow_8cpp.html#a8ed34ccf94d8a6d738b017eab885fafa">EmbFunction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p></p>
+
+</div>
+</div>
+<a id="affea79f8670d9406feb94c0e9b9b3bf2" name="affea79f8670d9406feb94c0e9b9b3bf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affea79f8670d9406feb94c0e9b9b3bf2">&#9670;&#160;</a></span>EmbScriptContext</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="struct_emb_script_context__.html">EmbScriptContext_</a> <a class="el" href="mainwindow_8cpp.html#affea79f8670d9406feb94c0e9b9b3bf2">EmbScriptContext</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p></p>
+
+</div>
+</div>
+<a id="a7e8f7eb495b0062296396d5de56f4864" name="a7e8f7eb495b0062296396d5de56f4864"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e8f7eb495b0062296396d5de56f4864">&#9670;&#160;</a></span>string</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structstd_1_1string__.html">std::string_</a> <a class="el" href="mainwindow_8cpp.html#a7e8f7eb495b0062296396d5de56f4864">string</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p></p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a0f36a84e7a582fc0c4da7b9f6bc47119" name="a0f36a84e7a582fc0c4da7b9f6bc47119"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f36a84e7a582fc0c4da7b9f6bc47119">&#9670;&#160;</a></span>mainWin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_main_window.html">MainWindow</a> * mainWin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>mainWin </p>
+<dl class="section return"><dt>Returns</dt><dd></dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a13c21041ff7e5b6de6cedd66bd347f52" name="a13c21041ff7e5b6de6cedd66bd347f52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13c21041ff7e5b6de6cedd66bd347f52">&#9670;&#160;</a></span>_mainWin</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_main_window.html">MainWindow</a>* _mainWin = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac628bab1d7838e1528d5f921a8c33656" name="ac628bab1d7838e1528d5f921a8c33656"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac628bab1d7838e1528d5f921a8c33656">&#9670;&#160;</a></span>engine</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="mainwindow_8cpp.html#affea79f8670d9406feb94c0e9b9b3bf2">EmbScriptContext</a> engine</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

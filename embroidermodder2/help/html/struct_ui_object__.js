@@ -24,6 +24,5 @@ var struct_ui_object__ =
     [ "textHeight", "struct_ui_object__.html#af2083d6aee31e64205fd5c037e90390b", null ],
     [ "textJustify", "struct_ui_object__.html#a33af7956829993c9a6e515c50a39e6ff", null ],
     [ "textRotation", "struct_ui_object__.html#ac52fe42f6c748f8527c22231a12b2c26", null ],
-    [ "texture_id", "struct_ui_object__.html#a0546d1993695b1dddda38ad4864782e5", null ],
     [ "type", "struct_ui_object__.html#a551374301513fdb71d8977304106af2c", null ]
 ];
