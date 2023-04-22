@@ -1,0 +1,45 @@
+
+[about_command]
+MenuName="None"
+MenuPosition=0
+ToolBarName="None"
+ToolBarPosition=0
+ToolTip="&About"
+StatusTip="Displays information about this product:  ABOUT"
+Alias="ABOUT"
+
+[circle_command]
+MenuName=Draw
+MenuPosition=8
+ToolBarName=Draw
+ToolBarPosition=8
+ToolTip="Circle"
+StatusTip="Creates a circle:  CIRCLE"
+Alias=["C", "CIRCLE"]
+
+[day_command]
+MenuName=None
+MenuPosition=0
+ToolBarName=None
+ToolBarPosition=0
+ToolTip="&Day"
+StatusTip="Updates the current view using day vision settings:  DAY"
+Alias=["DAY"]
+
+[new_file_command]
+MenuName="None"
+Position=0
+ToolBarName="None"
+ToolBarPosition=0
+ToolTip="&New"
+StatusTip="Create a new file:  NEW"
+Alias=["NEW"]
+
+[zoom_out_command]
+MenuName="None"
+MenuPosition=0
+ToolBarName="None"
+ToolBarPosition=0
+ToolTip="Zoom &Out"
+StatusTip="Zooms to decrease the apparent size of objects:  ZOOMOUT"
+Alias=["ZOOMOUT"]

@@ -57,10 +57,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     QString appDir = qApp->applicationDirPath();
     //Verify that files/directories needed are actually present.
-    QFileInfo check(appDir + "/commands");
-    if (!check.exists())
-        QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
-    check = QFileInfo(appDir + "/help");
+    QFileInfo check = QFileInfo(appDir + "/help");
     if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
     check = QFileInfo(appDir + "/icons");
@@ -217,22 +214,6 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     //script
     _mainWin = this;
-
-    /*
-    engine = new QScriptEngine(this);
-    engine->installTranslatorFunctions();
-    debugger = new QScriptEngineDebugger(this);
-    debugger->attachTo(engine);
-    InitNatives(engine);
-
-    //Load all commands in a loop
-    QDir commandDir(appDir + "/commands");
-    QStringList cmdList = commandDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    foreach(QString cmdName, cmdList)
-    {
-        LoadCommand(cmdName);
-    }
-    */
 
     statusbar = new StatusBar(this, this);
     this->setStatusBar(statusbar);
