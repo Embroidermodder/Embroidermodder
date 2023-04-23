@@ -41,7 +41,7 @@ void BaseObject::setObjectLineType(Qt::PenStyle lineType)
     lwtPen.setStyle(lineType);
 }
 
-void BaseObject::setObjectLineWeight(qreal lineWeight)
+void BaseObject::setObjectLineWeight(EmbReal lineWeight)
 {
     objPen.setWidthF(0); //NOTE: The objPen will always be cosmetic
 

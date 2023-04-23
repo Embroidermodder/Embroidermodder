@@ -1,10 +1,11 @@
 #ifndef UNDO_COMMANDS_H
 #define UNDO_COMMANDS_H
 
+#include "embroidermodder.h"
+
 #include <QUndoCommand>
 #include <QPointF>
 #include <QTransform>
-#include <QtCore/qmath.h>
 
 class BaseObject;
 class View;
@@ -38,7 +39,7 @@ private:
 class UndoableMoveCommand : public QUndoCommand
 {
 public:
-    UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -46,35 +47,32 @@ public:
 private:
     BaseObject* object;
     View*       gview;
-    qreal       dx;
-    qreal       dy;
+    EmbReal       dx;
+    EmbReal       dy;
 };
 
 class UndoableRotateCommand : public QUndoCommand
 {
 public:
-    UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
 
 private:
-    void rotate(qreal x, qreal y, qreal rot);
-
-    inline qreal pi() { return (qAtan(1.0)*4.0); };
-    inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
+    void rotate(EmbReal x, EmbReal y, EmbReal rot);
 
     BaseObject* object;
     View*       gview;
-    qreal       pivotX;
-    qreal       pivotY;
-    qreal       angle;
+    EmbReal       pivotX;
+    EmbReal       pivotY;
+    EmbReal       angle;
 };
 
 class UndoableScaleCommand : public QUndoCommand
 {
 public:
-    UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();
@@ -82,9 +80,9 @@ public:
 private:
     BaseObject* object;
     View*       gview;
-    qreal       dx;
-    qreal       dy;
-    qreal       factor;
+    EmbReal       dx;
+    EmbReal       dy;
+    EmbReal       factor;
 };
 
 class UndoableNavCommand : public QUndoCommand
@@ -126,7 +124,7 @@ private:
 class UndoableMirrorCommand : public QUndoCommand
 {
 public:
-    UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
+    UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent = 0);
 
     void undo();
     void redo();

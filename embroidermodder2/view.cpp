@@ -2,10 +2,10 @@
  * \file view.cpp
  */
 
+#include "embroidermodder.h"
 #include "view.h"
 #include "property-editor.h"
 #include "statusbar.h"
-#include "object-data.h"
 #include "object-base.h"
 #include "undo-editor.h"
 #include "undo-commands.h"
@@ -158,7 +158,7 @@ void View::deleteObject(BaseObject* obj)
     hashDeletedObjects.insert(obj->objectID(), obj);
 }
 
-void View::previewOn(int clone, int mode, qreal x, qreal y, qreal data)
+void View::previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data)
 {
     qDebug("View previewOn()");
     previewOff(); //Free the old objects before creating new ones
@@ -358,7 +358,7 @@ void View::createOrigin() //TODO: Make Origin Customizable
     if(mainWin->getSettingsGridShowOrigin())
     {
         //originPath.addEllipse(QPointF(0,0), 0.5, 0.5); //TODO: Make Origin Customizable
-        qreal rad = 0.5;
+        EmbReal rad = 0.5;
         originPath.moveTo(0.0, rad);
         originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, 360.0);
         originPath.arcTo(-rad, -rad, rad*2.0, rad*2.0, 90.0, -360.0);
@@ -372,21 +372,21 @@ void View::createOrigin() //TODO: Make Origin Customizable
 
 void View::createGridRect()
 {
-    qreal xSpacing = mainWin->getSettingsGridSpacingX();
-    qreal ySpacing = mainWin->getSettingsGridSpacingY();
+    EmbReal xSpacing = mainWin->getSettingsGridSpacingX();
+    EmbReal ySpacing = mainWin->getSettingsGridSpacingY();
 
     QRectF gr(0, 0, mainWin->getSettingsGridSizeX(), -mainWin->getSettingsGridSizeY());
     //Ensure the loop will work correctly with negative numbers
-    qreal x1 = qMin(gr.left(), gr.right());
-    qreal y1 = qMin(gr.top(), gr.bottom());
-    qreal x2 = qMax(gr.left(), gr.right());
-    qreal y2 = qMax(gr.top(), gr.bottom());
+    EmbReal x1 = qMin(gr.left(), gr.right());
+    EmbReal y1 = qMin(gr.top(), gr.bottom());
+    EmbReal x2 = qMax(gr.left(), gr.right());
+    EmbReal y2 = qMax(gr.top(), gr.bottom());
 
     gridPath = QPainterPath();
     gridPath.addRect(gr);
-    for(qreal gx = x1; gx < x2; gx += xSpacing)
+    for(EmbReal gx = x1; gx < x2; gx += xSpacing)
     {
-        for(qreal gy = y1; gy < y2; gy += ySpacing)
+        for(EmbReal gy = y1; gy < y2; gy += ySpacing)
         {
             gridPath.moveTo(x1,gy);
             gridPath.lineTo(x2,gy);
@@ -397,12 +397,12 @@ void View::createGridRect()
 
     //Center the Grid
     QRectF gridRect = gridPath.boundingRect();
-    qreal bx = gridRect.width()/2.0;
-    qreal by = -gridRect.height()/2.0;
-    qreal cx = mainWin->getSettingsGridCenterX();
-    qreal cy = -mainWin->getSettingsGridCenterY();
-    qreal dx = cx - bx;
-    qreal dy = cy - by;
+    EmbReal bx = gridRect.width()/2.0;
+    EmbReal by = -gridRect.height()/2.0;
+    EmbReal cx = mainWin->getSettingsGridCenterX();
+    EmbReal cy = -mainWin->getSettingsGridCenterY();
+    EmbReal dx = cx - bx;
+    EmbReal dy = cy - by;
 
     if(mainWin->getSettingsGridCenterOnOrigin())
         gridPath.translate(-bx, -by);
@@ -412,25 +412,25 @@ void View::createGridRect()
 
 void View::createGridPolar()
 {
-    qreal radSpacing = mainWin->getSettingsGridSpacingRadius();
-    qreal angSpacing = mainWin->getSettingsGridSpacingAngle();
+    EmbReal radSpacing = mainWin->getSettingsGridSpacingRadius();
+    EmbReal angSpacing = mainWin->getSettingsGridSpacingAngle();
 
-    qreal rad = mainWin->getSettingsGridSizeRadius();
+    EmbReal rad = mainWin->getSettingsGridSizeRadius();
 
     gridPath = QPainterPath();
     gridPath.addEllipse(QPointF(0,0), rad, rad);
-    for(qreal r = 0; r < rad; r += radSpacing)
+    for(EmbReal r = 0; r < rad; r += radSpacing)
     {
         gridPath.addEllipse(QPointF(0,0), r, r);
     }
-    for(qreal ang = 0; ang < 360; ang += angSpacing)
+    for(EmbReal ang = 0; ang < 360; ang += angSpacing)
     {
         gridPath.moveTo(0,0);
         gridPath.lineTo(QLineF::fromPolar(rad, ang).p2());
     }
 
-    qreal cx = mainWin->getSettingsGridCenterX();
-    qreal cy = mainWin->getSettingsGridCenterY();
+    EmbReal cx = mainWin->getSettingsGridCenterX();
+    EmbReal cy = mainWin->getSettingsGridCenterY();
 
     if(!mainWin->getSettingsGridCenterOnOrigin())
         gridPath.translate(cx, -cy);
@@ -438,12 +438,12 @@ void View::createGridPolar()
 
 void View::createGridIso()
 {
-    qreal xSpacing = mainWin->getSettingsGridSpacingX();
-    qreal ySpacing = mainWin->getSettingsGridSpacingY();
+    EmbReal xSpacing = mainWin->getSettingsGridSpacingX();
+    EmbReal ySpacing = mainWin->getSettingsGridSpacingY();
 
     //Ensure the loop will work correctly with negative numbers
-    qreal isoW = qAbs(mainWin->getSettingsGridSizeX());
-    qreal isoH = qAbs(mainWin->getSettingsGridSizeY());
+    EmbReal isoW = qAbs(mainWin->getSettingsGridSizeX());
+    EmbReal isoH = qAbs(mainWin->getSettingsGridSizeY());
 
     QPointF p1 = QPointF(0,0);
     QPointF p2 = QLineF::fromPolar(isoW,  30).p2();
@@ -457,9 +457,9 @@ void View::createGridIso()
     gridPath.lineTo(p3);
     gridPath.lineTo(p1);
 
-    for(qreal x = 0; x < isoW; x += xSpacing)
+    for(EmbReal x = 0; x < isoW; x += xSpacing)
     {
-        for(qreal y = 0; y < isoH; y += ySpacing)
+        for(EmbReal y = 0; y < isoH; y += ySpacing)
         {
             QPointF px = QLineF::fromPolar(x,  30).p2();
             QPointF py = QLineF::fromPolar(y, 150).p2();
@@ -475,9 +475,9 @@ void View::createGridIso()
 
     QRectF gridRect = gridPath.boundingRect();
     // bx is unused
-    qreal by = -gridRect.height()/2.0;
-    qreal cx = mainWin->getSettingsGridCenterX();
-    qreal cy = -mainWin->getSettingsGridCenterY();
+    EmbReal by = -gridRect.height()/2.0;
+    EmbReal cx = mainWin->getSettingsGridCenterX();
+    EmbReal cy = -mainWin->getSettingsGridCenterY();
 
     if(mainWin->getSettingsGridCenterOnOrigin())
         gridPath.translate(0, -by);
@@ -690,18 +690,18 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
         QPointF rulerHoriz = mapToScene(vw,rulerPixelSize);
         QPointF rulerVert  = mapToScene(rulerPixelSize,vh);
 
-        qreal ox = origin.x();
-        qreal oy = origin.y();
+        EmbReal ox = origin.x();
+        EmbReal oy = origin.y();
 
-        qreal rhx = rulerHoriz.x();
-        qreal rhy = rulerHoriz.y();
-        qreal rhw = rhx - ox;
-        qreal rhh = rhy - oy;
+        EmbReal rhx = rulerHoriz.x();
+        EmbReal rhy = rulerHoriz.y();
+        EmbReal rhw = rhx - ox;
+        EmbReal rhh = rhy - oy;
 
-        qreal rvx = rulerVert.x();
-        qreal rvy = rulerVert.y();
-        qreal rvw = rvx - ox;
-        qreal rvh = rvy - oy;
+        EmbReal rvx = rulerVert.x();
+        EmbReal rvy = rulerVert.y();
+        EmbReal rvw = rvx - ox;
+        EmbReal rvh = rvy - oy;
 
         //NOTE: Drawing ruler if zoomed out too far will cause an assertion failure.
         //      We will limit the maximum size the ruler can be shown at.
@@ -732,7 +732,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                     distStr.replace(i, 1, '0');
                 }
                 int unit = distStr.toInt();
-                qreal fraction;
+                EmbReal fraction;
                 bool feet = true;
                 if(rulerMetric)
                 {
@@ -745,7 +745,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                     {
                         unit = 1;
                         feet = false;
-                        fraction = (qreal)(unit/16);
+                        fraction = (EmbReal)(unit/16);
                     }
                     else
                     {
@@ -754,18 +754,18 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
                     }
                 }
 
-                qreal little  = 0.20;
-                qreal medium = 0.40;
-                qreal rhTextOffset = mapToScene(3, 0).x() - ox;
-                qreal rvTextOffset = mapToScene(0, 3).y() - oy;
-                qreal textHeight = rhh*medium;
+                EmbReal little  = 0.20;
+                EmbReal medium = 0.40;
+                EmbReal rhTextOffset = mapToScene(3, 0).x() - ox;
+                EmbReal rvTextOffset = mapToScene(0, 3).y() - oy;
+                EmbReal textHeight = rhh*medium;
 
                 QVector<QLineF> lines;
                 lines.append(QLineF(ox, rhy, rhx, rhy));
                 lines.append(QLineF(rvx, oy, rvx, rvy));
 
-                qreal mx = sceneMousePoint.x();
-                qreal my = sceneMousePoint.y();
+                EmbReal mx = sceneMousePoint.x();
+                EmbReal my = sceneMousePoint.y();
                 lines.append(QLineF(mx, rhy, mx, oy));
                 lines.append(QLineF(rvx, my, ox, my));
 
@@ -965,8 +965,8 @@ QPainterPath View::createRulerTextPath(float x, float y, QString str, float heig
 {
     QPainterPath path;
 
-    qreal xScale = height;
-    qreal yScale = height;
+    EmbReal xScale = height;
+    EmbReal yScale = height;
 
     int len = str.length();
     for(int i = 0; i < len; ++i)
@@ -1150,7 +1150,7 @@ void View::zoomIn()
     if(!allowZoomIn()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    qreal s = mainWin->getSettingsDisplayZoomScaleIn();
+    EmbReal s = mainWin->getSettingsDisplayZoomScaleIn();
     scale(s, s);
 
     centerOn(cntr);
@@ -1163,7 +1163,7 @@ void View::zoomOut()
     if(!allowZoomOut()) { return; }
     QApplication::setOverrideCursor(Qt::WaitCursor);
     QPointF cntr = mapToScene(QPoint(width()/2,height()/2));
-    qreal s = mainWin->getSettingsDisplayZoomScaleOut();
+    EmbReal s = mainWin->getSettingsDisplayZoomScaleOut();
     scale(s, s);
 
     centerOn(cntr);
@@ -1541,21 +1541,21 @@ void View::mouseMoveEvent(QMouseEvent* event)
         }
         else if(previewMode == PREVIEW_MODE_ROTATE)
         {
-            qreal x = previewPoint.x();
-            qreal y = previewPoint.y();
-            qreal rot = previewData;
+            EmbReal x = previewPoint.x();
+            EmbReal y = previewPoint.y();
+            EmbReal rot = previewData;
 
-            qreal mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle();
+            EmbReal mouseAngle = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).angle();
 
-            qreal rad = radians(rot-mouseAngle);
-            qreal cosRot = qCos(rad);
-            qreal sinRot = qSin(rad);
-            qreal px = 0;
-            qreal py = 0;
+            EmbReal rad = radians(rot-mouseAngle);
+            EmbReal cosRot = qCos(rad);
+            EmbReal sinRot = qSin(rad);
+            EmbReal px = 0;
+            EmbReal py = 0;
             px -= x;
             py -= y;
-            qreal rotX = px*cosRot - py*sinRot;
-            qreal rotY = px*sinRot + py*cosRot;
+            EmbReal rotX = px*cosRot - py*sinRot;
+            EmbReal rotY = px*sinRot + py*cosRot;
             rotX += x;
             rotY += y;
 
@@ -1564,11 +1564,11 @@ void View::mouseMoveEvent(QMouseEvent* event)
         }
         else if(previewMode == PREVIEW_MODE_SCALE)
         {
-            qreal x = previewPoint.x();
-            qreal y = previewPoint.y();
-            qreal scaleFactor = previewData;
+            EmbReal x = previewPoint.x();
+            EmbReal y = previewPoint.y();
+            EmbReal scaleFactor = previewData;
 
-            qreal factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor;
+            EmbReal factor = QLineF(x, y, sceneMousePoint.x(), sceneMousePoint.y()).length()/scaleFactor;
 
             previewObjectItemGroup->setScale(1);
             previewObjectItemGroup->setPos(0,0);
@@ -1582,15 +1582,15 @@ void View::mouseMoveEvent(QMouseEvent* event)
             else
             {
                 //Calculate the offset
-                qreal oldX = 0;
-                qreal oldY = 0;
+                EmbReal oldX = 0;
+                EmbReal oldY = 0;
                 QLineF scaleLine(x, y, oldX, oldY);
                 scaleLine.setLength(scaleLine.length()*factor);
-                qreal newX = scaleLine.x2();
-                qreal newY = scaleLine.y2();
+                EmbReal newX = scaleLine.x2();
+                EmbReal newY = scaleLine.y2();
 
-                qreal dx = newX - oldX;
-                qreal dy = newY - oldY;
+                EmbReal dx = newX - oldX;
+                EmbReal dy = newY - oldY;
 
                 previewObjectItemGroup->setScale(previewObjectItemGroup->scale()*factor);
                 previewObjectItemGroup->moveBy(dx, dy);
@@ -1633,8 +1633,8 @@ void View::mouseReleaseEvent(QMouseEvent* event)
         if(movingActive)
         {
             previewOff();
-            qreal dx = sceneMousePoint.x()-scenePressPoint.x();
-            qreal dy = sceneMousePoint.y()-scenePressPoint.y();
+            EmbReal dx = sceneMousePoint.x()-scenePressPoint.x();
+            EmbReal dy = sceneMousePoint.y()-scenePressPoint.y();
             //Ensure that moving only happens if the mouse has moved.
             if(dx || dy) moveSelected(dx, dy);
             movingActive = false;
@@ -1668,10 +1668,10 @@ bool View::allowZoomIn()
 {
     QPointF origin  = mapToScene(0,0);
     QPointF corner  = mapToScene(width(), height());
-    qreal maxWidth  = corner.x() - origin.x();
-    qreal maxHeight = corner.y() - origin.y();
+    EmbReal maxWidth  = corner.x() - origin.x();
+    EmbReal maxHeight = corner.y() - origin.y();
 
-    qreal zoomInLimit = 0.0000000001;
+    EmbReal zoomInLimit = 0.0000000001;
     if(qMin(maxWidth, maxHeight) < zoomInLimit)
     {
         qDebug("ZoomIn limit reached. (limit=%.10f)", zoomInLimit);
@@ -1685,10 +1685,10 @@ bool View::allowZoomOut()
 {
     QPointF origin  = mapToScene(0,0);
     QPointF corner  = mapToScene(width(), height());
-    qreal maxWidth  = corner.x() - origin.x();
-    qreal maxHeight = corner.y() - origin.y();
+    EmbReal maxWidth  = corner.x() - origin.x();
+    EmbReal maxHeight = corner.y() - origin.y();
 
-    qreal zoomOutLimit = 10000000000000.0;
+    EmbReal zoomOutLimit = 10000000000000.0;
     if(qMax(maxWidth, maxHeight) > zoomOutLimit)
     {
         qDebug("ZoomOut limit reached. (limit=%.1f)", zoomOutLimit);
@@ -1723,7 +1723,7 @@ void View::zoomToPoint(const QPoint& mousePoint, int zoomDir)
     QPointF pointBeforeScale(mapToScene(mousePoint));
 
     //Do The zoom
-    qreal s;
+    EmbReal s;
     if(zoomDir > 0)
     {
         if(!allowZoomIn()) { return; }
@@ -2151,7 +2151,7 @@ void View::moveAction()
     mainWin->prompt->processInput();
 }
 
-void View::moveSelected(qreal dx, qreal dy)
+void View::moveSelected(EmbReal dx, EmbReal dy)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2180,7 +2180,7 @@ void View::rotateAction()
     mainWin->prompt->processInput();
 }
 
-void View::rotateSelected(qreal x, qreal y, qreal rot)
+void View::rotateSelected(EmbReal x, EmbReal y, EmbReal rot)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2202,7 +2202,7 @@ void View::rotateSelected(qreal x, qreal y, qreal rot)
     gscene->clearSelection();
 }
 
-void View::mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2)
+void View::mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();
@@ -2231,7 +2231,7 @@ void View::scaleAction()
     mainWin->prompt->processInput();
 }
 
-void View::scaleSelected(qreal x, qreal y, qreal factor)
+void View::scaleSelected(EmbReal x, EmbReal y, EmbReal factor)
 {
     QList<QGraphicsItem*> itemList = gscene->selectedItems();
     int numSelected = itemList.size();

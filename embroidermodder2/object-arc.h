@@ -6,7 +6,7 @@
 class ArcObject : public BaseObject
 {
 public:
-    ArcObject(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, QGraphicsItem* parent = 0);
+    ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, QGraphicsItem* parent = 0);
     ArcObject(ArcObject* obj, QGraphicsItem* parent = 0);
     ~ArcObject();
 
@@ -14,39 +14,39 @@ public:
     virtual int type() const { return Type; }
 
     QPointF objectCenter()        const { return scenePos(); }
-    qreal   objectCenterX()       const { return scenePos().x(); }
-    qreal   objectCenterY()       const { return scenePos().y(); }
-    qreal   objectRadius()        const { return rect().width()/2.0*scale(); }
-    qreal   objectStartAngle()    const;
-    qreal   objectEndAngle()      const;
+    EmbReal   objectCenterX()       const { return scenePos().x(); }
+    EmbReal   objectCenterY()       const { return scenePos().y(); }
+    EmbReal   objectRadius()        const { return rect().width()/2.0*scale(); }
+    EmbReal   objectStartAngle()    const;
+    EmbReal   objectEndAngle()      const;
     QPointF objectStartPoint()    const;
-    qreal   objectStartX()        const;
-    qreal   objectStartY()        const;
+    EmbReal   objectStartX()        const;
+    EmbReal   objectStartY()        const;
     QPointF objectMidPoint()      const;
-    qreal   objectMidX()          const;
-    qreal   objectMidY()          const;
+    EmbReal   objectMidX()          const;
+    EmbReal   objectMidY()          const;
     QPointF objectEndPoint()      const;
-    qreal   objectEndX()          const;
-    qreal   objectEndY()          const;
-    qreal   objectArea()          const;
-    qreal   objectArcLength()     const;
-    qreal   objectChord()         const;
-    qreal   objectIncludedAngle() const;
+    EmbReal   objectEndX()          const;
+    EmbReal   objectEndY()          const;
+    EmbReal   objectArea()          const;
+    EmbReal   objectArcLength()     const;
+    EmbReal   objectChord()         const;
+    EmbReal   objectIncludedAngle() const;
     bool    objectClockwise()     const;
 
     void setObjectCenter(const QPointF& point);
-    void setObjectCenter(qreal pointX, qreal pointY);
-    void setObjectCenterX(qreal pointX);
-    void setObjectCenterY(qreal pointY);
-    void setObjectRadius(qreal radius);
-    void setObjectStartAngle(qreal angle);
-    void setObjectEndAngle(qreal angle);
+    void setObjectCenter(EmbReal pointX, EmbReal pointY);
+    void setObjectCenterX(EmbReal pointX);
+    void setObjectCenterY(EmbReal pointY);
+    void setObjectRadius(EmbReal radius);
+    void setObjectStartAngle(EmbReal angle);
+    void setObjectEndAngle(EmbReal angle);
     void setObjectStartPoint(const QPointF& point);
-    void setObjectStartPoint(qreal pointX, qreal pointY);
+    void setObjectStartPoint(EmbReal pointX, EmbReal pointY);
     void setObjectMidPoint(const QPointF& point);
-    void setObjectMidPoint(qreal pointX, qreal pointY);
+    void setObjectMidPoint(EmbReal pointX, EmbReal pointY);
     void setObjectEndPoint(const QPointF& point);
-    void setObjectEndPoint(qreal pointX, qreal pointY);
+    void setObjectEndPoint(EmbReal pointX, EmbReal pointY);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -56,11 +56,11 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY, QRgb rgb, Qt::PenStyle lineType);
+    void init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 
-    void calculateArcData(qreal startX, qreal startY, qreal midX, qreal midY, qreal endX, qreal endY);
-    void updateArcRect(qreal radius);
+    void calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY);
+    void updateArcRect(EmbReal radius);
 
     QPointF arcStartPoint;
     QPointF arcMidPoint;

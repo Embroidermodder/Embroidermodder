@@ -1,11 +1,11 @@
 #include "object-point.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PointObject::PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -26,7 +26,7 @@ PointObject::~PointObject()
     qDebug("PointObject Destructor()");
 }
 
-void PointObject::init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
+void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POINT);

@@ -8,7 +8,6 @@
 #include "statusbar-button.h"
 #include "imagewidget.h"
 #include "layer-manager.h"
-#include "object-data.h"
 #include "object-arc.h"
 #include "object-circle.h"
 #include "object-dimleader.h"
@@ -84,34 +83,54 @@ MainWindow::quit()
     exit();
 }
 
-void MainWindow::checkForUpdates()
+/**
+ *
+ */
+void
+MainWindow::checkForUpdates()
 {
     qDebug("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
-void MainWindow::cut()
+/**
+ *
+ */
+void
+MainWindow::cut()
 {
     qDebug("cut()");
     View* gview = activeView();
     if(gview) { gview->cut(); }
 }
 
-void MainWindow::copy()
+/**
+ *
+ */
+void
+MainWindow::copy()
 {
     qDebug("copy()");
     View* gview = activeView();
     if(gview) { gview->copy(); }
 }
 
-void MainWindow::paste()
+/**
+ *
+ */
+void
+MainWindow::paste()
 {
     qDebug("paste()");
     View* gview = activeView();
     if(gview) { gview->paste(); }
 }
 
-void MainWindow::selectAll()
+/**
+ *
+ */
+void
+MainWindow::selectAll()
 {
     qDebug("selectAll()");
     View* gview = activeView();

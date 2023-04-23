@@ -1,11 +1,11 @@
 #include "object-line.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-LineObject::LineObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+LineObject::LineObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("LineObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -25,7 +25,7 @@ LineObject::~LineObject()
     qDebug("LineObject Destructor()");
 }
 
-void LineObject::init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType)
+void LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_LINE);
@@ -48,13 +48,13 @@ void LineObject::setObjectEndPoint1(const QPointF& endPt1)
     setObjectEndPoint1(endPt1.x(), endPt1.y());
 }
 
-void LineObject::setObjectEndPoint1(qreal x1, qreal y1)
+void LineObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
 {
     QPointF endPt2 = objectEndPoint2();
-    qreal x2 = endPt2.x();
-    qreal y2 = endPt2.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    EmbReal x2 = endPt2.x();
+    EmbReal y2 = endPt2.y();
+    EmbReal dx = x2 - x1;
+    EmbReal dy = y2 - y1;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
@@ -66,13 +66,13 @@ void LineObject::setObjectEndPoint2(const QPointF& endPt2)
     setObjectEndPoint2(endPt2.x(), endPt2.y());
 }
 
-void LineObject::setObjectEndPoint2(qreal x2, qreal y2)
+void LineObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
 {
     QPointF endPt1 = scenePos();
-    qreal x1 = endPt1.x();
-    qreal y1 = endPt1.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    EmbReal x1 = endPt1.x();
+    EmbReal y1 = endPt1.y();
+    EmbReal dx = x2 - x1;
+    EmbReal dy = y2 - y1;
     setRotation(0);
     setScale(1);
     setLine(0, 0, dx, dy);
@@ -82,13 +82,13 @@ void LineObject::setObjectEndPoint2(qreal x2, qreal y2)
 QPointF LineObject::objectEndPoint2() const
 {
     QLineF lyne = line();
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal x2 = lyne.x2()*scale();
-    qreal y2 = lyne.y2()*scale();
-    qreal rotEnd2X = x2*cosRot - y2*sinRot;
-    qreal rotEnd2Y = x2*sinRot + y2*cosRot;
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
+    EmbReal x2 = lyne.x2()*scale();
+    EmbReal y2 = lyne.y2()*scale();
+    EmbReal rotEnd2X = x2*cosRot - y2*sinRot;
+    EmbReal rotEnd2Y = x2*sinRot + y2*cosRot;
 
     return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
 }
@@ -97,20 +97,20 @@ QPointF LineObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal mx = mp.x()*scale();
-    qreal my = mp.y()*scale();
-    qreal rotMidX = mx*cosRot - my*sinRot;
-    qreal rotMidY = mx*sinRot + my*cosRot;
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
+    EmbReal mx = mp.x()*scale();
+    EmbReal my = mp.y()*scale();
+    EmbReal rotMidX = mx*cosRot - my*sinRot;
+    EmbReal rotMidY = mx*sinRot + my*cosRot;
 
     return (scenePos() + QPointF(rotMidX, rotMidY));
 }
 
-qreal LineObject::objectAngle() const
+EmbReal LineObject::objectAngle() const
 {
-    qreal angle = line().angle() - rotation();
+    EmbReal angle = line().angle() - rotation();
     while(angle >= 360.0) { angle -= 360.0; }
     while(angle < 0.0)    { angle += 360.0; }
     return angle;
@@ -176,11 +176,11 @@ QPointF LineObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF endPoint2 = objectEndPoint2();
     QPointF midPoint  = objectMidPoint();
 
-    qreal end1Dist = QLineF(mousePoint, endPoint1).length();
-    qreal end2Dist = QLineF(mousePoint, endPoint2).length();
-    qreal midDist  = QLineF(mousePoint, midPoint).length();
+    EmbReal end1Dist = QLineF(mousePoint, endPoint1).length();
+    EmbReal end2Dist = QLineF(mousePoint, endPoint2).length();
+    EmbReal midDist  = QLineF(mousePoint, midPoint).length();
 
-    qreal minDist = qMin(qMin(end1Dist, end2Dist), midDist);
+    EmbReal minDist = qMin(qMin(end1Dist, end2Dist), midDist);
 
     if     (minDist == end1Dist) return endPoint1;
     else if(minDist == end2Dist) return endPoint2;

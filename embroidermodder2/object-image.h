@@ -6,7 +6,7 @@
 class ImageObject : public BaseObject
 {
 public:
-    ImageObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent = 0);
+    ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent = 0);
     ImageObject(ImageObject* obj, QGraphicsItem* parent = 0);
     ~ImageObject();
 
@@ -17,11 +17,11 @@ public:
     QPointF objectTopRight()    const;
     QPointF objectBottomLeft()  const;
     QPointF objectBottomRight() const;
-    qreal   objectWidth()       const { return rect().width()*scale(); }
-    qreal   objectHeight()      const { return rect().height()*scale(); }
-    qreal   objectArea()        const { return qAbs(objectWidth()*objectHeight()); }
+    EmbReal   objectWidth()       const { return rect().width()*scale(); }
+    EmbReal   objectHeight()      const { return rect().height()*scale(); }
+    EmbReal   objectArea()        const { return qAbs(objectWidth()*objectHeight()); }
 
-    void setObjectRect(qreal x, qreal y, qreal w, qreal h);
+    void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -31,7 +31,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType);
+    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
     void updatePath();
 };
 

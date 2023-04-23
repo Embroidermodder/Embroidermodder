@@ -635,179 +635,6 @@ typedef struct Settings_ {
     float stitch_time; /*< */
 } Settings;
 
-int read_settings(const char *settings_file);
-void write_settings(const char *fname);
-
-void createOrigin(void);
-void clear_selection(void);
-void copy_selection(void);
-
-void platform_string(char s[200]);
-
-void parse_command(int argc, char *argv[], char command[200]);
-
-UndoHistory undo_history_init(void);
-void undo_history_free(UndoHistory *);
-void add_to_undo_history(UndoHistory *undo_history, const char *command_line);
-
-bool validRGB(int r, int g, int b);
-
-EmbView init_view(void);
-
-EmbArray *createObjectList(EmbArray *list);
-
-bool streq(const char *s1, const char *s2);
-
-void read_str_setting(toml_table_t *table, const char *key, char s[200]);
-int read_int_setting(toml_table_t *table, const char *key);
-bool read_bool_setting(toml_table_t *table, const char *key);
-Dictionary *read_dictionary_setting(toml_table_t *table, const char *key);
-
-void write_float_setting(FILE *file, const char *key, float value);;
-void write_int_setting(FILE *file, const char *key, int value);
-void write_uint_setting(FILE *file, const char *key, unsigned int value);
-void write_str_setting(FILE *file, const char *key, const char value[200]);
-void write_bool_setting(FILE *file, const char *key, bool value);
-void write_dictionary_setting(FILE *file, const char *key, Dictionary value);
-
-/* Tabs */
-void create_tab_general(void);
-void create_tab_files_paths(void);
-void create_tab_display(void);
-void create_tab_prompt(void);
-void create_tab_open_save(void);
-void create_tab_printing(void);
-void create_tab_snap(void);
-void create_tab_grid_ruler(void);
-void create_tab_ortho_polar(void);
-void create_tab_quicksnap(void);
-void create_tab_quicktrack(void);
-void create_tab_lineweight(void);
-void create_tab_selection(void);
-
-/* Actions */
-void arc_action(void);
-void circle_action(void);
-void close_action(void);
-void copy_action(void);
-void cut_action(void);
-void ellipse_action(void);
-void error_action(const char *);
-void exit_action(void);
-void new_file_action(void);
-void open_file_action(int argc, char argv[10][200]);
-void icon_action(int);
-void pan_action(const char *);
-void paste_action(void);
-void print_action(void);
-void rectangle_action(void);
-void redo_action(void);
-void text_angle_action(EmbReal);
-void text_font_action(const char *);
-void text_size_action(EmbReal);
-void undo_action(void);
-void vulcanize_action(void);
-void window_action(const char *);
-void zoom_action(const char *);
-
-void create_group_box_general(int id, EmbPattern *pattern);
-void create_group_box_arc(int id, EmbArc *arc);
-void create_group_box_block(int id, EmbBlock *block);
-void create_group_box_circle(int id, EmbCircle *circle);
-void create_group_box_dim_aligned(int id, EmbAlignedDim *dim_aligned);
-void create_group_box_dim_angular(int id, EmbAngularDim *dim_angular);
-void create_group_box_dim_arc_length(int id, EmbArcLengthDim *dim_arc_length);
-void create_group_box_dim_diameter(int id, EmbDiameterDim *dim_diameter);
-void create_group_box_dim_leader(int id, EmbLeaderDim *dim_leader);
-void create_group_box_dim_linear(int id, EmbLinearDim *dim_linear);
-void create_group_box_dim_ordinate(int id, EmbOrdinateDim *dim_ordinate);
-void create_group_box_dim_radius(int id, EmbRadiusDim *dim_radius);
-void create_group_box_ellipse(int id, EmbEllipse *ellipse);
-void create_group_box_image(int id, EmbImage *image);
-void create_group_box_infinite_line(int id, EmbInfiniteLine *infinite_line);
-void create_group_box_line(int id, EmbLine *line);
-void create_group_box_path(int id, EmbPath *path);
-void create_group_box_point(int id, EmbPoint *point);
-void create_group_box_polygon(int id, EmbPolygon *polygon);
-void create_group_box_polyline(int id, EmbPolyline *polyline);
-void create_group_box_ray(int id, EmbRay *ray);
-void create_group_box_rectangle(int id, EmbRect *rect);
-void create_group_box_stitch(int id, EmbStitch *stitch);
-void create_group_box_stitch_list(int id, EmbArray *stitch_list);
-void create_group_box_text_multi(int id, EmbTextMulti *text_multi);
-void create_group_box_text_single(int id, EmbTextSingle *text_single);
-
-/* Dialogs */
-void alert(const char *);
-void about_dialog(void);
-void changelog_dialog(void);
-void details_dialog(void);
-void help_dialog(void);
-void tip_of_the_day_dialog(void);
-
-/* Geometry Object interface */
-UiObject *UiObject_init(int pattern_index, char type[200], int object_index);
-void UiObject_free(UiObject *obj);
-
-EmbRect boundingRect(UiObject *obj);
-bool clockwise(UiObject *obj);
-void move(UiObject *obj, EmbVector delta);
-void vulcanize(UiObject *obj);
-
-UiObject generic_design_init(void);
-
-UiObject sandbox_main(void);
-void sandbox_click(UiObject *global, EmbVector pos);
-void sandbox_prompt(UiObject *global, const char *str);
-
-UiObject scale_main(void);
-void scale_click(UiObject *global, EmbVector pos);
-void scale_prompt(UiObject *global, const char *str);
-
-UiObject single_line_text_main(void);
-void single_line_text_click(UiObject *global, EmbVector pos);
-void single_line_text_prompt(UiObject *global, const char *str);
-
-void embArc_setCenter(EmbArc *arc, EmbVector point);
-void embArc_setRadius(EmbArc *arc, float radius);
-void embArc_setStartAngle(EmbArc *arc, float angle);
-void embArc_setEndAngle(EmbArc *arc, float angle);
-float embArc_startAngle(EmbArc arc);
-float embArc_endAngle(EmbArc arc);
-
-void embCircle_setArea(EmbCircle *circle, float area);
-void embCircle_setCircumference(EmbCircle *circle, float circumference);
-
-UiObject snowflake_main();
-UiObject snowflake_click(UiObject global, EmbVector position);
-UiObject snowflake_move(UiObject global, EmbVector delta);
-void updateSnowflake(EmbPath *path, UiObject global);
-
-UiObject star_main();
-UiObject star_click(UiObject global, EmbVector pos);
-UiObject star_move(UiObject global, EmbVector delta);
-void updateStar(EmbPath *path, UiObject global);
-
-Index *index_init(void);
-void index_free(Index *);
-Dictionary *dictionary_from_index(Index *, const char *);
-
-void c_split(char input[200], int *argc, char argv[10][200]);
-void open_file_dialog(void);
-void create_tab(int);
-void load_menu(const char *menu_label);
-void load_toolbar(const char *toolbar_label);
-void simplify_path(char *path);
-void status_bar(void);
-void property_editor(void);
-void load_configuration(void);
-void pattern_view(void);
-void actuator(char cmd[200]);
-void settings_editor(void);
-void settings_editor(void);
-
-typedef QString EmbString;
-
 enum COMMAND_ACTIONS
 {
 
@@ -897,5 +724,297 @@ enum COMMAND_ACTIONS
 
     ACTION_null
 };
+
+//Custom Data used in QGraphicsItems
+
+//                   (     int, const QVariant)
+//I.E. object.setData(OBJ_TYPE, OBJ_TYPE_LINE);
+//I.E. object.setData(OBJ_LAYER, "OUTLINE");
+//I.E. object.setData(OBJ_COLOR, 123);
+//I.E. object.setData(OBJ_LTYPE, OBJ_LTYPE_CONT);
+
+//Keys
+enum OBJ_KEYS {
+OBJ_TYPE   = 0, //value type - int: See OBJ_TYPE_VALUES
+OBJ_NAME   = 1, //value type - str: See OBJ_NAME_VALUES
+OBJ_LAYER  = 2, //value type - str: "USER", "DEFINED", "STRINGS", etc...
+OBJ_COLOR  = 3, //value type - int: 0-255 //TODO: Use color chart in formats/format-dxf.h for this
+OBJ_LTYPE  = 4, //value type - int: See OBJ_LTYPE_VALUES
+OBJ_LWT    = 5, //value type - int: 0-27
+OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
+};
+
+//Values
+enum OBJ_TYPE_VALUES {
+OBJ_TYPE_NULL         =      0, //NOTE: Allow this enum to evaluate false
+OBJ_TYPE_BASE         = 100000, //NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast()
+OBJ_TYPE_ARC          = 100001,
+OBJ_TYPE_BLOCK        = 100002,
+OBJ_TYPE_CIRCLE       = 100003,
+OBJ_TYPE_DIMALIGNED   = 100004,
+OBJ_TYPE_DIMANGULAR   = 100005,
+OBJ_TYPE_DIMARCLENGTH = 100006,
+OBJ_TYPE_DIMDIAMETER  = 100007,
+OBJ_TYPE_DIMLEADER    = 100008,
+OBJ_TYPE_DIMLINEAR    = 100009,
+OBJ_TYPE_DIMORDINATE  = 100010,
+OBJ_TYPE_DIMRADIUS    = 100011,
+OBJ_TYPE_ELLIPSE      = 100012,
+OBJ_TYPE_ELLIPSEARC   = 100013,
+OBJ_TYPE_RUBBER       = 100014,
+OBJ_TYPE_GRID         = 100015,
+OBJ_TYPE_HATCH        = 100016,
+OBJ_TYPE_IMAGE        = 100017,
+OBJ_TYPE_INFINITELINE = 100018,
+OBJ_TYPE_LINE         = 100019,
+OBJ_TYPE_PATH         = 100020,
+OBJ_TYPE_POINT        = 100021,
+OBJ_TYPE_POLYGON      = 100022,
+OBJ_TYPE_POLYLINE     = 100023,
+OBJ_TYPE_RAY          = 100024,
+OBJ_TYPE_RECTANGLE    = 100025,
+OBJ_TYPE_SLOT         = 100026,
+OBJ_TYPE_SPLINE       = 100027,
+OBJ_TYPE_TEXTMULTI    = 100028,
+OBJ_TYPE_TEXTSINGLE   = 100029
+};
+
+//OBJ_NAME_VALUES
+const char* const OBJ_NAME_NULL         = "Unknown";
+const char* const OBJ_NAME_BASE         = "Base";
+const char* const OBJ_NAME_ARC          = "Arc";
+const char* const OBJ_NAME_BLOCK        = "Block";
+const char* const OBJ_NAME_CIRCLE       = "Circle";
+const char* const OBJ_NAME_DIMALIGNED   = "Aligned Dimension";
+const char* const OBJ_NAME_DIMANGULAR   = "Angular Dimension";
+const char* const OBJ_NAME_DIMARCLENGTH = "Arc Length Dimension";
+const char* const OBJ_NAME_DIMDIAMETER  = "Diameter Dimension";
+const char* const OBJ_NAME_DIMLEADER    = "Leader Dimension";
+const char* const OBJ_NAME_DIMLINEAR    = "Linear Dimension";
+const char* const OBJ_NAME_DIMORDINATE  = "Ordinate Dimension";
+const char* const OBJ_NAME_DIMRADIUS    = "Radius Dimension";
+const char* const OBJ_NAME_ELLIPSE      = "Ellipse";
+const char* const OBJ_NAME_ELLIPSEARC   = "Elliptical Arc";
+const char* const OBJ_NAME_RUBBER       = "Rubber";
+const char* const OBJ_NAME_GRID         = "Grid";
+const char* const OBJ_NAME_HATCH        = "Hatch";
+const char* const OBJ_NAME_IMAGE        = "Image";
+const char* const OBJ_NAME_INFINITELINE = "Infinite Line";
+const char* const OBJ_NAME_LINE         = "Line";
+const char* const OBJ_NAME_PATH         = "Path";
+const char* const OBJ_NAME_POINT        = "Point";
+const char* const OBJ_NAME_POLYGON      = "Polygon";
+const char* const OBJ_NAME_POLYLINE     = "Polyline";
+const char* const OBJ_NAME_RAY          = "Ray";
+const char* const OBJ_NAME_RECTANGLE    = "Rectangle";
+const char* const OBJ_NAME_SLOT         = "Slot";
+const char* const OBJ_NAME_SPLINE       = "Spline";
+const char* const OBJ_NAME_TEXTMULTI    = "Multi Line Text";
+const char* const OBJ_NAME_TEXTSINGLE   = "Single Line Text";
+
+enum OBJ_LTYPE_VALUES {
+//CAD Linetypes
+OBJ_LTYPE_CONT     = 0,
+OBJ_LTYPE_CENTER   = 1,
+OBJ_LTYPE_DOT      = 2,
+OBJ_LTYPE_HIDDEN   = 3,
+OBJ_LTYPE_PHANTOM  = 4,
+OBJ_LTYPE_ZIGZAG   = 5,
+//Embroidery Stitchtypes
+OBJ_LTYPE_RUNNING  = 6, // __________
+OBJ_LTYPE_SATIN    = 7, // vvvvvvvvvv
+OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
+};
+
+enum OBJ_LWT_VALUES {
+OBJ_LWT_BYLAYER    = -2,
+OBJ_LWT_BYBLOCK    = -1,
+OBJ_LWT_DEFAULT    =  0,
+OBJ_LWT_01         =  1,
+OBJ_LWT_02         =  2,
+OBJ_LWT_03         =  3,
+OBJ_LWT_04         =  4,
+OBJ_LWT_05         =  5,
+OBJ_LWT_06         =  6,
+OBJ_LWT_07         =  7,
+OBJ_LWT_08         =  8,
+OBJ_LWT_09         =  9,
+OBJ_LWT_10         = 10,
+OBJ_LWT_11         = 11,
+OBJ_LWT_12         = 12,
+OBJ_LWT_13         = 13,
+OBJ_LWT_14         = 14,
+OBJ_LWT_15         = 15,
+OBJ_LWT_16         = 16,
+OBJ_LWT_17         = 17,
+OBJ_LWT_18         = 18,
+OBJ_LWT_19         = 19,
+OBJ_LWT_20         = 20,
+OBJ_LWT_21         = 21,
+OBJ_LWT_22         = 22,
+OBJ_LWT_23         = 23,
+OBJ_LWT_24         = 24
+};
+
+enum OBJ_SNAP_VALUES {
+OBJ_SNAP_NULL            =  0, //NOTE: Allow this enum to evaluate false
+OBJ_SNAP_ENDPOINT        =  1,
+OBJ_SNAP_MIDPOINT        =  2,
+OBJ_SNAP_CENTER          =  3,
+OBJ_SNAP_NODE            =  4,
+OBJ_SNAP_QUADRANT        =  5,
+OBJ_SNAP_INTERSECTION    =  6,
+OBJ_SNAP_EXTENSION       =  7,
+OBJ_SNAP_INSERTION       =  8,
+OBJ_SNAP_PERPENDICULAR   =  9,
+OBJ_SNAP_TANGENT         = 10,
+OBJ_SNAP_NEAREST         = 11,
+OBJ_SNAP_APPINTERSECTION = 12,
+OBJ_SNAP_PARALLEL        = 13
+};
+
+enum OBJ_RUBBER_VALUES {
+OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
+OBJ_RUBBER_ON  = 1,  //NOTE: Allow this enum to evaluate true
+
+OBJ_RUBBER_CIRCLE_1P_RAD,
+    /*!< For the circle object currently focussed, show two rubber points:
+        one for the centre (the anchor) and the other at some point on the
+        radius to adjust the radius. */
+OBJ_RUBBER_CIRCLE_1P_DIA,
+    /*!< For the curcle object currently focussed, show two rubber points:
+        one for the left of the diameter and one for the right.
+        These rubber points can be moved around the circle, but they always
+        oppose one another. */
+OBJ_RUBBER_CIRCLE_2P,
+OBJ_RUBBER_CIRCLE_3P,
+OBJ_RUBBER_CIRCLE_TTR,
+OBJ_RUBBER_CIRCLE_TTT,
+
+OBJ_RUBBER_DIMLEADER_LINE,
+
+OBJ_RUBBER_ELLIPSE_LINE,
+OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS,
+OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS,
+OBJ_RUBBER_ELLIPSE_ROTATION,
+
+OBJ_RUBBER_GRIP,
+
+OBJ_RUBBER_LINE,
+
+OBJ_RUBBER_POLYGON,
+OBJ_RUBBER_POLYGON_INSCRIBE,
+OBJ_RUBBER_POLYGON_CIRCUMSCRIBE,
+
+OBJ_RUBBER_POLYLINE,
+
+OBJ_RUBBER_IMAGE,
+
+OBJ_RUBBER_RECTANGLE,
+
+OBJ_RUBBER_TEXTSINGLE
+};
+
+enum SPARE_RUBBER_VALUES {
+SPARE_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
+SPARE_RUBBER_PATH,
+SPARE_RUBBER_POLYGON,
+SPARE_RUBBER_POLYLINE
+};
+
+enum PREVIEW_CLONE_VALUES {
+PREVIEW_CLONE_NULL = 0, //NOTE: Allow this enum to evaluate false
+PREVIEW_CLONE_SELECTED,
+PREVIEW_CLONE_RUBBER
+};
+
+enum PREVIEW_MODE_VALUES {
+PREVIEW_MODE_NULL = 0, //NOTE: Allow this enum to evaluate false
+PREVIEW_MODE_MOVE,
+PREVIEW_MODE_ROTATE,
+PREVIEW_MODE_SCALE
+};
+
+const char* const ENABLE_SNAP   = "ENABLE_SNAP";
+const char* const ENABLE_GRID   = "ENABLE_GRID";
+const char* const ENABLE_RULER  = "ENABLE_RULER";
+const char* const ENABLE_ORTHO  = "ENABLE_ORTHO";
+const char* const ENABLE_POLAR  = "ENABLE_POLAR";
+const char* const ENABLE_QSNAP  = "ENABLE_QSNAP";
+const char* const ENABLE_QTRACK = "ENABLE_QTRACK";
+const char* const ENABLE_LWT    = "ENABLE_LWT";
+const char* const ENABLE_REAL   = "ENABLE_REAL";
+
+const char* const SCENE_QSNAP_POINT = "SCENE_QSNAP_POINT";
+const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";
+const char* const VIEW_MOUSE_POINT  = "VIEW_MOUSE_POINT";
+const char* const RUBBER_ROOM = "RUBBER_ROOM";
+
+const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
+const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
+const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
+
+int read_settings(const char *settings_file);
+void write_settings(const char *fname);
+
+static const EmbReal emb_constant_pi = 3.14159265358979323846;
+
+/*
+ * \brief Convert \a a to a QPointF.
+ */
+inline QPointF
+to_QPointF(EmbVector a)
+{
+    QPointF result(a.x, a.y);
+    return result;
+}
+
+/*
+ * \brief Convert \a a to an EmbVector.
+ */
+inline EmbVector
+to_EmbVector(QPointF a)
+{
+    EmbVector v;
+    v.x = a.x();
+    v.y = a.y();
+    return v;
+}
+
+/*
+ * \brief Wrapper for embVector_add to use the syntax \a a + \a b.
+ */
+inline EmbVector
+operator+(EmbVector a, EmbVector b)
+{
+    return embVector_add(a, b);
+}
+
+/*
+ * \brief Wrapper for embVector_subtract to use the syntax \a a - \a b.
+ */
+inline EmbVector
+operator-(EmbVector a, EmbVector b)
+{
+    return embVector_subtract(a, b);
+}
+
+/**
+ * .
+ */
+inline EmbReal
+radians(EmbReal degrees)
+{
+    return (degrees*emb_constant_pi/180.0);
+}
+
+/**
+ *
+ */
+inline EmbReal
+degrees(EmbReal radian)
+{
+    return (radian*180.0/emb_constant_pi);
+}
 
 #endif

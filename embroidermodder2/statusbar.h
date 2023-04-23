@@ -28,7 +28,7 @@ public:
     StatusBarButton* statusBarLwtButton;
     QLabel* statusBarMouseCoord;
 
-    void setMouseCoord(qreal x, qreal y);
+    void setMouseCoord(EmbReal x, EmbReal y);
 
 protected:
 

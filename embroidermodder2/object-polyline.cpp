@@ -1,12 +1,12 @@
 #include "object-polyline.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-PolylineObject::PolylineObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PolylineObject::PolylineObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolylineObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -28,7 +28,7 @@ PolylineObject::~PolylineObject()
     qDebug("PolylineObject Destructor()");
 }
 
-void PolylineObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+void PolylineObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POLYLINE);
@@ -154,13 +154,13 @@ QPointF PolylineObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
-    qreal closestDist = QLineF(mousePoint, closestPoint).length();
+    EmbReal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
     for(int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
-        qreal elemDist = QLineF(mousePoint, elemPoint).length();
+        EmbReal elemDist = QLineF(mousePoint, elemPoint).length();
         if(elemDist < closestDist)
         {
             closestPoint = elemPoint;
@@ -213,7 +213,7 @@ QPainterPath PolylineObject::objectCopyPath() const
 
 QPainterPath PolylineObject::objectSavePath() const
 {
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);

@@ -3,7 +3,6 @@
 #include "statusbar.h"
 #include "statusbar-button.h"
 #include "object-save.h"
-#include "object-data.h"
 #include "object-path.h"
 #include "object-polygon.h"
 #include "object-polyline.h"
@@ -202,8 +201,8 @@ MdiWindow::loadFile(const QString &fileName)
                 EmbPolygon polygon = g.object.polygon;
                 QPainterPath polygonPath;
                 bool firstPoint = false;
-                qreal startX = 0, startY = 0;
-                qreal x = 0, y = 0;
+                EmbReal startX = 0, startY = 0;
+                EmbReal x = 0, y = 0;
                 EmbArray* curPointList = polygon.pointList;
                 for (int j=0; j<curPointList->count; j++) {
                     EmbPoint pp = curPointList->geometry[j].object.point;

@@ -6,7 +6,7 @@
 class PointObject : public BaseObject
 {
 public:
-    PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent = 0);
+    PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
     PointObject(PointObject* obj, QGraphicsItem* parent = 0);
     ~PointObject();
 
@@ -16,13 +16,13 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    qreal   objectX()   const { return scenePos().x(); }
-    qreal   objectY()   const { return scenePos().y(); }
+    EmbReal   objectX()   const { return scenePos().x(); }
+    EmbReal   objectY()   const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
+    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
+    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -32,7 +32,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType);
+    void init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 };
 
 #endif

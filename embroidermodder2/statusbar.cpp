@@ -31,7 +31,7 @@ StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)
     this->addWidget(statusBarLwtButton);
 }
 
-void StatusBar::setMouseCoord(qreal x, qreal y)
+void StatusBar::setMouseCoord(EmbReal x, EmbReal y)
 {
     //TODO: set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific)
 

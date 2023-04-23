@@ -1,7 +1,6 @@
 #include "embroidermodder.h"
 
 #include "object-save.h"
-#include "object-data.h"
 
 #include "object-arc.h"
 #include "object-circle.h"
@@ -281,8 +280,8 @@ void SaveObject::addPath(EmbPattern* pattern, QGraphicsItem* item)
     {
         QPainterPath path = polylineItem->path();
         QPointF pos = polylineItem->pos();
-        qreal startX = pos.x();
-        qreal startY = pos.y();
+        EmbReal startX = pos.x();
+        EmbReal startY = pos.y();
 
         QPainterPath::Element element;
         QPainterPath::Element P1;
@@ -421,8 +420,8 @@ void SaveObject::addTextSingle(EmbPattern* pattern, QGraphicsItem* item)
 //NOTE: This function should be used to interpret various object types and save them as polylines for stitchOnly formats.
 void SaveObject::toPolyline(EmbPattern* pattern, const QPointF& objPos, const QPainterPath& objPath, const QString& layer, const QColor& color, const QString& lineType, const QString& lineWeight)
 {
-    qreal startX = objPos.x();
-    qreal startY = objPos.y();
+    EmbReal startX = objPos.x();
+    EmbReal startY = objPos.y();
     EmbArray* pointList = 0;
     QPainterPath::Element element;
     for (int i = 0; i < objPath.elementCount(); ++i) {

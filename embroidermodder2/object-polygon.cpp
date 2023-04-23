@@ -1,12 +1,12 @@
 #include "object-polygon.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 #include <QMessageBox>
 
-PolygonObject::PolygonObject(qreal x, qreal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+PolygonObject::PolygonObject(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PolygonObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -28,7 +28,7 @@ PolygonObject::~PolygonObject()
     qDebug("PolygonObject Destructor()");
 }
 
-void PolygonObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+void PolygonObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POLYGON);
@@ -114,8 +114,8 @@ void PolygonObject::updateRubber(QPainter* painter)
 
         QPointF inscribePoint = mapFromScene(objectRubberPoint("POLYGON_INSCRIBE_POINT"));
         QLineF inscribeLine = QLineF(QPointF(0,0), inscribePoint);
-        qreal inscribeAngle = inscribeLine.angle();
-        qreal inscribeInc = 360.0/numSides;
+        EmbReal inscribeAngle = inscribeLine.angle();
+        EmbReal inscribeInc = 360.0/numSides;
 
         if(painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
@@ -138,8 +138,8 @@ void PolygonObject::updateRubber(QPainter* painter)
 
         QPointF circumscribePoint = mapFromScene(objectRubberPoint("POLYGON_CIRCUMSCRIBE_POINT"));
         QLineF circumscribeLine = QLineF(QPointF(0,0), circumscribePoint);
-        qreal circumscribeAngle = circumscribeLine.angle();
-        qreal circumscribeInc = 360.0/numSides;
+        EmbReal circumscribeAngle = circumscribeLine.angle();
+        EmbReal circumscribeInc = 360.0/numSides;
 
         if(painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
 
@@ -209,13 +209,13 @@ QPointF PolygonObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPainterPath::Element element = normalPath.elementAt(0);
     QPointF closestPoint = mapToScene(QPointF(element.x, element.y));
-    qreal closestDist = QLineF(mousePoint, closestPoint).length();
+    EmbReal closestDist = QLineF(mousePoint, closestPoint).length();
     int elemCount = normalPath.elementCount();
     for(int i = 0; i < elemCount; ++i)
     {
         element = normalPath.elementAt(i);
         QPointF elemPoint = mapToScene(element.x, element.y);
-        qreal elemDist = QLineF(mousePoint, elemPoint).length();
+        EmbReal elemDist = QLineF(mousePoint, elemPoint).length();
         if(elemDist < closestDist)
         {
             closestPoint = elemPoint;
@@ -271,7 +271,7 @@ QPainterPath PolygonObject::objectSavePath() const
 {
     QPainterPath closedPath = normalPath;
     closedPath.closeSubpath();
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);

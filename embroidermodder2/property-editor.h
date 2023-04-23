@@ -123,7 +123,7 @@ private:
     QString fieldOffText;
 
     void updateLineEditStrIfVaries(QLineEdit* lineEdit, const QString& str);
-    void updateLineEditNumIfVaries(QLineEdit* lineEdit, qreal num, bool useAnglePrecision);
+    void updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision);
     void updateFontComboBoxStrIfVaries(QFontComboBox* fontComboBox, const QString& str);
     void updateComboBoxStrIfVaries(QComboBox* comboBox, const QString& str, const QStringList& strList);
     void updateComboBoxBoolIfVaries(QComboBox* comboBox, bool val, bool yesOrNoText);

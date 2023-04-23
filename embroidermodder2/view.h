@@ -51,17 +51,17 @@ public slots:
     void selectionChanged();
     void clearSelection();
     void deleteSelected();
-    void moveSelected(qreal dx, qreal dy);
+    void moveSelected(EmbReal dx, EmbReal dy);
     void cut();
     void copy();
     void paste();
     void repeatAction();
     void moveAction();
     void scaleAction();
-    void scaleSelected(qreal x, qreal y, qreal factor);
+    void scaleSelected(EmbReal x, EmbReal y, EmbReal factor);
     void rotateAction();
-    void rotateSelected(qreal x, qreal y, qreal rot);
-    void mirrorSelected(qreal x1, qreal y1, qreal x2, qreal y2);
+    void rotateSelected(EmbReal x, EmbReal y, EmbReal rot);
+    void mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
     int  numSelected();
 
     void deletePressed();
@@ -91,7 +91,7 @@ public slots:
     void createGrid(const QString& gridType);
     void setRulerColor(QRgb color);
 
-    void previewOn(int clone, int mode, qreal x, qreal y, qreal data);
+    void previewOn(int clone, int mode, EmbReal x, EmbReal y, EmbReal data);
     void previewOff();
 
     void enableMoveRapidFire();
@@ -143,7 +143,7 @@ private:
     QList<QGraphicsItem*> previewObjectList;
     QGraphicsItemGroup* previewObjectItemGroup;
     QPointF previewPoint;
-    qreal   previewData;
+    EmbReal   previewData;
     int     previewMode;
 
     QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
@@ -206,9 +206,6 @@ private:
     int panStartY;
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
-
-    inline qreal pi() { return (qAtan(1.0)*4.0); };
-    inline qreal radians(qreal degrees) { return (degrees*pi()/180.0); };
 };
 
 #endif

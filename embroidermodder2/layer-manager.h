@@ -1,6 +1,8 @@
 #ifndef LAYER_MANAGER_H
 #define LAYER_MANAGER_H
 
+#include "embroidermodder.h"
+
 #include <QDialog>
 
 class MainWindow;
@@ -28,7 +30,7 @@ public:
 void addLayer(const QString& name,
               const bool visible,
               const bool frozen,
-              const qreal zValue,
+              const EmbReal zValue,
               const QRgb color,
               const QString& lineType,
               const QString& lineWeight,

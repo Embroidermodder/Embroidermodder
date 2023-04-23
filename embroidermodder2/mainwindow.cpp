@@ -2,8 +2,8 @@
  * \file mainwindow.cpp
  */
 
-#include "mainwindow.h"
 #include "embroidermodder.h"
+#include "mainwindow.h"
 #include "statusbar.h"
 #include "statusbar-button.h"
 #include "view.h"
@@ -11,10 +11,6 @@
 #include "property-editor.h"
 #include "undo-editor.h"
 #include "preview-dialog.h"
-#include "object-data.h"
-
-#include <vector>
-#include <stdlib.h>
 
 #include <QDebug>
 #include <QFrame>

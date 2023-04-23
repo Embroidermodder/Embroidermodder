@@ -10,8 +10,8 @@
 #include <QToolButton>
 #include <QWidget>
 
+#include "embroidermodder.h"
 #include "property-editor.h"
-#include "object-data.h"
 
 #include "object-arc.h"
 #include "object-circle.h"
@@ -516,7 +516,7 @@ void PropertyEditor::updateLineEditStrIfVaries(QLineEdit* lineEdit, const QStrin
     else if(fieldOldText != fieldNewText) lineEdit->setText(fieldVariesText);
 }
 
-void PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, qreal num, bool useAnglePrecision)
+void PropertyEditor::updateLineEditNumIfVaries(QLineEdit* lineEdit, EmbReal num, bool useAnglePrecision)
 {
     int precision = 0;
     if(useAnglePrecision) precision = precisionAngle;

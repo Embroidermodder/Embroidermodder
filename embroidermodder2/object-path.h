@@ -6,7 +6,7 @@
 class PathObject : public BaseObject
 {
 public:
-    PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
+    PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent = 0);
     PathObject(PathObject* obj, QGraphicsItem* parent = 0);
     ~PathObject();
 
@@ -17,13 +17,13 @@ public:
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    qreal   objectX()   const { return scenePos().x(); }
-    qreal   objectY()   const { return scenePos().y(); }
+    EmbReal   objectX()   const { return scenePos().x(); }
+    EmbReal   objectY()   const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
+    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
+    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -33,7 +33,7 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
     void updatePath(const QPainterPath& p);
     QPainterPath normalPath;
     //TODO: make paths similar to polylines. Review and implement any missing functions/members.

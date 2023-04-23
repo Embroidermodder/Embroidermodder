@@ -1,7 +1,7 @@
 #include <QtGui>
 
 #include "settings-dialog.h"
-#include "object-data.h"
+#include "embroidermodder.h"
 #include "statusbar.h"
 #include "statusbar-button.h"
 

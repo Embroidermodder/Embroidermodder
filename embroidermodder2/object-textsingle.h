@@ -6,7 +6,7 @@
 class TextSingleObject : public BaseObject
 {
 public:
-    TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent = 0);
+    TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent = 0);
     TextSingleObject(TextSingleObject* obj, QGraphicsItem* parent = 0);
     ~TextSingleObject();
 
@@ -19,7 +19,7 @@ public:
     QString objectText()           const { return objText; }
     QString objectTextFont()       const { return objTextFont; }
     QString objectTextJustify()    const { return objTextJustify; }
-    qreal   objectTextSize()       const { return objTextSize; }
+    EmbReal   objectTextSize()       const { return objTextSize; }
     bool    objectTextBold()       const { return objTextBold; }
     bool    objectTextItalic()     const { return objTextItalic; }
     bool    objectTextUnderline()  const { return objTextUnderline; }
@@ -28,15 +28,15 @@ public:
     bool    objectTextBackward()   const { return objTextBackward; }
     bool    objectTextUpsideDown() const { return objTextUpsideDown; }
     QPointF objectPos()            const { return scenePos(); }
-    qreal   objectX()              const { return scenePos().x(); }
-    qreal   objectY()              const { return scenePos().y(); }
+    EmbReal   objectX()              const { return scenePos().x(); }
+    EmbReal   objectY()              const { return scenePos().y(); }
 
     QStringList objectTextJustifyList() const;
 
     void setObjectText(const QString& str);
     void setObjectTextFont(const QString& font);
     void setObjectTextJustify(const QString& justify);
-    void setObjectTextSize(qreal size);
+    void setObjectTextSize(EmbReal size);
     void setObjectTextStyle(bool bold, bool italic, bool under, bool strike, bool over);
     void setObjectTextBold(bool val);
     void setObjectTextItalic(bool val);
@@ -46,9 +46,9 @@ public:
     void setObjectTextBackward(bool val);
     void setObjectTextUpsideDown(bool val);
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
-    void setObjectPos(qreal x, qreal y) { setPos(x, y); }
-    void setObjectX(qreal x) { setObjectPos(x, objectY()); }
-    void setObjectY(qreal y) { setObjectPos(objectX(), y); }
+    void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
+    void setObjectX(EmbReal x) { setObjectPos(x, objectY()); }
+    void setObjectY(EmbReal y) { setObjectPos(objectX(), y); }
 
     void updateRubber(QPainter* painter = 0);
     virtual void vulcanize();
@@ -58,12 +58,12 @@ public:
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
 private:
-    void init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType);
+    void init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 
     QString objText;
     QString objTextFont;
     QString objTextJustify;
-    qreal   objTextSize;
+    EmbReal   objTextSize;
     bool    objTextBold;
     bool    objTextItalic;
     bool    objTextUnderline;

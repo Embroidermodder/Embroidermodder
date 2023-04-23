@@ -109,7 +109,6 @@ add_executable(embroidermodder2
     ${SRC_DIR}/object-arc.h
     ${SRC_DIR}/object-base.h
     ${SRC_DIR}/object-circle.h
-    ${SRC_DIR}/object-data.h
     ${SRC_DIR}/object-dimleader.h
     ${SRC_DIR}/object-ellipse.h
     ${SRC_DIR}/object-image.h
