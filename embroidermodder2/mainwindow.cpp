@@ -1,37 +1,23 @@
 /**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
  * \file mainwindow.cpp
  */
 
 #include "embroidermodder.h"
-#include "mainwindow.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "view.h"
-#include "cmdprompt.h"
-#include "property-editor.h"
-#include "undo-editor.h"
-#include "preview-dialog.h"
-
-#include <QDebug>
-#include <QFrame>
-#include <QVBoxLayout>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMdiArea>
-#include <QWidget>
-#include <QMdiSubWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QFileDialog>
-#include <QApplication>
-#include <QDate>
-#include <QFileInfo>
-#include <QLabel>
-#include <QComboBox>
-#include <QCloseEvent>
-#include <QMetaObject>
-#include <QLocale>
 
 MainWindow* _mainWin = 0;
 
@@ -625,10 +611,10 @@ void MainWindow::LoadCommand(EmbString cmdName)
 /**
  * \brief
  */
+    /*
 std::string
 Include(std::vector<std::string> args, QScriptEngine* engine)
 {
-    /*
     EmbString fileName = args(0).toString();
     QFile scriptFile("commands/" + fileName);
 
@@ -648,10 +634,10 @@ Include(std::vector<std::string> args, QScriptEngine* engine)
     }
 
     std::string result = engine->evaluate(s);
-    */
 
     return "";
 }
+    */
 
 /**
  *

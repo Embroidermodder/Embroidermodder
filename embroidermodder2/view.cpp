@@ -1,32 +1,24 @@
 /**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
  * \file view.cpp
  */
 
 #include "embroidermodder.h"
-#include "view.h"
-#include "property-editor.h"
-#include "statusbar.h"
-#include "object-base.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
 
-#include "selectbox.h"
-
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-
-#include <QtGui>
-#include <QGraphicsScene>
 //#include <QOpenGLWidget>
 
 View::View(MainWindow* mw, QGraphicsScene* theScene, QWidget* parent) : QGraphicsView(theScene, parent)
@@ -549,6 +541,9 @@ void View::toggleQSnap(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ *
+ */
 void View::toggleQTrack(bool on)
 {
     qDebug("View toggleQTrack()");
@@ -559,6 +554,9 @@ void View::toggleQTrack(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ *
+ */
 void View::toggleLwt(bool on)
 {
     qDebug("View toggleLwt()");
@@ -568,6 +566,9 @@ void View::toggleLwt(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ *
+ */
 void View::toggleReal(bool on)
 {
     qDebug("View toggleReal()");
@@ -577,11 +578,17 @@ void View::toggleReal(bool on)
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ *
+ */
 bool View::isLwtEnabled()
 {
     return gscene->property(ENABLE_LWT).toBool();
 }
 
+/**
+ *
+ */
 bool View::isRealEnabled()
 {
     return gscene->property(ENABLE_REAL).toBool();

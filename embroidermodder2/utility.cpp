@@ -11,10 +11,6 @@
  *
  *  Use Python's PEP7 style guide.
  *      https://peps.python.org/pep-0007/
- *
- * \file main.c
- * \brief As much of the code as possible, to keep the structure
- * simple and in a procedural style.
  */
 
 #include "embroidermodder.h"

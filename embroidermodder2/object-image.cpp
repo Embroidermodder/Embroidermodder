@@ -1,16 +1,36 @@
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
+ * \file object-rect.cpp
+ */
+
 #include "embroidermodder.h"
-#include "object-image.h"
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-
+/**
+ * \brief .
+ */
 ImageObject::ImageObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ImageObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * \brief .
+ */
 ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ImageObject Constructor()");
@@ -22,11 +42,17 @@ ImageObject::ImageObject(ImageObject* obj, QGraphicsItem* parent) : BaseObject(p
     }
 }
 
+/**
+ * \brief .
+ */
 ImageObject::~ImageObject()
 {
     qDebug("ImageObject Destructor()");
 }
 
+/**
+ * \brief .
+ */
 void ImageObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
@@ -44,14 +70,22 @@ void ImageObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt:
     setPen(objectPen());
 }
 
-void ImageObject::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
+/**
+ * \brief .
+ */
+void
+ImageObject::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
     updatePath();
 }
 
-QPointF ImageObject::objectTopLeft() const
+/**
+ * \brief .
+ */
+QPointF
+ImageObject::objectTopLeft() const
 {
     EmbReal rot = radians(rotation());
     EmbReal cosRot = qCos(rot);
@@ -66,7 +100,11 @@ QPointF ImageObject::objectTopLeft() const
     return (scenePos() + QPointF(ptlXrot, ptlYrot));
 }
 
-QPointF ImageObject::objectTopRight() const
+/**
+ * \brief .
+ */
+QPointF
+ImageObject::objectTopRight() const
 {
     EmbReal rot = radians(rotation());
     EmbReal cosRot = qCos(rot);
@@ -81,7 +119,11 @@ QPointF ImageObject::objectTopRight() const
     return (scenePos() + QPointF(ptrXrot, ptrYrot));
 }
 
-QPointF ImageObject::objectBottomLeft() const
+/**
+ * \brief .
+ */
+QPointF
+ImageObject::objectBottomLeft() const
 {
     EmbReal rot = radians(rotation());
     EmbReal cosRot = qCos(rot);
@@ -96,7 +138,11 @@ QPointF ImageObject::objectBottomLeft() const
     return (scenePos() + QPointF(pblXrot, pblYrot));
 }
 
-QPointF ImageObject::objectBottomRight() const
+/**
+ * \brief .
+ */
+QPointF
+ImageObject::objectBottomRight() const
 {
     EmbReal rot = radians(rotation());
     EmbReal cosRot = qCos(rot);
@@ -111,7 +157,11 @@ QPointF ImageObject::objectBottomRight() const
     return (scenePos() + QPointF(pbrXrot, pbrYrot));
 }
 
-void ImageObject::updatePath()
+/**
+ * \brief .
+ */
+void
+ImageObject::updatePath()
 {
     QPainterPath path;
     QRectF r = rect();
@@ -128,7 +178,11 @@ void ImageObject::updatePath()
     setObjectPath(path);
 }
 
-void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * \brief .
+ */
+void
+ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if(!objScene) return;
@@ -143,7 +197,11 @@ void ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->drawRect(rect());
 }
 
-void ImageObject::updateRubber(QPainter* painter)
+/**
+ * \brief .
+ */
+void
+ImageObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if(rubberMode == OBJ_RUBBER_IMAGE)
@@ -163,7 +221,11 @@ void ImageObject::updateRubber(QPainter* painter)
     }
 }
 
-void ImageObject::vulcanize()
+/**
+ * \brief .
+ */
+void
+ImageObject::vulcanize()
 {
     qDebug("ImageObject vulcanize()");
     updateRubber();
@@ -172,7 +234,11 @@ void ImageObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-QPointF ImageObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * \brief .
+ */
+QPointF
+ImageObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF ptl = objectTopLeft();     //Top Left Corner QSnap
     QPointF ptr = objectTopRight();    //Top Right Corner QSnap
@@ -194,16 +260,22 @@ QPointF ImageObject::mouseSnapPoint(const QPointF& mousePoint)
     return scenePos();
 }
 
-QList<QPointF> ImageObject::allGripPoints()
+/**
+ * \brief .
+ */
+QList<QPointF>
+ImageObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectTopLeft() << objectTopRight() << objectBottomLeft() << objectBottomRight();
     return gripPoints;
 }
 
-void ImageObject::gripEdit(const QPointF& before, const QPointF& after)
+/**
+ * \brief .
+ */
+void
+ImageObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for ImageObject
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

@@ -97,38 +97,7 @@ add_executable(embroidermodder2
     ${SRC_DIR}/undo-editor.cpp
     ${SRC_DIR}/view.cpp
 
-    ${SRC_DIR}/application.h
-    ${SRC_DIR}/cmdprompt.h
-    ${SRC_DIR}/embdetails-dialog.h
     ${SRC_DIR}/embroidermodder.h
-    ${SRC_DIR}/imagewidget.h
-    ${SRC_DIR}/layer-manager.h
-    ${SRC_DIR}/mainwindow.h
-    ${SRC_DIR}/mdiarea.h
-    ${SRC_DIR}/mdiwindow.h
-    ${SRC_DIR}/object-arc.h
-    ${SRC_DIR}/object-base.h
-    ${SRC_DIR}/object-circle.h
-    ${SRC_DIR}/object-dimleader.h
-    ${SRC_DIR}/object-ellipse.h
-    ${SRC_DIR}/object-image.h
-    ${SRC_DIR}/object-line.h
-    ${SRC_DIR}/object-path.h
-    ${SRC_DIR}/object-point.h
-    ${SRC_DIR}/object-polygon.h
-    ${SRC_DIR}/object-polyline.h
-    ${SRC_DIR}/object-rect.h
-    ${SRC_DIR}/object-save.h
-    ${SRC_DIR}/object-textsingle.h
-    ${SRC_DIR}/preview-dialog.h
-    ${SRC_DIR}/property-editor.h
-    ${SRC_DIR}/selectbox.h
-    ${SRC_DIR}/settings-dialog.h
-    ${SRC_DIR}/statusbar-button.h
-    ${SRC_DIR}/statusbar.h
-    ${SRC_DIR}/undo-commands.h
-    ${SRC_DIR}/undo-editor.h
-    ${SRC_DIR}/view.h
 
     ${CMAKE_SOURCE_DIR}/extern/tomlc99/toml.c
 )

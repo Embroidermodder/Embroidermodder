@@ -1,16 +1,36 @@
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
+ * \file object-rect.cpp
+ */
+
 #include "embroidermodder.h"
-#include "object-dimleader.h"
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-
+/**
+ * \brief .
+ */
 DimLeaderObject::DimLeaderObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * \brief .
+ */
 DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
@@ -20,11 +40,17 @@ DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : 
     }
 }
 
+/**
+ * \brief .
+ */
 DimLeaderObject::~DimLeaderObject()
 {
     qDebug("DimLeaderObject Destructor()");
 }
 
+/**
+ * \brief .
+ */
 void DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
