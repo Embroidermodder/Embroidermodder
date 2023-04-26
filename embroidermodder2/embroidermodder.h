@@ -3,7 +3,7 @@
  *
  *  ------------------------------------------------------------
  *
- *  Copyright 2013-2022 The Embroidermodder Team
+ *  Copyright 2013-2023 The Embroidermodder Team
  *  Embroidermodder 2 is Open Source Software.
  *  See LICENSE for licensing terms.
  *
@@ -39,96 +39,27 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QBrush>
 #include <QComboBox>
-#include <QContextMenuEvent>
-#include <QDebug>
-#include <QDialog>
-#include <QDir>
-#include <QDockWidget>
-#include <QFileDialog>
-#include <QFontComboBox>
-#include <QFormLayout>
+#include <QDialogButtonBox>
 #include <QGraphicsScene>
-#include <QGraphicsItem>
-#include <QGraphicsView>
-#include <QGridLayout>
+#include <QGraphicsPathItem>
 #include <QGroupBox>
-#include <QHash>
-#include <QImage>
-#include <QKeyEvent>
-#include <QLabel>
 #include <QLineEdit>
 #include <QList>
 #include <QMainWindow>
 #include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QMenu>
 #include <QMessageBox>
+#include <QMetaObject>
 #include <QObject>
-#include <QPainter>
-#include <QPainterPath>
-#include <QPen>
-#include <QPixmap>
-#include <QRubberBand>
-#include <QScrollArea>
-#include <QScrollBar>
-#include <QSettings>
-#include <QSignalMapper>
-#include <QStatusBar>
-#include <QStyleOption>
-#include <QTextBrowser>
 #include <QTextLayout>
 #include <QToolBar>
-#include <QToolButton>
-#include <QTransform>
 #include <QSplitter>
-#include <QUndoCommand>
-#include <QUndoGroup>
 #include <QUndoStack>
-#include <QUndoView>
-#include <QWidget>
-
-#include <QFrame>
 #include <QVBoxLayout>
-#include <QMenu>
-#include <QMenuBar>
-#include <QStatusBar>
-#include <QMdiArea>
-#include <QWidget>
-#include <QMdiSubWindow>
-#include <QMessageBox>
-#include <QToolBar>
-#include <QFileDialog>
-#include <QDate>
-#include <QFileInfo>
-#include <QComboBox>
-#include <QCloseEvent>
-#include <QMetaObject>
-#include <QLocale>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QUrl>
-#include <QProcess>
-#include <QMessageBox>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QMdiArea>
-#include <QGraphicsScene>
-#include <QComboBox>
-#include <QWhatsThis>
 
-#include <QtGlobal>
-#include <QtGui>
 #include <QtPrintSupport>
 
-//#include <QtScript>
-//#include <QtScriptTools>
-
-#if QT_VERSION >= 0x050000
-#include <QStandardPaths>
-#endif
-
+class ImageWidget;
 class MdiArea;
 class MdiWindow;
 class View;
@@ -138,6 +69,7 @@ class CmdPrompt;
 class PropertyEditor;
 class UndoEditor;
 class MainWindow;
+
 class BaseObject;
 class SelectBox;
 class ArcObject;
@@ -166,344 +98,25 @@ class RectObject;
 class SplineObject;
 class TextMultiObject;
 class TextSingleObject;
-class StatusBarButton;
-class StatusBar;
-
-/**
- */
-#define WIDGET_MODE_BLOCK             0
-#define WIDGET_MODE_TEXT              1
-#define WIDGET_MODE_IMAGE             2
-#define WIDGET_MODE_SVG               3
-#define WIDGET_MODE_BACKGROUND        4
-#define WIDGET_MODE_SPINBOX           5
-#define WIDGET_MODE_COMBOBOX          6
-#define WIDGET_MODE_CONTAINER         7
-#define WIDGET_MODE_PANEL             8
-#define WIDGET_MODE_VIEW              9
-#define WIDGET_MODE_ROOT             10
-
-/**
- */
-#define VIEW_STATE_SNAP          0x0000
-#define VIEW_STATE_GRIP          0x0001
-#define VIEW_STATE_RULER         0x0002
-#define VIEW_STATE_ORTHO         0x0004
-#define VIEW_STATE_POLAR         0x0008
-#define VIEW_STATE_QSNAP         0x0010
-#define VIEW_STATE_QTRACK        0x0020
-#define VIEW_STATE_LWT           0x0040
-#define VIEW_STATE_REAL          0x0080
-#define VIEW_STATE_CLOSEABLE     0x0100
-#define VIEW_STATE_USE_LOGO      0x0200
-#define VIEW_STATE_USE_TEXTURE   0x0400
-#define VIEW_STATE_USE_COLOR     0x0800
-#define VIEW_STATE_GRID          0x1000
-
-/* Permissions System(Not implemented)
- * ------------------------------------
- *
- * The permissions flag determines whether the user or the system can run this
- * action.
- */
-#define PERMISSIONS_USER              0
-#define PERMISSIONS_SYSTEM            1
-
-#define MITER_JOIN                    0
-
-#define LINE_STYLE_DASHED             0
-#define LINE_STYLE_SOLID              1
-
-#define BRUSH_STYLE_DASHED            0
-#define BRUSH_STYLE_SOLID             1
-
-#define DIRECTION_RIGHT               0
-#define DIRECTION_LEFT                1
-
-#define RENDER_UI                     0
-#define RENDER_TEXT_EDITOR            1
-
-#define RUBBER_MODES                 22
-    /*!< The number of possible rubber values: used for checking if a rubber
-        value is unset or in error. */
-
-#define NUMBER_ARCHITECTURAL          0
-#define NUMBER_DECIMAL                1
-#define NUMBER_ENGINEERING            2
-#define NUMBER_FRACTIONAL             3
-#define NUMBER_SCIENTIFIC             4
-
-#define DISABLE_GRID                  0
-#define RECTANGULAR_GRID              1
-#define CIRCULAR_GRID                 2
-#define ISOMETRIC_GRID                3
-
-/*
-enum ArrowStyle
-{
-    NoArrow, //NOTE: Allow this enum to evaluate false
-    Open,
-    Closed,
-    Dot,
-    Box,
-    Tick
-};
-
-enum lineStyle
-{
-    NoLine, //NOTE: Allow this enum to evaluate false
-    Flared,
-    Fletching
-};
-
-Action action_list[] = {
-    {"donothing", "&Do Nothing", "Does Nothing"},
-    {ACTION_windowcascade, "windowcascade", "&Cascade", "Cascade the windows."},
-    {ACTION_windowtile, "windowtile", "&Tile", "Tile the windows."},
-    {ACTION_windowclose, "windowclose", "Cl&ose", "Close the active window."},
-    {ACTION_windowcloseall, "windowcloseall", "Close &All", "Close all the windows."},
-    {ACTION_windownext, "windownext", "Ne&xt", "Move the focus to the next window."},
-    {ACTION_windowprevious, "windowprevious", "Pre&vious", "Move the focus to the previous window."},
-
-    {ACTION_new, "new", "&New", "Create a new file."},
-    {ACTION_open, "open", "&Open", "Open an existing file."},
-    {ACTION_save, "save", "&Save", "Save the design to disk."},
-    {ACTION_saveas, "saveas", "Save &As", "Save the design under a new name."},
-    {ACTION_print, "print", "&Print", "Print the design."},
-    {ACTION_designdetails, "designdetails", "&Details", "Details of the current design."},
-    {ACTION_exit, "exit", "E&xit", "Exit the application."},
-
-    {ACTION_cut, "cut", "Cu&t", "Cut the current selection's contents to the clipboard."},
-    {ACTION_copy, "copy", "&Copy", "Copy the current selection's contents to the clipboard."},
-    {ACTION_paste, "paste", "&Paste", "Paste the clipboard's contents into the current selection."},
-
-    {ACTION_help, "help", "&Help", "Displays help."},
-    {ACTION_changelog, "changelog", "&Changelog", "Describes new features in this product."},
-    {ACTION_tipoftheday, "tipoftheday", "&Tip Of The Day", "Displays a dialog with useful tips"},
-    {ACTION_about, "about", "&About Embroidermodder " VERSION, "Displays information about this product."},
-    {ACTION_whatsthis, "whatsthis", "&What's This?", "What's This? Context Help!"},
-
-    {ACTION_undo, "undo", "&Undo", "Reverses the most recent action."},
-    {ACTION_redo, "redo", "&Redo", "Reverses the effects of the previous undo action."},
-
-    {ACTION_icon16, "icon16", "Icon&16", "Sets the toolbar icon size to 16x16."},
-    {ACTION_icon24, "icon24", "Icon&24", "Sets the toolbar icon size to 24x24."},
-    {ACTION_icon32, "icon32", "Icon&32", "Sets the toolbar icon size to 32x32."},
-    {ACTION_icon48, "icon48", "Icon&48", "Sets the toolbar icon size to 48x48."},
-    {ACTION_icon64, "icon64", "Icon&64", "Sets the toolbar icon size to 64x64."},
-    {ACTION_icon128, "icon128", "Icon12&8", "Sets the toolbar icon size to 128x128."},
-
-    {ACTION_settingsdialog, "settingsdialog", "&Settings", "Configure settings specific to this product."},
-
-    {ACTION_makelayercurrent, "makelayercurrent", "&Make Layer Active", "Makes the layer of a selected object the active layer"},
-    {ACTION_layers, "layers", "&Layers", "Manages layers and layer properties:  LAYER"},
-    {ACTION_layerselector, "layerselector", "&Layer Selector", "Dropdown selector for changing the current layer"},
-    {ACTION_layerprevious, "layerprevious", "&Layer Previous", "Restores the previous layer settings:  LAYERP"},
-    {ACTION_colorselector, "colorselector", "&Color Selector", "Dropdown selector for changing the current thread color"},
-    {ACTION_linetypeselector, "linetypeselector", "&Stitchtype Selector", "Dropdown selector for changing the current stitch type"},
-    {ACTION_lineweightselector, "lineweightselector", "&Threadweight Selector", "Dropdown selector for changing the current thread weight"},
-    {ACTION_hidealllayers, "hidealllayers", "&Hide All Layers", "Turns the visibility off for all layers in the current drawing:  HIDEALL"},
-    {ACTION_showalllayers, "showalllayers", "&Show All Layers", "Turns the visibility on for all layers in the current drawing:  SHOWALL"},
-    {ACTION_freezealllayers, "freezealllayers", "&Freeze All Layers", "Freezes all layers in the current drawing:  FREEZEALL"},
-    {ACTION_thawalllayers, "thawalllayers", "&Thaw All Layers", "Thaws all layers in the current drawing:  THAWALL"},
-    {ACTION_lockalllayers, "lockalllayers", "&Lock All Layers", "Locks all layers in the current drawing:  LOCKALL"},
-    {ACTION_unlockalllayers, "unlockalllayers", "&Unlock All Layers", "Unlocks all layers in the current drawing:  UNLOCKALL"},
-
-    {ACTION_textbold, "textbold", "&Bold Text", "Sets text to be bold."},
-    {ACTION_textitalic, "textitalic", "&Italic Text", "Sets text to be italic."},
-    {ACTION_textunderline, "textunderline", "&Underline Text", "Sets text to be underlined."},
-    {ACTION_textstrikeout, "textstrikeout", "&StrikeOut Text", "Sets text to be striked out."},
-    {ACTION_textoverline, "textoverline", "&Overline Text", "Sets text to be overlined."},
-
-    {ACTION_zoomrealtime, "zoomrealtime", "Zoom &Realtime", "Zooms to increase or decrease the apparent size of objects in the current viewport."},
-    {ACTION_zoomprevious, "zoomprevious", "Zoom &Previous", "Zooms to display the previous view."},
-    {ACTION_zoomwindow, "zoomwindow", "Zoom &Window", "Zooms to display an area specified by a rectangular window."},
-    {ACTION_zoomdynamic, "zoomdynamic", "Zoom &Dynamic", "Zooms to display the generated portion of the drawing."},
-    {ACTION_zoomscale, "zoomscale", "Zoom &Scale", "Zooms the display using a specified scale factor."},
-    {ACTION_zoomcenter, "zoomcenter", "Zoom &Center", "Zooms to display a view specified by a center point and magnification or height."},
-    {ACTION_zoomin, "zoomin", "Zoom &In", "Zooms to increase the apparent size of objects."},
-    {ACTION_zoomout, "zoomout", "Zoom &Out", "Zooms to decrease the apparent size of objects."},
-    {ACTION_zoomselected, "zoomselected", "Zoom Selec&ted", "Zooms to display the selected objects."},
-    {ACTION_zoomall, "zoomall", "Zoom &All", "Zooms to display the drawing extents or the grid limits."},
-    {ACTION_zoomextents, "zoomextents", "Zoom &Extents", "Zooms to display the drawing extents."},
-
-    {ACTION_panrealtime, "panrealtime", "&Pan Realtime", "Moves the view in the current viewport."},
-    {ACTION_panpoint, "panpoint", "&Pan Point", "Moves the view by the specified distance."},
-    {ACTION_panleft, "panleft", "&Pan Left", "Moves the view to the left."},
-    {ACTION_panright, "panright", "&Pan Right", "Moves the view to the right."},
-    {ACTION_panup, "panup", "&Pan Up", "Moves the view up."},
-    {ACTION_pandown, "pandown", "&Pan Down", "Moves the view down."},
-
-    {ACTION_day, "day", "&Day", "Updates the current view using day vision settings."},
-    {ACTION_night, "night", "&Night", "Updates the current view using night vision settings."},
-    {-1, "END", "END", "END"}
-};
-
-std::vector<LineEdit> geometry_circle_line_edits = {
-    {
-        .label = "Center X",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleCenterX",
-        .user_editable = false
-    },
-    {
-        .label = "Center Y",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleCenterY",
-        .user_editable = false
-    },
-    {
-        .label = "Radius",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleRadius",
-        .user_editable = false
-    },
-    {
-        .label = "Diameter",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleDiameter",
-        .user_editable = false
-    },
-    {
-        .label = "Area",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleArea",
-        .user_editable = false
-    },
-    {
-        .label = "Circumference",
-        .icon = "blank",
-        .type = "double",
-        .signal = "lineEditCircleCircumference",
-        .user_editable = false
-    }
-};
-
-GroupBox geometry_circle = {
-    .title = "Geometry",
-    .line_edits = geometry_circle_line_edits,
-    .obj_type = OBJ_TYPE_CIRCLE
-};
-*/
-
-/**
- * \def EMB_BLOCK
- * These values are incorrect and need to be in libembroidery.
- */
-#define EMB_BLOCK                    -1
-       /*< For the block type, that has to exist for SVG. */
-#define EMB_DIM_ALIGNED              -2
-       /*< For the Aligned Dimension, that has to exist for DXF drawings. */
-#define EMB_DIM_ANGULAR              -20
-       /*< For the Angular Dimension, that has to exist for DXF drawings. */
-#define EMB_DIM_ARCLENGTH            -3
-       /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
-#define EMB_DIM_LINEAR               -4
-       /*< For the Linear Dimension, that has to exist for DXF drawings. */
-#define EMB_DIM_RADIUS               -5
-       /*< For the Radial Dimension, that has to exist for DXF drawings. */
-#define EMB_DIM_ORDINATE             -6
-       /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
-#define EMB_INFINITELINE             -7
-       /*< For the Infinite Line object. Which should be removed from output as it exists
-           for drafting reasons. */
-#define EMB_RAY                      -8
-       /*< For the Ray object. */
-
-/**
- * Modes for the UiObject struct.
- */
-#define DEFAULT_MODE                  0
-
-#define CIRCLE_MODE_1P_RAD            1
-#define CIRCLE_MODE_1P_DIA            2
-#define CIRCLE_MODE_2P                3
-#define CIRCLE_MODE_3P                4
-#define CIRCLE_MODE_TTR               5
-
-#define ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS 6
-#define ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS   7
-#define ELLIPSE_MODE_ELLIPSE_ROTATION  8
-
-#define DOLPHIN_MODE_NUM_POINTS        9
-#define DOLPHIN_MODE_XSCALE           10
-#define DOLPHIN_MODE_YSCALE           11
-
-#define HEART_MODE_NUM_POINTS         12
-#define HEART_MODE_STYLE              13
-#define HEART_MODE_XSCALE             14
-#define HEART_MODE_YSCALE             15
-
-#define ROTATE_MODE_NORMAL            16
-#define ROTATE_MODE_REFERENCE         17
-
-#define SCALE_MODE_NORMAL             18
-#define SCALE_MODE_REFERENCE          19
-
-#define SINGLE_LINE_TEXT_MODE_JUSTIFY 20
-#define SINGLE_LINE_TEXT_MODE_SETFONT 21
-#define SINGLE_LINE_TEXT_MODE_SETGEOM 22
-#define SINGLE_LINE_TEXT_MODE_RAPID   23
-
-#define STAR_MODE_NUM_POINTS          24
-#define STAR_MODE_CENTER_PT           25
-#define STAR_MODE_RAD_OUTER           26
-#define STAR_MODE_RAD_INNER           27
-
-#define SNOWFLAKE_MODE_NUM_POINTS     28
-#define SNOWFLAKE_MODE_XSCALE         29
-#define SNOWFLAKE_MODE_YSCALE         30
-
-/**
- * Kinds of messagebox.
- */
-#define MSG_CRITICAL                    1
-#define MSG_INFORMATION                 2
-#define MSG_QUESTION                    3
-#define MSG_WARNING                     4
-
-/**
- * \def JUSTIFY_LEFT
- * A kind of text justification.
- */
-#define JUSTIFY_LEFT                    0
-#define JUSTIFY_RIGHT                   1
-#define JUSTIFY_ALIGN                   2
-#define JUSTIFY_MIDDLE                  3
-#define JUSTIFY__                       3
-#define JUSTIFY_TOPLEFT                 4
-#define JUSTIFY_TOPCENTER               5
-#define JUSTIFY_TOPRIGHT                6
-#define JUSTIFY_MIDDLELEFT              7
-#define JUSTIFY_MIDDLECENTER            8
-#define JUSTIFY_MIDDLERIGHT             9
-#define JUSTIFY_BOTTOMLEFT             10
-#define JUSTIFY_BOTTOMCENTER           11
-#define JUSTIFY_BOTTOMRIGHT            12
 
 /**
  * @brief 
  * 
  */
-typedef struct DictionaryEntry_ {
-    char key[200];
-    char value[200];
-} DictionaryEntry;
+typedef std::unordered_map<std::string, std::string> Dictionary;
 
 /**
- * @brief 
- * 
+ * @brief \todo document this.
  */
-typedef struct Dictionary_ {
-    DictionaryEntry *data;
-    int length;
-    int max_length;
-} Dictionary;
+typedef struct UndoHistory_ {
+    std::vector<std::string> data; /*< \todo document this */
+    int position; /*< \todo document this */
+} UndoHistory;
+
+/**
+ * @brief \todo document this.
+ */
+typedef std::unordered_map<std::string, Dictionary> Index;
 
 /**
  * @brief This covers the inbuilt designs: Dolphin, Snowflake and Heart.
@@ -576,33 +189,6 @@ typedef struct UiObject_ {
 } UiObject;
 
 /**
- * @brief \todo document this.
- */
-typedef struct UndoHistory_ {
-    char data[100][200]; /*< \todo document this */
-    int length; /*< \todo document this */
-    int position; /*< \todo document this */
-    int max_length; /*< \todo document this */
-} UndoHistory;
-
-/**
- * @brief \todo document this.
- */
-typedef struct IndexEntry_ {
-    char key[200]; /*< \todo document this */
-    Dictionary *value; /*< \todo document this */
-} IndexEntry;
-
-/**
- * @brief \todo document this.
- */
-typedef struct Index_ {
-    IndexEntry *data; /*< \todo document this */
-    int length; /*< \todo document this */
-    int max_length; /*< \todo document this */
-} Index;
-
-/**
  * @brief
  *
  * # EmbViews
@@ -673,7 +259,7 @@ typedef struct Settings_ {
     bool mdi_bg_use_color; /*< \todo document this */
     char general_mdi_bg_logo[200]; /*< \todo document this */
     char general_mdi_bg_texture[200]; /*< \todo document this */
-    unsigned int  general_mdi_bg_color; /*< \todo document this */
+    unsigned int general_mdi_bg_color; /*< \todo document this */
     bool tip_of_the_day; /*< \todo document this */
     unsigned int general_current_tip; /*< \todo document this */
     bool general_system_help_browser; /*< \todo document this */
@@ -712,7 +298,7 @@ typedef struct Settings_ {
     bool grid_show_on_load; /*< \todo document this */
     bool grid_show_origin; /*< \todo document this */
     bool grid_color_match_crosshair; /*< \todo document this */
-    unsigned int  grid_color; /*< \todo document this */
+    unsigned int grid_color; /*< \todo document this */
     bool grid_load_from_file; /*< \todo document this */
     char grid_type[200]; /*< \todo document this */
     bool grid_center_on_origin; /*< \todo document this */
@@ -770,12 +356,12 @@ typedef struct Settings_ {
     char to_open[200]; /*< \todo document this */
     char menu_action[200]; /*< \todo document this */
     char current_directory[200]; /*< \todo document this */
-    EmbReal zoomInLimit;  /*< */
-    EmbReal zoomOutLimit;  /*< */
-    EmbVector grid_spacing;  /*< */
-    float ruler_width;  /*< */
-    float tick_depth;  /*< */
-    float major_tick_seperation;  /*< */
+    EmbReal zoomInLimit; /*< */
+    EmbReal zoomOutLimit; /*< */
+    EmbVector grid_spacing; /*< */
+    float ruler_width; /*< */
+    float tick_depth; /*< */
+    float major_tick_seperation; /*< */
     float needle_speed; /*< */
     float stitch_time; /*< */
 } Settings;
@@ -870,6 +456,49 @@ enum COMMAND_ACTIONS
     ACTION_null
 };
 
+enum UiMode {
+    DEFAULT_MODE,
+
+    CIRCLE_MODE_1P_RAD,
+    CIRCLE_MODE_1P_DIA,
+    CIRCLE_MODE_2P,
+    CIRCLE_MODE_3P,
+    CIRCLE_MODE_TTR,
+
+    ELLIPSE_MODE_MAJORDIAMETER_MINORRADIUS,
+    ELLIPSE_MODE_MAJORRADIUS_MINORRADIUS,
+    ELLIPSE_MODE_ELLIPSE_ROTATION,
+
+    DOLPHIN_MODE_NUM_POINTS,
+    DOLPHIN_MODE_XSCALE,
+    DOLPHIN_MODE_YSCALE,
+
+    HEART_MODE_NUM_POINTS,
+    HEART_MODE_STYLE,
+    HEART_MODE_XSCALE,
+    HEART_MODE_YSCALE,
+
+    ROTATE_MODE_NORMAL,
+    ROTATE_MODE_REFERENCE,
+
+    SCALE_MODE_NORMAL,
+    SCALE_MODE_REFERENCE,
+
+    SINGLE_LINE_TEXT_MODE_JUSTIFY,
+    SINGLE_LINE_TEXT_MODE_SETFONT,
+    SINGLE_LINE_TEXT_MODE_SETGEOM,
+    SINGLE_LINE_TEXT_MODE_RAPID,
+
+    STAR_MODE_NUM_POINTS,
+    STAR_MODE_CENTER_PT,
+    STAR_MODE_RAD_OUTER,
+    STAR_MODE_RAD_INNER,
+
+    SNOWFLAKE_MODE_NUM_POINTS,
+    SNOWFLAKE_MODE_XSCALE,
+    SNOWFLAKE_MODE_YSCALE
+};
+
 //Custom Data used in QGraphicsItems
 
 //                   (     int, const QVariant)
@@ -880,147 +509,159 @@ enum COMMAND_ACTIONS
 
 //Keys
 enum OBJ_KEYS {
-OBJ_TYPE   = 0, //value type - int: See OBJ_TYPE_VALUES
-OBJ_NAME   = 1, //value type - str: See OBJ_NAME_VALUES
-OBJ_LAYER  = 2, //value type - str: "USER", "DEFINED", "STRINGS", etc...
-OBJ_COLOR  = 3, //value type - int: 0-255 //TODO: Use color chart in formats/format-dxf.h for this
-OBJ_LTYPE  = 4, //value type - int: See OBJ_LTYPE_VALUES
-OBJ_LWT    = 5, //value type - int: 0-27
+OBJ_TYPE = 0, //value type - int: See OBJ_TYPE_VALUES
+OBJ_NAME = 1, //value type - str: See OBJ_NAME_VALUES
+OBJ_LAYER = 2, //value type - str: "USER", "DEFINED", "STRINGS", etc...
+OBJ_COLOR = 3, //value type - int: 0-255 //TODO: Use color chart in formats/format-dxf.h for this
+OBJ_LTYPE = 4, //value type - int: See OBJ_LTYPE_VALUES
+OBJ_LWT = 5, //value type - int: 0-27
 OBJ_RUBBER = 6  //value type - int: See OBJ_RUBBER_VALUES
 };
 
 //Values
 enum OBJ_TYPE_VALUES {
-OBJ_TYPE_NULL         =      0, //NOTE: Allow this enum to evaluate false
-OBJ_TYPE_BASE         = 100000, //NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast()
-OBJ_TYPE_ARC          = 100001,
-OBJ_TYPE_BLOCK        = 100002,
-OBJ_TYPE_CIRCLE       = 100003,
-OBJ_TYPE_DIMALIGNED   = 100004,
-OBJ_TYPE_DIMANGULAR   = 100005,
+OBJ_TYPE_NULL =      0,
+    /*< NOTE: Allow this enum to evaluate false */
+OBJ_TYPE_BASE = 100000,
+    /*< NOTE: Values >= 65536 ensure compatibility with qgraphicsitem_cast() */
+OBJ_TYPE_ARC = 100001,
+OBJ_TYPE_BLOCK = 100002,
+    /*< For the block type, that has to exist for SVG. */
+OBJ_TYPE_CIRCLE = 100003,
+OBJ_TYPE_DIMALIGNED = 100004,
+    /*< For the Aligned Dimension, that has to exist for DXF drawings. */
+OBJ_TYPE_DIMANGULAR = 100005,
+    /*< For the Angular Dimension, that has to exist for DXF drawings. */
 OBJ_TYPE_DIMARCLENGTH = 100006,
-OBJ_TYPE_DIMDIAMETER  = 100007,
-OBJ_TYPE_DIMLEADER    = 100008,
-OBJ_TYPE_DIMLINEAR    = 100009,
-OBJ_TYPE_DIMORDINATE  = 100010,
-OBJ_TYPE_DIMRADIUS    = 100011,
-OBJ_TYPE_ELLIPSE      = 100012,
-OBJ_TYPE_ELLIPSEARC   = 100013,
-OBJ_TYPE_RUBBER       = 100014,
-OBJ_TYPE_GRID         = 100015,
-OBJ_TYPE_HATCH        = 100016,
-OBJ_TYPE_IMAGE        = 100017,
+    /*< For the Arc Length Dimension, that has to exist for DXF drawings. */
+OBJ_TYPE_DIMDIAMETER = 100007,
+OBJ_TYPE_DIMLEADER = 100008,
+OBJ_TYPE_DIMLINEAR = 100009,
+    /*< For the Linear Dimension, that has to exist for DXF drawings. */
+OBJ_TYPE_DIMORDINATE = 100010,
+    /*< For the Ordinate Dimension, that has to exist for DXF drawings. */
+OBJ_TYPE_DIMRADIUS = 100011,
+    /*< For the Radial Dimension, that has to exist for DXF drawings. */
+OBJ_TYPE_ELLIPSE = 100012,
+OBJ_TYPE_ELLIPSEARC = 100013,
+OBJ_TYPE_RUBBER = 100014,
+OBJ_TYPE_GRID = 100015,
+OBJ_TYPE_HATCH = 100016,
+OBJ_TYPE_IMAGE = 100017,
 OBJ_TYPE_INFINITELINE = 100018,
-OBJ_TYPE_LINE         = 100019,
-OBJ_TYPE_PATH         = 100020,
-OBJ_TYPE_POINT        = 100021,
-OBJ_TYPE_POLYGON      = 100022,
-OBJ_TYPE_POLYLINE     = 100023,
-OBJ_TYPE_RAY          = 100024,
-OBJ_TYPE_RECTANGLE    = 100025,
-OBJ_TYPE_SLOT         = 100026,
-OBJ_TYPE_SPLINE       = 100027,
-OBJ_TYPE_TEXTMULTI    = 100028,
-OBJ_TYPE_TEXTSINGLE   = 100029
+    /*< For the Infinite Line object. Which should be removed from output as it exists
+        for drafting reasons. */
+OBJ_TYPE_LINE = 100019,
+OBJ_TYPE_PATH = 100020,
+OBJ_TYPE_POINT = 100021,
+OBJ_TYPE_POLYGON = 100022,
+OBJ_TYPE_POLYLINE = 100023,
+OBJ_TYPE_RAY = 100024,
+    /*< For the Ray object. */
+OBJ_TYPE_RECTANGLE = 100025,
+OBJ_TYPE_SLOT = 100026,
+OBJ_TYPE_SPLINE = 100027,
+OBJ_TYPE_TEXTMULTI = 100028,
+OBJ_TYPE_TEXTSINGLE = 100029
 };
 
 //OBJ_NAME_VALUES
-const char* const OBJ_NAME_NULL         = "Unknown";
-const char* const OBJ_NAME_BASE         = "Base";
-const char* const OBJ_NAME_ARC          = "Arc";
-const char* const OBJ_NAME_BLOCK        = "Block";
-const char* const OBJ_NAME_CIRCLE       = "Circle";
-const char* const OBJ_NAME_DIMALIGNED   = "Aligned Dimension";
-const char* const OBJ_NAME_DIMANGULAR   = "Angular Dimension";
+const char* const OBJ_NAME_NULL = "Unknown";
+const char* const OBJ_NAME_BASE = "Base";
+const char* const OBJ_NAME_ARC = "Arc";
+const char* const OBJ_NAME_BLOCK = "Block";
+const char* const OBJ_NAME_CIRCLE = "Circle";
+const char* const OBJ_NAME_DIMALIGNED = "Aligned Dimension";
+const char* const OBJ_NAME_DIMANGULAR = "Angular Dimension";
 const char* const OBJ_NAME_DIMARCLENGTH = "Arc Length Dimension";
-const char* const OBJ_NAME_DIMDIAMETER  = "Diameter Dimension";
-const char* const OBJ_NAME_DIMLEADER    = "Leader Dimension";
-const char* const OBJ_NAME_DIMLINEAR    = "Linear Dimension";
-const char* const OBJ_NAME_DIMORDINATE  = "Ordinate Dimension";
-const char* const OBJ_NAME_DIMRADIUS    = "Radius Dimension";
-const char* const OBJ_NAME_ELLIPSE      = "Ellipse";
-const char* const OBJ_NAME_ELLIPSEARC   = "Elliptical Arc";
-const char* const OBJ_NAME_RUBBER       = "Rubber";
-const char* const OBJ_NAME_GRID         = "Grid";
-const char* const OBJ_NAME_HATCH        = "Hatch";
-const char* const OBJ_NAME_IMAGE        = "Image";
+const char* const OBJ_NAME_DIMDIAMETER = "Diameter Dimension";
+const char* const OBJ_NAME_DIMLEADER = "Leader Dimension";
+const char* const OBJ_NAME_DIMLINEAR = "Linear Dimension";
+const char* const OBJ_NAME_DIMORDINATE = "Ordinate Dimension";
+const char* const OBJ_NAME_DIMRADIUS = "Radius Dimension";
+const char* const OBJ_NAME_ELLIPSE = "Ellipse";
+const char* const OBJ_NAME_ELLIPSEARC = "Elliptical Arc";
+const char* const OBJ_NAME_RUBBER = "Rubber";
+const char* const OBJ_NAME_GRID = "Grid";
+const char* const OBJ_NAME_HATCH = "Hatch";
+const char* const OBJ_NAME_IMAGE = "Image";
 const char* const OBJ_NAME_INFINITELINE = "Infinite Line";
-const char* const OBJ_NAME_LINE         = "Line";
-const char* const OBJ_NAME_PATH         = "Path";
-const char* const OBJ_NAME_POINT        = "Point";
-const char* const OBJ_NAME_POLYGON      = "Polygon";
-const char* const OBJ_NAME_POLYLINE     = "Polyline";
-const char* const OBJ_NAME_RAY          = "Ray";
-const char* const OBJ_NAME_RECTANGLE    = "Rectangle";
-const char* const OBJ_NAME_SLOT         = "Slot";
-const char* const OBJ_NAME_SPLINE       = "Spline";
-const char* const OBJ_NAME_TEXTMULTI    = "Multi Line Text";
-const char* const OBJ_NAME_TEXTSINGLE   = "Single Line Text";
+const char* const OBJ_NAME_LINE = "Line";
+const char* const OBJ_NAME_PATH = "Path";
+const char* const OBJ_NAME_POINT = "Point";
+const char* const OBJ_NAME_POLYGON = "Polygon";
+const char* const OBJ_NAME_POLYLINE = "Polyline";
+const char* const OBJ_NAME_RAY = "Ray";
+const char* const OBJ_NAME_RECTANGLE = "Rectangle";
+const char* const OBJ_NAME_SLOT = "Slot";
+const char* const OBJ_NAME_SPLINE = "Spline";
+const char* const OBJ_NAME_TEXTMULTI = "Multi Line Text";
+const char* const OBJ_NAME_TEXTSINGLE = "Single Line Text";
 
 enum OBJ_LTYPE_VALUES {
 //CAD Linetypes
-OBJ_LTYPE_CONT     = 0,
-OBJ_LTYPE_CENTER   = 1,
-OBJ_LTYPE_DOT      = 2,
-OBJ_LTYPE_HIDDEN   = 3,
-OBJ_LTYPE_PHANTOM  = 4,
-OBJ_LTYPE_ZIGZAG   = 5,
+OBJ_LTYPE_CONT = 0,
+OBJ_LTYPE_CENTER = 1,
+OBJ_LTYPE_DOT = 2,
+OBJ_LTYPE_HIDDEN = 3,
+OBJ_LTYPE_PHANTOM = 4,
+OBJ_LTYPE_ZIGZAG = 5,
 //Embroidery Stitchtypes
-OBJ_LTYPE_RUNNING  = 6, // __________
-OBJ_LTYPE_SATIN    = 7, // vvvvvvvvvv
+OBJ_LTYPE_RUNNING = 6, // __________
+OBJ_LTYPE_SATIN = 7, // vvvvvvvvvv
 OBJ_LTYPE_FISHBONE = 8, // >>>>>>>>>>
 };
 
 enum OBJ_LWT_VALUES {
-OBJ_LWT_BYLAYER    = -2,
-OBJ_LWT_BYBLOCK    = -1,
-OBJ_LWT_DEFAULT    =  0,
-OBJ_LWT_01         =  1,
-OBJ_LWT_02         =  2,
-OBJ_LWT_03         =  3,
-OBJ_LWT_04         =  4,
-OBJ_LWT_05         =  5,
-OBJ_LWT_06         =  6,
-OBJ_LWT_07         =  7,
-OBJ_LWT_08         =  8,
-OBJ_LWT_09         =  9,
-OBJ_LWT_10         = 10,
-OBJ_LWT_11         = 11,
-OBJ_LWT_12         = 12,
-OBJ_LWT_13         = 13,
-OBJ_LWT_14         = 14,
-OBJ_LWT_15         = 15,
-OBJ_LWT_16         = 16,
-OBJ_LWT_17         = 17,
-OBJ_LWT_18         = 18,
-OBJ_LWT_19         = 19,
-OBJ_LWT_20         = 20,
-OBJ_LWT_21         = 21,
-OBJ_LWT_22         = 22,
-OBJ_LWT_23         = 23,
-OBJ_LWT_24         = 24
+OBJ_LWT_BYLAYER = -2,
+OBJ_LWT_BYBLOCK = -1,
+OBJ_LWT_DEFAULT =  0,
+OBJ_LWT_01 =  1,
+OBJ_LWT_02 =  2,
+OBJ_LWT_03 =  3,
+OBJ_LWT_04 =  4,
+OBJ_LWT_05 =  5,
+OBJ_LWT_06 =  6,
+OBJ_LWT_07 =  7,
+OBJ_LWT_08 =  8,
+OBJ_LWT_09 =  9,
+OBJ_LWT_10 = 10,
+OBJ_LWT_11 = 11,
+OBJ_LWT_12 = 12,
+OBJ_LWT_13 = 13,
+OBJ_LWT_14 = 14,
+OBJ_LWT_15 = 15,
+OBJ_LWT_16 = 16,
+OBJ_LWT_17 = 17,
+OBJ_LWT_18 = 18,
+OBJ_LWT_19 = 19,
+OBJ_LWT_20 = 20,
+OBJ_LWT_21 = 21,
+OBJ_LWT_22 = 22,
+OBJ_LWT_23 = 23,
+OBJ_LWT_24 = 24
 };
 
 enum OBJ_SNAP_VALUES {
-OBJ_SNAP_NULL            =  0, //NOTE: Allow this enum to evaluate false
-OBJ_SNAP_ENDPOINT        =  1,
-OBJ_SNAP_MIDPOINT        =  2,
-OBJ_SNAP_CENTER          =  3,
-OBJ_SNAP_NODE            =  4,
-OBJ_SNAP_QUADRANT        =  5,
-OBJ_SNAP_INTERSECTION    =  6,
-OBJ_SNAP_EXTENSION       =  7,
-OBJ_SNAP_INSERTION       =  8,
-OBJ_SNAP_PERPENDICULAR   =  9,
-OBJ_SNAP_TANGENT         = 10,
-OBJ_SNAP_NEAREST         = 11,
+OBJ_SNAP_NULL =  0, //NOTE: Allow this enum to evaluate false
+OBJ_SNAP_ENDPOINT =  1,
+OBJ_SNAP_MIDPOINT =  2,
+OBJ_SNAP_CENTER =  3,
+OBJ_SNAP_NODE =  4,
+OBJ_SNAP_QUADRANT =  5,
+OBJ_SNAP_INTERSECTION =  6,
+OBJ_SNAP_EXTENSION =  7,
+OBJ_SNAP_INSERTION =  8,
+OBJ_SNAP_PERPENDICULAR =  9,
+OBJ_SNAP_TANGENT = 10,
+OBJ_SNAP_NEAREST = 11,
 OBJ_SNAP_APPINTERSECTION = 12,
-OBJ_SNAP_PARALLEL        = 13
+OBJ_SNAP_PARALLEL = 13
 };
 
 enum OBJ_RUBBER_VALUES {
 OBJ_RUBBER_OFF = 0,  //NOTE: Allow this enum to evaluate false
-OBJ_RUBBER_ON  = 1,  //NOTE: Allow this enum to evaluate true
+OBJ_RUBBER_ON = 1,  //NOTE: Allow this enum to evaluate true
 
 OBJ_RUBBER_CIRCLE_1P_RAD,
     /*!< For the circle object currently focussed, show two rubber points:
@@ -1080,24 +721,24 @@ PREVIEW_MODE_ROTATE,
 PREVIEW_MODE_SCALE
 };
 
-const char* const ENABLE_SNAP   = "ENABLE_SNAP";
-const char* const ENABLE_GRID   = "ENABLE_GRID";
-const char* const ENABLE_RULER  = "ENABLE_RULER";
-const char* const ENABLE_ORTHO  = "ENABLE_ORTHO";
-const char* const ENABLE_POLAR  = "ENABLE_POLAR";
-const char* const ENABLE_QSNAP  = "ENABLE_QSNAP";
+const char* const ENABLE_SNAP = "ENABLE_SNAP";
+const char* const ENABLE_GRID = "ENABLE_GRID";
+const char* const ENABLE_RULER = "ENABLE_RULER";
+const char* const ENABLE_ORTHO = "ENABLE_ORTHO";
+const char* const ENABLE_POLAR = "ENABLE_POLAR";
+const char* const ENABLE_QSNAP = "ENABLE_QSNAP";
 const char* const ENABLE_QTRACK = "ENABLE_QTRACK";
-const char* const ENABLE_LWT    = "ENABLE_LWT";
-const char* const ENABLE_REAL   = "ENABLE_REAL";
+const char* const ENABLE_LWT = "ENABLE_LWT";
+const char* const ENABLE_REAL = "ENABLE_REAL";
 
 const char* const SCENE_QSNAP_POINT = "SCENE_QSNAP_POINT";
 const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";
-const char* const VIEW_MOUSE_POINT  = "VIEW_MOUSE_POINT";
+const char* const VIEW_MOUSE_POINT = "VIEW_MOUSE_POINT";
 const char* const RUBBER_ROOM = "RUBBER_ROOM";
 
 const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
-const char* const VIEW_COLOR_CROSSHAIR  = "VIEW_COLOR_CROSSHAIR";
-const char* const VIEW_COLOR_GRID       = "VIEW_COLOR_GRID";
+const char* const VIEW_COLOR_CROSSHAIR = "VIEW_COLOR_CROSSHAIR";
+const char* const VIEW_COLOR_GRID = "VIEW_COLOR_GRID";
 
 int read_settings(const char *settings_file);
 void write_settings(const char *fname);
@@ -1162,11 +803,6 @@ degrees(EmbReal radian)
     return (radian*180.0/emb_constant_pi);
 }
 
-
-#include <QHash>
-#include <QPen>
-#include <QGraphicsPathItem>
-
 /**
  *
  */
@@ -1187,16 +823,16 @@ public:
     QHash<QString, QString> objRubberTexts;
     qint64 objID;
 
-    qint64       objectID() const { return objID; }
-    QPen         objectPen() const { return objPen; }
-    QColor       objectColor() const { return objPen.color(); }
-    QRgb         objectColorRGB() const { return objPen.color().rgb(); }
+    qint64 objectID() const { return objID; }
+    QPen objectPen() const { return objPen; }
+    QColor objectColor() const { return objPen.color(); }
+    QRgb objectColorRGB() const { return objPen.color().rgb(); }
     Qt::PenStyle objectLineType() const { return objPen.style(); }
-    EmbReal        objectLineWeight() const { return lwtPen.widthF(); }
+    EmbReal objectLineWeight() const { return lwtPen.widthF(); }
     QPainterPath objectPath() const { return path(); }
-    int          objectRubberMode() const { return objRubberMode; }
-    QPointF      objectRubberPoint(const QString& key) const;
-    QString      objectRubberText(const QString& key) const;
+    int objectRubberMode() const { return objRubberMode; }
+    QPointF objectRubberPoint(const QString& key) const;
+    QString objectRubberText(const QString& key) const;
 
     QRectF rect() const { return path().boundingRect(); }
     void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
@@ -1235,6 +871,11 @@ protected:
 class ArcObject : public BaseObject
 {
 public:
+    QPointF arcStartPoint;
+    QPointF arcMidPoint;
+    QPointF arcEndPoint;
+
+    ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent = 0);
     ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, QGraphicsItem* parent = 0);
     ArcObject(ArcObject* obj, QGraphicsItem* parent = 0);
     ~ArcObject();
@@ -1242,26 +883,32 @@ public:
     enum { Type = OBJ_TYPE_ARC };
     virtual int type() const { return Type; }
 
-    QPointF objectCenter()        const { return scenePos(); }
-    EmbReal   objectCenterX()       const { return scenePos().x(); }
-    EmbReal   objectCenterY()       const { return scenePos().y(); }
-    EmbReal   objectRadius()        const { return rect().width()/2.0*scale(); }
-    EmbReal   objectStartAngle()    const;
-    EmbReal   objectEndAngle()      const;
-    QPointF objectStartPoint()    const;
-    EmbReal   objectStartX()        const;
-    EmbReal   objectStartY()        const;
-    QPointF objectMidPoint()      const;
-    EmbReal   objectMidX()          const;
-    EmbReal   objectMidY()          const;
-    QPointF objectEndPoint()      const;
-    EmbReal   objectEndX()          const;
-    EmbReal   objectEndY()          const;
-    EmbReal   objectArea()          const;
-    EmbReal   objectArcLength()     const;
-    EmbReal   objectChord()         const;
-    EmbReal   objectIncludedAngle() const;
-    bool    objectClockwise()     const;
+    void init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath();
+
+    void calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY);
+    void updateArcRect(EmbReal radius);
+
+    QPointF objectCenter() const { return scenePos(); }
+    EmbReal objectCenterX() const { return scenePos().x(); }
+    EmbReal objectCenterY() const { return scenePos().y(); }
+    EmbReal objectRadius() const { return rect().width()/2.0*scale(); }
+    EmbReal objectStartAngle() const;
+    EmbReal objectEndAngle() const;
+    QPointF objectStartPoint() const;
+    EmbReal objectStartX() const;
+    EmbReal objectStartY() const;
+    QPointF objectMidPoint() const;
+    EmbReal objectMidX() const;
+    EmbReal objectMidY() const;
+    QPointF objectEndPoint() const;
+    EmbReal objectEndX() const;
+    EmbReal objectEndY() const;
+    EmbReal objectArea() const;
+    EmbReal objectArcLength() const;
+    EmbReal objectChord() const;
+    EmbReal objectIncludedAngle() const;
+    bool objectClockwise() const;
 
     void setObjectCenter(const QPointF& point);
     void setObjectCenter(EmbReal pointX, EmbReal pointY);
@@ -1284,16 +931,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
-
-    void calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY);
-    void updateArcRect(EmbReal radius);
-
-    QPointF arcStartPoint;
-    QPointF arcMidPoint;
-    QPointF arcEndPoint;
 };
 
 
@@ -1303,6 +940,9 @@ public:
     CircleObject(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, QGraphicsItem* parent = 0);
     CircleObject(CircleObject* obj, QGraphicsItem* parent = 0);
     ~CircleObject();
+
+    void init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath();
 
     enum { Type = OBJ_TYPE_CIRCLE };
     virtual int type() const { return Type; }
@@ -1337,9 +977,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
 };
 
 /**
@@ -1352,8 +989,20 @@ public:
     DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent = 0);
     ~DimLeaderObject();
 
+    void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
+
+    bool curved;
+    bool filled;
+    void updateLeader();
+    QPainterPath lineStylePath;
+    QPainterPath arrowStylePath;
+    EmbReal arrowStyleAngle;
+    EmbReal arrowStyleLength;
+    EmbReal lineStyleAngle;
+    EmbReal lineStyleLength;
+
     enum ArrowStyle
-    {
+ {
         NoArrow, //NOTE: Allow this enum to evaluate false
         Open,
         Closed,
@@ -1363,7 +1012,7 @@ public:
     };
 
     enum lineStyle
-    {
+ {
         NoLine, //NOTE: Allow this enum to evaluate false
         Flared,
         Fletching
@@ -1374,15 +1023,15 @@ public:
 
     QPointF objectEndPoint1() const;
     QPointF objectEndPoint2() const;
-    QPointF objectMidPoint()  const;
-    EmbReal   objectX1()        const { return objectEndPoint1().x(); }
-    EmbReal   objectY1()        const { return objectEndPoint1().y(); }
-    EmbReal   objectX2()        const { return objectEndPoint2().x(); }
-    EmbReal   objectY2()        const { return objectEndPoint2().y(); }
-    EmbReal   objectDeltaX()    const { return (objectX2() - objectX1()); }
-    EmbReal   objectDeltaY()    const { return (objectY2() - objectY1()); }
-    EmbReal   objectAngle()     const;
-    EmbReal   objectLength()    const { return line().length(); }
+    QPointF objectMidPoint() const;
+    EmbReal objectX1() const { return objectEndPoint1().x(); }
+    EmbReal objectY1() const { return objectEndPoint1().y(); }
+    EmbReal objectX2() const { return objectEndPoint2().x(); }
+    EmbReal objectY2() const { return objectEndPoint2().y(); }
+    EmbReal objectDeltaX() const { return (objectX2() - objectX1()); }
+    EmbReal objectDeltaY() const { return (objectY2() - objectY1()); }
+    EmbReal objectAngle() const;
+    EmbReal objectLength() const { return line().length(); }
 
     void setObjectEndPoint1(const QPointF& endPt1);
     void setObjectEndPoint1(EmbReal x1, EmbReal y1);
@@ -1400,18 +1049,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
-
-    bool curved;
-    bool filled;
-    void updateLeader();
-    QPainterPath lineStylePath;
-    QPainterPath arrowStylePath;
-    EmbReal arrowStyleAngle;
-    EmbReal arrowStyleLength;
-    EmbReal lineStyleAngle;
-    EmbReal lineStyleLength;
 };
 
 
@@ -1425,24 +1062,27 @@ public:
     EllipseObject(EllipseObject* obj, QGraphicsItem* parent = 0);
     ~EllipseObject();
 
+    void init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath();
+
     enum { Type = OBJ_TYPE_ELLIPSE };
     virtual int type() const { return Type; }
 
     QPainterPath objectSavePath() const;
 
-    QPointF objectCenter()        const { return scenePos(); }
-    EmbReal   objectCenterX()       const { return scenePos().x(); }
-    EmbReal   objectCenterY()       const { return scenePos().y(); }
-    EmbReal   objectRadiusMajor()   const { return qMax(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal   objectRadiusMinor()   const { return qMin(rect().width(), rect().height())/2.0*scale(); }
-    EmbReal   objectDiameterMajor() const { return qMax(rect().width(), rect().height())*scale(); }
-    EmbReal   objectDiameterMinor() const { return qMin(rect().width(), rect().height())*scale(); }
-    EmbReal   objectWidth()         const { return rect().width()*scale(); }
-    EmbReal   objectHeight()        const { return rect().height()*scale(); }
-    QPointF objectQuadrant0()     const;
-    QPointF objectQuadrant90()    const;
-    QPointF objectQuadrant180()   const;
-    QPointF objectQuadrant270()   const;
+    QPointF objectCenter() const { return scenePos(); }
+    EmbReal objectCenterX() const { return scenePos().x(); }
+    EmbReal objectCenterY() const { return scenePos().y(); }
+    EmbReal objectRadiusMajor() const { return qMax(rect().width(), rect().height())/2.0*scale(); }
+    EmbReal objectRadiusMinor() const { return qMin(rect().width(), rect().height())/2.0*scale(); }
+    EmbReal objectDiameterMajor() const { return qMax(rect().width(), rect().height())*scale(); }
+    EmbReal objectDiameterMinor() const { return qMin(rect().width(), rect().height())*scale(); }
+    EmbReal objectWidth() const { return rect().width()*scale(); }
+    EmbReal objectHeight() const { return rect().height()*scale(); }
+    QPointF objectQuadrant0() const;
+    QPointF objectQuadrant90() const;
+    QPointF objectQuadrant180() const;
+    QPointF objectQuadrant270() const;
 
     void setObjectSize(EmbReal width, EmbReal height);
     void setObjectCenter(const QPointF& center);
@@ -1461,9 +1101,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
 };
 
 
@@ -1477,16 +1114,19 @@ public:
     ImageObject(ImageObject* obj, QGraphicsItem* parent = 0);
     ~ImageObject();
 
+    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath();
+
     enum { Type = OBJ_TYPE_IMAGE };
     virtual int type() const { return Type; }
 
-    QPointF objectTopLeft()     const;
-    QPointF objectTopRight()    const;
-    QPointF objectBottomLeft()  const;
+    QPointF objectTopLeft() const;
+    QPointF objectTopRight() const;
+    QPointF objectBottomLeft() const;
     QPointF objectBottomRight() const;
-    EmbReal   objectWidth()       const { return rect().width()*scale(); }
-    EmbReal   objectHeight()      const { return rect().height()*scale(); }
-    EmbReal   objectArea()        const { return qAbs(objectWidth()*objectHeight()); }
+    EmbReal objectWidth() const { return rect().width()*scale(); }
+    EmbReal objectHeight() const { return rect().height()*scale(); }
+    EmbReal objectArea() const { return qAbs(objectWidth()*objectHeight()); }
 
     void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
@@ -1497,9 +1137,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
 };
 
 
@@ -1513,6 +1150,8 @@ public:
     LineObject(LineObject* obj, QGraphicsItem* parent = 0);
     ~LineObject();
 
+    void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
+
     enum { Type = OBJ_TYPE_LINE };
     virtual int type() const { return Type; }
 
@@ -1520,15 +1159,15 @@ public:
 
     QPointF objectEndPoint1() const { return scenePos(); }
     QPointF objectEndPoint2() const;
-    QPointF objectMidPoint()  const;
-    EmbReal   objectX1()        const { return objectEndPoint1().x(); }
-    EmbReal   objectY1()        const { return objectEndPoint1().y(); }
-    EmbReal   objectX2()        const { return objectEndPoint2().x(); }
-    EmbReal   objectY2()        const { return objectEndPoint2().y(); }
-    EmbReal   objectDeltaX()    const { return (objectX2() - objectX1()); }
-    EmbReal   objectDeltaY()    const { return (objectY2() - objectY1()); }
-    EmbReal   objectAngle()     const;
-    EmbReal   objectLength()    const { return line().length()*scale(); }
+    QPointF objectMidPoint() const;
+    EmbReal objectX1() const { return objectEndPoint1().x(); }
+    EmbReal objectY1() const { return objectEndPoint1().y(); }
+    EmbReal objectX2() const { return objectEndPoint2().x(); }
+    EmbReal objectY2() const { return objectEndPoint2().y(); }
+    EmbReal objectDeltaX() const { return (objectX2() - objectX1()); }
+    EmbReal objectDeltaY() const { return (objectY2() - objectY1()); }
+    EmbReal objectAngle() const;
+    EmbReal objectLength() const { return line().length()*scale(); }
 
     void setObjectEndPoint1(const QPointF& endPt1);
     void setObjectEndPoint1(EmbReal x1, EmbReal y1);
@@ -1546,8 +1185,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType);
 };
 
 
@@ -1564,12 +1201,17 @@ public:
     enum { Type = OBJ_TYPE_PATH };
     virtual int type() const { return Type; }
 
+    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath(const QPainterPath& p);
+    QPainterPath normalPath;
+    //TODO: make paths similar to polylines. Review and implement any missing functions/members.
+
     QPainterPath objectCopyPath() const;
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    EmbReal   objectX()   const { return scenePos().x(); }
-    EmbReal   objectY()   const { return scenePos().y(); }
+    EmbReal objectX() const { return scenePos().x(); }
+    EmbReal objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1583,11 +1225,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath(const QPainterPath& p);
-    QPainterPath normalPath;
-    //TODO: make paths similar to polylines. Review and implement any missing functions/members.
 };
 
 
@@ -1601,14 +1238,16 @@ public:
     PointObject(PointObject* obj, QGraphicsItem* parent = 0);
     ~PointObject();
 
+    void init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
+
     enum { Type = OBJ_TYPE_POINT };
     virtual int type() const { return Type; }
 
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    EmbReal   objectX()   const { return scenePos().x(); }
-    EmbReal   objectY()   const { return scenePos().y(); }
+    EmbReal objectX() const { return scenePos().x(); }
+    EmbReal objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1622,8 +1261,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
 };
 
 
@@ -1640,12 +1277,18 @@ public:
     enum { Type = OBJ_TYPE_POLYGON };
     virtual int type() const { return Type; }
 
+    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath(const QPainterPath& p);
+    QPainterPath normalPath;
+    int findIndex(const QPointF& point);
+    int gripIndex;
+
     QPainterPath objectCopyPath() const;
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    EmbReal   objectX()   const { return scenePos().x(); }
-    EmbReal   objectY()   const { return scenePos().y(); }
+    EmbReal objectX() const { return scenePos().x(); }
+    EmbReal objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1659,12 +1302,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath(const QPainterPath& p);
-    QPainterPath normalPath;
-    int findIndex(const QPointF& point);
-    int gripIndex;
 };
 
 /**
@@ -1680,12 +1317,18 @@ public:
     enum { Type = OBJ_TYPE_POLYLINE };
     virtual int type() const { return Type; }
 
+    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath(const QPainterPath& p);
+    QPainterPath normalPath;
+    int findIndex(const QPointF& point);
+    int gripIndex;
+
     QPainterPath objectCopyPath() const;
     QPainterPath objectSavePath() const;
 
     QPointF objectPos() const { return scenePos(); }
-    EmbReal   objectX()   const { return scenePos().x(); }
-    EmbReal   objectY()   const { return scenePos().y(); }
+    EmbReal objectX() const { return scenePos().x(); }
+    EmbReal objectY() const { return scenePos().y(); }
 
     void setObjectPos(const QPointF& point) { setPos(point.x(), point.y()); }
     void setObjectPos(EmbReal x, EmbReal y) { setPos(x, y); }
@@ -1699,12 +1342,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath(const QPainterPath& p);
-    QPainterPath normalPath;
-    int findIndex(const QPointF& point);
-    int gripIndex;
 };
 
 /**
@@ -1722,15 +1359,18 @@ public:
 
     QPainterPath objectSavePath() const;
 
+    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
+    void updatePath();
+
     QPointF objectPos() const { return scenePos(); }
 
-    QPointF objectTopLeft()     const;
-    QPointF objectTopRight()    const;
-    QPointF objectBottomLeft()  const;
+    QPointF objectTopLeft() const;
+    QPointF objectTopRight() const;
+    QPointF objectBottomLeft() const;
     QPointF objectBottomRight() const;
-    EmbReal   objectWidth()       const { return rect().width()*scale(); }
-    EmbReal   objectHeight()      const { return rect().height()*scale(); }
-    EmbReal   objectArea()        const { return qAbs(objectWidth()*objectHeight()); }
+    EmbReal objectWidth() const { return rect().width()*scale(); }
+    EmbReal objectHeight() const { return rect().height()*scale(); }
+    EmbReal objectArea() const { return qAbs(objectWidth()*objectHeight()); }
 
     void setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h);
 
@@ -1741,9 +1381,6 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType);
-    void updatePath();
 };
 
 /**
@@ -1778,7 +1415,7 @@ public:
     void addInfiniteLine (EmbPattern* pattern, QGraphicsItem* item);
     void addLine         (EmbPattern* pattern, QGraphicsItem* item);
     void addPath         (EmbPattern* pattern, QGraphicsItem* item);
-    void addPoint        (EmbPattern* pattern, QGraphicsItem* item);
+    void addPoint (EmbPattern* pattern, QGraphicsItem* item);
     void addPolygon      (EmbPattern* pattern, QGraphicsItem* item);
     void addPolyline     (EmbPattern* pattern, QGraphicsItem* item);
     void addRay          (EmbPattern* pattern, QGraphicsItem* item);
@@ -1788,7 +1425,6 @@ public:
     void addTextMulti    (EmbPattern* pattern, QGraphicsItem* item);
     void addTextSingle   (EmbPattern* pattern, QGraphicsItem* item);
 
-private:
     QGraphicsScene* gscene;
     int formatType;
 
@@ -1808,23 +1444,38 @@ public:
     enum { Type = OBJ_TYPE_TEXTSINGLE };
     virtual int type() const { return Type; }
 
+    void init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
+
+    QString objText;
+    QString objTextFont;
+    QString objTextJustify;
+    EmbReal objTextSize;
+    bool objTextBold;
+    bool objTextItalic;
+    bool objTextUnderline;
+    bool objTextStrikeOut;
+    bool objTextOverline;
+    bool objTextBackward;
+    bool objTextUpsideDown;
+    QPainterPath objTextPath;
+
     QList<QPainterPath> objectSavePathList() const { return subPathList(); }
     QList<QPainterPath> subPathList() const;
 
-    QString objectText()           const { return objText; }
-    QString objectTextFont()       const { return objTextFont; }
-    QString objectTextJustify()    const { return objTextJustify; }
-    EmbReal   objectTextSize()       const { return objTextSize; }
-    bool    objectTextBold()       const { return objTextBold; }
-    bool    objectTextItalic()     const { return objTextItalic; }
-    bool    objectTextUnderline()  const { return objTextUnderline; }
-    bool    objectTextStrikeOut()  const { return objTextStrikeOut; }
-    bool    objectTextOverline()   const { return objTextOverline; }
-    bool    objectTextBackward()   const { return objTextBackward; }
-    bool    objectTextUpsideDown() const { return objTextUpsideDown; }
-    QPointF objectPos()            const { return scenePos(); }
-    EmbReal   objectX()              const { return scenePos().x(); }
-    EmbReal   objectY()              const { return scenePos().y(); }
+    QString objectText() const { return objText; }
+    QString objectTextFont() const { return objTextFont; }
+    QString objectTextJustify() const { return objTextJustify; }
+    EmbReal objectTextSize() const { return objTextSize; }
+    bool objectTextBold() const { return objTextBold; }
+    bool objectTextItalic() const { return objTextItalic; }
+    bool objectTextUnderline() const { return objTextUnderline; }
+    bool objectTextStrikeOut() const { return objTextStrikeOut; }
+    bool objectTextOverline() const { return objTextOverline; }
+    bool objectTextBackward() const { return objTextBackward; }
+    bool objectTextUpsideDown() const { return objTextUpsideDown; }
+    QPointF objectPos() const { return scenePos(); }
+    EmbReal objectX()   const { return scenePos().x(); }
+    EmbReal objectY()   const { return scenePos().y(); }
 
     QStringList objectTextJustifyList() const;
 
@@ -1852,39 +1503,22 @@ public:
     virtual void gripEdit(const QPointF& before, const QPointF& after);
 protected:
     void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-private:
-    void init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType);
-
-    QString objText;
-    QString objTextFont;
-    QString objTextJustify;
-    EmbReal   objTextSize;
-    bool    objTextBold;
-    bool    objTextItalic;
-    bool    objTextUnderline;
-    bool    objTextStrikeOut;
-    bool    objTextOverline;
-    bool    objTextBackward;
-    bool    objTextUpsideDown;
-    QPainterPath objTextPath;
 };
 
 /**
  *
+ * \note On Mac, if the user drops a file on the app's Dock icon,
+ * or uses Open As, then this is how the app actually opens the file.
  */
-class MainWindow;
-
-// On Mac, if the user drops a file on the app's Dock icon, or uses Open As, then this is how the app actually opens the file.
 class Application : public QApplication
 {
     Q_OBJECT
 public:
     Application(int argc, char **argv);
     void setMainWin(MainWindow* mainWin) { _mainWin = mainWin; }
+    MainWindow* _mainWin;
 protected:
     virtual bool event(QEvent *e);
-private:
-    MainWindow* _mainWin;
 };
 
 
@@ -1909,6 +1543,12 @@ public:
 
     bool rapidFireEnabled;
     bool isBlinking;
+
+    QHash<QString, QString>*  aliasHash;
+
+    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
+    void clearFormatting();
+    void applyFormatting();
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event);
@@ -1963,16 +1603,11 @@ public slots:
 private slots:
     void copyClip();
     void pasteClip();
-private:
-    QHash<QString, QString>*  aliasHash;
-
-    void changeFormatting(const QList<QTextLayout::FormatRange>& formats);
-    void clearFormatting();
-    void applyFormatting();
 };
 
-//==========================================================================
-
+/**
+ * @brief The Command Prompt History class.
+ */
 class CmdPromptHistory : public QTextBrowser
 {
     Q_OBJECT
@@ -1980,6 +1615,9 @@ class CmdPromptHistory : public QTextBrowser
 public:
     CmdPromptHistory(QWidget* parent = 0);
     ~CmdPromptHistory();
+
+    int tmpHeight;
+    QString applyFormatting(const QString& txt, int prefixLength);
 
 protected:
     void contextMenuEvent(QContextMenuEvent* event);
@@ -1992,14 +1630,11 @@ public slots:
 
 signals:
     void historyAppended(const QString& txt);
-
-private:
-    int tmpHeight;
-    QString applyFormatting(const QString& txt, int prefixLength);
 };
 
-//==========================================================================
-
+/**
+ * @brief .
+ */
 class CmdPromptSplitter : public QSplitter
 {
     Q_OBJECT
@@ -2017,8 +1652,9 @@ signals:
     void moveResizeHistory(int y);
 };
 
-//==========================================================================
-
+/**
+ * @brief .
+ */
 class CmdPromptHandle : public QSplitterHandle
 {
     Q_OBJECT
@@ -2026,6 +1662,10 @@ class CmdPromptHandle : public QSplitterHandle
 public:
     CmdPromptHandle(Qt::Orientation orientation, QSplitter* parent);
     ~CmdPromptHandle();
+
+    int pressY;
+    int releaseY;
+    int moveY;
 
 protected:
     void mousePressEvent(QMouseEvent* e);
@@ -2036,15 +1676,11 @@ signals:
     void handlePressed(int y);
     void handleReleased(int y);
     void handleMoved(int y);
-
-private:
-    int pressY;
-    int releaseY;
-    int moveY;
 };
 
-//==========================================================================
-
+/**
+ * @brief .
+ */
 class CmdPrompt : public QWidget
 {
     Q_OBJECT
@@ -2052,6 +1688,18 @@ class CmdPrompt : public QWidget
 public:
     CmdPrompt(QWidget* parent = 0);
     ~CmdPrompt();
+
+    CmdPromptInput*    promptInput;
+    CmdPromptHistory*  promptHistory;
+    QVBoxLayout*       promptVBoxLayout;
+    QFrame*            promptDivider;
+
+    CmdPromptSplitter* promptSplitter;
+
+    QHash<QString, QString>*  styleHash;
+    void updateStyle();
+    QTimer* blinkTimer;
+    bool blinkState;
 
 protected:
 
@@ -2130,23 +1778,10 @@ signals:
     void showSettings();
 
     void historyAppended(const QString& txt);
-
-private:
-    CmdPromptInput*    promptInput;
-    CmdPromptHistory*  promptHistory;
-    QVBoxLayout*       promptVBoxLayout;
-    QFrame*            promptDivider;
-
-    CmdPromptSplitter* promptSplitter;
-
-    QHash<QString, QString>*  styleHash;
-    void updateStyle();
-    QTimer* blinkTimer;
-    bool blinkState;
 };
 
 /**
- *
+ * @brief .
  */
 class EmbDetailsDialog : public QDialog
 {
@@ -2156,12 +1791,11 @@ public:
     EmbDetailsDialog(QGraphicsScene* theScene, QWidget *parent = 0);
     ~EmbDetailsDialog();
 
-private:
-    QWidget*          mainWidget;
+    QWidget* mainWidget;
 
-    void              getInfo();
-    QWidget*          createMainWidget();
-    QWidget*          createHistogram();
+    void getInfo();
+    QWidget* createMainWidget();
+    QWidget* createHistogram();
 
     QDialogButtonBox* buttonBox;
 
@@ -2176,13 +1810,14 @@ private:
 };
 
 /**
- *
+ * @brief .
  */
 class ImageWidget : public QWidget
 {
     Q_OBJECT
 
 public:
+    QImage img;
     ImageWidget(const QString &filename, QWidget* parent = 0);
     ~ImageWidget();
 
@@ -2191,34 +1826,31 @@ public:
 
 protected:
     void paintEvent(QPaintEvent* event);
-
-private:
-    QImage img;
 };
 
+/**
+ * @brief .
+ */
 class LayerManager : public QDialog
 {
     Q_OBJECT
 
 public:
-    LayerManager(MainWindow* mw, QWidget *parent = 0);
-    ~LayerManager();
-
-void addLayer(const QString& name,
-              const bool visible,
-              const bool frozen,
-              const EmbReal zValue,
-              const QRgb color,
-              const QString& lineType,
-              const QString& lineWeight,
-              const bool print);
-
-private slots:
-
-private:
     QStandardItemModel*    layerModel;
     QSortFilterProxyModel* layerModelSorted;
     QTreeView*             treeView;
+
+    LayerManager(MainWindow* mw, QWidget *parent = 0);
+    ~LayerManager();
+
+    void addLayer(const QString& name,
+        const bool visible,
+        const bool frozen,
+        const EmbReal zValue,
+        const QRgb color,
+        const QString& lineType,
+        const QString& lineWeight,
+        const bool print);
 };
 
 /**
@@ -2232,16 +1864,124 @@ public:
     MainWindow();
     ~MainWindow();
 
-    MdiArea*                        getMdiArea();
-    MainWindow*                     getApplication();
-    MdiWindow*                      activeMdiWindow();
-    View*                           activeView();
-    QGraphicsScene*                 activeScene();
-    QUndoStack*                     activeUndoStack();
+    QString settings_general_language;
+    QString settings_general_icon_theme;
+    int settings_general_icon_size;
+    bool settings_general_mdi_bg_use_logo;
+    bool settings_general_mdi_bg_use_texture;
+    bool settings_general_mdi_bg_use_color;
+    QString settings_general_mdi_bg_logo;
+    QString settings_general_mdi_bg_texture;
+    QRgb settings_general_mdi_bg_color;
+    bool settings_general_tip_of_the_day;
+    quint16 settings_general_current_tip;
+    bool settings_general_system_help_browser;
+    bool settings_general_check_for_updates;
+    bool settings_display_use_opengl;
+    bool settings_display_renderhint_aa;
+    bool settings_display_renderhint_text_aa;
+    bool settings_display_renderhint_smooth_pix;
+    bool settings_display_renderhint_high_aa;
+    bool settings_display_renderhint_noncosmetic;
+    bool settings_display_show_scrollbars;
+    int settings_display_scrollbar_widget_num;
+    QRgb settings_display_crosshair_color;
+    QRgb settings_display_bg_color;
+    QRgb settings_display_selectbox_left_color;
+    QRgb settings_display_selectbox_left_fill;
+    QRgb settings_display_selectbox_right_color;
+    QRgb settings_display_selectbox_right_fill;
+    uint8_t settings_display_selectbox_alpha;
+    EmbReal settings_display_zoomscale_in;
+    EmbReal settings_display_zoomscale_out;
+    uint8_t settings_display_crosshair_percent;
+    QString settings_display_units;
+    QRgb settings_prompt_text_color;
+    QRgb settings_prompt_bg_color;
+    QString settings_prompt_font_family;
+    QString settings_prompt_font_style;
+    uint8_t settings_prompt_font_size;
+    bool settings_prompt_save_history;
+    bool settings_prompt_save_history_as_html;
+    QString settings_prompt_save_history_filename;
+    QString settings_opensave_custom_filter;
+    QString settings_opensave_open_format;
+    bool settings_opensave_open_thumbnail;
+    QString settings_opensave_save_format;
+    bool settings_opensave_save_thumbnail;
+    uint8_t settings_opensave_recent_max_files;
+    QStringList settings_opensave_recent_list_of_files;
+    QString settings_opensave_recent_directory;
+    uint8_t settings_opensave_trim_dst_num_jumps;
+    QString settings_printing_default_device;
+    bool settings_printing_use_last_device;
+    bool settings_printing_disable_bg;
+    bool settings_grid_show_on_load;
+    bool settings_grid_show_origin;
+    bool settings_grid_color_match_crosshair;
+    QRgb settings_grid_color;
+    bool settings_grid_load_from_file;
+    QString settings_grid_type;
+    bool settings_grid_center_on_origin;
+    EmbReal settings_grid_center_x;
+    EmbReal settings_grid_center_y;
+    EmbReal settings_grid_size_x;
+    EmbReal settings_grid_size_y;
+    EmbReal settings_grid_spacing_x;
+    EmbReal settings_grid_spacing_y;
+    EmbReal settings_grid_size_radius;
+    EmbReal settings_grid_spacing_radius;
+    EmbReal settings_grid_spacing_angle;
+    bool settings_ruler_show_on_load;
+    bool settings_ruler_metric;
+    QRgb settings_ruler_color;
+    uint8_t settings_ruler_pixel_size;
+    bool settings_qsnap_enabled;
+    QRgb settings_qsnap_locator_color;
+    uint8_t settings_qsnap_locator_size;
+    uint8_t settings_qsnap_aperture_size;
+    bool settings_qsnap_endpoint;
+    bool settings_qsnap_midpoint;
+    bool settings_qsnap_center;
+    bool settings_qsnap_node;
+    bool settings_qsnap_quadrant;
+    bool settings_qsnap_intersection;
+    bool settings_qsnap_extension;
+    bool settings_qsnap_insertion;
+    bool settings_qsnap_perpendicular;
+    bool settings_qsnap_tangent;
+    bool settings_qsnap_nearest;
+    bool settings_qsnap_apparent;
+    bool settings_qsnap_parallel;
+    bool settings_lwt_show_lwt;
+    bool settings_lwt_real_render;
+    EmbReal settings_lwt_default_lwt;
+    bool settings_selection_mode_pickfirst;
+    bool settings_selection_mode_pickadd;
+    bool settings_selection_mode_pickdrag;
+    QRgb settings_selection_coolgrip_color;
+    QRgb settings_selection_hotgrip_color;
+    uint8_t settings_selection_grip_size;
+    uint8_t settings_selection_pickbox_size;
+    QString settings_text_font;
+    EmbReal settings_text_size;
+    EmbReal settings_text_angle;
+    bool settings_text_style_bold;
+    bool settings_text_style_italic;
+    bool settings_text_style_underline;
+    bool settings_text_style_overline;
+    bool settings_text_style_strikeout;
+
+    MdiArea* getMdiArea();
+    MainWindow* getApplication();
+    MdiWindow* activeMdiWindow();
+    View* activeView();
+    QGraphicsScene* activeScene();
+    QUndoStack* activeUndoStack();
 
     void setUndoCleanIcon(bool opened);
 
-    virtual void                   updateMenuToolbarStatusbar();
+    virtual void updateMenuToolbarStatusbar();
 
     MainWindow*     mainWin;
     MdiArea*        mdiArea;
@@ -2256,227 +1996,227 @@ public:
     std::string run_script_file(std::string fname);
     std::string run_script(std::vector<std::string> script);
 
-    QString getSettingsGeneralLanguage()              { return settings_general_language;               }
-    QString getSettingsGeneralIconTheme()             { return settings_general_icon_theme;             }
-    int     getSettingsGeneralIconSize()              { return settings_general_icon_size;              }
-    bool    getSettingsGeneralMdiBGUseLogo()          { return settings_general_mdi_bg_use_logo;        }
-    bool    getSettingsGeneralMdiBGUseTexture()       { return settings_general_mdi_bg_use_texture;     }
-    bool    getSettingsGeneralMdiBGUseColor()         { return settings_general_mdi_bg_use_color;       }
-    QString getSettingsGeneralMdiBGLogo()             { return settings_general_mdi_bg_logo;            }
-    QString getSettingsGeneralMdiBGTexture()          { return settings_general_mdi_bg_texture;         }
-    QRgb    getSettingsGeneralMdiBGColor()            { return settings_general_mdi_bg_color;           }
-    bool    getSettingsGeneralTipOfTheDay()           { return settings_general_tip_of_the_day;         }
-    int     getSettingsGeneralCurrentTip()            { return settings_general_current_tip;            }
-    bool    getSettingsGeneralSystemHelpBrowser()     { return settings_general_system_help_browser;    }
-    bool    getSettingsGeneralCheckForUpdates()       { return settings_general_check_for_updates;      }
-    bool    getSettingsDisplayUseOpenGL()             { return settings_display_use_opengl;             }
-    bool    getSettingsDisplayRenderHintAA()          { return settings_display_renderhint_aa;          }
-    bool    getSettingsDisplayRenderHintTextAA()      { return settings_display_renderhint_text_aa;     }
-    bool    getSettingsDisplayRenderHintSmoothPix()   { return settings_display_renderhint_smooth_pix;  }
-    bool    getSettingsDisplayRenderHintHighAA()      { return settings_display_renderhint_high_aa;     }
-    bool    getSettingsDisplayRenderHintNonCosmetic() { return settings_display_renderhint_noncosmetic; }
-    bool    getSettingsDisplayShowScrollBars()        { return settings_display_show_scrollbars;        }
-    int     getSettingsDisplayScrollBarWidgetNum()    { return settings_display_scrollbar_widget_num;   }
-    QRgb    getSettingsDisplayCrossHairColor()        { return settings_display_crosshair_color;        }
-    QRgb    getSettingsDisplayBGColor()               { return settings_display_bg_color;               }
-    QRgb    getSettingsDisplaySelectBoxLeftColor()    { return settings_display_selectbox_left_color;   }
-    QRgb    getSettingsDisplaySelectBoxLeftFill()     { return settings_display_selectbox_left_fill;    }
-    QRgb    getSettingsDisplaySelectBoxRightColor()   { return settings_display_selectbox_right_color;  }
-    QRgb    getSettingsDisplaySelectBoxRightFill()    { return settings_display_selectbox_right_fill;   }
-    uint8_t  getSettingsDisplaySelectBoxAlpha()        { return settings_display_selectbox_alpha;        }
-    EmbReal   getSettingsDisplayZoomScaleIn()           { return settings_display_zoomscale_in;           }
-    EmbReal   getSettingsDisplayZoomScaleOut()          { return settings_display_zoomscale_out;          }
-    uint8_t  getSettingsDisplayCrossHairPercent()      { return settings_display_crosshair_percent;      }
-    QString getSettingsDisplayUnits()                 { return settings_display_units;                  }
-    QRgb    getSettingsPromptTextColor()              { return settings_prompt_text_color;              }
-    QRgb    getSettingsPromptBGColor()                { return settings_prompt_bg_color;                }
-    QString getSettingsPromptFontFamily()             { return settings_prompt_font_family;             }
-    QString getSettingsPromptFontStyle()              { return settings_prompt_font_style;              }
-    uint8_t  getSettingsPromptFontSize()               { return settings_prompt_font_size;               }
-    bool    getSettingsPromptSaveHistory()            { return settings_prompt_save_history;            }
-    bool    getSettingsPromptSaveHistoryAsHtml()      { return settings_prompt_save_history_as_html;    }
-    QString getSettingsPromptSaveHistoryFilename()    { return settings_prompt_save_history_filename;   }
-    QString getSettingsCustomFilter()                 { return settings_opensave_custom_filter;         }
-    QString getSettingsOpenFormat()                   { return settings_opensave_open_format;           }
-    bool    getSettingsOpenThumbnail()                { return settings_opensave_open_thumbnail;        }
-    QString getSettingsSaveFormat()                   { return settings_opensave_save_format;           }
-    bool    getSettingsSaveThumbnail()                { return settings_opensave_save_thumbnail;        }
-    uint8_t  getSettingsRecentMaxFiles()               { return settings_opensave_recent_max_files;      }
-    uint8_t  getSettingsOpenSaveTrimDstNumJumps()      { return settings_opensave_trim_dst_num_jumps;    }
-    QString getSettingsPrintingDefaultDevice()        { return settings_printing_default_device;        }
-    bool    getSettingsPrintingUseLastDevice()        { return settings_printing_use_last_device;       }
-    bool    getSettingsPrintingDisableBG()            { return settings_printing_disable_bg;            }
-    bool    getSettingsGridShowOnLoad()               { return settings_grid_show_on_load;              }
-    bool    getSettingsGridShowOrigin()               { return settings_grid_show_origin;               }
-    bool    getSettingsGridColorMatchCrossHair()      { return settings_grid_color_match_crosshair;     }
-    QRgb    getSettingsGridColor()                    { return settings_grid_color;                     }
-    bool    getSettingsGridLoadFromFile()             { return settings_grid_load_from_file;            }
-    QString getSettingsGridType()                     { return settings_grid_type;                      }
-    bool    getSettingsGridCenterOnOrigin()           { return settings_grid_center_on_origin;          }
-    EmbReal   getSettingsGridCenterX()                  { return settings_grid_center_x;                  }
-    EmbReal   getSettingsGridCenterY()                  { return settings_grid_center_y;                  }
-    EmbReal   getSettingsGridSizeX()                    { return settings_grid_size_x;                    }
-    EmbReal   getSettingsGridSizeY()                    { return settings_grid_size_y;                    }
-    EmbReal   getSettingsGridSpacingX()                 { return settings_grid_spacing_x;                 }
-    EmbReal   getSettingsGridSpacingY()                 { return settings_grid_spacing_y;                 }
-    EmbReal   getSettingsGridSizeRadius()               { return settings_grid_size_radius;               }
-    EmbReal   getSettingsGridSpacingRadius()            { return settings_grid_spacing_radius;            }
-    EmbReal   getSettingsGridSpacingAngle()             { return settings_grid_spacing_angle;             }
-    bool    getSettingsRulerShowOnLoad()              { return settings_ruler_show_on_load;             }
-    bool    getSettingsRulerMetric()                  { return settings_ruler_metric;                   }
-    QRgb    getSettingsRulerColor()                   { return settings_ruler_color;                    }
-    uint8_t  getSettingsRulerPixelSize()               { return settings_ruler_pixel_size;               }
-    bool    getSettingsQSnapEnabled()                 { return settings_qsnap_enabled;                  }
-    QRgb    getSettingsQSnapLocatorColor()            { return settings_qsnap_locator_color;            }
-    uint8_t  getSettingsQSnapLocatorSize()             { return settings_qsnap_locator_size;             }
-    uint8_t  getSettingsQSnapApertureSize()            { return settings_qsnap_aperture_size;            }
-    bool    getSettingsQSnapEndPoint()                { return settings_qsnap_endpoint;                 }
-    bool    getSettingsQSnapMidPoint()                { return settings_qsnap_midpoint;                 }
-    bool    getSettingsQSnapCenter()                  { return settings_qsnap_center;                   }
-    bool    getSettingsQSnapNode()                    { return settings_qsnap_node;                     }
-    bool    getSettingsQSnapQuadrant()                { return settings_qsnap_quadrant;                 }
-    bool    getSettingsQSnapIntersection()            { return settings_qsnap_intersection;             }
-    bool    getSettingsQSnapExtension()               { return settings_qsnap_extension;                }
-    bool    getSettingsQSnapInsertion()               { return settings_qsnap_insertion;                }
-    bool    getSettingsQSnapPerpendicular()           { return settings_qsnap_perpendicular;            }
-    bool    getSettingsQSnapTangent()                 { return settings_qsnap_tangent;                  }
-    bool    getSettingsQSnapNearest()                 { return settings_qsnap_nearest;                  }
-    bool    getSettingsQSnapApparent()                { return settings_qsnap_apparent;                 }
-    bool    getSettingsQSnapParallel()                { return settings_qsnap_parallel;                 }
-    bool    getSettingsLwtShowLwt()                   { return settings_lwt_show_lwt;                   }
-    bool    getSettingsLwtRealRender()                { return settings_lwt_real_render;                }
-    EmbReal   getSettingsLwtDefaultLwt()                { return settings_lwt_default_lwt;                }
-    bool    getSettingsSelectionModePickFirst()       { return settings_selection_mode_pickfirst;       }
-    bool    getSettingsSelectionModePickAdd()         { return settings_selection_mode_pickadd;         }
-    bool    getSettingsSelectionModePickDrag()        { return settings_selection_mode_pickdrag;        }
-    QRgb    getSettingsSelectionCoolGripColor()       { return settings_selection_coolgrip_color;       }
-    QRgb    getSettingsSelectionHotGripColor()        { return settings_selection_hotgrip_color;        }
-    uint8_t  getSettingsSelectionGripSize()            { return settings_selection_grip_size;            }
-    uint8_t  getSettingsSelectionPickBoxSize()         { return settings_selection_pickbox_size;         }
-    QString getSettingsTextFont()                     { return settings_text_font;                      }
-    EmbReal   getSettingsTextSize()                     { return settings_text_size;                      }
-    EmbReal   getSettingsTextAngle()                    { return settings_text_angle;                     }
-    bool    getSettingsTextStyleBold()                { return settings_text_style_bold;                }
-    bool    getSettingsTextStyleItalic()              { return settings_text_style_italic;              }
-    bool    getSettingsTextStyleUnderline()           { return settings_text_style_underline;           }
-    bool    getSettingsTextStyleStrikeOut()           { return settings_text_style_strikeout;           }
-    bool    getSettingsTextStyleOverline()            { return settings_text_style_overline;            }
+    QString getSettingsGeneralLanguage() { return settings_general_language; }
+    QString getSettingsGeneralIconTheme() { return settings_general_icon_theme; }
+    int getSettingsGeneralIconSize() { return settings_general_icon_size; }
+    bool getSettingsGeneralMdiBGUseLogo() { return settings_general_mdi_bg_use_logo; }
+    bool getSettingsGeneralMdiBGUseTexture() { return settings_general_mdi_bg_use_texture; }
+    bool getSettingsGeneralMdiBGUseColor() { return settings_general_mdi_bg_use_color; }
+    QString getSettingsGeneralMdiBGLogo() { return settings_general_mdi_bg_logo; }
+    QString getSettingsGeneralMdiBGTexture() { return settings_general_mdi_bg_texture; }
+    QRgb getSettingsGeneralMdiBGColor() { return settings_general_mdi_bg_color; }
+    bool getSettingsGeneralTipOfTheDay() { return settings_general_tip_of_the_day; }
+    int getSettingsGeneralCurrentTip() { return settings_general_current_tip; }
+    bool getSettingsGeneralSystemHelpBrowser() { return settings_general_system_help_browser; }
+    bool getSettingsGeneralCheckForUpdates() { return settings_general_check_for_updates; }
+    bool getSettingsDisplayUseOpenGL() { return settings_display_use_opengl; }
+    bool getSettingsDisplayRenderHintAA() { return settings_display_renderhint_aa; }
+    bool getSettingsDisplayRenderHintTextAA() { return settings_display_renderhint_text_aa; }
+    bool getSettingsDisplayRenderHintSmoothPix() { return settings_display_renderhint_smooth_pix; }
+    bool getSettingsDisplayRenderHintHighAA() { return settings_display_renderhint_high_aa; }
+    bool getSettingsDisplayRenderHintNonCosmetic() { return settings_display_renderhint_noncosmetic; }
+    bool getSettingsDisplayShowScrollBars() { return settings_display_show_scrollbars; }
+    int getSettingsDisplayScrollBarWidgetNum() { return settings_display_scrollbar_widget_num; }
+    QRgb getSettingsDisplayCrossHairColor() { return settings_display_crosshair_color; }
+    QRgb getSettingsDisplayBGColor() { return settings_display_bg_color; }
+    QRgb getSettingsDisplaySelectBoxLeftColor() { return settings_display_selectbox_left_color; }
+    QRgb getSettingsDisplaySelectBoxLeftFill() { return settings_display_selectbox_left_fill; }
+    QRgb getSettingsDisplaySelectBoxRightColor() { return settings_display_selectbox_right_color; }
+    QRgb getSettingsDisplaySelectBoxRightFill() { return settings_display_selectbox_right_fill; }
+    uint8_t getSettingsDisplaySelectBoxAlpha() { return settings_display_selectbox_alpha; }
+    EmbReal getSettingsDisplayZoomScaleIn() { return settings_display_zoomscale_in; }
+    EmbReal getSettingsDisplayZoomScaleOut() { return settings_display_zoomscale_out; }
+    uint8_t getSettingsDisplayCrossHairPercent() { return settings_display_crosshair_percent; }
+    QString getSettingsDisplayUnits() { return settings_display_units; }
+    QRgb getSettingsPromptTextColor() { return settings_prompt_text_color; }
+    QRgb getSettingsPromptBGColor() { return settings_prompt_bg_color; }
+    QString getSettingsPromptFontFamily() { return settings_prompt_font_family; }
+    QString getSettingsPromptFontStyle() { return settings_prompt_font_style; }
+    uint8_t getSettingsPromptFontSize() { return settings_prompt_font_size; }
+    bool getSettingsPromptSaveHistory() { return settings_prompt_save_history; }
+    bool getSettingsPromptSaveHistoryAsHtml() { return settings_prompt_save_history_as_html; }
+    QString getSettingsPromptSaveHistoryFilename() { return settings_prompt_save_history_filename; }
+    QString getSettingsCustomFilter() { return settings_opensave_custom_filter; }
+    QString getSettingsOpenFormat() { return settings_opensave_open_format; }
+    bool getSettingsOpenThumbnail() { return settings_opensave_open_thumbnail; }
+    QString getSettingsSaveFormat() { return settings_opensave_save_format; }
+    bool getSettingsSaveThumbnail() { return settings_opensave_save_thumbnail; }
+    uint8_t getSettingsRecentMaxFiles() { return settings_opensave_recent_max_files; }
+    uint8_t getSettingsOpenSaveTrimDstNumJumps() { return settings_opensave_trim_dst_num_jumps; }
+    QString getSettingsPrintingDefaultDevice() { return settings_printing_default_device; }
+    bool getSettingsPrintingUseLastDevice() { return settings_printing_use_last_device; }
+    bool getSettingsPrintingDisableBG() { return settings_printing_disable_bg; }
+    bool getSettingsGridShowOnLoad() { return settings_grid_show_on_load; }
+    bool getSettingsGridShowOrigin() { return settings_grid_show_origin; }
+    bool getSettingsGridColorMatchCrossHair() { return settings_grid_color_match_crosshair; }
+    QRgb getSettingsGridColor() { return settings_grid_color;   }
+    bool getSettingsGridLoadFromFile() { return settings_grid_load_from_file; }
+    QString getSettingsGridType() { return settings_grid_type;    }
+    bool getSettingsGridCenterOnOrigin() { return settings_grid_center_on_origin; }
+    EmbReal getSettingsGridCenterX() { return settings_grid_center_x; }
+    EmbReal getSettingsGridCenterY() { return settings_grid_center_y; }
+    EmbReal getSettingsGridSizeX() { return settings_grid_size_x;  }
+    EmbReal getSettingsGridSizeY() { return settings_grid_size_y;  }
+    EmbReal getSettingsGridSpacingX() { return settings_grid_spacing_x; }
+    EmbReal getSettingsGridSpacingY() { return settings_grid_spacing_y; }
+    EmbReal getSettingsGridSizeRadius() { return settings_grid_size_radius; }
+    EmbReal getSettingsGridSpacingRadius() { return settings_grid_spacing_radius; }
+    EmbReal getSettingsGridSpacingAngle() { return settings_grid_spacing_angle; }
+    bool getSettingsRulerShowOnLoad() { return settings_ruler_show_on_load; }
+    bool getSettingsRulerMetric() { return settings_ruler_metric; }
+    QRgb getSettingsRulerColor() { return settings_ruler_color;  }
+    uint8_t getSettingsRulerPixelSize() { return settings_ruler_pixel_size; }
+    bool getSettingsQSnapEnabled() { return settings_qsnap_enabled; }
+    QRgb getSettingsQSnapLocatorColor() { return settings_qsnap_locator_color; }
+    uint8_t getSettingsQSnapLocatorSize() { return settings_qsnap_locator_size; }
+    uint8_t getSettingsQSnapApertureSize() { return settings_qsnap_aperture_size; }
+    bool getSettingsQSnapEndPoint() { return settings_qsnap_endpoint; }
+    bool getSettingsQSnapMidPoint() { return settings_qsnap_midpoint; }
+    bool getSettingsQSnapCenter() { return settings_qsnap_center; }
+    bool getSettingsQSnapNode() { return settings_qsnap_node;   }
+    bool getSettingsQSnapQuadrant() { return settings_qsnap_quadrant; }
+    bool getSettingsQSnapIntersection() { return settings_qsnap_intersection; }
+    bool getSettingsQSnapExtension() { return settings_qsnap_extension; }
+    bool getSettingsQSnapInsertion() { return settings_qsnap_insertion; }
+    bool getSettingsQSnapPerpendicular() { return settings_qsnap_perpendicular; }
+    bool getSettingsQSnapTangent() { return settings_qsnap_tangent; }
+    bool getSettingsQSnapNearest() { return settings_qsnap_nearest; }
+    bool getSettingsQSnapApparent() { return settings_qsnap_apparent; }
+    bool getSettingsQSnapParallel() { return settings_qsnap_parallel; }
+    bool getSettingsLwtShowLwt() { return settings_lwt_show_lwt; }
+    bool getSettingsLwtRealRender() { return settings_lwt_real_render; }
+    EmbReal getSettingsLwtDefaultLwt() { return settings_lwt_default_lwt; }
+    bool getSettingsSelectionModePickFirst() { return settings_selection_mode_pickfirst; }
+    bool getSettingsSelectionModePickAdd() { return settings_selection_mode_pickadd; }
+    bool getSettingsSelectionModePickDrag() { return settings_selection_mode_pickdrag; }
+    QRgb getSettingsSelectionCoolGripColor() { return settings_selection_coolgrip_color; }
+    QRgb getSettingsSelectionHotGripColor() { return settings_selection_hotgrip_color; }
+    uint8_t getSettingsSelectionGripSize() { return settings_selection_grip_size; }
+    uint8_t getSettingsSelectionPickBoxSize() { return settings_selection_pickbox_size; }
+    QString getSettingsTextFont() { return settings_text_font;    }
+    EmbReal getSettingsTextSize() { return settings_text_size;    }
+    EmbReal getSettingsTextAngle() { return settings_text_angle;   }
+    bool getSettingsTextStyleBold() { return settings_text_style_bold; }
+    bool getSettingsTextStyleItalic() { return settings_text_style_italic; }
+    bool getSettingsTextStyleUnderline() { return settings_text_style_underline; }
+    bool getSettingsTextStyleStrikeOut() { return settings_text_style_strikeout; }
+    bool getSettingsTextStyleOverline() { return settings_text_style_overline; }
 
-    void setSettingsGeneralLanguage(const QString& newValue)           { settings_general_language               = newValue; }
-    void setSettingsGeneralIconTheme(const QString& newValue)          { settings_general_icon_theme             = newValue; }
-    void setSettingsGeneralIconSize(int newValue)                      { settings_general_icon_size              = newValue; }
-    void setSettingsGeneralMdiBGUseLogo(bool newValue)                 { settings_general_mdi_bg_use_logo        = newValue; }
-    void setSettingsGeneralMdiBGUseTexture(bool newValue)              { settings_general_mdi_bg_use_texture     = newValue; }
-    void setSettingsGeneralMdiBGUseColor(bool newValue)                { settings_general_mdi_bg_use_color       = newValue; }
-    void setSettingsGeneralMdiBGLogo(const QString& newValue)          { settings_general_mdi_bg_logo            = newValue; }
-    void setSettingsGeneralMdiBGTexture(const QString& newValue)       { settings_general_mdi_bg_texture         = newValue; }
-    void setSettingsGeneralMdiBGColor(QRgb newValue)                   { settings_general_mdi_bg_color           = newValue; }
-    void setSettingsGeneralTipOfTheDay(bool newValue)                  { settings_general_tip_of_the_day         = newValue; }
-    void setSettingsGeneralCurrentTip(int newValue)                    { settings_general_current_tip            = newValue; }
-    void setSettingsGeneralSystemHelpBrowser(bool newValue)            { settings_general_system_help_browser    = newValue; }
-    void setSettingsGeneralCheckForUpdates(bool newValue)              { settings_general_check_for_updates      = newValue; }
-    void setSettingsDisplayUseOpenGL(bool newValue)                    { settings_display_use_opengl             = newValue; }
-    void setSettingsDisplayRenderHintAA(bool newValue)                 { settings_display_renderhint_aa          = newValue; }
-    void setSettingsDisplayRenderHintTextAA(bool newValue)             { settings_display_renderhint_text_aa     = newValue; }
-    void setSettingsDisplayRenderHintSmoothPix(bool newValue)          { settings_display_renderhint_smooth_pix  = newValue; }
-    void setSettingsDisplayRenderHintHighAA(bool newValue)             { settings_display_renderhint_high_aa     = newValue; }
-    void setSettingsDisplayRenderHintNonCosmetic(bool newValue)        { settings_display_renderhint_noncosmetic = newValue; }
-    void setSettingsDisplayShowScrollBars(bool newValue)               { settings_display_show_scrollbars        = newValue; }
-    void setSettingsDisplayScrollBarWidgetNum(int newValue)            { settings_display_scrollbar_widget_num   = newValue; }
-    void setSettingsDisplayCrossHairColor(QRgb newValue)               { settings_display_crosshair_color        = newValue; }
-    void setSettingsDisplayBGColor(QRgb newValue)                      { settings_display_bg_color               = newValue; }
-    void setSettingsDisplaySelectBoxLeftColor(QRgb newValue)           { settings_display_selectbox_left_color   = newValue; }
-    void setSettingsDisplaySelectBoxLeftFill(QRgb newValue)            { settings_display_selectbox_left_fill    = newValue; }
-    void setSettingsDisplaySelectBoxRightColor(QRgb newValue)          { settings_display_selectbox_right_color  = newValue; }
-    void setSettingsDisplaySelectBoxRightFill(QRgb newValue)           { settings_display_selectbox_right_fill   = newValue; }
-    void setSettingsDisplaySelectBoxAlpha(uint8_t newValue)             { settings_display_selectbox_alpha        = newValue; }
-    void setSettingsDisplayZoomScaleIn(EmbReal newValue)                 { settings_display_zoomscale_in           = newValue; }
-    void setSettingsDisplayZoomScaleOut(EmbReal newValue)                { settings_display_zoomscale_out          = newValue; }
-    void setSettingsDisplayCrossHairPercent(uint8_t newValue)           { settings_display_crosshair_percent      = newValue; }
-    void setSettingsDisplayUnits(const QString& newValue)              { settings_display_units                  = newValue; }
-    void setSettingsPromptTextColor(QRgb newValue)                     { settings_prompt_text_color              = newValue; }
-    void setSettingsPromptBGColor(QRgb newValue)                       { settings_prompt_bg_color                = newValue; }
-    void setSettingsPromptFontFamily(const QString& newValue)          { settings_prompt_font_family             = newValue; }
-    void setSettingsPromptFontStyle(const QString& newValue)           { settings_prompt_font_style              = newValue; }
-    void setSettingsPromptFontSize(uint8_t newValue)                    { settings_prompt_font_size               = newValue; }
-    void setSettingsPromptSaveHistory(bool newValue)                   { settings_prompt_save_history            = newValue; }
-    void setSettingsPromptSaveHistoryAsHtml(bool newValue)             { settings_prompt_save_history_as_html    = newValue; }
-    void setSettingsPromptSaveHistoryFilename(const QString& newValue) { settings_prompt_save_history_filename   = newValue; }
-    void setSettingsCustomFilter(const QString& newValue)              { settings_opensave_custom_filter         = newValue; }
-    void setSettingsOpenFormat(const QString& newValue)                { settings_opensave_open_format           = newValue; }
-    void setSettingsOpenThumbnail(bool newValue)                       { settings_opensave_open_thumbnail        = newValue; }
-    void setSettingsSaveFormat(const QString& newValue)                { settings_opensave_save_format           = newValue; }
-    void setSettingsSaveThumbnail(bool newValue)                       { settings_opensave_save_thumbnail        = newValue; }
-    void setSettingsRecentMaxFiles(uint8_t newValue)                    { settings_opensave_recent_max_files      = newValue; }
-    void setSettingsOpenSaveTrimDstNumJumps(uint8_t newValue)           { settings_opensave_trim_dst_num_jumps    = newValue; }
-    void setSettingsPrintingDefaultDevice(const QString& newValue)     { settings_printing_default_device        = newValue; }
-    void setSettingsPrintingUseLastDevice(bool newValue)               { settings_printing_use_last_device       = newValue; }
-    void setSettingsPrintingDisableBG(bool newValue)                   { settings_printing_disable_bg            = newValue; }
-    void setSettingsGridShowOnLoad(bool newValue)                      { settings_grid_show_on_load              = newValue; }
-    void setSettingsGridShowOrigin(bool newValue)                      { settings_grid_show_origin               = newValue; }
-    void setSettingsGridColorMatchCrossHair(bool newValue)             { settings_grid_color_match_crosshair     = newValue; }
-    void setSettingsGridColor(QRgb newValue)                           { settings_grid_color                     = newValue; }
-    void setSettingsGridLoadFromFile(bool newValue)                    { settings_grid_load_from_file            = newValue; }
-    void setSettingsGridType(const QString& newValue)                  { settings_grid_type                      = newValue; }
-    void setSettingsGridCenterOnOrigin(bool newValue)                  { settings_grid_center_on_origin          = newValue; }
-    void setSettingsGridCenterX(EmbReal newValue)                        { settings_grid_center_x                  = newValue; }
-    void setSettingsGridCenterY(EmbReal newValue)                        { settings_grid_center_y                  = newValue; }
-    void setSettingsGridSizeX(EmbReal newValue)                          { settings_grid_size_x                    = newValue; }
-    void setSettingsGridSizeY(EmbReal newValue)                          { settings_grid_size_y                    = newValue; }
-    void setSettingsGridSpacingX(EmbReal newValue)                       { settings_grid_spacing_x                 = newValue; }
-    void setSettingsGridSpacingY(EmbReal newValue)                       { settings_grid_spacing_y                 = newValue; }
-    void setSettingsGridSizeRadius(EmbReal newValue)                     { settings_grid_size_radius               = newValue; }
-    void setSettingsGridSpacingRadius(EmbReal newValue)                  { settings_grid_spacing_radius            = newValue; }
-    void setSettingsGridSpacingAngle(EmbReal newValue)                   { settings_grid_spacing_angle             = newValue; }
-    void setSettingsRulerShowOnLoad(bool newValue)                     { settings_ruler_show_on_load             = newValue; }
-    void setSettingsRulerMetric(bool newValue)                         { settings_ruler_metric                   = newValue; }
-    void setSettingsRulerColor(QRgb newValue)                          { settings_ruler_color                    = newValue; }
-    void setSettingsRulerPixelSize(uint8_t newValue)                    { settings_ruler_pixel_size               = newValue; }
-    void setSettingsQSnapEnabled(bool newValue)                        { settings_qsnap_enabled                  = newValue; }
-    void setSettingsQSnapLocatorColor(QRgb newValue)                   { settings_qsnap_locator_color            = newValue; }
-    void setSettingsQSnapLocatorSize(uint8_t newValue)                  { settings_qsnap_locator_size             = newValue; }
-    void setSettingsQSnapApertureSize(uint8_t newValue)                 { settings_qsnap_aperture_size            = newValue; }
-    void setSettingsQSnapEndPoint(bool newValue)                       { settings_qsnap_endpoint                 = newValue; }
-    void setSettingsQSnapMidPoint(bool newValue)                       { settings_qsnap_midpoint                 = newValue; }
-    void setSettingsQSnapCenter(bool newValue)                         { settings_qsnap_center                   = newValue; }
-    void setSettingsQSnapNode(bool newValue)                           { settings_qsnap_node                     = newValue; }
-    void setSettingsQSnapQuadrant(bool newValue)                       { settings_qsnap_quadrant                 = newValue; }
-    void setSettingsQSnapIntersection(bool newValue)                   { settings_qsnap_intersection             = newValue; }
-    void setSettingsQSnapExtension(bool newValue)                      { settings_qsnap_extension                = newValue; }
-    void setSettingsQSnapInsertion(bool newValue)                      { settings_qsnap_insertion                = newValue; }
-    void setSettingsQSnapPerpendicular(bool newValue)                  { settings_qsnap_perpendicular            = newValue; }
-    void setSettingsQSnapTangent(bool newValue)                        { settings_qsnap_tangent                  = newValue; }
-    void setSettingsQSnapNearest(bool newValue)                        { settings_qsnap_nearest                  = newValue; }
-    void setSettingsQSnapApparent(bool newValue)                       { settings_qsnap_apparent                 = newValue; }
-    void setSettingsQSnapParallel(bool newValue)                       { settings_qsnap_parallel                 = newValue; }
-    void setSettingsLwtShowLwt(bool newValue)                          { settings_lwt_show_lwt                   = newValue; }
-    void setSettingsLwtRealRender(bool newValue)                       { settings_lwt_real_render                = newValue; }
-    void setSettingsLwtDefaultLwt(EmbReal newValue)                      { settings_lwt_default_lwt                = newValue; }
-    void setSettingsSelectionModePickFirst(bool newValue)              { settings_selection_mode_pickfirst       = newValue; }
-    void setSettingsSelectionModePickAdd(bool newValue)                { settings_selection_mode_pickadd         = newValue; }
-    void setSettingsSelectionModePickDrag(bool newValue)               { settings_selection_mode_pickdrag        = newValue; }
-    void setSettingsSelectionCoolGripColor(QRgb newValue)              { settings_selection_coolgrip_color       = newValue; }
-    void setSettingsSelectionHotGripColor(QRgb newValue)               { settings_selection_hotgrip_color        = newValue; }
-    void setSettingsSelectionGripSize(uint8_t newValue)                 { settings_selection_grip_size            = newValue; }
-    void setSettingsSelectionPickBoxSize(uint8_t newValue)              { settings_selection_pickbox_size         = newValue; }
-    void setSettingsTextFont(const QString& newValue)                  { settings_text_font                      = newValue; }
-    void setSettingsTextSize(EmbReal newValue)                           { settings_text_size                      = newValue; }
-    void setSettingsTextAngle(EmbReal newValue)                          { settings_text_angle                     = newValue; }
-    void setSettingsTextStyleBold(bool newValue)                       { settings_text_style_bold                = newValue; }
-    void setSettingsTextStyleItalic(bool newValue)                     { settings_text_style_italic              = newValue; }
-    void setSettingsTextStyleUnderline(bool newValue)                  { settings_text_style_underline           = newValue; }
-    void setSettingsTextStyleStrikeOut(bool newValue)                  { settings_text_style_strikeout           = newValue; }
-    void setSettingsTextStyleOverline(bool newValue)                   { settings_text_style_overline            = newValue; }
+    void setSettingsGeneralLanguage(const QString& newValue) { settings_general_language = newValue; }
+    void setSettingsGeneralIconTheme(const QString& newValue) { settings_general_icon_theme = newValue; }
+    void setSettingsGeneralIconSize(int newValue) { settings_general_icon_size = newValue; }
+    void setSettingsGeneralMdiBGUseLogo(bool newValue) { settings_general_mdi_bg_use_logo = newValue; }
+    void setSettingsGeneralMdiBGUseTexture(bool newValue) { settings_general_mdi_bg_use_texture = newValue; }
+    void setSettingsGeneralMdiBGUseColor(bool newValue) { settings_general_mdi_bg_use_color = newValue; }
+    void setSettingsGeneralMdiBGLogo(const QString& newValue) { settings_general_mdi_bg_logo = newValue; }
+    void setSettingsGeneralMdiBGTexture(const QString& newValue) { settings_general_mdi_bg_texture = newValue; }
+    void setSettingsGeneralMdiBGColor(QRgb newValue) { settings_general_mdi_bg_color = newValue; }
+    void setSettingsGeneralTipOfTheDay(bool newValue) { settings_general_tip_of_the_day = newValue; }
+    void setSettingsGeneralCurrentTip(int newValue) { settings_general_current_tip = newValue; }
+    void setSettingsGeneralSystemHelpBrowser(bool newValue) { settings_general_system_help_browser = newValue; }
+    void setSettingsGeneralCheckForUpdates(bool newValue) { settings_general_check_for_updates = newValue; }
+    void setSettingsDisplayUseOpenGL(bool newValue) { settings_display_use_opengl = newValue; }
+    void setSettingsDisplayRenderHintAA(bool newValue) { settings_display_renderhint_aa = newValue; }
+    void setSettingsDisplayRenderHintTextAA(bool newValue) { settings_display_renderhint_text_aa = newValue; }
+    void setSettingsDisplayRenderHintSmoothPix(bool newValue) { settings_display_renderhint_smooth_pix = newValue; }
+    void setSettingsDisplayRenderHintHighAA(bool newValue) { settings_display_renderhint_high_aa = newValue; }
+    void setSettingsDisplayRenderHintNonCosmetic(bool newValue) { settings_display_renderhint_noncosmetic = newValue; }
+    void setSettingsDisplayShowScrollBars(bool newValue) { settings_display_show_scrollbars = newValue; }
+    void setSettingsDisplayScrollBarWidgetNum(int newValue) { settings_display_scrollbar_widget_num = newValue; }
+    void setSettingsDisplayCrossHairColor(QRgb newValue) { settings_display_crosshair_color = newValue; }
+    void setSettingsDisplayBGColor(QRgb newValue) { settings_display_bg_color = newValue; }
+    void setSettingsDisplaySelectBoxLeftColor(QRgb newValue) { settings_display_selectbox_left_color = newValue; }
+    void setSettingsDisplaySelectBoxLeftFill(QRgb newValue) { settings_display_selectbox_left_fill = newValue; }
+    void setSettingsDisplaySelectBoxRightColor(QRgb newValue) { settings_display_selectbox_right_color = newValue; }
+    void setSettingsDisplaySelectBoxRightFill(QRgb newValue) { settings_display_selectbox_right_fill = newValue; }
+    void setSettingsDisplaySelectBoxAlpha(uint8_t newValue) { settings_display_selectbox_alpha = newValue; }
+    void setSettingsDisplayZoomScaleIn(EmbReal newValue) { settings_display_zoomscale_in = newValue; }
+    void setSettingsDisplayZoomScaleOut(EmbReal newValue) { settings_display_zoomscale_out = newValue; }
+    void setSettingsDisplayCrossHairPercent(uint8_t newValue) { settings_display_crosshair_percent = newValue; }
+    void setSettingsDisplayUnits(const QString& newValue) { settings_display_units = newValue; }
+    void setSettingsPromptTextColor(QRgb newValue) { settings_prompt_text_color = newValue; }
+    void setSettingsPromptBGColor(QRgb newValue) { settings_prompt_bg_color = newValue; }
+    void setSettingsPromptFontFamily(const QString& newValue) { settings_prompt_font_family = newValue; }
+    void setSettingsPromptFontStyle(const QString& newValue) { settings_prompt_font_style = newValue; }
+    void setSettingsPromptFontSize(uint8_t newValue) { settings_prompt_font_size = newValue; }
+    void setSettingsPromptSaveHistory(bool newValue) { settings_prompt_save_history = newValue; }
+    void setSettingsPromptSaveHistoryAsHtml(bool newValue) { settings_prompt_save_history_as_html = newValue; }
+    void setSettingsPromptSaveHistoryFilename(const QString& newValue) { settings_prompt_save_history_filename = newValue; }
+    void setSettingsCustomFilter(const QString& newValue) { settings_opensave_custom_filter = newValue; }
+    void setSettingsOpenFormat(const QString& newValue) { settings_opensave_open_format = newValue; }
+    void setSettingsOpenThumbnail(bool newValue) { settings_opensave_open_thumbnail = newValue; }
+    void setSettingsSaveFormat(const QString& newValue) { settings_opensave_save_format = newValue; }
+    void setSettingsSaveThumbnail(bool newValue) { settings_opensave_save_thumbnail = newValue; }
+    void setSettingsRecentMaxFiles(uint8_t newValue) { settings_opensave_recent_max_files = newValue; }
+    void setSettingsOpenSaveTrimDstNumJumps(uint8_t newValue) { settings_opensave_trim_dst_num_jumps = newValue; }
+    void setSettingsPrintingDefaultDevice(const QString& newValue) { settings_printing_default_device = newValue; }
+    void setSettingsPrintingUseLastDevice(bool newValue) { settings_printing_use_last_device = newValue; }
+    void setSettingsPrintingDisableBG(bool newValue) { settings_printing_disable_bg = newValue; }
+    void setSettingsGridShowOnLoad(bool newValue) { settings_grid_show_on_load = newValue; }
+    void setSettingsGridShowOrigin(bool newValue) { settings_grid_show_origin = newValue; }
+    void setSettingsGridColorMatchCrossHair(bool newValue) { settings_grid_color_match_crosshair = newValue; }
+    void setSettingsGridColor(QRgb newValue) { settings_grid_color = newValue; }
+    void setSettingsGridLoadFromFile(bool newValue) { settings_grid_load_from_file = newValue; }
+    void setSettingsGridType(const QString& newValue) { settings_grid_type = newValue; }
+    void setSettingsGridCenterOnOrigin(bool newValue) { settings_grid_center_on_origin = newValue; }
+    void setSettingsGridCenterX(EmbReal newValue) { settings_grid_center_x = newValue; }
+    void setSettingsGridCenterY(EmbReal newValue) { settings_grid_center_y = newValue; }
+    void setSettingsGridSizeX(EmbReal newValue) { settings_grid_size_x = newValue; }
+    void setSettingsGridSizeY(EmbReal newValue) { settings_grid_size_y = newValue; }
+    void setSettingsGridSpacingX(EmbReal newValue) { settings_grid_spacing_x = newValue; }
+    void setSettingsGridSpacingY(EmbReal newValue) { settings_grid_spacing_y = newValue; }
+    void setSettingsGridSizeRadius(EmbReal newValue) { settings_grid_size_radius = newValue; }
+    void setSettingsGridSpacingRadius(EmbReal newValue) { settings_grid_spacing_radius = newValue; }
+    void setSettingsGridSpacingAngle(EmbReal newValue) { settings_grid_spacing_angle = newValue; }
+    void setSettingsRulerShowOnLoad(bool newValue) { settings_ruler_show_on_load = newValue; }
+    void setSettingsRulerMetric(bool newValue) { settings_ruler_metric = newValue; }
+    void setSettingsRulerColor(QRgb newValue) { settings_ruler_color = newValue; }
+    void setSettingsRulerPixelSize(uint8_t newValue) { settings_ruler_pixel_size = newValue; }
+    void setSettingsQSnapEnabled(bool newValue) { settings_qsnap_enabled = newValue; }
+    void setSettingsQSnapLocatorColor(QRgb newValue) { settings_qsnap_locator_color = newValue; }
+    void setSettingsQSnapLocatorSize(uint8_t newValue) { settings_qsnap_locator_size = newValue; }
+    void setSettingsQSnapApertureSize(uint8_t newValue) { settings_qsnap_aperture_size = newValue; }
+    void setSettingsQSnapEndPoint(bool newValue) { settings_qsnap_endpoint = newValue; }
+    void setSettingsQSnapMidPoint(bool newValue) { settings_qsnap_midpoint = newValue; }
+    void setSettingsQSnapCenter(bool newValue) { settings_qsnap_center = newValue; }
+    void setSettingsQSnapNode(bool newValue) { settings_qsnap_node = newValue; }
+    void setSettingsQSnapQuadrant(bool newValue) { settings_qsnap_quadrant = newValue; }
+    void setSettingsQSnapIntersection(bool newValue) { settings_qsnap_intersection = newValue; }
+    void setSettingsQSnapExtension(bool newValue) { settings_qsnap_extension = newValue; }
+    void setSettingsQSnapInsertion(bool newValue) { settings_qsnap_insertion = newValue; }
+    void setSettingsQSnapPerpendicular(bool newValue) { settings_qsnap_perpendicular = newValue; }
+    void setSettingsQSnapTangent(bool newValue) { settings_qsnap_tangent = newValue; }
+    void setSettingsQSnapNearest(bool newValue) { settings_qsnap_nearest = newValue; }
+    void setSettingsQSnapApparent(bool newValue) { settings_qsnap_apparent = newValue; }
+    void setSettingsQSnapParallel(bool newValue) { settings_qsnap_parallel = newValue; }
+    void setSettingsLwtShowLwt(bool newValue) { settings_lwt_show_lwt = newValue; }
+    void setSettingsLwtRealRender(bool newValue) { settings_lwt_real_render = newValue; }
+    void setSettingsLwtDefaultLwt(EmbReal newValue) { settings_lwt_default_lwt = newValue; }
+    void setSettingsSelectionModePickFirst(bool newValue) { settings_selection_mode_pickfirst = newValue; }
+    void setSettingsSelectionModePickAdd(bool newValue) { settings_selection_mode_pickadd = newValue; }
+    void setSettingsSelectionModePickDrag(bool newValue) { settings_selection_mode_pickdrag = newValue; }
+    void setSettingsSelectionCoolGripColor(QRgb newValue) { settings_selection_coolgrip_color = newValue; }
+    void setSettingsSelectionHotGripColor(QRgb newValue) { settings_selection_hotgrip_color = newValue; }
+    void setSettingsSelectionGripSize(uint8_t newValue) { settings_selection_grip_size = newValue; }
+    void setSettingsSelectionPickBoxSize(uint8_t newValue) { settings_selection_pickbox_size = newValue; }
+    void setSettingsTextFont(const QString& newValue) { settings_text_font = newValue; }
+    void setSettingsTextSize(EmbReal newValue) { settings_text_size = newValue; }
+    void setSettingsTextAngle(EmbReal newValue) { settings_text_angle = newValue; }
+    void setSettingsTextStyleBold(bool newValue) { settings_text_style_bold = newValue; }
+    void setSettingsTextStyleItalic(bool newValue) { settings_text_style_italic = newValue; }
+    void setSettingsTextStyleUnderline(bool newValue) { settings_text_style_underline = newValue; }
+    void setSettingsTextStyleStrikeOut(bool newValue) { settings_text_style_strikeout = newValue; }
+    void setSettingsTextStyleOverline(bool newValue) { settings_text_style_overline = newValue; }
 
-    QHash<int, QAction*>            actionHash;
-    QHash<QString, QToolBar*>       toolbarHash;
-    QHash<QString, QMenu*>          menuHash;
+    QHash<int, QAction*> actionHash;
+    QHash<QString, QToolBar*> toolbarHash;
+    QHash<QString, QMenu*> menuHash;
 
-    QString                         formatFilterOpen;
-    QString                         formatFilterSave;
+    QString formatFilterOpen;
+    QString formatFilterSave;
 
-    bool                            isCommandActive() { return prompt->isCommandActive(); }
-    QString                         activeCommand() { return prompt->activeCommand(); }
+    bool isCommandActive() { return prompt->isCommandActive(); }
+    QString activeCommand() { return prompt->activeCommand(); }
 
     QString platformString();
 
@@ -2489,7 +2229,7 @@ public slots:
     void disableMoveRapidFire();
 
     void onCloseWindow();
-    virtual void                   onCloseMdiWin(MdiWindow*);
+    virtual void onCloseMdiWin(MdiWindow*);
 
     void recentMenuAboutToShow();
 
@@ -2514,134 +2254,25 @@ public slots:
     void readSettings();
     void writeSettings();
 
-    static bool                     validFileFormat(const QString &fileName);
+    static bool validFileFormat(const QString &fileName);
 
 protected:
-    virtual void                   resizeEvent(QResizeEvent*);
-  void closeEvent(QCloseEvent *event);
-    QAction*                        getFileSeparator();
-  void loadFormats();
+    virtual void resizeEvent(QResizeEvent*);
+    void closeEvent(QCloseEvent *event);
+    QAction* getFileSeparator();
+    void loadFormats();
 
-private:
 
-    QString settings_general_language;
-    QString settings_general_icon_theme;
-    int settings_general_icon_size;
-    bool settings_general_mdi_bg_use_logo;
-    bool settings_general_mdi_bg_use_texture;
-    bool                            settings_general_mdi_bg_use_color;
-    QString                         settings_general_mdi_bg_logo;
-    QString                         settings_general_mdi_bg_texture;
-    QRgb                            settings_general_mdi_bg_color;
-    bool                            settings_general_tip_of_the_day;
-    quint16                         settings_general_current_tip;
-    bool                            settings_general_system_help_browser;
-    bool                            settings_general_check_for_updates;
-    bool                            settings_display_use_opengl;
-    bool                            settings_display_renderhint_aa;
-    bool                            settings_display_renderhint_text_aa;
-    bool                            settings_display_renderhint_smooth_pix;
-    bool                            settings_display_renderhint_high_aa;
-    bool                            settings_display_renderhint_noncosmetic;
-    bool                            settings_display_show_scrollbars;
-    int                             settings_display_scrollbar_widget_num;
-    QRgb                            settings_display_crosshair_color;
-    QRgb                            settings_display_bg_color;
-    QRgb                            settings_display_selectbox_left_color;
-    QRgb                            settings_display_selectbox_left_fill;
-    QRgb                            settings_display_selectbox_right_color;
-    QRgb                            settings_display_selectbox_right_fill;
-    uint8_t                          settings_display_selectbox_alpha;
-    EmbReal                           settings_display_zoomscale_in;
-    EmbReal                           settings_display_zoomscale_out;
-    uint8_t                          settings_display_crosshair_percent;
-    QString                         settings_display_units;
-    QRgb                            settings_prompt_text_color;
-    QRgb                            settings_prompt_bg_color;
-    QString                         settings_prompt_font_family;
-    QString                         settings_prompt_font_style;
-    uint8_t                          settings_prompt_font_size;
-    bool                            settings_prompt_save_history;
-    bool                            settings_prompt_save_history_as_html;
-    QString                         settings_prompt_save_history_filename;
-    QString                         settings_opensave_custom_filter;
-    QString                         settings_opensave_open_format;
-    bool                            settings_opensave_open_thumbnail;
-    QString                         settings_opensave_save_format;
-    bool                            settings_opensave_save_thumbnail;
-    uint8_t                          settings_opensave_recent_max_files;
-    QStringList                     settings_opensave_recent_list_of_files;
-    QString                         settings_opensave_recent_directory;
-    uint8_t                          settings_opensave_trim_dst_num_jumps;
-    QString                         settings_printing_default_device;
-    bool                            settings_printing_use_last_device;
-    bool                            settings_printing_disable_bg;
-    bool                            settings_grid_show_on_load;
-    bool                            settings_grid_show_origin;
-    bool                            settings_grid_color_match_crosshair;
-    QRgb                            settings_grid_color;
-    bool                            settings_grid_load_from_file;
-    QString                         settings_grid_type;
-    bool                            settings_grid_center_on_origin;
-    EmbReal                           settings_grid_center_x;
-    EmbReal                           settings_grid_center_y;
-    EmbReal                           settings_grid_size_x;
-    EmbReal                           settings_grid_size_y;
-    EmbReal                           settings_grid_spacing_x;
-    EmbReal                           settings_grid_spacing_y;
-    EmbReal                           settings_grid_size_radius;
-    EmbReal                           settings_grid_spacing_radius;
-    EmbReal                           settings_grid_spacing_angle;
-    bool                            settings_ruler_show_on_load;
-    bool                            settings_ruler_metric;
-    QRgb                            settings_ruler_color;
-    uint8_t                          settings_ruler_pixel_size;
-    bool                            settings_qsnap_enabled;
-    QRgb                            settings_qsnap_locator_color;
-    uint8_t                          settings_qsnap_locator_size;
-    uint8_t                          settings_qsnap_aperture_size;
-    bool                            settings_qsnap_endpoint;
-    bool                            settings_qsnap_midpoint;
-    bool                            settings_qsnap_center;
-    bool                            settings_qsnap_node;
-    bool                            settings_qsnap_quadrant;
-    bool                            settings_qsnap_intersection;
-    bool                            settings_qsnap_extension;
-    bool                            settings_qsnap_insertion;
-    bool                            settings_qsnap_perpendicular;
-    bool                            settings_qsnap_tangent;
-    bool                            settings_qsnap_nearest;
-    bool                            settings_qsnap_apparent;
-    bool                            settings_qsnap_parallel;
-    bool                            settings_lwt_show_lwt;
-    bool                            settings_lwt_real_render;
-    EmbReal                           settings_lwt_default_lwt;
-    bool                            settings_selection_mode_pickfirst;
-    bool                            settings_selection_mode_pickadd;
-    bool                            settings_selection_mode_pickdrag;
-    QRgb                            settings_selection_coolgrip_color;
-    QRgb                            settings_selection_hotgrip_color;
-    uint8_t                          settings_selection_grip_size;
-    uint8_t                          settings_selection_pickbox_size;
-    QString                         settings_text_font;
-    EmbReal settings_text_size;
-    EmbReal settings_text_angle;
-    bool                            settings_text_style_bold;
-    bool                            settings_text_style_italic;
-    bool                            settings_text_style_underline;
-    bool                            settings_text_style_overline;
-    bool                            settings_text_style_strikeout;
-
-    bool                            shiftKeyPressedState;
+    bool shiftKeyPressedState;
 
     QByteArray                      layoutState;
 
-    int                             numOfDocs;
-    int                             docIndex;
+    int numOfDocs;
+    int docIndex;
 
     QList<MdiWindow*>               listMdiWin;
     QMdiSubWindow*                  findMdiWindow(const QString &fileName);
-    QString                         openFilesPath;
+    QString openFilesPath;
 
     QAction*                        myFileSeparator;
 
@@ -2650,9 +2281,9 @@ private:
     QCheckBox*  checkBoxTipOfTheDay;
     QStringList listTipOfTheDay;
 
-  void createAllActions();
-    QAction*                        createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted = false);
-    //====================================================
+    void createAllActions();
+    QAction* createAction(const QString icon, const QString toolTip, const QString statusTip, bool scripted = false);
+
     //Toolbars
     //====================================================
     void createAllToolbars();
@@ -2679,7 +2310,7 @@ private:
     QToolBar* toolbarText;
     QToolBar* toolbarProperties;
     QToolBar* toolbarPrompt;
-    //====================================================
+
     //Selectors
     //====================================================
     QComboBox*     layerSelector;
@@ -2688,7 +2319,7 @@ private:
     QComboBox*     lineweightSelector;
     QFontComboBox* textFontSelector;
     QComboBox*     textSizeSelector;
-    //====================================================
+
     //Menus
     //====================================================
     void createAllMenus();
@@ -2705,7 +2336,7 @@ private:
     QMenu* settingsMenu;
     QMenu* windowMenu;
     QMenu* helpMenu;
-    //====================================================
+
     //SubMenus
     //====================================================
     QMenu* recentMenu;
@@ -2782,13 +2413,13 @@ public slots:
     void textSizeSelectorIndexChanged(int index);
 
     QString textFont();
-    EmbReal   textSize();
-    EmbReal   textAngle();
-    bool    textBold();
-    bool    textItalic();
-    bool    textUnderline();
-    bool    textStrikeOut();
-    bool    textOverline();
+    EmbReal textSize();
+    EmbReal textAngle();
+    bool textBold();
+    bool textItalic();
+    bool textUnderline();
+    bool textStrikeOut();
+    bool textOverline();
 
     void setTextFont(const QString& str);
     void setTextSize(EmbReal num);
@@ -2800,7 +2431,7 @@ public slots:
     void setTextOverline(bool val);
 
     QString getCurrentLayer();
-    QRgb    getCurrentColor();
+    QRgb getCurrentColor();
     QString getCurrentLineType();
     QString getCurrentLineWeight();
 
@@ -2843,14 +2474,6 @@ public slots:
     void nightVision();
 
     void doNothing();
-
-private:
-    /*
-    QScriptEngine*         engine;
-    QScriptEngineDebugger* debugger;
-    void                  javaInitNatives(QScriptEngine* engine);
-    void                  javaLoadCommand(const QString& cmdName);
-   */
 
 public:
     //Natives
@@ -2909,13 +2532,13 @@ public:
     void nativeSetGridColor(uint8_t r, uint8_t g, uint8_t b);
 
     QString nativeTextFont();
-    EmbReal   nativeTextSize();
-    EmbReal   nativeTextAngle();
-    bool    nativeTextBold();
-    bool    nativeTextItalic();
-    bool    nativeTextUnderline();
-    bool    nativeTextStrikeOut();
-    bool    nativeTextOverline();
+    EmbReal nativeTextSize();
+    EmbReal nativeTextAngle();
+    bool nativeTextBold();
+    bool nativeTextItalic();
+    bool nativeTextUnderline();
+    bool nativeTextStrikeOut();
+    bool nativeTextOverline();
 
     void nativeSetTextFont(const QString& str);
     void nativeSetTextSize(EmbReal num);
@@ -2967,7 +2590,7 @@ public:
     EmbReal nativeCalculateDistance(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
     EmbReal nativePerpendicularDistance(EmbReal px, EmbReal py, EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
 
-    int  nativeNumSelected();
+    int nativeNumSelected();
     void nativeSelectAll();
     void nativeAddToSelection(const QPainterPath path, Qt::ItemSelectionMode mode);
     void nativeClearSelection();
@@ -2998,46 +2621,46 @@ public:
     ~MdiWindow();
 
     virtual QSize              sizeHint() const;
-    QString                    getCurrentFile()   { return curFile; }
-    QString                    getShortCurrentFile();
+    QString getCurrentFile() { return curFile; }
+    QString getShortCurrentFile();
     View*                      getView() { return gview; }
     QGraphicsScene*            getScene() { return gscene; }
-    QString                    getCurrentLayer() { return curLayer; }
-    QRgb                       getCurrentColor() { return curColor; }
-    QString                    getCurrentLineType() { return curLineType; }
-    QString                    getCurrentLineWeight() { return curLineWeight; }
-    void                       setCurrentLayer(const QString& layer) { curLayer = layer; }
-    void                       setCurrentColor(const QRgb& color) { curColor = color; }
-    void                       setCurrentLineType(const QString& lineType) { curLineType = lineType; }
-    void                       setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
-    void                       designDetails();
-    bool                       loadFile(const QString &fileName);
-    bool                       saveFile(const QString &fileName);
+    QString getCurrentLayer() { return curLayer; }
+    QRgb getCurrentColor() { return curColor; }
+    QString getCurrentLineType() { return curLineType; }
+    QString getCurrentLineWeight() { return curLineWeight; }
+    void setCurrentLayer(const QString& layer) { curLayer = layer; }
+    void setCurrentColor(const QRgb& color) { curColor = color; }
+    void setCurrentLineType(const QString& lineType) { curLineType = lineType; }
+    void setCurrentLineWeight(const QString& lineWeight) { curLineWeight = lineWeight; }
+    void designDetails();
+    bool loadFile(const QString &fileName);
+    bool saveFile(const QString &fileName);
 signals:
-    void                       sendCloseMdiWin(MdiWindow*);
+    void sendCloseMdiWin(MdiWindow*);
 
 public slots:
-    void                       closeEvent(QCloseEvent* e);
-    void                       onWindowActivated();
+    void closeEvent(QCloseEvent* e);
+    void onWindowActivated();
 
-    void                       currentLayerChanged(const QString& layer);
-    void                       currentColorChanged(const QRgb& color);
-    void                       currentLinetypeChanged(const QString& type);
-    void                       currentLineweightChanged(const QString& weight);
+    void currentLayerChanged(const QString& layer);
+    void currentColorChanged(const QRgb& color);
+    void currentLinetypeChanged(const QString& type);
+    void currentLineweightChanged(const QString& weight);
 
-    void                       updateColorLinetypeLineweight();
-    void                       deletePressed();
-    void                       escapePressed();
+    void updateColorLinetypeLineweight();
+    void deletePressed();
+    void escapePressed();
 
-    void                       showViewScrollBars(bool val);
-    void                       setViewCrossHairColor(QRgb color);
-    void                       setViewBackgroundColor(QRgb color);
-    void                       setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
-    void                       setViewGridColor(QRgb color);
-    void                       setViewRulerColor(QRgb color);
+    void showViewScrollBars(bool val);
+    void setViewCrossHairColor(QRgb color);
+    void setViewBackgroundColor(QRgb color);
+    void setViewSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, int alpha);
+    void setViewGridColor(QRgb color);
+    void setViewRulerColor(QRgb color);
 
-    void                       print();
-    void                       saveBMC();
+    void print();
+    void saveBMC();
 
     void promptHistoryAppended(const QString& txt);
     void logPromptInput(const QString& txt);
@@ -3052,7 +2675,7 @@ private:
     QGraphicsScene*            gscene;
     View*                      gview;
 
-    bool                       fileWasLoaded;
+    bool fileWasLoaded;
 
     QString promptHistory;
     QList<QString> promptInputList;
@@ -3060,16 +2683,16 @@ private:
 
     QPrinter                   printer;
 
-    QString                    curFile;
-    void                       setCurrentFile(const QString& fileName);
-    QString                    fileExtension(const QString& fileName);
+    QString curFile;
+    void setCurrentFile(const QString& fileName);
+    QString fileExtension(const QString& fileName);
 
-    int                        myIndex;
+    int myIndex;
 
-    QString                    curLayer;
-    QRgb                       curColor;
-    QString                    curLineType;
-    QString                    curLineWeight;
+    QString curLayer;
+    QRgb curColor;
+    QString curLineType;
+    QString curLineWeight;
 
     void promptInputPrevNext(bool prev);
 };
@@ -3082,6 +2705,19 @@ class MdiArea : public QMdiArea
     Q_OBJECT
 
 public:
+    MainWindow* mainWin;
+
+    bool useLogo;
+    bool useTexture;
+    bool useColor;
+
+    QPixmap bgLogo;
+    QPixmap bgTexture;
+    QColor  bgColor;
+
+    void zoomExtentsAllSubWindows();
+    void forceRepaint();
+
     MdiArea(MainWindow* mw, QWidget* parent = 0);
     ~MdiArea();
 
@@ -3099,37 +2735,22 @@ public slots:
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent* e);
     virtual void paintEvent(QPaintEvent* e);
-
-private:
-    MainWindow* mainWin;
-
-    bool useLogo;
-    bool useTexture;
-    bool useColor;
-
-    QPixmap bgLogo;
-    QPixmap bgTexture;
-    QColor  bgColor;
-
-    void zoomExtentsAllSubWindows();
-    void forceRepaint();
 };
 
-
-class ImageWidget;
-
+/**
+ *
+ */
 class PreviewDialog : public QFileDialog
 {
     Q_OBJECT
 
 public:
     PreviewDialog(QWidget* parent = 0,
-                  const QString& caption = QString(),
-                  const QString& directory = QString(),
-                  const QString& filter = QString());
+       const QString& caption = QString(),
+       const QString& directory = QString(),
+       const QString& filter = QString());
     ~PreviewDialog();
 
-private:
     ImageWidget* imgWidget;
 };
 
@@ -3161,10 +2782,10 @@ private slots:
     void togglePickAddMode();
 
 private:
-    QWidget*     focusWidget;
+    QWidget* focusWidget;
 
-    QString      iconDir;
-    int          iconSize;
+    QString iconDir;
+    int iconSize;
     Qt::ToolButtonStyle propertyEditorButtonStyle;
 
     bool pickAdd;
@@ -3629,14 +3250,6 @@ class SelectBox : public QRubberBand
 public:
     SelectBox(Shape s, QWidget* parent = 0);
 
-public slots:
-    void setDirection(int dir);
-    void setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha);
-
-protected:
-    void paintEvent(QPaintEvent*);
-
-private:
     QColor leftBrushColor;
     QColor rightBrushColor;
     QColor leftPenColor;
@@ -3654,6 +3267,13 @@ private:
     bool boxDir;
 
     void forceRepaint();
+
+public slots:
+    void setDirection(int dir);
+    void setColors(const QColor& colorL, const QColor& fillL, const QColor& colorR, const QColor& fillR, int newAlpha);
+
+protected:
+    void paintEvent(QPaintEvent*);
 };
 
 /**
@@ -3667,169 +3287,168 @@ public:
     Settings_Dialog(MainWindow* mw, const QString& showTab = QString(), QWidget *parent = 0);
     ~Settings_Dialog();
 
-private:
-    MainWindow*       mainWin;
+    MainWindow* mainWin;
 
-    QTabWidget*       tabWidget;
+    QTabWidget* tabWidget;
 
-    QWidget*          createTabGeneral();
-    QWidget*          createTabFilesPaths();
-    QWidget*          createTabDisplay();
-    QWidget*          createTabPrompt();
-    QWidget*          createTabOpenSave();
-    QWidget*          createTabPrinting();
-    QWidget*          createTabSnap();
-    QWidget*          createTabGridRuler();
-    QWidget*          createTabOrthoPolar();
-    QWidget*          createTabQuickSnap();
-    QWidget*          createTabQuickTrack();
-    QWidget*          createTabLineWeight();
-    QWidget*          createTabSelection();
+    QWidget* createTabGeneral();
+    QWidget* createTabFilesPaths();
+    QWidget* createTabDisplay();
+    QWidget* createTabPrompt();
+    QWidget* createTabOpenSave();
+    QWidget* createTabPrinting();
+    QWidget* createTabSnap();
+    QWidget* createTabGridRuler();
+    QWidget* createTabOrthoPolar();
+    QWidget* createTabQuickSnap();
+    QWidget* createTabQuickTrack();
+    QWidget* createTabLineWeight();
+    QWidget* createTabSelection();
 
     QDialogButtonBox* buttonBox;
 
     void addColorsToComboBox(QComboBox* comboBox);
 
     //Temporary for instant preview
-    bool    preview_general_mdi_bg_use_logo;
-    bool    preview_general_mdi_bg_use_texture;
-    bool    preview_general_mdi_bg_use_color;
+    bool preview_general_mdi_bg_use_logo;
+    bool preview_general_mdi_bg_use_texture;
+    bool preview_general_mdi_bg_use_color;
 
     QString accept_general_mdi_bg_logo;
     QString accept_general_mdi_bg_texture;
-    QRgb    preview_general_mdi_bg_color;
-    QRgb    accept_general_mdi_bg_color;
+    QRgb preview_general_mdi_bg_color;
+    QRgb accept_general_mdi_bg_color;
 
-    bool    preview_display_show_scrollbars;
+    bool preview_display_show_scrollbars;
 
-    QRgb    preview_display_crosshair_color;
-    QRgb    accept_display_crosshair_color;
-    QRgb    preview_display_bg_color;
-    QRgb    accept_display_bg_color;
+    QRgb preview_display_crosshair_color;
+    QRgb accept_display_crosshair_color;
+    QRgb preview_display_bg_color;
+    QRgb accept_display_bg_color;
 
-    QRgb    preview_display_selectbox_left_color;
-    QRgb    accept_display_selectbox_left_color;
-    QRgb    preview_display_selectbox_left_fill;
-    QRgb    accept_display_selectbox_left_fill;
-    QRgb    preview_display_selectbox_right_color;
-    QRgb    accept_display_selectbox_right_color;
-    QRgb    preview_display_selectbox_right_fill;
-    QRgb    accept_display_selectbox_right_fill;
+    QRgb preview_display_selectbox_left_color;
+    QRgb accept_display_selectbox_left_color;
+    QRgb preview_display_selectbox_left_fill;
+    QRgb accept_display_selectbox_left_fill;
+    QRgb preview_display_selectbox_right_color;
+    QRgb accept_display_selectbox_right_color;
+    QRgb preview_display_selectbox_right_fill;
+    QRgb accept_display_selectbox_right_fill;
     quint8  preview_display_selectbox_alpha;
 
-    QRgb    preview_prompt_text_color;
-    QRgb    accept_prompt_text_color;
+    QRgb preview_prompt_text_color;
+    QRgb accept_prompt_text_color;
 
-    QRgb    preview_prompt_bg_color;
-    QRgb    accept_prompt_bg_color;
+    QRgb preview_prompt_bg_color;
+    QRgb accept_prompt_bg_color;
 
     QString preview_prompt_font_family;
     QString preview_prompt_font_style;
     quint8  preview_prompt_font_size;
 
-    QRgb    preview_grid_color;
-    QRgb    accept_grid_color;
+    QRgb preview_grid_color;
+    QRgb accept_grid_color;
 
-    QRgb    preview_ruler_color;
-    QRgb    accept_ruler_color;
+    QRgb preview_ruler_color;
+    QRgb accept_ruler_color;
 
-    bool    preview_lwt_show_lwt;
-    bool    preview_lwt_real_render;
+    bool preview_lwt_show_lwt;
+    bool preview_lwt_real_render;
 
     //Temporary until changes are accepted
     QString dialog_general_language;
     QString dialog_general_icon_theme;
-    int     dialog_general_icon_size;
-    bool    dialog_general_mdi_bg_use_logo;
-    bool    dialog_general_mdi_bg_use_texture;
-    bool    dialog_general_mdi_bg_use_color;
+    int dialog_general_icon_size;
+    bool dialog_general_mdi_bg_use_logo;
+    bool dialog_general_mdi_bg_use_texture;
+    bool dialog_general_mdi_bg_use_color;
     QString dialog_general_mdi_bg_logo;
     QString dialog_general_mdi_bg_texture;
-    QRgb    dialog_general_mdi_bg_color;
-    bool    dialog_general_tip_of_the_day;
-    bool    dialog_general_system_help_browser;
-    bool    dialog_display_use_opengl;
-    bool    dialog_display_renderhint_aa;
-    bool    dialog_display_renderhint_text_aa;
-    bool    dialog_display_renderhint_smooth_pix;
-    bool    dialog_display_renderhint_high_aa;
-    bool    dialog_display_renderhint_noncosmetic;
-    bool    dialog_display_show_scrollbars;
-    int     dialog_display_scrollbar_widget_num;
-    QRgb    dialog_display_crosshair_color;
-    QRgb    dialog_display_bg_color;
-    QRgb    dialog_display_selectbox_left_color;
-    QRgb    dialog_display_selectbox_left_fill;
-    QRgb    dialog_display_selectbox_right_color;
-    QRgb    dialog_display_selectbox_right_fill;
+    QRgb dialog_general_mdi_bg_color;
+    bool dialog_general_tip_of_the_day;
+    bool dialog_general_system_help_browser;
+    bool dialog_display_use_opengl;
+    bool dialog_display_renderhint_aa;
+    bool dialog_display_renderhint_text_aa;
+    bool dialog_display_renderhint_smooth_pix;
+    bool dialog_display_renderhint_high_aa;
+    bool dialog_display_renderhint_noncosmetic;
+    bool dialog_display_show_scrollbars;
+    int dialog_display_scrollbar_widget_num;
+    QRgb dialog_display_crosshair_color;
+    QRgb dialog_display_bg_color;
+    QRgb dialog_display_selectbox_left_color;
+    QRgb dialog_display_selectbox_left_fill;
+    QRgb dialog_display_selectbox_right_color;
+    QRgb dialog_display_selectbox_right_fill;
     quint8  dialog_display_selectbox_alpha;
-    EmbReal   dialog_display_zoomscale_in;
-    EmbReal   dialog_display_zoomscale_out;
+    EmbReal dialog_display_zoomscale_in;
+    EmbReal dialog_display_zoomscale_out;
     quint8  dialog_display_crosshair_percent;
     QString dialog_display_units;
-    QRgb    dialog_prompt_text_color;
-    QRgb    dialog_prompt_bg_color;
+    QRgb dialog_prompt_text_color;
+    QRgb dialog_prompt_bg_color;
     QString dialog_prompt_font_family;
     QString dialog_prompt_font_style;
     quint8  dialog_prompt_font_size;
-    bool    dialog_prompt_save_history;
-    bool    dialog_prompt_save_history_as_html;
+    bool dialog_prompt_save_history;
+    bool dialog_prompt_save_history_as_html;
     QString dialog_prompt_save_history_filename;
     QString dialog_opensave_custom_filter;
     QString dialog_opensave_open_format;
-    bool    dialog_opensave_open_thumbnail;
+    bool dialog_opensave_open_thumbnail;
     QString dialog_opensave_save_format;
-    bool    dialog_opensave_save_thumbnail;
+    bool dialog_opensave_save_thumbnail;
     quint8  dialog_opensave_recent_max_files;
     quint8  dialog_opensave_trim_dst_num_jumps;
     QString dialog_printing_default_device;
-    bool    dialog_printing_use_last_device;
-    bool    dialog_printing_disable_bg;
-    bool    dialog_grid_show_on_load;
-    bool    dialog_grid_show_origin;
-    bool    dialog_grid_color_match_crosshair;
-    QRgb    dialog_grid_color;
-    bool    dialog_grid_load_from_file;
+    bool dialog_printing_use_last_device;
+    bool dialog_printing_disable_bg;
+    bool dialog_grid_show_on_load;
+    bool dialog_grid_show_origin;
+    bool dialog_grid_color_match_crosshair;
+    QRgb dialog_grid_color;
+    bool dialog_grid_load_from_file;
     QString dialog_grid_type;
-    bool    dialog_grid_center_on_origin;
-    EmbReal   dialog_grid_center_x;
-    EmbReal   dialog_grid_center_y;
-    EmbReal   dialog_grid_size_x;
-    EmbReal   dialog_grid_size_y;
-    EmbReal   dialog_grid_spacing_x;
-    EmbReal   dialog_grid_spacing_y;
-    EmbReal   dialog_grid_size_radius;
-    EmbReal   dialog_grid_spacing_radius;
-    EmbReal   dialog_grid_spacing_angle;
-    bool    dialog_ruler_show_on_load;
-    bool    dialog_ruler_metric;
-    QRgb    dialog_ruler_color;
+    bool dialog_grid_center_on_origin;
+    EmbReal dialog_grid_center_x;
+    EmbReal dialog_grid_center_y;
+    EmbReal dialog_grid_size_x;
+    EmbReal dialog_grid_size_y;
+    EmbReal dialog_grid_spacing_x;
+    EmbReal dialog_grid_spacing_y;
+    EmbReal dialog_grid_size_radius;
+    EmbReal dialog_grid_spacing_radius;
+    EmbReal dialog_grid_spacing_angle;
+    bool dialog_ruler_show_on_load;
+    bool dialog_ruler_metric;
+    QRgb dialog_ruler_color;
     quint8  dialog_ruler_pixel_size;
-    bool    dialog_qsnap_enabled;
-    QRgb    dialog_qsnap_locator_color;
+    bool dialog_qsnap_enabled;
+    QRgb dialog_qsnap_locator_color;
     quint8  dialog_qsnap_locator_size;
     quint8  dialog_qsnap_aperture_size;
-    bool    dialog_qsnap_endpoint;
-    bool    dialog_qsnap_midpoint;
-    bool    dialog_qsnap_center;
-    bool    dialog_qsnap_node;
-    bool    dialog_qsnap_quadrant;
-    bool    dialog_qsnap_intersection;
-    bool    dialog_qsnap_extension;
-    bool    dialog_qsnap_insertion;
-    bool    dialog_qsnap_perpendicular;
-    bool    dialog_qsnap_tangent;
-    bool    dialog_qsnap_nearest;
-    bool    dialog_qsnap_apparent;
-    bool    dialog_qsnap_parallel;
-    bool    dialog_lwt_show_lwt;
-    bool    dialog_lwt_real_render;
-    EmbReal   dialog_lwt_default_lwt;
-    bool    dialog_selection_mode_pickfirst;
-    bool    dialog_selection_mode_pickadd;
-    bool    dialog_selection_mode_pickdrag;
-    QRgb    dialog_selection_coolgrip_color;
-    QRgb    dialog_selection_hotgrip_color;
+    bool dialog_qsnap_endpoint;
+    bool dialog_qsnap_midpoint;
+    bool dialog_qsnap_center;
+    bool dialog_qsnap_node;
+    bool dialog_qsnap_quadrant;
+    bool dialog_qsnap_intersection;
+    bool dialog_qsnap_extension;
+    bool dialog_qsnap_insertion;
+    bool dialog_qsnap_perpendicular;
+    bool dialog_qsnap_tangent;
+    bool dialog_qsnap_nearest;
+    bool dialog_qsnap_apparent;
+    bool dialog_qsnap_parallel;
+    bool dialog_lwt_show_lwt;
+    bool dialog_lwt_real_render;
+    EmbReal dialog_lwt_default_lwt;
+    bool dialog_selection_mode_pickfirst;
+    bool dialog_selection_mode_pickadd;
+    bool dialog_selection_mode_pickdrag;
+    QRgb dialog_selection_coolgrip_color;
+    QRgb dialog_selection_hotgrip_color;
     quint8  dialog_selection_grip_size;
     quint8  dialog_selection_pickbox_size;
 
@@ -3962,22 +3581,20 @@ public:
     QLabel* statusBarMouseCoord;
 
     void setMouseCoord(EmbReal x, EmbReal y);
-
-protected:
-
-private slots:
-
-private:
-
 };
 
-
+/**
+ *
+ */
 class StatusBarButton : public QToolButton
 {
     Q_OBJECT
 
 public:
     StatusBarButton(QString buttonText, MainWindow* mw, StatusBar* statbar, QWidget *parent = 0);
+
+    MainWindow* mainWin;
+    StatusBar*  statusbar;
 
 protected:
     void contextMenuEvent(QContextMenuEvent *event = 0);
@@ -4004,10 +3621,6 @@ public slots:
     void disableLwt();
     void enableReal();
     void disableReal();
-
-private:
-    MainWindow* mainWin;
-    StatusBar*  statusbar;
 };
 
 /**
@@ -4026,6 +3639,14 @@ public:
     bool canUndo() const;
     bool canRedo() const;
 
+    QWidget* focusWidget;
+
+    QString iconDir;
+    int iconSize;
+
+    QUndoGroup* undoGroup;
+    QUndoView*  undoView;
+
     QString undoText() const;
     QString redoText() const;
 protected:
@@ -4035,17 +3656,11 @@ public slots:
     void redo();
 
     void updateCleanIcon(bool opened);
-
-private:
-    QWidget*    focusWidget;
-
-    QString     iconDir;
-    int         iconSize;
-
-    QUndoGroup* undoGroup;
-    QUndoView*  undoView;
 };
 
+/**
+ *
+ */
 class UndoableAddCommand : public QUndoCommand
 {
 public:
@@ -4054,11 +3669,13 @@ public:
     void undo();
     void redo();
 
-private:
     BaseObject* object;
     View*       gview;
 };
 
+/**
+ *
+ */
 class UndoableDeleteCommand : public QUndoCommand
 {
 public:
@@ -4067,11 +3684,13 @@ public:
     void undo();
     void redo();
 
-private:
     BaseObject* object;
     View*       gview;
 };
 
+/**
+ *
+ */
 class UndoableMoveCommand : public QUndoCommand
 {
 public:
@@ -4080,13 +3699,15 @@ public:
     void undo();
     void redo();
 
-private:
     BaseObject* object;
     View*       gview;
-    EmbReal       dx;
-    EmbReal       dy;
+    EmbReal dx;
+    EmbReal dy;
 };
 
+/**
+ *
+ */
 class UndoableRotateCommand : public QUndoCommand
 {
 public:
@@ -4095,16 +3716,18 @@ public:
     void undo();
     void redo();
 
-private:
     void rotate(EmbReal x, EmbReal y, EmbReal rot);
 
     BaseObject* object;
     View*       gview;
-    EmbReal       pivotX;
-    EmbReal       pivotY;
-    EmbReal       angle;
+    EmbReal pivotX;
+    EmbReal pivotY;
+    EmbReal angle;
 };
 
+/**
+ *
+ */
 class UndoableScaleCommand : public QUndoCommand
 {
 public:
@@ -4113,14 +3736,16 @@ public:
     void undo();
     void redo();
 
-private:
     BaseObject* object;
     View*       gview;
-    EmbReal       dx;
-    EmbReal       dy;
-    EmbReal       factor;
+    EmbReal dx;
+    EmbReal dy;
+    EmbReal factor;
 };
 
+/**
+ *
+ */
 class UndoableNavCommand : public QUndoCommand
 {
 public:
@@ -4131,16 +3756,18 @@ public:
     void undo();
     void redo();
 
-private:
     QString navType;
     QTransform fromTransform;
     QTransform toTransform;
     QPointF fromCenter;
     QPointF toCenter;
-    bool    done;
+    bool done;
     View*   gview;
 };
 
+/**
+ *
+ */
 class UndoableGripEditCommand : public QUndoCommand
 {
 public:
@@ -4149,14 +3776,15 @@ public:
     void undo();
     void redo();
 
-private:
     BaseObject* object;
     View*       gview;
     QPointF     before;
     QPointF     after;
 };
 
-
+/**
+ *
+ */
 class UndoableMirrorCommand : public QUndoCommand
 {
 public:
@@ -4164,8 +3792,6 @@ public:
 
     void undo();
     void redo();
-
-private:
     void mirror();
 
     BaseObject* object;
@@ -4225,7 +3851,7 @@ public slots:
     void rotateAction();
     void rotateSelected(EmbReal x, EmbReal y, EmbReal rot);
     void mirrorSelected(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2);
-    int  numSelected();
+    int numSelected();
 
     void deletePressed();
     void escapePressed();
@@ -4306,8 +3932,8 @@ private:
     QList<QGraphicsItem*> previewObjectList;
     QGraphicsItemGroup* previewObjectItemGroup;
     QPointF previewPoint;
-    EmbReal   previewData;
-    int     previewMode;
+    EmbReal previewData;
+    int previewMode;
 
     QList<QGraphicsItem*> createObjectList(QList<QGraphicsItem*> list);
     QPointF cutCopyMousePoint;
@@ -4351,7 +3977,7 @@ private:
     QPointF sceneGripPoint;
 
     void updateMouseCoords(int x, int y);
-    QPoint  viewMousePoint;
+    QPoint viewMousePoint;
     QPointF sceneMousePoint;
     QRgb qsnapLocatorColor;
     quint8 qsnapLocatorSize;

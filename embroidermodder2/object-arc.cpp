@@ -14,10 +14,26 @@
  */
 
 /**
- * \file object-rect.cpp
+ * \file object-arc.cpp
  */
 
 #include "embroidermodder.h"
+
+/**
+ * @brief ArcObject::ArcObject
+ * @param arc
+ * @param rgb
+ * @param parent
+ */
+ArcObject::ArcObject(EmbArc arc, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+{
+    qDebug("ArcObject Constructor()");
+    init(
+        arc.start.x, arc.start.y,
+        arc.mid.x, arc.mid.y,
+        arc.end.x, arc.end.y,
+        rgb, Qt::SolidLine); //TODO: getCurrentLineType
+}
 
 /**
  * @brief ArcObject::ArcObject
@@ -44,9 +60,16 @@ ArcObject::ArcObject(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY,
 ArcObject::ArcObject(ArcObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("ArcObject Constructor()");
-    if(obj)
-    {
-        init(obj->objectStartX(), obj->objectStartY(), obj->objectMidX(), obj->objectMidY(), obj->objectEndX(), obj->objectEndY(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+    if (obj) {
+        init(
+            obj->objectStartX(),
+            obj->objectStartY(),
+            obj->objectMidX(),
+            obj->objectMidY(),
+            obj->objectEndX(),
+            obj->objectEndY(),
+            obj->objectColorRGB(),
+            Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
@@ -162,7 +185,7 @@ void ArcObject::setObjectCenterY(EmbReal pointY)
 void ArcObject::setObjectRadius(EmbReal radius)
 {
     EmbReal rad;
-    if(radius <= 0)
+    if (radius <= 0)
     {
         rad = 0.0000001;
     }
@@ -253,20 +276,31 @@ EmbReal ArcObject::objectEndAngle() const
 }
 
 /**
+ * @brief 
+ * @return 
+ */
+EmbVector
+rotate_vector(EmbVector v, EmbReal alpha)
+{
+    EmbVector rotv;
+    EmbVector u = embVector_unit(alpha);
+    rotv.x = v.x*u.x - v.y*u.y;
+    rotv.y = v.x*u.y + v.y*u.x;
+    return rotv;    
+}
+
+/**
  * @brief ArcObject::objectStartPoint
  * @return
  */
 QPointF ArcObject::objectStartPoint() const
 {
+    EmbVector v;
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal x = arcStartPoint.x()*scale();
-    EmbReal y = arcStartPoint.y()*scale();
-    EmbReal rotX = x*cosRot - y*sinRot;
-    EmbReal rotY = x*sinRot + y*cosRot;
+    embVector_multiply(to_EmbVector(arcStartPoint), scale(), &v);
+    EmbVector rotv = rotate_vector(v, rot);
 
-    return (scenePos() + QPointF(rotX, rotY));
+    return scenePos() + to_QPointF(rotv);
 }
 
 /**
@@ -293,15 +327,12 @@ EmbReal ArcObject::objectStartY() const
  */
 QPointF ArcObject::objectMidPoint() const
 {
+    EmbVector v;
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal x = arcMidPoint.x()*scale();
-    EmbReal y = arcMidPoint.y()*scale();
-    EmbReal rotX = x*cosRot - y*sinRot;
-    EmbReal rotY = x*sinRot + y*cosRot;
+    embVector_multiply(to_EmbVector(arcMidPoint), scale(), &v);
+    EmbVector rotv = rotate_vector(v, rot);
 
-    return (scenePos() + QPointF(rotX, rotY));
+    return scenePos() + to_QPointF(rotv);
 }
 
 /**
@@ -328,15 +359,12 @@ EmbReal ArcObject::objectMidY() const
  */
 QPointF ArcObject::objectEndPoint() const
 {
+    EmbVector v;
     EmbReal rot = radians(rotation());
-    EmbReal cosRot = qCos(rot);
-    EmbReal sinRot = qSin(rot);
-    EmbReal x = arcEndPoint.x()*scale();
-    EmbReal y = arcEndPoint.y()*scale();
-    EmbReal rotX = x*cosRot - y*sinRot;
-    EmbReal rotY = x*sinRot + y*cosRot;
+    embVector_multiply(to_EmbVector(arcEndPoint), scale(), &v);
+    EmbVector rotv = rotate_vector(v, rot);
 
-    return (scenePos() + QPointF(rotX, rotY));
+    return scenePos() + to_QPointF(rotv);
 }
 
 /**
@@ -366,7 +394,7 @@ EmbReal ArcObject::objectArea() const
     //Area of a circular segment
     EmbReal r = objectRadius();
     EmbReal theta = radians(objectIncludedAngle());
-    return ((r*r)/2)*(theta - qSin(theta));
+    return ((r*r)/2)*(theta - std::sin(theta));
 }
 
 /**
@@ -395,13 +423,13 @@ EmbReal ArcObject::objectIncludedAngle() const
 {
     EmbReal chord = objectChord();
     EmbReal rad = objectRadius();
-    if(chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
+    if (chord <= 0 || rad <= 0) return 0; //Prevents division by zero and non-existant circles
 
     //NOTE: Due to floating point rounding errors, we need to clamp the quotient so it is in the range [-1, 1]
     //      If the quotient is out of that range, then the result of asin() will be NaN.
     EmbReal quotient = chord/(2.0*rad);
-    if(quotient > 1.0) quotient = 1.0;
-    if(quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
+    if (quotient > 1.0) quotient = 1.0;
+    if (quotient < 0.0) quotient = 0.0; //NOTE: 0 rather than -1 since we are enforcing a positive chord and radius
     return degrees(2.0*asin(quotient)); //Properties of a Circle - Get the Included Angle - Reference: ASD9
 }
 
@@ -419,7 +447,7 @@ bool ArcObject::objectClockwise() const
     arc.mid.y = -objectMidY();
     arc.end.x = objectEndX();
     arc.end.y = -objectEndY();
-    if(embArc_clockwise(arc))
+    if (embArc_clockwise(arc))
         return true;
     return false;
 }
@@ -432,8 +460,9 @@ void ArcObject::updatePath()
     EmbReal startAngle = (objectStartAngle() + rotation());
     EmbReal spanAngle = objectIncludedAngle();
 
-    if(objectClockwise())
+    if (objectClockwise()) {
         spanAngle = -spanAngle;
+    }
 
     QPainterPath path;
     path.arcMoveTo(rect(), startAngle);
@@ -451,19 +480,25 @@ void ArcObject::updatePath()
 void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
-    if(!objScene) return;
+    if (!objScene) {
+        return;
+    }
 
     QPen paintPen = pen();
     painter->setPen(paintPen);
     updateRubber(painter);
-    if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if (option->state & QStyle::State_Selected) {
+        paintPen.setStyle(Qt::DashLine);
+    }
+    if (objScene->property(ENABLE_LWT).toBool()) {
+        paintPen = lineWeightPen();
+    }
     painter->setPen(paintPen);
 
     EmbReal startAngle = (objectStartAngle() + rotation())*16;
     EmbReal spanAngle = objectIncludedAngle()*16;
 
-    if(objectClockwise())
+    if (objectClockwise())
         spanAngle = -spanAngle;
 
     EmbReal rad = objectRadius();
@@ -518,9 +553,9 @@ ArcObject::mouseSnapPoint(const QPointF& mousePoint)
     EmbReal minDist = qMin(qMin(cntrDist, startDist), qMin(midDist, endDist));
 
     if     (minDist == cntrDist)  return center;
-    else if(minDist == startDist) return start;
-    else if(minDist == midDist)   return mid;
-    else if(minDist == endDist)   return end;
+    else if (minDist == startDist) return start;
+    else if (minDist == midDist)   return mid;
+    else if (minDist == endDist)   return end;
 
     return scenePos();
 }
