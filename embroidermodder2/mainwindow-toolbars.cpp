@@ -157,7 +157,7 @@ void MainWindow::createLayerToolbar()
     toolbarLayer->addAction(actionHash.value(ACTION_layers));
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = getSettingsGeneralIconTheme();
+    QString icontheme = settings_general_icon_theme;
 
     layerSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
@@ -190,7 +190,7 @@ void MainWindow::createPropertiesToolbar()
     toolbarProperties->setObjectName("toolbarProperties");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = getSettingsGeneralIconTheme();
+    QString icontheme = settings_general_icon_theme;
 
     colorSelector->setFocusProxy(prompt);
     //NOTE: Qt4.7 wont load icons without an extension...
@@ -268,19 +268,19 @@ MainWindow::createTextToolbar()
     toolbarText->setObjectName("toolbarText");
 
     toolbarText->addWidget(textFontSelector);
-    textFontSelector->setCurrentFont(QFont(getSettingsTextFont()));
+    textFontSelector->setCurrentFont(QFont(settings_text_font));
     connect(textFontSelector, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(textFontSelectorCurrentFontChanged(const QFont&)));
 
     toolbarText->addAction(actionHash.value(ACTION_textbold));
-    actionHash.value(ACTION_textbold)->setChecked(getSettingsTextStyleBold());
+    actionHash.value(ACTION_textbold)->setChecked(settings_text_style_bold);
     toolbarText->addAction(actionHash.value(ACTION_textitalic));
-    actionHash.value(ACTION_textitalic)->setChecked(getSettingsTextStyleItalic());
+    actionHash.value(ACTION_textitalic)->setChecked(settings_text_style_italic);
     toolbarText->addAction(actionHash.value(ACTION_textunderline));
-    actionHash.value(ACTION_textunderline)->setChecked(getSettingsTextStyleUnderline());
+    actionHash.value(ACTION_textunderline)->setChecked(settings_text_style_underline);
     toolbarText->addAction(actionHash.value(ACTION_textstrikeout));
-    actionHash.value(ACTION_textstrikeout)->setChecked(getSettingsTextStyleStrikeOut());
+    actionHash.value(ACTION_textstrikeout)->setChecked(settings_text_style_strikeout);
     toolbarText->addAction(actionHash.value(ACTION_textoverline));
-    actionHash.value(ACTION_textoverline)->setChecked(getSettingsTextStyleOverline());
+    actionHash.value(ACTION_textoverline)->setChecked(settings_text_style_overline);
 
     textSizeSelector->setFocusProxy(prompt);
     textSizeSelector->addItem("6 pt",   6);
@@ -297,7 +297,7 @@ MainWindow::createTextToolbar()
     textSizeSelector->addItem("48 pt", 48);
     textSizeSelector->addItem("60 pt", 60);
     textSizeSelector->addItem("72 pt", 72);
-    setTextSize(getSettingsTextSize());
+    setTextSize(settings_text_size);
     toolbarText->addWidget(textSizeSelector);
     connect(textSizeSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(textSizeSelectorIndexChanged(int)));
 

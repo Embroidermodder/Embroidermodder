@@ -1983,230 +1983,18 @@ public:
 
     virtual void updateMenuToolbarStatusbar();
 
-    MainWindow*     mainWin;
-    MdiArea*        mdiArea;
-    CmdPrompt*      prompt;
+    MainWindow* mainWin;
+    MdiArea* mdiArea;
+    CmdPrompt* prompt;
     PropertyEditor* dockPropEdit;
-    UndoEditor*     dockUndoEdit;
-    StatusBar*      statusbar;
+    UndoEditor* dockUndoEdit;
+    StatusBar* statusbar;
 
     QList<QGraphicsItem*> cutCopyObjectList;
 
     std::string actuator(std::string command);
     std::string run_script_file(std::string fname);
     std::string run_script(std::vector<std::string> script);
-
-    QString getSettingsGeneralLanguage() { return settings_general_language; }
-    QString getSettingsGeneralIconTheme() { return settings_general_icon_theme; }
-    int getSettingsGeneralIconSize() { return settings_general_icon_size; }
-    bool getSettingsGeneralMdiBGUseLogo() { return settings_general_mdi_bg_use_logo; }
-    bool getSettingsGeneralMdiBGUseTexture() { return settings_general_mdi_bg_use_texture; }
-    bool getSettingsGeneralMdiBGUseColor() { return settings_general_mdi_bg_use_color; }
-    QString getSettingsGeneralMdiBGLogo() { return settings_general_mdi_bg_logo; }
-    QString getSettingsGeneralMdiBGTexture() { return settings_general_mdi_bg_texture; }
-    QRgb getSettingsGeneralMdiBGColor() { return settings_general_mdi_bg_color; }
-    bool getSettingsGeneralTipOfTheDay() { return settings_general_tip_of_the_day; }
-    int getSettingsGeneralCurrentTip() { return settings_general_current_tip; }
-    bool getSettingsGeneralSystemHelpBrowser() { return settings_general_system_help_browser; }
-    bool getSettingsGeneralCheckForUpdates() { return settings_general_check_for_updates; }
-    bool getSettingsDisplayUseOpenGL() { return settings_display_use_opengl; }
-    bool getSettingsDisplayRenderHintAA() { return settings_display_renderhint_aa; }
-    bool getSettingsDisplayRenderHintTextAA() { return settings_display_renderhint_text_aa; }
-    bool getSettingsDisplayRenderHintSmoothPix() { return settings_display_renderhint_smooth_pix; }
-    bool getSettingsDisplayRenderHintHighAA() { return settings_display_renderhint_high_aa; }
-    bool getSettingsDisplayRenderHintNonCosmetic() { return settings_display_renderhint_noncosmetic; }
-    bool getSettingsDisplayShowScrollBars() { return settings_display_show_scrollbars; }
-    int getSettingsDisplayScrollBarWidgetNum() { return settings_display_scrollbar_widget_num; }
-    QRgb getSettingsDisplayCrossHairColor() { return settings_display_crosshair_color; }
-    QRgb getSettingsDisplayBGColor() { return settings_display_bg_color; }
-    QRgb getSettingsDisplaySelectBoxLeftColor() { return settings_display_selectbox_left_color; }
-    QRgb getSettingsDisplaySelectBoxLeftFill() { return settings_display_selectbox_left_fill; }
-    QRgb getSettingsDisplaySelectBoxRightColor() { return settings_display_selectbox_right_color; }
-    QRgb getSettingsDisplaySelectBoxRightFill() { return settings_display_selectbox_right_fill; }
-    uint8_t getSettingsDisplaySelectBoxAlpha() { return settings_display_selectbox_alpha; }
-    EmbReal getSettingsDisplayZoomScaleIn() { return settings_display_zoomscale_in; }
-    EmbReal getSettingsDisplayZoomScaleOut() { return settings_display_zoomscale_out; }
-    uint8_t getSettingsDisplayCrossHairPercent() { return settings_display_crosshair_percent; }
-    QString getSettingsDisplayUnits() { return settings_display_units; }
-    QRgb getSettingsPromptTextColor() { return settings_prompt_text_color; }
-    QRgb getSettingsPromptBGColor() { return settings_prompt_bg_color; }
-    QString getSettingsPromptFontFamily() { return settings_prompt_font_family; }
-    QString getSettingsPromptFontStyle() { return settings_prompt_font_style; }
-    uint8_t getSettingsPromptFontSize() { return settings_prompt_font_size; }
-    bool getSettingsPromptSaveHistory() { return settings_prompt_save_history; }
-    bool getSettingsPromptSaveHistoryAsHtml() { return settings_prompt_save_history_as_html; }
-    QString getSettingsPromptSaveHistoryFilename() { return settings_prompt_save_history_filename; }
-    QString getSettingsCustomFilter() { return settings_opensave_custom_filter; }
-    QString getSettingsOpenFormat() { return settings_opensave_open_format; }
-    bool getSettingsOpenThumbnail() { return settings_opensave_open_thumbnail; }
-    QString getSettingsSaveFormat() { return settings_opensave_save_format; }
-    bool getSettingsSaveThumbnail() { return settings_opensave_save_thumbnail; }
-    uint8_t getSettingsRecentMaxFiles() { return settings_opensave_recent_max_files; }
-    uint8_t getSettingsOpenSaveTrimDstNumJumps() { return settings_opensave_trim_dst_num_jumps; }
-    QString getSettingsPrintingDefaultDevice() { return settings_printing_default_device; }
-    bool getSettingsPrintingUseLastDevice() { return settings_printing_use_last_device; }
-    bool getSettingsPrintingDisableBG() { return settings_printing_disable_bg; }
-    bool getSettingsGridShowOnLoad() { return settings_grid_show_on_load; }
-    bool getSettingsGridShowOrigin() { return settings_grid_show_origin; }
-    bool getSettingsGridColorMatchCrossHair() { return settings_grid_color_match_crosshair; }
-    QRgb getSettingsGridColor() { return settings_grid_color;   }
-    bool getSettingsGridLoadFromFile() { return settings_grid_load_from_file; }
-    QString getSettingsGridType() { return settings_grid_type;    }
-    bool getSettingsGridCenterOnOrigin() { return settings_grid_center_on_origin; }
-    EmbReal getSettingsGridCenterX() { return settings_grid_center_x; }
-    EmbReal getSettingsGridCenterY() { return settings_grid_center_y; }
-    EmbReal getSettingsGridSizeX() { return settings_grid_size_x;  }
-    EmbReal getSettingsGridSizeY() { return settings_grid_size_y;  }
-    EmbReal getSettingsGridSpacingX() { return settings_grid_spacing_x; }
-    EmbReal getSettingsGridSpacingY() { return settings_grid_spacing_y; }
-    EmbReal getSettingsGridSizeRadius() { return settings_grid_size_radius; }
-    EmbReal getSettingsGridSpacingRadius() { return settings_grid_spacing_radius; }
-    EmbReal getSettingsGridSpacingAngle() { return settings_grid_spacing_angle; }
-    bool getSettingsRulerShowOnLoad() { return settings_ruler_show_on_load; }
-    bool getSettingsRulerMetric() { return settings_ruler_metric; }
-    QRgb getSettingsRulerColor() { return settings_ruler_color;  }
-    uint8_t getSettingsRulerPixelSize() { return settings_ruler_pixel_size; }
-    bool getSettingsQSnapEnabled() { return settings_qsnap_enabled; }
-    QRgb getSettingsQSnapLocatorColor() { return settings_qsnap_locator_color; }
-    uint8_t getSettingsQSnapLocatorSize() { return settings_qsnap_locator_size; }
-    uint8_t getSettingsQSnapApertureSize() { return settings_qsnap_aperture_size; }
-    bool getSettingsQSnapEndPoint() { return settings_qsnap_endpoint; }
-    bool getSettingsQSnapMidPoint() { return settings_qsnap_midpoint; }
-    bool getSettingsQSnapCenter() { return settings_qsnap_center; }
-    bool getSettingsQSnapNode() { return settings_qsnap_node;   }
-    bool getSettingsQSnapQuadrant() { return settings_qsnap_quadrant; }
-    bool getSettingsQSnapIntersection() { return settings_qsnap_intersection; }
-    bool getSettingsQSnapExtension() { return settings_qsnap_extension; }
-    bool getSettingsQSnapInsertion() { return settings_qsnap_insertion; }
-    bool getSettingsQSnapPerpendicular() { return settings_qsnap_perpendicular; }
-    bool getSettingsQSnapTangent() { return settings_qsnap_tangent; }
-    bool getSettingsQSnapNearest() { return settings_qsnap_nearest; }
-    bool getSettingsQSnapApparent() { return settings_qsnap_apparent; }
-    bool getSettingsQSnapParallel() { return settings_qsnap_parallel; }
-    bool getSettingsLwtShowLwt() { return settings_lwt_show_lwt; }
-    bool getSettingsLwtRealRender() { return settings_lwt_real_render; }
-    EmbReal getSettingsLwtDefaultLwt() { return settings_lwt_default_lwt; }
-    bool getSettingsSelectionModePickFirst() { return settings_selection_mode_pickfirst; }
-    bool getSettingsSelectionModePickAdd() { return settings_selection_mode_pickadd; }
-    bool getSettingsSelectionModePickDrag() { return settings_selection_mode_pickdrag; }
-    QRgb getSettingsSelectionCoolGripColor() { return settings_selection_coolgrip_color; }
-    QRgb getSettingsSelectionHotGripColor() { return settings_selection_hotgrip_color; }
-    uint8_t getSettingsSelectionGripSize() { return settings_selection_grip_size; }
-    uint8_t getSettingsSelectionPickBoxSize() { return settings_selection_pickbox_size; }
-    QString getSettingsTextFont() { return settings_text_font;    }
-    EmbReal getSettingsTextSize() { return settings_text_size;    }
-    EmbReal getSettingsTextAngle() { return settings_text_angle;   }
-    bool getSettingsTextStyleBold() { return settings_text_style_bold; }
-    bool getSettingsTextStyleItalic() { return settings_text_style_italic; }
-    bool getSettingsTextStyleUnderline() { return settings_text_style_underline; }
-    bool getSettingsTextStyleStrikeOut() { return settings_text_style_strikeout; }
-    bool getSettingsTextStyleOverline() { return settings_text_style_overline; }
-
-    void setSettingsGeneralLanguage(const QString& newValue) { settings_general_language = newValue; }
-    void setSettingsGeneralIconTheme(const QString& newValue) { settings_general_icon_theme = newValue; }
-    void setSettingsGeneralIconSize(int newValue) { settings_general_icon_size = newValue; }
-    void setSettingsGeneralMdiBGUseLogo(bool newValue) { settings_general_mdi_bg_use_logo = newValue; }
-    void setSettingsGeneralMdiBGUseTexture(bool newValue) { settings_general_mdi_bg_use_texture = newValue; }
-    void setSettingsGeneralMdiBGUseColor(bool newValue) { settings_general_mdi_bg_use_color = newValue; }
-    void setSettingsGeneralMdiBGLogo(const QString& newValue) { settings_general_mdi_bg_logo = newValue; }
-    void setSettingsGeneralMdiBGTexture(const QString& newValue) { settings_general_mdi_bg_texture = newValue; }
-    void setSettingsGeneralMdiBGColor(QRgb newValue) { settings_general_mdi_bg_color = newValue; }
-    void setSettingsGeneralTipOfTheDay(bool newValue) { settings_general_tip_of_the_day = newValue; }
-    void setSettingsGeneralCurrentTip(int newValue) { settings_general_current_tip = newValue; }
-    void setSettingsGeneralSystemHelpBrowser(bool newValue) { settings_general_system_help_browser = newValue; }
-    void setSettingsGeneralCheckForUpdates(bool newValue) { settings_general_check_for_updates = newValue; }
-    void setSettingsDisplayUseOpenGL(bool newValue) { settings_display_use_opengl = newValue; }
-    void setSettingsDisplayRenderHintAA(bool newValue) { settings_display_renderhint_aa = newValue; }
-    void setSettingsDisplayRenderHintTextAA(bool newValue) { settings_display_renderhint_text_aa = newValue; }
-    void setSettingsDisplayRenderHintSmoothPix(bool newValue) { settings_display_renderhint_smooth_pix = newValue; }
-    void setSettingsDisplayRenderHintHighAA(bool newValue) { settings_display_renderhint_high_aa = newValue; }
-    void setSettingsDisplayRenderHintNonCosmetic(bool newValue) { settings_display_renderhint_noncosmetic = newValue; }
-    void setSettingsDisplayShowScrollBars(bool newValue) { settings_display_show_scrollbars = newValue; }
-    void setSettingsDisplayScrollBarWidgetNum(int newValue) { settings_display_scrollbar_widget_num = newValue; }
-    void setSettingsDisplayCrossHairColor(QRgb newValue) { settings_display_crosshair_color = newValue; }
-    void setSettingsDisplayBGColor(QRgb newValue) { settings_display_bg_color = newValue; }
-    void setSettingsDisplaySelectBoxLeftColor(QRgb newValue) { settings_display_selectbox_left_color = newValue; }
-    void setSettingsDisplaySelectBoxLeftFill(QRgb newValue) { settings_display_selectbox_left_fill = newValue; }
-    void setSettingsDisplaySelectBoxRightColor(QRgb newValue) { settings_display_selectbox_right_color = newValue; }
-    void setSettingsDisplaySelectBoxRightFill(QRgb newValue) { settings_display_selectbox_right_fill = newValue; }
-    void setSettingsDisplaySelectBoxAlpha(uint8_t newValue) { settings_display_selectbox_alpha = newValue; }
-    void setSettingsDisplayZoomScaleIn(EmbReal newValue) { settings_display_zoomscale_in = newValue; }
-    void setSettingsDisplayZoomScaleOut(EmbReal newValue) { settings_display_zoomscale_out = newValue; }
-    void setSettingsDisplayCrossHairPercent(uint8_t newValue) { settings_display_crosshair_percent = newValue; }
-    void setSettingsDisplayUnits(const QString& newValue) { settings_display_units = newValue; }
-    void setSettingsPromptTextColor(QRgb newValue) { settings_prompt_text_color = newValue; }
-    void setSettingsPromptBGColor(QRgb newValue) { settings_prompt_bg_color = newValue; }
-    void setSettingsPromptFontFamily(const QString& newValue) { settings_prompt_font_family = newValue; }
-    void setSettingsPromptFontStyle(const QString& newValue) { settings_prompt_font_style = newValue; }
-    void setSettingsPromptFontSize(uint8_t newValue) { settings_prompt_font_size = newValue; }
-    void setSettingsPromptSaveHistory(bool newValue) { settings_prompt_save_history = newValue; }
-    void setSettingsPromptSaveHistoryAsHtml(bool newValue) { settings_prompt_save_history_as_html = newValue; }
-    void setSettingsPromptSaveHistoryFilename(const QString& newValue) { settings_prompt_save_history_filename = newValue; }
-    void setSettingsCustomFilter(const QString& newValue) { settings_opensave_custom_filter = newValue; }
-    void setSettingsOpenFormat(const QString& newValue) { settings_opensave_open_format = newValue; }
-    void setSettingsOpenThumbnail(bool newValue) { settings_opensave_open_thumbnail = newValue; }
-    void setSettingsSaveFormat(const QString& newValue) { settings_opensave_save_format = newValue; }
-    void setSettingsSaveThumbnail(bool newValue) { settings_opensave_save_thumbnail = newValue; }
-    void setSettingsRecentMaxFiles(uint8_t newValue) { settings_opensave_recent_max_files = newValue; }
-    void setSettingsOpenSaveTrimDstNumJumps(uint8_t newValue) { settings_opensave_trim_dst_num_jumps = newValue; }
-    void setSettingsPrintingDefaultDevice(const QString& newValue) { settings_printing_default_device = newValue; }
-    void setSettingsPrintingUseLastDevice(bool newValue) { settings_printing_use_last_device = newValue; }
-    void setSettingsPrintingDisableBG(bool newValue) { settings_printing_disable_bg = newValue; }
-    void setSettingsGridShowOnLoad(bool newValue) { settings_grid_show_on_load = newValue; }
-    void setSettingsGridShowOrigin(bool newValue) { settings_grid_show_origin = newValue; }
-    void setSettingsGridColorMatchCrossHair(bool newValue) { settings_grid_color_match_crosshair = newValue; }
-    void setSettingsGridColor(QRgb newValue) { settings_grid_color = newValue; }
-    void setSettingsGridLoadFromFile(bool newValue) { settings_grid_load_from_file = newValue; }
-    void setSettingsGridType(const QString& newValue) { settings_grid_type = newValue; }
-    void setSettingsGridCenterOnOrigin(bool newValue) { settings_grid_center_on_origin = newValue; }
-    void setSettingsGridCenterX(EmbReal newValue) { settings_grid_center_x = newValue; }
-    void setSettingsGridCenterY(EmbReal newValue) { settings_grid_center_y = newValue; }
-    void setSettingsGridSizeX(EmbReal newValue) { settings_grid_size_x = newValue; }
-    void setSettingsGridSizeY(EmbReal newValue) { settings_grid_size_y = newValue; }
-    void setSettingsGridSpacingX(EmbReal newValue) { settings_grid_spacing_x = newValue; }
-    void setSettingsGridSpacingY(EmbReal newValue) { settings_grid_spacing_y = newValue; }
-    void setSettingsGridSizeRadius(EmbReal newValue) { settings_grid_size_radius = newValue; }
-    void setSettingsGridSpacingRadius(EmbReal newValue) { settings_grid_spacing_radius = newValue; }
-    void setSettingsGridSpacingAngle(EmbReal newValue) { settings_grid_spacing_angle = newValue; }
-    void setSettingsRulerShowOnLoad(bool newValue) { settings_ruler_show_on_load = newValue; }
-    void setSettingsRulerMetric(bool newValue) { settings_ruler_metric = newValue; }
-    void setSettingsRulerColor(QRgb newValue) { settings_ruler_color = newValue; }
-    void setSettingsRulerPixelSize(uint8_t newValue) { settings_ruler_pixel_size = newValue; }
-    void setSettingsQSnapEnabled(bool newValue) { settings_qsnap_enabled = newValue; }
-    void setSettingsQSnapLocatorColor(QRgb newValue) { settings_qsnap_locator_color = newValue; }
-    void setSettingsQSnapLocatorSize(uint8_t newValue) { settings_qsnap_locator_size = newValue; }
-    void setSettingsQSnapApertureSize(uint8_t newValue) { settings_qsnap_aperture_size = newValue; }
-    void setSettingsQSnapEndPoint(bool newValue) { settings_qsnap_endpoint = newValue; }
-    void setSettingsQSnapMidPoint(bool newValue) { settings_qsnap_midpoint = newValue; }
-    void setSettingsQSnapCenter(bool newValue) { settings_qsnap_center = newValue; }
-    void setSettingsQSnapNode(bool newValue) { settings_qsnap_node = newValue; }
-    void setSettingsQSnapQuadrant(bool newValue) { settings_qsnap_quadrant = newValue; }
-    void setSettingsQSnapIntersection(bool newValue) { settings_qsnap_intersection = newValue; }
-    void setSettingsQSnapExtension(bool newValue) { settings_qsnap_extension = newValue; }
-    void setSettingsQSnapInsertion(bool newValue) { settings_qsnap_insertion = newValue; }
-    void setSettingsQSnapPerpendicular(bool newValue) { settings_qsnap_perpendicular = newValue; }
-    void setSettingsQSnapTangent(bool newValue) { settings_qsnap_tangent = newValue; }
-    void setSettingsQSnapNearest(bool newValue) { settings_qsnap_nearest = newValue; }
-    void setSettingsQSnapApparent(bool newValue) { settings_qsnap_apparent = newValue; }
-    void setSettingsQSnapParallel(bool newValue) { settings_qsnap_parallel = newValue; }
-    void setSettingsLwtShowLwt(bool newValue) { settings_lwt_show_lwt = newValue; }
-    void setSettingsLwtRealRender(bool newValue) { settings_lwt_real_render = newValue; }
-    void setSettingsLwtDefaultLwt(EmbReal newValue) { settings_lwt_default_lwt = newValue; }
-    void setSettingsSelectionModePickFirst(bool newValue) { settings_selection_mode_pickfirst = newValue; }
-    void setSettingsSelectionModePickAdd(bool newValue) { settings_selection_mode_pickadd = newValue; }
-    void setSettingsSelectionModePickDrag(bool newValue) { settings_selection_mode_pickdrag = newValue; }
-    void setSettingsSelectionCoolGripColor(QRgb newValue) { settings_selection_coolgrip_color = newValue; }
-    void setSettingsSelectionHotGripColor(QRgb newValue) { settings_selection_hotgrip_color = newValue; }
-    void setSettingsSelectionGripSize(uint8_t newValue) { settings_selection_grip_size = newValue; }
-    void setSettingsSelectionPickBoxSize(uint8_t newValue) { settings_selection_pickbox_size = newValue; }
-    void setSettingsTextFont(const QString& newValue) { settings_text_font = newValue; }
-    void setSettingsTextSize(EmbReal newValue) { settings_text_size = newValue; }
-    void setSettingsTextAngle(EmbReal newValue) { settings_text_angle = newValue; }
-    void setSettingsTextStyleBold(bool newValue) { settings_text_style_bold = newValue; }
-    void setSettingsTextStyleItalic(bool newValue) { settings_text_style_italic = newValue; }
-    void setSettingsTextStyleUnderline(bool newValue) { settings_text_style_underline = newValue; }
-    void setSettingsTextStyleStrikeOut(bool newValue) { settings_text_style_strikeout = newValue; }
-    void setSettingsTextStyleOverline(bool newValue) { settings_text_style_overline = newValue; }
 
     QHash<int, QAction*> actionHash;
     QHash<QString, QToolBar*> toolbarHash;
@@ -2262,23 +2050,22 @@ protected:
     QAction* getFileSeparator();
     void loadFormats();
 
-
     bool shiftKeyPressedState;
 
-    QByteArray                      layoutState;
+    QByteArray layoutState;
 
     int numOfDocs;
     int docIndex;
 
-    QList<MdiWindow*>               listMdiWin;
-    QMdiSubWindow*                  findMdiWindow(const QString &fileName);
+    QList<MdiWindow*> listMdiWin;
+    QMdiSubWindow* findMdiWindow(const QString &fileName);
     QString openFilesPath;
 
-    QAction*                        myFileSeparator;
+    QAction* myFileSeparator;
 
-    QWizard*    wizardTipOfTheDay;
-    QLabel*     labelTipOfTheDay;
-    QCheckBox*  checkBoxTipOfTheDay;
+    QWizard* wizardTipOfTheDay;
+    QLabel* labelTipOfTheDay;
+    QCheckBox* checkBoxTipOfTheDay;
     QStringList listTipOfTheDay;
 
     void createAllActions();
@@ -2298,6 +2085,11 @@ protected:
     void createPropertiesToolbar();
     void createTextToolbar();
     void createPromptToolbar();
+
+    const int file_toolbar = 0;
+    const int edit_toolbar = 1;
+    const int view_toolbar = 2;
+    const int zoom_toolbar = 3;
 
     QToolBar* toolbarFile;
     QToolBar* toolbarEdit;

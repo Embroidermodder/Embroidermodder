@@ -74,7 +74,7 @@ void MainWindow::createViewMenu()
     qDebug("MainWindow createViewMenu()");
 
     QString appDir = qApp->applicationDirPath();
-    QString icontheme = getSettingsGeneralIconTheme();
+    QString icontheme = settings_general_icon_theme;
 
     menuBar()->addMenu(viewMenu);
     viewMenu->addSeparator();
@@ -159,5 +159,3 @@ void MainWindow::createAllMenus()
     createHelpMenu();
 
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

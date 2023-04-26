@@ -19,6 +19,8 @@
 
 #include "embroidermodder.h"
 
+#include <fstream>
+
 MainWindow* _mainWin = 0;
 
 /**
@@ -55,7 +57,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     if (!check.exists())
         QMessageBox::critical(this, tr("Path Error"), tr("Cannot locate: ") + check.absoluteFilePath());
 
-    QString lang = getSettingsGeneralLanguage();
+    QString lang = settings_general_language;
     qDebug("language: %s", qPrintable(lang));
     if (lang == "system")
         lang = QLocale::system().languageToString(QLocale::system().language()).toLower();
@@ -113,7 +115,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     shiftKeyPressedState = false;
 
-    setWindowIcon(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    setWindowIcon(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + "app" + ".png"));
     setMinimumSize(800, 480); //Require Minimum WVGA
 
     loadFormats();
@@ -124,12 +126,12 @@ MainWindow::MainWindow() : QMainWindow(0)
     //layout->setMargin(0);
     vbox->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     mdiArea = new MdiArea(this, vbox);
-    mdiArea->useBackgroundLogo(getSettingsGeneralMdiBGUseLogo());
-    mdiArea->useBackgroundTexture(getSettingsGeneralMdiBGUseTexture());
-    mdiArea->useBackgroundColor(getSettingsGeneralMdiBGUseColor());
-    mdiArea->setBackgroundLogo(getSettingsGeneralMdiBGLogo());
-    mdiArea->setBackgroundTexture(getSettingsGeneralMdiBGTexture());
-    mdiArea->setBackgroundColor(QColor(getSettingsGeneralMdiBGColor()));
+    mdiArea->useBackgroundLogo(settings_general_mdi_bg_use_logo);
+    mdiArea->useBackgroundTexture(settings_general_mdi_bg_use_texture);
+    mdiArea->useBackgroundColor(settings_general_mdi_bg_use_color);
+    mdiArea->setBackgroundLogo(settings_general_mdi_bg_logo);
+    mdiArea->setBackgroundTexture(settings_general_mdi_bg_texture);
+    mdiArea->setBackgroundColor(QColor(settings_general_mdi_bg_color));
     mdiArea->setViewMode(QMdiArea::TabbedView);
     mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -143,8 +145,8 @@ MainWindow::MainWindow() : QMainWindow(0)
     this->setFocusProxy(prompt);
     mdiArea->setFocusProxy(prompt);
 
-    prompt->setPromptTextColor(QColor(getSettingsPromptTextColor()));
-    prompt->setPromptBackgroundColor(QColor(getSettingsPromptBGColor()));
+    prompt->setPromptTextColor(QColor(settings_prompt_text_color));
+    prompt->setPromptBackgroundColor(QColor(settings_prompt_bg_color));
 
     connect(prompt, SIGNAL(startCommand(const QString&)), this, SLOT(logPromptInput(const QString&)));
 
@@ -183,12 +185,12 @@ MainWindow::MainWindow() : QMainWindow(0)
             connect(prompt, SIGNAL(historyAppended(const QString&)), this, SLOT(promptHistoryAppended(const QString&)));
 
     //create the Object Property Editor
-    dockPropEdit = new PropertyEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), getSettingsSelectionModePickAdd(), prompt, this);
+    dockPropEdit = new PropertyEditor(appDir + "/icons/" + settings_general_icon_theme, settings_selection_mode_pickadd, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockPropEdit);
     connect(dockPropEdit, SIGNAL(pickAddModeToggled()), this, SLOT(pickAddModeToggled()));
 
     //create the Command History Undo Editor
-    dockUndoEdit = new UndoEditor(appDir + "/icons/" + getSettingsGeneralIconTheme(), prompt, this);
+    dockUndoEdit = new UndoEditor(appDir + "/icons/" + settings_general_icon_theme, prompt, this);
     addDockWidget(Qt::LeftDockWidgetArea, dockUndoEdit);
 
     //setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs); //TODO: Load these from settings
@@ -204,7 +206,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     createAllMenus();
     createAllToolbars();
 
-    iconResize(getSettingsGeneralIconSize());
+    iconResize(settings_general_icon_size);
     updateMenuToolbarStatusbar();
 
     //Show date in statusbar after it has been updated
@@ -228,8 +230,9 @@ MainWindow::MainWindow() : QMainWindow(0)
         }
         while(!tipLine.isNull());
     }
-    if (getSettingsGeneralTipOfTheDay())
+    if (settings_general_tip_of_the_day) {
         tipOfTheDay();
+    }
 }
 
 /**
@@ -251,26 +254,11 @@ MainWindow::~MainWindow()
 std::string
 MainWindow::run_script_file(std::string fname)
 {
-    std::string output = "";
-    /*
-    char line[200];
-    FILE *f;
-    int line_pos = 0;
-    f = fopen(filename, "r");
-    char c;
-    while (fread(&c, 1, 1, f)) {
-        if (c != '\n') {
-            line[line_pos] = c;
-            line_pos++;
-        }
-        else {
-            line[line_pos+1] = 0;
-            actuator(line);
-            line_pos = 0;
-        }
+    std::string output = "", line;
+    std::ifstream file(fname);
+    while (std::getline(file, line)) {
+        output += actuator(line);
     }
-    fclose(f);
-    */
     return output;
 }
 
@@ -2317,7 +2305,7 @@ MainWindow::openFile(bool recent, const QString& recentFile)
     QApplication::setOverrideCursor(Qt::ArrowCursor);
 
     QStringList files;
-    bool preview = getSettingsOpenThumbnail();
+    bool preview = settings_opensave_open_thumbnail;
     openFilesPath = settings_opensave_recent_directory;
 
     //Check to see if this from the recent files list
@@ -2742,7 +2730,7 @@ MainWindow::loadFormats()
 
     //TODO: Fixup custom filter
     /*
-    QString custom = getSettingsCustomFilter();
+    QString custom = settings_custom_filter;
     if (custom.contains("supported", Qt::CaseInsensitive))
         custom = ""; //This will hide it
     else if (!custom.contains("*", Qt::CaseInsensitive))

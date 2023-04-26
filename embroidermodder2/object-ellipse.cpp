@@ -38,9 +38,14 @@ EllipseObject::EllipseObject(EmbReal centerX, EmbReal centerY, EmbReal width, Em
 EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
-    if(obj)
-    {
-        init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+    if (obj) {
+        init(
+            obj->objectCenterX(),
+            obj->objectCenterY(),
+            obj->objectWidth(),
+            obj->objectHeight(),
+            obj->objectColorRGB(),
+            Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
