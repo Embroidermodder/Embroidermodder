@@ -1,33 +1,58 @@
-#include "object-rect.h"
-#include "object-data.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+/**
+ * \file object-rect.cpp
+ */
 
-RectObject::RectObject(qreal x, qreal y, qreal w, qreal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+#include "embroidermodder.h"
+
+/**
+ * \brief .
+ */
+RectObject::RectObject(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("RectObject Constructor()");
     init(x, y, w, h, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * \brief .
+ */
 RectObject::RectObject(RectObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("RectObject Constructor()");
-    if(obj)
-    {
+    if (obj) {
         QPointF ptl = obj->objectTopLeft();
         init(ptl.x(), ptl.y(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
 
+/**
+ * \brief RectObject destructor.
+ */
 RectObject::~RectObject()
 {
     qDebug("RectObject Destructor()");
 }
 
-void RectObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * \brief .
+ */
+void RectObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_RECTANGLE);
@@ -44,73 +69,93 @@ void RectObject::init(qreal x, qreal y, qreal w, qreal h, QRgb rgb, Qt::PenStyle
     setPen(objectPen());
 }
 
-void RectObject::setObjectRect(qreal x, qreal y, qreal w, qreal h)
+/**
+ * \brief .
+ */
+void RectObject::setObjectRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h)
 {
     setPos(x, y);
     setRect(0, 0, w, h);
     updatePath();
 }
 
-QPointF RectObject::objectTopLeft() const
+/**
+ * \brief .
+ * \return The top left corner location as a QPointF.
+ */
+QPointF
+RectObject::objectTopLeft() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
 
     QPointF tl = rect().topLeft();
-    qreal ptlX = tl.x()*scale();
-    qreal ptlY = tl.y()*scale();
-    qreal ptlXrot = ptlX*cosRot - ptlY*sinRot;
-    qreal ptlYrot = ptlX*sinRot + ptlY*cosRot;
+    EmbReal ptlX = tl.x()*scale();
+    EmbReal ptlY = tl.y()*scale();
+    EmbReal ptlXrot = ptlX*cosRot - ptlY*sinRot;
+    EmbReal ptlYrot = ptlX*sinRot + ptlY*cosRot;
 
     return (scenePos() + QPointF(ptlXrot, ptlYrot));
 }
 
+/**
+ * \brief .
+ */
 QPointF RectObject::objectTopRight() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
 
     QPointF tr = rect().topRight();
-    qreal ptrX = tr.x()*scale();
-    qreal ptrY = tr.y()*scale();
-    qreal ptrXrot = ptrX*cosRot - ptrY*sinRot;
-    qreal ptrYrot = ptrX*sinRot + ptrY*cosRot;
+    EmbReal ptrX = tr.x()*scale();
+    EmbReal ptrY = tr.y()*scale();
+    EmbReal ptrXrot = ptrX*cosRot - ptrY*sinRot;
+    EmbReal ptrYrot = ptrX*sinRot + ptrY*cosRot;
 
     return (scenePos() + QPointF(ptrXrot, ptrYrot));
 }
 
+/**
+ * \brief .
+ */
 QPointF RectObject::objectBottomLeft() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
 
     QPointF bl = rect().bottomLeft();
-    qreal pblX = bl.x()*scale();
-    qreal pblY = bl.y()*scale();
-    qreal pblXrot = pblX*cosRot - pblY*sinRot;
-    qreal pblYrot = pblX*sinRot + pblY*cosRot;
+    EmbReal pblX = bl.x()*scale();
+    EmbReal pblY = bl.y()*scale();
+    EmbReal pblXrot = pblX*cosRot - pblY*sinRot;
+    EmbReal pblYrot = pblX*sinRot + pblY*cosRot;
 
     return (scenePos() + QPointF(pblXrot, pblYrot));
 }
 
+/**
+ * \brief .
+ */
 QPointF RectObject::objectBottomRight() const
 {
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
 
     QPointF br = rect().bottomRight();
-    qreal pbrX = br.x()*scale();
-    qreal pbrY = br.y()*scale();
-    qreal pbrXrot = pbrX*cosRot - pbrY*sinRot;
-    qreal pbrYrot = pbrX*sinRot + pbrY*cosRot;
+    EmbReal pbrX = br.x()*scale();
+    EmbReal pbrY = br.y()*scale();
+    EmbReal pbrXrot = pbrX*cosRot - pbrY*sinRot;
+    EmbReal pbrYrot = pbrX*sinRot + pbrY*cosRot;
 
     return (scenePos() + QPointF(pbrXrot, pbrYrot));
 }
 
+/**
+ * \brief .
+ */
 void RectObject::updatePath()
 {
     QPainterPath path;
@@ -128,6 +173,9 @@ void RectObject::updatePath()
     setObjectPath(path);
 }
 
+/**
+ * \brief .
+ */
 void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
@@ -143,6 +191,9 @@ void RectObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->drawRect(rect());
 }
 
+/**
+ * \brief .
+ */
 void RectObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
@@ -150,10 +201,10 @@ void RectObject::updateRubber(QPainter* painter)
     {
         QPointF sceneStartPoint = objectRubberPoint("RECTANGLE_START");
         QPointF sceneEndPoint = objectRubberPoint("RECTANGLE_END");
-        qreal x = sceneStartPoint.x();
-        qreal y = sceneStartPoint.y();
-        qreal w = sceneEndPoint.x() - sceneStartPoint.x();
-        qreal h = sceneEndPoint.y() - sceneStartPoint.y();
+        EmbReal x = sceneStartPoint.x();
+        EmbReal y = sceneStartPoint.y();
+        EmbReal w = sceneEndPoint.x() - sceneStartPoint.x();
+        EmbReal h = sceneEndPoint.y() - sceneStartPoint.y();
         setObjectRect(x,y,w,h);
         updatePath();
     }
@@ -185,6 +236,9 @@ void RectObject::updateRubber(QPainter* painter)
     }
 }
 
+/**
+ * \brief .
+ */
 void RectObject::vulcanize()
 {
     qDebug("RectObject vulcanize()");
@@ -193,7 +247,11 @@ void RectObject::vulcanize()
     setObjectRubberMode(OBJ_RUBBER_OFF);
 }
 
-// Returns the closest snap point to the mouse point
+/**
+ * \brief .
+ * \return The closest snap point to the mouse point.
+ *
+ */
 QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF ptl = objectTopLeft();     //Top Left Corner QSnap
@@ -201,12 +259,12 @@ QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF pbl = objectBottomLeft();  //Bottom Left Corner QSnap
     QPointF pbr = objectBottomRight(); //Bottom Right Corner QSnap
 
-    qreal ptlDist = QLineF(mousePoint, ptl).length();
-    qreal ptrDist = QLineF(mousePoint, ptr).length();
-    qreal pblDist = QLineF(mousePoint, pbl).length();
-    qreal pbrDist = QLineF(mousePoint, pbr).length();
+    EmbReal ptlDist = QLineF(mousePoint, ptl).length();
+    EmbReal ptrDist = QLineF(mousePoint, ptr).length();
+    EmbReal pblDist = QLineF(mousePoint, pbl).length();
+    EmbReal pbrDist = QLineF(mousePoint, pbr).length();
 
-    qreal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
+    EmbReal minDist = qMin(qMin(ptlDist, ptrDist), qMin(pblDist, pbrDist));
 
     if     (minDist == ptlDist) return ptl;
     else if(minDist == ptrDist) return ptr;
@@ -216,6 +274,11 @@ QPointF RectObject::mouseSnapPoint(const QPointF& mousePoint)
     return scenePos();
 }
 
+/**
+ * \brief .
+ * \return A list of all grip points for the object.
+ * \todo make return value a std::vector<std::string>
+ */
 QList<QPointF> RectObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
@@ -223,6 +286,9 @@ QList<QPointF> RectObject::allGripPoints()
     return gripPoints;
 }
 
+/**
+ * \brief .
+ */
 void RectObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     QPointF delta = after-before;
@@ -232,6 +298,9 @@ void RectObject::gripEdit(const QPointF& before, const QPointF& after)
     else if(before == objectBottomRight()) { setObjectRect(objectTopLeft().x(), objectTopLeft().y(), objectWidth()+delta.x(), objectHeight()+delta.y()); }
 }
 
+/**
+ * \brief .
+ */
 QPainterPath RectObject::objectSavePath() const
 {
     QPainterPath path;
@@ -242,11 +311,9 @@ QPainterPath RectObject::objectSavePath() const
     path.lineTo(r.topLeft());
     path.lineTo(r.bottomLeft());
 
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

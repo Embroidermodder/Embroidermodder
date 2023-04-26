@@ -1,12 +1,25 @@
-#include "object-path.h"
-#include "object-data.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
-#include <QMessageBox>
+/**
+ * \file object-path.cpp
+ */
 
-PathObject::PathObject(qreal x, qreal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+#include "embroidermodder.h"
+
+PathObject::PathObject(EmbReal x, EmbReal y, const QPainterPath p, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PathObject Constructor()");
     init(x, y, p, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -28,7 +41,7 @@ PathObject::~PathObject()
     qDebug("PathObject Destructor()");
 }
 
-void PathObject::init(qreal x, qreal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
+void PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_PATH);
@@ -113,7 +126,7 @@ QPainterPath PathObject::objectCopyPath() const
 
 QPainterPath PathObject::objectSavePath() const
 {
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);

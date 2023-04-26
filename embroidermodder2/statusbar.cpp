@@ -1,7 +1,19 @@
-#include "mainwindow.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include <QLabel>
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+#include "embroidermodder.h"
 
 StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)
 {
@@ -31,7 +43,7 @@ StatusBar::StatusBar(MainWindow* mw, QWidget *parent) : QStatusBar(parent)
     this->addWidget(statusBarLwtButton);
 }
 
-void StatusBar::setMouseCoord(qreal x, qreal y)
+void StatusBar::setMouseCoord(EmbReal x, EmbReal y)
 {
     //TODO: set format from settings (Architectural, Decimal, Engineering, Fractional, Scientific)
 

@@ -1,10 +1,23 @@
 /**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
  * \file layer-manager.cpp
  */
 
-#include <QtGui>
-#include "layer-manager.h"
-#include "mainwindow.h"
+#include "embroidermodder.h"
 
 /**
  * @brief LayerManager::LayerManager
@@ -82,7 +95,7 @@ void
 LayerManager::addLayer(const QString& name,
                             const bool visible,
                             const bool frozen,
-                            const qreal zValue,
+                            const EmbReal zValue,
                             const QRgb color,
                             const QString& lineType,
                             const QString& lineWeight,

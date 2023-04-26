@@ -1,16 +1,36 @@
-#include "object-dimleader.h"
-#include "object-data.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+/**
+ * \file object-rect.cpp
+ */
 
-DimLeaderObject::DimLeaderObject(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+#include "embroidermodder.h"
+
+/**
+ * \brief .
+ */
+DimLeaderObject::DimLeaderObject(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
     init(x1, y1, x2, y2, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * \brief .
+ */
 DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("DimLeaderObject Constructor()");
@@ -20,12 +40,18 @@ DimLeaderObject::DimLeaderObject(DimLeaderObject* obj, QGraphicsItem* parent) : 
     }
 }
 
+/**
+ * \brief .
+ */
 DimLeaderObject::~DimLeaderObject()
 {
     qDebug("DimLeaderObject Destructor()");
 }
 
-void DimLeaderObject::init(qreal x1, qreal y1, qreal x2, qreal y2, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * \brief .
+ */
+void DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_DIMLEADER);
@@ -50,13 +76,13 @@ void DimLeaderObject::setObjectEndPoint1(const QPointF& endPt1)
     setObjectEndPoint1(endPt1.x(), endPt1.y());
 }
 
-void DimLeaderObject::setObjectEndPoint1(qreal x1, qreal y1)
+void DimLeaderObject::setObjectEndPoint1(EmbReal x1, EmbReal y1)
 {
     QPointF endPt2 = objectEndPoint2();
-    qreal x2 = endPt2.x();
-    qreal y2 = endPt2.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    EmbReal x2 = endPt2.x();
+    EmbReal y2 = endPt2.y();
+    EmbReal dx = x2 - x1;
+    EmbReal dy = y2 - y1;
     setRotation(0);
     setLine(0, 0, dx, dy);
     setPos(x1, y1);
@@ -68,13 +94,13 @@ void DimLeaderObject::setObjectEndPoint2(const QPointF& endPt2)
     setObjectEndPoint2(endPt2.x(), endPt2.y());
 }
 
-void DimLeaderObject::setObjectEndPoint2(qreal x2, qreal y2)
+void DimLeaderObject::setObjectEndPoint2(EmbReal x2, EmbReal y2)
 {
     QPointF endPt1 = scenePos();
-    qreal x1 = endPt1.x();
-    qreal y1 = endPt1.y();
-    qreal dx = x2 - x1;
-    qreal dy = y2 - y1;
+    EmbReal x1 = endPt1.x();
+    EmbReal y1 = endPt1.y();
+    EmbReal dx = x2 - x1;
+    EmbReal dy = y2 - y1;
     setRotation(0);
     setLine(0, 0, dx, dy);
     setPos(x1, y1);
@@ -89,13 +115,13 @@ QPointF DimLeaderObject::objectEndPoint1() const
 QPointF DimLeaderObject::objectEndPoint2() const
 {
     QLineF lyne = line();
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal x2 = lyne.x2()*scale();
-    qreal y2 = lyne.y2()*scale();
-    qreal rotEnd2X = x2*cosRot - y2*sinRot;
-    qreal rotEnd2Y = x2*sinRot + y2*cosRot;
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
+    EmbReal x2 = lyne.x2()*scale();
+    EmbReal y2 = lyne.y2()*scale();
+    EmbReal rotEnd2X = x2*cosRot - y2*sinRot;
+    EmbReal rotEnd2Y = x2*sinRot + y2*cosRot;
 
     return (scenePos() + QPointF(rotEnd2X, rotEnd2Y));
 }
@@ -104,20 +130,20 @@ QPointF DimLeaderObject::objectMidPoint() const
 {
     QLineF lyne = line();
     QPointF mp = lyne.pointAt(0.5);
-    qreal rot = radians(rotation());
-    qreal cosRot = qCos(rot);
-    qreal sinRot = qSin(rot);
-    qreal mx = mp.x()*scale();
-    qreal my = mp.y()*scale();
-    qreal rotMidX = mx*cosRot - my*sinRot;
-    qreal rotMidY = mx*sinRot + my*cosRot;
+    EmbReal rot = radians(rotation());
+    EmbReal cosRot = qCos(rot);
+    EmbReal sinRot = qSin(rot);
+    EmbReal mx = mp.x()*scale();
+    EmbReal my = mp.y()*scale();
+    EmbReal rotMidX = mx*cosRot - my*sinRot;
+    EmbReal rotMidY = mx*sinRot + my*cosRot;
 
     return (scenePos() + QPointF(rotMidX, rotMidY));
 }
 
-qreal DimLeaderObject::objectAngle() const
+EmbReal DimLeaderObject::objectAngle() const
 {
-    qreal angle = line().angle() - rotation();
+    EmbReal angle = line().angle() - rotation();
     while(angle >= 360.0) { angle -= 360.0; }
     while(angle < 0.0)    { angle += 360.0; }
     return angle;
@@ -126,13 +152,13 @@ qreal DimLeaderObject::objectAngle() const
 void DimLeaderObject::updateLeader()
 {
     int arrowStyle = Closed; //TODO: Make this customizable
-    qreal arrowStyleAngle = 15.0; //TODO: Make this customizable
-    qreal arrowStyleLength = 1.0; //TODO: Make this customizable
-    qreal lineStyleAngle = 45.0; //TODO: Make this customizable
-    qreal lineStyleLength = 1.0; //TODO: Make this customizable
+    EmbReal arrowStyleAngle = 15.0; //TODO: Make this customizable
+    EmbReal arrowStyleLength = 1.0; //TODO: Make this customizable
+    EmbReal lineStyleAngle = 45.0; //TODO: Make this customizable
+    EmbReal lineStyleLength = 1.0; //TODO: Make this customizable
 
     QLineF lyne = line();
-    qreal angle = lyne.angle();
+    EmbReal angle = lyne.angle();
     QPointF ap0 = lyne.p1();
     QPointF lp0 = lyne.p2();
 
@@ -197,7 +223,7 @@ void DimLeaderObject::updateLeader()
     else if(arrowStyle == Box)
     {
         arrowStylePath = QPainterPath();
-        qreal side = QLineF(ap1, ap2).length();
+        EmbReal side = QLineF(ap1, ap2).length();
         QRectF ar0(0, 0, side, side);
         ar0.moveCenter(ap0);
         arrowStylePath.addRect(ar0);
@@ -268,11 +294,11 @@ QPointF DimLeaderObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF endPoint2 = objectEndPoint2();
     QPointF midPoint  = objectMidPoint();
 
-    qreal end1Dist = QLineF(mousePoint, endPoint1).length();
-    qreal end2Dist = QLineF(mousePoint, endPoint2).length();
-    qreal midDist  = QLineF(mousePoint, midPoint).length();
+    EmbReal end1Dist = QLineF(mousePoint, endPoint1).length();
+    EmbReal end2Dist = QLineF(mousePoint, endPoint2).length();
+    EmbReal midDist  = QLineF(mousePoint, midPoint).length();
 
-    qreal minDist = qMin(end1Dist, end2Dist);
+    EmbReal minDist = qMin(end1Dist, end2Dist);
 
     if(curved)
         minDist = qMin(minDist, midDist);

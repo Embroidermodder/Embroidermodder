@@ -1,11 +1,25 @@
-#include "object-point.h"
-#include "object-data.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+/**
+ * \file object-rect.cpp
+ */
 
-PointObject::PointObject(qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+#include "embroidermodder.h"
+
+PointObject::PointObject(EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("PointObject Constructor()");
     init(x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -26,7 +40,7 @@ PointObject::~PointObject()
     qDebug("PointObject Destructor()");
 }
 
-void PointObject::init(qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
+void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_POINT);

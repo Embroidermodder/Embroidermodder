@@ -1,12 +1,25 @@
-#include "object-circle.h"
-#include "object-data.h"
-#include "embroidery.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+/**
+ * \file object-circle.cpp
+ */
 
-CircleObject::CircleObject(qreal centerX, qreal centerY, qreal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+#include "embroidermodder.h"
+
+CircleObject::CircleObject(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("CircleObject Constructor()");
     init(centerX, centerY, radius, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -27,7 +40,7 @@ CircleObject::~CircleObject()
     qDebug("CircleObject Destructor()");
 }
 
-void CircleObject::init(qreal centerX, qreal centerY, qreal radius, QRgb rgb, Qt::PenStyle lineType)
+void CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_CIRCLE);
@@ -51,27 +64,27 @@ void CircleObject::setObjectCenter(const QPointF& center)
     setObjectCenter(center.x(), center.y());
 }
 
-void CircleObject::setObjectCenter(qreal centerX, qreal centerY)
+void CircleObject::setObjectCenter(EmbReal centerX, EmbReal centerY)
 {
     setPos(centerX, centerY);
 }
 
-void CircleObject::setObjectCenterX(qreal centerX)
+void CircleObject::setObjectCenterX(EmbReal centerX)
 {
     setX(centerX);
 }
 
-void CircleObject::setObjectCenterY(qreal centerY)
+void CircleObject::setObjectCenterY(EmbReal centerY)
 {
     setY(centerY);
 }
 
-void CircleObject::setObjectRadius(qreal radius)
+void CircleObject::setObjectRadius(EmbReal radius)
 {
     setObjectDiameter(radius*2.0);
 }
 
-void CircleObject::setObjectDiameter(qreal diameter)
+void CircleObject::setObjectDiameter(EmbReal diameter)
 {
     QRectF circRect;
     circRect.setWidth(diameter);
@@ -81,15 +94,15 @@ void CircleObject::setObjectDiameter(qreal diameter)
     updatePath();
 }
 
-void CircleObject::setObjectArea(qreal area)
+void CircleObject::setObjectArea(EmbReal area)
 {
-    qreal radius = qSqrt(area/pi());
+    EmbReal radius = std::sqrt(area/emb_constant_pi);
     setObjectRadius(radius);
 }
 
-void CircleObject::setObjectCircumference(qreal circumference)
+void CircleObject::setObjectCircumference(EmbReal circumference)
 {
-    qreal diameter = circumference/pi();
+    EmbReal diameter = circumference/emb_constant_pi;
     setObjectDiameter(diameter);
 }
 
@@ -134,7 +147,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF itemLine(itemCenterPoint, itemQSnapPoint);
         setObjectCenter(sceneCenterPoint);
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        qreal radius = sceneLine.length();
+        EmbReal radius = sceneLine.length();
         setObjectRadius(radius);
         if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
@@ -148,7 +161,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QLineF itemLine(itemCenterPoint, itemQSnapPoint);
         setObjectCenter(sceneCenterPoint);
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
-        qreal diameter = sceneLine.length();
+        EmbReal diameter = sceneLine.length();
         setObjectDiameter(diameter);
         if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
         updatePath();
@@ -159,7 +172,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
         QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
         setObjectCenter(sceneLine.pointAt(0.5));
-        qreal diameter = sceneLine.length();
+        EmbReal diameter = sceneLine.length();
         setObjectDiameter(diameter);
         updatePath();
     }
@@ -181,7 +194,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
         setObjectCenter(sceneCenterPoint);
-        qreal radius = sceneLine.length();
+        EmbReal radius = sceneLine.length();
         setObjectRadius(radius);
         updatePath();
     }
@@ -196,7 +209,7 @@ void CircleObject::updateRubber(QPainter* painter)
             }
             else
             {
-                qreal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
+                EmbReal gripRadius = QLineF(objectCenter(), objectRubberPoint(QString())).length();
                 painter->drawEllipse(QPointF(), gripRadius, gripRadius);
             }
 
@@ -223,13 +236,13 @@ QPointF CircleObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF quad180 = objectQuadrant180();
     QPointF quad270 = objectQuadrant270();
 
-    qreal cntrDist = QLineF(mousePoint, center).length();
-    qreal q0Dist   = QLineF(mousePoint, quad0).length();
-    qreal q90Dist  = QLineF(mousePoint, quad90).length();
-    qreal q180Dist = QLineF(mousePoint, quad180).length();
-    qreal q270Dist = QLineF(mousePoint, quad270).length();
+    EmbReal cntrDist = QLineF(mousePoint, center).length();
+    EmbReal q0Dist   = QLineF(mousePoint, quad0).length();
+    EmbReal q90Dist  = QLineF(mousePoint, quad90).length();
+    EmbReal q180Dist = QLineF(mousePoint, quad180).length();
+    EmbReal q270Dist = QLineF(mousePoint, quad270).length();
 
-    qreal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
+    EmbReal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
     else if(minDist == q0Dist)   return quad0;
@@ -260,7 +273,7 @@ QPainterPath CircleObject::objectSavePath() const
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);

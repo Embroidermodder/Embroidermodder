@@ -1,10 +1,23 @@
-#include <QUndoGroup>
-#include <QUndoStack>
-#include <QUndoView>
-#include <QKeyEvent>
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include "undo-editor.h"
-#include "undo-commands.h"
+/**
+ * \file undo-editor.cpp
+ */
+
+#include "embroidermodder.h"
 
 UndoEditor::UndoEditor(const QString& iconDirectory, QWidget* widgetToFocus, QWidget* parent) : QDockWidget(parent)
 {

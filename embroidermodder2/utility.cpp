@@ -11,10 +11,6 @@
  *
  *  Use Python's PEP7 style guide.
  *      https://peps.python.org/pep-0007/
- *
- * \file main.c
- * \brief As much of the code as possible, to keep the structure
- * simple and in a procedural style.
  */
 
 #include "embroidermodder.h"
@@ -386,4 +382,21 @@ read_settings(const char *settings_file)
     }
 
     return 1;
+}
+
+/**
+ * @brief .
+ */
+bool
+validRGB(int r, int g, int b)
+{
+    return !(
+          std::isnan(r)
+        | std::isnan(b)
+        | std::isnan(g)
+        | (r < 0 || r > 255)
+        | (g < 0 || g > 255)
+        | (b < 0 || b > 255)
+    );
+
 }

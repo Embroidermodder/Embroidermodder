@@ -1,44 +1,23 @@
 /**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
  * \file mainwindow-commands.cpp
  */
 
-#include "mainwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "imagewidget.h"
-#include "layer-manager.h"
-#include "object-data.h"
-#include "object-arc.h"
-#include "object-circle.h"
-#include "object-dimleader.h"
-#include "object-ellipse.h"
-#include "object-image.h"
-#include "object-line.h"
-#include "object-path.h"
-#include "object-point.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
-#include "object-rect.h"
-#include "object-textsingle.h"
-#include "embroidery.h"
-#include "property-editor.h"
-#include "undo-editor.h"
-#include "undo-commands.h"
-#include "embdetails-dialog.h"
-
-#include <QLabel>
-#include <QDesktopServices>
-#include <QApplication>
-#include <QUrl>
-#include <QProcess>
-#include <QMessageBox>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QMdiArea>
-#include <QGraphicsScene>
-#include <QComboBox>
-#include <QWhatsThis>
+#include "embroidermodder.h"
 
 /**
  * @brief MainWindow::stub_implement
@@ -66,9 +45,8 @@ void
 MainWindow::exit()
 {
     qDebug("exit()");
-    if(getSettingsPromptSaveHistory())
-    {
-        prompt->saveHistory("prompt.log", getSettingsPromptSaveHistoryAsHtml()); //TODO: get filename from settings
+    if (settings_prompt_save_history) {
+        prompt->saveHistory("prompt.log", settings_prompt_save_history_as_html); //TODO: get filename from settings
     }
     qApp->closeAllWindows();
     this->deleteLater(); //Force the MainWindow destructor to run before exiting. Makes Valgrind "still reachable" happy :)
@@ -84,34 +62,56 @@ MainWindow::quit()
     exit();
 }
 
-void MainWindow::checkForUpdates()
+/**
+ *
+ */
+void
+MainWindow::checkForUpdates()
 {
     qDebug("checkForUpdates()");
     //TODO: Check website for new versions, commands, etc...
 }
 
-void MainWindow::cut()
+/**
+ *
+ */
+void
+MainWindow::cut()
 {
     qDebug("cut()");
     View* gview = activeView();
     if(gview) { gview->cut(); }
 }
 
-void MainWindow::copy()
+/**
+ *
+ */
+void
+MainWindow::copy()
 {
     qDebug("copy()");
     View* gview = activeView();
-    if(gview) { gview->copy(); }
+    if (gview) {
+        gview->copy();
+    }
 }
 
-void MainWindow::paste()
+/**
+ *
+ */
+void
+MainWindow::paste()
 {
     qDebug("paste()");
     View* gview = activeView();
     if(gview) { gview->paste(); }
 }
 
-void MainWindow::selectAll()
+/**
+ *
+ */
+void
+MainWindow::selectAll()
 {
     qDebug("selectAll()");
     View* gview = activeView();
@@ -280,7 +280,6 @@ void MainWindow::tipOfTheDay()
     labelTipOfTheDay->setWordWrap(true);
 
     QCheckBox* checkBoxTipOfTheDay = new QCheckBox(tr("&Show tips on startup"), wizardTipOfTheDay);
-    settings_general_tip_of_the_day = mainWin->getSettingsGeneralTipOfTheDay();
     checkBoxTipOfTheDay->setChecked(settings_general_tip_of_the_day);
     connect(checkBoxTipOfTheDay, SIGNAL(stateChanged(int)), this, SLOT(checkBoxTipOfTheDayStateChanged(int)));
 
@@ -434,7 +433,7 @@ void MainWindow::iconResize(int iconSize)
 
     //TODO: low-priority: open app with iconSize set to 128. resize the icons to a smaller size.
 
-    setSettingsGeneralIconSize(iconSize);
+    settings_general_icon_size = iconSize;
 }
 
 void MainWindow::icon16()
@@ -574,8 +573,7 @@ void MainWindow::updateAllViewGridColors(QRgb color)
 void MainWindow::updateAllViewRulerColors(QRgb color)
 {
     QList<QMdiSubWindow*> windowList = mdiArea->subWindowList();
-    for(int i = 0; i < windowList.count(); ++i)
-    {
+    for (int i = 0; i < windowList.count(); ++i) {
         MdiWindow* mdiWin = qobject_cast<MdiWindow*>(windowList.at(i));
         if(mdiWin) { mdiWin->setViewRulerColor(color); }
     }
@@ -583,14 +581,13 @@ void MainWindow::updateAllViewRulerColors(QRgb color)
 
 void MainWindow::updatePickAddMode(bool val)
 {
-    setSettingsSelectionModePickAdd(val);
+    settings_selection_mode_pickadd = val;
     dockPropEdit->updatePickAddModeButton(val);
 }
 
 void MainWindow::pickAddModeToggled()
 {
-    bool val = !getSettingsSelectionModePickAdd();
-    updatePickAddMode(val);
+    updatePickAddMode(!settings_selection_mode_pickadd);
 }
 
 // Layer ToolBar
@@ -837,114 +834,120 @@ void MainWindow::lineweightSelectorIndexChanged(int index)
 void MainWindow::textFontSelectorCurrentFontChanged(const QFont& font)
 {
     qDebug("textFontSelectorCurrentFontChanged()");
-    setTextFont(font.family());
+    settings_text_font = font.family();
 }
 
 void MainWindow::textSizeSelectorIndexChanged(int index)
 {
     qDebug("textSizeSelectorIndexChanged(%d)", index);
-    setSettingsTextSize(qFabs(textSizeSelector->itemData(index).toReal())); //TODO: check that the toReal() conversion is ok
+    settings_text_size = fabs(textSizeSelector->itemData(index).toReal()); //TODO: check that the toReal() conversion is ok
 }
 
 QString MainWindow::textFont()
 {
-    return getSettingsTextFont();
+    return settings_text_font;
 }
 
 EmbReal MainWindow::textSize()
 {
-    return getSettingsTextSize();
+    return settings_text_size;
 }
 
 EmbReal MainWindow::textAngle()
 {
-    return getSettingsTextAngle();
+    return settings_text_angle;
 }
 
 bool MainWindow::textBold()
 {
-    return getSettingsTextStyleBold();
+    return settings_text_style_bold;
 }
 
 bool MainWindow::textItalic()
 {
-    return getSettingsTextStyleItalic();
+    return settings_text_style_italic;
 }
 
 bool MainWindow::textUnderline()
 {
-    return getSettingsTextStyleUnderline();
+    return settings_text_style_underline;
 }
 
 bool MainWindow::textStrikeOut()
 {
-    return getSettingsTextStyleStrikeOut();
+    return settings_text_style_strikeout;
 }
 
 bool MainWindow::textOverline()
 {
-    return getSettingsTextStyleOverline();
+    return settings_text_style_overline;
 }
 
 void MainWindow::setTextFont(const QString& str)
 {
     textFontSelector->setCurrentFont(QFont(str));
-    setSettingsTextFont(str);
+    settings_text_font = str;
 }
 
 void MainWindow::setTextSize(EmbReal num)
 {
-    setSettingsTextSize(qFabs(num));
+    settings_text_size = fabs(num);
     int index = textSizeSelector->findText("Custom", Qt::MatchContains);
-    if(index != -1)
+    if (index != -1) {
         textSizeSelector->removeItem(index);
+    }
     textSizeSelector->addItem("Custom " + QString().setNum(num, 'f', 2) + " pt", num);
     index = textSizeSelector->findText("Custom", Qt::MatchContains);
-    if(index != -1)
+    if (index != -1) {
         textSizeSelector->setCurrentIndex(index);
+    }
 }
 
 void MainWindow::setTextAngle(EmbReal num)
 {
-    setSettingsTextAngle(num);
+    settings_text_angle = num;
 }
 
 void MainWindow::setTextBold(bool val)
 {
-    setSettingsTextStyleBold(val);
+    settings_text_style_bold = val;
 }
 
 void MainWindow::setTextItalic(bool val)
 {
-    setSettingsTextStyleItalic(val);
+    settings_text_style_italic = val;
 }
 
 void MainWindow::setTextUnderline(bool val)
 {
-    setSettingsTextStyleUnderline(val);
+    settings_text_style_underline = val;
 }
 
 void MainWindow::setTextStrikeOut(bool val)
 {
-    setSettingsTextStyleStrikeOut(val);
+    settings_text_style_strikeout = val;
 }
 
 void MainWindow::setTextOverline(bool val)
 {
-    setSettingsTextStyleOverline(val);
+    settings_text_style_overline = val;
 }
 
 QString MainWindow::getCurrentLayer()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentLayer(); }
+    if (mdiWin) {
+        return mdiWin->getCurrentLayer();
+    }
     return "0";
 }
 
 QRgb MainWindow::getCurrentColor()
 {
     MdiWindow* mdiWin = qobject_cast<MdiWindow*>(mdiArea->activeSubWindow());
-    if(mdiWin) { return mdiWin->getCurrentColor(); }
+    if (mdiWin) {
+        return mdiWin->getCurrentColor();
+    }
     return 0; //TODO: return color ByLayer
 }
 
@@ -1049,8 +1052,7 @@ void MainWindow::promptInputNext()
 void MainWindow::runCommand()
 {
     QAction* act = qobject_cast<QAction*>(sender());
-    if(act)
-    {
+    if (act) {
         qDebug("runCommand(%s)", qPrintable(act->objectName()));
         prompt->endCommand();
         prompt->setCurrentText(act->objectName());
@@ -1340,19 +1342,19 @@ void MainWindow::nativeNightVision()
 
 void MainWindow::nativeSetBackgroundColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsDisplayBGColor(qRgb(r,g,b));
+    settings_display_bg_color = qRgb(r,g,b);
     updateAllViewBackgroundColors(qRgb(r,g,b));
 }
 
 void MainWindow::nativeSetCrossHairColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsDisplayCrossHairColor(qRgb(r,g,b));
+    settings_display_crosshair_color = qRgb(r,g,b);
     updateAllViewCrossHairColors(qRgb(r,g,b));
 }
 
 void MainWindow::nativeSetGridColor(quint8 r, quint8 g, quint8 b)
 {
-    setSettingsGridColor(qRgb(r,g,b));
+    settings_grid_color = qRgb(r,g,b);
     updateAllViewGridColors(qRgb(r,g,b));
 }
 
@@ -1503,13 +1505,13 @@ void MainWindow::nativeAddTextSingle(const QString& str, EmbReal x, EmbReal y, E
     if(gview && gscene && stack)
     {
         TextSingleObject* obj = new TextSingleObject(str, x, -y, getCurrentColor());
-        obj->setObjectTextFont(getSettingsTextFont());
-        obj->setObjectTextSize(getSettingsTextSize());
-        obj->setObjectTextStyle(getSettingsTextStyleBold(),
-                                getSettingsTextStyleItalic(),
-                                getSettingsTextStyleUnderline(),
-                                getSettingsTextStyleStrikeOut(),
-                                getSettingsTextStyleOverline());
+        obj->setObjectTextFont(settings_text_font);
+        obj->setObjectTextSize(settings_text_size);
+        obj->setObjectTextStyle(settings_text_style_bold,
+                                settings_text_style_italic,
+                                settings_text_style_underline,
+                                settings_text_style_strikeout,
+                                settings_text_style_overline);
         obj->setObjectTextBackward(false);
         obj->setObjectTextUpsideDown(false);
         obj->setRotation(-rot);

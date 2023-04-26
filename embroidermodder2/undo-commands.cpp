@@ -1,7 +1,23 @@
-#include "undo-commands.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include "object-base.h"
-#include "view.h"
+/**
+ * \file undo-commands.cpp
+ */
+
+#include "embroidermodder.h"
 
 //==================================================
 // Add
@@ -49,7 +65,7 @@ void UndoableDeleteCommand::redo()
 // Move
 //==================================================
 
-UndoableMoveCommand::UndoableMoveCommand(qreal deltaX, qreal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableMoveCommand::UndoableMoveCommand(EmbReal deltaX, EmbReal deltaY, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -72,7 +88,7 @@ void UndoableMoveCommand::redo()
 // Rotate
 //==================================================
 
-UndoableRotateCommand::UndoableRotateCommand(qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableRotateCommand::UndoableRotateCommand(EmbReal pivotPointX, EmbReal pivotPointY, EmbReal rotAngle, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -92,17 +108,17 @@ void UndoableRotateCommand::redo()
     rotate(pivotX, pivotY, angle);
 }
 
-void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
+void UndoableRotateCommand::rotate(EmbReal x, EmbReal y, EmbReal rot)
 {
-    qreal rad = radians(rot);
-    qreal cosRot = qCos(rad);
-    qreal sinRot = qSin(rad);
-    qreal px = object->scenePos().x();
-    qreal py = object->scenePos().y();
+    EmbReal rad = radians(rot);
+    EmbReal cosRot = qCos(rad);
+    EmbReal sinRot = qSin(rad);
+    EmbReal px = object->scenePos().x();
+    EmbReal py = object->scenePos().y();
     px -= x;
     py -= y;
-    qreal rotX = px*cosRot - py*sinRot;
-    qreal rotY = px*sinRot + py*cosRot;
+    EmbReal rotX = px*cosRot - py*sinRot;
+    EmbReal rotY = px*sinRot + py*cosRot;
     rotX += x;
     rotY += y;
 
@@ -114,7 +130,7 @@ void UndoableRotateCommand::rotate(qreal x, qreal y, qreal rot)
 // Scale
 //==================================================
 
-UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableScaleCommand::UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFactor, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -133,12 +149,12 @@ UndoableScaleCommand::UndoableScaleCommand(qreal x, qreal y, qreal scaleFactor, 
     else
     {
         //Calculate the offset
-        qreal oldX = object->x();
-        qreal oldY = object->y();
+        EmbReal oldX = object->x();
+        EmbReal oldY = object->y();
         QLineF scaleLine(x, y, oldX, oldY);
         scaleLine.setLength(scaleLine.length()*scaleFactor);
-        qreal newX = scaleLine.x2();
-        qreal newY = scaleLine.y2();
+        EmbReal newX = scaleLine.x2();
+        EmbReal newY = scaleLine.y2();
 
         dx = newX - oldX;
         dy = newY - oldY;
@@ -249,7 +265,7 @@ void UndoableGripEditCommand::redo()
 // Mirror
 //==================================================
 
-UndoableMirrorCommand::UndoableMirrorCommand(qreal x1, qreal y1, qreal x2, qreal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
+UndoableMirrorCommand::UndoableMirrorCommand(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, const QString& text, BaseObject* obj, View* v, QUndoCommand* parent) : QUndoCommand(parent)
 {
     gview = v;
     object = obj;
@@ -271,5 +287,3 @@ void UndoableMirrorCommand::mirror()
 {
     //TODO: finish undoable mirror
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

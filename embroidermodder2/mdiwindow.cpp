@@ -1,29 +1,21 @@
-#include "mdiwindow.h"
-#include "view.h"
-#include "statusbar.h"
-#include "statusbar-button.h"
-#include "object-save.h"
-#include "object-data.h"
-#include "object-path.h"
-#include "object-polygon.h"
-#include "object-polyline.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QApplication>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QMainWindow>
-#include <QMdiArea>
-#include <QMdiSubWindow>
-#include <QStatusBar>
-#include <QColor>
-#include <QUndoStack>
-
-#include <QGraphicsScene>
-#include <QGraphicsView>
-#include <QGraphicsItem>
+/**
+ * \file mdiwindow.cpp
+ */
 
 #include "embroidermodder.h"
 
@@ -42,7 +34,7 @@ MdiWindow::MdiWindow(const int theIndex, MainWindow* mw, QMdiArea* parent, Qt::W
     curFile = aName.asprintf("Untitled%d.dst", myIndex);
     this->setWindowTitle(curFile);
 
-    this->setWindowIcon(QIcon("icons/" + mainWin->getSettingsGeneralIconTheme() + "/" + "app" + ".png"));
+    this->setWindowIcon(QIcon("icons/" + mainWin->settings_general_icon_theme + "/" + "app" + ".png"));
 
     gscene = new QGraphicsScene(0,0,0,0, this);
     gview = new View(mainWin, gscene, this);
@@ -202,8 +194,8 @@ MdiWindow::loadFile(const QString &fileName)
                 EmbPolygon polygon = g.object.polygon;
                 QPainterPath polygonPath;
                 bool firstPoint = false;
-                qreal startX = 0, startY = 0;
-                qreal x = 0, y = 0;
+                EmbReal startX = 0, startY = 0;
+                EmbReal x = 0, y = 0;
                 EmbArray* curPointList = polygon.pointList;
                 for (int j=0; j<curPointList->count; j++) {
                     EmbPoint pp = curPointList->geometry[j].object.point;
@@ -264,7 +256,7 @@ MdiWindow::loadFile(const QString &fileName)
         QString stitches;
         stitches.setNum(stitchCount);
 
-        if (mainWin->getSettingsGridLoadFromFile()) {
+        if (mainWin->settings_grid_load_from_file) {
             //TODO: Josh, provide me a hoop size and/or grid spacing from the pattern.
         }
 
@@ -293,11 +285,9 @@ MdiWindow::loadFile(const QString &fileName)
 void MdiWindow::print()
 {
     QPrintDialog dialog(&printer, this);
-    if(dialog.exec() == QDialog::Accepted)
-    {
+    if(dialog.exec() == QDialog::Accepted) {
         QPainter painter(&printer);
-        if(mainWin->getSettingsPrintingDisableBG())
-        {
+        if(mainWin->settings_printing_disable_bg) {
             //Save current bg
             QBrush brush = gview->backgroundBrush();
             //Save ink by not printing the bg at all
@@ -307,8 +297,7 @@ void MdiWindow::print()
             //Restore the bg
             gview->setBackgroundBrush(brush);
         }
-        else
-        {
+        else {
             //Print, fitting the viewport contents into a full page
             gview->render(&painter);
         }
@@ -334,7 +323,7 @@ void MdiWindow::saveBMC()
 
     QPainter painter(&img);
     QRectF targetRect(0,0,150,150);
-    if(mainWin->getSettingsPrintingDisableBG()) //TODO: Make BMC background into it's own setting?
+    if (mainWin->settings_printing_disable_bg) //TODO: Make BMC background into it's own setting?
     {
         QBrush brush = gscene->backgroundBrush();
         gscene->setBackgroundBrush(Qt::NoBrush);
@@ -342,8 +331,7 @@ void MdiWindow::saveBMC()
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
         gscene->setBackgroundBrush(brush);
     }
-    else
-    {
+    else {
         gscene->update();
         gscene->render(&painter, targetRect, extents, Qt::KeepAspectRatio);
     }

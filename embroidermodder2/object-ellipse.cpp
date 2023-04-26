@@ -1,32 +1,68 @@
-#include "object-ellipse.h"
-#include "object-data.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
+ * \file object-rect.cpp
+ */
+
+#include "embroidermodder.h"
 
 #include <QPainter>
 #include <QStyleOption>
 #include <QGraphicsScene>
 
-EllipseObject::EllipseObject(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+/**
+ * \brief .
+ */
+EllipseObject::EllipseObject(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
     init(centerX, centerY, width, height, rgb, Qt::SolidLine); //TODO: getCurrentLineType
 }
 
+/**
+ * \brief .
+ */
 EllipseObject::EllipseObject(EllipseObject* obj, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("EllipseObject Constructor()");
-    if(obj)
-    {
-        init(obj->objectCenterX(), obj->objectCenterY(), obj->objectWidth(), obj->objectHeight(), obj->objectColorRGB(), Qt::SolidLine); //TODO: getCurrentLineType
+    if (obj) {
+        init(
+            obj->objectCenterX(),
+            obj->objectCenterY(),
+            obj->objectWidth(),
+            obj->objectHeight(),
+            obj->objectColorRGB(),
+            Qt::SolidLine); //TODO: getCurrentLineType
         setRotation(obj->rotation());
     }
 }
 
+/**
+ * \brief .
+ */
 EllipseObject::~EllipseObject()
 {
     qDebug("EllipseObject Destructor()");
 }
 
-void EllipseObject::init(qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, Qt::PenStyle lineType)
+/**
+ * \brief .
+ */
+void
+EllipseObject::init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_ELLIPSE);
@@ -45,7 +81,11 @@ void EllipseObject::init(qreal centerX, qreal centerY, qreal width, qreal height
     updatePath();
 }
 
-void EllipseObject::setObjectSize(qreal width, qreal height)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectSize(EmbReal width, EmbReal height)
 {
     QRectF elRect = rect();
     elRect.setWidth(width);
@@ -54,37 +94,65 @@ void EllipseObject::setObjectSize(qreal width, qreal height)
     setRect(elRect);
 }
 
-void EllipseObject::setObjectCenter(const QPointF& center)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectCenter(const QPointF& center)
 {
     setObjectCenter(center.x(), center.y());
 }
 
-void EllipseObject::setObjectCenter(qreal centerX, qreal centerY)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectCenter(EmbReal centerX, EmbReal centerY)
 {
     setPos(centerX, centerY);
 }
 
-void EllipseObject::setObjectCenterX(qreal centerX)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectCenterX(EmbReal centerX)
 {
     setX(centerX);
 }
 
-void EllipseObject::setObjectCenterY(qreal centerY)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectCenterY(EmbReal centerY)
 {
     setY(centerY);
 }
 
-void EllipseObject::setObjectRadiusMajor(qreal radius)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectRadiusMajor(EmbReal radius)
 {
     setObjectDiameterMajor(radius*2.0);
 }
 
-void EllipseObject::setObjectRadiusMinor(qreal radius)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectRadiusMinor(EmbReal radius)
 {
     setObjectDiameterMinor(radius*2.0);
 }
 
-void EllipseObject::setObjectDiameterMajor(qreal diameter)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectDiameterMajor(EmbReal diameter)
 {
     QRectF elRect = rect();
     if(elRect.width() > elRect.height())
@@ -95,7 +163,11 @@ void EllipseObject::setObjectDiameterMajor(qreal diameter)
     setRect(elRect);
 }
 
-void EllipseObject::setObjectDiameterMinor(qreal diameter)
+/**
+ * \brief .
+ */
+void
+EllipseObject::setObjectDiameterMinor(EmbReal diameter)
 {
     QRectF elRect = rect();
     if(elRect.width() < elRect.height())
@@ -106,43 +178,63 @@ void EllipseObject::setObjectDiameterMinor(qreal diameter)
     setRect(elRect);
 }
 
-QPointF EllipseObject::objectQuadrant0() const
+/**
+ * \brief .
+ */
+QPointF
+EllipseObject::objectQuadrant0() const
 {
-    qreal halfW = objectWidth()/2.0;
-    qreal rot = radians(rotation());
-    qreal x = halfW*qCos(rot);
-    qreal y = halfW*qSin(rot);
+    EmbReal halfW = objectWidth()/2.0;
+    EmbReal rot = radians(rotation());
+    EmbReal x = halfW*qCos(rot);
+    EmbReal y = halfW*qSin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
-QPointF EllipseObject::objectQuadrant90() const
+/**
+ * \brief .
+ */
+QPointF
+EllipseObject::objectQuadrant90() const
 {
-    qreal halfH = objectHeight()/2.0;
-    qreal rot = radians(rotation()+90.0);
-    qreal x = halfH*qCos(rot);
-    qreal y = halfH*qSin(rot);
+    EmbReal halfH = objectHeight()/2.0;
+    EmbReal rot = radians(rotation()+90.0);
+    EmbReal x = halfH*qCos(rot);
+    EmbReal y = halfH*qSin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
-QPointF EllipseObject::objectQuadrant180() const
+/**
+ * \brief .
+ */
+QPointF
+EllipseObject::objectQuadrant180() const
 {
-    qreal halfW = objectWidth()/2.0;
-    qreal rot = radians(rotation()+180.0);
-    qreal x = halfW*qCos(rot);
-    qreal y = halfW*qSin(rot);
+    EmbReal halfW = objectWidth()/2.0;
+    EmbReal rot = radians(rotation()+180.0);
+    EmbReal x = halfW*qCos(rot);
+    EmbReal y = halfW*qSin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
-QPointF EllipseObject::objectQuadrant270() const
+/**
+ * \brief .
+ */
+QPointF
+EllipseObject::objectQuadrant270() const
 {
-    qreal halfH = objectHeight()/2.0;
-    qreal rot = radians(rotation()+270.0);
-    qreal x = halfH*qCos(rot);
-    qreal y = halfH*qSin(rot);
+    EmbReal halfH = objectHeight()/2.0;
+    EmbReal rot = radians(rotation()+270.0);
+    EmbReal x = halfH*qCos(rot);
+    EmbReal y = halfH*qSin(rot);
     return objectCenter() + QPointF(x,y);
 }
 
-void EllipseObject::updatePath()
+/**
+ * \brief .
+ */
+void
+EllipseObject::updatePath()
 {
     QPainterPath path;
     QRectF r = rect();
@@ -153,7 +245,11 @@ void EllipseObject::updatePath()
     setObjectPath(path);
 }
 
-void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
+/**
+ * \brief .
+ */
+void
+EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* /*widget*/)
 {
     QGraphicsScene* objScene = scene();
     if(!objScene) return;
@@ -168,7 +264,11 @@ void EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     painter->drawEllipse(rect());
 }
 
-void EllipseObject::updateRubber(QPainter* painter)
+/**
+ * \brief .
+ */
+void
+EllipseObject::updateRubber(QPainter* painter)
 {
     int rubberMode = objectRubberMode();
     if(rubberMode == OBJ_RUBBER_ELLIPSE_LINE)
@@ -187,22 +287,22 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        qreal ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        qreal ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+        EmbReal ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        EmbReal ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
 
         //TODO: incorporate perpendicularDistance() into libcgeometry
-        qreal px = sceneAxis2Point2.x();
-        qreal py = sceneAxis2Point2.y();
-        qreal x1 = sceneAxis1Point1.x();
-        qreal y1 = sceneAxis1Point1.y();
+        EmbReal px = sceneAxis2Point2.x();
+        EmbReal py = sceneAxis2Point2.y();
+        EmbReal x1 = sceneAxis1Point1.x();
+        EmbReal y1 = sceneAxis1Point1.y();
         QLineF line(sceneAxis1Point1, sceneAxis1Point2);
         QLineF norm = line.normalVector();
-        qreal dx = px-x1;
-        qreal dy = py-y1;
+        EmbReal dx = px-x1;
+        EmbReal dy = py-y1;
         norm.translate(dx, dy);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        qreal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        EmbReal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
         setObjectSize(ellipseWidth, ellipseHeight);
@@ -219,22 +319,22 @@ void EllipseObject::updateRubber(QPainter* painter)
         QPointF sceneAxis1Point2 = objectRubberPoint("ELLIPSE_AXIS1_POINT2");
         QPointF sceneCenterPoint = objectRubberPoint("ELLIPSE_CENTER");
         QPointF sceneAxis2Point2 = objectRubberPoint("ELLIPSE_AXIS2_POINT2");
-        qreal ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
-        qreal ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
+        EmbReal ellipseWidth = objectRubberPoint("ELLIPSE_WIDTH").x();
+        EmbReal ellipseRot = objectRubberPoint("ELLIPSE_ROT").x();
 
         //TODO: incorporate perpendicularDistance() into libcgeometry
-        qreal px = sceneAxis2Point2.x();
-        qreal py = sceneAxis2Point2.y();
-        qreal x1 = sceneCenterPoint.x();
-        qreal y1 = sceneCenterPoint.y();
+        EmbReal px = sceneAxis2Point2.x();
+        EmbReal py = sceneAxis2Point2.y();
+        EmbReal x1 = sceneCenterPoint.x();
+        EmbReal y1 = sceneCenterPoint.y();
         QLineF line(sceneCenterPoint, sceneAxis1Point2);
         QLineF norm = line.normalVector();
-        qreal dx = px-x1;
-        qreal dy = py-y1;
+        EmbReal dx = px-x1;
+        EmbReal dy = py-y1;
         norm.translate(dx, dy);
         QPointF iPoint;
         norm.intersects(line, &iPoint);
-        qreal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
+        EmbReal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
         setObjectCenter(sceneCenterPoint);
         setObjectSize(ellipseWidth, ellipseHeight);
@@ -252,7 +352,11 @@ void EllipseObject::updateRubber(QPainter* painter)
     }
 }
 
-void EllipseObject::vulcanize()
+/**
+ * \brief .
+ */
+void
+EllipseObject::vulcanize()
 {
     qDebug("EllipseObject vulcanize()");
     updateRubber();
@@ -261,7 +365,11 @@ void EllipseObject::vulcanize()
 }
 
 // Returns the closest snap point to the mouse point
-QPointF EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
+/**
+ * \brief .
+ */
+QPointF
+EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
 {
     QPointF center  = objectCenter();
     QPointF quad0   = objectQuadrant0();
@@ -269,13 +377,13 @@ QPointF EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
     QPointF quad180 = objectQuadrant180();
     QPointF quad270 = objectQuadrant270();
 
-    qreal cntrDist = QLineF(mousePoint, center).length();
-    qreal q0Dist   = QLineF(mousePoint, quad0).length();
-    qreal q90Dist  = QLineF(mousePoint, quad90).length();
-    qreal q180Dist = QLineF(mousePoint, quad180).length();
-    qreal q270Dist = QLineF(mousePoint, quad270).length();
+    EmbReal cntrDist = QLineF(mousePoint, center).length();
+    EmbReal q0Dist   = QLineF(mousePoint, quad0).length();
+    EmbReal q90Dist  = QLineF(mousePoint, quad90).length();
+    EmbReal q180Dist = QLineF(mousePoint, quad180).length();
+    EmbReal q270Dist = QLineF(mousePoint, quad270).length();
 
-    qreal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
+    EmbReal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
 
     if     (minDist == cntrDist) return center;
     else if(minDist == q0Dist)   return quad0;
@@ -286,18 +394,28 @@ QPointF EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
     return scenePos();
 }
 
-QList<QPointF> EllipseObject::allGripPoints()
+/**
+ * \brief .
+ */
+QList<QPointF>
+EllipseObject::allGripPoints()
 {
     QList<QPointF> gripPoints;
     gripPoints << objectCenter() << objectQuadrant0() << objectQuadrant90() << objectQuadrant180() << objectQuadrant270();
     return gripPoints;
 }
 
+/**
+ * \brief .
+ */
 void EllipseObject::gripEdit(const QPointF& before, const QPointF& after)
 {
     //TODO: gripEdit() for EllipseObject
 }
 
+/**
+ * \brief .
+ */
 QPainterPath EllipseObject::objectSavePath() const
 {
     QPainterPath path;
@@ -305,11 +423,9 @@ QPainterPath EllipseObject::objectSavePath() const
     path.arcMoveTo(r, 0);
     path.arcTo(r, 0, 360);
 
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
     return trans.map(path);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

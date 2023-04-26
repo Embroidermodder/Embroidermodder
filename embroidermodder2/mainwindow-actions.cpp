@@ -1,11 +1,23 @@
 /**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
+
+/**
  * \file mainwindow-actions.cpp
  */
 
-#include "mainwindow.h"
-#include <QAction>
-#include <QApplication>
-#include <QMdiArea>
+#include "embroidermodder.h"
 
 /**
  * @brief MainWindow::createAllActions
@@ -114,7 +126,7 @@ MainWindow::createAction(const QString icon, const QString toolTip, const QStrin
 {
     QString appDir = qApp->applicationDirPath();
 
-    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + getSettingsGeneralIconTheme() + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
+    QAction *ACTION = new QAction(QIcon(appDir + "/icons/" + settings_general_icon_theme + "/" + icon + ".png"), toolTip, this); //TODO: Qt4.7 wont load icons without an extension...
     ACTION->setStatusTip(statusTip);
     ACTION->setObjectName(icon);
     // TODO: Set What's This Context Help to statusTip for now so there is some infos there.

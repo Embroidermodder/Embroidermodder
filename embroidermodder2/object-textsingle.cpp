@@ -1,11 +1,21 @@
-#include "object-textsingle.h"
-#include "object-data.h"
+/**
+ *  Embroidermodder 2.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Copyright 2013-2022 The Embroidermodder Team
+ *  Embroidermodder 2 is Open Source Software.
+ *  See LICENSE for licensing terms.
+ *
+ *  ------------------------------------------------------------
+ *
+ *  Use Python's PEP7 style guide.
+ *      https://peps.python.org/pep-0007/
+ */
 
-#include <QPainter>
-#include <QStyleOption>
-#include <QGraphicsScene>
+#include "embroidermodder.h"
 
-TextSingleObject::TextSingleObject(const QString& str, qreal x, qreal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
+TextSingleObject::TextSingleObject(const QString& str, EmbReal x, EmbReal y, QRgb rgb, QGraphicsItem* parent) : BaseObject(parent)
 {
     qDebug("TextSingleObject Constructor()");
     init(str, x, y, rgb, Qt::SolidLine); //TODO: getCurrentLineType
@@ -32,7 +42,7 @@ TextSingleObject::~TextSingleObject()
     qDebug("TextSingleObject Destructor()");
 }
 
-void TextSingleObject::init(const QString& str, qreal x, qreal y, QRgb rgb, Qt::PenStyle lineType)
+void TextSingleObject::init(const QString& str, EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
     setData(OBJ_TYPE, type());
     setData(OBJ_NAME, OBJ_NAME_TEXTSINGLE);
@@ -97,8 +107,8 @@ void TextSingleObject::setObjectText(const QString& str)
     //Backward or Upside Down
     if(objTextBackward || objTextUpsideDown)
     {
-        qreal horiz = 1.0;
-        qreal vert = 1.0;
+        EmbReal horiz = 1.0;
+        EmbReal vert = 1.0;
         if(objTextBackward) horiz = -1.0;
         if(objTextUpsideDown) vert = -1.0;
 
@@ -171,7 +181,7 @@ void TextSingleObject::setObjectTextJustify(const QString& justify)
     setObjectText(objText);
 }
 
-void TextSingleObject::setObjectTextSize(qreal size)
+void TextSingleObject::setObjectTextSize(EmbReal size)
 {
     objTextSize = size;
     setObjectText(objText);
@@ -301,7 +311,7 @@ void TextSingleObject::gripEdit(const QPointF& before, const QPointF& after)
 
 QList<QPainterPath> TextSingleObject::subPathList() const
 {
-    qreal s = scale();
+    EmbReal s = scale();
     QTransform trans;
     trans.rotate(rotation());
     trans.scale(s,s);
