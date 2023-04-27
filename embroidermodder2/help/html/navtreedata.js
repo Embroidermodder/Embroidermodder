@@ -82,106 +82,106 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Geometry and Algorithms", "md_extern_libembroidery_src_geometry_geometry.html", [
-      [ "To Do", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md20", null ],
-      [ "Development", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md21", null ],
-      [ "Testing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md22", null ],
-      [ "Contributing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md23", [
-        [ "Funding", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md24", null ],
-        [ "Programming and Engineering", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md25", null ],
-        [ "Writing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md26", null ]
+      [ "To Do", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md94", null ],
+      [ "Development", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md95", null ],
+      [ "Testing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md96", null ],
+      [ "Contributing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md97", [
+        [ "Funding", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md98", null ],
+        [ "Programming and Engineering", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md99", null ],
+        [ "Writing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md100", null ]
       ] ],
-      [ "Embroidermodder Project Coding Standards", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md27", [
-        [ "Where Code Goes", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md28", null ],
-        [ "Where Non-compiled Files Go", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md29", null ],
-        [ "Ways in which we break style on purpose", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md30", null ],
-        [ "Naming Conventions", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md31", null ]
+      [ "Embroidermodder Project Coding Standards", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md101", [
+        [ "Where Code Goes", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md102", null ],
+        [ "Where Non-compiled Files Go", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md103", null ],
+        [ "Ways in which we break style on purpose", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md104", null ],
+        [ "Naming Conventions", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md105", null ]
       ] ],
-      [ "Code Style", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md32", [
-        [ "Braces", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md33", null ]
+      [ "Code Style", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md106", [
+        [ "Braces", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md107", null ]
       ] ],
-      [ "Version Control", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md34", null ],
-      [ "Donations", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md35", [
-        [ "Format Support", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md36", null ]
+      [ "Version Control", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md108", null ],
+      [ "Donations", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md109", [
+        [ "Format Support", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md110", null ]
       ] ],
-      [ "Embroidermodder Project Coding Standards", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md37", [
-        [ "Naming Conventions", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md38", null ]
+      [ "Embroidermodder Project Coding Standards", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md111", [
+        [ "Naming Conventions", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md112", null ]
       ] ],
-      [ "Code Style", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md39", [
-        [ "Braces", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md40", null ],
-        [ "Version Control", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md41", null ],
-        [ "Comments", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md42", null ]
+      [ "Code Style", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md113", [
+        [ "Braces", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md114", null ],
+        [ "Version Control", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md115", null ],
+        [ "Comments", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md116", null ]
       ] ],
-      [ "Ideas", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md43", [
-        [ "Why this document", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md44", null ],
-        [ "googletests", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md45", null ],
-        [ "Qt and dependencies", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md46", null ],
-        [ "Documentation", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md47", null ],
-        [ "Social Platform", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md48", null ],
-        [ "Identify the meaning of these TODO items", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md49", null ],
-        [ "Progress Chart", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md50", null ],
-        [ "Style", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md51", null ],
-        [ "Standard", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md52", null ],
-        [ "Image Fitting", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md53", null ],
-        [ "To Place", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md54", null ],
-        [ "To Do", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md55", null ],
-        [ "Basic features", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md56", null ],
-        [ "Code quality and user friendliness", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md57", null ],
-        [ "Documentation", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md58", null ],
-        [ "GUI", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md59", null ]
+      [ "Ideas", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md117", [
+        [ "Why this document", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md118", null ],
+        [ "googletests", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md119", null ],
+        [ "Qt and dependencies", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md120", null ],
+        [ "Documentation", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md121", null ],
+        [ "Social Platform", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md122", null ],
+        [ "Identify the meaning of these TODO items", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md123", null ],
+        [ "Progress Chart", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md124", null ],
+        [ "Style", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md125", null ],
+        [ "Standard", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md126", null ],
+        [ "Image Fitting", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md127", null ],
+        [ "To Place", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md128", null ],
+        [ "To Do", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md129", null ],
+        [ "Basic features", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md130", null ],
+        [ "Code quality and user friendliness", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md131", null ],
+        [ "Documentation", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md132", null ],
+        [ "GUI", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md133", null ]
       ] ],
-      [ "Electronics development", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md60", null ],
-      [ "Development", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md61", [
-        [ "Contributing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md62", null ],
-        [ "Debug", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md63", null ],
-        [ "Binary download", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md64", null ]
+      [ "Electronics development", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md134", null ],
+      [ "Development", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md135", [
+        [ "Contributing", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md136", null ],
+        [ "Debug", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md137", null ],
+        [ "Binary download", "md_extern_libembroidery_src_geometry_geometry.html#autotoc_md138", null ]
       ] ]
     ] ],
     [ "Formats", "md_extern_libembroidery_src_formats_formats.html", [
-      [ "Overview", "md_extern_libembroidery_src_formats_formats.html#autotoc_md66", null ],
-      [ "Read/Write Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md67", [
-        [ "Test Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md68", null ],
-        [ "Documentation Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md69", null ],
-        [ "Overall Support", "md_extern_libembroidery_src_formats_formats.html#autotoc_md70", null ],
-        [ "Table of Format Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md71", null ]
+      [ "Overview", "md_extern_libembroidery_src_formats_formats.html#autotoc_md140", null ],
+      [ "Read/Write Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md141", [
+        [ "Test Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md142", null ],
+        [ "Documentation Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md143", null ],
+        [ "Overall Support", "md_extern_libembroidery_src_formats_formats.html#autotoc_md144", null ],
+        [ "Table of Format Support Levels", "md_extern_libembroidery_src_formats_formats.html#autotoc_md145", null ]
       ] ],
-      [ "Toyota Embroidery Format (.100)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md72", [
-        [ "Toyota Embroidery Format (.10o)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md73", null ]
+      [ "Toyota Embroidery Format (.100)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md146", [
+        [ "Toyota Embroidery Format (.10o)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md147", null ]
       ] ],
-      [ "Bernina Embroidery Format (.art)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md74", null ],
-      [ "Bitmap Cache Embroidery Format (.bmc)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md75", null ],
-      [ "Bits and Volts Embroidery Format (.bro)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md76", null ],
-      [ "Melco Embroidery Format (.cnd)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md77", null ],
-      [ "Embroidery Thread Color Format (.col)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md78", [
-        [ "Example", "md_extern_libembroidery_src_formats_formats.html#autotoc_md79", null ]
+      [ "Bernina Embroidery Format (.art)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md148", null ],
+      [ "Bitmap Cache Embroidery Format (.bmc)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md149", null ],
+      [ "Bits and Volts Embroidery Format (.bro)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md150", null ],
+      [ "Melco Embroidery Format (.cnd)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md151", null ],
+      [ "Embroidery Thread Color Format (.col)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md152", [
+        [ "Example", "md_extern_libembroidery_src_formats_formats.html#autotoc_md153", null ]
       ] ],
-      [ "Singer Embroidery Format (.csd)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md80", null ],
-      [ "Comma Separated Values (.csv)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md81", [
-        [ "Embroidermodder 2.0 CSV Dialect", "md_extern_libembroidery_src_formats_formats.html#autotoc_md82", null ],
-        [ "EmBird CSV Dialect", "md_extern_libembroidery_src_formats_formats.html#autotoc_md83", null ]
+      [ "Singer Embroidery Format (.csd)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md154", null ],
+      [ "Comma Separated Values (.csv)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md155", [
+        [ "Embroidermodder 2.0 CSV Dialect", "md_extern_libembroidery_src_formats_formats.html#autotoc_md156", null ],
+        [ "EmBird CSV Dialect", "md_extern_libembroidery_src_formats_formats.html#autotoc_md157", null ]
       ] ],
-      [ "Barudan Embroidery Format (.dat)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md84", null ],
-      [ "Melco Embroidery Format (.dem)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md85", null ],
-      [ "Barudan Embroidery Format (.dsb)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md86", null ],
-      [ "Tajima Embroidery Format (.dst)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md87", [
-        [ "Header", "md_extern_libembroidery_src_formats_formats.html#autotoc_md88", null ],
-        [ "Stitch Data", "md_extern_libembroidery_src_formats_formats.html#autotoc_md89", null ]
+      [ "Barudan Embroidery Format (.dat)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md158", null ],
+      [ "Melco Embroidery Format (.dem)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md159", null ],
+      [ "Barudan Embroidery Format (.dsb)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md160", null ],
+      [ "Tajima Embroidery Format (.dst)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md161", [
+        [ "Header", "md_extern_libembroidery_src_formats_formats.html#autotoc_md162", null ],
+        [ "Stitch Data", "md_extern_libembroidery_src_formats_formats.html#autotoc_md163", null ]
       ] ],
-      [ "ZSK USA Embroidery Format (.dsz)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md90", null ],
-      [ "Drawing Exchange Format (.dxf)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md91", null ]
+      [ "ZSK USA Embroidery Format (.dsz)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md164", null ],
+      [ "Drawing Exchange Format (.dxf)", "md_extern_libembroidery_src_formats_formats.html#autotoc_md165", null ]
     ] ],
     [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", [
-      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md93", null ],
-      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md94", null ],
-      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md95", null ],
-      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md96", null ],
-      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md97", null ],
-      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md98", [
-        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md99", null ],
-        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md100", null ],
-        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md101", null ],
-        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md102", null ]
+      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md167", null ],
+      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md168", null ],
+      [ "Enforcement Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md169", null ],
+      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md170", null ],
+      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md171", null ],
+      [ "Enforcement Guidelines", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md172", [
+        [ "1. Correction", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md173", null ],
+        [ "2. Warning", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md174", null ],
+        [ "3. Temporary Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md175", null ],
+        [ "4. Permanent Ban", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md176", null ]
       ] ],
-      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md103", null ]
+      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md177", null ]
     ] ],
     [ "Privacy Policy for Embroidery Viewer", "md_privacy_policy.html", null ],
     [ "Todo List", "todo.html", null ],
@@ -206,7 +206,7 @@ var NAVTREE =
         [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
-        [ "Enumerator", "globals_eval.html", null ],
+        [ "Enumerator", "globals_eval.html", "globals_eval" ],
         [ "Macros", "globals_defs.html", "globals_defs" ]
       ] ]
     ] ]
@@ -216,26 +216,24 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_changelog.html",
-"class_cmd_prompt.html#a6025e86dd29f4bd8b56f39acef31bc3d",
-"class_image_object.html#add4e11623be9bc6e02557c67674564ed",
-"class_main_window.html#a50a0a6210093640ae630359e9408797a",
-"class_main_window.html#ab5fed98c20bd4bed7f653c4b1cc9e095",
-"class_mdi_window.html#a8437f8fd71bcf6da5de2a49cbd0b105b",
-"class_property_editor.html#a5bee0c1ce67e3148f8523cc5129779b3",
-"class_save_object.html#a93ebf7c045279170bc1e7ee5fecf84f1",
-"class_settings___dialog.html#ad845e96939b38dc5962382fd333f7532",
-"class_view.html#a383007f70259d129c2686bd8aa315840",
-"embroidermodder_8h.html#a4b8159dcc9138d98d45c864948d5c95e",
-"embroidermodder_8h.html#afca03bac4e9305b486cf47d110c1e16a",
-"embroidery_8h.html#ad45f2268d8f7cbfe771a7903715c5220",
-"embroidery__internal_8h.html#a72e798e33c5912c4a540cc09d4dbed42",
-"format__bro_8c.html#a23abf7de541eea9e0c7578e72a9f849e",
-"format__vp3_8c.html#a9eda46b769612781b9a6e87d8404784c",
-"index.html#other-supported-thread-brands",
-"object-data_8h.html#a142ce63dd47580d3d23de0a7147c0e2aa67cd248111692fbb75c3925f4563023f",
-"polygon_8c.html",
-"struct_emb_stitch__.html",
-"struct_ui_object__.html#ab52ef4455f9b2b7c2b3b59d6e01f085f"
+"class_cmd_prompt.html#a8a704b838837bac0812271fa7c7a99a9",
+"class_line_object.html#a1b150139c660fbed98153e3763e11d9a",
+"class_main_window.html#a8f95344a142090b2145b237768497c2d",
+"class_mdi_window.html#a9e47fdf77546964b59fb5e1bd8736196",
+"class_property_editor.html#a5d52b256ee2b7a6b0f6648d0457f98c0",
+"class_save_object.html#ab7e966439929747934b38ef015938c33",
+"class_settings___dialog.html#ad9bb48d0531a4cc9c65fa4dd34eb47b1",
+"class_view.html#a50f2a887aea481c21501f0ba17f1ec27",
+"embroidermodder_8h.html#a29bcbce98e36705fa9c1577a227d53c0a21cbc22cd57ac906315fac3d245a25b9",
+"embroidery_8h.html#a3ecde07612d019c10b5ddc5ac7b44bc3",
+"embroidery__internal_8h.html#a04a552f47e6e19f3aef114fe63079267",
+"embroidery__internal_8h.html#ab1f6a20dd5ef0db6a0e6483deba90711",
+"format__inb_8c.html#a08e7ef1dacff6ecf60085901a4a552eb",
+"functions_vars.html",
+"main_8c.html#aab9b4367da6ddf2b410223f3a36aff98",
+"struct__bcf__file__header.html#a73c1fc1614d894815c78aca5b3c84984",
+"struct_settings__.html#a2cbd97157359fc50f24248f2b0858269",
+"utility_8cpp.html#ada4ed7c67c6b8fd122b08b3b1f0ddf36"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

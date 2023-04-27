@@ -2,74 +2,55 @@
 \label{class_undoable_rotate_command}\index{UndoableRotateCommand@{UndoableRotateCommand}}
 
 
-{\ttfamily \#include $<$undo-\/commands.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_undoable_rotate_command_a83a0197d8813e95241b320139603fc89}{Undoable\+Rotate\+Command}} (qreal pivot\+PointX, qreal pivot\+PointY, qreal rot\+Angle, const QString \&text, \mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$obj, \mbox{\hyperlink{class_view}{View}} $\ast$v, QUndo\+Command $\ast$parent=0)
+\mbox{\hyperlink{class_undoable_rotate_command_a249239cd50289ba54def50c02126ee7f}{Undoable\+Rotate\+Command}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} pivot\+PointX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} pivot\+PointY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot\+Angle, const QString \&text, \mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$obj, \mbox{\hyperlink{class_view}{View}} $\ast$v, QUndo\+Command $\ast$parent=0)
 \item 
 void \mbox{\hyperlink{class_undoable_rotate_command_a0e1e7804a53f6d62efc72c9bdbec8571}{undo}} ()
 \item 
 void \mbox{\hyperlink{class_undoable_rotate_command_a93c48d6ed036e1a381be53ac67643284}{redo}} ()
+\item 
+void \mbox{\hyperlink{class_undoable_rotate_command_a51576e708df32279e01321cebf9279d2}{rotate}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} rot)
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \mbox{\hyperlink{class_undoable_rotate_command_a521c88e7fec79196ea48330175ada7e3}{rotate}} (qreal x, qreal y, qreal rot)
-\item 
-qreal \mbox{\hyperlink{class_undoable_rotate_command_a198c35d0f4b77c21af2adcc0d28b3abb}{pi}} ()
-\item 
-qreal \mbox{\hyperlink{class_undoable_rotate_command_ac59979622741dac009ccdbeac2503662}{radians}} (qreal \mbox{\hyperlink{embroidery_8h_aaccc2423db2913edc508bd03bbdbde71}{degrees}})
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$ \mbox{\hyperlink{class_undoable_rotate_command_a2e1f84592366462c24fc68dff57b903c}{object}}
 \item 
 \mbox{\hyperlink{class_view}{View}} $\ast$ \mbox{\hyperlink{class_undoable_rotate_command_a9e47fdf77546964b59fb5e1bd8736196}{gview}}
 \item 
-qreal \mbox{\hyperlink{class_undoable_rotate_command_a31f5904782b4558f0c5245add4dbbe60}{pivotX}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_undoable_rotate_command_a87580073aa08cad98074845a73855bff}{pivotX}}
 \item 
-qreal \mbox{\hyperlink{class_undoable_rotate_command_a9ac068f8814e4a8191550a2b571dd0c1}{pivotY}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_undoable_rotate_command_aaf37f67a51c33bea6fc5c8a6128b95b8}{pivotY}}
 \item 
-qreal \mbox{\hyperlink{class_undoable_rotate_command_afeb394ee506f5642a6db2b27a26af405}{angle}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_undoable_rotate_command_af357a7ddc15f398023533703329941a1}{angle}}
 \end{DoxyCompactItemize}
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_undoable_rotate_command_a83a0197d8813e95241b320139603fc89}\label{class_undoable_rotate_command_a83a0197d8813e95241b320139603fc89}} 
+\mbox{\Hypertarget{class_undoable_rotate_command_a249239cd50289ba54def50c02126ee7f}\label{class_undoable_rotate_command_a249239cd50289ba54def50c02126ee7f}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!UndoableRotateCommand@{UndoableRotateCommand}}
 \index{UndoableRotateCommand@{UndoableRotateCommand}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{UndoableRotateCommand()}{UndoableRotateCommand()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_undoable_rotate_command}{Undoable\+Rotate\+Command}} (\begin{DoxyParamCaption}\item[{qreal}]{pivot\+PointX,  }\item[{qreal}]{pivot\+PointY,  }\item[{qreal}]{rot\+Angle,  }\item[{const QString \&}]{text,  }\item[{\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$}]{obj,  }\item[{\mbox{\hyperlink{class_view}{View}} $\ast$}]{v,  }\item[{QUndo\+Command $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_undoable_rotate_command}{Undoable\+Rotate\+Command}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{pivot\+PointX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{pivot\+PointY,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot\+Angle,  }\item[{const QString \&}]{text,  }\item[{\mbox{\hyperlink{class_base_object}{Base\+Object}} $\ast$}]{obj,  }\item[{\mbox{\hyperlink{class_view}{View}} $\ast$}]{v,  }\item[{QUndo\+Command $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
 
 
 \doxysubsubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_undoable_rotate_command_a198c35d0f4b77c21af2adcc0d28b3abb}\label{class_undoable_rotate_command_a198c35d0f4b77c21af2adcc0d28b3abb}} 
-\index{UndoableRotateCommand@{UndoableRotateCommand}!pi@{pi}}
-\index{pi@{pi}!UndoableRotateCommand@{UndoableRotateCommand}}
-\doxyparagraph{\texorpdfstring{pi()}{pi()}}
-{\footnotesize\ttfamily qreal pi (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
-
-\mbox{\Hypertarget{class_undoable_rotate_command_ac59979622741dac009ccdbeac2503662}\label{class_undoable_rotate_command_ac59979622741dac009ccdbeac2503662}} 
-\index{UndoableRotateCommand@{UndoableRotateCommand}!radians@{radians}}
-\index{radians@{radians}!UndoableRotateCommand@{UndoableRotateCommand}}
-\doxyparagraph{\texorpdfstring{radians()}{radians()}}
-{\footnotesize\ttfamily qreal radians (\begin{DoxyParamCaption}\item[{qreal}]{degrees }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}
-
 \mbox{\Hypertarget{class_undoable_rotate_command_a93c48d6ed036e1a381be53ac67643284}\label{class_undoable_rotate_command_a93c48d6ed036e1a381be53ac67643284}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!redo@{redo}}
 \index{redo@{redo}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{redo()}{redo()}}
 {\footnotesize\ttfamily void redo (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_undoable_rotate_command_a521c88e7fec79196ea48330175ada7e3}\label{class_undoable_rotate_command_a521c88e7fec79196ea48330175ada7e3}} 
+\mbox{\Hypertarget{class_undoable_rotate_command_a51576e708df32279e01321cebf9279d2}\label{class_undoable_rotate_command_a51576e708df32279e01321cebf9279d2}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!rotate@{rotate}}
 \index{rotate@{rotate}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{rotate()}{rotate()}}
-{\footnotesize\ttfamily void rotate (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{qreal}]{rot }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void rotate (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{rot }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_undoable_rotate_command_a0e1e7804a53f6d62efc72c9bdbec8571}\label{class_undoable_rotate_command_a0e1e7804a53f6d62efc72c9bdbec8571}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!undo@{undo}}
@@ -80,39 +61,39 @@ qreal \mbox{\hyperlink{class_undoable_rotate_command_afeb394ee506f5642a6db2b27a2
 
 
 \doxysubsubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_undoable_rotate_command_afeb394ee506f5642a6db2b27a26af405}\label{class_undoable_rotate_command_afeb394ee506f5642a6db2b27a26af405}} 
+\mbox{\Hypertarget{class_undoable_rotate_command_af357a7ddc15f398023533703329941a1}\label{class_undoable_rotate_command_af357a7ddc15f398023533703329941a1}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!angle@{angle}}
 \index{angle@{angle}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{angle}{angle}}
-{\footnotesize\ttfamily qreal angle\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} angle}
 
 \mbox{\Hypertarget{class_undoable_rotate_command_a9e47fdf77546964b59fb5e1bd8736196}\label{class_undoable_rotate_command_a9e47fdf77546964b59fb5e1bd8736196}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!gview@{gview}}
 \index{gview@{gview}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{gview}{gview}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_view}{View}}$\ast$ gview\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_view}{View}}$\ast$ gview}
 
 \mbox{\Hypertarget{class_undoable_rotate_command_a2e1f84592366462c24fc68dff57b903c}\label{class_undoable_rotate_command_a2e1f84592366462c24fc68dff57b903c}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!object@{object}}
 \index{object@{object}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{object}{object}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_base_object}{Base\+Object}}$\ast$ object\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_base_object}{Base\+Object}}$\ast$ object}
 
-\mbox{\Hypertarget{class_undoable_rotate_command_a31f5904782b4558f0c5245add4dbbe60}\label{class_undoable_rotate_command_a31f5904782b4558f0c5245add4dbbe60}} 
+\mbox{\Hypertarget{class_undoable_rotate_command_a87580073aa08cad98074845a73855bff}\label{class_undoable_rotate_command_a87580073aa08cad98074845a73855bff}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!pivotX@{pivotX}}
 \index{pivotX@{pivotX}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{pivotX}{pivotX}}
-{\footnotesize\ttfamily qreal pivotX\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} pivotX}
 
-\mbox{\Hypertarget{class_undoable_rotate_command_a9ac068f8814e4a8191550a2b571dd0c1}\label{class_undoable_rotate_command_a9ac068f8814e4a8191550a2b571dd0c1}} 
+\mbox{\Hypertarget{class_undoable_rotate_command_aaf37f67a51c33bea6fc5c8a6128b95b8}\label{class_undoable_rotate_command_aaf37f67a51c33bea6fc5c8a6128b95b8}} 
 \index{UndoableRotateCommand@{UndoableRotateCommand}!pivotY@{pivotY}}
 \index{pivotY@{pivotY}!UndoableRotateCommand@{UndoableRotateCommand}}
 \doxyparagraph{\texorpdfstring{pivotY}{pivotY}}
-{\footnotesize\ttfamily qreal pivotY\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} pivotY}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{undo-commands_8h}{undo-\/commands.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{undo-commands_8cpp}{undo-\/commands.\+cpp}}\end{DoxyCompactItemize}

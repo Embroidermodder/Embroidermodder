@@ -102,7 +102,7 @@ $(document).ready(function(){initNavTree('md_extern_libembroidery_src_geometry_g
   <div class="headertitle"><div class="title">Geometry and Algorithms </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md20"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md94"></a>
 To Do</h1>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000206">Todo:</a></b></dt><dd>(Arduino) Fix emb-outline files</dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000207">Todo:</a></b></dt><dd>(Arduino)Fix thread-color files</dd></dl>
@@ -110,20 +110,20 @@ To Do</h1>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000209">Todo:</a></b></dt><dd>(Arduino) inotool.org - seems like the logical solution for Nightly/CI builds</dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000210">Todo:</a></b></dt><dd>(Arduino) Smoothieboard experiments</dd></dl>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000211">Todo:</a></b></dt><dd>(testing) looping test that reads 10 times while running valgrind. See \texttt{<a class="el" href="embroidery_8h.html#a3bf191bd99e2da8d36465f454a4646f6">embPattern_loadExternalColorFile()</a>} Arduino leak note for more info.</dd></dl>
-<h1><a class="anchor" id="autotoc_md21"></a>
+<h1><a class="anchor" id="autotoc_md95"></a>
 Development</h1>
 <p>If you wish to develop with us you can chat via the contact email on the [website]\url{<a href="https://libembroidery.org">https://libembroidery.org</a>} or in the issues tab on the [github page]\url{<a href="https://github.com/Embroidermodder/Embroidermodder/issues">https://github.com/Embroidermodder/Embroidermodder/issues</a>}. People have been polite and friendly in these conversations and I (Robin) have really enjoyed them. If we do have any arguments please note we have a [Code of Conduct] <a class="el" href="_c_o_d_e___o_f___c_o_n_d_u_c_t_8md.html">CODE_OF_CONDUCT.md</a> so there is a consistent policy to enforce when dealing with these arguments.</p>
 <p>The first thing you should try is building from source using the [build advice](build) above. Then read some of the [manual] \url{<a href="https://libembroidery.org/embroidermodder_2.0_manual.pdf">https://libembroidery.org/embroidermodder_2.0_manual.pdf</a>} to get the general layout of the source code and what we are currently planning.</p>
-<h1><a class="anchor" id="autotoc_md22"></a>
+<h1><a class="anchor" id="autotoc_md96"></a>
 Testing</h1>
 <p>To find unfixed errors run the tests by launching from the command line with: </p><pre class="fragment">$ embroidermodder --test
 </pre><p> then dig through the output. It's currently not worth reporting the errors, since there are so many but if you can fix anything reported here you can submit a PR.</p>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md97"></a>
 Contributing</h1>
-<h2><a class="anchor" id="autotoc_md24"></a>
+<h2><a class="anchor" id="autotoc_md98"></a>
 Funding</h2>
 <p>The easiest way to help is to fund development (see the Donate button above), since we can't afford to spend a lot of time developing and only have limited kit to test out libembroidery on.</p>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md99"></a>
 Programming and Engineering</h2>
 <p>Should you want to get into the code itself:</p>
 <ul>
@@ -133,15 +133,15 @@ Programming and Engineering</h2>
 <li>Scheme developers and C/SDL developers to help build the GUI.</li>
 <li>Scheme developers to help add designs for generating of custom stitch-filled emblems like the heart or dolphi. Note that this happens in Embroidermodder not libembroidery (which assumes that you already have a function available).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md26"></a>
+<h2><a class="anchor" id="autotoc_md100"></a>
 Writing</h2>
 <p>We also need people familiar with the software and the general machine embroidery ecosystem to contribute to the <a href="https://github.com/Embroidermodder/docs">documentation</a>.</p>
 <p>We need researchers to find references for the documentation: colour tables, machine specifications etc. The history is murky and often very poorly maintained so if you know anything from working in the industry that you can share: it'd be appreciated!</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<h1><a class="anchor" id="autotoc_md101"></a>
 Embroidermodder Project Coding Standards</h1>
 <p>A basic set of guidelines to use when submitting code.</p>
 <p>Code structure is mre important than style, so first we advise you read `&lsquo;Design&rsquo;' and experimenting before getting into the specifics of code style.</p>
-<h2><a class="anchor" id="autotoc_md28"></a>
+<h2><a class="anchor" id="autotoc_md102"></a>
 Where Code Goes</h2>
 <p>Anything that deals with the specifics of embroidery file formats, threads, rendering to images, embroidery machinery or command line interfaces should go in <code>libembroidery</code> not here.</p>
 <p>Should your idea pass this test:</p>
@@ -152,22 +152,22 @@ Where Code Goes</h2>
 <li>If the data will not vary declare it as a compiler definition using the "Compiler definitions" section and put it in <code>src/em2.h</code>.</li>
 <li>All other C code goes in <code>src/em2.c</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md29"></a>
+<h2><a class="anchor" id="autotoc_md103"></a>
 Where Non-compiled Files Go</h2>
 <dl class="todo"><dt><b><a class="el" href="todo.html#_todo000212">Todo:</a></b></dt><dd>Like most user interfaces Embroidermodder is mostly data, so here we will have a list describing where each CSV goes.</dd></dl>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md104"></a>
 Ways in which we break style on purpose</h2>
 <p>Most style guides advise you to keep functions short. We make a few pointed exceptions to this where the overall health and functionality of the source code should benefit.</p>
 <p>The <code>actuator</code> function will always be a mess and it should be: we're keeping the total source lines of code down by encoding all user action into a descrete sequence of strings that are all below \texttt{_STRING_LENGTH} in length. See the section on the actuator (TODO) describing why any other solution we could think here would mean more more code without a payoff in speed of execution or clarity.</p>
-<h2><a class="anchor" id="autotoc_md31"></a>
+<h2><a class="anchor" id="autotoc_md105"></a>
 Naming Conventions</h2>
 <p>Name variables and functions intelligently to minimize the need for comments. It should be immediately obvious what information it represents. Short names such as \texttt{x} and \texttt{y} are fine when referring to coordinates. Short names such as \texttt{i} and \texttt{j} are fine when doing loops.</p>
 <p>Variable names should be <code>camelCase</code>, starting with a lowercase word followed by uppercase word(s). C Functions that attempt to simulate namespacing, should be \texttt{nameSpace_camelCase}.</p>
 <p>All files and directories shall be lowercase and contain no spaces.</p>
-<h1><a class="anchor" id="autotoc_md32"></a>
+<h1><a class="anchor" id="autotoc_md106"></a>
 Code Style</h1>
 <p>Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.</p>
-<h2><a class="anchor" id="autotoc_md33"></a>
+<h2><a class="anchor" id="autotoc_md107"></a>
 Braces</h2>
 <p>For functions: please put each brace on a new line. </p><pre class="fragment">void function_definition(int argument)
 {
@@ -179,11 +179,11 @@ Braces</h2>
 </pre><p> Use exceptions sparingly.</p>
 <p>Do not use ternary operator <code>(?:)</code> in place of if/else.</p>
 <p>Do not repeat a variable name that already occurs in an outer scope.</p>
-<h1><a class="anchor" id="autotoc_md34"></a>
+<h1><a class="anchor" id="autotoc_md108"></a>
 Version Control</h1>
 <p>Being an open source project, developers can grab the latest code at any time and attempt to build it themselves. We try our best to ensure that it will build smoothly at any time, although occasionally we do break the build. In these instances, please provide a patch, pull request which fixes the issue or open an issue and notify us of the problem, as we may not be aware of it and we can build fine.</p>
 <p>Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...</p>
-<h1><a class="anchor" id="autotoc_md35"></a>
+<h1><a class="anchor" id="autotoc_md109"></a>
 Donations</h1>
 <p>Creating software that interfaces with hardware is costly. A summary of some of the costs involved:</p>
 <ul>
@@ -194,21 +194,21 @@ Donations</h1>
 <li>Consumable materials (thread, fabric, stabilizer, etc...)</li>
 </ul>
 <p>If you have found our software useful, please consider funding further development by donating to the project on Open Collective (\url{<a href="https://opencollective.com/embroidermodder">https://opencollective.com/embroidermodder</a>}).</p>
-<h2><a class="anchor" id="autotoc_md36"></a>
+<h2><a class="anchor" id="autotoc_md110"></a>
 Format Support</h2>
 <p>Support for Singer FHE, CHE (Compucon) formats?</p>
-<h1><a class="anchor" id="autotoc_md37"></a>
+<h1><a class="anchor" id="autotoc_md111"></a>
 Embroidermodder Project Coding Standards</h1>
 <p>A basic set of guidelines to use when submitting code.</p>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md112"></a>
 Naming Conventions</h2>
 <p>Name variables and functions intelligently to minimize the need for comments. It should be immediately obvious what information it represents. Short names such as x and y are fine when referring to coordinates. Short names such as i and j are fine when doing loops.</p>
 <p>Variable names should be "camelCase", starting with a lowercase word followed by uppercase word(s). C++ Class Names should be "CamelCase", using all uppercase word(s). C Functions that attempt to simulate namespacing, should be "nameSpace\_camelCase".</p>
 <p>All files and directories shall be lowercase and contain no spaces.</p>
-<h1><a class="anchor" id="autotoc_md39"></a>
+<h1><a class="anchor" id="autotoc_md113"></a>
 Code Style</h1>
 <p>Tabs should not be used when indenting. Setup your IDE or text editor to use 4 spaces.</p>
-<h2><a class="anchor" id="autotoc_md40"></a>
+<h2><a class="anchor" id="autotoc_md114"></a>
 Braces</h2>
 <p>For functions: please put each brace on a new line. </p><pre class="fragment">void function_definition(int argument)
 {
@@ -220,11 +220,11 @@ Braces</h2>
 </pre><p> Use exceptions sparingly.</p>
 <p>Do not use ternary operator (?:) in place of if/else.</p>
 <p>Do not repeat a variable name that already occurs in an outer scope.</p>
-<h2><a class="anchor" id="autotoc_md41"></a>
+<h2><a class="anchor" id="autotoc_md115"></a>
 Version Control</h2>
 <p>Being an open source project, developers can grab the latest code at any time and attempt to build it themselves. We try our best to ensure that it will build smoothly at any time, although occasionally we do break the build. In these instances, please provide a patch, pull request which fixes the issue or open an issue and notify us of the problem, as we may not be aware of it and we can build fine.</p>
 <p>Try to group commits based on what they are related to: features/bugs/comments/graphics/commands/etc...</p>
-<h2><a class="anchor" id="autotoc_md42"></a>
+<h2><a class="anchor" id="autotoc_md116"></a>
 Comments</h2>
 <p>When writing code, sometimes there are items that we know can be improved, incomplete or need special clarification. In these cases, use the types of comments shown below. They are pretty standard and are highlighted by many editors to make reviewing code easier. We also use shell scripts to parse the code to find all of these occurrences so someone wanting to go on a bug hunt will be able to easily see which areas of the code need more love.</p>
 <p>libembroidery and Embroidermodder are written in C and adheres to C89 standards. This means that any C99 or C++ comments will show up as errors when compiling with gcc. In any C code, you must use: </p><pre class="fragment">/* Use C Style Comments within code blocks. */
@@ -249,38 +249,38 @@ Comments</h2>
 /**
  * NOTE: This comment is much more important than lesser comments.
  */
-</pre> <h1><a class="anchor" id="autotoc_md43"></a>
+</pre> <h1><a class="anchor" id="autotoc_md117"></a>
 Ideas</h1>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md118"></a>
 Why this document</h2>
 <p>I've been trying to make this document indirectly through the Github issues page and the website we're building but I think a straightforward, plain-text file needs to be the ultimate backup for this. Then I can have a printout while I'm working on the project.</p>
-<h2><a class="anchor" id="autotoc_md45"></a>
+<h2><a class="anchor" id="autotoc_md119"></a>
 googletests</h2>
 <p>gtests are non-essential, testing is for developers not users so we can choose our own framework. I think the in-built testing for libembroidery was good and I want to re-instate it.</p>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md120"></a>
 Qt and dependencies</h2>
 <p>I'm switching to SDL2 (which is a whole other conversation) which means we can ship it with the source code package meaning only a basic build environment is necessary to build it.</p>
-<h2><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md121"></a>
 Documentation</h2>
 <p>Can we treat the website being a duplicate of the docs a non-starter? I'd be happier with tex/pdf only and (I know this is counter-intuitive) one per project.</p>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<h2><a class="anchor" id="autotoc_md122"></a>
 Social Platform</h2>
 <p>So... all the issues and project boards etc. being on Github is all well and good assuming that we have our own copies. But we don't if Github goes down or some other major player takes over the space and we have to move (again, since this started on SourceForge).</p>
 <p>This file is a backup for that which is why I'm repeating myself between them.</p>
-<h2><a class="anchor" id="autotoc_md49"></a>
+<h2><a class="anchor" id="autotoc_md123"></a>
 Identify the meaning of these TODO items</h2>
 <ul>
 <li>Saving CSV/SVG (rt) + CSV read/write UNKNOWN interpreted as COLOR bug <code>#179</code></li>
 <li>Lego Mindstorms NXT/EV3 ports and/or commands</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md50"></a>
+<h2><a class="anchor" id="autotoc_md124"></a>
 Progress Chart</h2>
 <p>The chart of successful from-to conversions (previously a separate issue) is something that should appear in the README.</p>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md125"></a>
 Style</h2>
 <p>Rather than maintain our own standard for style, please defer to the Python's PEP 7 <b>[pep7]</b> for C style. If it passes the linters for that we consider it well styled for a pull request.</p>
 <p>As for other languages we have no house style other than whatever "major" styles exist, for example Java in Google style <b>[google_java]</b> would be acceptable. We'll elect specific standards if it becomes an issue.</p>
-<h2><a class="anchor" id="autotoc_md52"></a>
+<h2><a class="anchor" id="autotoc_md126"></a>
 Standard</h2>
 <p>The criteria for a good Pull Request from an outside developer has these properties, from most to least important:</p>
 <ul>
@@ -292,14 +292,14 @@ Standard</h2>
 <li><code>embroider</code> should be in POSIX style as a command line program.</li>
 <li>No dependancies that aren't "standard", i.e. use only the C Standard Library.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md53"></a>
+<h2><a class="anchor" id="autotoc_md127"></a>
 Image Fitting</h2>
 <p>A currently unsolved problem in development that warrants further research is the scenario where a user wants to feed embroider an image that can then be .</p>
-<h2><a class="anchor" id="autotoc_md54"></a>
+<h2><a class="anchor" id="autotoc_md128"></a>
 To Place</h2>
 <p>A <em>right-handed coordinate system</em> is one where up is positive and right is positive. Left-handed is up is positive, left is positive. Screens often use down is positive, right is positive, including the OpenGL standard so when switching between graphics formats and stitch formats we need to use a vertical flip (<code>embPattern\_flip</code>).</p>
 <p><code>0x20</code> is the space symbol, so when padding either 0 or space is preferred and in the case of space use the literal ' '.</p>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md129"></a>
 To Do</h2>
 <p>We currently need help with:</p>
 <ul>
@@ -320,7 +320,7 @@ To Do</h2>
 <li>GUI</li>
 <li>electronics development</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md56"></a>
+<h2><a class="anchor" id="autotoc_md130"></a>
 Basic features</h2>
 <ul>
 <li>Incorporate <code>#if 0</code>ed parts of <code>libembroidery.c</code>.</li>
@@ -328,14 +328,14 @@ Basic features</h2>
 <li>Document the specifics of the file formats here for embroidery machine specific formats. Find websites and other sources that break down the binary formats we currently don't understand.</li>
 <li>Find more and better documentation of the structure of the headers for the formats we do understand.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md57"></a>
+<h2><a class="anchor" id="autotoc_md131"></a>
 Code quality and user friendliness</h2>
 <ul>
 <li>Document all structs, macros and functions (will contribute directly on the web version).</li>
 <li>Incorporate experimental code, improve support for language bindings.</li>
 <li>Make stitch x, y into an EmbVector.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md58"></a>
+<h2><a class="anchor" id="autotoc_md132"></a>
 Documentation</h2>
 <ul>
 <li>Create csv data files for thread tables.</li>
@@ -343,7 +343,7 @@ Documentation</h2>
 <li>Run <code>sloccount</code> on <code>extern/</code> and <code>.</code> (and ) so we know the current scale of the project, aim to get this number low. Report the total as part of the documentation.</li>
 <li>Try to get as much of the source code that we maintain into C as possible so new developers don't need to learn multiple languages to have an effect. This bars the embedded parts of the code.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md59"></a>
+<h2><a class="anchor" id="autotoc_md133"></a>
 GUI</h2>
 <ul>
 <li>Make EmbroideryMobile (Android) also backend to <code>libembroidery</code> with a Java wrapper.</li>
@@ -351,20 +351,20 @@ GUI</h2>
 <li>Share some of the MobileViewer and iMobileViewer layout with the main EM2. Perhaps combine those 3 into the Embroidermodder repository so there are 4 repositories total.</li>
 <li>Convert layout data to JSON format and use cJSON for parsing.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md60"></a>
+<h1><a class="anchor" id="autotoc_md134"></a>
 Electronics development</h1>
 <ul>
 <li>Currently experimenting with Fritzing[8](8), upload netlists to embroiderbot when they can run simulations using the asm in <code>libembroidery</code>.</li>
 <li>Create a common assembly for data that is the same across chipsets <code>libembrodiery\_data\_internal.s</code>.</li>
 <li>Make the defines part of <code><a class="el" href="embroidery_8h.html">embroidery.h</a></code> all systems and the function list <code>c code only</code>. That way we can share some development between assembly and C versions.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md61"></a>
+<h1><a class="anchor" id="autotoc_md135"></a>
 Development</h1>
-<h2><a class="anchor" id="autotoc_md62"></a>
+<h2><a class="anchor" id="autotoc_md136"></a>
 Contributing</h2>
 <p>If you're interested in getting involved, here's some guidance for new developers. Currently The Embroidermodder Team is all hobbyists with an interest in making embroidery machines more open and user friendly. If you'd like to support us in some other way you can donate to our Open Collective page (click the Donate button) so we can spend more time working on the project.</p>
 <p>All code written for libembroidery should be ANSI C89 compliant if it is C. Using other languages should only be used where necessary to support bindings.</p>
-<h2><a class="anchor" id="autotoc_md63"></a>
+<h2><a class="anchor" id="autotoc_md137"></a>
 Debug</h2>
 <p>If you wish to help with development, run this debug script and send us the error log. </p><pre class="fragment">#!/bin/bash
 
@@ -378,7 +378,7 @@ cmake --build . --config=DEBUG
 
 valgrind ./embroider --full-test-suite
 </pre><p> While we will attempt to maintain good results from this script as part of normal development it should be the first point of failure on any system we haven't tested or format we understand less.</p>
-<h2><a class="anchor" id="autotoc_md64"></a>
+<h2><a class="anchor" id="autotoc_md138"></a>
 Binary download</h2>
 <p>We need a current <code>embroider</code> command line program download, so people can update without building. </p>
 </div></div><!-- contents -->

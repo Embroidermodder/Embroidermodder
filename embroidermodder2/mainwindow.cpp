@@ -383,15 +383,15 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "zoomextents") {
-        nativeZoomExtents();
+        zoomExtents();
         return "";
     }
     if (command == "zoomin") {
-        nativeZoomIn();
+        zoomIn();
         return "";
     }
     if (command == "zoomout") {
-        nativeZoomOut();
+        zoomOut();
         return "";
     }
     if (command == "open") {
@@ -403,55 +403,54 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "icon16") {
-        nativeIcon16();
+        icon16();
         return "";
     }
     if (command == "icon24") {
-        nativeIcon24();
+        icon24();
         return "";
     }
     if (command == "icon32") {
-        nativeIcon32();
+        icon32();
         return "";
     }
     if (command == "icon48") {
-        nativeIcon48();
+        icon48();
         return "";
     }
     if (command == "icon64") {
-        nativeIcon64();
+        icon64();
         return "";
     }
     if (command == "icon128") {
-        nativeIcon128();
+        icon128();
         return "";
     }
     if (command == "pan left") {
-        nativePanLeft();
+        panLeft();
         return "";
     }
-/*
     if (command == "pan right") {
-        nativePanRight();
+        panRight();
         return "";
     }
     if (command == "pan up") {
-        nativePanUp();
+        panUp();
         return "";
     }
     if (command == "pan down") {
-        nativePanDown();
+        panDown();
         return "";
     }
-
     if (command == "day") {
-        nativeDayVision();
+        dayVision();
         return "";
     }
     if (command == "night") {
-        nativeNightVision();
+        nightVision();
         return "";
     }
+/*
     if (command == "text font") {
         output = nativeTextFont();
         return "";
@@ -468,44 +467,40 @@ MainWindow::actuator(std::string command)
         return "";
     }
     if (command == "text italic") {
-        output = nativeTextItalic();
-        return "";
+        return nativeTextItalic();
     }
     if (command == "text underline") {
-        output = nativeTextUnderline();
-        return "";
+        return nativeTextUnderline();
     }
     if (command == "text strikeout") {
-        output = nativeTextStrikeOut();
-        return "";
+        return nativeTextStrikeOut();
     }
     if (command == "text overline") {
-        output = nativeTextOverline();
+        return nativeTextOverline();
+    }
+    if (command == "set text font") {
+        output = ""; setTextFont(args[0]);
         return "";
     }
-
-    if (command == "set text font", output = ""; nativeSetTextFont(args[0]);}
+    if (command == "set text size", output = ""; setTextSize(atoi(args[0]));}
         return "";
     }
-    if (command == "set text size", output = ""; nativeSetTextSize(atoi(args[0]));}
+    if (command == "set text angle",  output = ""; setTextAngle(args[0]);}
         return "";
     }
-"set text angle",  output = ""; nativeSetTextAngle(args[0]);}
+    if (command == "set text bold", output = ""; nativeTextBold(args[0]);}
         return "";
     }
-"set text bold", output = ""; nativeTextBold(args[0]);}
+    if (command == "set text italic", output = ""; nativeTextItalic(args[0]);}
         return "";
     }
-"set text italic", output = ""; nativeTextItalic(args[0]);}
+    if (command == "set text underline", output = ""; nativeTextUnderline(args[0]);}
         return "";
     }
-"set text underline", output = ""; nativeTextUnderline(args[0]);}
+    if (command == "set text strikeout", output = ""; nativeTextStrikeOut(args[0]);}
         return "";
     }
-"set text strikeout", output = ""; nativeTextStrikeOut(args[0]);}
-        return "";
-    }
-"set text overline", output = ""; nativeTextOverline(args[0]);}
+    if (command == "set text overline", output = ""; nativeTextOverline(args[0]);}
         return "";
     }
 
@@ -588,11 +583,21 @@ MainWindow::actuator(std::string command)
         MessageBox(); }
     if (command == "isInt") {
         IsInt(); }
-    if (command == "undo") { Undo(); }
-    if (command == "redo") { Redo(); }
-    if (command == "icon16") { Icon16(); }
-    if (command == "icon24") { Icon24(); }
-    if (command == "icon32") { Icon32(); }
+    if (command == "undo") {
+        undo();
+    }
+    if (command == "redo") {
+        Redo();
+    }
+    if (command == "icon16") {
+        icon16();
+    }
+    if (command == "icon24") {
+        icon24();
+    }
+    if (command == "icon32") {
+        icon32();
+    }
     if (command == "icon48") { Icon48(); }
     if (command == "icon64") { Icon64(); }
     if (command == "icon128") { Icon128(); }
@@ -710,23 +715,44 @@ MainWindow::actuator(std::string command)
     }
     if (command == "qsnapY") {
         scriptValQSnapY();
+        return "";
     }
     if (command == "mouseX") {
         scriptValMouseX();
+        return "";
     }
     if (command == "mouseY") {
         scriptValMouseY();
+        return "";
     }
     if (command == "include") {
         Include();
+        return "";
     }
-"Alert", nativeAlert(args[0]);
-"BlinkPrompt", nativeBlinkPrompt();
-"SetPromptPrefix", nativeSetPromptPrefix(args[0]);
-"EnablePromptRapidFire", nativeEnablePromptRapidFire();
-"DisablePromptRapidFire", nativeDisablePromptRapidFire();
-"EnableMoveRapidFire", nativeEnableMoveRapidFire();
-"DisableMoveRapidFire", nativeDisableMoveRapidFire();
+    if (command == "Alert") {
+        nativeAlert(args[0]);
+        return "";
+    }
+    if (command == "BlinkPrompt") {
+        nativeBlinkPrompt();
+        return "";
+    }
+    if (command == "SetPromptPrefix") {
+        setPromptPrefix(args[0]);
+        return "";
+    }
+    if (command == "EnablePromptRapidFire", nativeEnablePromptRapidFire();
+        return "";
+    }
+    if (command == "DisablePromptRapidFire", nativeDisablePromptRapidFire();
+        return "";
+    }
+    if (command == "EnableMoveRapidFire", nativeEnableMoveRapidFire();
+        return "";
+    }
+    if (command == "DisableMoveRapidFire", nativeDisableMoveRapidFire();
+        return "";
+    }
     */
     return "<br/><font color=\"red\">Unknown command \"" + command
         + "\". Press F1 for help.</font>";
@@ -931,7 +957,7 @@ Error(std::vector<std::string> args)
     EmbString strCmd = args(0).toString();
     EmbString strErr = args(1).toString();
 
-    mainWin()->nativeSetPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
+    mainWin()->setPromptPrefix("ERROR: (" + strCmd + ") " + strErr);
     mainWin()->nativeAppendPromptHistory(QString());
     mainWin()->nativeEndCommand();
     */
@@ -1062,7 +1088,7 @@ SetBackgroundColor(std::vector<std::string> args)
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setBackgroundColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetBackgroundColor(r, g, b);
+    mainWin()->setBackgroundColor(r, g, b);
     return "";
 }
 
@@ -1090,7 +1116,7 @@ SetCrossHairColor(std::vector<std::string> args)
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setCrossHairColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetCrossHairColor(r, g, b);
+    mainWin()->setCrossHairColor(r, g, b);
     return "";
 }
 
@@ -1115,7 +1141,7 @@ SetGridColor(std::vector<std::string> args)
     if (g < 0 || g > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): g value must be in range 0-255"); }
     if (b < 0 || b > 255) { return context->throwError(QScriptContext::UnknownError, "setGridColor(): b value must be in range 0-255"); }
 
-    mainWin()->nativeSetGridColor(r, g, b);
+    mainWin()->setGridColor(r, g, b);
     return "";
 }
 
@@ -1130,7 +1156,7 @@ SetTextSize(std::vector<std::string> args)
         return "TYPE ERROR: setTextSize(): first argument failed isNaN check. There is an error in your code.");
     }
 
-    mainWin()->nativeSetTextSize(num);
+    mainWin()->setTextSize(num);
 
 SetTextAngle(std::vector<std::string> args)
     if (args.size() != 1)    return "ERROR: setTextAngle() requires one argument");
@@ -1142,7 +1168,7 @@ SetTextAngle(std::vector<std::string> args)
     if (std::isnan(num))
         return "TYPE ERROR: setTextAngle(): first argument failed isNaN check. There is an error in your code.");
 
-    mainWin()->nativeSetTextAngle(num);
+    mainWin()->setTextAngle(num);
 
 SetTextBold(std::vector<std::string> args)
     if (args.size() != 1) {
@@ -1150,7 +1176,7 @@ SetTextBold(std::vector<std::string> args)
     }
     if (!args(0).isBool()) return "TYPE ERROR: setTextBold(): first argument is not a bool");
 
-    mainWin()->nativeSetTextBold(args(0).toBool());
+    mainWin()->setTextBold(args(0).toBool());
 
 SetTextItalic(std::vector<std::string> args)
     if (args.size() != 1)
@@ -1158,7 +1184,7 @@ SetTextItalic(std::vector<std::string> args)
     if (!args(0).isBool())
         return "TYPE ERROR: setTextItalic(): first argument is not a bool");
 
-    mainWin()->nativeSetTextItalic(args[0].toBool());
+    mainWin()->setTextItalic(args[0].toBool());
 
 SetTextUnderline(std::vector<std::string> args)
     if (args.size() != 1)
@@ -1166,13 +1192,13 @@ SetTextUnderline(std::vector<std::string> args)
     if (!args(0).isBool())
         return "TYPE ERROR: setTextUnderline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextUnderline(args(0).toBool());
+    mainWin()->setTextUnderline(args(0).toBool());
 
 SetTextStrikeOut(std::vector<std::string> args)
     if (args.size() != 1)    return "ERROR: setTextStrikeOut() requires one argument");
     if (!args(0).isBool()) return "TYPE ERROR: setTextStrikeOut(): first argument is not a bool");
 
-    mainWin()->nativeSetTextStrikeOut(args(0).toBool());
+    mainWin()->setTextStrikeOut(args(0).toBool());
 
 /**
  * \brief
@@ -1183,7 +1209,7 @@ SetTextOverline(std::vector<std::string> args)
     if (args.size() != 1)    return "ERROR: setTextOverline() requires one argument");
     if (!args(0).isBool()) return "TYPE ERROR: setTextOverline(): first argument is not a bool");
 
-    mainWin()->nativeSetTextOverline(args(0).toBool());
+    mainWin()->setTextOverline(args(0).toBool());
     return "";
 }
 
@@ -1241,32 +1267,32 @@ SetRubberMode(std::vector<std::string> args)
     EmbString mode = args(0).toString().toUpper();
 
     if (mode == "CIRCLE_1P_RAD") {
-        mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
+        mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_1P_RAD);
     }
-    else if (mode == "CIRCLE_1P_DIA") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
-    else if (mode == "CIRCLE_2P") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_2P); }
-    else if (mode == "CIRCLE_3P") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_3P); }
-    else if (mode == "CIRCLE_TTR") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
-    else if (mode == "CIRCLE_TTR") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
+    else if (mode == "CIRCLE_1P_DIA") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_1P_DIA); }
+    else if (mode == "CIRCLE_2P") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_2P); }
+    else if (mode == "CIRCLE_3P") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_3P); }
+    else if (mode == "CIRCLE_TTR") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_TTR); }
+    else if (mode == "CIRCLE_TTR") { mainWin()->setRubberMode(OBJ_RUBBER_CIRCLE_TTT); }
 
-    else if (mode == "DIMLEADER_LINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
+    else if (mode == "DIMLEADER_LINE") { mainWin()->setRubberMode(OBJ_RUBBER_DIMLEADER_LINE); }
 
-    else if (mode == "ELLIPSE_LINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
-    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
-    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
-    else if (mode == "ELLIPSE_ROTATION") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
+    else if (mode == "ELLIPSE_LINE") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_LINE); }
+    else if (mode == "ELLIPSE_MAJORDIAMETER_MINORRADIUS") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS); }
+    else if (mode == "ELLIPSE_MAJORRADIUS_MINORRADIUS") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS); }
+    else if (mode == "ELLIPSE_ROTATION") { mainWin()->setRubberMode(OBJ_RUBBER_ELLIPSE_ROTATION); }
 
-    else if (mode == "LINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_LINE); }
+    else if (mode == "LINE") { mainWin()->setRubberMode(OBJ_RUBBER_LINE); }
 
-    else if (mode == "POLYGON") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON); }
-    else if (mode == "POLYGON_INSCRIBE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
-    else if (mode == "POLYGON_CIRCUMSCRIBE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
+    else if (mode == "POLYGON") { mainWin()->setRubberMode(OBJ_RUBBER_POLYGON); }
+    else if (mode == "POLYGON_INSCRIBE") { mainWin()->setRubberMode(OBJ_RUBBER_POLYGON_INSCRIBE); }
+    else if (mode == "POLYGON_CIRCUMSCRIBE") { mainWin()->setRubberMode(OBJ_RUBBER_POLYGON_CIRCUMSCRIBE); }
 
-    else if (mode == "POLYLINE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_POLYLINE); }
+    else if (mode == "POLYLINE") { mainWin()->setRubberMode(OBJ_RUBBER_POLYLINE); }
 
-    else if (mode == "RECTANGLE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_RECTANGLE); }
+    else if (mode == "RECTANGLE") { mainWin()->setRubberMode(OBJ_RUBBER_RECTANGLE); }
 
-    else if (mode == "TEXTSINGLE") { mainWin()->nativeSetRubberMode(OBJ_RUBBER_TEXTSINGLE); }
+    else if (mode == "TEXTSINGLE") { mainWin()->setRubberMode(OBJ_RUBBER_TEXTSINGLE); }
 
     else                                                 { return context->throwError(QScriptContext::UnknownError, "setRubberMode(): unknown rubberMode value"); }
 
@@ -1304,7 +1330,7 @@ SetRubberPoint(std::vector<std::string> args)
         return "TYPE ERROR: setRubberPoint(): third argument failed isNaN check. There is an error in your code.");
     }
 
-    mainWin()->nativeSetRubberPoint(key, x, y);
+    mainWin()->setRubberPoint(key, x, y);
     return "";
 }
 
@@ -1321,7 +1347,7 @@ SetRubberText(std::vector<std::string> args)
     EmbString key = args(0).toString().toUpper();
     EmbString txt = args(1).toString();
 
-    mainWin()->nativeSetRubberText(key, txt);
+    mainWin()->setRubberText(key, txt);
     return "";
 }
 
@@ -1896,7 +1922,7 @@ SetCursorShape(std::vector<std::string> args)
     if (!args(0).isString()) return "TYPE ERROR: setCursorShape(): first argument is not a string");
 
     EmbString shape = args(0).toString();
-    mainWin()->nativeSetCursorShape(shape);
+    mainWin()->setCursorShape(shape);
     return "";
 }
 

@@ -2,7 +2,7 @@
 \label{class_ellipse_object}\index{EllipseObject@{EllipseObject}}
 
 
-{\ttfamily \#include $<$object-\/ellipse.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
@@ -13,39 +13,37 @@ enum \{ \mbox{\hyperlink{class_ellipse_object_adc29c2ff13d900c2f185ee95427fb06ca
 \doxyparagraph*{Public Types inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-enum \{ \mbox{\hyperlink{class_base_object_adf764cbdea00d65edcd07bb9953ad2b7a56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
+enum \{ \mbox{\hyperlink{class_base_object_a06fc87d81c62e9abb8790b6e5713c55ba56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
  \}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_ellipse_object_ab3b83c00a93a95ca1fb3687a74683975}{Ellipse\+Object}} (qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, QGraphics\+Item $\ast$parent=0)
+\mbox{\hyperlink{class_ellipse_object_ae10de046ea7018c800389ea3ae770ca4}{Ellipse\+Object}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} width, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} height, QRgb rgb, QGraphics\+Item $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_ellipse_object_aeb8df5faa02dae96ed3ca12247ebec3b}{Ellipse\+Object}} (\mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} $\ast$obj, QGraphics\+Item $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_ellipse_object_a4af49ee541a5ac77011f084eb4170969}{$\sim$\+Ellipse\+Object}} ()
 \item 
+void \mbox{\hyperlink{class_ellipse_object_aa86daf4b698866afce276162fccfa85d}{init}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} width, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} height, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{class_ellipse_object_a039f7f27373baf7ff380fc8977240095}{update\+Path}} ()
+\item 
 virtual int \mbox{\hyperlink{class_ellipse_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}} () const
 \item 
 QPainter\+Path \mbox{\hyperlink{class_ellipse_object_ac103a3e4474b084a48281e9409087272}{object\+Save\+Path}} () const
 \item 
-QPointF \mbox{\hyperlink{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}{object\+Center}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_ellipse_object_a9c0745d78f8b695f258073bbfad65c26}{object\+Radius\+Major}} () const
 \item 
-qreal \mbox{\hyperlink{class_ellipse_object_a38eb9c1ac0dba70c03c0aaf009b52359}{object\+CenterX}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_ellipse_object_a34e8f75c88c47a0d1fa49d0183527776}{object\+Radius\+Minor}} () const
 \item 
-qreal \mbox{\hyperlink{class_ellipse_object_ae515447aa537443a37150ebf9aa0dc9b}{object\+CenterY}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_ellipse_object_a6c6019d9ecf5a55e4264da2b58694f96}{object\+Diameter\+Major}} () const
 \item 
-qreal \mbox{\hyperlink{class_ellipse_object_a3ce7a38d309dabfc1ee75bf00667f579}{object\+Radius\+Major}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_ellipse_object_afd301779725e605f5a68faa75cab88b6}{object\+Diameter\+Minor}} () const
 \item 
-qreal \mbox{\hyperlink{class_ellipse_object_add10312e541574a1af2ed45db344633f}{object\+Radius\+Minor}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_ellipse_object_a1cf0f8f89e0c7e34bee6b130e9e781a2}{object\+Width}} () const
 \item 
-qreal \mbox{\hyperlink{class_ellipse_object_a8f3b5ae65ed8205f4014bd9c1dc40fb6}{object\+Diameter\+Major}} () const
-\item 
-qreal \mbox{\hyperlink{class_ellipse_object_a5a3457c14dd31131f2624b132ae2bbee}{object\+Diameter\+Minor}} () const
-\item 
-qreal \mbox{\hyperlink{class_ellipse_object_a06947a77020f6b0ad9767647472817ff}{object\+Width}} () const
-\item 
-qreal \mbox{\hyperlink{class_ellipse_object_a732d1bafb2973d70809b7b4ffc490e53}{object\+Height}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_ellipse_object_a8b32d2fe97aba53df24ccb52bd8c45d0}{object\+Height}} () const
 \item 
 QPointF \mbox{\hyperlink{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}{object\+Quadrant0}} () const
 \item 
@@ -55,23 +53,15 @@ QPointF \mbox{\hyperlink{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}
 \item 
 QPointF \mbox{\hyperlink{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}{object\+Quadrant270}} () const
 \item 
-void \mbox{\hyperlink{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}{set\+Object\+Size}} (qreal width, qreal height)
+void \mbox{\hyperlink{class_ellipse_object_ab26096023d9c94ac4d05d0b65f432433}{set\+Object\+Size}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} width, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} height)
 \item 
-void \mbox{\hyperlink{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}{set\+Object\+Center}} (const QPointF \&center)
+void \mbox{\hyperlink{class_ellipse_object_a349034f12af2783a9fc9300852448a28}{set\+Object\+Radius\+Major}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radius)
 \item 
-void \mbox{\hyperlink{class_ellipse_object_acaf966b0c2d06eec5f95ecceda481e52}{set\+Object\+Center}} (qreal centerX, qreal centerY)
+void \mbox{\hyperlink{class_ellipse_object_af9784975bc2244a286aa596a74c50c78}{set\+Object\+Radius\+Minor}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} radius)
 \item 
-void \mbox{\hyperlink{class_ellipse_object_a147b2ff3561d389cbe579134f3080cf3}{set\+Object\+CenterX}} (qreal centerX)
+void \mbox{\hyperlink{class_ellipse_object_af43110139375d00ef5c2dbcce6f825a6}{set\+Object\+Diameter\+Major}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} diameter)
 \item 
-void \mbox{\hyperlink{class_ellipse_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}{set\+Object\+CenterY}} (qreal centerY)
-\item 
-void \mbox{\hyperlink{class_ellipse_object_acea0f957dab3876197f2210c71b567a5}{set\+Object\+Radius\+Major}} (qreal radius)
-\item 
-void \mbox{\hyperlink{class_ellipse_object_a2ab4bb6691afe0de34d0bbeb6b158b88}{set\+Object\+Radius\+Minor}} (qreal radius)
-\item 
-void \mbox{\hyperlink{class_ellipse_object_a89413638132f1817d4edf2c4f9fc1576}{set\+Object\+Diameter\+Major}} (qreal diameter)
-\item 
-void \mbox{\hyperlink{class_ellipse_object_a38d2a9005168c1e8011ed7d812f010f4}{set\+Object\+Diameter\+Minor}} (qreal diameter)
+void \mbox{\hyperlink{class_ellipse_object_aaa9c07c9c123e62f2610b5cc740adb6f}{set\+Object\+Diameter\+Minor}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} diameter)
 \item 
 void \mbox{\hyperlink{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}{update\+Rubber}} (QPainter $\ast$painter=0)
 \item 
@@ -102,7 +92,7 @@ QRgb \mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objec
 \item 
 Qt\+::\+Pen\+Style \mbox{\hyperlink{class_base_object_ae0a604004cfeb357f0548b2f6e57b598}{object\+Line\+Type}} () const
 \item 
-qreal \mbox{\hyperlink{class_base_object_a35cd00e428fb7d678fdf3910a24a42d6}{object\+Line\+Weight}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a1a128171318d66ad813ee9389e54d084}{object\+Line\+Weight}} () const
 \item 
 QPainter\+Path \mbox{\hyperlink{class_base_object_a412eb69dc8fcb917011df8514ca2ffdd}{object\+Path}} () const
 \item 
@@ -112,17 +102,29 @@ QPointF \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{ob
 \item 
 QString \mbox{\hyperlink{class_base_object_abde4bc1ba52dda6ce2c750727b3d1c17}{object\+Rubber\+Text}} (const QString \&key) const
 \item 
+QPointF \mbox{\hyperlink{class_base_object_a6e02f5f5c100974d3300f0676e28f21b}{object\+Center}} () const
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a01bd01f5638cd6900cf3508eeb56c050}{object\+CenterX}} () const
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a0c5cda475129b6a745d0303b9f091ce4}{object\+CenterY}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_ac66c41fce2b0e882f8979c94da33af98}{set\+Object\+Center}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} center)
+\item 
+void \mbox{\hyperlink{class_base_object_a088d122cd2f294797b3d912fa5d77f7d}{set\+Object\+CenterX}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX)
+\item 
+void \mbox{\hyperlink{class_base_object_a7fde4e68a4b06fd94c64f6bc55d94263}{set\+Object\+CenterY}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY)
+\item 
 QRectF \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}} () const
 \item 
 void \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{set\+Rect}} (const QRectF \&r)
 \item 
-void \mbox{\hyperlink{class_base_object_af2b0fbb979971d15e5f2b02a2a7d1abf}{set\+Rect}} (qreal x, qreal y, qreal w, qreal h)
+void \mbox{\hyperlink{class_base_object_aac7bf9412ec3b195464feb6a36148d99}{set\+Rect}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} w, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} h)
 \item 
 QLineF \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}} () const
 \item 
 void \mbox{\hyperlink{class_base_object_a321d2d38e3176c39656090d311ea753e}{set\+Line}} (const QLineF \&li)
 \item 
-void \mbox{\hyperlink{class_base_object_ade461de6393f7953c6f2e5167cca5be7}{set\+Line}} (qreal x1, qreal y1, qreal x2, qreal y2)
+void \mbox{\hyperlink{class_base_object_a69935f9f192b284399c79e5b1ede9a14}{set\+Line}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
 \item 
 void \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{set\+Object\+Color}} (const QColor \&color)
 \item 
@@ -130,7 +132,7 @@ void \mbox{\hyperlink{class_base_object_aa67b1eed03b12bc06fbca3db567eb56d}{set\+
 \item 
 void \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{set\+Object\+Line\+Type}} (Qt\+::\+Pen\+Style line\+Type)
 \item 
-void \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{set\+Object\+Line\+Weight}} (qreal line\+Weight)
+void \mbox{\hyperlink{class_base_object_ad12aba3f58db683304dcde1f65d92c93}{set\+Object\+Line\+Weight}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} line\+Weight)
 \item 
 void \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{set\+Object\+Path}} (const QPainter\+Path \&p)
 \item 
@@ -164,20 +166,25 @@ void \mbox{\hyperlink{class_ellipse_object_a8c124c843504f6971f6677f12ac9247f}{pa
 \item 
 QPen \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{line\+Weight\+Pen}} () const
 \item 
-qreal \mbox{\hyperlink{class_base_object_ab5ad5bd82be7c0e997b240dc84a41f2a}{pi}} () const
-\item 
-qreal \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}} (qreal degree) const
-\item 
-qreal \mbox{\hyperlink{class_base_object_af1174f0ca1609e6e5efc8078b0170962}{degrees}} (qreal radian) const
-\item 
 void \mbox{\hyperlink{class_base_object_a7f8405662dc85ae3f3e257c36a065c8d}{real\+Render}} (QPainter $\ast$painter, const QPainter\+Path \&render\+Path)
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
+\doxysubsubsection*{Additional Inherited Members}
+\doxyparagraph*{Public Attributes inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-void \mbox{\hyperlink{class_ellipse_object_a0db799a5ecf0037124029974c5e8857a}{init}} (qreal centerX, qreal centerY, qreal width, qreal height, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+QPen \mbox{\hyperlink{class_base_object_a2b56b214c2181ebc987cea243ad90d84}{obj\+Pen}}
 \item 
-void \mbox{\hyperlink{class_ellipse_object_a039f7f27373baf7ff380fc8977240095}{update\+Path}} ()
+QPen \mbox{\hyperlink{class_base_object_ade83f75b3122d793d6f692ed411921da}{lwt\+Pen}}
+\item 
+QLineF \mbox{\hyperlink{class_base_object_a354490514773214110dd038847f7510e}{obj\+Line}}
+\item 
+int \mbox{\hyperlink{class_base_object_a53e2d92993be951f9e5cdadb82fae316}{obj\+Rubber\+Mode}}
+\item 
+QHash$<$ QString, QPointF $>$ \mbox{\hyperlink{class_base_object_a7369d3b6403fe2ffbebaa63ad51bf609}{obj\+Rubber\+Points}}
+\item 
+QHash$<$ QString, QString $>$ \mbox{\hyperlink{class_base_object_a520c9eb8e88469046cdaab1f3d679e69}{obj\+Rubber\+Texts}}
+\item 
+qint64 \mbox{\hyperlink{class_base_object_a41f66da1ca9ecaeb4f57c60ea008b09c}{obj\+ID}}
 \end{DoxyCompactItemize}
 
 
@@ -195,17 +202,25 @@ Type&\\
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_ellipse_object_ab3b83c00a93a95ca1fb3687a74683975}\label{class_ellipse_object_ab3b83c00a93a95ca1fb3687a74683975}} 
+\mbox{\Hypertarget{class_ellipse_object_ae10de046ea7018c800389ea3ae770ca4}\label{class_ellipse_object_ae10de046ea7018c800389ea3ae770ca4}} 
 \index{EllipseObject@{EllipseObject}!EllipseObject@{EllipseObject}}
 \index{EllipseObject@{EllipseObject}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{EllipseObject()}{EllipseObject()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} (\begin{DoxyParamCaption}\item[{qreal}]{centerX,  }\item[{qreal}]{centerY,  }\item[{qreal}]{width,  }\item[{qreal}]{height,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerY,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{width,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_aeb8df5faa02dae96ed3ca12247ebec3b}\label{class_ellipse_object_aeb8df5faa02dae96ed3ca12247ebec3b}} 
 \index{EllipseObject@{EllipseObject}!EllipseObject@{EllipseObject}}
 \index{EllipseObject@{EllipseObject}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{EllipseObject()}{EllipseObject()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_ellipse_object}{Ellipse\+Object}} $\ast$}]{obj,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_a4af49ee541a5ac77011f084eb4170969}\label{class_ellipse_object_a4af49ee541a5ac77011f084eb4170969}} 
 \index{EllipseObject@{EllipseObject}!````~EllipseObject@{$\sim$EllipseObject}}
@@ -215,12 +230,20 @@ Type&\\
 
 
 
+
+
+
+
 \doxysubsubsection{Member Function Documentation}
 \mbox{\Hypertarget{class_ellipse_object_acfde9da59c0bbaaab7decdc222aa38a3}\label{class_ellipse_object_acfde9da59c0bbaaab7decdc222aa38a3}} 
 \index{EllipseObject@{EllipseObject}!allGripPoints@{allGripPoints}}
 \index{allGripPoints@{allGripPoints}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{allGripPoints()}{allGripPoints()}}
 {\footnotesize\ttfamily QList$<$ QPointF $>$ all\+Grip\+Points (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+
 
 
 
@@ -234,13 +257,21 @@ Implements \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}
 
 
 
+
+
+
+
 Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{Base\+Object}}.
 
-\mbox{\Hypertarget{class_ellipse_object_a0db799a5ecf0037124029974c5e8857a}\label{class_ellipse_object_a0db799a5ecf0037124029974c5e8857a}} 
+\mbox{\Hypertarget{class_ellipse_object_aa86daf4b698866afce276162fccfa85d}\label{class_ellipse_object_aa86daf4b698866afce276162fccfa85d}} 
 \index{EllipseObject@{EllipseObject}!init@{init}}
 \index{init@{init}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{init()}{init()}}
-{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{qreal}]{centerX,  }\item[{qreal}]{centerY,  }\item[{qreal}]{width,  }\item[{qreal}]{height,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerX,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{centerY,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{width,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}\label{class_ellipse_object_a71dcd474d5a8c0e5fdc137b48da18a0c}} 
 \index{EllipseObject@{EllipseObject}!mouseSnapPoint@{mouseSnapPoint}}
@@ -250,43 +281,29 @@ Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}
 
 
 
+
+
+
+
 Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}{Base\+Object}}.
 
-\mbox{\Hypertarget{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}\label{class_ellipse_object_a6e02f5f5c100974d3300f0676e28f21b}} 
-\index{EllipseObject@{EllipseObject}!objectCenter@{objectCenter}}
-\index{objectCenter@{objectCenter}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{objectCenter()}{objectCenter()}}
-{\footnotesize\ttfamily QPointF object\+Center (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_ellipse_object_a38eb9c1ac0dba70c03c0aaf009b52359}\label{class_ellipse_object_a38eb9c1ac0dba70c03c0aaf009b52359}} 
-\index{EllipseObject@{EllipseObject}!objectCenterX@{objectCenterX}}
-\index{objectCenterX@{objectCenterX}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{objectCenterX()}{objectCenterX()}}
-{\footnotesize\ttfamily qreal object\+CenterX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_ellipse_object_ae515447aa537443a37150ebf9aa0dc9b}\label{class_ellipse_object_ae515447aa537443a37150ebf9aa0dc9b}} 
-\index{EllipseObject@{EllipseObject}!objectCenterY@{objectCenterY}}
-\index{objectCenterY@{objectCenterY}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{objectCenterY()}{objectCenterY()}}
-{\footnotesize\ttfamily qreal object\+CenterY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
-
-\mbox{\Hypertarget{class_ellipse_object_a8f3b5ae65ed8205f4014bd9c1dc40fb6}\label{class_ellipse_object_a8f3b5ae65ed8205f4014bd9c1dc40fb6}} 
+\mbox{\Hypertarget{class_ellipse_object_a6c6019d9ecf5a55e4264da2b58694f96}\label{class_ellipse_object_a6c6019d9ecf5a55e4264da2b58694f96}} 
 \index{EllipseObject@{EllipseObject}!objectDiameterMajor@{objectDiameterMajor}}
 \index{objectDiameterMajor@{objectDiameterMajor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectDiameterMajor()}{objectDiameterMajor()}}
-{\footnotesize\ttfamily qreal object\+Diameter\+Major (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Diameter\+Major (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_ellipse_object_a5a3457c14dd31131f2624b132ae2bbee}\label{class_ellipse_object_a5a3457c14dd31131f2624b132ae2bbee}} 
+\mbox{\Hypertarget{class_ellipse_object_afd301779725e605f5a68faa75cab88b6}\label{class_ellipse_object_afd301779725e605f5a68faa75cab88b6}} 
 \index{EllipseObject@{EllipseObject}!objectDiameterMinor@{objectDiameterMinor}}
 \index{objectDiameterMinor@{objectDiameterMinor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectDiameterMinor()}{objectDiameterMinor()}}
-{\footnotesize\ttfamily qreal object\+Diameter\+Minor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Diameter\+Minor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_ellipse_object_a732d1bafb2973d70809b7b4ffc490e53}\label{class_ellipse_object_a732d1bafb2973d70809b7b4ffc490e53}} 
+\mbox{\Hypertarget{class_ellipse_object_a8b32d2fe97aba53df24ccb52bd8c45d0}\label{class_ellipse_object_a8b32d2fe97aba53df24ccb52bd8c45d0}} 
 \index{EllipseObject@{EllipseObject}!objectHeight@{objectHeight}}
 \index{objectHeight@{objectHeight}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectHeight()}{objectHeight()}}
-{\footnotesize\ttfamily qreal object\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}\label{class_ellipse_object_a989f52950c0f699cd0b5bb863fd2eba1}} 
 \index{EllipseObject@{EllipseObject}!objectQuadrant0@{objectQuadrant0}}
@@ -294,11 +311,19 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{objectQuadrant0()}{objectQuadrant0()}}
 {\footnotesize\ttfamily QPointF object\+Quadrant0 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
+
+
+
+
 \mbox{\Hypertarget{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}\label{class_ellipse_object_a6f45a549f7ea8538c71e26e754d638da}} 
 \index{EllipseObject@{EllipseObject}!objectQuadrant180@{objectQuadrant180}}
 \index{objectQuadrant180@{objectQuadrant180}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectQuadrant180()}{objectQuadrant180()}}
 {\footnotesize\ttfamily QPointF object\+Quadrant180 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}\label{class_ellipse_object_a5e9d2f3ea2c1b533c55a9ec0f15bbd80}} 
 \index{EllipseObject@{EllipseObject}!objectQuadrant270@{objectQuadrant270}}
@@ -306,23 +331,31 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{objectQuadrant270()}{objectQuadrant270()}}
 {\footnotesize\ttfamily QPointF object\+Quadrant270 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
+
+
+
+
 \mbox{\Hypertarget{class_ellipse_object_a9f6924403c5064c4c0bef05f4bc353e5}\label{class_ellipse_object_a9f6924403c5064c4c0bef05f4bc353e5}} 
 \index{EllipseObject@{EllipseObject}!objectQuadrant90@{objectQuadrant90}}
 \index{objectQuadrant90@{objectQuadrant90}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectQuadrant90()}{objectQuadrant90()}}
 {\footnotesize\ttfamily QPointF object\+Quadrant90 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
-\mbox{\Hypertarget{class_ellipse_object_a3ce7a38d309dabfc1ee75bf00667f579}\label{class_ellipse_object_a3ce7a38d309dabfc1ee75bf00667f579}} 
+
+
+
+
+\mbox{\Hypertarget{class_ellipse_object_a9c0745d78f8b695f258073bbfad65c26}\label{class_ellipse_object_a9c0745d78f8b695f258073bbfad65c26}} 
 \index{EllipseObject@{EllipseObject}!objectRadiusMajor@{objectRadiusMajor}}
 \index{objectRadiusMajor@{objectRadiusMajor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectRadiusMajor()}{objectRadiusMajor()}}
-{\footnotesize\ttfamily qreal object\+Radius\+Major (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Radius\+Major (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_ellipse_object_add10312e541574a1af2ed45db344633f}\label{class_ellipse_object_add10312e541574a1af2ed45db344633f}} 
+\mbox{\Hypertarget{class_ellipse_object_a34e8f75c88c47a0d1fa49d0183527776}\label{class_ellipse_object_a34e8f75c88c47a0d1fa49d0183527776}} 
 \index{EllipseObject@{EllipseObject}!objectRadiusMinor@{objectRadiusMinor}}
 \index{objectRadiusMinor@{objectRadiusMinor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectRadiusMinor()}{objectRadiusMinor()}}
-{\footnotesize\ttfamily qreal object\+Radius\+Minor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Radius\+Minor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_ellipse_object_ac103a3e4474b084a48281e9409087272}\label{class_ellipse_object_ac103a3e4474b084a48281e9409087272}} 
 \index{EllipseObject@{EllipseObject}!objectSavePath@{objectSavePath}}
@@ -330,11 +363,15 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{objectSavePath()}{objectSavePath()}}
 {\footnotesize\ttfamily QPainter\+Path object\+Save\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
-\mbox{\Hypertarget{class_ellipse_object_a06947a77020f6b0ad9767647472817ff}\label{class_ellipse_object_a06947a77020f6b0ad9767647472817ff}} 
+
+
+
+
+\mbox{\Hypertarget{class_ellipse_object_a1cf0f8f89e0c7e34bee6b130e9e781a2}\label{class_ellipse_object_a1cf0f8f89e0c7e34bee6b130e9e781a2}} 
 \index{EllipseObject@{EllipseObject}!objectWidth@{objectWidth}}
 \index{objectWidth@{objectWidth}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{objectWidth()}{objectWidth()}}
-{\footnotesize\ttfamily qreal object\+Width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Width (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_ellipse_object_a8c124c843504f6971f6677f12ac9247f}\label{class_ellipse_object_a8c124c843504f6971f6677f12ac9247f}} 
 \index{EllipseObject@{EllipseObject}!paint@{paint}}
@@ -342,59 +379,59 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{paint()}{paint()}}
 {\footnotesize\ttfamily void paint (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter,  }\item[{const QStyle\+Option\+Graphics\+Item $\ast$}]{option,  }\item[{QWidget $\ast$}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}}
 
-\mbox{\Hypertarget{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}\label{class_ellipse_object_aa52e174cba0d91d43fc71fbd4ef128d7}} 
-\index{EllipseObject@{EllipseObject}!setObjectCenter@{setObjectCenter}}
-\index{setObjectCenter@{setObjectCenter}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{setObjectCenter()}{setObjectCenter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily void set\+Object\+Center (\begin{DoxyParamCaption}\item[{const QPointF \&}]{center }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_acaf966b0c2d06eec5f95ecceda481e52}\label{class_ellipse_object_acaf966b0c2d06eec5f95ecceda481e52}} 
-\index{EllipseObject@{EllipseObject}!setObjectCenter@{setObjectCenter}}
-\index{setObjectCenter@{setObjectCenter}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{setObjectCenter()}{setObjectCenter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void set\+Object\+Center (\begin{DoxyParamCaption}\item[{qreal}]{centerX,  }\item[{qreal}]{centerY }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_a147b2ff3561d389cbe579134f3080cf3}\label{class_ellipse_object_a147b2ff3561d389cbe579134f3080cf3}} 
-\index{EllipseObject@{EllipseObject}!setObjectCenterX@{setObjectCenterX}}
-\index{setObjectCenterX@{setObjectCenterX}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{setObjectCenterX()}{setObjectCenterX()}}
-{\footnotesize\ttfamily void set\+Object\+CenterX (\begin{DoxyParamCaption}\item[{qreal}]{centerX }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}\label{class_ellipse_object_a37b66fbeeb02558c1a8f0f2ceb8cee69}} 
-\index{EllipseObject@{EllipseObject}!setObjectCenterY@{setObjectCenterY}}
-\index{setObjectCenterY@{setObjectCenterY}!EllipseObject@{EllipseObject}}
-\doxyparagraph{\texorpdfstring{setObjectCenterY()}{setObjectCenterY()}}
-{\footnotesize\ttfamily void set\+Object\+CenterY (\begin{DoxyParamCaption}\item[{qreal}]{centerY }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_a89413638132f1817d4edf2c4f9fc1576}\label{class_ellipse_object_a89413638132f1817d4edf2c4f9fc1576}} 
+\mbox{\Hypertarget{class_ellipse_object_af43110139375d00ef5c2dbcce6f825a6}\label{class_ellipse_object_af43110139375d00ef5c2dbcce6f825a6}} 
 \index{EllipseObject@{EllipseObject}!setObjectDiameterMajor@{setObjectDiameterMajor}}
 \index{setObjectDiameterMajor@{setObjectDiameterMajor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{setObjectDiameterMajor()}{setObjectDiameterMajor()}}
-{\footnotesize\ttfamily void set\+Object\+Diameter\+Major (\begin{DoxyParamCaption}\item[{qreal}]{diameter }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void set\+Object\+Diameter\+Major (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{diameter }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_a38d2a9005168c1e8011ed7d812f010f4}\label{class_ellipse_object_a38d2a9005168c1e8011ed7d812f010f4}} 
+
+
+
+
+\mbox{\Hypertarget{class_ellipse_object_aaa9c07c9c123e62f2610b5cc740adb6f}\label{class_ellipse_object_aaa9c07c9c123e62f2610b5cc740adb6f}} 
 \index{EllipseObject@{EllipseObject}!setObjectDiameterMinor@{setObjectDiameterMinor}}
 \index{setObjectDiameterMinor@{setObjectDiameterMinor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{setObjectDiameterMinor()}{setObjectDiameterMinor()}}
-{\footnotesize\ttfamily void set\+Object\+Diameter\+Minor (\begin{DoxyParamCaption}\item[{qreal}]{diameter }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void set\+Object\+Diameter\+Minor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{diameter }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_acea0f957dab3876197f2210c71b567a5}\label{class_ellipse_object_acea0f957dab3876197f2210c71b567a5}} 
+
+
+
+
+\mbox{\Hypertarget{class_ellipse_object_a349034f12af2783a9fc9300852448a28}\label{class_ellipse_object_a349034f12af2783a9fc9300852448a28}} 
 \index{EllipseObject@{EllipseObject}!setObjectRadiusMajor@{setObjectRadiusMajor}}
 \index{setObjectRadiusMajor@{setObjectRadiusMajor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{setObjectRadiusMajor()}{setObjectRadiusMajor()}}
-{\footnotesize\ttfamily void set\+Object\+Radius\+Major (\begin{DoxyParamCaption}\item[{qreal}]{radius }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void set\+Object\+Radius\+Major (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{radius }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_a2ab4bb6691afe0de34d0bbeb6b158b88}\label{class_ellipse_object_a2ab4bb6691afe0de34d0bbeb6b158b88}} 
+
+
+
+
+\mbox{\Hypertarget{class_ellipse_object_af9784975bc2244a286aa596a74c50c78}\label{class_ellipse_object_af9784975bc2244a286aa596a74c50c78}} 
 \index{EllipseObject@{EllipseObject}!setObjectRadiusMinor@{setObjectRadiusMinor}}
 \index{setObjectRadiusMinor@{setObjectRadiusMinor}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{setObjectRadiusMinor()}{setObjectRadiusMinor()}}
-{\footnotesize\ttfamily void set\+Object\+Radius\+Minor (\begin{DoxyParamCaption}\item[{qreal}]{radius }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void set\+Object\+Radius\+Minor (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{radius }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}\label{class_ellipse_object_a1879bfa0a3aab6074f9582e517fcfbe9}} 
+
+
+
+
+\mbox{\Hypertarget{class_ellipse_object_ab26096023d9c94ac4d05d0b65f432433}\label{class_ellipse_object_ab26096023d9c94ac4d05d0b65f432433}} 
 \index{EllipseObject@{EllipseObject}!setObjectSize@{setObjectSize}}
 \index{setObjectSize@{setObjectSize}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{setObjectSize()}{setObjectSize()}}
-{\footnotesize\ttfamily void set\+Object\+Size (\begin{DoxyParamCaption}\item[{qreal}]{width,  }\item[{qreal}]{height }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void set\+Object\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{width,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{height }\end{DoxyParamCaption})}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_a67b824a3d6f5f8dc7b9f435353c62676}\label{class_ellipse_object_a67b824a3d6f5f8dc7b9f435353c62676}} 
 \index{EllipseObject@{EllipseObject}!type@{type}}
@@ -410,13 +447,21 @@ Reimplemented from \mbox{\hyperlink{class_base_object_a67b824a3d6f5f8dc7b9f43535
 \index{EllipseObject@{EllipseObject}!updatePath@{updatePath}}
 \index{updatePath@{updatePath}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{updatePath()}{updatePath()}}
-{\footnotesize\ttfamily void update\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void update\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}\label{class_ellipse_object_add4e11623be9bc6e02557c67674564ed}} 
 \index{EllipseObject@{EllipseObject}!updateRubber@{updateRubber}}
 \index{updateRubber@{updateRubber}!EllipseObject@{EllipseObject}}
 \doxyparagraph{\texorpdfstring{updateRubber()}{updateRubber()}}
 {\footnotesize\ttfamily void update\+Rubber (\begin{DoxyParamCaption}\item[{QPainter $\ast$}]{painter = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+
 
 \mbox{\Hypertarget{class_ellipse_object_a814830f38fd2c36b3f96252ee65d7617}\label{class_ellipse_object_a814830f38fd2c36b3f96252ee65d7617}} 
 \index{EllipseObject@{EllipseObject}!vulcanize@{vulcanize}}
@@ -426,11 +471,15 @@ Reimplemented from \mbox{\hyperlink{class_base_object_a67b824a3d6f5f8dc7b9f43535
 
 
 
+
+
+
+
 Implements \mbox{\hyperlink{class_base_object_ac256400a6f25c6c8af7e18e1ac1a0181}{Base\+Object}}.
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{object-ellipse_8h}{object-\/ellipse.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{object-ellipse_8cpp}{object-\/ellipse.\+cpp}}\end{DoxyCompactItemize}

@@ -101,49 +101,41 @@ $(document).ready(function(){initNavTree('class_undoable_rotate_command.html',''
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_undoable_rotate_command-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">UndoableRotateCommand Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="undo-commands_8h_source.html">undo-commands.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a83a0197d8813e95241b320139603fc89"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a83a0197d8813e95241b320139603fc89">UndoableRotateCommand</a> (qreal pivotPointX, qreal pivotPointY, qreal rotAngle, const QString &amp;text, <a class="el" href="class_base_object.html">BaseObject</a> *obj, <a class="el" href="class_view.html">View</a> *v, QUndoCommand *parent=0)</td></tr>
-<tr class="separator:a83a0197d8813e95241b320139603fc89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a249239cd50289ba54def50c02126ee7f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a249239cd50289ba54def50c02126ee7f">UndoableRotateCommand</a> (<a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> pivotPointX, <a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> pivotPointY, <a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> rotAngle, const QString &amp;text, <a class="el" href="class_base_object.html">BaseObject</a> *obj, <a class="el" href="class_view.html">View</a> *v, QUndoCommand *parent=0)</td></tr>
+<tr class="separator:a249239cd50289ba54def50c02126ee7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e1e7804a53f6d62efc72c9bdbec8571"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a0e1e7804a53f6d62efc72c9bdbec8571">undo</a> ()</td></tr>
 <tr class="separator:a0e1e7804a53f6d62efc72c9bdbec8571"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93c48d6ed036e1a381be53ac67643284"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a93c48d6ed036e1a381be53ac67643284">redo</a> ()</td></tr>
 <tr class="separator:a93c48d6ed036e1a381be53ac67643284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51576e708df32279e01321cebf9279d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a51576e708df32279e01321cebf9279d2">rotate</a> (<a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> x, <a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> y, <a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> rot)</td></tr>
+<tr class="separator:a51576e708df32279e01321cebf9279d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a521c88e7fec79196ea48330175ada7e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a521c88e7fec79196ea48330175ada7e3">rotate</a> (qreal x, qreal y, qreal rot)</td></tr>
-<tr class="separator:a521c88e7fec79196ea48330175ada7e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a198c35d0f4b77c21af2adcc0d28b3abb"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a198c35d0f4b77c21af2adcc0d28b3abb">pi</a> ()</td></tr>
-<tr class="separator:a198c35d0f4b77c21af2adcc0d28b3abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac59979622741dac009ccdbeac2503662"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#ac59979622741dac009ccdbeac2503662">radians</a> (qreal <a class="el" href="embroidery_8h.html#aaccc2423db2913edc508bd03bbdbde71">degrees</a>)</td></tr>
-<tr class="separator:ac59979622741dac009ccdbeac2503662"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
 <tr class="memitem:a2e1f84592366462c24fc68dff57b903c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_base_object.html">BaseObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a2e1f84592366462c24fc68dff57b903c">object</a></td></tr>
 <tr class="separator:a2e1f84592366462c24fc68dff57b903c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e47fdf77546964b59fb5e1bd8736196"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_view.html">View</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a9e47fdf77546964b59fb5e1bd8736196">gview</a></td></tr>
 <tr class="separator:a9e47fdf77546964b59fb5e1bd8736196"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31f5904782b4558f0c5245add4dbbe60"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a31f5904782b4558f0c5245add4dbbe60">pivotX</a></td></tr>
-<tr class="separator:a31f5904782b4558f0c5245add4dbbe60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ac068f8814e4a8191550a2b571dd0c1"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a9ac068f8814e4a8191550a2b571dd0c1">pivotY</a></td></tr>
-<tr class="separator:a9ac068f8814e4a8191550a2b571dd0c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afeb394ee506f5642a6db2b27a26af405"><td class="memItemLeft" align="right" valign="top">qreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#afeb394ee506f5642a6db2b27a26af405">angle</a></td></tr>
-<tr class="separator:afeb394ee506f5642a6db2b27a26af405"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87580073aa08cad98074845a73855bff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#a87580073aa08cad98074845a73855bff">pivotX</a></td></tr>
+<tr class="separator:a87580073aa08cad98074845a73855bff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf37f67a51c33bea6fc5c8a6128b95b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#aaf37f67a51c33bea6fc5c8a6128b95b8">pivotY</a></td></tr>
+<tr class="separator:aaf37f67a51c33bea6fc5c8a6128b95b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af357a7ddc15f398023533703329941a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_undoable_rotate_command.html#af357a7ddc15f398023533703329941a1">angle</a></td></tr>
+<tr class="separator:af357a7ddc15f398023533703329941a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a83a0197d8813e95241b320139603fc89" name="a83a0197d8813e95241b320139603fc89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83a0197d8813e95241b320139603fc89">&#9670;&#160;</a></span>UndoableRotateCommand()</h2>
+<a id="a249239cd50289ba54def50c02126ee7f" name="a249239cd50289ba54def50c02126ee7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a249239cd50289ba54def50c02126ee7f">&#9670;&#160;</a></span>UndoableRotateCommand()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,19 +143,19 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="class_undoable_rotate_command.html">UndoableRotateCommand</a> </td>
           <td>(</td>
-          <td class="paramtype">qreal&#160;</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
           <td class="paramname"><em>pivotPointX</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">qreal&#160;</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
           <td class="paramname"><em>pivotPointY</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">qreal&#160;</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
           <td class="paramname"><em>rotAngle</em>, </td>
         </tr>
         <tr>
@@ -201,57 +193,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a198c35d0f4b77c21af2adcc0d28b3abb" name="a198c35d0f4b77c21af2adcc0d28b3abb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a198c35d0f4b77c21af2adcc0d28b3abb">&#9670;&#160;</a></span>pi()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">qreal pi </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ac59979622741dac009ccdbeac2503662" name="ac59979622741dac009ccdbeac2503662"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac59979622741dac009ccdbeac2503662">&#9670;&#160;</a></span>radians()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">qreal radians </td>
-          <td>(</td>
-          <td class="paramtype">qreal&#160;</td>
-          <td class="paramname"><em>degrees</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a93c48d6ed036e1a381be53ac67643284" name="a93c48d6ed036e1a381be53ac67643284"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93c48d6ed036e1a381be53ac67643284">&#9670;&#160;</a></span>redo()</h2>
 
@@ -269,31 +210,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a521c88e7fec79196ea48330175ada7e3" name="a521c88e7fec79196ea48330175ada7e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a521c88e7fec79196ea48330175ada7e3">&#9670;&#160;</a></span>rotate()</h2>
+<a id="a51576e708df32279e01321cebf9279d2" name="a51576e708df32279e01321cebf9279d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51576e708df32279e01321cebf9279d2">&#9670;&#160;</a></span>rotate()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void rotate </td>
           <td>(</td>
-          <td class="paramtype">qreal&#160;</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">qreal&#160;</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">qreal&#160;</td>
+          <td class="paramtype"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a>&#160;</td>
           <td class="paramname"><em>rot</em>&#160;</td>
         </tr>
         <tr>
@@ -302,11 +240,6 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -329,24 +262,16 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="afeb394ee506f5642a6db2b27a26af405" name="afeb394ee506f5642a6db2b27a26af405"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afeb394ee506f5642a6db2b27a26af405">&#9670;&#160;</a></span>angle</h2>
+<a id="af357a7ddc15f398023533703329941a1" name="af357a7ddc15f398023533703329941a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af357a7ddc15f398023533703329941a1">&#9670;&#160;</a></span>angle</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">qreal angle</td>
+          <td class="memname"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> angle</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -356,19 +281,11 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_view.html">View</a>* gview</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -378,69 +295,45 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_base_object.html">BaseObject</a>* object</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a31f5904782b4558f0c5245add4dbbe60" name="a31f5904782b4558f0c5245add4dbbe60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31f5904782b4558f0c5245add4dbbe60">&#9670;&#160;</a></span>pivotX</h2>
+<a id="a87580073aa08cad98074845a73855bff" name="a87580073aa08cad98074845a73855bff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87580073aa08cad98074845a73855bff">&#9670;&#160;</a></span>pivotX</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">qreal pivotX</td>
+          <td class="memname"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> pivotX</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a9ac068f8814e4a8191550a2b571dd0c1" name="a9ac068f8814e4a8191550a2b571dd0c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ac068f8814e4a8191550a2b571dd0c1">&#9670;&#160;</a></span>pivotY</h2>
+<a id="aaf37f67a51c33bea6fc5c8a6128b95b8" name="aaf37f67a51c33bea6fc5c8a6128b95b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf37f67a51c33bea6fc5c8a6128b95b8">&#9670;&#160;</a></span>pivotY</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">qreal pivotY</td>
+          <td class="memname"><a class="el" href="embroidery_8h.html#a2082be9aabfb541dff1825c4ca6a05cd">EmbReal</a> pivotY</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>embroidermodder2/<a class="el" href="undo-commands_8h_source.html">undo-commands.h</a></li>
+<li>embroidermodder2/<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a></li>
 <li>embroidermodder2/<a class="el" href="undo-commands_8cpp.html">undo-commands.cpp</a></li>
 </ul>
 </div><!-- contents -->

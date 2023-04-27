@@ -103,15 +103,17 @@ $(document).ready(function(){initNavTree('class_cmd_prompt_history.html',''); in
 <a href="#pub-slots">Public Slots</a> &#124;
 <a href="#signals">Signals</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="class_cmd_prompt_history-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">CmdPromptHistory Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p><code>#include &lt;<a class="el" href="cmdprompt_8h_source.html">cmdprompt.h</a>&gt;</code></p>
+<p>The Command Prompt History class.  
+ <a href="class_cmd_prompt_history.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-slots" name="pub-slots"></a>
 Public Slots</h2></td></tr>
@@ -135,23 +137,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7758b86748c24bd1a9d2efb8c96fc131"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43ca37891556f01f374633c81a43e8d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_history.html#a43ca37891556f01f374633c81a43e8d4">~CmdPromptHistory</a> ()</td></tr>
 <tr class="separator:a43ca37891556f01f374633c81a43e8d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a083f7557b2d14f34e7cdb0532301c012"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_history.html#a083f7557b2d14f34e7cdb0532301c012">applyFormatting</a> (const QString &amp;txt, int prefixLength)</td></tr>
+<tr class="separator:a083f7557b2d14f34e7cdb0532301c012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:abbd120a8ddc81e6aa4451664821dd5ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_history.html#abbd120a8ddc81e6aa4451664821dd5ca">tmpHeight</a></td></tr>
+<tr class="separator:abbd120a8ddc81e6aa4451664821dd5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a59701ebb47f7e2f55977543b6293ba47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_history.html#a59701ebb47f7e2f55977543b6293ba47">contextMenuEvent</a> (QContextMenuEvent *event)</td></tr>
 <tr class="separator:a59701ebb47f7e2f55977543b6293ba47"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a083f7557b2d14f34e7cdb0532301c012"><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_history.html#a083f7557b2d14f34e7cdb0532301c012">applyFormatting</a> (const QString &amp;txt, int prefixLength)</td></tr>
-<tr class="separator:a083f7557b2d14f34e7cdb0532301c012"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr class="memitem:abbd120a8ddc81e6aa4451664821dd5ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_cmd_prompt_history.html#abbd120a8ddc81e6aa4451664821dd5ca">tmpHeight</a></td></tr>
-<tr class="separator:abbd120a8ddc81e6aa4451664821dd5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>The Command Prompt History class. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7758b86748c24bd1a9d2efb8c96fc131" name="a7758b86748c24bd1a9d2efb8c96fc131"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7758b86748c24bd1a9d2efb8c96fc131">&#9670;&#160;</a></span>CmdPromptHistory()</h2>
 
@@ -229,9 +230,6 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">QString applyFormatting </td>
@@ -251,11 +249,6 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
@@ -396,25 +389,17 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">int tmpHeight</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>embroidermodder2/<a class="el" href="cmdprompt_8h_source.html">cmdprompt.h</a></li>
+<li>embroidermodder2/<a class="el" href="embroidermodder_8h_source.html">embroidermodder.h</a></li>
 <li>embroidermodder2/<a class="el" href="cmdprompt_8cpp.html">cmdprompt.cpp</a></li>
 </ul>
 </div><!-- contents -->

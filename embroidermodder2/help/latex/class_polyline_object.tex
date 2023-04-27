@@ -2,7 +2,7 @@
 \label{class_polyline_object}\index{PolylineObject@{PolylineObject}}
 
 
-{\ttfamily \#include $<$object-\/polyline.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
@@ -13,13 +13,13 @@ enum \{ \mbox{\hyperlink{class_polyline_object_a385c44f6fb256e5716a2302a5b940388
 \doxyparagraph*{Public Types inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-enum \{ \mbox{\hyperlink{class_base_object_adf764cbdea00d65edcd07bb9953ad2b7a56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
+enum \{ \mbox{\hyperlink{class_base_object_a06fc87d81c62e9abb8790b6e5713c55ba56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
  \}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_polyline_object_a33a02ba0e687c6e417b875c3d72d9717}{Polyline\+Object}} (qreal x, qreal y, const QPainter\+Path \&p, QRgb rgb, QGraphics\+Item $\ast$parent=0)
+\mbox{\hyperlink{class_polyline_object_a9c92a25d425aa75618ce0e704fc36185}{Polyline\+Object}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, const QPainter\+Path \&p, QRgb rgb, QGraphics\+Item $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_polyline_object_a8b4414122bd0ded315d46b11c6eb7192}{Polyline\+Object}} (\mbox{\hyperlink{class_polyline_object}{Polyline\+Object}} $\ast$obj, QGraphics\+Item $\ast$parent=0)
 \item 
@@ -27,23 +27,29 @@ enum \{ \mbox{\hyperlink{class_base_object_adf764cbdea00d65edcd07bb9953ad2b7a562
 \item 
 virtual int \mbox{\hyperlink{class_polyline_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}} () const
 \item 
+void \mbox{\hyperlink{class_polyline_object_aee1454778ef2e8dbe95e59c9f1c757fc}{init}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, const QPainter\+Path \&p, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
+\item 
+void \mbox{\hyperlink{class_polyline_object_a0c5988f5592958a4a556713f81ac01f2}{update\+Path}} (const QPainter\+Path \&p)
+\item 
+int \mbox{\hyperlink{class_polyline_object_a0caedd585da2a079cc80e50516558845}{find\+Index}} (const QPointF \&point)
+\item 
 QPainter\+Path \mbox{\hyperlink{class_polyline_object_ae792daf964109ba44609cfb75a02c0e2}{object\+Copy\+Path}} () const
 \item 
 QPainter\+Path \mbox{\hyperlink{class_polyline_object_ac103a3e4474b084a48281e9409087272}{object\+Save\+Path}} () const
 \item 
 QPointF \mbox{\hyperlink{class_polyline_object_a1a830f5a31e400da1680895d92f8b763}{object\+Pos}} () const
 \item 
-qreal \mbox{\hyperlink{class_polyline_object_a5accd51fbc75b1a14a56c2f20b57769e}{objectX}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_polyline_object_ace4975b202743d55bd6e2cfa99984a1e}{objectX}} () const
 \item 
-qreal \mbox{\hyperlink{class_polyline_object_a672f9e4f77a92bb4211be8bbb3981634}{objectY}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_polyline_object_a46fc8cee1a08acb0d28b5a6663983232}{objectY}} () const
 \item 
 void \mbox{\hyperlink{class_polyline_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{set\+Object\+Pos}} (const QPointF \&point)
 \item 
-void \mbox{\hyperlink{class_polyline_object_a3462477d59b303adaec6a9cb98a10313}{set\+Object\+Pos}} (qreal x, qreal y)
+void \mbox{\hyperlink{class_polyline_object_a77259130aaa4cdcd0910fa1ef60518a2}{set\+Object\+Pos}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
 \item 
-void \mbox{\hyperlink{class_polyline_object_a5827c1605b3f62a56fa5008b498fc7b0}{set\+ObjectX}} (qreal x)
+void \mbox{\hyperlink{class_polyline_object_a16b8364c9f0b4ef9ce1a0604b58faf60}{set\+ObjectX}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x)
 \item 
-void \mbox{\hyperlink{class_polyline_object_abf77d0df0a021f2d033e1be15580edb5}{set\+ObjectY}} (qreal y)
+void \mbox{\hyperlink{class_polyline_object_a4e5af5d52a15ae578a26d72f6bc6f52a}{set\+ObjectY}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
 \item 
 void \mbox{\hyperlink{class_polyline_object_add4e11623be9bc6e02557c67674564ed}{update\+Rubber}} (QPainter $\ast$painter=0)
 \item 
@@ -74,7 +80,7 @@ QRgb \mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objec
 \item 
 Qt\+::\+Pen\+Style \mbox{\hyperlink{class_base_object_ae0a604004cfeb357f0548b2f6e57b598}{object\+Line\+Type}} () const
 \item 
-qreal \mbox{\hyperlink{class_base_object_a35cd00e428fb7d678fdf3910a24a42d6}{object\+Line\+Weight}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a1a128171318d66ad813ee9389e54d084}{object\+Line\+Weight}} () const
 \item 
 QPainter\+Path \mbox{\hyperlink{class_base_object_a412eb69dc8fcb917011df8514ca2ffdd}{object\+Path}} () const
 \item 
@@ -84,17 +90,29 @@ QPointF \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{ob
 \item 
 QString \mbox{\hyperlink{class_base_object_abde4bc1ba52dda6ce2c750727b3d1c17}{object\+Rubber\+Text}} (const QString \&key) const
 \item 
+QPointF \mbox{\hyperlink{class_base_object_a6e02f5f5c100974d3300f0676e28f21b}{object\+Center}} () const
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a01bd01f5638cd6900cf3508eeb56c050}{object\+CenterX}} () const
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a0c5cda475129b6a745d0303b9f091ce4}{object\+CenterY}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_ac66c41fce2b0e882f8979c94da33af98}{set\+Object\+Center}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} center)
+\item 
+void \mbox{\hyperlink{class_base_object_a088d122cd2f294797b3d912fa5d77f7d}{set\+Object\+CenterX}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX)
+\item 
+void \mbox{\hyperlink{class_base_object_a7fde4e68a4b06fd94c64f6bc55d94263}{set\+Object\+CenterY}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY)
+\item 
 QRectF \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}} () const
 \item 
 void \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{set\+Rect}} (const QRectF \&r)
 \item 
-void \mbox{\hyperlink{class_base_object_af2b0fbb979971d15e5f2b02a2a7d1abf}{set\+Rect}} (qreal x, qreal y, qreal w, qreal h)
+void \mbox{\hyperlink{class_base_object_aac7bf9412ec3b195464feb6a36148d99}{set\+Rect}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} w, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} h)
 \item 
 QLineF \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}} () const
 \item 
 void \mbox{\hyperlink{class_base_object_a321d2d38e3176c39656090d311ea753e}{set\+Line}} (const QLineF \&li)
 \item 
-void \mbox{\hyperlink{class_base_object_ade461de6393f7953c6f2e5167cca5be7}{set\+Line}} (qreal x1, qreal y1, qreal x2, qreal y2)
+void \mbox{\hyperlink{class_base_object_a69935f9f192b284399c79e5b1ede9a14}{set\+Line}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
 \item 
 void \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{set\+Object\+Color}} (const QColor \&color)
 \item 
@@ -102,7 +120,7 @@ void \mbox{\hyperlink{class_base_object_aa67b1eed03b12bc06fbca3db567eb56d}{set\+
 \item 
 void \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{set\+Object\+Line\+Type}} (Qt\+::\+Pen\+Style line\+Type)
 \item 
-void \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{set\+Object\+Line\+Weight}} (qreal line\+Weight)
+void \mbox{\hyperlink{class_base_object_ad12aba3f58db683304dcde1f65d92c93}{set\+Object\+Line\+Weight}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} line\+Weight)
 \item 
 void \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{set\+Object\+Path}} (const QPainter\+Path \&p)
 \item 
@@ -126,6 +144,30 @@ virtual QList$<$ QPointF $>$ \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c
 \item 
 virtual void \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{grip\+Edit}} (const QPointF \&before, const QPointF \&after)=0
 \end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+QPainter\+Path \mbox{\hyperlink{class_polyline_object_a2d031a596313582e57c7e3401a3b0982}{normal\+Path}}
+\item 
+int \mbox{\hyperlink{class_polyline_object_ad13cefad9b419a67d5a86189cd70a6a9}{grip\+Index}}
+\end{DoxyCompactItemize}
+\doxyparagraph*{Public Attributes inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+QPen \mbox{\hyperlink{class_base_object_a2b56b214c2181ebc987cea243ad90d84}{obj\+Pen}}
+\item 
+QPen \mbox{\hyperlink{class_base_object_ade83f75b3122d793d6f692ed411921da}{lwt\+Pen}}
+\item 
+QLineF \mbox{\hyperlink{class_base_object_a354490514773214110dd038847f7510e}{obj\+Line}}
+\item 
+int \mbox{\hyperlink{class_base_object_a53e2d92993be951f9e5cdadb82fae316}{obj\+Rubber\+Mode}}
+\item 
+QHash$<$ QString, QPointF $>$ \mbox{\hyperlink{class_base_object_a7369d3b6403fe2ffbebaa63ad51bf609}{obj\+Rubber\+Points}}
+\item 
+QHash$<$ QString, QString $>$ \mbox{\hyperlink{class_base_object_a520c9eb8e88469046cdaab1f3d679e69}{obj\+Rubber\+Texts}}
+\item 
+qint64 \mbox{\hyperlink{class_base_object_a41f66da1ca9ecaeb4f57c60ea008b09c}{obj\+ID}}
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -136,29 +178,7 @@ void \mbox{\hyperlink{class_polyline_object_a8c124c843504f6971f6677f12ac9247f}{p
 \item 
 QPen \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{line\+Weight\+Pen}} () const
 \item 
-qreal \mbox{\hyperlink{class_base_object_ab5ad5bd82be7c0e997b240dc84a41f2a}{pi}} () const
-\item 
-qreal \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}} (qreal degree) const
-\item 
-qreal \mbox{\hyperlink{class_base_object_af1174f0ca1609e6e5efc8078b0170962}{degrees}} (qreal radian) const
-\item 
 void \mbox{\hyperlink{class_base_object_a7f8405662dc85ae3f3e257c36a065c8d}{real\+Render}} (QPainter $\ast$painter, const QPainter\+Path \&render\+Path)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \mbox{\hyperlink{class_polyline_object_a15c4f00ca522e1fa4430f67538ea151b}{init}} (qreal x, qreal y, const QPainter\+Path \&p, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
-\item 
-void \mbox{\hyperlink{class_polyline_object_a0c5988f5592958a4a556713f81ac01f2}{update\+Path}} (const QPainter\+Path \&p)
-\item 
-int \mbox{\hyperlink{class_polyline_object_a0caedd585da2a079cc80e50516558845}{find\+Index}} (const QPointF \&point)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
-\begin{DoxyCompactItemize}
-\item 
-QPainter\+Path \mbox{\hyperlink{class_polyline_object_a2d031a596313582e57c7e3401a3b0982}{normal\+Path}}
-\item 
-int \mbox{\hyperlink{class_polyline_object_ad13cefad9b419a67d5a86189cd70a6a9}{grip\+Index}}
 \end{DoxyCompactItemize}
 
 
@@ -176,11 +196,11 @@ Type&\\
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_polyline_object_a33a02ba0e687c6e417b875c3d72d9717}\label{class_polyline_object_a33a02ba0e687c6e417b875c3d72d9717}} 
+\mbox{\Hypertarget{class_polyline_object_a9c92a25d425aa75618ce0e704fc36185}\label{class_polyline_object_a9c92a25d425aa75618ce0e704fc36185}} 
 \index{PolylineObject@{PolylineObject}!PolylineObject@{PolylineObject}}
 \index{PolylineObject@{PolylineObject}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{PolylineObject()}{PolylineObject()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_polyline_object}{Polyline\+Object}} (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{const QPainter\+Path \&}]{p,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_polyline_object}{Polyline\+Object}} (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{const QPainter\+Path \&}]{p,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_polyline_object_a8b4414122bd0ded315d46b11c6eb7192}\label{class_polyline_object_a8b4414122bd0ded315d46b11c6eb7192}} 
 \index{PolylineObject@{PolylineObject}!PolylineObject@{PolylineObject}}
@@ -211,7 +231,7 @@ Implements \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}
 \index{PolylineObject@{PolylineObject}!findIndex@{findIndex}}
 \index{findIndex@{findIndex}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{findIndex()}{findIndex()}}
-{\footnotesize\ttfamily int find\+Index (\begin{DoxyParamCaption}\item[{const QPointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily int find\+Index (\begin{DoxyParamCaption}\item[{const QPointF \&}]{point }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_polyline_object_af377b9b2e3594940757c25610899c02b}\label{class_polyline_object_af377b9b2e3594940757c25610899c02b}} 
 \index{PolylineObject@{PolylineObject}!gripEdit@{gripEdit}}
@@ -223,11 +243,11 @@ Implements \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}
 
 Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{Base\+Object}}.
 
-\mbox{\Hypertarget{class_polyline_object_a15c4f00ca522e1fa4430f67538ea151b}\label{class_polyline_object_a15c4f00ca522e1fa4430f67538ea151b}} 
+\mbox{\Hypertarget{class_polyline_object_aee1454778ef2e8dbe95e59c9f1c757fc}\label{class_polyline_object_aee1454778ef2e8dbe95e59c9f1c757fc}} 
 \index{PolylineObject@{PolylineObject}!init@{init}}
 \index{init@{init}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{init()}{init()}}
-{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{const QPainter\+Path \&}]{p,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{const QPainter\+Path \&}]{p,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_polyline_object_a71dcd474d5a8c0e5fdc137b48da18a0c}\label{class_polyline_object_a71dcd474d5a8c0e5fdc137b48da18a0c}} 
 \index{PolylineObject@{PolylineObject}!mouseSnapPoint@{mouseSnapPoint}}
@@ -257,17 +277,17 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{objectSavePath()}{objectSavePath()}}
 {\footnotesize\ttfamily QPainter\+Path object\+Save\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
 
-\mbox{\Hypertarget{class_polyline_object_a5accd51fbc75b1a14a56c2f20b57769e}\label{class_polyline_object_a5accd51fbc75b1a14a56c2f20b57769e}} 
+\mbox{\Hypertarget{class_polyline_object_ace4975b202743d55bd6e2cfa99984a1e}\label{class_polyline_object_ace4975b202743d55bd6e2cfa99984a1e}} 
 \index{PolylineObject@{PolylineObject}!objectX@{objectX}}
 \index{objectX@{objectX}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{objectX()}{objectX()}}
-{\footnotesize\ttfamily qreal objectX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} objectX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_polyline_object_a672f9e4f77a92bb4211be8bbb3981634}\label{class_polyline_object_a672f9e4f77a92bb4211be8bbb3981634}} 
+\mbox{\Hypertarget{class_polyline_object_a46fc8cee1a08acb0d28b5a6663983232}\label{class_polyline_object_a46fc8cee1a08acb0d28b5a6663983232}} 
 \index{PolylineObject@{PolylineObject}!objectY@{objectY}}
 \index{objectY@{objectY}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{objectY()}{objectY()}}
-{\footnotesize\ttfamily qreal objectY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} objectY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_polyline_object_a8c124c843504f6971f6677f12ac9247f}\label{class_polyline_object_a8c124c843504f6971f6677f12ac9247f}} 
 \index{PolylineObject@{PolylineObject}!paint@{paint}}
@@ -281,23 +301,23 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{setObjectPos()}{setObjectPos()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{const QPointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_polyline_object_a3462477d59b303adaec6a9cb98a10313}\label{class_polyline_object_a3462477d59b303adaec6a9cb98a10313}} 
+\mbox{\Hypertarget{class_polyline_object_a77259130aaa4cdcd0910fa1ef60518a2}\label{class_polyline_object_a77259130aaa4cdcd0910fa1ef60518a2}} 
 \index{PolylineObject@{PolylineObject}!setObjectPos@{setObjectPos}}
 \index{setObjectPos@{setObjectPos}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{setObjectPos()}{setObjectPos()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_polyline_object_a5827c1605b3f62a56fa5008b498fc7b0}\label{class_polyline_object_a5827c1605b3f62a56fa5008b498fc7b0}} 
+\mbox{\Hypertarget{class_polyline_object_a16b8364c9f0b4ef9ce1a0604b58faf60}\label{class_polyline_object_a16b8364c9f0b4ef9ce1a0604b58faf60}} 
 \index{PolylineObject@{PolylineObject}!setObjectX@{setObjectX}}
 \index{setObjectX@{setObjectX}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{setObjectX()}{setObjectX()}}
-{\footnotesize\ttfamily void set\+ObjectX (\begin{DoxyParamCaption}\item[{qreal}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void set\+ObjectX (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_polyline_object_abf77d0df0a021f2d033e1be15580edb5}\label{class_polyline_object_abf77d0df0a021f2d033e1be15580edb5}} 
+\mbox{\Hypertarget{class_polyline_object_a4e5af5d52a15ae578a26d72f6bc6f52a}\label{class_polyline_object_a4e5af5d52a15ae578a26d72f6bc6f52a}} 
 \index{PolylineObject@{PolylineObject}!setObjectY@{setObjectY}}
 \index{setObjectY@{setObjectY}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{setObjectY()}{setObjectY()}}
-{\footnotesize\ttfamily void set\+ObjectY (\begin{DoxyParamCaption}\item[{qreal}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void set\+ObjectY (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_polyline_object_a67b824a3d6f5f8dc7b9f435353c62676}\label{class_polyline_object_a67b824a3d6f5f8dc7b9f435353c62676}} 
 \index{PolylineObject@{PolylineObject}!type@{type}}
@@ -313,7 +333,7 @@ Reimplemented from \mbox{\hyperlink{class_base_object_a67b824a3d6f5f8dc7b9f43535
 \index{PolylineObject@{PolylineObject}!updatePath@{updatePath}}
 \index{updatePath@{updatePath}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{updatePath()}{updatePath()}}
-{\footnotesize\ttfamily void update\+Path (\begin{DoxyParamCaption}\item[{const QPainter\+Path \&}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void update\+Path (\begin{DoxyParamCaption}\item[{const QPainter\+Path \&}]{p }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_polyline_object_add4e11623be9bc6e02557c67674564ed}\label{class_polyline_object_add4e11623be9bc6e02557c67674564ed}} 
 \index{PolylineObject@{PolylineObject}!updateRubber@{updateRubber}}
@@ -338,17 +358,17 @@ Implements \mbox{\hyperlink{class_base_object_ac256400a6f25c6c8af7e18e1ac1a0181}
 \index{PolylineObject@{PolylineObject}!gripIndex@{gripIndex}}
 \index{gripIndex@{gripIndex}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{gripIndex}{gripIndex}}
-{\footnotesize\ttfamily int grip\+Index\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily int grip\+Index}
 
 \mbox{\Hypertarget{class_polyline_object_a2d031a596313582e57c7e3401a3b0982}\label{class_polyline_object_a2d031a596313582e57c7e3401a3b0982}} 
 \index{PolylineObject@{PolylineObject}!normalPath@{normalPath}}
 \index{normalPath@{normalPath}!PolylineObject@{PolylineObject}}
 \doxyparagraph{\texorpdfstring{normalPath}{normalPath}}
-{\footnotesize\ttfamily QPainter\+Path normal\+Path\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QPainter\+Path normal\+Path}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{object-polyline_8h}{object-\/polyline.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{object-polyline_8cpp}{object-\/polyline.\+cpp}}\end{DoxyCompactItemize}

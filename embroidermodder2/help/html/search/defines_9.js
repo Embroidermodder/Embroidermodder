@@ -1,19 +1,5 @@
 var searchData=
 [
   ['jef_5fthread_0',['jef_thread',['../embroidery_8h.html#a007d16b8f9e075b446c0845273dc4868',1,'embroidery.h']]],
-  ['jump_1',['JUMP',['../embroidery_8h.html#aee551d17fffb6235cc7123499dbf7d65',1,'embroidery.h']]],
-  ['justify_5f_5f_2',['JUSTIFY__',['../embroidermodder_8h.html#acf4a59ca012b99a9941218ff7557f350',1,'embroidermodder.h']]],
-  ['justify_5falign_3',['JUSTIFY_ALIGN',['../embroidermodder_8h.html#aedd12ac3014582e039b6c8771ebd30df',1,'embroidermodder.h']]],
-  ['justify_5fbottomcenter_4',['JUSTIFY_BOTTOMCENTER',['../embroidermodder_8h.html#ab62d8b7cf5de69084058ce17882bc252',1,'embroidermodder.h']]],
-  ['justify_5fbottomleft_5',['JUSTIFY_BOTTOMLEFT',['../embroidermodder_8h.html#a141e6a60e6aaf465fe244b39b6a102c8',1,'embroidermodder.h']]],
-  ['justify_5fbottomright_6',['JUSTIFY_BOTTOMRIGHT',['../embroidermodder_8h.html#aa366944f47c5cb022194682c5c116a03',1,'embroidermodder.h']]],
-  ['justify_5fleft_7',['JUSTIFY_LEFT',['../embroidermodder_8h.html#aea3758ebedef824873c207f6bd47e24c',1,'embroidermodder.h']]],
-  ['justify_5fmiddle_8',['JUSTIFY_MIDDLE',['../embroidermodder_8h.html#ad4418045303954487b9316ef4d9a28d7',1,'embroidermodder.h']]],
-  ['justify_5fmiddlecenter_9',['JUSTIFY_MIDDLECENTER',['../embroidermodder_8h.html#af01f2c75c637cfc6b94983739df9dff3',1,'embroidermodder.h']]],
-  ['justify_5fmiddleleft_10',['JUSTIFY_MIDDLELEFT',['../embroidermodder_8h.html#a283c4381f09ad516549e1ec41fe739a3',1,'embroidermodder.h']]],
-  ['justify_5fmiddleright_11',['JUSTIFY_MIDDLERIGHT',['../embroidermodder_8h.html#a1b85bea13bb087a9da77b219cd58573b',1,'embroidermodder.h']]],
-  ['justify_5fright_12',['JUSTIFY_RIGHT',['../embroidermodder_8h.html#ae3dc0c37e15dada43d73b30a39700525',1,'embroidermodder.h']]],
-  ['justify_5ftopcenter_13',['JUSTIFY_TOPCENTER',['../embroidermodder_8h.html#a236ccbb437674a19f27dd40a44ac36c0',1,'embroidermodder.h']]],
-  ['justify_5ftopleft_14',['JUSTIFY_TOPLEFT',['../embroidermodder_8h.html#a775e053fa1f41d3f23790c68113c8fd3',1,'embroidermodder.h']]],
-  ['justify_5ftopright_15',['JUSTIFY_TOPRIGHT',['../embroidermodder_8h.html#a1152fcd774da8f72f0dd3caf291d6185',1,'embroidermodder.h']]]
+  ['jump_1',['JUMP',['../embroidery_8h.html#aee551d17fffb6235cc7123499dbf7d65',1,'embroidery.h']]]
 ];

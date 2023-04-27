@@ -21,15 +21,17 @@ void \mbox{\hyperlink{utility_8cpp_ae3f080af9ed5a4d74da64730178ad366}{c\+\_\+spl
 void \mbox{\hyperlink{utility_8cpp_a6ba40f28df8964130a55aac5472ea6d8}{simplify\+\_\+path}} (char $\ast$path)
 \begin{DoxyCompactList}\small\item\em Simplifies a path by removing the .. and . symbols in place. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{utility_8cpp_a6fcdc8ef9d8e516770d265c3c6f6e3c8}{read\+\_\+settings}} (const char $\ast$\mbox{\hyperlink{utility_8cpp_a89d83c58510cbfa074c2f541751b57fd}{settings\+\_\+file}})
-\begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Read the settings from file which aren\textquotesingle{}t editable by the user. These files need to be placed in the install folder. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{utility_8cpp_a676090199811da7c58ccc15c8e25c308}{valid\+RGB}} (int r, int g, int b)
+\end{DoxyCompactItemize}
 \doxysubsubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} \mbox{\hyperlink{utility_8cpp_a19276c778f3034b94881cf1f8614dbb2}{settings}}
 \item 
-\mbox{\hyperlink{embroidermodder_8h_a6e4c300aad52822a324a91edae2235b6}{Index}} $\ast$ \mbox{\hyperlink{utility_8cpp_a249fb28889d6d477f958c07135703999}{menu\+\_\+layout}}
+\mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}} $\ast$ \mbox{\hyperlink{utility_8cpp_a249fb28889d6d477f958c07135703999}{menu\+\_\+layout}}
 \item 
-\mbox{\hyperlink{embroidermodder_8h_a6e4c300aad52822a324a91edae2235b6}{Index}} $\ast$ \mbox{\hyperlink{utility_8cpp_a45f3c24488cf835c1a2273f73f23d192}{toolbar\+\_\+layout}}
+\mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}} $\ast$ \mbox{\hyperlink{utility_8cpp_a45f3c24488cf835c1a2273f73f23d192}{toolbar\+\_\+layout}}
 \item 
 \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} \mbox{\hyperlink{utility_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}{views}} \mbox{[}50\mbox{]}
 \item 
@@ -51,7 +53,7 @@ char \mbox{\hyperlink{utility_8cpp_a89d83c58510cbfa074c2f541751b57fd}{settings\+
 \item 
 bool \mbox{\hyperlink{utility_8cpp_a3e6926ae65525832ed3c1ba9d8df636e}{just\+\_\+opened}} = true
 \item 
-\mbox{\hyperlink{embroidermodder_8h_a3794854683c62bbef133e2a41d85d87f}{Dictionary}} $\ast$ \mbox{\hyperlink{utility_8cpp_a1fd87cd97dc9a686025693c4145fe352}{translation\+\_\+table}}
+\mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}} $\ast$ \mbox{\hyperlink{utility_8cpp_a1fd87cd97dc9a686025693c4145fe352}{translation\+\_\+table}}
 \item 
 \mbox{\hyperlink{embroidermodder_8h_aa5d35c075d47a1a4196817dd4cac166f}{Emb\+View}} $\ast$ \mbox{\hyperlink{utility_8cpp_ab02931290454a2e1456d354fd9bc734d}{active\+\_\+view}} = NULL
 \end{DoxyCompactItemize}
@@ -134,7 +136,17 @@ Simplifies a path by removing the .. and . symbols in place.
 
 Check if the filename is valid before we attempt to read or write it. 
 
-{\itshape fname} The file name to check (absolute or relative). Returns true If this file can be parsed by libembroidery. Returns false If it cannot be, or no file name appears to be present. \mbox{\Hypertarget{utility_8cpp_a997a8ba218de2d7ed474b7dc1bd35718}\label{utility_8cpp_a997a8ba218de2d7ed474b7dc1bd35718}} 
+{\itshape fname} The file name to check (absolute or relative). Returns true If this file can be parsed by libembroidery. Returns false If it cannot be, or no file name appears to be present. \mbox{\Hypertarget{utility_8cpp_a676090199811da7c58ccc15c8e25c308}\label{utility_8cpp_a676090199811da7c58ccc15c8e25c308}} 
+\index{utility.cpp@{utility.cpp}!validRGB@{validRGB}}
+\index{validRGB@{validRGB}!utility.cpp@{utility.cpp}}
+\doxyparagraph{\texorpdfstring{validRGB()}{validRGB()}}
+{\footnotesize\ttfamily bool valid\+RGB (\begin{DoxyParamCaption}\item[{int}]{r,  }\item[{int}]{g,  }\item[{int}]{b }\end{DoxyParamCaption})}
+
+
+
+
+
+\mbox{\Hypertarget{utility_8cpp_a997a8ba218de2d7ed474b7dc1bd35718}\label{utility_8cpp_a997a8ba218de2d7ed474b7dc1bd35718}} 
 \index{utility.cpp@{utility.cpp}!willOverflowInt32@{willOverflowInt32}}
 \index{willOverflowInt32@{willOverflowInt32}!utility.cpp@{utility.cpp}}
 \doxyparagraph{\texorpdfstring{willOverflowInt32()}{willOverflowInt32()}}
@@ -193,7 +205,7 @@ These copies of the settings struct are for restoring the state if the user does
 \index{utility.cpp@{utility.cpp}!menu\_layout@{menu\_layout}}
 \index{menu\_layout@{menu\_layout}!utility.cpp@{utility.cpp}}
 \doxyparagraph{\texorpdfstring{menu\_layout}{menu\_layout}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a6e4c300aad52822a324a91edae2235b6}{Index}}$\ast$ menu\+\_\+layout}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}$\ast$ menu\+\_\+layout}
 
 \mbox{\Hypertarget{utility_8cpp_a13436802d05b83f14d262a678d87ff5f}\label{utility_8cpp_a13436802d05b83f14d262a678d87ff5f}} 
 \index{utility.cpp@{utility.cpp}!n\_views@{n\_views}}
@@ -213,7 +225,17 @@ These copies of the settings struct are for restoring the state if the user does
 \doxyparagraph{\texorpdfstring{settings}{settings}}
 {\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_ab057e1afb884d1e29ecc02ebc883a8f1}{Settings}} settings}
 
-The actuator changes the program state via these global variables. \mbox{\Hypertarget{utility_8cpp_ab1f9e621f425b3b13369ffbad56c3a57}\label{utility_8cpp_ab1f9e621f425b3b13369ffbad56c3a57}} 
+Embroidermodder 2.
+
+\DoxyHorRuler{0}
+
+
+Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
+
+\DoxyHorRuler{0}
+
+
+Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} The actuator changes the program state via these global variables. \mbox{\Hypertarget{utility_8cpp_ab1f9e621f425b3b13369ffbad56c3a57}\label{utility_8cpp_ab1f9e621f425b3b13369ffbad56c3a57}} 
 \index{utility.cpp@{utility.cpp}!settings\_dir@{settings\_dir}}
 \index{settings\_dir@{settings\_dir}!utility.cpp@{utility.cpp}}
 \doxyparagraph{\texorpdfstring{settings\_dir}{settings\_dir}}
@@ -235,13 +257,13 @@ This file needs to be read from the users home directory to ensure it is writabl
 \index{utility.cpp@{utility.cpp}!toolbar\_layout@{toolbar\_layout}}
 \index{toolbar\_layout@{toolbar\_layout}!utility.cpp@{utility.cpp}}
 \doxyparagraph{\texorpdfstring{toolbar\_layout}{toolbar\_layout}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a6e4c300aad52822a324a91edae2235b6}{Index}}$\ast$ toolbar\+\_\+layout}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a59b98c3061d780d55cc048bcce8b47d0}{Index}}$\ast$ toolbar\+\_\+layout}
 
 \mbox{\Hypertarget{utility_8cpp_a1fd87cd97dc9a686025693c4145fe352}\label{utility_8cpp_a1fd87cd97dc9a686025693c4145fe352}} 
 \index{utility.cpp@{utility.cpp}!translation\_table@{translation\_table}}
 \index{translation\_table@{translation\_table}!utility.cpp@{utility.cpp}}
 \doxyparagraph{\texorpdfstring{translation\_table}{translation\_table}}
-{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a3794854683c62bbef133e2a41d85d87f}{Dictionary}}$\ast$ translation\+\_\+table}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidermodder_8h_a65f6a13c9f5a038f42c86bdd5bb2410f}{Dictionary}}$\ast$ translation\+\_\+table}
 
 \mbox{\Hypertarget{utility_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}\label{utility_8cpp_ada4ed7c67c6b8fd122b08b3b1f0ddf36}} 
 \index{utility.cpp@{utility.cpp}!views@{views}}

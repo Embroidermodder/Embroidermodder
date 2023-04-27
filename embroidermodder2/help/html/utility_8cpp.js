@@ -7,6 +7,7 @@ var utility_8cpp =
     [ "roundToMultiple", "utility_8cpp.html#a2ae89ff887eb8c663accf7d97031a9ce", null ],
     [ "simplify_path", "utility_8cpp.html#a6ba40f28df8964130a55aac5472ea6d8", null ],
     [ "valid_file_format", "utility_8cpp.html#acf9ae2be63cafd4a01f64f1228acd70d", null ],
+    [ "validRGB", "utility_8cpp.html#a676090199811da7c58ccc15c8e25c308", null ],
     [ "willOverflowInt32", "utility_8cpp.html#a997a8ba218de2d7ed474b7dc1bd35718", null ],
     [ "willUnderflowInt32", "utility_8cpp.html#a587048d8547151491b6a30bb18e06e82", null ],
     [ "active_view", "utility_8cpp.html#ab02931290454a2e1456d354fd9bc734d", null ],

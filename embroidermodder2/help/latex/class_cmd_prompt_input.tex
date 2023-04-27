@@ -2,7 +2,7 @@
 \label{class_cmd_prompt_input}\index{CmdPromptInput@{CmdPromptInput}}
 
 
-{\ttfamily \#include $<$cmdprompt.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Slots}
 \begin{DoxyCompactItemize}
@@ -92,6 +92,12 @@ void \mbox{\hyperlink{class_cmd_prompt_input_a13f2c0b5a7f1d4b33fc323e585f807b2}{
 \mbox{\hyperlink{class_cmd_prompt_input_ab5f12870265949b620f2d5d39398193c}{Cmd\+Prompt\+Input}} (QWidget $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_cmd_prompt_input_a8c4c9cf079dd926513eb04799032cf2b}{$\sim$\+Cmd\+Prompt\+Input}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_aa8c43625ddf2edd841f2be88ef14a6a8}{change\+Formatting}} (const QList$<$ QText\+Layout\+::\+Format\+Range $>$ \&formats)
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a07ea41be0cdc43ffcd09898d3ae5c523}{clear\+Formatting}} ()
+\item 
+void \mbox{\hyperlink{class_cmd_prompt_input_a96eb04cda6b08d5a0748ee2329d88add}{apply\+Formatting}} ()
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -111,6 +117,8 @@ bool \mbox{\hyperlink{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}{
 bool \mbox{\hyperlink{class_cmd_prompt_input_ad651d258c5fe49323b105b1b23d64777}{rapid\+Fire\+Enabled}}
 \item 
 bool \mbox{\hyperlink{class_cmd_prompt_input_a2f7636df8b2a22914ee5e8a96139b655}{is\+Blinking}}
+\item 
+QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adfa881da9910b019e20455f6dcd3fdd3}{alias\+Hash}}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
@@ -125,20 +133,6 @@ bool \mbox{\hyperlink{class_cmd_prompt_input_ad7452c5931d2f0c7f63a308d1ccccfc7}{
 void \mbox{\hyperlink{class_cmd_prompt_input_aeb934907ae4a4cd2a39e1e90f48b2b0e}{copy\+Clip}} ()
 \item 
 void \mbox{\hyperlink{class_cmd_prompt_input_ada07be170999321a59ed996d67587e98}{paste\+Clip}} ()
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \mbox{\hyperlink{class_cmd_prompt_input_aa8c43625ddf2edd841f2be88ef14a6a8}{change\+Formatting}} (const QList$<$ QText\+Layout\+::\+Format\+Range $>$ \&formats)
-\item 
-void \mbox{\hyperlink{class_cmd_prompt_input_a07ea41be0cdc43ffcd09898d3ae5c523}{clear\+Formatting}} ()
-\item 
-void \mbox{\hyperlink{class_cmd_prompt_input_a96eb04cda6b08d5a0748ee2329d88add}{apply\+Formatting}} ()
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
-\begin{DoxyCompactItemize}
-\item 
-QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adfa881da9910b019e20455f6dcd3fdd3}{alias\+Hash}}
 \end{DoxyCompactItemize}
 
 
@@ -174,13 +168,13 @@ QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adf
 \index{CmdPromptInput@{CmdPromptInput}!applyFormatting@{applyFormatting}}
 \index{applyFormatting@{applyFormatting}!CmdPromptInput@{CmdPromptInput}}
 \doxyparagraph{\texorpdfstring{applyFormatting()}{applyFormatting()}}
-{\footnotesize\ttfamily void apply\+Formatting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void apply\+Formatting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_cmd_prompt_input_aa8c43625ddf2edd841f2be88ef14a6a8}\label{class_cmd_prompt_input_aa8c43625ddf2edd841f2be88ef14a6a8}} 
 \index{CmdPromptInput@{CmdPromptInput}!changeFormatting@{changeFormatting}}
 \index{changeFormatting@{changeFormatting}!CmdPromptInput@{CmdPromptInput}}
 \doxyparagraph{\texorpdfstring{changeFormatting()}{changeFormatting()}}
-{\footnotesize\ttfamily void change\+Formatting (\begin{DoxyParamCaption}\item[{const QList$<$ QText\+Layout\+::\+Format\+Range $>$ \&}]{formats }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void change\+Formatting (\begin{DoxyParamCaption}\item[{const QList$<$ QText\+Layout\+::\+Format\+Range $>$ \&}]{formats }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_cmd_prompt_input_a8879ea019915d4e44d0256adb9be7f5c}\label{class_cmd_prompt_input_a8879ea019915d4e44d0256adb9be7f5c}} 
 \index{CmdPromptInput@{CmdPromptInput}!checkChangedText@{checkChangedText}}
@@ -210,7 +204,7 @@ QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adf
 \index{CmdPromptInput@{CmdPromptInput}!clearFormatting@{clearFormatting}}
 \index{clearFormatting@{clearFormatting}!CmdPromptInput@{CmdPromptInput}}
 \doxyparagraph{\texorpdfstring{clearFormatting()}{clearFormatting()}}
-{\footnotesize\ttfamily void clear\+Formatting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void clear\+Formatting (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_cmd_prompt_input_a59701ebb47f7e2f55977543b6293ba47}\label{class_cmd_prompt_input_a59701ebb47f7e2f55977543b6293ba47}} 
 \index{CmdPromptInput@{CmdPromptInput}!contextMenuEvent@{contextMenuEvent}}
@@ -435,7 +429,7 @@ QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adf
 \index{CmdPromptInput@{CmdPromptInput}!aliasHash@{aliasHash}}
 \index{aliasHash@{aliasHash}!CmdPromptInput@{CmdPromptInput}}
 \doxyparagraph{\texorpdfstring{aliasHash}{aliasHash}}
-{\footnotesize\ttfamily QHash$<$QString, QString$>$$\ast$ alias\+Hash\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QHash$<$QString, QString$>$$\ast$ alias\+Hash}
 
 \mbox{\Hypertarget{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}\label{class_cmd_prompt_input_a5b910e1bf795b20bdb8b51f09fae8e45}} 
 \index{CmdPromptInput@{CmdPromptInput}!cmdActive@{cmdActive}}
@@ -489,5 +483,5 @@ QHash$<$ QString, QString $>$ $\ast$ \mbox{\hyperlink{class_cmd_prompt_input_adf
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{cmdprompt_8h}{cmdprompt.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{cmdprompt_8cpp}{cmdprompt.\+cpp}}\end{DoxyCompactItemize}

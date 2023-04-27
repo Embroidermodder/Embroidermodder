@@ -1,8 +1,5 @@
 var annotated_dup =
 [
-    [ "std", null, [
-      [ "string_", "structstd_1_1string__.html", "structstd_1_1string__" ]
-    ] ],
     [ "_bcf_directory", "struct__bcf__directory.html", "struct__bcf__directory" ],
     [ "_bcf_directory_entry", "struct__bcf__directory__entry.html", "struct__bcf__directory__entry" ],
     [ "_bcf_file", "struct__bcf__file.html", "struct__bcf__file" ],
@@ -20,11 +17,8 @@ var annotated_dup =
     [ "CmdPromptInput", "class_cmd_prompt_input.html", "class_cmd_prompt_input" ],
     [ "CmdPromptSplitter", "class_cmd_prompt_splitter.html", "class_cmd_prompt_splitter" ],
     [ "Compress", "struct_compress.html", "struct_compress" ],
-    [ "Dictionary_", "struct_dictionary__.html", "struct_dictionary__" ],
-    [ "DictionaryEntry_", "struct_dictionary_entry__.html", "struct_dictionary_entry__" ],
     [ "DimLeaderObject", "class_dim_leader_object.html", "class_dim_leader_object" ],
     [ "EllipseObject", "class_ellipse_object.html", "class_ellipse_object" ],
-    [ "EmbAction_", "struct_emb_action__.html", "struct_emb_action__" ],
     [ "EmbAlignedDim_", "struct_emb_aligned_dim__.html", "struct_emb_aligned_dim__" ],
     [ "EmbAngularDim_", "struct_emb_angular_dim__.html", "struct_emb_angular_dim__" ],
     [ "EmbArc_", "struct_emb_arc__.html", "struct_emb_arc__" ],
@@ -38,7 +32,6 @@ var annotated_dup =
     [ "EmbDiameterDim_", "struct_emb_diameter_dim__.html", "struct_emb_diameter_dim__" ],
     [ "EmbEllipse_", "struct_emb_ellipse__.html", "struct_emb_ellipse__" ],
     [ "EmbFormatList_", "struct_emb_format_list__.html", "struct_emb_format_list__" ],
-    [ "EmbFunction_", "struct_emb_function__.html", "struct_emb_function__" ],
     [ "EmbGeometry_", "struct_emb_geometry__.html", "struct_emb_geometry__" ],
     [ "EmbImage_", "struct_emb_image__.html", "struct_emb_image__" ],
     [ "EmbInfiniteLine_", "struct_emb_infinite_line__.html", "struct_emb_infinite_line__" ],
@@ -54,7 +47,6 @@ var annotated_dup =
     [ "EmbRay_", "struct_emb_ray__.html", "struct_emb_ray__" ],
     [ "EmbRect_", "struct_emb_rect__.html", "struct_emb_rect__" ],
     [ "EmbSatinOutline_", "struct_emb_satin_outline__.html", "struct_emb_satin_outline__" ],
-    [ "EmbScriptContext_", "struct_emb_script_context__.html", "struct_emb_script_context__" ],
     [ "EmbSpline_", "struct_emb_spline__.html", "struct_emb_spline__" ],
     [ "EmbStitch_", "struct_emb_stitch__.html", "struct_emb_stitch__" ],
     [ "EmbTextMulti_", "struct_emb_text_multi__.html", "struct_emb_text_multi__" ],
@@ -67,8 +59,6 @@ var annotated_dup =
     [ "Huffman", "struct_huffman.html", "struct_huffman" ],
     [ "ImageObject", "class_image_object.html", "class_image_object" ],
     [ "ImageWidget", "class_image_widget.html", "class_image_widget" ],
-    [ "Index_", "struct_index__.html", "struct_index__" ],
-    [ "IndexEntry_", "struct_index_entry__.html", "struct_index_entry__" ],
     [ "LayerManager", "class_layer_manager.html", "class_layer_manager" ],
     [ "LineObject", "class_line_object.html", "class_line_object" ],
     [ "LSYSTEM", "struct_l_s_y_s_t_e_m.html", "struct_l_s_y_s_t_e_m" ],

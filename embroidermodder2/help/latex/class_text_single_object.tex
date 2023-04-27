@@ -2,7 +2,7 @@
 \label{class_text_single_object}\index{TextSingleObject@{TextSingleObject}}
 
 
-{\ttfamily \#include $<$object-\/textsingle.\+h$>$}
+{\ttfamily \#include $<$embroidermodder.\+h$>$}
 
 \doxysubsubsection*{Public Types}
 \begin{DoxyCompactItemize}
@@ -13,19 +13,21 @@ enum \{ \mbox{\hyperlink{class_text_single_object_ac36f475ca5b446f4fde4c9b90bec7
 \doxyparagraph*{Public Types inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
 \begin{DoxyCompactItemize}
 \item 
-enum \{ \mbox{\hyperlink{class_base_object_adf764cbdea00d65edcd07bb9953ad2b7a56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
+enum \{ \mbox{\hyperlink{class_base_object_a06fc87d81c62e9abb8790b6e5713c55ba56205085b8e5cc892bead298d181fae6}{Type}} = OBJ\+\_\+\+TYPE\+\_\+\+BASE
  \}
 \end{DoxyCompactItemize}
 \doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_text_single_object_abfd1a4c6b8ef79697659cce0e6896933}{Text\+Single\+Object}} (const QString \&str, qreal x, qreal y, QRgb rgb, QGraphics\+Item $\ast$parent=0)
+\mbox{\hyperlink{class_text_single_object_a46c5c828fa68edd63441683fb6a47d88}{Text\+Single\+Object}} (const QString \&str, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, QRgb rgb, QGraphics\+Item $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_text_single_object_a3cb3a7d5c79e32c637a507efdf12cfc2}{Text\+Single\+Object}} (\mbox{\hyperlink{class_text_single_object}{Text\+Single\+Object}} $\ast$obj, QGraphics\+Item $\ast$parent=0)
 \item 
 \mbox{\hyperlink{class_text_single_object_a9333059446169a1704b15db08a8a493a}{$\sim$\+Text\+Single\+Object}} ()
 \item 
 virtual int \mbox{\hyperlink{class_text_single_object_a67b824a3d6f5f8dc7b9f435353c62676}{type}} () const
+\item 
+void \mbox{\hyperlink{class_text_single_object_a0502b1275a248b2ff978f720f7baf983}{init}} (const QString \&str, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
 \item 
 QList$<$ QPainter\+Path $>$ \mbox{\hyperlink{class_text_single_object_ae7f14441ae9fb837a93dced6d3050559}{object\+Save\+Path\+List}} () const
 \item 
@@ -37,7 +39,7 @@ QString \mbox{\hyperlink{class_text_single_object_a66d69d5468a03b707993dd1364e74
 \item 
 QString \mbox{\hyperlink{class_text_single_object_af9bb36818f9208f156ebd84f0c9dc431}{object\+Text\+Justify}} () const
 \item 
-qreal \mbox{\hyperlink{class_text_single_object_aee31d760f66e08981ba3728a0047c7c3}{object\+Text\+Size}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_text_single_object_ad80dfdc033ebdbd822c85cbcf551fb77}{object\+Text\+Size}} () const
 \item 
 bool \mbox{\hyperlink{class_text_single_object_abd9bfad20a4f91e670c97e500677a564}{object\+Text\+Bold}} () const
 \item 
@@ -55,9 +57,9 @@ bool \mbox{\hyperlink{class_text_single_object_ae00edebc0fe78e6ddd525c6a62673d3d
 \item 
 QPointF \mbox{\hyperlink{class_text_single_object_a1a830f5a31e400da1680895d92f8b763}{object\+Pos}} () const
 \item 
-qreal \mbox{\hyperlink{class_text_single_object_a5accd51fbc75b1a14a56c2f20b57769e}{objectX}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_text_single_object_ace4975b202743d55bd6e2cfa99984a1e}{objectX}} () const
 \item 
-qreal \mbox{\hyperlink{class_text_single_object_a672f9e4f77a92bb4211be8bbb3981634}{objectY}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_text_single_object_a46fc8cee1a08acb0d28b5a6663983232}{objectY}} () const
 \item 
 QString\+List \mbox{\hyperlink{class_text_single_object_a3b60cf4746c50761c5b102c523de7606}{object\+Text\+Justify\+List}} () const
 \item 
@@ -67,7 +69,7 @@ void \mbox{\hyperlink{class_text_single_object_a36ccc380480cb4a4a4927f95eec349fc
 \item 
 void \mbox{\hyperlink{class_text_single_object_aecfd4b92054f93852799a05ca2d50127}{set\+Object\+Text\+Justify}} (const QString \&justify)
 \item 
-void \mbox{\hyperlink{class_text_single_object_a9b7089332d5c05cd7a8b0e858f3cee36}{set\+Object\+Text\+Size}} (qreal size)
+void \mbox{\hyperlink{class_text_single_object_adb0d1365dd5e5491ff66bdb017f7d9dd}{set\+Object\+Text\+Size}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} size)
 \item 
 void \mbox{\hyperlink{class_text_single_object_aee43a0de60de2931ec49670747a0adba}{set\+Object\+Text\+Style}} (bool bold, bool italic, bool under, bool strike, bool over)
 \item 
@@ -87,11 +89,11 @@ void \mbox{\hyperlink{class_text_single_object_a751e66a1a647a1b5980069f719db0ce7
 \item 
 void \mbox{\hyperlink{class_text_single_object_a4c60e3a9a4952f0780a652dfbc2d5c38}{set\+Object\+Pos}} (const QPointF \&point)
 \item 
-void \mbox{\hyperlink{class_text_single_object_a3462477d59b303adaec6a9cb98a10313}{set\+Object\+Pos}} (qreal x, qreal y)
+void \mbox{\hyperlink{class_text_single_object_a77259130aaa4cdcd0910fa1ef60518a2}{set\+Object\+Pos}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
 \item 
-void \mbox{\hyperlink{class_text_single_object_a5827c1605b3f62a56fa5008b498fc7b0}{set\+ObjectX}} (qreal x)
+void \mbox{\hyperlink{class_text_single_object_a16b8364c9f0b4ef9ce1a0604b58faf60}{set\+ObjectX}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x)
 \item 
-void \mbox{\hyperlink{class_text_single_object_abf77d0df0a021f2d033e1be15580edb5}{set\+ObjectY}} (qreal y)
+void \mbox{\hyperlink{class_text_single_object_a4e5af5d52a15ae578a26d72f6bc6f52a}{set\+ObjectY}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y)
 \item 
 void \mbox{\hyperlink{class_text_single_object_add4e11623be9bc6e02557c67674564ed}{update\+Rubber}} (QPainter $\ast$painter=0)
 \item 
@@ -122,7 +124,7 @@ QRgb \mbox{\hyperlink{class_base_object_a8dc961aacf04cf3f232c9e8b74a0b458}{objec
 \item 
 Qt\+::\+Pen\+Style \mbox{\hyperlink{class_base_object_ae0a604004cfeb357f0548b2f6e57b598}{object\+Line\+Type}} () const
 \item 
-qreal \mbox{\hyperlink{class_base_object_a35cd00e428fb7d678fdf3910a24a42d6}{object\+Line\+Weight}} () const
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a1a128171318d66ad813ee9389e54d084}{object\+Line\+Weight}} () const
 \item 
 QPainter\+Path \mbox{\hyperlink{class_base_object_a412eb69dc8fcb917011df8514ca2ffdd}{object\+Path}} () const
 \item 
@@ -132,17 +134,29 @@ QPointF \mbox{\hyperlink{class_base_object_afe364b3703b71b547e359106944e0d89}{ob
 \item 
 QString \mbox{\hyperlink{class_base_object_abde4bc1ba52dda6ce2c750727b3d1c17}{object\+Rubber\+Text}} (const QString \&key) const
 \item 
+QPointF \mbox{\hyperlink{class_base_object_a6e02f5f5c100974d3300f0676e28f21b}{object\+Center}} () const
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a01bd01f5638cd6900cf3508eeb56c050}{object\+CenterX}} () const
+\item 
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_base_object_a0c5cda475129b6a745d0303b9f091ce4}{object\+CenterY}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_ac66c41fce2b0e882f8979c94da33af98}{set\+Object\+Center}} (\mbox{\hyperlink{embroidery_8h_a16fa26764453571074cb85a7574738d4}{Emb\+Vector}} center)
+\item 
+void \mbox{\hyperlink{class_base_object_a088d122cd2f294797b3d912fa5d77f7d}{set\+Object\+CenterX}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerX)
+\item 
+void \mbox{\hyperlink{class_base_object_a7fde4e68a4b06fd94c64f6bc55d94263}{set\+Object\+CenterY}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} centerY)
+\item 
 QRectF \mbox{\hyperlink{class_base_object_a219118b77139ccd62076e632467d45c4}{rect}} () const
 \item 
 void \mbox{\hyperlink{class_base_object_ae443d04537526140184689e987b27623}{set\+Rect}} (const QRectF \&r)
 \item 
-void \mbox{\hyperlink{class_base_object_af2b0fbb979971d15e5f2b02a2a7d1abf}{set\+Rect}} (qreal x, qreal y, qreal w, qreal h)
+void \mbox{\hyperlink{class_base_object_aac7bf9412ec3b195464feb6a36148d99}{set\+Rect}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} w, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} h)
 \item 
 QLineF \mbox{\hyperlink{class_base_object_a2ade3e56db935cd69fd3a46ef26c3f1c}{line}} () const
 \item 
 void \mbox{\hyperlink{class_base_object_a321d2d38e3176c39656090d311ea753e}{set\+Line}} (const QLineF \&li)
 \item 
-void \mbox{\hyperlink{class_base_object_ade461de6393f7953c6f2e5167cca5be7}{set\+Line}} (qreal x1, qreal y1, qreal x2, qreal y2)
+void \mbox{\hyperlink{class_base_object_a69935f9f192b284399c79e5b1ede9a14}{set\+Line}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y1, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} x2, \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} y2)
 \item 
 void \mbox{\hyperlink{class_base_object_a0abb399709aa2214d9a2ecbf28335894}{set\+Object\+Color}} (const QColor \&color)
 \item 
@@ -150,7 +164,7 @@ void \mbox{\hyperlink{class_base_object_aa67b1eed03b12bc06fbca3db567eb56d}{set\+
 \item 
 void \mbox{\hyperlink{class_base_object_a59af90152f97f3c4136a4594ec4b5346}{set\+Object\+Line\+Type}} (Qt\+::\+Pen\+Style line\+Type)
 \item 
-void \mbox{\hyperlink{class_base_object_afd09aefdd45b1a264ae45e12b1ea7d59}{set\+Object\+Line\+Weight}} (qreal line\+Weight)
+void \mbox{\hyperlink{class_base_object_ad12aba3f58db683304dcde1f65d92c93}{set\+Object\+Line\+Weight}} (\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} line\+Weight)
 \item 
 void \mbox{\hyperlink{class_base_object_abe260738bb530527583e2f64e6883a1f}{set\+Object\+Path}} (const QPainter\+Path \&p)
 \item 
@@ -174,30 +188,7 @@ virtual QList$<$ QPointF $>$ \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c
 \item 
 virtual void \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{grip\+Edit}} (const QPointF \&before, const QPointF \&after)=0
 \end{DoxyCompactItemize}
-\doxysubsubsection*{Protected Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \mbox{\hyperlink{class_text_single_object_a8c124c843504f6971f6677f12ac9247f}{paint}} (QPainter $\ast$, const QStyle\+Option\+Graphics\+Item $\ast$, QWidget $\ast$)
-\end{DoxyCompactItemize}
-\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
-\begin{DoxyCompactItemize}
-\item 
-QPen \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{line\+Weight\+Pen}} () const
-\item 
-qreal \mbox{\hyperlink{class_base_object_ab5ad5bd82be7c0e997b240dc84a41f2a}{pi}} () const
-\item 
-qreal \mbox{\hyperlink{class_base_object_a7dc5e96f4e28b14d82b05e74822b261b}{radians}} (qreal degree) const
-\item 
-qreal \mbox{\hyperlink{class_base_object_af1174f0ca1609e6e5efc8078b0170962}{degrees}} (qreal radian) const
-\item 
-void \mbox{\hyperlink{class_base_object_a7f8405662dc85ae3f3e257c36a065c8d}{real\+Render}} (QPainter $\ast$painter, const QPainter\+Path \&render\+Path)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Member Functions}
-\begin{DoxyCompactItemize}
-\item 
-void \mbox{\hyperlink{class_text_single_object_aa0de0266635cdc0f8c6ddf27b9187df1}{init}} (const QString \&str, qreal x, qreal y, QRgb rgb, Qt\+::\+Pen\+Style line\+Type)
-\end{DoxyCompactItemize}
-\doxysubsubsection*{Private Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 QString \mbox{\hyperlink{class_text_single_object_a436935c8d5c17c50a8ec53f70dd348e0}{obj\+Text}}
@@ -206,7 +197,7 @@ QString \mbox{\hyperlink{class_text_single_object_a55a3988ac8255fcf5e354aca19fa9
 \item 
 QString \mbox{\hyperlink{class_text_single_object_a6aeda44e1b3a63360c352b5454d1e7da}{obj\+Text\+Justify}}
 \item 
-qreal \mbox{\hyperlink{class_text_single_object_a90816c6fe8d7adb237a6559c7bafad7f}{obj\+Text\+Size}}
+\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} \mbox{\hyperlink{class_text_single_object_a697933a191825b602d76eefaf3af326f}{obj\+Text\+Size}}
 \item 
 bool \mbox{\hyperlink{class_text_single_object_afed9a50ce71a6b4afe8be0fa01faf85a}{obj\+Text\+Bold}}
 \item 
@@ -224,6 +215,35 @@ bool \mbox{\hyperlink{class_text_single_object_aea46e55e75f9793fa12c083156f0fb93
 \item 
 QPainter\+Path \mbox{\hyperlink{class_text_single_object_ac9429bed2406eb0b91c4757f9a14ace3}{obj\+Text\+Path}}
 \end{DoxyCompactItemize}
+\doxyparagraph*{Public Attributes inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+QPen \mbox{\hyperlink{class_base_object_a2b56b214c2181ebc987cea243ad90d84}{obj\+Pen}}
+\item 
+QPen \mbox{\hyperlink{class_base_object_ade83f75b3122d793d6f692ed411921da}{lwt\+Pen}}
+\item 
+QLineF \mbox{\hyperlink{class_base_object_a354490514773214110dd038847f7510e}{obj\+Line}}
+\item 
+int \mbox{\hyperlink{class_base_object_a53e2d92993be951f9e5cdadb82fae316}{obj\+Rubber\+Mode}}
+\item 
+QHash$<$ QString, QPointF $>$ \mbox{\hyperlink{class_base_object_a7369d3b6403fe2ffbebaa63ad51bf609}{obj\+Rubber\+Points}}
+\item 
+QHash$<$ QString, QString $>$ \mbox{\hyperlink{class_base_object_a520c9eb8e88469046cdaab1f3d679e69}{obj\+Rubber\+Texts}}
+\item 
+qint64 \mbox{\hyperlink{class_base_object_a41f66da1ca9ecaeb4f57c60ea008b09c}{obj\+ID}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_text_single_object_a8c124c843504f6971f6677f12ac9247f}{paint}} (QPainter $\ast$, const QStyle\+Option\+Graphics\+Item $\ast$, QWidget $\ast$)
+\end{DoxyCompactItemize}
+\doxyparagraph*{Protected Member Functions inherited from \mbox{\hyperlink{class_base_object}{Base\+Object}}}
+\begin{DoxyCompactItemize}
+\item 
+QPen \mbox{\hyperlink{class_base_object_a7ac621b0affe3fbfc373d8dbc1ea0fd2}{line\+Weight\+Pen}} () const
+\item 
+void \mbox{\hyperlink{class_base_object_a7f8405662dc85ae3f3e257c36a065c8d}{real\+Render}} (QPainter $\ast$painter, const QPainter\+Path \&render\+Path)
+\end{DoxyCompactItemize}
 
 
 \doxysubsubsection{Member Enumeration Documentation}
@@ -240,13 +260,23 @@ Type&\\
 
 
 \doxysubsubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_text_single_object_abfd1a4c6b8ef79697659cce0e6896933}\label{class_text_single_object_abfd1a4c6b8ef79697659cce0e6896933}} 
+\mbox{\Hypertarget{class_text_single_object_a46c5c828fa68edd63441683fb6a47d88}\label{class_text_single_object_a46c5c828fa68edd63441683fb6a47d88}} 
 \index{TextSingleObject@{TextSingleObject}!TextSingleObject@{TextSingleObject}}
 \index{TextSingleObject@{TextSingleObject}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{TextSingleObject()}{TextSingleObject()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_text_single_object}{Text\+Single\+Object}} (\begin{DoxyParamCaption}\item[{const QString \&}]{str,  }\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_text_single_object}{Text\+Single\+Object}} (\begin{DoxyParamCaption}\item[{const QString \&}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{QRgb}]{rgb,  }\item[{QGraphics\+Item $\ast$}]{parent = {\ttfamily 0} }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_text_single_object_a3cb3a7d5c79e32c637a507efdf12cfc2}\label{class_text_single_object_a3cb3a7d5c79e32c637a507efdf12cfc2}} 
+Embroidermodder 2.
+
+\DoxyHorRuler{0}
+
+
+Copyright 2013-\/2022 The Embroidermodder Team Embroidermodder 2 is Open Source Software. See LICENSE for licensing terms.
+
+\DoxyHorRuler{0}
+
+
+Use Python\textquotesingle{}s PEP7 style guide. \href{https://peps.python.org/pep-0007/}{\texttt{ https\+://peps.\+python.\+org/pep-\/0007/}} \mbox{\Hypertarget{class_text_single_object_a3cb3a7d5c79e32c637a507efdf12cfc2}\label{class_text_single_object_a3cb3a7d5c79e32c637a507efdf12cfc2}} 
 \index{TextSingleObject@{TextSingleObject}!TextSingleObject@{TextSingleObject}}
 \index{TextSingleObject@{TextSingleObject}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{TextSingleObject()}{TextSingleObject()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
@@ -281,11 +311,11 @@ Implements \mbox{\hyperlink{class_base_object_ac4ee17e41d5451c0e2efaeb88521eadc}
 
 Implements \mbox{\hyperlink{class_base_object_a1c46a0045853e83ae92ff1128ec0c6aa}{Base\+Object}}.
 
-\mbox{\Hypertarget{class_text_single_object_aa0de0266635cdc0f8c6ddf27b9187df1}\label{class_text_single_object_aa0de0266635cdc0f8c6ddf27b9187df1}} 
+\mbox{\Hypertarget{class_text_single_object_a0502b1275a248b2ff978f720f7baf983}\label{class_text_single_object_a0502b1275a248b2ff978f720f7baf983}} 
 \index{TextSingleObject@{TextSingleObject}!init@{init}}
 \index{init@{init}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{init()}{init()}}
-{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{const QString \&}]{str,  }\item[{qreal}]{x,  }\item[{qreal}]{y,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily void init (\begin{DoxyParamCaption}\item[{const QString \&}]{str,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y,  }\item[{QRgb}]{rgb,  }\item[{Qt\+::\+Pen\+Style}]{line\+Type }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_text_single_object_a71dcd474d5a8c0e5fdc137b48da18a0c}\label{class_text_single_object_a71dcd474d5a8c0e5fdc137b48da18a0c}} 
 \index{TextSingleObject@{TextSingleObject}!mouseSnapPoint@{mouseSnapPoint}}
@@ -357,11 +387,11 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{objectTextOverline()}{objectTextOverline()}}
 {\footnotesize\ttfamily bool object\+Text\+Overline (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_text_single_object_aee31d760f66e08981ba3728a0047c7c3}\label{class_text_single_object_aee31d760f66e08981ba3728a0047c7c3}} 
+\mbox{\Hypertarget{class_text_single_object_ad80dfdc033ebdbd822c85cbcf551fb77}\label{class_text_single_object_ad80dfdc033ebdbd822c85cbcf551fb77}} 
 \index{TextSingleObject@{TextSingleObject}!objectTextSize@{objectTextSize}}
 \index{objectTextSize@{objectTextSize}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objectTextSize()}{objectTextSize()}}
-{\footnotesize\ttfamily qreal object\+Text\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} object\+Text\+Size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_text_single_object_a007ffd842dd4805180eed1767ecbf102}\label{class_text_single_object_a007ffd842dd4805180eed1767ecbf102}} 
 \index{TextSingleObject@{TextSingleObject}!objectTextStrikeOut@{objectTextStrikeOut}}
@@ -381,17 +411,17 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{objectTextUpsideDown()}{objectTextUpsideDown()}}
 {\footnotesize\ttfamily bool object\+Text\+Upside\+Down (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_text_single_object_a5accd51fbc75b1a14a56c2f20b57769e}\label{class_text_single_object_a5accd51fbc75b1a14a56c2f20b57769e}} 
+\mbox{\Hypertarget{class_text_single_object_ace4975b202743d55bd6e2cfa99984a1e}\label{class_text_single_object_ace4975b202743d55bd6e2cfa99984a1e}} 
 \index{TextSingleObject@{TextSingleObject}!objectX@{objectX}}
 \index{objectX@{objectX}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objectX()}{objectX()}}
-{\footnotesize\ttfamily qreal objectX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} objectX (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_text_single_object_a672f9e4f77a92bb4211be8bbb3981634}\label{class_text_single_object_a672f9e4f77a92bb4211be8bbb3981634}} 
+\mbox{\Hypertarget{class_text_single_object_a46fc8cee1a08acb0d28b5a6663983232}\label{class_text_single_object_a46fc8cee1a08acb0d28b5a6663983232}} 
 \index{TextSingleObject@{TextSingleObject}!objectY@{objectY}}
 \index{objectY@{objectY}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objectY()}{objectY()}}
-{\footnotesize\ttfamily qreal objectY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} objectY (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_text_single_object_a8c124c843504f6971f6677f12ac9247f}\label{class_text_single_object_a8c124c843504f6971f6677f12ac9247f}} 
 \index{TextSingleObject@{TextSingleObject}!paint@{paint}}
@@ -405,11 +435,11 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{setObjectPos()}{setObjectPos()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{const QPointF \&}]{point }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_text_single_object_a3462477d59b303adaec6a9cb98a10313}\label{class_text_single_object_a3462477d59b303adaec6a9cb98a10313}} 
+\mbox{\Hypertarget{class_text_single_object_a77259130aaa4cdcd0910fa1ef60518a2}\label{class_text_single_object_a77259130aaa4cdcd0910fa1ef60518a2}} 
 \index{TextSingleObject@{TextSingleObject}!setObjectPos@{setObjectPos}}
 \index{setObjectPos@{setObjectPos}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{setObjectPos()}{setObjectPos()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{qreal}]{x,  }\item[{qreal}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void set\+Object\+Pos (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x,  }\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_text_single_object_a24dfe9e669bed01d4608fc2e46090cc4}\label{class_text_single_object_a24dfe9e669bed01d4608fc2e46090cc4}} 
 \index{TextSingleObject@{TextSingleObject}!setObjectText@{setObjectText}}
@@ -453,11 +483,11 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{setObjectTextOverline()}{setObjectTextOverline()}}
 {\footnotesize\ttfamily void set\+Object\+Text\+Overline (\begin{DoxyParamCaption}\item[{bool}]{val }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_text_single_object_a9b7089332d5c05cd7a8b0e858f3cee36}\label{class_text_single_object_a9b7089332d5c05cd7a8b0e858f3cee36}} 
+\mbox{\Hypertarget{class_text_single_object_adb0d1365dd5e5491ff66bdb017f7d9dd}\label{class_text_single_object_adb0d1365dd5e5491ff66bdb017f7d9dd}} 
 \index{TextSingleObject@{TextSingleObject}!setObjectTextSize@{setObjectTextSize}}
 \index{setObjectTextSize@{setObjectTextSize}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{setObjectTextSize()}{setObjectTextSize()}}
-{\footnotesize\ttfamily void set\+Object\+Text\+Size (\begin{DoxyParamCaption}\item[{qreal}]{size }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void set\+Object\+Text\+Size (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{size }\end{DoxyParamCaption})}
 
 \mbox{\Hypertarget{class_text_single_object_a900f48dff7954e7f73b0b3b2c36e527f}\label{class_text_single_object_a900f48dff7954e7f73b0b3b2c36e527f}} 
 \index{TextSingleObject@{TextSingleObject}!setObjectTextStrikeOut@{setObjectTextStrikeOut}}
@@ -483,17 +513,17 @@ Implements \mbox{\hyperlink{class_base_object_a80af764c683465a8777c85754f619d28}
 \doxyparagraph{\texorpdfstring{setObjectTextUpsideDown()}{setObjectTextUpsideDown()}}
 {\footnotesize\ttfamily void set\+Object\+Text\+Upside\+Down (\begin{DoxyParamCaption}\item[{bool}]{val }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{class_text_single_object_a5827c1605b3f62a56fa5008b498fc7b0}\label{class_text_single_object_a5827c1605b3f62a56fa5008b498fc7b0}} 
+\mbox{\Hypertarget{class_text_single_object_a16b8364c9f0b4ef9ce1a0604b58faf60}\label{class_text_single_object_a16b8364c9f0b4ef9ce1a0604b58faf60}} 
 \index{TextSingleObject@{TextSingleObject}!setObjectX@{setObjectX}}
 \index{setObjectX@{setObjectX}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{setObjectX()}{setObjectX()}}
-{\footnotesize\ttfamily void set\+ObjectX (\begin{DoxyParamCaption}\item[{qreal}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void set\+ObjectX (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{x }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
-\mbox{\Hypertarget{class_text_single_object_abf77d0df0a021f2d033e1be15580edb5}\label{class_text_single_object_abf77d0df0a021f2d033e1be15580edb5}} 
+\mbox{\Hypertarget{class_text_single_object_a4e5af5d52a15ae578a26d72f6bc6f52a}\label{class_text_single_object_a4e5af5d52a15ae578a26d72f6bc6f52a}} 
 \index{TextSingleObject@{TextSingleObject}!setObjectY@{setObjectY}}
 \index{setObjectY@{setObjectY}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{setObjectY()}{setObjectY()}}
-{\footnotesize\ttfamily void set\+ObjectY (\begin{DoxyParamCaption}\item[{qreal}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void set\+ObjectY (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 \mbox{\Hypertarget{class_text_single_object_a0c4d7aca894bd5837c32949b629281ff}\label{class_text_single_object_a0c4d7aca894bd5837c32949b629281ff}} 
 \index{TextSingleObject@{TextSingleObject}!subPathList@{subPathList}}
@@ -534,77 +564,77 @@ Implements \mbox{\hyperlink{class_base_object_ac256400a6f25c6c8af7e18e1ac1a0181}
 \index{TextSingleObject@{TextSingleObject}!objText@{objText}}
 \index{objText@{objText}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objText}{objText}}
-{\footnotesize\ttfamily QString obj\+Text\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString obj\+Text}
 
 \mbox{\Hypertarget{class_text_single_object_a7377723a61779d93dac21ab6baf1e524}\label{class_text_single_object_a7377723a61779d93dac21ab6baf1e524}} 
 \index{TextSingleObject@{TextSingleObject}!objTextBackward@{objTextBackward}}
 \index{objTextBackward@{objTextBackward}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextBackward}{objTextBackward}}
-{\footnotesize\ttfamily bool obj\+Text\+Backward\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Backward}
 
 \mbox{\Hypertarget{class_text_single_object_afed9a50ce71a6b4afe8be0fa01faf85a}\label{class_text_single_object_afed9a50ce71a6b4afe8be0fa01faf85a}} 
 \index{TextSingleObject@{TextSingleObject}!objTextBold@{objTextBold}}
 \index{objTextBold@{objTextBold}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextBold}{objTextBold}}
-{\footnotesize\ttfamily bool obj\+Text\+Bold\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Bold}
 
 \mbox{\Hypertarget{class_text_single_object_a55a3988ac8255fcf5e354aca19fa984d}\label{class_text_single_object_a55a3988ac8255fcf5e354aca19fa984d}} 
 \index{TextSingleObject@{TextSingleObject}!objTextFont@{objTextFont}}
 \index{objTextFont@{objTextFont}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextFont}{objTextFont}}
-{\footnotesize\ttfamily QString obj\+Text\+Font\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString obj\+Text\+Font}
 
 \mbox{\Hypertarget{class_text_single_object_a51e25f445db383dcfbf9c07b7ff74590}\label{class_text_single_object_a51e25f445db383dcfbf9c07b7ff74590}} 
 \index{TextSingleObject@{TextSingleObject}!objTextItalic@{objTextItalic}}
 \index{objTextItalic@{objTextItalic}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextItalic}{objTextItalic}}
-{\footnotesize\ttfamily bool obj\+Text\+Italic\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Italic}
 
 \mbox{\Hypertarget{class_text_single_object_a6aeda44e1b3a63360c352b5454d1e7da}\label{class_text_single_object_a6aeda44e1b3a63360c352b5454d1e7da}} 
 \index{TextSingleObject@{TextSingleObject}!objTextJustify@{objTextJustify}}
 \index{objTextJustify@{objTextJustify}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextJustify}{objTextJustify}}
-{\footnotesize\ttfamily QString obj\+Text\+Justify\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QString obj\+Text\+Justify}
 
 \mbox{\Hypertarget{class_text_single_object_a7abd4d0a3137df09011f00abcd48effa}\label{class_text_single_object_a7abd4d0a3137df09011f00abcd48effa}} 
 \index{TextSingleObject@{TextSingleObject}!objTextOverline@{objTextOverline}}
 \index{objTextOverline@{objTextOverline}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextOverline}{objTextOverline}}
-{\footnotesize\ttfamily bool obj\+Text\+Overline\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Overline}
 
 \mbox{\Hypertarget{class_text_single_object_ac9429bed2406eb0b91c4757f9a14ace3}\label{class_text_single_object_ac9429bed2406eb0b91c4757f9a14ace3}} 
 \index{TextSingleObject@{TextSingleObject}!objTextPath@{objTextPath}}
 \index{objTextPath@{objTextPath}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextPath}{objTextPath}}
-{\footnotesize\ttfamily QPainter\+Path obj\+Text\+Path\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily QPainter\+Path obj\+Text\+Path}
 
-\mbox{\Hypertarget{class_text_single_object_a90816c6fe8d7adb237a6559c7bafad7f}\label{class_text_single_object_a90816c6fe8d7adb237a6559c7bafad7f}} 
+\mbox{\Hypertarget{class_text_single_object_a697933a191825b602d76eefaf3af326f}\label{class_text_single_object_a697933a191825b602d76eefaf3af326f}} 
 \index{TextSingleObject@{TextSingleObject}!objTextSize@{objTextSize}}
 \index{objTextSize@{objTextSize}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextSize}{objTextSize}}
-{\footnotesize\ttfamily qreal obj\+Text\+Size\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{embroidery_8h_a2082be9aabfb541dff1825c4ca6a05cd}{Emb\+Real}} obj\+Text\+Size}
 
 \mbox{\Hypertarget{class_text_single_object_ae6838350c529ce34b7ebc265a2f9b416}\label{class_text_single_object_ae6838350c529ce34b7ebc265a2f9b416}} 
 \index{TextSingleObject@{TextSingleObject}!objTextStrikeOut@{objTextStrikeOut}}
 \index{objTextStrikeOut@{objTextStrikeOut}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextStrikeOut}{objTextStrikeOut}}
-{\footnotesize\ttfamily bool obj\+Text\+Strike\+Out\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Strike\+Out}
 
 \mbox{\Hypertarget{class_text_single_object_a24c17d15655e63cdcdb9831b3b3a1e3d}\label{class_text_single_object_a24c17d15655e63cdcdb9831b3b3a1e3d}} 
 \index{TextSingleObject@{TextSingleObject}!objTextUnderline@{objTextUnderline}}
 \index{objTextUnderline@{objTextUnderline}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextUnderline}{objTextUnderline}}
-{\footnotesize\ttfamily bool obj\+Text\+Underline\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Underline}
 
 \mbox{\Hypertarget{class_text_single_object_aea46e55e75f9793fa12c083156f0fb93}\label{class_text_single_object_aea46e55e75f9793fa12c083156f0fb93}} 
 \index{TextSingleObject@{TextSingleObject}!objTextUpsideDown@{objTextUpsideDown}}
 \index{objTextUpsideDown@{objTextUpsideDown}!TextSingleObject@{TextSingleObject}}
 \doxyparagraph{\texorpdfstring{objTextUpsideDown}{objTextUpsideDown}}
-{\footnotesize\ttfamily bool obj\+Text\+Upside\+Down\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily bool obj\+Text\+Upside\+Down}
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-embroidermodder2/\mbox{\hyperlink{object-textsingle_8h}{object-\/textsingle.\+h}}\item 
+embroidermodder2/\mbox{\hyperlink{embroidermodder_8h}{embroidermodder.\+h}}\item 
 embroidermodder2/\mbox{\hyperlink{object-textsingle_8cpp}{object-\/textsingle.\+cpp}}\end{DoxyCompactItemize}
