@@ -1747,5 +1747,3 @@ void PropertyEditor::fieldEdited(QObject* fieldObj)
 
     blockSignals = false;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

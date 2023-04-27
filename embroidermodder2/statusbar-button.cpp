@@ -238,5 +238,3 @@ void StatusBarButton::disableReal()
     View* gview = mainWin->activeView();
     if(gview) { gview->toggleReal(false); }
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

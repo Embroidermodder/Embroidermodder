@@ -137,7 +137,7 @@ UndoableScaleCommand::UndoableScaleCommand(EmbReal x, EmbReal y, EmbReal scaleFa
     setText(text);
 
     //Prevent division by zero and other wacky behavior
-    if(scaleFactor <= 0.0)
+    if (scaleFactor <= 0.0)
     {
         dx = 0.0;
         dy = 0.0;
@@ -190,7 +190,7 @@ UndoableNavCommand::UndoableNavCommand(const QString& type, View* v, QUndoComman
 
 bool UndoableNavCommand::mergeWith(const QUndoCommand* newest)
 {
-    if(newest->id() != id()) // make sure other is also an UndoableNavCommand
+    if (newest->id() != id()) // make sure other is also an UndoableNavCommand
          return false;
 
     const UndoableNavCommand* cmd = static_cast<const UndoableNavCommand*>(newest);
@@ -202,7 +202,7 @@ bool UndoableNavCommand::mergeWith(const QUndoCommand* newest)
 
 void UndoableNavCommand::undo()
 {
-    if(!done)
+    if (!done)
     {
         toTransform = gview->transform();
         toCenter = gview->center();
@@ -216,18 +216,18 @@ void UndoableNavCommand::undo()
 void UndoableNavCommand::redo()
 {
 
-    if(!done)
+    if (!done)
     {
-        if     (navType == "ZoomInToPoint")  { gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), +1); }
-        else if(navType == "ZoomOutToPoint") { gview->zoomToPoint(gview->scene()->property(VIEW_MOUSE_POINT).toPoint(), -1); }
-        else if(navType == "ZoomExtents")    { gview->zoomExtents(); }
-        else if(navType == "ZoomSelected")   { gview->zoomSelected(); }
-        else if(navType == "PanStart")       { /* Do Nothing. We are just recording the spot where the pan started. */  }
-        else if(navType == "PanStop")        { /* Do Nothing. We are just recording the spot where the pan stopped. */  }
-        else if(navType == "PanLeft")        { gview->panLeft();  }
-        else if(navType == "PanRight")       { gview->panRight(); }
-        else if(navType == "PanUp")          { gview->panUp();    }
-        else if(navType == "PanDown")        { gview->panDown();  }
+        if     (navType == "ZoomInToPoint")  { gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), +1); }
+        else if (navType == "ZoomOutToPoint") { gview->zoomToPoint(gview->scene()->property("VIEW_MOUSE_POINT").toPoint(), -1); }
+        else if (navType == "ZoomExtents")    { gview->zoomExtents(); }
+        else if (navType == "ZoomSelected")   { gview->zoomSelected(); }
+        else if (navType == "PanStart")       { /* Do Nothing. We are just recording the spot where the pan started. */  }
+        else if (navType == "PanStop")        { /* Do Nothing. We are just recording the spot where the pan stopped. */  }
+        else if (navType == "PanLeft")        { gview->panLeft();  }
+        else if (navType == "PanRight")       { gview->panRight(); }
+        else if (navType == "PanUp")          { gview->panUp();    }
+        else if (navType == "PanDown")        { gview->panDown();  }
         toTransform = gview->transform();
         toCenter = gview->center();
     }

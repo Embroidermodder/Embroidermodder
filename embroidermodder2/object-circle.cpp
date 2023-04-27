@@ -42,8 +42,8 @@ CircleObject::~CircleObject()
 
 void CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_CIRCLE);
+    setData(OBJ_TYPE, OBJ_TYPE_CIRCLE);
+    setData(OBJ_NAME, "Circle");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -51,32 +51,13 @@ void CircleObject::init(EmbReal centerX, EmbReal centerY, EmbReal radius, QRgb r
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     setObjectRadius(radius);
-    setObjectCenter(centerX, centerY);
+    EmbVector center = {centerX, centerY};
+    setObjectCenter(center);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
     setPen(objectPen());
     updatePath();
-}
-
-void CircleObject::setObjectCenter(const QPointF& center)
-{
-    setObjectCenter(center.x(), center.y());
-}
-
-void CircleObject::setObjectCenter(EmbReal centerX, EmbReal centerY)
-{
-    setPos(centerX, centerY);
-}
-
-void CircleObject::setObjectCenterX(EmbReal centerX)
-{
-    setX(centerX);
-}
-
-void CircleObject::setObjectCenterY(EmbReal centerY)
-{
-    setY(centerY);
 }
 
 void CircleObject::setObjectRadius(EmbReal radius)
@@ -129,7 +110,7 @@ void CircleObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opti
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
@@ -145,11 +126,11 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
         QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        setObjectCenter(sceneCenterPoint);
+        setObjectCenter(to_EmbVector(sceneCenterPoint));
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         EmbReal radius = sceneLine.length();
         setObjectRadius(radius);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_CIRCLE_1P_DIA)
@@ -159,11 +140,11 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemQSnapPoint = mapFromScene(sceneQSnapPoint);
         QLineF itemLine(itemCenterPoint, itemQSnapPoint);
-        setObjectCenter(sceneCenterPoint);
+        setObjectCenter(to_EmbVector(sceneCenterPoint));
         QLineF sceneLine(sceneCenterPoint, sceneQSnapPoint);
         EmbReal diameter = sceneLine.length();
         setObjectDiameter(diameter);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_CIRCLE_2P)
@@ -171,7 +152,7 @@ void CircleObject::updateRubber(QPainter* painter)
         QPointF sceneTan1Point = objectRubberPoint("CIRCLE_TAN1");
         QPointF sceneQSnapPoint = objectRubberPoint("CIRCLE_TAN2");
         QLineF sceneLine(sceneTan1Point, sceneQSnapPoint);
-        setObjectCenter(sceneLine.pointAt(0.5));
+        setObjectCenter(to_EmbVector(sceneLine.pointAt(0.5)));
         EmbReal diameter = sceneLine.length();
         setObjectDiameter(diameter);
         updatePath();
@@ -193,7 +174,7 @@ void CircleObject::updateRubber(QPainter* painter)
         getArcCenter(arc, &sceneCenter);
         QPointF sceneCenterPoint(sceneCenter.x, sceneCenter.y);
         QLineF sceneLine(sceneCenterPoint, sceneTan3Point);
-        setObjectCenter(sceneCenterPoint);
+        setObjectCenter(to_EmbVector(sceneCenterPoint));
         EmbReal radius = sceneLine.length();
         setObjectRadius(radius);
         updatePath();
@@ -214,7 +195,7 @@ void CircleObject::updateRubber(QPainter* painter)
             }
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }

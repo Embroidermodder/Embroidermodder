@@ -1624,7 +1624,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
     QGraphicsScene* s = mainWin->activeScene();
 
     QCheckBox* checkBoxShowLwt = new QCheckBox(tr("Show LineWeight"), groupBoxLwtMisc);
-    if(s) { dialog_lwt_show_lwt = s->property(ENABLE_LWT).toBool(); }
+    if(s) { dialog_lwt_show_lwt = s->property("ENABLE_LWT").toBool(); }
     else  { dialog_lwt_show_lwt = mainWin->settings_lwt_show_lwt; }
     preview_lwt_show_lwt = dialog_lwt_show_lwt;
     checkBoxShowLwt->setChecked(preview_lwt_show_lwt);
@@ -1632,7 +1632,7 @@ QWidget* Settings_Dialog::createTabLineWeight()
 
     QCheckBox* checkBoxRealRender = new QCheckBox(tr("RealRender"), groupBoxLwtMisc);
     checkBoxRealRender->setObjectName("checkBoxRealRender");
-    if(s) { dialog_lwt_real_render = s->property(ENABLE_REAL).toBool(); }
+    if(s) { dialog_lwt_real_render = s->property("ENABLE_REAL").toBool(); }
     else  { dialog_lwt_real_render = mainWin->settings_lwt_real_render; }
     preview_lwt_real_render = dialog_lwt_real_render;
     checkBoxRealRender->setChecked(preview_lwt_real_render);

@@ -64,8 +64,8 @@ EllipseObject::~EllipseObject()
 void
 EllipseObject::init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal height, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_ELLIPSE);
+    setData(OBJ_TYPE, OBJ_TYPE_ELLIPSE);
+    setData(OBJ_NAME, "Ellipse");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -73,7 +73,8 @@ EllipseObject::init(EmbReal centerX, EmbReal centerY, EmbReal width, EmbReal hei
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     setObjectSize(width, height);
-    setObjectCenter(centerX, centerY);
+    EmbVector center = {centerX, centerY};
+    setObjectCenter(center);
     setObjectColor(rgb);
     setObjectLineType(lineType);
     setObjectLineWeight(0.35); //TODO: pass in proper lineweight
@@ -92,42 +93,6 @@ EllipseObject::setObjectSize(EmbReal width, EmbReal height)
     elRect.setHeight(height);
     elRect.moveCenter(QPointF(0,0));
     setRect(elRect);
-}
-
-/**
- * \brief .
- */
-void
-EllipseObject::setObjectCenter(const QPointF& center)
-{
-    setObjectCenter(center.x(), center.y());
-}
-
-/**
- * \brief .
- */
-void
-EllipseObject::setObjectCenter(EmbReal centerX, EmbReal centerY)
-{
-    setPos(centerX, centerY);
-}
-
-/**
- * \brief .
- */
-void
-EllipseObject::setObjectCenterX(EmbReal centerX)
-{
-    setX(centerX);
-}
-
-/**
- * \brief .
- */
-void
-EllipseObject::setObjectCenterY(EmbReal centerY)
-{
-    setY(centerY);
 }
 
 /**
@@ -258,7 +223,7 @@ EllipseObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, 
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawEllipse(rect());
@@ -278,7 +243,7 @@ EllipseObject::updateRubber(QPainter* painter)
         QPointF itemLinePoint1  = mapFromScene(sceneLinePoint1);
         QPointF itemLinePoint2  = mapFromScene(sceneLinePoint2);
         QLineF itemLine(itemLinePoint1, itemLinePoint2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if (painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORDIAMETER_MINORRADIUS)
@@ -304,14 +269,14 @@ EllipseObject::updateRubber(QPainter* painter)
         norm.intersects(line, &iPoint);
         EmbReal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
-        setObjectCenter(sceneCenterPoint);
+        setObjectCenter(to_EmbVector(sceneCenterPoint));
         setObjectSize(ellipseWidth, ellipseHeight);
         setRotation(-ellipseRot);
 
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_ELLIPSE_MAJORRADIUS_MINORRADIUS)
@@ -336,14 +301,14 @@ EllipseObject::updateRubber(QPainter* painter)
         norm.intersects(line, &iPoint);
         EmbReal ellipseHeight = QLineF(px, py, iPoint.x(), iPoint.y()).length()*2.0;
 
-        setObjectCenter(sceneCenterPoint);
+        setObjectCenter(to_EmbVector(sceneCenterPoint));
         setObjectSize(ellipseWidth, ellipseHeight);
         setRotation(-ellipseRot);
 
         QPointF itemCenterPoint = mapFromScene(sceneCenterPoint);
         QPointF itemAxis2Point2 = mapFromScene(sceneAxis2Point2);
         QLineF itemLine(itemCenterPoint, itemAxis2Point2);
-        if(painter) drawRubberLine(itemLine, painter, VIEW_COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(itemLine, painter, "VIEW_COLOR_CROSSHAIR");
         updatePath();
     }
     else if(rubberMode == OBJ_RUBBER_GRIP)
@@ -383,7 +348,7 @@ EllipseObject::mouseSnapPoint(const QPointF& mousePoint)
     EmbReal q180Dist = QLineF(mousePoint, quad180).length();
     EmbReal q270Dist = QLineF(mousePoint, quad270).length();
 
-    EmbReal minDist = qMin(qMin(qMin(q0Dist, q90Dist), qMin(q180Dist, q270Dist)), cntrDist);
+    EmbReal minDist = std::min({q0Dist, q90Dist, q180Dist, q270Dist, cntrDist});
 
     if     (minDist == cntrDist) return center;
     else if(minDist == q0Dist)   return quad0;

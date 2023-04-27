@@ -41,8 +41,8 @@ LineObject::~LineObject()
 
 void LineObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_LINE);
+    setData(OBJ_TYPE, OBJ_TYPE_LINE);
+    setData(OBJ_NAME, "Line");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -139,12 +139,12 @@ void LineObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     if(objectRubberMode() != OBJ_RUBBER_LINE) painter->drawLine(line());
 
-    if(objScene->property(ENABLE_LWT).toBool() && objScene->property(ENABLE_REAL).toBool()) { realRender(painter, path()); }
+    if(objScene->property("ENABLE_LWT").toBool() && objScene->property("ENABLE_REAL").toBool()) { realRender(painter, path()); }
 }
 
 void LineObject::updateRubber(QPainter* painter)
@@ -158,7 +158,7 @@ void LineObject::updateRubber(QPainter* painter)
         setObjectEndPoint1(sceneStartPoint);
         setObjectEndPoint2(sceneQSnapPoint);
 
-        drawRubberLine(line(), painter, VIEW_COLOR_CROSSHAIR);
+        drawRubberLine(line(), painter, "VIEW_COLOR_CROSSHAIR");
     }
     else if(rubberMode == OBJ_RUBBER_GRIP)
     {
@@ -170,7 +170,7 @@ void LineObject::updateRubber(QPainter* painter)
             else if(gripPoint == objectMidPoint())  painter->drawLine(line().translated(mapFromScene(objectRubberPoint(QString()))-mapFromScene(gripPoint)));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -223,5 +223,3 @@ QPainterPath LineObject::objectSavePath() const
     path.lineTo(objectDeltaX(), objectDeltaY());
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

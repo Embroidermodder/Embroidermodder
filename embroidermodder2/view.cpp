@@ -323,7 +323,7 @@ void View::setRubberText(const QString& key, const QString& txt)
 void View::setGridColor(QRgb color)
 {
     gridColor = QColor(color);
-    gscene->setProperty(VIEW_COLOR_GRID, color);
+    gscene->setProperty("VIEW_COLOR_GRID", color);
     if (gscene) gscene->update();
 }
 
@@ -335,10 +335,22 @@ void View::setRulerColor(QRgb color)
 
 void View::createGrid(const QString& gridType)
 {
-    if     (gridType == "Rectangular") { createGridRect();  gscene->setProperty(ENABLE_GRID, true); }
-    else if (gridType == "Circular")    { createGridPolar(); gscene->setProperty(ENABLE_GRID, true); }
-    else if (gridType == "Isometric")   { createGridIso();   gscene->setProperty(ENABLE_GRID, true); }
-    else                               { gridPath = QPainterPath(); gscene->setProperty(ENABLE_GRID, false); }
+    if (gridType == "Rectangular") {
+        createGridRect();
+        gscene->setProperty("ENABLE_GRID", true);
+    }
+    else if (gridType == "Circular") {
+        createGridPolar();
+        gscene->setProperty("ENABLE_GRID", true);
+    }
+    else if (gridType == "Isometric") {
+        createGridIso();
+        gscene->setProperty("ENABLE_GRID", true);
+    }
+    else {
+        gridPath = QPainterPath();
+        gscene->setProperty("ENABLE_GRID", false);
+    }
 
     createOrigin();
 
@@ -490,7 +502,7 @@ void View::toggleSnap(bool on)
     qDebug("View toggleSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_SNAP, on);
+    gscene->setProperty("ENABLE_SNAP", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -512,7 +524,7 @@ void View::toggleRuler(bool on)
 {
     qDebug("View toggleRuler()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_RULER, on);
+    gscene->setProperty("ENABLE_RULER", on);
     rulerMetric = mainWin->settings_ruler_metric;
     rulerColor = QColor(mainWin->settings_ruler_color);
     rulerPixelSize = mainWin->settings_ruler_pixel_size;
@@ -525,7 +537,7 @@ void View::toggleOrtho(bool on)
     qDebug("View toggleOrtho()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_ORTHO, on);
+    gscene->setProperty("ENABLE_ORTHO", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -535,7 +547,7 @@ void View::togglePolar(bool on)
     qDebug("View togglePolar()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_POLAR, on);
+    gscene->setProperty("ENABLE_POLAR", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -545,7 +557,7 @@ void View::toggleQSnap(bool on)
     qDebug("View toggleQSnap()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     qSnapToggle = on;
-    gscene->setProperty(ENABLE_QSNAP, on);
+    gscene->setProperty("ENABLE_QSNAP", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -558,7 +570,7 @@ void View::toggleQTrack(bool on)
     qDebug("View toggleQTrack()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
     //TODO: finish this
-    gscene->setProperty(ENABLE_QTRACK, on);
+    gscene->setProperty("ENABLE_QTRACK", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -570,7 +582,7 @@ void View::toggleLwt(bool on)
 {
     qDebug("View toggleLwt()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_LWT, on);
+    gscene->setProperty("ENABLE_LWT", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -582,7 +594,7 @@ void View::toggleReal(bool on)
 {
     qDebug("View toggleReal()");
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    gscene->setProperty(ENABLE_REAL, on);
+    gscene->setProperty("ENABLE_REAL", on);
     gscene->update();
     QApplication::restoreOverrideCursor();
 }
@@ -607,7 +619,7 @@ void View::drawBackground(QPainter* painter, const QRectF& rect)
 {
     painter->fillRect(rect, backgroundBrush());
 
-    if (gscene->property(ENABLE_GRID).toBool() && rect.intersects(gridPath.controlPointRect()))
+    if (gscene->property("ENABLE_GRID").toBool() && rect.intersects(gridPath.controlPointRect()))
     {
         QPen gridPen(gridColor);
         gridPen.setJoinStyle(Qt::MiterJoin);
@@ -696,7 +708,7 @@ void View::drawForeground(QPainter* painter, const QRectF& rect)
     //Draw horizontal and vertical rulers
     //==================================================
 
-    if (gscene->property(ENABLE_RULER).toBool())
+    if (gscene->property("ENABLE_RULER").toBool())
     {
         bool proceed = true;
 
@@ -1106,9 +1118,9 @@ void View::updateMouseCoords(int x, int y)
 {
     viewMousePoint = QPoint(x, y);
     sceneMousePoint = mapToScene(viewMousePoint);
-    gscene->setProperty(SCENE_QSNAP_POINT, sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
-    gscene->setProperty(SCENE_MOUSE_POINT, sceneMousePoint);
-    gscene->setProperty(VIEW_MOUSE_POINT, viewMousePoint);
+    gscene->setProperty("SCENE_QSNAP_POINT", sceneMousePoint); //TODO: if qsnap functionality is enabled, use it rather than the mouse point
+    gscene->setProperty("SCENE_MOUSE_POINT", sceneMousePoint);
+    gscene->setProperty("VIEW_MOUSE_POINT", viewMousePoint);
     mainWin->statusbar->setMouseCoord(sceneMousePoint.x(), -sceneMousePoint.y());
 }
 
@@ -1291,7 +1303,7 @@ void View::mouseDoubleClickEvent(QMouseEvent* event)
 
 void View::mousePressEvent(QMouseEvent* event)
 {
-    updateMouseCoords(event->x(), event->y());
+    updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton)
     {
         if (mainWin->isCommandActive())
@@ -1617,10 +1629,10 @@ void View::mouseMoveEvent(QMouseEvent* event)
     }
     if (panningActive)
     {
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - panStartX));
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - panStartY));
-        panStartX = event->x();
-        panStartY = event->y();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->position().x() - panStartX));
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->position().y() - panStartY));
+        panStartX = event->position().x();
+        panStartY = event->position().y();
         event->accept();
     }
     gscene->update();
@@ -1628,7 +1640,7 @@ void View::mouseMoveEvent(QMouseEvent* event)
 
 void View::mouseReleaseEvent(QMouseEvent* event)
 {
-    updateMouseCoords(event->x(), event->y());
+    updateMouseCoords(event->position().x(), event->position().y());
     if (event->button() == Qt::LeftButton)
     {
         if (movingActive)
@@ -2277,14 +2289,14 @@ void View::showScrollBars(bool val)
 void View::setCrossHairColor(QRgb color)
 {
     crosshairColor = color;
-    gscene->setProperty(VIEW_COLOR_CROSSHAIR, color);
+    gscene->setProperty("VIEW_COLOR_CROSSHAIR", color);
     if (gscene) gscene->update();
 }
 
 void View::setBackgroundColor(QRgb color)
 {
     setBackgroundBrush(QColor(color));
-    gscene->setProperty(VIEW_COLOR_BACKGROUND, color);
+    gscene->setProperty("VIEW_COLOR_BACKGROUND", color);
     if (gscene) gscene->update();
 }
 
@@ -2292,5 +2304,3 @@ void View::setSelectBoxColors(QRgb colorL, QRgb fillL, QRgb colorR, QRgb fillR, 
 {
     selectBox->setColors(QColor(colorL), QColor(fillL), QColor(colorR), QColor(fillR), alpha);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
