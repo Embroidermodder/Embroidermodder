@@ -43,8 +43,8 @@ PolygonObject::~PolygonObject()
 
 void PolygonObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_POLYGON);
+    setData(OBJ_TYPE, OBJ_TYPE_POLYGON);
+    setData(OBJ_NAME, "Polygon");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -79,7 +79,7 @@ void PolygonObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* opt
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     if(normalPath.elementCount())
@@ -130,7 +130,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         EmbReal inscribeAngle = inscribeLine.angle();
         EmbReal inscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(inscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(inscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
 
         QPainterPath inscribePath;
         //First Point
@@ -154,7 +154,7 @@ void PolygonObject::updateRubber(QPainter* painter)
         EmbReal circumscribeAngle = circumscribeLine.angle();
         EmbReal circumscribeInc = 360.0/numSides;
 
-        if(painter) drawRubberLine(circumscribeLine, painter, VIEW_COLOR_CROSSHAIR);
+        if(painter) drawRubberLine(circumscribeLine, painter, "VIEW_COLOR_CROSSHAIR");
 
         QPainterPath circumscribePath;
         //First Point
@@ -201,7 +201,7 @@ void PolygonObject::updateRubber(QPainter* painter)
             painter->drawLine(enPoint, mapFromScene(objectRubberPoint(QString())));
 
             QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-            drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+            drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
         }
     }
 }
@@ -290,5 +290,3 @@ QPainterPath PolygonObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(closedPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

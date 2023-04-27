@@ -96,7 +96,7 @@ QPointF BaseObject::objectRubberPoint(const QString& key) const
 
     QGraphicsScene* gscene = scene();
     if(gscene)
-        return scene()->property(SCENE_QSNAP_POINT).toPointF();
+        return scene()->property("SCENE_QSNAP_POINT").toPointF();
     return QPointF();
 }
 

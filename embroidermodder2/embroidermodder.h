@@ -565,39 +565,6 @@ OBJ_TYPE_TEXTMULTI = 100028,
 OBJ_TYPE_TEXTSINGLE = 100029
 };
 
-//OBJ_NAME_VALUES
-const char* const OBJ_NAME_NULL = "Unknown";
-const char* const OBJ_NAME_BASE = "Base";
-const char* const OBJ_NAME_ARC = "Arc";
-const char* const OBJ_NAME_BLOCK = "Block";
-const char* const OBJ_NAME_CIRCLE = "Circle";
-const char* const OBJ_NAME_DIMALIGNED = "Aligned Dimension";
-const char* const OBJ_NAME_DIMANGULAR = "Angular Dimension";
-const char* const OBJ_NAME_DIMARCLENGTH = "Arc Length Dimension";
-const char* const OBJ_NAME_DIMDIAMETER = "Diameter Dimension";
-const char* const OBJ_NAME_DIMLEADER = "Leader Dimension";
-const char* const OBJ_NAME_DIMLINEAR = "Linear Dimension";
-const char* const OBJ_NAME_DIMORDINATE = "Ordinate Dimension";
-const char* const OBJ_NAME_DIMRADIUS = "Radius Dimension";
-const char* const OBJ_NAME_ELLIPSE = "Ellipse";
-const char* const OBJ_NAME_ELLIPSEARC = "Elliptical Arc";
-const char* const OBJ_NAME_RUBBER = "Rubber";
-const char* const OBJ_NAME_GRID = "Grid";
-const char* const OBJ_NAME_HATCH = "Hatch";
-const char* const OBJ_NAME_IMAGE = "Image";
-const char* const OBJ_NAME_INFINITELINE = "Infinite Line";
-const char* const OBJ_NAME_LINE = "Line";
-const char* const OBJ_NAME_PATH = "Path";
-const char* const OBJ_NAME_POINT = "Point";
-const char* const OBJ_NAME_POLYGON = "Polygon";
-const char* const OBJ_NAME_POLYLINE = "Polyline";
-const char* const OBJ_NAME_RAY = "Ray";
-const char* const OBJ_NAME_RECTANGLE = "Rectangle";
-const char* const OBJ_NAME_SLOT = "Slot";
-const char* const OBJ_NAME_SPLINE = "Spline";
-const char* const OBJ_NAME_TEXTMULTI = "Multi Line Text";
-const char* const OBJ_NAME_TEXTSINGLE = "Single Line Text";
-
 enum OBJ_LTYPE_VALUES {
 //CAD Linetypes
 OBJ_LTYPE_CONT = 0,
@@ -721,25 +688,6 @@ PREVIEW_MODE_ROTATE,
 PREVIEW_MODE_SCALE
 };
 
-const char* const ENABLE_SNAP = "ENABLE_SNAP";
-const char* const ENABLE_GRID = "ENABLE_GRID";
-const char* const ENABLE_RULER = "ENABLE_RULER";
-const char* const ENABLE_ORTHO = "ENABLE_ORTHO";
-const char* const ENABLE_POLAR = "ENABLE_POLAR";
-const char* const ENABLE_QSNAP = "ENABLE_QSNAP";
-const char* const ENABLE_QTRACK = "ENABLE_QTRACK";
-const char* const ENABLE_LWT = "ENABLE_LWT";
-const char* const ENABLE_REAL = "ENABLE_REAL";
-
-const char* const SCENE_QSNAP_POINT = "SCENE_QSNAP_POINT";
-const char* const SCENE_MOUSE_POINT = "SCENE_MOUSE_POINT";
-const char* const VIEW_MOUSE_POINT = "VIEW_MOUSE_POINT";
-const char* const RUBBER_ROOM = "RUBBER_ROOM";
-
-const char* const VIEW_COLOR_BACKGROUND = "VIEW_COLOR_BACKGROUND";
-const char* const VIEW_COLOR_CROSSHAIR = "VIEW_COLOR_CROSSHAIR";
-const char* const VIEW_COLOR_GRID = "VIEW_COLOR_GRID";
-
 int read_settings(const char *settings_file);
 void write_settings(const char *fname);
 
@@ -834,6 +782,17 @@ public:
     QPointF objectRubberPoint(const QString& key) const;
     QString objectRubberText(const QString& key) const;
 
+    QPointF objectCenter() const { return scenePos(); }
+    EmbReal objectCenterX() const { return scenePos().x(); }
+    EmbReal objectCenterY() const { return scenePos().y(); }
+
+    void setObjectCenter(EmbVector center)
+    {
+        setPos(center.x, center.y);
+    }
+    void setObjectCenterX(EmbReal centerX) { setX(centerX); }
+    void setObjectCenterY(EmbReal centerY) { setY(centerY); }
+
     QRectF rect() const { return path().boundingRect(); }
     void setRect(const QRectF& r) { QPainterPath p; p.addRect(r); setPath(p); }
     void setRect(EmbReal x, EmbReal y, EmbReal w, EmbReal h) { QPainterPath p; p.addRect(x,y,w,h); setPath(p); }
@@ -889,9 +848,6 @@ public:
     void calculateArcData(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY);
     void updateArcRect(EmbReal radius);
 
-    QPointF objectCenter() const { return scenePos(); }
-    EmbReal objectCenterX() const { return scenePos().x(); }
-    EmbReal objectCenterY() const { return scenePos().y(); }
     EmbReal objectRadius() const { return rect().width()/2.0*scale(); }
     EmbReal objectStartAngle() const;
     EmbReal objectEndAngle() const;
@@ -910,10 +866,6 @@ public:
     EmbReal objectIncludedAngle() const;
     bool objectClockwise() const;
 
-    void setObjectCenter(const QPointF& point);
-    void setObjectCenter(EmbReal pointX, EmbReal pointY);
-    void setObjectCenterX(EmbReal pointX);
-    void setObjectCenterY(EmbReal pointY);
     void setObjectRadius(EmbReal radius);
     void setObjectStartAngle(EmbReal angle);
     void setObjectEndAngle(EmbReal angle);
@@ -949,9 +901,6 @@ public:
 
     QPainterPath objectSavePath() const;
 
-    QPointF objectCenter() const { return scenePos(); }
-    EmbReal objectCenterX() const { return scenePos().x(); }
-    EmbReal objectCenterY() const { return scenePos().y(); }
     EmbReal objectRadius() const { return rect().width()/2.0*scale(); }
     EmbReal objectDiameter() const { return rect().width()*scale(); }
     EmbReal objectArea() const { return emb_constant_pi*objectRadius()*objectRadius(); }
@@ -961,10 +910,6 @@ public:
     QPointF objectQuadrant180() const { return objectCenter() + QPointF(-objectRadius(),0); }
     QPointF objectQuadrant270() const { return objectCenter() + QPointF(0, objectRadius()); }
 
-    void setObjectCenter(const QPointF& center);
-    void setObjectCenter(EmbReal centerX, EmbReal centerY);
-    void setObjectCenterX(EmbReal centerX);
-    void setObjectCenterY(EmbReal centerY);
     void setObjectRadius(EmbReal radius);
     void setObjectDiameter(EmbReal diameter);
     void setObjectArea(EmbReal area);
@@ -1070,9 +1015,6 @@ public:
 
     QPainterPath objectSavePath() const;
 
-    QPointF objectCenter() const { return scenePos(); }
-    EmbReal objectCenterX() const { return scenePos().x(); }
-    EmbReal objectCenterY() const { return scenePos().y(); }
     EmbReal objectRadiusMajor() const { return qMax(rect().width(), rect().height())/2.0*scale(); }
     EmbReal objectRadiusMinor() const { return qMin(rect().width(), rect().height())/2.0*scale(); }
     EmbReal objectDiameterMajor() const { return qMax(rect().width(), rect().height())*scale(); }
@@ -1085,10 +1027,6 @@ public:
     QPointF objectQuadrant270() const;
 
     void setObjectSize(EmbReal width, EmbReal height);
-    void setObjectCenter(const QPointF& center);
-    void setObjectCenter(EmbReal centerX, EmbReal centerY);
-    void setObjectCenterX(EmbReal centerX);
-    void setObjectCenterY(EmbReal centerY);
     void setObjectRadiusMajor(EmbReal radius);
     void setObjectRadiusMinor(EmbReal radius);
     void setObjectDiameterMajor(EmbReal diameter);

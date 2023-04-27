@@ -53,5 +53,3 @@ void StatusBar::setMouseCoord(EmbReal x, EmbReal y)
     //Scientific
     //statusBarMouseCoord->setText(QString().setNum(x, 'E', 4) + ", " + QString().setNum(y, 'E', 4)); //TODO: use precision from unit settings
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

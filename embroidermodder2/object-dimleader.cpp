@@ -53,8 +53,8 @@ DimLeaderObject::~DimLeaderObject()
  */
 void DimLeaderObject::init(EmbReal x1, EmbReal y1, EmbReal x2, EmbReal y2, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_DIMLEADER);
+    setData(OBJ_TYPE, OBJ_TYPE_DIMLEADER);
+    setData(OBJ_NAME, "Dimension Leader");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -246,7 +246,7 @@ void DimLeaderObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* o
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPath(lineStylePath);

@@ -95,8 +95,8 @@ ArcObject::~ArcObject()
  */
 void ArcObject::init(EmbReal startX, EmbReal startY, EmbReal midX, EmbReal midY, EmbReal endX, EmbReal endY, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_ARC);
+    setData(OBJ_TYPE, OBJ_TYPE_ARC);
+    setData(OBJ_NAME, "Arc");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -156,30 +156,6 @@ void ArcObject::updateArcRect(EmbReal radius)
     arcRect.setHeight(radius*2.0);
     arcRect.moveCenter(QPointF(0,0));
     setRect(arcRect);
-}
-
-/**
- * @brief ArcObject::setObjectCenter
- * @param point
- */
-void ArcObject::setObjectCenter(const QPointF& point)
-{
-    setObjectCenter(point.x(), point.y());
-}
-
-void ArcObject::setObjectCenter(EmbReal pointX, EmbReal pointY)
-{
-    setPos(pointX, pointY);
-}
-
-void ArcObject::setObjectCenterX(EmbReal pointX)
-{
-    setX(pointX);
-}
-
-void ArcObject::setObjectCenterY(EmbReal pointY)
-{
-    setY(pointY);
 }
 
 void ArcObject::setObjectRadius(EmbReal radius)
@@ -490,7 +466,7 @@ void ArcObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
     if (option->state & QStyle::State_Selected) {
         paintPen.setStyle(Qt::DashLine);
     }
-    if (objScene->property(ENABLE_LWT).toBool()) {
+    if (objScene->property("ENABLE_LWT").toBool()) {
         paintPen = lineWeightPen();
     }
     painter->setPen(paintPen);

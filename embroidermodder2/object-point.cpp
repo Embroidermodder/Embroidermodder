@@ -42,8 +42,8 @@ PointObject::~PointObject()
 
 void PointObject::init(EmbReal x, EmbReal y, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_POINT);
+    setData(OBJ_TYPE, OBJ_TYPE_POINT);
+    setData(OBJ_NAME, "Point");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -67,7 +67,7 @@ void PointObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* optio
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPoint(0,0);
@@ -84,7 +84,7 @@ void PointObject::updateRubber(QPainter* painter)
             if(gripPoint == scenePos())
             {
                 QLineF rubLine(mapFromScene(gripPoint), mapFromScene(objectRubberPoint(QString())));
-                drawRubberLine(rubLine, painter, VIEW_COLOR_CROSSHAIR);
+                drawRubberLine(rubLine, painter, "VIEW_COLOR_CROSSHAIR");
             }
         }
     }
@@ -122,5 +122,3 @@ QPainterPath PointObject::objectSavePath() const
     path.addRect(-0.00000001, -0.00000001, 0.00000002, 0.00000002);
     return path;
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */

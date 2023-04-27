@@ -55,8 +55,8 @@ ImageObject::~ImageObject()
  */
 void ImageObject::init(EmbReal x, EmbReal y, EmbReal w, EmbReal h, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_IMAGE);
+    setData(OBJ_TYPE, OBJ_TYPE_IMAGE);
+    setData(OBJ_NAME, "Image");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -191,7 +191,7 @@ ImageObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawRect(rect());

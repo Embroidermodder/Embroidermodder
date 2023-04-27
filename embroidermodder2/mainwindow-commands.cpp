@@ -1962,7 +1962,7 @@ MainWindow::nativeQSnapX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return scene->property(SCENE_QSNAP_POINT).toPointF().x();
+        return scene->property("SCENE_QSNAP_POINT").toPointF().x();
     }
     return 0.0;
 }
@@ -1976,7 +1976,7 @@ MainWindow::nativeQSnapY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        return -scene->property(SCENE_QSNAP_POINT).toPointF().y();
+        return -scene->property("SCENE_QSNAP_POINT").toPointF().y();
     }
     return 0.0;
 }
@@ -1990,8 +1990,8 @@ MainWindow::nativeMouseX()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        qDebug("mouseX: %.50f", scene->property(SCENE_MOUSE_POINT).toPointF().x());
-        return scene->property(SCENE_MOUSE_POINT).toPointF().x();
+        qDebug("mouseX: %.50f", scene->property("SCENE_MOUSE_POINT").toPointF().x());
+        return scene->property("SCENE_MOUSE_POINT").toPointF().x();
     }
     return 0.0;
 }
@@ -2005,8 +2005,8 @@ MainWindow::nativeMouseY()
 {
     QGraphicsScene* scene = activeScene();
     if (scene) {
-        qDebug("mouseY: %.50f", -scene->property(SCENE_MOUSE_POINT).toPointF().y());
-        return -scene->property(SCENE_MOUSE_POINT).toPointF().y();
+        qDebug("mouseY: %.50f", -scene->property("SCENE_MOUSE_POINT").toPointF().y());
+        return -scene->property("SCENE_MOUSE_POINT").toPointF().y();
     }
     return 0.0;
 }

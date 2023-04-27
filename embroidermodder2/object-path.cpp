@@ -43,8 +43,8 @@ PathObject::~PathObject()
 
 void PathObject::init(EmbReal x, EmbReal y, const QPainterPath& p, QRgb rgb, Qt::PenStyle lineType)
 {
-    setData(OBJ_TYPE, type());
-    setData(OBJ_NAME, OBJ_NAME_PATH);
+    setData(OBJ_TYPE, OBJ_TYPE_PATH);
+    setData(OBJ_NAME, "Path");
 
     //WARNING: DO NOT enable QGraphicsItem::ItemIsMovable. If it is enabled,
     //WARNING: and the item is double clicked, the scene will erratically move the item while zooming.
@@ -76,7 +76,7 @@ void PathObject::paint(QPainter* painter, const QStyleOptionGraphicsItem* option
     painter->setPen(paintPen);
     updateRubber(painter);
     if(option->state & QStyle::State_Selected)  { paintPen.setStyle(Qt::DashLine); }
-    if(objScene->property(ENABLE_LWT).toBool()) { paintPen = lineWeightPen(); }
+    if(objScene->property("ENABLE_LWT").toBool()) { paintPen = lineWeightPen(); }
     painter->setPen(paintPen);
 
     painter->drawPath(objectPath());
@@ -132,5 +132,3 @@ QPainterPath PathObject::objectSavePath() const
     trans.scale(s,s);
     return trans.map(normalPath);
 }
-
-/* kate: bom off; indent-mode cstyle; indent-width 4; replace-trailing-space-save on; */
