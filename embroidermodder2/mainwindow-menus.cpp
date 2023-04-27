@@ -19,10 +19,6 @@
 
 #include "embroidermodder.h"
 
-#include <QMenu>
-#include <QMenuBar>
-#include <QAction>
-
 /**
  * @brief MainWindow::createFileMenu
  */
@@ -31,9 +27,9 @@ MainWindow::createFileMenu()
 {
     qDebug("MainWindow createFileMenu()");
     menuBar()->addMenu(fileMenu);
-    fileMenu->addAction(actionHash.value(ACTION_new));
+    fileMenu->addAction(actionHash[ACTION_new]);
     fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_open));
+    fileMenu->addAction(actionHash[ACTION_open]);
 
     fileMenu->addMenu(recentMenu);
     connect(recentMenu, SIGNAL(aboutToShow()), this, SLOT(recentMenuAboutToShow()));
@@ -41,17 +37,17 @@ MainWindow::createFileMenu()
     recentMenu->setTearOffEnabled(false);
 
     fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_save));
-    fileMenu->addAction(actionHash.value(ACTION_saveas));
+    fileMenu->addAction(actionHash[ACTION_save]);
+    fileMenu->addAction(actionHash[ACTION_saveas]);
     fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_print));
+    fileMenu->addAction(actionHash[ACTION_print]);
     fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_windowclose));
+    fileMenu->addAction(actionHash[ACTION_windowclose]);
     fileMenu->addSeparator();
-    fileMenu->addAction(actionHash.value(ACTION_designdetails));
+    fileMenu->addAction(actionHash[ACTION_designdetails]);
     fileMenu->addSeparator();
 
-    fileMenu->addAction(actionHash.value(ACTION_exit));
+    fileMenu->addAction(actionHash[ACTION_exit]);
     fileMenu->setTearOffEnabled(false);
 }
 
@@ -59,12 +55,12 @@ void MainWindow::createEditMenu()
 {
     qDebug("MainWindow createEditMenu()");
     menuBar()->addMenu(editMenu);
-    editMenu->addAction(actionHash.value(ACTION_undo));
-    editMenu->addAction(actionHash.value(ACTION_redo));
+    editMenu->addAction(actionHash[ACTION_undo]);
+    editMenu->addAction(actionHash[ACTION_redo]);
     editMenu->addSeparator();
-    editMenu->addAction(actionHash.value(ACTION_cut));
-    editMenu->addAction(actionHash.value(ACTION_copy));
-    editMenu->addAction(actionHash.value(ACTION_paste));
+    editMenu->addAction(actionHash[ACTION_cut]);
+    editMenu->addAction(actionHash[ACTION_copy]);
+    editMenu->addAction(actionHash[ACTION_paste]);
     editMenu->addSeparator();
     editMenu->setTearOffEnabled(true);
 }
@@ -80,32 +76,32 @@ void MainWindow::createViewMenu()
     viewMenu->addSeparator();
     viewMenu->addMenu(zoomMenu);
     zoomMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/zoom" + ".png"));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomrealtime));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomprevious));
+    zoomMenu->addAction(actionHash[ACTION_zoomrealtime]);
+    zoomMenu->addAction(actionHash[ACTION_zoomprevious]);
     zoomMenu->addSeparator();
-    zoomMenu->addAction(actionHash.value(ACTION_zoomwindow));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomdynamic));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomscale));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomcenter));
+    zoomMenu->addAction(actionHash[ACTION_zoomwindow]);
+    zoomMenu->addAction(actionHash[ACTION_zoomdynamic]);
+    zoomMenu->addAction(actionHash[ACTION_zoomscale]);
+    zoomMenu->addAction(actionHash[ACTION_zoomcenter]);
     zoomMenu->addSeparator();
-    zoomMenu->addAction(actionHash.value(ACTION_zoomin));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomout));
+    zoomMenu->addAction(actionHash[ACTION_zoomin]);
+    zoomMenu->addAction(actionHash[ACTION_zoomout]);
     zoomMenu->addSeparator();
-    zoomMenu->addAction(actionHash.value(ACTION_zoomselected));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomall));
-    zoomMenu->addAction(actionHash.value(ACTION_zoomextents));
+    zoomMenu->addAction(actionHash[ACTION_zoomselected]);
+    zoomMenu->addAction(actionHash[ACTION_zoomall]);
+    zoomMenu->addAction(actionHash[ACTION_zoomextents]);
     viewMenu->addMenu(panMenu);
     panMenu->setIcon(QIcon(appDir + "/icons/" + icontheme + "/pan" + ".png"));
-    panMenu->addAction(actionHash.value(ACTION_panrealtime));
-    panMenu->addAction(actionHash.value(ACTION_panpoint));
+    panMenu->addAction(actionHash[ACTION_panrealtime]);
+    panMenu->addAction(actionHash[ACTION_panpoint]);
     panMenu->addSeparator();
-    panMenu->addAction(actionHash.value(ACTION_panleft));
-    panMenu->addAction(actionHash.value(ACTION_panright));
-    panMenu->addAction(actionHash.value(ACTION_panup));
-    panMenu->addAction(actionHash.value(ACTION_pandown));
+    panMenu->addAction(actionHash[ACTION_panleft]);
+    panMenu->addAction(actionHash[ACTION_panright]);
+    panMenu->addAction(actionHash[ACTION_panup]);
+    panMenu->addAction(actionHash[ACTION_pandown]);
     viewMenu->addSeparator();
-    viewMenu->addAction(actionHash.value(ACTION_day));
-    viewMenu->addAction(actionHash.value(ACTION_night));
+    viewMenu->addAction(actionHash[ACTION_day]);
+    viewMenu->addAction(actionHash[ACTION_night]);
     viewMenu->addSeparator();
 
     viewMenu->setTearOffEnabled(true);
@@ -117,7 +113,7 @@ void MainWindow::createSettingsMenu()
 {
     qDebug("MainWindow createSettingsMenu()");
     menuBar()->addMenu(settingsMenu);
-    settingsMenu->addAction(actionHash.value(ACTION_settingsdialog));
+    settingsMenu->addAction(actionHash[ACTION_settingsdialog]);
     settingsMenu->addSeparator();
     settingsMenu->setTearOffEnabled(true);
 }
@@ -136,15 +132,15 @@ void MainWindow::createHelpMenu()
 {
     qDebug("MainWindow createHelpMenu()");
     menuBar()->addMenu(helpMenu);
-    helpMenu->addAction(actionHash.value(ACTION_help));
+    helpMenu->addAction(actionHash[ACTION_help]);
     helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_changelog));
+    helpMenu->addAction(actionHash[ACTION_changelog]);
     helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_tipoftheday));
+    helpMenu->addAction(actionHash[ACTION_tipoftheday]);
     helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_about));
+    helpMenu->addAction(actionHash[ACTION_about]);
     helpMenu->addSeparator();
-    helpMenu->addAction(actionHash.value(ACTION_whatsthis));
+    helpMenu->addAction(actionHash[ACTION_whatsthis]);
     helpMenu->setTearOffEnabled(true);
 }
 

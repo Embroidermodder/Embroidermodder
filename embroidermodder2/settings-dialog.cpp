@@ -303,11 +303,11 @@ QWidget* Settings_Dialog::createTabDisplay()
     QLabel* labelScrollBarWidget = new QLabel(tr("Perform action when clicking corner widget"), groupBoxScrollBars);
     QComboBox* comboBoxScrollBarWidget = new QComboBox(groupBoxScrollBars);
     dialog_display_scrollbar_widget_num = mainWin->settings_display_scrollbar_widget_num;
-    int numActions = mainWin->actionHash.size();
-    for(int i = 0; i < numActions; i++)
-    {
-        QAction* action = mainWin->actionHash.value(i);
-        if(action) comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
+    for (int i = 0; i < n_actions; i++) {
+        QAction* action = mainWin->actionHash[i];
+        if (action) {
+            comboBoxScrollBarWidget->addItem(action->icon(), action->text().replace("&", ""));
+        }
     }
     comboBoxScrollBarWidget->setCurrentIndex(dialog_display_scrollbar_widget_num);
     connect(comboBoxScrollBarWidget, SIGNAL(currentIndexChanged(int)), this, SLOT(comboBoxScrollBarWidgetCurrentIndexChanged(int)));

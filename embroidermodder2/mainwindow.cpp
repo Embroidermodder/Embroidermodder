@@ -759,13 +759,14 @@ MainWindow::actuator(std::string command)
 }
 
 /*
-void MainWindow::LoadCommand(EmbString cmdName)
+void MainWindow::LoadCommand(QString cmdName)
 {
     qDebug("LoadCommand(%s)", qPrintable(cmdName));
     //NOTE: Every QScriptProgram must have a unique function name to call. If every function was called main(), then
     //      the QScriptEngine would only call the last script evaluated (which happens to be main() in another script).
     //      Thus, by adding the cmdName before main(), it becomes line_main(), circle_main(), etc...
     //      Do not change this code unless you really know what you are doing. I mean it.
+
     EmbString appDir = qApp->applicationDirPath();
     QFile file(appDir + "/commands/" + cmdName + "/" + cmdName + ".js");
     file.open(QIODevice::ReadOnly);
@@ -861,20 +862,18 @@ void MainWindow::LoadCommand(EmbString cmdName)
 
     QSettings settings(appDir + "/commands/" + cmdName + "/" + cmdName + ".ini", QSettings::IniFormat);
     EmbString menuName = settings.value("Menu/Name", "Lost & Found").toString();
-    int menuPos = settings.value("Menu/Position",             0).toInt();
+    int menuPos = settings.value("Menu/Position", 0).toInt();
     EmbString toolbarName = settings.value("ToolBar/Name", "Lost & Found").toString();
-    int toolbarPos  = settings.value("ToolBar/Position",          0).toInt();
-    EmbString toolTip = settings.value("Tips/ToolTip",             "").toString();
-    EmbString statusTip = settings.value("Tips/StatusTip",           "").toString();
-    QStringList aliases = settings.value("Prompt/Alias")                .toStringList();
+    int toolbarPos  = settings.value("ToolBar/Position", 0).toInt();
+    EmbString toolTip = settings.value("Tips/ToolTip", "").toString();
+    EmbString statusTip = settings.value("Tips/StatusTip", "").toString();
+    QStringList aliases = settings.value("Prompt/Alias").toStringList();
 
     QAction* ACTION = createAction(cmdName, toolTip, statusTip, true);
 
-    if (toolbarName.toUpper() != "NONE")
-    {
+    if (toolbarName.toUpper() != "NONE") {
         //If the toolbar doesn't exist, create it.
-        if (!toolbarHash.value(toolbarName))
-        {
+        if (!toolbarHash.value(toolbarName)) {
             QToolBar* tb = new QToolBar(toolbarName, this);
             tb->setObjectName("toolbar" + toolbarName);
             connect(tb, SIGNAL(topLevelChanged(bool)), this, SLOT(floatingChangedToolBar(bool)));
@@ -887,11 +886,9 @@ void MainWindow::LoadCommand(EmbString cmdName)
         toolbarHash.value(toolbarName)->addAction(ACTION);
     }
 
-    if (menuName.toUpper() != "NONE")
-    {
+    if (menuName.toUpper() != "NONE") {
         //If the menu doesn't exist, create it.
-        if (!menuHash.value(menuName))
-        {
+        if (!menuHash.value(menuName)) {
             QMenu* menu = new QMenu(menuName, this);
             menu->setTearOffEnabled(true);
             menuBar()->addMenu(menu);
@@ -902,8 +899,7 @@ void MainWindow::LoadCommand(EmbString cmdName)
         menuHash.value(menuName)->addAction(ACTION);
     }
 
-    foreach(EmbString alias, aliases)
-    {
+    foreach(EmbString alias, aliases) {
         prompt->addCommand(alias, cmdName);
     }
 }
@@ -2187,7 +2183,7 @@ MirrorSelected(std::vector<std::string> args)
 QAction*
 MainWindow::getAction(int actionEnum)
 {
-    return actionHash.value(actionEnum);
+    return actionHash[actionEnum];
 }
 
 /**
@@ -2235,14 +2231,14 @@ MainWindow::windowMenuAboutToShow()
 {
     qDebug("MainWindow::windowMenuAboutToShow()");
     windowMenu->clear();
-    windowMenu->addAction(actionHash.value(ACTION_windowclose));
-    windowMenu->addAction(actionHash.value(ACTION_windowcloseall));
+    windowMenu->addAction(actionHash[ACTION_windowclose]);
+    windowMenu->addAction(actionHash[ACTION_windowcloseall]);
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windowcascade));
-    windowMenu->addAction(actionHash.value(ACTION_windowtile));
+    windowMenu->addAction(actionHash[ACTION_windowcascade]);
+    windowMenu->addAction(actionHash[ACTION_windowtile]);
     windowMenu->addSeparator();
-    windowMenu->addAction(actionHash.value(ACTION_windownext));
-    windowMenu->addAction(actionHash.value(ACTION_windowprevious));
+    windowMenu->addAction(actionHash[ACTION_windownext]);
+    windowMenu->addAction(actionHash[ACTION_windowprevious]);
 
     windowMenu->addSeparator();
     QList<QMdiSubWindow*> windows = mdiArea->subWindowList();
@@ -2579,9 +2575,9 @@ MainWindow::updateMenuToolbarStatusbar()
 {
     qDebug("MainWindow::updateMenuToolbarStatusbar()");
 
-    actionHash.value(ACTION_print)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_windowclose)->setEnabled(numOfDocs > 0);
-    actionHash.value(ACTION_designdetails)->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_print]->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_windowclose]->setEnabled(numOfDocs > 0);
+    actionHash[ACTION_designdetails]->setEnabled(numOfDocs > 0);
 
     if (numOfDocs) {
         //Toolbars

@@ -366,95 +366,97 @@ typedef struct Settings_ {
     float stitch_time; /*< */
 } Settings;
 
-enum COMMAND_ACTIONS
-{
+static const int ACTION_donothing = 0;
 
-    ACTION_donothing,
+static const int ACTION_new = 1;
+static const int ACTION_open = 2;
+static const int ACTION_save = 3;
+static const int ACTION_saveas = 4;
+static const int ACTION_print = 5;
+static const int ACTION_designdetails = 6;
+static const int ACTION_exit = 7;
+static const int ACTION_cut = 8;
+static const int ACTION_copy = 9;
+static const int ACTION_paste = 10;
 
-    ACTION_new,
-    ACTION_open,
-    ACTION_save,
-    ACTION_saveas,
-    ACTION_print,
-    ACTION_designdetails,
-    ACTION_exit,
-    ACTION_cut,
-    ACTION_copy,
-    ACTION_paste,
+static const int ACTION_undo = 11;
+static const int ACTION_redo = 12;
 
-    ACTION_undo,
-    ACTION_redo,
-    // Window Menu
-    ACTION_windowclose,
-    ACTION_windowcloseall,
-    ACTION_windowcascade,
-    ACTION_windowtile,
-    ACTION_windownext,
-    ACTION_windowprevious,
-    // Help Menu
-    ACTION_help,
-    ACTION_changelog,
-    ACTION_tipoftheday,
-    ACTION_about,
-    ACTION_whatsthis,
-    // Icons
-    ACTION_icon16,
-    ACTION_icon24,
-    ACTION_icon32,
-    ACTION_icon48,
-    ACTION_icon64,
-    ACTION_icon128,
+// Window Menu
+static const int ACTION_windowclose = 13;
+static const int ACTION_windowcloseall = 14;
+static const int ACTION_windowcascade = 15;
+static const int ACTION_windowtile = 16;
+static const int ACTION_windownext = 17;
+static const int ACTION_windowprevious = 18;
 
-    ACTION_settingsdialog,
+// Help Menu
+static const int ACTION_help = 19;
+static const int ACTION_changelog = 20;
+static const int ACTION_tipoftheday = 21;
+static const int ACTION_about = 22;
+static const int ACTION_whatsthis = 23;
 
-    // Layer ToolBar
-    ACTION_makelayercurrent,
-    ACTION_layers,
-    ACTION_layerselector,
-    ACTION_layerprevious,
-    ACTION_colorselector,
-    ACTION_linetypeselector,
-    ACTION_lineweightselector,
-    ACTION_hidealllayers,
-    ACTION_showalllayers,
-    ACTION_freezealllayers,
-    ACTION_thawalllayers,
-    ACTION_lockalllayers,
-    ACTION_unlockalllayers,
-    //Text ToolBar
-    ACTION_textbold,
-    ACTION_textitalic,
-    ACTION_textunderline,
-    ACTION_textstrikeout,
-    ACTION_textoverline,
-    // Zoom ToolBar
-    ACTION_zoomrealtime,
-    ACTION_zoomprevious,
-    ACTION_zoomwindow,
-    ACTION_zoomdynamic,
-    ACTION_zoomscale,
-    ACTION_zoomcenter,
-    ACTION_zoomin,
-    ACTION_zoomout,
-    ACTION_zoomselected,
-    ACTION_zoomall,
-    ACTION_zoomextents,
-    // Pan SubMenu
-    ACTION_panrealtime,
-    ACTION_panpoint,
-    ACTION_panleft,
-    ACTION_panright,
-    ACTION_panup,
-    ACTION_pandown,
+// Icons
+static const int ACTION_icon16 = 24;
+static const int ACTION_icon24 = 25;
+static const int ACTION_icon32 = 26;
+static const int ACTION_icon48 = 27;
+static const int ACTION_icon64 = 28;
+static const int ACTION_icon128 = 29;
 
-    ACTION_day,
-    ACTION_night,
+static const int ACTION_settingsdialog = 30;
 
-    //TODO: ACTION_spellcheck,
-    //TODO: ACTION_quickselect,
+// Layer ToolBar
+static const int ACTION_makelayercurrent = 31;
+static const int ACTION_layers = 32;
+static const int ACTION_layerselector = 33;
+static const int ACTION_layerprevious = 34;
+static const int ACTION_colorselector = 35;
+static const int ACTION_linetypeselector = 36;
+static const int ACTION_lineweightselector = 37;
+static const int ACTION_hidealllayers = 38;
+static const int ACTION_showalllayers = 39;
+static const int ACTION_freezealllayers = 40;
+static const int ACTION_thawalllayers = 41;
+static const int ACTION_lockalllayers = 42;
+static const int ACTION_unlockalllayers = 43;
 
-    ACTION_null
-};
+// Text ToolBar
+static const int ACTION_textbold = 44;
+static const int ACTION_textitalic = 45;
+static const int ACTION_textunderline = 46;
+static const int ACTION_textstrikeout = 47;
+static const int ACTION_textoverline = 48;
+
+// Zoom ToolBar
+static const int ACTION_zoomrealtime = 49;
+static const int ACTION_zoomprevious = 50;
+static const int ACTION_zoomwindow = 51;
+static const int ACTION_zoomdynamic = 52;
+static const int ACTION_zoomscale = 53;
+static const int ACTION_zoomcenter = 54;
+static const int ACTION_zoomin = 55;
+static const int ACTION_zoomout = 56;
+static const int ACTION_zoomselected = 57;
+static const int ACTION_zoomall = 58;
+static const int ACTION_zoomextents = 59;
+
+// Pan SubMenu
+static const int ACTION_panrealtime = 60;
+static const int ACTION_panpoint = 61;
+static const int ACTION_panleft = 62;
+static const int ACTION_panright = 63;
+static const int ACTION_panup = 64;
+static const int ACTION_pandown = 65;
+
+static const int ACTION_day = 66;
+static const int ACTION_night = 67;
+
+//TODO: ACTION_spellcheck = 33;
+//TODO: ACTION_quickselect = 33;
+
+static const int ACTION_null = 68;
 
 enum UiMode {
     DEFAULT_MODE,
@@ -1934,7 +1936,7 @@ public:
     std::string run_script_file(std::string fname);
     std::string run_script(std::vector<std::string> script);
 
-    QHash<int, QAction*> actionHash;
+    QAction* actionHash[200];
     QHash<QString, QToolBar*> toolbarHash;
     QHash<QString, QMenu*> menuHash;
 
@@ -3695,5 +3697,19 @@ private:
 
     void alignScenePointWithViewPoint(const QPointF& scenePoint, const QPoint& viewPoint);
 };
+
+/**
+ * .
+ */
+typedef struct Action__ {
+    int hash;
+    const char *icon;
+    const char *tooltip;
+    const char *statustip;
+} Action;
+
+/* */
+extern std::vector<Action> action_table;
+extern int n_actions;
 
 #endif
